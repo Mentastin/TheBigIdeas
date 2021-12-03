@@ -1,0 +1,136 @@
+\chapter{Introduction}
+Many properties of mathematical systems can be unified and simplified by a presentation with diagrams and arrows.
+\chapter{Categories, functors and natural transformations}
+\section{Categories}
+\subsection{Graphs}
+\begin{definition}
+A \udef{(directed) graph} consists of
+\begin{itemize}
+\item of \emph{objects} $a,b,c,\ldots$
+\item of \emph{arrows} $f,g,h,\ldots$
+\item two operations
+\begin{enumerate}
+\item \emph{Domain}, which assigns to each arrow $f$ an object $a = \dom f$
+\item \emph{Codomain}, which assigns to each arrow $f$ an object $b = \cod f$
+\end{enumerate}
+\end{itemize}
+\end{definition}
+If $f$ is an arrow, $\dom(f) = a$ and $\cod(f) = b$, then we write
+\[ f: \begin{tikzcd}
+a \rar & b
+\end{tikzcd} \qquad \text{or} \qquad \begin{tikzcd}
+a \rar{f} & b
+\end{tikzcd} \]
+
+\subsection{Metacategories}
+\begin{definition}
+A \udef{metacategory} is a graph with two additional operations:
+\begin{enumerate}
+\item \emph{Identity}, which assigns to each object $a$ an arrow $1_a = \id_a: a \to a$.
+\[ \text{\textit{Identity}}: \{ \text{objects} \} \to \{ \text{arrows} \}: a \mapsto \left(\begin{tikzcd}a \rar{1_a} & a\end{tikzcd}\right) \]
+\item \emph{Composition}, which assigns to each pair of arrows $(f,g)$ with $\dom g = \cod f$ an arrow $g\circ f$, called their \udef{composite}, with
+\[ \begin{tikzcd}\dom f \rar{g\circ f} & \cod g\end{tikzcd} \]
+\end{enumerate}
+These operations are subject to the following axioms:
+\begin{enumerate}
+\item \emph{Associativity}. For any given arrows in the configuration
+\[ \begin{tikzcd}
+a \ar[r, "f"] & b \ar[r, "g"] & c \ar[r, "h"] & d
+\end{tikzcd} \]
+one has the equality
+\[ h\circ (g \circ g) = (h \circ g) \circ f \]
+\item \emph{Unit law}. For all arrows \begin{tikzcd}
+a \rar{f} & b
+\end{tikzcd} and \begin{tikzcd}
+b \rar{g} &c
+\end{tikzcd}, composition with the identity arrow $1_b$ gives
+\[ t_b \circ f = f \qquad \text{and} \qquad g\circ 1_b = g \]
+This axiom asserts that the identity arrow acts as an identity for composition.
+\end{enumerate}
+\end{definition}
+Composition can be summarised diagrammatically by saying that it transforms \begin{tikzcd}a \rar{f} & b \rar{g} & c \end{tikzcd} to 
+\[ \begin{tikzcd}[column sep=small]
+& b \arrow[dr, "g"] & \\
+a \arrow[rr, "g\circ f"] \arrow[ur, "f"] & & c
+\end{tikzcd} \]
+Many properties can be represented by using such diagrams. A diagram is called \udef{commutative} if all possible compositions with the same domain and codomain are equal\footnote{Depending on the definition of equality at hand this statement may be trivial. For example, arrows are defined as equal iff they have the same domain and codomain, then all compositions with the same domain and codomain are equal by definition. In other words, it is only possible to write commutative diagrams. If arrows are conceived to contain more structure than just domain and codomain, more interesting definitions of equality are possible and the assertion of the commutativity of a diagram becomes a non-trivial assertion.} to each other.
+
+\begin{example}
+\begin{enumerate}
+\item The associativity axiom can be restated as the commutativity of the diagram
+\[ \begin{tikzcd}[column sep=8em, row sep=large]
+a \ar[r, "h\circ (g \circ g) = (h \circ g) \circ f"] \ar[d, "f"] \ar{dr}[near end]{g\circ f} & d \\
+b \ar[crossing over]{ur}[near start]{h\circ g} \ar[r, "g"] & c \ar[u, "h"]
+\end{tikzcd} \]
+\item The unit law can be restated as the commutativity of the diagram
+\[ \begin{tikzcd}
+a \rar{f} \drar{f} & b \dar{1_b} \drar{g} & \\
+& b \rar{g} & c
+\end{tikzcd} \]
+\end{enumerate}
+\end{example}
+
+A metacategory is any interpretation that satisfies the axioms.
+
+\begin{example}
+In the metacategory of sets all objects are sets and all arrows are functions.
+
+For any set $S$, the identity operation defined above yields the \textit{identity function}
+\[ 1_S: S\to S: s\mapsto s \]
+
+The composite of two functions $f: X\to Y$ and $g: Y\to Z$ is defined as
+\[ g\circ f: X \to Z: x\mapsto g(f(x)) \]
+for all $x\in X$.
+\end{example}
+
+The arrows of a category are often called its \udef{morphisms}.
+
+For any object the identity arrow is uniquely defined. Therefore it is possible to identify the identity arrow with the object itself. This further means it is possible to dispense with objects altogether and deal only with arrows. Arrows-only metacategories can be defined characterised axiomatically as follows
+\begin{definition}
+An \udef{arrows-only metacategory $C$} consists of
+\begin{itemize}
+\item arrows;
+\item ordered pairs of arrows, called \udef{composable pairs}; and
+\item an operation assigning to each composable pair $(f,g)$ an arrow $g\circ f$, called their composite.
+\end{itemize}
+We say ``$g \circ f$ is defined'' to mean ``$(g,f)$ is a composable pair''.
+
+Given these data, an identity in $C$ is \textit{defined} to be an arrow $u$ such that $f\circ u = f$ whenever $f\circ u$ is defined and $u\circ g = g$ whenever $u\circ g$ is defined. Then the data are also required to satisfy some axioms:
+\begin{enumerate}
+\item The composite $(h \circ g)\circ f$ is defined if and only if the composite $h\circ (g \circ f)$ is defined. If they are defined, they are equal (this triple composite may be written $hgf$).
+\item The triple composite $hgf$ is defined whenever both composites $hg$ and $gf$ are defined.
+\item For each arrow $g$ of $C$ there exist identity arrows $u$ and $u'$ of $C$ such that $u'\circ g$ and $g\circ u$ are defined.
+\end{enumerate}
+\end{definition}
+The identity arrows $u$ and $u'$ in the third axiom may be interpreted as domain and codomain; they are necessarily unique (TODO why?).
+
+\begin{eigenschap}
+The axioms of metacategories and arrows-only metacategories are equivalent.
+\end{eigenschap}
+
+\subsubsection{Categories}
+A \udef{category} is any metacategory where the objects and arrows form sets. Not all metacategories are categories. For example the metacategory of sets is not a category. This is because there is no such thing as the set of all sets.\footnote{See Russell's paradox.}
+
+Thus a category $C$ contains a set of objects $O$ and arrows $A$. We often drop the letters $O$ and $A$ and write
+\[ a \in C \qquad \text{and}\qquad f\;\text{in}\; C \]
+to mean that $a$ is an object of $C$ and $f$ is an arrow in $C$. We also write
+\[ \hom(b,c) = \{f | f \;\text{in}\; C, \dom f = b , \cod f = c\} \]
+for the set of arrows from $b$ to $c$.
+
+\begin{example}
+Here are some elementary categories. In each case there is only one possible definition of composition.
+\begin{itemize}
+\item \textbf{0} is the empty categroy.
+\item \textbf{1} is the category
+\[ \begin{tikzcd} a \arrow[loop] \end{tikzcd} \]
+\item \textbf{2} is the category
+\[ \begin{tikzcd}a \arrow[loop left] \rar{} & b\arrow[loop right] \end{tikzcd} \]
+\item \textbf{3} is the category
+\[ \begin{tikzcd}[column sep=small]
+& b \arrow[dr]\arrow[loop] & \\
+a \arrow[rr] \arrow[loop left] \arrow[ur] & & c \arrow[loop right]
+\end{tikzcd} \]
+\item $\downarrow\downarrow$ is the category
+\[ \begin{tikzcd}a \arrow[loop left] \rar[shift left]\rar[shift right] & b \arrow[loop right]\end{tikzcd} \]
+\end{itemize}
+\end{example}

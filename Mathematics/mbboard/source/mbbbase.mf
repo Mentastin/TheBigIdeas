@@ -1,0 +1,848 @@
+% blackboard typefaces by Anthony Phan.
+% file: mbbbase.mf (base file)
+% last modification: 25.10.2001.
+
+mbbbase:=1; % when |mbbbase| is known, this file has been input
+
+newinternal slant, math_spread, superness;
+superness:=1/sqrt 2;% initialisation
+superbowl:=superness;
+
+boolean math_fitting, square_dots,old_digits,
+variant_a,variant_f,variant_g,variant_y,
+low_umlaut,square_hebrew,dagesh_mark;
+math_fitting=false; low_umlaut=true;
+square_hebrew=true; dagesh_mark=false;
+
+string normal_extra_endchar, tmp_string;
+normal_extra_endchar:=extra_endchar;
+
+path tmp_path,tmpp_path,last_path,bowl_path;
+
+def font_setup=
+  autorounding:=0; smoothing:=0;
+  clear_pen_memory;
+  define_pixels(u,dh);
+  define_whole_vertical_pixels(body_height,asc_height,
+    cap_height,fig_height,x_height,desc_depth,dot_size);
+  $:=1;
+  forever:
+    exitif unknown thin[$].#;
+    define_whole_blacker_pixels(thin[$]);
+    hthick[$].#:=thick[$].#*(1++slant);
+    hThick[$].#:=Thick[$].#*(1++slant);
+    define_whole_pixels(thick[$],Thick[$],hthick[$],hThick[$])
+    hthick[$]:=thick[$]*(1++slant);
+    hThick[$]:=Thick[$]*(1++slant);
+    lowres_fix(thick[$],Thick[$]) 1.2;
+    lowres_fix(hthick[$],hThick[$]) 1.2;
+    pickup pencircle scaled thin[$]; circle.nib[$]:=savepen;
+    pickup makepen((((.5,.5)--(-.5,.5)--(-.5,-.5)--(.5,-.5)--cycle)
+	xscaled ((1++slant)*thin[$]) yscaled thin[$])slanted slant);
+    square.nib[$]:=savepen;
+    $:=$+1;
+  endfor
+  dot_skip#:=max(1.5o#,0.5u#);
+  define_whole_pixels(dot_skip);
+  dot_skip:=max(1,dot_skip);
+  numeric paren_depth#,asc_depth#,body_depth#,
+  comma_size#,appr#,Appr#,
+  comma_size,apprl,apprr,Apprl,Apprr,ess,cap_ess;
+  oo:=vround(0.5o#*hppp*o_correction)+eps;
+  uo:=vround 1.5oo+eps;
+  define_corrected_pixels(o);
+  define_horizontal_corrected_pixels(ho);
+  appr#=u#+letter_fit#; Appr#=1.5u#+letter_fit#;
+  apprl=floor(0.5hround(2appr#*hppp));
+  apprr=ceiling(0.5hround(2appr#*hppp));
+  Apprl=floor(0.5hround(2Appr#*hppp));
+  Apprr=ceiling(0.5hround(2Appr#*hppp));
+  ess=(ess#/thick1#)*thick1;
+  cap_ess=(cap_ess#/thick2#)*thick2;
+  0.5[body_height#,-paren_depth#]=math_axis#;
+  0.5[asc_height#,-asc_depth#]=math_axis#;
+  body_depth#:=desc_depth#+body_height#-asc_height#;
+  define_whole_vertical_pixels(asc_depth,body_depth,paren_depth);
+  comma_size#=min(dot_size#+desc_depth#,asc_height#-x_height#+thin1#);
+  comma_size=min(dot_size+desc_depth,asc_height-x_height+thin1);
+  rule_thickness:=ceiling(rule_thickness#*hppp);
+  pickup pencircle scaled rule_thickness; rule.nib:=savepen;
+  math_axis:=good.y(math_axis#*hppp);
+  if slant>0:
+    currenttransform:=identity slanted slant;
+  else:
+    currenttransform:=identity yscaled aspect_ratio scaled granularity;
+  fi
+  use_rule1;
+%  shrink_fit:=1+hround(2letter_fit#*hppp)
+%  -2hround(letter_fit#*hppp);
+  if math_fitting: let math_fit=do_math_fit;
+  else: let math_fit=ignore_math_fit; fi
+  extra_font_setup;
+enddef;
+
+def extra_font_setup= enddef;
+
+% not as complex as Knuth's macros.
+
+def ignore_math_fit(expr left_adjustment,right_adjustment)=enddef;
+
+def do_math_fit(expr left_adjustment,right_adjustment)=
+  interim xoffset:=hround(left_adjustment*hppp);
+  charwd:=charwd+left_adjustment+right_adjustment;
+  w:=hround(charwd*hppp);
+  charic:=charic-right_adjustment; if charic<0: charic:=0; fi
+enddef;
+
+vardef ic#=charic enddef;
+
+def padded expr del_sharp=
+  charht:=charht+del_sharp; chardp:=chardp+del_sharp
+enddef;
+
+vardef use_rule@#=
+  circle.nib:=circle.nib@#;
+  square.nib:=square.nib@#;
+  thin#:=thin@#.#; thin:=thin@#;
+  thick:=thick@#; hthick:=hthick@#;
+  Thick:=Thick@#; hThick:=hThick@#;
+  thick#:=thick@#.#; hthick#:=hthick@#.#;
+  Thick#:=Thick@#.#; hThick#:=hThick@#.#;
+enddef;
+
+vardef ortho_penpos@#(expr $,$$)=
+  (x@#r-x@#l,y@#r-y@#l)
+  =$*((0,-1)rotated angle($$ slanted slant))slanted -slant;
+  (x@#r-x@#,y@#r-y@#)=(x@#-x@#l,y@#-y@#l)
+enddef;
+
+vardef stroke text t =
+  forsuffixes e = l,r: path_.e:=t; endfor
+  if cycle path_.l:
+    errmessage "Beware: `stroke' doesn't work with cycles";
+  fi
+  path_.l -- reverse path_.r -- cycle
+enddef;
+
+def diag_width(expr $,$$)=
+  $/abs sind angle($$ slanted slant)
+enddef;
+
+vardef square_end@#(expr $)=
+  save x_,y_;
+  (x_,y_)=unitvector($);
+  ortho_penpos@#(thin,(x_,y_));
+  z@#b=z@#+0.5(x_,y_)*(thin)*((y_-slant*x_)++(-x_));
+  z@#a-z@#b=z@#b-z@#c=whatever*(y_,-x_);
+  z@#a-z@#r=whatever*(x_,y_);
+  x@#.a:=0.5hround 2x@#.a; x@#.c:=0.5hround 2x@#.c;
+  y@#.a:=0.5vround 2y@#.a; y@#.c:=0.5vround 2y@#.c;
+  erase fill z@#.a--z@#.a+(x_,y_)--z@#.c+(x_,y_)--z@#.c--cycle;
+  fill z@#r--z@#a--z@#c--z@#l--cycle;
+  labels(@#a,@#b,@#c,@#r,@#l)
+enddef;
+
+% $ <---> $$$; $$ <---> $$$$. sign=+1 for X, -1 for Z.
+
+vardef adjust_slanted_bar(suffix $,$$,$$$,$$$$)(expr bar_thick,sign)=
+  save a,b;
+  if abs(y$$-y$)=bar_thick:
+    (a1,a2)=(z$$-z$)slanted slant;
+    if a1=0: b=0;% b should then be infinite.
+    else: b=if sign<0: - fi (a1++a2)*((a1++a2)/2a1);
+    fi
+  else:
+    a=angle((z$$-z$)slanted slant);
+    b=(cosd(a)/sind(a) if sign<0: - else: + fi
+      (((y$$-y$)/(bar_thick)/sind(a))+-+1))
+    /(((y$$-y$)/(bar_thick))**2-1)*(y$$-y$);
+  fi
+  z$$$=(x$-b,y$); z$$$$=(x$$+b,y$$)
+enddef;
+
+% ellipses and related things.
+
+primarydef w up_to_right z=
+  w{0,ypart(z-w)}
+  ...(superness[xpart z,xpart w],
+    superness[ypart w,ypart z]){z-w}
+  ...{xpart(z-w),0}z
+enddef;
+let up_to_left=up_to_right;
+let down_to_right=up_to_right;
+let down_to_left=up_to_right;
+primarydef w right_to_up z=
+  w{xpart(z-w),0}
+  ...(superness[xpart w,xpart z],
+    superness[ypart z,ypart w]){z-w}
+  ...{0,ypart(z-w)}z
+enddef;
+let right_to_down=right_to_up;
+let left_to_up=right_to_up;
+let left_to_down=right_to_up;
+
+primarydef w flat_up_to_right z=
+  flat_up_to_right_(w,z)...{xpart(z-w),0}z
+enddef;
+vardef flat_up_to_right_(expr w,z)=
+  save z_,z__; pair z_,z__;
+  z_=(superness[xpart z,xpart w],superness[ypart w,ypart z]);
+  xpart z__=xpart w; z__-z_=whatever*(w-z);
+  w..controls 0.5(w+z__) and z__..z_{z-w}
+enddef;
+let flat_up_to_left=flat_up_to_right;
+let flat_down_to_right=flat_up_to_right;
+let flat_down_to_left=flat_up_to_right;
+primarydef w flat_right_to_up z=
+  flat_right_to_up_(w,z)...{0,ypart(z-w)}z
+enddef;
+vardef flat_right_to_up_(expr w,z)=
+  save z_,z__; pair z_,z__;
+  z_=(superness[xpart w,xpart z],superness[ypart z,ypart w]);
+  ypart z__=ypart w; z__-z_=whatever*(w-z);
+  w..controls 0.5(w+z__) and z__..z_{z-w}
+enddef;
+let flat_right_to_down=flat_right_to_up;
+let flat_left_to_up=flat_right_to_up;
+let flat_left_to_down=flat_right_to_up;
+
+% Mighty macro by D. E. Knuth
+
+def ellipse_set(suffix $,@,@@,$$)=
+  alpha_:=slope*(x@-x$); beta_:=y$$-y$-slope*(x$$-x$);
+  gamma_:=alpha_/beta_;
+  y@-y$=.5(beta_-alpha_*gamma_);
+  x@@-x$=-2gamma_*(x@-x$)/(1+gamma_*gamma_);
+  y@@-y$$=slope*(x@@-x$$)
+enddef;
+
+def hellipse_set(suffix $,@,@@,$$)=
+  alpha_:=(y@-y$)/slope; beta_:=x$$-x$-(y$$-y$)/slope;
+  gamma_:=alpha_/beta_;
+  x@-x$=.5(beta_-alpha_*gamma_);
+  y@@-y$=-2gamma_*(y@-y$)/(1+gamma_*gamma_);
+  x@@-x$$=(y@@-y$$)/slope
+enddef;
+
+vardef elliptic_arc(suffix $,$$,$$$)=
+  save x_,t,p_; path p_;
+  p_=z$ up_to_right (x$+5u,y$$) right_to_down (x$+10u,y$);
+  t=xpart(p_ intersectiontimes ((x$+5u,y$$$)..(x$+10u,y$$$)));
+  x_=xpart(point t of p_); x$$-x$=5u*((x$$$-x$)/(x_-x$));
+  p_:=((p_ shifted (-x$,0)) xscaled ((x$$$-x$)/(x_-x$))) shifted (x$,0);
+  y$$$'=y$$; z$$$'-z$$$=whatever*(direction t of p_);
+  subpath (0,t) of p_
+enddef;
+
+def autorounded=
+  interim smoothing:=2; interim autorounding:=2
+enddef;
+
+def center_bar(suffix $,$$)=
+  pickup circle.nib;
+  if hround((w+apprl-apprr-hthick-thin)/2)
+    <>(w+apprl-apprr-hthick-thin)/2: change_width fi;
+  lft x$=(w+apprl-apprr-hthick-thin)/2; x$$=x$+hthick;
+enddef;
+
+def center_stem(text t)=
+  pickup circle.nib;
+  if 0.5(w+apprl-apprr)<>good.x(0.5(w+apprl-apprr)): change_width; fi
+  for $=t: x[$]=0.5(w+apprl-apprr); endfor
+enddef;
+
+def compute_spread(expr normal_spread,big_spread)=
+  spread#:=math_spread[normal_spread,big_spread];
+  spread:=2ceiling(spread#*hppp/2)+eps
+enddef;
+
+def v_center(expr h_sharp) =
+  .5h_sharp+math_axis#, .5h_sharp-math_axis#
+enddef;
+
+boolean straight_bowl;
+straight_bowl=true;
+bowl_max_height:=infinity;
+
+def bbbowl(expr top_point,mid_point,bot_point,thickness) expr p=
+  x.bowl.mid:=x.bowl.top:=x.bowl.bot:=xpart mid_point
+  if xpart mid_point<xpart top_point: + else: - fi thickness;
+  y.bowl.mid:=ypart mid_point;
+  y.bowl.top:=ypart(p intersectionpoint
+    ((x.bowl.mid,ypart top_point)..(x.bowl.mid,y.bowl.mid)));
+  y.bowl.bot:=ypart(p intersectionpoint
+    ((x.bowl.mid,ypart bot_point)..(x.bowl.mid,y.bowl.mid)));
+  bowl_path:=if straight_bowl: z.bowl.top..z.bowl.bot
+  else: begingroup interim superness:=superbowl;
+      if xpart mid_point<xpart top_point:
+	if x.bowl.top<xpart top_point: top_point left_to_down
+	else: z.bowl.top.. fi
+      else: if x.bowl.top>xpart top_point: top_point right_to_down
+	else: z.bowl.top.. fi fi
+      if ypart(top_point-bot_point)>bowl_max_height:
+	(x.bowl.mid,ypart top_point-0.5bowl_max_height)
+	..(x.bowl.mid,ypart bot_point+0.5bowl_max_height)
+      else: z.bowl.mid fi
+      if xpart mid_point<xpart bot_point:
+	if x.bowl.bot<xpart bot_point: down_to_right bot_point
+	else: ..z.bowl.bot fi
+      else: if x.bowl.bot>xpart bot_point: down_to_left bot_point
+	else: ..z.bowl.bot fi fi
+    endgroup
+  fi;
+  draw bowl_path
+enddef;
+
+def hbbowl(expr top_point,mid_point,bot_point,thickness) expr p=
+  x.bowl.mid:=x.bowl.top:=x.bowl.bot:=xpart mid_point
+  if xpart mid_point<xpart top_point: + else: - fi thickness;
+  y.bowl.mid:=ypart mid_point; y.bowl.bot:=ypart bot_point;
+  y.bowl.top:=ypart(p intersectionpoint
+    ((x.bowl.mid,ypart top_point)..(x.bowl.mid,y.bowl.mid)));
+  bowl_path:=if straight_bowl: z.bowl.top..z.bowl.bot
+  else: begingroup interim superness:=superbowl;
+      if xpart mid_point<xpart top_point:
+	if x.bowl.top<xpart top_point: top_point left_to_down
+	else: z.bowl.top.. fi
+      else: if x.bowl.top>xpart top_point: top_point right_to_down
+	else: z.bowl.top.. fi fi
+      if abs(ypart(top_point-mid_point))>0.5bowl_max_height:
+	
+	(x.bowl.mid,ypart top_point
+	  if ypart(top_point-mid_point)>0: - else: + fi
+	  0.5bowl_max_height)..
+	fi
+    z.bowl.mid if y.bowl.mid<>y.bowl.bot: ..z.bowl.bot fi
+    endgroup
+  fi;
+  draw bowl_path
+enddef;
+
+% some drawings are repeated, so they become macros.
+% Also, it makes it simpler to change.
+
+def dot(suffix $,$$)=
+  if square_dots: pickup square.nib;
+    draw (x$,y$)--(x$$,y$)--(x$$,y$$)--(x$,y$$)--cycle;
+    labels($,$$);
+  else: pickup circle.nib;
+    y$a=y$c=0.5[y$,y$$]; x$b=x$d=0.5[x$,x$$];
+    x$a=x$; x$c=x$$; y$b=y$$; y$d=y$;
+    draw z$a up_to_right z$b right_to_down z$c
+    down_to_left z$d left_to_up z$a;
+    labels($,$$,$a,$b,$c,$d); fi
+enddef;
+
+% the next program draws `acute', `grave' and related shapes
+% when square_dots=false. Well, it is quite tricky and some
+% people would think that this program leads to wrong results.
+% I am not sure that it does not but I've designed it so.
+
+vardef long_dot(suffix $,$$)=
+  pickup circle.nib; save a,r,u_; pair u_;
+  r$=max(0.5(0.5dot_size-thin),0);
+  r$$=max(0.5(dot_size-thin),0);
+  a=(r$$-r$)/abs(z$$-z$);
+  u_=unitvector(z$$-z$);
+  z$$b-z$$=r$$*u_; z$b-z$=-r$*u_;% edges
+  z$-z$a=r$*a*u_; z$$-z$$a=r$$*a*u_;% midpoints
+  ortho_penpos$a(0.5thick*(1+-+a),u_);
+  ortho_penpos$$a(thick*(1+-+a),u_);
+  ortho_penpos$$(thick,u_);
+  draw z$b{(z$$r-z$$l)}...z$a.r--z$$a.r...z$$r{z$$-z$}...
+  (superness[z$$,z$$b]+superness[z$$,z$$r]-z$$){z$$b-z$$r}
+  ...z$$b{-(z$$r-z$$l)}...
+  (superness[z$$,z$$b]+superness[z$$,z$$l]-z$$){z$$l-z$$b}
+  ...z$$.l{z$-z$$}...z$$a.l--z$a.l...cycle;
+  penlabels($a,$$,$$a); labels($,$b,$$b);
+enddef;
+
+% see, for instance, "bbcomma" in bbpunct.mf to learn which
+% coordinates should be known before calling the next routine.
+
+vardef complete_comma@#=
+  save tmp_path; path tmp_path;
+  if y4@#>y1@#: top y4@#-y3@#=min(dot_size/2,y4@#-y1@#);
+  else: y3@#-bot y4@#=min(dot_size/2,y1@#-y4@#); fi
+  y2@#=y1@#; x2@#=0[x1@#,x5@#];
+  tmp_path=z1@#..z2@# right_to_up z3@#;
+  hbbowl(z1@#,1/3[z3@#,(x3@#,y1@#)],z3@#,abs(x5@#-x3@#)) tmp_path;
+  draw tmp_path; square_end1@#((x5@#-x3@#,0));
+  if square_dots: x4@#=x3@#; y4@#=y5@#;
+    draw z3@#..z4@#; draw z5@#..z.bowl.bot;
+    pickup square.nib; draw z4@#..z5@#;
+  else: x4@#=0.5[x3@#,x5@#]; y5@#=y3@#;
+    draw z3@# up_to_left z4@# right_to_down z5@#;
+  fi
+  labels(1@#,2@#,3@#,4@#,5@#)
+enddef;
+
+def complete_AV(expr $,lftbound,rtbound)=
+  if $<0: x1l=rtbound; x3r=lftbound; y1l=y5l=y3r=h; y2l=y4r=-d;
+  else: x1l=lftbound; x3r=rtbound; y1l=y5l=y3r=-d; y2l=y4r=h; fi
+  numeric a,x,y;
+  a=(abs(x3r-x1l)-2(h+d)*slant)/(2h+2d);
+  y=(thick+thin)/(2h+2d);
+  x=(thick+thin)*(-a*y+sqrt(1+(a**2)-(y**2)))/(1-(y**2));
+  x4r-x2l=x3r-x5l=if $<0: - fi x; x2l-x1l=x5l-x2l; z6l=z2l;
+  numeric x,y;
+  x=if $<0: - fi diag_width(thin,z3r-z4r);
+  y=if $<0: - fi diag_width(thin,z1l-z2l);
+  penpos1(y,0); penpos2(y,0); penpos3(x,0);
+  penpos4(x,0); penpos5(x,0); penpos6(x,0);
+  y3a-y3=if $<0:- fi thin;
+  z3a-z3=z5a-z5=z4-z4a=z6-z6a=whatever*(z4-z3);
+  z2a=whatever[z1r,z2r]; z2a=whatever[z5,z6];
+  fill z1r--z2a--z6--z2l--z1l--cycle;
+  penstroke z3e..z4e; penstroke z5e..z6e;
+  fill z3--z5--z5a--z3a--cycle;
+  fill z4--z6--z6a--z4a--cycle;
+  penlabels(1,2,3,4,5,6); labels(2a,3a,4a,5a,6a)
+enddef;
+
+% def adjust_O(expr @,$,$$,$$$,$$$$)=
+%   pickup circle.nib;
+%   rt x[@]=w-apprr+$$; lft x[@+2]=apprl-$;
+%   top y[@+1]=h+$$$; bot y[@+3]=-d-$$$$;
+%   y[@]=y[@+2]=0.5[y[@+1],y[@+3]]; x[@+1]=x[@+3]=0.5[x[@],x[@+2]];
+%   x[@+4]-x[@+2]=x[@]-x[@+6]=hThick;
+%   tmp_path:=superellipse(z[@],z[@+1],z[@+2],z[@+3],superness);
+%   z[@+4]=tmp_path intersectionpoint ((x[@+4],y[@+3])..(x[@+4],y[@]));
+%   z[@+5]=tmp_path intersectionpoint ((x[@+4],y[@+1])..(x[@+4],y[@]));
+%   z[@+6]=tmp_path intersectionpoint ((x[@+6],y[@+3])..(x[@+6],y[@]));
+%   z[@+7]=tmp_path intersectionpoint ((x[@+6],y[@+1])..(x[@+6],y[@]));
+% enddef;
+
+vardef bbcircle@#(expr left_side,right_side,top_side,bot_side)=
+  rt x@#a=right_side; lft x@#c=left_side;
+  top y@#b=top_side; bot y@#d=bot_side;
+  y@#a=y@#c=0.5[y@#b,y@#d]; x@#b=x@#d=0.5[x@#a,x@#c];
+  last_path:=superellipse(z@#a,z@#b,z@#c,z@#d,superness);
+  labels(@#a,@#b,@#c,@#d)
+enddef;
+
+% def complete_O(expr $,$$,$$$,$$$$)=
+%   pickup circle.nib;
+%   rt x1=w-apprr+$$; lft x3=apprl-$; top y2=h+$$$; bot y4=-d-$$$$;
+%   y1=y3=0.5[y2,y4]; x2=x4=0.5[x1,x3];
+%   tmp_path:=superellipse(z1,z2,z3,z4,superness);
+%   draw tmp_path;
+%   bbbowl(x3,y2,y4,hThick) tmp_path;
+%   bbbowl(x1,y2,y4,hThick) tmp_path;
+%   labels(1,2,3,4);
+% enddef;
+
+def complete_X(expr shift)=
+  pickup circle.nib;
+  numeric a;
+  x1l=apprl-shift; x4r=w-apprr+shift; y1l=h; y4r=-d;
+  adjust_slanted_bar(1l,4r,2r,3l)(thick+thin,1);
+  a=diag_width(thin,z1l-z3l);
+  penpos1(a,0); penpos2(a,0); penpos3(a,0); penpos4(a,0);
+  z5l=(apprl,-d); z8r=(w-apprr,h);
+  adjust_slanted_bar(5l,8r,5r,8l)(thin,-1);
+  forsuffixes $=l,r:
+    z6$=whatever[z5$,z8$]; z6$=whatever[z1,z3];
+    z7$=whatever[z5$,z8$]; z7$=whatever[z2,z4];
+  endfor
+  y1-y1a=thin; z1a=whatever[z1,z3]; z1-z1a=z2-z2a=z3a-z3=z4a-z4;
+  penstroke z1e..z3e; penstroke z2e..z4e; penstroke z5e..z6e;
+  penstroke z7e..z8e; fill z1a--z2a--z2--z1--cycle;
+  fill z3--z4--z4a--z3a--cycle; labels(1a,2a,3a,4a);
+  penlabels(1,2,3,4,5,6,7,8);
+enddef;
+
+% macros for lowercase.
+
+boolean g_bar, j_bar;
+g_bar=false; j_bar=false;
+
+% $ and $$ : proportionnal depth of the curve along the straight bar.
+
+def complete_right_lower(expr $,$$)=
+  if g_bar or j_bar: complete_gj_bar(-1);
+  else: pickup circle.nib; lft x1=apprl; x3=x1;
+    bot y1=-d; y2=y1; top y3=h; y4=y3; x2-x1=x4-x3=hthick;
+    pickup square.nib; draw z1--z2--z4--z3--cycle;
+  fi
+  pickup circle.nib;
+  rt x7=w-apprr+ho; terminate_lower($,$$);
+enddef;
+
+% $ and $$ : proportionnal depth of the curve along the straight bar.
+
+def complete_left_lower(expr $,$$)=  
+  if g_bar or j_bar: complete_gj_bar(1);
+  else: pickup circle.nib; rt x1=w-apprr; x3=x1;
+    bot y1=-d; y2=y1; top y3=h; y4=y3; x1-x2=x3-x4=hthick;
+    pickup square.nib; draw z1--z2--z4--z3--cycle; fi
+  pickup circle.nib;
+  lft x7=apprl-ho; terminate_lower($,$$);
+enddef;
+
+def terminate_lower(expr $,$$)=
+  pickup circle.nib;
+  x5=x9=x2; y7=0.5[y6,y8]; x6=x8=0.5[x7,x1];
+  if ab_down_factor>0: bot y6=-oo;
+    y5=ab_down_factor[top 0,bot x_height];
+  else: bot y6=bot y5=0; fi
+  if ab_up_factor>0: top y8=x_height+oo; 
+    y9=ab_up_factor[bot x_height,top 0];
+  else: top y8=top y9=x_height; fi
+  tmp_path:=z5 if ab_down_factor>0: down_to_left else:.. fi
+  z6 left_to_up z7 up_to_right z8
+  if ab_up_factor>0: right_to_down else:.. fi z9;
+  bbbowl(z8,z7,z6,hThick) tmp_path; draw tmp_path;
+  labels(1,2,3,4,5,6,7,8,9);
+enddef;
+
+% $ : proportionnal depth of the curve along the straight bar.
+
+def complete_n=
+  pickup circle.nib; lft x1=apprl; x3=x1;
+  bot y1=bot y2=0; top y3=top y4=h; x2-x1=x4-x3=hthick;
+  x5=x2; x6=0.5[x7,x5]; rt x7=rt x8=w-apprr;
+  if hmn_factor>0: y5=hmn_factor[bot x_height, y1];
+    top y6=x_height+oo;
+  else: top y5=top y6=x_height; fi
+  y7=0.7[y1,y6]; x8-x9=hthick;
+  if g_bar or j_bar: y8=0; else: bot y8=bot y9=-d; fi
+  tmp_path:=z5 if hmn_factor>0: up_to_right else:.. fi
+  z6 right_to_down z7..
+  if g_bar: g_curve8(9,x9,true);
+  elseif j_bar: j_curve8(9,x9,true);
+  else: z8; fi
+  draw tmp_path; hbbowl(z6,z7,z8,hthick) tmp_path;
+  pickup square.nib; draw z1--z2--z4--z3--cycle;
+  if (not j_bar) and (not g_bar): draw z8..z9; fi
+  labels(1,2,3,4,5,6,7,8,9,10); g_bar:=false; j_bar:=false;
+enddef;
+
+def complete_u(expr $)=
+  if g_bar or j_bar: complete_gj_bar(1);
+  else:
+    pickup circle.nib; rt x1=w-apprr; x3=x1;
+    bot y1=-d; y2=y1; top y3=h; y4=y3; x1-x2=x3-x4=hthick;
+    pickup square.nib; draw z1--z2--z4--z3--cycle; fi
+  pickup circle.nib;
+  x5=x2; x6=0.5[x7,0.5[x2,x1]]; lft x7=lft x8=apprl;
+  top y8=x_height; y7=0.7[y8,y6];
+  if uy_factor>0: y5=uy_factor[top 0,y8]; bot y6=-oo;
+  else: bot y5=bot y6=0; fi
+  tmp_path:=z5 if uy_factor>0: down_to_right else:.. fi
+  z6 left_to_up z7..z8;
+  draw tmp_path; hbbowl(z6,z7,z8,hthick) tmp_path;
+  pickup square.nib;
+  draw z8..z.bowl.bot; labels(1,2,3,4,5,6,7,8,9,10);
+enddef;
+
+def complete_gj_bar(expr $)=
+  pickup circle.nib;
+  top y3=top y4=h; y1=0;
+  if $>0: rt x1=rt x3=w-apprr; x3-x4=hthick;
+  else: lft x1=lft x3=apprl; x4-x3=hthick; fi
+  draw z3..if g_bar: g_curve1(2,x4,true); g_bar:=false;
+  else: j_curve1(2,x4,true); j_bar:=false; fi
+  draw z2..z4; pickup square.nib; draw z3..z4;
+enddef;
+
+vardef g_curve@#(suffix $)(expr $$,squared_end)=
+  save p_; path p_;
+  bot y@#.a=-d; y@#.b=0.5[bot y@#,y@#.a];
+  if $$<x@#: lft x@#.b=apprl+hround 0.15u;
+  else: rt x@#.b=w-apprr-hround 0.15u; fi
+  p_=elliptic_arc(@#,@#.a,@#.b);
+  hbbowl(z@#.a,z@#,z@#,abs($$-x@#)) p_;
+  z$=z.bowl.bot;
+  if squared_end: square_end@#.b(z@#.b-z@#.b'); fi
+  labels(@#.a,@#.b,@#.b');
+  p_
+enddef;
+
+vardef j_curve@#(suffix $)(expr $$,squared_end)=
+  save p_; path p_;
+  bot y@#.a=bot y@#.b=-d;
+  $$-x@#.b=if x@#<$$: - fi hround 2u;
+  x@#.a=0.25[x@#.b,$$];
+  p_=z@# down_to_right z@#.a..z@#.b;
+  hbbowl(z@#.a,z@#,z@#,abs($$-x@#)) p_;
+  z$=z.bowl.bot;
+  if squared_end: square_end@#.b(z@#.b-z@#.a); fi
+  labels(@#.a,@#.b);
+  p_
+enddef;
+
+def complete_f_stroke(suffix $,$$)(expr top_width,squared_end)=
+  pickup circle.nib;
+  top y$.a=top y$.b=h; y$=x_height;
+  x$.a-x$$=top_width; x$.b=0.25[x$.a,x$$];
+  tmp_path:=z$.a..z$.b left_to_down z$;
+  hbbowl(z$.b,z$,z$,x$$-x$) tmp_path;
+  if not variant_f:
+    bot y$.c=bot y$$=0; x$.c=x$; tmpp_path:=z$$..z.bowl.bot;
+  else: bot y$$.a=bot y$$.b=-d; y$$=0;
+    x$-x$$.a=hround 2u; x$$.b=0.25[x$$.a,x$];
+    tmpp_path:=z$$.a..z$$.b right_to_up z$$..z.bowl.bot;
+    hbbowl(z$$.b,z$$,z$$,x$$-x$) tmpp_path; z$.c=z.bowl.bot; fi
+  draw tmp_path..z$.c; draw tmpp_path;
+  if not variant_f: pickup square.nib;
+    draw z$.c..z$$; labels($,$.a,$.b,$.c,$$,$$.a);
+  else: square_end$$.a(left);
+    labels($,$.a,$.b,$.c,$$,$$.a,$$.b); fi
+  if squared_end: square_end$.a(right); fi
+enddef;
+
+%
+% accents
+%
+
+if unknown tmp_h: tmp_h:=x_height; fi
+
+def complete_grave(expr $,$$)=
+  if square_dots:
+    x0=(w+$-$$)/2+0.25u; x2l=hround $-0.5;
+    y0=y3r=vround 1/3[tmp_h,h]; y2l=y4r=h;
+    adjust_slanted_bar(2l,0,0',1l)(0.5(thick+thin),1);
+    a:=diag_width(thin,z0'-z0);
+    penpos1(a,0); penpos2(a,0); penpos3(a,0); penpos4(a,0);
+    x3-x0=x0-x1; x4-x0'=x0'-x2;
+    y1a-y1=thin; z1a=whatever[z1,z2];
+    z1a-z1=z3a-z3=z2-z2a=z4-z4a;
+    penstroke z1e..z2e; penstroke z3e..z4e;
+    fill z1a--z3a--z3--z1--cycle;
+    fill z2--z4--z4a--z2a--cycle;
+    labels(1a,2a,3a,4a); penlabels(0,0',1,2,3,4);
+  else:
+    pickup circle.nib;
+    x2=$+dot_size/2+hround((w-$-$$)/8);
+    x1=w-$$-dot_size/4-hround((w-$-$$)/5);
+    y1=vround 1/5[tmp_h,h]+dot_size/4;
+    y2=h-dot_size/2; long_dot(1,2);
+  fi
+enddef;
+
+def complete_acute(expr $,$$)=
+  if square_dots:
+    x0=(w+$-$$)/2-0.25u; x4r=w-hround $$+0.5;
+    y0=y1l=vround 1/3[tmp_h,h]; y2l=y4r=h;
+    adjust_slanted_bar(4r,0,0',3r)(0.5(thick+thin),-1);
+    a:=diag_width(thin,z0'-z0);
+    penpos1(a,0); penpos2(a,0); penpos3(a,0); penpos4(a,0);
+    x3-x0=x0-x1; x4-x0'=x0'-x2;
+    y1a-y1=thin; z1a=whatever[z1,z2];
+    z1a-z1=z3a-z3=z2-z2a=z4-z4a;
+    penstroke z1e..z2e; penstroke z3e..z4e;
+    fill z1a--z3a--z3--z1--cycle;
+    fill z2--z4--z4a--z2a--cycle;
+    labels(1a,2a,3a,4a); penlabels(0,0',1,2,3,4);
+  else:
+    pickup circle.nib;
+    x2=w-$$-dot_size/2-hround((w-$-$$)/8);
+    x1=$+dot_size/4+hround((w-$-$$)/5);
+    y1=vround 1/5[tmp_h,h]+dot_size/4;
+    y2=h-dot_size/2; long_dot(1,2);
+  fi
+enddef;
+
+def complete_circumflex(expr $,$$,$$$)=
+  if square_dots:
+    begingroup save d; d=-vround 1/3[tmp_h,h];
+      complete_AV($$$,$,w-$$);
+    endgroup;
+  else:
+    pickup circle.nib;
+    if $$$>0: top y1=top y2=y1r=y2r=h; y1l=y2l=y1r-thin;
+      y3r=y4r=y4a=y6a=y6r=y7r=vround 1/5[tmp_h,h];
+      y5=max(top y1r-dot_size,0.5[y1r,y3r]);
+    else: bot y1=bot y2=y1r=y2r=vround 1/5[tmp_h,h];
+      y1l=y2l=y1r+thin; y3r=y4r=y4a=y6a=y6r=y7r=h;
+      y5=min(bot y1r+dot_size,0.5[y1r,y3r]);
+    fi
+    x2-x1=hthick; x7r=$; x3r=w-$$; x1-x7r=x3r-x2;
+    adjust_slanted_bar(7r,1,7,1a)(0.5thin,-$$$);
+    adjust_slanted_bar(3r,2,3,2a)(0.5thin,$$$);
+    z1r=whatever[z7r,z1a]; z2r=whatever[z3r,z2a]; 
+    z6=z7; z3=z4; x5=0.5[x1,x2];
+    x4-x4r=diag_width(0.5thin,z5-z4); x6r-x6=diag_width(0.5thin,z5-z6);
+    z5r-z4r=whatever*(z5-z4); z5r-z6r=whatever*(z5-z6);
+    z5l-(x4+(x4-x4r),y4)=whatever*(z5-z4);
+    z5l-(x6-(x6r-x6),y6)=whatever*(z5-z6);
+    z1r-z7r=whatever*(z1-z7); z2r-z3r=whatever*(z2-z3);
+    z1l-(x7+(x7-x7r),y7)=whatever*(z1-z7);
+    z2l-(x3-(x3r-x3),y3)=whatever*(z2-z3);
+    z1l-z7l=whatever*(z1-z7); z2l-z3l=whatever*(z2-z3);
+    z7l-z5l=whatever*(z7-z5); z3l-z5l=whatever*(z3-z5); 
+    z6l=z7l; z4l=z3l;
+    penstroke z1e--z2e--z3e--z4e--z5e--z6e--z7e--cycle;
+    penlabels(1,2,3,4,5,6,7); labels(1a,2a);
+  fi
+enddef;
+
+def complete_hat(expr $,$$)=complete_circumflex($,$$,1); enddef;
+
+def complete_hacheck(expr $,$$)=complete_circumflex($,$$,-1); enddef;
+
+def complete_tilde(expr $,$$)=
+  if square_dots:
+    x1r=$; x8r=w-$$;
+    x2r=0.25[x1r,x8r]; x2r-x1r=x8r-x7r; y8r=h; y8r-y7r=y2r-y1r;
+    y1r=y7r+o=min(vround 2/3[h,tmp_h],h-vround 1.2(thick+thin));
+    adjust_slanted_bar(2r,7r,5r,4r)(thick+thin,-1);
+    numeric a,b;
+    a=diag_width(thin,z2r-z4r); b=diag_width(thin,z2r-z1r);
+    penpos4(a,0); penpos5(a,180); penpos1(b,180); penpos8(b,0);
+    z2l-z1l=whatever*(z2r-z1r); z2l-z4l=whatever*(z2r-z4r);
+    z7l-z5l=whatever*(z7r-z5r); z7l-z8l=whatever*(z7r-z8r);
+    forsuffixes @=r,l:
+      z3@-z4@=whatever*(z2r-z4r); z3@-z8=whatever*(z7r-z8r);
+      z6@-z5@=whatever*(z7r-z5r); z6@-z1=whatever*(z2r-z1r);
+    endfor
+    penstroke z1e--z2e--z3e; penstroke z6e--z7e--z8e;
+    penlabels(1,2,3,4,5,6,7,8);
+  else: pickup circle.nib;
+    bot y1=bot y6l+o=vround 1/3[tmp_h,h];
+    lft x1=$; rt x7=w-$$; top y7=top y2r-o=h;
+    y6r-y6l=y2r-y2l=vround 0.5[thin,dot_size-thin];
+    z4=0.5[z1,z7]; slope:=2(y7-y1)/(x1-x7); numeric a;
+    a=(sind angle((-1,-slope)slanted slant))[dot_size-thin,thick];
+    ortho_penpos4(a,(-1,-slope));
+    forsuffixes @=r,l:
+      hellipse_set(1,2@,3@,4@); hellipse_set(7,6@,5@,4@);
+      draw z1 up_to_right z2@...z3@---z5@
+      ...z6@ right_to_up z7;
+    endfor
+    square_end1(down); square_end7(up);
+    penlabels(1,2,3,4,5,6,7);
+  fi
+enddef;
+
+def complete_dot(expr $,$$)=
+  pickup circle.nib; center_bar(1,1');
+  top y1'=h; bot y1=h-dot_size; dot(1,1');
+enddef;
+
+def complete_umlaut(expr $,$$)=
+  pickup circle.nib; x1'-x1=x2'-x2=hthick;
+  lft x1-$=w-$$-rt x2'=hround 0.5(w-$-$$-7u);
+  top y1'=top y2'=h; bot y1=bot y2=h-dot_size;
+  dot(1,1'); dot(2,2');
+enddef;
+
+def complete_long_umlaut(expr $,$$)=
+  if square_dots:
+    y0=vround 1/3[tmp_h,h]; y8r=h;
+    x0=0.5[$,w-$$]; x8r=w-$$;
+    adjust_slanted_bar(0,8r,6r,0')
+    (max(thick+thin+0.5u,2u),-1);
+    a:=diag_width(1,z0'-z0);
+    forsuffixes @#=1,2,3,4,5,6,7,8: penpos@#(a*thin,0); endfor
+    z2-z1=z4-z3=z6-z5=z8-z7=(a*thick,0);
+    z8r-z0'=z0'-z3l;z6r-z0=z0-z1l; y1a-y1=thin;
+    z1a-z1=z2a-z2=z3-z3a=z4-z4a=z5a-z5=z6a-z6
+    =z7-z7a=z8-z8a=whatever*(z3-z1);
+    penstroke z1e..z3e; penstroke z2e..z4e;
+    penstroke z5e..z7e; penstroke z6e..z8e;
+    for i=1 upto 4:
+      fill z[2i-1]--z[2i]--z[2i]a---z[2i-1]a--cycle;
+    endfor
+    penlabels(0,0',1,2,3,4,5,6,7,8); labels(1a,2a,3a,4a,5a,6a,7a,8a);
+  else:
+    pickup circle.nib;
+    y1=y3=vround 1/5[tmp_h,h]+0.25dot_size;
+    y2=y4=h-0.5dot_size+o;
+    x1-x3=x2-x4=hround(max(dot_size+0.5u,3u));
+    0.5[x1,x3]=0.5[$,w-$$];
+    x2=w-$$-max(0.5dot_size,u);
+    long_dot(1,2); long_dot(3,4);
+  fi
+enddef;
+
+def complete_circ(expr $,$$)=
+  pickup circle.nib;
+  numeric a,b; b=vround(1/3[tmp_h,h]);
+  a=round max(hThick+thin,h+o-b);
+  top y2=b+a+eps; bot y4=b-eps; y1=y3=0.5[y4,y2];
+  lft x3-$=w-$$-rt x1=hround 0.5(w-$-$$-a);
+  x2=x4=0.5[x1,x3];
+  draw superellipse(z1,z2,z3,z4,superness);
+  labels(1,2,3,4,0);
+enddef;
+
+def complete_breve(expr $,$$)=
+  pickup circle.nib; top y1=top y3=h;
+  lft x1-$=w-$$-rt x3=hround 0.5(w-$-$$-6u);
+  bot y2=vround 1/3[tmp_h,h]; x2=0.5[x1,x3];
+  draw z1 down_to_right z2 right_to_up z3;
+  square_end1(up); square_end3(up);
+  labels(1,2,3);
+enddef;
+
+def complete_cedilla(expr $,$$)=
+  pickup circle.nib;
+  x1=x2=x4=good.x $; x3-x1=hThick; x1-x5=hround 2u;
+  y1=$$; bot y4=bot y5=-desc_depth; top y2=-vround max(o,d/6);
+  y3=0.5[y4,y2]; draw z2 right_to_down z3 down_to_left z4..z5;
+  draw z1..z4; square_end5(left);
+  labels(1,2,3,4,5);
+enddef;
+
+def complete_ogonek(expr $,$$)=
+  pickup circle.nib;
+  x1=x6=good.x $; x5-x1=x1-x2=hthick; x2=x3;
+  y1=$$; bot y4=bot y6=-desc_depth-oo;
+  y5=good.y 1/3[y4,y1]; y1-y2=y5-y6;
+  y3=(superness**2)[y4,y2];
+  x4=(superness**2)[x6,x3];
+  tmp_path:=z1{z2-z1}...z3 down_to_right z4{right}...z5{z5-z6};
+  z7=tmp_path intersectionpoint ((x1,y3)..(x1,y4));
+  draw tmp_path; draw z1..z7; square_end5(z5-z6);
+  labels(1,2,3,4,5,6,7);
+enddef;
+
+% `iff' construction
+
+let semi_ =;; let colon_ = :; let endchar_ = endchar;
+def iff expr b = if b:let next_=use_it else:let next_=lose_it fi; next_ enddef;
+def use_it = let : = restore_colon; enddef;
+def restore_colon = let : = colon_; enddef;
+def lose_it = let endchar=fi;
+let ;=fix_ semi_ if false enddef;
+def fix_=let ;=semi_; let endchar=endchar_;
+enddef;
+def always_iff = let : = endgroup; killboolean enddef;
+def killboolean text t = use_it enddef;
+
+% proofing
+
+def horizontal_rules_list=
+  -body_depth,-desc_depth,x_height,cap_height,asc_height,body_height
+enddef;
+
+def makebox(text rule) =
+  for y=-d.o_,0,h.o_:
+    rule((-xoffset,y),(w-xoffset,y)); endfor
+  for y=horizontal_rules_list:
+    rule((apprl-xoffset,y),(w-apprr-xoffset,y)); endfor
+  for x=0,apprl,w-apprr,w:
+    rule((x-xoffset,-d.o_),(x-xoffset,h.o_)); endfor
+  for x=apprl+u step u until w-apprr-1.5:
+    rule((x-xoffset,-d.o_),(x-xoffset,h.o_)); endfor
+  if charic<>0:
+    rule((w-xoffset+charic*hppp,h.o_),
+      (w-xoffset+charic*hppp,.5h.o_)); fi
+enddef;
+
+def accents_proofing=
+  for $=0 upto 19:
+    makelabel("",(0.5[apprl,w-apprr],0.5x_height)
+      +(4u*cosd($*360/20),0.5x_height*sind($*360/20)));
+  endfor
+enddef;
+
+def diacritics_proofing=
+  if proofing>0:extra_endchar:=extra_endchar&"accents_proofing;"; fi
+enddef;
+
+def standard_proofing=
+  if proofing>0:extra_endchar:=normal_extra_endchar; fi
+enddef;

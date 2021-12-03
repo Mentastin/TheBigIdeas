@@ -1,0 +1,128 @@
+\subsection{What is it?}
+The Unified Modeling Language (UML) is a family of graphical notations that help describing and designing software systems, particularly software systems built using the object-oriented paradigm. The UML is a relatively open standard, controlled by the Object Management Group (OMG), an open consortium of companies. The UML was born out of the unification of many graphical modeling languages around in the late 1980s and early 1990s.
+
+\subsubsection{Ways of using it}
+One can identify three modes in which UML is often used:
+\begin{enumerate}
+\item \textbf{UML as a sketch.} In this usage UML is used to communicate some aspect of a system. Such a sketch is by no means complete, but just meant to illustrate an idea. Selectivity is key.
+\item \textbf{UML as a blueprint.} In this usage the UML diagram is meant to be a complete and detailed guide to the code. A blueprint may be of the whole system or of a particular area. Such diagrams can be used by specialised \udef{CASE (computer aided software engineering) tools}.
+\item \textbf{UML as a programming language} is when the blueprint is complete and accurate enough that it can mechanically be converted into executable code. The standard approach is called \udef{Model-Driven Architecture (MDA)}. 
+\end{enumerate}
+
+The UML can also be used for conceptual modeling or software modeling.
+\begin{enumerate}
+\item In the \textbf{software perspective}, the UML elements map (fairly) directly to elements in the software system. Within the software perspective, a distinction can also be made between diagrams focusing on \textit{interface} or \textit{implementation}.
+\item In the \textbf{conceptual perspective}, the diagram deals in concepts, not necessarily actual components in the system.
+\end{enumerate}
+
+The UML standard can also be seen as having either \textit{prescriptive} or \textit{descriptive} rules. TODO Fowler p.13
+
+\subsubsection{Notation and meta-model}
+The UML defines
+\begin{itemize}
+\item a \textbf{notation} (i.e. graphical syntax) and
+\item a \textbf{meta-model} which defines the concepts of the language.
+\end{itemize}
+When referring to the UML, sometimes the notation and sometimes the meta-model is meant.
+
+\subsubsection{UML diagrams}
+
+\subsection{Class diagrams}
+\begin{wrapfigure}{r}{0.3\textwidth}
+\vspace{-10pt}
+\begin{tikzpicture}
+\umlclass{Order}{
+  dateReceived : Date[0..1] \\ isPrepaid: Boolean[1] \\ number: String[1] \\ price: Money
+}{dispatch \\ close}
+\end{tikzpicture}
+\vspace{-20pt}
+\end{wrapfigure}
+
+A class diagram describes the various types of objects in the system and the static relationships that exist among them. Each class has a name and several \udef{features}, i.e. the properties and operations of a class. 
+
+\subsubsection{Properties}
+\udef{Properties} represent the structural features of a class. Properties appear in two very distinct notations: \textit{attributes} and \textit{associations}.
+
+\paragraph{Attributes} define the property within the class box itself. They are put in the section under the title. The full form of an attribute is:
+\begin{syntax}
+\opt{\textit{visibility}} \opt{/} \textit{name} \opt{: \textit{type}} \opt{[\textit{multiplicity}]} \opt{= \textit{default}} \opt{\textit{property-string}}
+\end{syntax}
+Only \texttt{\textit{name}} is necessary.
+\begin{itemize}
+\item \texttt{\textit{visibility}} can be
+\begin{itemize}
+\item \texttt{+} for public
+\item \texttt{-} for private
+\item \texttt{$\sim$} for package
+\item \texttt{\#} for protected
+\end{itemize}
+\item \texttt{/} means the property is a derived property, i.e. calculated from other properties.
+\item \texttt{\textit{name}} is the name of the attribute.
+\item \texttt{\textit{type}} indicates what kind of object may be placed in the attribute.
+\item \texttt{\textit{multiplicity}} shows how many objects may fill the property. Multiplicities may be specified as
+\begin{itemize}
+\item \texttt{\textit{number}}: the property contains \texttt{\textit{number}} objects.
+\item \texttt{\textit{lowerBound}..\textit{upperBound}}: the property contains more than \texttt{\textit{lowerBound}}, but no more than \texttt{\textit{upperBound}}, objects.
+\item \texttt{*}: the property contains an arbitrary number (zero or more) of objects.
+\item \texttt{\textit{lowerBound}..*}: the property contains more than \texttt{\textit{lowerBound}} objects.
+\end{itemize}
+\item \texttt{\textit{number}} is the value for a newly created object if the attribute is not specified during creation.
+\item \texttt{\textit{property-string}} is of the form
+\begin{syntax}
+\{ \textit{property-modifier} \mult{, \textit{property-modifier}} \}
+\end{syntax}
+where \texttt{\textit{property-modifier}} can be one of
+\begin{itemize}
+\item \texttt{id}: the property is part of the identifier for the class which owns the property.
+\item \texttt{readOnly}: clients may not modify the property.
+\item \texttt{ordered} or \texttt{unordered}: the objects associated with this multi-valued property are (un)ordered.
+\item \texttt{unique} or \texttt{nonunique}: the objects associated with this multi-valued property may or may not have duplicate values.
+\item \texttt{sequence} (or \texttt{seq}): \texttt{ordered} and \texttt{nonunique}.
+\item \texttt{bag}: \texttt{unordered} and \texttt{nonunique}.
+\item \texttt{union}: the property is a derived union of its subsets TODO?.
+\item \texttt{redefines \textit{property-name}}: the property redefines an inherited property named \texttt{\textit{property-name}}.
+\item \texttt{subsets \textit{property-name}}: the property is a subset of the property named \texttt{\textit{property-name}}.
+\item \texttt{\textit{property-constraint}}: A constraint that applies to the property.
+\end{itemize}
+\end{itemize}
+
+\paragraph{Associations} are another way to notate properties. An \udef{association} is a solid line between two classes, directed from the source class to the target class. All extra information about the property is written at the target end of the association.
+
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \begin{tikzpicture}
+\umlclass{Order}{
+  + dateReceived : Date[0..1] \\ + isPrepaid: Boolean[1] \\ + lineItems: OrderLine[*] {ordered}
+}{}
+\end{tikzpicture}
+  \caption{Showing properties as attributes}
+  \label{fig:attributesAssociations:sub1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \begin{tikzpicture}
+\umlsimpleclass{Date}
+\umlsimpleclass[x=4]{Order}
+\umlsimpleclass[x=8]{Boolean}
+\umlsimpleclass[y=-2, x=4]{OrderLine}
+\umluniassoc[attr2=+dateReceived|0..1, mult1=*]{Order}{Date}
+\umluniassoc[mult2=1, arg2=+isPrepaid]{Order}{Boolean}
+\umluniassoc[mult1=1, mult2=*, arg2={lineItems ordered TODO}]{Order}{OrderLine}
+\end{tikzpicture}
+  \caption{Showing properties as associations}
+  \label{fig:attributesAssociations:sub2}
+\end{subfigure}
+\caption{The same properties represented in two different notations}
+\label{fig:attributesAssociations}
+\end{figure}
+
+In general it is useful to use attributes for small things and value types (TODO ref), such as dates and booleans, and associations for more significant classes.
+
+\subsubsection{{Operations}}
+
+\subsection{Sequence diagrams}
+
+
+\subsection{Executable UML and model-driven architecture}

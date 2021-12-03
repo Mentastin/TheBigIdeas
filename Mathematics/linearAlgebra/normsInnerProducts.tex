@@ -1,0 +1,1004 @@
+\chapter{Normed spaces and inner product spaces}
+In this chapter we will always use either $\mathbb{F} = \R$ or $\mathbb{F} = \C$.
+\section{Normed spaces}
+\begin{definition}
+A \udef{norm} on a vector space $V$ is a function
+\[ \norm{\cdot}: V \to \mathbb{R} \]
+that has the following properties:
+\begin{itemize}[leftmargin=6cm]
+\item[\textbf{Triangle inequality}\footnote{Also known as the property of being \udef{subadditive}.}] $\norm{u+v} \leq \norm{u}+\norm{v}$;
+\item[\textbf{Absolute homogeneity}] $\norm{\lambda v} = |\lambda|\cdot\norm{v}$;
+\item[\textbf{Point-separating}] If $\norm{v} = 0$, then $v = 0$.
+\end{itemize}
+A \udef{seminorm} is a function $V\to \mathbb{R}$ that is subadditive and absolutely homogeneous.
+
+A \udef{normed space} $(\mathbb{F},V,+,\norm{\cdot})$ is a vector space $(\mathbb{F},V,+)$ equipped with a norm $\norm{\cdot}$.
+\end{definition}
+\begin{lemma}
+A subadditive, absolutely homogenous function $f:V\to \R$ is non-negative:
+\[ f: V\to \R_{\geq 0}. \]
+Thus norms and seminorms are functions $V\to \R_{\geq 0}$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}[Reverse triangle inequality]
+Let $(V,\norm{\cdot})$ be a normed space. Then $\forall v,w\in V: |\norm{v}-\norm{w}|\leq \norm{v-w}$.
+\end{lemma}
+\begin{proof}
+$\norm{v} = \norm{v-w+w} \leq \norm{v-w} + \norm{w}$.
+\end{proof}
+
+\begin{definition}
+A vector with norm 1 is called a \udef{unit vector}. Unit vectors are often written with a hat:
+\[ \norm{\vhat{v}} = 1. \]
+\end{definition}
+
+\begin{lemma}
+A subspace of a normed vector space is a normed space, with the norm given by the restriction of the norm in the larger space.
+\end{lemma}
+
+\begin{proposition}
+Every normed space can be viewed as a metric space with the metric $d:V\times V \to [0,\infty[$ given by
+\[ d(x,y) = \norm{x-y}. \]
+This metric has the properties of
+\begin{itemize}[leftmargin=6cm]
+\item[\textbf{Translation invariance}] $d(x+a, y+a) = d(x,y)$;
+\item[\textbf{Scaling}] $d(\lambda x, \lambda y) = |\lambda|d(x,y)$.
+\end{itemize}
+Conversely, any metric with translation invariance and scaling determines a norm:
+\[ \norm{x} = d(x,\vec{0}). \]
+Passing from norm to metric back to norm, we recover the original norm.
+\end{proposition}
+\begin{lemma}
+A linear map $L:V\to W$ between normed spaces is an isometry for the metric \textup{if and only if} it preserves the norm, i.e.
+\[ \forall v\in V: \quad \norm{v}_V = \norm{L(v)}_W. \]
+\end{lemma}
+\begin{proof}
+Assume $L$ is an isometry, then
+\[ \norm{v} = d(v,\vec{0}) = d(L(v),L(\vec{0})) = \norm{L(v) - L(\vec{0})} = \norm{L(v) - \vec{0}} = \norm{L(v)}. \]
+Assume $L$ preserves the norm, then
+\[ d(L(v_1), d(v_2)) = \norm{L(v_1)-L(v_2)} = \norm{L(v_1-v_2)} = \norm{v_1-v_2} = d(v_1,v_2). \]
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a normed vector space, then the norm $\norm{\cdot}:V\to \R$ is a continuous map.
+\end{proposition}
+\begin{proof}
+As both $V$ and $\R$ are sequential spaces, it is enough, by \ref{prop:sequentialContinuity}, to show that $x_i\to x$ implies $\norm{x_i}\to \norm{x}$. Take such a sequence $x_i\to x$. Let $\epsilon> 0$. There exists an $N\in\N$ such that for all $n\geq N: \norm{x_n - x}\leq \epsilon$. Then
+\[ |\norm{x_n}-\norm{x}|\leq \norm{x_n - x}\leq \epsilon, \]
+so $\norm{x_i}\to \norm{x}$.
+\end{proof}
+
+\begin{definition}
+Let $V$ be a vector space. Two norms $\norm{\cdot}_1$ and $\norm{\cdot}_2$ on $V$ are \udef{equivalent} if there exist $a,b\in \R$ such that
+\begin{align*}
+\forall v\in V: a\norm{v}_1&\leq \norm{v}_2 \\
+\forall v\in V: b\norm{v}_2&\leq \norm{v}_1
+\end{align*}
+\end{definition}
+
+\begin{proposition}
+Equivalent norms induce the same topology.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+Because normed product spaces are metric spaces, we have a notion of convergence and can define infinite sums:
+\begin{definition}
+In a normed space $V$, we can define a \udef{infinite linear combination} as an infinite sum
+\[ \sum_{i\in I} c_i v_i  \]
+where $\{v_i\}_{i\in I}$ is a set of vectors and $\{c_i\}_{i I}$ a set of scalars, if that sum converges in the norm topology.
+\end{definition}
+\begin{note}
+This finite sum is defined using nets:
+Ordered by inclusion, the set $J = \{I'\subset I \;|\; I' \; \text{is finite}\}$ is a directed set. This means
+\[ \left(\sum_{i\in A}c_iv_i \right)_{A\in J} \]
+is a net. The infinite sum is defined if this net converges.
+\end{note}
+
+\begin{lemma}
+Every proper subspace $U$ of a normed vector space $V$ has empty interior.
+\end{lemma}
+\begin{proof}
+Suppose $U$ has a non-empty interior. Then it contains some ball $B(u,\epsilon)$. Now every vector in $V$ can be translated and rescaled to fit inside the ball $B(u,\epsilon)$. Indeed let $v\in V$ and set $u' = u+ \frac{\epsilon}{2\norm{v}}v \in B(u,\epsilon)$. Then, since $U$ is a subspace $v = \frac{2\norm{v}}{\epsilon}(u'-u)\in U$. So $U=V$.
+\end{proof}
+
+\begin{lemma}[Riesz's lemma] \label{lemma:RieszsLemma}
+Let $V$ be a normed vector space. Given a non-dense subspace $X$ and a number $\theta<1$, there exists a unit vector $v\in V$ such that $\inf_{x\in X}\norm{x-v}\geq \theta$.
+\end{lemma}
+\begin{proof}
+Take a vector $v_1$ not in the closure of $X$ and put $a = \inf_{x\in X}\norm{x-v_1}$. Then $a>0$ by lemma \ref{lemma:sequencesSupInf}. For $\epsilon > 0$, let $x_1\in X$ be such that $\norm{x_1+v_1}<a+\epsilon$. Then take
+\[ v = \frac{v_1 - x_1}{\norm{v_1-x_1}} \qquad \text{so} \qquad \norm{v}=1. \]
+And
+\[ \inf_{x\in X}\norm{x-v} = \inf_{x\in X}\norm{x-\frac{v_1 - x_1}{\norm{v_1-x_1}}} = \inf_{x\in X}\norm{\frac{x-v_1 + x_1}{\norm{v_1-x_1}}} = \frac{\inf_{x\in X}\norm{x-v_1}}{\norm{v_1-x_1}} \geq \frac{a}{a+\epsilon}. \]
+By choosing $\epsilon >0$ small, $a/(a+\epsilon)$ can be made arbitrarily close to $1$.
+\end{proof}
+For finite-dimensional spaces we can even take $\theta=1$.
+
+
+\subsection{Finite-dimensional normed (sub)spaces}
+
+\begin{lemma} \label{lemma:coordinateContinuity}
+Let $V$ be a normed vector space and $\{x_1, \ldots, x_n\}$ a linearly independent set of vectors. There exists a $c>0$ such that $\forall \alpha_1,\ldots, \alpha_n \in \mathbb{F}$:
+\[ \norm{\alpha_1x_1 + \ldots + \alpha_nx_n} \geq c(|\alpha_1|+\ldots+|\alpha_n|) . \]
+\end{lemma}
+\begin{proof}
+TODO ref locally convex spaces?
+\end{proof}
+TODO This is equivalent with continuity of coordinate functions.
+
+\begin{proposition} \label{prop:finiteDimComplete}
+Every finite-dimensional subspace of a normed vector space is complete.
+\end{proposition}
+\begin{proof}
+Take a basis $\{e_i\}_{i=1}^n$ and let $c$ be as in lemma \ref{lemma:coordinateContinuity}. Consider an arbitrary Cauchy sequence $(v_k)_{k\in\N}$. We can write
+\[ v_k = \alpha_{k,1}e_1 + \ldots + \alpha_{k,n}e_n. \]
+We claim that $(\alpha_{k,i})_{k\in\N}$ is Cauchy in $\mathbb{F}$ for all $1\leq i\leq n$. Indeed, take an $\epsilon>0$. By the Cauchy nature of $(v_k)_{k\in\N}$ we can find a $k_0$ such that $\forall k', k''>k_0:$
+\[ c\epsilon > \norm{v_{k'} - v_{k''}} \geq \norm{\sum_{i=1}^n (\alpha_{k',i}-\alpha_{k'',i})e_i}\geq c\sum_{i=1}^n |\alpha_{k',i}-\alpha_{k'',i}| \geq c |\alpha_{k',i}-\alpha_{k'',i}|. \]
+Dividing left and right by $c$ gives exactly the Cauchy condition for each $1\leq i\leq n$. By the completeness of $\R$ or $\C$, each of these sequences has a limit $\alpha_i$.
+Then $v= \sum_{i=1}^n\alpha_ie_i$ is an element of the subspace. The sequence $(v_k)$ converges to $v$ because
+\[ \norm{v_k-v} = \norm{\sum_{i=1}^n (\alpha_{k,i}-\alpha_i)e_i} \leq \sum_{i=1}^n |\alpha_{k,i}-\alpha_i|\norm{e_i} \]
+and the right-hand side goes to zero as $k\to \infty$.
+\end{proof}
+\begin{corollary} \label{corollary:finiteDimClosed}
+Every finite-dimensional subspace of a normed vector space is closed.
+\end{corollary}
+TODO ref for proof.
+
+\begin{proposition}
+On a finite-dimensional vector space all norms are equivalent.
+\end{proposition}
+\begin{proof}
+Let $\{e_i\}_{i=1}^n$ be a basis and take an arbitrary vector $v = \sum_{i=1}^nv_ie_i$. Let $\norm{\cdot}_1$ and $\norm{\cdot}_2$ be two norms.
+We calculate
+\[ \norm{v}_1 \leq \sum_{i=1}^n|v_i|\norm{e_i}_1 \leq k\sum_{i=1}^n|v_i| \leq \frac{k}{c_2}\norm{v}_2 \]
+where the first inequality is the triangle inequality, the second comes from $k=\max\norm{e_i}_1$ and the third is lemma \ref{lemma:coordinateContinuity}. A similar calculation gives the other necessary inequality.
+\end{proof}
+
+\begin{proposition}
+In a finite-dimensional normed space $V$, any subset $M \subseteq V$ is compact if and only if $M$ is closed and bounded.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+The closed unit ball of a vector space is compact \textup{if and only if} the vector space is finite-dimensional.
+\end{proposition}
+\begin{proof}
+One direction is given by the previous proposition. For the other direction, we show the contrapositive: let the vector space be infinite-dimensional.
+We define a sequence of unit vectors $(e_i)_{i\in\N}$ recursively as follows:
+\begin{itemize}
+\item $e_1$ is just a unit vector;
+\item for $e_{n+1}$ apply Riesz's lemma \ref{lemma:RieszsLemma} to the subspace $\Span\{e_i\}_{i=1}^n$ and $\theta = 1/2$. This subspace cannot be dense, because it is a closed (by corollary \ref{corollary:finiteDimClosed}) finite-dimensional subspace of an infinite-dimensional vector space.
+\end{itemize}
+This yields a sequence such that for all $m,n$
+\[ \norm{e_m - e_n}\geq \frac{1}{2}. \]
+This sequence is not Cauchy and thus not convergent.
+\end{proof}
+
+
+
+
+
+
+
+\subsection{Norms on constructed vector spaces}
+\subsubsection{Direct sum}
+\[ \norm{x\oplus y}_{X\oplus Y} = \norm{x}_X + \norm{y}_Y \]
+TODO + arbitrary direct sums.
+\subsubsection{The graph norm}
+Let $L:V\to W$ be a linear map between normed spaces. The graph of $L$
+\[ \setbuilder{(v,w)\in V\oplus W}{w = Lv} \]
+has a natural norm inherited from the direct sum:
+\[ \norm{(v,Lv)} = \norm{v}_V + \norm{Lv}_W. \]
+This norm can also be seen as a norm on $V$: the \udef{graph norm} induced by $L$ is defined as
+\[ \norm{v}_L := \norm{v}_V + \norm{Lv}_W. \]
+
+
+\section{Operators on normed spaces}
+
+\subsection{Bounded operators}
+\begin{definition}
+An operator $L$ between normed vector spaces is called \udef{bounded} if $\exists M>0$ such that $\forall v\in \dom(L)$
+\[ \norm{L(v)} \leq M \norm{v}. \]
+
+The set of bounded operators from $V$ to $W$ is denoted $\Bounded(V,W)$. If $V=W$, we write $\Bounded(V)$.
+\end{definition}
+
+\begin{theorem} \label{theorem:boundedLinearMaps}
+Let $L$ be a linear operator between normed spaces $V,W$. The following are equivalent:
+\begin{enumerate}
+\item $L$ is continuous everywhere in $\dom(L)$;
+\item $L$ is continuous at $0$;
+\item $L$ is bounded.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We proceed round-robin-style:
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{(1) \Rightarrow (2)}$] Trivial.
+\item[$\boxed{(2) \Rightarrow (3)}$] From continuity at zero, there exists a $\delta>0$ such that $\norm{L(h)} = \norm{L(h)-L(0)} \leq 1$ for all $h\in \dom(L)$ with $\norm{h}\leq \delta$. Thus for all nonzero $v\in \dom(L)$
+\[ \norm{L(v)} = \norm{\frac{\norm{v}}{\delta}L(\delta \frac{v}{\norm{v}})} = \frac{\norm{v}}{\delta}\norm{L(\delta \frac{v}{\norm{v}})}\leq \frac{\norm{v}}{\delta}. \]
+\item[$\boxed{(3) \Rightarrow (1)}$] For all non-zero vectors $v,h\in \dom(L)$ we have
+\[ \norm{L(v+h)-L(v)} = \norm{L(h)}\leq M \norm{h} = M\norm{(v+h) - v}. \]
+\end{itemize}
+\end{proof}
+\begin{corollary} \label{corollary:boundedAntiLinearMaps}
+An anti-linear map between complex vector spaces is also continuous \textup{if and only if} it is bounded.
+\end{corollary}
+\begin{proof}
+An anti-linear map $A:V\to W$ is an $\R$-linear map $A:V_\R\to W_\R$. Now $V_\R, W_\R$ have the same norms as $V,W$ and thus the same topology. So $A:V\to W$ is continuous if and only if $A:V_\R\to W_\R$ is continuous.
+\end{proof}
+\begin{corollary}
+All norm-decreasing homomorphisms are continuous.
+\end{corollary}
+
+\begin{proposition}
+Let $V,W$ be normed spaces. Then $T:V\to W$ is bounded \textup{if and only if}
+$T^{-1}[B(\vec{0},1)]$ has nonempty interior.
+\end{proposition}
+\begin{proof}
+TODO!
+\end{proof}
+
+\begin{lemma} \label{lemma:kerClosed}
+Let $T$ be a bounded linear operator. Then $\ker(T)$ is closed.
+\end{lemma}
+\begin{proof}
+Suppose $T$ bounded and thus continuous. Then $\ker L = L^{-1}[\{0\}]$ and thus closed, by proposition \ref{prop:continuity}.
+\end{proof}
+\begin{proof}
+Let $v\in \overline{\ker(T)}$. Then find a sequence $(v_n)$ in $\ker(T)$ that converges to $v$. Then by continuity $(Tv_n)$ converges to $Tv$, but for all $n\in\N: Tx_n = 0$, so the limit is $Tv=0$. Thus $v\in\ker(T)$, making it closed.
+\end{proof}
+
+\begin{proposition}\label{prop:continuousMapCriterion}
+Let $L:V\to W$ be a linear map between normed spaces.
+\begin{enumerate}
+\item If $V$ is finite-dimensional, then $L$ is continuous.
+\item If $W$ is finite-dimensional, then $L$ is continuous \textup{if and only if} $\ker L$ is closed.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{enumerate}
+\item This follows from a consideration of the graph norm $\norm{v}_L = \norm{v}+\norm{Lv}$ and the fact that on a finite-dimensional space any two norms are equivalent: for all $v$ we can choose an $M$ such that
+\[ \norm{Lv}\leq \norm{v}_L \leq M\norm{v}. \]
+\item Assume $W$ finite-dimensional. Consider the map $\bar{L}:V/\ker L\to W: v+\ker{L}\mapsto L(v)$, defined in proposition \ref{prop:splittingMap}. Then $V/\ker L$ is isomorphic to a subspace of $W$ and thus is finite-dimensional. By the first point, $\bar{L}$ must be continuous. Let $\pi: V\to V/\ker L$ denote the quotient map, which is continuous (TODO is this where closure of $\ker L$ is used?). Then $L = \bar{L}\circ \pi$ is a composition of continuous maps and thus continuous.
+
+Conversely, we have the lemma \ref{lemma:kerClosed}.
+\end{enumerate}
+\end{proof}
+
+\subsubsection{The normed space of bounded operators}
+\begin{proposition}
+Let $(V,\norm{\cdot}_V)$ and $(W,\norm{\cdot}_W)$ be normed spaces. Then $\Bounded(V,W)$ is a vector space with pointwise addition and scalar multiplication.
+\end{proposition}
+
+\begin{proposition}
+Let $(V,\norm{\cdot}_V)$ and $(W,\norm{\cdot}_W)$ be normed spaces. Then the space $\Bounded(V,W)$ of bounded linear maps has a norm defined by
+\begin{align*}
+\forall L\in \Bounded(V,W): \quad \norm{L} &= \sup\setbuilder{\frac{\norm{Lx}_W}{\norm{x}_V}}{x\in V\setminus\{0\}} \\
+&= \sup\setbuilder{\frac{\norm{Lx}_W}{\norm{x}_V}}{\norm{x}_V=1}.
+\end{align*}
+\end{proposition}
+This norm is called the \udef{operator norm}.
+
+\begin{proposition} \label{prop:operatorNorm}
+Let $L\in\Bounded{V,W}$ be a bounded operator and let $B(\vec{0},\epsilon)$ be an open ball centered at $\vec{0}$. Then
+\begin{align*}
+\norm{L} &= \frac{\sup L[B(\vec{0},\epsilon)]}{\epsilon} \\
+&= \frac{\sup L[\overline{B}(\vec{0},\epsilon)]}{\epsilon} \\
+&= \sup\setbuilder{\norm{Lx}}{\norm{x} = 1}.
+\end{align*}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}
+Let $S,T$ be compatible bounded operators. Then
+\[ \norm{ST} \leq \norm{S}\norm{T}. \]
+\end{lemma}
+\begin{proof}
+$\norm{ST} = \sup\setbuilder{\frac{\norm{STx}}{\norm{x}}}{\norm{x}=1} \leq \sup\setbuilder{\frac{\norm{S}\norm{Tx}}{\norm{x}}}{\norm{x}=1}\leq \norm{S}\;\norm{T}$.
+\end{proof}
+
+\subsubsection{Operators bounded below}
+\begin{definition}
+Let $T$ be a bounded linear operator. We say $T$ is \udef{bounded below} if
+\[ \exists b>0:\forall v\in \dom(T): \quad \norm{Tv}\geq b\norm{v} \]
+\end{definition}
+
+
+\begin{proposition} \label{prop:boundedBelow}
+Let $T:V\to W$ be a bounded operator that is bounded below. Then
+\begin{enumerate}
+\item $T$ is injective;
+\item if $T$ is surjective, the inverse $T^{-1}: W\to V$ exists and is bounded.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+To show $T$ is injective, take $x_1,x_2\in \dom T$ such that $Tx_1 = Tx_2$. Then
+\[ 0 = \norm{Tx_1 - Tx_2} = \norm{T(x_1 - x_2)} \geq b\norm{x_1 - x_2} \geq 0. \]
+So $\norm{x_1 - x_2} = 0$ and thus $x_1=x_2$.
+
+The existence of $T^{-1}$ is then clear. For boundedness notice that $T^{-1}y \in \dom(T)$, so because $T$ is bounded below,
+\[ \norm{T^{-1}y} \leq \frac{1}{b}\norm{TT^{-1}y} = \frac{1}{b}\norm{y}. \]
+\end{proof}
+
+\begin{lemma} \label{lemma:boundedBelowBounded}
+Let $T:\dom(V)\to W$ be an injective operator. Then $T$ is bounded \textup{if and only if} $T^{-1}:\im(T)\to \dom(T)$ is bounded below.
+\end{lemma}
+\begin{proof}
+Assume $T$ bounded. Then for all $x\in\im T$: $\norm{x} = \norm{TT^{-1}x} \leq \norm{T}\norm{T^{-1}x}$, so $T^{-1}$ is bounded below by $1/\norm{T}$.
+
+Assume $T^{-1}$ bounded below. Then for all $x\in\dom(T)$: $\norm{x} = \norm{T^{-1}Tx} \geq b\norm{Tx}$, so $T$ is bounded by $1/b$.
+\end{proof}
+
+\subsection{Open and closed operators}
+TODO definition: closed meaning closed graph or closed map?
+\begin{proposition} \label{prop:closedGraphEquivalence}
+Let $X,Y$ be normed spaces and $T: \dom(T)\subset X \to Y$ be a linear operator. Then
+the following are equivalent:
+\begin{enumerate}
+\item the graph of $T$ is closed in $X\oplus Y$;
+\item if $(x_n)_{n\in\N}\subset \dom(T)$ converges to $x\in X$ and $(Tx_n)_{n\in\N}$ converges to $y$, then $x\in\dom(T)$ and $Tx = y$.
+\end{enumerate}
+\end{proposition}
+
+\subsection{Compact operators}
+\begin{definition}
+A linear map $L:V\to W$ between normed spaces is called \udef{compact} if $L[\overline{B}(\vec{0}, 1)]$ is relatively compact.
+
+I.e. the image of the closed unit ball has compact closure.
+
+The space of compact maps from $V$ to $W$ is denoted $\mathcal{K}(V,W)$.
+\end{definition}
+
+These operators were introduced to study equations of the form
+\[ (T-\lambda I)x(t) = p(t). \]
+
+\begin{proposition}
+Let $L\in\Hom(V,W)$. The following are equivalent:
+\begin{enumerate}
+\item $L$ is compact;
+\item the image of any bounded subset of $V$ is relatively compact in $W$;
+\item there exists a neighbourhood $U$ of $0$ in $V$ such that the image of $U$ is a subset of a compact set in $W$;
+\item for any bounded sequence $(x_n)_{n\in\N} \subseteq V$, then sequence $(Lx_n)_{n\in\N}$ contains a converging subsequence.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+All maps of finite rank are compact.
+\end{corollary}
+\begin{proof}
+Closed balls in $\C^n$ are compact.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a normed space. Then $\mathcal{K}(V)$ is a closed two-sided ideal in $\Bounded(V)$.
+\end{proposition}
+
+\section{Inner product spaces}
+\begin{definition}
+An \udef{inner product} on a vector space $V$ is a function
+\[ \inner{\cdot,\cdot}: V\times V \to \mathbb{F}  \]
+that has the following properties:
+\begin{itemize}[leftmargin=4.5cm]
+\item[\textbf{Linearity}] in the \emph{second}\footnote{Some authors take linearity in the first component.} component
+\[\inner{v,\lambda_1 w_1 + \lambda_2 w_2} = \lambda_1\inner{v,w_1} + \lambda_2\inner{v,w_2},\]
+where $\lambda_1,\lambda_2 \in \mathbb{F}$ and $v,w_1,w_2\in V$.
+\item[\textbf{Conjugate symmetry}\footnote{This is for $\mathbb{F} = \C$. For $\mathbb{F} = \R$ this reduces to normal symmetry $\inner{v,w} = \inner{w,v}$.}] $\inner{v,w} = \overline{\inner{w,v}}$ for all $v,w\in V$.
+\item[\textbf{Positivity}\footnote{By conjugate symmetry we know that $\inner{v,v}$ is a real number, so this condition makes sense.}] $\inner{v,v} \geq 0$ for all $v\in V$.
+\item[\textbf{Definiteness}]$\inner{v,v} = 0$ if and only if $v= 0$.
+\end{itemize}
+An \udef{inner product space} or \udef{pre-Hilbert space} $(\mathbb{F}, V,+,\inner{\cdot,\cdot})$ is a vector space $(\mathbb{F}, V,+)$ together with an inner product $\inner{\cdot,\cdot}$ on $V$.
+
+A real finite-dimensional inner product space is called a \udef{Euclidean space}.
+\end{definition}
+\begin{lemma}
+An inner product over a complex vector space $V$ is anti-linear in the first component.
+\end{lemma}
+
+\begin{lemma} \label{lemma:nonDegeneracyInnerProduct}
+Definiteness implies the inner product on $V$ is non-degenerate:
+\[ [\forall u\in V:\inner{u,v} = 0] \implies v = 0. \]
+\end{lemma}
+The converse is not true.
+
+There are some generalised notions of inner product:
+\begin{definition}
+Let $V$ be a complex vector space.
+\begin{enumerate}
+\item A \udef{sesquilinear form} is a function $V\times V\to \C$ that is linear in the second component and anti-linear in the first.
+\item A \udef{Hermitian form} is a conjugate symmetric sesquilinear form.
+\item A \udef{pre-inner product} is a positive Hermitian form, i.e. an inner product without the requirement of definiteness.
+\end{enumerate}
+\end{definition}
+
+\begin{example}
+\begin{enumerate}
+\item The \udef{standard inner product} on $\R^n$ is given by
+\[ \inner{a,b} = \inner{\begin{bmatrix}
+a_1 \\ \vdots \\ a_n
+\end{bmatrix},\begin{bmatrix}
+b_1 \\ \vdots \\ b_n
+\end{bmatrix}} = \begin{bmatrix}
+a_1 & \hdots & a_n
+\end{bmatrix}\begin{bmatrix}
+b_1 \\ \vdots \\ b_n
+\end{bmatrix} = a^\transp b \]
+This is also known as the \udef{dot product} $a\cdot b$.
+\item The \udef{standard inner product} on $\C^n$ is given by
+\[ \inner{a,b} = \inner{\begin{bmatrix}
+a_1 \\ \vdots \\ a_n
+\end{bmatrix},\begin{bmatrix}
+b_1 \\ \vdots \\ b_n
+\end{bmatrix}} = \begin{bmatrix}
+\bar{a}_1 & \hdots & \bar{a}_n
+\end{bmatrix}\begin{bmatrix}
+b_1 \\ \vdots \\ b_n
+\end{bmatrix} = \bar{a}^\transp b \]
+\item The \udef{Frobenius inner product} on $\C^{m\times n}$ is given by
+\[ \inner{A,B}_F =  \Tr(\overline{A}^\transp B) = \overline{\vectorisation_C(A)}^\transp \vectorisation_C(B)\]
+\item On the vector space $\mathcal{C}[a,b]$ of continuous real functions on $[a,b]$, we can take the inner product
+\[ \inner{f,g} = \int_a^b f(x)\cdot g(x) \diff{x}. \]
+\end{enumerate}
+\end{example}
+
+\begin{definition}
+Two vectors $u,v \in V$ are \udef{orthogonal} if $\inner{u,v} =0$. This is denoted $u\perp v$.
+\end{definition}
+\begin{lemma} \label{lemma:elementaryOrthogonality}
+Let $V$ be an inner product space.
+\begin{enumerate}
+\item $0$ is the only vector orthogonal to itself.
+\item $0$ is orthogonal to all $v\in V$;
+\item Let $x,y\in V$. If, for all $v\in V$, $\inner{v,x} = \inner{v,y}$, then $x=y$.
+\end{enumerate}\end{lemma}
+\begin{proof}
+The first is a consequence of definiteness, the second a consequence of linearity: $\inner{v,0} = \inner{v,0\cdot0} = 0\inner{v,0} = 0$.
+
+The third is also a consequence of linearity: assume $\forall v\in V: \inner{v,x} = \inner{v,y}$, then $\inner{v,x-y}=0$ and $x-y$ is orthogonal to all $v\in V$ and in particular to $0$. Thus $x-y$ must be zero.
+\end{proof}
+
+\begin{proposition}
+Every inner product gives rise to a norm, defined by
+\[ \norm{\cdot} = \sqrt{\inner{\cdot,\cdot}}. \]
+\end{proposition}
+\begin{proof}
+The only non-trivial part is the triangle inequality. This will be proved later using the Cauchy-Schwarz inequality.
+\end{proof}
+
+
+\begin{lemma}
+Let $V$ be an inner product space. Then
+\[ \norm{v+w}^2 = \norm{v}^2+\norm{w}^2+2\Re\inner{v,w} \]
+\end{lemma}
+\begin{lemma} \label{lemma:orthogonalDecomposition}
+Let $v,w\in V$, with $w\neq 0$. We can decompose $v$ as a multiple of $w$ and a vector $u$ orthogonal to $w$:
+\[ v = cw+u = \left(\frac{\inner{v,w}}{\norm{w}^2}\right)w + \left( v- \frac{\inner{v,w}w}{\norm{w}^2} \right). \]
+\end{lemma}
+\begin{proof}
+The only thing to check is $\inner{w, v- \frac{\inner{v,w}w}{\norm{w}^2}} = 0$, which is a simple calculation.
+\end{proof}
+
+\subsection{Pythagoras and Cauchy-Schwarz}
+\begin{theorem}[Pythagorean theorem]
+Suppose $u\perp v$. Then $\norm{u+v}^2 = \norm{u}^2 + \norm{v}^2$.
+\end{theorem}
+\begin{proof}
+\[ \norm{u+v}^2 = \inner{u+v,u+v} = \inner{u,u}+ \inner{u,v} + \inner{v,u} + \inner{v,v} = \norm{u}^2 + \norm{v}^2. \]
+\end{proof}
+
+\begin{theorem}[Cauchy-Schwarz-Bunyakovsky inequality.] \label{theorem:CauchySchwarz}
+Let $V$ be a vector space with a pre-inner product $\inner{\cdot,\cdot}$. Let $v,w\in V$. Then
+\[ |\inner{v,w}|^2\leq \inner{v,v}\cdot\inner{w,w}. \]
+Suppose $\inner{\cdot,\cdot}$ is definite (i.e. an inner product), then
+this is an equality \textup{if and only if} $v$ and $w$ are scalar multiples.
+\end{theorem}
+This resut is also known as the Cauchy-Schwarz inequality, or the CSB inequality.
+\begin{proof}
+Consider 
+\[ \inner{v-\lambda w, v-\lambda w} = \inner{v,v}-\lambda\inner{v,w}-\overline{\lambda}\inner{w,v} + |\lambda|^2 \inner{w,w} \geq 0. \]
+Suppose $\inner{v,w}=re^{i\theta}$ (if $\mathbb{F} = \R$, then $\theta=0$ or $\theta = \pi$). The inequality must still hold for all $\lambda$ of the form $te^{-i\theta}$ for some $t\in \R$. The inequality thus becomes
+\[ 0\leq \inner{v,v}-te^{-i\theta}re^{i\theta}-te^{i\theta}re^{-i\theta} + t^2 \inner{w,w} = \inner{v,v}-2rt + t^2 \inner{w,w}. \]
+On the right we have a quadratic formula in $t$. This may never be negative and the discriminant may therefore not be positive. Calculating the discriminant gives $(2r)^2 - 4\inner{v,v}\inner{w,w}$. Thus
+\[ 0\geq r^2 - \inner{v,v}\inner{w,w} = |\inner{v,w}|^2 - \inner{v,v}\inner{w,w}. \]
+\end{proof}
+In the case of an inner product, there is a simpler proof:
+\begin{proof}
+Take the decomposition from lemma \ref{lemma:orthogonalDecomposition} and apply the Pythagorean theorem to obtain
+\[ \norm{v}^2 = \frac{|\inner{v,w}|^2}{\norm{v}^2} + \norm{u}^2 \geq \frac{|\inner{v,w}|^2}{\norm{v}^2}. \]
+This also shows the claim about scalar multiples.
+\end{proof}
+\begin{corollary} \label{lemma:innerBoundedFunctionals}
+Let $V$ be an inner product space. The functions
+\[\inner{v,\cdot}: V\to \mathbb{F}: x\mapsto \inner{v,x} \]
+are bounded linear functionals for all $v\in V$.
+\end{corollary}
+\begin{corollary} \label{corollary:preInnerProductCSBZero}
+Let $V$ be a vector space with a pre-inner product $\inner{\cdot,\cdot}$. Then
+\[ \inner{x,x}=0\lor\inner{y,y}=0 \quad\implies\quad \inner{x,y} = 0. \]
+\end{corollary}
+\begin{definition}
+The Cauchy-Schwarz inequality allows us to define the \udef{angle} $\theta$ between two vectors $v,w$ by
+\[ \cos\theta = \frac{\inner{v,w}}{\norm{v}\norm{w}}.\]
+\end{definition}
+\begin{lemma}
+If $v\perp w$, then the angle between them is $\pi/2 + k\pi$.
+\end{lemma}
+
+\begin{theorem}[Triangle inequality]
+Let $v,w\in V$. Then
+\[ \norm{v+w} \leq \norm{v}+\norm{w} \qquad\text{or, equivalently}\qquad \norm{v}-\norm{w}\leq \norm{v-w}. \]
+This inequality is an equality if and only if one of $u,v$ is a nonnegative multiple of the other.
+\end{theorem}
+\begin{proof}
+We calculate
+\begin{align*}
+\norm{v+w}^2 &= \norm{v}^2+\norm{w}^2+2\Re\inner{v,w} \\
+&\leq \norm{v}^2+\norm{w}^2+2|\inner{v,w}| \\
+&\leq \norm{v}^2+\norm{w}^2+2\norm{v}\norm{w} \\
+&= (\norm{v}+\norm{w})^2.
+\end{align*}
+The substitution $v\to v-w$ gives the second form.
+\end{proof}
+
+\subsection{Parallelogram law and polarisation}
+\begin{theorem}[Parallelogram law]
+Let $V$ be an inner product space and $v,w\in V$. Then
+\[ \norm{v+w}^2 + \norm{v-w}^2 = 2 (\norm{v}^2+\norm{w}^2). \]
+\end{theorem}
+\begin{proof}
+We calculate
+\begin{align*}
+\norm{v+w}^2 + \norm{v-w}^2 = \inner{v+w, v+w}+\inner{v-w,v-w} = 2(\norm{v}^2 + \norm{w}^2).
+\end{align*}
+\end{proof}
+\begin{corollary}[Appolonius' identity]
+Let $V$ be an inner product space and $x,y,z\in V$. Then
+\[ \norm{z-x}^2 + \norm{z-y}^2 = \frac{1}{2}\norm{x-y}^2 + 2\norm*{z-\frac{1}{2}(x+y)}^2. \]
+\end{corollary}
+\begin{proof}
+Apply the parallelogram law to $u = \frac{1}{2}(z-x)$ and $v = \frac{1}{2}(z-y)$.
+\end{proof}
+
+\begin{theorem}[Polarisation identities]
+Polarisation identities allow us to recover the inner product from the norm.
+\begin{enumerate}
+\item For real vector spaces, $\mathbb{F} = \R$:
+\begin{align*}
+\inner{v,w} &= \frac{1}{2}(\norm{v+w}^2 - \norm{v}^2-\norm{w}^2) \\
+&= \frac{1}{2}(\norm{v}^2 + \norm{w}^2-\norm{v-w}^2) \\
+&= \frac{1}{4}(\norm{v+w}^2 - \norm{v-w}^2) = \frac{1}{4}\sum_{k=0}^1 (-1)^k\norm{v+(-1)^k w}^2.
+\end{align*}
+\item For complex vector spaces, $\mathbb{F} = \C$:
+\[ \inner{x,y} = \frac{1}{4}\sum_{k=0}^3 i^k\norm{x+i^k y}^2. \]
+\end{enumerate}
+\end{theorem}
+\begin{corollary}
+A sesquilinear form is Hermitian \textup{if and only if} $\inner{v,v}$ is real for all $v\in V$.
+\end{corollary}
+\begin{proof}
+The direction $\Rightarrow$ is obvious. For the other direction, assume $\inner{v,v}$ is real for all $v\in V$ and in particular $\inner{u+i^kv,u+i^kv}$ is real. We calculate
+\begin{align*}
+\overline{\inner{u,v}} &= \frac{1}{4}\sum^3_{k=0}(-i)^k\inner{u+i^kv,u+i^kv} \\
+&= \frac{1}{4}\sum^3_{k=0}(-i)^k\inner{v+(-i)^ku,v+(-i)^ku} & &\text{Using (conjugate) linearity and $i^k(-i)^k=1$}\\
+&= \frac{1}{4}\sum^3_{k=0}i^k\inner{v+i^ku,v+i^ku} & &\text{Substituting $k\to k+2$}\\
+&= \inner{v,u}.
+\end{align*}
+\end{proof}
+Not all norms on vector spaces can be obtained from an inner product. If a norm can be obtained from an inner product, we can use polarisation to recover the inner product. If a norm cannot be obtained from an inner product, the putative inner product suggested by polarisation will turn out not to be an inner product.
+\begin{proposition}
+A norm can be obtained from an inner product \textup{if and only if} it satisfies the parallelogram law.
+\end{proposition}
+\begin{corollary}
+The space $l^p$ is an inner product space \textup{if and only if} $p=2$.
+\end{corollary}
+\begin{proof}
+The inner product on $l^2$ is defined by $\inner{x_n, y_n} = \sum_{n=1}^\infty \overline{x_n}y_n$.
+
+If $p\neq 2$ we can find a counterexample to the parallelogram law: let $x=(1,1,0,0,\ldots)\in l^p$ and $y = (1,-1,0,0,\ldots)\in l^p$. Then
+\[ \norm{x}_p = \norm{y}_p = 2^{1/p} \qquad \text{and} \qquad \norm{x+y} = \norm{x-y} = 2 \]
+and the parallelogram law is then not valid if $p\neq 2$.
+\end{proof}
+
+
+\section{Orthogonal and orthonormal sets of vectors}
+\begin{definition}
+\begin{itemize}
+\item A set of vectors $D$ is called \udef{orthogonal} if for any two vectors $v,w\in D$, $v\perp w$ \textup{if and only if} $v\neq w$.
+\item A set of vectors $D$ is called \udef{orthonormal} if for any two vectors $v,w\in D$,
+\[ \inner{v,w} = \begin{cases}
+0 & (v\neq w) \\ 1 & (v=w)
+\end{cases}. \]
+\end{itemize}
+In particular an orthonormal set is an orthogonal set of unit vectors.
+\end{definition}
+
+\subsection{Orthogonal sets and sequences}
+\begin{lemma} \label{lemma:orthogonalLinearlyIndependent}
+Every orthogonal set of vectors is linearly independent.
+\end{lemma}
+\begin{lemma}
+Every subset of an orthogonal (resp. orthonormal) set is orthogonal (resp. orthonormal).
+\end{lemma}
+
+\begin{theorem}[Gram-Schmidt procedure]
+Every finite set of linearly independent vectors $D = \{v_1,\ldots, v_n\}$ can be transformed into an orthonormal set $D' = \{e_1,\ldots,e_n\}$ with the same number of vectors such that the spans are the same: $\Span(D') = \Span(D)$.
+\end{theorem}
+\begin{proof}
+The procedure goes as follows:
+\begin{align*}
+e_1 &= \frac{v_1}{\norm{v_1}} \\
+e_2 &= \frac{v_2 - \inner{e_1,v_2}e_1}{\norm{v_2 - \inner{e_1,v_2}e_1}} \\
+&\hdots \\
+e_j &= \frac{v_j - \inner{e_1,v_j}e_1- \ldots - \inner{e_{j-1},v_j}e_{j-1}}{\norm{v_2 - \inner{e_1,v_2}e_1- \ldots - \inner{e_{j-1},v_j}e_{j-1}}} \\
+&\hdots
+\end{align*}
+\end{proof}
+
+\begin{lemma} \label{lemma:orthogonality}
+Let $(\mathbb{F}, V,+,\inner{\cdot,\cdot})$ be an inner product space. Then
+\[ \inner{v,w}=0 \qquad \iff \qquad \forall a\in\mathbb{F}:\;\norm{v}\leq\norm{v+aw}.  \]
+\end{lemma}
+\begin{proof}
+The implication $\Rightarrow$ is a consequence of the Pythagorean theorem. For the other implication, assume $\forall a\in\mathbb{F}:\;\norm{v}\leq\norm{v+aw}$. Then
+\[ \norm{v}^2 \leq \norm{v-aw}^2 = \norm{v}^2 - 2\Re\inner{v,aw} + \norm{aw}^2 \]
+which implies $2\Re\inner{v,aw} \leq a^2\norm{w}^2$. Let $\inner{v,w} = re^{i\theta}$. (If $\mathbb{F} = \R$, then $\theta=0$.) Then in particular the inequality holds for all $a=te^{i\theta}$ with $t\in\R$. This yields
+\[ 2\Re(te^{-i\theta}re^{i\theta}) \leq t^2\norm{w}^2 \qquad \text{or}\qquad 2rt\leq t^2\norm{w}^2. \]
+Letting $t\geq 0$, we can divide out a $t$: $2r\leq t\norm{w}^2$. Then letting $t\to 0$ gives $r=0$ and thus $\inner{v,w}=0$.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be an inner product space and $D = \{e_1,\ldots, e_n\}$ a finite orthonormal set of vectors. Then $\forall v\in V$
+\[ \inf_{c_i\in\mathbb{F}}\norm{v-\sum_{i=1}^nc_ie_i} = \norm{v-\sum_{i=1}^n\inner{e_i,v}e_i} \]
+\end{proposition}
+\begin{proof}
+We calculate
+\begin{align*}
+\norm{v-\sum_{i=1}^nc_ie_i}^2 &= \inner{v-\sum_{i=1}^nc_ie_i,v-\sum_{j=1}^nc_je_j} \\
+&= \norm{v} - \sum_{j=1}^n c_j\inner{v,e_j} - \sum_{i=1}^n\bar{c}_i\inner{e_i,v} + \sum_{i,j=1}^n\bar{c}_ic_j\inner{e_i,e_j} \\
+&= \norm{v} - 2\Re\left(\sum_{i=1}^nc_i\overline{\inner{e_i,v}}\right) + \sum_{i=1}^n|c_i|^2 \\
+&= \sum_{i=1}^n\left(|c_i|^2 - 2\Re\left(\sum_{i=1}^nc_i\overline{\inner{e_i,v}}\right) + |\inner{e_i,v}|^2\right) +\norm{v} - \sum_{i=1}^n|\inner{e_i;v}|^2 \\
+&= \sum_{i=1}^n|c_i - \inner{e_i,v}|^2 +\norm{v} - \sum_{i=1}^n|\inner{e_i,v}|^2.
+\end{align*}
+This is clearly minimised when $c_i = \inner{e_i,v}$.
+\end{proof}
+\begin{corollary}
+Let $v\in\Span(D)$, then $v = \sum_{i=1}^n \inner{e_i,v}e_i$.
+\end{corollary}
+We call the numbers $\inner{e_i,v}$ the \udef{Fourier coefficients} of $v$ w.r.t. $D$.
+\begin{proof}
+In this case $\inf_{c_i\in\mathbb{F}}\norm{v-\sum_{i=1}^nc_ie_i} = 0$.
+\end{proof}
+\begin{corollary}[Bessel inequality]
+Let $\{e_i\}_{i\in I}$ be an orthonormal family and $v\in V$, then
+\[ \sum_{i\in I}|\inner{e_i,v}|^2 = \sup \left\{\sum_{\substack{i\in I' \subset I\\ I' \;\text{finite}}} |\inner{e_i,v}|^2 \right\} \leq \norm{v}^2. \]
+\end{corollary}
+\begin{proof}
+In the previous proof,
+\[ 0 \leq \norm{v-\sum_{i=1}^nc_ie_i}^2 = \sum_{i=1}^n|c_i - \inner{e_i,v}|^2 +\norm{v} - \sum_{i=1}^n|\inner{e_i,v}|^2 = \norm{v} - \sum_{i=1}^n|\inner{e_i,v}|^2. \]
+Where we have set $c_i = \inner{e_i,v}$. Thus the supremum must also be $\leq \norm{v}$.
+\end{proof}
+\begin{corollary}
+For any $v\in V$, $\inner{e_i,v} = 0$ except for countably many $i\in I$. \label{corollary:countableComponents}
+\end{corollary}
+\begin{proof}
+Ref TODO. \url{https://proofwiki.org/wiki/Uncountable_Sum_as_Series}.
+\end{proof}
+TODO: link with metric topology being sequential?
+
+We can also obtain the Cauchy-Schwarz inequality from the Bessel inequality.
+\begin{proof}
+Let $x,y\in V$. Then $\{x/\norm{x}\}$ is an orthonormal set. Applying the Bessel inequality for $y$ gives $\norm{y}^2 \geq |\inner{x/\norm{x}, y}|^2 \implies |\inner{x,y}|^2\leq \norm{x}^2\norm{y}^2 \implies |\inner{x,y}| \leq \norm{x}\;\norm{y}$.
+\end{proof}
+
+\subsection{Orthonormal bases}
+\begin{definition}
+Let $D$ be an orthonormal set of vectors in an inner product space $V$, then $D$ is said to be
+\begin{enumerate}
+\item \udef{maximal}, if it is a maximal element in the set of orthonormal sets ordered by inclusion;
+\item \udef{total}, if the smallest closed subspace that includes $D$ is $V$ (i.e. $\Span(D)$ is dense in $V$);
+\item an \udef{orthonormal basis} (o.n. basis) or a \udef{Hilbert basis} if any vector in $V$ can be written as a (possibly infinite) linear combination of elements of $D$.
+\end{enumerate}
+\end{definition}
+\begin{note}
+Hilbert bases are in general not Hamel bases.  E.g., take $\R^\mathbb{N}$. Then 
+\begin{align*}
+(1,0,0,&\ldots), \\
+(0,1,0,&\ldots), \\
+(0,0,1,&\ldots), \\
+&\ldots
+\end{align*}
+is an orthonormal basis, but not a Hamel basis (consider $(1,1,1,\ldots)$).
+\end{note}
+
+\begin{proposition}
+If $V$ is finite-dimensional, then the notions of maximal orthonormal set, total orthonormal set and orthonormal set coincide. Such an orthonormal set is also a (Hamel) basis of $V$.
+\end{proposition}
+\begin{proof}
+Corollaries of Gram-Schmidt.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be an inner product space and $D = \{e_i\}_{i\in I}$ an orthonormal set. The $D$ is an o.n. basis \textup{if and only if} $D$ is total.
+\end{proposition}
+\begin{proof}
+$\boxed{\Rightarrow}$ Assume $D$ an o.n. basis. Then there exists a sequence of partial sums converging to any element $v\in V$. Each of these partial sums is a finite linear combination of elements in $D$ and thus this sequence is a sequence in $\Span(D)$. This means $v\in\overline{\Span(D)}$.
+
+$\boxed{\Leftarrow}$ Assume $\overline{\Span(D)} = V$. Because the topology on $V$ is a metric topology, we can find a sequence $(v_n)$ in $\Span(D)$ that converges to any $v\in V$.
+\end{proof}
+
+
+\begin{proposition} \label{prop:totalONBParsevalEquivalence} \label{prop:plancherel}
+Let $V$ be an inner product space and $D = \{e_i\}_{i\in I}$ an orthonormal set. The following are equivalent:
+\begin{enumerate}
+\item $D$ is an orthonormal basis of $V$;
+\item $D$ is total in $V$;
+\item for all $v,w\in V$,
+\[ \inner{v,w} = \sum_{i\in I}\inner{v,e_i}\inner{e_i,w}; \]
+\item \textup{(Parseval's identity)} for all $v\in V$,
+\[ \norm{v}^2 = \sum_{i\in I}|\inner{e_i,v}|^2; \]
+\item for all $v\in V$: if $v\perp D$, then $v=0$;
+\item \textup{(Plancherel formula)} for all $v\in V$,
+\[ v = \sum_{i\in I}\inner{e_{i},v}e_{i}. \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We proceed round-robin-style.
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{(1) \Rightarrow (2)}$] Assume $D$ an o.n. basis. Then there exists a net of partial sums converging to any element $v\in V$. Each of these partial sums is a finite linear combination of elements in $D$ and thus this net is a net in $\Span(D)$. This means $v\in\overline{\Span(D)}$.
+\item[$\boxed{(2) \Rightarrow (3)}$] Fix $v,w\in V$. Because $V$ is a metric spaces and thus sequential, we can find sequences $(v_j)_{j\in J}$ and $(w_k)_{k\in K}$ in $\Span(D)$ converging to $v$ and $w$. Now the linear maps $u\mapsto \overline{\inner{u, e_i}}$ and $u\mapsto \inner{e_i, u}$ are bounded by Cauchy-Schwarz and thus continuous by theorem \ref{theorem:boundedLinearMaps} (TODO corollary CSB). Then we can calculate, using the fact that each $v_j$ and $w_k$ is a finite linear combination of $e_i$,
+\begin{align*}
+\inner{v,w} &= \inner{\lim_{j}v_j, \lim_k w_k} = \lim_{j}\lim_{k}\inner{v_j,w_k} \\
+&= \lim_{j}\lim_{k}\inner{\sum_{i=1}^{N_{j}}\inner{e_i,v_j}e_i,\sum_{i'=1}^{N_k}\inner{e_{i'},w_k}e_{i'}} \\
+&= \lim_{j}\lim_{k}\sum_{i=1}^{N_{j}}\sum_{i'=1}^{N_k}\inner{v_j,e_i}\inner{e_{i'},w_k}\inner{e_i,e_{i'}} = \lim_{j}\lim_{k}\sum_{i=1}^{N_{j}}\sum_{i'=1}^{N_k}\inner{v_j,e_i}\inner{e_{i'},w_k}\delta_{i,i'} \\
+&= \lim_{j}\lim_{k}\sum_{i=1}^{\min\{N_{j},N_{k}\}}\inner{v_j,e_i}\inner{e_i,w_k} \\
+&= \lim_{j}\lim_{k}\sum_{i\in I}\inner{v_j,e_i}\inner{e_i,w_k} \\
+&= \sum_{i\in I}\lim_{j}\lim_{k}\inner{v_j,e_i}\inner{e_i,w_k} \\
+&= \sum_{i\in I}\inner{v,e_i}\inner{e_i,w}.
+\end{align*}
+For the interchange of the limits and the summation in the penultimate equality we can use Tannery's theorem, \ref{theorem:tannery}. Indeed $|\inner{e_i,w_k}|$ is bounded by $\norm{w_k}$ by the Bessel inequality. By the continuity of the norm we have $\lim_k \norm{w_k} = \norm{w}$, so the sequence $\norm{w_k}$ is bounded.
+\item[$\boxed{(3) \Rightarrow (4)}$] Set $v=w$.
+\item[$\boxed{(4) \Rightarrow (5)}$] If $v\perp D$, then
+\[ \norm{v}^2 = \sum_{i\in I}|\inner{e_i,v}|^2 = 0 \qquad\text{which implies $v=0$.} \]
+\item[$\boxed{(5) \Rightarrow (6)}$] The vector $v-\sum_{i\in I}\inner{e_i,v}e_i$ is perpendicular to $D$:
+\[ \forall e_j\in D: \quad \inner{e_j, v-\sum_{i\in I}\inner{e_i,v}e_i} = \inner{e_j, v}-\sum_{i\in I}\inner{e_i,v}\inner{e_j,e_i} = \inner{e_j, v} - \inner{e_j, v} = 0. \]
+So $v-\sum_{i\in I}\inner{e_i,v}e_i = 0$ and the Plancherel formula holds.
+\item[$\boxed{(6) \Rightarrow (1)}$] By definition of o.n. basis.
+\end{itemize}
+\end{proof}
+There are maximal orthonormal families that are not bases.
+\begin{example}
+Consider the space $l^2(\N)$ and take the subspace $X$ generated by the family of elements
+\[ \left( \sum_{n=1}^\infty n^{-1}e_n, e_2,e_3,e_4,\ldots \right) \]
+with the inner product induced by the inner product of $l^2$. In this space $F=\{e_2,e_3,\ldots\}$ is orthonormal and maximal, but not a basis.
+\end{example}
+
+Maximal orthonormal families feel like kinds bases, especially given the next couple of results. We would really like the concepts of orthonormal basis and maximal orthonormal family to coincide. Spaces in which they do not are missing something; they are not complete. This is one good reason we are most often interested in Hilbert spaces.
+
+\begin{theorem}
+\begin{itemize}
+\item Every vector space has a maximal orthonormal set.
+\item Every orthonormal set can be extended to a maximal orthonormal set.
+\end{itemize}
+\end{theorem}
+\begin{proof}
+The first statement follows easily from the second. The second statement is proved using Zorn's lemma. Let $S$ be an orthonormal set. Define
+\[ \mathcal{A} = \{ D\subset V \;|\; S\subset D \; \text{and $D$ is orthonormal} \} \]
+ordered by inclusion. It is easy to see that any chain on $\mathcal{A}$ has an upper bound on $\mathcal{A}$, by just taking the union which is still orthonormal. It follows from Zorn's lemma that $\mathcal{A}$ has a maximal element $R$. This is by definition an orthonormal basis.
+
+In the finite-dimensional case this can also be proved using Gram-Schmidt.
+\end{proof}
+
+\begin{proposition}
+Given a vector space $V$, any two maximal orthonormal sets have the same cardinality.
+\end{proposition}
+\begin{proof}
+Take $D = \{e_i\}_{i\in I}$ and $D' = \{f_j\}_{j\in J}$ maximal orthonormal sets.
+\end{proof}
+\begin{definition}
+An inner product space is \udef{separable} if it is separable as a metric space, i.e. it admits a countable dense subset.
+\end{definition}
+\begin{proposition}
+An inner product space is separable \textup{if and only if} it admits an orthonormal basis with at most countably many vectors.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsection{Orthogonal complements}
+\begin{definition}
+Let $U$ be a subset of an inner product space $V$. The \udef{orthogonal complement} $U^\perp$ of $U$ is the set of vectors in $V$ that are orthogonal to every vector in $U$:
+\[ U^\perp = \{ v\in V\;|\; \inner{v,u}=0\; \forall u\in U \}. \]
+\end{definition}
+We can also consider the orthogonal complement of a subspace with respect to another subspace, not the full space.
+\begin{definition}
+Let $U\subseteq W$ be subsets of an inner product space $V$. The \udef{orthogonal complement} of $U$ with respect to $W$ is the set of vectors in $W$ that are orthogonal to every vector in $U$:
+\[ W\ominus U = \{ w\in W\;|\; \inner{w,u}=0\; \forall u\in U \}. \]
+\end{definition}
+
+\begin{proposition} \label{prop:OrthogonalComplementProperties}
+Let $U,W$ be \emph{subsets} of an inner product space $V$.
+\begin{enumerate}
+\item $U^\perp$ is a subspace of $V$;
+\item $U^\perp = \Span(U)^\perp$;
+\item $\{0\}^\perp = V$;
+\item $V^\perp = \{0\}$;
+\item $U\cap U^\perp \subset \{0\}$;
+\item If $U\subset W$, then $W^\perp \subset U^\perp$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition} \label{prop:ominusUnderIsometry}
+Let $V$ be an inner product space and $T:V\to V$ an isometry. Let $A\supseteq B$ be subspaces. Then
+\[ T[A\ominus B] = T[A]\ominus T[B]. \]
+\end{proposition}
+\begin{proof}
+Take $v\in T[A\ominus B]$. Then there exists an $x\in A$ such that $T(x) = v$ and $\inner{x,b}=0$ for all $b\in B$. Then by isometry $\inner{T(x), T(b)}=0$ for all $b\in B$. So $v\in T[A]\ominus T[B]$. This reasoning can be inverted to give the other inclusion. 
+\end{proof}
+
+\begin{proposition} \label{prop:linearDeMorgan}
+Let $W_1,W_2$ be subspaces of an inner product space $V$. Then
+\[ (W_1+W_2)^\perp = W_1^\perp \cap W_2^\perp. \]
+\end{proposition}
+\begin{proposition} \label{prop:orthogonalComplementClosed}
+Let $U$ be a \emph{subset} of an inner product space $V$. Then $U^\perp$ is closed and $\overline{U}^\perp = U^\perp$. This can be rephrased as
+\[ \overline{U}^\perp = \overline{U^\perp} = U^\perp. \]
+Also
+\[\overline{U} \subset (U^\perp)^\perp. \]
+\end{proposition}
+\begin{proof}
+Let $x\in \overline{U^\perp}$. Then there exists a sequence $(x_i)$ in $U^\perp$ that converges to $x$. For all $u\in U$, the functional $\inner{u,\cdot}:y\mapsto \inner{u,y}$ is bounded (by Cauchy-Schwarz). Thus all these functionals are continuous. Applying any one to the sequence $x_i$ gives a sequence of zeros. Thus $\inner{u,x} = 0$ for all $u\in U$. Thus $x\in U^\perp$ and hence $U^\perp \supset \overline{U^\perp}$ meaning $U^\perp$ is closed.
+
+Now $\overline{U}\supset U$, so $\overline{U}^\perp \subset U^\perp$. For the other inclusion, take an $x\in U^\perp$. Take an arbitrary $y\in \overline{U}$. Then there exists a sequence $(y_i)$ in $U$ that converges to $y$. Apply the bounded functional $\inner{x,\cdot}$ to the sequence $(y_i)$, yielding a sequence of zeros. Thus $\inner{x,y}=0$. Thus $x\in \overline{U}^\perp$.
+
+Finally let $u\in \overline{U}$. Take a sequence $u_i\to u$. Take an arbitrary element $x\in U^\perp$. As before $\inner{x,u} = \lim_i\inner{x,u_i} = 0$. So $u\in (U^\perp)^\perp$.
+\end{proof}
+\begin{corollary} \label{corollary:orthogonalComplementClosed}
+If the subset $U$ is dense in $V$, then $U^\perp = \{0\}$. 
+\end{corollary}
+\begin{proof}
+\[ U^\perp = \overline{U}^\perp = V^\perp = \{0\}. \]
+\end{proof}
+\begin{proposition}
+Let $U$ be a finite-dimensional subspace of an inner product space $V$.
+\begin{enumerate}
+\item $V=U\oplus U^\perp$;
+\item $U = (U^\perp)^\perp$.
+\end{enumerate}
+\end{proposition}
+Notice that $V$ may be infinite dimensional!
+\begin{proof}
+We start with the first point. The sum $U + U^\perp$ is definitely direct, $U\oplus U^\perp$, by proposition \ref{prop:OrthogonalComplementProperties} and the criterion for a direct sum, proposition \ref{prop:directSumCriterion}. Clearly $U\oplus U^\perp\subseteq V$, so we just need to show that $V \subseteq U\oplus U^\perp$.
+
+To that end, take a vector $v\in V$. Let $\{e_i\}_{i=1}^n$ be an orthonormal basis of $U$. We can write
+\[ v = \left(v - \sum_{i=1}^n\inner{v,e_i}e_i\right) + \left(\sum_{i=1}^n\inner{v,e_i}e_i\right). \]
+The first part is an element of $U^\perp$, the second of $U$, so $v\in U\oplus U^\perp$.
+
+For the second point: any finite-dimensional subspace $U$ is automatically closed, so $U = \overline{U} \subset (U^\perp)^\perp$, by proposition \ref{prop:orthogonalComplementClosed}. For the other inclusion, take $v\in (U^\perp)^\perp$. By the first point, we can write $v = v_1 + v_2$ where $v_1\in U$ and $v_2\in U^\perp$. Because $v\in (U^\perp)^\perp$ and $v_2\in U^\perp$, we must have
+\[ 0 = \inner{v_2, v} = \inner{v_2, v_1+v_2} = \inner{v_2, v_1} + \inner{v_2,v_2} = \norm{v_2}. \]
+So $v=v_1\in U$.
+\end{proof}
+
+TODO all projection results for projection onto finite dim? See proposition before Bessel inequality. In fact better: projection onto summand of direct sum! Put under decompositions.
+
+
+A result dual to proposition \ref{prop:linearDeMorgan} also holds in finite-dimensional spaces:
+\begin{proposition}
+Let $W_1,W_2$ be subspaces a finite-dimensional space $V$. Then
+\[ (W_1\cap W_2)^\perp = W_1^\perp + W_2^\perp. \]
+\end{proposition}
+\begin{proof}
+We start by applying proposition \ref{prop:linearDeMorgan} to $W_1^\perp$ and $W_2^\perp$:
+\[ (W_1^\perp+W_2^\perp)^\perp = (W_1^\perp)^\perp \cap (W_2^\perp)^\perp = W_1 \cap W_2. \]
+Taking the orthogonal complement of both sides gives the result. In infinite dimensions $(W_1^\perp+W_2^\perp)$ is not necessarily closed. 
+\end{proof}
+
+
+
+\section{Maps on inner product spaces}
+Inner product spaces are naturally metric spaces with metric 
+\[ d(x,y) = \norm{x-y} = \sqrt{\inner{x-y, x-y}}. \]
+
+\begin{lemma}[Continuity of inner product]
+Let $V$ be an inner product space. Then the inner product is a continuous function $V\times V \to \mathbb{F}$.
+\end{lemma}
+\begin{proof}
+We show that if $x_n \to x$ and $y_n \to y$, then $\inner{x_n,y_n}\to \inner{x,y}$. By the triangle and Cauchy-Schwarz inequalities
+\begin{align*}
+|\inner{x_n,y_n}-\inner{x,y}| &= |\inner{x_n,y_n}-\inner{x_n,y}+\inner{x_n,y} - \inner{x,y}| \\
+&\leq |\inner{x_n, y_n-y}| + |\inner{x_n-x, y}| \\
+&\leq \norm{x_n}\norm{y_n-y} + \norm{x_n-x}\norm{y}.
+\end{align*}
+Because the right-hand side converges to $0$, the left-hand side must too.
+\end{proof}
+
+\subsection{Isometries}
+\begin{lemma} \label{lemma:equalityOfMapsInnerProductSpaces}
+Let $V$ be an inner product space and $S,T\in\Hom(V)$. Then $S=T$ \textup{if and only if}
+\[ \forall v,w\in V: \inner{Tv,w} = \inner{Sv,w}. \]
+\end{lemma}
+\begin{proof}
+The direction $\boxed{\Rightarrow}$ is obvious. For the other direction, use
+\[ 0 = \inner{Tv,w} - \inner{Sv,w} = \inner{(T-S)v,w} \]
+for all $v,w$. In particular $w=(T-S)v$. The result follows from definiteness of the inner product.
+\end{proof}
+
+\begin{lemma}
+Let $V,W$ be inner product spaces. Let $f:V\to W$ be a function. Then $f$ preserves the metric (i.e. is an isometry) \textup{if and only if} $f$ also preserves the inner product:
+\[ \forall x,y \in V: \quad \inner{f(x),f(y)}_W = \inner{x,y}_V. \]
+\end{lemma}
+The proof is a simple application of the polarisation identities.
+
+\begin{definition}
+Let $V,W$ be an inner product spaces. A linear map $U\in\Hom(V,W)$ is called \udef{unitary} if it is an isometry and invertible.
+
+Unitary operators on real vector spaces are also called \udef{orthogonal operators}.
+\end{definition}
+Because every isometry is injective (see lemma \ref{lemma:isometryInjective}), it is enough for a linear map to be isometric and surjective to be unitary.
+
+\begin{lemma}
+Every unitary map is bounded and has norm $1$.
+\end{lemma}
+\begin{proof}
+Let $U: V\to W$ be a unitary map between inner product spaces. Then $\forall v\in V: \norm{U(v)} = \norm{v}$.
+\end{proof}
+
+Unitary operators transform orthonormal bases to orthonormal bases:
+\begin{proposition}
+Let $T\in \Hom(V,W)$ with $V,W$ inner product spaces and let $V$ have an orthonormal basis $\{e_i\}_{i\in I}$. Then $T$ is unitary \textup{if and only if} $\{Te_i\}_{i\in I}$ is an orthonormal basis of $W$.
+\end{proposition}
+\begin{proof}
+Assume $T$ unitary. The family $\{Te_i\}_{i\in I}$ is certainly orthonormal, by preservation of the inner product. Now let $w\in W$ and so $T^{-1}w\in V$. By the Plancherel formula, proposition \ref{prop:plancherel}, we can write
+\[ T^{-1}w = \sum_{n=1}^\infty \inner{e_{i_n},T^{-1}w}e_{i_n} = \lim_{N\to\infty}\sum_{n=1}^N \inner{e_{i_n},T^{-1}w}e_{i_n} \]
+and so
+\[ w = TT^{-1}w = T\lim_{N\to\infty}\sum_{n=1}^N \inner{e_{i_n},T^{-1}w}e_{i_n} = \lim_{N\to\infty}\sum_{n=1}^N \inner{e_{i_n}T^{-1}w}Te_{i_n} \]
+because $T$ is bounded and thus continuous, by theorem \ref{theorem:boundedLinearMaps}.
+Thus $\{Te_i\}_{i\in I}$ is an orthonormal basis of $W$.
+
+Conversely, assume $\{Te_i\}_{i\in I}$ is an orthonormal basis of $W$. We first prove $T$ is bounded, which is a simple application of Parseval's identity, proposition \ref{prop:totalONBParsevalEquivalence}:
+\[ \norm{Tv}^2 = \sum_{i\in I}|\inner{Te_i,Tv}|^2 = \sum_{i\in I}|\inner{e_i,v}|^2 = \norm{v}^2. \]
+The rest of the proof is again an application of the Plancherel formula.
+\end{proof}
+
+\begin{lemma}
+Let $U$ be a unitary map. If $\lambda$ is an eigenvalue of $U$, then $|\lambda| = 1$.
+\end{lemma}
+\begin{proof}
+Let $v$ be an eigenvector associated to the eigenvalue $\lambda$. Then
+\[ \inner{v,v} = \inner{L(v),L(v)} = \inner{\lambda v, \lambda v} = \lambda^2\inner{v,v},  \]
+so $\lambda^2 = 1$.
+\end{proof}
+
+\subsection{Symmetric operators}
+\begin{definition}
+Let $(\mathbb{F},V,+,\inner{\cdot,\cdot})$ be an inner product space. A linear operator $L$ is called \udef{symmetric} if, $\forall v,w\in \dom(L)$
+\[ \inner{L(v),w} = \inner{v,L(w)}. \]
+\end{definition}
+
+\begin{proposition}
+Let $V$ be an inner product space and $L$ a symmetric operator on $V$. Then eigenvectors of $L$ associated to different eigenvalues are orthogonal.
+\end{proposition}
+\begin{proof}
+Let $v,w$ be eigenvectors of $L$ with eigenvalues $\lambda, \mu$ such that $\lambda \neq \mu$. Then
+\[ \lambda\inner{v,w} = \inner{\lambda v,w}=\inner{L(v),w} = \inner{v,L(w)} = \inner{v,\mu w} = \mu \inner{v,w} \]
+and consequently $\inner{v,w} =0$.
+\end{proof}
+
+\subsection{Impact on subspaces}
+\subsubsection{Invariant and reducing subspaces}
+\begin{definition}
+Let $V$ be an inner product space and $T$ a linear operator on $V$.
+\begin{itemize}
+\item A subspace $U\subseteq V$ is said to be \udef{invariant} under $T$ if $T[U] \subset U$.
+\item A subspace $U\subseteq V$ is said to be \udef{reducing} for $T$ if both $U$ and $U^\perp$ are invariant under $T$.
+\end{itemize}
+\end{definition}

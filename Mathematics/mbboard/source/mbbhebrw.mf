@@ -1,0 +1,795 @@
+% blackboard typefaces by Anthony Phan.
+% file: mbbhebrw.mf (Hebrew letters)
+% last modification: 25.10.2001.
+
+% Originally, this file was intented to generate only
+% usual Hebrew letters together with their final forms.
+% Designs with dagesh diacritic mark appeared to be
+% necessary for three reasons (the two firsts are not
+% good reasons but the last one is truly a good one):
+% Yannis Haralambous in his quadratic Hebrew font
+% did so. In the book of Fraenkel on set theory, such
+% symbols are used. And last, no correct placement of
+% the dagesh can be done by TeX mechanism. So it deserves
+% a particular treatment.
+% Furthermore, nobody can imagine placing an accent in the middle
+% of a lead plate...
+% A last remark: dagesh can overlap the underlying glyph,
+% especially when dots are squares. But I don't care too much
+% of that.
+
+def horizontal_rules_list=0.4h,0.5h,0.6h,
+  -body_depth,-desc_depth,cap_height,asc_height,body_height
+enddef;
+
+use_rule2;
+
+% special parameters
+
+hebrew_flare#:=1/3cap_height#;
+hebrew_jut#:=2u#; yod_jut#:=0.75u#;
+define_whole_vertical_pixels(hebrew_flare);
+define_whole_pixels(hebrew_jut,yod_jut);
+
+top_skip#:=bot_skip#:=0.1cap_height#;
+define_whole_vertical_pixels(top_skip,bot_skip);
+heb_size1#:=max(asc_height#-top_skip#-x_height#,dot_size#+dot_skip#+thin#);
+heb_size2#:=max(body_height#-top_skip#-x_height#,2dot_size#+dot_skip#);
+heb_size1:=max(asc_height-top_skip-x_height,dot_size+dot_skip+thin);
+heb_size2:=max(body_height-top_skip-x_height,2dot_size+dot_skip);
+
+% special macros
+
+vardef complete_hebrew_curve@#(expr lshift,rshift,$,squared_end)=
+  pickup circle.nib;
+  top y1@#=top y2@#=h; lft x1@#=apprl+hround lshift;
+  rt x3@#=rt x4@#=w-apprr-hround rshift;
+  x2@#=max(0.25[x1@#,x3@#],rt x3@#-6u);
+  y3@#=$[max(0,-d),h]; bot y4@#=-d;
+  tmp_path:=z1@#..z2@# right_to_down z3@#..z4@#;
+  draw tmp_path; hbbowl(z2@#,z3@#,z4@#,hthick) tmp_path;
+  pickup square.nib; draw z4@#--z.bowl.bot;
+  if squared_end: square_end1@#(left); fi
+  labels(1@#,2@#,3@#,4@#);
+enddef;
+
+vardef complete_dagesh@#(expr x_mid,y_mid)=
+  if dagesh_mark:
+    pickup circle.nib; x@#=good.x(x_mid-0.5hthick);
+    x@#'-x@#=hthick; bot y@#=vround(y_mid-0.5dot_size);
+    top y@#'-bot y@#=dot_size; dot(@#,@#');
+  fi
+enddef;
+
+if dagesh_mark: tmp_string:=" with dagesh";
+else: tmp_string:=""; fi
+
+vardef complete_hebrew_club@#(expr x_mid,y_top,y_bot,$)=
+  save a; a=hround max(5u,1.5hthick+thin,3thin);
+  y1@#l=y2@#l=y_bot; y2@#r=y1@#r; y3@#l=y_top;
+  penpos1@#(thin,if y_top<y_bot: - fi 90);
+  x1@#l-x3@#l=if $<0: - fi a;
+  x1@#l=hround(x_mid if $<0: - else: + fi 0.5a);
+  x2@#r=0.5[x1@#r,x3@#l];
+  adjust_slanted_bar(3@#l,2@#r,3@#r,2@#a)
+  (thin,if y_top<y_bot: - fi $);
+  z2@#l=whatever[z3@#l,z2@#a]; penstroke z1@#e--z2@#e--z3@#e;
+  penlabels(1@#,2@#,3@#);
+enddef;
+
+% Hebrew letters
+
+iff known dagesh_accent:
+beginchar(dagesh_accent,appr#+hthick#+thin#+dot_skip#-appr#,cap_height#,0);
+  "Hebrew dagesh accent";
+  italcorr 0.5(cap_height#+dot_size#)*slant-dot_skip#+0.5u#;
+  complete_dagesh1(apprl+0.5(hthick+thin),0.5h);
+endchar;
+
+beginchar(bbhebr0,12u#+2appr#,cap_height#,0);
+  "Hebrew letter alef (0)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  pickup circle.nib;
+  x1l=apprl-0.4u; x4r=w-apprr+0.4u; y1l=h; y4r=-d;
+  adjust_slanted_bar(1l,4r,2r,3l)(thick+thin,1);
+  numeric a,t; a=diag_width(thin,z1l-z3l);
+  penpos1(a,0); penpos2(a,0); penpos3(a,0); penpos4(a,0);
+  y1-y1a=thin; z1-z1a=z2-z2a=z3a-z3=z4a-z4=whatever*(z1-z3);
+  penstroke z1e..z3e; penstroke z2e..z4e;
+  fill z1--z2--z2a--z1a--cycle; fill z3--z4--z4a--z3a--cycle;
+  lft x5=apprl; rt x10=w-apprr; x8-x5=x10-x13=hThick;
+  bot y5=bot y8=0; top y10=top y13=h;
+  x6=0.5[x3,x3a]; x11=0.5[x2,x2a];
+  h-top y6=bot y11=hebrew_flare;
+  z6=z5 upright z6; z12=z10 downleft z11;
+  tmp_path:=z5 up_to_right z6;
+  tmpp_path:=z10 down_to_left z11;
+  t=xpart(tmp_path intersectiontimes (z1..z3));
+  z7=point t of tmp_path;
+  z12=point t of tmpp_path;
+  if x7>x8: z9=tmp_path intersectionpoint (z8..(x8,y6));
+  else: x9=x8; z9=whatever[z1,z3]; fi
+  x14=w+apprl-apprr-x9; y14=h-y9;
+  draw subpath (0,t) of tmp_path; draw z8..z9;
+  draw subpath (0,t) of tmpp_path; draw z13..z14;
+  z5a=lft z5; z8a=rt z8; z10a=rt z10; z13a=lft z13;
+  z5r=top z5; z8r=top z8; z10r=bot z10; z13r=bot z13;
+  y5l=y8l=0; y10l=y13l=h; x5l=x5a; x8l=x8a; x10l=x10a; x13l=x13a;
+  fill z5l--z8l--z8a--z8r--z5r--z5a--cycle;
+  fill z10l--z13l--z13a--z13r--z10r--z10a--cycle;
+  labels(1a,2a,3a,4a,5a,6,6,7,8a,10a,11,12,13a,14);
+  penlabels(1,2,3,4,5,8,10,13);
+  complete_dagesh15(0.5[x8,x3+0.5dot_size*(x1-x3)/h],0.5dot_size);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr1,10u#+hebrew_jut#+2appr#,cap_height#,0);
+  "Hebrew letter bet (1)"& tmp_string;
+  italcorr 0.6cap_height#*slant-hebrew_jut#;
+  complete_hebrew_curve(0,hebrew_jut-0.5u,0.5,true);
+  pickup circle.nib;
+  apprl-lft x7=rt x8-(w-apprr)=hround 0.5u;
+  bot y7=bot y8=0;
+  pickup square.nib; draw z7..z8; labels(7,8);
+  complete_dagesh9(0.5[x1,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr2,8u#+2appr#,cap_height#,0);
+  "Hebrew letter gimel (2)& tmp_string";
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(0.5u,0,0.5,true);
+  numeric t; pickup circle.nib;
+  x7=x4; lft x8=apprl; x9-x8=hThick;
+  y7=0.4[y4,y1]; y8=y9=y4; tmp_path:=z7 left_to_down z8;
+  t=xpart(tmp_path intersectiontimes bowl_path);
+  z10=tmp_path intersectionpoint (z9..(x9,y7));
+  z8a=lft z8; z9a=rt z9;
+  z8r=top z8; z9r=top z9;
+  y8l=y9l=0; x8l=x8a; x9l=x9a;
+  fill z8l--z9l--z9a--z9r--z8r--z8a--cycle;
+  draw subpath (t,2) of tmp_path; draw z9..z10;
+  labels(7,8,8a,8r,8l,9,9a,9r,9l,10);
+  complete_dagesh13(min(x1+0.5hthick,0.5[x1,x.bowl.mid]),0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr3,9u#+hebrew_jut#+2appr#,cap_height#,0);
+  "Hebrew letter dalet (3)"& tmp_string;
+  italcorr cap_height#*slant;
+  pickup circle.nib;
+  top y1=top y2=h; apprl-lft x1=rt x2-(w-apprr)=hround 0.5u;
+  y3=y6=y1; x2-x3=x2-x4=hebrew_jut;
+  x3-x6=x4-x5=hthick; bot y4=bot y5=0;
+  pickup square.nib; draw z1..z2;
+  draw z3--z4--z5--z6; labels(1,2,3,4,5,6);
+  complete_dagesh7(0.5[x1,x5],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr4,12u#+Appr#+appr#,cap_height#,0);
+  "Hebrew letter he (4)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(Apprl-apprl,0,0.5,true);
+  y7=y8=y4; x7=x9=x1; x8-x7=x10-x9=hthick;
+  top y9=top y10=h-hebrew_flare;
+  draw z7--z8--z10--z9--cycle;
+  labels(7,8,9,10);
+  complete_dagesh11(0.5[x.bowl.mid,x8],0.5h);
+  math_fit(0,0);
+endchar;
+
+iff square_hebrew and not dagesh_mark:
+beginchar(bbhebr5,hthick#+thin#+2Appr#,cap_height#,0);
+  "Hebrew letter vav (5)";
+  italcorr cap_height#*slant-u#;
+  center_bar(1,2); x3=x1; x4=x2; bot y1=bot y2=-d; top y3=top y4=h;
+  pickup square.nib; draw z1--z2--z4--z3--cycle;
+  labels(1,2,3,4);
+  math_fit(0,0);
+endchar;
+
+iff square_hebrew and dagesh_mark:
+beginchar(bbhebr5,2hthick#+2thin#+dot_skip#+appr#+Appr#,cap_height#,0);
+  "Hebrew letter vav (5) with dagesh";
+  italcorr cap_height#*slant-u#;
+  pickup circle.nib; rt x2=rt x4=w-Apprr; x2-x1=x5'-x5=hthick;
+  x3=x1; x1-x5'=thin+dot_skip; bot y5=vround(0.5h-0.5dot_size);
+  top y5'-bot y5=dot_size; bot y1=bot y2=-d; top y3=top y4=h;
+  pickup square.nib; draw z1--z2--z4--z3--cycle; dot(5,5');
+  labels(1,2,3,4);
+  math_fit(0,0);
+endchar;
+
+iff not square_hebrew and not dagesh_mark:
+beginchar(bbhebr5,hthick#+thin#+yod_jut#+2appr#,cap_height#,0);
+  "Hebrew letter vav (5)";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  complete_hebrew_curve(-0.5u,0,0.75,true);
+  math_fit(0,0);
+endchar;
+
+iff not square_hebrew and dagesh_mark:
+beginchar(bbhebr5,hthick#+thin#
+    +max(hthick#+thin#+dot_skip#,yod_jut#)+2appr#,cap_height#,0);
+  "Hebrew letter vav (5) with dagesh";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  complete_hebrew_curve(w-apprr-hthick-thin-yod_jut-apprl-0.5u,0,0.75,true);
+  pickup circle.nib; lft x7=min(apprl,lft x.bowl.mid-hthick-thin-dot_skip);
+  x7'-x7=hthick; bot y7=vround(0.5h-0.5dot_size);
+  top y7'-bot y7=dot_size; dot(7,7'); 
+  math_fit(0,0);
+endchar;
+
+iff not dagesh_mark:
+beginchar(bbhebr6,hthick#+thin#+2hebrew_jut#-u#+2appr#,cap_height#,0);
+  "Hebrew letter zayin (6)";
+  italcorr cap_height#*slant;
+  center_bar(5,6); x4=x5;
+  apprl-lft x1=rt x2-(w-apprr)=hround 0.5u;
+  top y1=top y2=top y3=h; bot y5=bot y6=0;
+  if not square_hebrew: x3=0.25[x2,x6]; y4=0.6[y5,y1];
+    tmp_path:=z3 left_to_down z4..z5;
+    draw tmp_path; hbbowl(z3,z4,z5,x6-x5) tmp_path;
+    pickup square.nib;
+    draw z1--z2; draw z5..z6; labels(1,2,3,4,5,6);
+  else: y4=y3; x3=x6; pickup square.nib; draw z1--z2;
+    draw z3--z6--z5--z4; labels(1,2,3,4,5,6);
+  fi
+  math_fit(0,0);
+endchar;
+
+iff dagesh_mark:
+beginchar(bbhebr6,hthick#+thin#+hebrew_jut#-0.5u#
+    +max(hthick#+thin#+dot_skip#,hebrew_jut#)+2appr#,cap_height#,0);
+  "Hebrew letter zayin (6) with dagesh";
+  italcorr cap_height#*slant;
+  pickup circle.nib; rt x2=w-apprr+hround 0.5u;
+  x2-x6=x5-x1=hebrew_jut; x6-x5=x7'-x7=hthick; x4=x5;
+  lft x7=min(apprl,lft x5-hthick-thin-dot_skip);
+  top y1=top y2=top y3=h; bot y5=bot y6=0;
+  bot y7=vround(0.5h-0.5dot_size); top y7'-bot y7=dot_size;
+  if not square_hebrew: x3=0.25[x2,x6]; y4=0.6[y5,y1];
+    tmp_path:=z3 left_to_down z4..z5;
+    draw tmp_path; hbbowl(z3,z4,z5,x6-x5) tmp_path;
+    pickup square.nib;
+    draw z1--z2; draw z5..z6; labels(1,2,3,4,5,6);
+  else: y4=y3; x3=x6; pickup square.nib; draw z1--z2;
+    draw z3--z6--z5--z4; labels(1,2,3,4,5,6);
+  fi
+  dot(7,7');
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr7,12u#+Appr#+appr#,cap_height#,0);
+  "Hebrew letter het (7)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(Apprl-apprr,0,0.5,false);
+  x7=x1; x8=x9=x7+hthick; y7=y8=y4; y9=y1;
+  draw z1--z7--z8--z9; labels(7,8,9);
+  complete_dagesh10(0.5[x.bowl.mid,x8],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr8,12.25u#+2appr#,cap_height#,0);
+  "Hebrew letter tet (8)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  pickup circle.nib;
+  lft x2=lft x3=apprl; x4=x6=0.5[x2,x5]; rt x5=w-apprr;
+  x1=x2+hthick; lft x7=hround max(0.3[apprl,w-apprr],rt x1+u);
+  top y2=h; y1=y2=y6=y7; y3=y5=0.5[y2,y4]; bot y4=0;
+  tmp_path:=z2..z3 down_to_right z4 right_to_up z5 up_to_left z6..z7;
+  draw tmp_path; hbbowl(z4,z3,z2,x1-x2) tmp_path;
+  bbbowl(z6,z5,z4,hThick) tmp_path;
+  pickup square.nib; draw z1..z2; square_end7(left);
+  labels(1,2,3,4,5,6,7);
+  complete_dagesh11(0.5[x1,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+iff square_hebrew and not dagesh_mark:
+beginchar(bbhebr9,hthick#+thin#+2Appr#,cap_height#,0);
+  "Hebrew letter yod (9)";
+  italcorr cap_height#*slant-u#;
+  center_bar(1,2); x1=x3; x2=x4;
+  bot y1=bot y2=vround 0.5h; top y3=top y4=h; pickup square.nib;
+  draw z1--z2--z4--z3--cycle; labels(1,2,3,4);
+  math_fit(0,0);
+endchar;
+
+iff square_hebrew and dagesh_mark:
+beginchar(bbhebr9,2hthick#+2thin#+dot_skip#+appr#+Appr#,cap_height#,0);
+  "Hebrew letter yod (9) with dagesh";
+  italcorr cap_height#*slant-u#;
+  pickup circle.nib; rt x2=rt x4=w-Apprr; x2-x1=x5'-x5=hthick;
+  x3=x1; x1-x5'=thin+dot_skip; bot y5=vround(0.5h-0.5dot_size);
+  top y5'-bot y5=dot_size; bot y1=bot y2=vround 0.5h; top y3=top y4=h;
+  pickup square.nib; draw z1--z2--z4--z3--cycle; dot(5,5');
+  labels(1,2,3,4);
+  math_fit(0,0);
+endchar;
+
+iff not square_hebrew and not dagesh_mark:
+beginchar(bbhebr9,hthick#+thin#+yod_jut#+2appr#,cap_height#,0);
+  "Hebrew letter yod (9)";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  begingroup save d; d=-vround 0.5h;
+    complete_hebrew_curve(-0.5u,0,0.5,true);
+  endgroup;
+  math_fit(0,0);
+endchar;
+
+iff not square_hebrew and dagesh_mark:
+beginchar(bbhebr9,hthick#+thin#+
+    +max(hthick#+thin#+dot_skip#,yod_jut#)+2appr#,cap_height#,0);
+  "Hebrew letter yod (9) with dagesh";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  begingroup save d; d=-vround 0.5h;
+    complete_hebrew_curve(w-apprr-hthick-thin-yod_jut-apprl-0.5u,0,0.5,true);
+  endgroup;
+  pickup circle.nib;
+  lft x7=min(apprl,lft x.bowl.mid-hthick-thin-dot_skip);
+  x7'-x7=hthick; bot y7=vround(0.5h-0.5dot_size);
+  top y7'-bot y7=dot_size; dot(7,7'); 
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr10,10u#+2appr#,cap_height#,desc_depth#);
+  "Hebrew letter final kaf (10)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(0,0,0.5,true);
+  complete_dagesh7(0.5[x1,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr11,12u#+2appr#,cap_height#,0);
+  "Hebrew letter kaf (11)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(0,0,0.5,true);
+  z7=(x1,y4); draw z7..z4; labels(7);
+  complete_dagesh8(0.5[x1,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr12,12u#+2appr#,cap_height#,0);
+  "Hebrew letter lamed (12)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  pickup circle.nib;
+  rt x2=rt x3=w-apprr; bot y1=0; top y3=top y4=h; y2=h/2;
+  top y5-bot y4=hebrew_flare; y5=y6; lft x4=lft x5=apprl; y7=y4;
+  x7=x6=x5+hthick; lft x1=hround(0.4[apprl,w-apprr]);
+  tmp_path:=z1 right_to_up z2..z3;
+  draw tmp_path; hbbowl(z1,z2,z3,hthick) tmp_path;
+  pickup square.nib; draw z3--z4--z5--z6--z7;
+  square_end1(left); labels(1,2,3,4,5,6,7);
+  complete_dagesh10(0.5[x4,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr13,12u#+Appr#+appr#,cap_height#,0);
+  "Hebrew letter final mem (13)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(Apprl-apprl,0,0.5,false);
+  y9=y1; y7=y8=y4; x7=x1; x8=x9=x7+hthick;
+  draw z1--z7--z4; draw z8..z9;
+  labels(7,8,9);
+  complete_dagesh10(0.5[x8,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr14,12u#+Appr#+appr#,cap_height#,0);
+  "Hebrew letter mem (14)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  pickup circle.nib; numeric t;
+  lft x1=lft x3=lft x6=Apprl; x2=x4=x1+hthick; rt x8=rt x9=w-apprr;
+  x7=0.5[x6,x8];
+  lft x10=hround max(0.4[apprl,w-apprr],rt x2+u);
+  top y3=top y4=h; top y7=h; bot y1=0; y1=y2=y9=y10;
+  y6=y8=0.5[y1,y7];
+  tmp_path:=z6 up_to_right z7 right_to_down z8..z9;
+  t=xpart(tmp_path intersectiontimes(z2..(x2,y7)));
+  z5=point t of tmp_path;
+  draw z4..z5&subpath(t,5) of tmp_path; hbbowl(z7,z8,z9,hthick) tmp_path;
+  pickup square.nib; draw z9..z10; draw z1--z2--z4--z3--cycle;
+  labels(1,2,3,4,5,6,7,8,9,10);
+  complete_dagesh15(0.5[x2,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+iff square_hebrew and not dagesh_mark:
+beginchar(bbhebr15,hthick#+thin#+2Appr#,cap_height#,desc_depth#);
+  "Hebrew letter final nun (15)";
+  italcorr cap_height#*slant-u#;
+  center_bar(1,2); x3=x1; x4=x2; bot y1=bot y2=-d; top y3=top y4=h;
+  pickup square.nib; draw z1--z2--z4--z3--cycle;
+  labels(1,2,3,4);
+  math_fit(0,0);
+endchar;
+
+iff square_hebrew and dagesh_mark:
+beginchar(bbhebr15,2hthick#+2thin#+dot_skip#+appr#+Appr#,
+    cap_height#,desc_depth#);
+  "Hebrew letter final nun (15) with dagesh";
+  italcorr cap_height#*slant-u#;
+  pickup circle.nib; rt x2=rt x4=w-Apprr;  x2-x1=x5'-x5=hthick;
+  x3=x1; x1-x5'=thin+dot_skip; bot y5=vround(0.5h-0.5dot_size);
+  top y5'-bot y5=dot_size; bot y1=bot y2=-d; top y3=top y4=h;
+  pickup square.nib; draw z1--z2--z4--z3--cycle; dot(5,5');
+  labels(1,2,3,4);
+  math_fit(0,0);
+endchar;
+
+iff not square_hebrew and not dagesh_mark:
+beginchar(bbhebr15,hthick#+thin#+yod_jut#+2appr#,
+    cap_height#,desc_depth#);
+  "Hebrew letter final nun (15)";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  complete_hebrew_curve(-0.5u,0,0.75,true);
+  math_fit(0,0);
+endchar;
+
+iff not square_hebrew and dagesh_mark:
+beginchar(bbhebr15,hthick#+thin#+
+    +max(hthick#+thin#+dot_skip#,yod_jut#)
+    +2appr#,cap_height#,desc_depth#);
+  "Hebrew letter final nun (15) with dagesh";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  complete_hebrew_curve(w-apprr-hthick-thin-yod_jut-apprl-0.5u,0,0.75,true);
+  pickup circle.nib; lft x7=min(apprl,lft x.bowl.mid-hthick-thin-dot_skip);
+  x7'-x7=hthick; bot y7=vround(0.5h-0.5dot_size);
+  top y7'-bot y7=dot_size; dot(7,7'); 
+  math_fit(0,0);
+endchar;
+
+%beginchar(bbhebr15,hthick#+thin#+2appr#,cap_height#,desc_depth#);
+%  "Hebrew letter final nun (15)";
+%  italcorr cap_height#*slant-0.5u#;
+%  center_bar(1,2); x3=x1; x4=x2; bot y1=bot y2=-d; top y3=top y4=h;
+%  pickup square.nib; draw z1--z2--z4--z3--cycle;
+%  labels(1,2,3,4);
+%  math_fit(0,0);
+%endchar;
+
+beginchar(bbhebr16,7.5u#+2appr#,cap_height#,0);
+  "Hebrew letter nun (16)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  pickup circle.nib;
+  rt x3=rt x4=w-apprr; lft x1=apprl-hround 0.5u;
+  x2=max(0.25[x1,x3],rt x3-6u);
+  bot y1=bot y2=0; top y4=h; y3=0.5[y1,y4];
+  tmp_path:=z1..z2 right_to_up z3..z4;
+  draw tmp_path; hbbowl(z2,z3,z4,hthick) tmp_path;
+  pickup square.nib; draw z4..z.bowl.bot;
+  square_end1(left); labels(1,2,3,4);
+  complete_dagesh7(0.5[x1,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr17,12.25u#+2appr#,cap_height#,0);
+  "Hebrew letter samekh (17)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  pickup circle.nib;
+  lft x1=apprl; rt x5=w-apprr; x2=x1; x4=x5; x3=0.5[x1,x5];
+  top y1=h; y5=y1; bot y3=0; y2=y4=0.5[y1,y3];
+  tmp_path:=z1..z2 down_to_right z3 right_to_up z4..z5;
+  draw tmp_path; hbbowl(z3,z2,z1,hthick) tmp_path;
+  hbbowl(z3,z4,z5,hthick) tmp_path;
+  pickup square.nib; draw z1..z5;
+  labels(1,2,3,4,5);
+  complete_dagesh10(0.5[x1,x5],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr18,11.5u#+hebrew_jut#+2appr#,cap_height#,0);
+  "Hebrew letter ayin (18)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  pickup circle.nib;
+  rt x3=rt x4=w-apprr; lft x1=apprl-hround 0.5u; x2=w-apprr-6u;
+  x5=x6=good.x(x1+hebrew_jut+u); x7=x8=x5+hthick;
+  bot y1=0; y2=y5=y8=y1; top y4=h; y4=y6=y7; y3=h/2;
+  tmp_path:=z1..z2 right_to_up z3..z4;
+  draw tmp_path; hbbowl(z2,z3,z4,hthick) tmp_path;
+  pickup square.nib; draw z4..z.bowl.bot; draw z5--z6--z7--z8;
+  square_end1(left); labels(1,2,3,4,5,6,7,8);
+  complete_dagesh11(0.5[x7,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr19,12u#+2appr#,cap_height#,desc_depth#);
+  "Hebrew letter final pe (19)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(0,0,0.5,false);
+  bot y7=bot y8=h-hebrew_flare; x7=x1;
+  y9=y1; x9-x1=x8-x7=hthick;
+  draw z1--z7--z8--z9; labels(7,8,9);
+  complete_dagesh10(0.5[0.5[x7,x8],x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr20,12u#+2appr#,cap_height#,0);
+  "Hebrew letter pe (20)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(0,0,0.5,false);
+  bot y7=bot y8=h-hebrew_flare; x7=x10=x1; y9=y1; y10=y4;
+  x9-x1=x8-x7=hthick; draw z1--z7--z8--z9; draw z10..z4;
+  labels(7,8,9,10);
+  complete_dagesh11(0.5[0.5[x7,x8],x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr21,12u#+Appr#+appr#,cap_height#,desc_depth#);
+  "Hebrew letter final tzadi (21)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  numeric t; pickup circle.nib;
+  bot y1=bot y2=-d; top y3=h; y3=y4=y6=y8=y9;
+  bot y7=hebrew_flare;
+  lft x1=lft x4=lft x6=Apprl; rt x8=w-apprr;
+  x2=x3=x1+hthick; x7=0.5[x1,x8];
+  tmp_path:=z6 down_to_right z7 right_to_up z8;
+  t=xpart(tmp_path intersectiontimes (z2..z3));
+  hbbowl(z7,z8,z8,hThick) tmp_path; z9=z.bowl.bot;
+  z5=point t of tmp_path;
+  z9a=lft z9; z8a=rt z8; z9l=bot z9; z8l=bot z8;
+  z9r=(x9a,h); z8r=(x8a,h);
+  fill z8a--z8r--z9r--z9a--z9l--z8l--cycle;
+  draw subpath (t,4) of tmp_path;
+  pickup square.nib;
+  draw z1--z2--z3--z4--cycle;
+  labels(1,2,3,4,5,6,7,8,9,8a,9a,10,12); penlabels(8,9);
+  complete_dagesh13(0.5[x2,x9],0.5[y3,y7]);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr22,12u#+2appr#,cap_height#,0#);
+  "Hebrew letter tzadi (22)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  pickup circle.nib;
+  numeric t;
+  x1l+0.4u=x5l=apprl; x6l=w-apprr; y1l=h; y5l=y6l=-d;
+  penpos5(thin,90); penpos6(thin,90); z4r=z6r;
+  adjust_slanted_bar(1l,4r,2r,3l)(thick+thin,1);
+  a:=diag_width(thin,z1l-z3l);
+  penpos1(a,0); penpos2(a,0); penpos3(a,0); penpos4(a,0);
+  y1-y1a=thin; z1-z1a=z2-z2a=whatever*(z1-z3);
+  penstroke z1e..z3e; penstroke z2e..z4e; penstroke z5e..z6e;
+  fill z1--z2--z2a--z1a--cycle;
+  rt x7=w-apprr; x7-x10=hThick; top y7=top y10=h;
+  x8=0.5[x2,x2a]; bot y8=hebrew_flare;
+  tmp_path:=z7 down_to_left z8;
+  t=xpart(tmp_path intersectiontimes (z2..z4));
+  z9=point t of tmp_path;
+  if x9<x10: z11=tmp_path intersectionpoint (z10..(x10,y8));
+  else: x11=x10; z11=whatever[z2,z4]; fi
+  draw subpath (0,t) of tmp_path; draw z10..z11;
+  z7a=rt z7; z10a=lft z10;
+  z7r=bot z7; z10r=bot z10;
+  y7l=y10l=h; x7l=x7a; x10l=x10a;
+  fill z7l--z10l--z10a--z10r--z7r--z7a--cycle;
+  labels(1a,2a,4a,7a,8,9,10a,11);
+  penlabels(1,2,3,4,5,6,7,10);
+  complete_dagesh12(
+    max(
+      min(
+	0.25[x1,x3],
+	0.5[x1,x3]+0.5dot_size*(x1-x3)/(y1-y3)-0.5(hthick+thin)-dot_skip
+	),
+      apprl+0.5(hthick+thin)
+      ),0.5h);
+  math_fit(0,0);
+endchar;
+
+% Comments about the placement of the dagesh mark:
+% the right x position is `0.25[x1,x3]',
+% but upper right corner of the square dot should not
+% lie beyond the line `z1..z3', so this
+% position may be the minimum of the previous coordinate and
+% `0.5[x1,x3]+0.5dot_size*(x1-x3)/(y1-y3)-0.5(hthick+thin)-dot_skip';
+% at last the dot mustn't go beyond the left limit,
+% so we finally take the maximum of the previous quantity
+% and `apprl+0.5(hthick+thin)' to be the right x coordinate.
+
+beginchar(bbhebr23,12u#+Appr#+appr#,cap_height#,desc_depth#);
+  "Hebrew letter qof (23)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  pickup circle.nib;
+  rt x2=rt x3=w-apprr; bot y1=0; top y3=top y4=h; y2=h/2;
+  top y5=top y6=h-hebrew_flare;
+  lft x4=lft x5=lft x8=Apprl; x6=x7=x5+hthick; bot y8=bot y7=-d;
+  lft x1=hround max(0.4[apprl,w-apprr],rt x6+u);
+  tmp_path:=z1 right_to_up z2..z3;
+  draw tmp_path; hbbowl(z1,z2,z3,hthick) tmp_path;
+  pickup square.nib; draw z3--z4; draw z5--z6--z7--z8--cycle;
+  square_end1(left); labels(1,2,3,4,5,6,7,8);
+  complete_dagesh11(0.5[x.bowl.mid,x6],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr24,10.5u#+2appr#,cap_height#,0);
+  "Hebrew letter resh (24)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(-0.5u,0,0.5,true);
+  complete_dagesh7(0.5[x1,x.bowl.mid],0.5h);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr25,14u#+2appr#,cap_height#,0);
+  "Hebrew letter shin (25)"& tmp_string;
+  italcorr cap_height#*slant-0.5u#;
+  numeric t;
+  center_bar(10',11');
+  lft x3=apprl; rt x7=w-apprr; x7-x8=x2-x3=hthick;
+  if not dagesh_mark: x10=x10'; x11=x11';
+  else: x11-x10=x14'-x14=hthick;
+    x8-x14'=x14-x11=max(dot_skip+thin,hround 0.5(x8-x11'-hthick));
+    top y14'-bot y14=dot_size; bot y14=vround 0.5(h-dot_size);
+    dot(14,14'); pickup circle.nib;
+  fi
+  x12=x11; x4=x3; x6=x7; top y3=h; y7=y8=y2=y3=y10=y11;
+  y4=y6=0.5[y5,y3]; x5=0.5[x3,x7]; bot y5=0;
+  tmp_path:=z3..z4 down_to_right z5 right_to_up z6..z7;
+  t=xpart(tmp_path intersectiontimes (z2..(x2,y5)));
+  z1=point t of tmp_path;
+  draw tmp_path;
+  hbbowl(z5,z6,z7,hthick) tmp_path;
+  if not square_hebrew:
+    y12=y4; y9=y1; x9=x10;
+    z13-z12=(point 0.5(1+t) of tmp_path-z4) xscaled -1;
+    tmpp_path:=z11---z12...z13{(direction 0.5(1+t) of tmp_path) xscaled -1}
+    ...z9{(direction t of tmp_path) xscaled -1}
+    ...z1{-direction t of tmp_path};
+    draw tmpp_path; draw z1..z2;
+    hbbowl(point 3.5 of tmpp_path,z12,z11,hthick) tmpp_path;
+    pickup square.nib; draw z10..z11; labels(13);
+  else: hbbowl(z5,z4,z3,hthick) tmp_path;
+    x9=x10; bot y9=bot y12=vround 0.25h;
+    pickup square.nib; draw z9--z10--z11--z12--cycle;
+  fi
+  draw z2..z3; draw z7..z8;
+  labels(1,2,3,4,5,6,7,8,9,10,11,12);
+  math_fit(0,0);
+endchar;
+
+beginchar(bbhebr26,11.5u#+hebrew_jut#+2appr#,cap_height#,0);
+  "Hebrew letter tav (26)"& tmp_string;
+  italcorr 0.6cap_height#*slant-0.5u#;
+  complete_hebrew_curve(hebrew_jut-0.5u,0,0.5,false);
+  pickup circle.nib; y7=y8=y9=y4; lft x8=apprl-hround 0.5u;
+  x7=x1; x9-x7=hthick; x10=x9; y10=y1;
+  pickup square.nib; draw z1..z7; draw z8--z9--z10;
+  labels(7,8,9,10);
+  complete_dagesh11(0.5[x.bowl.mid,x9],0.5h);
+  math_fit(0,0);
+endchar;
+
+% ligatures.
+
+iff known bbhebr27 and square_hebrew:
+beginchar(bbhebr27,2hthick#+2thin#+2Appr#+2appr#,cap_height#,0);
+  "Hebrew ligature vav-vav (27)";
+  italcorr cap_height#*slant-u#;
+  pickup circle.nib;
+  bot y1=0; y1=y2=y5=y6; top y3=h; y3=y4=y7=y8;
+  lft x1=lft x4=Apprl; rt x6=rt x7=w-Apprr;
+  x2-x1=x3-x4=x6-x5=x7-x8=hthick;
+  pickup square.nib; draw z1--z2--z3--z4--cycle;
+  draw z5--z6--z7--z8--cycle;
+  labels(1,2,3,4,5,6,7,8);
+  math_fit(0,0);
+endchar;
+
+iff known bbhebr27 and not square_hebrew:
+beginchar(bbhebr27,2hthick#+2thin#+yod_jut#+4appr#,cap_height#,0);
+  "Hebrew ligature vav-vav (27)";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  a:=w-apprl-apprr-(thin+hthick+yod_jut);
+  complete_hebrew_curve(0-0.5u,a,0.75,true);
+  complete_hebrew_curve'(a-0.5u,0,0.75,true);
+  math_fit(0,0);
+endchar;
+
+iff known bbhebr28 and square_hebrew:
+beginchar(bbhebr28,2hthick#+2thin#+2Appr#+2appr#,cap_height#,0);
+  "Hebrew ligature yod-vav (28)";
+  italcorr cap_height#*slant-u#;
+  pickup circle.nib;
+  bot y1=bot y2=vround 0.5h;
+  bot y5=bot y6=0; top y3=h; y3=y4=y7=y8;
+  lft x1=lft x4=Apprl; rt x6=rt x7=w-Apprr;
+  x2-x1=x3-x4=x6-x5=x7-x8=hthick;
+  pickup square.nib; draw z1--z2--z3--z4--cycle;
+  draw z5--z6--z7--z8--cycle;
+  labels(1,2,3,4,5,6,7,8);
+  math_fit(0,0);
+endchar;
+
+iff known bbhebr28 and not square_hebrew:
+beginchar(bbhebr28,2hthick#+2thin#+yod_jut#+4appr#,cap_height#,0);
+  "Hebrew ligature yod-vav (28)";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  a:=w-apprl-apprr-(thin+hthick+yod_jut);
+  begingroup save d; d=-vround 0.5h;
+    complete_hebrew_curve(-0.5u,a,0.5,true);
+  endgroup;
+  complete_hebrew_curve'(a-0.5u,0,0.75,true);
+  math_fit(0,0);
+endchar;
+
+iff known bbhebr29 and square_hebrew:
+beginchar(bbhebr29,2hthick#+2thin#+2Appr#+2appr#,cap_height#,0);
+  "Hebrew ligature yod-yod (29)";
+  italcorr cap_height#*slant-u#;
+  pickup circle.nib;
+  bot y1=vround 0.5h; y1=y2=y5=y6; top y3=h; y3=y4=y7=y8;
+  lft x1=lft x4=Apprl; rt x6=rt x7=w-Apprr;
+  x2-x1=x3-x4=x6-x5=x7-x8=hthick;
+  pickup square.nib; draw z1--z2--z3--z4--cycle;
+  draw z5--z6--z7--z8--cycle; labels(1,2,3,4,5,6,7,8);
+  math_fit(0,0);
+endchar;
+
+iff known bbhebr29 and not square_hebrew:
+beginchar(bbhebr29,2hthick#+2thin#+yod_jut#+4appr#,cap_height#,0);
+  "Hebrew ligature vav-vav (29)";
+  italcorr 0.8cap_height#*slant-0.5u#;
+  a:=w-apprl-apprr-(thin+hthick+yod_jut);
+  begingroup save d; d=-vround 0.5h;
+    complete_hebrew_curve(-0.5u,a,0.5,true);
+    complete_hebrew_curve'(a-0.5u,0,0.5,true);
+  endgroup;
+  math_fit(0,0);
+endchar;
+
+iff known bbhebr30:
+beginchar(bbhebr30,5u#+2appr#,body_height#,0);
+  "Hebrew punctuation geresh (apostrophe)";
+  if square_hebrew:
+    italcorr body_height#*slant;
+    x1l=apprl-0.5u; x4r=w-apprr+0.5u;
+    y4r=h; y1l=vround 0.7h;
+    adjust_slanted_bar(1l,4r,2r,3l)(thick+thin,-1);
+    numeric a,b; b=x4r-x1l;% it will be usefull for the next character.
+    a=diag_width(thin,z3l-z1l);
+    penpos1(a,0); penpos2(a,0); penpos3(a,0); penpos4(a,0);
+    y1a-y1=thin; z1a=whatever[z1,z3]; z1a-z1=z2a-z2=z3-z3a=z4-z4a;
+    penstroke z1e..z3e; penstroke z2e..z4e;
+    fill z1a--z2a--z2--z1--cycle; fill z3--z4--z4a--z3a--cycle;
+    labels(1a,2a,3a,4a); penlabels(1,2,3,4);
+  else:
+    italcorr (body_height#-0.4dot_size#)*slant-0.5u#;
+    numeric b; b=x2-x1; pickup circle.nib;
+    x2=w-apprr-dot_size/2-hround 0.5u;
+    x1=apprl+dot_size/4+hround 0.5u;
+    y1=vround 0.7h+dot_size/4;
+    y2=h-dot_size/2; long_dot(1,2);
+  fi
+  math_fit(0,0);
+endchar;
+
+iff known bbhebr31:
+beginchar(bbhebr31,10u#+2appr#,body_height#,0);
+  "Hebrew punctuation gershayim (double apostrophe)";
+  if square_hebrew:
+    italcorr body_height#*slant;
+    x1l=apprl-0.5u; x4r-x1l=b; y4r=h; y1l=vround 0.7h;
+    adjust_slanted_bar(1l,4r,2r,3l)(thick+thin,-1);
+    a:=diag_width(thin,z3l-z1l);
+    penpos1(a,0); penpos2(a,0); penpos3(a,0); penpos4(a,0);
+    y1a-y1=thin; z1a=whatever[z1,z3]; z1a-z1=z2a-z2=z3-z3a=z4-z4a;
+    for i=1 upto 4: forsuffixes $=,r,l,a:
+	z[i+4]$-z[i]$=(w-apprr-x4,0); endfor endfor
+    penstroke z1e..z3e; penstroke z2e..z4e;
+    penstroke z5e..z7e; penstroke z6e..z8e;
+    fill z1a--z2a--z2--z1--cycle; fill z3--z4--z4a--z3a--cycle;
+    fill z5a--z6a--z6--z5--cycle; fill z7--z8--z8a--z7a--cycle;
+    labels(1a,2a,3a,4a,5a,6a,7a,8a); penlabels(1,2,3,4,5,6,7,8);
+  else:
+    italcorr (body_height#-0.4dot_size#)*slant-0.5u#;
+    pickup circle.nib;
+    x4=w-apprr-dot_size/2-hround 0.5u;
+    x1=apprl+dot_size/4+hround 0.5u;
+    y1=y3=vround 0.7h+dot_size/4;
+    y2=y4=h-dot_size/2; x2-x1=x4-x3=b;
+    long_dot(1,2); long_dot(3,4);
+  fi
+  math_fit(0,0);
+endchar;

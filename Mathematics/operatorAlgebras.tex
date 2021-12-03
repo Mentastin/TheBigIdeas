@@ -1,0 +1,1695 @@
+\chapter{Banach algebras}
+In this part we set $\F \in \{\R, \C\}$. Usually operator algebras are assumed to be complex. We will attempt to give results for real algebras where possible.
+\begin{definition}
+A \udef{normed algebra} is an associative algebra $A$ over $\F$ with norm $\norm{\cdot}$ such that $(\F, A,+, \norm{\cdot})$ is a normed space and
+\[ \forall x,y\in A: \quad \norm{xy}\leq\norm{x}\norm{y}. \]
+We say $A$ is \udef{unital} if there exists a unit element $\vec{1}\in A$ such that
+\[ \forall x\in A: \vec{1}\cdot x = x = x\cdot \vec{1} \qquad \text{and} \qquad \norm{\vec{1}} = 1. \]
+\end{definition}
+\begin{definition}
+A \udef{Banach algebra} is a normed algebra that is also a Banach space.
+\end{definition}
+TODO: which results also hold for normed algebras?
+
+\begin{lemma} \label{lemma:multiplicationContinuous}
+Let $A$ be a Banach algebra. The multiplication map $\cdot: A\times A \to A: (x,y)\mapsto xy$ is continuous.
+\end{lemma}
+\begin{proof}
+Because $A\times A$ is a metric space, we can combine \ref{prop:continuousLimitInterchange} and \ref{corollary:convergenceFiniteProductTopology} to conclude that the multiplication map is continuous iff $x_ny_n \to xy$ whenever $x_n \to x$ and $y_n \to y$.
+
+Assume $x_n \to x$ and $y_n \to y$. Then
+\begin{align*}
+\norm{x_ny_n - xy} &= \norm{x_ny_n - xy_n + xy_n - xy} \leq \norm{(x_n-x)y_n}+ \norm{x(y_n-y)}\\ 
+&\leq \norm{x_n-x}\cdot\norm{y_n}+ \norm{x}\cdot\norm{y_n-y} = \norm{x_n-x}\cdot\norm{y_n-y+y}+ \norm{x}\cdot\norm{y_n-y}\\
+&\leq \norm{x_n-x}\cdot(\norm{y_n-y} + \norm{y})+ \norm{x}\cdot\norm{y_n-y} \to 0
+\end{align*}
+\end{proof}
+As a consequence multiplication by a fixed factor, $x\mapsto cx$ or $x\mapsto xc$ for some $c$, is also continuous, by \ref{corollary:productInclusionsContinuous}. This is also immediate from the boundedness of multiplication $\norm{xy}\leq\norm{x}\norm{y}$ and \ref{theorem:boundedLinearMaps}.
+
+\begin{lemma}
+Let $A$ be a Banach algebra and $D\subset A$ a subset. Suppose $a\in A$ commutes with all elements of $D$, then $a$ commutes with the closure $\overline{D}$.
+\end{lemma}
+\begin{proof}
+Take an arbitrary element $d\in \overline{D}$. Take an arbitrary $\epsilon >0$. Then we can find an $x\in D$ such that $\norm{x-d}\leq \epsilon$. Then, using that $a$ and $x$ commute,
+\begin{align*}
+\norm{ad - da} &= \norm{a(d+x-x) - (d+x-x)} \\
+&= \norm{a(d-x) - (d-x)a} \leq 2\epsilon \norm{a}.
+\end{align*}
+Because we can choose $\epsilon$ arbitrarily small, $\norm{ad - da}$ must be zero.
+\end{proof}
+
+\begin{proposition} \label{prop:smallestBanachAlgebra}
+Let $A$ be a Banach algebra and $S\subset A$ a subset. Then
+\[ \mathcal{B}(S) \defeq \overline{\Span}\setbuilder{s_1\cdot s_2 \cdot \ldots \cdot s_k}{k\geq 1, s_1,\ldots, s_k \in S} \]
+is the smallest Banach subalgebra in $A$ that contains $S$.
+\end{proposition}
+
+\begin{proposition}
+Let $A$ be a Banach algebra and $J\subset A$ an ideal. Then $A/J$ is a Banach algebra with the quotient norm
+\[ \norm{x+J}_J = \inf_{j\in J}\norm{x-j}. \]
+\end{proposition}
+
+\section{Unitisation}
+\begin{definition}
+Let $A$ be a Banach algebra. Then the \udef{unitisation} of $A$ is the algebra $A^\dagger = A\oplus \F$ with multiplication
+\[ (x,\lambda)\cdot (y,\mu) = (xy+\lambda y + \mu x, \lambda\mu) \]
+and a norm that extends the norm $\norm{\cdot}$ on $A$ to a norm on $A^\dagger$. In other words, there is an isometric embedding
+\[ A \hookrightarrow A^\dagger: x\mapsto (x,0). \]
+\end{definition}
+TODO: is $A^\dagger$ necessarily complete?
+\begin{lemma}
+For any Banach algebra $A$, $A^\dagger$ is a unital Banach algebra with unit $\vec{1} = (0,1)$.
+\end{lemma}
+\begin{proof}
+TODO: is $A^\dagger$ necessarily complete?
+\end{proof}
+It is possible to use multiple norms for the unitisation.
+\begin{proposition} \label{prop:normsOfUnitisation}
+Let $A$ be a Banach algebra. Of the possible norms for $A^\dagger$, the $1$-norm
+\[ \norm{(x,\lambda)}_1 = \norm{x}+|\lambda| \]
+is minimal and the operator norm
+\[ \norm{(x,\lambda)}_{op} = \sup\setbuilder{\norm{xa + \lambda a}}{a\in A \land \norm{a}\leq 1} \]
+is maximal. All possible norms are equivalent.
+\end{proposition}
+\begin{proof}
+TODO: prove the operator norm is actually a norm and isometric.
+\end{proof}
+
+We set
+\[ \tilde{A} = \begin{cases}
+A & \text{if $A$ unital} \\
+A^\dagger & \text{if $A$ non-unital.}
+\end{cases} \]
+If a Banach algebra $A$ is unital, we can identify $\F$ with $\F\cdot \vec{1} \subseteq A$.
+
+Alternatively we could define $\tilde{A}$ as the smallest unital Banach algebra containing $A$.
+
+\begin{lemma}
+Let $A$ be a Banach algebra. Then $A$ is an ideal of $A^\dagger$.
+\end{lemma}
+
+\begin{lemma}
+Let $A$ be a Banach algebra. We have the split exact sequence
+\[ \begin{tikzcd}
+0 \rar & A \rar[hook, "\iota"] & A^\dagger \rar[shift left, "\pi_2"] & \lar[hook, shift left, "\lambda"] \F \rar & 0.
+\end{tikzcd} \]
+\end{lemma}
+
+\begin{lemma}
+Let $A,B$ be Banach algebras. Every algebra homomorphism $\Psi:A\to B$ extends uniquely to a unital homomorphism $\Psi^\dagger: A^\dagger \to B^\dagger$:
+\[ \Psi^\dagger: A^\dagger \to B^\dagger: (a,\lambda) \mapsto (\Psi(a),\lambda). \]
+\end{lemma}
+\begin{proof}
+We want $\Psi^\dagger((a,0)) = (\Psi(a),0)$ for all $a\in A$. Because $\Psi$ is unital, we have $\Psi^\dagger((\vec{0},1)) = (\vec{0},1)$. So
+\[ \Psi^\dagger((a,\lambda)) = \Psi^\dagger((a,0))+\lambda \Psi^\dagger((\vec{0},1)) = (\Psi(a),0) + \lambda(\vec{0},1) = (\Psi(a),\lambda). \]
+\end{proof}
+\begin{corollary} \label{corollary:projectionOnACommutes}
+Let $\pi_1: A^\dagger \to A$ be the projection on the first component: $\pi_1(a,\alpha) = a$.
+
+The unital extension $\Psi^\dagger$ commutes with $\pi_2$:
+\[ \pi_2\circ\Psi^\dagger = \Psi^\dagger \circ \pi_2 = \Psi\circ \pi_2. \]
+Restricted to $A$, this is equal to $\Psi$.
+\end{corollary}
+As before we set, for $\Psi: A \to B$ an algebra homomorphism
+\[ \tilde{\Psi} = \begin{cases}
+\Psi & \text{if $A$ unital} \\
+\Psi^\dagger & \text{if $A$ non-unital.}
+\end{cases} \]
+Thus $\tilde{\Psi}$ is a function on $\tilde{A}$.
+
+\begin{lemma} \label{lemma:DaggerMorphismProperties}
+Let $A,B$ be Banach algebras and $\Psi:A\to B$ and algebra homomorphism. Then
+\begin{enumerate}
+\item $\im(\Psi^\dagger) = (\im\Psi)^\dagger$;
+\item $\ker(\Psi^\dagger) = \ker(\Psi)\oplus\{0\}$;
+\item $\Psi^\dagger$ is injective \textup{if and only if} $\Psi$ is injective;
+\item $\Psi^\dagger$ is surjective \textup{if and only if} $\Psi$ is surjective;
+\item $\norm{\Psi^\dagger} = \max\{\norm{\Psi},1\}$;
+\item $\Psi^\dagger$ is isometric \textup{if and only if} $\Psi$ is isometric.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The third point follows from the second and \ref{prop:injectivityKernelTriviality}.
+\end{proof}
+
+\begin{definition}
+Let $A$ be a Banach algebra. We define the \udef{scalar mapping} to be
+\[ s = \lambda\circ \pi: A^\dagger \to A^\dagger: (a,\lambda) \mapsto (0,\lambda). \]
+\end{definition}
+Notice that $\pi\circ s = \pi$.
+
+\subsection{Approximate units}
+\begin{definition}
+Let $A$ be a Banach algebra. A net $(e_\lambda)_{\lambda\in\Lambda}$ is an \udef{approximate unit} if
+\begin{enumerate}
+\item $\norm{e_\lambda}\leq 1$ for all $\lambda$;
+\item $a = \lim_{\lambda\to \infty} e_\lambda \cdot a = \lim_{\lambda\to \infty} a \cdot e_\lambda$.
+\end{enumerate}
+We call $(e)_\lambda$ is an \udef{increasing approximate unit} if $\lambda_0 \leq \lambda_1$ implies $0\leq e_{\lambda_0} \leq e_{\lambda_1}$.
+\end{definition}
+\begin{lemma}
+If $A$ is unital, any approximate unit in $A$ converges to $\vec{1}$.
+\end{lemma}
+TODO: usually increasing. When not?
+
+\section{Algebras of real and complex functions}
+
+\section{Complexification}
+
+\section{Complex analysis on Banach algebras}
+There is a theory of holomorphic (analytic) functions from open sets in $\C$ taking values in a Banach space, which is nearly identical to the usual complex-valued theory. In particular, most of the standard theorems of complex analysis, such as the Cauchy Integral Formula, Liouville’s Theorem,and the existence and radius of convergence of Taylor and Laurent expansions,have exact analogs in this setting. 
+
+\begin{lemma}
+TODO: holomorphic?? And check sign.
+\[ \od{}{z} R_x(z) = (x-z)^{-2}. \]
+\end{lemma}
+
+\section{Series in Banach algebras}
+\subsection{Neumann series}
+\begin{proposition}[Neumann series] \label{prop:NeumannSeries}
+Let $A$ be a unital Banach algebra and $x\in A$. 
+If $\norm{x}<1$, then $\vec{1}-x$ is invertible with inverse
+\[ (\vec{1}-x)^{-1} = \sum_{n=0}^\infty x^n. \]
+Equivalently, if $\norm{\vec{1}-x}< 1$, then $x$ is invertible with inverse
+\[ x^{-1} = \sum_{n=0}^\infty(\vec{1}-x)^n. \]
+\end{proposition}
+\begin{proof}
+Since $\norm{x^n}\leq \norm{x}^n$ for all $n\geq 1$ and $\sum \norm{x}^n$ is a convergent geometric series, the series $\sum x^n$ is convergent by \ref{prop:absoluteUnconditionalConvergenceBanach}.
+\end{proof}
+\begin{corollary} \label{corollary:openSetInvertibles}
+Let $x\in\GL(A)$, then $B(x,\norm{x^{-1}}^{-1})\subset \GL(A)$. The invertible elements $\GL(A)$ form an open subset of $A$.
+\end{corollary}
+\begin{proof}
+The second assertion follows from the first by \ref{prop:interior}. Let $y\in B(x,\norm{x^{-1}}^{-1})$. Then
+\[ \norm{\vec{1} - x^{-1}y} \leq \norm{x^{-1}}\cdot\norm{x-y} < \norm{x^{-1}}\cdot\norm{x^{-1}}^{-1} = 1  \]
+and, by the proposition, $x^{-1}y$ is invertible. Similarly $yx^{-1}$ is invertible and thus $y$ is invertible by \ref{lemma:productInvertibility}.
+\end{proof}
+\begin{corollary} \label{corollary:inverseMapContinuous}
+The map $^{-1}: \GL(A)\to\GL(A): x\mapsto x^{-1}$ is continuous.
+\end{corollary}
+\begin{proof}
+Take a convergent sequence $(x_n)\subset\GL(A)$ with limit $x$. We wish to prove $(x_n^{-1})$ converges to $x^{-1}$, because then the map is continuous by \ref{prop:continuousLimitInterchange}. We can choose an $n_0$ such that $\forall n\geq n_0: x_n \in B(x,\norm{x^{-1}}^{-1})$. From now on we consider only the tails $(x_n)_{n=n_0}^\infty$ and $(x_n^{-1})_{n=n_0}^\infty$, which have the same limits by TODO ref. Then
+\[ \norm{x^{-1}}\cdot\norm{x-x_n} < \norm{x^{-1}}\cdot\norm{x^{-1}}^{-1} = 1. \]
+Also
+\[ \norm{\vec{1} - x^{-1}x_n} = \norm{x^{-1}(x-x_n)} \leq \norm{x^{-1}}\cdot\norm{x-x_n} < 1. \]
+We calculate, using the inequalities to apply the Neumann series formula and geometric series formula:
+\begin{align*}
+\norm{x_n^{-1} - x^{-1}} &= \norm{(x_n^{-1}x - \vec{1})x^{-1}} = \norm{((x^{-1}x_n)^{-1} - \vec{1})x^{-1}} \\
+&= \norm{\left(\sum_{k=0}^\infty[\vec{1} - x^{-1}x_n]^k - \vec{1}\right)x^{-1}} = \norm{\left(\sum_{k=1}^\infty[\vec{1} - x^{-1}x_n]^k\right)x^{-1}} \\
+&\leq \sum_{k=1}^\infty\norm{\vec{1} - x^{-1}x_n}^k\cdot\norm{x^{-1}} = \sum_{k=1}^\infty\norm{x^{-1}(x - x_n)}^k\cdot\norm{x^{-1}} \\
+&\leq \norm{x^{-1}}\sum_{k=1}^\infty\norm{x - x_n}^k\cdot\norm{x^{-1}}^{k} = \norm{x^{-1}}\sum_{k=0}^\infty\norm{x - x_n}^k\cdot\norm{x^{-1}}^{k} - \norm{x^{-1}} \\
+&= \frac{\norm{x^{-1}}}{1-\norm{x - x_n}\cdot\norm{x^{-1}}}-\norm{x^{-1}} = \frac{\norm{x - x_n}\cdot\norm{x^{-1}}^2}{1-\norm{x - x_n}\cdot\norm{x^{-1}}}.
+\end{align*}
+As the right-hand side converges to $0$, so must the left-hand side. Thus $(x_n^{-1})$ converges to $x^{-1}$.
+\end{proof}
+
+
+\subsection{The exponential}
+\begin{proposition}
+Let $A$ be a Banach algebra and $a\in A$. Then the series
+\[ \sum_{i=1}^\infty \frac{a^i}{i!} \]
+converges. We denote its limit $\exp(a)-1$ or $e^a-1$.
+\end{proposition}
+\begin{proof}
+By
+\[ \norm{\sum_{i=1}^N \frac{a^i}{i!}} \leq \sum_{i=1}^N \frac{\norm{a}^i}{i!} \]
+it is absolutely convergent and thus convergent, by \ref{prop:absoluteUnconditionalConvergenceBanach}.
+\end{proof}
+The function $a\mapsto \exp(a) = \vec{1} + \sum_{i=1}^\infty \frac{a^i}{i!}$ is the \udef{exponential mapping}.
+
+\begin{lemma}
+The exponential mapping is continuous.
+\end{lemma}
+\begin{proof}
+TODO - see Coleman
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a unital Banach algebra and $a,b\in A$. If $a$ and $b$ commute, then
+\[ \exp(a+b) = \exp(a)\exp(b). \]
+\end{proposition}
+\begin{proof}
+TODO - Coleman
+\end{proof}
+\begin{corollary}
+The image of the exponential function is contained in $\GL(A)$.
+\end{corollary}
+\begin{proof}
+As $a$ and $-a$ commute, we have $\exp(-a)\exp(a) = \exp(0) = \vec{1}$.
+\end{proof}
+
+\begin{lemma}
+Let $A$ be a Banach algebra and $a\in A$. Then
+\[ \exp(a) = \lim_{n\to\infty} \left(\vec{1} + \frac{a}{n}\right)^n. \]
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\section{The spectrum}
+TODO: remove unital requirement.
+\begin{definition}
+Let $A$ be a complex Banach algebra. The \udef{spectrum} of an element $x\in A$ is defined as
+\[ \sigma(x) = \sigma_A(x) \defeq \setbuilder{\lambda\in\C}{x-\lambda\cdot \vec{1} \in \tilde{A} \;\text{is not invertible}}. \]
+If $A$ is a real Banach algebra, then the spectrum of $x\in A$ is defined as
+\[ \sigma_A(x) \defeq \sigma_{A_\C}(x) = \setbuilder{\lambda\in\C}{x-\lambda\cdot \vec{1} \in \widetilde{A_\C} \;\text{is not invertible}}.  \]
+The \udef{resolvent set} of an element $x\in A$ is
+\[ \rho(x) = \C\setminus\sigma(x) \]
+and its \udef{resolvent map} is
+\[ R_x: \rho(x) \to A : z\mapsto (x-z)^{-1}. \]
+The \udef{spectral radius} of $x\in A$ is
+\[ r(x) = \max\{ |\lambda|\;|\; \lambda\in\sigma(x) \}. \]
+\end{definition}
+
+\begin{lemma}
+Let $A$ be a non-unital Banach algebra. Then $0\in\sigma_A(a)$ for all $a\in A$.
+\end{lemma}
+\begin{proof}
+Because $A\subset A^\dagger$ as an ideal, $(a,0)\in A^\dagger$ is not invertible.
+\end{proof}
+
+\begin{lemma}
+Let $A$ be a real Banach algebra. Then for all $a\in A$ and $\mu_1,\mu_2\in \R$:
+\begin{enumerate}
+\item $\sigma(a) = \overline{\sigma(a)}$;
+\item $\mu_1 + \mu_2 i \in \sigma(a)$ \textup{if and only if} $(a-\mu_1)^2+\mu_2^2$ is not invertible in $\tilde{A}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $\lambda \notin \sigma(a)$, so $(a-\lambda)^{-1}$ exists. Then
+\[ \vec{1} = \overline{\vec{1}} = \overline{(a-\lambda)}\overline{(a-\lambda)^{-1}} = (a-\overline{\lambda})\overline{(a-\lambda)^{-1}}, \]
+so $a-\overline{\lambda}$ is invertible and $\overline{\lambda}\notin \sigma(a)$. The converse is identical, using $\overline{\lambda}$.
+
+(2) By (1), $a - (\mu_1 + \mu_2 i)$ is invertible if and only if $a - (\mu_1 - \mu_2 i)$ is invertible. Because $a - (\mu_1 + \mu_2 i)$ and $a - (\mu_1 - \mu_2 i)$ commute, this is equivalent to saying
+\[ (a - (\mu_1 + \mu_2 i))(a - (\mu_1 - \mu_2 i)) = (a-\mu_1)^2 + \mu_2^2 \]
+is invertible in $\widetilde{A_\C}$, by \ref{lemma:productInvertibility} and thus also in $A$, by TODO ref.
+\end{proof}
+
+\begin{proposition}
+Let $B$ be a complex Banach algebra and $A = B_\R$, then for all $a\in A$
+\[ \sigma_A(a) = \sigma_B(a) \cup \overline{\sigma_B(a)}. \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{corollary:spectrumCompact}
+For any $x\in A$, the spectrum $\sigma(x)$ is a compact subset of $\setbuilder{\lambda\in\C}{|\lambda|\leq \norm{x}}$.
+
+In particular, $r(x) \leq \norm{x}$.
+\end{proposition}
+\begin{proof}
+Let $\lambda\in \C$ be such that $|\lambda|>\norm{x}$, then
+\[ 1 > \frac{\norm{x}}{|\lambda|} = \frac{\lambda - (\lambda - \norm{x})}{|\lambda|} = \norm{\vec{1} - \left(\vec{1} - \frac{x}{\lambda}\right)}. \]
+By \ref{prop:NeumannSeries}, $\vec{1} - x/\lambda$ is invertible and thus so is $x-\lambda$.
+
+It is then enough to show that $\sigma(x)$ is closed. By \ref{corollary:openSetInvertibles}, $\GL(A)$ is open and the set of non-invertibles $A\setminus \GL(A)$ is closed. Consider $f: \C \to A: \lambda \mapsto x-\lambda$. Then $\sigma(x) = f^{-1}[A\setminus \GL(A)]$ is the preimage of a closed set under a continuous map, and hence is closed.
+\end{proof}
+
+\begin{proposition}[Spectral radius formula] \label{proposition:spectralRadiusFormula}
+Let $A$ be a Banach algebra and $x\in A$. Then
+\[ r(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = \inf_{n\in\N}\norm{x^n}^{1/n}. \]
+\end{proposition}
+\begin{proof}
+TODO, with complex analysis.
+\end{proof}
+
+\begin{theorem}
+Let $A$ be a unital Banach algebra. For every $x\in A$, the spectrum $\sigma(x)$ is non-empty.
+\end{theorem}
+\begin{proof}
+TODO, uses complex analysis. Also move higher?
+\end{proof}
+\begin{corollary}[Gelfand-Mazur] \label{corollary:GelfandMazur}
+Let $A$ be a unital complex Banach algebra. If every non-zero element is invertible, then $A=\C\cdot \vec{1}$.
+\end{corollary}
+\begin{proof}
+Suppose $x\in A\setminus (\C\cdot\vec{1})$. Then $\sigma(x) = \emptyset$, contradicting the theorem.
+\end{proof}
+In other words, $\C$ is the only normed complex division algebra.
+
+\begin{proposition}
+Let $A$ be a unital Banach algebra and $x,y\in A$. Then $\vec{1} - xy$ is invertible \textup{if and only if} $\vec{1} - yx$ is invertible.
+\end{proposition}
+\begin{proof}
+Assume $\vec{1} - xy$ invertible. Then the inverse of $\vec{1} - yx$ is
+\[ y(\vec{1} - xy)^{-1}x + \vec{1}. \]
+\end{proof}
+\begin{corollary}
+Let $A$ be a unital Banach algebra and $x,y\in A$. Then
+\[ \sigma(xy)\cup\{0\} = \sigma(yx)\cup\{0\}. \]
+\end{corollary}
+\begin{proof}
+Assuming $\lambda \neq 0$, we have $\lambda\in\sigma(xy) \iff \frac{xy}{\lambda} - \vec{1}$ is invertible.
+\end{proof}
+It is important to include $0$: there are cases when $0\in \sigma(xy)$, but $0\notin \sigma(yx)$.
+
+\begin{lemma} \label{lemma:spectrumOfImage}
+Let $A,B$ be unital Banach algebras and $\Psi: A\to B$ a unital algebra homomorphism. Then for all $x\in A$: $\sigma(\Psi(x)) \subseteq \sigma(x)$ and hence $r(\Psi(x)) \leq r(x)$.
+\end{lemma}
+\begin{proof}
+By contraposition: Assume $\lambda\notin\sigma(x)$, then $x-\lambda$ has an inverse, call it $a$. Then $(\Psi(x) - \lambda)$ has an inverse by
+\[ (\Psi(x) - \lambda)\Psi(a) = \Psi(x-\lambda)\Psi(a) = \Psi((x-\lambda)a) = \Psi(\vec{1}) = \vec{1},\]
+meaning $\lambda \notin \sigma(\Psi(x))$.
+\end{proof}
+
+In general if $B$ is a subalgebra of a Banach algebra $A$, then for any $x\in B$, $\sigma_B(x) \supseteq \sigma_A(x)$.
+
+\begin{proposition}
+Let $A$ be a unital Banach algebra and suppose that $S\subset A$ is a set of pairwise commuting elements. Then there exists a unital commutative Banach subalgebra $C$ such that $S\subset C\subset A$ and
+\[ \sigma_A(s) = \sigma_C(s) \qquad \text{for all $s\in S$.} \]
+\end{proposition}
+\begin{proof}
+Consider the
+\end{proof}
+
+\section{Characters}
+\begin{definition}
+Let $A$ be a Banach algebra. A \udef{character} on $A$ is a non-zero algebra homomorphism $A\to\C$.
+\end{definition}
+In other words, a character on $A$ is a non-zero multiplicative linear functional $A\to \C$.
+In particular, if $A$ is a real algebra, a character is still complex valued, but now  an $\R$-linear functional on $A$. 
+
+\begin{lemma}
+Let $A$ be a real Banach algebra. Let $\varphi$ be a character on $A$. Then
+\[ \varphi \in \tdual{A} \iff \varphi = \overline{\varphi} \iff \varphi[A] \subset \R. \]
+\end{lemma}
+
+\begin{proposition} \label{prop:charactersUnital} \label{prop:charactersContinuous}
+Let $A$ be a Banach algebra and $\varphi$ a character on $A$, then $\varphi$ is continuous and
+\begin{enumerate}
+\item $\norm{\varphi}\leq 1$;
+\item $\norm{\varphi} = 1$ if $A$ contains an approximate unit;
+\item $\norm{\varphi} = 1 = \varphi(\vec{1})$ if $A$ is unital.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We first prove that $\varphi$ is unital if $A$ is unital: As $\varphi(x) = \varphi(x\cdot\vec{1}) = \varphi(x)\varphi(\vec{1})$ for all $x\in A$ and $\varphi \neq 0$, it follows that $\varphi(\vec{1}) = 1$.
+
+Next $\norm{\varphi}\leq 1$ follows from $\norm{\tilde{\varphi}} \leq 1$ by \ref{lemma:DaggerMorphismProperties}. To this end suppose that for some $x\in \tilde{A}$, $|\tilde{\varphi}(x)|>\norm{x}$. Then $x-\tilde{\varphi}(x)$ is invertible by corollary \ref{corollary:spectrumCompact}. Thus
+\[ 1 = \tilde{\varphi}(\vec{1}) = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})\tilde{\varphi}(x-\tilde{\varphi}(x)) = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})[\tilde{\varphi}(x)-\tilde{\varphi}(x)] = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})\cdot 0 = 0 \]
+which is a contradiction. Then $\norm{\tilde{\varphi}} \leq 1$ and thus $\norm{\varphi} \leq 1$. By \ref{theorem:boundedLinearMaps}, $\varphi$ is continuous.
+
+Then it just remains to be shown that $\norm{\varphi} = 1$ if $A$ contains an approximate unit. TODO
+\end{proof}
+
+
+\section{Commutative Banach algebras}
+\subsection{The (Gelfand) spectrum}
+\begin{definition}
+Let $A$ be a commutative Banach algebra. The \udef{(Gelfand) spectrum} (or \udef{character space}) $\hat{A}$ is the set of characters on $A$.
+\end{definition}
+If we equip $\hat{A}$ with the weak-$*$ topology, the Banach-Alaoglu theorem (TODO ref) implies $\hat{A}$ is a locally compact Hausdorff space.
+
+TODO $\hat{A}$ compact if and only if $A$ unital.
+
+All elements of the Gelfand spectrum are unital and continuous, by \ref{prop:charactersUnital} and \ref{prop:charactersContinuous}.
+
+If $A$ is a real algebra, then
+\[ \hat{A} = \setbuilder{\varphi|_A}{\varphi\in \widehat{A_\C}}. \]
+
+\begin{proposition} \label{prop:commutativeSameSpectrum}
+Let $A$ be  a  unital  Banach  algebra,  and  suppose  that $S\subseteq A$ is a subset  of  pairwise commuting elements.  Then there exists a unital commutative Banach subalgebra $C\subseteq A$ with $S\subseteq C$ such that
+\[ \forall s\in S: \quad \sigma_A(s) = \sigma_C(s). \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{prop:BanachAlgebraIdeals}
+Let $A$ be a unital Banach algebra and $\mathcal{J}$ is a maximal ideal. Then 
+\begin{enumerate}
+\item $\mathcal{J}$ is closed;
+\item if $A$ is complex and commutative, then $A/\mathcal{J} \cong \C$;
+\item if $A$ is real and commutative, then $A/\mathcal{J} \cong \R$ or $A/\mathcal{J} \cong \C$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+If $\mathcal{J}$ is not closed, then $\overline{\mathcal{J}} = A$ by maximality. So by proposition \ref{prop:closure} every open set must intersect $\mathcal{J}$, in particular the set $\GL(A)$, open by \ref{corollary:openSetInvertibles}. Because $\mathcal{J}$ is an ideal containing an invertible element, $\mathcal{J}=A$ by TODO ref. A contradiction.
+
+If $A$ is commutative, $A/\mathcal{J}$ is a field by TODO ref. It is also a unital Banach algebra (TODO), so $A/\mathcal{J} \cong \C$ by the Gelfand-Mazur theorem, \ref{corollary:GelfandMazur}.
+\end{proof}
+
+\begin{proposition} \label{prop:characterMaximalIdealsComplex}
+Let $A$ be a complex unital commutative Banach algebra. Then we have a bijection
+\[ \ker: \hat{A} \twoheadrightarrowtail \{\text{maximal ideals in $A$}\}: \varphi \mapsto \ker(\varphi).  \]
+\end{proposition}
+\begin{proof}
+First we verify that for each character $\varphi$ the kernel is a maximal ideal. Indeed applying \ref{prop:splittingMap} to $\varphi$ we get an isomorphism $A/\ker\varphi \cong \im\varphi = \C$, meaning $\ker(\varphi)$ has codimension 1 and thus is a maximal proper subspace. By \ref{prop:kernelIsIdeal}, $\ker(\varphi)$ is an ideal.
+
+To prove $\ker$ is injective: let $\ker(\varphi) = \ker(\psi)$. Take some $a\in A$, which we can uniquely write as $\lambda+n$, with $n\in\ker(\varphi) = \ker(\psi)$. TODO ref + extract lemma! Then $\varphi(a) = \lambda = \psi(a)$, so $\varphi = \psi$.
+
+For surjectivity, take a maximal ideal $\mathcal{J}$.
+By \ref{prop:BanachAlgebraIdeals}, $A/\mathcal{J}\cong \C$, so the quotient map $A\to A/\mathcal{J}\cong \C$ can be seen as a character with kernel $\mathcal{J}$.
+\end{proof}
+
+TODO characterMaximalIdealsReal!
+
+
+\begin{proposition} \label{prop:spectrumFromSpectrum}
+Let $A$ be a unital commutative Banach algebra and $x\in A$. Then
+\[ \sigma(x) = \setbuilder{\varphi(x)}{\varphi\in\hat{A}} = \hat{x}[\hat{A}]. \]
+\end{proposition}
+TODO: introduce notation $\hat{x}$ earlier?
+\begin{proof}
+Suppose $\lambda = \varphi(x)$ for some $\varphi\in\hat{A}$. Then $x-\lambda\in\ker\varphi$, which is a proper ideal.
+So $x-\lambda \notin\GL(A)$ and $\lambda \in\sigma(x)$.
+
+Suppose $\lambda \in \sigma(x)$. Because $x-\lambda$ is non-invertible, the ideal generated by it is proper, by \ref{lemma:nonInvertibleGeneratedIdeals}, and $x-\lambda$ lies in a maximal ideal, by \ref{prop:everyProperIdealInMaximalIdeal}. By \ref{prop:characterMaximalIdealsComplex}, this means $x-\lambda \in \ker\varphi$ for some $\varphi\in\hat{A}$ and then $\lambda = \varphi(x)$.
+\end{proof}
+
+\subsection{The Gelfand transform}
+\begin{definition}
+Let $A$ be a unital commutative Banach algebra. The \udef{Gelfand transform} of $A$ is the map
+\[ \wedge : A\to C(\hat{A}): x\mapsto \hat{x} \]
+where $\hat{x}(\varphi) = \varphi(x)$ for all $x\in A, \varphi\in\hat{A}$.
+\end{definition}
+\begin{lemma} \label{lemma:GelfandTransformHomomorphism}
+Let $A$ be a unital commutative Banach algebra with Gelfand transform $\wedge : A\to C(\hat{A})$. Then
+\begin{enumerate}
+\item $\wedge$ is well-defined, in the sense that $\hat{x} \in C(\hat{A})$;
+\item $\wedge$ is linear and multiplicative;
+\item $\norm{\hat{x}} = r(x) \leq \norm{x}$.
+\end{enumerate}
+Thus the Gelfand transform is a unital, norm-contractive Banach algebra homomorphism.
+\end{lemma}
+\begin{proof}
+We prove in turn:
+\begin{enumerate}
+\item We have equipped $\hat{A}$ with the weak-$*$ topology. Then proposition \ref{prop:weak*continuousFunctional} says each $\hat{x}$ is continuous.
+\item $\hat{x}(\lambda \varphi + \psi) = \lambda \varphi(x) + \psi(x) = \lambda\hat{x}(\varphi) + \hat{x}(\psi)$ and $\hat{x}(\varphi\psi) = \varphi(x)\psi(x) = \hat{x}(\varphi)\hat{x}(\psi)$.
+\item For all $x\in A$:
+\[ \norm{\hat{x}} = \sup_{\varphi\in\hat{A}}\left( \frac{|\varphi(x)|}{\norm{\varphi}} \right) = \sup_{\varphi\in\hat{A}}(|\varphi(x)|) = r(x) \leq \norm{x} \]
+where we have used that $\norm{\varphi} = 1$ by \ref{prop:charactersUnital}, $\sigma(x) = \setbuilder{|\varphi(x)|}{\varphi\in\hat{A}}$ by \ref{prop:spectrumFromSpectrum} and the inequality is from \ref{corollary:spectrumCompact}.
+\end{enumerate}
+\end{proof}
+
+
+
+
+
+\chapter{$C^*$-algebras}
+\section{$*$-algebras}
+\begin{definition}
+A \udef{$*$-algebra} is a $*$-r(i)ng $(A,+,\cdot, *)$, with involution $*$, that is an associative algebra over a commutative $*$-ring $(R,+,\cdot, ')$, with involution $'$,
+such that
+\[ \forall r\in R, x\in A: \quad (rx)^* = r'x^*. \]
+
+A \udef{complex $*$-algebra} is a $*$-algebra where the $*$-ring $R$ is $\C$ with complex conjugation as the involution $'$.
+
+A \udef{real $*$-algebra} is a $*$-algebra where the $*$-ring $R$ is $\R$ with the identity map as the involution $'$.
+
+If a $*$-algebra is also a Banach algebra and for all elements $\norm{x^*} =\norm{x}$, then it is called a \udef{Banach-$*$-algebra}.
+\end{definition}
+TODO: drop condition $\norm{x^*} =\norm{x}$? Not required for $C^*$ (already implied).
+
+\begin{lemma}
+Let $A$ be a $*$-algebra. The unitisation $A^\dagger = A\oplus \F$ can also be seen as a $*$-algebra with the involution defined by
+\[ (a, \lambda)^* = (a^*, \overline{\lambda}) \qquad \forall a\in A, \lambda\in \F.\]
+\end{lemma}
+\begin{lemma} \label{lemma:elementaryStarLemma}
+Let $A$ be a unital $*$-algebra. Then
+\begin{enumerate}
+\item $\vec{1}^* = \vec{1}$;
+\item if $x$ is invertible, then $x^*$ is invertible with $(x^*)^{-1} = (x^{-1})^*$;
+\item $\sigma(x^*) = \setbuilder{\overline{\lambda}}{\lambda \in \sigma(x)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Take some $x\in A$.
+\begin{enumerate}
+\item $\vec{1}^* x = (x^*\cdot \vec{1})^* = x^{**} = x$.
+Similarly $x\vec{1}^* = x$.
+\item $x^*\cdot (x^{-1})^* = (x^{-1}x)^* = \vec{1}^* = \vec{1}$. Similarly $(x^{-1})^*\cdot x^* = \vec{1}$.
+\end{enumerate}
+\end{proof}
+
+\begin{proposition} \label{prop:smallestBanach*Algebra}
+Let $A$ be a Banach-$*$-algebra and $S\subset A$ a subset. Then
+\[ \mathcal{B}^*(S) \defeq \mathcal{B}(S\cup S^*) \]
+is the smallest Banach-$*$-subalgebra in $A$ that contains $S$, where $\mathcal{B}$ is defined as in \ref{prop:smallestBanachAlgebra} and $S^* = \setbuilder{s^*\in A}{s\in S}$.
+\end{proposition}
+
+\begin{definition}
+Let $A$ be a $*$-algebra and $x\in A$. We say that $x$ is
+\begin{enumerate}
+\item \udef{normal}, if $x^*x = xx^*$;
+\item \udef{self-adjoint}, if $x=x^*$;
+\item \udef{unitary}, if $x^*x = xx^* = \vec{1}$ (assuming $A$ unital);
+\item a \udef{projection}, if $x=x^*=x^2$.
+\end{enumerate}
+The set of all
+\begin{enumerate}
+\item normal elements in $A$ is denoted $\Normals(A)$;
+\item self-adjoint elements in $A$ is denoted $\SelfAdjoints(A)$;
+\item unitaries in $A$ is denoted $\Unitaries(A)$;
+\item projections in $A$ is denoted $\Projections(A)$.
+\end{enumerate}
+
+\end{definition}
+\begin{lemma}
+We have the following implications:
+\[ \text{projection} \Rightarrow \text{self-adjoint} \Rightarrow \text{normal} \Leftarrow \text{unitary}. \]
+\end{lemma}
+
+\begin{lemma} \label{lemma:orthogonalProjection}
+Let $A$ be a unital $*$-algebra and $p\in\Projections(A)$. Then $\vec{1}-p$ is a projection.
+\end{lemma}
+\begin{proof}
+We simply calculate
+\[ (\vec{1}-p)^2 = (\vec{1}-p)(\vec{1}-p) = \vec{1} - p -p + p = \vec{1}-p = (\vec{1}-p)^*. \]
+\end{proof}
+
+\begin{lemma} \label{lemma:realImaginaryParts}
+Let $A$ be a $*$-algebra and $x\in A$. Then there are unique self-adjoint elements $x_1,x_2\in A$ such that $x = x_1+i\cdot x_2$. They are given by
+\[ x_1 = \frac{x+x^*}{2} \qquad \text{and} \qquad x_2 = \frac{x-x^*}{2i}. \]
+\end{lemma}
+We call $x_1$ and $x_2$ the \udef{real part} and \udef{imaginary part} of $x$, respectively.
+
+\subsection{$*$-homomorphisms}
+\begin{definition}
+Let $A,B$ be $*$-algebras. A \udef{$*$-homomorphism} is a linear, multiplicative, $*$-preserving map $\Psi: A \to B$.
+
+If $A,B$ are unital and $\Psi(\vec{1}_A) = \vec{1}_B$, then we say $\Psi$ is \udef{unital}.
+\end{definition}
+\begin{lemma}
+Let $A$ be a $*$-algebra, then $*$-homomorphisms map
+\begin{enumerate}
+\item normal elements to normal elements;
+\item self-adjoints to self-adjoints;
+\item projections to projections;
+\item unitaries to unitaries, if the $*$-homomorphism is unital.
+\end{enumerate}
+\end{lemma}
+
+\section{$C^*$-algebras}
+\begin{definition}
+A (complex) \udef{$C^*$-algebra} is a complex Banach-$*$-algebra $A$ such that
+\[\forall x\in A: \quad \norm{x^*x} = \norm{x}^2.\]
+This identity is known as the \udef{$C^*$-identity}, the \udef{$C^*$-property}, the \udef{$C^*$-condition} or the \udef{$C^*$-axiom}.
+\end{definition}
+
+\begin{definition}
+A \udef{real} $C^*$-algebra is a real Banach-$*$-algebra such that 
+\end{definition}
+
+\begin{example}
+TODO: Concrete $C^*$-algebras.
+
+$\mathcal{C}(X)$ for some compact $X$ (need Hausdorff?). TODO: norm well defined (i.e. bounded) and for $g\in \mathcal{C}(X)$, $\sigma(g) = g[X]$.
+\end{example}
+
+\begin{proposition}
+The $C^*$-identity is equivalent to
+\[\forall x\in A: \quad \norm{x^*x} = \norm{x^*}\cdot\norm{x}.\]
+\end{proposition}
+\begin{proof}
+TODO. Highly non-trivial. TODO: move later.
+\end{proof}
+
+
+\begin{lemma} \label{lemma:C*identityEquivalent}
+The $C^*$-identity is equivalent to
+\[\forall x\in A: \quad \norm{x^*x} \geq \norm{x}^2.\]
+\end{lemma}
+\begin{proof}
+Let $x\in A$, then $\norm{x}^2 \leq \norm{x^*x} \leq \norm{x}\cdot\norm{x^*}$ and so $\norm{x}\leq \norm{x^*}$. By replacing $x$ with $x^*$ and using $x^{**}=x$ we also get $\norm{x}\geq \norm{x^*}$. Then $\norm{x^*x}\leq \norm{x^*}\cdot\norm{x} = \norm{x}^2$. Together with the original inequality this implies the $C^*$-identity.
+\end{proof}
+
+\begin{definition}
+Let $A$ be a $C^*$-algebra and $D$ a subset of $A$. The $C^*$-algebra \udef{generated} by $D$, $C^*(D)$, is the smallest $C^*$-subalgebra of $A$ containing $D$.
+TODO refine def.
+\end{definition}
+\begin{lemma}
+$C^*(\vec{1},a)$ is commutative.
+\end{lemma}
+
+\begin{lemma} \label{lemma:consequencesC*}
+Let $A$ be a $C^*$-algebra. The $C^*$-identity implies
+\begin{enumerate}
+\item  $\norm{\vec{1}} = 1$.
+\item the involution $*$ is isometric: $\norm{x^*} = \norm{x}$;
+\item the involution $*$ is continuous.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $A$ be a $C^*$-algebra. Then the sets $\Normals(A), \SelfAdjoints(A), \Unitaries(A)$ and $\Projections(A)$ are closed in $A$. 
+\end{lemma}
+\begin{proof}
+This follows from the continuity of the multiplication and the involution $*$.
+\end{proof}
+
+\begin{proposition} \label{prop:normNormalElement}
+Let $A$ be a $C^*$-algebra and $x\in A$ a normal element. Then $r(x) = \norm{x}$.
+\end{proposition}
+\begin{proof}
+We compute
+\[ \norm{x}^4 = \norm{x^*x}^2 = \norm{x^*xx^*x} = \norm{(x^*)^2x^2} = \norm{x^2}^2 \]
+where we have repeatedly applied the $C^*$-identity and used normality once. We conclude that $\norm{x^2} = \norm{x}^2$. Inductively we obtain $\norm{x^{(2^n)}} = \norm{x}^{2^n}$. By the spectral radius formula, \ref{proposition:spectralRadiusFormula}, we get
+\[ r(x) = \lim_{n\to\infty}\norm{x^{(2^n)}}^{1/2^n} = \lim_{n\to\infty}\norm{x} = \norm{x}. \]
+\end{proof}
+\begin{corollary} \label{corollary:atMostOneNorm}
+Let $A$ be a $*$-algebra. There exists at most one norm on $A$ turning it into a $C^*$-algebra. If there is such a norm, it is given by $\norm{x} = \sqrt{r(x^*x)}$.
+\end{corollary}
+\begin{proof}
+By the $C^*$-identity $\norm{x} = \sqrt{\norm{x^*x}}$ and $x^*x$ is normal, so we can apply the proposition.
+\end{proof}
+It is important to not the spectral radius is a purely algebraic property and is independent of the norm.
+
+\subsection{$C^*$-homomorphisms}
+TODO drop unital
+\begin{proposition}
+Let $A,B$ be unital $C^*$-algebras and $\Psi: A\to B$ a unital $*$-homomorphism. Then $\Psi$ is bounded (and thus continuous) with $\norm{\Psi} = 1$.
+\end{proposition}
+\begin{proof}
+Because $x^*x$ and $\Psi(x^*x)$ are normal, we calculate using \ref{prop:normNormalElement}
+\[ \norm{x}^2 = \norm{x^*x} = r(x^*x) \geq r(\Psi(x^*x)) = \norm{\Psi(x^*x)} = \norm{\Psi(x)^*\Psi(x)} = \norm{\Psi(x)}^2, \]
+where the inequality follows from an application of lemma \ref{lemma:spectrumOfImage} to $x^*x$. Hence $\norm{\Psi}\leq 1$. Equality follows from $\Psi(\vec{1}) = 1$.
+\end{proof}
+\begin{corollary}
+The kernel of $\Psi$ is a closed $*$-ideal.
+\end{corollary}
+\begin{proof}
+TODO ref.
+\end{proof}
+
+\begin{lemma}
+A surjective $*$-homomorphism from a unital $C^*$-algebra is unital.
+\end{lemma}
+\begin{proof}
+Let $\Psi: A \to B$ be a surjective $*$-homomorphism with $A$ unital. For all $a\in A$:
+\[ \Psi(a)\Psi(\vec{1}) = \Psi(a \vec{1}) = \Psi(a) \qquad \text{and} \qquad \Psi(\vec{1})\Psi(a) = \Psi(\vec{1} a) = \Psi(a). \]
+As all elements of $B$ are of the form $\Psi(a)$, $\Psi(\vec{1})$ is a multiplicative identity for $B$.
+\end{proof}
+
+\subsubsection{Lifts}
+TODO: move to $*$-algebra homomorphisms?
+\begin{proposition}
+Let $\Psi: A \to B$ be a surjective $*$-homomorphism between $C^*$-algebras. Then
+\begin{enumerate}
+\item every self-adjoint element $b\in B$ has a self-adjoint lift $a\in A$, such that $\norm{a} = \norm{b}$;
+\item every positive element $b\in B$ has a positive lift $a\in A$, such that $\norm{a} = \norm{b}$;
+\item every element $b\in B$ has a lift $a\in A$ such that $\norm{a} = \norm{b}$.
+\end{enumerate}
+\end{proposition}
+In general normal elements, unitaries and projections do not lift to normal elements, unitaries and projections, unless $\Psi$ is injective.
+\begin{lemma} \label{lemma:injectiveLifts}
+Let $\Psi: A \to B$ be an injective $*$-homomorphism between $C^*$-algebras.
+\begin{enumerate}
+\item if $\Psi(a)$ is a normal element, then $a$ is a normal element;
+\item if $\Psi(p)$ is a projection, then $p$ is a projection;
+\item if $\Psi(u)$ is a unitary element, then $u$ is a unitary element.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+If $\Psi(a)\Psi(a)^* = \Psi(a)^*\Psi(a)$, then $\Psi(a^*a) = \Psi(aa^*)$ and $a^*a = aa^*$ by injectivity.
+
+The other conditions are verified similarly.
+\end{proof}
+
+
+\section{Unitisation of $C^*$-algebras}
+For Banach-$*$-algebras we may have a choice of norms to put on the unitisation. For $C^*$-algebras there is exactly one.
+
+TODO: of course $C^*$-algebras use supremum norms. They are fundamentally operators after all!
+\begin{proposition}
+Let $A$ be a $C^*$-algebra. Then there exists a unique norm on $A^\dagger$ that turns it into a $C^*$-algebra: the operator norm
+\[ \norm{(a,\lambda)} \defeq \sup\setbuilder{\norm{ax + \lambda x}}{x\in A \land \norm{x}\leq 1} .\]
+\end{proposition}
+\begin{proof}
+There is at most one such norm, by \ref{corollary:atMostOneNorm}. Because the operator norm is a suitable norm for $A^\dagger$ by \ref{prop:normsOfUnitisation}, we just need to verify the $C^*$-identity:
+\begin{align*}
+\norm{(a,\lambda)^*(a,\lambda)} &= \sup_{\norm{x}\leq 1} \norm{(a,\lambda)^*(a,\lambda)x} \\
+&\geq \sup_{\norm{x}\leq 1} \norm{x^*}\cdot\norm{(a,\lambda)^*(a,\lambda)x} \geq \sup_{\norm{x}\leq 1} \norm{x^*(a,\lambda)^*(a,\lambda)x} \\
+&= \sup_{\norm{x}\leq 1} \norm{((a,\lambda)x)^*(a,\lambda)x} = \sup_{\norm{x}\leq 1} \norm{(a,\lambda)x}^2 = \norm{(a,\lambda)}^2,
+\end{align*}
+where we have used the $C^*$-identity in $A$ because $(a,\lambda)x = ax + \lambda x \in A$.
+\end{proof}
+
+\section{Functionals and spectrum}
+\begin{lemma} \label{lemma:normSelfAdjoint}
+Let $A$ be a unital $C^*$-algebra and $x\in A$ a self-adjoint element. Then
+\[ \forall t\in\R: \quad \norm{x+it}^2 = \norm{x^2+t^2} \leq \norm{x}^2 + t^2. \]
+\end{lemma}
+
+\begin{proposition}
+Let $A$ be a unital $C^*$-algebra and $\varphi: A\to \C$ a linear functional satisfying $\norm{\varphi} = \varphi(\vec{1})$. If $a\in A$ is self-adjoint, then $\varphi(a) \in \R$.
+\end{proposition}
+\begin{proof}
+We may assume $\varphi \neq 0$ and $\varphi(\vec{1}) = 1$. Using \ref{lemma:normSelfAdjoint}, we calculate
+\[ |\varphi(x)+it|^2 = |\varphi(x+it)|^2 \leq \norm{x+it}^2 \leq \norm{x}^2 + t^2. \]
+By \ref{lemma:boundedThenReal} this means $\varphi(x)\in\R$.
+\end{proof}
+TODO: alternate proof in Fillmore using exponential map.
+\begin{corollary} \label{corollary:selfAdjointSpectrumReal}
+Let $x\in A$ be self-adjoint. Then $\sigma(x) \subseteq \R$.
+\end{corollary}
+\begin{proof}
+By \ref{prop:commutativeSameSpectrum}, and the fact that $x$ is self-adjoint (TODO ref) we may assume $A$ commutative. Let $\lambda \in \sigma(x)$. By \ref{prop:spectrumFromSpectrum} there is a $\varphi\in\hat{A}$ such that $\lambda = \varphi(x)$. By \ref{prop:charactersUnital}, $\norm{\varphi} = \varphi(\vec{1}) = 1$. Then by the proposition $\lambda = \varphi(x) \in \R$.
+\end{proof}
+\begin{corollary}
+Let $\varphi:A\to \C$ be a \emph{linear} functional satisfying $\norm{\varphi} = \varphi(\vec{1})$. Then $\varphi$ is $*$-preserving, i.e. for all $x\in A$
+\[\varphi(x^*) = \overline{\varphi(x)}. \] 
+\end{corollary}
+\begin{proof}
+By \ref{lemma:realImaginaryParts} we can write $x= x_1+ix_2$. Then $\varphi(x^*) = \varphi(x_1-ix_2) = \varphi(x_1) - i \varphi(x_2)$. By the proposition $\varphi(x_1), \varphi(x_2)\in \R$.
+\end{proof}
+\begin{corollary} \label{corollary:characters*Preserving}
+Every character on $A$ is $*$-preserving.
+\end{corollary}
+
+\begin{proposition}
+Let $A$ be a unital $C^*$-algebra, $B\subseteq A$ a unital $C^*$-subalgebra and $x\in B$. Then $x$ is invertible in $B$ \textup{if and only if} $x$ is invertible in $A$.
+\end{proposition}
+\begin{proof}
+If an inverse exists in $B$, said inverse will also be in $A$.
+
+Conversely, suppose $x$ not invertible in $B$. Then either $x^*x$ or $xx^*$ is not invertible in $B$ by \ref{lemma:elementaryStarLemma} and \ref{lemma:productInvertibility}. Let $y$ be one of the two that is not invertible. Because $y$ is self-adjoint, $\sigma_B(y)\subset \R$, by \ref{corollary:selfAdjointSpectrumReal}. Thus $(y_n) = (y+\frac{i}{n})$ is a sequence of invertibles converging to $y$. By \ref{corollary:openSetInvertibles}, $\norm{y_n - y}\geq \norm{y_n^{-1}}^{-1}$ must hold for all $n$, otherwise $y$ would be invertible. Thus $\norm{y_n^{-1}}^{-1}$ must converge to zero and $\norm{y_n^{-1}}$ must diverge (TODO ref). Since the inversion map is continuous on $\GL(A)$, by \ref{corollary:inverseMapContinuous}, it follows that $y$ cannot be invertible in $A$. Since $x$ is invertible if and only if $x^*$ is invertible, by \ref{lemma:elementaryStarLemma}, $y$ being non-invertible implies $x$ is not invertible, by \ref{lemma:productInvertibility}.
+\end{proof}
+\begin{corollary} \label{corollary:spectrumIndependentOfSurroundingAlgebra}
+Let $A$ be a $C^*$-algebra, $B\subseteq A$ a $C^*$-subalgebra and $x\in B$.
+
+The spectrum of $x$ is independent of the surrounding algebra:
+\[ \sigma_B(x) = \sigma_A(x). \]
+\end{corollary}
+\begin{proof}
+Apply the proposition to $\tilde{A}$ and $\tilde{B}$. Note that if $A,B$ are non-unital, the unit of $B^\dagger$ is the same as that of $A^\dagger$.
+\end{proof}
+This does not hold in general for Banach-$*$-algebras!
+
+\begin{proposition} \label{prop:generatedAlgebraSpectrumHomeomorphism}
+Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. Then the map
+\[ \hat{x}|_{\widehat{C^*(x,\vec{1})}}: \widehat{C^*(x,\vec{1})}\to \sigma(x): \varphi \mapsto \varphi(x) \]
+is a homeomorphism.
+\end{proposition}
+\begin{proof}
+By \ref{corollary:spectrumIndependentOfSurroundingAlgebra} the map is independent of the surrounding algebra (TODO: $C^*(x,\vec{1})$ also independent?). So without WLOG we take $A = C^*(x,\vec{1})$. Because $x$ is normal, $C^*(x,\vec{1})$ is commutative (TODO:ref). By \ref{prop:spectrumFromSpectrum} the map is surjective and well-defined, in that it maps into the codomain $\sigma(x)$. It is also continuous by \ref{prop:weak*continuousFunctional}.
+
+To show injectivity, suppose $\varphi(x) = \psi(x)$ for some $\varphi,\psi\in\hat{A}$. Because (TODO ref)
+\[ A = \overline{\Span}\setbuilder{x^n(x^*)^m}{n,m\geq 0} \]
+and characters are continuous homomorphisms, \ref{prop:charactersContinuous}, we see that $\varphi = \psi$.
+
+Finally we need to show the map is open. Because $\sigma(x)$ is compact, this follows from \ref{prop:compactToHausdorffHomeomorphism}.
+\end{proof}
+
+\section{Commutative $C^*$-algebras}
+\subsection{The Gelfand-Naimark theorem}
+TODO: non-unital case!
+\begin{theorem}[Gelfand-Naimark] \label{theorem:GelfandNaimarkCommutative}
+Let $A$ be a unital commutative $C^*$-algebra. Then the Gelfand transform
+\[ \wedge: A\to\mathcal{C}(\hat{A}): x\mapsto \hat{x} \]
+is an isometric $*$-isomorphism.
+\end{theorem}
+Here we view $\mathcal{C}(\hat{A})$ as a $C^*$-algebra with involution $f^*(\varphi) = \overline{f(\varphi)}$ for all $\varphi\in\hat{A}$. TODO: more in exercises.
+\begin{proof}
+We already know the Gelfand transform is a homomorphism by \ref{lemma:GelfandTransformHomomorphism}.
+
+We first prove it is a $*$-homomorphism: $\forall x\in A: \hat{x}^* = (x^*)^\wedge$. To that end, take some $\varphi\in\hat{A}$. Then
+\[ (\hat{x})^*(\varphi) = \overline{\hat{x}(\varphi)} = \overline{\varphi(x)} = \varphi(x^*) = (x^*)^\wedge(\varphi) \]
+where the third equality is due to \ref{corollary:characters*Preserving}.
+
+For isometry, notice that every element is normal due to commutativity. By \ref{prop:normNormalElement} and \ref{lemma:GelfandTransformHomomorphism}, we have
+\[ \norm{x} = r(x) = \norm{\hat{x}}. \]
+
+Then we just need to show the Gelfand transform is bijective (TODO ref). Injectivity follows from isometry, \ref{lemma:isometryInjective}. For surjectivity we want to apply the Stone-Weierstrass theorem \ref{theorem:StoneWeierstrass}. To show the image of $A$ separates points, take $\varphi \neq \psi$ in $\hat{A}$. Then $\varphi(x) \neq \psi(x)$ for some $x\in A$, meaning $\hat{x}(\varphi) \neq \hat{x}(\psi)$. 
+
+By the Stone-Weierstrass theorem \ref{theorem:StoneWeierstrass} the image of $A$ is dense in $\mathcal{\hat{A}}$. By \label{lemma:isometryClosed} the image of an isometry from a complete space is closed. Thus the image of $A$ is all of $\mathcal{\hat{A}}$.
+\end{proof}
+\begin{corollary}
+Every commutative $C^*$-algebra is isomorphic to $C(X)$ for some compact Hausdorff space $X$.
+
+This space $X$ is unique up to isomorphism.
+\end{corollary}
+\begin{proof}
+The first part follows directly from the Gelfand-Naimark theorem. For the second part, we know that $\widehat{C(X)}\cong X$ by TODO ref. And if $X \cong Y$, then $C(X) \cong C(Y)$?TODO ref?
+\end{proof}
+
+\begin{proposition}
+If $A$ (commutative) generated by one element $a$, then $A$ is isomorphic to the $C^*$-algebra of continuous functions on the spectrum of $a$ which vanish at $0$.
+\end{proposition}
+
+\begin{proposition}
+Any injective $*$-homomorphism of $C^*$-algebras is an isometry.
+\end{proposition}
+\begin{proof}
+Let $\Psi:A\to B$ be an injective $*$-homomorphism of $C^*$-algebras. It is enough to show $\norm{\Psi(a)} = \norm{a}$ for self-adjoint $a\in A$. Then for arbitrary $x\in A$, we have
+\[ \norm{\Psi(x)} = \sqrt{\norm{\Psi(x)^*\Psi(x)}} = \sqrt{\norm{\Psi(x^*x)}} = \sqrt{\norm{x^*x}} = \norm{x}. \]
+We can assume $A,B$ unital by passing to $\Psi^\dagger$ using \ref{lemma:DaggerMorphismProperties}.
+
+We can also assume $A, B$ are commutative by restricting $\Psi$ to $\Psi': C^*(a,\vec{1}) \to C^*(\Psi(a),\vec{1})$.
+
+By the Gelfand-Naimark theorem \ref{theorem:GelfandNaimarkCommutative} we can suppose we have is a unital injection $\Psi: \mathcal{C}(X)\to \mathcal{C}(Y)$ for some compact Hausdorff spaces $X,Y$. There is then (TODO ref) some continuous surjection $\alpha: Y\to X$ such that $\forall f\in\mathcal{C}(X): \Psi(f) = f\circ \alpha$. Then $\norm{\Psi(f)} = \norm{f}$ because both functions have the same range.
+\end{proof}
+
+TODO non-unital Gelfand-Naimark!
+
+\section{Continuous / bounded (?) functional calculus}
+
+TODO: relocate.
+\begin{lemma} \label{lemma:WeierstrassApproximation}
+Let $D\subseteq \C$. Then
+\[ \mathcal{C}(D) = C^*(I_D, \vec{1}_D). \]
+\end{lemma}
+\begin{proof}
+TODO ref to Stone-Weierstrass.
+\end{proof}
+
+\begin{theorem}[Functional calculus]
+Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. There exists a unique $*$-homomorphism
+\[ \Phi_x: \mathcal{C}(\sigma(x))\to A: f\mapsto f(x) \]
+such that $I_{\sigma(x)}(x) = x$ and $\vec{1}_{\sigma(x)}(x) = \vec{1}_A$. Moreover
+\[ \im\Phi_x = C^*(x,\vec{1}). \]
+\end{theorem}
+\begin{proof}
+Unicity from \ref{lemma:WeierstrassApproximation} TODO.
+
+For existence, let $B = C^*(x,\vec{1})$, which is commutative because $x$ is normal. Then $\hat{x}: \hat{B}\to \sigma(x): \varphi\mapsto \varphi(x)$ is a homeomorphism by \ref{prop:generatedAlgebraSpectrumHomeomorphism} and $\hat{x}^t: \mathcal{C}(\sigma(x))\to \mathcal{C}(\hat{B})$ is an isometric isomorphism (TODO!). The we have the isometric $*$-homomorphism
+\[ \Phi_x = \iota\circ\wedge^{-1}\circ\hat{x}^t: \begin{tikzcd} \mathcal{C}(\sigma(x)) \ar[r, "\hat{x}^t"] & \mathcal{C}(\hat{B}) \ar[r, "\wedge^{-1}"] & B \ar[r , hook, "\iota"] & A \end{tikzcd} \]
+where the inverse Gelfand transform $\wedge^{-1}$ exists and is isometric by the Gelfand-Naimark theorem \ref{theorem:GelfandNaimarkCommutative}, because $B$ is commutative.
+
+We verify
+\[ I_{\sigma(x)}(x) = \Phi_x(I_{\sigma(x)}) = (\iota\circ\wedge^{-1}\circ\hat{x}^t)(I_{\sigma(x)}) = (\iota\circ\wedge^{-1})(I_{\sigma(x)}\circ\hat{x}) = (\iota\circ\wedge^{-1})(\hat{x}) = \iota(x) = x \]
+using the definition of the transpose, cancellation of $I_{\sigma}(x)$ and inverse of Gelfand transform. We also verify
+\[ \vec{1}_{\sigma(x)}(x) = \Phi_x(\vec{1}_{\sigma(x)}) = (\iota\circ\wedge^{-1}\circ\hat{x}^t)(\vec{1}_{\sigma(x)}) = (\iota\circ\wedge^{-1})(\vec{1}_{\sigma(x)}\circ\hat{x}) = (\iota\circ\wedge^{-1})(\vec{1}_{\hat{B}}) = \iota(\vec{1}) = \vec{1} \]
+using the fact that the Gelfand transform of $\vec{1}$ is $\varphi\mapsto \varphi(\vec{1})$, which is $\vec{1}_{\hat{B}}$ by \ref{prop:charactersUnital}.
+\end{proof}
+For polynomials in $z,\overline{z}$, this functional calculus works as expected, because it is a $*$-homomorphism.
+
+In fact we can apply functional calculus to any continuous defined on a superset of the spectrum: restricting to the spectrum still yields a continuous function by \ref{prop:continuousConstructions}.
+
+\begin{lemma}
+Let $X$ be a compact space and view $\mathcal{C}(X)$ as a unital commutative $C^*$-algebra. Fix $g\in\mathcal{C}(X)$. The functional calculus is then given simply by composition:
+\[ \mathcal{C}(g[X]) \to \mathcal{C}(X): f\mapsto f(g) = f\circ g. \]
+\end{lemma}
+\begin{proof}
+Composition is a unital $*$-homomorphism with the right properties. The claim follows from uniqueness of the functional calculus.
+\end{proof}
+
+\begin{proposition} \label{prop:propertiesContinuousFunctionalCalculus}
+Let $A$ be a unital $C^*$-algebra and $x\in A$ be a normal element with functional calculus $\Phi_x$.
+\begin{enumerate}
+\item If $B$ is a unital $C^*$-algebra and $\Psi: A\to B$ a unital $*$-homomorphism, then
+\[ \Psi\circ\Phi_x = \Phi_{\Psi(x)}, \]
+which means
+\[ \forall f\in \mathcal{C}(\sigma(x)):\quad \Psi(f(x)) = f(\Psi(x)). \]
+\item For any $f\in\mathcal{C}(\sigma(x))$:
+\[ \sigma(f(x)) = f(\sigma(x)). \]
+This is the spectral mapping theorem.
+\item For any $f\in\mathcal{C}(\sigma(x))$ and $g\in\mathcal{C}(\sigma(f(x)))$:
+\[ (g\circ f)(x) = \Phi_x(g\circ f) = \Phi_{f(x)}(g) = g(f(x)). \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\hspace{1em}
+\begin{enumerate}
+\item The claim is well-defined because $\sigma(\Psi(x))\subseteq \sigma(x)$, by \ref{lemma:spectrumOfImage}. It is easy to check both sides are unital $*$-homomorphisms from $\mathcal{C}(\sigma(x))$ to $B$, sending the identity function to $\Psi(x)$. The claim then follows from uniqueness of the functional calculus.
+\item Let $B = C^*(x,\vec{1})$, which is commutative because $x$ is normal. We calculate
+\[ \sigma(f(x)) = \setbuilder{\varphi(f(x))}{\varphi\in\hat{B}} = \setbuilder{f(\varphi(x))}{\varphi\in\hat{B}} = f(\sigma(x)). \]
+using \ref{prop:spectrumFromSpectrum} and the previous point.
+\item For all $\varphi\in\hat{B}$:
+\[ \varphi((g\circ f)(x)) = g(f(\varphi(x))) = g(\varphi(f(x)) = \varphi(g(f(x))) \]
+Using the first point. Hence $(g\circ f)(x) = g(f(x))$ by TODO ref.
+\end{enumerate}
+\end{proof}
+
+\begin{proposition} \label{prop:continuityContinuousFunctionalCalculus}
+Let $K\subset \R$ be non-empty and compact; $f:K\to \C$ a continuous function; $A$ a unital $C^*$-algebra and $\Omega_K$ the set of self-adjoint elements in $A$ with spectrum contained in $K$. The function
+\[ f: \Omega_K\subset A \to A: a\mapsto f(a) \]
+is continuous.
+\end{proposition}
+\begin{proof}
+The map $A\to A$ given by $a\mapsto a^n$ is continuous for every $n\geq 0$, because multiplication is continuous. Then every polynomial $f$ induces a continuous map $A\to A$.
+Then $\epsilon/3$ by Stone-Weierstrass.
+\end{proof}
+TODO: also for non-compact $K$ and $K\subseteq \C$. Then $\Omega_K$ set of normal elements.
+
+\begin{lemma}
+If two polynomials in $z,\overline{z}$ agree on the spectrum of a normal element, they give an equation the element obeys.
+\end{lemma}
+The proof is the unicity of the functional calculus.
+\begin{corollary} \label{corollary:propertiesFromSpectrum}
+Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. Then
+\begin{enumerate}
+\item $x$ is self-adjoint \textup{if and only if} $\sigma(x)\subseteq \R$;
+\item $x$ is unitary \textup{if and only if} $\sigma(x)\subseteq \mathbb{T}$;
+\item $x$ is a projection \textup{if and only if} $\sigma(x)\subseteq \{0,1\}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+\hspace{1em} TODO spectral mapping
+\begin{enumerate}
+\item By \ref{corollary:selfAdjointSpectrumReal} we have that self-adjoint implies real spectrum. The converse follows from the lemma applied to $z = \overline{z}$.
+\item Assume $x$ unitary. By the $C^*$-identity $\norm{x} = \sqrt{\norm{x^*x}} = 
+\sqrt{\norm{\vec{1}}} = 1$, by \ref{lemma:consequencesC*}. By \ref{prop:normNormalElement}, $r(x) = \norm{x} = 1$. Also $\norm{x^{-1}}^{-1} = 1$. So $\sigma(x)\subseteq \mathbb{T}$ by \ref{corollary:openSetInvertibles}. The converse follows from the lemma applied to $1 = z\overline{z} = \overline{z}z$.
+\item Assume $x$ a projection. Then $x-\lambda$ has an inverse given by $-\lambda^{-1} + (1 - \lambda)^{-1}\lambda^{-1}x$ if $\lambda \notin \{0,1\}$:
+\[ (x-\lambda)\left( - \frac{1}{\lambda} + \frac{x}{(1-\lambda)\lambda} \right) = \vec{1} - \frac{x}{\lambda} + \frac{x-x\lambda}{(1-\lambda)\lambda} =  \vec{1} - \frac{x}{\lambda} + \frac{x}{\lambda} = \vec{1}. \]
+The converse follows from the lemma applied to $z = \overline{z} = z^2$.
+\end{enumerate}
+\end{proof}
+
+
+
+\begin{proposition}
+Let $A$ be a unital $C^*$-algebra. Then every element in $A$ can be written as a linear combination of at most four unitaries.
+\end{proposition}
+\begin{proof}
+Let $x\in A$. By \ref{lemma:realImaginaryParts} we can write $x=x_1+ix_2$ for some self-adjoint $x_1,x_2$.
+TODO
+\end{proof}
+
+\section{Positivity}
+\subsection{Positive elements}
+\begin{definition}
+Let $A$ be a $C^*$-algebra. An element $a\in A$ is \udef{positive} if it is normal and $\sigma(a) \subset [0,+\infty[$. We write $a\geq 0$.
+
+The set of all positive elements of $A$ is the \udef{positive cone} of $A$
+\[ A^+ \defeq \setbuilder{a\in A}{a\geq 0}. \]
+\end{definition}
+By \ref{corollary:propertiesFromSpectrum} every projection is positive and every positive element is in fact self-adjoint.
+
+By \ref{lemma:normalSpectralRadiusEqualsNorm} we have for all positive $a\in A$:
+\[ \norm{a} = \sup\sigma(a) = \max\sigma(a). \]
+
+\begin{proposition}
+Let $A$ be a unital $C^*$-algebra and $a\in A$ a self-adjoint element. Then
+\[ a\in A^+ \qquad\iff\qquad \exists b\in \SelfAdjoints(A):\quad a = b^2. \]
+In this case there is a unique $b$ that is positive.
+\end{proposition}
+\begin{proof}
+Let $a\in A^+$. Then define $b = \sqrt{a}$ by spectral calculus. Then we have
+\[ b^2 = (\Phi_a(\sqrt{\mbox{\;\;}}))^2 = \Phi_a(\sqrt{\mbox{\;\;}})\cdot \Phi_a(\sqrt{\mbox{\;\;}}) = \Phi_a(\sqrt{\mbox{\;\;}}^2) = \Phi_a(I_{\sigma(a)}) = a. \]
+Converse by spectral mapping \ref{prop:propertiesContinuousFunctionalCalculus}.
+\end{proof}
+
+\begin{lemma} \label{lemma:positivityDistanceToNorm}
+Let $A$ be a unital $C^*$-algebra and $a\in A$ self-adjoint. Then the following are equivalent:
+\begin{enumerate}
+\item $a$ is positive;
+\item $\norm{\frac{1}{2}\vec{1} - a / \norm{a}} \leq \frac{1}{2}$;
+\item $\norm{r\vec{1} - a / \norm{a}} \leq r$ for all $r\geq 1/2$.
+\item $\norm{r\vec{1} - a / \norm{a}} \leq r$ for some $r\geq 1/2$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The proof is cyclic:
+
+$(1.\Rightarrow 2.)$ Assume $a$ positive. Then $\sigma(a) \subseteq [0,\norm{a}]$. By spectral mapping, \ref{prop:propertiesContinuousFunctionalCalculus}, we have $\sigma(\frac{1}{2}\vec{1} - a / \norm{a}) \subseteq [-1/2, 1/2]$ and thus $\norm{\frac{1}{2}\vec{1} - a / \norm{a}} \leq \frac{1}{2}$, by \ref{prop:normNormalElement}.
+
+$(2.\Rightarrow 3.)$ Write $r = 1/2 + r'$, so $r'\geq 0$. Then
+\[ \norm{r\vec{1} - \frac{a}{\norm{a}}} = \norm{\frac{1}{2}\vec{1} + r'\vec{1} - \frac{a}{\norm{a}}} \leq \norm{r'\vec{1}}+ \norm{\frac{1}{2}\vec{1} - \frac{a}{\norm{a}}} \leq r' + \frac{1}{2} = r. \]
+
+$(3.\Rightarrow 4.)$ Clear.
+
+$(4.\Rightarrow 1.)$ By \ref{prop:normNormalElement}, $\sigma(r\vec{1} - a / \norm{a}) \subseteq [-r, r]$. By spectral mapping, this means $\sigma(a) \subseteq [0, 2r\norm{a}]$ and thus $a$ is positive.
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a $C^*$-algebra. The set $A^+$ is
+\begin{enumerate}
+\item a cone, i.e. $rA^+\subseteq A^+$ for all real $r>0$;
+\item closed under addition;
+\item convex.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By spectral mapping, \ref{prop:propertiesContinuousFunctionalCalculus}.
+
+(2) Take $a,b\in A$ and set $p= \frac{\norm{a}+\norm{b}}{\norm{a+b}} \geq 1 \geq 1/2$. Then
+\[ \norm{p\vec{1} - \frac{a+b}{\norm{a+b}}} \leq \frac{1}{\norm{a+b}}\left(\norm{\norm{a}-a} + \norm{\norm{b}-b}\right) \leq \frac{\norm{a}+\norm{b}}{\norm{a+b}} = p \]
+using the triangle inequality and point 3. of \ref{lemma:positivityDistanceToNorm} with $r=1$.
+
+(3) Convexity follows from additive closure by \ref{lemma:convexityAdditiveClosure}.
+\end{proof}
+
+
+\begin{lemma} \label{lemma:positiveNegativeParts}
+Let $A$ be a unital $C^*$-algebra, and $a\in A$ a self-adjoint element. Then there exists a unique decomposition $a=a_+−a_−$ where $a_+,a_−\in A^+$ and $a_+a_− = 0$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+Thus every element of $A$ is a linear combination of four positive elements, by \ref{lemma:realImaginaryParts}.
+
+\begin{proposition}\label{prop:existenceSquareRoot}
+Let $A$ be a $C^*$-algebra and $a\in A$. Then $a$ is positive \textup{if and only if} $a = b^*b$ for some $b\in A$.
+\end{proposition}
+TODO: link with $\sqrt{a}$?
+\begin{corollary}
+Let $A$ be a concrete $C^*$-algebra of bounded operators on some Hilbert space $\mathcal{H}$ and $a\in A$. Then $a$ is positive \textup{if and only if} for all $x\in \mathcal{H}: \inner{x,ax}\geq 0$.
+\end{corollary}
+Consequently if $\inner{x,ax}\geq 0$ for all $x\in\mathcal{H}$, then $a$ is self-adjoint.
+
+\subsection{Partial order on self-adjoint elements}
+TODO: general link order - positivity
+\begin{lemma}
+The relation on self-adjoints of a $C^*$-algebra $A$ defined by
+\[ a\leq b \qquad\iff\qquad b-a\in A^+ \]
+is a vector partial order.
+\end{lemma}
+\begin{proof}
+Transitivity follows from convexity. To prove anti-symmetry, assume $a\geq b$ and $b\geq a$. It follows that $b-a$ is self-adjoint and $\sigma(b-a) \subseteq ]-\infty,0]\cap [0,+\infty[ = \{0\}$. So $\norm{b-a} = r(b-a) = 0$ by \ref{prop:normNormalElement}, meaning $a=b$.
+\end{proof}
+
+\begin{lemma}
+If $\alpha,\beta\in\R$ and $\alpha\leq \beta$, then $\alpha\vec{1}\leq \beta\vec{1}$.
+\end{lemma}
+
+\begin{lemma}
+If $0\leq a \leq b$ and $a$ invertible, then $b$ invertible and $0\leq a^{-1}\leq b^{-1}$.
+\end{lemma}
+
+\begin{lemma}
+Let $A$ be a unital $C^*$-algebra and $v$ an arbitrary element $v\in A$. If $v^*v$ is positive, then $v=0$.
+\end{lemma}
+
+\begin{proposition}
+Let $A$ be a unital $C^*$-algebra and $a\in A$ a self-adjoint element. Then $a\leq \norm{a}\cdot\vec{1}$.
+\end{proposition}
+\begin{proof}
+This follows from
+\[ \sigma(\norm{a}-a) = \setbuilder{\norm{a}-\lambda}{\lambda\in\sigma(a)} \]
+using the fact that the spectrum of $a$ is real, \ref{corollary:selfAdjointSpectrumReal}.
+\end{proof}
+\begin{corollary}
+If $0\leq a \leq b$, then $\norm{a} \leq \norm{b}$.
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
+\subsubsection{Operator monotonicity}
+Delicate!
+\begin{proposition}
+Assume $0\leq a\leq b$. Then
+\begin{enumerate}
+\item $\sqrt{a}\leq \sqrt{b}$;
+\item $0\leq ab$ if $a,b$ commute.
+\end{enumerate}
+\end{proposition}
+It is not true that $a^2\leq b^2$ or that $ab$ is positive in general!
+
+\subsection{Absolute value}
+\begin{definition}
+Let $A$ be a unital $C^*$-algebra. For each $a\in A$, the \udef{absolute value} of $a$ is $|a| = (a^*a)^{1/2}$.
+\end{definition}
+The square root is well defined using functional calculus on the self-adjoint element $a^*a$.
+
+\begin{lemma} \label{lemma:propertiesAbsoluteValue}
+Let $A$ be a unital $C^*$-algebra.
+\begin{enumerate}
+\item Let $u\in\Unitaries$, then $|u| = 1$.
+\item Let $a\in A$, then $|a|$ is positive and thus self-adjoint.
+\item The map $a\mapsto |a|$ is continuous.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+For the first point, $|u| = (u^*u)^{1/2} = \vec{1}^{1/2} = \vec{1}$.
+
+The second point follows from spectral mapping \ref{prop:propertiesContinuousFunctionalCalculus} using the fact that $z\mapsto \overline{z}z$ has positive image in $\C$.
+
+For the third point, $a\mapsto a^*a$ is continuous by \ref{lemma:multiplicationContinuous} and \ref{lemma:consequencesC*}. Then $a\mapsto |a|$ is continuous by \ref{prop:continuityContinuousFunctionalCalculus}.
+\end{proof}
+
+\begin{lemma}
+Let $T$ be a bounded operator on a Hilbert space $\mathcal{H}$. Then $|T|$ is the only positive operator $A$ in $\Bounded(\mathcal{H})$ such that $\norm{Ax} = \norm{Tx}$ for all $x\in\mathcal{H}$.
+\end{lemma}
+\begin{proof}
+We have for all $x\in\mathcal{H}$,
+\[ \inner{Ax,Ax} = \inner{Tx,Tx} \implies \inner{(A^*A-T^*T)x,x}=0, \]
+which implies $T^*T = A^*A$. Now $A$ is positive, so $A^*A = A^2$ and taking the squared root give $A = \sqrt{T^*T} = |T|$.
+\end{proof}
+
+\subsubsection{Polar decomposition}
+\begin{proposition}[Polar decomposition]
+Let $A$ be a unital $C^*$-algebra and $a\in \GL(A)$ an invertible element. Then there exists a unique decomposition
+\[ a = u(a) |a| \]
+such that $u(a)$ is unitary. The map $u: \GL(A) \to \Unitaries(A)$ is continuous.
+\end{proposition}
+\begin{proof}
+If $a$ is invertible, then so are $a^*$ and $|a|$ (TODO ref). Put $u(a) = a|a|^{-1}$. Clearly $a = u(a)|a|$ and $u(a)$ is unitary because it is invertible and
+\[ u(a)^*u(a) = |a|^{-1}a^*a|a|^{-1} = |a|^{-1}|a|^2|a|^{-1} = \vec{1}. \]
+
+The continuity of u: $a\mapsto a|a|^{-1}$ follows from the continuity of multiplication, \ref{lemma:multiplicationContinuous}, the continuity of the absolute value, \ref{lemma:propertiesAbsoluteValue} and the continuity of the inverse, \ref{corollary:inverseMapContinuous}.
+\end{proof}
+TODO: polar decomposition for non-invertible elements. Then $u$ is a partial isometry.
+
+\subsection{Positive maps}
+\begin{definition}
+Let $A,B$ be $C^*$-algebras. Then $f:A\to B$ is a \udef{positive map} if
+\[ \forall x\in A: \quad x\geq 0 \implies f(x)\geq 0. \]
+\end{definition}
+By \ref{prop:existenceSquareRoot}, this is equivalent to the condition that $f(x^*x)\geq 0$ for all $x\in A$.
+
+TODO: \url{https://www-m5.ma.tum.de/foswiki/pub/M5/CQC/Masterarbeit.pdf}
+\url{https://iopscience.iop.org/article/10.1088/0305-4470/34/29/308}
+
+\subsubsection{Positive functionals and states}
+\begin{definition}
+Let $A$ be a $C^*$-algebra. A linear functional $\rho$ on $A$ is positive, written $\rho\geq 0$, if
+\[ \forall x\in A: \quad x\geq 0 \implies \rho(x)\geq 0. \]
+\end{definition}
+\begin{definition}
+A \udef{state} on a $C^*$-algebra $A$ is a positive linear functional of norm $1$. The set $\mathcal{S}(A)$ of all states on $A$ is called the \udef{state space} of $A$.
+\end{definition}
+Not necessarily multiplicative!
+
+\begin{example}
+Let $A$ be a concrete $C^*$-algebra of operators acting non-degenerately on $\mathcal{H}$ and $\xi \in \mathcal{H}$. Define
+\[ \rho_\xi: A \to \C: x\mapsto \inner{\xi, x\xi}, \]
+then $\rho_\xi$ is a positive linear functional on $A$ of norm $\norm{\xi}^2$, so  $\rho_\xi$ is a state if $\norm{\xi} =1$. Such a state is called a \udef{vector state} of $A$.
+\end{example}
+
+\begin{proposition}
+Let $A$ be a $C^*$-algebra and $\rho$ a positive linear functional on $A$. Then
+\[ A\times A \to \C: (a,b)\mapsto \rho(a^*b) \]
+is a positive Hermitian form.
+\end{proposition}
+\begin{corollary}
+This form obeys the Cauchy-Schwarz inequality, \ref{theorem:CauchySchwarz}:
+\[ \forall a,b\in A:\quad |\rho(a^*b)|^2 \leq \rho(a^*a)\rho(b^*b). \]
+Or
+\[ \forall a,b\in A:\quad |\rho(ab)|^2 \leq \rho(aa^*)\rho(b^*b). \]
+\end{corollary}
+
+\begin{proposition}
+Let $\omega$ be a linear functional over a $C^*$-algebra $A$. The following are equivalent:
+\begin{enumerate}
+\item $\omega$ is positive;
+\item $\omega$ is continuous and $\norm{\omega} = \lim_\lambda \omega(e_\lambda^2)$ for some approximate unit $\{e_\lambda\}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}
+Let $\omega$ be a positive linear functional over a $C^*$-algebra $A$ and $a,b\in A$, then
+\begin{enumerate}
+\item $\omega(a^*) = \overline{\omega(a)}$;
+\item $|\omega(a)|^2 \leq \omega(a^*a)\norm{\omega}$;
+\item $|\omega(a^*ba)| \leq \omega(a^*a)\norm{b}$;
+\item $\norm{\omega} = \sup\setbuilder{\omega(a^*a)}{\norm{a} = 1}$
+\item for any approximate unit $\{e_\lambda\}$, $\norm{\omega} = \lim_\lambda\omega(e_\lambda^2)$
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+By \ref{lemma:realImaginaryParts} and \ref{lemma:positiveNegativeParts} we can write $a\in A$ as
+\[ a = x_{1,+} - x_{1,-} + i(x_{2,+} - x_{2,-}).\]
+Where $x_{1,+}, x_{1,-}, x_{2,+}, x_{2,-}$ are self-adjoint. Then
+\[ \rho(a^*) = \rho(x_{1,+} - x_{1,-} - i(x_{2,+} - x_{2,-})) = \rho(x_{1,+}) - \rho(x_{1,-}) - i(\rho(x_{2,+}) - \rho(x_{2,-})) = \overline{\rho(a)}. \]
+Where the last equality follows because $\rho$ takes real values on self-adjoint elements. (TODO!)
+\end{proof}
+\begin{corollary}
+Let $\omega_1$ and $\omega_2$ be positive linear functionals over a $C^*$-algebra $A$. Then $\omega_1+\omega_2$ is a positive linear functional and
+\[ \norm{\omega_1+\omega_2} = \norm{\omega_1} + \norm{\omega_2}. \]
+Thus the state space is a convex subset of the dual of $A$.
+\end{corollary}
+\begin{corollary}
+Let $X$ be a compact Hausdorff space. Let $\omega$ be a positive linear functional on $\cont(X)$. Then $\omega$ is continuous and $\norm{\omega} = 1$.
+\end{corollary}
+TODO: move up for Riesz-Markov?
+
+\begin{proposition}
+If $A$ is commutative, the pure states are exactly the characters.
+\end{proposition}
+
+\subsection{Comparison of projectors}
+Lattice
+\subsection{General comparison theory}
+
+
+
+\chapter{Representations and states}
+\section{Representations}
+TODO: link to general definition!
+\begin{definition}
+A \udef{representation} of a $C^*$-algebra $A$ on a Hilbert space $\mathcal{H}$ is a $*$-homomorphism $\pi: A \to \Bounded(\mathcal{H})$.
+
+A \udef{subrepresentation} of $\pi$ is the restriction of $\pi$ to a closed invariant subspace of $\mathcal{H}$.
+
+We say a representation $\pi: A \to \Bounded(\mathcal{H})$ is
+\begin{enumerate}
+\item \udef{faithful} if it is injective;
+\item \udef{non-degenerate} if $\overline{\pi(A)\mathcal{H}} = \mathcal{H}$;
+\item \udef{cyclic} w.r.t. a unit vector $\xi\in\mathcal{H}$ if $\overline{\pi(A)\xi} = \mathcal{H}$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}
+Let $A$ be a $C^*$-algebra and $\pi: A \to \Bounded(\mathcal{H})$ a representation of $A$. Then $\pi$ is a faithful representation of $A/\ker\pi$.
+\end{lemma}
+
+\begin{proposition}
+Let $\pi:A\to\mathcal{H}$ be a representation of a $C^*$-algebra, then $\pi$ being faithful is equivalent to any of the following:
+\begin{enumerate}
+\item $\ker \pi = \{0\}$;
+\item $\norm{\pi(a)} = \norm{a}$ for all $a\in A$;
+\item $\pi(a) > 0$ for all $a>0$.
+\end{enumerate}
+\end{proposition}
+
+\begin{lemma}
+Let $\pi: A\to\mathcal{H}$ be a representation and $P_1$ be a projector with closed range $\mathcal{H}_1$. Then $\pi|_{\mathcal{H}_1}$ is a subrepresentation \textup{if and only if}
+\[ \forall a\in A: \quad \pi(a)P_1 = P_1\pi(a).  \]
+\end{lemma}
+\begin{proof}
+Assume $P_1\pi(a) = \pi(a)P_1$ for all $a\in A$. Then multiplying by $P_1$ gives
+\[ P_1\pi(a)P_1 = \pi(a)P_1 \quad \forall a\in A \]
+which expresses invariance. Conversely, assume this invariance condition. Then
+\[ \pi(a)P_1 = P_1\pi(a)P_1 = (P_1\pi(a)P_1)^{**} = (P_1\pi(a^*)P_1)^{*} = (\pi(a^*)P_1)^* = P_1\pi(a). \]
+\end{proof}
+
+\begin{lemma} \label{lemma:nonDegeneracyAlgebraRepresentation}
+Let $\pi:A\to \mathcal{H}$ be a representation of a $C^*$-algebra $A$. Define
+\[ \mathcal{H}_0 \defeq \setbuilder{x\in\mathcal{H}}{\forall a\in A: \pi(a)x = 0}. \]
+Then $\pi$ is non-degenerate \textup{if and only if} $\mathcal{H}_0 = \{0\}$.
+\end{lemma}
+\begin{proof}
+It is enough to prove that
+\[ (\pi(A)\mathcal{H})^\perp = \mathcal{H}_0. \]
+This implies $\overline{\pi(A)\mathcal{H}} = \mathcal{H}_0^\perp$ by \ref{corollary:doubleComplementClosure}. The claim then follows from \ref{prop:OrthogonalComplementProperties}.
+
+The proof then rests on the equality
+\[ \forall x,y\in \mathcal{H}, a\in A: \quad \inner{x,\pi(a)y} = \inner{\pi(a^*)x,y}. \]
+An $x\in\mathcal{H}$ is an element of $(\pi(A)\mathcal{H})^\perp$ iff the left side is zero for all $y\in\mathcal{H},a\in A$. An $x\in\mathcal{H}$ is an element of $\mathcal{H}_0$ iff $\pi(a^*)x = 0$ for all $a^*\in A$. This is equivalent to saying the right side is zero for all $y\in\mathcal{H},a\in A$ by the non-degeneracy of the inner product \ref{lemma:nonDegeneracyInnerProduct}.
+\end{proof}
+
+\begin{proposition}
+Let $\pi:A\to \mathcal{H}$ be a non-degenerate representation. Then $\pi$ is the direct sum of a family of cyclic representations.
+\end{proposition}
+
+\begin{definition}
+Two representations $\pi,\rho$ of $A$ on Hilbert spaces $\mathcal{X}$ and $\mathcal{Y}$ respectively are \udef{(unitarily) equivalent} if there is a unitary operator $U\in\Bounded(\mathcal{X}, \mathcal{Y})$ such that
+\[ \forall x\in A: \quad U\pi(x)U^* = \rho(x). \]
+\end{definition}
+
+\subsection{Irreducible representations}
+TODO connect to more general definitions.
+\begin{definition}
+A set $D$ of bounded operators on a Hilbert space $\mathcal{H}$ is called \udef{algebraically irreducible} if the only subspaces of $\mathcal{H}$ invariant under the action of $D$ are the trivial subspaces $\{0\}$ and $\mathcal{H}$.
+
+The set $D$ is called \udef{topologically irreducible} if the only closed invariant subspaces of $\mathcal{H}$ are the trivial subspaces.
+
+A representation $\pi: A\to\mathcal{H}$ is called irreducible if $\pi[A]$ is irreducible.
+\end{definition}
+\begin{proposition}
+For $C^*$-algebras the notions of algebraic and topological irreducibility are equivalent.
+\end{proposition}
+
+\begin{proposition}
+Let $D$ be a self-adjoint set of bounded operators on the Hilbert space $\mathcal{H}$. The following are equivalent:
+\begin{enumerate}
+\item $D$ is irreducible;
+\item the commutant $\comm{D}$ consists of multiples of the identity operator;
+\item every non-zero vector $x\in\mathcal{H}$ is cyclic for $D$ in $\mathcal{H}$, or $D =0$ and $\mathcal{H} = \C$.
+\end{enumerate}
+\end{proposition}
+
+\section{The GNS construction}
+TODO: move (much) higher, at least before positivity!
+\begin{lemma}
+Let $\omega$ be a state on a $C^*$-algebra $A$. Then the map
+\[ A\times A \to \C: (x,y)\mapsto \omega(x^*y) \]
+is a pre-inner product on $A$.
+\end{lemma}
+
+\begin{lemma}
+Let $\omega$ be a state on a $C^*$-algebra $A$. Then
+\[ N_\omega \defeq \setbuilder{x\in A}{\omega(x^*x) = 0} \]
+is a closed left ideal in $A$.
+\end{lemma}
+\begin{proof}
+TODO: left ideal criterion?
+
+Let $x,y\in N_\omega$, Then
+\[ \omega((x+y)^*(x+y)) = \omega(x^*x) + \omega(y^*x) + \omega(x^*y) + \omega(y^*y) = 0 \]
+where $\omega(y^*x), \omega(x^*y)$ are zero by corollary \ref{corollary:preInnerProductCSBZero} to the Cauchy-Schwarz inequality.
+\end{proof}
+
+\begin{lemma}
+Let $\omega$ be a state on a $C^*$-algebra $A$. Then $H^0_\omega = A/N_\omega$ is an inner product space with inner product
+\[ \inner{[x], [y]}_\omega = \omega(x^*y) \]
+where $[x] = x + N_\omega$ for $x\in A$.
+
+We also define $\mathcal{H}_\omega$ as the Hilbert space completion of $H^0_\omega$.
+\end{lemma}
+\begin{proof}
+We verify this inner product is well-defined: take $x,x'\in [x]$ and $y,y'\in[y]$. Then $(x'-x) \in N_\omega$ and $(y'-y) \in N_\omega$. Again using corollary \ref{corollary:preInnerProductCSBZero} to the Cauchy-Schwarz inequality, we see
+\[ \omega(x^*y) = \omega(x^*y) + \omega(x^*(y'-y)) = \omega(x^*y') = \omega(x^*y') + \omega((x'-x)^*y') = \omega(x^{\prime *}y'). \]
+\end{proof}
+
+\begin{lemma}
+Let $\omega$ be a state on a $C^*$-algebra $A$ and write $[x] = x+N_\omega$. Then for any increasing approximate unit $(e_n)_n$,
+\[ \xi_\omega = \lim_{n\to\infty}[e_n] \]
+is a unit vector in $\mathcal{H}_\omega$ which does not depend on the choice of approximate unit.
+\end{lemma}
+
+\begin{theorem}[Gelfand-Naimark-Segal]
+Let $\omega$ be a state on a $C^*$-algebra $A$. The map $\pi_\omega: A\to \Bounded(H^0_\omega)$ defined by
+\[ \pi_\omega(x) : H^0_\omega \to H^0_\omega: [y] \mapsto [xy] \]
+is a well-defined representation of $A$ on $H^0_\omega$. This can be extended to a representation of $A$ on $\mathcal{H}_\omega$. Also
+\begin{enumerate}
+\item $\pi_\omega$ is cyclic w.r.t. $\xi_\omega$;
+\item for all $a\in A:\; \omega(a) = \inner{\xi_\omega, \pi_\omega(a)\xi_\omega}_\omega.$
+\end{enumerate}
+This is the unique representation with these properties, up to unitary equivalence.
+\end{theorem}
+\begin{corollary}
+Let $\omega$ be a state over the $C^*$-algebra $A$ and $\tau: A\to A$ a $*$-automorphism that leaves $\omega$ invariant:
+\[ \forall a\in A: \quad \omega(\tau(a)) = \omega(a). \]
+Then there exists a unique unitary operator $U$ on $\mathcal{H}_\omega$ such that
+\[ \forall a\in A: \quad U\pi_\omega(a)U^* = \pi_\omega(\tau(a)) \]
+and $U\xi_\omega = \xi_\omega$.
+\end{corollary}
+
+\begin{definition}
+Let $\omega: A\to \C$ be a state.
+We call the cyclic representation $(\mathcal{H}_\omega,\pi_\omega,\xi_\omega)$ constructed in the GNS theorem is called the \udef{canonical cyclic representation} of $A$ associated with $\omega$.
+\end{definition}
+
+\begin{lemma}
+Let $\omega$ be a state over a $C^*$-algebra $A$ and $(\mathcal{H}_\omega,\pi_\omega,\xi_\omega)$ the associated cyclic representation. There is a bijective correspondence 
+\[ \omega_T(a) = \inner{T\xi_\omega, \pi_\omega(a)\xi_\omega} \]
+between positive functionals $\omega_T$ over $A$ majorised by $\omega$ and positive operators $T$ in the commutant $\comm{\pi_\omega}$ with $\norm{T}\leq 1$.
+\end{lemma}
+
+\begin{proposition}
+Let $\omega$ be a state over a $C^*$-algebra $A$ and $(\mathcal{H}_\omega,\pi_\omega,\xi_\omega)$ the associated cyclic representation. The following are equivalent:
+\begin{enumerate}
+\item $(\mathcal{H}_\omega,\pi_\omega)$;
+\item $\omega$ is a pure state;
+\item $\omega$ is an extremal point of the state space $\mathcal{S}(A)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}
+Let $A$ be a $C^*$-algebra. Then $A$ is isomorphic to a norm-closed self-adjoint algebra of bounded operators on a Hilbert space.
+\end{theorem}
+
+
+\section{Multiplier algebras}
+\subsection{Essential ideals}
+TODO move to section about ideals
+\begin{definition}
+Let $J$ be an ideal of a $C^*$-algebra $A$. Then $J$ is called \udef{essential} if for all $a\in A$ we have that $aJ = \{0\}$ implies $a=0$.
+\end{definition}
+
+\begin{lemma} \label{lemma:C*idealSquared}
+Let $A$ be a $C^*$-algebra and $I\subset A$ an ideal. Then $I^2 = I$.
+\end{lemma}
+\begin{proof}
+Let $a\in I^+$. Then $a = (a^{1/2})^2\in I^2$. As $I$ and $I^2$ are $C^*$-algebras, they are spanned by their positive elements. So $I^2 
+\subset I \subset I^2$.
+\end{proof}
+\begin{lemma} \label{lemma:productC*ideals}
+Let $A$ be a $C^*$-algebra and $I,J\subset A$ ideals. Then $IJ = I\cap J$.
+\end{lemma}
+\begin{proof}
+We calculate $I\cap J = (I\cap J)^2 \subset IJ \subset I\cap J$ using \ref{lemma:C*idealSquared}.
+\end{proof}
+
+\begin{proposition}
+Let $J$ be an ideal of a $C^*$-algebra $A$. Then the following are equivalent:
+\begin{enumerate}
+\item $J$ is essential;
+\item $\forall a\in A:\;Ja = \{0\}$ implies $a=0$;
+\item every other non-zero ideal in $A$ has a non-zero intersection with $J$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Assume (3) and let $a\in A$ such that $aJ=\{0\}$. Let $I= \overline{AaA}$ be the ideal generated by $a$.
+\end{proof}
+
+\subsection{Multiplier algebras}
+\begin{proposition}
+Let $A$ be a $C^*$-algebra and $\pi_1, \pi_2$ faithful, non-degenerate representations. Then the idealisers $I(\pi_1[A]), I(\pi_2[A])$ of $\pi_1[A]$ and $\pi_2[A]$ are isomorphic to each other.
+\end{proposition}
+\begin{proof}
+We need to show
+\[ I(\pi_1[A]) = \setbuilder{T\in \Bounded(\mathcal{H}_1)}{T\pi_1[A] \cup \pi_1[A]T \subseteq \pi_1[A]} \cong \setbuilder{T\in \Bounded(\mathcal{H}_2)}{T\pi_2[A] \cup \pi_2[A]T \subseteq \pi_2[A]} = I(\pi_2[A]). \]
+
+We first show $I(\pi[A])$ contains $\pi[A]$ as an essential ideal. That it contains $A$ as an ideal is obvious. Non-degeneracy of the representation means that the only $x\in\mathcal{H}$ that is mapped to $0$ by all $\pi[A]$ is $0$, by \ref{lemma:nonDegeneracyAlgebraRepresentation}. 
+
+The idealiser is the largest subalgebra of $\Bounded(\mathcal{H})$ that contains $A$ as an ideal. The ideal is necessarily 
+\end{proof}
+
+\begin{definition}
+Let $A$ be a $C^*$-algebra. The \udef{multiplier algebra} $M(A)$ of $A$ is the largest $C^*$-algebra that contains $A$ as an essential ideal.
+\end{definition}
+
+The multiplier algebra is the non-commutative analogue of Stone–Čech compactification: if $A$ is commutative, then $A\cong C(X)$ and
+\[ M(A) \cong C_b(X) \cong C(\beta(X)), \]
+where $\beta(X)$ denotes the Stone–Čech compactification of $X$.
+
+\begin{lemma}
+If $A$ is a unital $C^*$-algebra, then $M(A) = A$.
+\end{lemma}
+If we view the $C^*$-algebra $A$ as a Hilbert $A$-module, then $M(A)$ is the set of adjointable operators on $A$.
+
+\begin{proposition}
+Let $A$ be a $C^*$-algebra and $\pi_1, \pi_2$ faithful, non-degenerate representations. Then the idealisers $I(\pi_1[A]), I(\pi_2[A])$ of $\pi_1[A]$ and $\pi_2[A]$ are isomorphic to each other and to the multiplier algebra $M(A)$.
+
+
+$M(A)$ can be realised as the idealiser
+\[ M(A) \cong I(\pi[A]) = \setbuilder{T\in \Bounded(\mathcal{H})}{T\pi[A] \cup \pi[A]T \subseteq \pi[A]} \]
+of $A$ in $\Bounded(\mathcal{H})$.
+\end{proposition}
+\begin{proof}
+We need to show
+\[ I(\pi_1[A]) = \setbuilder{T\in \Bounded(\mathcal{H}_1)}{T\pi_1[A] \cup \pi_1[A]T \subseteq \pi_1[A]} \cong \setbuilder{T\in \Bounded(\mathcal{H}_2)}{T\pi_2[A] \cup \pi_2[A]T \subseteq \pi_2[A]} = I(\pi_2[A]). \]
+
+We first show $I(\pi[A])$ contains $\pi[A]$ as an essential ideal. That it contains $A$ as an ideal is obvious. Non-degeneracy of the representation means that the only $x\in\mathcal{H}$ that is mapped to $0$ by all $\pi[A]$ is $0$, by \ref{lemma:nonDegeneracyAlgebraRepresentation}. 
+
+The idealiser is the largest subalgebra of $\Bounded(\mathcal{H})$ that contains $A$ as an ideal. The ideal is necessarily 
+\end{proof}
+
+For example, let $\mathcal{H}$ be a Hilbert space. Then $M(\mathcal{K}(\mathcal{H})) = \Bounded(\mathcal{H})$, where $\mathcal{K}(\mathcal{H})$ is the algebra of compact operators on $\mathcal{H}$.
+
+We write $\mathcal{U}M(A)$ to mean the unitary elements of the multiplier algebra.
+
+Let $\pi: A\to M(B)$ be a $*$-homomorphism. If $\overline{\Span}(\pi(A)B) = B$, then $\pi$ can be uniquely extended to $\overline{\pi}: M(A) \to M(B)$. 
+
+\section{Universal $C^*$-algebras}
+\begin{definition}
+Let $\mathcal{X}$ be a non-empty set. We formally write $\mathcal{X}^* = \setbuilder{x^*}{x\in \mathcal{X}}$ and view it as a set disjoint from $\mathcal{X}$. A noncommutative-$*$-polynomial with variables in $\mathcal{X}$ is a formal expression of the form
+\[ \sum_{k=1}^m\lambda_k x_{k,1}x_{k,2}\ldots x_{k,n_k} \]
+where $m, n_k\in \N$, $x_{k,n}\in \mathcal{X}\cup\mathcal{X}^*$ and $\lambda_k\in \C$.
+
+a \udef{polynomal relation} $\mathcal{R}$ on $\mathcal{X}$ is a collection of formal statements of the form
+\[ \norm{p_j(\mathcal{X})}\leq r_j \]
+indexed by some index set $J$ where $r_j \in\R^{\geq 0}$ and $p_j$ is a noncommutative-$*$-polynomial with variables in $\mathcal{X}$.
+\end{definition}
+
+\begin{definition}
+Let $\mathcal{X}$ be a non-empty set and $\mathcal{R}$ a set of polynomial relations on $\mathcal{X}$.
+
+A \udef{representation} of $(\mathcal{X}\;|\;\mathcal{R})$ is a $C^*$-algebra $A$ together with a map $\pi:\mathcal{X}\to A$ such that $\mathcal{R}$ becomes true in the image of $\pi$.
+
+A representation $\pi_u:\mathcal{X}\to B$ of $(\mathcal{X}\;|\;\mathcal{R})$ is called \udef{universal} if for any other representation $\pi:\mathcal{X}\to A$ of $(\mathcal{X}\;|\;\mathcal{R})$, there exists a unique $*$-homomorphism $\varphi: B\to A$ such that $\varphi\circ \pi_u = \pi$.
+
+In this case we call $B$ the \udef{universal $C^*$-algebra} generated by $(\mathcal{X}\;|\;\mathcal{R})$ and write $B= C^*(\mathcal{X}\;|\;\mathcal{R})$.
+\end{definition}
+
+\begin{definition}
+A polynomial relation $\mathcal{R}$ on $\mathcal{X}$ is said to be \udef{bounded}, if for every $x\in \mathcal{X}$, we have
+\[ \sup\setbuilder{\norm{\pi(x)}}{\pi:\mathcal{X}\to A\;\text{is a representation of}\;(\mathcal{X}\;|\;\mathcal{R})} < \infty. \] 
+\end{definition}
+
+\begin{example}
+\begin{itemize}
+\item The relation $(\mathcal{X}\;|\;\mathcal{R}) = (\{a\}\;|\;\{\norm{a-a^*}\leq 0\})$ is not bounded.
+\item The relation $(\mathcal{X}\;|\;\mathcal{R}) = (\{x,y\}\;|\;\{\norm{\vec{1}-x^*x-y^*y}\leq 0\})$ is bounded: writing $x$ for $\pi(x)$, the spectrum of $x^*x = 1-y^*y$ is positive and bounded by $1$ according to the spectral mapping theorem \ref{prop:propertiesContinuousFunctionalCalculus}. Now $\norm{\pi(x)} = \sqrt{r(\pi(x)^*\pi(x))} \leq 1$ by \ref{prop:normNormalElement} and so
+\[ \sup\setbuilder{\norm{\pi(x)}}{\pi:\mathcal{X}\to A\;\text{is a representation of}\;(\mathcal{X}\;|\;\mathcal{R})} \leq 1 < \infty. \]
+\item The relation $(\mathcal{X}\;|\;\mathcal{R}) = (\mathcal{X}\;|\;\bigcup_{x\in\mathcal{X}}\{\norm{x-x^*}\leq 0,\norm{x-x^2}\leq 0 \})$ is bounded. It gives rise to a universal $C^*$-algebra generated by projections.
+\end{itemize}
+\end{example}
+
+\begin{proposition}
+Let $\mathcal{X}$ be a non-empty set and $\mathcal{R}$ a polynomial relation on $\mathcal{X}$. Then $(\mathcal{X}\;|\; \mathcal{R})$ is bounded if and only if $C^*(\mathcal{X}\;|\;\mathcal{R})$ exists.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\section{Direct limits}
+\subsection{AF}
+\subsection{UHF}
+\subsection{Stable algebras}
+\url{http://web.math.ku.dk/~rordam/manus/encyc.pdf}
+
+\chapter{Von Neumann Algebras}
+TODO: definitions of SOT and WOT!
+\begin{definition}
+A concrete $C^*$-algebra $A\subseteq \Bounded(\mathcal{H})$ is a \udef{von Neumann algebra} if it is closed in the SOT.
+\end{definition}
+
+\section{von Neumann bicommutant theorem}
+\begin{proposition}
+Let $S\subset \Bounded(\mathcal{H})$ be a set for some Hilbert space $\mathcal{H}$. Then
+\begin{enumerate}
+\item $\comm{S}$ is a Banach algebra;
+\item $\comm{S}$ is a $C^*$-algebra if $S = S^*$;
+\item $\comm{S}\subseteq \Bounded(\mathcal{H})$ is WOT-closed.
+\end{enumerate}
+\end{proposition}
+
+
+\chapter{Group $C^*$-algebras and crossed products}
+I also like the name ``Automorphism groups''.
+\section{Group $C^*$-algebras}
+\subsection{Discrete groups}
+\begin{definition}
+Let $G$ be a finite group and $R$ a r(i)ng. The \udef{group ring} $RG$ is the set of functions $(G\to R)$ with pointwise addition and the convolution product
+\[ (x\star y)(g) = \sum_h x(h)y(h^{-1}g) = \sum_{g=hk}x(h)y(k) \]
+for all $x,y\in RG$ and $g\in G$. 
+\end{definition}
+The a group ring can be seen as a free module generated by $G$. (TODO: this as definition?)
+
+The group algebra $\C G$ has an involution:
+\[ x^*(g) = \overline{x(g^{-1})} \qquad \text{for all $x\in \C G$}. \]
+And it admits a norm making it a $C^*$-algebra.
+
+\subsection{Locally compact Hausdorff groups}
+For topological groups we are not restricted to finite sums. For locally compact Hasdorff groups we can in fact define multiplication, involution and a norm on the space $C_c(G)$ of complex-valued continuous functions of compact support.
+
+\begin{lemma}
+Let $G$ be a locally compact Hausdorff group. Convolution is a bilinear operation that maps $C_c(G)\times C_c(G)\to C_c(G)$ defined by
+\[ (f\star g)(t) \defeq \int_Gf(s)g(s^{-1}t)\diff\mu(s). \]
+\end{lemma}
+\begin{proof}
+Continuity follows from the dominated convergence theorem. Also
+\[ \operatorname{supp}(f\star g)\subseteq \operatorname{supp}(f)\cdot\operatorname{supp}(g) \]
+where $\cdot$ is the group multiplication.
+\end{proof}
+\begin{lemma}
+The algebra $C_c(G)$ has an involutive anti-linear anti-automorphism
+\[ *: f \mapsto f^* = (s\mapsto \overline{f(s^{-1})}\Delta(s^{-1})) \]
+where $\Delta$ is the modular function on $G$. This means $C_c(G)$ is a $*$-algebra with $*$ as involution.
+\end{lemma}
+
+
+\section{$C^*$-dynamical systems}
+\begin{definition}
+A \udef{$C^*$-dynamical system} is a triple $(G,\alpha, A)$ consisting of a locally  
+compact group $G$, a $C^*$-algebra $A$ and a homomorphism $\alpha$ of $G$ into $\Aut(A)$, such that $g \mapsto a_g(a)$ is continuous for all $a \in A$. 
+\end{definition}
+
+\subsection{Covariant homomorphisms and representations}
+\begin{definition}
+Let $(G,\alpha, A)$ be a $C^*$-dynamical system. A \udef{covariant homomorphism} into the multiplier algebra $M(D)$ of some $C^*$-algebra $D$ is a pair $(\rho, U)$ where
+\begin{itemize}
+\item $\rho: A\to M(D)$ is a $*$-homomorphism and
+\item $U: G\to \Unitaries M(D)$ is a strictly continuous homomorphism between groups
+\end{itemize}
+satisfying
+\[ \rho(\alpha_g(a))= U_g\rho(a)U_{g}^* \qquad \text{for all $g\in G$.} \]
+We say $(\rho, U)$ is non-degenerate if $\rho$ is.
+\end{definition}
+
+\subsubsection{Integrated forms}
+\begin{definition}
+Given a covariant homomorphism $(\rho, U)$ on a $C^*$-dynamical system $(G,\alpha, A)$ into $M(D)$ we can parcel these two functions into one function $C_c(G,A)\to M(D)$, called the \udef{integrated form}
+\[ (\rho \rtimes U) (f)  \defeq \int_G\rho(f(r))U_r \diff\mu(r) \]
+where $\mu$ is the left Haar measure.
+\end{definition}
+\begin{lemma}
+Let $(\rho, U)$ be a covariant homomorphism. Then $\rho \rtimes U$ is a $*$-homomorphism.
+\end{lemma}
+
+\subsubsection{Induced covariant morphisms}
+Given a $*$-homomorphism $\rho: A\to M(D)$ we can extend it naturally to a covariant homomorphism.
+\begin{definition}
+Let $(G, \alpha, A)$ be a $C^*$-dynamical system and $\rho: A\to M(D)$ a $*$-homomorphism. Then the \udef{covariant homomorphism induced from $\rho$} $\Ind \rho$ is the covariant homomorphism $(\widetilde{\rho}, 1\otimes \lambda)$ of $(G, \alpha, A)$ into $M(D\otimes\Compact(L^2(G))$ where
+\begin{itemize}
+\item $\lambda: G\to \Unitaries(L^2(G))$ is the left regular representation of $G$ given by $(\lambda_s\xi)(t) =\xi(s^{-1}t)$;
+\item $\rho$ is the composition
+\[ \begin{tikzcd}
+A \rar{\widetilde{\alpha}} & C_b(G,A) \ar[r,hook] & M(A\otimes C_0(G)) \rar{\rho\otimes M} & M(D\otimes \Compact(L^2(G)))
+\end{tikzcd} \]
+where $\widetilde{\alpha}: A\to C_b(G,A)$ is defined by $\widetilde{\alpha}(a)(s)= \alpha_{s^{-1}}(a)$ and 
+\[ M: C_0(G)\to \Bounded(L^2(G)) = M(\Compact(L^2(G))) \]
+denotes the representation by multiplication operators.
+\end{itemize}
+\end{definition}
+The \udef{regular representation} of $(G, \alpha, A)$ is $\Lambda^G_A \defeq \Ind(\id_A)$.
+
+\begin{lemma}
+Let $\rho: A\to M(D)$ be a $*$-homomorphism. Then
+\[ \Ind\rho = () \]
+\end{lemma}
+
+\subsubsection{Covariant representations}
+\begin{definition}
+A \udef{(covariant) representation} of a $C^*$-dynamical system $(G,\alpha, A)$ on a Hilbert space $\mathcal{H}$ is a covariant homomorphism $(\pi, U)$ into $M(\Compact(\mathcal{H})) = \Bounded(\mathcal{H})$.
+\end{definition}
+
+\begin{definition}
+Covariant representations $(\pi, U)$ on $\mathcal{H}$ and $(\pi', U')$ on $\mathcal{H}'$ are \udef{unitarily equivalent} if there is a unitary operator $W: \mathcal{H}\to \mathcal{H}'$ such that
+\[ \pi'(a) = W\pi(a)W^* \qquad \text{and} \qquad U_g' =  WU_gW^* \]
+for all $a\in A,g\in G$.
+\end{definition}
+
+Suppose $(\pi,U)$ and $(\rho, V)$ are covariant representations on $\mathcal{H}$ and $\mathcal{V}$ respectively. Their direct sum $(\pi, U) \oplus (\rho, V )$ is the covariant representation $(\pi \oplus \rho, U \oplus V )$ on $\mathcal{H} \oplus \mathcal{V}$ given by $(\pi \oplus \rho)(a) \defeq \pi(a)\oplus \rho(a)$ and $(U \oplus V)_s \defeq U_s \oplus V_s$.
+\subsection{Crossed products}
+The crossed product $A \rtimes_\alpha G$ will be defined as the completion of $C_c(G,A)$, viewed as a $*$-algebra in a certain way, with respect to a certain norm.
+
+First the algebra: the set of functions $G\to A$ with compact support naturally comes equipped with scalar multiplication and vectorial addition. We define the multiplication as
+\[ f\star g: G \to \C: x\mapsto \int_G f(s)\alpha_s(g(s^{-1}x))\diff\mu(s) \]
+and the involution $*$ by
+\[ f^*: x\mapsto \Delta(x^{-1})\alpha_x(f(x^{-1})^*). \]
+Notice the appearance of $\alpha$ in the definitions.
+
+Next we define a norm. This will be done using integrated forms.
+Let $(\pi, U)$ be a covariant representation of a $C^*$-dynamical system $(A,G,\alpha)$ on $\mathcal{H}$. Then
+\[ (\pi \rtimes U) (f)  \defeq \int_G\pi(f(r))U_r \diff\mu(r)\]
+defines a $*$-representation of the $*$-algebra $C_c(G,A)$ on $\mathcal{H}$, called the \udef{integrated form}.
+
+Then we can define a norm, called the \udef{universal norm}, on $C_c(G,A)$ by
+\[ \norm{f} \defeq \sup\setbuilder{\norm{(\pi\rtimes U)(f)}}{(\pi, U)\;\text{is a covariant representation of} \; (A,G,\alpha)} \]
+The supremum\footnote{One may worry we are taking the supremum over a class and not a set (the covariant representations do not form a set). Luckily the class is a subclass of the real numbers and thus a set.} is finite because $\norm{f} \leq \norm{f}_1$.
+
+The completion of $C_c(G,A)$ with respect to the universal norm is called the \udef{crossed product} $A \rtimes_\alpha G$.
+
+In fact, when evaluating the supremum for the universal norm, we do not need to consider all representations of $(A,G,\alpha)$: Let $(\pi, U)$ be a covariant representation of $(A,G,\alpha)$ on $\mathcal{H}$. Let 
+\[ \mathcal{E} \defeq \overline{\Span}\setbuilder{\pi(a)h}{a\in A; h\in \mathcal{H}} \]
+be the \udef{essential subspace} of $\pi$. We call the corresponding subrepresentation $\operatorname{ess} \pi$. Because
+\[ U_s h =  \pi(\alpha_{s^{-1}}(a))U_s\pi(a) h \qquad \forall a\in A, h\in\mathcal{H}, \]
+it is clear $\mathcal{E}$ is invariant under $U$ as well. Call $U'$ the restriction of $U$ to $\mathcal{E}$.
+
+Then $\norm{(\operatorname{ess}\pi\rtimes U')(f)} = \norm{(\pi\rtimes U)(f)}$ and so
+\[ \norm{f} =\sup\setbuilder{\norm{(\pi\rtimes U)(f)}}{(\pi, U)\;\text{is a non-degenerate covariant representation of} \; (A,G,\alpha)} \]
+
+\begin{proposition}
+If $(A,G,\alpha)$ is a dynamical system, then the map sending
+a covariant pair $(\pi, U)$ to its integrated form $\pi\rtimes U$ is a one-to-one correspondence
+between non-degenerate covariant representations of $(A, G, \alpha)$ and non-degenerate
+representations of $A\rtimes_\alpha G$. This correspondence preserves direct sums, irreducibility
+and equivalence.
+\end{proposition}
+
+\subsubsection{Universal property}
+
+In general the crossed product $A\rtimes_\alpha G$ does not contain a copy of either $A$ or $G$. The multiplier algebra $M(A\rtimes_\alpha G)$ does however: There exist injective homomorphisms
+\[ i_A: A\to M(A\rtimes_\alpha G) \qquad i_G: G\to \mathcal{U}M(A\rtimes_\alpha G) \]
+satisfying
+\begin{enumerate}
+\item $i_A(\alpha_r(a)) = i_G(r)i_A(a)i_G(r)^*$ for all $a\in A, r\in G$;
+\item $A \rtimes_\alpha G = \overline{\Span}\setbuilder{i_A(a)\int_Gf(s)i_G(s)\diff\mu(s)}{a\in A, f\in C_c(G)}$;
+\item if $(\pi, U)$ is a covariant representation of $(G,A,\alpha)$, then
+\[ \pi = (\pi\rtimes U)\circ i_A \qquad \text{and} \qquad U = (\pi \rtimes U)\circ i_G. \]
+\end{enumerate}
+This is a universal property. Suppose another $C^*$-algebra $B$ and maps
+\[ j_A: A\to M(B) \qquad \text{and} \qquad j_G: G\to \mathcal{U}M(B) \]
+satisfy these conditions, then there exists an isomorphism $\Psi: A\rtimes_\alpha G \to B$ such that
+\[ \Psi \circ i_A = j_A \qquad \text{and} \qquad \Psi\circ i_G = j_G. \]
+
+The existence of such homomorphisms $i_A,i_G$ is proved by explicitly giving them.
+They are defined by
+\begin{align*}
+(i_A(a)f)(t) &= af(t) & (i_G(s)f)(t) &= \alpha_s(f(s^{-1}t) \\
+(fi_A(a))(t) &= f(t)\alpha_t(a) & (fi_G(s))(t) &= f(t^{-1}s)\Delta(s^{-1})
+\end{align*}
+for all $f\in C_c(G,A), a\in A, t\in G$.
+
+We can use the existence of these embeddings to prove the proposition. We need to show the existence of an inverse of the map from non-degenerate covariant representations to integrated forms.
+
+Let $\omega$ be a non-degenerate covariant representation of $A\rtimes_\alpha G$. Because it is non-degenerate, we can extend it uniquely to a representation of $M(A\rtimes_\alpha G)$. Using $i_A, i_G$ we can restrict this representation to a representation of $A$ and $G$. Together they form a covariant representation and one can check it is exactly the original representation $\omega$.
+
+\subsubsection{Induced representations}

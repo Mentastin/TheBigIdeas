@@ -1,0 +1,98 @@
+% blackboard typefaces by Anthony Phan.
+% file: mbboard.tex (\TeX' file for mbb's fonts)
+% last modification: November 1st, 1999.
+%
+\catcode`@=11
+%
+% proofing?
+%
+\ifx\proofmode\undefined
+	\def\symbol@message#1{\relax}%
+	\def\symbol@mark#1#2{\relax}%
+\else
+	\def\symbol@message#1{\medbreak{\noindent\bf #1}
+		\medskip\noindent\ignorespaces}%
+	\def\symbolsp@cing#1{(\ifcase\number#1 ord\or op%
+		\or bin\or rel\or open\or close\or punct%
+		\or var\else ???\fi)}%
+	\def\symbol@mark#1#2{$#1$ {\tt\string#1}
+		\symbolsp@cing{#2},\ \ignorespaces}%
+\fi
+%
+% Symbols declarations: \LaTeX-like commands
+%
+\def\hexnumber@#1{\ifcase\number#1 0\or 1\or 2\or 3\or 4%
+	\or 5\or 6\or 7\or 8\or 9\or A\or B\or C\or D\or E\or F\fi}%
+%
+\def\DeclareMathSymbol#1#2#3#4{%
+	\count255=#2\multiply\count255 by 16
+	\advance\count255 by \csname#3fam\endcsname
+	\multiply\count255 by 256\advance\count255 by #4
+	\ifcat\noexpand#1\relax\mathchardef#1=\count255
+	\else\expandafter
+		\mathcode\expandafter`\csname#1\endcsname=\count255
+	\fi\symbol@mark{#1}{#2}}
+%
+\def\gobble@quotes#1{\ifx#1"\else#1\fi}
+%
+\def\@DeclareMathDelimiter#1#2#3#4#5#6{%
+	\edef#1{\noexpand\delimiter\noexpand"\gobble@quotes#2%
+	\expandafter\hexnumber@\csname#3fam\endcsname\gobble@quotes#4%
+	\expandafter\hexnumber@\csname#5fam\endcsname\gobble@quotes#6 }%
+	\symbol@mark{#1}{#2}}
+%
+\def\@xDeclareMathDelimiter#1#2#3#4#5{%
+	\count255=\csname#2fam\endcsname
+	\multiply\count255 by 256\advance\count255 by #3
+	\multiply\count255 by 16
+	\advance\count255 by \csname#4fam\endcsname
+	\multiply\count255 by 256\advance\count255 by #5
+	\expandafter\delcode\expandafter`\csname#1\endcsname=\count255
+	\symbol@mark{#1}{#2}}
+%
+\def\DeclareMathDelimiter#1{%
+	\ifcat\noexpand#1\relax
+	\def\Large@stuff{\noexpand\delimiter}%
+	\expandafter\@DeclareMathDelimiter
+	\else\expandafter\@xDeclareMathDelimiter\fi#1}
+%
+\def\DeclareMathRadical#1#2#3#4#5{%
+	\edef#1{\noexpand\radical\noexpand"%
+	\expandafter\hexnumber@\csname#2fam\endcsname\gobble@quotes#3%
+	\expandafter\hexnumber@\csname#4fam\endcsname\gobble@quotes#5 }%
+	\symbol@mark{#1.}{8}}
+%
+\def\DeclareMathAccent#1#2#3#4{%
+        \edef#1{\noexpand\mathaccent\noexpand"%
+	\expandafter\hexnumber@\csname#3fam\endcsname\gobble@quotes#4 }%
+	\symbol@mark{#1.}{8}}
+%
+% loading blackboard fonts
+%
+\font\twelvembb=mbb12 \font\tenmbb=mbb10
+\font\ninembb=mbb9    \font\eightmbb=mbb8
+\font\sevenmbb=mbb7   \font\sixmbb=mbb6
+\font\fivembb=mbb5
+%
+\skewchar\tenmbb="7F   \skewchar\ninembb="7F \skewchar\eightmbb="7F 
+\skewchar\sevenmbb="7F \skewchar\sixmbb="7F  \skewchar\fivembb="7F 
+\hyphenchar\tenmbb="2D   \hyphenchar\ninembb="2D \hyphenchar\eightmbb="2D 
+\hyphenchar\sevenmbb="2D \hyphenchar\sixmbb="2D  \hyphenchar\fivembb="2D 
+%
+\newfam\mbbfam
+%
+% Initialization
+% (make changes in your own file if you want different sizes)
+%
+\textfont\mbbfam=\tenmbb  \scriptfont\mbbfam=\sevenmbb
+\scriptscriptfont\mbbfam=\fivembb  \def\mbb{\fam\mbbfam\tenmbb}
+\def\mathbb#1{{\fam\mbbfam#1}}
+%
+\input mbboard.dcl
+%
+\catcode`@=12
+\let\proofmode=\undefined
+\endinput
+
+
+

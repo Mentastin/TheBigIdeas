@@ -1,0 +1,498 @@
+\usepackage{imakeidx}
+\usepackage[greek, english]{babel}
+%\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsthm}
+%\usepackage{mbboard/texinputs/mbboard}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{thmtools}
+\usepackage{mathtools}
+\usepackage{etoolbox}
+\usepackage{scalerel}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usepackage{ulem}
+\usepackage{contour}
+\usepackage{xcolor}
+\usepackage{bbold}
+\usepackage{url}
+\usepackage{slashed}
+\usepackage{simpler-wick}
+\usepackage{tikz-feynman}
+\usepackage{../tikz-uml}
+\usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{csquotes}
+%\usepackage{commath}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\usepackage{tensor}
+\usepackage{verbatim}
+\usepackage{esint}
+\usepackage[shortlabels]{enumitem}
+\usepackage[skins, breakable]{tcolorbox}
+%\usepackage{bbm}
+\usepackage{bm}
+%\usepackage{autonum}
+\usepackage{diagbox}
+
+
+\usepackage{listings}
+\usepackage[]{algorithm2e}
+
+\usepackage[margin=1.4in]{geometry}
+\usepackage[hidelinks, hypertexnames=false]{hyperref}
+\usepackage[user, xr]{zref}
+
+\makeindex[name=definition,title={Index of definitions}]
+
+\tcbset{breakable}
+
+\usetikzlibrary{cd, fit, patterns, snakes, decorations.markings, trees}
+\usepgfmodule{nonlineartransformations}
+
+
+% --- Theorems and such ---
+\newtheorem{theorem}{Theorem}[part]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem*{remark}{Remark} %Does not work (some package conflicts with amsthm)
+% --- New commands ---
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+%\newcommand{\H}{\mathbb{H}}
+\newcommand{\F}{\mathbb{F}}
+
+\newcommand{\transp}{\mathrm{T}}
+
+% --- Inner products / brackets ---
+\newcommand{\inner}[1]{\left\langle #1 \right\rangle}
+\newcommand{\ket}[1]{\left| #1 \right\rangle}
+\newcommand{\bra}[1]{\left\langle #1 \right|}
+\newcommand{\braket}[3][\null]{%    %TOreDO!
+  \ifx#1\null
+       \langle#2|#3\rangle%
+    \else%
+       \langle#2|#1|#3\rangle%
+    \fi}
+\newcommand{\sbraket}[3][\null]{%    %TOreDO!
+  \ifx#1\null
+       \left\langle#2\vphantom{#3}\right.\left|#3\vphantom{#2}\right\rangle%
+    \else%
+         \left\langle#2\vphantom{#1}\vphantom{#3}\right.\left|#1\vphantom{#2}\vphantom{#3}\right|\left.#3\vphantom{#1}\vphantom{#2}\right\rangle%
+    \fi}
+\newcommand{\ketbra}[2]{|#1\rangle\langle#2|}
+\newcommand{\sketbra}[2]{\left|#1\vphantom{#2}\right\rangle\left\langle#2\vphantom{#1}\right|}
+
+\newcommand{\grade}[1]{\left\langle #1 \right\rangle}
+% --- Set builder notation ---
+\newcommand{\setbuilder}[2]{ \left\{\left. #1 \;\right|\; #2 \right\} }
+% --- Script r ---
+\def\rcurs{{\mbox{$\resizebox{.09in}{.08in}{\includegraphics[trim= 1em 0 14em 0,clip]{ScriptR}}$}}}
+\def\brcurs{{\mbox{$\resizebox{.09in}{.08in}{\includegraphics[trim= 1em 0 14em 0,clip]{BoldR}}$}}}
+\def\hrcurs{{\mbox{$\hat \brcurs$}}}
+% --- Vector style ---
+\let\arrowvec\vec
+\renewcommand{\vec}[1]{\bm{\mathrm{#1}}}
+%\let\ihat\hat
+%\let\operator\hat
+\newcommand{\vhat}[1]{\vec{\hat{#1}}}
+% --- Complex vectors ---
+\newcommand{\vbar}[1]{\vec{\bar{#1}}}
+% --- Norm ---
+\makeatletter
+\DeclareDocumentCommand\braces{}{{\ifnum\z@=`}\fi\@braces}
+\DeclareDocumentCommand\@braces{ s t\big t\Big t\bigg t\Bigg m m m }
+{ % General braces with automatic and manual sizing
+	\IfBooleanTF{#1}
+	{\left#6\smash{#8}\right#7\vphantom{#8}}
+	{
+		\IfBooleanTF{#2}{\bigl#6{#8}\bigr#7}{
+			\IfBooleanTF{#3}{\Bigl#6{#8}\Bigr#7}{
+				\IfBooleanTF{#4}{\biggl#6{#8}\biggr#7}{
+					\IfBooleanTF{#5}{\Biggl#6{#8}\Biggr#7}{\left#6{#8}\right#7}
+				}
+			}
+		}
+	}
+	\ifnum\z@=`{\fi}
+}
+%\DeclareDocumentCommand\norm{ l m }{\braces#1{\lVert}{\rVert}{#2}} % Norm
+\makeatother
+
+\newcommand\swapifbranches[3]{#1{#3}{#2}}
+\makeatletter
+\MHInternalSyntaxOn
+\patchcmd{\DeclarePairedDelimiter}{\@ifstar}{\swapifbranches\@ifstar}{}{}
+\MHInternalSyntaxOff
+\makeatother
+
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+% --- Lines in (block) matrices ---
+% --- Defining quantities ---
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\eqdef}{\eqqcolon}
+\newcommand{\defequiv}{\quad\Leftrightarrow_{\text{def}}\quad}
+% --- Maths operators ---
+\DeclareMathOperator{\Set}{Set}
+\newcommand\powerset{\mathop{\mathcal{P}}}
+\newcommand\cat[1]{\mathsf{#1}}
+\DeclareMathOperator{\ob}{ob}
+\DeclareMathOperator{\mor}{mor}
+
+\newcommand{\symdiff}{\mathbin{\Delta}}
+\DeclareMathOperator{\len}{len}
+\DeclareMathOperator{\seg}{seg}
+
+\newcommand\seq[1]{\langle #1 \rangle}
+
+\DeclareMathOperator{\lcm}{lcm}
+%\DeclareMathOperator{\gcd}{gcd}
+
+\newcommand\ideals{\mathop{\mathcal{I}}}
+\newcommand\filters{\mathop{\mathcal{F}}}
+
+\newcommand\joinIr{\mathop{\mathcal{J}}}
+\newcommand\meetIr{\mathop{\mathcal{M}}}
+
+\DeclareMathOperator{\st}{st}
+
+\DeclareMathOperator{\group}{gp}
+
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\Ogroup}{O}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\SU}{SU}
+\DeclareMathOperator{\U}{U}
+
+\DeclareMathOperator{\Iso}{Iso}
+
+\DeclareMathOperator{\Pin}{Pin}
+\DeclareMathOperator{\Spin}{Spin}
+
+\DeclareMathOperator{\glAlg}{gl}
+\DeclareMathOperator{\slAlg}{sl}
+\DeclareMathOperator{\uAlg}{u}
+\DeclareMathOperator{\suAlg}{su}
+\DeclareMathOperator{\oAlg}{o}
+\DeclareMathOperator{\soAlg}{so}
+
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Ad}{Ad}
+\DeclareMathOperator{\ad}{ad}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator\atanh{arctanh}
+\DeclareMathOperator\sech{sech}
+\DeclareMathOperator\csch{csch}
+
+
+\DeclareMathOperator\id{id}
+\DeclareMathOperator\dom{dom}
+\DeclareMathOperator\codom{codom}
+\DeclareMathOperator\co{co}
+\DeclareMathOperator\coker{coker}
+\DeclareMathOperator\codim{codim}
+\DeclareMathOperator\im{im}
+\DeclareMathOperator\evalMap{ev}
+
+\DeclareMathOperator\Row{row}
+\DeclareMathOperator\Col{col}
+\DeclareMathOperator\Null{null}
+\DeclareMathOperator\Rank{rank}
+
+\newcommand\Expval[1]{\mathbb{E}\left[#1\right]}
+\newcommand\expval[1]{\left\langle #1 \right\rangle}
+\DeclareMathOperator\Var{Var}
+
+\DeclareMathOperator\vectorisation{vec}
+\DeclareMathOperator\Tr{Tr}
+\DeclareMathOperator\adj{adj}
+\DeclareMathOperator\Span{span}
+\DeclareMathOperator\Hom{Hom}
+\DeclareMathOperator\End{End}
+\DeclareMathOperator\Aut{Aut}
+\newcommand\Bounded{\mathop{\mathcal{B}}}
+\newcommand\Compact{\mathop{\mathcal{K}}}
+\newcommand\Fred{\mathop{\mathcal{F}}}
+
+\newcommand\cont{\mathop{\mathcal{C}}}
+
+\DeclareMathOperator\Cl{Cl}
+\DeclareMathOperator\cCl{\mathbb{C}l}
+
+\DeclareMathOperator\Ind{Ind}
+\DeclareMathOperator\Index{idx}
+
+\NewDocumentCommand{\grad}{}{%
+  \mathop{}\!% \mathop for good spacing before \nabla
+  \nabla}
+\NewDocumentCommand{\curl}{}{%
+  \mathop{}\!% \mathop for good spacing before \nabla
+  \nabla\times}
+\DeclareMathOperator\vnabla{\vec{\nabla}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\DeclareMathOperator\Res{Res}
+
+\newcommand\Normals{\mathop{\mathcal{N}}\nolimits}
+\newcommand\SelfAdjoints{\mathop{\mathcal{SA}}\nolimits}
+\newcommand\Projections{\mathop{\mathcal{P}}\nolimits}
+\newcommand\Unitaries{\mathop{\mathcal{U}}\nolimits}
+
+% --- Algebraic dual / topological dual / commutant ---
+\DeclareMathSymbol{\mlq}{\mathord}{operators}{``}
+\DeclareMathSymbol{\mrq}{\mathord}{operators}{`'}
+
+\newcommand\adual[1]{{#1}^*}
+\newcommand\abidual[1]{{#1}^{**}}
+\newcommand\tdual[1]{{#1}^\prime}
+\newcommand\tbidual[1]{{#1}^{\prime\prime}}
+\newcommand\comm[1]{{#1}\raisebox{-0.15em}{$\scaleobj{1.3}{\mrq}$}}
+% --- Define custom environments ---
+\newtcolorbox{note}{enhanced,sharp corners=all,colback=white,colframe=black,toprule=-1pt,bottomrule=-1pt,leftrule=1pt,rightrule=-1pt, overlay unbroken={
+\draw[black,line width=1pt] (frame.north west) -- ++(.2,0);
+\draw[black,line width=1pt] (frame.south west) -- ++(.2,0);
+}, overlay first={
+\draw[black,line width=1pt] (frame.north west) -- ++(.2,0);
+}, overlay last={
+\draw[black,line width=1pt] (frame.south west) -- ++(.2,0);
+}, left=2mm, top=2mm, bottom=2mm}
+
+%\newtcolorbox{practical}{enhanced,sharp corners=all,colback=white,colframe=black,toprule=0pt,bottomrule=0pt,leftrule=1pt,rightrule=0pt, overlay unbroken={
+%\draw[black,line width=1pt] (frame.north west) -- ++(.2,0);
+%\draw[black,line width=1pt] (frame.south west) -- ++(.2,0);
+%}, overlay first={
+%\draw[black,line width=1pt] (frame.north west) -- ++(.2,0);
+%}, overlay last={
+%\draw[black,line width=1pt] (frame.south west) -- ++(.2,0);
+%}, left=2mm, top=2mm, bottom=2mm}
+
+\newtcolorbox{example}{enhanced,sharp corners=all,colback=white,colframe=black,toprule=-1pt,bottomrule=-1pt,leftrule=1pt,rightrule=-1pt, overlay unbroken={
+\draw[black,line width=1pt] (frame.north west) -- ++(.2,0);
+\draw[black,line width=1pt] (frame.south west) -- ++(.2,0);
+}, overlay first={
+\draw[black,line width=1pt] (frame.north west) -- ++(.2,0);
+}, overlay last={
+\draw[black,line width=1pt] (frame.south west) -- ++(.2,0);
+}, title={\underline{Example}}, attach boxed title to top,
+boxed title style={empty,size=minimal,toprule=2pt,top=4pt},
+coltitle=black, left=2mm, top=2mm, bottom=2mm}
+
+%\newtcolorbox{params}{enhanced,sharp corners=all,colback=white,colframe=black,toprule=0pt,bottomrule=0pt,leftrule=1pt,rightrule=0pt, overlay unbroken={
+%\draw[black,line width=1pt] (frame.north west) -- ++(.2,0);
+%\draw[black,line width=1pt] (frame.south west) -- ++(.2,0);
+%}, overlay first={
+%\draw[black,line width=1pt] (frame.north west) -- ++(.2,0);
+%}, overlay last={
+%\draw[black,line width=1pt] (frame.south west) -- ++(.2,0);
+%}, left=2mm, top=2mm, bottom=2mm}
+
+\newtcolorbox{definition}{enhanced,sharp corners=all,colback=white,colframe=red,toprule=-1pt,bottomrule=-1pt,leftrule=1pt,rightrule=-1pt, overlay unbroken={
+\draw[red,line width=1pt] (frame.north west) -- ++(.2,0);
+\draw[red,line width=1pt] (frame.south west) -- ++(.2,0);
+}, overlay first={
+\draw[red,line width=1pt] (frame.north west) -- ++(.2,0);
+}, overlay last={
+\draw[red,line width=1pt] (frame.south west) -- ++(.2,0);
+}, %title={DEF}, attach boxed title to top, boxed title style={empty,size=minimal,toprule=2pt,top=4pt}, coltitle=red, left=2mm, top=2mm, bottom=2mm
+}
+
+\newtcolorbox{eigenschap}{enhanced,sharp corners=all,colback=white,colframe=green,toprule=0pt,bottomrule=0pt,leftrule=1pt,rightrule=0pt, overlay unbroken={
+\draw[green,line width=1pt] (frame.north west) -- ++(.2,0);
+\draw[green,line width=1pt] (frame.south west) -- ++(.2,0);
+}, overlay first={
+\draw[green,line width=1pt] (frame.north west) -- ++(.2,0);
+}, overlay last={
+\draw[green,line width=1pt] (frame.south west) -- ++(.2,0);
+}, left=2mm, top=2mm, bottom=2mm}
+% --- Define underlines ---
+\renewcommand{\ULdepth}{1.8pt}
+\contourlength{0.9pt}
+\renewcommand{\ULthickness}{.7pt}
+\newcommand{\udef}[1]{%
+\textcolor{red}{\uline{\phantom{#1}}}%
+  \llap{\contour{white}{#1}}%
+\index[definition]{#1}%
+}
+\newcommand{\ueig}[1]{%
+\textcolor{green}{\uline{\phantom{#1}}}%
+  \llap{\contour{white}{#1}}%
+}
+\newcommand{\undline}[1]{%
+\uline{\phantom{#1}}%
+  \llap{\contour{white}{#1}}%
+}
+% --- Important remark ---
+\newcommand{\remark}[1]{\begin{center}\textbf{#1}\end{center}}
+% --- Extra symbols ---
+\newcommand*{\twoheadrightarrowtail}{\mathrel{\rightarrowtail\kern-1.9ex\twoheadrightarrow}}
+
+\DeclareFontFamily{U}{mathb}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathb}{m}{n}{
+      <5> <6> <7> <8> <9> <10> gen * mathb
+      <10.95> mathb10 <12> <14.4> <17.28> <20.74> <24.88> mathb12
+      }{}
+\DeclareSymbolFont{mathb}{U}{mathb}{m}{n}
+\DeclareFontSubstitution{U}{mathb}{m}{n}
+\DeclareMathSymbol{\sqsubsetneq}    {3}{mathb}{"88}
+
+
+\DeclareFontFamily{OT1}{mbb}{\hyphenchar\font45}
+%
+\DeclareFontShape{OT1}{mbb}{m}{n}{
+      <5> <6> <7> <8> <9> <10> gen * mbb
+      <10.95> mbb10 <12> <14.4> mbb12 <17.28> <20.74> <24.88> mbb17
+      }{}
+\DeclareSymbolFont{mbb}{OT1}{mbb}{m}{n}
+%
+\DeclareFontShape{OT1}{mbb}{bx}{n}{
+      <5> <6> <7> <8> <9> <10> gen * mbb
+      <10.95> mbb10 <12> <14.4> mbb12 <17.28> <20.74> <24.88> mbb17
+      }{}
+\DeclareSymbolFont{mbb}{OT1}{mbb}{bx}{n}
+
+
+\DeclareMathSymbol{\bbomega}{0}{mbb}{"B8}
+% --- Defines pictures and graphics ---
+\makeatletter
+\def\circletransformation{%
+\pgfmathsetmacro{\myX}{\pgf@x*sin(\pgf@y)*.6}
+\pgfmathsetmacro{\myY}{\pgf@x*cos(\pgf@y)*.6}
+\setlength{\pgf@x}{\myX pt}
+\setlength{\pgf@y}{\myY pt}
+}
+\makeatother
+
+\tikzset{
+  apple/.pic={
+    \draw (0,1) .. controls (-.6,1.8) and (-1.3,.8) .. (-1.1,0) .. controls (-.9,-.8) and (-.3,-1.5) .. (0,-1) .. controls (.3,-1.5) and (.9,-.8) .. (1.1,0) .. controls (1.3,.8) and (.6,1.8) .. (0,1) -- (0,1.6);
+  }
+}
+% --- More settings ---
+\newlength\tindent
+\setlength{\tindent}{\parindent}
+\setlength{\parindent}{0pt}
+\renewcommand{\indent}{\hspace*{\tindent}}
+
+% Start at chapter zero:
+\setcounter{chapter}{-1}
+
+% Include \paragraph in ToC:
+\setcounter{tocdepth}{5}
+% Number \subsubsection:
+\setcounter{secnumdepth}{3}
+
+\graphicspath{ {./images/} }
+
+% =========================== Commath clone ========================
+% Differential (upface d)
+\DeclareMathOperator{\diff}{d \!}
+% Derivative (upface D)
+\DeclareMathOperator{\Diff}{D \!}
+
+% Command for partial derivatives. The first argument denotes the function and the second argument denotes the variable with respect to which the derivative is taken. The optional argument denotes the order of differentiation. The style (text style/display style) is determined automatically
+\providecommand{\pd}[3][]{\ensuremath{
+\frac{\partial{^{#1}}#2}{\partial{{#3}^{#1}}}
+}}
+
+% \tpd[2]{f}{k} denotes the second partial derivative of f with respect to k
+% The first letter t means "text style"
+\providecommand{\tpd}[3][]{\ensuremath{\mathinner{
+\tfrac{\partial{^{#1}}#2}{\partial{{#3}^{#1}}}
+}}}
+% \dpd[2]{f}{k} denotes the second partial derivative of f with respect to k
+% The first letter d means "display style"
+\providecommand{\dpd}[3][]{\ensuremath{\mathinner{
+\dfrac{\partial{^{#1}}#2}{\partial{{#3}^{#1}}}
+}}}
+
+% mixed derivative - analogous to the partial derivative command
+% \md{f}{5}{x}{2}{y}{3}
+\providecommand{\md}[6]{\ensuremath{
+\ifinner
+\tfrac{\partial{^{#2}}#1}{\partial{{#3}^{#4}}\partial{{#5}^{#6}}}
+\else
+\dfrac{\partial{^{#2}}#1}{\partial{{#3}^{#4}}\partial{{#5}^{#6}}}
+\fi
+}}
+
+% \tpd[2]{f}{k} denotes the second partial derivative of f with respect to k
+% The first letter t means "text style"
+\providecommand{\tmd}[6]{\ensuremath{\mathinner{
+\tfrac{\partial{^{#2}}#1}{\partial{{#3}^{#4}}\partial{{#5}^{#6}}}
+}}}
+% \dpd[2]{f}{k} denotes the second partial derivative of f with respect to k
+% The first letter d means "display style"
+\providecommand{\dmd}[6]{\ensuremath{\mathinner{
+\dfrac{\partial{^{#2}}#1}{\partial{{#3}^{#4}}\partial{{#5}^{#6}}}
+}}}
+
+
+% ordinary derivative - analogous to the partial derivative command
+\providecommand{\od}[3][]{\ensuremath{
+\ifinner
+\tfrac{\diff{^{#1}}#2}{\diff{{#3}^{#1}}}
+\else
+\dfrac{\diff{^{#1}}#2}{\diff{{#3}^{#1}}}
+\fi
+}}
+
+\providecommand{\tod}[3][]{\ensuremath{\mathinner{
+\tfrac{\diff{^{#1}}#2}{\diff{{#3}^{#1}}}
+}}}
+\providecommand{\dod}[3][]{\ensuremath{\mathinner{
+\dfrac{\diff{^{#1}}#2}{\diff{{#3}^{#1}}}
+}}}
+
+% functional derivative - analogous to the partial derivative command
+\providecommand{\fd}[3][]{\ensuremath{
+\ifinner
+\tfrac{\delta{^{#1}}#2}{\delta{{#3}^{#1}}}
+\else
+\dfrac{\delta{^{#1}}#2}{\delta{{#3}^{#1}}}
+\fi
+}}
+
+\providecommand{\tfd}[3][]{\ensuremath{\mathinner{
+\tfrac{\delta{^{#1}}#2}{\delta{{#3}^{#1}}}
+}}}
+\providecommand{\dfd}[3][]{\ensuremath{\mathinner{
+\dfrac{\delta{^{#1}}#2}{\delta{{#3}^{#1}}}
+}}}
+
+% --- Code style ---
+\lstdefinestyle{program}{numbers=left}
+\lstdefinestyle{snippet}{}
+\usepackage{courier}
+\definecolor{verylightgray}{gray}{0.95}
+\lstset{basicstyle=\selectfont\ttfamily, backgroundcolor=\color{verylightgray}}
+% --- Syntax environment ---
+\newenvironment{syntax}{\begin{center}\ttfamily \small}{\end{center}}
+\newcommand{\opt}[1]{\textbf{(}#1\textbf{)?}}
+\newcommand{\optnb}[1]{#1\textbf{?}}
+\newcommand{\mult}[1]{\textbf{(}#1\textbf{)*}}
+\newcommand{\multnb}[1]{#1\textbf{*}}
+\newcounter{index}
+\newcommand\opts[1]{%
+  \getargsC{#1}%
+  \textbf{(} \argi%
+  \setcounter{index}{1}
+  \whiledo{\value{index} < \narg}{%
+    \stepcounter{index}%
+     \textbf{|} \csname arg\romannumeral\value{index}\endcsname \hspace{.8em}%
+  }\textbf{)}%
+}
+
+
+
+% --- End setup ---

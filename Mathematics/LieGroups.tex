@@ -1,0 +1,501 @@
+\chapter{Lie groups and algebras}
+
+\section{Lie Group}
+A Lie group is a topological group that is also a differential manifold. This means we can apply differentials, which is of course very important. So important in fact that Sophus Lie called Lie groups infinitesimal groups when he first introduced them. Not only that, but it means we can consider tangent spaces, which will also be important later. TODO better justification
+
+Bearing in mind the link between the topology and group properties explored in the section on topological groups, we quite naturally arrive at the following definition:
+\begin{definition}
+A \udef{Lie group} is a smooth manifold $G$ which is also a group and such that both the group product $G\times G \to G$ and the inverse map $G \to G$ are smooth.
+\end{definition}
+
+There is a particular type of Lie group that will be of particular importance to us, namely the matrix Lie group. In fact we will almost exclusively consider matrix Lie groups.
+
+\subsection{Matrix Lie group}
+For matrix groups there is a simpler condition to see whether it is a Lie group or not:
+\begin{eigenschap}
+All \ueig{closed subgroups} of $\GL(n, \C)$ are matrix Lie groups.
+\end{eigenschap}
+The condition that it be closed means that for every sequence in the Lie group the limit needs to be in the Lie group as well, if there is one. (Or you can say every Cauchy sequence in the Lie group has to have a limit in the Lie group). This is a technicality and is satisfied for most of the interesting subgroups of $\GL(n, \C)$. 
+
+We have already seen that all subgroups of $\GL(n, \C)$ are topological groups. To prove the assertion then we must only verify that it is a smooth manifold. Because $\C^{n\times n}$ is a manifold and a matrix Lie group is a subset of $\C^{n\times n}$, the matrix Lie group inherits Hausdorffness and second-countability from $\C^{n\times n}$. To show it is smooth and locally homeomorphic to $\R^{m}$ in every point, we will explicitly construct such homeomorphisms using the matrix exponential.
+
+\subsubsection{Exponential maps}
+The homeomorphisms will be constructed based on the exponential map.
+\[ \exp: \GL(n,\C) \to \GL(n,\C): X \mapsto e^X \]
+This map is not a bijection, however if we restrict it to a neighbourhood of $\mathbb{0}$, it is locally a bijection. In fact it maps that neighbourhood to a neighbourhood of $\mathbb{1}$. More formally
+\begin{eigenschap}
+There exists a neighbourhood $U$ of $\mathbb{0}$ and a neighbourhood $V$ of $\mathbb{1}$ such that the exponential mapping takes $U$ homeomorphically onto $V$.
+\end{eigenschap}
+This result should not be surprising. For $X$ close to $\mathbb{0}$ we have the approximation $e^{X} \approx \mathbb{1} + X + \mathcal{O}(X^2)$. So for matrices in a small neighbourhood $U$ around $\mathbb{0}$ the exponential mapping can be seen as approximately linear, which is injective. In order to get surjectivity, we restrict the codomain of the mapping to the image of $U$ under the exponential mapping. This is a neighbourhood of $\mathbb{1}$ because $e^0 = \mathbb{1}$. 
+
+We have obtained a bijection and because the matrix exponential is continuous, this restriction of it is also continuous. We would now like to show that the map maps open sets in our matrix Lie group, which we shall now call $G$, to open sets of $\R^{m}$. Unfortunately it doesn't. There is no reason why $\mathbb{0}$ or any matrices in $U$ should be elements of $G$. (Remember that the relevant group operation for matrix groups is the matrix multiplication, for which the neutral element is $\mathbb{1}$; the matrix $\mathbb{0}$ is of no particular importance in this context.) Being a group, the matrix Lie group must contain $\mathbb{1}$; being a topological group, it must contain a neighbourhood of $\mathbb{1}$; being a subspace of $\GL(n,\C)$ endowed with the subspace topology, the intersection of $V$ with that neighbourhood is an open set in $G$ which we will call $V'$.
+
+So if we invert the restricted matrix exponential, we get a homeomorphism from \undline{one} neighbourhood of $G$ to $\GL(n,\C)$, which can then be composed with a homeomorphism to $\R^m$.
+
+\begin{definition}
+The inverse map $\exp^{-1}: V' \to U$ is called the \udef{logarithm}.
+\end{definition}
+
+From this we can construct a homeomorphism from a neighbourhood of any element $A$ of $G$. By multiplying each element of $V'$ with $A$ we get a neighbourhood $V_A$ of $A$. We define the following homeomorphism on $V_A$: multiply by $A^{-1}$ (this is bijective due to associativity of the group operation and continuous due to the definition of topological groups) and then send through the inverted, restricted matrix exponential. This composition of homeomorphisms is a homeomorphism. So for each element $A \in G$ we can find a neighbourhood $V_A$ that is homeomorphic to $\R^m$ thanks to this homeomorphism.
+
+\begin{example}
+TODO Finite Lie group
+\end{example}
+
+
+\subsubsection{Lie algebra of a matrix Lie group}
+TODO: justification
+
+\begin{definition}
+Let $G$ be a matrix Lie group. The \udef{Lie algebra} of $G$, denoted $\mathfrak{g}$, is the set of all matrices $X_t$ such that $e^{itX_t}$ is in $G$ for all \undline{\textbf{real}} numbers $t$. We call the matrices $X_t$ \udef{generators} of the group.
+\end{definition}
+
+\begin{note}
+Now here we have a complication. There are actually two conventions. The definition above is the convention most often used in physics. In the mathematics literature the Lie algebra in usually defined using $e^{tX_t}$, not $e^{itX_t}$. The physics convention gives rise to Hermitian generators in the algebras of $\U(n)$ and $\SU(n)$. This is useful because we are often interested in turning them into quantum operators, which correspond to observables only if they are Hermitian. The downside of this convention however is that it makes our life much more difficult in other places, and it even means that some definitions don't make any sense. In what follows we will generally be using the physics convention. We will however make use of the mathematics convention when the need arises. Also if there are interesting differences in the mathematics definition, we will mention those as well.
+\end{note}
+
+To try to grasp why the definition given above is useful, we introduce the notion of parametrization of group elements.
+\subsubsection{Parametrization of group elements.}
+When first introducing the matrix groups, we pointed out how the elements could be written in function of real parameters. We now make this notion more concrete and begin by defining a one-parameter subgroup.
+\begin{definition}
+A function $A : \R \to \GL(n, \C)$ is called a \udef{one-parameter subgroup} of $\GL(n, \C)$ if
+\begin{enumerate}
+\item $A$ is continuous,
+\item $A(0) = \mathbb{1}_n$,
+\item $A(t+s) = A(t)A(s)$ for all $t,s \in \R$.
+\end{enumerate}
+\end{definition}
+If $A$ is a one-parameter subgroup of $\GL(n,\C)$, then it has the following property:
+\begin{eigenschap}
+There exists a unique $n\times n$ complex matrix $X$ such that
+\[ A(t) = e^{tX} \]
+\end{eigenschap}
+
+So $X_t$ is in $\mathfrak{g}$ if and only if the one-parameter subgroup generated by $X_t$ lies in G. Conversely for any one-parameter subgroup that is a subgroup of G, there exists a generator and that generator is by definition part of the algebra.
+
+Before continuing we shall consider some examples of algebras of matrix Lie groups. In general we shall call the algebra of a Lie group the lowercase version of the name of the Lie group. E.g., the Lie algebra of $\GL(n, \C)$ is $\glAlg(n,\C)$.
+
+\begin{example}
+\begin{enumerate}
+\item If $X$ is any $n\times n$ complex matrix, then $e^{itX}$ is invertible. Thus the Lie algebra, $\glAlg(n,\C)$, of the invertible matrices, $\GL(n,\C)$, is the space of all complex $n\times n$ matrices.
+\item If we use the mathematical convention, then the Lie algebra of $\GL(n,\R)$ is the space of all real $n\times n$ matrices, denoted $\glAlg(n,\R)$. To prove this we first remark that is $X$ is any real $n\times n$ matrix, then $e^{tX}$ will be invertible and real. Conversely, if $e^{tX}$ is real for all real $t$, then $X=\left.\od{}{t}e^{tX}\right|_{t=0}$ will also be real. Obviously in the physics convention the above no longer holds true.
+
+\item The Lie algebra $\slAlg(n,\C)$ of $\SL(n,\C)$ is the space of all complex $n \times n$ matrices with zero trace. To prove this we use that
+\[ \det(e^X) = e^{\Tr(X)}. \]
+If $\Tr(X) = 0$, then $\det(e^{itX}) = 1$ for all real numbers $t$. On the other hand, if $X$ is any $n\times n$ matrix such that $\det(e^{itX}) =1$ for all $t$, then $e^{it\Tr(X)} = 1$ for all $t$. This means that $it\Tr(X)$ is an integer multiple of $2\pi i$ for all $t$, which is only possible if $\Tr(X) = 0$.
+
+\item Lie algebra of $\U(N)$. If $X$ is to be a generator in our algebra, we need $e^{itX}$ to be unitary. So
+\[ \left(e^{itX}\right)^\dagger = \left(e^{itX}\right)^{-1} = e^{-itX}. \]
+We also have that
+\[ \left(e^{itX}\right)^\dagger = e^{-itX^\dagger}. \]
+Which gives us
+\[ e^{-itX} = e^{-itX^\dagger}. \]
+Differentiating at $t=0$ we see that the generators have to be Hermitian ($X = X^\dagger$).
+
+We can also prove this by writing out the definition of the matrix exponential. 
+\[ U(N) \ni U = e^{it_iX_i} \]
+\begin{align}
+\mathbb{1} = U^\dagger U &= (\mathbb{1}-it_i X_i^\dagger + \ldots )(\mathbb{1}+it_i X_i + \ldots) \\
+&= \mathbb{1} + it_i(X_i^\dagger - X_i) + \ldots = \mathbb{1}
+\end{align}
+So we require the generators to be Hermitian matrices ($X_i^\dagger = X_i$). We have $N^2$ independent $X_i$ that are Hermitian. 
+\[ \uAlg(N) = \{ H \in \GL(N,\C), H^\dagger = H \} \]
+In the mathematics convention this condition becomes that the generators have to be skew-Hermitian, i.e. $X_i^\dagger = -X_i$.
+
+\item Lie algebra of $\SU(N)$. Combining the arguments for the algebras of the unitary and special linear group, we see that the generators must be unitary and of trace zero. In other words the algebra is given by
+\[ \suAlg(N) = \{ H\in\uAlg(N), \Tr[H] = 0 \} \]
+and has dimension $N^2-1$.
+
+For $N=2$ we have:
+\[ \begin{cases}
+\suAlg(2) = \{\sigma_1, \sigma_2, \sigma_3\} \\
+\uAlg(2) = \{\sigma_1, \sigma_2, \sigma_3, \mathbb{1}\}
+\end{cases} \]
+Where
+\[ \sigma_1 = \begin{pmatrix}
+0 & 1 \\ 1 & 0
+\end{pmatrix}, \qquad \sigma_2 = \begin{pmatrix}
+0 & -i \\ i & 0
+\end{pmatrix}, \qquad \sigma_3 = \begin{pmatrix}
+1 & 0 \\ 0 & -1
+\end{pmatrix}\]
+
+\item Lie algebra of $\Ogroup(N)$. As explained above, if we want the algebra to be real, we need to make use of the mathematical convention. So $O=e^{t_iX_i}$.
+\begin{align}
+\mathbb{1} = O^\intercal O = e^{t_iX_i^\intercal}e^{t_iX_i} &= (\mathbb{1}+t_i X_i^\intercal + \ldots )(\mathbb{1}+t_i X_i + \ldots) \\
+&= \mathbb{1} + t_i(X^\intercal_i + X_i) + \ldots
+\end{align}
+So we require the generators to be antisymmetric matrices ($X_i^\intercal = -X_i$).
+\[ \oAlg(N) = \{ X \in \GL(N,\R), X^\intercal = -X \} = \soAlg(N) \]
+The dimension of $\oAlg(N)$ is $\frac{N(N-1)}{2}$.
+\end{enumerate}
+\end{example}
+
+The Lie algebra as defined above is in some way prototypical. I.e. when we make this notion more abstract, we want the abstract notion to behave in a similar fashion and have many of the same properties. Of course to do that we first need an idea of what properties these Lie algebras actually have. This is what we will be exploring next.
+
+\begin{eigenschap}
+If $G$ is a \textit{connected} matrix Lie group, then every $A \in G$ can be written in the form
+\[ A = e^{X_1}e^{X_2}\ldots e^{X_m} \]
+for some $X_1, X_2, \ldots, X_m$ in $\mathfrak{g}$
+\end{eigenschap}
+
+\begin{eigenschap}
+Every continuous homomorphism between two matrix Lie groups is smooth.
+\end{eigenschap}
+
+\begin{eigenschap}
+A matrix $X$ is in $\mathfrak{g}$ if and only if there exists a smooth curve $\gamma$ in $\C^{n\times n}$ such that
+\begin{enumerate}
+\item $\gamma(t)$ lies in $G$ for all $t$;
+\item $\gamma(0) = \mathbb{1}$;
+\item $\left.\od{\gamma}{t}\right|_{t=0} = X$
+\end{enumerate}
+Thus $\mathfrak{g}$ is the tangent space at the identity to $G$.
+\end{eigenschap}
+
+
+\begin{itemize}
+\item If we assume $X \in \mathfrak{g}$, we can take $\gamma(t) = \exp(tX)$. This $\gamma(t)$ satisfies the points of the proposition above.
+\item We now assume $\gamma(t)$ is a smooth curve in $G$ with $\gamma(0) = \mathbb{1}$.
+\begin{align}\od{\gamma(t)}{t} &= \lim_{\delta t \to 0} \frac{\gamma(t+\delta t)-\gamma(t)}{\delta t} = \gamma(t)\left(\lim_{\delta t \to 0}\frac{\gamma(\delta t)-\gamma(0)}{\delta t}\right) \\ &= \gamma(t)\left.\od{\gamma}{t}\right|_{t=0} = \gamma(t)X \end{align}
+From which we get that
+\[ \gamma(t) = \exp{tX} \]
+\end{itemize}
+
+Now this is interesting, so interesting in fact that we use this last proposition to construct a general definition of a Lie algebra associated to a Lie group.
+
+We can now also reintroduce the physics convention. We just divide all elements of any algebra by the imaginary unit $i$. The elements of this algebra may not be closed under the bracket operation, but that does not matter as we have a different definition to work from now: they are elements of the tangent space at identity to $G$, rescaled with a fractor $-i$.
+
+We have already seen that in the mathematics convention the commutator belongs to the algebra (remembering to sum according to Einstein notation):
+\[ [X_i, X_j] = f_{ij}^k X_k \]
+Where we call $f_{ij}^k$ a \udef{structure constant} (with respect to the chosen basis of course). In the physics convention, we obviously need to deal with the factor $i$:
+\[ [X_i, X_j] = if_{ij}^k X_k \]
+\begin{eigenschap}
+From the antisymmetry of the bracket we get:
+\[ f^k_{ij} + f^k_{ji} = 0 \]
+From the Jacobi identity we get:
+\[ f^m_{ie}f^e_{jk} + f^m_{je}f^e_{ki} + f^m_{ke}f^e_{ij} = 0 \]
+\end{eigenschap}
+
+And lastly a final property of Lie algebras of matrix Lie groups follows straight from the \ueig{Baker-Campbell-Hausdorff formula}: 
+\[ e^{A}e^{B} = e^C \qquad \text{with} \qquad C=A+B+\frac{1}{2}[A,B] + \frac{1}{12}([A,[A,B]]+[B,[B,A]]) + \ldots  \]
+\begin{eigenschap}
+To know the (local) structure of a Lie group close to the identity one \ueig{only} needs to know the commutator of the generators $[X_i,X_j]$
+\end{eigenschap}
+
+\section{Lie Algebra}
+Again we will start by restricting our attention to Lie algebra's of matrix Lie groups. That way we can give some examples that will (hopefully) aid in the understanding of the general case.
+
+
+\subsection{Definition}
+
+\begin{eigenschap}
+Let $G$ be a matrix Lie group, with Lie algebra $\mathfrak(g)$. Let $X$ and $Y$ be elements of $\mathfrak{g}$. Then
+\begin{enumerate}
+\item $sX \in \mathfrak{g}$, for all \undline{real} numbers $s$,
+\item $X+Y \in \mathfrak{g}$,
+\item $-i(XY - YX)\in \mathfrak{g}$.
+\end{enumerate}
+\end{eigenschap}
+The first two points mean that the Lie algebra is actually a vector space over the \undline{real} numbers. This is important and serves as the crux of our first generalisation of Lie algebras, so we will have a quick look at the proofs of the statements above. 
+
+\begin{enumerate}
+\item This first point is fairly straightforward, since $e^{t(sX)} = e^{(ts)X}$, which must be in $G$ if $X$ is in $\mathfrak{g}$.
+\item If $X$ and $Y$ commute, this is again immediate. If they don't however we need to do a little more work. We start from the Lie product formula:
+\[ e^{t(X+Y)} = \lim_{m\to\infty} \left(e^{\frac{tX}{m}}e^{\frac{tY}{m}}\right)^m \]
+Clearly if $X, Y \in \mathfrak{g}$,  for every $m$, $e^{\frac{tX}{m}}$ and $e^{\frac{tY}{m}}$ are elements of $G$. Since $G$ is a group, $\left(e^{\frac{tX}{m}}e^{\frac{tY}{m}}\right)^m$ is in $G$. Now because $G$ is a matrix Lie group, and thus \textit{closed} in $\GL(n, \C)$, the limit must also be in $G$. (If that is the limit is in $\GL(n, \C)$, which it is because $e^{t(X+Y)}$ is invertible). This shows that $X+Y$ is in $\mathfrak{g}$.
+\item The third point follows from the product rule of the differential operator. Alternatively we can use the Baker-Campbell-Hausdorff formula:
+\[e^{tX}e^{sY} = e^{tX+sY+ \frac{ts}{2}[X,Y] + \ldots}\]
+This together with the first two points shows the third point.
+\end{enumerate}
+
+We have shown that the Lie algebra is a vector space over the real numbers, but crucially a Lie algebra is in general not a vector space over complex numbers, even if it consists of matrices with complex entries. For an example we consider the algebra $\suAlg(n)$, which consists of Hermitian matrices with zero trace. Assume $X$ is such a matrix. Now because $(iX)^\dagger = -iX^\dagger = -iX$, $iX$ is not Hermitian. As a consequence it cannot be an element of $\suAlg(n)$ and thus $\suAlg(n)$ is not a complex vector space.
+
+If we follow the mathematical definition, the third point becomes $XY - YX \in \mathfrak{g}$. This will be important later. In fact it's so important we will give it name.
+\begin{definition}
+Given two $n \times n$ matrices $A$ and $B$, the \udef{bracket} (or \udef{commutator}) of $A$ and $B$, denoted $[A,B]$ is defined to be
+\[ [A,B] = AB - BA \]
+\end{definition}
+
+Using the mathematical convention, the Lie algebra of any matrix Lie group is closed under brackets. This is in general not the case using the physics convention. Take for example the algebra $\suAlg(2)$, generated by $\{\sigma_1, \sigma_2, \sigma_3\}$. Then
+\[ [\sigma_1,\sigma_2] = \begin{pmatrix}
+2i & 0 \\ 0 & -2i
+\end{pmatrix} \]
+which is not Hermitian and thus not an element of $\suAlg(2)$! This also means that $\suAlg(n)$ (with $n>1$) is not an algebra in according to the definition we are about to give.
+
+Despite the problems with the conventions, these properties seem nice. We would like to study things that exhibit these properties in general. So based on this we define a Lie algebra in general in the following way.
+
+\begin{definition}
+A (finite-dimensional) real or complex \udef{Lie algebra $\mathfrak{g}$} is an $n$-dim (real or complex) vector space with the following map:
+\[[\cdot,\cdot]: \mathfrak{g}\times\mathfrak{g} \to \mathfrak{g}: (X,Y) \mapsto [X,Y]\]
+that has the following properties
+\begin{enumerate}
+\item Bilinear: $\forall X,Y,Z \in \mathfrak{g}, \qquad a,b \in \R \quad (\text{or} \C)$:
+\[ [aX + bY, Z] = a[X,Z] + b[Y,Z] \]
+\item Antisymmetric: $\forall X,Y \in \mathfrak{g}$
+\[ [X,Y] = -[Y,X] \]
+\item Satisfies the \udef{Jacobi identity}: $\forall X,Y,Z \in \mathfrak{g}$
+\[ [X,[Y,Z]] + [Y,[Z,X]] + [Z,[X,Y]] = 0 \]
+\end{enumerate}
+\end{definition}
+The only surprising thing in this definition is the appearance of the Jacobi identity. It can be thought of as a condition that takes the place of associativity, but is weaker. In fact every Lie algebra can be embedded in into some associative algebra so that the bracket corresponds to the operation $XY - YX$. 
+
+If we follow the mathematical convention, the Lie algebra of a matrix Lie group is a real Lie algebra in the sense of the above definition. Unfortunately this is not true for the physics convention.
+
+As noted above, this notably means $\suAlg(n)$ (with $n>1$) is not an algebra in according this definition. There are several ways to solve this problem. The obvious one would be to redefine the bracket operator when using the physics convention (i.e. say that $[A,B] = -i \left(AB - BA\right)$). This is usually not done. We could also extend $\suAlg(n)$ to include $iX$ for every $X \in \suAlg(n)$ (this is called the \udef{complexification} of $\suAlg(n)$), which would mean that $\suAlg(n)$ is actually $\slAlg(n)$ (i.e. we drop the condition that the elements of $\suAlg(n)$ have to be Hermitian). This is apparently actually done sometimes in the physics literature. Or finally we can do what we will do in these notes, namely forget about this definition, use the definition we will motivate in the next section and write the extra $i$ whenever it pops up.
+
+Furthermore for every finite-dimensional real or complex vector space $V$, let $\glAlg(V)$ denote the space of linear maps of $V$ into itself. Then $\glAlg(V)$ is a real or complex Lie algebra with the bracket operation $[A,B] = AB - BA$.
+
+\subsection{Lie algebra of a Lie group}
+
+We finally define the Lie algebra:
+\begin{definition}
+The \udef{Lie algebra} of a Lie group $G$ is the tangent space at the identity with the bracket operation defined by
+\[ [v,w] = [X^v, X^w]_e. \]
+\end{definition}
+
+
+
+\section{Representations of Lie algebras}
+TODO: representations of Lie groups: Representation vs linear group action. Continuous groups must be represented on the physical Hilbert space by unitary operators $U(T(\theta))$.
+
+
+We start with some definitions.
+
+\begin{definition}
+A \udef{homomorphism} between two algebras $\mathfrak{g}_1, \mathfrak{g}_2$ is a map that preserves $[,]$:
+\[ \phi: \mathfrak{g}_1 \to \mathfrak{g}_2: [X_1,X_2] \mapsto \phi([X_1,X_2]) = [\phi(X_1), \phi(X_2)] \]
+If the map is invertible, it is called an \udef{isomorphism}.
+\end{definition}
+
+Every Lie group homomorphism gives rise to a Lie algebra homomorphism.
+\begin{eigenschap}
+Let $G$ and $H$ be matrix Lie groups, with Lie algebras $\mathfrak{g}$ and $\mathfrak{h}$ respectively. Suppose that $\Phi: G \to H$ is a Lie group homomorphism. Then there exists a unique real linear \ueig{homomorphism} $\phi: \mathfrak{g} \to \mathfrak{h}$ such that
+\[\Phi\left(e^{X}\right) = e^{\phi(X)}\]
+for all $X \in \mathfrak{g}$. The map $\phi$ has the following additional properties:
+\begin{enumerate}
+\item $\phi\left(AXA^{-1}\right) = \Phi(A)\phi(X)\Phi(A)^{-1}$, for all $X\in\mathfrak{g}, A \in G$
+\item $\phi(X) = \left.\od{}{t}\Phi \left(e^{tX}\right)\right|_{t=0}$, for all $X \in \mathfrak{g}$
+\end{enumerate}
+\end{eigenschap}
+
+\begin{definition}
+An \udef{algebra representations} is a homomorphism between an abstract algebra and the space of linear operators.
+\[ D: \mathfrak{g} \to \GL(n,\R) \; \text{or} \; \GL(n,\C): X \mapsto D(X) \]
+A representation is said to be faithful if it is injective.
+\end{definition}
+
+\begin{eigenschap}
+\ueig{Ado's theorem}:
+Any finite dimensional Lie algebra admits a faithful matrix representation.
+\end{eigenschap}
+This nontrivial theorem means that every Lie algebra can be viewed as a subalgebra of $\glAlg(n,\C)$, and thus as an algebra of a matrix Lie group.
+
+\subsection{Adjoint representation}
+
+\begin{eigenschap}
+Let $G$ be a matrix Lie group, with Lie algebra $\mathfrak(g)$. Let $X$ be an element of $\mathfrak{g}$ and $A$ an element of $G$.
+\[ AXA^{-1} \in \mathfrak{g} \]
+\end{eigenschap}
+This means that the following definition makes sense:
+\begin{definition}
+Let $G$ be a matrix Lie group with algebra $\mathfrak{g}$. Then for each $A \in G$ we define the linear map $\Ad_A: \mathfrak{g} \to \mathfrak{g}$ by the formula
+\[ \Ad_A(X) = AXA^{-1} \]
+\end{definition}
+\begin{eigenschap}
+\begin{itemize}
+\item $\Ad_A^{-1} = \Ad_{A^{-1}}$.
+\item The map $A \to \Ad_A$ is a group homomorphism of $G$ into $\GL(\mathfrak{g})$.
+\item $\Ad_A([X,Y]) = [\Ad_A(X),\Ad_A(Y)] \qquad \forall A\in G, X,Y \in \mathfrak{g}$.
+\end{itemize}
+\end{eigenschap}
+Because $A \to \Ad_A$ is a group homomorphism, we have an associated algebra homomorphism, $X \mapsto \ad_X$.
+\begin{eigenschap}
+The associated Lie algebra map $\ad: \mathfrak{g} \to \glAlg(\mathfrak{g})$ is given by
+\[ \ad_X(Y) = [X,Y] \]
+\end{eigenschap}
+This last property generalises well and we can use it to define the adjunct map for a Lie algebra in general.
+
+The maps $\Ad$ and $\ad$ give the \udef{adjoint representations} of $G$ and $\mathfrak{g}$.
+
+The adjoint representation $\ad_{X_i}$ is linear, and thus can be represented as a matrix. So for every $X_i$ in the basis, we have a $T_i$ that maps the coordinates of a $Y \in \mathfrak{g}$ to $[X_i, Y]$. If we write $Y = c_1X_1 + c_2X_2 + c_3X_3 + \ldots$, then
+\[ T_i \begin{pmatrix}
+c_1 \\ c_2 \\ \vdots
+\end{pmatrix} = \begin{pmatrix}
+if^1_{11}c_1 + if^1_{12}c_2 + \hdots \\
+if^2_{11}c_1 + if^2_{12}c_2 + \hdots \\
+\vdots
+\end{pmatrix} \]
+So
+\[ T_i = \begin{pmatrix}
+if^1_{11} & if^1_{12} & \ldots \\
+if^2_{11} & if^2_{12} & \ldots \\
+\vdots
+\end{pmatrix} \qquad \text{or} \qquad \left(T_i\right)^k_j = if^k_{ij}\]
+These matrices have the following property (derived from the Jacobi identity):
+\begin{eigenschap}
+\[ [T_i,T_j] = -if_{ij}^k T_k \]
+\end{eigenschap}
+ 
+
+\begin{definition}
+The \udef{Cartan-Killing form} 
+\begin{align}
+g_{ij} &\equiv \Tr[T_i\cdot T_j] \\
+&=-f_{ik}^ef_{je}^k
+\end{align}
+\end{definition}
+
+\begin{definition}
+The \udef{quadratic Casimir} in a given representation of an algebra is given by
+\[ C_2 = g^{ij}X_iX_j \]
+This is an \ueig{invariant} for a specific representation.
+\end{definition}
+
+\begin{eigenschap}
+The quadratic Casimir \ueig{commutes} with any element $X$ of the algebra:
+\[ [C_2,X] = 0 \]
+In general $C_2 \notin \mathfrak{g}$
+\end{eigenschap}
+A \udef{Casimir} is an operator that commutes with all generators. 
+\begin{example}
+The angular momentum operators have to structure of $\suAlg(2)$
+\begin{align}
+[L_i,L_j] &= i\epsilon_{ijk}L_k \qquad (L_i \; \text{generators}) \\
+[L^2, L_i] &= 0
+\end{align}
+\end{example}
+
+\begin{example}
+Find the Casimir operator of the fundamental representation of $\suAlg(2)$.
+
+We call $\tau_i = \frac{\sigma_i}{2}$, so that
+\[ [\tau_i, \tau_j] = i\epsilon_{ijk}\tau_k \]
+We then compute
+\begin{align}
+C_2 &= \sum_{i,j}g^{ij}\tau_i\tau_j = \frac{1}{2}\sum_{i,j}\delta_{ij}\tau_i\tau_j = \frac{3}{8}\mathbb{1} \\
+&= \frac{1}{2}s(s+1) \mathbb{1} \qquad \Rightarrow \qquad s= \tfrac{1}{2}
+\end{align}
+Where we used that $g^{ij} = (g_{ij})^{-1}$ and $g_{ij} = \epsilon_{ike}\epsilon_{jke} = 2\delta_{ij}$
+\end{example}
+
+\subsection{Representations of $\suAlg(2)$}
+\subsubsection{The algebras $\suAlg(2)$ and $\soAlg(3)$} are isomorphic
+\[ \soAlg(3) = \{ X\in \GL(3,\R), X^\intercal = -X \} \]
+\[ X_1 = \begin{pmatrix}
+0 & 0 & 0 \\ 0 & 0 & 1 \\ 0 & -1 & 0
+\end{pmatrix}, \qquad X_2 = \begin{pmatrix}
+0 & 0 & -1 \\ 0&0&0 \\ 1&0&0
+\end{pmatrix}, \qquad X_3 = \begin{pmatrix}
+0&1&0 \\ -1&0&0 \\ 0&0&0
+\end{pmatrix} \]
+
+\begin{example}
+Show that $[X_i,X_j] = -\epsilon_{ijk}X_k$
+\end{example}
+
+Let $J_i$ be
+\[ J_i = -iX_i \]
+so that $[J_i,J_j] = i\epsilon_{ijk}J_k$. Then $J_i$ are generators of $\suAlg(2)$.
+\remark{The groups have the same algebra, which means they are the same around identity}
+\subsubsection{Building the $\suAlg(2)$ representation} we run into the problem that the $J_i$ cannot be diagonalised simultaneously, i.e. they don't commute.
+So we choose a basis in which $J_3$ is diagonal, then we define
+\[ J_\pm \equiv J_1 \pm iJ_2 \]
+With the following properties:
+\[ \begin{cases}
+[J_3,J_\pm] = [J_3,J_1]\pm i[J_3,J_2] = iJ_2 \pm J_1 = \pm J_\pm \\
+[J_+, J_-] = i[J_2,J_1] - i[J_1,J_2] = 2J_3
+\end{cases} \]
+We now notate a basis of states $V$ with $\ket{j,m}$
+\[ J_3\ket{j,m} = m\ket{j,m} \]
+where $m$ is an eigenvalue of $J_3$ and $j$ is the biggest eigenvalue ($m\leq j$). We can find enough eigenvectors to make the basis because $J_3$ is diagonal.
+
+From the relation 
+\begin{align}
+J_3 \left(J_\pm\ket{j,m}\right) &= \left(J_\pm J_3 + [J_3,J_\pm]\right)\ket{j,m} \\
+&= J_\pm m \ket{j,m} \pm J_\pm \ket{j,m} \\
+&= (m\pm 1)\left(J_\pm\ket{j,m}\right)
+\end{align}
+we get the following
+\[ \begin{cases}
+J_+\ket{j,j} = 0 \qquad (j>0) \\
+J_-\ket{j,j_-} = 0 \qquad (j_- \;\text{smallest eigenvalue of}\; J_3)
+\end{cases} \]
+
+We also see that the eigenvalues are spaced an integer apart, from $j_-$ to $j$.
+
+
+Because the trace of a commutator is zero (as the trace is cyclic), we also have that 
+\[ \Tr[J_3] = \frac{1}{2}\Tr([J_+,J_-]) = 0 = \sum_{j_-}^j m \]
+which means that
+\[ 0 = j + (j-1) + \ldots + (j_-+1) +j_- \quad \Rightarrow \quad j+j_- = 0 \quad \Rightarrow \quad j_- = -j \]
+
+So the dimension of $V$ is $2j+1$, which must be an integer, meaning that $j$ must be half-integer.
+
+We also impose the following normalisation:
+\[ \braket{j,m} = 1 \qquad \braket{j,j} = 1\]
+
+For a generic state $\ket{j,m}$ we get the following:
+\begin{align}
+J_3\ket{j,m} &= m\ket{j,m} \\
+J_+\ket{j,m} &= [(j+1+m)(j+m)]^{1/2} \ket{j,m+1} \\
+J_-\ket{j,m} &= [(j+1-m)(j+m)]^{1/2} \ket{j,m-1}
+\end{align}
+
+\begin{example}
+Fundamental representation of $\suAlg(2)$ (i.e. of dimension $2$).
+
+\[ j=1/2 \qquad \begin{cases}
+\ket{1/2,+1/2} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} \\
+\ket{1/2,-1/2} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+\end{cases} \]
+\[ J_3 = - \frac{1}{2} \begin{pmatrix}
+-1 & 0 \\ 0 & 1
+\end{pmatrix} = \frac{\sigma_3}{2} \]
+\[ \begin{cases}
+J_+\ket{1/2, 1/2} = 0 \\ J_+\ket{1/2, -1/2} = \ket{1/2,1/2}
+\end{cases} \qquad \begin{cases}
+J_-\ket{1/2, 1/2} = \ket{1/2,-1/2} \\ J_-\ket{1/2, -1/2} = 0
+\end{cases} \]
+\[J_+ = \begin{pmatrix}
+0&1\\0&0
+\end{pmatrix} \qquad J_- = \begin{pmatrix}
+0&0\\1&0
+\end{pmatrix}\]
+\[ J_1 = \frac{1}{2}\begin{pmatrix}
+0&1\\1&0
+\end{pmatrix} = \frac{\sigma_2}{2} \qquad J_2 = \frac{1}{2} \begin{pmatrix}
+0&-i\\i&0
+\end{pmatrix} = \frac{\sigma_2}{2}\]
+\end{example}
+
+\begin{example}
+The $j=1$ representation of $\suAlg(2)$
+\[\ket{1,1} = \begin{pmatrix} 1\\0\\0 \end{pmatrix}, \quad \ket{1,0} = \begin{pmatrix} 0\\1\\0 \end{pmatrix}, \quad \ket{1,-1} = \begin{pmatrix} 0\\0\\1 \end{pmatrix} \quad J_3 = \begin{pmatrix}
+1&0&0\\0&0&0\\0&0&-1
+\end{pmatrix}\]
+\[ \begin{cases}
+J_+\ket{1,1} = 0 \\
+J_+\ket{1,0} = \sqrt{2}\ket{1,1} \\
+J_+\ket{1,-1} = \sqrt{2}\ket{1,0}
+\end{cases} \qquad \begin{cases}
+J_-\ket{1,1} = \sqrt{2}\ket{1,0} \\
+J_-\ket{1,0} = \sqrt{2}\ket{1,-1} \\
+J_-\ket{1,-1} = 0
+\end{cases} \]
+\[J_+ = \sqrt{2}\begin{pmatrix}
+0&1&0\\0&0&1\\0&0&0
+\end{pmatrix} \qquad J_- = \sqrt{2}\begin{pmatrix}
+0&0&0\\1&0&0\\0&1&0
+\end{pmatrix}\]
+\[ J_1 = \frac{1}{\sqrt{2}}\begin{pmatrix}
+0&1&0\\1&0&1\\0&1&0
+\end{pmatrix} \qquad J_2 = \frac{1}{\sqrt{2}} \begin{pmatrix}
+0&-i&0\\i&0&-i\\0&i&0
+\end{pmatrix}\]
+\end{example}
+
+\begin{example}
+Exercise: calculate $C_2$
+\[ C_2 = \frac{1}{2}l(l+1) \qquad (l=1) \]
+\end{example}

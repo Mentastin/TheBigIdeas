@@ -1,0 +1,83 @@
+\paragraph{History}
+First specified in 1972. SWI-Prolog offers a comprehensive free Prolog environment.
+\paragraph{Concepts}
+\begin{itemize}
+\item A Prolog database consists of known instances of relations, called \udef{facts}.
+\item New relations can be constructed from old ones. These are expressed as \udef{rules}.
+\item \udef{Queries} are expressions containing one or more variables.
+\item \undline{Unification} is used to determine whether a query has a valid substitution consistent with the rules and facts in the database.
+\item \udef{Clauses} are sets of statements.
+\end{itemize}
+
+\begin{itemize}
+\item A subprogram (called a \udef{predicate}) represents a state of the world.
+\item A command (called a \udef{goal}) tells Prolog to make that state of the world true, if possible.
+\end{itemize}
+
+\paragraph{Basic setup}
+Code entered in interactive mode and code in a file is treated differently. Facts and rules should be put in a file.
+
+The interactive prompt is \texttt{?-} and lines end with a period.
+
+
+\paragraph{Syntactic elements}
+Comments:
+\begin{lstlisting}[language=prolog, style=snippet]
+% This is a comment
+\end{lstlisting}
+Facts:
+\begin{lstlisting}[language=prolog, style=snippet]
+magicNumber(7).
+magicNumber(9).
+magicNumber(42).
+\end{lstlisting}
+which we can query:
+\begin{lstlisting}[language=prolog, style=snippet]
+?- magicNumber(7).                   % True
+?- magicNumber(8).                   % False
+?- magicNumber(9).                   % True
+\end{lstlisting}
+
+Multiple operations can be chained using commas.
+
+\paragraph{Unification}
+We request unification by passing an undefined variable:
+\begin{lstlisting}[language=prolog, style=snippet]
+?- magicNumber(Presto).              % Presto = 7 ;
+                                     % Presto = 9 ;
+                                     % Presto = 42.
+\end{lstlisting}
+The equals sign represents unification. We have three cases.
+\begin{enumerate}
+\item If both sides are bound (i.e., defined), Prolog checks equality.
+\item If one side is free (i.e., undefined), Prolog tries to assign the variable to match the other side.
+\item If both sides are free, the assignment is remembered.
+\end{enumerate}
+Attempted unification can have three outcomes. It can
+\begin{enumerate}
+\item Succeed (return True) without changing anything, because an equality-style unification was true;
+\item Succeed (return True) and bind one or more variables in the process; or
+\item Fail (return False) because an equality-style unification was false (failure can never bind variables).
+\end{enumerate}
+
+
+The equals sign can not do arithmetic (as Prolog cannot solve equations out of the box). The \texttt{is} operator does allow arithmetic, but right side must always be bound.
+\begin{lstlisting}[language=prolog, style=snippet]
+?- X = 3+2.             % X = 3+2 - unification can't do arithmetic
+?- X is 3+2.            % X = 5 - "is" does arithmetic.
+?- 5 = X+2.             % This is why = can't do arithmetic -
+                        % because Prolog can't solve equations
+?- 5 is X+2.            % Error. Unlike =, the right hand side of IS
+                        % must always be bound, thus guaranteeing
+                        % no attempt to solve an equation.
+\end{lstlisting}
+We can however reverse addition if we try to unify with the \texttt{plus} predicate.
+\begin{lstlisting}[language=prolog, style=snippet]
+?- plus(1, 2, 3).                    % True
+?- plus(1, 2, X).                    % X = 3 because 1+2 = X.
+?- plus(1, X, 3).                    % X = 2 because 1+X = 3.
+?- plus(X, 2, 3).                    % X = 1 because X+2 = 3.
+?- plus(X, 5, Y).                    % Error - infinite solutions
+\end{lstlisting}
+
+TODO: more

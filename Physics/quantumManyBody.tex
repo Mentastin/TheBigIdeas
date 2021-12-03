@@ -1,0 +1,936 @@
+\chapter{Introduction}
+Some of the tools developed for quantum field theory, in particular second quantisation and Green's functions, greatly simplify the discussion of many identical interacting particles.
+
+The second quantised operators automatically in corporate the Fermi or Bose statistics at each step.
+
+Green's functions allow the use of perturbation theory and Feynman diagrams.
+
+We will often assume $T=0$. For electrons this is not a very strong assumption as the Fermi temperature for metals is close to room temperature.
+
+TODO spin >< coordinates
+
+\chapter{The Schrödinger equation in second quantisation}
+We start with the time-dependent Schrödinger equation, which is given by
+\[ i\hbar \pd{}{t}\Psi(x_1, \ldots, x_N, t) = H\Psi(x_1, \ldots, x_N, t) \]
+together with an appropriate set of boundary conditions. The quantity $x_k$ denotes the coordinates of the $k^\text{th}$ particle. It includes the spatial coordinate $\vec{x}_k$ and any discrete variables such as the $z$ component of spin for a system of fermions or the $z$ component of isotopic spin for a system of nucleons. (TODO ????)
+
+Mostly we will only consider time-independent interactions between two particles. The Hamiltonian is then given by:
+\[ H = \sum^N_{k=1}T(x_k) + \frac{1}{2}\sum^N_{\substack{k,l=1 \\ k \neq l}}V(x_k,x_l) \]
+
+We now choose a complete set of time-independent single-particle wave functions that incorporate the boundary conditions and are eigenvalues of the Hamiltonian, $\psi_{E}(x)$ where $E$ is used to label the functions, in other words it is a quantum number.  It is useful to assume the quantum numbers are ordered: $E \in 1,2,\ldots$.
+
+We now wish to expand $\Psi$ in terms of $\psi_{E_k}$. If $\Psi$ were a function only of $x_1$, we would be able to write
+\[ \Psi = \sum_{E'_1}a_{E_1'}\psi_{E_1'}(x_1). \]
+where each $a_{E_1'}$ is just a constant. Now $\Psi$ is not only a function, so in general $a_{E_1'}$ depends on $x_2,\ldots, x_N$. This is a function in one fewer variable that $\Psi$ and can be expanded in the same way. Repeating this process, $\Psi$ can be fully expanded as
+\begin{equation}
+\Psi(x_1, \ldots, x_N, t) = \sum_{E'_1, \ldots, E'_N}C(E'_1, \ldots, E'_N;t)\psi_{E'_1}(x_1)\ldots \psi_{E'_N}(x_N). \label{psiExpansion}
+\end{equation}
+
+
+We now write the Schrödinger equation with this expression for $\Psi$, multiply both side with 
+\[ \prod_{k=1}^N \psi^\dagger_{E_k}(x_k) \]
+where $E_1\ldots E_N$ is a \textit{fixed} set of quantum numbers and integrate over all space.
+
+On the left-hand side this has the effect of projecting out $C(E_1, \ldots, E_N,t)$.
+\begin{align*}
+ \int \diff{x} \left (\prod_{k=1}^N \psi^\dagger_{E_k}(x_k) \right) \cdot i\hbar \pd{}{t}\Psi &= \int \diff{x} i\hbar \pd{}{t} \left (\prod_{k=1}^N \psi^\dagger_{E_k}(x_k) \right)\Psi \\
+&= \int \diff{x} i\hbar \pd{}{t} \left (\prod_{k=1}^N \psi^\dagger_{E_k}(x_k) \right) \sum_{E'_1, \ldots, E'_N}C(E'_1, \ldots, E'_N,t)\left (\prod_{k=1}^N \psi_{E'_k}(x_k) \right) \\
+&=  i\hbar \pd{}{t}\sum_{E'_1, \ldots, E'_N}C(E'_1, \ldots, E'_N,t) \int \diff{x} \left (\prod_{k=1}^N \psi^\dagger_{E_k}(x_k) \right) \left (\prod_{k=1}^N \psi_{E'_k}(x_k) \right) \\
+&= i\hbar \pd{}{t} C(E_1, \ldots, E_N,t)
+\end{align*}
+where $\diff{x} = \diff{x_1}\ldots \diff{x_N}$ and the last step follows because
+\[ \int \diff{x_{k}} \psi^\dagger_{E_k}(x_k)\psi_{E'_k}(x_k) = \braket{E_k}{E'_k} = \delta_{E_k,E'_k}.\]
+
+The right-hand side is a little more complicated. We start by isolating the kinetic energy term.
+\begin{align*}
+\int \diff{x} \left (\prod_{k=1}^N \psi^\dagger_{E_k}(x_k) \right)\sum^N_{k=1}T(x_k) \Psi &= \sum^N_{k=1} \int \diff{x} \left (\prod_{i=1}^N \psi^\dagger_{E_i}(x_i) \right) T(x_k) \sum_{E'_1, \ldots, E'_N}C(E'_1, \ldots, E'_N,t)\left (\prod_{i=1}^N \psi_{E'_i}(x_i) \right) \\
+&= \sum^N_{k=1} \sum_{E'_k} \int \diff{x_k} \psi^\dagger_{E_k}(x_k) T(x_k) \psi_{E'_k}(x_k) \times C(E_1, \ldots, E_{k-1}, E'_{k}, E_{k+1}, \ldots E_N,t) \\
+&= \sum^N_{k=1} \sum_{W} \braket[T]{E_k}{W} \times C(E_1, \ldots, E_{k-1}, W, E_{k+1}, \ldots, E_N,t)
+\end{align*}
+This follows because $T(x_k)$ commutes with all $\psi(x_l)$ with $k\neq l$.
+
+Following a similar procedure for the potential energy term, we get
+\begin{multline*}
+\frac{1}{2}\sum^N_{\substack{k,l=1 \\ k \neq l}} \sum_W \sum_{W'} \int\int \diff{x_k}\diff{x_l} \psi_{E_k}^\dagger(x_k)\psi_{E_l}^\dagger(x_l) V(x_k,x_l)\psi_W(x_k)\psi_{W'}(x_l) \\ \times C(E_1, \ldots, E_{k-1}, W, E_{k+1}, \ldots, E_{l-1},W',E_{l+1}, \ldots, E_N,t) \\
+= \frac{1}{2}\sum^N_{\substack{k,l=1 \\ k \neq l}} \sum_W \sum_{W'} \braket[V]{E_kE_l}{WW'} \times C(E_1, \ldots, E_{k-1}, W, E_{k+1}, \ldots, E_{l-1},W',E_{l+1}, \ldots, E_N,t)
+\end{multline*}
+
+
+Now for reference we put all these parts together into one equation
+\begin{multline}
+i\hbar \pd{}{t} C(E_1, \ldots, E_N,t) = \sum^N_{k=1} \sum_{W} \braket[T]{E_k}{W} \times C(E_1, \ldots, E_{k-1}, W, E_{k+1}, \ldots, E_N,t) \\ +
+\frac{1}{2}\sum^N_{\substack{k,l=1 \\ k \neq l}} \sum_W \sum_{W'} \braket[V]{E_kE_l}{WW'} \times C(E_1, \ldots, E_{k-1}, W, E_{k+1}, \ldots, E_{l-1},W',E_{l+1}, \ldots, E_N,t) \label{modSchr}
+\end{multline}
+
+
+Now we incorporate the statistics:
+\[ \Psi(\ldots x_i \ldots x_j \ldots; t) = \pm \Psi(\ldots x_j \ldots x_i \ldots; t) \]
+Because the $\psi$s commute in the expansion \ref{psiExpansion}, we see that the change of sign must come from the coefficients:
+\[ C(\ldots E_i \ldots E_j \ldots;t) = \pm C(\ldots E_j \ldots E_i \ldots;t) \]
+
+\section{Bosons}
+For bosons the coefficients are symmetric under exchange of quantum numbers. This mean we can group all of the same states together. For example
+\[ C(1,2,1,3,2,4,\ldots;t) = C(\underbrace{1,1,1,\dots}_{n_1},\underbrace{2,2,2,\dots}_{n_2}, \ldots ;t) \]
+where we have introduced the \udef{occupation numbers} $n_1, n_2 ,\ldots$. These occupation numbers uniquely determine the coefficients, so we can write
+\[ \bar{C}(n_1,n_2,\ldots,n_\infty; t) \equiv C(\underbrace{1,1,1,\dots}_{n_1},\underbrace{2,2,2,\dots}_{n_2}, \ldots ;t) \]
+
+Now we require $\Psi$ to be normalised to unity. We assume the single particle wave functions $\psi_{E_k}$ to already be properly normalised. Looking back at equation \ref{psiExpansion}, we see that this yields the condition
+\[ \sum_{E_1, \ldots, E_N}|C(E_1, \ldots, E_N,t)|^2 = 1. \]
+For an expression in terms of occupation numbers, we split the sum into two factors: A sum over all possible values of all occupation numbers and a sum over all possible values of all quantum numbers $E_k$, given the occupation numbers fixed by the first sum:
+\[ \sum_{n_1, \ldots n_\infty}\sum_{\substack{E_1, \ldots, E_N \\ (n_1, \ldots n_\infty)}} |\bar{C}(n_1,\ldots,n_\infty; t)|^2 = \sum_{n_1, \ldots n_\infty}|\bar{C}(n_1,\ldots,n_\infty; t)|^2\sum_{\substack{E_1, \ldots, E_N \\ (n_1, \ldots n_\infty)}} 1 = 1.  \]
+In our notation expressions in brackets under summations are conditions that the things we are summing over must fulfill.
+
+The second sum is the equivalent of putting $N$ object into boxes with $n_1$ objects in the first box, $n_2$ in the second etc.
+\[ \sum_{\substack{E_1, \ldots, E_N \\ (n_1, \ldots n_\infty)}} 1 = \frac{N!}{n_1!n_2!\ldots n_\infty !}\]
+The normalisation condition thus becomes
+\[ \sum_{n_1, \ldots n_\infty}|\bar{C}(n_1,\ldots,n_\infty; t)|^2\frac{N!}{n_1!n_2!\ldots n_\infty !} = 1. \]
+This is more simply expressed if we define another coefficient
+\[ f(n_1,\ldots,n_\infty; t) \equiv \left(\frac{N!}{n_1!n_2!\ldots n_\infty !}\right)^{1/2}\bar{C}(n_1,\ldots,n_\infty; t) \]
+rendering the normalisation condition
+\[ \sum_{n_1, \ldots n_\infty}|f(n_1,\ldots,n_\infty; t)|^2 = 1. \]
+The original wave function can be rewritten in therms of these coefficients:
+\begin{equation}
+\Psi(x_1, \ldots, x_N; t) =  \sum_{\substack{n_1,\ldots, n_\infty} \\ \left(\sum_i n_i = N\right)} f(n_1,\ldots,n_\infty; t) \Phi_{n_1n_2\ldots n_\infty}(x_1,\ldots, x_N) 
+\label{psiOccNum}
+\end{equation}
+
+where we have defined
+\[ \Phi_{n_1n_2\ldots n_\infty}(x_1,\ldots, x_N) \equiv \left(\frac{n_1!n_2!\ldots n_\infty !}{N!}\right)^{1/2}\sum_{\substack{E_1, \ldots, E_N \\ (n_1, \ldots n_\infty)}}\psi_{E_1}(x_1)\ldots \psi_{E_N}(x_N) \]
+
+In other words the functions $\Phi_{n_1n_2\ldots n_\infty}$ form a complete set. They are also completely symmetrised and orthonormal. 
+
+We can now return to the analysis of equation \ref{modSchr}. Now, crucially, we can do the following substitution:
+\begin{equation}
+\sum^N_{k=1} \qquad \to \qquad \sum_E n_E. \label{sub1}
+\end{equation}
+
+This follows because for every $k$ that $E_k$ takes the same value, the same term is contributed to the sum.
+
+The substitution is straightforward for the kinetic energy term. In the potential energy term, the condition $k \neq l$ complicates matters somewhat.  The solution is to perform the substitution
+\begin{equation}
+\sum^N_{\substack{k,l=1 \\ k \neq l}} \qquad \to \qquad \sum_E\sum_{E'} n_E(n_{E'} - \delta_{EE'}). \label{sub2}
+\end{equation}
+
+
+The resulting equations are horribly long, but are simplified massively by using the creation and destruction operators $b^\dagger_k, b_k$ from the second quantisation.
+
+\subsection{Creation and destruction operators}
+We remind ourselves that the time-independent creation and destruction operators $b^\dagger_k$ and $b_k$ satisfy 
+\[ \begin{cases}
+[b_k, b^\dagger_{k'}] = \delta_{kk'} \\
+[b_k,b_{k'}] = [b_k^\dagger, b_{k'}^\dagger] = 0
+\end{cases}. \]
+Consequently
+\[ \begin{cases}
+b_k \ket{n_k} = \sqrt{n_k}\ket{n_k-1} \\
+b_k^\dagger \ket{n_k} = \sqrt{n_k+1}\ket{n_k+1}
+\end{cases}. \]
+
+We can rewrite the equation \ref{psiOccNum} in abstract sate vector notation
+\[ \ket{\Psi(t)} = \sum_{n_1,\ldots, n_\infty} f(n_1,\ldots, n_\infty;t)\ket{n_1n_2\ldots n_\infty}. \]
+The number operator ($b^\dagger_k b_k$) for different modes commute, so (TODO why)
+\[ \ket{n_1n_2\ldots n_\infty} = \ket{n_1}\ket{n_2}\ldots \ket{n_\infty}. \]
+
+Now finally we take equation \ref{modSchr} and we apply the following manipulations (which we will not make explicit because of the length of the equations):
+\begin{enumerate}
+\item Rewrite in terms of $\bar{C}$:
+\[ \begin{cases}
+C(E_1\ldots E_N; t) = \bar{C}(n_1,\ldots, n_\infty; t) \\
+C(E_1, \ldots, E_{k-1},W,E_{k+1}, \ldots, E_N; t) = \bar{C}(n_1, \ldots, n_{E_k}-1, \ldots, n_W +1, \ldots, n_\infty; t)
+\end{cases} \]
+\item Apply substitutions \ref{sub1} and \ref{sub2}. Now we are no longer summing over indices $k$ of $E_k$, but over values of $E,E',W,W'$. We rename these $i,j,k,l$ for ease.
+\item Rewrite in terms of the coefficients $f$. In order to do that we split up the sum
+\[ \sum_{i,j,k,l} = \sum_{i\neq j \neq k \neq l} + \sum_{i = j \neq k \neq l} + \ldots \]
+\item Plug the result into the equation
+\[ i\hbar \pd{}{t}\ket{\Psi(t)} = \sum_{n_1, \ldots, n_\infty} i\hbar \pd{}{t}f(n_1,\ldots, n_\infty; t)\ket{n_1n_2\ldots n_\infty}  \]
+Finally we relabel the occupation numbers and using
+\[ \sqrt{n'_i + 1}\sqrt{n_j'}\ket{n_1'\ldots n_i'+1 \ldots n'_j-1 \ldots n'_\infty} = b^\dagger_i b_j\ket{n_1'n_2'\ldots n'_\infty} \]
+we get
+\[  i\hbar \pd{}{t}\ket{\psi(t)} = \hat{H}\ket{\psi(t)} \]
+with
+\[ \boxed{\hat{H} = \sum_{i,j}b^\dagger_i b_j \braket[T]{i}{j} + \frac{1}{2}\sum_{i,j,k,l}b^\dagger_i b^\dagger_j \braket[V]{ij}{kl} b_lb_k}. \]
+\end{enumerate}
+This resulting equation in second quantisation is completely equivalent to the originl one. The matrix elements $\braket[T]{i}{j}$ and $\braket[V]{ij}{kl}$ are just complex numbers.
+
+
+For bosons the order $b_lb_k$ does not matter, we write it in this order however because for Fermions the expression will be formally the same and there the creation and annihilation operators do not commute.
+
+\section{Fermions}
+For fermions the wavefunction is antisymmetric:
+\[ C(\ldots E_i \ldots E_j \ldots;t) = - C(\ldots E_j \ldots E_i \ldots;t) \]
+Consequently the occupation numbers are either one or zero. We can analogously define $\bar{C}(n_1,n_2,\ldots,n_\infty; t)$, $f(n_1,n_2,\ldots,n_\infty; t)$ and $\Phi_{n_1n_2\ldots n_\infty}$, except now $\bar{C}$ can pick up a minus sign and the wave functions $\Phi$ are given by the Slater determinant 
+\[\Phi_{n_1n_2\ldots n_\infty}(x_1\ldots x_N) = \sqrt{\frac{\prod_i n_i!}{N!}}\begin{vmatrix}
+\varphi_{E^0_1}(x_1) & \hdots & \varphi_{E^0_1}(x_N) \\
+\vdots & & \vdots \\
+\varphi_{E^0_N}(x_1) & \hdots & \varphi_{E^0_N}(x_N)
+\end{vmatrix}\]
+
+
+\subsection{Creation and destruction operators}
+The operators for fermions satisfy the anti-commutator relations
+\[ \begin{cases}
+\left\{a_i,a_j^\dagger\right\} = \delta_{ij} \\
+\left\{a_i, a_j\right\} = \left\{a_i^\dagger, a_j^\dagger\right\} = 0
+\end{cases} \]
+
+\[ \hat{H} = \sum_{ij}a^\dagger_ia_j \braket[T]{i}{j} + \frac{1}{2}\sum_{ijkl}a^\dagger_i a^\dagger_j \braket[V]{ij}{kl} a_la_k  \]
+Consequently
+\[ \begin{cases}
+a^\dagger\ket{0} = \ket{1} \qquad a^\dagger\ket{1} = 0 \\
+a\ket{1} = \ket{0} \qquad a\ket{0} = 0
+\end{cases} \]
+
+We can write the state vectors using creation operators
+\[ \ket{n_1n_2\ldots n_\infty} = (a_1^\dagger)^{n_1}(a_2^\dagger)^{n_2}\ldots (a_\infty^\dagger)^{n_\infty}\ket{0} \].
+Because of the anti-commutator relations, we need to keep track of the sign. For example
+\[ a_j\ket{n_1n_2\ldots n_\infty} = (-1)^{n_1+n_2+\ldots + n_{j-1}}(a_1^\dagger)^{n_1} \ldots (a_ja_j^\dagger) \ldots (a_\infty^\dagger)^{n_\infty}\ket{0} \]
+so
+\[ a^\dagger_j\ket{n_1n_2\ldots n_\infty} = (-1)^{n_1+n_2+\ldots+n_{j-1}}\ket{n_1\ldots (n_j+1) \ldots n_\infty} \]
+(if $n_j = 0$, otherwise we get $0$). Similarly
+\[ a_j\ket{n_1\ldots n_j\ldots n_\infty} = (-1)^{n_1+n_2+\ldots+n_{j-1}}\ket{n_1\ldots (n_j-1) \ldots n_\infty} \]
+(if $n_j = 1$). We call $n_1+n_2+\ldots+n_{j-1} \equiv S_j$.
+
+The number operator introduces no extra phases
+\[ a^\dagger_j a_j \ket{\ldots n_j \ldots} = n_j\ket{\ldots n_j \ldots} \]
+
+The phase signs introduced by the operators are exactly the ones introduced by the reordering necessary to define $\bar{C}$.
+
+So finally we get a very similar result for the Hamiltonian in second quantization for fermions:
+\[ \hat{H} = \sum_{i,j}a_i^\dagger a_j \braket[T]{i}{j} + \frac{1}{2}\sum_{i,j,k,l}a^\dagger_i a^\dagger_j \braket[V]{ij}{kl}a_la_k \]
+Now the order of the operators is important ($a_la_k = - a_k a_l$). The order also ensures $\hat{H}$ is Hermitian.
+
+\section{Fields}
+
+In first quantization:
+\[ \vec{p} = \sum^N_{}  ???\]
+Where $i$ is a particle index.
+In the second quantization this becomes
+\[ \hat{\vec{p}} =  \sum_{i,j}a_i^\dagger a_j \braket[T]{i}{j} ????????\]
+Where $i,j$ are state indices.
+
+For fermions:
+\[ \vec{p} = \hbar \vec{k} \qquad S_z = \pm 1 \qquad |\vec{S}| = \tfrac{1}{2} \]
+
+\[ \varphi_{E_i, \alpha}(\vec{x}) = \begin{cases}
+\frac{e^{i \vec{k}\cdot \vec{x}}}{\sqrt{V}}\begin{pmatrix}
+0\\1
+\end{pmatrix} \\
+\frac{e^{i \vec{k}\cdot \vec{x}}}{\sqrt{V}}\begin{pmatrix}
+1\\0
+\end{pmatrix}
+\end{cases} = \varphi_{\vec{k}, \alpha}(\vec{x}) \]
+
+Quantum field theory so fields. We use $c^\dagger, c$ to denote the $a$ and $b$ operators.
+\[ \hat{\psi}_\alpha(x) = \sum_i \varphi_{E_i,\alpha}(\vec{x})c_{i,\alpha} \]
+With $i$ spin index (the book does not use them)
+\[ \hat{\psi}^\dagger_\alpha(x) = \sum_i \varphi^\dagger_{E_i,\alpha}(\vec{x})c^\dagger_{i,\alpha} \]
+These operators create or annihilate particles in a particular point in space so they are field operators in the second quantization. So we shift our focus from a give state to a give point in space.
+\begin{align*} \sum_{i,j} a_i^\dagger a_j \braket[T]{i}{j} &= \sum_{\substack{i,j\\\alpha, \beta}} a^\dagger_{i,\alpha} \int \diff{^3x}\varphi^\dagger_{E_i,\alpha}(\vec{x})\left(\frac{-\hbar^2\nabla^2}{2m}\right)\varphi_{E_j,\beta}(\vec{x}) a_{j,\beta} \\
+&= \sum_{\alpha, \beta} \int \diff{^3x}\left(\sum_i a_{i,\alpha}^\dagger\varphi^\dagger\right) ....(???) \\
+&= \sum_{\alpha, \beta} \int \diff{^3x}\hat{\psi}^\dagger_\alpha(\vec{x})\left(\frac{-\hbar^2\nabla^2}{2m}\right)\hat{\psi}_\beta(\vec{x})
+\end{align*}
+We write
+\begin{align*}
+\left[\hat{\psi}_\alpha(\vec{x}), \hat{\psi}^\dagger_\beta(\vec{x})\right]_{\pm} &= \sum_j\sum_l \varphi_{E_j,\alpha}(\vec{x})\varphi^\dagger_{E_l,\beta}(\vec{x})\left[c_j,c_l^\dagger\right]_{\pm} \\
+&= ??? \\
+&= \delta(\vec{x} - \vec{x'})\delta_{\alpha,\beta} ????
+\end{align*}
+Where minus is for bosons, plus for fermions
+
+
+So 
+\[ \hat{H} = \int \diff{^3x} \hat{\psi}_\alpha^\dagger(\vec{x})T(\vec{x})\hat{\psi}_\alpha(\vec{x}) + \frac{1}{2}\int \diff{^3x}\int \diff{^3x'}\hat{\psi}_\alpha^\dagger(\vec{x})\hat{\psi}_\beta^\dagger(\vec{x'})V(\vec{x}, \vec{x'})\hat{\psi}_\beta(\vec{x'})\hat{\psi}_\alpha(\vec{x}) \]
+
+In first quantization:
+\[ \int \diff{x}\psi^\dagger(x)V(x)\psi(x) \]
+Where the $\psi$s are wavefunctions and $V$ is an operator
+
+In second quantization:
+\[ \int \diff{x}\hat{\psi}^\dagger(x)V(x)\hat{\psi}(x) \]
+Now the $\hat{\psi}$s are operators and $V{x}$ is a complex number.
+
+One body operator
+
+First quantization (with $i$ particle index):
+\[ J = \sum^N_{i=1} J(x_i) \]
+
+Second quantization (with $i,j$ state indices):
+\[ \hat{J} = \sum_{i,j}\braket[J]{i}{j}c^\dagger_i c_j = \int \diff{^3x}\hat{\psi}^\dagger(\vec{x})J(x)\hat{\psi}(\vec{x}) \]
+
+Number density operator:
+\[ n(\vec{x}) = \sum^N_{i=1} \delta(\vec{x}- \vec{x_i}) \]
+So
+\[ \int \diff{^3x'}\hat{\psi}(\vec{x'})\delta(\vec{x}- \vec{x'})\hat{\psi}(\vec{x'}) = \hat{\psi}^\dagger(\vec{x})\hat{\psi}(\vec{x}) \]
+\[ = \sum \varphi ??\]
+Total number operator:
+\[ \hat{N} \equiv \int \diff{^3x}\hat{n}(\vec{x}) = \sum c^\dagger_i c_i = \sum_i\hat{n}_i = \int \diff{^3x}\hat{\psi}(\vec{x})\hat{\psi}(\vec{x}) \]
+\[ \left[\hat{N}, \hat{H}\right] = 0 \qquad \left[\hat{\vec{P}}, \hat{H}\right] = 0 = \left[\hat{\vec{J}}, \hat{H}\right] \]
+
+\section{Example: the jellium model}
+Now a real application of this technique to a physical system. The system is the degenerate electron gas (``Jellium model''). This is a very simple model in the sense that you can think of your system as a cubic box with side $L$ ($V=L^3$). The only constraint on the electrons is that they must be inside the box. We are mainly interested in bulk properties, so we will be working in the thermodynamic limit ($V\to\infty, N\to\infty$ keeping $n = \frac{N}{V}$ finite). In order to confine the electrons we apply a uniform positive background (gel in the box) so the whole thing is charge neutral. 
+
+It is a surprisingly good model for various situation (such as electrons in metals, white dwarf stars, neutron stars). There is a pressure due to the Pauli exclusion principle
+
+For this problem a reasonable set of single particle wave functions incorporating the boundary conditions is given by the plane wave states
+\[ \psi_{\vec{k}\lambda}\frac{e^{i \vec{k}\cdot \vec{x}}}{\sqrt{V}}\eta_\lambda \]
+where $\eta_\lambda$ are the two spin functions for spin-up and spin-down along a chosen $z$ axis.
+\[ \eta_\uparrow = \begin{bmatrix}
+1\\0
+\end{bmatrix} \qquad \eta_\downarrow = \begin{bmatrix}
+0 \\ 1
+\end{bmatrix}\]
+The periodic boundary conditions determine the allowed wavenumbers as
+\[ k_i = \frac{2\pi n_i}{L} \qquad i=x,y,z \qquad n_i = 0, \pm 1, \pm 2, \ldots \]
+
+The Hamiltonian can be written as the sum of three terms,
+\[\hat{H} = \hat{H}_{el} + \hat{H}_b + \hat{H}_{el-b}\]
+where the first term arises from the interactions between electrons, the second is the energy of the positive background and the third is the interaction energy between the electrons and the positive background.
+
+We will write down expressions for all the terms. The terms diverge individually, but together give a meaningful result. We include an exponential factor in order to force all the integrals converge. Later we will take the limit of $\mu \to 0$ (after we have taken the thermodynamic limit) so that the exponential factors do not influence the physics.
+\begin{align*}
+H_b &= \frac{1}{2}\int_V \diff{\vec{x}}\int_V \diff{\vec{x'}} \frac{\rho(\vec{x})\rho(\vec{x}')}{|\vec{x}- \vec{x}'|}e^{-\mu |\vec{x}- \vec{x}'|} \\
+&= \frac{e^2}{2}\int_V \diff{\vec{x}}\int_V \diff{\vec{x}'} \frac{n_b(\vec{x})n_b(\vec{x}')}{|\vec{x}- \vec{x}'|}e^{-\mu |\vec{x}- \vec{x}'|} \\
+&= \frac{e^2n^2}{2}\int_V \diff{\vec{x}}\int_V \diff{\vec{y}} \frac{1}{|y|}e^{-\mu |y|} \\
+\end{align*}
+Here $n = N/V$ is the number density of the electrons (the density $\rho$ of the positive background must equal $e \cdot n$ in order for the system to be neutral). Evaluating these integrals (where we already assume $L \to \infty$ for the integral over $\vec{y}$ and use polar coordinates), we get
+\[H_b = \frac{1}{2}e^2 \frac{N^2}{V}\frac{4\pi}{\mu^2}\]
+
+Then for interaction between the electrons and the background, we get
+\begin{align*}
+H_{el-b} &= -e^2 \frac{N}{V} \sum^N_{i=1} \int_V \diff{^3\vec{x}} \frac{e^{-\mu(|\vec{x}- \vec{r}_i|)}}{|\vec{x}- \vec{r}_i|} \\
+&= -e^2 \frac{N}{V} \sum^N_{i=1} \int_V \diff{^3\vec{z}} \frac{e^{-\mu |\vec{z}|}}{|\vec{z}|} \\
+&= -e^2 \frac{N^2}{V}\frac{4\pi}{\mu^2}
+\end{align*}
+
+So far we have
+\[ H = - \frac{1}{2}e^2 \frac{N^2}{S}\frac{2\pi}{\mu} + H_{el}  \]
+
+We now consider the Hamiltonian in second quantization. Given that $H_b$ and $H_{el-b}$ are just numbers, they stay the same.
+\begin{align*}
+\hat{H}_{el} &= \hat{T} + \hat{V} \\
+&= \sum_{ij}a^\dagger_i \braket[T]{i}{j}a_j + \frac{1}{2}\sum_{ijkl}a^\dagger_i a^\dagger_j \braket[V]{ij}{V}{kl}a_l a_k 
+\end{align*}
+
+First we tackle the matrix element in the kinetic energy term.
+\begin{align*}
+\braket[T]{i}{j} &= \braket[T]{\vec{k}\lambda}{\vec{k}'\lambda'} \\
+&= \braket[\frac{\hbar^2\nabla^2}{2m}]{\vec{k}\lambda}{\vec{k}'\lambda'} \\
+&= \frac{\hbar^2 k^{\prime 2}}{2m}\braket{\vec{k}\lambda}{\vec{k}'\lambda'} \\
+&= \frac{\hbar^2 k^2}{2m} \delta_{\lambda \lambda'}\delta_{\vec{k}\vec{k}'}
+\end{align*}
+
+So the kinetic energy operator is
+\[ \hat{T} = \sum_{\vec{k}\lambda}\frac{\hbar^2 k^2}{2m}a^\dagger_{\vec{k}\lambda}a_{\vec{k}\lambda} \]
+
+Next comes the matrix element in the potential energy term.
+\begin{align*}
+\braket[V]{ij}{kl} &= \braket[V]{\vec{k'}\lambda', \vec{p'}\mu'}{\vec{k}\lambda, \vec{p}\mu} \\
+&= \int \diff{\vec{x}} \int \diff{\vec{x'}} \psi\dagger_{\vec{k'},\lambda'}(\vec{x})\psi^\dagger_{\vec{p'},\mu'}(\vec{x'})V(\vec{x}- \vec{x'})\psi_{\vec{k},\lambda}(\vec{x})\psi_{\vec{p},\mu}(\vec{x'}) \\
+&= \frac{e^2}{V^2} \int \int \diff{\vec{x}}\diff{\vec{x'}}e^{-i \vec{k}'\cdot\vec{x}}\eta_{\lambda'}(1)^\dagger e^{-i \vec{p}'\cdot\vec{x}'}\eta_{\mu'}(2)^\dagger \frac{e^{-\mu|\vec{x}- \vec{x}'|}}{|\vec{x} - \vec{x}'|} e^{i \vec{k}\cdot\vec{x}}\eta_{\lambda}(1)e^{i \vec{p}\cdot\vec{x}'}\eta_{\mu}(2)\\
+&= \frac{e^2}{V}\delta_{\lambda\lambda'}\delta_{\mu\mu'}\int \diff{\vec{x}}\diff{\vec{x'}}e^{i \vec{x}(\vec{k}-\vec{k'})}e^{i\vec{x'}(\vec{p}- \vec{p'})}\frac{e^{\mu|\vec{x}- \vec{x'}|}}{|\vec{x}- \vec{x'}|} \\
+&= \frac{e^2}{V}\delta_{\lambda\lambda'}\delta_{\mu\mu'}\int \diff{\vec{y}}\left(\diff{\vec{x'}}e^{i \vec{x'}(\vec{k}-\vec{k'})}e^{i\vec{x'}(\vec{p}- \vec{p'})}\right)e^{i\vec{y}(\vec{k}- \vec{k'})}\frac{e^{\mu|\vec{y}|}}{|\vec{y}|} \\
+&= \frac{e^2}{V}\delta_{\lambda\lambda'}\delta_{\mu\mu'}\int \diff{\vec{y}}e^{i\vec{y}(\vec{k}- \vec{k'})}\frac{e^{\mu\vec{y}}}{\vec{y}}\delta_{\vec{k}+ \vec{p}, \vec{k'}+ \vec{p'}}
+\end{align*}
+
+
+Where $\vec{y} = \vec{x}- \vec{x}'$ and we have used that
+\[ \int \diff{^3x}e^{i(\vec{k_2}- \vec{k_1})\cdot \vec{x}} = \delta_{\vec{k_1}\vec{k_2}} \]
+Solving this integral, we get
+\[ \braket[V]{ij}{kl} = \frac{e^2}{V}\delta_{\lambda\lambda'}\delta_{\mu\mu'}\delta_{\vec{k}+ \vec{p}, \vec{k'}+ \vec{p'}}\frac{4\pi}{(\vec{k}- \vec{k'})^2 + \mu^2} \]
+
+This means we get the following expression for $\hat{V}$:
+\begin{align*}
+\hat{V} &= \frac{e^2}{S}\sum_{\substack{\vec{k'},\lambda',\vec{p'},\mu' \\ \vec{k},\lambda,\vec{p},\mu}} \frac{2\pi}{q + \mu}\delta_{\vec{k}- \vec{k'}, \vec{p'}- \vec{p}}\delta_{\lambda\lambda'}\delta_{\mu\mu'} \cdot a_{\vec{k'},\lambda'}^\dagger a_{\vec{p'},\mu'}^\dagger a_{\vec{p},\mu} a_{\vec{k},\lambda} \\
+&= \frac{e^2}{S}\sum_{\substack{\vec{k},\vec{p},\vec{q} \\ \lambda, \mu}}\frac{2\pi}{q + \mu}a_{\vec{k}+ \vec{q},\lambda}^\dagger a_{\vec{p}- \vec{q},\mu}^\dagger a_{\vec{p},\mu} a_{\vec{k},\lambda}
+\end{align*}
+Where we have defined $\vec{q} = \vec{k'}- \vec{k} = \vec{q} - \vec{q'}$
+
+We split this sum into a part with $q=0$ and a part with $q \neq 0$.
+
+\[ \hat{V} = \frac{e^2}{2S}\sum_{\substack{\vec{k}\vec{p}\vec{q} \\ \lambda \mu}}\frac{2\pi}{\mu}a_{\vec{k},\lambda}^\dagger a_{\vec{p},\mu}^\dagger a_{\vec{p},\mu} a_{\vec{k},\lambda} + \frac{e^2}{2S}\sum_{\substack{\vec{k}\vec{p} \\ \vec{q}\neq 0 \\ \lambda \mu}}\frac{2\pi}{q+\mu}a_{\vec{k}+ \vec{q},\lambda}^\dagger a_{\vec{p}- \vec{q},\mu}^\dagger a_{\vec{p},\mu} a_{\vec{k},\lambda} \]
+We have
+\[ \left[\hat{n}_{\vec{p}\mu}, a_{\vec{k},\lambda}\right] = - \delta_{\vec{k}\vec{p}}\delta_{\mu\lambda}a_{\vec{k}\lambda} \]
+so
+\[ a^\dagger_{\vec{p}\mu}a_{\vec{p}\mu}a_{\vec{k}\lambda} = a_{\vec{k}\lambda}a^\dagger_{\vec{p}\mu}a_{\vec{p}\mu} - \delta_{\vec{k}\vec{p}}\delta_{\mu\lambda}a_{\vec{k}\lambda} \]
+
+
+If we now consider the part with $\vec{q} = 0$
+\begin{align*}
+\hat{V}_{\vec{q}=0} &= \frac{e^2}{2}\sum_{\substack{\vec{k} \vec{p} \\ \lambda \mu}} \frac{2\pi}{\mu S} a_{\vec{k},\lambda}^\dagger a_{\vec{p},\mu}^\dagger a_{\vec{p},\mu} a_{\vec{k},\lambda} \\
+&= \frac{e^2}{2}\sum_{\substack{\vec{k} \vec{p} \\ \lambda \mu}} \frac{2\pi}{\mu S} a^\dagger_{\vec{k}\lambda}a_{\vec{k}\lambda}\left[a^\dagger_{\vec{p}\mu}a_{\vec{p}\mu} - \delta_{\vec{k}\vec{p}}\delta_{\mu\lambda}\right]
+\end{align*}
+
+Rewriting in terms of the number operator we get
+\begin{align*}
+\hat{V}_{\vec{q}=0} &= \frac{e^2}{2} \frac{2\pi}{\mu S} \sum_{\vec{k} \lambda} \left(\hat{n}_{\vec{k}\lambda}\right)\left(\sum_{\vec{p} \mu}\hat{n}_{\vec{p}\mu}\right) - \frac{e^2}{2S}\frac{2\pi}{\mu} \left(\sum_{\vec{k}\lambda}\hat{n}_{\vec{k}\lambda}\right) \\
+&= \frac{e^2}{2S}\frac{2\pi}{\mu}\left(N^2 - N\right) \\
+&= \frac{e^2}{2}\frac{2\pi}{\mu}\frac{N^2}{S} - \frac{e^2}{2}\frac{2\pi}{\mu}\frac{N}{S}
+\end{align*}
+
+When we take our limit the second term goes to zero in the first step. The first term however remains and diverges in the second step. Luckily it exactly cancels the other diverging contributions to the Hamiltonian ($H_b + H_{el-b} = - \frac{1}{2}e^2 \frac{N^2}{S}\frac{2\pi}{\mu}$). All divergences have now been dealt with, so we can always take $\mu \to 0$.
+
+\begin{align*}
+\hat{H} &= \sum_{\vec{k}\lambda}\frac{\hbar^2 k^2}{2m}a^\dagger_{\vec{k}\lambda}a_{\vec{k}\lambda}+ \frac{2\pi e^2}{2 S}\sum'_{\substack{\vec{k} \vec{p} \vec{q} \\ \lambda \mu \\ \vec{q \neq 0}}} \frac{1}{q}a^\dagger_{\vec{k}+ \vec{q}, \lambda}a^\dagger_{\vec{p}- \vec{q}, \mu}a_{\vec{p},\mu}a_{\vec{k}, \lambda}
+\end{align*}
+We write the apostrophe to remind ourselves that $\vec{q} = 0$ is not considered.
+
+Compared to the three dimensional case, the factor of $2\pi$ is still different and we divide by $q$ instead of $q^2$.
+
+We now define some lengths, first $r_0$ in terms of the surface area per particle.
+\[ S = \pi r_0^2 N  \]
+Then we have the Bohr radius
+\[ a_0 = \frac{\hbar^2}{me^2} \]
+Finally we define a dimensionless quantity
+\[ r_s \equiv \frac{r_0}{a_0} \]
+
+We now use perturbation theory, so we write the Hamiltonian as $\hat{H} = \hat{H}_0 + \hat{H_1}$. In the high density limit ($r_s \to 0$) we can view $\hat{H_1}$ as a small perturbation.
+
+\[\hat{H}_0 = \sum_{\vec{k}\lambda}\frac{\hbar^2 \bar{k}^2}{2m}a^\dagger_{\vec{k}\lambda}a_{\vec{k}\lambda} = \sum_{\vec{k}\lambda}\frac{\hbar^2 \bar{k}^2}{2m}\hat{n}_{\vec{k}\lambda}\]
+In the high density limit we have a Fermi sphere. ($|\vec{k}|\leq k_F$)
+
+We can determine the Fermi wavenumber $k_F$ by computing the expectation value of the number operator in the ground state $\ket{F}$.
+\begin{align*}
+N &= \braket[\hat{N}]{F}{F} = \sum_{\vec{k}\lambda} \braket[\hat{n}_{\vec{k}\lambda}]{F}{F} \\
+&= \sum_{\vec{k}\lambda} \theta(k_F - k) \\
+&= (\Delta k)^{-1} \sum_\lambda \int \diff{^2k} \theta(k_F - k) \\
+&= S(2\pi)^{-2}\cdot 2 \int \diff{^2k} \theta(k_F - k) \\
+&= \frac{S}{2\pi}k_F^2
+\end{align*}
+
+So we get
+\[ k_F = \sqrt{\frac{2\pi N}{S}} = \frac{\sqrt{2}}{r_0} \]
+This expression is significantly different from the three dimensional case, due to a difference in $\Delta k$ and the fact that we used the surface of a circle, not the volume of a sphere.
+
+We can now calculate $E_0$.
+\begin{align*}
+ E_0 &= \braket[\hat{H}_0]{F}{F} = \sum_{\vec{k},\lambda} \frac{\hbar^2 k^2}{2m}\braket[\hat{n}_{\vec{k}\lambda}]{F}{F} \\
+ &= 2\sum_{|\vec{k}|\leq k_F} \frac{\hbar^2 k^2}{2m} \\
+ &= \frac{\hbar^2}{m} S (2\pi)^{-2} \int_0^{k_F} \diff{^2k}k^2 \\
+ &= \frac{\hbar^2}{m} S (2\pi)^{-1} \int_0^{k_F} \diff{k}k^3 \\
+ &= \frac{\hbar^2}{m} N \frac{k_F^2}{4} \\
+ &= \frac{\hbar^2}{m}N\frac{1}{2r_0^2} \\
+ &= N\frac{e^2}{2a_0r_s^2}
+\end{align*}
+
+And we also calculate $E_1$, recalling that
+\[ \hat{H}_1 = \frac{e^2}{2S}\sum'_{\substack{\vec{k}\vec{p}\vec{q} \\ \lambda \mu}} \frac{2\pi}{q}a^\dagger_{\vec{k}+ \vec{q}, \lambda} a^\dagger_{\vec{p}- \vec{q}, \mu}a_{\vec{p},\mu}a_{\vec{k}, \lambda} \]
+We calculate
+\begin{align*}
+E_1 &= \braket[\hat{H}_1]{F}{F} = \frac{e^2}{2S}\sum'_{\substack{\vec{k}\vec{p}\vec{q} \\ \lambda \mu}} \frac{2\pi}{q}\braket[a^\dagger_{\vec{k}+ \vec{q}, \lambda} a^\dagger_{\vec{p}- \vec{q}, \mu}a_{\vec{p},\mu}a_{\vec{k}, \lambda}]{F}{F}
+\end{align*}
+As in the three dimensional case only the exchange term contributes. So the matrix element becomes
+\begin{align*}
+\delta_{\vec{k}+\vec{q},\vec{p}}\delta_{\lambda,\mu}\braket[a^\dagger_{\vec{k}+ \vec{q}, \lambda} a^\dagger_{\vec{k}, \lambda}a_{\vec{k}+\vec{q},\lambda}a_{\vec{k}, \lambda}]{F}{F} &= - \delta_{\vec{k}+\vec{q},\vec{p}}\delta_{\lambda,\mu}\braket[\hat{n}_{\vec{k}+ \vec{q}, \lambda} \hat{n}_{\vec{k}, \lambda}]{F}{F} \\
+&= - \delta_{\vec{k}+\vec{q},\vec{p}}\delta_{\lambda,\mu}\theta(k_F - |\vec{k}+\vec{q}|)\theta(k_F - k)
+\end{align*}
+
+So the first order potential energy is given by the following expression:
+\begin{align*}
+E_1 &= -\frac{e^2}{2S}\sum'_{\substack{\vec{k}\vec{q} \\ \lambda}} \frac{2\pi}{q}\theta(k_F - |\vec{k}+\vec{q}|)\theta(k_F - k) \\
+&= - \frac{e^2}{2}\frac{2\pi S}{(2\pi)^4}2 \int \diff{^2k}\diff{^2q}q^{-2} \theta(k_F - |\vec{k}+\vec{q}|)\theta(k_F - k) \\
+&= - \frac{e^2S}{(2\pi)^3}\int \diff{^2P}\diff{^2q}q^{-2} \theta(k_F - |\vec{P}+\tfrac{\vec{q}}{2}|)\theta(k_F - |\vec{P}- \tfrac{\vec{q}}{2}|)
+\end{align*}
+Where $\vec{P} = \vec{k}+ \frac{1}{2}\vec{q}$.
+In order to evaluate this integral, we first calculate an expression for a circle segment of a circle of radius $R$ of height $h$:
+\[ R^2\arccos \left(\frac{R-h}{R}\right) - (R-h)\sqrt{2Rh - h^2} \]
+
+The integral over $\vec{P}$ yields a surface equals to two such segments with height $k_F - \frac{q}{2}$ from circles of radius $k_F$. Thus we have
+\begin{align*}
+\int \diff{^2P} \theta(k_F - |\vec{P}+\tfrac{\vec{q}}{2}|)\theta(k_F - |\vec{P}- \tfrac{\vec{q}}{2}|) &= 2 \left( k_F^2\arccos \left(\frac{q}{2k_F}\right) - \frac{q}{2}\sqrt{k_F^2 - \frac{q^2}{4}} \right)\theta(2k_F - q) \\
+&= 2k_F^2 \left( \arccos \left(x\right) - x\sqrt{1 - x^2} \right)\theta(1 - x)
+\end{align*}
+With $x = \frac{q}{2k_F}$
+
+Therefor we get for the first order potential energy
+\begin{align*}
+E_1 &= - \frac{e^2S}{(2\pi)^3}2k_F^2 2k_F\int_0^1 2\pi \left( \arccos \left(x\right) - x\sqrt{1 - x^2} \right) \\
+&= - \frac{e^2S}{(2\pi)^2}4k_F^3\left( 1 - \frac{1}{3} \right) \\
+&= - \frac{e^2S}{(2\pi)^2} \frac{8k_F^3}{3}\\
+&= - \frac{e^2}{2\pi}N \frac{8}{3}k_F \\
+&= - \frac{e^2}{2\pi}N \frac{8\sqrt{2}}{3a_0r_s}
+\end{align*}
+This expression is again completely different from the three dimensional case, mostly due to the different geometry.
+
+So the ground state energy per particle in the high-density limit is given approximately as
+\[ \frac{E}{N} = \frac{e^2}{2a_0}\left[\frac{1}{r_s^2} - \frac{8\sqrt{2}}{3\pi}\frac{1}{r_s} + \ldots\right] \]
+The minimum is at
+\[r_s = \frac{3\pi}{4\sqrt{2}} \approx 1.666\]
+and the minimum energy per particle is
+\[ \frac{E}{N} = -0.36 \frac{e^2}{2a_0} \]
+This means that compared to the three dimensional case, $r_s$ is smaller (so the density is higher) and the binding energy is higher.
+
+
+
+\begin{params}
+\underline{Recap of the Jellium model}
+
+\[ \frac{E}{N} \underset{r_S \to 0}{=} \left(\frac{e^2}{2a_0}\right)\left[\underbrace{\frac{2.21}{r_S^2}}_{\text{kinetic}}`- \underbrace{\frac{0.916}{r_S}}_{\text{exchange}} + \underbrace{\ldots}_{\text{correlation energy}}\right] \]
+The name correlation energy was introduced by Wigner. It was called stupidity energy by Feynman.
+
+We will try in this course to calculate more terms in this perturbative expansion.
+
+Putting all the contributions together we get the following figure: (see notes)
+
+Variational principle
+\[ \braket[\hat{H}]{F}{F} \geq \braket[\hat{H}]{0}{0} \]
+(with $F$ the Fermi state and $0$ the exact state)
+
+But is our approximation actually any good? We consider bulk sodium metal. Cohesive energy
+\[ \begin{cases}
+\frac{E}{N} = - 1.13 eV \\
+r_S = 3.96
+\end{cases} \] 
+So our crude model is not too bad.
+
+A first question is why is the real energy higher? In the real case we don't have a uniform background, but localised charges. So electrons have less space to move around. This means a larger momentum (from the uncertainty principle) and thus higher kinetic energy and a positive contribution to the total energy.
+
+For real metals $r_S$ is between 2 and 6.
+
+Low density limit ($r_S \; \to \; \infty$). Wigner (1938). Solid. Lattice of electrons that only move a bit around equilibrium in positive background. In this case we can apply classical electrostatic approaches. (Madelung, Ewald method). The result is
+\[ \frac{E}{N} = \frac{e^2}{2a_0} \left[\frac{-1.79}{r_s}+ \frac{2.66}{r_s^{3/2}} + \ldots\right] \] 
+
+Real metals are between the high and low density limits.
+
+\[ E_\text{corr} = 0.0622 \ln r_S + const. + \mathcal{O}(r_S \ln r_S) \]
+
+\end{params}
+
+Read chapter 2 (useful for later)
+We move on to chapter 3
+
+\chapter{Green's functions in the ground-state formalism}
+The single-particle Green's function is defined by
+\[ i G_{\alpha\beta}(\vec{x},t;\vec{x}', t') = \frac{\braket[T \left[\hat{\psi}_{H\alpha}(\vec{x},t)\hat{\psi}^\dagger_{H\beta}(\vec{x}',t')\right]]{\Psi_0}{\Psi_0}}{\braket{\Psi_0}{\Psi_0}} \]
+where $\ket{\Psi_0}$ is the Heisenberg ground state of the interacting system satisfying
+\[ \hat{H}\ket{\Psi_0} = E\ket{\Psi_0}, \]
+$\hat{\psi}_{H\alpha}(\vec{x},t)$ is a Heisenberg operator, i.e. with time-dependence given by
+\[ \hat{\psi}_{H\alpha}(\vec{x},t) = e^{i\hat{H}t/\hbar}\hat{\psi}_\alpha(\vec{x})e^{-i\hat{H}t/\hbar} \]
+and $\alpha$ and $\beta$ label the components of the field operator.
+
+If $\hat{H}$ is time independent, then $G$ depends only on the time difference $t-t'$:
+\[ i G_{\alpha\beta}(\vec{x},t;\vec{x}', t') = \begin{cases}
+e^{iE(t-t')/\hbar}\frac{\braket[T \left[\hat{\psi}_{H\alpha}(\vec{x})e^{-i \hat{H}(t-t')/\hbar}\hat{\psi}^\dagger_{H\beta}(\vec{x}')\right]]{\Psi_0}{\Psi_0}}{\braket{\Psi_0}{\Psi_0}} \qquad t>t' \\
+\pm e^{-iE(t-t')/\hbar}\frac{\braket[T \left[\hat{\psi}_{H\alpha}(\vec{x})e^{i \hat{H}(t-t')/\hbar}\hat{\psi}^\dagger_{H\beta}(\vec{x}')\right]]{\Psi_0}{\Psi_0}}{\braket{\Psi_0}{\Psi_0}} \qquad t'>t
+\end{cases} \]
+
+Green's functions are studied because the Feynman rules for finding their $n^\text{th}$ order contributions in perturbation theory are relatively simple but they still contain properties of great interest
+\begin{itemize}
+\item expectation value of each single particle operator in the ground state of the system
+\item ground-state total energy
+\item elementary excitations.
+\end{itemize}
+
+\section{Relation to observables}
+\subsection{Expectation value of single-particle operators}
+In general a second-quantized operator is given by
+\[ \hat{J} = \int \diff{^3x}\sum_{\alpha\beta}\hat{\psi}^\dagger_\beta(\vec{x})J_{\beta\alpha}(\vec{x})\hat{\psi}_\alpha(\vec{x}). \]
+This suggests the following expression for the second-quantized density $\hat{\mathcal{J}}(\vec{x})$:
+\[\hat{\mathcal{J}}(\vec{x}) = \sum_{\alpha\beta}\hat{\psi}^\dagger_\beta(\vec{x})J_{\beta\alpha}(\vec{x})\hat{\psi}_\alpha(\vec{x}).\]
+
+The ground-state expectation value or the operator density is given by
+\begin{align*}
+\expval{\hat{\mathcal{J}}(\vec{x})} &\equiv \frac{\braket[\hat{\mathcal{J}}(\vec{x})]{\Psi_0}{\Psi_0}}{\braket{\Psi_0}{\Psi_0}} \\
+&= \lim_{\vec{x'}\to \vec{x}}\sum_{\alpha\beta}J_{\beta\alpha}(\vec{x}) \frac{\braket[\hat{\psi}^\dagger_\beta(\vec{x'})\hat{\psi}_\alpha(\vec{x})]{\Psi_0}{\Psi_0}}{\braket{\Psi_0}{\Psi_0}} \\
+&= \pm i \lim_{t'\to t^+}\lim_{\vec{x'}\to \vec{x}} \sum_{\alpha\beta}J_{\beta\alpha}(\vec{x})G_{\alpha\beta}(\vec{x},t; \vec{x'},t') \\
+&=  \pm i \lim_{t'\to t^+}\lim_{\vec{x'}\to \vec{x}} \Tr[J(\vec{x})G(\vec{x},t; \vec{x'},t')]
+\end{align*}
+
+Some examples:
+\begin{itemize}
+\item Number density:
+\[ \expval{\hat{n}(\vec{x})} = \pm i\Tr G(\vec{x},t;\vec{x},t^+) \]
+\item Total kinetic energy:
+\[ \expval{\hat{T}} = \pm i \int \diff{^3x}\lim_{\vec{x'}\to \vec{x}}\left[- \frac{\hbar^2\nabla^2}{2m}\Tr G(\vec{x},t;\vec{x'},t^+)\right] \]
+\end{itemize}
+
+\subsection{Ground-state energy}
+We now have an expression for the kinetic energy. We would also like an expression for the potential energy so we can add both contributions to obtain the ground-state energy. The potential is not a single particle operator, so we need to find a new trick: we will use the Schrödinger equation to extract the potential energy.
+
+Assuming $\braket{\Psi_0}{\Psi_0}$ is normalised, we wish to compute the following:
+\begin{align*}
+\expval{\hat{V}} = \frac{1}{2} \sum_{\substack{\alpha \alpha' \\ \beta \beta'}}\int \diff{\vec{x}}\int \diff{\vec{x'}} \braket[\hat{\psi}_{\alpha}^\dagger(\vec{x})\hat{\psi}^\dagger_\beta(\vec{x})V_{\substack{\alpha\alpha' \\ \beta \beta'}}(\vec{x}, \vec{x'})\hat{\psi}_{\beta'}(\vec{x}')\hat{\psi}_{\alpha'}(\vec{x}')]{\Psi_0}{\Psi_0}
+\end{align*}
+
+For any Heisenberg operator, the following holds:
+\[i\hbar \pd{}{t}\hat{\psi}_{H\alpha}(\vec{x},t) = e^{i\hat{H}t/\hbar} \left[\hat{\psi}_{H\alpha}(\vec{x}),\hat{H}\right]e^{-i\hat{H}t/\hbar} =  \left[\hat{\psi}_{\alpha}(\vec{x},t),\hat{H}\right]\]
+
+Using the expression $\hat{T} = \sum_\beta \int \diff{\vec{x}} \hat{\psi}^\dagger_\alpha(\vec{x})T(\vec{x})\hat{\psi}_\alpha(\vec{x})$ for the kinetic energy in second quantization, we see that
+\begin{align*}
+\left[\hat{\psi}_\alpha(\vec{x}), \hat{T}\right] &= \sum_\beta \int \diff{\vec{y}} \lim_{\vec{y'} \to \vec{y}}\left(\frac{-\hbar^2\nabla^2}{2m}\right)\left[\hat{\psi}_\alpha(\vec{x}), \hat{\psi}^\dagger_\beta(\vec{y'})\hat{\psi}_\beta(\vec{y})\right] \\
+\end{align*}
+
+Next we appreciate the identity
+\begin{align*}
+\left[A,BC\right] &= ABC - BCA = ABC - BAC + BAC - BCA \\
+&= \begin{cases}
+\left[A,B\right]C - B \left[C,A\right] \\
+\left\{A,B\right\}C - B \left\{C,A\right\}.
+\end{cases}
+\end{align*}
+This allows us to write the previous expression in terms of either commutators \textbf{or} anti-commutators. Thus the following will be correct for both bosons and fermions.
+
+So
+
+\begin{align*}
+\left[\hat{\psi}_\alpha(\vec{x}), \hat{T}\right] &= \sum_\beta \int \diff{\vec{y}} \lim_{\vec{y'} \to \vec{y}}\left(\frac{-\hbar^2\nabla^2}{2m}\right)\delta_{\alpha\beta}\delta(\vec{x}- \vec{y'})\hat{\psi}_\beta(\vec{y}) \\
+&= - \frac{\hbar^2\nabla^2 x}{2m}\hat{\psi}_\alpha(\vec{x}) \\
+&= T(\vec{x})\hat{\psi}_{\alpha}(\vec{x})
+\end{align*}
+
+For the potential energy we quite simply need to apply the identity twice: we split the product of four field operators in the right part of the commutator into two and two, and then into (anti-)commutators of single field operators we can compute.
+
+\begin{align*}
+\left[\hat{\psi}_\alpha(\vec{x}), \hat{V}\right] &= \frac{1}{2} \sum_{\substack{\beta \beta' \\ \gamma \gamma'}}\int \diff{\vec{y}}\int \diff{\vec{y'}} \left[\hat{\psi}_\alpha(\vec{x}), \hat{\psi}^\dagger_\beta(\vec{y})\hat{\psi}^\dagger_\gamma(\vec{y'})V_{\substack{\beta \beta' \\ \gamma \gamma'}}(\vec{y}, \vec{y'})\hat{\psi}_{\gamma'}(\vec{y'})\hat{\psi}_{\beta'}(\vec{y})\right] \\
+&= - \frac{1}{2}\sum_{\beta\beta'\gamma'}\int \diff{\vec{y}}\hat{\psi}^\dagger_\beta(\vec{z})V_{\substack{\beta\beta' \\ \alpha\gamma'}}(\vec{y}, \vec{x})\hat{\psi}_{\gamma'}(\vec{x})\hat{\psi}_{\beta'}(\vec{y}) + \frac{1}{2}\sum_{\beta'\gamma\gamma'}\int \diff{\vec{y'}}\hat{\psi}^\dagger_\gamma(\vec{z'})V_{\substack{\alpha\beta' \\ \gamma\gamma'}}(\vec{x}, \vec{y'})\hat{\psi}_{\gamma'}(\vec{y'})\hat{\psi}_{\beta'}(\vec{x})
+\end{align*}
+
+In the first term we can change the dummy variables
+\[ \begin{cases}
+\beta \to \gamma \\
+\beta' \to \gamma' \\
+\gamma' \to \beta' \\
+\vec{y} \to \vec{y'}
+\end{cases} \]
+and using the anticommutivity of the fields $\hat{\psi}$ as well as the symmetry of the potential
+\[ V_{\substack{\alpha\alpha' \\ \beta \beta'}}(\vec{x}, \vec{x'}) = V_{\substack{\beta \beta' \\ \alpha\alpha'}}(\vec{x'}, \vec{x}) \]
+we obtain
+\[ \left[\hat{\psi}_\alpha(\vec{x}), \hat{V}\right] = \sum_{\beta'\gamma\gamma'}\int \diff{\vec{y'}}\hat{\psi}^\dagger_\gamma(\vec{z'})V_{\substack{\alpha\beta' \\ \gamma\gamma'}}(\vec{x}, \vec{y'})\hat{\psi}_{\gamma'}(\vec{y'})\hat{\psi}_{\beta'}(\vec{x}). \]
+
+Filling all this into the equation for the time evolution of a Heisenberg operator, we get
+\[ i\hbar \pd{}{t}\hat{\psi}_{H\alpha}(\vec{x},t) = \left[\hat{\psi}_{H\alpha}(\vec{x},t),\hat{H}\right] = - \frac{\hbar^2 \nabla^2_x}{2m}\hat{\psi}_{H\alpha}(\vec{x},t) + \sum_{\beta'\gamma\gamma'} \int \diff{\vec{y'}}\hat{\psi}^\dagger_{H\gamma}(\vec{y'},t)V_{\substack{\alpha\beta' \\ \gamma \gamma'}}(\vec{x}, \vec{z'})\hat{\psi}_{H\gamma'}(\vec{y'},t)\hat{\psi}_{H\beta'}(\vec{x},t). \]
+Rearranging slightly:
+\[ \left[ i\hbar \pd{}{t} - T(\vec{x})\right] \hat{\psi}_{H\alpha}(\vec{x},t) =  \sum_{\beta'\gamma\gamma'} \int \diff{\vec{y'}}\hat{\psi}^\dagger_{H\gamma}(\vec{y'},t)V_{\substack{\alpha\beta' \\ \gamma \gamma'}}(\vec{x}, \vec{z'})\hat{\psi}_{H\gamma'}(\vec{y'},t)\hat{\psi}_{H\beta'}(\vec{x},t). \]
+
+
+To simplify we multiply by $\hat{\psi}_{H\alpha}(\vec{x'},t')$ on the left and take the ground-state expectation value.
+\begin{multline*}
+\left[ i\hbar \pd{}{t} - T(\vec{x})\right] \braket[\hat{\psi}_{H\alpha}^\dagger(\vec{x'},t')\hat{\psi}_{H\alpha}(\vec{x},t)]{\Psi_0}{\Psi_0} = \\ \sum_{\beta'\gamma\gamma'} \int \diff{\vec{y'}} \braket[\hat{\psi}_{H\alpha}^\dagger(\vec{x'},t')\hat{\psi}^\dagger_{H\gamma}(\vec{y'},t)V_{\substack{\alpha\beta' \\ \gamma \gamma'}}(\vec{x}, \vec{z'})\hat{\psi}_{H\gamma'}(\vec{y'},t)\hat{\psi}_{H\beta'}(\vec{x},t)]{\Psi_0}{\Psi_0}.
+\end{multline*}
+In the limit $\vec{x'}\to \vec{x}, t'\to t^+$, the left side is equal to
+\[\pm i\lim_{t'\to t^+}\lim_{\vec{x'}\to \vec{x}}\left[i\hbar \pd{}{t} - T(\vec{x})\right]G_{\alpha\alpha}(\vec{x},t;\vec{x'},t').\]
+Summing over $\alpha$ and integrating over $\vec{x}$, the right hand side becomes double the ground-state expectation value for the potential energy, $\expval{\hat{V}}$.
+\begin{align*}
+\expval{\hat{V}} &= \pm i\frac{1}{2}\int \diff{\vec{x}}\lim_{t'\to t^+}\lim_{\vec{x'}\to \vec{x}}\sum_\alpha\left[i\hbar \pd{}{t} - T(\vec{x})\right]G_{\alpha\alpha}(\vec{x},t;\vec{x'},t')
+\end{align*}
+
+Finally we have an expression for the ground-state energy solely in terms of the single particle Green's function:
+\begin{align*}
+E &= \expval{\hat{T}+ \hat{V}} = \expval{\hat{H}} \\
+&= \pm i \frac{1}{2} \int \diff{\vec{x}}\lim_{\substack{\vec{x'} \to \vec{x} \\ t'\to t^+}} \left[i\hbar \pd{}{t} + T(\vec{x})\right]\Tr G(\vec{x},t; \vec{x}',t')
+\end{align*}
+
+\subsubsection{Green's functions in momentum space}
+We assume the system is homogeneous and in a large box of volume $V$. ($\left[\hat{\vec{p}},\hat{H}\right]=0; G_{\alpha\beta}(\vec{x}- \vec{x}', t - t')$
+
+We can then write the single particle Green's function as
+\begin{align*} G_{\alpha\beta}(\vec{x}t, \vec{x}'t') \equiv \sum_{\vec{k}} \frac{1}{V}\int^{+\infty}_{-\infty} \frac{\diff{\omega}}{2\pi} e^{i \vec{k}\cdot (\vec{x} - \vec{x}')}e^{-i\omega(t-t')}G_{\alpha\beta}(\vec{k}, \omega)
+\end{align*}
+In the limit $V\to \infty$, the sum becomes an integral
+\[ G_{\alpha\beta}(\vec{x}t, \vec{x}'t') = (2\pi)^{-4}\int\diff{\vec{k}} \int^{+\infty}_{-\infty} \diff{\omega} e^{i \vec{k}\cdot (\vec{x} - \vec{x}')}e^{-i\omega(t-t')}G_{\alpha\beta}(\vec{k}, \omega) \]
+
+We get the following expression for the total energy:
+\begin{align*}
+E &= \pm \frac{1}{2}i \int \diff{\vec{x}}\lim_{\substack{\vec{x'} \to \vec{x} \\ t'\to t^+}} \frac{1}{(2\pi)^4}\int \diff{\vec{k}}\int^{+\infty}_{-\infty}\diff{\omega}\left(\hbar\omega + \frac{\hbar^2k^2}{2m}\right)e^{i \vec{k}\cdot(\vec{x} - \vec{x}')}e^{-i\omega(t-t')} \Tr G[\vec{k},\omega] \\ 
+&= \pm \frac{1}{2}i \frac{V}{(2\pi)^4}\lim_{\eta\to 0^+} \int \diff{\vec{k}} \int^{+\infty}_{-\infty} \diff{\omega}e^{i\omega\eta} \left(\frac{\hbar^2k^2}{2m}+ \hbar \omega\right)\Tr G(\vec{k},\omega)
+\end{align*}
+Where we have defined $\eta \equiv t'-t$.
+
+The total number of particles is given by
+\[ N = \int \diff{\vec{x}}\expval{\hat{n}(\vec{x})} = \pm i \frac{V}{(2\pi)^4}\lim_{\eta\to0^+}\int \diff{\vec{k}}\int^\infty_{-\infty}\diff{\omega}e^{i\omega \eta}\Tr G(\vec{k},\omega) \]
+
+\section{Calculating the Green's function for free, noninteracting fermions}
+We now attempt to calculate the single-particle Green's function for free, noninteracting fermion, which we call $G^0$. In this case $\hat{H} = \hat{H}_0 = \hat{T}$ and $\hat{H}_0\ket{F} = E_0\ket{F}$ if $k < k_F$, i.e. the fermion is inside the Fermi sphere.
+
+It is convenient to perform a transformation to holes and particles. In the definition of the field
+\[ \hat{\psi}(\vec{x}) = \sum_{\vec{k},\lambda}\psi_{\vec{k}\lambda}(\vec{x})c_{\vec{k}\lambda} \]
+we redefine the fermion operator $c_{\vec{k}\lambda}$ as
+\[ c_{\vec{k}\lambda} = \begin{cases}
+a_{\vec{k}\lambda} \qquad (|\vec{k}|> k_F) \qquad \text{particles} \\
+b^\dagger_{- \vec{k}\lambda} \qquad (|\vec{k}| \leq k_F) \qquad \text{holes}
+\end{cases} \] 
+The anti-commutation rules are preserved:
+\[ \{a_{\vec{k}}, a^\dagger_{\vec{k}'}\} = \{b_{\vec{k}}, b^\dagger_{\vec{k}'}\} = \delta_{\vec{k} \vec{k}'} \]
+\[ \{a_{\vec{k}} , b^\dagger_{\vec{k}'}\} = 0 \]
+This means it's canonical transformation the physics is preserved.
+
+\begin{align*}
+\hat{H}_0 &= \sum_{\vec{k}\lambda} \epsilon_{\vec{k}}c^\dagger_{\vec{k}\lambda}c^\dagger_{\vec{k}\lambda} \\
+&= \sum_{\substack{|\vec{k}|\leq k_F \\ \lambda}} \epsilon_{\vec{k}} b_{\vec{k}\lambda}b^\dagger_{\vec{k}\lambda} + \sum_{\substack{|\vec{k}|> k_F \\ \lambda}} \epsilon_{\vec{k}} a^\dagger_{\vec{k}\lambda}a_{\vec{k}\lambda} \\
+&= \sum_{\substack{|\vec{k}|\leq k_F \\ \lambda}} \epsilon_{\vec{k}}- \sum_{\substack{|\vec{k}|\leq k_F \\ \lambda}} b^\dagger_{\vec{k}\lambda}b_{\vec{k}\lambda} + \sum_{\substack{|\vec{k}|> k_F \\ \lambda}} \epsilon_{\vec{k}} a^\dagger_{\vec{k}\lambda}a_{\vec{k}\lambda} \\
+&= \text{filled Fermi sea} + \text{holes} + \text{particles}
+\end{align*}
+Where $\epsilon_{\vec{k}} = \frac{\hbar^2k^2}{2m}$ and remembering that $b_{\vec{k}\lambda}b^\dagger_{\vec{k}\lambda} = 1 - b^\dagger_{\vec{k}\lambda}b_{\vec{k}\lambda}$.
+
+If there are no particles or holes, the energy is that of the Fermi sea. Creating holes lowers the energy, whereas creating a particle raises the energy. If the total number of fermions is fixed, particles and holes occur in pairs. Because $k_\text{particle}>k_F\geq k_{\text{hole}}$ each particle-hole pair has has a net positive energy. So the filled Fermi sea represents the ground state.
+
+In order to calculate the Green's function, we need the operator fields in terms of these operators. In the Schrödinger picture this is straightforward
+\[ \hat{\psi}_{S\alpha}(\vec{x}) = \sum_{|\vec{k}|>k_F}\psi_{\vec{k}\alpha}(\vec{x})a_{\vec{k}\alpha} + \sum_{|\vec{k}|> k_F}\psi_{\vec{k}\alpha}(\vec{x})b^\dagger_{-\vec{k}\alpha} \]
+
+In order to get the field in the Heisenberg picture
+\[ \hat{\psi}_{H\alpha}(\vec{x},t) = e^{i\hat{H}t/\hbar}\hat{\psi}_\alpha(\vec{x}) e^{-i\hat{H}t / \hbar} \]
+with $\hat{\psi}_\alpha(\vec{x}) = \sum_{\vec{k}} \frac{e^{i \vec{k} \cdot \vec{x}}}{\sqrt{V}}\eta_\alpha c_{\vec{k}\alpha}$, we need to evaluate
+\begin{align*}
+e^{i\hat{H}_0t / \hbar}c_{\vec{k}\alpha}e^{-i\hat{H}_0t / \hbar} &= \sum^\infty_{n=0} \frac{1}{n!}\left[\frac{i}{\hbar}\hat{H}_0t, \left[\frac{i}{\hbar}\hat{H}_0t, \ldots \left[\frac{i\hat{H}_0t}{\hbar}, c_{\vec{k}\alpha}\right]\ldots\right]\right] \\
+&= \sum^\infty_{n=0} \frac{(it/\hbar)^n}{n!}\left[\hat{H}_0, \left[\hat{H}_0, \ldots \left[\hat{H}_0, c_{\vec{k}\alpha}\right]\ldots\right]\right]
+\end{align*}
+where $\hat{H}_0$ is the same as $\hat{H}$ because we are working with a non-interacting system.
+
+The innermost commutator is
+\begin{align*}
+\left[\hat{H}_0, c_{\vec{k}\alpha}\right] &= -\left[c_{\vec{k}\alpha}, \hat{H}_0\right] = -\sum_{\vec{k}'\alpha'}\epsilon_{\vec{k}'}\left[c_{\vec{k}\alpha}, c^\dagger_{\vec{k'}\alpha'}c_{\vec{k'}\alpha'} \right] \\
+&= -\epsilon_{\vec{k}}c_{\vec{k}\alpha}
+\end{align*}
+Where we have used our cool identity. As a result we get 
+\begin{align*}
+e^{i\hat{H}_0t / \hbar}c_{\vec{k}\alpha}e^{-i\hat{H}_0t / \hbar} &= \sum^\infty_{n=0}\frac{(it/\hbar)^n(-\epsilon_{\vec{k}})^n}{n!}c_{\vec{k}\alpha} \\
+&= e^{- \frac{i}{\hbar}\epsilon_{\vec{k}}t}c_{\vec{k}\alpha}
+\end{align*}
+We also introduce $\omega_{\vec{k}}$ such that $\hbar \omega_{\vec{k}} = \epsilon_{\vec{k}}$and then get
+\[ \hat{\psi}_{H\alpha}(\vec{x}) = \sum_{|\vec{k}|>k_F}\psi_{\vec{k}\alpha}(\vec{x})e^{-i\omega_{\vec{k}}t}a_{\vec{k}\alpha} + \sum_{|\vec{k}|> k_F}\psi_{\vec{k}\alpha}(\vec{x})e^{-i\omega_{\vec{k}}t}b^\dagger_{-\vec{k}\alpha} \]
+
+Now we are ready to tackle the Green's function proper, which by definition is given by 
+\[ iG_{\alpha\beta}^0(\vec{x}t, \vec{x}'t') = \braket[T[\hat{\psi}_{H\alpha}(\vec{x}t)\hat{\psi}_{H\beta}^\dagger(\vec{x}',t')]]{\Phi_0}{\Phi_0} \]
+The particle and hole destructor operators both annihilate the ground state:
+\[ b_{\vec{k}\alpha} \ket{\Phi_0} = 0 \qquad a_{\vec{k}\alpha}\ket{\Phi_0} = 0 \]
+So many terms do not give a contribution:
+\[ iG^0_{\alpha\beta}(\vec{x},t; \vec{x}', t') = \begin{cases}
+\frac{1}{V} \sum_{\substack{|\vec{k}|>k_F \\ |\vec{k}'|> k_F}} e^{i(\vec{k}\cdot \vec{x} - \omega_k t)}e^{-i(\vec{k}'\cdot \vec{x}' - \omega_k't')}\eta_\alpha\eta_\beta^\dagger \braket[a_{\vec{k}\alpha}a^\dagger_{\vec{k}\beta}]{\Phi_0}{\Phi_0} \qquad (t>t') \\
+-\frac{1}{V} \sum_{\substack{|\vec{k}|\leq k_F \\ |\vec{k}'|\leq k_F}} e^{i(\vec{k}'\cdot \vec{x}' + \omega_k't')}e^{-i(\vec{k}\cdot \vec{x} + \omega_k t)}\eta_\beta^\dagger\eta_\alpha \braket[b_{\vec{k}'\beta}b^\dagger_{\vec{k}\alpha}]{\Phi_0}{\Phi_0} \qquad (t<t')
+\end{cases} \]
+Changing variables, we get
+
+\[iG^0_{\alpha\beta}(\vec{x}t, \vec{x}'t') = \frac{1}{V}\delta_{\alpha\beta} \sum_{\vec{k}} e^{i \vec{k}(\vec{x}- \vec{x}')}e^{-i\omega_{\vec{k}}(t-t')} \left[\theta(t-t')\theta(k-k_F) - \theta(t'-t)\theta(k_F-k)\right]\]
+
+Letting the volume go to infinity, the summation becomes an integral:
+\[ iG^0_{\alpha\beta}(\vec{x}t, \vec{x}'t') = \frac{1}{(2\pi)^3}\delta_{\alpha\beta} \int \diff{\vec{k}} e^{i \vec{k}(\vec{x}- \vec{x}')}e^{-i\omega_{\vec{k}}(t-t')} \left[\theta(t-t')\theta(k-k_F) - \theta(t'-t)\theta(k_F-k)\right] \]
+using the integral representation for the step function
+\[ \theta(t-t') = -\int^\infty_{-\infty} \frac{\diff{\omega}}{2\pi i}\frac{e^{-i\omega(t-t')}}{\omega + i\eta} \]
+the Green's function becomes
+\[G^0_{\alpha\beta}(\vec{x},t;\vec{x}',t) = \frac{1}{(2\pi)^4} \int \diff{\vec{k}}\int^{+\infty}_{-\infty} \diff{\omega}e^{i \vec{k}\cdot(\vec{x}- \vec{x}')}e^{-i\omega(t-t')}\delta_{\alpha\beta}\left[\frac{\theta(k-k_F)}{\omega - \omega_k + i\eta}+\frac{\theta(k_F-k)}{\omega - \omega_k - i\eta}\right].\]
+Comparing with
+\[G_{\alpha\beta}(\vec{x}- \vec{x}', t-t') = \frac{1}{(2\pi)^4} \int \diff{\vec{k}}\int^{+\infty}_{-\infty} \diff{\omega}e^{i \vec{k}\cdot(\vec{x}- \vec{x}')}e^{-i\omega(t-t')}G_{\alpha\beta}(\vec{k},\omega)\]
+We find the Green's function for non interaction fermions in momentum space:
+\[ G_{\alpha\beta}^0(\vec{k},\omega) = \delta_{\alpha\beta}\left[\frac{\theta(k-k_F)}{\omega-\omega_k+i\eta} + \frac{\theta(k_F-k)}{\omega - \omega_k - i\eta}\right] \]
+Where the first term refers to particles and the second to holes. $\omega_k = \frac{\epsilon_k}{\hbar} = \frac{\hbar k^2}{2m}$
+
+\section{The Lehmann representation}
+
+We now go back to the general interacting case. Lehmann representation is modification of Green functions in order to emphasize certain aspects, in particular elementary excitations. We do the calculations for fermions, because the possibility of Bose condensation at $T=0$ produces additional complications.
+
+Again we start from the definition of the Green's function
+\[ iG_{\alpha\beta}(\vec{x}t, \vec{x}'t') = \braket[T \left[\hat{\psi}_{H\alpha}(\vec{x}t)\hat{\psi}_{H\beta}^\dagger(\vec{x}'t')\right]]{\Psi_0}{\Psi_0}. \]
+
+We insert a complete set of Heisenberg states $\{\ket{\Psi_n}\}$ (with $\sum_n\ket{\Psi_n}\bra{\Psi_n} = \mathbb{1}$ and $\hat{H}\ket{\Psi_n} = E_n\ket{\Psi_n}$) in this definition (expanding the time-ordered product for fermionic fields):
+\begin{multline*}
+iG_{\alpha\beta}(\vec{x},t;\vec{x'},t') = \sum_n \left[\theta(t-t')\braket[\hat{\psi}_{H\alpha}(\vec{x}t)]{\Psi_0}{\Psi_n}\braket[\hat{\psi}^\dagger_{H\beta}(\vec{x'}t')]{\Psi_n}{\Psi_0}\right. \\
+- \left.\theta(t'-t)\braket[\hat{\psi}^\dagger_{H\beta}(\vec{x'}t')]{\Psi_0}{\Psi_n}\braket[\hat{\psi}_{H\alpha}(\vec{x}t)]{\Psi_n}{\Psi_0}\right]
+\end{multline*}
+
+The time-dependence of the matrix elements can be made explicit:
+\begin{multline*}
+iG_{\alpha\beta}(\vec{x},t;\vec{x'},t') = \sum_n \left[\theta(t-t')e^{-i(E_n-E)(t-t')/\hbar}\braket[\hat{\psi}_{\alpha}(\vec{x})]{\Psi_0}{\Psi_n}\braket[v]{\Psi_n}{\Psi_0}\right. \\
+- \left.\theta(t'-t)e^{i(E_n-E)(t-t')/\hbar}\braket[\hat{\psi}^\dagger_{\beta}(\vec{x'})]{\Psi_0}{\Psi_n}\braket[\hat{\psi}_{\alpha}(\vec{x})]{\Psi_n}{\Psi_0}\right]
+\end{multline*}
+
+\begin{note}
+The relevant states $\ket{\Psi_n}$ contain $N \pm 1$ particles if the state $\Psi_0$ contains $N$ particles.
+\end{note}
+
+First assume that $\hat{H}$ does not depend on time, the with $\tau=t-t'$ we can write
+\[ G_{\alpha\beta}(\vec{x},\vec{x}',\tau) = \frac{1}{2\pi}\int^{+\infty}_{-\infty}\diff{\omega}e^{-i\omega \tau}\tilde{G}_{\alpha\beta}(\vec{x}, \vec{x}',\omega) \]
+where
+\[ \tilde{G}_{\alpha\beta}(\vec{x}, \vec{x}', \omega) = \sum_n \left[\frac{\braket[\hat{\psi}_\alpha(\vec{x})]{\Psi_0}{\Psi_n}\braket[\hat{\psi}_\beta^\dagger(\vec{x}')]{\Psi_n}{\Psi_0}}{\omega-(E_n - E_0)/\hbar + i\eta} + \frac{\braket[\hat{\psi}_\beta^\dagger(\vec{x}')]{\Psi_0}{\Psi_n}\braket[\hat{\psi}_\alpha(\vec{x})]{\Psi_n}{\Psi_0}}{\omega+(E_n - E_0)/\hbar - i\eta} \right] \]
+This is a meromorphic function with poles at
+\[ \omega_p = \pm (E_n - E_0)/\hbar \mp i\eta \]
+
+
+Now we take a look at the first denominator:
+\begin{align*}
+\omega &= \frac{(E_n - E_0)}{\hbar}-i\eta = \frac{E_n(N+1)}{\hbar} - \frac{E_0(N)}{\hbar} - i\eta  \\
+&= \frac{E_n(N+1) - E_0(N+1)}{\hbar} + \frac{E_0(N+1)-E_0(N)}{\hbar} - i\eta \\
+&= \frac{\epsilon_n(N+1)}{\hbar} + \frac{\mu}{\hbar} -i\eta
+\end{align*}
+Where $\mu$ is the chemical potential. It measures the gain in energy if we add one more particles to our system. $\mu(N+1) = \mu(N)+O(1/N)$. The excitation energy $\epsilon_n$ is non negative.
+
+The second denominator gives a similar result, yielding
+\[ \tilde{G}_{\alpha\beta}(\vec{x},\vec{x}', \omega) = \sum_n \left[\frac{\braket[\hat{\psi}_\alpha(\vec{x})]{\Psi_0}{\Psi_n}\braket[\hat{\psi}_\beta^\dagger(\vec{x}')]{\Psi_n}{\Psi_0}}{\omega-\epsilon_n(N+1)/\hbar- \mu/\hbar + i\eta} + \frac{\braket[\hat{\psi}_\beta^\dagger(\vec{x}')]{\Psi_0}{\Psi_n}\braket[\hat{\psi}_\alpha(\vec{x})]{\Psi_n}{\Psi_0}}{\omega+\epsilon_n(N-1)/\hbar -\mu/\hbar- i\eta} \right] \]
+
+
+
+At this point we assume translational invariance, so the momentum operator commutes with $\hat{H}$. It is natural to use the plane wave basis for such a system. The momentum operator for such a system is given by
+\[ \hat{\vec{P}} \equiv \sum_\alpha \int \diff{\vec{x}}\hat{\psi}^\dagger_\alpha(\vec{x})(-i\hbar \vnabla)\hat{\psi}_\alpha(\vec{x}) = \sum_{\vec{k}\lambda}\hbar \vec{k}c^\dagger_{\vec{k}\lambda}c_{\vec{k}\lambda} \]
+
+The expression
+\[ \left[\hat{\psi}_\alpha(\vec{x}), \hat{\vec{p}}\right] = -i\hbar\nabla\psi_\alpha(\vec{x}) \]
+can be written in integral form
+\[ \hat{\psi}_\alpha(\vec{x}) = e^{-i\hat{\vec{p}}\cdot\vec{x}/\hbar}\hat{\psi}_\alpha(0)e^{i\hat{\vec{p}}/\hbar} \]
+So for Heisenberg fields we can write
+\[ \hat{\psi}_{H\alpha}(\vec{x},t) = e^{i(\hat{H}t - \hat{\vec{p}}\cdot\vec{x})/\hbar}\hat{\psi}_\alpha(0)e^{-i(\hat{H}t- \hat{\vec{p}}\cdot \vec{x})/\hbar} \]
+
+Lehmann representation
+\[ G_{\alpha\beta}(\vec{k}, \omega) = \hbar V \sum_{n} \left[\frac{\braket[\hat{\psi}_\alpha(0)]{\Psi_0}{n\vec{k}}\braket[\hat{\psi}^\dagger_\beta(0)]{n\vec{k}}{\Psi_0}}{\hbar\omega - (\mu + \epsilon_n^{N+1}(\vec{k}))+i\eta} + \frac{\braket[\hat{\psi}_\beta^\dagger(0)]{\Psi_0}{n,-\vec{k}}\braket[\hat{\psi}_\alpha(0)]{n,-\vec{k}}{\Psi_0}}{\hbar\omega - (\mu - \epsilon_n^{N-1}(-\vec{k}))-i\eta} \right] \]
+
+System with spin 1/2 particles with coulomb potential is invariant under rotations and reflections
+\[ \left[\hat{H}, \mathcal{P}\right] = 0 \]
+
+Basis set:
+\[ \left\{\mathbb{1}, \vec{\sigma}\right\} \qquad \sigma_x = ... \]
+
+So we can decompose
+\[ G_{\alpha\beta}(\vec{k},\omega) = G(\vec{k},\omega)\mathbb{1} + b(\vec{\sigma}\cdot\vec{k}) \]
+This should depend only on the modulus of $k$ (no preferred direction). Because $b(\vec{\sigma}\cdot\vec{k})$ is a pseudo-scalar, if there is reflection symmetry $b = 0$.
+So we get
+\[G_{\alpha\beta}(\vec{k},\omega) = \delta_{\alpha\beta}G(|\vec{k}|, \omega)\]
+\[ \sum_\alpha G_{\alpha\alpha} = \Tr G = (2s+1)G \qquad \to \qquad G = \frac{G_{\alpha\alpha}}{2s+1} \]
+The only non-vanishing component is when $\beta=\alpha$
+\[ G_{\alpha\alpha}(\vec{k}, \omega) = \hbar V \sum_{n} \left[\frac{\braket[\hat{\psi}_\alpha(0)]{\psi_0}{n\vec{k}}\braket[\hat{\psi}^\dagger_\alpha(0)]{n\vec{k}}{\psi_0}}{\hbar\omega - (\mu + \epsilon_n^{N+1}(\vec{k}))+i\eta} + \frac{\braket[\hat{\psi}_\alpha^\dagger(0)]{\psi_0}{n,-\vec{k}}\braket[\hat{\psi}_\alpha(0)]{n,-\vec{k}}{\psi_0}}{\hbar\omega - (\mu - \epsilon_n^{N-1}(-\vec{k}))-i\eta} \right] \]
+So
+\[ G(\vec{k},\omega) = \frac{\hbar V}{2s+1}\sum_n \left[\frac{\left|\braket[\hat{\psi}_\alpha(0)]{\psi_0}{n\vec{k}}\right|^2}{\hbar\omega- (\mu+\epsilon_n(\vec{k}))+i\eta} + \frac{\left|\braket[\hat{\psi}_\alpha^\dagger(0)]{\psi_0}{n,-\vec{k}}\right|^2}{\hbar\omega- (\mu-\epsilon_n(-\vec{k}))-i\eta}\right] \]
+We take $V\to\infty$
+
+We write $\diff{n}$ the number of states between $\epsilon$ and $\epsilon+\diff{\epsilon}$. ($\epsilon < \epsilon_n(\vec{k}) < \epsilon + \diff{\epsilon}$)
+\[ \diff{n} = \left(\frac{\diff{n}(\epsilon)}{\diff{\epsilon}}\right)\diff{\epsilon} \]
+\[ A(\vec{k},\omega) \equiv \lim_{V\to\infty} \frac{\hbar V}{2s+1}\left|\braket[\hat{\psi}_\alpha(0)]{\psi_0}{n\vec{k}}\right|^2 \od{n}{\epsilon} \geq 0 \]
+\[ B(\vec{k},\omega) \equiv \lim_{V\to\infty} \frac{\hbar V}{2s+1}\left|\braket[\hat{\psi}^\dagger_\alpha(0)]{\psi_0}{n,-\vec{k}}\right|^2 \od{n}{\epsilon} \geq 0 \]
+($\omega = \frac{\epsilon}{\hbar}$)
+\[\sum_n \to \int \diff{n} = \int \diff{\epsilon}\od{n}{\epsilon} = \hbar \int \diff{\omega}\od{n}{\epsilon}\]
+So
+\[\frac{V}{2s+1}\sum_n ????? (applying the above)\]
+
+Spectral representation:
+\[ G(\vec{k},\omega) = \int^\infty_0 \diff{\omega'} \left[\frac{A(\vec{k},\omega')}{\omega - \hbar^{-1}\mu - \omega'+i\eta} + \frac{B(\vec{k},\omega')}{\omega - \hbar^{-1}\mu + \omega'-i\eta} \right] \]
+\[ \int_0^\infty A(\vec{k},\omega)\diff{\omega} + \int_0^\infty B(\vec{k},\omega)\diff{\omega}= 1 \]
+
+$\omega$ not analytic in either top or bottom half complex plane.
+
+Retarded or advanced GF
+\[ iG^R(\vec{x}t, \vec{x}',t') = \braket[\left\{\hat{\psi}_{H\alpha}(\vec{x},t), \hat{\psi}^\dagger_{H\beta}(\vec{x}'t')\right\}]{\psi_0}{\psi_0}\theta(t-t') \]
+\[ iG^A(...) = ??? \]
+
+After similar procedure for Green function
+\[G_{\alpha\beta}(\vec{k},\omega)^{R,A} = \hbar V \sum_n \left[ \frac{\braket[\hat{\psi}_\alpha(0)]{\psi_0}{n\vec{k}}\braket[v]{n\vec{k}}{\psi_0}}{\hbar\omega - (\mu+\epsilon_n(\vec{k}))\pm i\eta} + \frac{\braket[\hat{\psi}^\dagger_\beta(0)]{\psi_0}{n, -\vec{k}}\braket[\hat{\psi}_\alpha(0)]{n, -\vec{k}}{\psi_0}}{\hbar\omega - (\mu-\epsilon_n(-\vec{k}))\pm i\eta} \right]\]
+Where plus and minus refer to advanced and retarded.
+
+This expression is very similar, but with a crucial difference:
+\begin{itemize}
+\item $G^R$ only has poles below the real axis and thus is analytical for $\Im \omega >0$.
+\item $G^A$ only has poles above the real axis and thus is analytical for $\Im \omega <0$.
+\end{itemize}
+If $\omega$ is real and $\omega > \frac{\mu}{\hbar}$, then $G^R_{\alpha\beta}(\vec{k},\omega) = G_{\alpha\beta}(\vec{k},\omega)$.
+
+If $\omega$ is real and $\omega < \frac{\mu}{\hbar}$, then $G^A_{\alpha\beta}(\vec{k},\omega) = G_{\alpha\beta}(\vec{k},\omega)$.
+
+We can also obtain a spectral representation for these 2 functions
+\[ G_{\alpha\beta}(\vec{k},\omega)^{R,A} = \int^\infty_0 \diff{\omega'}\left[\frac{A(\vec{k},\omega')}{\omega - \hbar^{-1}\mu - \omega' \pm i\eta} + \frac{B(\vec{k},\omega')}{\omega - \hbar^{-1}\mu + \omega' \pm i\eta} \right] \]
+
+We write
+\[ \frac{1}{\omega \pm i\eta} = \sigma \frac{1}{\omega} \mp i\pi\delta(\omega) \]
+where $\sigma$ is the principle part. (Also missed formal definition)
+
+So
+\[ G_{\alpha\beta}(\vec{k},\omega)^{R,A} = \int_0^\infty \diff{\omega'}\frac{A(\vec{k},\omega')}{\omega-\hbar^{-1}\mu-\omega'} \mp i\pi A(...) ??? \]
+
+
+Now we consider the imaginary part of this expression
+\[\Im G^{R,A}(\vec{k},\omega') = \mp \pi A(\vec{k}, \omega'-\hbar^{-1}\mu) \mp B(\vec{k}, -\omega' + \hbar^{-1}\mu) \mp B(\vec{k}, -\omega'+\hbar^{-1}\mu)\]
+?????????????????
+
+Dispersion relations or Kramer - Kronig relations
+\[ \Re G^{R,A}(\vec{k},\omega) = \mp \mathcal{P}\int^{+\infty}_{-\infty} \frac{\diff{\omega'}}{\pi}\frac{\Im G^{R,A}(\vec{k},\omega')}{\omega-\omega'} \]
+
+???
+In general (for any system)
+\[ G_{\alpha\beta}(\vec{k},\omega) \sim \frac{1}{\omega} \qquad \omega \to \infty \]
+
+``Adiabatic switching on''
+\[ \hat{H} = \hat{H}_0 + \hat{V} = \hat{H}_0 + \hat{H}_1 \]
+\[\hat{H}(t) = \hat{H}_0 + e^{-\epsilon(t)}\hat{H}_1\]
+\[ \begin{cases}
+\hat{H}(0) = \hat{H}_0 + \hat{H}_0 \\ \hat{H}(t=^{+\infty}_{-\infty}) \to \hat{H}_0
+\end{cases} \]
+
+Missed previous lecture
+
+Lecture 09/04
+
+20 minutes late. 
+
+\begin{align*}
+iG_{\alpha\beta}(\vec{x},t,\vec{x}',t') &= \braket[T \left[\hat{\psi}_{H\alpha}(\vec{x},t)\hat{\psi}^\dagger_{H\beta}(\vec{x}',t')\right]]{\psi_0}{\psi_0} \\
+&= \braket[\hat{\psi}_{H\alpha}(\vec{x},t)\hat{\psi}_{H\beta}^\dagger(\vec{x}',t')]{\psi_0}{\psi_0}\theta(t-t') - \braket[\hat{\psi}_{H\beta}^\dagger(\vec{x}',t')\hat{\psi}_{H\alpha}(\vec{x},t)]{\psi_0}{\psi_0}\theta(t'-t)
+\end{align*}
+
+\begin{note}
+Green function: the physical interpretation
+
+\[\braket[\hat{\psi}(\vec{x},t)\hat{\psi}^\dagger(\vec{x}', t')]{\psi_0}{\psi_0} \qquad t> t'\]
+We have system. At time $t'$ we create particle at location $\vec{x}'$. It evolves and then gets destroyed at time $t$ and place $\vec{x}$.
+
+\[\braket[\hat{\psi}^\dagger(\vec{x}',t')\hat{\psi}(\vec{x}, t)]{\psi_0}{\psi_0} \qquad t'> t\]
+We have system. Particle gets destroyed at time $t$ and place $\vec{x}$. Hole evolves and gets filled at time $t'$ and $\vec{x}'$.
+
+
+This justifies the name propagator. (Describes additional particle or pole).
+
+\end{note}
+
+\[ \hat{U}(t,t_0) = e^{i\hat{H}_0t/\hbar}e^{-i\hat{H}(t-t_0)/\hbar}e^{-i\hat{H}_0t_0/\hbar} \]
+\[\hat{\psi}_I(t) = e^{i\hat{H}_0t/\hbar}\hat{\psi}_S e^{-i\hat{H}_0t/\hbar}\]
+Go from interaction picture to Heisenberg picture
+\[\hat{U}(0,t)\hat{\psi}_I(t)\hat{U}(t,0) = e^{i\hat{H}t/\hbar}\hat{\psi}_S e^{-i\hat{H}t/\hbar} = \hat{\psi}_H(t)\]
+
+For $t>t'$: 
+\begin{align*}
+iG_{\alpha\beta}(\vec{x},t,\vec{x}',t') &= \braket[\hat{\psi}_{H\alpha}(\vec{x},t)\hat{\psi}^\dagger_{H\beta}(\vec{x}',t')]{\psi_0}{\psi_0} \\
+&= \braket[\hat{U}(\infty,0)\hat{U}(0,t)\hat{\psi}_{I_\alpha}(\vec{x},t)\hat{U}(t,0)\hat{U}(0,t')\hat{\psi}_{I_\beta}(\vec{x}',t')\hat{U}(t',0)\hat{U}(0,-\infty)]{\phi_0}{\phi_0} \\
+&= \braket[\hat{U}(\infty,t)\hat{\psi}_{I_\alpha}(\vec{x},t)\hat{U}(t,t')\hat{\psi}_{I_\beta}(\vec{x}',t')\hat{U}(t',-\infty)]{\phi_0}{\phi_0}
+\end{align*}
+So we have evolution from $-\infty$ to $t'$, $t'$ to $t$ and $t$ to $\infty$.
+
+\[ \frac{\braket[\hat{O}_H(t)]{\psi_0}{\psi_0}}{\braket{\psi_0}{\psi_0}} = \frac{\braket[\hat{U}_\epsilon(\infty,t)\hat{O}_I(t)\hat{U}_\epsilon(t,-\infty)]{\phi_0}{\phi_0}}{\expval{\hat{S}{\phi_0}}} \]
+
+With
+\[ \hat{S} \equiv \hat{U}_\epsilon(\infty,0)\hat{U}_\epsilon(0,-\infty) = \hat{U}_\epsilon(\infty,-\infty) \]
+
+Interaction picture.
+
+From now on we adopt the conventions
+\[ \hat{\psi}_I \; \to \; \hat{\psi} \qquad x \equiv (\vec{x},t_x) = (\vec{x}, x_0) \]
+\[ U(x_1,x_2) = V(\vec{x}_1, \vec{x}_2)\delta(t_1-t_2) \]
+(we assume the interaction is instantaneous, in a fully relativistic approach we may not assume this).
+
+\[ iG_{\alpha\beta}(x,y) = \sum^\infty_{n=0}\left(- \frac{i}{\hbar}\right)^n \frac{1}{n!} \int^{+\infty}_{-\infty}\diff{t_1} \ldots \int^{+\infty}_{-\infty}\diff{t_n} \frac{\braket[T \left[\hat{H}_1(t_1)\ldots \hat{H}_n(t_n)\hat{\psi}_\alpha(x)\hat{\psi}_\beta^\dagger(y)\right]]{\phi_0}{\phi_0}}{\braket[\hat{S}]{\phi_0}{\phi_0}} \]
+
+We now look at numerator with $n=0 \;+\; n=1$.
+\[i\tilde{G}_{\alpha\beta}(x,y) = \braket[T \left[\hat{\psi}_\alpha(x)\hat{\psi}_\beta^\dagger(y)\right]]{\phi_0}{\phi_0} + \left(-\frac{i}{\hbar}\right)\sum_{\substack{\lambda\lambda' \\ \mu\mu'}}\frac{1}{2}\int \diff{^4x_1}\diff{^4x'_1}U(x_1,x'_1)\braket[T \left[\hat{\psi}_\lambda^\dagger(x_1)\hat{\psi}^\dagger_\mu(x_1')\hat{\psi}_{\mu'}(x'_1)\hat{\psi}_{\lambda'}(x_1)\hat{\psi}_\alpha(x)\hat{\psi}_\beta^\dagger(y)\right]]{\phi_0}{\phi_0} (??)\]
+
+Goal:
+\[ \braket[T \left[\hat{\psi}^\dagger \ldots \hat{\psi} \hat{\psi}_\alpha(x)\hat{\psi}_\beta^\dagger(y)\right]]{\phi_0}{\phi_0} \]
+(non-interacting G.S)
+
+Not easy process, but theorem simplifies it.
+
+Particle-hole formalism
+\[ \hat{\psi}_S(\vec{x}) = \sum_{\substack{\vec{k}\lambda \\ |\vec{k}|>k_F}}\psi_{\vec{k}\lambda}(\vec{x})a_{\vec{k}\lambda} + \sum_{\substack{\vec{k}\lambda \\ |\vec{k}|\geq k_F}}\psi_{\vec{k}\lambda}(\vec{x})^\dagger_{-\vec{k}\lambda} \]
+
+\[\hat{\psi}_I(\vec{x},t) = e^{i\hat{H}_0t/\hbar}\hat{\psi}_S(\vec{x})e^{-i\hat{H}_0t / \hbar}\]
+
+???? (something something Fermi sphere)
+
+\[ \hat{\psi}(x) = \hat{\psi}^{(+)}(x) + \hat{\psi}^{(-)}(x) \]
+\[ \hat{\psi}^\dagger(x) = \hat{\psi}^{(+)\dagger}(x) + \hat{\psi}^{(-)\dagger}(x) \]
+Destruction parts:
+\[ \hat{\psi}^{(+)}(x)\ket{\phi_0} = 0 \qquad \hat{\psi}^{(-)\dagger}(x)\ket{\phi_0} = 0 \]
+
+Normal order operator: put the destruction operator on the right.
+\[ N \left[\hat{\psi}^{(+)}\cdot \hat{\psi}^{(-)}\right] = -\hat{\psi}^{(-)}\cdot \hat{\psi}^{(+)}  \]
+(minus for Fermions)
+
+
+Missed some lectures
+
+Lecture 17/04
+15 mins late
+
+Feynman rules in momentum space: internal vertex.
+Just see notes

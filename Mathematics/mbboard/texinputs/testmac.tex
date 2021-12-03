@@ -1,0 +1,416 @@
+%
+% TESTMAC.tex
+%
+\catcode`\@=11
+%
+% Page setup
+%
+%\magnification=\magstep1
+\voffset=0.12 true cm
+\hoffset=0.31 true cm
+\vsize=24.2 true cm
+\hsize=15.3 true cm
+\parindent=1.333em
+%
+% Heading
+%
+\font\nineit=cmti9
+\font\twelverm=cmr12
+\newif\iftitle
+\titlefalse
+\footline={\hfil}
+\headline={\iftitle\hfil\global\titlefalse
+	\ifodd\pageno\advance\pageno by 1\fi
+	\else\vbox{\line{\ifodd\pageno
+		{\nineit\@title}\hfil\llap{\tenrm\folio}
+		\else\rlap{\tenrm\folio}\hfill{\nineit\@title}%
+		\fi}\vskip6pt\hrule}\fi}
+%
+% Sectionning
+%
+\def\,{\ifmmode\mskip\thinmuskip\else\thinspace\fi}
+\def\dots{\ifmmode\ldots\else%
+	.\kern\fontdimen3\font
+	.\kern\fontdimen3\font
+	.\fi}
+%
+\def\french{\frenchspacing\language=1
+	\def\@textsep{~---~}%
+	\def\Author{Auteur~}\def\LastVersion{Derni\`ere version~}%
+	\def\today{\day\space\ifcase\month\or
+		janvier\or f\'evrier\or mars\or avril\or mai\or juin\or
+		juillet\or ao\^ut\or septembre\or octobre\or novembre\or
+		d\'ecembre\fi\space\number\day,\space\number\year}}%
+%
+\def\english{\frenchspacing\language=0
+	\def\@textsep{\kern 1em}%
+	\def\Author{Author}\def\LastVersion{Last version}%
+	\def\today{\ifcase\month\or
+		January\or February\or March\or April\or May\or June\or
+		July\or August\or September\or October\or November\or
+		December\fi\space\number\day,\space\number\year}}%
+%
+\def\begintitle{\bgroup
+	\def\title##1{\gdef\@title{##1}}%
+	\def\subtitle##1{\def\@subtitle{##1}}%
+	\def\author##1{\def\@author{##1}}%
+	\let\@title=\undefined
+	\let\@subtitle=\undefined
+	\let\@author=\undefined}
+%
+\def\endtitle{\global\titletrue\parindent=0pt
+	\leavevmode
+	\ifx\@title\undefined\else{\twelverm\@title}\par\fi
+	\vskip 6pt
+	\hrule height 6pt
+	\vskip 6pt
+	\ifx\@subtitle\undefined\else\hfill{\twelverm\@subtitle}\par\fi
+	\ifx\@author\undefined\else\hfill{\rm\Author: \@author}\par\fi
+	\hfill{\rm\LastVersion: \today}\par
+	\egroup
+	\bigbreak}
+%
+\def\section#1{\bigbreak\noindent{\bf#1}\par\nobreak\medskip}
+\def\subsection#1{\medbreak\noindent{\bf#1\unskip.}\@textsep\ignorespaces}
+\def\cs#1{{\tt\string#1}}%
+\long\def\comments#1\endcomments{}%
+\def\fuzzytext{\tolerance=9999\hfuzz=3em\vfuzz=0.1pt}%
+\def\normaltext{\tolerance=200\hfuzz=0.1pt\vfuzz=0.1pt}%
+\def\newpage{\par\vfill\eject}%
+%
+% font tests
+%
+\newcount\randomnumber
+\newcount\rndmult \rndmult=16% 3*5+1
+\newcount\rndincr \rndincr=19019% 7*11**13*19
+\newcount\rndmodu \rndmodu=66430125% 3*3*3*3*5*5*5
+\newcount\reducednumber
+\def\reduce#1modulo#2.{%
+        \reducednumber=#1%
+        \divide\reducednumber by#2%
+        \multiply\reducednumber by #2%
+        \advance\reducednumber by -#1%
+        \multiply\reducednumber by -1}
+\def\randomchoice{%
+        \multiply\randomnumber by \rndmult
+        \advance\randomnumber by \rndincr
+        \reduce\randomnumber modulo \rndmodu.
+        \global\randomnumber=\reducednumber}
+\randomnumber=\day
+\advance\randomnumber by -1
+\multiply\randomnumber by 1440
+\advance\randomnumber by \time
+\multiply\randomnumber by 12
+\advance\randomnumber by \month
+\advance\randomnumber by -1
+\reduce\randomnumber modulo \rndmodu.
+\randomnumber=\reducednumber
+%
+\newcount\n\newcount\m
+\def\mixfrom#1to#2.{\medbreak\noindent{\count255=#2%
+	\advance\count255 by -#1%
+	\n=0\loop\ifnum\n<25 \m=0%
+	{\loop\ifnum\m<43\randomchoice
+		\reduce\randomnumber modulo\count255.
+		\advance\reducednumber by #1%
+		\char\reducednumber
+		\advance\m by 1
+		\repeat}
+	\advance\n by 1\endgraf\noindent
+	\repeat}\medbreak}
+%
+\def\compare#1#2{\medbreak\noindent{%
+	\font\ftestfont=#1\font\stestfont=#2%
+	\count255=0%
+	{\bf#1\unskip/\ignorespaces#2}
+	\par\nobreak\medskip\noindent
+	{\loop\ifnum\count255<256
+	{\ftestfont\char\count255
+	\stestfont\char\count255}
+	\advance\count255 by 1\repeat}}\medbreak}
+%
+\def\docomparison#1#2from#3to#4.{\medbreak\noindent{%
+	\font\ftestfont=#1\font\stestfont=#2%
+	\count255=#3%
+	\count0=#4\advance\count0 by 1
+	{\bf#1\unskip/\ignorespaces#2}
+	\par\medskip\noindent
+	{\loop\ifnum\count255<\count0
+	{\ftestfont\char\count255
+	\stestfont\char\count255$_{_{\the\count255}}$}
+	\advance\count255 by 1\repeat}}\medbreak}
+%
+\def\usuals#1{\medbreak\noindent{\bf#1\unskip.}~---~{%
+	\font\testfont=#1\testfont\setbaselineskip
+	\let\-=\allowbreak
+	A\-B\-C\-D\-E\-F\-G\-H\-I\-J\-K\-L\-M\-%
+	N\-O\-P\-Q\-R\-T\-S\-U\-V\-W\-X\-Y\-Z \-
+	a\-b\-c\-d\-e\-f\-g\-h\-i\-j\-k\-l\-m\-%
+	n\-o\-p\-q\-r\-s{}\-t\-u\-v\-w\-x\-y\-z \-
+	\AE\-\OE\-\O
+	\ae\-\oe\-\o\-\ss
+	+\-=\-\# @ 1\-2\-3\-4\-5\-6\-7\-8\-9\-0 \-\$ \&  () []%
+	\medbreak}}
+%
+% in math (display) mode
+%
+\let\normall=\mathopen
+\let\normalm=\mathrel
+\let\normalr=\mathclose
+\def\biggg#1{{\hbox{$\left#1\vbox to20.5\p@{}\right.\n@space$}}}
+\def\bigggl{\mathopen\biggg}
+\def\bigggr{\mathclose\biggg}
+\def\bigggm{\mathrel\biggg}
+\def\testdelimiter#1{
+	\csname#1l\endcsname({\rm H}
+	\csname#1m\endcsname|{\rm O}
+	\csname#1r\endcsname)
+	=\csname#1l\endcsname[{\rm H}
+	\csname#1m\endcsname\thickvert{\rm O}
+	\csname#1r\endcsname]
+	=\csname#1l\endcsname\{{\rm H}
+	\csname#1m\endcsname|{\rm O}
+	\csname#1r\endcsname\}
+	=\csname#1l\endcsname\langle {\rm H}
+	\csname#1m\endcsname|{\rm O}
+	\csname#1r\endcsname\rangle
+	=\csname#1l\endcsname\lbbbrack{\rm H}
+	\csname#1m\endcsname|{\rm O}
+	\csname#1r\endcsname\rbbbrack
+	=\csname#1l\endcsname\lceil{\rm H}
+	\csname#1m\endcsname\thickvert{\rm O}
+	\csname#1r\endcsname\rceil
+\cr
+	=\csname#1l\endcsname\lfloor{\rm H}
+	\csname#1m\endcsname\thickvert{\rm O}
+	\csname#1r\endcsname\rfloor
+	=\csname#1l\endcsname\lgroup{\rm H}
+	\csname#1m\endcsname\thickvert{\rm O}
+	\csname#1r\endcsname\rgroup
+%=\csname#1l\endcsname\lmoustache {\rm H}\csname#1r\endcsname\rmoustache
+	=\csname#1l\endcsname|{\rm H}\csname#1r\endcsname|
+	=\csname#1l\endcsname\Vert {\rm H}\csname#1r\endcsname\Vert
+	=\csname#1l\endcsname\vvvert {\rm H}\csname#1r\endcsname\vvvert
+	=\csname#1l\endcsname\uparrow {\rm H}
+	\csname#1m\endcsname\updownarrow{\rm H}
+	\csname#1r\endcsname\downarrow
+	=\csname#1l\endcsname\Uparrow {\rm H}
+	\csname#1m\endcsname\Updownarrow{\rm H}
+	\csname#1r\endcsname\Downarrow
+	=\sqrt{\csname#1m\endcsname|}}
+\def\testwideaccent#1{#1{I}=#1{H}=#1{II}=#1{III}=
+	#1{IIII}=#1{IIIII}=#1{IIIIII}=#1{IIIIIIII}}
+\def\kerningtable[#1,#2][#3,#4]{\medbreak\noindent{\parindent=0pt
+	\m=#4 \advance\m by -#3 \advance\m by 1
+	\dim=\hsize \divide\dim by \m
+	\m=#1 \advance\m by -1
+	\n=#3 \advance\n by -1
+	{\loop\leavevmode
+		\ifnum\m<#2
+		\advance\m by 1
+		{\loop
+			\ifnum\n<#4
+			\advance\n by 1
+			\setbox0\hbox{\char\m\char\n}%
+			\setbox1\hbox{\char\m\null\char\n}%
+			\hbox to \dim{\char\m\char\n
+			\ifdim\wd0=\wd1\else{\rm*}\fi\hss}%
+		\repeat}\endgraf
+	\repeat}%
+	}\medbreak}%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hyphenation{prom-i-nent}
+
+%\newcount\m \newcount\n
+\newcount\p \newdimen\dim
+\chardef\other=12
+
+\def\hours{\n=\time \divide\n 60
+  \m=-\n \multiply\m 60 \advance\m \time
+  \twodigits\n\ heures \twodigits\m\ minutes}
+
+\def\twodigits#1{\ifnum #1<10 0\fi \number#1}
+
+\def\startfont{\tracinglostchars=0
+	\fuzzytext
+%	\tolerance=1000
+%	\raggedbottom
+	\parindent=0pt
+%	\newlinechar=`@
+%	\hyphenpenalty=200
+%	\doublehyphendemerits=30000
+	\font\testfont=\fontname
+%	\spaceskip=0pt
+	%  \leftline{{\bf\fontname\unskip}\ (tel que le \today, \`a \hours)}
+	%  \nobreak\medskip\nobreak
+	\testfont %\setbaselineskip
+%	\ifdim\fontdimen6\testfont<10pt \rightskip=0pt plus 20pt
+%	\else\rightskip=0pt plus 2em \fi
+%	\spaceskip=\fontdimen2\testfont % space between words (\raggedright)
+%	\xspaceskip=\fontdimen2\testfont
+%	\advance\xspaceskip by\fontdimen7\testfont
+	}
+
+\def\setbaselineskip{\setbox0=\hbox{\n=0
+	\loop\char\n \ifnum \n<255 \advance\n 1 \repeat}
+	\baselineskip=6pt \advance\baselineskip\ht0
+	\advance\baselineskip\dp0 }
+
+\def\setchar#1{{\escapechar-1\message{\string#1 character = }%
+	\def\do##1{\catcode`##1=\other}\dospecials
+	\read-1 to\next
+	\expandafter\finsetchar\next\next#1}}
+\def\finsetchar#1#2\next#3{\global\chardef#3=`#1
+	\ifnum #3=`\# \global\chardef#3=#2 \fi}
+\def\promptthree{\setchar\background
+	\setchar\starting \setchar\ending}
+
+\def\mixture{\promptthree \domix\mixpattern}
+\def\alternation{\promptthree \domix\altpattern}
+\def\mixpattern{\0\1\0\0\1\1\0\0\0\1\1\1\0\1}
+\def\altpattern{\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0\1\0}
+\def\domix#1{\par\chardef\0=\background \n=\starting
+	\loop \chardef\1=\n #1\endgraf
+	\ifnum \n<\ending \advance\n 1 \repeat}
+
+\def\!{\discretionary{\background}{\background}{\background}}
+\def\series{\promptthree \!\doseries\starting\ending\par}
+\def\doseries#1#2{\n=#1\loop\char\n\!\ifnum\n<#2\advance\n 1 \repeat}
+\def\complower{\!\doseries{`a}{`z}\doseries{'31}{'34}\par}
+\def\compupper{\!\doseries{`A}{`Z}\doseries{'35}{'37}\par}
+\def\compdigs{\!\doseries{`0}{`9}\par}
+\def\alphabet{\setchar\background\complower}
+\def\ALPHABET{\setchar\background\compupper}
+
+\def\lowers{\docomprehensive\complower{`a}{`z}{'31}{'34}}
+\def\uppers{\docomprehensive\compupper{`A}{`Z}{'35}{'37}}
+\def\digits{\docomprehensive\compdigs{`0}{`4}{`5}{`9}}
+\def\docomprehensive#1#2#3#4#5{\par\chardef\background=#2
+	\loop{#1} \ifnum\background<#3\m=\background\advance\m 1
+	\chardef\background=\m \repeat \chardef\background=#4
+	\loop{#1} \ifnum\background<#5\m=\background\advance\m 1
+	\chardef\background=\m \repeat}
+
+\def\names{ {\AA}ngel\aa\ Beatrice Claire
+	Diana \'Erica Fran\c{c}oise Ginette H\'el\`ene Iris
+	Jackie K\=aren {\L}au\.ra Mar{\'\i}a N\H{a}ta{\l}{\u\i}e {\O}ctave
+	Pauline Qu\^eneau Roxanne Sabine T\~a{\'\j}a Ur\v{s}ula
+	Vivian Wendy Xanthippe Yv{\o}nne Z\"azilie\par}
+\def\punct{\par\dopunct{min}\dopunct{pig}\dopunct{hid}
+	\dopunct{HIE}\dopunct{TIP}\dopunct{fluff}
+	\$1,234.56 + 7/8 = 9\% @ \#0\par}
+\def\dopunct#1{#1,\ #1:\ #1;\ `#1'\ ?`#1?\ !`#1!\ (#1)\ [#1]\ #1*\ #1.\par}
+
+\def\bigtest{\sample
+	hamburgefonstiv HAMBURGEFONSTIV\par
+	\names \punct \lowers \uppers \digits}
+
+\def\math{\textfont1=\testfont \skewchar\testfont=\skewtrial
+ \mathchardef\Gamma="100 \mathchardef\Delta="101
+ \mathchardef\Theta="102 \mathchardef\Lambda="103 \mathchardef\Xi="104
+ \mathchardef\Pi="105 \mathchardef\Sigma="106 \mathchardef\Upsilon="107
+ \mathchardef\Phi="108 \mathchardef\Psi="109 \mathchardef\Omega="10A
+ \def\ii{i} \def\jj{j}
+ \def\\##1{|##1|+}\mathtrial
+ \def\\##1{##1_2+}\mathtrial
+ \def\\##1{##1^2+}\mathtrial
+ \def\\##1{##1/2+}\mathtrial
+ \def\\##1{2/##1+}\mathtrial
+ \def\\##1{##1,{}+}\mathtrial
+ \def\\##1{d##1+}\mathtrial
+ \let\ii=\imath \let\jj=\jmath \def\\##1{\hat##1+}\mathtrial}
+\newcount\skewtrial \skewtrial='177
+\def\mathtrial{$\\A \\B \\C \\D \\E \\F \\G \\H \\I \\J \\K \\L \\M \\N \\O
+ \\P \\Q \\R \\S \\T \\U \\V \\W \\X \\Y \\Z \\a \\b \\c \\d \\e \\f \\g
+ \\h \\\ii \\\jj \\k \\l \\m \\n \\o \\p \\q \\r \\s \\t \\u \\v \\w \\x \\y
+ \\z \\\alpha \\\beta \\\gamma \\\delta \\\epsilon \\\zeta \\\eta \\\theta
+ \\\iota \\\kappa \\\lambda \\\mu \\\nu \\\xi \\\pi \\\rho \\\sigma \\\tau
+ \\\upsilon \\\phi \\\chi \\\psi \\\omega \\\vartheta \\\varpi \\\varphi
+ \\\Gamma \\\Delta \\\Theta \\\Lambda \\\Xi \\\Pi \\\Sigma \\\Upsilon
+ \\\Phi \\\Psi \\\Omega \\\partial \\\ell \\\wp$\par}
+\def\mathsy{\begingroup\skewtrial='060 % for math symbol font tests
+ \def\mathtrial{$\\A \\B \\C \\D \\E \\F \\G \\H \\I \\J \\K \\L
+	\\M \\N \\O \\P \\Q \\R \\S \\T \\U \\V \\W \\X \\Y \\Z$\par}
+ \math\endgroup}
+
+\def\oct#1{\hbox{\rm\'{}\kern-.2em\it#1\/\kern.05em}} % octal constant
+\def\hex#1{\hbox{\rm\H{}\tt#1}} % hexadecimal constant
+\def\setdigs#1"#2{\gdef\h{#2}% \h=hex prefix; \0\1=corresponding octal
+ \m=\n \divide\m by 64 \xdef\0{\the\m}%
+ \multiply\m by-64 \advance\m by\n \divide\m by 8 \xdef\1{\the\m}}
+\def\testrow{\setbox0=\hbox{\penalty 1\def\\{\char"\h}%
+ \\0\\1\\2\\3\\4\\5\\6\\7\\8\\9\\A\\B\\C\\D\\E\\F%
+ \global\p=\lastpenalty}} % \p=1 if none of the characters exist
+\def\oddline{\cr
+	\noalign{\nointerlineskip}
+	\multispan{19}\hrulefill&
+	\setbox0=\hbox{\lower 2.3pt\hbox{\hex{\h x}}}\smash{\box0}\cr
+	\noalign{\nointerlineskip}}
+\newif\ifskipping
+\def\evenline{\loop\skippingfalse
+	\ifnum\n<256 \m=\n \divide\m 16 \chardef\next=\m
+	\expandafter\setdigs\meaning\next \testrow
+	\ifnum\p=1 \skippingtrue \fi\fi
+	\ifskipping \global\advance\n 16 \repeat
+	\ifnum\n=256 \let\next=\endchart\else\let\next=\morechart\fi
+	\next}
+\def\morechart{\cr\noalign{\hrule\penalty5000}
+	\chartline \oddline \m=\1 \advance\m 1 \xdef\1{\the\m}
+	\chartline \evenline}
+\def\chartline{&\oct{\0\1x}&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&\:&&}
+\def\chartstrut{\lower4.5pt\vbox to14pt{}}
+\def\table{\bigbreak\global\n=0
+	\halign to\hsize\bgroup
+		\chartstrut##\tabskip0pt plus10pt&
+		&\hfil##\hfil&\vrule##\cr
+		\lower6.5pt\null
+		&\hbox to 0pt{\hss\rm\fontname\hss}
+		&&\oct0&&\oct1&&\oct2&&\oct3&&\oct4
+		&&\oct5&&\oct6&&\oct7&\evenline}
+\def\endchart{\cr\noalign{\hrule}
+	\raise11.5pt\null&&&\hex 8&&\hex 9&&\hex A&&\hex B&
+	&\hex C&&\hex D&&\hex E&&\hex F&\cr\egroup\bigbreak\par}
+\def\:{\setbox0=\hbox{\char\n}%
+	\ifdim\ht0>7.5pt\reposition
+	\else\ifdim\dp0>2.5pt\reposition\fi\fi
+	\box0\global\advance\n 1 }
+\def\reposition{\setbox0=\vbox{\kern2pt\box0}\dim=\dp0
+	\advance\dim 2pt \dp0=\dim}
+\def\centerlargechars{
+	\def\reposition{\setbox0=\hbox{$\vcenter{\kern2pt\box0\kern2pt}$}}}
+
+\def\text{{%\advance\baselineskip-4pt
+%\setbox0=\hbox{abcdefghijklmnopqrstuvwxyz}
+%\ifdim\hsize>2\wd0 \ifdim 15pc>2\wd0 \hsize=15pc \else \hsize=2.5\wd0 \fi\fi
+On November 14, 1885, Senator \& Mrs.~Leland Stanford called
+together at their San Francisco mansion the 24~prominent men who had
+been chosen as the first trustees of The Leland Stanford Junior University.
+They handed to the board the Founding Grant of the University, which they
+had executed three days before. This document---with various amendments,
+legislative acts, and court decrees---remains as the University's charter.
+In bold, sweeping language it stipulates that the objectives of the University
+are ``to qualify students for personal success and direct usefulness in life;
+and to promote the publick welfare by exercising an influence in behalf of
+humanity and civilization, teaching the blessings of liberty regulated by
+law, and inculcating love and reverence for the great principles of
+government as derived from the inalienable rights of man to life, liberty,
+and the pursuit of happiness.'' \moretext
+(!`THE DAZED BROWN FOX QUICKLY GAVE 12345--67890 JUMPS!)\par}}
+\def\moretext{?`But aren't Kafka's Schlo{\ss} and {\AE}sop's {\OE}uvres
+often na{\"\i}ve vis-\`a-vis the d{\ae}monic ph{\oe}nix's official r\^ole
+in fluffy souffl\'es? }
+\def\omitaccents{\let\moretext=\relax}
+\def\sample{\table\text}
+\def\UsualTest#1{{\def\fontname{#1 }\startfont\sample\names}}
+\english
+\def\LaTeX{L\kern-.36em%
+        {\setbox\z@\hbox{T}%
+         \vbox to\ht\z@{\hbox{$\rm\scriptstyle A$}%
+                        \vss}%
+        }%
+        \kern-.15em%
+        \TeX}
+\catcode`\@=12
+\endinput

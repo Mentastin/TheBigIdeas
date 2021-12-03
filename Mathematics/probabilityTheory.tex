@@ -1,0 +1,234 @@
+\url{file:///C:/Users/user/Downloads/Gut2005_Book_ProbabilityAGraduateCourse.pdf}
+\url{https://services.math.duke.edu/~rtd/PTE/PTE5_011119.pdf}
+TODO: Kolmogorov 0-1 law Gut p21
+
+\chapter{Foundations}
+\section{Kolmogorov axioms}
+\begin{definition}
+A measure space $\seq{\Omega, \mathcal{A}, P}$ is called a \udef{probability space} if the measure $P$ is normalised: $P(\Omega) = 1$.
+\end{definition}
+
+\begin{lemma}
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $A,B\subseteq \Omega$ measurable sets. Then
+\begin{enumerate}
+\item $P(A^c)= 1- P(A)$;
+\item $A\subset B$ implies $P(B)= P(A) + P(B\setminus A)$;
+\item $P(A\cup B)+P(A\cap B) = P(A) + P(B)$;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) $\Omega = A\cup A^c$ is a disjoint union.
+
+(2) $B = A\cup (B\setminus A)$ is a disjoint union.
+
+(3) $A\cup B = A\setminus (A\cap B) \cup B\setminus (A\cap B) \cup (A\cap B)$ is a disjoint union and $(A\cap B)\subseteq A,B$, so we can use (2).
+\end{proof}
+\begin{corollary} \mbox{}
+\begin{enumerate}
+\item $P(A\cup B) \leq P(A) + P(B)$;
+\item $A\subset B$ implies $P(A) \leq P(B)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{theorem}[The inclusion-exclusion formula]
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $\seq{A_k}$ a sequence of events. Then
+\begin{multline*}
+P\left(\bigcup^n_{k=1} A_k\right) = \sum_{k=1}^nP(A_k)\; - \sum_{1\leq i< j \neq n}P(A_i\cap A_j)\; + \sum_{1\leq i<j<k\leq n}P(A_i\cap A_j\cap A_k)\; - \;\ldots \\
++ \;(-1)^{n+1}P(A_1\cap A_2 \cap \ldots \cap A_n).
+\end{multline*}
+This can also be written as
+\[ P\left(\bigcup^n_{k=1} A_k\right) = \sum_{S\subset 1:n}(-1)^{\#(S)+1} P \left(\bigcap_{i\in S}A_i\right). \]
+\end{theorem}
+\begin{proof}
+Set $A = \bigcup^n_{k=1}A_k$ and consider the function
+\[ f = \prod_{k=1}^n(\chi_A-\chi_{A_k}) \]
+in $(\Omega\to \{0,1\})$. This function is identically zero. Expanding $f=0$ yields the equation
+\[ \chi_A = \sum_{k=1}^n\chi_{A_k} - \sum_{1\leq i< j \neq n}\chi_{A_i}\cdot\chi_{A_j} + \sum_{1\leq i<j<k\leq n}\chi_{A_i}\cdot\chi_{A_j}\cdot\chi_{A_k} - \ldots + (-1)^{n+1}\chi_{A_1}\cdot\chi_{A_2}\cdot \ldots \cdot\chi_{A_n}. \]
+Integrating both sides of the equation over the measure $P$ gives the result.
+\end{proof}
+\begin{corollary}[Bonferroni inequalities]
+\begin{align*}
+P\left(\bigcup^n_{k=1} A_k\right) &\leq \sum_{k=1}^nP(A_k) \\
+P\left(\bigcup^n_{k=1} A_k\right) &\geq \sum_{k=1}^nP(A_k) - \sum_{1\leq i< j \neq n}P(A_i\cap A_j) \\
+P\left(\bigcup^n_{k=1} A_k\right) &\leq \sum_{k=1}^nP(A_k) - \sum_{1\leq i< j \neq n}P(A_i\cap A_j) + \sum_{1\leq i<j<k\leq n}P(A_i\cap A_j\cap A_k)
+\end{align*}
+\end{corollary}
+\begin{proof}
+TODO \url{https://planetmath.org/proofofbonferroniinequalities}
+\end{proof}
+\begin{corollary}
+If the events of the sequence $\seq{A_k}$ are independent, then
+\[ P\left(\bigcup^n_{k=1} A_k\right) = 1 - \prod^n_{k=1}(1-P(A_k)). \]
+Also
+\[ P\left(\bigcup^n_{k=1} A_k\right) \geq 1 - \exp\left(-\sum^n_{k=1}P(A_k)\right). \]
+\end{corollary}
+
+\begin{proposition}
+Let $\seq{\Omega, \mathcal{A}, \mu}$ be a probability space and $\mathcal{F}$ an algebra that generates the $\sigma$-algebra $\mathcal{A} = \sigma\{\mathcal{F}\}$. For any $A\in\mathcal{A}$ and $\varepsilon > 0$ there exists a set $A_\varepsilon \in \mathcal{F}$ such that
+\[ \mu(A\symdiff A_\varepsilon) \leq \varepsilon. \] 
+\end{proposition}
+\begin{proof}
+Let $\varepsilon > 0$ and define
+\[ \mathcal{E} = \setbuilder{A\in\mathcal{A}}{\mu(A\symdiff A_\varepsilon) \leq \varepsilon\;\text{for some}\; A_\varepsilon\in\mathcal{F}}. \]
+Clearly $\mathcal{F} \subseteq \mathcal{E} \subseteq \mathcal{A}$. So if $\mathcal{E}$ is a $\sigma$-algebra, then it is equal to $\mathcal{A}$ and the proposition is proven.
+\begin{itemize}
+\item $\Omega \in \mathcal{A}$ because $\Omega \in \mathcal{F}$.
+\item Let $A\in \mathcal{E}$. Then $A^c\symdiff (A_\varepsilon)^c = A\symdiff A_\varepsilon < \varepsilon$, so $A^c\in \mathcal{E}$.
+\item Let $\seq{A_i}$ be a sequence of sets in $\mathcal{E}$ and set $A = \bigcup_{i= 0}^\infty A_i$. Then
+\[ \lim_{n\to\infty}P\left(\bigcup_{i=0}^n A_i\right) = P\left(\lim_{n\to\infty}\bigcup_{i=0}^n A_i\right) = P(A) \]
+and there exists an $n_0\in\N$ such that
+\[ \varepsilon/2 > P(A) - P\left(\bigcup_{i=0}^{n_0} A_i\right) = P\left(A\setminus \bigcup_{i=0}^{n_0} A_i\right). \]
+TODO
+\end{itemize}
+\end{proof}
+
+\section{Independence}
+\begin{definition}
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space. The events in a set $\{A_i\}$ are called \udef{independent} if for all finite $F\subset \{A_i\}$ we have
+\[ P\left(\bigcap_{A_i\in F}A_i\right) = \prod_{A_i\in F}P(A_i). \]
+\end{definition}
+
+\begin{lemma}
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $A,B$ independent events. Then $\{A,B^c\}, \{A^c,B\}$ and $\{A^c, B^c\}$ are also independent.
+\end{lemma}
+\begin{lemma}
+Null sets are independent of any event, in particular of themselves.
+\end{lemma}
+\begin{proof}
+Let $A$ be a null set and $B$ any event. Then
+\[ 0\leq P(A\cap B) \leq P(A\setminus B) + P(A\cap B) = P(A) = 0, \]
+so 
+\[ P(A\cap B) = 0 =  P(A)P(B).  \]
+\end{proof}
+
+\subsubsection{Independent collections of events}
+\begin{definition}
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space. Let $\{\mathcal{A}_i\}$ be a countable family of sets of events. The sets of events in this family are called \udef{independent} if (the image of) every section of $(\mathcal{A}_i\mapsto i)$ is independent.
+\end{definition}
+
+\begin{proposition}
+Let $\{\mathcal{A}_i\}_{i\in I}$ be a countable family of independent sets of events. Then
+\begin{enumerate}
+\item $\{\mathfrak{D}\{\mathcal{A}_i\}\}$ are independent sets of events;
+\item if the $\mathcal{A}_i$ are $\pi$-systems, then $\{\sigma\{\mathcal{A}_i\}\}$ are independent sets of events.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The second part follows from the first by \ref{prop:generatedDynkinSigma}.
+
+We prove the first part by induction on the cardinality of $I$. For $\#(I) = 1$ any section contains only one set, which is necessarily independent.
+
+For the induction step, let $s: I \to \bigcup \{\mathfrak{D}\{\mathcal{A}_i\}\}$ be a section. Take $i_0\in I$. We need to show that $s[I\setminus \{i_0\}]\cup \{A\}$ is independent for all $A\in \mathfrak{D}\{\mathcal{A}_{i_0}\}$. By the induction hypothesis we may assume that $s[I\setminus \{i_0\}]\cup \{A\}$ is independent for all $A\in \mathcal{A}_{i_0}$.
+
+Let $B\in s[I]$ and define 
+\[ \mathcal{E}_B = \setbuilder{A\in \mathfrak{D}\{\mathcal{A}_{i_0}\}}{P(A\cap B) = P(A)P(B)}. \]
+TODO
+\end{proof}
+
+\subsubsection{Pair-wise independence}
+\begin{definition}
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space. The events in a set $\{A_k\}_{k\in I}$ are called \udef{pair-wise independent} if for all $i\neq j \in I$ we have
+\[ P\left(A_i \cap A_j\right) = P(A_i)\cdot P(A_j). \]
+\end{definition}
+Clearly independence implies pair-wise independence. The converse is not true.
+
+\begin{example}
+Let $\Omega = \{(1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 1, 1)\}$, $\mathcal{A} = \powerset(\Omega)$ and $P = A\mapsto 1/4 \cdot \#(A)$.
+
+Set $A_k = \{\text{the $k^\text{th}$ coordinate equals $1$}\}$ for $k=1,2,3$. Then
+\begin{align*}
+P(A_k) &= \frac{1}{2} & \forall k \in\{1,2,3\} \\
+P(A_i\cap A_j) &= \frac{1}{4} & \forall i\neq j \in\{1,2,3\} \\
+P(A_i)P(A_j) &= \frac{1}{4} & \forall i\neq j \in\{1,2,3\} \\
+P(A_1\cap A_2 \cap A_3) &= \frac{1}{4} \\
+P(A_1)P(A_2)P(A_3) &= \frac{1}{8}.
+\end{align*}
+The sets $A_1, A_2, A_3$ are pair-wise independent, but not independent.
+\end{example}
+
+\subsection{Conditional probability}
+\begin{definition}
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space, $A$ and $B$ be two events, and suppose that $P(A) > 0$. The \udef{conditional probability} of $B$ given $A$ is defined as
+\[ P(B | A) \defeq \frac{P(A\cap B)}{P(A)}. \]
+\end{definition}
+\begin{lemma}
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $A$ an event with non-zero probability. Then
+\[ P(\cdot | A): B\mapsto P(B | A) \]
+is a probability measure on the measurable space $\seq{\Omega, \mathcal{A}}$.
+\end{lemma}
+\begin{lemma}
+If $A,B$ are independent events, then $P(B|A) = P(B)$.
+\end{lemma}
+\begin{proof}
+$P(B|A) = \frac{P(A\cap B)}{P(A)} = \frac{P(A)\cdot P(B)}{P(A)} = P(B)$.
+\end{proof}
+
+\subsection{Chain rule and law of total probability}
+\begin{theorem}[Law of total probability]
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $\seq{H_i}_{i\in I}$ a (countable) partition of $\Omega$. Then, for any event $A\in \mathcal{A}$
+\[ P(A) = \sum_{i\in I}P(A|H_i)\cdot P(H_i). \]
+\end{theorem}
+\begin{proof}
+$A = A\cap \Omega = \bigcup_{i\in I}(A\cap H_i)$ is a disjoint union.
+\end{proof}
+
+\subsection{Bayes' formula}
+\begin{theorem}[Bayes' formula]
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $\seq{H_i}_{i\in I}$ a (countable) partition of $\Omega$. Then, for any event $A$ of non-zero probability,
+\[ P(H_k|A ) = \frac{P(A|H_k)\cdot P(H_k)}{P(A)} = \frac{P(A|H_k)\cdot P(H_k)}{\sum_{i\in I}P(A|H_i)\cdot P(H_i)}. \]
+\end{theorem}
+\begin{proof}
+$P(H_k|A) = \frac{P(H_k \cap A)}{P(A)} = \frac{P(A|H_k)\cdot P(H_k)}{P(A)}$.
+\end{proof}
+
+
+\section{Random variables}
+\begin{definition}
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space. A \udef{random variable} (or \udef{r.v.}) $X$ is a measurable function $X:\Omega \to \R$.
+
+A measurable function $X:\Omega\to \overline{\R}=[-\infty,+\infty]$ is called an \udef{extended random variable}.
+
+Given a random variable there is an \udef{induced probability measure} $\mathbb{P}$ on $\R$ given by
+\[ \mathbb{P}: A\mapsto P(X^{-1}(A)) = P(\setbuilder{\omega\in \mathcal{A}}{X(\omega)\in A}). \]
+We will also write $P(X\in A)$ for $\mathbb{P}(A)$.
+\end{definition}
+The induced probability measure is indeed a probability measure.
+
+\subsection{Equivalence relations on }
+
+\subsection{Distribution functions}
+\subsubsection{Probability density functions}
+\subsection{Moments}
+\subsubsection{Raw and central moments}
+\subsubsection{Moment generating function}
+\subsubsection{Normalised moments}
+\subsubsection{Examples of moments}
+\paragraph{Expected value}
+\paragraph{Variance and standard deviation}
+\paragraph{Skewness}
+\paragraph{Kurtosis}
+\subsection{Cumulants}
+\subsection{Functions of random variables}
+\subsection{Inequalities and bounds}
+\subsubsection{Bounds on first moment}
+\subsubsection{Chebyshev inequality}
+
+\chapter{Inequalities}
+\chapter{Characteristic functions}
+\chapter{Convergence}
+
+\chapter{Stochastic processes}
+\begin{definition}
+Let $S$ be a complete metric space. A \udef{stochastic process} in $S$ is an indexed family $X = (X_t)_{t\in[0,T]}$ of $S$-valued stochastic variables, for some $T\in [0,+\infty]$.
+
+The \udef{finite-dimensional distributions} of $X$ 
+\end{definition}
+
+\url{https://link.springer.com/content/pdf/10.1007%2F978-3-319-78768-8.pdf}
+\url{https://people.math.harvard.edu/~knill/books/KnillProbability.pdf}
+
+\url{file:///C:/Users/user/Downloads/(Advances%20in%20applied%20mathematics)%20Kirkwood,%20James%20R%20-%20Markov%20Processes-CRC%20Press%20(2015).pdf}
+\url{file:///C:/Users/user/Downloads/(De%20Gruyter%20Studies%20in%20Mathematics)%20Kolokoltsov%20V.N.%20-%20Markov%20processes,%20semigroups%20and%20generators-De%20Gruyter%20(2011).pdf}
+
+
+\chapter{Martingales}

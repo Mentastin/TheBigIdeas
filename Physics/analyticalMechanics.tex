@@ -1,0 +1,239 @@
+\chapter{Motivation and overview}
+In this chapter we will develop a new way to do classical mechanics. This new method does not make use of forces and is simple to apply, even to quite complex mechanical problems. Conceptually it can be thought to be based on a generalisation of two tricks we have already encountered to simplify problems in mechanics: using conservation laws such as conservation of energy and momentum and changing coordinates to more suitable ones. These tricks have so far only been applied on an ad hoc basis. There was no guaranty either could be applied.
+
+This new approach is interesting in particular for a couple of reasons. First, there is a natural way to deal with constraints constraints. Second this new way of doing things is much more easily extended to quantum mechanics and quantum field theory.
+
+In fact there are two formulations of this new theory: one due to Lagrange and one due to Hamilton.
+
+The chapter will be structured as follows:
+\begin{itemize}
+\item First we will derive the Lagrangian version of this new theory from Newtonian mechanics using D'Alembert's principle.
+\item Next the Lagrangian equations will be derived from a different principle: that of least action. What this essentially means, is that the systems evolve in the ``easiest possible way''. A similar idea will provide the basis for general relativity. This idea is also much more general than any particular set of rules determining how to manipulate vectorial forces, and thus is much more generally extended to the quantum realm.
+\item In order to do that some more mathematics, the calculus of variations, is needed.
+
+\item Next we will consider the second, Hamiltonian, formulation of the theory. This reformulates the theory, using a Legendre transform, such that we get a system of first order differential equations. For practical problems, this is usually not very useful, but it allows some theoretical results to be derived more easily. It is also this version of the theory that will be most relevant for quantum mechanics.
+\item Finally we will be in a position to explore one of the most beautiful ideas in physics: that there is a link between symmetries and conserved quantities. This is formally encapsulated in Noether's theorem.
+\end{itemize} 
+
+\chapter{A first derivation of the Euler-Lagrange equation}
+\section{Constraints and configuration space}
+In many interesting mechanics problems we have to deal with constraints. Examples include:
+\begin{enumerate}
+\item The bob of a pendulum must remain a fixed distance from the point of support;
+\item The particles of a rigid body must maintain fixed distances from each other;
+\item The contact particle of a body rolling on a fixed surface must be at rest.
+\end{enumerate}
+When solving the Newtonian equations of motion for a particle
+\[ m \vec{\dot{v}} = \vec{F}, \]
+we enforced the constraints by adding a constraint force.
+\[ \vec{F} = \vec{F}^S + \vec{F}^C \]
+With $\vec{F}^S$ the specified force (the force on the particle if there were no constraint) and $\vec{F}^C$ the constraint force.
+Unfortunately this constraint force is variable, being just enough to counteract any force pulling the particle out of its constraint. There is no easy way to calculate the constraint force, it gives additional conditions that need to be solved simultaneously with the dynamical equations.
+
+We have already encountered one way to deal with constraints when we discussed circular motion: using polar coordinates. The constraint then becomes that the radial component of the position vector is constant. Thus we are only interested in the tangential component of all the quantities involved and the radial component is no longer relevant. 
+
+We only need one coordinate to specify the configuration of our system. 
+
+\subsection{Generalised coordinates}
+TODO: after equations
+
+$N$ particles with index $i$
+$n$ degrees of freedom
+$\mathcal{Q}$
+
+Holonomic + see Goldstein
+\subsection{Generalised velocities}
+
+\begin{equation}
+\vec{v}_i = \pd{\vec{r}_i}{q_1}\dot{q}_1 + \ldots + \pd{\vec{r}_i}{q_n}\dot{q}_n = \sum^n_{j=1}\pd{\vec{r}_i}{q_j}\dot{q}_j \label{particleV}
+\end{equation}
+(note on partial derivatives and formalism subsubsection?)
+
+
+\section{D'Alembert's principle}
+We can now specify any possible configuration of our system using generalised coordinates. We still do not know what the constraint forces are and how they impact the specified forces.
+
+One thing we can say however, is that the constraint force must at all times be perpendicular to the paths that a particle is constrained to. If there were a component of the constraint force in a direction the particle could move in, it would feel a force in that direction. Thus the constraint can not be geometrical (or equivalently geometrical) in nature.
+
+Because $\vec{v}$ points in the direction the particle is traveling in, we can write
+\[ \vec{F}^C \cdot \vec{v} = 0. \]
+In other words, the constraint force does no work. Actually we can obtain an even stronger result: because $\vec{F}^C$ must be perpendicular to any possible trajectory, we can write
+\[ \vec{F}^C \cdot \vec{v^*} = 0 \]
+where $\vec{v^*}$ is any velocity that is kinematically possible. We call $\vec{v^*}$ \udef{virtual motion} and thus the equation above expresses that constraint forces do no \udef{virtual work}. This means all the (virtual) work must be done by the specified forces.
+
+Summing over all the particles in the system, we get
+\begin{eigenschap}
+\textbf{D'Alembert's principle}:
+\[ \sum^N_{i=1}\vec{F}_i  \cdot \vec{v^*}_i = \sum^N_{i=1}m_i \vec{\dot{v}}_i \cdot \vec{v^*}_i = \sum^N_{i=1}\vec{F}^S_i  \cdot \vec{v^*}_i \]
+where $\{\vec{v^*}_i\}$ is any virtual motion of the system at a time $t$.
+\end{eigenschap}
+
+\section{Lagrange's equations}
+Lagrange's equations are obtained from D'Alembert's principle by choosing interesting values for $\vec{v^*}_i$.
+
+As a first example, say we vary only the first generalised coordinate $q_1$ and keep all the others fixed (i.e. $\dot{q}_2 = \ldots = \dot{q}_n = 0$). If we further take $\dot{q}_1 = 1$, we have according the equation \ref{particleV}
+\[ \vec{v^*}_i = \pd{\vec{r}_i}{q_1}. \]
+According to D'Alembert's principle, it follows that
+\[ \sum^N_{i=1}m_i \vec{\dot{v}}_i \cdot \pd{\vec{r}_i}{q_1} = \sum^N_{i=1}\vec{F}^S_i  \cdot \pd{\vec{r}_i}{q_1} \] 
+Varying the other generalised coorinates in the same way, we obtain the system of equations
+\begin{equation}
+\sum^N_{i=1}m_i \vec{\dot{v}}_i \cdot \pd{\vec{r}_i}{q_j} = \sum^N_{i=1}\vec{F}^S_i  \cdot \pd{\vec{r}_i}{q_j} \qquad j = 1, \ldots , n \label{Lag1}
+\end{equation}
+ 
+
+The right hand side of this equation is called the \udef{generalised force $Q_j$} corresponding to the coordinate $q_j$:
+\[ Q_j \equiv \sum_i \vec{F}^S_i \cdot \pd{\vec{r}_i}{q_j}. \]
+
+The left hand side can be rewritten in terms of the kinetic energy $T = \sum_i\frac{m_i}{2}\vec{v}_i \cdot \vec{v}_i$ in the following way:
+\begin{equation}
+\od{}{t}\left(\pd{T}{\dot{q}_j}\right) - \pd{T}{q_j} = \sum^N_{i=1}m_i \vec{\dot{v}}_i \cdot \pd{\vec{r}_i}{q_j} \label{kinRewrite}
+\end{equation}
+
+
+The interpretation of this formula is not entirely straightforward. In particular the partial derivative with respect to the generalised velocity $\dot{q}_j$ combined with the total derivative with respect to time is quite surprising.
+
+On reviewing equation \ref{particleV} (and recalling that $\vec{r}_i = \vec{r}_i(\vec{q})$ is a function of the configuration $\vec{q}$) , we see that in general the kinetic energy can be seen as a function of $\vec{q}$ and $\vec{\dot{q}}$. We can treat $\vec{q}$ and $\vec{\dot{q}}$ as independent variables, due to the fact that at any particular time $t$, the system can be found in any configuration $\vec{q}$ with any set of velocities $\vec{\dot{q}}$. In other words, $\vec{q}$ and $\vec{\dot{q}}$ are only dependent if we are considering the time evolution of the system.
+
+When computing the partial derivatives of the kinetic energy, we disregard the time evolution of the system and assume $\vec{q}$ and $\vec{\dot{q}}$ are independent variables.
+
+At this point it may not be obvious why we would not consider the time evolution of the system. The equations we have derived so far are not guaranteed to be true if we just go plugging in random values of $\vec{q}$ and $\vec{\dot{q}}$. It is however always \textit{possible} to compute $\pd{T}{\dot{q}_j}$ while forgetting about any time evolution, regardless of whether it is useful or not.
+
+It should also be noted that there is no ambiguity in notation; if we state that $T = T(\vec{q}, \vec{\dot{q}})$ and we take a partial derivative with respect to $\vec{\dot{q}}$, the definition of partial derivative forces us to keep $\vec{q}$ constant (and vice versa). Thus the variables must be independent.
+
+Then there is the total derivative with respect to time. This only makes sense if we consider the time evolution of the system; in which case $T(\vec{q}, \vec{\dot{q}}) = T(\vec{q}(t), \vec{\dot{q}}(t)) = T(t)$. Thus $T$ is a function only of time and the notation $\od{}{t}$ makes sense. In a strict mathematical sense $T(t)$ and $T(\vec{q}, \vec{\dot{q}})$ are different functions. The context of the derivative makes it clear which one we need to use.
+
+In conclusion then, the expression
+\[ \od{}{t}\left(\pd{T}{\dot{q}_j}\right) - \pd{T}{q_j} \]
+is quite strange. It is not at all obvious, to me at least, that computing it results in anything at all but useful, but we \textit{can} compute it, given an expression for $T$ in function of $\vec{q}$ and $\vec{\dot{q}}$ and it does result in something useful.
+
+Now we are ready to tackle the proof that 
+\[ \od{}{t}\left(\pd{T}{\dot{q}_j}\right) - \pd{T}{q_j} = \sum^N_{i=1}m_i \vec{\dot{v}}_i \cdot \pd{\vec{r}_i}{q_j}. \]
+We start with
+\begin{align*}
+\pd{}{\dot{q}_j}\left(\frac{1}{2}\vec{v}_i\cdot \vec{v}_i\right) &= \vec{v}_i \cdot \pd{\vec{v}_i}{\dot{q}_j} \\
+&= \vec{v}_i \cdot \pd{\vec{r}_i}{q_j}
+\end{align*}
+this follows from first the chain rule, and then $\vec{v}_i = \pd{\vec{r}_i}{q_1}\dot{q}_1 + \ldots + \pd{\vec{r}_i}{q_n}\dot{q}_n$ using the independence of $q_j$ and $\dot{q}_j$.
+
+Then a further application of the chain rule gives 
+\begin{align*}
+\od{}{t}\left[\pd{}{\dot{q}_j}\left(\frac{1}{2}\vec{v}_i\cdot \vec{v}_i\right)\right] &= \vec{\dot{v}}_i \cdot \pd{\vec{r}_i}{q_j} + \vec{v}_i \cdot \od{}{t}\left(\pd{\vec{r}_i}{q_j}\right) \\
+&= \vec{\dot{v}}_i \cdot \pd{\vec{r}_i}{q_j} + \vec{v}_i\cdot \sum^n_{k=1}\pd[2]{\vec{r}_i}{q_k}{q_j}\dot{q}_k.
+\end{align*}
+
+Similarly (and again assuming independence of $\vec{q}$ and $\vec{\dot{q}}$),
+\[ \pd{}{q_j}\left(\frac{1}{2}\vec{v}_i\cdot \vec{v}_i\right) = \vec{v}_i \cdot \pd{\vec{v}_i}{q_j} = \vec{v}_i \cdot \pd{}{q_j}\left(\sum^n_{k=1}\pd{\vec{r}_i}{q_k}\dot{q}_k\right) = \vec{v}_i\cdot \sum^n_{k=1}\pd[2]{\vec{r}_i}{q_k}{q_j}\dot{q}_k. \]
+
+Combining these two results, gives
+\[ \od{}{t}\left[\pd{}{\dot{q}_j}\left(\frac{1}{2}\vec{v}_i\cdot \vec{v}_i\right)\right] - \pd{}{q_j}\left(\frac{1}{2}\vec{v}_i\cdot \vec{v}_i\right) = \vec{\dot{v}}_i \cdot \pd{\vec{r}_i}{q_j} \]
+Multiplying by $m_i$ and summing over $i$, we obtain
+\[ \od{}{t}\left(\pd{T}{\dot{q}_j}\right) - \pd{T}{q_j} = \sum^N_{i=1}m_i \vec{\dot{v}}_i \cdot \pd{\vec{r}_i}{q_j}. \]
+
+Using this result, we can write
+\begin{eigenschap}
+\textbf{Lagrange's equations}
+\[ \od{}{t}\left(\pd{T}{\dot{q}_j}\right) - \pd{T}{q_j} = Q_j \qquad (1\leq j \leq n). \]
+\end{eigenschap}
+This is just a rewrite of equation \ref{Lag1}. It turns out that in general it is much easier to compute in this form.
+
+
+\section{Lagrange's equations for a conservative system}
+
+If the system is conservative, then the specified force has a potential associated with it. The generalised force $Q_j$ can then be written in terms of this potential.
+
+So we assume $\vec{F}^S = - \grad V$. Then, if $\vec{q}^A$ and $\vec{q}^B$ are any two points in configuration space that can be joined by a straight line parallel to the $q_j$-axis, we can write
+\begin{align*}
+\int^{\vec{q}^B}_{\vec{q}^A} Q_j \diff{q_j} &= \int^{\vec{q}^B}_{\vec{q}^A} \left(\sum_i \vec{F}^S_i \cdot \pd{\vec{r}_i}{q_j}\right) \diff{q_j} \\
+&= \sum_i \int_{C_i} \vec{F}^S_i \cdot \diff{\vec{r}} = V(\vec{q}^A) - V(\vec{q}^B) \\
+&= - \int^{\vec{q}^B}_{\vec{q}^A} \pd{V}{q_j} \diff{q_j}
+\end{align*}
+This equality holds for all $\vec{q}^A$, $\vec{q}^B$ chosen as described, so the integrands must be equal:
+\[ Q_j = - \pd{V}{q_j} \]
+
+This yields the following form for Lagrange's equations:
+\[ \od{}{t}\left(\pd{T}{\dot{q}_j}\right) - \pd{T}{q_j} = - \pd{V}{q_j} \qquad (1\leq j \leq n). \]
+For solving practical mechanics problems this is usually the most useful form.
+
+There is however one last way we can rewrite Lagrange's equations, to put them in their most famous and elegant form. Since the potential is only a function of $\vec{q}$, $\pd{V}{\dot{q}_j}$ must be zero. So the equations can be written
+\[ \od{}{t}\left(\pd{T}{\dot{q}_j}\right) - \pd{T}{q_j} = \od{}{t}\left(\pd{V}{\dot{q}_j}\right) - \pd{V}{q_j} \qquad (1\leq j \leq n). \]
+
+We now introduce $L(\vec{q}, \vec{\dot{q}}) \equiv T(\vec{q}, \vec{\dot{q}}) - V(\vec{q})$ which is called the \udef{Lagrangian} of the system.
+
+Rewriting using the Lagrangian we get
+\begin{eigenschap}
+\textbf{Lagrange's equations}
+\[ \od{}{t}\left(\pd{L}{\dot{q}_j}\right) - \pd{L}{q_j} = 0 \qquad (1\leq j \leq n). \]
+\end{eigenschap}
+This new way of writing the equations is mainly interesting from a theoretical point of view. It is this form of the equations that we will derive from the least action principle and it is this form of the equations that is most suitable to be adapted to quantum mechanics.
+
+
+\subsection{Velocity dependent potential}
+There are systems whose specified forces are not conservative, but their equations of motion can still be written in the Lagrangian form. This is possible if the generalised forces happen to be able to be written in the form
+\[ Q_j = \od{}{t}\left(\pd{U}{\dot{q}_j}\right) - \pd{U}{q_j} \]
+for some function $U(\vec{q}, \vec{\dot{q}})$ which is called the \udef{velocity dependent potential}.
+
+In practice there is really only one important case: that of a charged particle moving in electromagnetic fields. This case will be treated in the part on electromagnetism.
+
+
+\subsection{Sufficiency of the Lagrange equations}
+TODO
+
+\section{Lagrange's equations for systems with moving constraints}
+The theory expounded so far can (somewhat surprisingly) be extended to the class of problems in which the constraints are time dependent. Example include driven oscillators that are driven at a certain \textit{prescribed} frequency and contraints that rotate in a \textit{prescribed} manner.
+
+TODO refer to introduction of generalised coordinates
+
+The result is that now $\vec{r}_i$ depends on both $\vec{q}$ and time $t$.
+\[ \vec{r}_i = \vec{r}_i(\vec{q}, t) \qquad (1 \leq i \leq N) \]
+The particle velocities are now given by
+\[ \vec{v}_i = \pd{\vec{r}_i}{q_1}\dot{q}_1 + \ldots + \pd{\vec{r}_i}{q_n}\dot{q}_n + \pd{\vec{r}_i}{t}. \]
+Notice that we are treating $t$ as an independent variable.
+
+Obviously the constraint forces of moving constraints do work (just look at the driven oscillator), so initially there is no reason to think that systems with moving constraints satisfy Lagrange's equations, but it turns out they do. We motivate this claim in three steps:
+\begin{enumerate}
+\item Obviously D'Alembert's principle can no longer be true, but the conclusion (equation \ref{Lag1}) we reached based on the principle \textit{is}. In order for this to be true, we just need to verify that
+\[ \sum^N_{i=1} \vec{F}_i^C \cdot \pd{\vec{r}_i}{q_j} = 0. \]
+In essence what we are trying to prove is that, while the constraint forces in general can do both real and virtual work, they do \textit{not} do any virtual work if only the coordinate $q_j$ is allowed to vary.
+
+This is because, by the definition of the partial derivative, $\pd{\vec{r}_i}{q_j}$ is calculated keeping all the other coordinates \textit{and time} constant. Now of course $\vec{F}_i^C$ does depend on time, but at any particular time $t$, the expression $\sum^N_{i=1} \vec{F}_i^C \cdot \pd{\vec{r}_i}{q_j}$ is the same as if the constraints were fixed in time, meaning it is still zero.
+
+\item Next we need to verify equation \ref{kinRewrite}. One may think that the extra term $\pd{\vec{r}_i}{t}$ in the expression for the particle velocity would throw sand in the works. It does not, mainly because the partial derivatives get rid of it. It is straightforward to redo the proof with this extra term.
+
+\item Lastly, for a conservative system, is 
+\[ \sum^N_{i=1}\vec{F}^S_i \cdot \pd{\vec{r}_i}{q_j} = - \pd{V}{q_j} \]
+still true? The answer is yes. The proof is exactly the same because the partial derivatives are calculated at constant time.
+\end{enumerate}
+So to recap: Lagranges's equations still hold when moving constraints are present, provided that $t$ is regarded as an independent variable.
+
+\chapter{Action and Hamilton's principle}
+\section{A brief overview of the principle of least action}
+- stationary
+Hero of Alexandria
+Maupertuis and Hamilton
+
+
+\section{Variation of functionals}
+\section{The Euler-Lagrange equation}
+
+
+\chapter{Hamilton's formulation}
+\section{Generalised momenta}
+\section{Hamilton's equations}
+\subsection{Poisson brackets}
+\section{Symplectic maps}
+\section{The Hamilton-Jacobi equation}
+\section{Hamiltonian phase space}
+\section{Liouville's theorem and recurrence}
+
+\chapter{Symmetry and conservation principles}
+\section{Intuitive idea}
+\section{Variational symmetries}
+\section{Noether's theorem}
+\section{Finding variational symmetries}
+\section{Energy}
+\section{Linear momentum}
+\section{Angular momentum}
+
+\chapter{Non-holonomic systems}
+
+\chapter{The second variation}

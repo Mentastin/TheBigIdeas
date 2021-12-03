@@ -1,0 +1,411 @@
+\paragraph{History.}
+FORTRAN (FORmula TRANslation) was the first high-level programming language to become widely used. At conception, in 1957, there were serious concerns as to whether a high-level language could ever seriously compete with assembly languages. Thus design was oriented heavily towards efficiency.
+
+The language went through many revisions. The biggest change was between FORTRAN 77 and Fortran 90. Fortran 95 is the most widely implemented of the more recent specifications and later versions are largely similar.
+
+\paragraph{Syntactic features.}
+The basic structure of a program can be seen in this hello world example.
+\begin{lstlisting}[language={[77]fortran}, style=program]
+      program helloworld
+        print *, "Hello world!"
+        stop
+        end
+\end{lstlisting}
+The \texttt{stop} statement is optional since the program will stop when it reaches the end, but is recommended to emphasize that execution flow stops there. You cannot have a variable with the same name as the program.
+
+FORTRAN is completely case insensitive and was traditionally written in all caps. Current practice is to mix upper and lower case.
+
+Blanks are ignored completely, in fact they may all be removed. Spaces may be inserted freely.
+
+FORTRAN 77 uses fixed-format source code:
+\begin{itemize}
+\item Comments must begin with a \texttt{C} or a \texttt{*} in column 1. Some compilers allow in-line comment with an \texttt{!}. The exclamation mark may appear anywhere on a line, except in positions 2-6.
+\item Statement labels must occur in columns 1-5
+\item Continuation lines must have a non-blank character in column 6. Any non-blank character can be used as a continuation character. Traditionally a plus, an ampersand or a digit is used. Example:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+c The next statement goes over two physical lines
+      area = 3.14159265358979
+     +       * r * r
+\end{lstlisting}
+\item Statements must start in column 7.
+\item The line-length may be limited to 72 characters (derived from the 80-byte width of a punch-card, with last 8 characters reserved for (optional) sequence numbers)
+\end{itemize}
+
+
+
+\subparagraph{Variables, types and declarations}
+Variables are 1 to 6 characters long, begin with a letter and may contain letters and digits.
+
+Reserved words are: \texttt{assign, backspace, block data, call, close, common, continue, data, dimension, do, else, else if, end, endfile, endif, entry, equivalence, external, format, function, goto, if, implicit, inquire, intrinsic, open, parameter, pause, print, program, read, return, rewind, rewrite, save, stop, subroutine, then, write}.
+
+Variables do not have to be explicitly declared. Explicit declarations take the form
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      integer A, B, C
+      real radius, eulerE
+      double precision q, r
+      complex z
+      logical t
+      character ch
+\end{lstlisting}
+If there is no explicit declaration, a \textit{naming convention} is used. By default variable names beginning with \texttt{I-N} are integer variables; all others are real. This default behaviour can be modified with an \texttt{IMPLICIT} statement:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      IMPLICIT INTEGER (A-Z)
+\end{lstlisting}
+This causes the type integer to be assumed for all variables.
+
+Constants are defined in the following way
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      PARAMETER (KMAX = 100, MIDPT = 50)
+\end{lstlisting}
+the \texttt{parameter} statement(s) must come before the first executable statement.
+
+\subparagraph{Arrays.} One-dimensional arrays are declared as follows.
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      real a(20)
+      real b(0:19), weird(-162:237)
+      double precision x(100)
+\end{lstlisting}
+By default arrays are indexed from $1$ to their length, inclusive. Arbitrary index ranges can also be defined, see arrays \texttt{b} and \texttt{wierd} above.
+
+Elements or arrays can be accessed using brackets: \texttt{a(3) = 2.0}. The Fortran compiler does not check whether array elements are out of bounds or undefined!
+
+Multi-dimensional arrays can be declared in a similar way by putting a comma between indexes:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      real A(3,5,2:7)
+      A(1,4,2) = 5
+\end{lstlisting}
+
+Two-dimensional arrays are stored in memory as contiguous sequences of elements, column by column.
+
+An alternative (old-fashioned) style is to use the \texttt{dimension} statement:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      real A, x
+      dimension x(50)
+      dimension A(10,20)
+C This is equivalent to:
+      real A(10,20), x(50)
+\end{lstlisting}
+
+\subparagraph{The \texttt{DATA} statement} is a compact way to input data that is known at compile time. The syntax is as follows
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      data m/10/, n/20/, x/2.5/, y/2.5/
+C Or alternatively
+      data m,n/10,20/, x,y/2*2.5/
+\end{lstlisting}
+Both statements result in \texttt{m = 10, n = 20, x = 2.5, y = 2.5}.
+
+The data statement is performed only once, right before the execution of the program starts. For this reason, the data statement is mainly used in the main program and not in subroutines. It can also be used to initialize arrays (vectors, matrices).
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      real A(10,20)
+      data A/ 200 * 0.0/
+C Individual elements may also be initialised
+      data A(1,1)/ 12.5/, A(2,1)/ -33.3/, A(2,2)/ 1.0/
+\end{lstlisting}
+
+The data statement cannot be used for variables contained in a common block. There is a special syntax for this purpose, called \texttt{block data}.
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      block data
+        integer nmax
+        parameter (nmax=20)
+        real v(nmax), alpha, beta
+        common /vector/v,alpha,beta
+        data v/20*100.0/, alpha/3.14/, beta/2.71/
+      end
+\end{lstlisting}
+
+The block data may not be nested inside the main program or a subroutine.
+
+\paragraph{Expressions and assignment}
+FORTRAN supports the following literals:
+\begin{itemize}
+\item Integer literals
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      1
+      0
+      -100
+      32767
+      +15
+\end{lstlisting}
+\item Real literals
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      1.0
+      -0.25
+      2.6E6
+      3.333E-1
+\end{lstlisting}
+The $E$ means multiply by $10$ to the power of whatever comes after it.
+\item Double precision literals
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      2.0D-1
+      1D99
+\end{lstlisting}
+Like reals, but $D$ instead of $E$.
+\item Complex literals
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      (2, -3)
+      (1., 9.9E-1)
+\end{lstlisting}
+\item Logical literals
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      .TRUE.
+      .FALSE.
+\end{lstlisting}
+\item Character literals. Most often used in arrays (as strings). Some versions of FORTRAN require single quotes.  An enclosed single-quote can be represented by doubling.
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      'ABC'
+      'Anything goes!'
+      'It''s a nice day'
+\end{lstlisting}
+\end{itemize}
+
+Operator precedence in FORTRAN 77 (from highest to lowest):
+\begin{enumerate}
+\item[\texttt{**}] Exponentiation
+\item[\texttt{-}] Unary minus
+\item[\texttt{*, /}] Multiplication, division
+\item[\texttt{+,-}] Addition, subtraction
+\item[] Relational operators: \texttt{.LT., .LE., .GT., .GE., .EQ., .NE.} (respectively $<, <=, >, >=, =, \backslash=$).
+\item[\texttt{.NOT.}] Logical not
+\item[\texttt{.AND.}] Logical and
+\item[\texttt{.OR.}] Logical or
+\end{enumerate}
+For different evaluation order, use parentheses.
+
+Caution must be taken when using the \undline{division operator}. If both operands are integer, integer division is performed, otherwise real arithmetic division is performed.
+
+Assignment is done with the equals sign
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      area = pi * r**2
+\end{lstlisting}
+
+For type conversion, the following functions are available: \texttt{int(), real(), dble(), ichar(), char()}. The function \texttt{ichar} converts a character into an integer; \texttt{char} does the opposite.
+
+Constructs that are not statically checked are ordinarily left unchecked.
+
+\paragraph{Flow control.}
+The \texttt{if} statement comes in several forms:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      if (x .LT. 0) x = -x
+\end{lstlisting}
+or
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      if (x .LT. 0) then
+        x = -x
+      endif
+\end{lstlisting}
+or
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      if (x .LT. 0) then
+        x = -x
+      elseif (x .GT. 5) then
+        x = 5
+      else
+        x = x+1
+      endif
+\end{lstlisting}
+\texttt{if} statements can also be nested.
+
+FORTRAN 77 only has the \texttt{do}-loop. An example:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      integer i, n, sum
+ 
+      sum = 0
+      do 10 i = 1, n
+         sum = sum + i
+         write(*,*) 'i =', i
+         write(*,*) 'sum =', sum
+  10  continue
+\end{lstlisting}
+Here the number $10$ is a label. Column positions 1-5 are reserved for statement labels. Typically, most programmers use consecutive multiples of 10.
+
+The \texttt{continue} statement is a placeholder that does nothing.
+
+The statement identified by the label after the \texttt{DO} command is called the \udef{terminal statement}.
+
+The variable is typically incremented by one each loop until the second value is reached (inclusive). A step may also be specified (negative means counting down).
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      integer i
+ 
+      do 20 i = 10, 1, -2
+         write(*,*) 'i =', i
+  20  continue
+\end{lstlisting}
+
+Many compilers also allow the \texttt{DO} statement to be closed by \texttt{ENDDO}. This is not ANSI FORTRAN 77, however. The expressions in the beginning of the \texttt{DO}-loop arwe evaluated only once. So the following loop does not run forever:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      integer i,j
+ 
+      read (*,*) j
+      do 20 i = 1, j
+         j = j + 1
+  20  continue
+      write (*,*) j
+\end{lstlisting}
+
+Other types of loops have to be simulated using \texttt{GOTO} statements.
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+     integer n
+
+     n = 1
+  10 if (n .LE. 100) then
+        write (*,*) n
+        n = 2*n
+        goto 10
+     endif
+\end{lstlisting}
+
+\paragraph{Subprograms.}
+Fortran has two different types of subprograms, called functions and subroutines. 
+
+Functions take a set of input arguments (parameters) and return a value of some type.
+Some built-in functions include:
+\begin{lstlisting}
+abs     absolute value
+min     minimum value
+max     maximum value
+sqrt    square root
+sin     sine
+cos     cosine
+tan     tangent
+atan    arctangent
+exp     exponential (natural)
+log     logarithm (natural)
+\end{lstlisting}
+
+An example of a user-defined function:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      real function r(m,t)
+        integer m
+        real t
+        r = 0.1*t * (m**2 + 14*m + 46)
+        if (r .LT. 0) r = 0.0
+        return
+      end
+\end{lstlisting}
+We see
+\begin{itemize}
+\item Functions have a type. If none is declared, the same implicit typing system as for variables is used.
+\item Functions are terminated by the \texttt{return} statement.
+\item The return value should be stored in a variable with the same name as the function. 
+\item Strictly speaking Fortran 77 does not permit recursion. However, it is not uncommon for a compiler to allow recursion. 
+\end{itemize}
+
+A subroutine does not return a value. The syntax is as follows:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      subroutine iswap (a, b)
+        integer a, b
+        integer tmp
+        tmp = a
+        a = b
+        b = tmp
+        return
+      end
+\end{lstlisting}
+The subroutine works because parameters in FORTRAN 77 subprograms are \undline{passed by reference.}
+
+We can pass arrays of arbitrary size to subprograms if we define the arrays in the subprogram with dummy indices (usually an asterisk).
+
+\paragraph{Common blocks and scope.}
+FORTRAN 77 has no global variables. Common blocks can be used instead. In general the syntax is as follows
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      program main
+        real alpha, beta
+        common /coeff/ alpha, beta
+        [ statements ]
+        stop
+      end
+C
+      subroutine sub1 ( [ some arguments ] )
+        [ declarations of arguments ]
+        real alpha, beta
+        common /coeff/ alpha, beta
+        [ statements ]
+        return
+      end
+C
+      subroutine sub2 ( [ some arguments ] )
+        [ declarations of arguments ]
+        real alpha, beta
+        common /coeff/ alpha, beta
+        [ statements ]
+        return
+      end
+\end{lstlisting}
+The syntax of a common statement is: \texttt{COMMON / name / list-of-variables}. A variable cannot belong to more than one common block. The variables in a common block do not need to have the same names each place they occur (although it is a good idea to do so), but they must be listed in the same order and have the same type and size.
+
+Putting arrays in common blocks is a bad idea.
+\paragraph{I/O.} In FORTRAN each file is associated with a unit number, an integer between 1 and 99. Some unit numbers are reserved: 5 is standard input, 6 is standard output. 
+
+Before you can use a file you have to open it. The command is 
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      open (list-of-specifiers)
+\end{lstlisting}
+Where the most common specifiers are
+\begin{lstlisting}
+[UNIT=]  u
+IOSTAT=  ios
+ERR=     err
+FILE=    fname
+STATUS=  sta
+ACCESS=  acc
+FORM=    frm
+RECL=    rl
+\end{lstlisting}
+\begin{itemize}
+\item[\texttt{u}]  is a number between 1 and 99 inclusive that denotes the file.
+\item[\texttt{ios}] is the I/O status identifier and should be an integer variable. Upon return, \texttt{ios} is set to zero if the statement was successful and set to a non-zero value otherwise. 
+\item[\texttt{err}] is a label which the program will jump to if there is an error. 
+\item[\texttt{fname}] is a character string denoting the file name. 
+\item[\texttt{sta}] is a character string that has to be either \texttt{NEW}, \texttt{OLD} or \texttt{SCRATCH}. It shows the prior status of the file. A scratch file is a file that is created when opened and deleted when closed (or the program ends). 
+\item[\texttt{acc}] must be either \texttt{SEQUENTIAL} or \texttt{DIRECT}. The default is \texttt{SEQUENTIAL}.
+\item[\texttt{frm}] must be either \texttt{FORMATTED} or \texttt{UNFORMATTED}. The default is \texttt{UNFORMATTED}. 
+\item[\texttt{rl}] specifies the length of each record in a direct-access file. 
+\end{itemize}
+After a file has been opened, you can access it by read and write statements. When you are done with the file, it should be closed by the statement 
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      close ([UNIT=]u[,IOSTAT=ios,ERR=err,STATUS=sta])
+\end{lstlisting}
+In this case \texttt{sta} is a character string which can be \texttt{KEEP} (the default) or \texttt{DELETE}. 
+
+Reading and writing is done as follows:
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+read ([UNIT=]u, [FMT=]fmt, IOSTAT=ios, ERR=err, END=s) [ list-of-variables ]
+write([UNIT=]u, [FMT=]fmt, IOSTAT=ios, ERR=err, END=s) [ list-of-variables ]
+\end{lstlisting}
+The \texttt{END=s} specifier defines which statement label the program jumps to if it reaches end-of-file. The format number \texttt{fmt} refers to a label for a format statement (described below).
+
+The first two arguments can be replaced with asterisks. This is sometimes called \udef{list directed} read / write. This format assumes the file has a line per record and the fields are separated by blanks or commas.
+
+If we are reading or writing to the stantard input, the followinf syntax may be used (the asterisk refers to the format):
+\begin{lstlisting}[language={[77]fortran}, style=snippet]
+      read  *, [ list-of-variables ]
+      print *, [ list-of-variables ]
+\end{lstlisting}
+
+\paragraph{The \texttt{FORMAT} statement} TODO
+
+\paragraph{Language design notes}
+
+Changes compared to FORTRAN 66:
+\begin{itemize}
+\item Additions:
+\begin{itemize}
+\item Block \texttt{IF} and \texttt{END IF} statements, with optional \texttt{ELSE} and \texttt{ELSE IF}.
+\item \texttt{DO}-loop extensions including
+\begin{itemize}
+\item parameter expressions
+\item negative increments
+\item zero trip counts
+\item Better file I/O.
+\item The \texttt{IMPLICIT} statement.
+\item The \texttt{PARAMETER} statement.
+\item The \texttt{CHARACTER} datatype.
+\item Lexical comparison of strings with \texttt{LGE, LGT, LLE, LLT}.
+\end{itemize}
+\end{itemize}
+\item Deprecated:
+\begin{itemize}
+\item Hollerith constants and Hollerith data.
+\item Transfer of control out of and back into the range of a DO loop (also known as "Extended Range")
+\end{itemize}
+\end{itemize}

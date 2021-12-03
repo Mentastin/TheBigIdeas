@@ -1,0 +1,958 @@
+\url{https://arxiv.org/pdf/1912.10642.pdf}
+\url{https://arxiv.org/pdf/0810.1279.pdf}
+\url{http://katmat.math.uni-bremen.de/acc/acc.pdf}
+
+\chapter{Basic concepts}
+\section{Categories}
+\subsection{Definitions and examples}
+\begin{definition}
+A \udef{category} $\cat{C}$ consists of
+\begin{enumerate}
+\item a collection $\ob(\cat{C})$ of \udef{objects} $X,Y,Z,\ldots$
+\item a collection $\mor(\cat{C})$ of \udef{morphisms} or \udef{arrows} $f,g,h,\ldots$
+\end{enumerate}
+such that
+\begin{itemize}
+\item each morphism $f$ has an associated \udef{domain} object $\dom(f)$ and \udef{codomain} object $\codom(f)$; we write
+\[ f: X \to Y \qquad\text{or}\qquad \begin{tikzcd}
+X \rar{f} & Y
+\end{tikzcd}  \]
+to mean $f$ is a morphism with $\dom(f) = X$ and $\codom(f) = Y$;
+\item each object has a designated \udef{identity morphism} $\id_X: X\to X$;
+\item for any pair $f,g$ such that $\codom(f) = \dom(g)$, there exists a \udef{composite morphism}
+\[ g\circ f: \dom(f) \to \codom(g); \]
+we call such pairs \udef{composable}; any sequence of morphisms may be called composable if each morphism is composable with its neighbours;
+\end{itemize}
+subject to the axioms
+\begin{itemize}[leftmargin=3cm]
+\item[\textbf{Identity}] for any $f: X\to Y$, the composites $\id_Y\circ f = f\circ \id_X = f$;
+\item[\textbf{Associativity}] for any composable triple $f,g,h$ we have
+\[ h\circ (g\circ f) = (h\circ g)\circ f \eqdef h\circ g \circ f. \]
+\end{itemize}
+We also write $gf$ or $g\cdot f$ instead of $gf$.
+\end{definition}
+
+Two arrows are called \udef{parallel} if they have the same domain and codomain.
+
+The notation heavily suggests that we can think of the objects as sets and the morphisms as functions. Such categories do indeed constitute the main examples of categories. They are called \udef{concrete categories}. The other categories are \udef{abstract categories}.
+
+TODO: concrete categories are categories with a faithful functor to $\cat{Set}$?
+
+\begin{example}
+Some examples of concrete categories are
+\begin{itemize}
+\item All sets are objects in the category $\cat{Set}$ and all functions are morphisms.
+\item The category $\cat{Poset}$ has partially ordered sets as objects and order-preserving functions as morphisms.
+\end{itemize}
+Some examples of abstract categories are
+\begin{itemize}
+\item A set may be regarded as a category in which the elements of the set define the objects and the only morphisms are the required identities. A category is \udef{discrete} if every morphism is an identity.
+\item A preorder $(P, \precsim)$ can be regarded as a category. The elements of $P$ are the objects of the category and for $x,y\in P$ there exists a unique morphism $x\to y$ if and only if $x\precsim y$. Transitivity implies the existence of composites and reflexivity the existence of identity morphisms.
+\item In particular (TODO: Von Neumann??) ordinals are preorders and thus define categories. We use the notation $\mathbb{0}, \mathbb{1}, \mathbb{2}, \ldots$ for the categories defined by $0,1,2,\ldots$. Also $\bbomega$ is the category defined by $\omega$.
+\end{itemize}
+\end{example}
+
+If the category is small enough, we can depict it using a diagram. Points are objects and arrows are morphisms.
+
+\begin{example}
+\begin{align*}
+\mathbb{1}&: \begin{tikzcd}
+0 \arrow[loop left]
+\end{tikzcd} \\
+\mathbb{2}&: \begin{tikzcd}[ampersand replacement=\&]
+0 \arrow[loop left] \ar[r] \& 1 \arrow[loop right]
+\end{tikzcd} & &\text{\udef{walking arrow} or \udef{free arrow}} \\
+\mathbb{I}&: \begin{tikzcd}[ampersand replacement=\&]
+0 \arrow[loop left] \ar[r, shift left] \& 1 \ar[l, shift left] \arrow[loop right]
+\end{tikzcd} & &\text{\udef{walking isomorphism} or \udef{free isomorphism}} \\
+\mathbb{3}&: \begin{tikzcd}[ampersand replacement=\&]
+0 \arrow[loop left] \ar[r] \ar[rr, bend left] \& 1 \ar[r] \arrow[loop below] \& 2 \arrow[loop right]
+\end{tikzcd}
+\end{align*}
+\end{example}
+
+\begin{lemma} \label{lemma:arrowsOnlyDefinition}
+We can define the notion of category without referencing objects, as each object can be identified with its identity morphism. The definition then becomes:
+
+\upshape
+A category $\cat{C}$ consists of
+\begin{enumerate}
+\item a collection $\mor(\cat{C})$ of arrows $f,g,h,\ldots$
+\item a collection of pairs of arrows, called \udef{composable pairs}
+\item an operation assigning each composable pair to an arrow
+\[ (g,f) \mapsto gf \]
+if $(g,f)$ is a composable pair, we say $gf$ is defined.
+\end{enumerate}
+We call an arrow $I$ and \udef{identity arrow} if for all arrows $f$ in $\cat{C}$,
+\begin{align*}
+If &= f & &\text{whenever $If$ is defined} \\
+fI &= f & &\text{whenever $fI$ is defined.}
+\end{align*}
+The category must then satisfy the axioms
+\begin{itemize}[leftmargin=3cm]
+\item[\textbf{Associativity}] for any composable triple $f,g,h$ we have
+\begin{align*}
+\text{$hg$ and $gf$ are defined} &\iff \text{$hg$ and $(hg)f$ are defined} \\ &\iff \text{$gf$ and $h(gf)$ are defined}
+\end{align*}
+and if this holds, then
+\[ h(gf) = (hg)f \eqdef hgf; \]
+\item[\textbf{Identity}] for each arrow $f$ there exist identity arrows $I,I'$ in $\cat{C}$ such that $If$ and $fI'$ are defined.
+\end{itemize}
+\end{lemma}
+
+
+\subsection{Questions of size: are categories graphs?}
+Based on all this we may think a category is a special type of graph, and this would be true if it were not for the question of size. A graph has a \textit{set} of points and a \textit{set} of edges. The collections of objects and morphisms in a category do \emph{not} need to be sets. Indeed the collection of objects in the category $\cat{Set}$ is the collection of all sets, which is not a set by \ref{corollary:setOfSets}.
+
+\begin{definition}
+A category $\cat{C}$ is \udef{small} if its collection of morphisms is a set.
+
+A category $\cat{C}$ is \udef{locally small} for any objects $X,Y$ if the collection of morphisms from $X$ to $Y$ is a set. This set is called a \udef{hom-set} and is denoted $\Hom(X,Y)$ or $\cat{C}(X,Y)$.
+\end{definition}
+In view of \ref{lemma:arrowsOnlyDefinition}, a small category has only a set of objects.
+
+\begin{lemma}
+If a category $\cat{C}$ is small, then
+\begin{align*}
+\dom&: \mor(\cat{C}) \to \ob(\cat{C}) \\
+\codom&: \mor(\cat{C}) \to \ob(\cat{C}) \\
+\id&: \ob(\cat{C}) \to \mor(\cat{C}): X\mapsto \id_X
+\end{align*}
+are functions.
+\end{lemma}
+
+\begin{lemma}
+A small category
+\begin{itemize}
+\item with at most one element in every hom-set defines a preorder;
+\item such that for all objects $X,Y$, the set $\Hom(X,Y)\cup \Hom(Y,X)$ is at most a singleton defines a partial order.
+\end{itemize}
+\end{lemma}
+We call such categories \udef{preorder categories} and \udef{poset categories}.
+
+\subsection{Duality}
+Intuitively category-theoretic duality is obtained by ``flipping all the arrows''.
+\begin{definition}
+Let $\cat{C}$ be a category. The \udef{opposite category} $\cat{C^{op}}$ has
+\begin{enumerate}
+\item the objects of $\cat{C}$ as objects;
+\item a morphism $f^\text{o}: Y\to X$ for each morphism $f:X\to Y$ in $\cat{C}$.
+\end{enumerate}
+And
+\begin{itemize}
+\item for each object $X$, $\id_X^\text{o}$ serves as the identity $\id_X$ in $\cat{C^{op}}$;
+\item for all composable $f,g$ in $\mor(\cat{C})$, $(fg)^\text{o} = g^\text{o}f^\text{o}$.
+\end{itemize}
+\end{definition}
+It is easy to verify that the opposite category is indeed a category.
+
+\begin{lemma}
+The category $(\cat{C^{op})^{op}}$ is again the category $\cat{C}$.
+\end{lemma}
+
+\begin{lemma}
+Let $f,g$ be morphisms, then $f = g \iff f^o = g^o$.
+\end{lemma}
+
+A statement about the category $\cat{C^{op}}$ can often be interpreted as a statement about $\cat{C}$. This is referred to as the ``dual statement''. In other words: a statement in $\cat{C}$is true if and only if the dual statement is true in $\cat{C^{op}}$.
+
+If we prove that something is true in a collection of categories including $\cat{C}$ and $\cat{C^{op}}$, we have in effect proven both the statement and the dual statement. We then say the second follows from the first by duality. For an example see \ref{lemma:singleSplitImpliesDoubleSplit} and \ref{lemma:monicEpicCompositions}.
+
+We also say properties of morphisms and categories are dual if having one in $\cat{C}$ means having the other in $\cat{C^{op}}$.
+
+\begin{example}
+Using the fact that monic and epic are dual properties of morphisms (see later), we have, for example, the following implications:
+\begin{quote}
+For any composable morphisms $g,f$ in any category $\cat{C}$: If $gf$ is monic, then $f$ is monic.
+\end{quote}
+Implies
+\begin{quote}
+For any composable morphisms $g^\text{o},f^\text{o}$ in any category $\cat{C^{op}}$: If $g^\text{o}f^\text{o}$ is monic, then $f^\text{o}$ is monic.
+\end{quote}
+Implies
+\begin{quote}
+For any composable morphisms $g^\text{o},f^\text{o}$ in any category $\cat{C^{op}}$: If $(fg)^\text{o}$ is monic, then $f^\text{o}$ is monic.
+\end{quote}
+Implies
+\begin{quote}
+For any composable morphisms $g,f$ in any category $\cat{C}$: If $fg$ is epic, then $f$ is epic.
+\end{quote}
+So proving the first also proves the last, by duality.
+\end{example}
+
+
+
+\subsection{Constructions of categories}
+\subsubsection{Subcategories}
+\begin{definition}
+Let $\cat{C}$ be a category. A category $\cat{D}$ is a \udef{subcategory} of $\cat{C}$ if all its objects are objects of $\cat{C}$ and all its morphisms are morphisms of $\cat{C}$.
+\end{definition}
+
+\subsubsection{Core and skeleton}
+\begin{definition}
+Let $\cat{C}$ be a category.
+\begin{itemize}
+\item The \udef{core} of $\cat{C}$ is the groupoid whose objects are the objects of $\cat{C}$ and whose morphisms are the isomorphisms of $\cat{C}$.
+\end{itemize}
+\end{definition}
+
+\subsubsection{Product categories}
+\begin{definition}
+The \udef{product} $\cat{C}\times \cat{D}$ of categories $\cat{C}$ and $\cat{D}$  is a category consisting of
+\begin{enumerate}
+\item ordered pairs $(c,d)$ where $c\in \cat{C}$ and $d\in \cat{D}$ as objects;
+\item ordered pairs $(f,g): (c,d) \to (c',d')$ where $f:c\to c'$ and $g:d\to d'$ as morphisms.
+\end{enumerate}
+Composition and identities are defined component-wise.
+\end{definition}
+
+
+
+\section{Functors}
+\begin{definition}
+A \udef{(covariant) functor} $F:\cat{C}\to\cat{D}$ consists of
+\begin{enumerate}
+\item an object $Fc$ in $\cat{D}$ for each $c\in C$;
+\item a morphism $Ff: Fc\to Fc'$ for each morphism $f:c\to c'$ in $\cat{C}$
+\end{enumerate}
+satisfying the functorial properties:
+\begin{itemize}
+\item for any composable pair $g,f$ in $\cat{C}$, $Fg\circ Ff = F(g\circ f)$;
+\item for each object $c$ in $\cat{C}$, $F(\id_c) = \id_{Fc}$.
+\end{itemize}
+A \udef{contravariant functor} $F:\cat{C}\to\cat{D}$ is similar, except
+\begin{enumerate}
+\item $f:c\to c'$ maps to $Ff: Fc'\to Fc$
+\item if $g,f$ are composable, then $Ff \circ Fg = F(g\circ f)$.
+\end{enumerate}
+An \udef{endofunctor} is a functor between a category and itself.
+\end{definition}
+Functors between small categories are functions.
+
+\begin{example}
+Examples of covariant functors:
+\begin{itemize}
+\item For any category $\cat{C}$, there is an \udef{identity functor} $I_\cat{C}$ that maps objects and morphisms to themselves.
+\item There is an endofunctor $\mathcal{P}:\cat{Set} \to \cat{Set}$ that maps sets to their powerset and functions $f:A\to B$ to their image function $f[\cdot]:\mathcal{P}(A)\to \mathcal{P}(B)$.
+\item \udef{Forgetful functors} are functors from the category of some type of structured set to a category of structured set with less (or) no structure. For example, we have a forgetful functor $U: \cat{Poset} \to \cat{Set}$ that maps the cateory $\cat{Poset}$ into the category $\cat{Set}$ by forgetting the order. 
+\end{itemize}
+Examples of contravariant functors:
+\begin{itemize}
+\item The contravariant endofunctor $\mathcal{P}:\cat{Set} \to \cat{Set}$ that maps sets to their powerset and functions $f:A\to B$ to their inverse image function $f^{-1}[\cdot]:\mathcal{P}(B)\to \mathcal{P}(A)$.
+\end{itemize}
+\end{example}
+
+\begin{lemma} \label{lemma:functorMorphismPreservation}
+Functors preserve split monomorphisms, split epimorphisms and isomorphisms.
+\end{lemma}
+Functors do not necessarily preserve monomorphisms and epimorphisms.
+\begin{corollary}
+Let $F:\cat{C}\to \cat{D}$ be a functor. Let $f:X \to Y$ be monic (resp. epic). If $F(f)$ is not monic (resp. epic), then $f$ is not split monic (resp. split epic).
+\end{corollary}
+
+\subsection{Functors as morphisms}
+\begin{definition}
+We define $\cat{Cat}$ as the category whose objects are small categories and whose morphisms are functors between them.
+
+We define $\cat{CAT}$ as the category whose objects are locally small categories and whose morphisms are functors between them.
+\end{definition}
+\begin{lemma}
+$\cat{Cat}$ is not small, but it is locally small.
+
+$\cat{CAT}$ is not locally small.
+\end{lemma}
+There is an inclusion functor $\cat{Cat} \hookrightarrow \cat{CAT}$.
+
+We can obviously consider isomorphisms in the category $\cat{Cat}$, but this is not a very natural notion to work with. For example, a category is not typically isomorphic to its opposite category.
+
+The more natural concept is equivalence of categories.
+
+\begin{lemma} \label{lemma:varianceOfComposite}
+Let $F,G$ be composable morphisms in $\cat{CAT}$, i.e. functors. Then $FG$ is contravariant if exactly one of $F,G$ is contravariant and covariant otherwise.
+\end{lemma}
+
+\subsection{Opposites and functors}
+\begin{lemma}
+For any category $\cat{C}$, taking the opposite is a contravariant functor $o: \cat{C}\to \cat{C^{op}}$ which maps objects to themselves and morphisms $f:X\to Y$ to $f^\text{o}: Y\to X$.
+
+Dually, taking the opposite is also a contravariant functor $o: \cat{C^{op}}\to \cat{C}$.
+\end{lemma}
+
+We will often just insert $o$ wherever necessary to make the variances match. For example we can view a functor $F:\cat{C}\to \cat{D}$ as a functor $F:\cat{C^{op}}\to \cat{D^{op}}$ where the latter expression would be more correctly written as
+\[ F^o \defeq oFo: \cat{C^{op}}\to \cat{D^{op}} \]
+
+In the same vein, given a contravariant functor $F:\cat{C}\to \cat{D}$ we can construct a functor $Fo: \cat{C^{op}}\to \cat{D}$, which is covariant by \ref{lemma:varianceOfComposite}. In identifying the two, we have an alternative definition of contravariant functor:
+
+\begin{lemma}
+A contravariant functor $F:\cat{C}\to\cat{D}$ is a (covariant) functor $F:\cat{C^{op}}\to \cat{D}$.
+\end{lemma}
+
+
+\begin{lemma}
+We can view taking the opposite category as a (covariant) functor $\operatorname{op}: \cat{CAT} \to \cat{CAT}$ which sends categories $\cat{C}$ to $\cat{C^{op}}$ and functors $F$ to $F^o$.
+\end{lemma}
+
+
+For any locally small category $\cat{C}$, functors restricted to hom-sets become functions on those hom-sets. In particular:
+\begin{lemma}
+Let $\cat{C}$ be a locally small category and $A$ a set of morphisms in $\cat{C}$. Then
+\begin{enumerate}
+\item for any objects $X,Y$ in $\cat{C}$
+\[ o[\cat{C}(Y,X)] = \setbuilder{f^o}{f \in \cat{C}(Y,X)} = \cat{C^{op}}(X,Y).  \]
+\item $o|_A: A \to o[A]$ is bijective with inverse $o|_{o[A]}: o[A] \to A$.
+\end{enumerate}
+\end{lemma}
+
+\subsection{(Commuting) diagrams}
+Informally a diagram in a category is a drawing with points and arrows.
+
+We always assume that all identity arrows and composite arrows are present in the diagram, even if they are rarely drawn.
+
+We say that such a diagram commutes if, for any two points $x,y$ in the diagram, every path from $x$ to $y$ defines the same morphism.
+
+\begin{example}
+Let $(N_1, 0_1, S_1)$ and $(N_2, 0_2, S_2)$ be Peano systems and $\pi$ the unique isomorphism defined in \ref{theorem:existenceUniquenessPeano}. The condition
+\[ \forall n\in N_1: \pi(S_1n) = S_2\pi(n) \]
+is equivalent to saying
+\[ \begin{tikzcd}
+N_1 \ar[r, "\pi"] \ar[d, "S_1"] & N_2 \ar[d, "S_2"] \\
+N_1 \ar[r, "\pi"] & N_2
+\end{tikzcd} \qquad \text{commutes.} \]
+The two paths in the diagram correspond to the two sides of the equation.
+\end{example}
+
+More formally we have the following definition:
+\begin{definition}
+Let $J$ be a category.
+A \udef{diagram} of type (or shape) $\cat{J}$ in a category $\cat{C}$ is a (covariant) functor
+\[ D: \cat{J} \to \cat{C}. \]
+The category $\cat{J}$ is called the \udef{index category} or \udef{scheme} of the diagram $D$.
+
+Usually we are interested in diagrams where $\cat{J}$ is small or even finite. In these cases we call the diagram \udef{small} or \udef{finite}.
+
+If the index category $\cat{J}$ is a preordered set, then we call the diagram a \udef{commutative diagram}.
+
+Let $\cat{I}$ be a subcategory of $\cat{J}$. Then the functor $D$ restricted to $\cat{I}$ is a \udef{subdiagram} of $D$.
+\end{definition}
+To actually draw such a diagram, you draw each object and morphism in the index category and name it using its image under $D$.
+
+There is no requirement of injectivity, so the same object or morphism in $\cat{C}$ may appear several times in the diagram.
+
+Every path in the index category with the same start $X$ and end $Y$ defines a morphism in the hom-set $\Hom(X,Y)$. In a preorder category there is at most one morphism in each hom-set, so each such path must correspond to the same morphism. Thus the informal and formal definitions of commutative diagram agree.
+
+\begin{example}
+The commutative square shown in the last example has the shape
+\[ \mathbb{S}: \begin{tikzcd}
+\bm{1} \ar[loop left] \ar[r] \ar[dr] \ar[d] & \bm{2} \ar[d] \ar[loop right] \\
+\bm{3} \ar[loop left] \ar[r] & \bm{4} \ar[loop right]
+\end{tikzcd}. \]
+All morphisms in the category have been drawn. We also call this preorder category the \udef{commutative square}.
+\end{example}
+
+Any two paths in a commutative diagram with the same start and end yield an equation of morphism. Constructing proofs with these equations is known as \udef{diagram chasing} or \udef{abstract nonsense}.
+
+\begin{example}
+Warning! When drawing the diagram you draw the index category and label with the object category. You do not draw the image in the object category! This is not necessarily a preorder category when the index category is a preorder category. In fact it is not necessarily even a category. So, for example, the functor $F$ that maps
+\[ \begin{tikzcd}
+X_1 \dar{f} & X_2 \dar{g} \\ Y_1 & Y_2
+\end{tikzcd} \qquad\text{to}\qquad \begin{tikzcd}
+X = F(X_1) = F(X_2) \ar[d, shift right, swap, "f' = F(f)"] \ar[d, shift left, "g' = F(g)"] \\ Y = F(Y_1) = F(Y_2)
+\end{tikzcd}  \]
+should be drawn as
+\[ \begin{tikzcd}
+X \dar{f'} & X \dar{g'} \\ Y & Y
+\end{tikzcd}, \qquad\text{not}\qquad \begin{tikzcd}
+X \ar[d, swap, shift right, "f'"] \ar[d, shift left, "g'"] \\ Y
+\end{tikzcd} \]
+\end{example}
+
+\begin{lemma}
+Functors preserve commutative diagrams: Let $D:\cat{J}\to \cat{C}$ be a commutative diagram and $F:\cat{C}\to \cat{B}$ a functor. Then $F\circ D$ is a commutative diagram.
+\end{lemma}
+
+\subsubsection{Diagram chasing results}
+\begin{lemma}
+Consider the diagram
+\[ \begin{tikzcd}
+X \rar{f}\dar{k} & Y \rar{g}\dar{h} & Z\dar{l} \\
+A \rar{p} & B \rar{q} & C
+\end{tikzcd}. \]
+Suppose the left and right squares commute (as subdiagrams), then the whole diagram commutes.
+\end{lemma}
+\begin{proof}
+There are two pairs of nodes that may have more than one morphism between them: $(X,C)$ and $(A,Z)$. We show that there is only one morphism in $\Hom(X,C)$. The other case is similar.
+
+The question boils down to whether $qhf = qpk$. Now we know that $hf = pk$ because the left square commutes, so the identity is automatic.
+\end{proof}
+
+
+\section{Morphisms}
+\subsection{Mono- and epimorphisms}
+\begin{definition}
+A morphism $f: X \to Y$ is called
+\begin{itemize}
+\item a \udef{monomorphism} or \udef{monic} or \udef{left-cancellative} if, for any parallel morphisms $g,h: Z\to X$
+\[ fg = fh \qquad \text{implies} \qquad g = h \]
+\item an \udef{epimorphism} or \udef{epic} or \udef{right-cancellative} if, for any parallel morphisms $g,h: Y\to Z$
+\[ gf = hf \qquad \text{implies} \qquad g = h. \]
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $\cat{C}$ be a category.
+\begin{enumerate}
+\item A morphism $m:X\to Y$ is a monomorphism if for every object $A$ in $\cat{C}$ and every pair of morphisms $f,g: A\to X$, the diagram
+\[ \begin{tikzcd}
+A \ar[r, shift left, "f"] \ar[r, shift right, swap, "g"] & X \ar[r, "m"] & Y
+\end{tikzcd} \qquad \text{commutes.} \]
+\item A morphism $e:X\to Y$ is an epimorphism if for every object $A$ in $\cat{C}$ and every pair of morphisms $f,g: Y\to A$, the diagram
+\[ \begin{tikzcd}
+X \ar[r, "e"] & Y \ar[r, shift left, "f"] \ar[r, shift right, swap, "g"] & A
+\end{tikzcd} \qquad \text{commutes.} \]
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $\cat{C}$ be a category.
+
+A monomorphism in $\cat{C}$ is an epimorphism in $\cat{C^{op}}$ and an epimorphism in $\cat{C}$ is a monomorphism in $\cat{C^{op}}$. Thus monic and epic are dual properties.
+\end{lemma}
+\begin{proof}
+Assume $f$ is monic in $\cat{C}$. Assume $g^of^o = h^of^o$ for all $g^o, h^o$ in $\cat{C^{op}}$. Then
+\[ (fg)^o = (fh)^o \implies fg = fh \implies g=h \implies g^o = h^o. \]
+The other statement follows by duality.
+\end{proof}
+
+\begin{proposition} \label{prop:injectiveMonoSurjectiveEpi}
+In any concrete category
+\begin{enumerate}
+\item $f$ is an injective function implies $f$ is monomorphic;
+\item $f$ is a surjective function implies $f$ is epimorphic.
+\end{enumerate}
+In the category $\cat{Set}$, the opposite implications also hold.
+\end{proposition}
+\begin{proof}
+Set $f:X\to Y$.
+\begin{enumerate}
+\item Assume $f$ injective. Let $g,h: Z\to X$ such that $g\neq h$. Because we are in a concrete category, this means there exists a $z\in Z$ such that $g(z) \neq h(z)$. By injectivity of $f$ this means $f(g(z)) \neq f(h(z))$ and so $fg \neq fh$. We conclude $f$ is monic by contraposition.
+\item Assume $f$ surjective. Let $g,h: Y\to Z$ such that $g\neq h$. Because we are in a concrete category, this means there exists a $y\in Y$ such that $g(y) \neq h(y)$. By surjectivity of $f$ we can find an $x\in X$ such that $f(x) = y$. So $g(f(x)) \neq h(f(x))$ and we conclude $gf \neq hf$, meaning $f$ is epic by contraposition.
+\end{enumerate}
+Suppose we are now in the category $\cat{Set}$.
+\begin{enumerate}
+\item Assume $f$ monic. To prove injectivity, take arbitrary $x_1,x_2\in X$ and assume $f(x_1) = f(x_2)$. Now define the constant functions $x_1: Z\to X: z\mapsto x_1$ and $x_2: Z\to X: z\mapsto x_2$. Then
+\[ fx_1 = f(x_1) = f(x_2) = f(x_2) \qquad \implies \qquad x_1 = x_2 \]
+because $f$ monic.
+\item Assume $f$ epic. Left compose $f$ with both the characteristic function $\chi_{f[X]}$ and the constant function $1: Y\to \{1\}: y\mapsto 1$. It is clear $\chi_{f[X]}f = 1f$, so $\chi_{f[X]} = 1$ meaning $f$ is surjective.
+\end{enumerate}
+\end{proof}
+
+\begin{lemma} \label{lemma:monicEpicCompositions}
+Let the morphisms $g,f$ be composable such that $gf$ exists.
+\begin{enumerate}
+\item If $f$ and $g$ are monic, then $gf$ is monic.
+\item If $gf$ is monic, then $f$ is monic.
+\end{enumerate}
+Dually:
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item If $f$ and $g$ are epic, then $gf$ is epic.
+\item If $gf$ is epic, then $g$ is epic.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The first claim is obvious. Then second is true because for morphisms $h,k$ composible with $f$,
+\[ fh = fk \implies gfh = gfk \implies h = k. \]
+The rest follows by duality.
+\end{proof}
+
+\subsection{Left and right inverses}
+\begin{definition}
+Let $f:X\to Y$ be a morphism.
+\begin{itemize}
+\item A \udef{left inverse} (or \udef{retraction}) of $f$ is a morphism $g: Y\to X$ such that
+\[ g\circ f = \id_X. \]
+\item A \udef{right inverse} (or \udef{section}) of $f$ is a morphism $h: Y\to X$ such that
+\[ f\circ h = \id_Y. \]
+\item A \udef{(two-sided) inverse} of $f$ is a morphism that is both a left and a right inverse.
+\end{itemize}
+An \udef{isomorphism} is a morphism $f: X\to Y$ for which a two-sided inverse exists.
+
+If an isomorphism exists from $X$ to $Y$ (or equivalently from $Y$ to $X$), we say $X$ and $Y$ are \udef{isomorphic}, and write $X\cong Y$.
+\end{definition}
+
+An \udef{endomorphism} is a morphism $f$ such that $\dom(f) = \codom(f)$. An \udef{automorphism} is an endomorphism that is an isomorphism.
+
+\begin{lemma}
+Let $f:X\to Y$ and $g:Y\to X$ be morphisms in a category $\cat{C}$. Then
+\begin{enumerate}
+\item $g$ is a left inverse of $f$ if and only if the diagram
+\[ \begin{tikzcd}
+X \rar{f} & Y \rar{g} & X
+\end{tikzcd} \qquad \text{commutes;} \]
+\item $g$ is a right inverse of $f$ if and only if the diagram
+\[ \begin{tikzcd}
+Y \rar{g} & X \rar{f} & Y
+\end{tikzcd} \qquad \text{commutes.} \]
+\end{enumerate}
+\end{lemma}
+
+\begin{definition}
+A \udef{groupoid} is a category in which every morphism is an isomorphism.
+
+A \udef{group} is a groupoid with one object.
+\end{definition}
+
+\begin{lemma}
+For any category $\cat{C}$ there exists a subcategory containing all the objects of $\cat{C}$ and only the morphisms of $\cat{C}$ that are isomorphisms. This subcategory is called the \udef{maximal groupoid} inside $\cat{C}$.
+\end{lemma}
+
+\begin{lemma}
+Let $f:X\to Y$ be a morphism. If $g: Y\to X$ is a left inverse and $h: Y\to X$ a right inverse of $f$, then $g=h$ and $f$ is an isomorphism. In particular an isomorphism can have at most one inverse.
+\end{lemma}
+\begin{proof}
+The proof is identical to \ref{lemma:leftRightInverse}:
+\[ g = g\id_Y = g(fh) = (gf)h = \id_Xh = h. \]
+\end{proof}
+
+\begin{lemma}
+Let $f$ be a morphism.
+\begin{enumerate}
+\item If $f$ has a left inverse, it is clearly a monomorphism.
+\item If $f$ has a right inverse, it is clearly an epimorphism.
+\end{enumerate}
+\end{lemma} 
+The converses are \emph{not true}. We do however call a morphism with a left inverse a \udef{split monomorphism} and a morphism with a right inverse a \udef{split epimorphism}. Clearly split monic and split epic are dual properties.
+
+\begin{lemma}
+In the category $\cat{Set}$
+\begin{enumerate}
+\item every monomorphism is split;
+\item the assertion that every epimorphism is split is equivalent to the axiom of choice.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+This is a restatement of \ref{lemma:injectiveInverse} and \ref{lemma:surjectiveInverse}.
+\end{proof}
+
+By definition an isomorphism is a morphism that is split monic and split epic, but we can relax this condition slightly:
+\begin{lemma} \label{lemma:singleSplitImpliesDoubleSplit}
+If a monomorphism is split epic, it is also split monic, and thus an isomorphism.
+
+If an epimorphism is split monic, it is also split epic, and thus an isomorphism.
+\end{lemma}
+\begin{proof}
+Assume a morphism $f:X\to Y$ is monic and has a right inverse $r$. We claim $r$ is also a left inverse. Indeed
+\[ fr = \id_Y \implies frf = \id_Yf = f\id_X \implies rf = \id_x  \]
+where the second implication is because $f$ is monic. The second claim of the lemma follows by duality.
+\end{proof}
+
+
+\begin{lemma}
+In a preorder category, every morphism that is monic or epic, is an isomorphism.
+
+In a poset category, every morphism that is monic or epic, is an identity.
+\end{lemma}
+
+
+
+
+
+
+\section{Naturality}
+\subsection{Natural transformations}
+\begin{definition}
+Let $\cat{C}, \cat{D}$ be categories and $F,G: \cat{C}\to \cat{D}$ functors. A \udef{natural transformation} $\alpha: F \Rightarrow G$ consists of
+\begin{enumerate}
+\item an arrow $\alpha_c: Fc\to Gc$ in $\cat{D}$, called a \udef{component} of the natural transformation, for each object $c\in \cat{C}$
+\end{enumerate}
+such that, for any morphism $f:c\to c'$ in $\cat{C}$, 
+\[ \begin{tikzcd}
+Fc \ar[r, "\alpha_c"] \ar[d, swap, "Ff"] & Gc \ar[d, "Gf"] \\
+Fc' \ar[r, "\alpha_{c'}"] & Gc'
+\end{tikzcd} \qquad \text{commutes}.\]
+A \udef{natural isomorphism} is a natural transformation in which every component is an isomorphism. We write $F\cong G$ in this case.
+\end{definition}
+
+We represent the natural transformation $\alpha: F \Rightarrow G$ between $F,G: \cat{C}\to \cat{D}$ diagrammatically as
+\[ \begin{tikzcd}[column sep=huge]
+\cat{C}
+  \arrow[bend left=50]{r}[name=U,label=above:$F$]{}
+  \arrow[bend right=50]{r}[name=D,label=below:$G$]{} &
+\cat{D}
+  \arrow[shorten <=10pt,shorten >=10pt,Rightarrow,to path={(U) -- node[label=right:$\alpha$] {} (D)}]{}
+\end{tikzcd} \]
+
+The origin of this commutative square can be found in the following picture:
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[commutative diagrams/every diagram]
+\matrix[matrix of math nodes, commutative diagrams/every cell] (mC) at (0,1.5) {c \\ \\ c' \\};
+\path[commutative diagrams/.cd,every arrow,every label](mC-1-1)edge[blue] node {$f$}(mC-3-1);
+\matrix[matrix of math nodes, commutative diagrams/every cell] (mD) at (6,0) {Fc &&  \\ && Gc \\ Fc'  && \\ && Gc' \\};
+\path[commutative diagrams/.cd,every arrow,every label](mD-1-1)edge[red] node {$\alpha_c$}(mD-2-3);
+\path[commutative diagrams/.cd,every arrow,every label] (mD-2-3) edge[blue] node {$Gf$} (mD-4-3);
+\path[commutative diagrams/.cd,every arrow,every label](mD-3-1)edge[red] node {$\alpha_{c'}$}(mD-4-3);
+\path[commutative diagrams/.cd,every arrow,every label](mD-1-1)edge[blue] node {$Ff$}(mD-3-1);
+
+\path[commutative diagrams/.cd,every arrow,every label](mC-1-1)edge node {$F$}(mD-1-1);
+\path[commutative diagrams/.cd,every arrow,every label](mC-1-1)edge[pos=0.34, swap] node {$G$}(mD-2-3);
+
+\path[commutative diagrams/.cd,every arrow,every label](mC-3-1)edge node {$F$}(mD-3-1);
+\path[commutative diagrams/.cd,every arrow,every label](mC-3-1)edge node[pos=0.36, swap] {$G$}(mD-4-3);
+
+\node[draw=black,fit=(mC),circle, label={above left:$\cat{C}$}] (catC) {};
+\node[draw=black,fit=(mD),circle, label={above right:$\cat{D}$}] (catD) {};
+\end{tikzpicture}
+\end{figure}
+Thus a natural transformation is one that shifts the image of a functor along the morphisms in the target category.
+
+This leads us to the following proposition, which is sometimes used to define natural transformations:
+\begin{proposition}
+Let $F,G:\cat{C}\to\cat{D}$ be functors. The natural transformations $\alpha: F\Rightarrow G$ correspond bijectively to functors $H: \cat{C}\times\mathbb{2}\to \cat{D}$ such that
+\[ \begin{tikzcd}
+\cat{C} \ar[r,"i_0"] \ar[dr, swap, "F"] & \cat{C}\times\mathbb{2} \ar[d,"H"] & \cat{C} \ar[l, "i_1"] \ar[dl, "G"] \\
+& \cat{D} &
+\end{tikzcd} \qquad \text{commutes.} \]
+Here $i_0, i_1$ are the functors that map objects $c$ to $(c,0)$ and $(c,1)$ respectively.
+
+The same holds for natural isomorphisms, if $\mathbb{2}$ is replaced by $\mathbb{I}$.
+\end{proposition}
+
+\begin{example}
+Let $M$ be a monoid. A \udef{dynamical system} is a functor $F: \cat{B}M\to\cat{C}$ from the delooping space to some category. Often this category is $\cat{Top}$ or $\cat{Vect}$. Then the single object of $\cat{B}M$ is mapped to an object $c$ in $\cat{C}$ and the morphisms of $\cat{B}M$ become actions on the object: each element $m\in M$ specifies a morphism in $\cat{B}M$, which is mapped to a morphism in $\cat{C}$
+\[ m: c\to c: x\mapsto m\cdot x. \]
+
+A morphism of dynamical systems, or \udef{intertwiner}, is a map between natural transformation $\alpha:F\to G$. This can be seen as a map between objects in $\cat{C}$ that is covariant, in the sense that
+\[ \alpha(m\cdot x) = m\cdot \alpha(x). \]
+\end{example}
+
+\subsubsection{Natural transformations as canonical maps}
+A canonical map $\alpha$ is a map between objects that arises naturally from the definition or the construction of the objects.
+
+TODO: make rigourous! explicate for universal algebra.
+
+In some sense the canonical map works at the level of structure and thus must commute with morphisms.
+
+A \udef{canonical map} is a functor such that there exists a natural transformation from the identit functor to it.
+
+TODO: what about between different categories?
+
+
+
+
+
+
+\subsection{Equivalence of categories}
+\begin{definition}
+An \udef{equivalence of categories} consists of functors $F: \cat{C} \to \cat{D}$ and $G: \cat{D} \to \cat{C}$ such that we have natural isomorphisms $\id_\cat{C} \cong GF$ and $\id_\cat{D} \cong FG$.
+
+The categories $\cat{C}, \cat{D}$ are \udef{equivalent} if there exists an equivalence between them. We write $\cat{C} \simeq \cat{D}$.
+\end{definition}
+
+Except for considerations of size, this equivalence is an equivalence relation.
+\begin{lemma}
+The notion of equivalence is reflexive, symmetric and transitive.
+\end{lemma}
+
+\begin{definition}
+A functor $F:\cat{C}\to\cat{D}$ is called
+\begin{itemize}
+\item \udef{full} if for all $x,y\in \cat{C}$, the map $\cat{C}(x,y) \to \cat{D}(Fx,Fy)$ is surjective;
+\item \udef{faithful} if for all $x,y\in \cat{C}$, the map $\cat{C}(x,y) \to \cat{D}(Fx,Fy)$ is injective;
+\item and \udef{essentially surjective on objects} if for every object $d\in\cat{D}$ there is some $c\in\cat{C}$ such that $d$ is isomorphic to $Fc$.
+\end{itemize}
+These are local definitions. We also call $F$
+\begin{itemize}
+\item an \udef{embedding} if it is injective on objects;
+\item a \udef{full embedding} if it is full, faithful and an embedding.
+\end{itemize}
+The domain of a full embedding defines a \udef{full subcategory}.
+\end{definition}
+
+\begin{proposition}
+A functor defining an equivalence of categories is full, faithful, and essentially surjective on objects.
+
+Assuming the axiom of choice, any functor with these properties defines an equivalence of categories.
+\end{proposition}
+
+\begin{lemma} \label{lemma:isomorphismCreationReflection}
+If $F:\cat{C}\to\cat{D}$ is a full and faithful functor, the $F$  reflects and creates isomorphisms:
+\begin{enumerate}
+\item If $f$ is a morphism in $\cat{C}$ so that $Ff$ is an isomorphism in $\cat{D}$, then $f$ is an isomorphism.
+\item If $x$ and $y$ are objects in $\cat{C}$ such that $Fx$ and $Fy$ are isomorphic in $\cat{D}$, then $x$ and $y$ are isomorphic in $\cat{C}$.
+\end{enumerate}
+\end{lemma}
+By \ref{lemma:functorMorphismPreservation} the converses hold for any functor.
+
+\begin{definition}
+The \udef{isomorphism class} of an object in a category is the collection of objects isomorphic to the object.
+
+A category $\cat{C}$ is \udef{skeletal} if it contains one object in each isomorphism class.
+\end{definition}
+\begin{lemma}
+Let $\cat{C}$ be a category.
+There is a unique - up to isomorphism - skeletal category equivalent to $\cat{C}$.
+\end{lemma}
+This category is called the \udef{skeleton} of $\cat{C}$, denoted $\cat{skC}$.
+\begin{proof}
+Choose an object in each isomorphism class and define $\cat{skC}$ to be the full subcategory on this collection of objects. The full embedding $\cat{skC} \hookrightarrow \cat{C}$ is an equivalence of categories.
+\end{proof}
+
+\begin{lemma}
+An equivalence between skeletal categories is an isomorphism of categories
+\end{lemma}
+\begin{corollary}
+Two categories are equivalent \textup{if and only if} their skeletons are isomorphic.
+\end{corollary}
+
+\begin{definition}
+A category $\cat{C}$ is called
+\begin{itemize}
+\item \udef{essentially small} if it is equivalent to a small category (i.e. its skeleton is small);
+\item \udef{essentially discrete} if it is equivalent to a discrete category (i.e. its skeleton is discrete).
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Every preorder category is equivalent to a poset category.
+\end{lemma}
+
+\section{Monoidal categories}
+\begin{definition}
+A \udef{monoidal category} is a category $\cat{C}$ equipped with
+\begin{enumerate}
+\item a functor $\otimes: \cat{C}\times\cat{C} \to \cat{C}$ called the \udef{tensor product};
+\item an object $1\in \cat{C}$ called the \udef{unit object} or the \udef{tensor unit}
+\end{enumerate}
+We write $(\cat{C}, \otimes, 1, \alpha, \lambda, \rho)$.
+\end{definition}
+
+\subsection{Enrichment}
+\begin{definition}
+Let $(\cat{V}, \otimes, 1, \alpha, \lambda, \rho)$ be a monoidal category. A \udef{$\cat{V}$-category} $\cat{C}$ (or \udef{$\cat{V}$-enriched category} or \udef{category enriched over $\cat{V}$}) contains
+\begin{enumerate}
+\item 
+\end{enumerate}
+such that
+\end{definition}
+
+
+\chapter{Higher category theory}
+\section{2-categories}
+\subsection{Functor categories}
+\begin{proposition} \label{prop:functorCategory}
+Let $\cat{C}, \cat{D}$ be categories. There is a category of functors $\cat{C}\to \cat{D}$ with as morphisms natural transformations called the \udef{functor category} $[\cat{C},\cat{D}]$.
+\end{proposition}
+\begin{proof}
+There are clearly identity natural transformations $I:F\Rightarrow F$ for each functor $F: \cat{C}\to \cat{D}$ with components given by $I_{Fc}$ for all $c\in\cat{C}$.
+
+To verify composition, let $\alpha: F \Rightarrow G$ and $\beta: G\Rightarrow H$ be natural transformations between parallel functors $F,G,H: \cat{C}\to \cat{D}$. Then the composition	$\beta\alpha: F\Rightarrow H$ has components
+\[ (\beta\alpha)_c = \beta_c\alpha_c. \]
+We just need to show $\beta\alpha$ is a natural transformation. Consider the diagram
+\[ \begin{tikzcd}
+Fc \ar[r, "\alpha_c"] \ar[d, "Ff"] & Gc \ar[d, "Gf"] \ar[r, "\beta_c"] & Hc \ar[d,"Hf"] \\
+Fc' \ar[r, "{\alpha_{c'}}"] & Gc' \ar[r, "{\beta_{c'}}"] & Hc'
+\end{tikzcd} \]
+Both squares commute by naturality of $\alpha,\beta$. The rectangle then commutes: the only non-trivial part is the equality of paths $Fc\to Hc'$, but any such path can be deformed into another by flipping over squares (TODO better reference).
+\end{proof}
+
+\subsection{The 2-category of categories}
+
+
+\chapter{Representability and universal properties}
+\section{The Yoneda lemma}
+\url{https://math.stackexchange.com/questions/149376/excessive-use-of-the-yoneda-lemma}
+\url{https://qchu.wordpress.com/2012/04/02/the-yoneda-lemma-i/}
+\begin{lemma}
+Let $\cat{C},\cat{D}$ be categories. For every $c\in\cat{C}$, there is a functor defined by
+\[ \evalMap_c: [\cat{C},\cat{D}] \to \cat{D}: F\mapsto Fc. \]
+\end{lemma}
+\begin{proof}
+A natural transformation $\alpha: F \Rightarrow G$ is mapped to its component $\alpha_c: Fc \to Gc$. By \ref{prop:functorCategory}, for all $F$, $I_F\mapsto I_{Fc}$ and the composition of composable natural transformations $\beta,\alpha$ has the component $\beta_c\alpha_c$ at $c$.
+\end{proof}
+So this gives us a functor
+\[ \evalMap: (\cat{Set^C}, \cat{C}) \to \cat{Set}: \quad (F,c)\mapsto Fc.\]
+
+Let $\cat{C}$ be a small category. Then for a given $c\in\cat{C}$, $\cat{C}(c,-)$ is the covariant functor represented by $c$ and thus an object in $[\cat{C},\cat{\Set}]$, which is locally small. Then we can consider the covariant functor represented by $\cat{C}(c,-)$,
+\[ [\cat{C},\cat{\Set}]\to \cat{Set}:\quad F \mapsto \Hom(\cat{C}(c,-), F). \]
+
+By currying, we can consider the two-sided represented functor $\cat{C}(-,-): \cat{C^{op}}\times\cat{C}\to \cat{Set}$ as a contravariant functor $\cat{C} \to \cat{Set^C}: c\mapsto \cat{C}(c,-)$. Composing this with the contravariant functor represented by $F$ gives the covariant functor
+\[ \cat{C} \to \cat{Set}:\quad c \mapsto \Hom(\cat{C}(c,-), F). \]
+
+Combining these two functors we have a bifunctor
+\[ (\cat{Set^C}, \cat{C}) \to \cat{Set}: \quad(F,c) \mapsto \Hom(\cat{C}(c,-), F). \]
+
+If we now let $\cat{C}$ be only locally small, not necessarily small, $\cat{Set^C}$ is no longer necessarily locally small. It turns out however that $\Hom(\cat{C}(c,-), F)$ still always yields a set. This assertion is part of the Yoneda lemma. The other part is the assertion that there is a natural isomorphism $\Phi$:
+\[ \begin{tikzcd}
+\cat{C}\times\cat{Set^C} \ar[rr, bend left=50, "{\Hom(\cat{C}(c,-), F)}"] \ar[rr, bend right=50, "\evalMap_c(F)"] & \Phi\Downarrow\cong & \cat{Set}
+\end{tikzcd}. \]
+
+\begin{theorem}[Yoneda lemma] \label{theorem:YonedaLemma}
+Let $\cat{C}$ be a locally small category.
+
+Given a functor $F: \cat{C} \to \cat{Set}$ and an object $c$ in $\cat{C}$, the function
+\[ \Phi_{c,F}: \Hom(\cat{C}(c,-), F) \to Fc: \alpha \mapsto \alpha_c(I_c) \]
+is a bijection.
+
+Also $\Phi$ is a natural transformation with components $\Phi_{c,F}$.
+\end{theorem}
+\begin{corollary}[Yoneda embedding] \label{corollary:YonedaEmbedding}
+Let $\cat{C}$ be a locally small category. The functors
+\[ \begin{tikzcd}
+\cat{C} \ar[r, hook] & \cat{Set^{C^{op}}} \\
+c \ar[d, swap, "f"]\ar[r, mapsto] \ar[r,mapsto, shift right=1.7em] & \cat{C}(o(-),c) \ar[d, "f_*"] \\
+d \ar[r,mapsto] & \cat{C}(o(-),d)
+\end{tikzcd} \qquad\text{and}\qquad \begin{tikzcd}
+\cat{C^{op}} \ar[r, hook] & \cat{Set^C} \\
+c \ar[r, mapsto] \ar[r,mapsto, shift right=1.7em] & \cat{C}(c,-) \\
+d \ar[u, "f^o"] \ar[r,mapsto] & \cat{C}(d,-) \ar[u, swap, "f^*"]
+\end{tikzcd} \]
+define full and faithful embeddings.
+\end{corollary}
+\begin{proof}
+The functors are clearly injective on objects as morphisms with different domain or codomain are different.
+
+Consider first the left embedding. We want the transformation $f_*$ to be natural (this is the transformation with all components equal to $f_*$). Indeed the functors $\cat{C}(o(-),c)$ and $\cat{C}(o(-),c)$ map morphisms $g^o$ in $\cat{C^{op}}$ to $g^*$. Now $f_*$ and $g^*$ clearly commute, proving the naturality of $f_*$.
+
+Then the function $\cat{C}(c,d) \to \Hom(\cat{C}(-,c),\cat{C}(-,d)): f\mapsto f_*$ is the inverse of the Yoneda map $\Phi_{c,\cat{C}(-,d)}$:
+\[ \Phi_{c,\cat{C}(-,d)}(f_*) = f_*(I_c) = f\circ I_c = f. \]
+Thus by the Yoneda lemma it is bijection, meaning
+\[ \cat{C}(c,d) \cong \Hom(\cat{C}(-,c),\cat{C}(-,d)) \]
+and the left functor is full and faithful by definition.
+
+The statement for the right functor can be proven analogously. Alternatively, we can see that it is a dual statement in the following way: taking the category to be $\cat{C^{op}}$, we get
+\[ \cat{C^{op}}(c,d) \cong \Hom(\cat{C^{op}}(-,c),\cat{C^{op}}(-,d)) \]
+or
+\[ o[\cat{C}(d,c)] \cong \Hom(o\cdot\cat{C}(c,-)\cdot o,o\cdot\cat{C}(d,-)\cdot o) \]
+now for every $\alpha \in \Hom(\cat{C}(c,-),\cat{C}(d,-))$, there is an $\alpha^o$ in $\Hom(o\cdot\cat{C}(c,-)\cdot o,o\cdot\cat{C}(d,-)\cdot o)$, so we have an isomorphism
+\[ \cat{C}(d,c) \cong \Hom(\cat{C}(c,-),\cat{C}(d,-)). \]
+\end{proof}
+
+It is common to refer both to the Yoneda lemma \ref{theorem:YonedaLemma} and its corollary on the Yoneda embedding, \ref{corollary:YonedaEmbedding}, as the Yoneda lemma.
+
+\begin{proposition} \label{prop:representablyIsomorphic}
+Let $\cat{C}$ be a locally small category. The following are equivalent:
+\begin{enumerate}
+\item $f:x\to y$ is an isomorphism in $\cat{C}$;
+\item $f_*: \cat{C}(-,x) \Rightarrow \cat{C}(-,y)$ is a natural isomorphism;
+\item $f^*: \cat{C}(y,-) \Rightarrow \cat{C}(x,-)$ is a natural isomorphism.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We have already shown $f_*$ and $f^*$ are natural transformations in \ref{corollary:YonedaEmbedding}.
+The proof follows from the Yoneda embedding \ref{corollary:YonedaEmbedding} and \ref{lemma:isomorphismCreationReflection}.
+
+Alternatively, a partial proof is as follows: If $f$ has an inverse $f^{-1}$, then $(f^{-1})^*$ is an inverse of $f^*$ and $(f^{-1})_*$ an inverse of $f_*$.
+\end{proof}
+
+\section{Representable functors}
+\subsection{Functors represented by objects}
+\begin{definition}
+Let $\cat{C}$ be a locally small category and $c$ an object in $\cat{C}$.
+
+Given a morphism $f: X\to Y$ in $\cat{C}$, we can define the functions
+\begin{enumerate}
+\item $f_*: \cat{C}(c,X) \to \cat{C}(c,Y): g\mapsto fg$ defined by post-composition;
+\item $f^*: \cat{C}(Y,c) \to \cat{C}(X,c): g\mapsto gf$ defined by pre-composition.
+\end{enumerate}
+These are morphisms in the category $\cat{Set}$.
+
+Based on this we can define the \udef{covariant functor represented by $c$} $\cat{C}(c,-)$ and the \udef{contravariant functor represented by $c$} $\cat{C}(-,c)$:
+\[ \begin{tikzcd}
+\cat{C} \ar[r, "{\cat{C}(c,-)}"] & \cat{Set} \\
+x \ar[d, swap, "f"]\ar[r, mapsto] \ar[r,mapsto, shift right=1.7em] & \cat{C}(c,x) \ar[d, "f_*"] \\
+y \ar[r,mapsto] & \cat{C}(c,y)
+\end{tikzcd} \qquad\qquad \begin{tikzcd}
+\cat{C} \ar[r, "{\cat{C}(-,c)}"] & \cat{Set} \\
+x \ar[r, mapsto] \ar[r,mapsto, shift right=1.7em] & \cat{C}(x,c) \ar[d, "f^*"] \\
+y \ar[u, "f"] \ar[r,mapsto] & \cat{C}(y,c) 
+\end{tikzcd} \]
+We also have the \udef{two-sided represented functor} $\cat{C}(-,-):\cat{C}\times \cat{C} \to \cat{Set}$, which is contravariant in the first argument and covariant in the second:
+\[ \begin{tikzcd}
+\cat{C}\times\cat{C} \ar[r, "{\cat{C}(-,-)}"] & \cat{Set} \\
+(x,y) \ar[d, shift left]\ar[r, mapsto] \ar[r,mapsto, shift right=1.7em] & \cat{C}(x,y) \ar[d, "{f^*h_*: g\mapsto hgf}"] \\
+(w,z) \ar[u, shift left, "{(f,h)}"] \ar[r,mapsto] & \cat{C}(w,z)
+\end{tikzcd} \]
+\end{definition}
+The placement of the asterisk indicates the placement of the function being composed with $f$: below means to the right and above to the left. This is consistent with the notation for indicating bases in the part on matrix representations of linear functions (TODO ref).
+
+\begin{proposition}
+Let $\cat{C}$ be a locally small category and $f: X\to Y$ a morphism. Then $f_*$ and $f^*$ are dual as follows:
+\begin{align*}
+(f^\text{o})^* &= of_*o = (f^*)^o; \\
+(f^\text{o})_* &= of^*o = (f^*)^o.
+\end{align*}
+\end{proposition}
+\begin{proof}
+We start with the locally small category $\cat{C^{op}}$, the morphism $f^\text{o}: Y\to X$ and an object $c$. Then 
+\[ (f^\text{o})^*: \cat{C^{op}}(X,c) \to \cat{C^{op}}(Y,c): g^\text{o} \mapsto g^\text{o}f^\text{o}. \]
+We can rewrite this as
+\[ (f^\text{o})^*: o[\cat{C}(c,X)] \to o[\cat{C}(c,Y)]: g^o \mapsto (fg)^o \]
+or
+\[ o|_{o[\cat{C}(Y,c)]}(f^\text{o})^*o|_{\cat{C}(c, X)}: \cat{C}(c,X) \to \cat{C}(c,Y): g \mapsto fg. \]
+This last function is exactly $f_*$. The other equality follows by duality: replacing $\cat{C}$ with $\cat{C^{op}}$ and $f: X\to Y$ with $f^o: Y\to X$ gives
+\[ (f^o)_* = o|_{o[\cat{C^{op}}(X,c)]}(f^\text{oo})^*o|_{\cat{C^{op}}(c, Y)} = o|_{\cat{C}(c,X)}f^*o|_{o[\cat{C}(Y,c)]} \]
+so
+\[ f^* =  o|_{o[\cat{C}(c,X)]}(f^o)_* o|_{\cat{C}(Y,c)}. \]
+\end{proof}
+\begin{corollary} \label{corollary:dualityRepresentedFunctors}
+The co- and contravariant represented functors are dual in the following sense:
+\begin{align*}
+o\cdot \cat{C^{op}}(c,-) \cdot o &= \cat{C}(-,c) \\
+o\cdot \cat{C^{op}}(-,c) \cdot o &= \cat{C}(c,-) \\
+\end{align*}
+\end{corollary}
+Note that $o$ still works as a function on sets of morphisms in $\cat{C}$, even though they are now said to be in the category $\cat{Set}$. We also use that $o$ acts on transformations as $o(\alpha) = o\alpha o$ (TODO!).
+\begin{proof}
+We verify the equality for all objects and morphisms:
+\[ (o\cdot \cat{C^{op}}(c,-) \cdot o)(x) = (o\cdot \cat{C^{op}}(c,-))(x) = o(\cat{C^{op}}(c,x)) = o(o(\cat{C}(x,c))) = \cat{C}(x,c) \]
+and
+\[ (o\cdot \cat{C^{op}}(c,-) \cdot o)(f) = (o\cdot \cat{C^{op}}(c,-))(f^o) = o((f^o)_*) =o(of^*o) = oof^*oo = f^*. \]
+\end{proof}
+
+\begin{proposition} \label{prop:monicEpicInPrePostComposition}
+Let $\cat{C}$ be a locally small category and $f: X\to Y$ a morphism. Then
+\begin{enumerate}
+\item $f: X\to Y$ is monic \textup{if and only if} for all $c$ in $\cat{C}$, $f_*: \cat{C}(c,X) \to \cat{C}(c,Y)$ is injective;
+\end{enumerate}
+and, dually,
+\begin{enumerate}
+\setcounter{enumi}{1}
+\item $f:X\to Y$ is epic \textup{if and only if} for all $c$ in $\cat{C}$, $f^*: \cat{C}(Y,c) \to \cat{C}(X,c)$ is injective.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Assume $f$ monic. To show injectivity, assume $f_*(g) = f_*(h)$, which means $fg = fh$. By monicity $g = h$, showing $f^*$ is injective.
+
+The converse is equally direct, as is the second statement.
+
+The second statement also follows by duality, recognising that because $o$ is bijective when restricted to the relevant sets, $of^*o$ is injective if and only if $f^*$ is, by \ref{prop:injectiveMonoSurjectiveEpi} and \ref{lemma:monicEpicCompositions}.
+\end{proof}
+
+\subsection{Representable functors}
+\begin{definition}
+Let $\cat{C}$ be a locally small category.
+
+A covariant / contravariant functor $F: \cat{C} \to \cat{Set}$ is \udef{representable} if there is an object $c\in\cat{C}$ such that $F$ is naturally isomorphic to the covariant / contravariant functor represented by $c$, i.e.
+\[ F \cong \begin{cases}
+\cat{C}(c,-) & \text{$F$ covariant} \\
+\cat{C}(-,c) & \text{$F$ contravariant.}
+\end{cases} \]
+We say $F$ is \udef{represented} by the object $c\in\cat{C}$.
+
+A \udef{representation} of a functor $F: \cat{C} \to \cat{Set}$ is given by an object $c\in\cat{C}$ and a natural isomorphism $\alpha$ from $F$ to the functor represented by $c$.
+\end{definition}
+A functor is represented by at most one object, up to isomorphism, by \ref{prop:representablyIsomorphic}.
+
+By the Yoneda lemma, every natural isomorphism $\alpha$ corresponds to en element $\alpha_c(I_c) \in Fc$.
+\begin{definition}
+A \udef{univeral property} of an object $c\in \cat{C}$ is expressed by a representable functor $F$ together with a \udef{universal element} $x\in Fc$ that corresponds to a natural isomorphism between $F$ and the functor represented by $c$.
+\end{definition}
+\section{The category of elements}
+\chapter{Limits and colimits}
+\chapter{Adjunctions}
+\chapter{Monads}
+
+\chapter{Abelian categories}
+Five lemma. Short exact sequences. Split exact. Exact functors.

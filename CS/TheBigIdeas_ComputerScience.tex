@@ -1,0 +1,338 @@
+\documentclass{report}
+\input{../preamble}
+\zexternaldocument*[math-]{../Mathematics/TheBigIdeas_Mathematics}
+
+\title{Some of the Big Ideas in Computer Science}
+\author{Joseph Cunningham}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+Clean architecture
+
+Gang of four
+
+TODO: unity of terminology!
+
+\part{Background}
+\setcounter{chapter}{0} % Reset chapter counter
+\input{background}
+
+\part{Theoretical computer science}
+\setcounter{chapter}{0} % Reset chapter counter
+\chapter{Data structures}
+\input{dataStructures}
+
+\chapter{Computation theory}
+\input{computationTheory}
+
+\chapter{Program verification}
+loop invariants?
+\section{Axiomatic}
+Hoare, 1969
+\section{Weakest precondition}
+Dijkstra, 1972
+\section{Algebraic data types}
+Guttag, 1975
+\section{Functional correctness}
+Mills, 1975
+
+\chapter{Algorithms}
+\input{algorithms}
+
+\chapter{Data types and type theory}
+\input{types}
+
+\chapter{Database theory}
+
+\part{Programming}
+\setcounter{chapter}{0} % Reset chapter counter
+
+\chapter{Language theory}
+
+regexes
+
+CFG / CFL
+
+Chomsky hierarchy
+
+Lexers, parsers, translators and compilers
+\chapter{Language design}
+\input{languageDesign}
+
+\chapter{Paradigms and patterns}
+\section{The object-oriented paradigm}
+\subsection{Encapsulation}
+\subsection{Inheritance}
+\subsection{Polymorphism}
+
+\section{Design patterns}
+Observer, Decorator, Factory, Singleton, Command, Adapter, Facade, Template method, Iterator, Composite, State, Proxy, Compound patterns
+
+Bridge, Builder, Chain of responsability, Flyweight, Interpreter, Mediator, Memento, Prototype, Visitor
+
+Visitor, listener, module
+\subsection{Dynamic languages}
+\subsubsection{Monkey patching}
+
+\chapter{Practical coding}
+\input{practicalCoding}
+
+\chapter{Notes on selected languages}
+\input{lang}
+
+\part{Computer systems}
+\setcounter{chapter}{0} % Reset chapter counter
+\input{systems}
+
+\part{Advanced algorithms}
+\setcounter{chapter}{0} % Reset chapter counter
+\chapter{Artificial intelligence}
+\chapter{Machine learning}
+
+\chapter{Simulation}
+\section{Overview and problem statement}
+\subsection{Time and length scales}
+\begin{table}
+\centering
+\begin{tabular}{llll}
+\textbf{Complex structure} & \textbf{Length scale} & \textbf{Time scale} & \textbf{Mechanics} \\ \hline
+Complex structure & $10^3$m & $10^{6}$s & structural mechanics \\
+Simple structure & $10^1$m & $10^3$s & fracture mechanics \\
+Component & $10^{-1}$m & $10^0$s & Continuum mechanics \\
+Grain microstructure & $10^{-3}$m & $10^{-3}$s & crystal plasticity \\
+Dislocation microstructure & $10^{-5}$m & $10^{-6}$s & micro-mechanics \\
+Single dislocation & $10^{-7}$m & $10^{-9}$s & dislocation dynamics \\
+Atomic & $10^{-9}$m & $10^{-12}$s & molecular dynamics \\
+Electron orbitals & $10^{-11}$m & $10^{-15}$s & quantum mechanics
+\end{tabular}
+\caption{The important unit structure is indicated for each scale, along with approximate length and time scales, as well as the approach used to simulate the material's behaviour.}
+\label{tab:timeLength}
+\end{table}
+Multiscale modeling: continuum, meso, nano, QM
+
+\subsection{Atomic scale}
+Trajectories over potential energy hypersurfaces; MD uses thermal energy to move smoothly over surface, MC moves randomly with probability $\exp(-\Delta U / k_BT)$.
+
+Equilibrium properties ore calculated as mean values over $M$ sampled configurations (assuming the configuration space has been sampled according to the correct distribution)
+\[ \bar{f} = \frac{1}{M}\sum^M_{\alpha=1}f_\alpha \]
+Law of large numbers:
+\[ \Expval{f} = \lim_{M\to \infty}\bar{f} \]
+
+\subsection{Thermodynamic quantities}
+\begin{itemize}
+\item \textbf{Internal energy} Sum of kinetic and potential energy
+\[ U = \bar{K} + \bar{V} \qquad \bar{K} = \sum^N_{i=1}\frac{\bar{p}_i^2}{2m_i} \]
+\item \textbf{Temperature} calculated using the equipartition theorem
+\[ \bar{K} = \frac{3}{2}Nk_B T \qquad \to \qquad T = \frac{2}{3Nk_B}\bar{K} = \frac{2}{(3N_a - N_c)k_B}\bar{K} \]
+where $N_a$ is number of atoms and $N_c$ is the total number of independent constraints.
+\item \textbf{Pressure} is calculated using the expression obtained from the virial theorem
+\[ p = \frac{N}{V}k_B T + \frac{1}{3V}\sum^N_{i=1}\sum^N_{j>i}\bar{\vec{f}_{ij}\cdot \vec{r}_{ij}} \]
+\item \textbf{Free energies} and \textbf{entropy} cannot be calculated directly in general because these are properties of the whole ensemble which require counting all of the ensemble states. There are however some tricks to calculate free energy differences.
+\end{itemize}
+
+\subsection{Fluctuations}
+Trajectory length must be $>$ decay time of ACF
+
+Time separation must be $\ll$ decay time of ACF.
+
+\subsection{Block averaging}
+
+\section{Monte Carlo simulations}
+\subsection{Calculating area under a curve}
+\subsection{Importance sampling}
+\subsection{Boundary conditions}
+
+\subsection{Markov chain Monte Carlo}
+A Markov chain is a stochastic model describing a sequence of events where the probability of the next event occurring only depends on the previous event. In other words we have a chain
+\[ X_1 \to X_2 \to \ldots \to X_J \to X_{J+1}\to \ldots \]
+and the Markov model is completely determined by the transition probabilities $W(X_J \to X_{J'})$.
+
+\subsection{Metropolis algorithm}
+A Monte Carlo algorithm can be used to compute (approximations of) ensemble averages of quantities in statistical mechanics. This is done by sampling the ensemble, calculating the quantity for each sample and then averaging the results.
+
+The tricky part is being able to accurately sample the ensemble. The Metropolis algorithm provides a way to do that with Markov chains. Not all Markov chains sample a well-defined, stationary distribution. A sufficient but not necessary condition for the existence of a stationary distribution is detailed balance.
+
+Detailed balance is essentially microscopic reversibility. For every pair of states $J,J'$ the probability of being in state $J$ and transitioning to $J'$ is the same as being in state $J'$ and transitioning to $J$.
+\[ W_{J'\leftarrow J}P^\text{eq}_J = W_{J\leftarrow J'}P^\text{eq}_{J'} \]
+
+It is exactly this stationary distribution $P^\text{eq}_J$ that we want to reflect the ensemble. The equality can be rewritten as
+\[ \frac{P^\text{eq}_J}{P^\text{eq}_{J'}} = \frac{W_{J\leftarrow J'}}{W_{J'\leftarrow J}} \]
+
+Next a new and interesting way to generate the Markov chain is introduced. Each state is generated from the previous one using a two-step process:
+\begin{enumerate}
+\item Propose a new state $J'$. The likelihood of a new state $J'$ being proposed is given by $\alpha_{J'\leftarrow J}$.
+\item Decide whether to accept or reject the new state. The new state is accepted with probability $W^\text{acc}_{J'\leftarrow J}$.
+\end{enumerate}
+The transition probabilities are then given by 
+\[ W_{J'\leftarrow J} = \alpha_{J'\leftarrow J}W^\text{acc}_{J'\leftarrow J}. \]
+Further imposing detailed balance gives
+\[ \frac{P^\text{eq}_J}{P^\text{eq}_{J'}} = \frac{W_{J\leftarrow J'}}{W_{J'\leftarrow J}} = \frac{\alpha_{J\leftarrow J'}W^\text{acc}_{J\leftarrow J'}}{\alpha_{J\leftarrow J'}W^\text{acc}_{J'\leftarrow J}} \]
+
+The beauty of the Metropolis algorithm is that if the underlying stochastic matrix $\alpha$ is symmetric ($\alpha_{J\leftarrow J'} = \alpha_{J'\leftarrow J}$), then this further simplifies to
+\[ \frac{P^\text{eq}_J}{P^\text{eq}_{J'}} = \frac{W^\text{acc}_{J\leftarrow J'}}{W^\text{acc}_{J'\leftarrow J}} \]
+
+This means we can choose any $\alpha$ we like (so long as it's symmetric) and we can make sure we are sampling the ensemble correctly by using good rules for accepting new moves.
+
+\subsubsection{Sampling the canonical ensemble}
+If we are trying to sample the canonical (NVT) ensemble, we need the stationary distribution the be the Boltzmann distribution.
+\[ \frac{P^\text{eq}_J}{P^\text{eq}_{J'}} = \exp\left[- \frac{V_{J'}-V_J}{k_BT}\right] \]
+This still leaves some choice as to the exact form of $W^\text{acc}_{J'\leftarrow J}$. The Metropolis choice is
+\[ W^\text{acc}_{J'\leftarrow J} = \begin{cases}
+\exp\left[- \frac{V_{J'}-V_J}{k_BT}\right] & (V_{J'}>V_J) \\
+1 & (V_{J'}\leq V_J)
+\end{cases} \]
+in other words
+\[ W^\text{acc}_{J'\leftarrow J} = \min \left[1, \; \exp\left(-(V_{J'}-V_J) / k_BT\right)\right] \]
+
+TODO write out algorithm
+
+\part{Quantum computation}
+\input{quantumComputation}
+
+\part{Applications}
+\setcounter{chapter}{0} % Reset chapter counter
+\chapter{Computer graphics}
+\section{Graphics formats}
+svg, jpeg, png
+\section{2D graphics creation}
+Inkscape, GIMP, 
+\section{3D graphics creation}
+Blender
+\subsection{Rendering}
+\subsubsection{Ray-tracing}
+\section{Computer vision}
+OpenCV
+
+face-recognition
+
+\chapter{The data analysis workflow}
+\section{Getting data}
+\section{Cleaning and transforming}
+\section{Distributions and modeling}
+
+\chapter{Web}
+\chapter{Games and game engines}
+\chapter{Publishing}
+tex 
+
+latex
+
+tikz
+\chapter{Audio}
+alsa, jack, pulseaudio
+
+
+\part{Reference}
+\appendix
+\chapter{Bibliography}
+
+ Software Languages: Syntax, Semantics, and Metaprogramming
+by Ralf Lämmel.
+Lämmel, Ralf
+
+The Art of Computer Programming, D. Knuth
+
+Introduction to Algorithms, third edition
+
+A categorical manifesto
+
+\url{https://github.com/jozefg/learn-tt}
+
+Spartan type theory
+
+Homotopy Type Theory:
+Univalent Foundations of Mathematics
+\url{https://homotopytypetheory.org/book/}
+
+Gang of four design patterns
+
+Introduction to Univalent Foundations of Mathematics with Agda by Martín Escardó.
+
+Types and programming languages, Benjamin C. Pierce
+
+An introduction to univalent foundations for mathematicians, DANIEL R. GRAYSON
+
+Proofs and Types, Jean-Yves Girard
+
+Bengt Nordström, Kent Petersson, and Jan M. Smith: Programming in Martin-Löf's Type Theory
+
+
+Advanced Compiler Design and Implementation
+Third edition Programming Languages: design and implementation. Terrence W. Pratt and Marvin V. Zelkowitz
+
+Donald Knuth - Structured programming with go to statements \url{https://web.archive.org/web/20190421081706/http://www.cs.sjsu.edu/~mak/CS185C/KnuthStructuredProgrammingGoTo.pdf}
+
+Dijkstra, E. W. (March 1968). "Letters to the editor: go to statement considered harmful". Communications of the ACM. 11 (3): 147–148. doi:10.1145/362929.362947. 
+
+Martin Fowler: UML Distilled, third edition.
+Executable UML: A Foundation for Model-Driven Architecture, Mellor, Balcer
+Object Oriented Systems development using the unified modeling language, Bahrami
+
+Pattern recognition, an algorithmic approach, Natashima
+Unifying theories of programming, Hoare
+
+Dijkstra, Edsger W. "EWD472: Guarded commands, non-determinacy and formal. derivation of programs" \url{http://www.cs.utexas.edu/users/EWD/ewd04xx/EWD472.PDF}
+
+The definitive ANTLR 4 reference, Terence Parr
+
+FORTRAN 77 tutorial (\url{https://web.stanford.edu/class/me200c/tutorial_77/})
+\url{http://fortranwiki.org/fortran/show/HomePage}
+
+\url{https://learnxinyminutes.com/}
+
+
+\url{https://docs.scala-lang.org}
+\url{https://hackernoon.com/a-10-minute-introduction-to-scala-d1fed19eb74c}
+
+Programming in Haskell (2nd ed), Graham Hutton
+
+ToRead:
+\url{http://www.drdobbs.com/architecture-and-design/so-you-want-to-write-your-own-language/240165488?pgno=1}
+\url{https://hackernoon.com/considerations-for-programming-language-design-a-rebuttal-5fb7ef2fd4ba}
+- OO bad
+\url{http://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html}
+\url{https://medium.com/@cscalfani/goodbye-object-oriented-programming-a59cda4c0e53}
+\url{https://www.yegor256.com/2016/08/15/what-is-wrong-object-oriented-programming.html}
+\url{https://content.pivotal.io/blog/all-evidence-points-to-oop-being-bullshit}
+\url{https://www.infoq.com/presentations/Are-We-There-Yet-Rich-Hickey}
+- HDL
+\url{http://www.myhdl.org/}
+\url{http://pshdl.org/}
+\url{https://hackage.haskell.org/package/kansas-lava}
+\url{https://chisel.eecs.berkeley.edu/documentation.html}
+\url{https://chisel.eecs.berkeley.edu/chisel-dac2012.pdf}
+\url{https://github.com/freechipsproject/firrtl/blob/master/spec/spec.pdf}
+
+\url{https://insights.sigasi.com/opinion/jan/verilogs-major-flaw.html}
+\url{https://www.reddit.com/r/programming/comments/5avlpa/why_hardware_development_is_hard_part_1_verilog/}
+\url{https://www.viewpointusa.com/IE/ar/hdl-fpga-development-the-good-the-bad-and-the-ugly/}
+\url{https://news.ycombinator.com/item?id=7565711}
+\url{https://danluu.com/why-hardware-development-is-hard/}
+- Go
+\url{https://tour.golang.org/list}
+\url{https://blog.golang.org/go-slices-usage-and-internals}
+\url{https://blog.golang.org/defer-panic-and-recover}
+\url{https://blog.golang.org/go-concurrency-patterns-timing-out-and}
+\url{https://blog.golang.org/go-maps-in-action}
+\url{https://blog.golang.org/gos-declaration-syntax}
+\url{https://www.quora.com/Why-does-Go-seem-to-be-the-most-heavily-criticized-among-the-newer-programming-languages}
+\url{https://github.com/ksimka/go-is-not-good}
+\url{http://nomad.uk.net/articles/why-gos-design-is-a-disservice-to-intelligent-programmers.html}
+\url{https://news.ycombinator.com/item?id=9266184}
+\url{https://bluxte.net/musings/2018/04/10/go-good-bad-ugly/}
+\url{https://talks.golang.org/2012/splash.article}
+\url{https://bravenewgeek.com/go-is-unapologetically-flawed-heres-why-we-use-it/}
+\url{https://hackernoon.com/the-beauty-of-go-98057e3f0a7d}
+\url{https://corte.si/posts/code/go/golang-practicaly-beats-purity/index.html}
+- Scala
+\url{https://news.ycombinator.com/item?id=8420199}
+\url{https://upon2020.com/blog/2017/05/why-scala-is-not-for-you-nor-me/}
+- Generics
+
+
+Head first design patterns; Freeman, Robson
+
+\end{document}

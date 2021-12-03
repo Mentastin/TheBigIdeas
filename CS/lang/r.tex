@@ -1,0 +1,450 @@
+\paragraph{History, purpose and setup}
+
+\paragraph{Syntax}
+\begin{itemize}
+\item In the interpreter you can get help about \textit{word} using \texttt{?\textit{word}}.
+\item \textbf{Comments}
+\begin{lstlisting}[language={r}, style=snippet]
+# Single line comments begin with a '#'
+# There are no multiline comments.
+\end{lstlisting}
+item \textbf{Variables} can be assigned in different ways:
+\begin{lstlisting}[language={r}, style=snippet]
+x = 5     # this is possible
+y <- "1"  # this is preferred
+TRUE -> z # this works but is weird
+\end{lstlisting}
+\end{itemize}
+
+\paragraph{Data and datatypes}
+You can find out the type of any expression using \texttt{class()}:
+\begin{lstlisting}[language={r}, style=snippet]
+class(5) # "numeric"
+\end{lstlisting}
+
+\subparagraph{Basic types}:
+\begin{itemize}
+\item \textbf{Numeric} is a double-precision floating-point number.
+\begin{lstlisting}[language={r}, style=snippet]
+# Unless otherwise specified all numbers are assumed to be numerics
+class(5)    # "numeric"
+class(12.2) # "numeric"
+# You can have infinitely large or small numbers
+class(Inf)  # "numeric"
+class(-Inf) # "numeric"
+# You can also use scientific notation
+5e4 # 50000
+6.02e23 # Avogadro's number
+1.6e-35 # Planck length
+\end{lstlisting}
+Illegal arithmetic yields a value \texttt{NaN} (``not-a-number''):
+\begin{lstlisting}[language={r}, style=snippet]
+0 / 0 # NaN
+class(NaN) # "numeric"
+\end{lstlisting}
+\item\textbf{Integers} Long-storage integers are written with L.
+\begin{lstlisting}[language={r}, style=snippet]
+5L # 5
+class(5L) # "integer"
+\end{lstlisting}
+\item \textbf{Character} There is no difference between strings and characters in R. To write a string literal both single and double quotes can be used.
+\begin{lstlisting}[language={r}, style=snippet]
+class("Horatio")  # "character"
+class('Horatio')  # "character"
+class('H')        # "character"
+\end{lstlisting}
+\item \textbf{Logical} Booleans are logical. Missing data (\texttt{NA}) is as well.
+\begin{lstlisting}[language={r}, style=snippet]
+class(TRUE)     # "logical"
+class(FALSE)    # "logical"
+class(NA)       # "logical"
+\end{lstlisting}
+\item \textbf{Factor} The factor class is for categorical data. Factors can be ordered (like childrens' grade levels) or unordered (like gender).
+\item \textbf{NULL} is NULL. It can be used to blank out a vector.
+\end{itemize}
+
+\subparagraph{Data structures}
+\begin{itemize}
+\item \textbf{Vectors} are created with the function \texttt{c()}.
+\begin{lstlisting}[language={r}, style=snippet]
+c(1, 2, 3, 4)   # 1 2 3 4
+vec <- c(8, 9, 10, 11)
+vec             # 8 9 10 11
+\end{lstlisting}
+Every value is considered a vector of length 1. Conversely every vector has the datatype of its contents.
+\begin{lstlisting}[language={r}, style=snippet]
+class(c(4L, 5L, 8L, 3L)) # "integer"
+\end{lstlisting}
+A vector can not contain data of different types, but it may always contain the logical value \texttt{NA}.
+
+R indexes from $1$. Slicing is also supported (bounds are inclusive).
+\begin{lstlisting}[language={r}, style=snippet]
+vec[1]    # 8
+vec[2:3]  # 9 10
+\end{lstlisting}
+
+Some other ways of creating vectors include
+\begin{lstlisting}[language={r}, style=snippet]
+5:15                      # 5  6  7  8  9 10 11 12 13 14 15
+seq(from=0, to=11, by=2)  # 0  2  4  6  8 10
+\end{lstlisting}
+\item \textbf{Matrices} are two-dimensional vectors. All entries are of the same type. Unlike a vector, the class of a matrix is ``matrix'', no matter what's in it.
+\begin{lstlisting}[language={r}, style=snippet]
+mat <- matrix(nrow = 4, ncol = 3, c(1,2,3,4,5,6))
+mat
+# =>
+#       [,1] [,2] [,3]
+# [1,]    1    5    3
+# [2,]    2    6    4
+# [3,]    3    1    5
+# [4,]    4    2    6
+
+class(mat) # "matrix"
+\end{lstlisting}
+Indexing for matrices:
+\begin{lstlisting}[language={r}, style=snippet]
+# Ask for vector containing the first row
+mat[1,]    # 1 5 3
+# Ask for a specific cell
+mat[3,2]   # 1
+\end{lstlisting}
+Matrices can be made by sticking vectors together, either as rows or as columns.
+\begin{lstlisting}[language={r}, style=snippet]
+rbind(c(1,2,4,5), c(6,7,0,4))
+# =>
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    2    4    5
+# [2,]    6    7    0    4
+cbind(1:4, c("dog", "cat", "bird", "dog"))
+# =>
+#      [,1] [,2]
+# [1,] "1"  "dog"
+# [2,] "2"  "cat"
+# [3,] "3"  "bird"
+# [4,] "4"  "dog"
+\end{lstlisting}
+\item \textbf{Data frames} are two-dimensional structures that can contain different types. The class of a data frame is ``data.frame''.
+\begin{lstlisting}[language={r}, style=snippet]
+students <- data.frame(c("Cedric","Fred","George","Cho","Draco","Ginny"),
+                       c(3,2,2,1,0,-1),
+                       c("H", "G", "G", "R", "S", "G"))
+names(students) <- c("name", "year", "house") # name the columns
+class(students)   # "data.frame"
+students
+# =>
+#     name year house
+# 1 Cedric    3     H
+# 2   Fred    2     G
+# 3 George    2     G
+# 4    Cho    1     R
+# 5  Draco    0     S
+# 6  Ginny   -1     G
+\end{lstlisting}
+The \texttt{data.frame()} function converts character vectors to factor vectors by default; turn this off by setting \texttt{stringsAsFactors = FALSE} when you create the data frame.
+
+Indexing data frames:
+\begin{lstlisting}[language={r}, style=snippet]
+students$year      # 3  2  2  1  0 -1
+students[,2]       # 3  2  2  1  0 -1
+students[,"year"]  # 3  2  2  1  0 -1
+\end{lstlisting}
+A column can be dropped by assigning the \texttt{NULL} value to it.
+\begin{lstlisting}[language={r}, style=snippet]
+students$house <- NULL
+students
+# =>
+#     name year
+# 1 Cedric    3
+# 2   Fred    2
+# 3 George    2
+# 4    Cho    1
+# 5  Draco    0
+# 6  Ginny   -1
+\end{lstlisting}
+Rows can be dropped by subsetting:
+\begin{lstlisting}[language={r}, style=snippet]
+students[students$house != "G",]
+# =>
+#     name year house
+# 1 Cedric    3     H
+# 4    Cho    1     R
+# 5  Draco    0     S
+\end{lstlisting}
+\item \textbf{Arrays} are $n$-dimensional structures that contain only one type.
+\begin{lstlisting}[language={r}, style=snippet]
+array(c(c(c(2,300,4),c(8,9,0)),c(c(5,60,0),c(66,7,847))), dim=c(3,2,2))
+# =>
+# , , 1
+#
+#      [,1] [,2]
+# [1,]    2    8
+# [2,]  300    9
+# [3,]    4    0
+#
+# , , 2
+#
+#      [,1] [,2]
+# [1,]    5   66
+# [2,]   60    7
+# [3,]    0  847
+\end{lstlisting}
+\item \textbf{Lists} are like dictionaries in Python. May be multi-dimensional. Possibly ragged. May contain different types.
+\begin{lstlisting}[language={r}, style=snippet]
+list1 <- list(time = 1:40)
+list1$price = c(rnorm(40,.5*list1$time,4))
+\end{lstlisting}
+List indexing can be done in several ways. The following are equivalent in this case:
+\begin{lstlisting}[language={r}, style=snippet]
+list1$time
+list1[["time"]]
+list1[[1]]
+\end{lstlisting}
+Lists are not very efficient.
+\end{itemize}
+
+\subparagraph{Type coercion}
+\begin{lstlisting}[language={r}, style=snippet]
+as.character(c(6, 8)) # "6" "8"
+as.logical(c(1,0,1,1)) # TRUE FALSE  TRUE  TRUE
+as.numeric("Bilbo")
+# =>
+# [1] NA
+# Warning message:
+# NAs introduced by coercion
+\end{lstlisting}
+If you put elements of different types into a vector, weird coercions happen:
+\begin{lstlisting}[language={r}, style=snippet]
+c(TRUE, 4) # 1 4
+c("dog", TRUE, 4) # "dog"  "TRUE" "4"
+\end{lstlisting}
+
+\paragraph{Basic operations and arithmetic}
+\subparagraph{Comparisons}
+\begin{lstlisting}[language={r}, style=snippet]
+TRUE == FALSE   # FALSE
+FALSE != TRUE   # TRUE
+\end{lstlisting}
+\subparagraph{Numbers} Doing arithmetic on a mix of integers and numerics returns a numeric. Arithmetic on integers returns integers (except with division).
+\begin{lstlisting}[language={r}, style=snippet]
+10L + 66L # 76
+53.2 - 4  # 49.2
+2.0 * 2L  # 4
+3L / 4    # 0.75    # dividing always returns numeric
+4 ^ 2     # 16
+4 %% 3.1  # 0.9     # modulo
+4 %% 3.1  # 0.9     # modulo
+\end{lstlisting}
+\subparagraph{Logicals}
+\begin{lstlisting}[language={r}, style=snippet]
+# OR
+TRUE | FALSE    # TRUE
+TRUE | NA       # TRUE
+FALSE | NA      # NA
+NA | NA         # NA
+
+# AND
+TRUE & FALSE    # FALSE
+TRUE & NA       # NA
+FALSE & NA      # FALSE
+NA & NA         # NA
+\end{lstlisting}
+\subparagraph{Vectors}
+\begin{itemize}
+\item Arithmetic with vectors of the same length pairs up the elements
+\begin{lstlisting}[language={r}, style=snippet]
+c(1,2,3) + c(1,2,3) # 2 4 6
+\end{lstlisting}
+\item Arithmetic with scalars is applied element-wise to the vector
+\begin{lstlisting}[language={r}, style=snippet]
+(4 * c(1,2,3) - 2)  # 2 6 10
+\end{lstlisting}
+\item Arithmetic with vectors of different length can only be done if the length of the larger vector is an integer multiple of the length of the smaller. The smaller vector is then repeated enough times to fill the larger. This is a generalisation of the above two behaviours. Usually it is better practice and easier to read if lengths are matched.
+\begin{lstlisting}[language={r}, style=snippet]
+c(1,2,3,1,2,3) * c(1,2)          # 1 4 3 2 2 6
+c(1,2,3,1,2,3) * c(1,2,1,2,1,2)  # 1 4 3 2 2 6
+
+c('Z', 'o', 'r', 'r', 'o') == "Zorro"  # FALSE FALSE FALSE FALSE FALSE
+c('Z', 'o', 'r', 'r', 'o') == "Z"      # TRUE FALSE FALSE FALSE FALSE
+# (Remember every value is treated as a vector of length 1)
+\end{lstlisting}
+\end{itemize}
+\subparagraph{Matrices}
+Matrices can be transposed and multiplied.
+\begin{lstlisting}[language={r}, style=snippet]
+mat
+# =>
+#      [,1] [,2]
+# [1,]    1    4
+# [2,]    2    5
+# [3,]    3    6
+t(mat)
+# =>
+#      [,1] [,2] [,3]
+# [1,]    1    2    3
+# [2,]    4    5    6
+mat %*% t(mat)
+# =>
+#      [,1] [,2] [,3]
+# [1,]   17   22   27
+# [2,]   22   29   36
+# [3,]   27   36   45
+\end{lstlisting}
+
+\paragraph{Flow control and loops}
+\begin{itemize}
+\item \textbf{If/else}
+\begin{lstlisting}[language={r}, style=snippet]
+if (4 > 3) {
+    print("4 is greater than 3")
+} else {
+    print("4 is not greater than 3")
+}
+\end{lstlisting}
+\item \textbf{For loops}
+\begin{lstlisting}[language={r}, style=snippet]
+for (i in 1:4) {
+  print(i)
+}
+\end{lstlisting}
+\item \textbf{While loops}
+\begin{lstlisting}[language={r}, style=snippet]
+a <- 10
+while (a > 4) {
+    cat(a, "...", sep = "")
+    a <- a - 1
+})
+\end{lstlisting}
+\end{itemize}
+Loops run slowly in R. It is generally much better to do operations on entire vectors or use \texttt{apply()}-type functions.
+
+\paragraph{Environments}
+
+\paragraph{Functions}
+
+\begin{lstlisting}[language={r}, style=snippet]
+jiggle <- function(x) {
+    x = x + rnorm(1, sd=.1) #add in a bit of (controlled) noise
+    return(x)
+}
+# Called like any other R function:
+jiggle(5)
+\end{lstlisting}
+
+\paragraph{Built-in functionality}
+\begin{itemize}
+\item \textbf{Constants}
+\begin{enumerate}
+\item[\texttt{letters}]
+\item[\texttt{month.abb}]
+\end{enumerate}
+\item \textbf{Numeric functions}
+\begin{enumerate}
+\item[\texttt{round()}]
+\item[\texttt{log()}]
+\item[\texttt{max()}]
+\end{enumerate}
+\item \textbf{Logical functions}
+\begin{enumerate}
+\item[\texttt{isTRUE()}]
+\end{enumerate}
+\item \textbf{Functions on strings}
+\begin{enumerate}
+\item[\texttt{substr()}]
+\item[\texttt{gsub()}]
+\end{enumerate}
+\item \textbf{Functions on vectors}
+\begin{enumerate}
+\item[\texttt{length()}]
+\item[\texttt{sort()}]
+\item[\texttt{which()}] Return indices of elements that match.
+\item[\texttt{any()}] Return true if any of the elements match.
+\item[\texttt{max()}]
+\item[\texttt{min()}]
+\item[\texttt{sum()}]
+\item[\texttt{head()}] Look at top of dataset.
+\item[\texttt{tail()}] Look at bottom of dataset.
+\end{enumerate}
+\textbf{Descriptive statistics}
+\begin{enumerate}
+\item[\texttt{data()}] Browse pre-loaded data sets
+\item[\texttt{data(rivers)}] Load dataset ``Lengths of Major North American Rivers'' as a numeric vector \texttt{rivers}.
+\item[\texttt{mean()}]
+\item[\texttt{var()}]
+\item[\texttt{sd()}]
+\item[\texttt{summary(rivers)}] Summary statistics: minimum, 1st quartile, median, mean, 3rd quartile, maximum.
+\end{enumerate}
+\item \textbf{Functions on data frames}
+\begin{enumerate}
+\item[\texttt{dim()}]
+\item[\texttt{nrow()}]
+\item[\texttt{ncol()}]
+\end{enumerate}
+\item \textbf{Data visualisation}
+\begin{itemize}
+\item[\textbf{Stem-and-leaf}]
+\item[\textbf{Histogram}]
+\item[\textbf{Plot}]
+\end{itemize}
+\end{itemize}
+
+\paragraph{Packages}
+The \texttt{data.table} package provides functionality a lot like the data frames.
+\begin{lstlisting}[language={r}, style=snippet]
+# An augmented version of the data.frame structure is the data.table
+# If you're working with huge or panel data, or need to merge a few data
+# sets, data.table can be a good choice. Here's a whirlwind tour:
+install.packages("data.table") # download the package from CRAN
+require(data.table) # load it
+students <- as.data.table(students)
+students # note the slightly different print-out
+# =>
+#      name year house
+# 1: Cedric    3     H
+# 2:   Fred    2     G
+# 3: George    2     G
+# 4:    Cho    1     R
+# 5:  Draco    0     S
+# 6:  Ginny   -1     G
+students[name=="Ginny"] # get rows with name == "Ginny"
+# =>
+#     name year house
+# 1: Ginny   -1     G
+students[year==2] # get rows with year == 2
+# =>
+#      name year house
+# 1:   Fred    2     G
+# 2: George    2     G
+# data.table makes merging two data sets easy
+# let's make another data.table to merge with students
+founders <- data.table(house=c("G","H","R","S"),
+                       founder=c("Godric","Helga","Rowena","Salazar"))
+founders
+# =>
+#    house founder
+# 1:     G  Godric
+# 2:     H   Helga
+# 3:     R  Rowena
+# 4:     S Salazar
+setkey(students, house)
+setkey(founders, house)
+students <- founders[students] # merge the two data sets by matching "house"
+setnames(students, c("house","houseFounderName","studentName","year"))
+students[,order(c("name","year","house","houseFounderName")), with=F]
+# =>
+#    studentName year house houseFounderName
+# 1:        Fred    2     G           Godric
+# 2:      George    2     G           Godric
+# 3:       Ginny   -1     G           Godric
+# 4:      Cedric    3     H            Helga
+# 5:         Cho    1     R           Rowena
+# 6:       Draco    0     S          Salazar
+
+# data.table makes summary tables easy
+students[,sum(year),by=house]
+# =>
+#    house V1
+# 1:     G  3
+# 2:     H  3
+# 3:     R  1
+# 4:     S  0
+\end{lstlisting}

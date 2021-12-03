@@ -1,0 +1,256 @@
+\paragraph{History.}
+
+\paragraph{Concepts.}
+Haskell has \udef{lazy evaluation}; it only evaluates things when it needs to.
+
+\paragraph{Basic setup.}
+Haskell can be run in a REPL (Read-Eval-Print Loop). The REPL can be started with the command \texttt{ghci}.
+
+In the REPL, new values are created with \texttt{let}.
+\begin{lstlisting}[language=haskell, style=snippet]
+let foo = 5
+\end{lstlisting}
+Type can be inspected using \texttt{:t}.
+\begin{lstlisting}[language=haskell, style=snippet]
+> :t foo
+foo :: Integer
+\end{lstlisting}
+Additional information on any identifier is given by \texttt{:i}:
+\begin{lstlisting}[language=haskell, style=snippet]
+> :i (+)
+class Num a where
+  (+) :: a -> a -> a
+  ...
+    -- Defined in 'GHC.Num'
+infixl 6 +
+\end{lstlisting}
+
+
+\paragraph{Syntactic elements.}
+Comments:
+\begin{lstlisting}[language=haskell, style=snippet]
+-- Single line comments start with two dashes.
+{- Multiline comments can be enclosed
+in a block like this.
+-}
+\end{lstlisting}
+Lines end with a newline character.
+
+\paragraph{Primitive data types and operators.}
+\subparagraph{Numbers.}
+Math is a you expect. Division is floating point by default. Integer division done using \texttt{`div`}.
+\begin{lstlisting}[language=haskell, style=snippet]
+1 + 1 -- 2
+8 - 1 -- 7
+10 * 2 -- 20
+35 / 4 -- 8.75
+35 `div` 4 -- 8
+\end{lstlisting}
+\subparagraph{Booleans.} The primitives \texttt{True} and \texttt{False} are capitalised. Operations:
+\begin{lstlisting}[language=haskell, style=snippet]
+not True -- False
+not False -- True
+1 == 1 -- True
+1 /= 1 -- False
+1 < 10 -- True
+\end{lstlisting}
+Here \texttt{not} is actually a function.
+\subparagraph{Strings and characters.} Strings are lists of characters.
+\begin{lstlisting}[language=haskell, style=snippet]
+"This is a string."
+'a' -- character
+'You cant use single quotes for strings.' -- error!
+
+['H', 'e', 'l', 'l', 'o'] -- "Hello"
+"This is a string" !! 0 -- 'T'
+\end{lstlisting}
+
+Function identifiers do not need to contain letters.
+\begin{lstlisting}[language=haskell, style=snippet]
+(//) a b = a `div` b
+35 // 4 -- 8
+\end{lstlisting}
+\paragraph{Lists and tuples.}
+\subparagraph{Lists.}
+Every element in a list must have the same type. Ranges can be used and are versatile.
+\begin{lstlisting}[language=haskell, style=snippet]
+[1, 2, 3, 4, 5]
+[1..5]              -- [1, 2, 3, 4, 5]
+['A'..'F']          -- "ABCDEF"
+[0,2..10] -- [0, 2, 4, 6, 8, 10]
+[5..1] -- [] (Haskell defaults to incrementing)
+[5,4..1] -- [5, 4, 3, 2, 1]
+\end{lstlisting}
+Indexing is zero-based and done using \texttt{!!}.
+\begin{lstlisting}[language=haskell, style=snippet]
+[1..10] !! 3 -- 4
+\end{lstlisting}
+Thanks to lazy evaluation the following is possible:
+\begin{lstlisting}[language=haskell, style=snippet]
+[1..] -- a list of all the natural numbers
+[1..] !! 999 -- 1000
+\end{lstlisting}
+List operations:
+\begin{lstlisting}[language=haskell, style=snippet]
+-- joining two lists
+[1..5] ++ [6..10]
+
+-- adding to the head of a list
+0:[1..5] -- [0, 1, 2, 3, 4, 5]
+
+head [1..5] -- 1
+tail [1..5] -- [2, 3, 4, 5]
+init [1..5] -- [1, 2, 3, 4]
+last [1..5] -- 5
+\end{lstlisting}
+List comprehension:
+\begin{lstlisting}[language=haskell, style=snippet]
+[x*2 | x <- [1..5]] -- [2, 4, 6, 8, 10]
+[x*2 | x <- [1..5], x*2 > 4] -- [6, 8, 10]
+\end{lstlisting}
+
+\subparagraph{Tuples.} Every element in a tuple can be a different type, but a tuple has a fixed length. Tuple literals are written with parentheses.
+\begin{lstlisting}[language=haskell, style=snippet]
+("haskell", 1)
+
+-- accessing elements of a pair (i.e. a tuple of length 2)
+fst ("haskell", 1) -- "haskell"
+snd ("haskell", 1) -- 1
+
+-- pair element accessing does not work on n-tuples (i.e. triple, quadruple, etc)
+snd ("snd", "can't touch this", "da na na na") -- error! see function below
+\end{lstlisting}
+
+\paragraph{Functions.}
+Declaring and calling functions.
+\begin{lstlisting}[language=haskell, style=snippet]
+add a b = a + b
+add 1 2 -- 3
+\end{lstlisting}
+Haskell also supports infix notation.
+\begin{lstlisting}[language=haskell, style=snippet]
+1 `add` 2 -- 3
+\end{lstlisting}
+
+Branching can be achieved with guards.
+\begin{lstlisting}[language=haskell, style=snippet]
+fib x
+  | x < 2 = 1
+  | otherwise = fib (x - 1) + fib (x - 2)
+\end{lstlisting}
+
+\subparagraph{Overloading.}
+\begin{lstlisting}[language=haskell, style=snippet]
+fib 1 = 1
+fib 2 = 2
+fib x = fib (x - 1) + fib (x - 2)
+\end{lstlisting}
+
+\subparagraph{Pattern matching.}
+\begin{itemize}
+\item On tuples:
+\begin{lstlisting}[language=haskell, style=snippet]
+sndOfTriple (_, y, _) = y
+\end{lstlisting}
+\item On lists:
+\begin{lstlisting}[language=haskell, style=snippet]
+myMap func [] = []
+-- x is the first element of the list. 
+-- xs is the rest of the list. 
+myMap func (x:xs) = func x:(myMap func xs)
+\end{lstlisting}
+\end{itemize}
+
+\subparagraph{Anonymous functions.} Anonymous functions are created with a backslash followed by all the arguments.
+\begin{lstlisting}[language=haskell, style=snippet]
+myMap (\x -> x + 2) [1..5] -- [3, 4, 5, 6, 7]
+\end{lstlisting}
+
+\subparagraph{Partial application.}
+\begin{lstlisting}[language=haskell, style=snippet]
+add a b = a + b
+foo = add 10 -- foo is now a function that takes a number and adds 10 to it
+foo 5 -- 15
+-- Another way to write the same thing
+foo = (10+)
+foo 5 -- 15
+\end{lstlisting}
+
+\subparagraph{Function composition.} Function composition is achieved with the \texttt{.} operator.
+\begin{lstlisting}[language=haskell, style=snippet]
+foo = (4*) . (10+)
+foo 5 -- 60 because 4*(10+5) = 60
+\end{lstlisting}
+
+\subparagraph{Operator precedence.} The \texttt{\$} operator applies a function to a given parameter. It is low priority and is right-associative. The expression on its right is applied as a parameter to the function on its left.
+
+
+\subparagraph{Built in functions}
+
+Another \texttt{map} example.
+\begin{lstlisting}[language=haskell, style=snippet]
+map (*2) [1..5] -- [2, 4, 6, 8, 10]
+\end{lstlisting}
+
+foldr, foldl
+
+\paragraph{Type signatures and data types.}
+Haskell has a very strong type system, and every valid expression has a type.
+
+Some basic types:
+\begin{lstlisting}[language=haskell, style=snippet]
+5 :: Integer
+"hello" :: String
+True :: Bool
+\end{lstlisting}
+
+When you define a value, it's good practice to write its type above it:
+\begin{lstlisting}[language=haskell, style=snippet]
+doubleInt :: Integer -> Integer
+doubleInt x = x * 2
+\end{lstlisting}
+
+Custom types can be defined.
+\begin{lstlisting}[language=haskell, style=snippet]
+data Color = Red | Blue | Green
+\end{lstlisting}
+The type is \texttt{Color} and its possible values are \texttt{Red}, \texttt{Blue} and \texttt{Green}.
+Data types can have parameters as well.
+\begin{lstlisting}[language=haskell, style=snippet]
+data Maybe a = Nothing | Just a
+-- These are all of type Maybe
+Just "hello"    -- of type `Maybe String`
+Just 1          -- of type `Maybe Int`
+Nothing         -- of type `Maybe a` for any `a`
+\end{lstlisting}
+
+\paragraph{Flow control.}
+\subparagraph{\texttt{if}-expressions.}
+\begin{lstlisting}[language=haskell, style=snippet]
+haskell = if 1 == 1 then "awesome" else "awful" -- haskell = "awesome"
+\end{lstlisting}
+Multiline \texttt{if}. Indentation is important.
+\begin{lstlisting}[language=haskell, style=snippet]
+haskell = if 1 == 1
+            then "awesome"
+            else "awful"
+\end{lstlisting}
+\subparagraph{\texttt{case} expressions.}
+\begin{lstlisting}[language=haskell, style=snippet]
+case args of
+  "help" -> printHelp
+  "start" -> startProgram
+  _ -> putStrLn "bad args"
+\end{lstlisting}
+\subparagraph{Recursion.} Haskell does not have any loops, but we can make them using the \texttt{map} function.
+\begin{lstlisting}[language=haskell, style=snippet]
+for array func = map func array
+for [0..5] $ \i -> show i -- Using the for loop.
+\end{lstlisting}
+
+
+\paragraph{Monads.}
+TODO
+
+\paragraph{I/O.}
+TODO

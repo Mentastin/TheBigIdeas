@@ -1,0 +1,167 @@
+% blackboard typefaces by Anthony Phan.
+% file: mbbcrkdr.mf (Cork driver file)
+% last modification: 25.10.2001.
+
+mode_setup;font_setup;
+font_coding_scheme:="TeX text";% Cork encoding
+
+numeric cap_accent_height#,accent_height#,
+cap_accent_height_bis#,accent_height_bis#,
+cork_code[],cork_wd[],cork_ht[],cork_dp[],cork_ic[],cork_h[];
+picture cork_picture[];
+
+cap_accent_height#=min(1.25body_height#-cap_height#,x_height#);
+accent_height#=min(asc_height#-x_height#,x_height#);
+cap_accent_height_bis#=min(cap_height#,
+  10/7x_height#+0.5dot_size#)-x_height#;
+accent_height_bis#=min(asc_height#,
+  10/7x_height#+0.5dot_size#)-x_height#;
+accent_height_ter#=min(asc_height#,
+  10/7x_height# if not low_umlaut: +0.5dot_size# fi)-x_height#;
+ 
+numeric slash_width;
+slash_width=hround(3.8u+hthick+thin);
+
+def cork_extra_endchar=
+  if known cork_code[charcode]: cork_wd[charcode]:=charwd;
+    cork_ht[charcode]:=charht; cork_dp[charcode]:=chardp;
+    cork_ic[charcode]:=charic; cork_h[charcode]:=h;
+    cork_picture[charcode]:=currentpicture;
+  fi
+enddef;
+
+def correct_width_by(expr $,$$)=charwd:=charwd+$+$$;
+  w:=hround(charwd*hppp); interim xoffset:=hround($*hppp);
+  currentpicture:=currentpicture shifted (xoffset,0);
+enddef;
+
+def begincorkchar(expr letter,accent,code,extra_height,extra_depth)=
+  numeric a,rshift,lshift; a=byte letter;
+  beginchar(code,cork_wd[a],cork_ht[a]+extra_height,
+      cork_dp[a]+extra_depth);
+    "The letter "& if string letter: letter else: "i" fi &" with "& accent;
+    currentpicture:=cork_picture[a];
+    tmp_h:=cork_h[a];
+    rshift-apprr=lshift-apprl
+    =hround 0.5(w-apprr-apprl-min(max(w-apprl-apprr,7u),9u));
+  enddef;
+  def endcorkchar=endchar
+enddef;
+
+bbes_zet:=hex"FF";
+bbslash_o:=hex"F8"; bbslash_O:=hex"D8";
+bbae:=hex"E6"; bbAE:=hex"C6";
+bboe:=hex"F7"; bbOE:=hex"D7";
+bbdotless_i:=hex"19"; bbdotless_j:=hex"1A";
+bbcross_d:=hex"F0";
+bbEng:=hex"8D"; bbeng:=hex"AD";
+bbThorn:=hex"DE"; bbthorn:=hex"FE";
+
+cork_code[byte "A"]=1; cork_code[byte "a"]=1;
+cork_code[byte "C"]=1; cork_code[byte "c"]=1;
+cork_code[byte "D"]=1; cork_code[byte "d"]=1;
+cork_code[byte "E"]=1; cork_code[byte "e"]=1;
+cork_code[byte "G"]=1; cork_code[byte "g"]=1;
+cork_code[byte "I"]=1; cork_code[byte "i"]=1;
+cork_code[byte "J"]=1; cork_code[byte "j"]=1;
+cork_code[byte "L"]=1; cork_code[byte "l"]=1;
+cork_code[byte "N"]=1; cork_code[byte "n"]=1;
+cork_code[byte "O"]=1; cork_code[byte "o"]=1;
+cork_code[byte "R"]=1; cork_code[byte "r"]=1;
+cork_code[byte "S"]=1; cork_code[byte "s"]=1;
+cork_code[byte "T"]=1; cork_code[byte "t"]=1;
+cork_code[byte "U"]=1; cork_code[byte "u"]=1;
+cork_code[byte "Y"]=1; cork_code[byte "y"]=1;
+cork_code[byte "Z"]=1; cork_code[byte "z"]=1;
+cork_code[byte bbdotless_i]=1;
+
+% roman encoding
+bblig_ff:=hex"1B"; bblig_fi:=hex"1C"; bblig_fl:=hex"1D"; bblig_ffi:=hex"1E";
+bblig_ffl=hex"1F";
+ligtable "f": "f"=:bblig_ff, "i"=:bblig_fi, "l"=:bblig_fl, "f"=:bblig_ff;
+ligtable bblig_ff: "i"=:bblig_ffi, "l"=:bblig_ffl;
+%  bblig_ct=hex"09";
+%  bblig_st=hex"0A";
+%  ligtable "c": "t"=:bblig_ct;
+%  ligtable "s": "t"=:bblig_st;
+
+bbgrave:=hex"00"; bbacute:=hex"01"; bbcircumflex:=hex"02";
+bbtilde:=hex"03"; bbumlaut:=hex"04"; bblong_umlaut:=hex"05";
+bbcirc_accent:=hex"06"; bbhacheck:=hex"07";bbbreve:=hex"08";
+bbmacron:=hex"09"; bbdotaccent:=hex"0A"; bbcedilla:=hex"0B";
+bbogonek:=hex"0C";bbwide_circumflex:=hex"5E"; bbwide_tilde:=hex"7E";
+
+bbnormal_space:=hex"20"; bbunderscore:=hex"5F";
+bbasterisk:=hex"2A"; bbcomma:=hex"2C"; bbperiod:=hex"2E";
+bbcolon:=hex"3A"; bbsemicolon:=hex"3B"; 
+bbquestion_mark:=hex"3F"; bbexclamation_point:=hex"21"; 
+bbspanish_shriek:=hex"BD"; bbspanish_query:=hex"BE";
+bbslash:=hex"2F"; bbback_slash:=hex"5C";
+vertical:=hex"7C";
+parenthesis_left:=hex"28"; parenthesis_right:=hex"29";
+bracket_left:=hex"5B"; bracket_right:=hex"5D";
+brace_left:=hex"7B"; brace_right:=hex"7D";
+bbapostrophe:=hex"27"; bbreverse_apostrophe:=hex"60";
+bbopening_quotes:=hex"10"; bbclosing_quotes:=hex"11";
+bbgerman_opening_comma:=hex"0D";
+bbgerman_opening_quotes:=hex"12";
+bbstraight_quotes:=hex"22"; % ASCII location
+bbfso_quotes:=hex"0E"; bbfsc_quotes:=hex"0F";
+bbfdo_quotes:=hex"13"; bbfdc_quotes:=hex"14";
+bbdash:=hex"2D"; bben_dash:=hex"15"; bbem_dash:=hex"16";
+bbcompound_word_mark:=hex"17"; bbhyphenchar:=hex"7F";
+ligtable bbdash: bbdash=:bben_dash;
+ligtable bben_dash: bbdash=:bbem_dash;
+ligtable bbreverse_apostrophe: bbreverse_apostrophe=:bbopening_quotes;
+ligtable bbapostrophe: bbapostrophe=:bbclosing_quotes;
+ligtable bbcomma: bbcomma=:bbgerman_opening_quotes;
+% Next characters are no more treated as ligatures.
+%ligtable bbexclamation_point: bbreverse_apostrophe=:bbspanish_shriek;
+%ligtable bbquestion_mark: bbreverse_apostrophe=:bbspanish_query;  
+% Strange, there's nothing to do with french single quotes.
+ligtable "<": "<"=:bbfdo_quotes;
+ligtable ">": ">"=:bbfdc_quotes;
+
+% symbols encoding
+equal_sign:=hex"3D"; plus_sign:=hex"2B";% minus_sign:=hex"";
+inferior_sign:=hex"3C"; superior_sign:=hex"3E";
+hash_sign:=hex"23";% bbhash_mark:=hex"23";
+bbdollar:=hex"24"; bbpercent:=hex"25";
+bbsmall_zero:=hex"18";
+bbeuro:=hex"9F";% I don't want to code any chapter mark.
+ligtable bbpercent:bbsmall_zero kern(-1.5u#-2letter_fit#);
+ligtable bbsmall_zero:bbsmall_zero kern(-1.5u#-2letter_fit#);
+bbampersand:=hex"26"; bbat_sign:=hex"40"; bbpound:=hex"BF";
+
+% let the show begin :
+input mbbaccnt;
+extra_endchar:="cork_extra_endchar";
+input mbbromup;
+extra_endchar:="";
+input mbbcrkup;
+extra_endchar:="cork_extra_endchar";
+input mbbromlo;
+extra_endchar:="";
+input mbbcrklo;
+input mbbromxu;
+input mbbromxl;
+input mbbromlg;
+input mbbdigit;
+input mbbpunct;
+input mbbsymbl;
+
+% parameters for TFM files.
+
+font_slant=slant;
+font_x_height=x_height#;
+font_normal_stretch=3u#;
+font_normal_shrink=2u#;
+font_quad=18u#+4letter_fit#;
+font_extra_space=2u#;
+font_normal_space=6u#+2letter_fit#;
+
+%
+% Needs ligtables...
+%
+
+bye.

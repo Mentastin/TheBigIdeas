@@ -1,0 +1,604 @@
+\section{Basic definitions}
+
+\begin{definition}
+A \udef{group} is a structured set $(G,\boldsymbol{\cdot})$ where $\boldsymbol{\cdot}$ is a binary operation on $G$
+\[\boldsymbol{\cdot}: G\times G \to G: (g,h)\mapsto g\cdot h\]
+such that
+\begin{enumerate}
+\item $\boldsymbol{\cdot}$ is associative:
+\[ \forall g_1,g_2,g_3 \in G: \quad g_1\cdot (g_2\cdot g_3) = (g_1\cdot g_2)\cdot g_3 \]
+\item there exists an \udef{identity} $e$:
+\[ \forall g\in G: \quad g\cdot e = e\cdot g = g \]
+\item every element has an \udef{inverse}:
+\[ \forall g\in G: \exists h \in G: \quad  gh = hg = e \]
+We write the inverse $h$ as $g^{-1}$. 
+\end{enumerate}
+If $\boldsymbol{\cdot}$ is satisfies
+\[ \forall g_1, g_2 \in G: \quad g_1 \cdot g_2 = g_2\cdot g_1 \]
+then the group is called \udef{commutative} or \udef{abelian}.
+
+The cardinality of $G$ is the \udef{order} of the group, denoted $|G|$.
+\end{definition}
+
+\begin{lemma}
+A group is a structure of type $(e, (\cdot)^{-1}, \boldsymbol{\cdot})$ with arity defined by
+\[ \alpha(e) = 0, \qquad \alpha((\cdot)^{-1}) = 1, \qquad \alpha(\boldsymbol{\cdot}) = 2. \]
+\end{lemma}
+For such a structure to be a group $G$, it must satisfy
+\begin{itemize}
+\item associativity;
+\item $\forall g\in G: g\cdot e = e\cdot g = g$;
+\item $\forall g\in G: gg^{-1} = g^{-1}g = e$.
+\end{itemize}
+In particular the concepts of homomorphism and isomorphism apply.
+
+\begin{definition}
+Let $f:G\to H$ be a group homomorphism. The \udef{kernel} of $f$ is the set
+\[ \ker(f) \defeq \setbuilder{g\in G}{f(g)=e_H}. \]
+\end{definition}
+
+\begin{lemma}
+Let $G$ be a group.
+\begin{itemize}
+\item The identity of $G$ is unique.
+\item The inverse of an element in $G$ is unique.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+(1) Assume there are two identities $e, e'$. Then
+\[ e = e\cdot e' = e' \]
+where we have first used the identity property of $e'$ and then of $e$.
+
+(2) Assume $g\in G$ has two inverses $h,h'$. Then
+\[ h = h\cdot e = h\cdot (g\cdot h') = (h\cdot g)\cdot h' = e\cdot h' = h'. \] 
+\end{proof}
+
+
+\begin{example}
+Examples of Groups:
+\begin{enumerate}
+\item The \udef{trivial group} $\{e\}$.
+\item $Z_n$, the group of all $n^{\text{th}}$ roots of $1$ with the ordinary product, is of order $n$.
+\begin{itemize}
+\item $Z_2 = \{1,-1\}$
+\item $Z_3 = \{1, e^{i2/3\pi}, e^{i1/3\pi}\}$
+\end{itemize}
+One may remark that this group is the same as (i.e. isomorphic to) the cyclic group introduced above.
+\item $S_n$, the group of all permutations of $n$ elements, is of order $n!$.
+\item Integers with addition.
+\item $\mathbb{R}\setminus\{0\}$ with multiplication.
+\item The square (i.e. $n\times n$) invertible matrices with matrix multiplication form a group.
+\item The \udef{Klein 4-group} is an abelian group of 4 elements $e,a,b,c$ with multiplication defined by
+\[ a^2 = b^2 = c^2 = e \qquad ab = c. \]
+\end{enumerate}
+\end{example}
+
+\subsection{Notations}
+We can use whatever symbols we want to denote the group operation, but there are two main conventions:
+\begin{enumerate}
+\item In \udef{multiplicative notation} the group operation is denoted by $\boldsymbol{\cdot}$, $*$ or just by concatenation (i.e. we write $gh$ instead of $g\cdot h$). In this case the inverse of $g$ is written $g^{-1}$, the neutral element $e$ is denoted $1$ and we can define
+\[ g^n \defeq \underbrace{gg\ldots g}_{\text{$n$ factors}}\]
+which is unambiguous due to associativity. Also
+\[ g^{-n} \defeq (g^{-1})^n = (g^{n})^{-1}. \]
+\item \udef{Additive notation} is mainly used for abelian groups. Conversion between multiplicative and additive notation is as follows:
+\[ \begin{tikzcd}
+g\cdot h \arrow[r, leftrightarrow]& g+h \\
+1 \arrow[r, leftrightarrow]& 0 \\
+g^{-1} \arrow[r, leftrightarrow]& -g \\
+g^n \arrow[r, leftrightarrow] & ng.
+\end{tikzcd} \]
+\end{enumerate}
+
+\begin{lemma} \label{lemma:calculusRepeatedGroupOperation}
+Let $G$ be a group, $g\in G$ and $m,n\in \Z$. Then
+\begin{enumerate}
+\item in multiplicative notation we have
+\[ g^mg^n = g^{m+n} \qquad (g^m)^n = g^{mn}; \]
+\item in additive notation we have
+\[ mg+ng = (m+n)g \qquad n(mg) = (mn)g. \]
+\end{enumerate}
+These statements are equivalent.
+\end{lemma}
+
+\subsection{Subgroups}
+\begin{definition}
+Let $(G,\boldsymbol{\cdot})$ be a group. We call $(H,*)$ a \udef{subgoup} if it is a group and $H\subseteq G$ and $* = \boldsymbol{\cdot}|_H$.
+\end{definition}
+
+\begin{lemma}[Subgroup criterion]
+Let $(G,\boldsymbol{\cdot})$ be a group and $H$ a non-empty subset of $G$. The following are equivalent:
+\begin{enumerate}
+\item $(H,\boldsymbol{\cdot}|_H)$ is a subgroup;
+\item for all $a,b\in H$:
+\begin{itemize}
+\item $a\cdot b \in H$,
+\item $a^{-1}\in H$;
+\end{itemize}
+\item for all $a,b\in H: a\cdot b^{-1} \in H$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $G$ be a group and $H_1, H_2$ be subgroups. Then $H_1\cap H_2$ is again a subgroup of $G$.
+\end{lemma}
+\begin{lemma}
+Let $f:G\to H$ be a group homomorphism. Then $\ker(f)$ is a subgroup.
+\end{lemma}
+
+\subsubsection{Lagrange's theorem}
+\begin{theorem}
+Let $G$ be a group and $H$ a subgroup of $G$. Then
+\[ |G| = [G:H]\cdot |H|. \]
+\end{theorem}
+If $G$ is finite, $|G|$ and $|H|$ are natural numbers. If $G$ is infinite, the theorem still holds, but the orders and index are cardinals.
+
+\subsubsection{Normal subgroups}
+
+
+
+\subsection{Examples and types of groups}
+\subsubsection{Permutation groups}
+\begin{proposition}
+\begin{enumerate}
+\item Let $X$ be a set. The set of bijections $X\to X$ forms a group;
+\item Let $X,Y$ be sets. The groups of bijections on $X$ and $Y$ are isomorphic \textup{if and only if} $X$ and $Y$ are equinumerous.
+\end{enumerate}
+\end{proposition}
+
+\begin{definition}
+We call the group of bijections on a set $X$ the \udef{symmetric group} of $X$, denoted $S(X)$.
+\begin{itemize}
+\item The \udef{degree} of $S(X)$ is the cardinality of $X$.
+\item For any cardinal $n$, we denote the unique permutation group of degree $n$ by $S_n$.
+\item Elements of $S_n$ are called \udef{permutations} and subgroups of $S_n$ are called \udef{permutation groups}.
+\end{itemize}
+\end{definition}
+\begin{lemma}
+For all cardinals $\kappa >_c 2$, the permutation group $S_\kappa$ is non-abelian.
+\end{lemma}
+
+\subsubsection{Words, relations and presentations}
+
+\begin{example}
+Quaternion group
+\[ \mathbb{H} \defeq \group\{a,b|a^4=e, a^2=b^2, b^{-1}ab = a^{-1}\} \]
+Dihedral group of order $2n$.
+\[ D_n \defeq \group\{ a,b | a^n=b^2=e, b^{-1}ab = a^{-1} \} \]
+\end{example}
+
+\subsubsection{Cyclic groups}
+\begin{definition}
+A group is called \udef{cyclic} if it is generated by a single element.
+\end{definition}
+ \begin{lemma}
+\begin{enumerate}
+\item The group $(\Z, +)$ is cyclic.
+\item Every cyclic group is a an image of $\Z$ by a homomorphism.
+\item Every cyclic group is isomorphic to $\Z$ or $\Z/m\Z$.
+\end{enumerate}
+\end{lemma}
+We write $\Z_m$ or $C_m$ for $\Z/m\Z$.
+ 
+\subsubsection{Torsion groups and order}
+\begin{definition}
+Let $G$ be a group. An element $a$ satisfying $a^n = 1$ for some $n$ is said to be of \udef{finite order}. In this case the \udef{order} of the element $a$ is $n$.
+
+A group in which every element is of finite order is called a \udef{torsion group} or a \udef{periodic group}.
+\end{definition}
+\begin{lemma}
+Every finite group is a torsion group. The converse is not true.
+\end{lemma}
+\begin{proof}
+Let $G$ be a finite group. Assume $G$ is not a torsion group. Then we can find an element $g\in G$ that is not of finite order. Consider the mapping $\N \to G: n\mapsto g^n$. The image of this mapping is a subset of $G$ and thus finite, so the mapping is not injective, so we can find $n<m\in\N$ such that $g^n = g^m$. Then $g^{m-n}=1$ with $m-n\in \N$, so $g$ is of finite order, which is a contradiction. This falsity of the converse is shown by the following examples.
+\end{proof}
+
+\begin{example}
+The set
+\[ \setbuilder{z\in \C}{z^n = 1\;\text{for some}\; n\in \Z} \]
+together with complex multiplication forms an infinite torsion group.
+\end{example}
+
+\begin{lemma}
+Let $G$ be an abelian group. Then the set of all elements of finite order forms a subgroup, called the \udef{torsion subgroup}.
+\end{lemma}
+
+\subsubsection{Direct product}
+\begin{definition}
+The \udef{direct product} $G \equiv H\otimes F$ of two groups $H$ and $F$ is defined with the following operation:
+\[ (H\otimes F) \times (H\otimes F) \rightarrow (H\otimes F): ((h_1,f_1),(h_2,f_2)) \mapsto (h_1\cdot h_2, f_1\cdot f_2)\]
+\end{definition}
+The direct product is a group with
+\[ \begin{cases}
+e_G = (e_H,e_F) \\
+g^{-1} = (h^{-1}, f^{-1})\qquad \forall g = (h,f) \in G.
+\end{cases} \]
+The groups $F$ and $H$ are subgroups of $G$ and can be recovered by considering, respectively the elements of $G$ of the form $(e_H, g)$ and $(g ,e_F)$.
+
+\subsection{Inner and outer automorphisms}
+\begin{definition}
+Let $G$ be a group and $c\in G$ an element. Then the mapping
+\[ \operatorname{Ad}(c): G\to G: x\mapsto c^{-1}xc \]
+is called \udef{conjugation by $c$}. Such mappings are called \udef{inner automorphisms}.
+\end{definition}
+Inner automorphisms are indeed automorphisms.
+
+
+\section{Group action}
+\begin{definition}
+An \udef{action} of a group $G$ on a set $X$ is a mapping
+\[ \cdot: G\times X \to X: (g,x) \mapsto g\cdot x \]
+satisfying
+\begin{enumerate}
+\item $e\cdot x = x$ for all $x\in X$ where $e$ is the neutral element of $G$;
+\item $g(h\cdot x) = (gh)\cdot x$ for all $x\in X$ and $g,h\in G$.
+\end{enumerate}
+We will often just right $gx$ instead of $g\cdot x$.
+
+A set $X$ with a given action of $G$ on it is called a \udef{$G$-set}.
+\end{definition}
+This definition can be reformulated using the curried form of $\pi$, namely
+\[ \rho \defeq \operatorname{curry}(\pi): G \to (X\to X). \]
+Then the rest of the definition of group action amounts to the statement that 
+\[ \rho: G \to S(X) \quad \text{is a group homomorphism.} \]
+
+We may then specify $G$-sets by the data $(X,\rho)$, where $X$ is a set and $\rho: G \to S(X)$ a group homomorphism.
+
+TODO: opposite action.
+
+\begin{definition}
+Given two $G$-sets $X,Y$, a \udef{$G$-equivariant mapping} or \udef{intertwiner} is a map $f:X \to Y$ such that
+\[ f(gx) = gf(x) \]
+for all $g\in G$ and $x\in X$.
+\end{definition}
+We can express this by saying $f: (X,\rho_1) \to (Y,\rho_2)$ is a map between $G$-sets such that
+\[ f\circ \rho_1(g) = \rho_2(g)\circ f \]
+for all $g\in G$.
+
+\begin{lemma}
+The $G$-sets form a locally small category with $G$-equivariant maps as morphisms.
+\end{lemma}
+
+
+\subsection{Orbits and stabilisers}
+\begin{definition}
+Let $G$ be a group acting on a set $X$. We define the \udef{orbit} of $x\in X$ as the set
+\[ Gx = G\cdot x \defeq \setbuilder{g\cdot x \in X}{g\in G}  \]
+and the \udef{stabiliser} of $x\in X$ as the set
+\[ G_x \defeq \setbuilder{g\in G}{g\cdot x = x}. \]
+\end{definition}
+\begin{proposition}[Orbit-stabiliser theorem]
+Let $X$ be a $G$-set and $x\in X$. Then
+\begin{enumerate}
+\item $|Gx| = [G:G_x]$;
+\item $|G| = |Gx|\cdot |G_x|$.
+\end{enumerate}
+\end{proposition}
+
+\subsection{Actions of groups on themselves}
+\subsubsection{Regular actions}
+\begin{definition}
+A group $G$ has a natural left action on the set $G$:
+\[ G\times \operatorname{Field}(G) \to \operatorname{Field}(G): (g,h) \mapsto gh. \]
+This action of $G$ is called the \udef{left-regular} group action.
+
+Similarly, the natural right action on the set $G$ is called the \udef{right-regular} group action:
+\[ \operatorname{Field}(G) \times G \to \operatorname{Field}(G): (h,g) \mapsto hg. \]
+\end{definition}
+
+\subsubsection{Conjugation}
+\begin{definition}
+Let $G$ be a group. The conjugation mapping
+\[ G\times \operatorname{Field}(G) \to \operatorname{Field}(G): (g,h) \mapsto \Ad(g)h = g^{-1}hg \]
+is a group action by $G$ on itself. Then
+\begin{itemize}
+\item orbits under this action are called \udef{conjugacy classes};
+\item $a,b\in G$ are \udef{conjugate} if they belong to the same conjugacy class, i.e.
+\[ c^{-1}ac = b \qquad \text{for some $c\in G$.} \]
+\end{itemize}
+We also write $h^g \defeq \Ad(g)h = g^{-1}hg$ if there is no risk of confusion.
+\end{definition}
+
+
+\begin{definition}
+Let $G$ be a group. The stabiliser of $a\in G$ when $G$ is acting on itself by conjugation, is called the \udef{centraliser} of $a$, denoted
+\[ Z_G(a) \defeq G_a = \setbuilder{g\in G}{g^{-1}ag = a}. \]
+We also define the centraliser of a subset $A$ of $G$:
+\[ Z_G(A) = \bigcap_{a\in A}Z_G(a). \]
+In particular we define the \udef{centre} of $G$ as
+\[ Z(G) \defeq Z_G(G). \]
+\end{definition}
+The stabiliser of $a\in G$ is the set of elements that commute with $a$:
+\[ Z_G(a) = \setbuilder{g\in G}{ag = ga}. \]
+
+
+\begin{definition}
+Let $G$ be a group and $A\subseteq G$ a subset. Then an element $g\in G$ is said to \udef{normalise} $A$ if $A^x = A$, where
+\[ A^g \defeq \Ad(g)A = g^{-1}Ag. \]
+The \udef{normaliser} of $A$ in $G$ is the set of all elements in $G$ that normalise $A$:
+\[ N_G(A) \defeq \setbuilder{g\in G}{A^g = A}. \]
+\end{definition}
+Let $A$ be a subset of $G$. Then the difference between the centraliser and normaliser of $A$ can be summarised as:
+\begin{itemize}
+\item conjugation of $a\in A$ by an element in the centraliser leaves $a$ fixed, so
+\[ a^g = a \qquad \forall g\in Z_G(A); \]
+\item conjugation of $a\in A$ by an element in the normaliser maps $a$ to an element in $A$, so
+\[ a^g \in A \qquad \forall g\in N_G(A). \]
+\end{itemize}
+\begin{lemma}
+Let $G$ be a group and $A\subseteq G$ a set. Then
+\begin{enumerate}
+\item $Z_G(A) \subset N_G(A)$;
+\item both $Z_G(A)$ and $N_G(A)$ are subgroups of $G$;
+\item $N_G(A)$ is the largest subgroup of $G$ in which $A$ is normal.
+\end{enumerate}
+\end{lemma}
+
+
+
+
+
+
+
+\section{Group action}
+We have seen that symmetry transformations naturally form a group. Based on the concrete set of transformations that are symmetries we saw they form this abstract structure which we called a group. The advantage of working with this abstract entity is that it contains exactly the relevant details about the symmetry. We need not worry ourselves about the peculiarities of the particular system and we can easily make use of results others have obtained solving other problems.
+
+Once we have thoroughly studied the symmetries of our system, we will want a way to move back from studying abstract groups to studying transformations of the system we are actually interested in.
+
+Sometimes there is a natural correspondence between the set of group elements and the set of transformations. If this is the case the group can be interpreted as acting on the system in a \udef{canonical} (or natural) way.
+
+\begin{example}
+\begin{itemize}
+\item Dihedral group $D_4$ acts quite naturally on a blanc, square piece of paper.
+\item The symmetric group $\mathcal{S}_n$ of all permutations of a set of $n$ elements acts naturally on a set of $n$ elements.
+\item The group of $n\times n$ matrices acts naturally on $n$-dimensional vectors through matrix multiplication.
+\end{itemize}
+\end{example}
+
+In general the transition back may not be so clear, simple or natural. For instance there may be a subset of the $n$-dimensional vectors with a symmetry group isomorphic to $D_4$. To what transformations do these group elements correspond? We cannot just rotate and flip these vectors. It is for understanding these cases that the concept of a \udef{group action} is useful.
+
+\subsection{Definition}
+We start with a group $G$ and a set $X$. The set $X$ is frequently the set of configurations of the system and thus transformations of the system are functions of the type $f:\,X\to X$; to keep things general, we only assume we have set and we are agnostic as to its origins.
+A group action quite simply associates a transformation of the set to every element of the group.
+
+We do however require that this association has some fairly natural features, so that the nature and essence of the group is not lost in transition: the group action must respect the identity element and and group operation. This leads us to the following definition:
+\begin{definition}
+Let $G$ be a group and $X$ a set, then a \udef{(left) group action $\varphi$} of $G$ on $X$ is a function
+\[ \varphi: \, G\times X \to X: \, (g,x)\mapsto \varphi(g,x) = g\cdot x \]
+with the properties:
+\begin{enumerate}
+\item For the identity element $e$ and all $x\in X$: 
+\[e\cdot x = x \]
+\item For all $g,h \in G$ and $x\in X$:
+\[ (gh)\cdot x = g\cdot (h\cdot x) \]
+\end{enumerate}
+Notice that we have introduced the notation $g\cdot x$ meaning apply the transformation attributed to $g$ through the group action to the element $x$.
+\end{definition}
+
+The above definition is for a \textit{left} group action. We can analogously define a right group action. The only difference between the two is that in the right group action in the transformation
+\[ x \cdot (gh) = (x\cdot g)\cdot h \]
+the transformation associated with $g$ gets applied first. Using the formula $(gh)^{-1} = h^{-1}g^{-1}$ we can always construct a left group action from a right one and vice versa, so typically we only consider left group actions.
+
+An important property is immediately apparent from the definition:
+\begin{eigenschap}
+The transformation associated with $g$ (i.e. $x\mapsto g\cdot x$) is always a bijection because the inverse is given by $x \mapsto g^{-1}\cdot x$.
+\end{eigenschap}
+
+\subsection{Types of action}
+What follows is simply an enumeration of some properties group actions may have. The action of $G$ on $X$ is called
+\begin{enumerate}
+\item \udef{transitive} if $X$ is non-empty and for each $x,y$ in $X$ there exists a $g \in G$ such that $g\cdot x = y$.
+\item \udef{faithful} if for every distinct $g,h$ in $G$ there exists an $x \in X$ such that $g\cdot x \neq h\cdot x$. In other words the mapping of elements of $G$ to transformations of $X$ is 1-to-1 or injective.
+\end{enumerate}
+
+\subsection{Orbits and stabilizers}
+\begin{definition}
+Consider a group $G$ acting on a set $X$. The \udef{orbit} of an element $x$ of $X$ is denoted $G\cdot x$.
+\[ G\cdot x = \{ g\cdot x | g\in G \}. \]
+\end{definition}
+
+The \udef{stabilizer subgroup} of $G$ with respect to an element $x$ of $X$ is the set of all elements in $G$ that fix $x$ and is denoted $G_x$.
+\[G_x = \{ g\in G | g\cdot x = x \} \]
+
+\subsection{Continuous group action}
+A continuous group action on a topological space $X$ is a group action of a topological group $G$ that is continuous: i.e.,
+\[G \times X \to X : \;(g, x) \mapsto g \cdot x \]
+is a continuous map.
+
+This is the proper type of group action to use with topological groups, if their topologicalness is relevant and to be preserved.
+
+\subsection{Representations}
+If the group action is the action of a group on a vector space such that the transformations the group elements are mapped to are linear transformations, we call this group action a \udef{representation}.
+
+\begin{definition}
+A \udef{representation} of a group $G$ on an $n$-dim vector space $V$ is a mapping of the elements of $G$ to the set of invertible linear operations acting on $V$:
+\[D: G \rightarrow GL(V): g \mapsto D(g)\]
+Such that
+\begin{itemize}
+\item $D(e) = \mathbb{1}_V$
+\item $D(g_1\cdot g_2) = D(g_1)D(g_2) = D(g_3)$
+\end{itemize}
+\end{definition}
+
+\begin{example}
+\begin{itemize}
+\item Representations of $Z_3 = \{e,\omega, \omega^2\} \qquad (\omega = e^{i2/3\pi})$
+\begin{itemize}
+\item Trivial representations
+\[D(e) = D(\omega) = D(\omega^2) = \mathbb{1}_V\]
+\item Representation $\GL(1, \mathbb{C})$
+\[ D(e) = 1, \quad D(\omega) = e^{i\frac{2}{3}\pi} , \qquad D(\omega^2) = e^{i\frac{1}{3}\pi} \]
+\item Regular representation:
+\[D(e) = 
+\begin{pmatrix}
+1&0&0\\0&1&0\\0&0&1
+\end{pmatrix}, \qquad D(\omega) = \begin{pmatrix}
+0&0&1\\1&0&0\\0&1&0
+\end{pmatrix}, \qquad D(\omega^2) = \begin{pmatrix}
+0&1&0\\0&0&1\\1&0&0
+\end{pmatrix}
+\]
+In general a we can define a regular representation for any finite group $G$ as follows: Let $V$ be a vector space with basis $e_t$ indexed by the elements of $G$, $t \in G$. The mapping $D: e_t \mapsto e_{ts}$ defines the \udef{(left) regular representation} of $G$. This notion can be extended to groups of infinite order.
+\end{itemize}
+\item The standard representation of a subgroups $H$ of $\GL(n,\C)$ on the vector space $\C^n$ is given by the inclusion:
+\[ D: H \to \GL(\C^n) = \GL(n,\C): h \mapsto h \]
+\end{itemize}
+\end{example}
+
+
+\begin{definition}
+Two representations are \udef{equivalent} if there exists a linear operator $S$ such that
+\[D(g) \mapsto D'(g) = S^{-1}D(g)S\]
+In other words there exists a similarity transformation $S$
+\end{definition}
+
+\begin{definition}
+A representation is \udef{unitary} if $\forall g \in G$
+\[D(g)D^\dagger(g) = D^\dagger(g)D(g) = \mathbb{1}_V\]
+\end{definition}
+
+\begin{definition}
+Consider a \undline{representation $D$} of a \undline{group $G$} on a \undline{vector space $V$}
+\begin{enumerate}
+\item A subspace $W$ of $V$ is called \udef{invariant} if $D(g)w$ is in $W$ for all $w \in W$ and all $g \in G$. An invariant subspace $W$ is called nontrivial if $W\neq\{0\}$ and $W \neq V$.
+\item We call $D$ \udef{reducible} if there exists a nontrivial subspace $U$ of $V$ that is invariant under $D$.
+\item $D$ is \udef{irreducible} if the only subspaces invariant under all elements of the image of $D$ are $\emptyset$ and $V$
+\item $D$ is \udef{completely reducible} if we can decompose $V$ into invariant subspaces:
+\[V = U_1\oplus U_2 \oplus \ldots \oplus U_n\]
+There then exists a similarity transformation such that
+\[\forall g: D(g) = \begin{pmatrix}
+D_1(g) & 0 & \dots & 0\\
+0 & D_2(g)  & \dots & 0\\
+\vdots & & \ddots & \vdots\\
+0&0&\dots&D_n(g)
+\end{pmatrix}\qquad \text{with}\quad D \equiv D_1\oplus D_2 \oplus \ldots \oplus D_n\]
+\end{enumerate}
+\end{definition}
+
+\begin{example}
+The regular representation of $Z_3$ is completely reducible. The linear operators $D(e), D(\omega)$ and $D(\omega^2)$ have eigenvalues $1,\omega, \omega^2$ with eigenvectors 
+\[ \begin{pmatrix}
+1\\1\\1
+\end{pmatrix}\, \qquad \begin{pmatrix}
+1\\ \omega^2 \\ \omega
+\end{pmatrix} \qquad \text{and} \qquad \begin{pmatrix}
+1 \\ \omega \\ \omega^2
+\end{pmatrix}. \]
+Each eigenvector generates an invariant subspace. We can then apply the following coordinate transformation
+\[ S = \frac{1}{\sqrt{3}}\begin{pmatrix}
+1&1&1\\
+1&\omega^2 & \omega \\
+1&\omega& \omega^2
+\end{pmatrix} \]
+in order to get the following matrices
+\[D'(e) = \begin{pmatrix}
+1&0&0\\
+0&1&0\\
+0&0&1
+\end{pmatrix}, \qquad D'(\omega) = \begin{pmatrix}
+1 & 0 & 0\\
+0& \omega & 0 \\
+0&0&\omega^2
+\end{pmatrix}, \qquad D'(\omega^2) = \begin{pmatrix}
+1 & 0 & 0\\
+0& \omega^2 & 0 \\
+0&0&\omega
+\end{pmatrix}\]
+\[ D' = D_1\oplus D_2 \oplus D_3 = \diag\{1,1,2\}\oplus \diag\{1,\omega, \omega^2\} \oplus \diag\{1, \omega^2, \omega\} \]
+\end{example}
+
+\subsubsection{Projective representations}
+Bargmann theorem
+
+
+
+\section{Topological groups}
+A group is a set with an extra structure layered on top: the group operation that satisfies the group axioms. A topological space is also a set with an extra structure layered on top: the topology, as discussed in a previous part. Now here's a novel idea: let's layer both of these structures on a set at once. This gives no new mathematics because the two structures do not interact in any way; in order for interesting things to occur, we must pose some additional requirements.
+
+\begin{definition}
+A \udef{topological group} $G$ is a topological space that is also a a group such that the group operations of
+\begin{enumerate}
+\item product
+\[ G\times G \to G: \, (x,y)\mapsto xy \]
+\item and taking inverses
+\[ G\to G: \, x\mapsto x^{-1} \]
+\end{enumerate}
+are \textbf{continuous}.
+\end{definition}
+TODO also need that points are closed?
+
+\begin{lemma}
+The continuity of the product and inverse is equivalent to the continuity of $G\times G \to G: (s,r)\mapsto sr^{-1}$.
+\end{lemma}
+TODO; reframe as criterion?
+
+\begin{lemma}
+Let $G$ be a topological group. The following are homeomorphisms:
+\begin{enumerate}
+\item $G\to G: s\mapsto s^{-1}$;
+\item $G\to G: s\mapsto rs$ for any $r\in G$.
+\end{enumerate}
+\end{lemma}
+An important consequence of this is that the topology of $G$ is determined by the topology near the identity $e$.
+
+Topological groups are also sometimes called continuous groups.
+
+
+\section{Group extensions}
+\begin{definition}
+Let $N,Q$ be groups. An \udef{extension} of $Q$ by $N$ is a group $G$ such that
+\[
+\begin{tikzcd}
+1 \ar[r] & N \ar[r, "\iota"] & G \ar[r, "\pi"] & Q \ar[r] & 1
+\end{tikzcd}.
+\]
+is a short exact sequence.
+\end{definition}
+\begin{lemma}
+If $G$ is an extension of $Q$ by $N$, then $G$ is a group (TODO: closure), $\iota(N)$ is a normal subgroup of $G$ and $Q$ is isomorphic to $Q$.
+\end{lemma}
+
+\begin{definition}
+Two extensions $G,G'$ of $Q$ by $N$ are \udef{equivalent} if there is a homomorphism $T:G\to G'$ making the following diagram commutative:
+\[
+\begin{tikzcd}
+1 \ar[r] & N \ar[r, "\iota"] \ar[equal]{d} & G \ar[r, "\pi"] \ar[d,"T"] & Q \ar[r] \ar[d, equal] & 1 \\
+1 \ar[r] & N \ar[r, "\iota"] & G' \ar[r, "\pi"] & Q \ar[r] & 1.
+\end{tikzcd}
+\]
+\end{definition}
+\begin{lemma}
+If $G,G'$ are equivalent extensions, then they are isomorphic. So equivalence of extension is an equivalence relation.
+\end{lemma}
+\begin{proof}
+The short five lemma (TODO).
+\end{proof}
+The converse is \emph{not} true! TODO: For instance, there are $8$ inequivalent extensions of the Klein four-group by $\mathbb{Z}/2\mathbb{Z}$, but there are, up to group isomorphism, only four groups of order $8$ containing a normal subgroup of order $2$ with quotient group isomorphic to the Klein four-group.
+
+\section{Grothendieck group}
+Given a commutative monoid $M$, the Grothendieck group $G(M)$ is the ``most general'' Abelian group that arises from $M$. Intuitively it is formed by adding additive inverses for all elements of $M$.
+
+
+
+ 
+TODO Grothendieck construction for Abelian monoids: $G(M)$.
+Universality, functoriality
+
+Cancellation property: simplified construction.
+
+Grothendieck map $M\to G(M)$ is injective \textup{if and only if} $M$ has cancellation.
+
+\subsection{The integers}
+\begin{definition}
+$\Z$
+\end{definition}
+
+
+\section{Ordered groups}
+
+\begin{lemma}
+Let $(G,+,\leq)$ be an ordered group and $x,y\in G$. Then
+\[ (\forall \varepsilon > 0: x< y+\varepsilon) \implies x\leq y. \]
+\end{lemma}
+\begin{proof}
+The proof is by contraposition. Assume $x>y$, then we can take $\varepsilon = x-y>0$. This implies $x = y+\varepsilon$ and so $x \geq y+\varepsilon$. 
+\end{proof}
