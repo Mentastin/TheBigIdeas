@@ -109,11 +109,15 @@ Next we are interested in the eigen vectors associated to $\lambda_{0,1}$. Let $
 \end{pmatrix} \in \C^{(N-M)}$ and define $Q = \begin{pmatrix}
 Q_1 & 0 \\ 0 & Q_2
 \end{pmatrix}$, which is also unitary. Then we have
-\[ QH(s)Q^{-1} = \begin{pmatrix}
-(1-s)\mathbb{1}_M & 0 \\ 0 & \mathbb{1}_{N-M}
-\end{pmatrix} + \frac{s-1}{N}Q\mathbb{J}^{N\times 1}(\mathbb{J}^{N\times 1})^*Q^* = = \begin{pmatrix}
-(1-s)\mathbb{1}_M & 0 \\ 0 & \mathbb{1}_{N-M}
-\end{pmatrix} + \frac{s-1}{N} \begin{pmatrix}\sqrt{M} \\ 0 \\ \vdots \\ 0 \\ \sqrt{N-M} \\ 0 \\ \vdots \end{pmatrix}\begin{pmatrix}\sqrt{M} \\ 0 \\ \vdots \\ 0 \\ \sqrt{N-M} \\ 0 \\ \vdots \end{pmatrix}^*. \]
+\begin{align*}
+    QH(s)Q^{-1} &= \begin{pmatrix}
+        (1-s)\mathbb{1}_M & 0 \\ 0 & \mathbb{1}_{N-M}
+        \end{pmatrix} + \frac{s-1}{N}Q\mathbb{J}^{N\times 1}(\mathbb{J}^{N\times 1})^*Q^* \\
+    &= \begin{pmatrix}
+        (1-s)\mathbb{1}_M & 0 \\ 0 & \mathbb{1}_{N-M}
+        \end{pmatrix} + \frac{s-1}{N} \begin{pmatrix}\sqrt{M} \\ 0 \\ \vdots \\ 0 \\ \sqrt{N-M} \\ 0 \\ \vdots \end{pmatrix}\begin{pmatrix}\sqrt{M} \\ 0 \\ \vdots \\ 0 \\ \sqrt{N-M} \\ 0 \\ \vdots \end{pmatrix}^*.
+\end{align*}
+
 All but two of the eigenvectors are just elements of $\mathcal{N}$. To study the other two we can simplify by ``removing the zeros''. Now the eigenvalue problem becomes
 \[ \left(\begin{pmatrix}
 1-s-\lambda_{0,1} & 0 \\ 0 & 1 -\lambda_{0,1}
@@ -142,7 +146,7 @@ For computational ease we will keep on working with the eigenvectors $\vec{v}_{0
 \subsubsection{Poisson projective measurement}
 The dynamics of the system is governed by the differential equation
 \[ \od{\rho}{s} = \Lambda(\ketbra{0}{0}\rho \ketbra{0}{0} + \ketbra{1}{1} \rho \ketbra{1}{1} - \rho). \]
-Now we can rewrite $\frac{d\rho}{dt}$ in the basis $ \ket{0}, \ket{1}$: let $i,j,k,l=0,1 \mod 2$ with implicit summation
+Now we can rewrite $\od{\rho}{t}$ in the basis $ \ket{0}, \ket{1}$: let $i,j,k,l=0,1 \mod 2$ with implicit summation
 \begin{align*}
 \od{\rho}{s} &= \od{}{s}\left(\ketbra{i}{i}\rho\ketbra{j}{j}\right) \\
 &= \od{}{s}(\braket[\rho]{i}{j})\ketbra{i}{j} + \braket[\rho]{i}{j}\od{}{s}(\ketbra{i}{j}) \\
@@ -150,11 +154,37 @@ Now we can rewrite $\frac{d\rho}{dt}$ in the basis $ \ket{0}, \ket{1}$: let $i,j
 &= \od{}{s}(\braket[\rho]{i}{j})\ketbra{i}{j} + \braket[\rho]{i}{j}\ketbra{i+1}{i+1}\od{}{s}\ketbra{i}{j} - \braket[\rho]{i}{j}\ketbra{i}{j}\od{}{s}\ketbra{j+1}{j+1} \\
 &= \left(\od{}{s}(\braket[\rho]{i}{j}) + \braket[\rho]{i+1}{j}\braket[\od{}{s}]{i}{i+1}  - \braket[\rho]{i}{j+1}\braket[\od{}{s}]{j+1}{j}\right)\ketbra{i}{j}. \\
 \end{align*}
-For each $\ketbra{i}{j}$ we get an equation, four in total. One of these is redundant by the zero trace requirement. Writing $\rho_{i,j}\defeq \braket[\rho]{i}{j})$ and $\omega_{ij} \defeq \braket[\od{}{s}]{i}{j}$ the three remaining equations are
+For each $\ketbra{i}{j}$ we get an equation, four in total. One of these is redundant by the zero trace requirement. Writing $y_{i,j}\defeq \braket[\rho]{i}{j})$ and $\omega_{ij} \defeq \braket[\od{}{s}]{i}{j}$ the three remaining equations are
 \begin{align*}
 \od{\rho_{00}}{s} &= -\rho_{10}\omega_{01} + \rho_{01}\omega_{10} \\
-\od{\rho_{01}}{s} &= -\Lambda\rho_{01} - (1-\rho_{00})\omega_{01} + \rho_{00}\omega_{01} \\
-\od{\rho_{10}}{s} &= -\Lambda\rho_{10} - \rho_{00}\omega_{10} + (1-\rho_{00})\omega_{10}
+\od{\rho_{01}}{s} &= -\Lambda \rho_{01} - (1-\rho_{00})\omega_{01} + \rho_{00}\omega_{01} \\
+\od{\rho_{10}}{s} &= -\Lambda \rho_{10} - \rho_{00}\omega_{10} + (1-\rho_{00})\omega_{10}
 \end{align*}
-Setting $\omega = \omega_{10} = - \omega_{01}$ and $\rho = \rho_{00} - 1/2$we obtain the equation
-\[ \od[2]{\rho}{s} = \left(\frac{\od{\omega}{s}}{\omega}-\Lambda\right)\od{\rho}{s} - 4\omega^2\rho. \]
+Setting $\omega = \omega_{10} = - \omega_{01}$ and $y = \rho_{00} - 1/2$we obtain the equation
+\[ \od[2]{y}{s} = \left(\frac{\od{\omega}{s}}{\omega}-\Lambda\right)\od{y}{s} - 4\omega^2y. \]
+
+
+Setting $\vec{y} = \begin{pmatrix}
+y \\ y'
+\end{pmatrix}$ this second order differential equation is equivalent to the first order system
+\[ \begin{pmatrix}
+y \\ y'
+\end{pmatrix}' = \begin{pmatrix}
+0 & 1 \\ -4 & -\Lambda/\omega
+\end{pmatrix}, \]
+which is in the form $\vec{y}' = A \vec{y}$. Now $A$ is similar to $\begin{pmatrix}
+    \omega/\Lambda & 0 \\ -4 & -\Lambda/\omega
+\end{pmatrix}$, so it is bounded if both $\Lambda$ and $\Lambda^{-1}$ are bounded functions.
+
+Then by the Picard-Lindelöf theorem the initial value problem has a unique solution on $[0,1]$. In addition let $y_1$ be the solution obtained using $\Lambda_1$ and $y_2$ using $\Lambda_2$. Then
+\[ \Lambda_1 \leq \Lambda_2 \implies y_1 \leq y_2. \]
+To see this, we may first remark that
+\[ \setbuilder{t\in[0,1]}{y_1(t)\leq y_2(t) \land y'_1(t)\leq y'_2(t)} = (y_2-y_1)^{-1}[\;[0,+\infty[\;] \cap (y'_2-y'_1)^{-1}[\;[0,+\infty[\;] \]
+is a closed and bounded set that contains $0$. Let $t_1$ be its supremum. This means that $y_1(t_1)\leq y_2(t_1)$ and $y'_1(t_1)\leq y'_2(t_1)$, but $y_1(t) > y_2(t)$ or $y'_1(t) > y'_2(t)$ on some open set $]t_1, t_1+\delta [$.
+
+
+
+
+
+
+
