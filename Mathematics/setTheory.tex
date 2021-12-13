@@ -1,4 +1,99 @@
 \chapter{Material set theory: from ideas to axioms}
+
+\section{Potter-Scott set theory}
+\begin{definition}
+Let $\mathcal{W}$ be a universe with urelements $\mathcal{U}$.
+\begin{itemize}
+\item The \udef{accumulation} of an entity $a$ is
+\[ \acc(a) \defeq \setbuilder{x}{x\in \mathcal{U} \lor \left[\exists b\in a: x\in b \lor x\subseteq b\right]}. \]
+\item A collection $V$ is called a \udef{history} if
+\[ \forall v\in V: v = \acc(V\cap v). \]
+\item The accumulation of a history is called a level.
+\end{itemize}
+\end{definition}
+
+We can write the accumulation as
+\[ \acc(a) = \mathcal{U}\cup \left(\bigcup a\right) \cup \left(\bigcup\setbuilder{\powerset(b)}{b\in a}\right). \]
+
+Lemma \ref{lemma:elementSubsetUnion} translates to:
+\begin{lemma} \label{lemma:elementsSubsetAccumulation}
+Let $a,b$ be collections. If $b\in a$, then $b\subseteq \acc(a)$.
+\end{lemma}
+
+\begin{example}
+Let $\mathcal{W}$ be a universe with urelements $\mathcal{U}$.
+\begin{enumerate}
+\item $\emptyset$ is (trivially) a history (assuming it exists). Then
+\[ \acc(\emptyset) = \mathcal{U} \]
+is a level.
+\item $V = \{\mathcal{U}\}$ is a history:
+\begin{itemize}
+\item $\acc(V\cap \mathcal{U}) = \acc(\emptyset) = \mathcal{U}$.
+\end{itemize}
+Then $\acc(\{\mathcal{U}\}) = \mathcal{U}\cup \powerset(\mathcal{U}) \eqdef L_1$ is a level.
+\item $V = \{\mathcal{U}, L_1\}$ is a history:
+\begin{itemize}
+\item $\acc(V \cap \mathcal{U}) = \acc(\emptyset) = \mathcal{U}$;
+\item $\acc(V \cap L_1) = \acc(\{\mathcal{U}\}) = L_1$.
+\end{itemize}
+Then $\acc(\{\mathcal{U}, L_1\}) = \mathcal{U}\cup \powerset(\mathcal{U})\cup \powerset(\powerset(\mathcal{U})) \eqdef L_2$ is a level.
+\item $V = \{\mathcal{U}, L_1, L_2\}$ is a history:
+\begin{itemize}
+\item $\acc(V \cap \mathcal{U}) = \acc(\emptyset) = \mathcal{U}$;
+\item $\acc(V \cap L_1) = \acc(\{\mathcal{U}\}) = L_1$;
+\item $\acc(V \cap L_2) = \acc(\{\mathcal{U}, L_1\}) = L_2$.
+\end{itemize}
+Then $\acc(\{\mathcal{U}, L_1, L_2\}) = \mathcal{U}\cup \powerset(\mathcal{U})\cup \powerset(\powerset(\mathcal{U}))\cup \powerset(\powerset(\powerset(\mathcal{U}))) \eqdef L_3$ is a level.
+\end{enumerate}
+\end{example}
+
+A level is supposed to contain all collections up to a certain ``depth''.
+
+A history $V$ is supposed to be a set of levels such that for each level $L$ in $V$ all previous levels contained in $L$ are also in $V$.
+
+Formally:
+\begin{proposition}
+\begin{enumerate}
+\item Let $V$ be a history, then every element $l$ of $V$ is a level with history $V\cap l$.
+
+\item Let $l,L$ be levels and $V$ a history of $L$. If $l\in L$, then $l\in V$.
+
+\item Each level has a unique history.
+
+\item Let $L, L'$ be levels such that $L' \subseteq L$. If $V$ is a history and $L\in V$, then $L'\in V$.
+\item Let $L, L'$ be levels then $L'\subseteq L$ \textup{if and only if} $L' = L$ or $L'\in L$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Because $V$ is a history, we have $l = \acc(V\cap l)$. So we just need to show $V\cap l$ is a history. Indeed take $A\in (V\cap l)$, then $A \subseteq \acc(V\cap l) = l$ (by \ref{lemma:elementsSubsetAccumulation}). So $A = A\cap l$ and
+\[ \acc((V\cap l)\cap A) = \acc(V\cap A) = A. \]
+
+(2) Let $L$ be a level. Assume there exist histories $V_1, V_2$ such that $\acc(V_1) = L = \acc(V_2)$.
+
+(3)
+\end{proof}
+
+
+
+
+\subsection{Sets}
+\begin{definition}
+A collection is called a \udef{set} or \udef{grounded} if it is a subcollection of some level.
+\end{definition}
+
+\subsection{Axiom scheme of separation}
+TODO $A$ level??
+\begin{enumerate}[(I)]
+\item \textbf{Axiom of separation}: let $P$ be a unary predicate, then for each set $A$, the collection $\setbuilder{x\in A}{P(x)}$ exists.
+\end{enumerate}
+These collections are automatically sets.
+
+Only those sets describable by predicates (a countable number). (cfr. second order).
+
+\subsection{Theory of levels}
+
+
+
 \section{Some initial ideas}
 In these notes we build up mathematics starting with Zermelo-Fraenkel set theory. Alternatives are to be discussed in a different set of notes.
 \begin{enumerate}
@@ -50,6 +145,36 @@ This can be generalised to the abbreviation, for some definite condition $P$, of
 \end{itemize}
 For formal proofs it is often useful to write out the abbreviations.
 \end{note}
+
+\subsubsection{Definitions of some set-theoretic operations}
+TODO: setbuilder (with expressions in creation part) and $\{\}$.
+\begin{definition}
+Let $A,B$ be sets. We define
+\begin{itemize}
+\item the \udef{emptyset}
+\[ \emptyset \defeq \setbuilder{x}{x\neq x}; \]
+\item the \udef{set difference} of $A$ and $B$ or \udef{relative complement} of $B$ in $A$
+\[ A\setminus B \defeq \setbuilder{x}{x\in A \land x\notin B}; \]
+\item the \udef{powerset} of $A$
+\[ \powerset(A) \defeq \setbuilder{X}{X\subseteq A}; \]
+\item the \udef{union} of $A$
+\[ \bigcup A \defeq \setbuilder{x}{\exists X\in A: x\in X}; \]
+\item the \udef{intersection} of $A$
+\[ \bigcap A \defeq \setbuilder{x}{\forall X\in A: x\in X}; \]
+\end{itemize}
+We introduce some abbreviations for the union and intersection:
+\begin{itemize}
+\item $A\cup B \defeq \bigcup\{A,B\}$;
+\item $\bigcup_\Phi \sigma \defeq \bigcup\setbuilder{\sigma(x)}{\Phi(x)}$.
+\end{itemize}
+And similarly for the intersection.
+\end{definition}
+
+\begin{lemma} \label{lemma:elementSubsetUnion}
+Let $A,B$ be collections. Then
+\[ A \in B \implies A\subseteq \bigcup B \]
+\end{lemma}
+
 \section{The Zermelo axioms}
 The \udef{Zermelo axioms} are the following, except for the axiom of choice which will be discussed later:
 \begin{enumerate}[(I)]
