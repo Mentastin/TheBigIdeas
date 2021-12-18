@@ -327,12 +327,17 @@ Then $(\tdual{X},\norm{\cdot})$ is a normed space. We call $\tdual{X}$ the \udef
 \begin{lemma}
 The topological dual $\tdual{X}$ is a subspace of the algebraic dual $\adual{X}$. If $X$ is finite-dimensional, then $\tdual{X}=\adual{X}$.
 \end{lemma}
-\begin{lemma}
-Let $\omega\in \tdual{X}$ be a bounded linear functional. Then
+\begin{lemma} Let $X$ be a normed space and
+let $x\in X$ $\omega\in \tdual{X}$ be a bounded linear functional. Then
 \begin{align*}
-\norm{\omega} &= \sup\{ |\omega(x)|\;|\; \norm{x}=1 \} \\
-&= \sup\left\{ \frac{|\omega(x)|}{\norm{x}}\;|\;x\neq 0 \right\} \\
-&= \inf\{ c>0\;|\; |\omega(x)|\leq c\norm{x}\forall x\in X \}
+\norm{\omega} &= \sup\setbuilder{|\omega(v)|}{\norm{v}=1 } \\
+&= \sup\setbuilder{\frac{|\omega(v)|}{\norm{v}}}{v\neq 0} \\
+&= \inf\setbuilder{c>0} {|\omega(v)|\leq c\norm{v}\forall v\in X}
+\end{align*}
+and
+\begin{align*}
+\norm{x} &= \sup\setbuilder{|\varphi(x)|}{ \norm{\varphi}=1} \qquad\qquad\quad\\ %TODO: fragile spacing!
+&= \sup\setbuilder{\frac{|\varphi(x)|}{\norm{\varphi}}}{\varphi\neq 0}.
 \end{align*}
 \end{lemma}
 \begin{proof}
@@ -617,11 +622,21 @@ By (TODO ref) $\sum\norm{x_{\sigma(i)}}$ converges for any permutation $\sigma$ 
 \end{proof}
 
 \section{Function spaces}
-\subsection{The spaces $\mathcal{L}^n(X,\diff{\mu})$}
-\subsection{The spaces $L^n(X,\diff{\mu})$}
+\subsection{The spaces $\mathcal{L}^p(X,\diff{\mu})$}
+\subsection{The spaces $L^p(X,\diff{\mu})$}
 \begin{theorem}[Riesz-Fisher]
-The space $L^n(X,\diff{\mu})$ is complete.
+The space $L^p(X,\diff{\mu})$ is complete.
 \end{theorem}
+
+For $L^\infty$: essential supremum.
+
+\subsubsection{Locally integrable spaces}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The \udef{locally $L^p$} space is the space
+\[ L^p_\text{loc}(\Omega) \defeq \setbuilder{f \in (\Omega\to\C)}{\text{$f\in L^p(K)$ for all compact $K\subset \Omega$}}. \]
+The functions in $L^1_\text{loc}(\Omega)$ are called \udef{locally integrable} on $\Omega$.
+\end{definition}
+TODO: deal with equivalence classes??
 
 \subsection{Sequence spaces}
 TODO:  $L^p(A,\mu)$ with $\mu$ counting measure.
@@ -718,6 +733,29 @@ Let $y\in \overline{\im T}$ and take a sequence $(Tx_n)$ converging to $y$. Beca
 and by proposition \ref{prop:CauchyCriterion} $(x_n)$ is Cauchy. By completeness this sequence has a limit $x$. By boundedness $\lim_n Tx_n = Tx$, meaning $y$ is in $\im T$.
 \end{proof}
 
+\subsection{Contractions}
+A linear operator $T$ on a normed space is a contraction if and only if it is bounded and $\norm{T}<1$. 
+
+\subsubsection{Neumann series}
+\begin{lemma}
+Let $T$ be a bounded linear operator on a normed space $X$ with $\norm{T}<1$. Then the series $\sum^\infty_{i=1}T^i(b)$ converges for all $b\in X$ and is the unique fixed point of $F(x) = T(x)+b$.
+\end{lemma}
+\begin{proof}
+The function $F$ is a contraction if and only if $\norm{T}<1$. So it has a unique fixed point. Starting the fixed point iteration at $b$ yields the series:
+\begin{align*}
+F(b) &= Tb + b \\
+F(Tb+b) &= T^2b + Tb + b \\
+&\hdots.
+\end{align*}
+Alternatively we could have used the inequality $\norm{T^nb} \leq \norm{T}^n\norm{b}$, the convergence of the geometric series and \ref{prop:absoluteUnconditionalConvergenceBanach} to prove convergence. Proving it is a fixed point is then elementary.
+\end{proof}
+\begin{corollary}[Neumann series]
+Let $T$ be a bounded linear operator with $\norm{T}<1$. Then
+\[ (\id - T)^{-1} = \sum_{i=1}^\infty T^i. \]
+\end{corollary}
+\begin{proof}
+Let $x\in X$. Then $(\id - T)^{-1}x = y$ iff $x-Tx = y$ iff $x$ is the fixed point of $Tx+y$. So $y = \sum_{i=1}^\infty T^ix$.
+\end{proof}
 
 \subsection{The uniform boundedness principle}
 TODO: if a family of bounded operators on a Banach space is pointwise bounded, then it is uniformly bounded.
@@ -875,6 +913,7 @@ Let $\mathcal{H}$ be a Hilbert space, $K$ a closed, convex, non-empty subset of 
 \begin{enumerate}
 \item There exists a unique element of $K$ of least norm. I.e. there exists a unique $k_0\in K$ such that
 \[ \norm{k_0} = \inf\setbuilder{\norm{k}}{k\in K}. \]
+I.e. $\min\setbuilder{\norm{k}}{k\in K}$ exists.
 \item For any $h\in\mathcal{H}$ there exists a unique point $k_0$ in $K$ such that
 \[ \norm{h-k_0} = \inf\{\norm{h-k}\;|\; k\in K\}. \]
 We use this to define the distance $d(h,K) \defeq \norm{h-k_0}$.
@@ -919,6 +958,8 @@ We need to prove every vector $x\in \mathcal{H}$ has a unique decomposition of t
 Such a decomposition exists: we can take $y=k_0$ and $z = x-k_0$. We have already proved uniqueness. We can also give another argument for uniqueness: assume another such decomposition $x=y'+z'$. Then $y-y'= z-z'$ where the left side is in $K$ and the right in $K^\perp$. The only element in $K\cap K^\perp$ is $0$, so $y=y'$ and $z=z'$.
 \end{proof}
 The ability to make such decompositions in general is unique to Hilbert spaces, see theorem \ref{theorem:criterionHilbertSpace}.
+
+\subsection{Orthogonal projection and decomposition}
 \begin{definition}
 Let $\mathcal{H}$ be a Hilbert space. Given a subspace $K$ and an element $x \in \mathcal{H}$, we call the unique element $y\in K$ of the decomposition $K\oplus K^\perp$ the \udef{orthogonal projection} of $x$ on $K$. It is denoted $P_K(x)$. This defines a function $P_K:\mathcal{H}\to K$ called the \udef{orthogonal projection} on $K$.
 \end{definition}
@@ -975,7 +1016,7 @@ The converses are only true for Hilbert spaces:
 Let $H$ be an inner product space. If any of the following hold, $H$ is a Hilbert space:
 \begin{enumerate}
 \item For any subspace $U$, $U^\perp = \{0\}$ implies $U$ is dense in $H$.
-\item For all closed subspaces $K$ we have $(K^\perp)^\perp = \overline{K}$.
+\item For all subspaces $K$ we have $(K^\perp)^\perp = \overline{K}$.
 \item For all closed subspaces $K$ we can decompose $H = K\oplus K^\perp$.
 \end{enumerate}
 \end{theorem}
@@ -1900,3 +1941,51 @@ TODO \url{https://en.wikipedia.org/wiki/Spectrum_(functional_analysis)#Classific
 
 \url{http://individual.utoronto.ca/jordanbell/notes/SVD.pdf}
 \url{https://digitalcommons.mtu.edu/cgi/viewcontent.cgi?article=2133&context=etdr}
+
+
+
+\chapter{Integral operators and transforms}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. Then an \udef{integral operator} or \udef{integral transform} is a map between function spaces (TODO which?) on $\Omega$ of the form
+\[ T: ? \to ?: f \mapsto \int_\Omega K(x,y)f(y) \diff{\mu(y)} \]
+where $K\in \Omega\times \Omega$ is the \udef{kernel} or \udef{nucleus} of $T$.
+
+The kernel is called
+\begin{itemize}
+\item \udef{symmetric} if $K(x,y) = \overline{K(y,x)}$;
+\item \udef{Volterra} if $\Omega = \R$ and $K(x,y) = 0$ for $y>x$;
+\item \udef{convolutional} if $\Omega$ is a group and $K(x,y) = F(x-y)$ for some function $F$;
+\item \udef{Hilbert-Schmidt} if $\int_{\Omega\times \Omega}|K(x,y)|^2\diff{x}\diff{y} < \infty$;
+\item \udef{singular} if $K(x,y)$ is unbounded on $\Omega\times \Omega$.
+\end{itemize}
+\end{definition}
+
+
+\section{Integral equations}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. An \udef{integral equation} is an equation containing an unknown function on $\Omega$ and an integral over $\Omega$.
+
+An integral equation is 
+\begin{itemize}
+\item \udef{of the first kind} if it is of the form
+\[ \int_\Omega K(x,y)u(y)\diff{\mu(y)} = f(x) \qquad x\in \Omega \]
+where $f$ is a given function and $u$ is the unknown function;
+\item \udef{of the second kind} if it is of the form
+\[ \lambda u(x) - \int_\Omega K(x,y)u(y)\diff{\mu(y)} = f(x) \qquad x\in \Omega \]
+where $f$ is a given function, $\lambda$ is a scalar and $u$ is the unknown function.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+Let
+\[ \lambda u(x) - \int_\Omega K(x,y)u(y)\diff{\mu(y)} = f(x)\]
+be an integral equation of the second kind. This integral equation has a unique solution $u$ if
+\[ |\lambda| > \sup_{x\in \Omega} \int_{\Omega}|K(x,y)|\diff{\mu(y)}. \]
+\end{proposition}
+\begin{proof}
+Let the map $T$ be defined by
+\[ T(u) = x\mapsto \frac{1}{\lambda}\left(\int_\Omega K(x,y)u(y)\diff{\mu(y)} + f(x)\right) \]
+so that solutions of the integral equation are exactly the fixed points of $T$. Then
+\[ \norm{Tu-Tv}_\infty = \sup_{x\in\Omega} \frac{1}{|\lambda|} \left|\int_\Omega K(x,y)(u(y)- v(y))\diff{\mu(y)}\right| \leq \frac{1}{|\lambda|} \sup_{x\in \Omega} \int_{\Omega}|K(x,y)|\diff{\mu(y)} \cdot \norm{u-v}_\infty. \]
+So $T$ is a contraction if $|\lambda| > \sup_{x\in \Omega} \int_{\Omega}|K(x,y)|\diff{\mu(y)}$. The result follows from \ref{prop:contractionFixedPoint}.
+\end{proof}

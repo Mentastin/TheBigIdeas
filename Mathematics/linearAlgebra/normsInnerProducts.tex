@@ -66,9 +66,7 @@ Assume $L$ preserves the norm, then
 Let $V$ be a normed vector space, then the norm $\norm{\cdot}:V\to \R$ is a continuous map.
 \end{proposition}
 \begin{proof}
-As both $V$ and $\R$ are sequential spaces, it is enough, by \ref{prop:sequentialContinuity}, to show that $x_i\to x$ implies $\norm{x_i}\to \norm{x}$. Take such a sequence $x_i\to x$. Let $\epsilon> 0$. There exists an $N\in\N$ such that for all $n\geq N: \norm{x_n - x}\leq \epsilon$. Then
-\[ |\norm{x_n}-\norm{x}|\leq \norm{x_n - x}\leq \epsilon, \]
-so $\norm{x_i}\to \norm{x}$.
+The reverse triangle inequality, $|\norm{v}-\norm{w}| \leq norm{v-w}$, implies that the norm is Lipschitz continuous with Lipschitz constant $1$, so we can use \ref{lemma:LipschitzcontinuousContinuous}.
 \end{proof}
 
 \begin{definition}
@@ -118,6 +116,8 @@ By choosing $\epsilon >0$ small, $a/(a+\epsilon)$ can be made arbitrarily close 
 \end{proof}
 For finite-dimensional spaces we can even take $\theta=1$.
 
+\subsection{Linear independence and bases in normed spaces}
+\url{https://math.stackexchange.com/questions/1518029/are-uncountable-schauder-like-bases-studied-used}
 
 \subsection{Finite-dimensional normed (sub)spaces}
 
@@ -514,7 +514,7 @@ On the right we have a quadratic formula in $t$. This may never be negative and 
 In the case of an inner product, there is a simpler proof:
 \begin{proof}
 Take the decomposition from lemma \ref{lemma:orthogonalDecomposition} and apply the Pythagorean theorem to obtain
-\[ \norm{v}^2 = \frac{|\inner{v,w}|^2}{\norm{v}^2} + \norm{u}^2 \geq \frac{|\inner{v,w}|^2}{\norm{v}^2}. \]
+\[ \norm{v}^2 = \frac{|\inner{v,w}|^2}{\norm{w}^2} + \norm{u}^2 \geq \frac{|\inner{v,w}|^2}{\norm{w}^2}. \]
 This also shows the claim about scalar multiples.
 \end{proof}
 \begin{corollary} \label{lemma:innerBoundedFunctionals}
@@ -644,6 +644,9 @@ e_j &= \frac{v_j - \inner{e_1,v_j}e_1- \ldots - \inner{e_{j-1},v_j}e_{j-1}}{\nor
 \end{align*}
 \end{proof}
 
+If we only need an orthogonal set $\{y_1,\ldots,y_n\}$, not an orthonormal one, we can use the procedure
+\[ y_{k+1} = v_{k+1} - \sum_{i=1}^k \frac{\inner{v_{k+1}, y_i}}{\inner{y_i,y_i}}y_i. \]
+
 \begin{lemma} \label{lemma:orthogonality}
 Let $(\mathbb{F}, V,+,\inner{\cdot,\cdot})$ be an inner product space. Then
 \[ \inner{v,w}=0 \qquad \iff \qquad \forall a\in\mathbb{F}:\;\norm{v}\leq\norm{v+aw}.  \]
@@ -695,7 +698,14 @@ Ref TODO. \url{https://proofwiki.org/wiki/Uncountable_Sum_as_Series}.
 \end{proof}
 TODO: link with metric topology being sequential?
 
+\begin{corollary}[Riemann-Lebesgue lemma]
+For any sequence $\seq{e_i}_{i\in J \subset I}$, we have
+\[ \lim_{i\in J} \inner{e_i,v} = 0. \]
+\end{corollary}
+
+\begin{corollary}
 We can also obtain the Cauchy-Schwarz inequality from the Bessel inequality.
+\end{corollary}
 \begin{proof}
 Let $x,y\in V$. Then $\{x/\norm{x}\}$ is an orthonormal set. Applying the Bessel inequality for $y$ gives $\norm{y}^2 \geq |\inner{x/\norm{x}, y}|^2 \implies |\inner{x,y}|^2\leq \norm{x}^2\norm{y}^2 \implies |\inner{x,y}| \leq \norm{x}\;\norm{y}$.
 \end{proof}
@@ -774,6 +784,15 @@ For the interchange of the limits and the summation in the penultimate equality 
 So $v-\sum_{i\in I}\inner{e_i,v}e_i = 0$ and the Plancherel formula holds.
 \item[$\boxed{(6) \Rightarrow (1)}$] By definition of o.n. basis.
 \end{itemize}
+\end{proof}
+
+\begin{lemma}
+Every orthonormal basis is a maximal orthonormal family.
+\end{lemma}
+\begin{proof}
+Let $D = \{e_i\}_{i\in I}$ be an o.n. basis. Assume, towards a contradiction, that there exists an o.n. family $D' \supsetneq D$. Let $x\in D'\setminus D$. Then, using the Plancherel formula and the fact that $D'$ is orthogonal,
+\[ x = \sum_{i\in I}\inner{e_{i},x}e_{i} = \sum_{i\in I} 0 = 0. \]
+As $0$ can never be an element of an o.n. family, this is a contradiction.  
 \end{proof}
 There are maximal orthonormal families that are not bases.
 \begin{example}

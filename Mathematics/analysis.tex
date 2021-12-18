@@ -77,12 +77,23 @@ Let $(X,\mathcal{T})$ be a topological space and $(V,\norm{\cdot})$ a normed spa
 
 \chapter{Continuity}
 
+\begin{definition}
+Let $X$ be a topological space.
+\begin{itemize}
+\item The set of continuous functions in $(X\to \R)$ is denoted $\cont(X)$.
+\item The set of continuous functions in $(X\to \R)$ which vanish at infinity is denoted $\cont(X)$ (assuming $X$ is normed vector space TODO: more general?).
+\item The set of continuous functions in $(X\to \R)$ with compact support is denoted $\cont_c(X)$.
+\end{itemize}
+\end{definition}
+
+TODO: ideals and multiplier algebras.
 
 \chapter{Differentiation}
 \url{file:///C:/Users/user/Downloads/978-1-4614-3894-6.pdf}
 \url{file:///C:/Users/user/Downloads/2011_Bookmatter_TheRicciFlowInRiemannianGeomet.pdf}
 
 \section{For real functions}
+
 \section{For real normed vector spaces}
 TODO: directional / Gateaux derivative for locally convex TVSs?
 \subsection{Directional derivatives}
@@ -108,6 +119,9 @@ Let $f,g: V\to W$, $u\in V$ and $\lambda\in\F$, then
 \item $\partial_u(\lambda f) = \lambda \partial_uf$.
 \end{enumerate}
 \end{lemma}
+
+\subsubsection{Partial derivatives}
+TODO notation $D^\alpha$ for multiindex $\alpha$. Also $|\alpha| = sum_i \alpha_i$.
 
 \subsubsection{Gateaux derivative}
 \begin{definition}
@@ -217,6 +231,33 @@ Let $f:U\subseteq\R^m\to\R^n$ be a function. Then $A_{\diff{f}}$ is a matrix wit
 \[ [A_{\diff{f}}]_{ij} = [\diff{f}\vec{e}_j]_i = \left[\pd{f}{x^j}\right]_i. \]
 This matrix is called the \udef{Jacobian} $J_f$.
 \end{definition}
+
+\section{Taylor expansion}
+Radius of convergence
+
+\section{Classification of spaces}
+\begin{definition}
+Let $X,Y$ be subsets of normed vector spaces and $X$ be open. We call a function $f: X\to Y$
+\begin{itemize}
+\item \udef{smooth} at $x_0\in V$ if all derivatives of $f$ at $x_0$ exist;
+\item \udef{analytic} at $x_0\in V$ if the Taylor series of $f$ at $x_0$ exists and has non-zero radius of convergence.
+\end{itemize}
+\end{definition}
+\begin{lemma}
+Let $f: X\to Y$ be a smooth function. Then all derivatives are continuous.
+\end{lemma}
+
+\begin{definition}
+Let $X,Y$ be subsets of normed vector spaces and $X$ be open.
+\begin{itemize}
+\item $\cont^r(X,Y)$ is the space of functions in $(X \to Y)$ whose first $r$ derivatives exist and are continuous;
+\item $\cont^\infty(X,Y)$ is the space of functions in $(X \to Y)$ that are smooth at all points in $X$;
+\item $\cont^\omega(X,Y)$ is the space of functions in $(X \to Y)$ that are analytic at all points in $X$.
+\end{itemize}
+If $Y = \C$, we write $\cont^r(X), \cont^\infty(X)$ and $\cont^\omega(X)$. We can also use subscripts $_0$ and $_c$ to denote the extra conditions of vanishing at infinity and having compact support.
+\end{definition}
+
+
 
 \chapter{Non-standard analysis}
 \url{http://www.lightandmatter.com/calc/}
@@ -906,6 +947,9 @@ where $\mu$ and $\nu_\text{sing}$ are mutually singular and $\nu_\text{ac}$ is a
 
 \end{theorem}
 
+\subsection{Convolution}
+TODO Young's convolution inequality
+
 \chapter{Complex analysis}
 \begin{definition}
 A \udef{complex function} is a function in $(U\subseteq \C \to \C)$.
@@ -953,4 +997,113 @@ x & y
 \chapter{Calculus}
 \input{calculus}
 \chapter{Taylor and other series}
+TODO: move
 \input{series}
+
+\chapter{Distributions}
+\section{The space of test functions}
+\subsection{Canonical LF topology}
+\subsubsection{Convergence}
+\subsection{The space of test functions}
+\begin{definition}
+Let $X$ be an open subset of a normed vector space. The space of \udef{test functions} on $X$ is $\cont^\infty_c(X)$ equipped with the canonical LF topology. This space is also commonly denoted $\testFuncs(X)$.
+\end{definition}
+
+\begin{example}
+The \udef{bump function}
+\[ \phi: \R\to\R: x\mapsto \begin{cases}
+e^{1/(x^2-1)} & |x|<1 \\ 0 & |x| \geq 1
+\end{cases} \]
+is a test function in $\testFuncs(\R)$.
+\end{example}
+
+\begin{lemma}
+Every test function is bounded.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\section{The module of distributions}
+\begin{definition}
+    Let $X$ be an open subset of a normed vector space.
+    A linear map $T: \testFuncs(X) \to \C$ is a \udef{distribution} on $X$ is an element of the topological dual of $\testFuncs(X)$ equipped with the strong dual topology. It is denoted $\dists(X)$.
+\end{definition}
+
+\begin{proposition}
+    The space of distributions $\dists(X)$ is a module over the ring $\cont^\infty(X)$.
+    
+    If $T\in \dists(X)$ and $a\in \cont^\infty(X)$, then the multiplication is defined by
+    \[ (aT)(\phi) = T(a\phi) \qquad \forall \phi \in \testFuncs(X). \]
+\end{proposition}
+
+\subsection{Dirac delta distribution}
+\begin{definition}
+    Let $X$ be an open subset of a normed vector space and $x_0\in X$. The \udef{Dirac delta distribution} at $x_0$ is the distribution
+    \[ \delta_{x_0}: \testFuncs(X) \to \C: \phi \mapsto \phi(x_0). \]
+    We write $\delta \defeq \delta_0$.
+\end{definition}
+
+\begin{proposition}
+Let $X$ be an open subset of a normed vector space containing $0$. Suppose $\seq{f_n: X\to \C}$ is a sequence of functions such that
+\begin{enumerate}
+\item $\int_X f_n(x)\diff{x} = 1$ for all $n$;
+\item there exists a constant $C$ such that $\int_X |f_n(x)|\diff{x} \leq C$ for all $n$;
+\item $\lim_{n\to \infty} \int_{|x|>r}|f_n(x)|\diff{x} = 0 $ for all $r > 0$.
+\end{enumerate}
+If $\phi$ is bounded on $X$ and continuous at $0$, then
+\[ \lim_{n\to \infty} \int_X f_n(x)\phi(x)\diff{x} = \phi(0) \]
+and in particular $f_n\to \delta$ in $\dists(X)$.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+Sequences $\seq{f_n}$ satisfying the assumptions of the proposition are called \udef{delta sequences}.
+
+\begin{lemma}
+Let $f: \R^N\to\C$ be an integrable function with $\int_{\R^N}f(x)\diff{x} = 1$. Then $\seq{n^Nf(nx)}$ is a delta sequence.
+\end{lemma}
+
+\subsection{Integral distributions}
+\begin{proposition}
+    Let $X$ be an open subset of a normed vector space and $f: X\to\C$ an absolutely integrable function. Then 
+    \[ T_f: \testFuncs(X) \to \C: \phi \mapsto \int_X f(x)\phi(x)\diff{x} \]
+    is a distribution.
+\end{proposition}
+
+\section{The derivative of a distribution}
+\begin{definition}
+    Let $X$ be an open subset of a normed vector space $V$ and let $T\in \dists(X)$. For $u\in V$ we define the directional derivative of $T$ as
+    \[ \partial_u(T) \defeq - T\circ \partial_u. \]
+\end{definition}
+
+\begin{lemma}
+Let $T_f$ be an integral distribution such that $\partial_u(f)$ is well-defined on $X$, then
+\[ \partial_u(T_f) = T_{\partial_{u}(f)}. \]
+\end{lemma}
+\begin{proof}
+TODO by partial integration.
+\end{proof}
+
+\begin{lemma}
+Let $X$ be an open subset of $\R^N$ and let $T\in \dists(X)$. Then
+\[ D^\alpha T = (-1)^{|\alpha|}T\circ D^\alpha. \]
+\end{lemma}
+
+\begin{proposition}
+    Let $X$ be an open subset of a normed vector space $V$, $T\in \dists(X)$ and $u\in V$. Then
+    \begin{enumerate}
+    \item $\partial_{u}T \in \dists(X)$;
+    \item $\partial_{u}$ is linear on the module $\dists(X)$.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proposition}
+Let $\theta$ be the Heaviside function. Then
+\[ (T_\theta)' = \delta. \]
+\end{proposition}
+
+\subsection{Jump discontinuities in integral distributions}
+TODO Sacks 6.3.3
+
+\section{Convolution}
