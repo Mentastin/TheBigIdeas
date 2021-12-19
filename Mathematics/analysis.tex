@@ -1037,7 +1037,8 @@ TODO
     \[ (aT)(\phi) = T(a\phi) \qquad \forall \phi \in \testFuncs(X). \]
 \end{proposition}
 
-\subsection{Dirac delta distribution}
+\subsection{Types of distributions}
+\subsubsection{Dirac delta distribution}
 \begin{definition}
     Let $X$ be an open subset of a normed vector space and $x_0\in X$. The \udef{Dirac delta distribution} at $x_0$ is the distribution
     \[ \delta_{x_0}: \testFuncs(X) \to \C: \phi \mapsto \phi(x_0). \]
@@ -1064,14 +1065,18 @@ Sequences $\seq{f_n}$ satisfying the assumptions of the proposition are called \
 Let $f: \R^N\to\C$ be an integrable function with $\int_{\R^N}f(x)\diff{x} = 1$. Then $\seq{n^Nf(nx)}$ is a delta sequence.
 \end{lemma}
 
-\subsection{Integral distributions}
+\subsubsection{Integral distributions}
 \begin{proposition}
     Let $X$ be an open subset of a normed vector space and $f: X\to\C$ an absolutely integrable function. Then 
     \[ T_f: \testFuncs(X) \to \C: \phi \mapsto \int_X f(x)\phi(x)\diff{x} \]
     is a distribution.
 \end{proposition}
 
-\section{The derivative of a distribution}
+\begin{lemma} \label{lemma:uniquenessIntegratedFunction}
+Let $f,g: X\to \C$ be absolutely integrable functions. If $T_f = T_g$, then $f(x) = g(x)$ a.e.
+\end{lemma}
+
+\subsection{The derivative of a distribution}
 \begin{definition}
     Let $X$ be an open subset of a normed vector space $V$ and let $T\in \dists(X)$. For $u\in V$ we define the directional derivative of $T$ as
     \[ \partial_u(T) \defeq - T\circ \partial_u. \]
@@ -1103,7 +1108,66 @@ Let $\theta$ be the Heaviside function. Then
 \[ (T_\theta)' = \delta. \]
 \end{proposition}
 
-\subsection{Jump discontinuities in integral distributions}
+\subsubsection{Jump discontinuities in integral distributions}
 TODO Sacks 6.3.3
 
-\section{Convolution}
+\subsection{Convolution}
+
+
+\section{Sobolev spaces}
+TODO: after $L^p$ spaces.
+\subsection{Weak derivatives}
+\begin{definition}
+    Let $X$ be an open subset of a normed vector space, $f\in L^p(X)$ and $D^\alpha$ a derivative on $X$. If there exists $g\in L^q(X)$ such that $D^\alpha T_f = T_g$, then $g$ is the \udef{weak $\alpha$ derivative} of $f$ in $L^q(X)$.
+\end{definition}
+The weak $\alpha$ derivative is unique if it exists, due to \ref{lemma:uniquenessIntegratedFunction}.
+
+The definition of weak derivative translates to the requirement
+\[ \int_X f D^\alpha \phi \diff{x} = (-1)^{|\alpha|}\int_X g\phi\diff{x} \qquad \forall \phi\in\testFuncs(X). \]
+
+\subsection{Strong derivatives}
+\begin{definition}
+    Let $X$ be an open subset of a normed vector space, $f\in L^p(X)$ and $D^\alpha$ a derivative on $X$. We call $g\in L^q(X)$ a \udef{strong $\alpha$ derivative} if there exists a sequence $\seq{f_n} \subset \cont^\infty(X)$  such that
+    \begin{itemize}
+    \item $f_n \to f$ in $L^p(X)$; and
+    \item $D^{\alpha}f_n \to g$ in $L^q(X)$.
+    \end{itemize}
+\end{definition}
+
+\begin{theorem}
+Let $f\in L^p(X)$. Then $g\in L^q(X)$ is a weak $\alpha$ derivative \textup{if and only if} it is a strong $\alpha$ derivative.
+\end{theorem}
+
+\subsection{Sobolev spaces}
+\begin{definition}
+Let $X$ be an open subset of a normed vector space, $1\leq p \leq \infty$ and $k\in\N$. Then the \udef{Sobolev space} $W^{k,p}(X)$ is defined as
+\[ W^{k,p}(X) \defeq \setbuilder{T\in \dists(X)}{\text{$T$ has a weak $\alpha$ derivative in $L^p(X)$ for all $|\alpha|\leq k$}}.
+ \]
+\end{definition}
+In particular each distribution in $W^{k,p}(X)$ is an integral distribution $T_f$ for some $f$ in $L^p(X)$.
+
+\begin{lemma}
+    Let $X$ be an open subset of a normed vector space, $1\leq p \leq \infty$ and $k\in\N$. Then
+    \[ \testFuncs(X) \subset W^{k,p}(X) \subset L^p(X), \]
+    so that $W^{p,k}(X)$ is a dense subspace of $L^p(X)$.
+\end{lemma}
+
+\begin{proposition}
+A Sobolev space $W^{k,p}(X)$ is a Banach space with norm
+\[ \norm{f}_{W^{k,p}(X)} = \begin{cases}
+\left(\sum_{|\alpha|\leq k}\norm{D^\alpha f}^p_{L^{p}(X)}\right)^{1/p} & 1\leq p < \infty \\
+\max_{|\alpha|\leq k} \norm{D^\alpha f}_{L^{\infty}(X)} & p = \infty.
+\end{cases} \]
+In particular $W^{k,2}(X)$ is a Hilbert space with inner product
+\[ \inner{f,g} \sum_{|\alpha| \leq k} \int_X D^\alpha f(x) \overline{D^\alpha g(x)}\diff{x}. \]
+The Hilbert space $W^{k,2}(X)$ is more commonly denoted $H^k(X)$.
+\end{proposition}
+TODO: generalise ???
+
+\begin{proposition}
+Let $X$ be an open subset of a normed vector space, $1\leq p < \infty$ and $k\in\N$. Then $W^{k,p}(X)$ coincides with the closure of $\cont^\infty(X) \cap W^{k,p}(X)$ in the $W^{k,p}(X)$-norm.
+\end{proposition}
+
+\begin{definition}
+    Let $X$ be an open subset of a normed vector space, $1\leq p < \infty$ and $k\in\N$. We define $W_0^{k,p}(X)$ to be the closure of $\cont^\infty_c(X)$ in the $W^{k,p}(X)$-norm.
+\end{definition}
