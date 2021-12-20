@@ -753,13 +753,22 @@ F(Tb+b) &= T^2b + Tb + b \\
 \end{align*}
 Alternatively we could have used the inequality $\norm{T^nb} \leq \norm{T}^n\norm{b}$, the convergence of the geometric series and \ref{prop:absoluteUnconditionalConvergenceBanach} to prove convergence. Proving it is a fixed point is then elementary.
 \end{proof}
-\begin{corollary}[Neumann series]
+\begin{corollary}[Neumann series] \ref{corollary:NeumannSeries}
 Let $T$ be a bounded linear operator with $\norm{T}<1$. Then
-\[ (\id - T)^{-1} = \sum_{i=1}^\infty T^i. \]
+\[ (\id - T)^{-1} = \sum_{i=1}^\infty T^i \]
+with uniform convergence. Also
+\[ \norm{(\id - T)^{-1}} \leq \frac{1}{1-\norm{T}}. \]
 \end{corollary}
 \begin{proof}
 Let $x\in X$. Then set $(\id - T)^{-1}x = y$. This is equivalent to $x = y-Ty$ and means $y$ is the fixed point of $y\mapsto Ty+x$. So $y = \sum_{i=1}^\infty T^ix$.
+
+The convergence is uniform by TODO ref.
+
+Finally we have
+\[ \norm{(\id - T)^{-1}} = \norm{\sum_{i=1}^\infty T^i} \leq \sum_{i=1}^\infty \norm{T^i} = \frac{1}{1-\norm{T}} \]
+by the geometric series.
 \end{proof}
+TODO ref: uniform convergence if $\sum_i \norm{T_i} < \infty$??
 
 \subsection{The uniform boundedness principle}
 TODO: if a family of bounded operators on a Banach space is pointwise bounded, then it is uniformly bounded.
@@ -1205,7 +1214,30 @@ Let $H,K$ be Hilbert spaces and $T: H\not\to K$ an operator. An \udef{adjoint} o
 \[ \inner{w,Tv}_K = \inner{S w,v}_H \quad \forall v\in \dom(T),\; \forall w\in \dom(S). \]
 \end{definition}
 
+\begin{theorem}[Hellinger-Toeplitz]
+Let $T: H\to K$ be an operator between Hilbert spaces (which is defined everywhere), then $T$ has an adjoint that is defined everywhere \textup{if and only if} it is bounded.
+\end{theorem}
+\begin{proof}
+The ``if'' will be shown below by explicit construction. For the ``only if'', take such an operator $T$.
 
+First we show $T$ has closed graph, by using proposition \ref{prop:closedGraphEquivalence}: assume $(x_n)$ converges to $x$ and $(Tx_n)$ converges to $y$. Then
+\[ \inner{z, Tx} = \inner{Sz,x} = \lim_n\inner{Sz, x_n} = \lim_n\inner{z, Tx_n} = \inner{z, y} \]
+where we have used the boundedness of $x\mapsto\inner{z,x}$. By the non-degeneracy of the inner product, $Tx = y$. So the graph of $T$ is closed. Similarly the graph of $S$ is closed. Applying the closed graph theorem \ref{theorem:closedGraphTheorem}, yields the boundedness of $T$ and $S$.
+\end{proof}
+\begin{corollary}
+Everywhere-defined symmetric operators are bounded.
+\end{corollary}
+
+\begin{example}
+The adjoint of the left-shift operator
+\[ S_L: \ell^2(\N) \to \ell^2(\N): (x_n)_{n\in\N} \mapsto (x_{n+1})_{n\in\N} \]
+is the right-shift operator
+\[ S_R: \ell^2(\N) \to \ell^2(\N): (x_n)_{n\in\N} \mapsto \left(\begin{cases}
+x_{n-1} & (n\geq 1) \\ 0 &(n=0)
+\end{cases}\right)_{n\in \N}. \]
+\end{example}
+
+\subsection{Bounded operators}
 \begin{proposition}
 Let $T\in\Bounded(H,K)$ with $H,K$ Hilbert spaces. Then
 \[ S = C_H^{-1}T^tC_K: K\to H, \]
@@ -1231,31 +1263,6 @@ The function $(w,v)\mapsto \inner{w,Tv}_K$ is sesquilinear. By proposition \ref{
 This can also be proved by a direct calculation using $(T^*)^* = T$ from \ref{lemma:HilbertAdjointLemma}.
 \end{proof}
 
-
-\begin{theorem}[Hellinger-Toeplitz]
-Let $T: H\to K$ be an operator between Hilbert spaces (which is defined everywhere), then $T$ has an adjoint that is defined everywhere \textup{if and only if} it is bounded.
-\end{theorem}
-\begin{proof}
-The ``if'' has already been shown. For the ``only if'', take such an operator $T$.
-
-First we show $T$ has closed graph, by using proposition \ref{prop:closedGraphEquivalence}: assume $(x_n)$ converges to $x$ and $(Tx_n)$ converges to $y$. Then
-\[ \inner{z, Tx} = \inner{Sz,x} = \lim_n\inner{Sz, x_n} = \lim_n\inner{z, Tx_n} = \inner{z, y} \]
-where we have used the boundedness of $x\mapsto\inner{z,x}$. By the non-degeneracy of the inner product, $Tx = y$. So the graph of $T$ is closed. Similarly the graph of $S$ is closed. Applying the closed graph theorem \ref{theorem:closedGraphTheorem}, yields the boundedness of $T$ and $S$.
-\end{proof}
-\begin{corollary}
-Everywhere-defined symmetric operators are bounded.
-\end{corollary}
-
-\begin{example}
-The adjoint of the left-shift operator
-\[ S_L: \ell^2(\N) \to \ell^2(\N): (x_n)_{n\in\N} \mapsto (x_{n+1})_{n\in\N} \]
-is the right-shift operator
-\[ S_R: \ell^2(\N) \to \ell^2(\N): (x_n)_{n\in\N} \mapsto \left(\begin{cases}
-x_{n-1} & (n\geq 1) \\ 0 &(n=0)
-\end{cases}\right)_{n\in \N}. \]
-\end{example}
-
-TODO general adjointable
 \begin{lemma} \label{lemma:HilbertAdjointLemma}
 Let $S,T\in\Bounded(H,K)$ and $\lambda \in \mathbb{F}$.
 \begin{enumerate}
@@ -1328,10 +1335,53 @@ The left-hand side is equal to $\inner{v,w}$ iff $T$ is an isometry. The right-h
 (3) If $T$ is invertible, it must have a left and right inverse. By lemma \ref{lemma:leftRightInverse} they must be the same.
 \end{proof}
 
-TODO: integral operators.
+\subsection{Unbounded operators}
+\begin{lemma}
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Let $S_1, S_2$ be adjoints of $T$ then for all $x\in \dom(S_1)\cap\dom(S_2)$ we have $S_1(x) = S_2(x)$.
+\end{lemma}
+\begin{proof}
+For all $u\in \dom(T)$ we have
+\[ \inner{S_1(x) - S_2(x), u}_H = \inner{S_1(x), u}_H - \inner{S_2(x), u}_H = \inner{x, Tu}_K - \inner{x, Tu}_K = 0. \]
+So $\dom(T) \subset (\{S_1(x) - S_2(x)\})^\perp$ and in fact $H = \overline{\dom(T)} \subset (\{S_1(x) - S_2(x)\})^\perp$ because orthogonal complements are closed and $T$ is densely defined. So $S_1(x) - S_2(x) = 0$.
+\end{proof}
+
+\begin{definition}
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. We define the adjoint
+\[ T^* = \bigcup\setbuilder{S\in (K\not\to H)}{\text{$S$ is an adjoint of $T$}}. \]
+\end{definition}
+
+\begin{lemma}
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
+\[ \dom(T^*) = \setbuilder{x\in K}{\text{$u\mapsto \inner{x, Tu}$ is a bounded functional}}. \]
+\end{lemma}
+\begin{proof}
+$\boxed{\subseteq}$ If $\omega: u\mapsto \inner{x, Tu}$ is bounded, then it has a Riesz vector $x^*$ such that $\omega = u\mapsto \inner{x^*, u}$. The anti-linear operator with domain $\Span\{x\}$ that maps $x$ to $x^*$ is then an adjoint.
+
+$\boxed{\supseteq}$ If $x\in\dom(T^*)$, then, using the Cauchy-Schwarz inequality,
+\[ |\inner{x,Tu}| = |\inner{T^*x,u}| \leq \norm{T^*x}\;\norm{u}, \]
+so the functional $u\mapsto \inner{x, Tu}$ is bounded.
+\end{proof}
+\begin{corollary}
+The domain $\dom(T^*)$ is a vector space and in particular contains $0$.
+\end{corollary}
+
 \begin{proposition}
-Let $A$ be a Borel set and $K:A\times A\to \C$ a measurable function such that the integral operator with kernel $K$ is bounded. Then the adjoint of the integral operator is again an integral operator with kernel $K^*(x,y) = \overline{K(y,x)}$.
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
+\[ \graph(T^*) = \left( \begin{pmatrix}
+0 & \id \\ -\id & 0
+\end{pmatrix}\graph(T) \right)^\perp. \]
 \end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then $T^*$ is a closed operator.
+\end{corollary}
+
+\begin{proposition}
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then $\ker(T^*) = \im(T)^\perp$.
+\end{proposition}
+TODO: link with previous?
 
 \section{Dirac notation}
 \url{https://core.ac.uk/download/pdf/25263496.pdf}
@@ -1780,40 +1830,54 @@ Let $L\in \Hom(V)$. The following are invariant under $L$:
 \end{itemize}
 \end{example}
 \section{The spectrum}
+TODO: consistency $\lambda \id - L$, not $L-\lambda \id$.
 \begin{definition}
 Let $L$ be an operator on a vector space $V$ over the field $\mathbb{F}$.
 \begin{itemize}
 \item The \udef{spectrum} of $L$ is the set
-\[ \sigma(L) = \{ \lambda \in \mathbb{F} \;|\; L-\lambda \id_V: V\to V \; \text{has no bounded inverse}.  \} \]
+\[ \sigma(L) = \{ \lambda \in \mathbb{F} \;|\; \lambda \id_V - L: V\to V \; \text{has no bounded inverse}.  \} \]
 By ``having no bounded inverse'', we mean there is no bounded operator $R_\lambda: V\to \dom(L)$ such that
-\[ R_\lambda(T-\lambda I) = \id_{\dom(L)} \qquad (T-\lambda \id)R_\lambda = \id_V. \]
-\item The \udef{point spectrum} $\sigma_\text{p}(L)$ is the set of all its eigenvalues, i.e. the values of $\lambda$ where $L-\lambda \id_V$ fails to be injective.
-\item The \udef{continuous spectrum} $\sigma_\text{c}(L)$ is the set of all values of $\lambda$ such that $L-\lambda \id_V$ is injective, but not surjective, and has an image dense in $V$.
-\item The \udef{residual spectrum} $\sigma_\text{r}(L)$ is the set of all values of $\lambda$ such that $L-\lambda \id_V$ is injective, but not surjective, and does not even have an image dense in $V$.
+\[ R_\lambda(\lambda \id_V - L) = \id_{\dom(L)} \qquad (\lambda \id_V - L)R_\lambda = \id_V. \]
+\item The \udef{point spectrum} $\sigma_\text{p}(L)$ is the set of all its eigenvalues, i.e. the values of $\lambda$ where $\lambda \id_V - L$ fails to be injective.
+\item The \udef{continuous spectrum} $\sigma_\text{c}(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, but not surjective, and has an image dense in $V$.
+\item The \udef{residual spectrum} $\sigma_\text{r}(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, but not surjective, and does not even have an image dense in $V$.
 \end{itemize}
 \end{definition}
 In finite dimensions we know that
-\[ \text{$L-\lambda \id_V$ is surjective} \quad\iff\quad \text{$L-\lambda \id_V$ is injective.} \]
+\[ \text{$\lambda \id_V - L$ is surjective} \quad\iff\quad \text{$\lambda \id_V - L$ is injective.} \]
 So in this case there can only ever be a point spectrum.
 
 \begin{definition}
 For $\lambda \notin \sigma_\text{p}(L)$ the \udef{resolvent} $R_\lambda(L): \dom(R_\lambda(L)) \to \dom(L)$ of $L$ is
-\[ R_\lambda(L) = (L-\lambda \id_V)^{-1}. \]
+\[ R_\lambda(L) = (\lambda \id_V - L)^{-1}. \]
 Note that $R_\lambda(L)$ is a linear operator on $V$ with $\dom(R_\lambda(L)) \subset V$.
 \end{definition}
+
 \begin{proposition}
-Let $X$ be a Banach space and $T:X\to X$ a bounded linear operator. Then $\lambda \in \sigma(T)$ \textup{if and only if} $T-\lambda \id_V$ is not bijective.
+Let $L$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{L}$ the resolvent $R_\lambda(L)$ is bounded and given by
+\[ R_\lambda(L) = (\lambda \id_X - L)^{-1} = \sum_{n=0}^\infty\frac{L^n}{\lambda^{n+1}} \]
+with uniform convergence. The norm is bounded by
+\[ \norm{R_\lambda(L)} = \norm{(\lambda \id_X - L)^{-1}} \leq \frac{1}{|\lambda|-\norm{T}}. \]
 \end{proposition}
 \begin{proof}
-If $T$ is bounded, then $T-\lambda \id_V$ is bounded for all $\lambda\in\mathbb{F}$. By corollary \ref{corollary:boundedInverse} to the open mapping theorem, if $T-\lambda \id_V$ is bijective, then it is bounded.
+The operator $T/\lambda$ is a contraction so the Neumann series \ref{corollary:NeumannSeries} gives
+\[ \left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \left(\frac{T}{\lambda}\right)^n.  \]
+Now $(\lambda \id_X - L)^{-1} = \frac{1}{\lambda}\left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \frac{T^n}{\lambda^{n+1}}$. The Neumann series also gives us the bound on the norm.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a Banach space and $T:X\to X$ a bounded linear operator. Then $\lambda \in \sigma(T)$ \textup{if and only if} $\lambda \id_V - T$ is not bijective.
+\end{proposition}
+\begin{proof}
+If $T$ is bounded, then $\lambda \id_V - T$ is bounded for all $\lambda\in\mathbb{F}$. By corollary \ref{corollary:boundedInverse} to the open mapping theorem, if $\lambda \id_V - T$ is bijective, then it is bounded.
 \end{proof}
 
 
 \begin{lemma}
-Let $L$ be an operator on a vector space $V$. If $T-\lambda \id_V$ is not bounded from below, then $\lambda \in \sigma(T)$.
+Let $L$ be an operator on a vector space $V$. If $\lambda \id_V - T$ is not bounded from below, then $\lambda \in \sigma(T)$.
 \end{lemma}
 \begin{proof}
-If $\lambda \notin \sigma(T)$, then $R_\lambda(L)$ is bijective and bounded. By lemma \ref{lemma:boundedBelowBounded}, $T-\lambda \id_V$ is bounded below.
+If $\lambda \notin \sigma(T)$, then $R_\lambda(L)$ is bijective and bounded. By lemma \ref{lemma:boundedBelowBounded}, $\lambda \id_V - T$ is bounded below.
 \end{proof}
 
 
@@ -1821,7 +1885,7 @@ If $\lambda \notin \sigma(T)$, then $R_\lambda(L)$ is bijective and bounded. By 
 Let $T:X\to X$ be an operator on a Banach space and $\lambda\in\sigma_\text{c}$, then $R_\lambda(T)$ is unbounded.
 \end{lemma}
 \begin{proof}
-If $R_\lambda(T)$ is bounded, $T-\lambda \id_V$ then is bounded below by lemma \ref{lemma:boundedBelowBounded} and has closed range by proposition \ref{prop:boundedBelowClosedRange}.
+If $R_\lambda(T)$ is bounded, $\lambda \id_V - T$ then is bounded below by lemma \ref{lemma:boundedBelowBounded} and has closed range by proposition \ref{prop:boundedBelowClosedRange}.
 \end{proof}
 
 
@@ -1989,11 +2053,16 @@ This definition is well-defined: $T\in (L^2(\Omega) \to L^2(\Omega))$. This foll
 \end{align*}
 
 \begin{proposition}
-Let $T$ be an integral operator with kernel $K(x,y)$, then $T^*$ is the integral operator with kernel $K(y,x)$.
+Let $T$ be an integral operator with kernel $K(x,y)$, then $T^*$ is the integral operator with kernel $\overline{K(y,x)}$.
 \end{proposition}
 \begin{proof}
 TODO
 \end{proof}
+
+\begin{proposition}
+Let $A$ be a Borel set and $K:A\times A\to \C$ a measurable function such that the integral operator with kernel $K$ is bounded. Then the adjoint of the integral operator is again an integral operator with kernel $K^*(x,y) = \overline{K(y,x)}$.
+\end{proposition}
+
 
 \section{Integral equations}
 \begin{definition}
