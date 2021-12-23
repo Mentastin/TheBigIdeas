@@ -1,5 +1,7 @@
 \chapter{Normed spaces and inner product spaces}
 In this chapter we will always use either $\mathbb{F} = \R$ or $\mathbb{F} = \C$.
+
+TODO: \url{https://math.stackexchange.com/questions/2151779/normed-vector-spaces-over-finite-fields/2568231}
 \section{Normed spaces}
 \begin{definition}
 A \udef{norm} on a vector space $V$ is a function
@@ -201,9 +203,12 @@ This norm can also be seen as a norm on $V$: the \udef{graph norm} induced by $L
 
 \section{Operators on normed spaces}
 
+
 \subsection{Bounded operators}
 \begin{definition}
-An operator $L$ between normed vector spaces is called \udef{bounded} if $\exists M>0$ such that $\forall v\in \dom(L)$
+An operator $L$ between normed vector spaces is called \udef{bounded} if it is Lipschitz continuous.
+
+In other words, there exists an $M>0$ such that $\forall v\in \dom(L)$
 \[ \norm{L(v)} \leq M \norm{v}. \]
 
 The set of bounded operators from $V$ to $W$ is denoted $\Bounded(V,W)$. If $V=W$, we write $\Bounded(V)$.
@@ -213,6 +218,7 @@ The set of bounded operators from $V$ to $W$ is denoted $\Bounded(V,W)$. If $V=W
 Let $L$ be a linear operator between normed spaces $V,W$. The following are equivalent:
 \begin{enumerate}
 \item $L$ is continuous everywhere in $\dom(L)$;
+\item $L$ is continuous at $x_0 \in \dom(L)$;
 \item $L$ is continuous at $0$;
 \item $L$ is bounded.
 \end{enumerate}
@@ -221,10 +227,12 @@ Let $L$ be a linear operator between normed spaces $V,W$. The following are equi
 We proceed round-robin-style:
 \begin{itemize}[leftmargin=2cm]
 \item[$\boxed{(1) \Rightarrow (2)}$] Trivial.
-\item[$\boxed{(2) \Rightarrow (3)}$] From continuity at zero, there exists a $\delta>0$ such that $\norm{L(h)} = \norm{L(h)-L(0)} \leq 1$ for all $h\in \dom(L)$ with $\norm{h}\leq \delta$. Thus for all nonzero $v\in \dom(L)$
+\item[$\boxed{(2) \Rightarrow (3)}$] Let $\seq{x_n}$ converge to $0$, then
+\[ \lim_{n\to\infty}L(x_n) = \lim_{n\to\infty}L(x_n+x_0) - L(x_0) = L(\lim_{n\to\infty}x_n+x_0) - L(x_0) = L(x_0) - L(x_0) = 0. \]
+Continuity follows because normed vector spaces are sequential spaces.
+\item[$\boxed{(3) \Rightarrow (4)}$] From continuity at zero, there exists a $\delta>0$ such that $\norm{L(h)} = \norm{L(h)-L(0)} \leq 1$ for all $h\in \dom(L)$ with $\norm{h}\leq \delta$. Thus for all nonzero $v\in \dom(L)$
 \[ \norm{L(v)} = \norm{\frac{\norm{v}}{\delta}L(\delta \frac{v}{\norm{v}})} = \frac{\norm{v}}{\delta}\norm{L(\delta \frac{v}{\norm{v}})}\leq \frac{\norm{v}}{\delta}. \]
-\item[$\boxed{(3) \Rightarrow (1)}$] For all non-zero vectors $v,h\in \dom(L)$ we have
-\[ \norm{L(v+h)-L(v)} = \norm{L(h)}\leq M \norm{h} = M\norm{(v+h) - v}. \]
+\item[$\boxed{(4) \Rightarrow (1)}$] Lipschitz continuity implies continuity \ref{lemma:LipschitzcontinuousContinuous}.
 \end{itemize}
 \end{proof}
 \begin{corollary} \label{corollary:boundedAntiLinearMaps}
@@ -284,7 +292,10 @@ Let $(V,\norm{\cdot}_V)$ and $(W,\norm{\cdot}_W)$ be normed spaces. Then the spa
 &= \sup\setbuilder{\frac{\norm{Lx}_W}{\norm{x}_V}}{\norm{x}_V=1}.
 \end{align*}
 \end{proposition}
-This norm is called the \udef{operator norm}.
+
+\begin{definition}
+    This norm is called the \udef{operator norm}.
+\end{definition}
 
 \begin{proposition} \label{prop:operatorNorm}
 Let $L\in\Bounded{V,W}$ be a bounded operator and let $B(\vec{0},\epsilon)$ be an open ball centered at $\vec{0}$. Then
@@ -338,8 +349,12 @@ Assume $T$ bounded. Then for all $x\in\im T$: $\norm{x} = \norm{TT^{-1}x} \leq \
 Assume $T^{-1}$ bounded below. Then for all $x\in\dom(T)$: $\norm{x} = \norm{T^{-1}Tx} \geq b\norm{Tx}$, so $T$ is bounded by $1/b$.
 \end{proof}
 
-\subsection{Open and closed operators}
-TODO definition: closed meaning closed graph or closed map?
+\subsection{Closed operators}
+\begin{definition}
+A \udef{closed operator} is an operator with closed graph.
+\end{definition}
+This is not the same as a closed map in the topological sense!
+
 \begin{proposition} \label{prop:closedGraphEquivalence}
 Let $X,Y$ be normed spaces and $T: \dom(T)\subset X \to Y$ be a linear operator. Then
 the following are equivalent:
@@ -348,6 +363,50 @@ the following are equivalent:
 \item if $(x_n)_{n\in\N}\subset \dom(T)$ converges to $x\in X$ and $(Tx_n)_{n\in\N}$ converges to $y$, then $x\in\dom(T)$ and $Tx = y$.
 \end{enumerate}
 \end{proposition}
+TODO: remove domain from proposition?
+\begin{corollary}
+All bounded operators have closed graph. (? If domain is closed?)
+\end{corollary}
+The converse is not true in general.
+
+\url{https://en.wikipedia.org/wiki/Unbounded_operator#Closed_linear_operators}
+\url{https://en.wikipedia.org/wiki/Closed_graph_theorem_(functional_analysis)}
+
+\begin{proposition}
+Let $T$ be an injective operator. Then $T^{-1}: \im(T) \to \dom(T)$ is closed.
+\end{proposition}
+\begin{proof}
+We use \ref{prop:closedGraphEquivalence}. Take $\seq{y_n}\subset \dom(T^{-1})$ such that $y_n\to y$ and $T^{-1}y_n\to x$. Set $x_n = T^{-1}y_n$, so then $Tx_n = y_n\to y$. Because $T$ is closed it follows that $Tx = y$, so $T^{-1}y = x$, meaning $T^{-1}$ is closed.
+\end{proof}
+
+\subsubsection{Closable operators}
+\begin{definition}
+A linear operator is called \udef{closable} if it has closed extension.
+\end{definition}
+
+\begin{proposition}
+A linear operator $T$ is closable \textup{if and only if} for all sequences $\seq{x_n}\subset\dom(T)$
+\[ \left(x_n\to 0 \land T(x_n)\to v\right) \quad\implies\quad v = 0. \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}
+A closable operator $T$ has a minimal closed extension $\overline{T}$, which is given by the closure of the graph of $T$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $T$ be a closed and $S$ a bounded operator, then
+\begin{enumerate}
+\item $S+T$ is closed;
+\item $TS$ is closed.
+\end{enumerate}
+\end{proposition}
+TODO example $ST$ need not be closed.
 
 \subsection{Compact operators}
 \begin{definition}
