@@ -460,7 +460,7 @@ TODO
 
 Define TVS.
 
-\begin{lemma}
+\begin{lemma} \label{lemma:closureSum}
 Let $V$ be a TVS and $A,B$ subsets of $V$. Then
 \[ \overline{A+B} \subseteq \overline{A} + \overline{B} \]
 \end{lemma}
@@ -558,28 +558,45 @@ Assume $C$ closed under addition. Take $v,w\in C$ and $\lambda\in[0,1]$. Then $(
 \section{Operators on topological vector spaces}
 \subsection{Compact operators}
 \begin{definition}
-A linear operator $T:X\to Y$ between TVSs is \udef{compact} if it maps bounded sets to relatively compact sets, i.e. 
+A linear operator $T:X\to Y$ between TVSs is \udef{compact} if it maps bounded sets to precompact sets, i.e. 
 \[ \text{$A\subset X$ is bounded} \quad\implies\quad \text{$\overline{T[A]}$ is compact.} \]
+The set of compact linear operators in $(X\to Y)$ is denoted $\Compact(X,Y)$.
 \end{definition}
 
 \begin{proposition}
 Let $T:X\to Y$ be a linear operator between TVSs. The following are equivalent:
 \begin{enumerate}
 \item $T$ is a compact operator;
-\item the image of the unit ball $B(0,1)$ of $X$ is relatively compact in $Y$;
-\item there exists a neighbourhood $U\subset X$ of the origin such that $T[U]$ is relatively compact;
+\item the image of the unit ball of $X$, $T[B(\vec{0},1)]$, is precompact in $Y$;
+\item there exists a neighbourhood $U\subset X$ of the origin such that $T[U]$ is precompact;
 \item there exists a neighbourhood $U \subset X$ of the origin and a compact set $V\subset Y$ such that $T[U] \subset V$;
-\item for any bounded sequence $(x_{n})_{n\in \mathbb{N}}$ in $X$, the sequence $(Tx_{n})_{n\in \mathbb{N} }$ contains a converging subsequence.
+\item for any bounded sequence $(x_{n})_{n\in \mathbb{N}}$ in $X$, the sequence $(Tx_{n})_{n\in \mathbb{N} }$ contains a converging subsequence. (TODO: only for sequential spaces).
 \end{enumerate}
 \end{proposition}
 
 \begin{lemma}
-Let $X,Y$ be TVSs. The compact operators from $X$ to $Y$ form a vector space. 
+Let $X,Y$ be TVSs.
+\begin{enumerate}
+\item Then $\Compact(X, Y)$ is a vector space.
+\item If $X,Y$ are normed spaces, then $\Compact(X, Y)$ is a subspace of $\Bounded(X, Y)$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-Let $K,K':X\to Y$ be compact operators. Then
+(1) Let $K,K':X\to Y$ be compact operators. Then, by \ref{lemma:closureSum},
 \[ \overline{K[B(0, 1)]+K'[B(0, 1)]} \subseteq \overline{K[B(0, 1)]}+\overline{K'[B(0, 1)]} \qquad \overline{K[\lambda B(0, 1)]} = \lambda\overline{K[B(0, 1)]}. \]
+
+(2) Let $K\in\Compact(X, Y)$. Then the image of the unit ball is precompact, meaning it is bounded. So $K$ is bounded by \ref{prop:operatorNorm}.
 \end{proof}
+
+\begin{lemma}
+Let $T:V\to W$ be a bounded operator. If $W$ has the Heine-Borel property, then $T$ is compact.
+\end{lemma}
+\begin{proof}
+The set $T[B(\vec{0},1)]$ is bounded because $T$ is. By the Heine-Borel (TODO ref) property of $W$, $\overline{B(\vec{0},1)}$ is compact.
+\end{proof}
+\begin{corollary}
+Bounded operators with as image a finite dimensional normed space are compact.
+\end{corollary}
 
 \section{Continuity}
 \url{https://en.wikipedia.org/wiki/Bilinear_map#Continuity_and_separate_continuity}
@@ -753,7 +770,7 @@ F(Tb+b) &= T^2b + Tb + b \\
 \end{align*}
 Alternatively we could have used the inequality $\norm{T^nb} \leq \norm{T}^n\norm{b}$, the convergence of the geometric series and \ref{prop:absoluteUnconditionalConvergenceBanach} to prove convergence. Proving it is a fixed point is then elementary.
 \end{proof}
-\begin{corollary}[Neumann series] \ref{corollary:NeumannSeries}
+\begin{corollary}[Neumann series] \label{corollary:NeumannSeries}
 Let $T$ be a bounded linear operator with $\norm{T}<1$. Then
 \[ (\id - T)^{-1} = \sum_{i=1}^\infty T^i \]
 with uniform convergence. Also
@@ -857,15 +874,13 @@ Now assume $T$ has closed graph and $Y$ is complete. Take $x\in\overline{\dom(T)
 so $(Tx_n)$ is Cauchy by \ref{prop:CauchyCriterion} and thus by completeness has a limit, say $y$. Then $Tx=y$ by continuity. Since $T$ has closed graph, $x\in\dom(T)$. So $\overline{\dom(T)}\subseteq \dom(T)$ and $\dom(T)$ is closed. 
 \end{proof}
 
-\begin{theorem}[Closed graph] \label{theorem:closedGraphTheorem}
-Let $X,Y$ be Banach spaces and $T:\dom(T)\subset X\to Y$ a linear operator. Then $T$ is bounded if $T$ has closed graph.
+\begin{theorem}[Closed graph theorem] \label{theorem:closedGraphTheorem}
+Let $X,Y$ be Banach spaces and $T: X\to Y$ a linear operator. Then $T$ is bounded \textup{if and only if} $T$ has closed graph.
 \end{theorem}
 \begin{proof}
 Assume the graph of $T$ is closed. Then the graph, being a closed subset of a Banach space, is a Banach space (TODO: reference). Then the restriction of the bounded map $X\oplus Y \to X: (x,y)\mapsto x$ to the graph of $T$ is bijective. So by corollary \ref{corollary:boundedInverse} the inverse is bounded, so $T$ is bounded.
 \end{proof}
-\begin{corollary}
-If $T$ is a linear map $X\to Y$, then $T$ is bounded \textup{if and only if} $T$ has closed graph.
-\end{corollary}
+Notice that it is important that the domain of $T$ be the whole of $X$.
 
 
 \subsection{Compact operators}
@@ -1207,7 +1222,6 @@ The equality of norms follows from
 where the second inequality is Cauchy-Schwarz.
 \end{proof}
 
-
 \section{Adjoints of operators}
 \begin{definition}
 Let $H,K$ be Hilbert spaces and $T: H\not\to K$ an operator. An \udef{adjoint} of $T$ is an operator $S: K\not\to H$ such that
@@ -1382,6 +1396,24 @@ Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then $
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then $\ker(T^*) = \im(T)^\perp$.
 \end{proposition}
 TODO: link with previous?
+
+\begin{lemma}
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Assume $T$ injective and $\im(T)$ dense in $K$. Then $T^*$ is also injective and
+\[ (T^*)^{-1} = (T^{-1})^*. \]
+\end{lemma}
+
+\begin{proposition}
+Let $T: H\not\to K$ be a densely defined and closable operator between Hilbert spaces. Then $T^*$ is densely defined and $\overline{T} = T^{**}$.
+\end{proposition}
+
+\subsubsection{Friedrichs extension}
+\begin{proposition}
+Let $T: H\not\to K$ be a densely defined, positive, symmetric operator between Hilbert spaces. Then $T$ has positive self-adjoint extension.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
 
 \section{Dirac notation}
 \url{https://core.ac.uk/download/pdf/25263496.pdf}
@@ -1831,47 +1863,91 @@ Let $L\in \Hom(V)$. The following are invariant under $L$:
 \end{example}
 \section{The spectrum}
 TODO: consistency $\lambda \id - L$, not $L-\lambda \id$.
+TODO: everything is now in $\C$.
+
 \begin{definition}
-Let $L$ be an operator on a vector space $V$ over the field $\mathbb{F}$.
+Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
+
+For $\lambda\in\C$ the \udef{resolvent} $R_\lambda(L)$ is defined as
+\[ R_\lambda(L) \defeq (\lambda \id_V - L)^{-1}: \im(\lambda \id_V - L)\to\dom(L), \]
+if this inverse exists (i.e. if $\lambda \id_V - L$ is injective).
+
+The \udef{resolvent set} $\rho(L)$ is the set
+\[ \rho(L) \defeq \setbuilder{\lambda\in \C}{\text{$R_\lambda(L)$ exists, has domain $V$ and is bounded}}. \]
+\end{definition}
+
+\begin{lemma}[Resolvent identity]
+Let $T$ be a linear operator and $\lambda,\mu\in\C$ such that $R_\lambda(T), R_\mu(T)$ exist. Then $R_\lambda(T)$ and $R_\mu(T)$ commute and
+\[ R_\lambda(T) - R_\mu(T) = (\mu-\lambda)R_\lambda(T)R_\mu(T). \]
+\end{lemma}
+\begin{proof}
+The commutativity of the resolvents follows from \ref{lemma:commutationInverse}.
+
+We calculate
+\begin{align*}
+R_\lambda(T) - R_\mu(T) &= R_\lambda(T)R_\mu(T)(\mu\id - T) - R_\mu(T)R_\lambda(T)(\lambda\id - T) \\
+&= \mu R_\lambda(T)R_\mu(T) - R_\lambda(T)R_\mu(T) T - \lambda R_\mu(T)R_\lambda(T) + R_\mu(T)R_\lambda(T) T \\
+&= (\mu - \lambda)R_\lambda(T)R_\mu(T).
+\end{align*}
+\end{proof}
+
+\begin{definition}
+Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
 \begin{itemize}
-\item The \udef{spectrum} of $L$ is the set
-\[ \sigma(L) = \{ \lambda \in \mathbb{F} \;|\; \lambda \id_V - L: V\to V \; \text{has no bounded inverse}.  \} \]
-By ``having no bounded inverse'', we mean there is no bounded operator $R_\lambda: V\to \dom(L)$ such that
-\[ R_\lambda(\lambda \id_V - L) = \id_{\dom(L)} \qquad (\lambda \id_V - L)R_\lambda = \id_V. \]
-\item The \udef{point spectrum} $\sigma_\text{p}(L)$ is the set of all its eigenvalues, i.e. the values of $\lambda$ where $\lambda \id_V - L$ fails to be injective.
-\item The \udef{continuous spectrum} $\sigma_\text{c}(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, but not surjective, and has an image dense in $V$.
-\item The \udef{residual spectrum} $\sigma_\text{r}(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, but not surjective, and does not even have an image dense in $V$.
+\item The \udef{spectrum} of $L$ is the complement of the resolvent set: $\sigma(L) \defeq \C\setminus\rho(L)$.
+\item The \udef{point spectrum} or \udef{discrete spectrum} $\sigma_\text{p}(L)$ contains the values of $\lambda$ where $\lambda \id_V - L$ fails to be injective. These values are called the \udef{eigenvalues} of $L$.
+\item The \udef{continuous spectrum} $\sigma_\text{c}(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, $\overline{\im(\lambda \id_V - L)} = V$, but $\im(\lambda \id_V - L) \neq V$.
+\item The \udef{residual spectrum} $\sigma_\text{r}(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, but $\overline{\im(\lambda \id_V - L)} \neq V$.
 \end{itemize}
+The sets $\sigma_\text{p}(T), \sigma_\text{c}(T)$ and $\sigma_\text{r}(T)$ are disjoint.
 \end{definition}
 In finite dimensions we know that
 \[ \text{$\lambda \id_V - L$ is surjective} \quad\iff\quad \text{$\lambda \id_V - L$ is injective.} \]
 So in this case there can only ever be a point spectrum.
 
-\begin{definition}
-For $\lambda \notin \sigma_\text{p}(L)$ the \udef{resolvent} $R_\lambda(L): \dom(R_\lambda(L)) \to \dom(L)$ of $L$ is
-\[ R_\lambda(L) = (\lambda \id_V - L)^{-1}. \]
-Note that $R_\lambda(L)$ is a linear operator on $V$ with $\dom(R_\lambda(L)) \subset V$.
-\end{definition}
+\begin{proposition}
+Let $X$ be a Banach space and $T$ a closed linear operator on $X$. Then $\lambda \in \sigma(T)$ \textup{if and only if} $\lambda \id_X - T: \dom(T) \to V$ is not bijective.
+\end{proposition}
+\begin{proof}
+If $\lambda \id_X - T$ is not bijective, then clearly $\lambda \in \sigma(T)$.
+
+Conversely, assume $\lambda \id_X - T$ is bijective. Then $(\lambda \id_X - T)^{-1}: X\to \dom(T)$ is closed by \ref{prop:algebraClosedOperators} and has as domain a Banach space, so it is bounded by the closed graph theorem \ref{theorem:closedGraphTheorem}.
+\end{proof}
+\begin{corollary}
+Let $T$ a closed linear operator on a Banach space. Then
+\[ \sigma(T) = \sigma_\text{p}(T) \cup \sigma_\text{c}(T) \cup \sigma_\text{r}(T). \]
+\end{corollary}
 
 \begin{proposition}
-Let $L$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{L}$ the resolvent $R_\lambda(L)$ is bounded and given by
-\[ R_\lambda(L) = (\lambda \id_X - L)^{-1} = \sum_{n=0}^\infty\frac{L^n}{\lambda^{n+1}} \]
+Let $T$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_\lambda(T)$ is bounded and given by
+\[ R_\lambda(T) = (\lambda \id_X - T)^{-1} = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
 with uniform convergence. The norm is bounded by
-\[ \norm{R_\lambda(L)} = \norm{(\lambda \id_X - L)^{-1}} \leq \frac{1}{|\lambda|-\norm{T}}. \]
+\[ \norm{R_\lambda(T)} = \norm{(\lambda \id_X - T)^{-1}} \leq \frac{1}{|\lambda|-\norm{T}}. \]
 \end{proposition}
 \begin{proof}
 The operator $T/\lambda$ is a contraction so the Neumann series \ref{corollary:NeumannSeries} gives
 \[ \left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \left(\frac{T}{\lambda}\right)^n.  \]
 Now $(\lambda \id_X - L)^{-1} = \frac{1}{\lambda}\left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \frac{T^n}{\lambda^{n+1}}$. The Neumann series also gives us the bound on the norm.
 \end{proof}
+\begin{corollary}
+Let $T$ be a bounded operator on a Banach space. Then $\sigma(T)\subset [-\norm{T}, \norm{T}]$.
+\end{corollary}
 
 \begin{proposition}
-Let $X$ be a Banach space and $T:X\to X$ a bounded linear operator. Then $\lambda \in \sigma(T)$ \textup{if and only if} $\lambda \id_V - T$ is not bijective.
+Let $T$ be a closed linear operator on a Banach space such that $0\in\rho(T)$. Let $S$ be a bounded operator with $\norm{S} < \norm{T^{-1}}^{-1}$, then $0\in\rho(T+S)$.
 \end{proposition}
 \begin{proof}
-If $T$ is bounded, then $\lambda \id_V - T$ is bounded for all $\lambda\in\mathbb{F}$. By corollary \ref{corollary:boundedInverse} to the open mapping theorem, if $\lambda \id_V - T$ is bijective, then it is bounded.
+Since $\norm{T^{-1}S} \leq \norm{T^{-1}}\;\norm{S} < 1$, it follows from the Neumann series \ref{corollary:NeumannSeries} that $\id + T^{-1}S$ has a bounded inverse so that $(\id + T^{-1}S)^{-1}T^{-1}$ exists and is bounded. Then $(\id + T^{-1}S)^{-1}T^{-1} = (T+S)^{-1} = T^{-1}(\id + ST^{-1})$.
 \end{proof}
-
+\begin{corollary}
+Let $T$ be a closed linear operator on a Banach space. Then $\sigma(T)$ is closed and $\rho(T)$ is open.
+\end{corollary}
+\begin{proof}
+Let $\lambda \in \rho$ such that $(\lambda\id - T)^{-1}$ is bounded. For all $\epsilon \in B(0, 1/\norm{()\lambda\id - T)^{-1}})$ we have that $(\lambda\id - T) + \epsilon\id = (\lambda +\epsilon)\id -T$ has bounded inverse, so $\lambda + \epsilon \in \rho(T)$.
+\end{proof}
+\begin{corollary}
+Let $T$ be a bounded linear operator on a Banach space. Then $\sigma(T)$ is compact.
+\end{corollary}
 
 \begin{lemma}
 Let $L$ be an operator on a vector space $V$. If $\lambda \id_V - T$ is not bounded from below, then $\lambda \in \sigma(T)$.
@@ -1888,6 +1964,17 @@ Let $T:X\to X$ be an operator on a Banach space and $\lambda\in\sigma_\text{c}$,
 If $R_\lambda(T)$ is bounded, $\lambda \id_V - T$ then is bounded below by lemma \ref{lemma:boundedBelowBounded} and has closed range by proposition \ref{prop:boundedBelowClosedRange}.
 \end{proof}
 
+TOreDO:
+\begin{proposition}
+Let $T \in \Bounded(H)$ for some Hilbert space $H$. Then $\sigma(T) \neq \emptyset$.
+\end{proposition}
+\begin{proof}
+Let $x,y\in H$ and define
+\[ f(\lambda) = \inner{x,R_\lambda(T)y}. \]
+If $\sigma(T) = \emptyset$, then $f$ is an entire function. Now
+\[ \norm{R_\lambda(T)} \leq \frac{1}{|\lambda| - \norm{T}} \to 0 \quad\text{as}\quad |\lambda| \to \infty. \]
+By Liouville's theorem (TODO ref) we must have $f\equiv 0$. Because the $x,y$ we arbitrary we must have $R_\lambda(T)y = 0$ for all $y\in H$, such that $R_\lambda(T)$ is not injective, which is impossible as it is an inverse.
+\end{proof}
 
 \subsection{The point spectrum: eigenvalue and eigenvectors}
 In this section we study invariant subspaces with dimension $1$, i.e. subspaces $U= \Span\{v\}$ such that
@@ -2020,6 +2107,92 @@ Then $\sigma_\text{r}(T) = \sigma_\text{cp}(T)\setminus\sigma_\text{p}(T)$.
 \subsection{The essential spectrum}
 TODO \url{https://en.wikipedia.org/wiki/Spectrum_(functional_analysis)#Classification_of_points_in_the_spectrum}
 
+\section{Spectral properties of operators on Hilbert spaces}
+
+\begin{proposition}
+Let $T$ be a closed, densly defined operator on a Hilbert space.
+\begin{enumerate}
+\item If $\lambda\in\rho(T)$, then $\overline{\lambda}\in\rho(T^*)$.
+\item If $\lambda\in\sigma_\text{r}(T)$, then $\overline{\lambda}\in\sigma_\text{p}(T^*)$.
+\item If $\lambda\in\sigma_\text{p}(T)$, then $\overline{\lambda}\in\sigma_\text{r}(T^*)\cup\sigma_\text{p}(T^*)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $T$ be a densely defined self-adjoint operator (TODO: closed necessary??). Then
+\begin{enumerate}
+\item $\sigma(T) \subset \R$;
+\item $\sigma_r(T) = \emptyset$;
+\item let $\lambda_1,\lambda_2 \in \sigma_\text{p}(T)$ and $\lambda_1\neq \lambda_2$, then 
+\[ \Null(\lambda_1\id - T) \perp \Null(\lambda_2 \id - T). \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $T$ be a unitary operator. Then
+\begin{enumerate}
+\item $\sigma_\text{r}(T) = \emptyset$;
+\item $\sigma(T) \subset \setbuilder{\lambda\in\C}{|\lambda| = 1}$.
+\end{enumerate}
+\end{proposition}
+TODO: move to more general place??
+
+\section{Multiplication operators}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. A \udef{multiplication operator} is an operator of the form
+\[ T: L^p(\Omega, \mu) \to L^p(\Omega, \mu): u(x) \mapsto a(x)u(x) \]
+for some $a\in L^\infty(\Omega,\mu)$
+\end{definition}
+
+\begin{proposition}
+Let $T: L^p(\Omega, \mu) \to L^p(\Omega, \mu): u \mapsto a\cdot u$ be a multiplication operator. Then
+\[ \norm{T} = \norm{a}_{L^\infty}. \]
+\end{proposition}
+\begin{proof}
+From the inequality $\norm{Tu}_{L^p}\leq \norm{a}_{L^\infty}\norm{u}_{L^p}$ we get $\norm{T} \leq \norm{a}_{L^\infty}$.
+
+TODO
+\end{proof}
+
+\begin{lemma}
+Let $T: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u \mapsto a\cdot u$ be a multiplication operator with $a\in L^\infty(\Omega,\mu)$. Then $T^*$ is the multiplication operator
+\[ T^*: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u \mapsto \overline{a}\cdot u. \]
+\end{lemma}
+\begin{proof}
+From 
+\[ \inner{Tu,v} = \int_\Omega a\cdot u \cdot \overline{v}\diff{\mu} = \int_\Omega u \cdot \overline{\overline{a}\cdot v}\diff{\mu} \]
+it follows that $T^*v = \overline{a}\cdot v$.
+\end{proof}
+\begin{corollary}
+Then
+\begin{enumerate}
+\item $T$ is self-adjoint if $a$ is real-valued;
+\item $T$ is skew-adjoint if $a$ is purely imaginary;
+\item $T$ is unitary if $|a(x)| \equiv 1$.
+\end{enumerate}
+\end{corollary}
+
+Let $E_\lambda$ be the level set
+\[ E_\lambda = \setbuilder{x\in\Omega}{a(x) = \lambda} \]
+
+\begin{proposition}
+Let $T: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u\mapsto a\cdot u$ be a multiplication operator with $a\in \cont(\Omega)$. Then
+\begin{enumerate}
+\item $\sigma_\text{p}(T) = \setbuilder{\lambda\in \im(a)}{\mu(E_\lambda)>0}$;
+\item $\sigma_\text{c}(T) = \setbuilder{\lambda\in \overline{\im(a)}}{\mu(E_\lambda) = 0}$;
+\item $\sigma_\text{r}(T) = \emptyset$;
+\item $\rho(T) = \C\setminus \overline{\im(T)}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
 \section{The spectral theorem}
 \url{https://link.springer.com/content/pdf/10.1007%2F978-1-4614-7116-5.pdf}
@@ -2032,7 +2205,7 @@ TODO \url{https://en.wikipedia.org/wiki/Spectrum_(functional_analysis)#Classific
 \chapter{Integral and convolution operators}
 \section{Integral operators and transforms}
 \begin{definition}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. Then an \udef{integral operator} or \udef{integral transform} is a map between function spaces (TODO which?) on $\Omega$ of the form
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. Then an \udef{integral operator} or \udef{integral transform} is a map of the form
 \[ T: L^2(\Omega) \to L^2(\Omega): f \mapsto \int_\Omega K(x,y)f(y) \diff{\mu(y)} \]
 where $K\in L^2(\Omega\times \Omega)$ is the \udef{kernel} or \udef{nucleus} of $T$.
 
@@ -2063,6 +2236,12 @@ TODO
 Let $A$ be a Borel set and $K:A\times A\to \C$ a measurable function such that the integral operator with kernel $K$ is bounded. Then the adjoint of the integral operator is again an integral operator with kernel $K^*(x,y) = \overline{K(y,x)}$.
 \end{proposition}
 
+\begin{proposition}
+Let $T$ be a Volterra integral operator. Then $\sigma(T) = \sigma_\text{c}(T) = \{0\}$.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
 \section{Integral equations}
 \begin{definition}
