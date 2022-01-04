@@ -561,7 +561,7 @@ Let $V$ be a vector space with a pre-inner product $\inner{\cdot,\cdot}$. Let $v
 Suppose $\inner{\cdot,\cdot}$ is definite (i.e. an inner product), then
 this is an equality \textup{if and only if} $v$ and $w$ are scalar multiples.
 \end{theorem}
-This resut is also known as the Cauchy-Schwarz inequality, or the CSB inequality.
+This result is also known as the Cauchy-Schwarz inequality, or the CSB inequality.
 \begin{proof}
 Consider 
 \[ \inner{v-\lambda w, v-\lambda w} = \inner{v,v}-\lambda\inner{v,w}-\overline{\lambda}\inner{w,v} + |\lambda|^2 \inner{w,w} \geq 0. \]
@@ -667,7 +667,6 @@ If $p\neq 2$ we can find a counterexample to the parallelogram law: let $x=(1,1,
 \[ \norm{x}_p = \norm{y}_p = 2^{1/p} \qquad \text{and} \qquad \norm{x+y} = \norm{x-y} = 2 \]
 and the parallelogram law is then not valid if $p\neq 2$.
 \end{proof}
-
 
 \section{Orthogonal and orthonormal sets of vectors}
 \begin{definition}
@@ -811,9 +810,9 @@ Let $V$ be an inner product space and $D = \{e_i\}_{i\in I}$ an orthonormal set.
 \begin{enumerate}
 \item $D$ is an orthonormal basis of $V$;
 \item $D$ is total in $V$;
-\item for all $v,w\in V$,
+\item \textup{(Parseval's identity)} for all $v,w\in V$,
 \[ \inner{v,w} = \sum_{i\in I}\inner{v,e_i}\inner{e_i,w}; \]
-\item \textup{(Parseval's identity)} for all $v\in V$,
+\item \textup{(Bessel equality)} for all $v\in V$,
 \[ \norm{v}^2 = \sum_{i\in I}|\inner{e_i,v}|^2; \]
 \item for all $v\in V$: if $v\perp D$, then $v=0$;
 \item \textup{(Plancherel formula)} for all $v\in V$,
@@ -983,8 +982,6 @@ Taking the orthogonal complement of both sides gives the result. In infinite dim
 
 
 \section{Maps on inner product spaces}
-Inner product spaces are naturally metric spaces with metric 
-\[ d(x,y) = \norm{x-y} = \sqrt{\inner{x-y, x-y}}. \]
 
 \begin{lemma}[Continuity of inner product]
 Let $V$ be an inner product space. Then the inner product is a continuous function $V\times V \to \mathbb{F}$.
@@ -997,6 +994,29 @@ We show that if $x_n \to x$ and $y_n \to y$, then $\inner{x_n,y_n}\to \inner{x,y
 &\leq \norm{x_n}\norm{y_n-y} + \norm{x_n-x}\norm{y}.
 \end{align*}
 Because the right-hand side converges to $0$, the left-hand side must too.
+\end{proof}
+
+\subsection{Bounded operators}
+\begin{lemma} \label{lemma:operatorNormInnerProduct}
+Let $T\in\Bounded(V,W)$, then
+\begin{align*}
+\norm{T} &= \sup_{w\in \im(T),v \in \dom(T)} \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \\
+&= \sup\setbuilder{|\inner{w,Tv}|}{w\in \im(T)\;\land\; v\in\dom{T}\;\land\; \norm{w} = 1 = \norm{v}} \\
+&= \sup_{w\in W,v \in \dom(T)} \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \\
+&= \sup\setbuilder{|\inner{w,Tv}|}{w\in W\;\land\; v\in\dom{T}\;\land\; \norm{w} = 1 = \norm{v}}.
+\end{align*}
+\end{lemma}
+\begin{proof}
+We prove
+\[ \norm{T} \leq \sup_{w\in \im(T),v \in \dom(T)} \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \leq \sup_{w\in W,v \in \dom(T)} \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \leq \norm{T}. \]
+The first inequality
+
+
+Set $M = \sup_{w\in \im(T),v \in \dom(T)} \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}}$. Then $M\leq \norm{T}$ follows from the Cauchy-Schwarz inequality \ref{theorem:CauchySchwarz}:
+\[ \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \leq \frac{\norm{w}\,\norm{Tv}}{\norm{w}\,\norm{v}} = \frac{\norm{Tv}}{\norm{v}} \leq \frac{\norm{T}\,\norm{v}}{\norm{v}} = \norm{T}. \]
+For the opposite inequality, we have
+\[ \setbuilder{|\inner{Tv,Tv}|}{v\in\dom{T}\land \norm{v} = 1} \subseteq \setbuilder{|\inner{w,Tv}|}{w\in \im(T)\land v\in\dom{T}\land \norm{w} = 1 = \norm{v}} \]
+so $M \geq \sup\setbuilder{|\inner{Tv,Tv}|}{v\in\dom{T}\;\land\; \norm{v} = 1} = \norm{T}$, by \ref{prop:operatorNorm}.
 \end{proof}
 
 \subsection{Isometries}
@@ -1080,3 +1100,61 @@ Let $V$ be an inner product space and $T$ a linear operator on $V$.
 \item A subspace $U\subseteq V$ is said to be \udef{reducing} for $T$ if both $U$ and $U^\perp$ are invariant under $T$.
 \end{itemize}
 \end{definition}
+
+\subsection{Quadratic form associated with an operator}
+\begin{definition}
+Let $T$ be a linear operator on an inner product space $V$. The \udef{quadratic form associated with $T$} is
+\[ Q: \dom(T)\to \F: u\mapsto \inner{u,Tu}. \]
+\end{definition}
+\begin{lemma}
+If $T$ is a symmetric operator, then its associated quadratic form is real-valued.
+\end{lemma}
+\begin{proof}
+Assume $T$ symmetric, then for all $u\in\dom(T)$
+\[ Q(u) = \inner{u,Tu} = \inner{Tu,u} = \overline{\inner{u,Tu}} = \overline{Q(u)}. \]
+\end{proof}
+
+\subsubsection{Rayleigh quotient}
+\begin{definition}
+Let $T$ be a linear operator on an inner product space $V$. The \udef{Rayleigh quotient} for $T$ is 
+\[ J: \dom(T)\setminus\{0\}\to \F: u\mapsto \frac{Q(u)}{\norm{u}^2} = \frac{\inner{u,Tu}}{\norm{u}^2}. \]
+\end{definition}
+
+\subsubsection{Numerical range}
+\url{https://users.math.msu.edu/users/shapiro/pubvit/downloads/numrangenotes/numrange_notes.pdf}
+
+\url{https://pskoufra.info.yorku.ca/files/2016/07/Numerical-Range.pdf}
+
+\url{http://www.math.wm.edu/~ckli/nrnote}
+
+\begin{definition}
+Let $T$ be a linear operator on an inner product space $V$ and $J_T$ the Rayleigh quotient of $T$. The range $\NumRange(T) \defeq \im(J_T)$ is known as the \udef{numerical range}.
+\end{definition}
+
+The numerical range of $T$ can equivalently be defined as the image of the unit sphere under the quadratic form associated to $T$.
+
+\subsubsection{Numerical radius}
+\begin{definition}
+Let $T$ be a linear operator on an inner product space $V$. Then
+\[ \nr(T) \defeq \sup_{u\in \dom(T)\setminus\{0\}} |J(u)| \]
+is the \udef{numerical radius}.
+\end{definition}
+
+\begin{proposition}
+Let $T$ be a bounded operator on an inner product space $V$, then
+\[ |J(u)| \leq \norm{T} \qquad \forall u\in \dom(T)\setminus\{0\}. \]
+If $T$ is also symmetric, then
+\[ \norm{T} = \sup_{u\in \dom(T)\setminus\{0\}} |J(u)|. \]
+\end{proposition}
+\begin{proof}
+The first claim follows simplif from the Cauchy-Schwarz inequality \ref{theorem:CauchySchwarz}
+\[ |J(u)| \leq \frac{\norm{u}\,\norm{Tu}}{\norm{u}^2} = \frac{\norm{Tu}}{\norm{u}} \leq \frac{\norm{T}\norm{u}}{\norm{u}} = \norm{T}. \]
+For the second claim we need to also show the inverse inequality. Set $M = \sup_{u\in \dom(T)\setminus\{0\}} |J(u)|$ and take $x\in\dom(T)$, $y\in V$.
+
+Since the associated quadratic form $Q$ is real-valued we have the inequalities
+\begin{align*}
+\inner{u+v}
+\end{align*}
+
+{lemma:operatorNormInnerProduct}
+\end{proof}

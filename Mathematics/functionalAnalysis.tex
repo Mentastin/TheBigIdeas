@@ -558,21 +558,28 @@ Assume $C$ closed under addition. Take $v,w\in C$ and $\lambda\in[0,1]$. Then $(
 \section{Operators on topological vector spaces}
 \subsection{Compact operators}
 \begin{definition}
-A linear operator $T:X\to Y$ between TVSs is \udef{compact} if it maps bounded sets to precompact sets, i.e. 
-\[ \text{$A\subset X$ is bounded} \quad\implies\quad \text{$\overline{T[A]}$ is compact.} \]
+A linear operator $T:X\to Y$ between TVSs is \udef{compact} if it maps a neighbourhood of the origin to a precompact set, i.e. 
+\[ \exists U \in \neighbourhoods(0): \;  \text{$\overline{T[U]}$ is compact.} \]
 The set of compact linear operators in $(X\to Y)$ is denoted $\Compact(X,Y)$.
 \end{definition}
 
 \begin{proposition}
-Let $T:X\to Y$ be a linear operator between TVSs. The following are equivalent:
+Let $X$ be a normed space and $Y$ a TVS and $T:X\to Y$ a linear operator. Then the following are equivalent:
 \begin{enumerate}
 \item $T$ is a compact operator;
-\item the image of the unit ball of $X$, $T[B(\vec{0},1)]$, is precompact in $Y$;
-\item there exists a neighbourhood $U\subset X$ of the origin such that $T[U]$ is precompact;
 \item there exists a neighbourhood $U \subset X$ of the origin and a compact set $V\subset Y$ such that $T[U] \subset V$;
-\item for any bounded sequence $(x_{n})_{n\in \mathbb{N}}$ in $X$, the sequence $(Tx_{n})_{n\in \mathbb{N} }$ contains a converging subsequence. (TODO: only for sequential spaces).
+\item the image of the unit ball of $X$, $T[B(\vec{0},1)]$, is precompact in $Y$;
+\item the image of any bounded set in $X$ is precompact in $Y$.
+\end{enumerate}
+If $Y$ is a normed space, these are also equivalent to
+\begin{enumerate} \setcounter{enumi}{4}
+\item for any bounded sequence $(x_{n})_{n\in \mathbb{N}}$ in $X$, the sequence $(Tx_{n})_{n\in \mathbb{N} }$ contains a converging subsequence.
 \end{enumerate}
 \end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
 
 \begin{lemma}
 Let $X,Y$ be TVSs.
@@ -583,7 +590,7 @@ Let $X,Y$ be TVSs.
 \end{lemma}
 \begin{proof}
 (1) Let $K,K':X\to Y$ be compact operators. Then, by \ref{lemma:closureSum},
-\[ \overline{K[B(0, 1)]+K'[B(0, 1)]} \subseteq \overline{K[B(0, 1)]}+\overline{K'[B(0, 1)]} \qquad \overline{K[\lambda B(0, 1)]} = \lambda\overline{K[B(0, 1)]}. \]
+\[ \overline{K[B(0, 1)]+K'[B(0, 1)]} \subseteq \overline{K[B(0, 1)]}+\overline{K'[B(0, 1)]}, \qquad \overline{K[\lambda B(0, 1)]} = \lambda\overline{K[B(0, 1)]}. \]
 
 (2) Let $K\in\Compact(X, Y)$. Then the image of the unit ball is precompact, meaning it is bounded. So $K$ is bounded by \ref{prop:operatorNorm}.
 \end{proof}
@@ -597,6 +604,12 @@ The set $T[B(\vec{0},1)]$ is bounded because $T$ is. By the Heine-Borel (TODO re
 \begin{corollary}
 Bounded operators with as image a finite dimensional normed space are compact.
 \end{corollary}
+\begin{corollary}
+The identity on a normed space $X$ is compact \textup{if and only if} $X$ is finite-dimensional.
+\end{corollary}
+\begin{proof}
+TODO ref. 
+\end{proof}
 
 \section{Continuity}
 \url{https://en.wikipedia.org/wiki/Bilinear_map#Continuity_and_separate_continuity}
@@ -911,7 +924,16 @@ This gives the conventional interpretation of the \udef{Hilbert space direct sum
 
 Hamel basis / Schauder basis / Hilbert basis
 
-Maximal orthonormal sets are orthonormal bases. So there is always an o.n. basis.
+\begin{lemma} \label{lemma:HilbertOnBasisMaximal}
+An orthonormal subset of a Hilbert space is an o.n. basis \textup{if and only if} it is maximal.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Every Hilbert space has an o.n. basis.
+\end{corollary}
+
 
 Every Hilbert basis is Schauder basis if $V$ is separable.
 
@@ -933,6 +955,16 @@ If we have an isomorphism, this isomorphism maps an orthonormal basis to an orth
 All separable infinite-dimensional Hilbert spaces are isometrically isomorphic to $\ell^2$.
 \end{corollary}
 
+\begin{lemma}
+Let $\{\phi_n(x)\}^\infty_{n=0}$ be an orthonormal basis of $L^2(\Omega)$, then $\{\phi_n(x)phi_m(y)\}^\infty_{n,m=0}$ is an orthonormal basis of $L^2(\Omega\times\Omega)$.
+\end{lemma}
+\begin{proof}
+The set $\{\phi_n(x)phi_m(y)\}^\infty_{n,m=0}$ is orthonormal:
+\[ \iint_{\Omega\times\Omega} \phi_n(x)\phi_m(y)\overline{\phi_{n'}(x)\phi_{m'}(y)}\diff{x}\diff{y} = \int_\Omega\phi_n(x)\overline{\phi_{n'}(x)}\diff{x} \cdot \int_\Omega\phi_m(y)\overline{\phi_{m'}(y)}\diff{y} = \delta_{n,n'}\delta_{m,m'}, \]
+using Fubini's theorem and the Hölder inequality (TODO refs).
+
+For completeness we may simply verify the Bessel equality by \ref{prop:totalONBParsevalEquivalence} and \ref{lemma:HilbertOnBasisMaximal}. TODO
+\end{proof}
 
 \section{Projectors and minimisation problems}
 Every subspace is a convex, non-empty subset.
@@ -1360,8 +1392,8 @@ So $\dom(T) \subset (\{S_1(x) - S_2(x)\})^\perp$ and in fact $H = \overline{\dom
 \end{proof}
 
 \begin{definition}
-Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. We define the adjoint
-\[ T^* = \bigcup\setbuilder{S\in (K\not\to H)}{\text{$S$ is an adjoint of $T$}}. \]
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. We define the adjoint $T^*$ as
+\[ T^* \defeq \bigcup\setbuilder{S\in (K\not\to H)}{\text{$S$ is an adjoint of $T$}}. \]
 \end{definition}
 
 \begin{lemma}
@@ -1686,93 +1718,6 @@ An integral operator defined by a square integrable kernel $K\in L^2(A\times A, 
 
 Every proper subspace $U$ of a normed vector space $V$ has empty interior.
 A nice consequence of this is that any closed proper subspace is necessarily nowhere dense. So if V is a Banach space, the Baire category theorem implies that V cannot be a countable union of closed proper subspaces. In particular, an infinite dimensional Banach space cannot be a countable union of finite dimensional subspaces. This means, for example, that a vector space of countable dimension (e.g. the space of polynomials) cannot be equipped with a complete norm.
-
-\subsection{Fredholm operators}
-\begin{definition}
-An operator $T\in\Bounded(H,H')$ is called a \udef{Fredholm operator} if $T$ has a finite-dimensional kernel and cokernel.
-
-The \udef{Fredholm index} of $T$ is defined as
-\[ \Index T \defeq \dim\ker T - \dim\coker T.  \]
-
-We denote the space of Fredholm operators from $H$ to $H'$ as $\Fred(H,H')$. If $H=H'$, we write $\Fred(H)$.
-\end{definition}
-
-\begin{example}
-\begin{enumerate}
-\item If $H=H'$ is finite-dimensional, then all operators are Fredholm with index $0$.
-\item The left shift $S_l:\ell^2(\N)\to\ell^2(\N): (x_n)_n\mapsto (x_{n+1})_n$ has index $1$.
-\item The right shift $S_r = S_l^*$ has index $-1$.
-\end{enumerate}
-\end{example}
-
-\begin{lemma}
-A Fredholm operator has closed range.
-\end{lemma}
-
-\begin{lemma}
-Let $T\in\Bounded(H)$. Then $\dim\coker T = \dim\ker T^*$.
-\end{lemma}
-\begin{proof}
-TODO (is it correct?) $\ker(T^*) = \im(T)^\perp$.
-\end{proof}
-
-\begin{proposition}
-Let $H$ be a Hilbert space. Then $\Compact(H)$ is a closed two-sided ideal in $H$.
-\end{proposition}
-\begin{definition}
-Let $H$ be a Hilbert space. The \udef{Calkin algebra} is the quotient $\Bounded(H)/\Compact(H)$.
-\end{definition}
-TODO: quotient algebra ($[A][B] = [AB]$)
-
-\begin{proposition}
-Let $[T]\in\Bounded(H)/\Compact(H)$. Then the following are equivalent:
-\begin{enumerate}
-\item $[T]$ is invertible in the Calkin algebra;
-\item $\exists S\in\Bounded(H):$ both $\vec{1}-TS$ and $\vec{1}-ST$ are compact;
-\item $T$ has closed range and finite-dimensional kernel and cokernel. 
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-Point 1. and 2. are easily equivalent: $[S]$ is an inverse of $[T]$ if and only if $[\vec{1}] = [S][T] = [ST]$ and $[\vec{1}] = [T][S] = [TS]$. Then
-\[ [\vec{1}] = [ST] \iff [ST - \vec{1}] = [0] \qquad [\vec{1}] = [TS] \iff [TS - \vec{1}] = [0] \]
-and $[F]=[0]$ if and only if $F$ is compact.
-
-
-\end{proof}
-
-\begin{proposition}
-Let $S,T\in\Fred(H)$ and $K\in\Compact(H)$. Then
-\begin{enumerate}
-\item $\Index(T^*) = -\Index(T)$;
-\item $\Index(ST) = \Index(S)+\Index(T)$;
-\item $\Index(T+K) = \Index(T)$;
-\item $\Index(T) = 0$ \textup{if and only if} $T=K+L$ for some invertible $L$.
-\end{enumerate}
-\end{proposition}
-
-\begin{lemma}
-Let the commutative diagram
-\[ \begin{tikzcd}
-0 \rar & H \dar{T} \rar & H' \dar{S} \rar & H^{\prime\prime} \dar{R} \rar & 0 \\
-0 \rar & H \rar & H' \rar & H^{\prime\prime} \rar & 0
-\end{tikzcd} \]
-have short exact rows. If any two of $T,S,R$ are Fredholm, then so is the third and
-\[ \Index S = \Index T + \Index R. \]
-\end{lemma}
-\begin{proof}
-TODO snake lemma to obtain long exact
-\[ 0\to \ker T \to \ker S\to \ker R \to \coker T \to \coker S \to \coker R \to 0. \]
-\end{proof}
-\begin{corollary} \mbox{}
-\begin{enumerate} 
-\item Let $T: H\to H$ and $S:H'\to H'$ be Fredholm, then so is $T\oplus S$ with
-\[ \Index(T\oplus S) = \Index(T)+\Index(S). \]
-\item Let $T: H\to H'$ and $S:H'\to H^{\prime\prime}$ be Fredholm, then so is $ST$ with
-\[ \Index(ST) = \Index(T)+\Index(S). \]
-\item Let $K: H\to H$ be compact, then $\id+K$ is Fredholm with
-\[ \Index(\id+K) = 0. \]
-\end{enumerate}
-\end{corollary}
 
 \section{Unbounded operators}
 
@@ -2202,28 +2147,132 @@ TODO
 
 
 
-\chapter{Integral and convolution operators}
+\chapter{Types of operators}
+\section{Fredholm operators}
+\begin{definition}
+An operator $T\in\Bounded(X,Y)$ between Banach spaces is called a \udef{Fredholm operator} if $T$ has a finite-dimensional kernel and cokernel.
+
+The \udef{Fredholm index} of $T$ is defined as
+\[ \Index T \defeq \dim\ker T - \dim\coker T.  \]
+
+We denote the space of Fredholm operators from $X$ to $Y$ as $\Fred(X,Y)$. If $X=Y$, we write $\Fred(X)$.
+\end{definition}
+
+\begin{example}
+\begin{enumerate}
+\item If $X=Y$ is finite-dimensional, then all operators are Fredholm with index $0$.
+\item The left shift $S_l:\ell^2(\N)\to\ell^2(\N): (x_n)_n\mapsto (x_{n+1})_n$ has index $1$.
+\item The right shift $S_r = S_l^*$ has index $-1$.
+\end{enumerate}
+\end{example}
+
+\begin{lemma}
+A Fredholm operator has closed range.
+\end{lemma}
+
+\begin{lemma}
+Let $T\in\Bounded(H)$ be a bounded operator on a Hilbert space. Then $\dim\coker T = \dim\ker T^*$.
+\end{lemma}
+\begin{proof}
+TODO (is it correct?) $\ker(T^*) = \im(T)^\perp$.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a Banach space. Then $\Compact(X)$ is a closed two-sided ideal in $\Bounded(X)$.
+\end{proposition}
+\begin{definition}
+Let $X$ be a Banach space. The \udef{Calkin algebra} is the quotient $\Bounded(X)/\Compact(X)$.
+\end{definition}
+TODO: quotient algebra ($[A][B] = [AB]$)
+
+\begin{proposition}
+Let $[T]\in\Bounded(X)/\Compact(X)$. Then the following are equivalent:
+\begin{enumerate}
+\item $[T]$ is invertible in the Calkin algebra;
+\item $\exists S\in\Bounded(X):$ both $\vec{1}-TS$ and $\vec{1}-ST$ are compact;
+\item $T$ has closed range and finite-dimensional kernel and cokernel. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Point 1. and 2. are easily equivalent: $[S]$ is an inverse of $[T]$ if and only if $[\vec{1}] = [S][T] = [ST]$ and $[\vec{1}] = [T][S] = [TS]$. Then
+\[ [\vec{1}] = [ST] \iff [ST - \vec{1}] = [0] \qquad [\vec{1}] = [TS] \iff [TS - \vec{1}] = [0] \]
+and $[F]=[0]$ if and only if $F$ is compact.
+
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $S,T\in\Fred(X)$, $\lambda\in\F$ and $K\in\Compact(X)$. Then
+\begin{enumerate}
+\item $\Index(ST) = \Index(S)+\Index(T)$;
+\item $\Index(T+K) = \Index(T)$;
+\item $\Index(\lambda T) = \Index(T)$, if $\lambda \neq 0$;
+\item $\Index(T) = 0$ \textup{if and only if} $T=K'+L$ for some compact $K'$ and invertible $L$.
+\end{enumerate}
+Let $T\in\Fred(H)$ for some Hilbert space $H$. Then
+\begin{enumerate} \setcounter{enumi}{4}
+\item $\Index(T^*) = -\Index(T)$.
+\end{enumerate}
+\end{proposition}
+TODO: integrate with corollary??
+
+\begin{lemma}
+Let the commutative diagram
+\[ \begin{tikzcd}
+0 \rar & X \dar{T} \rar & Y \dar{S} \rar & Z \dar{R} \rar & 0 \\
+0 \rar & X \rar & Y \rar & Z \rar & 0
+\end{tikzcd} \]
+have short exact rows. If any two of $T,S,R$ are Fredholm, then so is the third and
+\[ \Index S = \Index T + \Index R. \]
+\end{lemma}
+\begin{proof}
+TODO snake lemma to obtain long exact
+\[ 0\to \ker T \to \ker S\to \ker R \to \coker T \to \coker S \to \coker R \to 0. \]
+\end{proof}
+\begin{corollary} \mbox{}
+\begin{enumerate} 
+\item Let $T\in\Fred(X)$ and $S\in\Fred(Y)$ be Fredholm, then so is $T\oplus S$ with
+\[ \Index(T\oplus S) = \Index(T)+\Index(S). \]
+\item Let $T\in\Fred(X,Y)$ and $S\in\Fred(Y,Z)$ be Fredholm, then so is $ST$ with
+\[ \Index(ST) = \Index(T)+\Index(S). \]
+\item Let $K\in\Compact(X)$ be compact, then $\id_X+K$ is Fredholm with
+\[ \Index(\id_X+K) = 0. \]
+\end{enumerate}
+\end{corollary}
+
+\subsection{Fredholm alternative}
+
 \section{Integral operators and transforms}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. Then an \udef{integral operator} or \udef{integral transform} is a map of the form
-\[ T: L^2(\Omega) \to L^2(\Omega): f \mapsto \int_\Omega K(x,y)f(y) \diff{\mu(y)} \]
-where $K\in L^2(\Omega\times \Omega)$ is the \udef{kernel} or \udef{nucleus} of $T$.
+\[ T: U\subset (\Omega\to\C) \to (\Omega\to\C): f \mapsto \int_\Omega K(x,y)f(y) \diff{\mu(y)} \]
+where $K\in (\Omega\times \Omega \to \C)$ is the \udef{kernel} or \udef{nucleus} of $T$.
 
 The kernel is called
 \begin{itemize}
 \item \udef{symmetric} if $K(x,y) = \overline{K(y,x)}$;
 \item \udef{Volterra} if $\Omega = \R$ and $K(x,y) = 0$ for $y>x$;
 \item \udef{convolutional} if $\Omega$ is a group and $K(x,y) = F(x-y)$ for some function $F$;
-\item \udef{Hilbert-Schmidt} if $\int_{\Omega\times \Omega}|K(x,y)|^2\diff{x}\diff{y} < \infty$;
+\item \udef{Hilbert-Schmidt} if $K\in L^2(\Omega\times \Omega)$, i.e.
+\[ \int_{\Omega\times \Omega}|K(x,y)|^2\diff{x}\diff{y} < \infty; \]
 \item \udef{singular} if $K(x,y)$ is unbounded on $\Omega\times \Omega$.
 \end{itemize}
 \end{definition}
-This definition is well-defined: $T\in (L^2(\Omega) \to L^2(\Omega))$. This follows from the Cauchy-Schwarz inequality:
+
+\begin{lemma}
+Hilbert-Schmidt integral operators are compact operators on $L^2(\Omega\times \Omega)$.
+\end{lemma}
+\begin{proof}
+A Hilbert-Schmidt integral operator $T$ maps $L^2(\Omega)$ to $L^2(\Omega)$ functions:
 \begin{align*}
 \norm{Tu}^2_{L^2} &= \int_\Omega \left|\int_{\Omega} K(x,y)u(y)\diff{\mu(y)}\right|^2\diff{\mu(x)} \\
 &\leq \int_\Omega \left(\int_{\Omega} |K(x,y)|^2\diff{\mu(y)}\right) \bigg( |u(y)|^2\diff{\mu(y)}\bigg)\diff{\mu(x)} \\
 &= \left(\int_\Omega \int_{\Omega} |K(x,y)|^2\diff{\mu(y)}\diff{\mu(x)}\right) \bigg( |u(y)|^2\diff{\mu(y)}\bigg) < \infty
 \end{align*}
+where we have used the Cauchy-Schwarz inequality. This also immediately shows Hilbert-Schmidt integral operators are bounded.
+
+TODO Compact
+\end{proof}
 
 \begin{proposition}
 Let $T$ be an integral operator with kernel $K(x,y)$, then $T^*$ is the integral operator with kernel $\overline{K(y,x)}$.
@@ -2243,7 +2292,7 @@ Let $T$ be a Volterra integral operator. Then $\sigma(T) = \sigma_\text{c}(T) = 
 TODO
 \end{proof}
 
-\section{Integral equations}
+\subsection{Integral equations}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. An \udef{integral equation} is an equation containing an unknown function on $\Omega$ and an integral over $\Omega$.
 
