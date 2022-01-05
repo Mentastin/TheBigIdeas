@@ -610,7 +610,7 @@ The substitution $v\to v-w$ gives the second form.
 \end{proof}
 
 \subsection{Parallelogram law and polarisation}
-\begin{theorem}[Parallelogram law]
+\begin{theorem}[Parallelogram law] \label{theorem:parallelogramLaw}
 Let $V$ be an inner product space and $v,w\in V$. Then
 \[ \norm{v+w}^2 + \norm{v-w}^2 = 2 (\norm{v}^2+\norm{w}^2). \]
 \end{theorem}
@@ -628,17 +628,19 @@ Let $V$ be an inner product space and $x,y,z\in V$. Then
 Apply the parallelogram law to $u = \frac{1}{2}(z-x)$ and $v = \frac{1}{2}(z-y)$.
 \end{proof}
 
-\begin{theorem}[Polarisation identities]
+\begin{theorem}[Polarisation identities] \label{theorem:polarisationIdentities}
 Polarisation identities allow us to recover the inner product from the norm.
 \begin{enumerate}
-\item For real vector spaces, $\mathbb{F} = \R$:
+\item For real inner product spaces, $\mathbb{F} = \R$:
 \begin{align*}
 \inner{v,w} &= \frac{1}{2}(\norm{v+w}^2 - \norm{v}^2-\norm{w}^2) \\
 &= \frac{1}{2}(\norm{v}^2 + \norm{w}^2-\norm{v-w}^2) \\
 &= \frac{1}{4}(\norm{v+w}^2 - \norm{v-w}^2) = \frac{1}{4}\sum_{k=0}^1 (-1)^k\norm{v+(-1)^k w}^2.
 \end{align*}
-\item For complex vector spaces, $\mathbb{F} = \C$:
-\[ \inner{x,y} = \frac{1}{4}\sum_{k=0}^3 i^k\norm{x+i^k y}^2. \]
+\item For complex inner product spaces, $\mathbb{F} = \C$:
+\[ \inner{x,y} = \frac{1}{4}\sum_{k=0}^3 i^k\norm{i^k x+y}^2. \]
+\item For general sesquilinear forms:
+\[ S(x,y) = \frac{1}{4}\sum_{k=0}^3 i^k S(i^k x+y, i^k x+y). \]
 \end{enumerate}
 \end{theorem}
 \begin{corollary}
@@ -1009,14 +1011,16 @@ Let $T\in\Bounded(V,W)$, then
 \begin{proof}
 We prove
 \[ \norm{T} \leq \sup_{w\in \im(T),v \in \dom(T)} \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \leq \sup_{w\in W,v \in \dom(T)} \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \leq \norm{T}. \]
-The first inequality
-
-
-Set $M = \sup_{w\in \im(T),v \in \dom(T)} \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}}$. Then $M\leq \norm{T}$ follows from the Cauchy-Schwarz inequality \ref{theorem:CauchySchwarz}:
-\[ \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \leq \frac{\norm{w}\,\norm{Tv}}{\norm{w}\,\norm{v}} = \frac{\norm{Tv}}{\norm{v}} \leq \frac{\norm{T}\,\norm{v}}{\norm{v}} = \norm{T}. \]
-For the opposite inequality, we have
-\[ \setbuilder{|\inner{Tv,Tv}|}{v\in\dom{T}\land \norm{v} = 1} \subseteq \setbuilder{|\inner{w,Tv}|}{w\in \im(T)\land v\in\dom{T}\land \norm{w} = 1 = \norm{v}} \]
-so $M \geq \sup\setbuilder{|\inner{Tv,Tv}|}{v\in\dom{T}\;\land\; \norm{v} = 1} = \norm{T}$, by \ref{prop:operatorNorm}.
+The first two inequalities follow from the characterisation \ref{prop:operatorNorm}
+\[ \norm{T} = \sup_{v \in \dom(T)} \frac{\norm{Tv}}{\norm{v}} = \sup_{v \in \dom(T)} \frac{\inner{Tv,Tv}}{\norm{Tv}\,\norm{v}} \]
+and the inclusions
+\begin{align*}
+\setbuilder{\frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}}}{v\in\dom(T), w = Tv} &\subseteq \setbuilder{\frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}}}{v\in\dom(T), w\in\im(T)}\\
+&\qquad\quad\subseteq \setbuilder{\frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}}}{v\in\dom(T), w\in V}.
+\end{align*}
+The last equality follows from the Cauchy-Schwarz inequality \ref{theorem:CauchySchwarz}:
+\[ \frac{|\inner{w,Tv}|}{\norm{w}\,\norm{v}} \leq \frac{\norm{w}\,\norm{Tv}}{\norm{w}\,\norm{v}} = \frac{\norm{Tv}}{\norm{v}} \leq \frac{\norm{T}\,\norm{v}}{\norm{v}} = \norm{T} \]
+for all $v\in\dom(T), w\in V$. 
 \end{proof}
 
 \subsection{Isometries}
@@ -1104,20 +1108,21 @@ Let $V$ be an inner product space and $T$ a linear operator on $V$.
 \subsection{Quadratic form associated with an operator}
 \begin{definition}
 Let $T$ be a linear operator on an inner product space $V$. The \udef{quadratic form associated with $T$} is
-\[ Q: \dom(T)\to \F: u\mapsto \inner{u,Tu}. \]
+\[ Q_T: \dom(T)\to \F: u\mapsto \inner{u,Tu}. \]
 \end{definition}
-\begin{lemma}
+\begin{lemma} \label{lemma:symmetricRealQuadraticForm}
 If $T$ is a symmetric operator, then its associated quadratic form is real-valued.
 \end{lemma}
 \begin{proof}
 Assume $T$ symmetric, then for all $u\in\dom(T)$
-\[ Q(u) = \inner{u,Tu} = \inner{Tu,u} = \overline{\inner{u,Tu}} = \overline{Q(u)}. \]
+\[ Q_T(u) = \inner{u,Tu} = \inner{Tu,u} = \overline{\inner{u,Tu}} = \overline{Q(u)}. \]
 \end{proof}
 
 \subsubsection{Rayleigh quotient}
 \begin{definition}
 Let $T$ be a linear operator on an inner product space $V$. The \udef{Rayleigh quotient} for $T$ is 
-\[ J: \dom(T)\setminus\{0\}\to \F: u\mapsto \frac{Q(u)}{\norm{u}^2} = \frac{\inner{u,Tu}}{\norm{u}^2}. \]
+\[ J_T: \dom(T)\setminus\{0\}\to \F: u\mapsto \frac{Q(u)}{\norm{u}^2} = \frac{\inner{u,Tu}}{\norm{u}^2}. \]
+We may also write just $J$ if the intended operator $T$ is clear.
 \end{definition}
 
 \subsubsection{Numerical range}
@@ -1127,34 +1132,59 @@ Let $T$ be a linear operator on an inner product space $V$. The \udef{Rayleigh q
 
 \url{http://www.math.wm.edu/~ckli/nrnote}
 
+\url{https://link-springer-com.ezproxy.ulb.ac.be/content/pdf/10.1007%2F978-3-319-01448-7.pdf}
+
 \begin{definition}
 Let $T$ be a linear operator on an inner product space $V$ and $J_T$ the Rayleigh quotient of $T$. The range $\NumRange(T) \defeq \im(J_T)$ is known as the \udef{numerical range}.
 \end{definition}
 
 The numerical range of $T$ can equivalently be defined as the image of the unit sphere under the quadratic form associated to $T$.
 
+\begin{lemma}
+Let $V$ be an inner product space and $T$ a bounded symmetric operator on $V$. Then
+\begin{enumerate}
+\item the directional derivative $\partial_v(J_T(u))$ exists if $u\neq 0$ and is equal to (TODO remove and place in proof?)
+\[ \partial_v(J_T)|_u = \frac{\inner{u,u}\Big( \inner{v,Tu} + \inner{u,Tv} \Big) - \inner{u,Tu}\Big(\inner{u,v}+\inner{v,u}\Big)}{\inner{u,u}^2}; \]
+\item $u\in V\setminus \{ 0 \}$ is a critical point of $J_T$ \textup{if and only if} $u$ is an eigenvector of $T$ with corresponding eigenvalue $\lambda = J_T(u)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO: critical point in $\C$ v $\R$?? (For symmetric operators $J$ is real valued)
+\ref{prop:derivativeBilinearForm}
+\end{proof}
+
 \subsubsection{Numerical radius}
 \begin{definition}
 Let $T$ be a linear operator on an inner product space $V$. Then
-\[ \nr(T) \defeq \sup_{u\in \dom(T)\setminus\{0\}} |J(u)| \]
+\[ \nr(T) \defeq \sup_{u\in \dom(T)\setminus\{0\}} |J_T(u)| \]
 is the \udef{numerical radius}.
 \end{definition}
+If $Q_T$ is the quadratic form associated to an operator $T$, we have
+\[ |Q_T(u)| \leq \norm{u}^2\nr(T). \]
 
 \begin{proposition}
-Let $T$ be a bounded operator on an inner product space $V$, then
-\[ |J(u)| \leq \norm{T} \qquad \forall u\in \dom(T)\setminus\{0\}. \]
-If $T$ is also symmetric, then
-\[ \norm{T} = \sup_{u\in \dom(T)\setminus\{0\}} |J(u)|. \]
+Let $T$ be a bounded operator on an inner product space $V$, then $\forall u\in \dom(T)\setminus\{0\}$
+\[ |J_T(u)| \leq \nr(T) \leq \norm{T}. \]
+If $T$ is also symmetric and has $\dom(T)=V$, then $\norm{T} = \nr(T)$.
 \end{proposition}
 \begin{proof}
-The first claim follows simplif from the Cauchy-Schwarz inequality \ref{theorem:CauchySchwarz}
+The first claim follows simply from the Cauchy-Schwarz inequality \ref{theorem:CauchySchwarz}
 \[ |J(u)| \leq \frac{\norm{u}\,\norm{Tu}}{\norm{u}^2} = \frac{\norm{Tu}}{\norm{u}} \leq \frac{\norm{T}\norm{u}}{\norm{u}} = \norm{T}. \]
-For the second claim we need to also show the inverse inequality. Set $M = \sup_{u\in \dom(T)\setminus\{0\}} |J(u)|$ and take $x\in\dom(T)$, $y\in V$.
+For the second claim we need to also show the inverse inequality. By \ref{lemma:operatorNormInnerProduct} it is enough to show that $|\inner{w,Tv}| \leq \nr(T)$ for all $w,v\in V$ with $\norm{v} = 1 = \norm{w}$.
 
-Since the associated quadratic form $Q$ is real-valued we have the inequalities
+Take arbitrary unit vectors $v,w\in V$ and let $\theta$ be such that $|\inner{w,Tv}| = e^{i\theta}\inner{w,Tv}$. Then $\inner{e^{-i\theta}w,Tv}$ is real, so, viewing it as a sesquilinear form, the imaginary parts of the polarisation identity \ref{theorem:polarisationIdentities} cancel:
 \begin{align*}
-\inner{u+v}
+\inner{e^{-i\theta}w,Tv} &= \frac{1}{4}\sum_{k=0}^3i^k \inner{(i^ke^{-i\theta}w + v), T((i^ke^{-i\theta}w + Tv))} \\
+&= \frac{1}{4}\Big( \inner{v+e^{-i\theta}w, T(v+e^{-i\theta}w)} - \inner{v-e^{-i\theta}w, T(v-e^{-i\theta}w)} \Big),
 \end{align*}
+where we have used that the quadratic form is real by \ref{lemma:symmetricRealQuadraticForm}.
 
-{lemma:operatorNormInnerProduct}
+Thus
+\begin{align*}
+|\inner{w,Tv}| &= |\inner{e^{-i\theta}w,Tv}| \\
+&\leq \frac{1}{4}\Big( |\inner{v+e^{-i\theta}w, T(v+e^{-i\theta}w)}| + |\inner{v-e^{-i\theta}w, T(v-e^{-i\theta}w)}| \Big) \\
+&\leq \frac{1}{4}\nr(T)\Big( \norm{v+w}^2 + \norm{v-w}^2 \Big) \\
+&= \frac{1}{4}\nr(T)\Big( 2\norm{v}^2 + 2\norm{w}^2 \Big) = \nr(T),
+\end{align*}
+where we have used the fact that $v,w$ are unit vectors and the parallelogram law \ref{theorem:parallelogramLaw}.
 \end{proof}
