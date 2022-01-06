@@ -107,7 +107,8 @@ Suppose $U$ has a non-empty interior. Then it contains some ball $B(u,\epsilon)$
 \end{proof}
 
 \begin{lemma}[Riesz's lemma] \label{lemma:RieszsLemma}
-Let $V$ be a normed vector space. Given a non-dense subspace $X$ and a number $\theta<1$, there exists a unit vector $v\in V$ such that $\inf_{x\in X}\norm{x-v}\geq \theta$.
+Let $V$ be a normed vector space. Given a non-dense subspace $X$ and a number $\theta<1$, there exists a unit vector $v\in V$ such that
+\[ \theta \leq d(X,v) = \inf_{x\in X}\norm{x-v}. \]
 \end{lemma}
 \begin{proof}
 Take a vector $v_1$ not in the closure of $X$ and put $a = \inf_{x\in X}\norm{x-v_1}$. Then $a>0$ by lemma \ref{lemma:sequencesSupInf}. For $\epsilon > 0$, let $x_1\in X$ be such that $\norm{x_1+v_1}<a+\epsilon$. Then take
@@ -164,10 +165,12 @@ where the first inequality is the triangle inequality, the second comes from $k=
 In a finite-dimensional normed space $V$, any subset $M \subseteq V$ is compact if and only if $M$ is closed and bounded.
 \end{proposition}
 \begin{proof}
-TODO
+TODO + ref Heine Borel property
 \end{proof}
 
-\begin{proposition}
+
+TODO: move up?
+\begin{proposition} \label{prop:compactnessUnitBall}
 The closed unit ball of a vector space is compact \textup{if and only if} the vector space is finite-dimensional.
 \end{proposition}
 \begin{proof}
@@ -350,19 +353,20 @@ Assume $T^{-1}$ bounded below. Then for all $x\in\dom(T)$: $\norm{x} = \norm{T^{
 
 \subsection{Closed operators}
 \begin{definition}
-A \udef{closed operator} is an operator with closed graph.
+Let $T:\dom(T)\subseteq X\to Y$ be an operator. Then $T$ is a \udef{closed operator} if $\graph(T)$ is closed in $X\oplus Y$.
 \end{definition}
 This is not the same as a closed map in the topological sense!
 
+The most important property of closed operators is given by the following proposition. It is sometimes taken as the definition.
 \begin{proposition} \label{prop:closedGraphEquivalence}
 Let $X,Y$ be normed spaces and $T: \dom(T)\subset X \to Y$ be a linear operator. Then
 the following are equivalent:
 \begin{enumerate}
-\item the graph of $T$ is closed in $X\oplus Y$;
+\item $T$ is a closed operator;
 \item if $(x_n)_{n\in\N}\subset \dom(T)$ converges to $x\in X$ and $(Tx_n)_{n\in\N}$ converges to $y$, then $x\in\dom(T)$ and $Tx = y$.
 \end{enumerate}
 \end{proposition}
-TODO: remove domain from proposition?
+TODO: remove domain from proposition? (? If domain is closed?)
 \begin{corollary}
 All bounded operators have closed graph. (? If domain is closed?)
 \end{corollary}
@@ -387,6 +391,21 @@ Let $T$ be a closed and $S$ a bounded operator, then
 (3) We use \ref{prop:closedGraphEquivalence}. Take $\seq{y_n}\subset \dom(T^{-1})$ such that $y_n\to y$ and $T^{-1}y_n\to x$. Set $x_n = T^{-1}y_n$, so then $Tx_n = y_n\to y$. Because $T$ is closed it follows that $Tx = y$, so $T^{-1}y = x$, meaning $T^{-1}$ is closed.
 \end{proof}
 TODO example $ST$ need not be closed.
+
+\begin{lemma}
+Let $T$ be a closed operator, then $\ker(T)$ is closed.
+\end{lemma}
+\begin{proof}
+Let $\seq{x_n}\subset\ker(T)$ be a convergent sequence. Then $\seq{Tx_n}$ is identically zero and thus converges to $0$. By closedness of $T$, $Tx = 0$ and thus $x\in\ker(T)$. 
+\end{proof}
+We have already proven this for bounded operators, see \ref{lemma:kerClosed}.
+
+\begin{lemma}
+Let $T:X\not\to Y$ be an injective closed operator. Then $T^{-1}:\im(T)\to X$ is also closed.
+\end{lemma}
+\begin{proof}
+Take $\seq{y_n}\subset \im(T)$ such that $y_n\to y$ and $T^{-1}y_n \to x$. Then $T(T^{-1}y_n) = y_n \to y$, so by closedness of $T$, we have $Tx = y$, and thus $T^{-1}y = x$.
+\end{proof}
 
 \subsubsection{Closable operators}
 \begin{definition}
@@ -421,7 +440,7 @@ These operators were introduced to study equations of the form
 \[ (T-\lambda I)x(t) = p(t). \]
 
 \begin{proposition}
-Let $L\in\Hom(V,W)$. The following are equivalent:
+Let $L\in\Lin(V,W)$. The following are equivalent:
 \begin{enumerate}
 \item $L$ is compact;
 \item the image of any bounded subset of $V$ is relatively compact in $W$;
@@ -442,6 +461,19 @@ Closed balls in $\C^n$ are compact.
 \begin{proposition}
 Let $V$ be a normed space. Then $\mathcal{K}(V)$ is a closed two-sided ideal in $\Bounded(V)$.
 \end{proposition}
+
+\begin{lemma}
+The identity map on $X$ is compact \textup{if and only if} $X$ is finite-dimensional.
+\end{lemma}
+\begin{proof}
+The unit ball is compact iff $X$ is finite-dimensional, by \ref{prop:compactnessUnitBall}.
+\end{proof}
+\begin{corollary}
+Let $T\in\Compact(X,Y)$. If $T$ is injective and $T^{-1}$ bounded, then $X$ is finite-dimensional.
+\end{corollary}
+\begin{proof}
+In this case $\id_X = T^{-1}T$ is compact by TODO ref.
+\end{proof}
 
 \section{Inner product spaces}
 \begin{definition}
@@ -592,6 +624,8 @@ The Cauchy-Schwarz inequality allows us to define the \udef{angle} $\theta$ betw
 \begin{lemma}
 If $v\perp w$, then the angle between them is $\pi/2 + k\pi$.
 \end{lemma}
+
+TODO CS special case of Hölder inequality.
 
 \begin{theorem}[Triangle inequality]
 Let $v,w\in V$. Then
@@ -812,9 +846,9 @@ Let $V$ be an inner product space and $D = \{e_i\}_{i\in I}$ an orthonormal set.
 \begin{enumerate}
 \item $D$ is an orthonormal basis of $V$;
 \item $D$ is total in $V$;
-\item \textup{(Parseval's identity)} for all $v,w\in V$,
+\item for all $v,w\in V$,
 \[ \inner{v,w} = \sum_{i\in I}\inner{v,e_i}\inner{e_i,w}; \]
-\item \textup{(Bessel equality)} for all $v\in V$,
+\item \textup{(Parseval's identity)} for all $v\in V$,
 \[ \norm{v}^2 = \sum_{i\in I}|\inner{e_i,v}|^2; \]
 \item for all $v\in V$: if $v\perp D$, then $v=0$;
 \item \textup{(Plancherel formula)} for all $v\in V$,
