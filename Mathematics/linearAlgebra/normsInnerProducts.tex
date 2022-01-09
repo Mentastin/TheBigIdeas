@@ -705,6 +705,109 @@ and the parallelogram law is then not valid if $p\neq 2$.
 \end{proof}
 
 \section{Orthogonal and orthonormal sets of vectors}
+\subsection{Orthogonal complements}
+\begin{definition}
+Let $A$ be a subset of an inner product space $V$. The \udef{orthogonal complement} $A^\perp$ of $A$ is the set of vectors in $V$ that are orthogonal to every vector in $A$:
+\[ A^\perp = \{ v\in V\;|\; \inner{v,a}=0\; \forall a\in A \}. \]
+\end{definition}
+We can also consider the orthogonal complement of a subspace with respect to another subspace, not the full space.
+\begin{definition}
+Let $A\subseteq B$ be subsets of an inner product space $V$. The \udef{orthogonal complement} of $A$ with respect to $B$ is the set of vectors in $B$ that are orthogonal to every vector in $A$:
+\[ B\ominus A = \{ b\in B\;|\; \inner{b,a}=0\; \forall a\in A \}. \]
+\end{definition}
+
+\begin{proposition} \label{prop:OrthogonalComplementProperties}
+Let $A,B$ be \emph{subsets} of an inner product space $V$.
+\begin{enumerate}
+\item $A^\perp$ is a subspace of $V$;
+\item $A^\perp = \Span(A)^\perp$;
+\item $\{0\}^\perp = V$;
+\item $V^\perp = \{0\}$;
+\item $A\cap A^\perp \subset \{0\}$;
+\item If $A\subset B$, then $B^\perp \subset A^\perp$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition} \label{prop:ominusUnderIsometry}\label{prop:ominusSubspace}
+Let $V$ be an inner product space, let $A\subseteq B$ be subsets and $T:V\to V$ an isometry. Then
+\begin{enumerate}
+\item $B\ominus A = B\cap A^\perp$;
+\item $T[B\ominus A] = T[B]\ominus T[A]$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Take $v\in B\ominus A$. This is equivalent to $v\in B \land \forall u\in A: \inner{v,u} =0$ and thus equivalent to $v\in B \land v\in A^\perp$.
+
+(2) Take $v\in T[B\ominus A]$. This is equivalent to the existence of $x\in B$ such that $T(x) = v$ and $\inner{x,y}=0$ for all $y\in A$. By isometry $\inner{x,y}=0 \iff \inner{T(x), T(y)}=0$ for all $y\in A$. So, equivalently, $v\in T[B]\ominus T[A]$. 
+\end{proof}
+
+\begin{proposition} \label{prop:orthogonalComplementClosed}
+Let $A$ be a \emph{subset} of an inner product space $V$. Then $A^\perp$ is closed and $\overline{A}^\perp = A^\perp$. This can be rephrased as
+\[ \overline{A}^\perp = \overline{A^\perp} = A^\perp. \]
+Also
+\[\overline{A} \subset (A^\perp)^\perp. \]
+\end{proposition}
+\begin{proof}
+Let $x\in \overline{A^\perp}$. Then there exists a sequence $(x_i)$ in $A^\perp$ that converges to $x$. For all $a\in A$, the functional $\inner{a,\cdot}:y\mapsto \inner{a,y}$ is bounded (by Cauchy-Schwarz). Thus all these functionals are continuous. Applying any one to the sequence $x_i$ gives a sequence of zeros. Thus $\inner{a,x} = 0$ for all $a\in A$. Thus $x\in A^\perp$ and hence $A^\perp \supset \overline{A^\perp}$ meaning $A^\perp$ is closed.
+
+Now $\overline{A}\supset A$, so $\overline{A}^\perp \subset A^\perp$. For the other inclusion, take an $x\in A^\perp$. Take an arbitrary $y\in \overline{A}$. Then there exists a sequence $(y_i)$ in $A$ that converges to $y$. Apply the bounded functional $\inner{x,\cdot}$ to the sequence $(y_i)$, yielding a sequence of zeros. Thus $\inner{x,y}=0$. Thus $x\in \overline{U}^\perp$.
+
+Finally let $a\in \overline{A}$. Take a sequence $a_i\to a$. Take an arbitrary element $x\in A^\perp$. As before $\inner{x,a} = \lim_i\inner{x,a_i} = 0$. So $a\in (A^\perp)^\perp$.
+\end{proof}
+\begin{corollary} \label{corollary:orthogonalComplementClosed}
+Let $A$ be a subset of $V$. If $\Span(A)$ is dense in $V$, then $A^\perp = \{0\}$. 
+\end{corollary}
+\begin{proof}
+\[ A^\perp = \Span(A)^\perp = \overline{\Span(A)}^\perp = V^\perp = \{0\}. \]
+\end{proof}
+\begin{proposition}
+Let $U$ be a finite-dimensional subspace of an inner product space $V$.
+\begin{enumerate}
+\item $V=U\oplus U^\perp$;
+\item $U = (U^\perp)^\perp$.
+\end{enumerate}
+\end{proposition}
+Notice that $V$ may be infinite dimensional!
+\begin{proof}
+We start with the first point. The sum $U + U^\perp$ is definitely direct, $U\oplus U^\perp$, by proposition \ref{prop:OrthogonalComplementProperties} and the criterion for a direct sum, proposition \ref{prop:directSumCriterion}. Clearly $U\oplus U^\perp\subseteq V$, so we just need to show that $V \subseteq U\oplus U^\perp$.
+
+To that end, take a vector $v\in V$. Let $\{e_i\}_{i=1}^n$ be an orthonormal basis of $U$. We can write
+\[ v = \left(v - \sum_{i=1}^n\inner{v,e_i}e_i\right) + \left(\sum_{i=1}^n\inner{v,e_i}e_i\right). \]
+The first part is an element of $U^\perp$, the second of $U$, so $v\in U\oplus U^\perp$.
+
+For the second point: any finite-dimensional subspace $U$ is automatically closed, so $U = \overline{U} \subset (U^\perp)^\perp$, by proposition \ref{prop:orthogonalComplementClosed}. For the other inclusion, take $v\in (U^\perp)^\perp$. By the first point, we can write $v = v_1 + v_2$ where $v_1\in U$ and $v_2\in U^\perp$. Because $v\in (U^\perp)^\perp$ and $v_2\in U^\perp$, we must have
+\[ 0 = \inner{v_2, v} = \inner{v_2, v_1+v_2} = \inner{v_2, v_1} + \inner{v_2,v_2} = \norm{v_2}. \]
+So $v=v_1\in U$.
+\end{proof}
+
+TODO all projection results for projection onto finite dim? See proposition before Bessel inequality. In fact better: projection onto summand of direct sum! Put under decompositions.
+
+\begin{proposition} \label{prop:linearDeMorgan}
+Let $W_1,W_2$ be subspaces of an inner product space $V$. Then
+\[ (W_1+W_2)^\perp = W_1^\perp \cap W_2^\perp. \]
+\end{proposition}
+\begin{proof}
+For a vector $v\in V$,
+\[  v\in (W_1+W_2)^\perp \implies \forall x\in W_1\cup W_2: \inner{v,x} = 0 \implies v\in W_1^\perp \cap W_2^\perp \]
+and
+\begin{align*}
+v\in W_1^\perp \cap W_2^\perp &\implies \forall x\in W_1, y\in W_2: \inner{v,x} = 0 = \inner{v,y} \\
+&\implies \forall x\in W_1, y\in W_2:\inner{v, x+y} = 0 \implies v\in (W_1+W_2)^\perp.
+\end{align*}
+\end{proof}
+
+A result dual to proposition \ref{prop:linearDeMorgan} holds for finite-dimensional spaces:
+\begin{proposition}
+Let $W_1,W_2$ be subspaces a finite-dimensional space $V$. Then
+\[ (W_1\cap W_2)^\perp = W_1^\perp + W_2^\perp. \]
+\end{proposition}
+\begin{proof}
+We start by applying proposition \ref{prop:linearDeMorgan} to $W_1^\perp$ and $W_2^\perp$:
+\[ (W_1^\perp+W_2^\perp)^\perp = (W_1^\perp)^\perp \cap (W_2^\perp)^\perp = W_1 \cap W_2. \]
+Taking the orthogonal complement of both sides gives the result. In infinite dimensions $(W_1^\perp+W_2^\perp)$ is not necessarily closed. 
+\end{proof}
+
+\subsection{Orthogonal sets and sequences}
 \begin{definition}
 \begin{itemize}
 \item A set of vectors $D$ is called \udef{orthogonal} if for any two vectors $v,w\in D$, $v\perp w$ \textup{if and only if} $v\neq w$.
@@ -716,7 +819,6 @@ and the parallelogram law is then not valid if $p\neq 2$.
 In particular an orthonormal set is an orthogonal set of unit vectors.
 \end{definition}
 
-\subsection{Orthogonal sets and sequences}
 \begin{lemma} \label{lemma:orthogonalLinearlyIndependent}
 Every orthogonal set of vectors is linearly independent.
 \end{lemma}
@@ -775,7 +877,7 @@ We call the numbers $\inner{e_i,v}$ the \udef{Fourier coefficients} of $v$ w.r.t
 \begin{proof}
 In this case $\inf_{c_i\in\mathbb{F}}\norm{v-\sum_{i=1}^nc_ie_i} = 0$.
 \end{proof}
-\begin{corollary}[Bessel inequality]
+\begin{corollary}[Bessel inequality] \label{corollary:BesselInequality}
 Let $\{e_i\}_{i\in I}$ be an orthonormal family and $v\in V$, then
 \[ \sum_{i\in I}|\inner{e_i,v}|^2 = \sup \left\{\sum_{\substack{i\in I' \subset I\\ I' \;\text{finite}}} |\inner{e_i,v}|^2 \right\} \leq \norm{v}^2. \]
 \end{corollary}
@@ -824,6 +926,20 @@ Hilbert bases are in general not Hamel bases.  E.g., take $\R^\mathbb{N}$. Then
 is an orthonormal basis, but not a Hamel basis (consider $(1,1,1,\ldots)$).
 \end{note}
 
+\begin{proposition} \label{prop:exitenceMaximalOrthonormalSet}
+\begin{itemize}
+\item Every vector space has a maximal orthonormal set.
+\item Every orthonormal set can be extended to a maximal orthonormal set.
+\end{itemize}
+\end{proposition}
+\begin{proof}
+The first statement follows easily from the second. The second statement is proved using Zorn's lemma. Let $S$ be an orthonormal set. Define
+\[ \mathcal{A} = \{ D\subset V \;|\; S\subset D \; \text{and $D$ is orthonormal} \} \]
+ordered by inclusion. It is easy to see that any chain on $\mathcal{A}$ has an upper bound on $\mathcal{A}$, by just taking the union which is still orthonormal. It follows from Zorn's lemma that $\mathcal{A}$ has a maximal element $R$. This is by definition an orthonormal basis.
+
+In the finite-dimensional case this can also be proved using the Gram-Schmidt procedure.
+\end{proof}
+
 \begin{proposition}
 If $V$ is finite-dimensional, then the notions of maximal orthonormal set, total orthonormal set and orthonormal set coincide. Such an orthonormal set is also a (Hamel) basis of $V$.
 \end{proposition}
@@ -831,15 +947,26 @@ If $V$ is finite-dimensional, then the notions of maximal orthonormal set, total
 Corollaries of Gram-Schmidt.
 \end{proof}
 
-\begin{proposition}
-Let $V$ be an inner product space and $D = \{e_i\}_{i\in I}$ an orthonormal set. The $D$ is an o.n. basis \textup{if and only if} $D$ is total.
-\end{proposition}
+\begin{lemma} \label{lemma:characterisationMaximalOrthonormalSet}
+Let $V$ be an inner product space and $D$ an orthonormal set. Then
+\begin{enumerate}
+\item $D$ is maximal \textup{if and only if} $D^\perp = \{0\}$;
+\item if $D$ is an orthonormal basis, then $D$ is maximal.
+\end{enumerate}
+\end{lemma}
 \begin{proof}
-$\boxed{\Rightarrow}$ Assume $D$ an o.n. basis. Then there exists a sequence of partial sums converging to any element $v\in V$. Each of these partial sums is a finite linear combination of elements in $D$ and thus this sequence is a sequence in $\Span(D)$. This means $v\in\overline{\Span(D)}$.
+(1) All possible vectors with which to extend $D$ are elements of $D^\perp$. 
 
-$\boxed{\Leftarrow}$ Assume $\overline{\Span(D)} = V$. Because the topology on $V$ is a metric topology, we can find a sequence $(v_n)$ in $\Span(D)$ that converges to any $v\in V$.
+(2) Assume $D$ an o.n. basis. Then $D^\perp = (\Span(D))^\perp = V^\perp = \{0\}$, using \ref{prop:OrthogonalComplementProperties} and \ref{corollary:orthogonalComplementClosed}.
 \end{proof}
+There are maximal orthonormal families that are not bases.
+\begin{example}
+Consider the space $l^2(\N)$ and take the subspace $X$ generated by the family of elements
+\[ \left( \sum_{n=1}^\infty n^{-1}e_n, e_2,e_3,e_4,\ldots \right) \]
+with the inner product induced by the inner product of $l^2$. In this space $F=\{e_2,e_3,\ldots\}$ is orthonormal and maximal, but not an orthonormal basis.
+\end{example}
 
+Maximal orthonormal families are easy to construct, but do not have the nice properties of orthonormal bases (see below). We would really like the concepts of orthonormal basis and maximal orthonormal family to coincide. We will see they coincide exactly in Hilbert spaces (see \ref{theorem:criterionHilbertSpace}).
 
 \begin{proposition} \label{prop:totalONBParsevalEquivalence} \label{prop:plancherel}
 Let $V$ be an inner product space and $D = \{e_i\}_{i\in I}$ an orthonormal set. The following are equivalent:
@@ -881,35 +1008,17 @@ So $v-\sum_{i\in I}\inner{e_i,v}e_i = 0$ and the Plancherel formula holds.
 \end{proof}
 
 \begin{lemma}
-Every orthonormal basis is a maximal orthonormal family.
+Let $V$ be an inner product space. If $D$ is an orthonormal basis of $V$, then it is also an orthonormal basis of $\overline{V}$, the completion of $V$.
 \end{lemma}
 \begin{proof}
-Let $D = \{e_i\}_{i\in I}$ be an o.n. basis. Assume, towards a contradiction, that there exists an o.n. family $D' \supsetneq D$. Let $x\in D'\setminus D$. Then, using the Plancherel formula and the fact that $D'$ is orthogonal,
-\[ x = \sum_{i\in I}\inner{e_{i},x}e_{i} = \sum_{i\in I} 0 = 0. \]
-As $0$ can never be an element of an o.n. family, this is a contradiction.  
+Let $D$ be an o.n. basis. By \ref{prop:totalONBParsevalEquivalence} $\Span(D)$ is dense in $V$, meaning it is also dense in $\overline{V}$, by \ref{lemma:denseSubsetOfDenseSubspaceIsDense}. Thus $D$ is total in $\overline{V}$ and an o.n. basis by \ref{prop:totalONBParsevalEquivalence}.
 \end{proof}
-There are maximal orthonormal families that are not bases.
-\begin{example}
-Consider the space $l^2(\N)$ and take the subspace $X$ generated by the family of elements
-\[ \left( \sum_{n=1}^\infty n^{-1}e_n, e_2,e_3,e_4,\ldots \right) \]
-with the inner product induced by the inner product of $l^2$. In this space $F=\{e_2,e_3,\ldots\}$ is orthonormal and maximal, but not a basis.
-\end{example}
 
-Maximal orthonormal families feel like kinds bases, especially given the next couple of results. We would really like the concepts of orthonormal basis and maximal orthonormal family to coincide. Spaces in which they do not are missing something; they are not complete. This is one good reason we are most often interested in Hilbert spaces.
-
-\begin{theorem}
-\begin{itemize}
-\item Every vector space has a maximal orthonormal set.
-\item Every orthonormal set can be extended to a maximal orthonormal set.
-\end{itemize}
-\end{theorem}
-\begin{proof}
-The first statement follows easily from the second. The second statement is proved using Zorn's lemma. Let $S$ be an orthonormal set. Define
-\[ \mathcal{A} = \{ D\subset V \;|\; S\subset D \; \text{and $D$ is orthonormal} \} \]
-ordered by inclusion. It is easy to see that any chain on $\mathcal{A}$ has an upper bound on $\mathcal{A}$, by just taking the union which is still orthonormal. It follows from Zorn's lemma that $\mathcal{A}$ has a maximal element $R$. This is by definition an orthonormal basis.
-
-In the finite-dimensional case this can also be proved using Gram-Schmidt.
-\end{proof}
+\subsubsection{Cardinality and separable inner product spaces}
+\url{https://arxiv.org/pdf/1606.03869.pdf}
+\begin{definition}
+An inner product space is \udef{separable} if it is separable as a metric space, i.e. it admits a countable dense subset.
+\end{definition}
 
 \begin{proposition}
 Given a vector space $V$, any two maximal orthonormal sets have the same cardinality.
@@ -917,104 +1026,26 @@ Given a vector space $V$, any two maximal orthonormal sets have the same cardina
 \begin{proof}
 Take $D = \{e_i\}_{i\in I}$ and $D' = \{f_j\}_{j\in J}$ maximal orthonormal sets.
 \end{proof}
-\begin{definition}
-An inner product space is \udef{separable} if it is separable as a metric space, i.e. it admits a countable dense subset.
-\end{definition}
+
 \begin{proposition}
 An inner product space is separable \textup{if and only if} it admits an orthonormal basis with at most countably many vectors.
 \end{proposition}
 \begin{proof}
-TODO
+TODO infinite-dimensional analog of the Gram-Schmidt process
 \end{proof}
-
-\subsection{Orthogonal complements}
-\begin{definition}
-Let $U$ be a subset of an inner product space $V$. The \udef{orthogonal complement} $U^\perp$ of $U$ is the set of vectors in $V$ that are orthogonal to every vector in $U$:
-\[ U^\perp = \{ v\in V\;|\; \inner{v,u}=0\; \forall u\in U \}. \]
-\end{definition}
-We can also consider the orthogonal complement of a subspace with respect to another subspace, not the full space.
-\begin{definition}
-Let $U\subseteq W$ be subsets of an inner product space $V$. The \udef{orthogonal complement} of $U$ with respect to $W$ is the set of vectors in $W$ that are orthogonal to every vector in $U$:
-\[ W\ominus U = \{ w\in W\;|\; \inner{w,u}=0\; \forall u\in U \}. \]
-\end{definition}
-
-\begin{proposition} \label{prop:OrthogonalComplementProperties}
-Let $U,W$ be \emph{subsets} of an inner product space $V$.
-\begin{enumerate}
-\item $U^\perp$ is a subspace of $V$;
-\item $U^\perp = \Span(U)^\perp$;
-\item $\{0\}^\perp = V$;
-\item $V^\perp = \{0\}$;
-\item $U\cap U^\perp \subset \{0\}$;
-\item If $U\subset W$, then $W^\perp \subset U^\perp$.
-\end{enumerate}
-\end{proposition}
-
-\begin{proposition} \label{prop:ominusUnderIsometry}
-Let $V$ be an inner product space and $T:V\to V$ an isometry. Let $A\supseteq B$ be subspaces. Then
-\[ T[A\ominus B] = T[A]\ominus T[B]. \]
-\end{proposition}
-\begin{proof}
-Take $v\in T[A\ominus B]$. Then there exists an $x\in A$ such that $T(x) = v$ and $\inner{x,b}=0$ for all $b\in B$. Then by isometry $\inner{T(x), T(b)}=0$ for all $b\in B$. So $v\in T[A]\ominus T[B]$. This reasoning can be inverted to give the other inclusion. 
-\end{proof}
-
-\begin{proposition} \label{prop:linearDeMorgan}
-Let $W_1,W_2$ be subspaces of an inner product space $V$. Then
-\[ (W_1+W_2)^\perp = W_1^\perp \cap W_2^\perp. \]
-\end{proposition}
-\begin{proposition} \label{prop:orthogonalComplementClosed}
-Let $U$ be a \emph{subset} of an inner product space $V$. Then $U^\perp$ is closed and $\overline{U}^\perp = U^\perp$. This can be rephrased as
-\[ \overline{U}^\perp = \overline{U^\perp} = U^\perp. \]
-Also
-\[\overline{U} \subset (U^\perp)^\perp. \]
-\end{proposition}
-\begin{proof}
-Let $x\in \overline{U^\perp}$. Then there exists a sequence $(x_i)$ in $U^\perp$ that converges to $x$. For all $u\in U$, the functional $\inner{u,\cdot}:y\mapsto \inner{u,y}$ is bounded (by Cauchy-Schwarz). Thus all these functionals are continuous. Applying any one to the sequence $x_i$ gives a sequence of zeros. Thus $\inner{u,x} = 0$ for all $u\in U$. Thus $x\in U^\perp$ and hence $U^\perp \supset \overline{U^\perp}$ meaning $U^\perp$ is closed.
-
-Now $\overline{U}\supset U$, so $\overline{U}^\perp \subset U^\perp$. For the other inclusion, take an $x\in U^\perp$. Take an arbitrary $y\in \overline{U}$. Then there exists a sequence $(y_i)$ in $U$ that converges to $y$. Apply the bounded functional $\inner{x,\cdot}$ to the sequence $(y_i)$, yielding a sequence of zeros. Thus $\inner{x,y}=0$. Thus $x\in \overline{U}^\perp$.
-
-Finally let $u\in \overline{U}$. Take a sequence $u_i\to u$. Take an arbitrary element $x\in U^\perp$. As before $\inner{x,u} = \lim_i\inner{x,u_i} = 0$. So $u\in (U^\perp)^\perp$.
-\end{proof}
-\begin{corollary} \label{corollary:orthogonalComplementClosed}
-If the subset $U$ is dense in $V$, then $U^\perp = \{0\}$. 
+\begin{corollary}
+Any separable inner product space has an orthonormal basis.
 \end{corollary}
-\begin{proof}
-\[ U^\perp = \overline{U}^\perp = V^\perp = \{0\}. \]
-\end{proof}
+
 \begin{proposition}
-Let $U$ be a finite-dimensional subspace of an inner product space $V$.
-\begin{enumerate}
-\item $V=U\oplus U^\perp$;
-\item $U = (U^\perp)^\perp$.
-\end{enumerate}
-\end{proposition}
-Notice that $V$ may be infinite dimensional!
-\begin{proof}
-We start with the first point. The sum $U + U^\perp$ is definitely direct, $U\oplus U^\perp$, by proposition \ref{prop:OrthogonalComplementProperties} and the criterion for a direct sum, proposition \ref{prop:directSumCriterion}. Clearly $U\oplus U^\perp\subseteq V$, so we just need to show that $V \subseteq U\oplus U^\perp$.
-
-To that end, take a vector $v\in V$. Let $\{e_i\}_{i=1}^n$ be an orthonormal basis of $U$. We can write
-\[ v = \left(v - \sum_{i=1}^n\inner{v,e_i}e_i\right) + \left(\sum_{i=1}^n\inner{v,e_i}e_i\right). \]
-The first part is an element of $U^\perp$, the second of $U$, so $v\in U\oplus U^\perp$.
-
-For the second point: any finite-dimensional subspace $U$ is automatically closed, so $U = \overline{U} \subset (U^\perp)^\perp$, by proposition \ref{prop:orthogonalComplementClosed}. For the other inclusion, take $v\in (U^\perp)^\perp$. By the first point, we can write $v = v_1 + v_2$ where $v_1\in U$ and $v_2\in U^\perp$. Because $v\in (U^\perp)^\perp$ and $v_2\in U^\perp$, we must have
-\[ 0 = \inner{v_2, v} = \inner{v_2, v_1+v_2} = \inner{v_2, v_1} + \inner{v_2,v_2} = \norm{v_2}. \]
-So $v=v_1\in U$.
-\end{proof}
-
-TODO all projection results for projection onto finite dim? See proposition before Bessel inequality. In fact better: projection onto summand of direct sum! Put under decompositions.
-
-
-A result dual to proposition \ref{prop:linearDeMorgan} also holds in finite-dimensional spaces:
-\begin{proposition}
-Let $W_1,W_2$ be subspaces a finite-dimensional space $V$. Then
-\[ (W_1\cap W_2)^\perp = W_1^\perp + W_2^\perp. \]
+Not every inner product space has an orthonormal basis.
 \end{proposition}
 \begin{proof}
-We start by applying proposition \ref{prop:linearDeMorgan} to $W_1^\perp$ and $W_2^\perp$:
-\[ (W_1^\perp+W_2^\perp)^\perp = (W_1^\perp)^\perp \cap (W_2^\perp)^\perp = W_1 \cap W_2. \]
-Taking the orthogonal complement of both sides gives the result. In infinite dimensions $(W_1^\perp+W_2^\perp)$ is not necessarily closed. 
+\url{https://en.wikipedia.org/wiki/Inner_product_space#Orthonormal_sequences}
+\url{https://groups.google.com/g/sci.math.research/c/1SA_3h1whQo?pli=1}
+\url{https://www.angelfire.com/journal/mathematics/innerproduct.pdf}
+\url{https://arxiv.org/pdf/1009.1441.pdf}
 \end{proof}
-
 
 
 \section{Maps on inner product spaces}

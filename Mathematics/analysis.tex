@@ -88,6 +88,13 @@ Let $X$ be a topological space.
 
 TODO: ideals and multiplier algebras.
 
+\section{Discontinuities}
+\subsection{Jump discontinuities}
+\begin{definition}
+Let $f$ be a real function. We define the \udef{difference operator}
+\[ \Delta_{x_0}f \defeq \lim_{x\to x_0+} f(x) - \lim_{x\to x_0-} f(x) \]
+\end{definition}
+
 \chapter{Differentiation}
 \url{file:///C:/Users/user/Downloads/978-1-4614-3894-6.pdf}
 \url{file:///C:/Users/user/Downloads/2011_Bookmatter_TheRicciFlowInRiemannianGeomet.pdf}
@@ -1092,8 +1099,11 @@ Let $f,g: X\to \C$ be absolutely integrable functions. If $T_f = T_g$, then $f(x
 
 \subsection{The derivative of a distribution}
 \begin{definition}
-    Let $X$ be an open subset of a normed vector space $V$ and let $T\in \dists(X)$. For $u\in V$ we define the directional derivative of $T$ as
-    \[ \partial_u(T) \defeq - T\circ \partial_u. \]
+Let $X$ be an open subset of a normed vector space $V$ and let $T\in \dists(X)$. For $u\in V$ we define the directional derivative of $T$ as
+\[ \partial_u(T) \defeq - T\circ \partial_u. \]
+
+In particular, if $V = \R$, we define
+\[ T' \defeq \od{}{x}(T) \defeq - T\circ \od{}{x}. \]
 \end{definition}
 
 \begin{lemma}
@@ -1123,14 +1133,33 @@ Let $\theta$ be the Heaviside function. Then
 \end{proposition}
 
 \subsubsection{Jump discontinuities in integral distributions}
-TODO Sacks 6.3.3
+\begin{proposition}
+Let $f$ be a function that is $\cont^1$ on $]-\infty, x_0[$ and $]x_0, +\infty[$ for some $x_0\in\R$. Then
+the derivative of $f$ as distribution is given by
+\[ f' = (f|_{\R\setminus\{x_0\}})' + (\Delta_{x_0}f)\delta_{x_0}. \]
+\end{proposition}
+Note that if $f$ is continuous at $x_0$, this gives $f' = (f|_{\R\setminus\{x_0\}})'$ as distributions.
+\begin{proof}
+Let $\phi\in\testFuncs(\R)$. Then we calculate
+\begin{align*}
+f'(\phi) &= \int_{-\infty}^\infty f(x)\phi'(x)\diff{x} = \int_{-\infty}^{x_0} f(x)\phi'(x)\diff{x} + \int_{x_0}^\infty f(x)\phi'(x)\diff{x} \\
+&= \Big[f(x)\phi(x)\Big]_{-\infty}^{x_0} - \int_{-\infty}^{x_0} f'(x)\phi(x)\diff{x} + \Big[f(x)\phi(x)\Big]_{x_0}^{+\infty} - \int_{x_0}^{+\infty} f'(x)\phi(x)\diff{x} \\
+&= -\int_{\R\setminus\{x_0\}} f'(x)\phi(x)\diff{x} + \lim_{x\to x_0+}f(x)\phi(x)-\lim_{x\to x_0-}f(x)\phi(x) \\
+&= \int_{\R}f|_{\R\setminus\{x_0\}}\phi'(x)\diff{x} + \phi(x_0)\lim_{x\to x_0+}f(x)- \phi(x_0)\lim_{x\to x_0-}f(x) = \int_{\R}(f|_{\R\setminus\{x_0\}})'\phi(x)\diff{x} + (\Delta_{x_0}f)\delta_{x_0}.
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $f$ be a function that is $\cont^1$ on $]-\infty, x_0[$ and $]x_0, +\infty[$ for some $x_0\in\R$. Then
+the $k^\text{th}$ derivative of $f$ as distribution is given by
+\[ f^{(k)} = (f|_{\R\setminus\{x_0\}})^{(k)} + \sum_{j=0}^{k-1}(\Delta_{x_0}f^{(j)})\delta^{(k-1-j)}_{x_0}. \]
+\end{corollary}
 
 \subsection{Convolution}
 
 
 \section{Sobolev spaces}
 TODO: after $L^p$ spaces.
-\subsection{Weak derivatives}
+\subsection{Weak and strong derivatives}
 \begin{definition}
     Let $X$ be an open subset of a normed vector space, $f\in L^p(X)$ and $D^\alpha$ a derivative on $X$. If there exists $g\in L^q(X)$ such that $D^\alpha T_f = T_g$, then $g$ is the \udef{weak $\alpha$ derivative} of $f$ in $L^q(X)$.
 \end{definition}
@@ -1139,7 +1168,6 @@ The weak $\alpha$ derivative is unique if it exists, due to \ref{lemma:uniquenes
 The definition of weak derivative translates to the requirement
 \[ \int_X f D^\alpha \phi \diff{x} = (-1)^{|\alpha|}\int_X g\phi\diff{x} \qquad \forall \phi\in\testFuncs(X). \]
 
-\subsection{Strong derivatives}
 \begin{definition}
     Let $X$ be an open subset of a normed vector space, $f\in L^p(X)$ and $D^\alpha$ a derivative on $X$. We call $g\in L^q(X)$ a \udef{strong $\alpha$ derivative} if there exists a sequence $\seq{f_n} \subset \cont^\infty(X)$  such that
     \begin{itemize}
@@ -1178,12 +1206,12 @@ In particular $W^{k,2}(X, \diff{\mu})$ is a Hilbert space with inner product
 \[ \inner{f,g} \sum_{|\alpha| \leq k} \int_X D^\alpha f(x) \overline{D^\alpha g(x)}\diff{\mu(x)}. \]
 The Hilbert space $W^{k,2}(X, \diff{\mu})$ is more commonly denoted $H^k(X, \diff{\mu})$.
 \end{proposition}
-TODO: generalise ???
+TODO: alternative definition: use ordinary derivative and take completion???
 
 \begin{proposition}
 Let $X$ be an open subset of a normed vector space, $1\leq p < \infty$ and $k\in\N$. Then $W^{k,p}(X)$ coincides with the closure of $\cont^\infty(X) \cap W^{k,p}(X)$ in the $W^{k,p}(X)$-norm.
 \end{proposition}
 
 \begin{definition}
-    Let $X$ be an open subset of a normed vector space, $1\leq p < \infty$ and $k\in\N$. We define $W_0^{k,p}(X)$ to be the closure of $\cont^\infty_c(X)$ in the $W^{k,p}(X)$-norm.
+Let $X$ be an open subset of a normed vector space, $1\leq p < \infty$ and $k\in\N$. We define $W_0^{k,p}(X)$ to be the closure of $\cont^\infty_c(X)$ in the $W^{k,p}(X)$-norm.
 \end{definition}
