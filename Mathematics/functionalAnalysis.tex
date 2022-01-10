@@ -1319,7 +1319,7 @@ Then
 For $x\notin E$, we have $\int_\Lambda f(x,y)\overline{\psi_m(y)}\diff{\nu(y)} = 0$, so by the same logic $f(x,y) = 0$ for almost all $y$. 
 
 Now $|f|^2$ is integrable and
-\[ \iint_{\Omega\times \Lambda}|f(x,y)|^2\diff{\mu(x)}\diff(\nu(y)) = \int_{\Omega\setminus E}\int_\Lambda |f(x,y)|^2\diff{\mu(x)}\diff(\nu(y)) = 0, \]
+\[ \iint_{\Omega\times \Lambda}|f(x,y)|^2\diff{\mu(x)}\diff{\nu(y)} = \int_{\Omega\setminus E}\int_\Lambda |f(x,y)|^2\diff{\mu(x)}\diff{\nu(y)} = 0, \]
 so $f=0$ in $L^2(\Omega\times\Lambda, \mu\times\nu)$.
 \end{proof}
 
@@ -1353,24 +1353,42 @@ x_{n-1} & (n\geq 1) \\ 0 &(n=0)
 \end{cases}\right)_{n\in \N}. \]
 \end{example}
 
-\subsection{Unbounded operators}
+\subsection{Densely defined operators}
 \begin{lemma}
-Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Let $S_1, S_2$ be adjoints of $T$ then for all $x\in \dom(S_1)\cap\dom(S_2)$ we have $S_1(x) = S_2(x)$.
+Let $T: H\not\to K$ be an operator between Hilbert spaces. Let $S_1, S_2$ be adjoints of $T$ then for all $x\in \dom(S_1)\cap\dom(S_2)$ we have $S_1(x) - S_2(x) \in \dom(T)^\perp$.
+
+Conversely, let $S$ be an adjoint of $T$ and $x\in\dom(S)$. Then for all $v\in \dom(T)^\perp$ there exists an adjoint $S'$ such that $S'(x) = S(x) + v$.
 \end{lemma}
 \begin{proof}
 For all $u\in \dom(T)$ we have
 \[ \inner{S_1(x) - S_2(x), u}_H = \inner{S_1(x), u}_H - \inner{S_2(x), u}_H = \inner{x, Tu}_K - \inner{x, Tu}_K = 0. \]
-So $\dom(T) \subset (\{S_1(x) - S_2(x)\})^\perp$ and in fact $H = \overline{\dom(T)} \subset (\{S_1(x) - S_2(x)\})^\perp$ because orthogonal complements are closed and $T$ is densely defined. So $S_1(x) - S_2(x) = 0$.
+So $\{S_1(x) - S_2(x)\} \in \dom(T)^\perp$.
+
+For the converse, set $S' = S + \frac{\inner{x,\cdot}_K}{\inner{x,x}_K}v$. This is an adjoint: for all $a\in \dom(T), b\in \dom(S') = \dom(S)$ we have
+\[  \inner{S' b,a}_H = \inner{Sb, a}_H + \frac{\inner{x,b}_K}{\inner{x,x}_K}\inner{v,a}_H = \inner{Sb, a}_H = \inner{b,Ta}_K. \]
 \end{proof}
+\begin{corollary}
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Let $S_1, S_2$ be adjoints of $T$ then for all $x\in \dom(S_1)\cap\dom(S_2)$ we have $S_1(x) = S_2(x)$.
+\end{corollary}
+\begin{proof}
+We have $\dom(T)^\perp = \overline{\dom(T)}^\perp = H^\perp = \{0\}$. So $S_1(x) - S_2(x) = 0$.
+\end{proof}
+\begin{corollary} \label{corollary:maximalAdjointIsOperator}
+Let $T: H\not\to K$ be an operator between Hilbert spaces. Then
+\[ \bigcup\setbuilder{\graph(S)}{\text{$S\in (K\not\to H)$ is an adjoint of $T$}} \]
+is the graph of an operator \textup{if and only if} $T$ is densely defined.
+\end{corollary}
 
 \begin{definition}
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. We define the adjoint $T^*$ as
-\[ T^* \defeq \bigcup\setbuilder{\graph(S)}{\text{$S\in (K\not\to H)$ is an adjoint of $T$}}. \]
+\[ \graph(T^*) \defeq \bigcup\setbuilder{\graph(S)}{\text{$S\in (K\not\to H)$ is an adjoint of $T$}}. \]
 \begin{itemize}
 \item If $T^* = T$, we say $T$ is \udef{self-adjoint}.
 \item If $T^* = -T$, we say $T$ is \udef{skew-adjoint}.
 \end{itemize}
 \end{definition}
+
+\url{https://link.springer.com/article/10.1007/s43036-020-00068-4}
 
 \begin{lemma}
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
@@ -1387,32 +1405,75 @@ so the functional $u\mapsto \inner{x, Tu}$ is bounded.
 The domain $\dom(T^*)$ is a vector space and in particular contains $0$.
 \end{corollary}
 
+\begin{lemma} \label{lemma:HilbertAdjointLemma}
+Let $S,T:H \not\to K$ be densely defined and $\lambda \in \mathbb{F}$.
+\begin{enumerate}
+\item $(S+T)^* = S^* + T^*$ with $\dom((S+T)^*) = \dom(S^*)\cap\dom(T^*)$;
+\item $(\lambda T)^* = \bar{\lambda}T^*$;
+\item $\id_V^* = \id_V$.
+\end{enumerate}
+Let $T: H_1 \not\to H_2, S: H_2 \not\to H_3$ be densely defined
+\begin{enumerate}
+\setcounter{enumi}{4}
+\item $(ST)^* = T^*S^*$ with domain TODO.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
 \begin{proposition}
+Let $T: H\not\to K$ be an operator between Hilbert spaces. Then
+\begin{align*}
+\bigcup\setbuilder{\graph(S)}{\text{$S\in (K\not\to H)$ is an adjoint of $T$}} &= \left( \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\graph(T) \right)^\perp \\
+&=  \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\graph(T)^\perp.
+\end{align*}
+\end{proposition}
+\begin{proof}
+Take an adjoint $S$ and $(w, Sw)$ in $\graph(S)$. Then for all $v\in\dom(T)$:
+\[ 0 = \inner{w, Tv}_K - \inner{Sw, v}_H = \inner{w, Tv}_K + \inner{Sw, -v}_H = \inner{(w, Sw), (Tv,-v)}_{K\oplus H}. \]
+So $\graph(S) \perp (Tv,-v) = \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix} (v,Tv)$.
+
+The final equality follows from \ref{prop:ominusUnderIsometry}, using the fact that $\begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}$ is a surjective isometry.
+\end{proof}
+\begin{corollary}
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
 \[ \graph(T^*) = \left( \begin{pmatrix}
 0 & -\id \\ \id & 0
-\end{pmatrix}\graph(T) \right)^\perp. \]
-\end{proposition}
-\begin{proof}
-Take $(y, T^{*}y)$ in $\graph(T^*)$. Then for all $x\in\dom(T)$:
-\[ 0 = \inner{y, Tx}_K - \inner{T^*y, x}_H = \inner{y, Tx}_K + \inner{T^*y, -x}_H = \inner{(y, T^*y), (Tx,-x)}_{K\oplus H}. \]
-So $\graph(T^*) \perp (Tx,-x) = \begin{pmatrix}
+\end{pmatrix}\graph(T) \right)^\perp =  \begin{pmatrix}
 0 & -\id \\ \id & 0
-\end{pmatrix} (x,Tx)$.
-
-Clearly then $\graph(T^*) \subseteq \left( \begin{pmatrix}
-0 & -\id \\ \id & 0
-\end{pmatrix}\graph(T) \right)^\perp$.
-For the other inclusion we just need to remark that each singleton subset of $\left( \begin{pmatrix}
-0 & -\id \\ \id & 0
-\end{pmatrix}\graph(T) \right)^\perp$ is an adjoint.
-\end{proof}
-\begin{corollary}
-Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then $T^*$ is a closed operator.
+\end{pmatrix}\graph(T)^\perp \]
+and $T^*$ is a closed operator.
 \end{corollary}
 \begin{corollary}
 Let $T: H\not\to K$ be a densely defined and closable operator between Hilbert spaces. Then $T^*$ is densely defined and $\overline{T} = T^{**}$.
 \end{corollary}
+\begin{proof}
+From the proposition we have
+\begin{align*}
+\bigcup\setbuilder{\graph(S)}{\text{$S\in (K\not\to H)$ is an adjoint of $T^*$}} &=  \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\graph(T^*)^\perp \\
+&=  \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\left(\begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\graph(T)^\perp\right)^\perp \\
+&= \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}^2\graph(T)^{\perp\perp} = -\graph(T)^{\perp\perp} \\
+&= \overline{\graph(T)} = \graph(\overline{T}).
+\end{align*}
+This is an operator because $T$ is assumed closable. By \ref{corollary:maximalAdjointIsOperator} this means $T^*$ is densely defined and so $T^{**} = \overline{T}$.
+\end{proof}
 
 \begin{proposition}
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
@@ -1433,10 +1494,6 @@ Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Assume
 \[ (T^*)^{-1} = (T^{-1})^*. \]
 \end{lemma}
 
-\begin{proposition}
-Let $T: H\not\to K$ be a densely defined and closable operator between Hilbert spaces. Then $T^*$ is densely defined and $\overline{T} = T^{**}$.
-\end{proposition}
-
 \subsection{Bounded operators}
 \begin{proposition}
 Let $T\in\Bounded(H,K)$ with $H,K$ Hilbert spaces. Then
@@ -1454,25 +1511,6 @@ The function $(w,v)\mapsto \inner{w,Tv}_K$ is sesquilinear. By proposition \ref{
 This can also be proved by a direct calculation using $(T^*)^* = T$ from \ref{lemma:HilbertAdjointLemma}.
 \end{proof}
 
-\begin{lemma} \label{lemma:HilbertAdjointLemma}
-Let $S,T\in\Bounded(H,K)$ and $\lambda \in \mathbb{F}$.
-\begin{enumerate}
-\item $(T^*)^* = T$;
-\item $(S+T)^* = S^* + T^*$;
-\item $(\lambda T)^* = \bar{\lambda}T^*$;
-\item $\id_V^* = \id_V$.
-\end{enumerate}
-Let $T\in\Bounded(H_1,H_2), S\in\Bounded(H_2,H_3)$
-\begin{enumerate}
-\setcounter{enumi}{4}
-\item $(ST)^* = T^*S^*$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-The proofs are elementary manipulations. For example, to prove 1., we take arbitrary $v\in H$ and $w\in K$, Then
-\[ \inner{w,Tv} = \inner{T^*w,v} = \overline{\inner{v,T^*w}} = \overline{\inner{(T^*)^*v,w}} = \inner{w, (T^*)^*v}. \]
-By lemma \ref{lemma:elementaryOrthogonality} we have $Tv = (T^*)^*v$ for all $v\in V$. 
-\end{proof}
 \begin{lemma}
 The adjoint defines a map $*:\Bounded(H,K)\to \Bounded(K,H)$ that is anti-linear and continuous in the weak and uniform operator topologies. It is continuous in the strong operator topology \textup{if and only if} finite dimensional.
 \end{lemma}
@@ -1569,7 +1607,7 @@ If $\forall x\in H: \norm{Tx} = \norm{T^*x}$, then $T$ is normal.
 By polarisation $\inner{Tx, Ty} = \inner{T^*x, T^* y}$ for all $x,y\in H$.
 \end{proof}
 
-\begin{lemma} \label{lemma:normalSpectralRadiusEqualsNorm} %cited in: positivity C^*
+\begin{lemma} \label{lemma:normalSpectralRadiusEqualsNorm}
 For normal elements the spectral radius equals the norm.
 \end{lemma}
 
