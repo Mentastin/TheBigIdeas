@@ -325,30 +325,25 @@ Let $T$ be a bounded linear operator. We say $T$ is \udef{bounded below} if
 \[ \exists b>0:\forall v\in \dom(T): \quad \norm{Tv}\geq b\norm{v} \]
 \end{definition}
 
-
 \begin{proposition} \label{prop:boundedBelow}
-Let $T:V\to W$ be a bounded operator that is bounded below. Then
-\begin{enumerate}
-\item $T$ is injective;
-\item if $T$ is surjective, the inverse $T^{-1}: W\to V$ exists and is bounded.
-\end{enumerate}
+Let $T\in \Lin(V, W)$ be an operator. Then $T$ has a bounded inverse $T^{-1}: \im(T)\not\to V$ \textup{if and only if} $T$ is bounded below.
+
+In this case
+\[ \norm{T^{-1}} = \left(\inf_{x\neq 0}\frac{\norm{Tx}}{\norm{x}}\right)^{-1}. \]
 \end{proposition}
 \begin{proof}
+First assume $T$ bounded below.
 To show $T$ is injective, take $x_1,x_2\in \dom T$ such that $Tx_1 = Tx_2$. Then
 \[ 0 = \norm{Tx_1 - Tx_2} = \norm{T(x_1 - x_2)} \geq b\norm{x_1 - x_2} \geq 0. \]
 So $\norm{x_1 - x_2} = 0$ and thus $x_1=x_2$.
-
 The existence of $T^{-1}$ is then clear. For boundedness notice that $T^{-1}y \in \dom(T)$, so because $T$ is bounded below,
-\[ \norm{T^{-1}y} \leq \frac{1}{b}\norm{TT^{-1}y} = \frac{1}{b}\norm{y}. \]
-\end{proof}
+\[ b\norm{T^{-1}y} \leq \norm{TT^{-1}y} = \norm{y} \quad\implies\quad \norm{T^{-1}y} \leq \frac{1}{b}\norm{y}. \]
 
-\begin{lemma} \label{lemma:boundedBelowBounded}
-Let $T:\dom(V)\to W$ be an injective operator. Then $T$ is bounded \textup{if and only if} $T^{-1}:\im(T)\to \dom(T)$ is bounded below.
-\end{lemma}
-\begin{proof}
-Assume $T$ bounded. Then for all $x\in\im T$: $\norm{x} = \norm{TT^{-1}x} \leq \norm{T}\norm{T^{-1}x}$, so $T^{-1}$ is bounded below by $1/\norm{T}$.
+This also shows that $\norm{T^{-1}} \leq 1/b$ for all lower bounds $b$. In other words $1/\norm{T^{-1}} \geq \inf_{x\neq 0}\norm{Tx}/\norm{x}$.
 
-Assume $T^{-1}$ bounded below. Then for all $x\in\dom(T)$: $\norm{x} = \norm{T^{-1}Tx} \geq b\norm{Tx}$, so $T$ is bounded by $1/b$.
+Now assume $T^{-1}$ bounded. Then for all $x\in\dom(T)$: $\norm{x} = \norm{T^{-1}Tx} \leq \norm{T^{-1}}\norm{Tx}$, so $T$ is bounded below by $1/\norm{T^{-1}}$.
+
+This also shows that $1/\norm{T^{-1}}$ is a lower bound, so $1/\norm{T^{-1}} \leq \inf_{x\neq 0}\norm{Tx}/\norm{x}$.
 \end{proof}
 
 \subsection{Closed operators}
@@ -580,7 +575,7 @@ The only thing to check is $\inner{w, v- \frac{\inner{v,w}w}{\norm{w}^2}} = 0$, 
 \end{proof}
 
 \subsection{Pythagoras and Cauchy-Schwarz}
-\begin{theorem}[Pythagorean theorem]
+\begin{theorem}[Pythagorean theorem] \label{theorem:Pythagoras}
 Suppose $u\perp v$. Then $\norm{u+v}^2 = \norm{u}^2 + \norm{v}^2$.
 \end{theorem}
 \begin{proof}
@@ -1170,20 +1165,110 @@ Let $V$ be an inner product space and $T$ a linear operator on $V$.
 \end{itemize}
 \end{definition}
 
-\subsection{Quadratic form associated with an operator}
+\section{Energy forms}
 \begin{definition}
-Let $T$ be a linear operator on an inner product space $V$. The \udef{quadratic form associated with $T$} is
-\[ Q_T: \dom(T)\to \F: u\mapsto \inner{u,Tu}. \]
+Let $T$ be an operator on an inner product space $V$. The \udef{energy form} of $T$ is the map
+\[ \inner{\cdot, \cdot}_T: \dom(T)\times \dom(T) \to \F: (x,y) \mapsto \inner{x,Ty}. \]
+We also define the associated quadratic form
+\[ Q_T: \dom(T)\to \F: x\mapsto \inner{x,x}_T = \inner{x,Tx}. \]
 \end{definition}
-\begin{lemma} \label{lemma:symmetricRealQuadraticForm}
-If $T$ is a symmetric operator, then its associated quadratic form is real-valued.
+Energy forms are clearly sesquilinear.
+
+\begin{lemma} \label{lemma:quadraticFormInverseOperator}
+Let $T$ be an invertible operator. Then
+\[ Q_{T^{-1}}(x) = \overline{Q_T(T^{-1}(x))}. \]
 \end{lemma}
+\begin{proof}
+For all $x\in V$
+\[ Q_{T^{-1}}(x) = \inner{x,T^{-1}x} = \inner{TT^{-1}x, T^{-1}x} = \overline{\inner{T^{-1}x, T(T^{-1}x)}} = \overline{Q_T(T^{-1}(x))}. \]
+\end{proof}
+
+\begin{lemma}
+The energy form of an operator $T$ is conjugate symmetric \textup{if and only if} $T$ is symmetric.
+\end{lemma}
+\begin{corollary} \label{lemma:symmetricRealQuadraticForm}
+If $T$ is symmetric, then $Q_T$ is real-valued.
+\end{corollary}
 \begin{proof}
 Assume $T$ symmetric, then for all $u\in\dom(T)$
 \[ Q_T(u) = \inner{u,Tu} = \inner{Tu,u} = \overline{\inner{u,Tu}} = \overline{Q(u)}. \]
 \end{proof}
 
-\subsubsection{Rayleigh quotient}
+So the energy form associated to a symmetric operator is Hermitian. We typically would like our energy forms to be pre-inner products. This is exactly the case for positive operators.
+
+\subsection{Positive operators}
+\begin{definition}
+Let $T$ be a symmetric operator on an inner product space $V$. Then $T$ is called \udef{positive} if the associated energy form is positive: for all $x\in V$
+\[ Q_T(x) = \inner{x,x}_T = \inner{x,Tx} \geq 0. \]
+We write $A \geq 0$. We also say
+\begin{itemize}
+\item $A$ is \udef{strictly positive}, denoted $A > 0$, if $Q_T(u) > 0$;
+\item $A$ is \udef{negative} if $-A$ is positive;
+\item $A$ is \udef{positive definite}, \udef{strongly positive} or \udef{coercive} if there exists a constant $k>0$ such that
+\[ Q_T(x) \geq k\norm{x}^2 > 0. \]
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $A\in\Bounded(H)$ be a bounded operator. Then $A^*A$ and $AA^*$ are positive. Also $A^*A$ is strictly positive \textup{if and only if} $A$ is injective.
+\end{lemma}
+\begin{proof}
+For all $x\in H$:
+\[ \inner{A^*Ax,x} = \inner{Ax,Ax} = \norm{Ax}^2 \geq 0 \qquad \inner{AA^*x,x} = \inner{A^*x,A^*x} = \norm{A^*x}^2 \geq 0. \]
+If $A$ is injective, then its kernel is $\{0\}$ and thus $\norm{Ax}^2 > 0$ for all $x\in H\setminus\{0\}$.
+\end{proof}
+
+\begin{lemma}
+Let $T$ be an invertible operator on an inner product space $V$. Then $Q_T[V] = Q_{T^{-1}}[V]$.
+\end{lemma}
+\begin{proof}
+Immediate from \ref{lemma:quadraticFormInverseOperator}.
+\end{proof}
+\begin{corollary}
+Let $T$ be an invertible operator. Then $T$ is positive (definite) \textup{if and only if} $T^{-1}$ is positive (definite).
+\end{corollary}
+
+\subsubsection{Energy norm}
+\begin{definition}
+Let $T$ be a positive operator. Then
+\[ \norm{\cdot}_T: \dom(T) \to [0,+\infty[: x\mapsto \norm{x}_T = \sqrt{Q_T(x)} \]
+is the \udef{energy norm} associated to $T$.
+\end{definition}
+
+\begin{lemma}
+The energy norm of a positive operator determines a pseudometric topology.
+\end{lemma}
+
+\begin{definition}
+The topology generated by the energy norm is called the \udef{energy topology} and convergence in the energy topology is called \udef{convergence in energy}.
+\end{definition}
+
+\begin{proposition}
+Let $T$ be a positive operator. Then
+\begin{enumerate}
+\item the energy topology is coarser than the norm topology;
+\item the topologies are the same on $\dom(T)$ if $T$ is positive definite.
+\end{enumerate}
+\end{proposition}
+
+\subsubsection{The partial order on operators}
+\begin{definition}
+We define an \udef{operator partial order} by
+\[ A\leq B \qquad\iff\qquad B-A \geq 0. \]
+\end{definition}
+TODO: restrict to bounded operators??
+
+\begin{lemma}
+The operator partial order is a partial order on the set of operators on an inner product space.
+\end{lemma}
+
+\subsubsection{Dissipative operators}
+\begin{definition}
+Let $T$ be an operator on $H$. Then $T$ is \udef{dissipative} if, for all $x\in\dom(T)$
+\[ \Im \inner{x,Tx} \geq 0. \]
+\end{definition}
+
+\subsection{Rayleigh quotient}
 \begin{definition}
 Let $T$ be a linear operator on an inner product space $V$. The \udef{Rayleigh quotient} for $T$ is 
 \[ J_T: \dom(T)\setminus\{0\}\to \F: u\mapsto \frac{Q(u)}{\norm{u}^2} = \frac{\inner{u,Tu}}{\norm{u}^2}. \]
@@ -1253,3 +1338,10 @@ Thus
 \end{align*}
 where we have used the fact that $v,w$ are unit vectors and the parallelogram law \ref{theorem:parallelogramLaw}.
 \end{proof}
+\begin{corollary}
+If $T$ is a symmetric operator; it is bounded iff $J_T$ is bounded above and below:
+\[ \forall u\in\dom(T): \; k \leq J_T(u) \leq K \]
+for some $k,K\in \R$.
+\end{corollary}
+
+

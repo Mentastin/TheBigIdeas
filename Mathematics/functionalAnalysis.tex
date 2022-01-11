@@ -611,6 +611,16 @@ The identity on a normed space $X$ is compact \textup{if and only if} $X$ is fin
 TODO ref. 
 \end{proof}
 
+\begin{proposition}
+Let $V$ be an inner product space and $\seq{e_n}$ a sequence of orthonormal vectors in $V$. If $K$ is a compact operator, then $\lim_{n\to\infty}Ke_n = 0$.
+\end{proposition}
+\begin{corollary}
+If $V$ is infinite-dimensional and $K$ is invertible, then its inverse is unbounded.
+\end{corollary}
+\begin{proof}
+Due to $\lim_{n\to\infty}Ke_n = 0$ the operator $K$ cannot be bounded below, so $K^{-1}$ is not bounded by \ref{prop:boundedBelow}.
+\end{proof}
+
 \section{Continuity}
 \url{https://en.wikipedia.org/wiki/Bilinear_map#Continuity_and_separate_continuity}
 
@@ -624,6 +634,9 @@ TODO ref.
 \end{definition}
 
 A finite-dimensional normed / inner product space is automatically a Banach / Hilbert space by proposition \ref{prop:finiteDimComplete}.
+
+Every proper subspace $U$ of a normed vector space $V$ has empty interior.
+A nice consequence of this is that any closed proper subspace is necessarily nowhere dense. So if V is a Banach space, the Baire category theorem implies that V cannot be a countable union of closed proper subspaces. In particular, an infinite dimensional Banach space cannot be a countable union of finite dimensional subspaces. This means, for example, that a vector space of countable dimension (e.g. the space of polynomials) cannot be equipped with a complete norm.
 
 The space $\Bounded(V,W)$ is a Banach space.
 
@@ -673,6 +686,11 @@ Let $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$. We have the inequalities
 \norm{x+y}_p &\leq \norm{x}_p+\norm{y}_p\qquad\text{(Minkowski inequality)}
 \end{align*}
 which follow from the general cases (TODO ref) by applying the counting measure.
+
+\subsubsection{Operators on sequence spaces}
+TODO Gribanov's theorems
+
+3.7.1, 3.7.2 of Hanson / Yakovlev.
 
 \section{Series in Banach spaces}
 TODO
@@ -901,6 +919,33 @@ Notice that it is important that the domain of $T$ be the whole of $X$.
 Let $L\in\Hom(V,W)$ with $V,W$ Banach spaces. Then $L$ is compact \textup{if and only if} the image of any bounded subset of $V$ under $L$ is totally bounded in $W$.
 \end{proposition}
 TODO proof
+
+
+
+\subsubsection{Calkin algebra}
+\begin{proposition}
+Let $X$ be a Banach space. Then $\Compact(X)$ is a closed two-sided ideal in $\Bounded(X)$.
+\end{proposition}
+\begin{definition}
+Let $X$ be a Banach space. The \udef{Calkin algebra} is the quotient $\Bounded(X)/\Compact(X)$.
+\end{definition}
+TODO: quotient algebra ($[A][B] = [AB]$)
+
+\begin{proposition}
+Let $[T]\in\Bounded(X)/\Compact(X)$. Then the following are equivalent:
+\begin{enumerate}
+\item $[T]$ is invertible in the Calkin algebra;
+\item $\exists S\in\Bounded(X):$ both $\vec{1}-TS$ and $\vec{1}-ST$ are compact;
+\item $T$ has closed range and finite-dimensional kernel and cokernel. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Point 1. and 2. are easily equivalent: $[S]$ is an inverse of $[T]$ if and only if $[\vec{1}] = [S][T] = [ST]$ and $[\vec{1}] = [T][S] = [TS]$. Then
+\[ [\vec{1}] = [ST] \iff [ST - \vec{1}] = [0] \qquad [\vec{1}] = [TS] \iff [TS - \vec{1}] = [0] \]
+and $[F]=[0]$ if and only if $F$ is compact.
+
+TODO
+\end{proof}
 
 \section{Unbounded operators}
 
@@ -1405,23 +1450,6 @@ so the functional $u\mapsto \inner{x, Tu}$ is bounded.
 The domain $\dom(T^*)$ is a vector space and in particular contains $0$.
 \end{corollary}
 
-\begin{lemma} \label{lemma:HilbertAdjointLemma}
-Let $S,T:H \not\to K$ be densely defined and $\lambda \in \mathbb{F}$.
-\begin{enumerate}
-\item $(S+T)^* = S^* + T^*$ with $\dom((S+T)^*) = \dom(S^*)\cap\dom(T^*)$;
-\item $(\lambda T)^* = \bar{\lambda}T^*$;
-\item $\id_V^* = \id_V$.
-\end{enumerate}
-Let $T: H_1 \not\to H_2, S: H_2 \not\to H_3$ be densely defined
-\begin{enumerate}
-\setcounter{enumi}{4}
-\item $(ST)^* = T^*S^*$ with domain TODO.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
-
 \begin{proposition}
 Let $T: H\not\to K$ be an operator between Hilbert spaces. Then
 \begin{align*}
@@ -1494,6 +1522,8 @@ Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Assume
 \[ (T^*)^{-1} = (T^{-1})^*. \]
 \end{lemma}
 
+\url{https://arxiv.org/pdf/1507.08418.pdf}
+
 \subsection{Bounded operators}
 \begin{proposition}
 Let $T\in\Bounded(H,K)$ with $H,K$ Hilbert spaces. Then
@@ -1520,6 +1550,26 @@ By the proposition the adjoint map is anti-linear. It is also bounded with norm 
 TODO
 \end{proof}
 
+\begin{lemma} \label{lemma:HilbertAdjointLemma}
+Let $S,T\in\Bounded(H,K)$ and $\lambda \in \mathbb{F}$.
+\begin{enumerate}
+\item $(T^*)^* = T$;
+\item $(S+T)^* = S^* + T^*$;
+\item $(\lambda T)^* = \bar{\lambda}T^*$;
+\item $\id_V^* = \id_V$.
+\end{enumerate}
+Let $T\in\Bounded(H_1,H_2), S\in\Bounded(H_2,H_3)$
+\begin{enumerate}
+\setcounter{enumi}{4}
+\item $(ST)^* = T^*S^*$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The proofs are elementary manipulations. For example, to prove 1., we take arbitrary $v\in H$ and $w\in K$, Then
+\[ \inner{w,Tv} = \inner{T^*w,v} = \overline{\inner{v,T^*w}} = \overline{\inner{(T^*)^*v,w}} = \inner{w, (T^*)^*v}. \]
+By lemma \ref{lemma:elementaryOrthogonality} we have $Tv = (T^*)^*v$ for all $v\in V$. 
+\end{proof}
+
 \begin{proposition}
 Let $H,K$ be Hilbert spaces and $T:H\to K$ a bijective bounded linear operator with bounded inverse. Then $(T^*)^{-1}$ exists and
 \[ (T^*)^{-1} = (T^{-1})^*. \]
@@ -1542,52 +1592,21 @@ Let $T\in\Bounded(H,K)$. Then
 \end{proof}
 In particular $\im(T)$ is closed iff it is equal to $\ker(T^*)^\perp$. This is sometimes known as the closed range theorem. This is, e.g., the case when $T$ is bounded below, see \ref{prop:boundedBelowClosedRange}.
 
-\begin{proposition}
+\begin{proposition} \label{prop:normOfSquare}
 Let $T\in \Bounded(H,K)$ with $H,K$ Hilbert spaces. Then
-\begin{enumerate}
-\item $\norm{T^*T}= \norm{T}^2 = \norm{TT^*}$;
-\item $T$ is an isometry \textup{if and only if} $T^*T = \id_H$;
-\item $T$ is unitary \textup{if and only if} $T^*T = \id_H$ and $TT^* = \id_K$, i.e. $T^{-1} = T^*$.
-\end{enumerate}
+\[ \norm{T^*T}= \norm{T}^2 = \norm{TT^*}. \]
 \end{proposition}
 \begin{proof}
-(1) For $\norm{T^*T}= \norm{T}^2$ first observe that
+For $\norm{T^*T}= \norm{T}^2$ first observe that
 \[ \norm{T^*T} \leq \norm{T^*}\cdot\norm{T} = \norm{T}^2. \]
 Conversely, $\forall x\in H$:
 \[ \norm{T(x)}^2 = \inner{Tx,Tx} = \inner{T^*Tx,x} \leq \norm{T^*Tx}\cdot \norm{x} \leq \norm{T^*T}\cdot\norm{x}^2. \]
 The other equality follows by applying the first to $T^*$ and using $\norm{T^*}=\norm{T}$.
-
-(2) For all $v,w\in H$ we have
-\[ \inner{Tv,Tw} = \inner{T^*Tv,w}. \]
-The left-hand side is equal to $\inner{v,w}$ iff $T$ is an isometry. The right-hand side is equal to $\inner{v,w}$ iff $T^*T = \id_H$, by \ref{lemma:equalityOfMapsInnerProductSpaces}.
-
-(3) If $T$ is invertible, it must have a left and right inverse. By lemma \ref{lemma:leftRightInverse} they must be the same.
 \end{proof}
 
-
-
-\subsection{Friedrichs extension}
-\begin{proposition}
-Let $T: H\not\to K$ be a densely defined, positive, symmetric operator between Hilbert spaces. Then $T$ has positive self-adjoint extension.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-
-
-\section{Dirac notation}
-\url{https://core.ac.uk/download/pdf/25263496.pdf}
-\url{https://michael-herbst.com/talks/2014.07.22_Mathematical_Concept_Dirac_Notation.pdf}
-\url{http://galaxy.cs.lamar.edu/~rafaelm/webdis.pdf}
-\url{https://plato.stanford.edu/entries/qt-nvd/}
-\url{file:///C:/Users/user/Downloads/Abdus%20Salam,%20E.P.%20Wigner%20(Ed.)%20-%20Aspects%20of%20Quantum%20Theory%20-%20Dedicated%20to%20Dirac%E2%80%99s%2070th%20Birthday-Cambridge%20University%20Press%20(1972).pdf}
-\url{https://aip.scitation.org/doi/pdf/10.1063/1.1705001}
-
-\section{Bounded operators on Hilbert spaces}
-\subsection{Properties to do with the adjoint}
-\subsubsection{Normal operators}
+\subsection{Normal operators}
 \begin{definition}
-A bounded linear operator $T$ one a Hilbert space $H$ is \udef{normal} if
+A densely defined linear operator $T$ on a Hilbert space $H$ is \udef{normal} if
 \[ TT^* = T^*T. \]
 \end{definition}
 Self-adjoint and unitary operators are normal, but the converse is not true.
@@ -1600,11 +1619,15 @@ If $T$ is a normal operator, then $\ker T = \ker T^* = (\im T)^\perp$.
 \begin{proof}
 \[ \norm{Tx}^2 = \inner{Tx,Tx} = \inner{T^*Tx, x} = \inner{TT^*x, x} = \inner{T^*x, T^*x} = \norm{T^*x}^2. \]
 \end{proof}
-\begin{lemma}
-If $\forall x\in H: \norm{Tx} = \norm{T^*x}$, then $T$ is normal.
-\end{lemma}
+
+\begin{proposition}
+Let $T\in\Bounded(H)$ be a bounded operator. Then $T$ is normal \textup{if and only if} $\forall x\in H: \norm{Tx} = \norm{T^*x}$.
+\end{proposition}
 \begin{proof}
-By polarisation $\inner{Tx, Ty} = \inner{T^*x, T^* y}$ for all $x,y\in H$.
+First, assume $T$ normal. Then
+\[ \norm{Tx}^2 = |\inner{Tx,Tx}| = |\inner{T^*Tx,x}| = |\inner{TT^*x,x}| = |\inner{T^*x,T^*x}| = \norm{T^*x}^2. \]
+
+For the converse, we have $\inner{Tx, Ty} = \inner{T^*x, T^* y}$ for all $x,y\in H$ by polarisation.
 \end{proof}
 
 \begin{lemma} \label{lemma:normalSpectralRadiusEqualsNorm}
@@ -1615,18 +1638,65 @@ For normal elements the spectral radius equals the norm.
 A normal operator on a Hilbert space is invertible \textup{if and only if} it is bounded below.
 \end{lemma}
 
-\subsubsection{Self-adjoint operators}
-\begin{definition}
-Let $H$ be a Hilbert space.
+\subsection{Self-adjoint operators}
+A symmetric operator $T$ is self-adjoint if and only if $\dom(T) = \dom(T^*)$.
+\begin{lemma}
+Let $T$ be a symmetric densely defined operator on a Hilbert space $H$. Then
+\begin{enumerate}
+\item $\dom(T) \subseteq \dom(T^*)$;
+\item $T = T^*|_{\dom(T)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+This is immediate from symmetry: $\inner{Tx,x} = \inner{x,Tx}$ for all $x\in\dom(T)$.
+\end{proof}
+It is possible for an unbounded,
+symmetric operator to not have a self-adjoint extension, even if it is densely defined.
 
-A bounded operator $T\in\Bounded(H)$ is called \udef{self-adjoint} if $T=T^*$.
-\end{definition}
+\begin{example}
+Consider the operator
+\[ T: L^2(a,b) \to L^2(a,b): f\mapsto i\od{f}{x} \]
+with domain
+\[ \dom(T) = \setbuilder{f\in L^2(a,b)}{\od{f}{x}\in L^2(a,b),\; f(a) = 0 = f(b)}. \]
+Then
+\begin{align*}
+\inner{g, Tf} &= \int_{a}^b \overline{g(x)}i\od{f(x)}{x}\diff{x} \\
+&= \overline{g(b)}f(b) - \overline{g(a)f(a)} - \int_{a}^b \Big(i \od{}{x}\overline{g(x)}\Big)f(x)\diff{x} \\
+&= \int_a^b \overline{i \od{g(x)}{x}} f(x) \diff{x} = \inner{Tg, f}.
+\end{align*}
+So $T$ is symmetric and $\dom(T^*) = \setbuilder{f\in L^2(a,b)}{\od{f}{x}\in L^2(a,b)}$. We cannot extend $\dom(T)$, because $T$ would no longer be symmetric due to boundary terms.
+\end{example}
+
+\subsubsection{Bounded self-adjoint operators}
+\begin{lemma}
+Let $A, B\in\Bounded(H)$. Then
+\begin{enumerate}
+\item $A^*A, AA^*$ and $A+A^*$ are self-adjoint;
+\item if $A,B$ are self-adjoint, then $AB$ is self-adjoint \textup{if and only if} $A,B$ commute.
+\end{enumerate}
+\end{lemma}
+\begin{corollary}
+Let $A\in\Bounded(H)$. Then there exist unique self-adjoint operators $S,T$ such that
+\[ A = S+iT \qquad A^* = S-iT. \]
+\end{corollary}
+\begin{proof}
+Indeed $S = (A+A^*)/2$ and $T = (A-A^*)/2i$ are self-adjoint.
+\end{proof}
+\begin{corollary}
+The operator $A$ is normal \textup{if and only if} $S,T$ commute.
+\end{corollary}
+\begin{proof}
+We calculate the commutator
+\[ [S,T] = \left[\frac{A+A^*}{2}, \frac{A-A^*}{2i}\right] = \frac{A^*A - AA^*}{2i} = \frac{1}{2i}[A^*, A]. \]
+\end{proof}
+
 \begin{proposition}
 Let $T\in\Bounded(H)$ be self-adjoint. Then
 \[ \norm{T} = \sup\setbuilder{|\inner{\varphi, T\varphi}|}{\norm{\varphi}\leq 1}. \]
 \end{proposition}
 
-\subsubsection{Orthogonal projections}
+
+\subsection{Orthogonal projections}
 \url{https://planetmath.org/latticeofprojections}
 
 \begin{proposition}
@@ -1634,16 +1704,31 @@ Let $P$ be a bounded operator $P$ on a Hilbert space $\mathcal{H}$. Then the fol
 \begin{enumerate}
 \item $P$ is an orthogonal projection onto a closed subspace of $\mathcal{H}$;
 \item $P^2 = P$ and $P=P^*$;
-\item $P^2 = P$ and $\norm{P}\leq 1$.
+\item $P^2 = P$ and $\norm{P}\in \{0,1\}$;
+\item $P^2 = P$ and $\norm{P}\leq 1$;
+
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-Suppose first that $P$ is the orthogonal projection operator onto a closed subspace $K$. Clearly $P^2 = P$. Let $x,y\in\mathcal{H}$ and write $x= x_1+x_2, y = y_1+y_2$ where $x_1,y_1\in K$ and $x_2,y_2\in K^\perp$. Then
+$\boxed{(1)\Rightarrow (2)}$  Suppose first that $P$ is the orthogonal projection operator onto a closed subspace $K$. Clearly $P^2 = P$. Let $x,y\in\mathcal{H}$ and write $x= x_1+x_2, y = y_1+y_2$ where $x_1,y_1\in K$ and $x_2,y_2\in K^\perp$. Then
 \[ \inner{Px, y} = \inner{x_1, y_1+y_2} = \inner{x_1, y_1} + \inner{x_1,y_2} = \inner{x_1,y_1} = \inner{x_1+x_2, y_2} = \inner{x,Py}. \]
 So $P = P^*$.
 
-Suppose conversely that $P=P^*$ and $P^2 = P$. Define $K=\im P$, then $K$ is closed because $x\in K$ iff $Px=x$ and thus for any converging sequence $(x_n)_n\subset K$: $\lim x_n = \lim Px_n = P\left(\lim x_n\right)$, so the limit is in $K$. For orthogonality we need $\forall x\in\mathcal{H}: x-Px \in K^\perp$. This follows because $\forall x,y\in \mathcal{H}$:
-\[ \inner{Py,x-Px} = \inner{y,P(x-Px)} = 0. \]
+$\boxed{(2)\Rightarrow (3)}$ We calculate $\norm{P} = \norm{P^2} = \norm{P^*P} = \norm{P}^2$ using \ref{prop:normOfSquare}. The solutions to this equation are $\{0,1\}$.
+
+$\boxed{(3)\Rightarrow (4)}$ This is clear.
+
+$\boxed{(4)\Rightarrow (1)}$ Define $K=\im P$, then $K$ is closed because $x\in K$ iff $Px=x$ and thus for any converging sequence $(x_n)_n\subset K$: $\lim x_n = \lim Px_n = P\left(\lim x_n\right)$, so the limit is in $K$.
+
+We just need to show orthogonality: $Px \perp x- Px$. For this we use \ref{lemma:orthogonality}: for all $a\in\F$
+\[ \norm{Px} = \norm{Px + aPx - aPx} = \norm{P(Px + a(x-Px))} \leq \norm{P}\cdot \norm{Px + a(x-Px)} \leq \norm{Px + a(x-Px)}. \]
+We conclude $Px \perp x- Px$.
+\end{proof}
+\begin{corollary}
+Orthogonal projections are positive operators.
+\end{corollary}
+\begin{proof}
+This follows from $P = P^2 = P^*P$.
 \end{proof}
 
 \begin{lemma} \label{lemma:commutingProjectors}
@@ -1719,9 +1804,27 @@ $\boxed{(d)\Leftrightarrow (e)}$ By the equivalence
 \[ \norm{Px} \leq \norm{Qx} \iff \inner{Px,Px} \leq \inner{Qx,Qx} \iff \inner{Px,x}\leq \inner{Qx,x} \iff \inner{(Q-P)x,x}\geq 0. \]
 \end{proof}
 
+\subsection{Isometries}
 
-\subsubsection{Isometries}
-\paragraph{Wandering spaces and unilateral shifts}
+\begin{proposition}
+Let $T\in \Bounded(H,K)$ with $H,K$ Hilbert spaces. Then
+\begin{enumerate}
+\item $T$ is an isometry \textup{if and only if} $T^*T = \id_H$;
+\item $T$ is unitary \textup{if and only if} $T^*T = \id_H$ and $TT^* = \id_K$, i.e. $T^{-1} = T^*$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) For all $v,w\in H$ we have
+\[ \inner{Tv,Tw} = \inner{T^*Tv,w}. \]
+The left-hand side is equal to $\inner{v,w}$ iff $T$ is an isometry. The right-hand side is equal to $\inner{v,w}$ iff $T^*T = \id_H$, by \ref{lemma:equalityOfMapsInnerProductSpaces}.
+
+(2) If $T$ is invertible, it must have a left and right inverse. By lemma \ref{lemma:leftRightInverse} they must be the same.
+\end{proof}
+\begin{corollary}
+An isometry $T\in\Bounded(H)$ is unitary \textup{if and only if} it is normal.
+\end{corollary}
+
+\subsubsection{Wandering spaces and unilateral shifts}
 \begin{definition}
 Let $\mathcal{H}$ be a Hilbert space, $\mathcal{V}\subseteq \mathcal{H}$ a closed subspace and $T:\mathcal{H}\to \mathcal{H}$ a linear map. Then $\mathcal{V}$ is called a \udef{wandering space} for $T$ if $T^p[\mathcal{V}]\perp T^q[\mathcal{V}]$ for every $p\neq q\in\N$.
 \end{definition}
@@ -1783,6 +1886,24 @@ Finally $T|_{\mathcal{H}_0}$ is unitary because it is an isometry and surjective
 \subsubsection{Unitaries}
 \paragraph{Bilateral shifts}
 
+\subsection{Friedrichs extension}
+\begin{proposition}
+Let $T: H\not\to K$ be a densely defined, positive, symmetric operator between Hilbert spaces. Then $T$ has positive self-adjoint extension.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+
+\section{Dirac notation}
+\url{https://core.ac.uk/download/pdf/25263496.pdf}
+\url{https://michael-herbst.com/talks/2014.07.22_Mathematical_Concept_Dirac_Notation.pdf}
+\url{http://galaxy.cs.lamar.edu/~rafaelm/webdis.pdf}
+\url{https://plato.stanford.edu/entries/qt-nvd/}
+\url{file:///C:/Users/user/Downloads/Abdus%20Salam,%20E.P.%20Wigner%20(Ed.)%20-%20Aspects%20of%20Quantum%20Theory%20-%20Dedicated%20to%20Dirac%E2%80%99s%2070th%20Birthday-Cambridge%20University%20Press%20(1972).pdf}
+\url{https://aip.scitation.org/doi/pdf/10.1063/1.1705001}
+
+\section{Bounded operators on Hilbert spaces}
 
 \subsection{Finite-rank operators}
 \begin{lemma} \label{lemma:finiteRankSingularValues}
@@ -1811,7 +1932,7 @@ Let $T\in\Bounded(H)$. Then the following are equivalent:
 \item there exists a sequence $(T_n)_{n\in\N}$ of finite rank operators such that $\norm{T-T_n}\to 0$.
 \end{enumerate}
 \end{proposition}
-This is false in Banach spaces.
+This is false in Banach spaces. (TODO Enflo)
 \begin{proof}
 TODO
 \end{proof}
@@ -1829,7 +1950,7 @@ As in \ref{lemma:finiteRankSingularValues} for finite-rank operators we call $(\
 \begin{proposition}
 Let $H$ be a Hilbert space with orthonormal basis $(e_i)_{i\in I}$. If $T\in\Bounded(H)$ and
 \[ \sum_{i\in I}\norm{Te_i}^2  < \infty, \]
-then $T$ is a compact operator.
+then $T$ is a compact operator. + Converse??
 \end{proposition}
 \begin{proof}
 TODO + weaken $T\in\Bounded(H)$?
@@ -1838,14 +1959,22 @@ TODO + weaken $T\in\Bounded(H)$?
 An integral operator defined by a square integrable kernel $K\in L^2(A\times A, \mu)$ is compact.
 \end{corollary}
 
+\begin{proposition}
+Let $T$ be an operator on a Hilbert space. Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is compact;
+\item for all sequences $\seq{x_n}$, weak convergence $x_n \overset{w}{\to} x$ implies the strong convergence $Ax_n \to Ax$;
+\item for any two weakly convergent sequences $x_n\overset{w}{\to} x$ and $y_n\overset{w}{\to} y$ the energy form is continuous in both arguments:
+\[ \lim_{n\to\infty}\inner{x_n,y_n}_T = \lim_{n\to\infty}\inner{x_n,Ty_n} = \inner{x,Ty} = \inner{x,y}_T. \]
+\end{enumerate} 
+\end{proposition}
 
 \subsubsection{The real spectral theorem}
 \subsubsection{The complex spectral theorem}
 
 \subsection{Positive operators}
 
-Every proper subspace $U$ of a normed vector space $V$ has empty interior.
-A nice consequence of this is that any closed proper subspace is necessarily nowhere dense. So if V is a Banach space, the Baire category theorem implies that V cannot be a countable union of closed proper subspaces. In particular, an infinite dimensional Banach space cannot be a countable union of finite dimensional subspaces. This means, for example, that a vector space of countable dimension (e.g. the space of polynomials) cannot be equipped with a complete norm.
+
 
 \section{Unbounded operators}
 
@@ -1975,7 +2104,8 @@ Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
 The sets $\sigma_\text{p}(T), \sigma_\text{c}(T)$ and $\sigma_\text{r}(T)$ are disjoint.
 \end{definition}
 In finite dimensions we know that
-\[ \text{$\lambda \id_V - L$ is surjective} \quad\iff\quad \text{$\lambda \id_V - L$ is injective.} \]
+\[ \text{$\lambda \id_V - L$ is surjective} \quad\iff\quad \text{$\lambda \id_V - L$ is injective} \]
+and all linear operator are bounded.
 So in this case there can only ever be a point spectrum.
 
 \begin{proposition}
@@ -2026,7 +2156,7 @@ Let $T$ be a bounded linear operator on a Banach space. Then $\sigma(T)$ is comp
 Let $L$ be an operator on a vector space $V$. If $\lambda \id_V - T$ is not bounded from below, then $\lambda \in \sigma(T)$.
 \end{lemma}
 \begin{proof}
-If $\lambda \notin \sigma(T)$, then $R_\lambda(L)$ is bijective and bounded. By lemma \ref{lemma:boundedBelowBounded}, $\lambda \id_V - T$ is bounded below.
+If $\lambda \notin \sigma(T)$, then $R_\lambda(L)$ is bijective and bounded. By lemma \ref{prop:boundedBelow}, $\lambda \id_V - T$ is bounded below.
 \end{proof}
 
 
@@ -2034,7 +2164,7 @@ If $\lambda \notin \sigma(T)$, then $R_\lambda(L)$ is bijective and bounded. By 
 Let $T:X\to X$ be an operator on a Banach space and $\lambda\in\sigma_\text{c}$, then $R_\lambda(T)$ is unbounded.
 \end{lemma}
 \begin{proof}
-If $R_\lambda(T)$ is bounded, $\lambda \id_V - T$ then is bounded below by lemma \ref{lemma:boundedBelowBounded} and has closed range by proposition \ref{prop:boundedBelowClosedRange}.
+If $R_\lambda(T)$ is bounded, $\lambda \id_V - T$ then is bounded below by lemma \ref{prop:boundedBelow} and has closed range by proposition \ref{prop:boundedBelowClosedRange}.
 \end{proof}
 
 TOreDO:
@@ -2305,29 +2435,6 @@ Let $T\in\Bounded(H)$ be a bounded operator on a Hilbert space. Then $\dim\coker
 TODO (is it correct?) $\ker(T^*) = \im(T)^\perp$.
 \end{proof}
 
-\begin{proposition}
-Let $X$ be a Banach space. Then $\Compact(X)$ is a closed two-sided ideal in $\Bounded(X)$.
-\end{proposition}
-\begin{definition}
-Let $X$ be a Banach space. The \udef{Calkin algebra} is the quotient $\Bounded(X)/\Compact(X)$.
-\end{definition}
-TODO: quotient algebra ($[A][B] = [AB]$)
-
-\begin{proposition}
-Let $[T]\in\Bounded(X)/\Compact(X)$. Then the following are equivalent:
-\begin{enumerate}
-\item $[T]$ is invertible in the Calkin algebra;
-\item $\exists S\in\Bounded(X):$ both $\vec{1}-TS$ and $\vec{1}-ST$ are compact;
-\item $T$ has closed range and finite-dimensional kernel and cokernel. 
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-Point 1. and 2. are easily equivalent: $[S]$ is an inverse of $[T]$ if and only if $[\vec{1}] = [S][T] = [ST]$ and $[\vec{1}] = [T][S] = [TS]$. Then
-\[ [\vec{1}] = [ST] \iff [ST - \vec{1}] = [0] \qquad [\vec{1}] = [TS] \iff [TS - \vec{1}] = [0] \]
-and $[F]=[0]$ if and only if $F$ is compact.
-
-TODO
-\end{proof}
 
 \begin{proposition}
 Let $S,T\in\Fred(X)$, $\lambda\in\F$ and $K\in\Compact(X)$. Then
@@ -2369,6 +2476,8 @@ TODO snake lemma to obtain long exact
 \end{corollary}
 
 \subsection{Fredholm alternative}
+
+Surjective iff injective.
 
 \section{Integral operators and transforms}
 \begin{definition}
