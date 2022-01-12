@@ -337,6 +337,23 @@ Let $a,b\in\R$. Then
 By multiplication, using \ref{lemma:matrixOfOnesMultiplication}.
 \end{proof}
 
+\begin{definition}
+Let $A\in\F^{n\times n}$. We say $A$ is \udef{strictly diagonally dominant} if
+\[ \sum_{\substack{j \in 1:n // j\neq i}}|[A]_{ij}| < |[A]_{ii}|. \]
+\end{definition}
+\begin{proposition} \label{prop:invertibleDiagonallyDominant}
+If $A\in\F^{n\times n}$ is strictly diagonally dominant, then it is invertible.
+\end{proposition}
+\begin{proof}
+We prove the contraposition. Assume, then, that $A$ is not invertible, so there exists an $x\neq 0$ such that $Ax = 0$ (TODO ref). So then for all $i\in 1:n$ we have
+\[ \sum_{j = 1}^n [A]_{ij}x_j. \]
+Setting $|x_m| = \max_{i\in 1:n}|x_i|$, we have
+\[ [A]_{mm}x_m = -\sum_{\substack{j\in 1:n \\ j\neq m}}[A]_{mj}x_j \]
+and so
+\[ |[A]_{mm}|\cdot |x_m| = |\sum_{\substack{j\in 1:n \\ j\neq m}}[A]_{mj}x_j| \leq \sum_{\substack{j\in 1:n \\ j\neq m}}|[A]_{mj}|\cdot |x_j| \leq \sum_{\substack{j\in 1:n \\ j\neq m}}|[A]_{mj}|\cdot |x_m|.\]
+In particular this means $A$ cannot be strictly diagonally dominant.
+\end{proof}
+
 \subsection{Matrices and linear maps}
 \subsubsection{Matrices as maps $\F^n\to \F^m$}
 The matrix multiplication $\F^{m\times n}\times \F^n \to \F^m$ can be curried to produce a map $\ell$. The input of $\ell$, i.e. a matrix in $\F^{m\times n}$ is typically written as a subscript. So, for a matrix $A\in\F^{m\times n}$ we have
@@ -1991,6 +2008,14 @@ Let $A\in \F^{n\times n}$ and $\lambda\in \mathbb{F}$, then
 The equation $A\vec{v} = \lambda \vec{v}$ is equivalent to $(A-\lambda \mathbb{1}_n)\vec{v} = 0$. So there exist eigenvectors associated to $\lambda$ iff the kernel of $\ell_{A-\lambda \mathbb{1}_n}$ is not trivial iff $\ell_{A-\lambda \mathbb{1}_n}$ is injective (\ref{prop:injectivityKernelTriviality}) iff $\ell_{A-\lambda \mathbb{1}_n}$ is invertible (\ref{prop:invertibleFiniteDim}) iff $A-\lambda \mathbb{1}_n$ is invertible (\ref{lemma:invertibleMapInvertibleMatrix}).
 \end{proof}
 
+\begin{proposition}[Gerschgorin circle theorem]
+Let $A\in \F^{n\times n}$. If $\lambda$ is an eigenvalue of $A$, then there is an $i\in 1:n$ such that
+\[ |\lambda - [A]_{ii}| \leq \sum_{\substack{j\in 1:n \\ j \neq i}}|[A]_{ij}|. \]
+\end{proposition}
+\begin{proof}
+If $|\lambda - [A]_{ii}| > \sum_{\substack{j\in 1:n \\ j \neq i}}|[A]_{ij}|$ for all $i$, then $(A-\lambda\mathbb{1})$ is strictly diagonally dominant and thus invertible by \ref{prop:invertibleDiagonallyDominant}.
+\end{proof}
+
 \begin{proposition}
 Let $A\in\F^{n\times n}$ be a matrix. Suppose $\lambda_1, \ldots, \lambda_m$ are distinct eigenvalues of $A$ and $\vec{v}_1,\ldots, \vec{v}_m$ are corresponding eigenvectors. Then $\{\vec{v}_1,\ldots, \vec{v}_m\}$ is linearly independent.
 \end{proposition}
@@ -2029,13 +2054,29 @@ The characteristic polynomials of similar matrices are identical.
 \end{lemma}
 
 \begin{proposition}
-Let $A\in\F^{n\times n}$. Then the eigenvalues of $A$ are the solutions of the equation
-\[ p_A(x) = 0. \]
-This is called the \udef{characteristic equation} of $L$.
+Let $A\in\F^{n\times n}$. Then $p_A(x)$ can be factorised as
+\[ p_A(x) = \prod_{i=1}^m (x - \lambda_i)^{m_i}  \]
+where $\lambda_i$ are the eigenvalues of $A$ and the multiplicities $m_i$ are positive integers such that $\sum_{i=1}^m m_i = n$.
 \end{proposition}
+\begin{corollary}
+The eigenvalues of $A$ are the solutions of the equation
+\[ p_A(x) = 0. \]
+\end{corollary}
+\begin{corollary}
+The determinant of a matrix is the product of its eigenvalues, counting algebraic multiplicity: for $A\in\F^{n\times n}$
+\[ \det(A) = \prod_{i=1}^m\lambda_i^{m_i}. \]
+\end{corollary}
+\begin{proof}
+We have
+\[ \det(A) = (-1)^n\det(0-A) = (-1)^np_A(0) = (-1)^n\prod_{i=1}^m(0 - \lambda_i)^{m_i} = \prod_{i=1}^m\lambda_i^{m_i}. \]
+\end{proof}
 
 \begin{definition}
-Let $A\in\F^{n\times n}$ and $\lambda$ be an eigenvalue of $A$. The multiplicity of $\lambda$ as a root of $p_A(x)$ is the \udef{algebraic multiplicity} of $\lambda$.
+Let $A\in\F^{n\times n}$. The equation
+\[ p_A(x) = \det(x\mathbb{1}_n - A) = 0 \]
+is called the \udef{characteristic equation} of $A$.
+
+Let $\lambda$ be a solution of the characteristic equation. The multiplicity of $\lambda$ as a root of $p_A(x)$ is the \udef{algebraic multiplicity} of $\lambda$.
 \end{definition}
 \begin{lemma}
 Let $A\in\F^{n\times n}$ and $\lambda$ be an eigenvalue of $A$.
