@@ -720,8 +720,10 @@ Every measure space can be completed (TODO)
 \section{Carathéodory's construction of measures}
 
 \chapter{Integration theory}
-\section{Riemannian integration}
+\section{Riemann integration}
 See also Reed/Simon and \ref{prop:BLT}.
+\subsection{Riemann-Stieltjes}
+
 \section{Lebesgue integration}
 \url{https://math.stackexchange.com/questions/2218114/theoretical-advantages-of-lebesgue-integration}
 \url{https://math.stackexchange.com/questions/3202630/what-are-the-advantages-of-the-riemann-vs-lebesgue-integral}
@@ -730,16 +732,16 @@ TODO order on function spaces
 
 \begin{definition}
 Let $\Omega$ be a set. A \udef{simple function} (or \udef{step function}) on $\Omega$ is a function with a range of finite cardinality.
+
+Let $B$ be a set. We denote the subset of simple functions in $(\Omega\to B)$ by $\SF(\Omega,B)$
 \end{definition}
 
 \begin{lemma}
-Let $s:\Omega\to Y\subset \F$ be a simple function into a subset of a field $\F$. Then $s$ can be written as
+Let $s:\Omega\to Y$ be a simple function into a vector space. Then $s$ can be written as
 \[ s(x) = \sum_{\lambda \in s[\Omega]}\lambda\cdot \chi_{s^{-1}[\lambda]}(x). \]
 Additionally for some $k\in\N$ we can write $s[\Omega] = \bigcup_{i=1}^k\{\lambda_i\}$ and $A_i = s^{-1}[\lambda_i]$. Then the $A_i$ form a partition of $\Omega$ and
 \[ s(x) = \sum_{i=1}^k\lambda_i\cdot \chi_{A_i}(x). \]
 This is known as the \udef{canonical form} of $s$. Conversely every function of this form is a simple function.
-
-The simple function is positive if and only if $\forall i\in [0,k]: 0\leq\lambda_i$.
 \end{lemma}
 
 \begin{lemma}
@@ -757,26 +759,70 @@ For the $\boxed{\Leftarrow}$ direction, let $B\in \mathcal{B}$. Then
 which is a finite union of measurable sets.
 \end{proof}
 
-\begin{definition}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. Let
-\[ s:\Omega \to [0,+\infty[: x\mapsto \sum_{\lambda \in s[\omega]}\lambda\cdot \chi_{s^{-1}[\lambda]}(x) = \sum_{i=1}^k\lambda_j\cdot\chi_{A_i}(x)  \]
-be a measurable simple function. We define the \udef{integral} of $s$ over $\Omega$ w.r.t. $\mu$ as
-\[ \int_\Omega s\diff{\mu} \defeq \sum_{\lambda \in s[\omega]}\lambda\cdot \mu(s^{-1}[\lambda]) = \sum_{i=1}^k\lambda_j\mu(A_i). \]
-Using the convention that $0\times \infty = 0$. (TODO:clarify)
-\end{definition}
-Clearly we can also define the integral of $s$ over any $E\in\mathcal{A}$ as the integral of $s|_E$ of the measure space $(E,\mathcal{A}',\mu|_{\mathcal{A}'})$, as defined in \ref{lemma:submeasurespace}.
+\begin{lemma}
+Let $\Omega$ be a set, $G$ an abelian group and $s,t\in\SF(\Omega,G)$. If $s$ and $t$ have canonical forms
+\[ s = \sum_{i=1}^k a_i\cdot\chi_{A_i} \qquad\text{and}\qquad t = \sum_{j=1}^l b_j\cdot\chi_{B_j}, \]
+then $s+t$ has canonical form
+\[ s+t = \sum_{i=1}^k\sum_{j=1}^l (a_i+b_j)\chi_{A_i}\chi_{B_j} = \sum_{i,j \in (1:k)\times(1:l)}(a_i+b_j)\chi_{A_i\cap B_j}. \]
+\end{lemma}
 
-\begin{proposition} \label{prop:integrationPositiveLinear} \label{prop:integrationOrderPreserving}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The integral of measurable simple functions in $(\Omega\to [0,+\infty[)$ has the properties:
+\begin{proposition}
+Let $(\Omega,\mathcal{A})$ be a measurable set. Every measurable function $f:\Omega\to \R$ is the pointwise limit of a sequence of simple functions.
+\end{proposition}
+TODO: generalise??
+\begin{proof}
+\url{https://proofwiki.org/wiki/Measurable_Function_is_Pointwise_Limit_of_Simple_Functions}
+\end{proof}
+
+\subsubsection{Integration of simple functions}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $Y$ a vector space. Let
+\[ s:\Omega \to Y: x\mapsto \sum_{\lambda \in s[\omega]}\lambda\cdot \chi_{s^{-1}[\lambda]}(x) = \sum_{i=1}^k\lambda_i\cdot\chi_{A_i}(x)  \]
+be a measurable simple function. We define the \udef{integral} of $s$ over $\Omega$ w.r.t. $\mu$ as
+\[ \int_\Omega s\diff{\mu} \defeq \sum_{\lambda \in s[\omega]}\lambda\cdot \mu(s^{-1}[\lambda]) = \sum_{i=1}^k\mu(A_i)\cdot\lambda_j. \]
+Using the convention that $0\times \infty = 0$. (TODO: clarify)
+
+We call $s$ \udef{integrable} if the integral is finite (TODO clarify + below).
+\end{definition}
+
+The integral can be seen as a map $\SF(\Omega,Y)\to \overline{Y}$, where $\overline{Y}$ is the Dedekind-MacNeille completion (TODO!).
+
+For any $E\in\mathcal{A}$ we also define the integral over $E$ as the map
+\[ \int_E\diff{\mu}: \SF(\Omega,Y) \to \overline{Y}: s\mapsto \int_E s|_E \diff{\mu|_E}. \]
+Where the last integral is taken over the measure space $(E,\mathcal{A}',\mu|_{\mathcal{A}'})$ as defined in \ref{lemma:submeasurespace}.
+
+\begin{proposition} \label{prop:integrationLinear} \label{prop:integrationOrderPreserving}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $Y$ a vector space over $\F$. Then
 \begin{enumerate}
-\item it is positive linear: $\forall c\geq 0$ and $\forall s,t:\Omega\to [0,+\infty[$:
-\[ \int_\Omega (c\cdot s + t)\diff{\mu} = c\cdot \int_\Omega s\diff{\mu} + \int_\Omega t\diff{\mu}; \]
-\item if $s\leq t$ are positive simple functions on $\Omega$, then
-\[ \int_\Omega s\diff{\mu} \leq \int_\Omega t\diff{\mu}; \]
+\item the integral is linear: $\forall c\in \F$ and $\forall s,t\in\SF(\Omega, Y)$:
+\[ \int_\Omega (c\cdot s + t)\diff{\mu} = c\cdot \int_\Omega s\diff{\mu} + \int_\Omega t\diff{\mu}. \]
+\end{enumerate}
+If $Y$ is a normed space, then
+\begin{enumerate} \setcounter{enumi}{1}
+\item for all $s\in\SF(\Omega, Y)$:
+\[ \int_\Omega \norm{s}\diff{\mu} \leq \norm{\int_\Omega s \diff{\mu}}; \]
 \item if $E_1\subseteq E_2$ are events in $\mathcal{A}$, then
-\[ \int_{E_1}s\diff{\mu} \leq \int_{E_2}s\diff{\mu}. \]
+\[ \int_{E_1}\norm{s}\diff{\mu} \leq \int_{E_2}\norm{s}\diff{\mu}. \]
+\end{enumerate} \setcounter{enumi}{3}
+If $Y$ is an ordered space, then
+\begin{enumerate}
+\item if $s(x)\leq t(x)$ for all $x\in\Omega$, then
+\[ \int_\Omega s\diff{\mu} \leq \int_\Omega t\diff{\mu}. \]
 \end{enumerate}
 \end{proposition}
+\begin{proof}
+(1) Let $s,t$ have canonical forms
+\[ s = \sum_{i=1}^k a_i\cdot\chi_{A_i} \qquad\text{and}\qquad t = \sum_{i=1}^k b_i\cdot\chi_{B_i}. \]
+Then we calculate
+\begin{align*}
+\int_\Omega (c\cdot s + t)\diff{\mu} &= \sum_{i=1}^k\sum_{j=1}^l\mu(A_i\cap B_j)\cdot(c a_i + b_j) \\
+&= c\sum_{i=1}^k\sum_{j=1}^l\mu(A_i\cap B_j)\cdot a_i +  \sum_{i=1}^k\sum_{j=1}^l\mu(A_i\cap B_j) \cdot b_j \\
+&= c\sum_{i=1}^k\mu(A_i)\cdot a_i +  \sum_{j=1}^l\mu(B_j) \cdot b_j \\
+&= c\int_\Omega s\diff{\mu} + \int_\Omega t\diff{\mu}.
+\end{align*}
+
+The property (2) is just the triangle inequality. The other properties can be proven in a similar fashion to (1).
+\end{proof}
 
 \begin{proposition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $s:\Omega\to [0,+\infty[$ a measurable simple function. The map
@@ -784,7 +830,7 @@ Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $s:\Omega\to [0,+\infty[
 defines a measure.
 \end{proposition}
 \begin{proof}
-From the positive linearity of both measures and integration (\ref{lemma:measuresPositiveLinear}, \ref{prop:integrationPositiveLinear}) it is enough to consider $s = \chi_A$ for some $A\in\mathcal{A}$. In this case
+From the positive linearity of both measures and integration (\ref{lemma:measuresPositiveLinear}, \ref{prop:integrationLinear}) it is enough to consider $s = \chi_A$ for some $A\in\mathcal{A}$. In this case
 \[ \nu(E) = \int_\Omega\chi_A\chi_B \diff{\mu} = \int_\Omega\chi_{A\cap B} \diff{\mu} = \mu(A\cap E). \]
 It is clear that $\nu(\emptyset) = 0$. For $\sigma$-additivity, let $(E_n)$ be a sequence of disjoint sets in $\mathcal{A}$ and calculate
 \[ \nu\left(\bigcup_{n\in\N}E_n\right) = \mu\left(A\cap \bigcup_{n\in\N}E_n\right) = \mu\left(\bigcup_{n\in\N}(A\cap E_n)\right) = \sum_{n\in\N}\mu(A\cap E_n) = \sum_{n\in\N}\nu(E_n). \]
@@ -800,10 +846,10 @@ Define the measure $\nu: E\mapsto \int_E s\diff{\mu}$. Then by \ref{prop:measure
 
 \subsection{Positive real functions}
 \begin{definition}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and let $f:\Omega\to[0,+\infty]$ be a measurable function. Define
-\[ \operatorname{SF}(f) \defeq \setbuilder{s\in(\Omega\to[0,+\infty[)}{\text{$s$ is a positive measurable simple function with $s\leq f$}}. \]
-We define the \udef{integral} of $f$ on $\Omega$ w.r.t. $\mu$ as
-\[ \int_\Omega f \diff{\mu} \defeq \sup\setbuilder{\int_\Omega s \diff{\mu}}{s\in\operatorname{SF}(f)}. \]
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and let $f:\Omega\to[0,+\infty]$ be a positive measurable function. Define
+
+We define the \udef{Lebesgue integral} of $f$ on $\Omega$ w.r.t. $\mu$ as
+\[ \int_\Omega f \diff{\mu} \defeq \sup\setbuilder{\int_\Omega s \diff{\mu}}{s\in\SF(\Omega, [0,+\infty[)\;\land\; s\leq f}. \]
 We call $f$ \udef{integrable} when $\int_\Omega f \diff{\mu} < \infty$.
 \end{definition}
 For simple functions this definition corresponds to the previous one by \ref{prop:integrationOrderPreserving}.
@@ -845,13 +891,13 @@ Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and let $f,g:\Omega\to[0,+\i
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) This is clear from $\operatorname{SF}(f)\subseteq \operatorname{SF}(g)$.
+(1) For all $s\in \SF(\Omega, [0,+\infty[)$ we have that $s\leq f$ implies $s\leq g$.
 
 (2) This follows from $f\cdot\chi_{E_1}\leq f\cdot\chi_{E_2}$ and \ref{lemma:integralOverSubset}.
 
 (3) That the sequence $(\int_\Omega f_n\diff{\mu})_n$ is increasing follows from point 1. For increasing sequences the limits are suprema, by monotone convergence \ref{prop:sequenceMonotoneConvergence}. Also, for all $m\in\N$, we have $f_m\leq\sup_{n\in\N}f_n$, which implies, by point 1., that $\int_\Omega f_m\diff{\mu}\leq \int_\Omega \sup_{n\in\N}f_n\diff{\mu}$. So
 \[ \lim_{n\to\infty}\int_\Omega f_n\diff{\mu} = \sup_{n\in\N}\int_\Omega f_n\diff{\mu} \leq \int_\Omega \sup_{n\in\N}f_n\diff{\mu} = \int_\Omega \lim_{n\to\infty}f_n\diff{\mu}. \]
-For the other inequality, it is enough to prove that $c\int_\Omega s\diff{\mu} \leq \lim_{n\to\infty}\int_\Omega f_n\diff{\mu}$ for all $s\in\operatorname{SF}(f)$ and $0<c<1$. Fix such a $c$ and $s = \sum_{i=1}^k\lambda_i\chi_{A_i}$. Consider the sets
+For the other inequality, it is enough to prove that $c\int_\Omega s\diff{\mu} \leq \lim_{n\to\infty}\int_\Omega f_n\diff{\mu}$ for all $0<c<1$ and $s\in\SF(\Omega,[0,+\infty[)$ such that $s\leq f$. Fix such a $c$ and $s = \sum_{i=1}^k\lambda_i\chi_{A_i}$. Consider the sets
 \[ E_n = \setbuilder{x\in\Omega}{cs(x)\leq f_n(x)} = \bigcup_{i=1}^k \left(f^{-1}_n[\,[c\lambda_i, +\infty]\,]\cap A_i\right). \]
 Then $(E_n)$ is an increasing sequence in $\mathcal{A}$ with $\Omega= \bigcup_{n\in\N}E_n$ and
 \[ c\int_\Omega s\diff{\mu} = \int_{\bigcup_n E_n} cs\diff{\mu} = \lim_{n\to\infty}\int_{E_n} cs\diff{\mu} \]
@@ -894,13 +940,13 @@ Let $\seq{\Omega, \mathcal{A}, \mu}$ be a measure space and $f:\Omega\to[0,+\inf
 
 Assume $\mu(E) = 0$, then 
 \[ \int_\Omega f\diff{\mu} = \int_{\Omega\setminus E} f\diff{\mu} + \int_E f\diff{\mu} = 0+\int_E f\diff{\mu} \leq \sup_{x\in E}(f(x)). \]
-Now for all $s:\Omega\to [0,+\infty[$ in $\operatorname{SF}(f)$ we have
+Now for all $s\in\SF(\Omega\to [0,+\infty[)\cap \downarrow f$ we have
 \[ 0\leq \int_E s \diff{\mu}\leq \max_x(s(x))\mu(E) = 0  \]
 and so the supremum $\int_E f\diff{\mu}$ is zero as well.
 
-Now assume $\int_\Omega f\diff{\mu} = 0$. Consider the sets $E_n = f^{-1}[\,]\frac{1}{n},+\infty]\,]$. Then $\frac{1}{n}\chi_{E_n}\in\operatorname{SF}(f)$. Hence $\frac{1}{n}\mu(E_n)\leq \int_\Omega f\diff{\mu} = 0$, meaning $\mu(E_n) = 0$ for all $n$. So $\mu(E) = \sup_{n\in\N}\mu(E_n) = 0$.
+Now assume $\int_\Omega f\diff{\mu} = 0$. Consider the sets $E_n = f^{-1}[\,]\frac{1}{n},+\infty]\,]$. Then $\frac{1}{n}\chi_{E_n}\in \downarrow f$ is simple. Hence $\frac{1}{n}\mu(E_n)\leq \int_\Omega f\diff{\mu} = 0$, meaning $\mu(E_n) = 0$ for all $n$. So $\mu(E) = \sup_{n\in\N}\mu(E_n) = 0$.
 
-(2) Towards contraposition, assume the set $E = \setbuilder{x\in\R}{f(x) = +\infty}$ has non-zero measure. Then for all real $a>0$, $a/\mu(E)\chi_E\in\operatorname{SF}(f)$ and
+(2) Towards contraposition, assume the set $E = \setbuilder{x\in\R}{f(x) = +\infty}$ has non-zero measure. Then $a/\mu(E)\chi_E\in\SF(\Omega, [0,+\infty[)\cap \downarrow f$ for all real $a>0$ and
 \[  \int_\Omega f\diff{\mu} \geq \int_\Omega \frac{a\chi_E}{\mu(E)}\diff{\mu} = a  \]
 so $f$ is not integrable.
 \end{proof}
@@ -934,13 +980,65 @@ By the corollary $g(x)<+\infty$ a.e. and so also $g-h_n<+\infty$ a.e. Applying F
 \end{proof}
 
 
-\subsection{Positive operator-valued functions}
-\subsubsection{Bochner integration}
+\subsection{Integration of vector-valued functions}
+\subsubsection{Weak and strong measurability}
+TODO is Bochner measurable measurable with $Y$ given Borel $\sigma$-algebra?
 
-\section{Lebesgues integration for general functions}
+A function $f:X\to B$ is called Bochner-measurable if it is equal $\mu$-almost everywhere to a function $g$ taking values in a separable subspace $B_{0}$ of $B$, and such that the inverse image $g^{-1}[U]$ of every open set $U$ in $B$ belongs to $\Sigma$. Equivalently, $f$ is limit $\mu$-almost everywhere of a sequence of simple functions. 
+
+\begin{theorem}[Pettis measurability theorem]
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space. Then $f$ is strongly measurable \textup{if and only if} $f$ is weakly measurable and almost surely separably valued.
+\end{theorem}
+
+\subsubsection{Bochner integration}
+TODO: the Bochner integral is the unique extension of the integral of simple functions to the set of Bochner measurable functions???? (I.e. simple functions dense in Bochner space, with $L^1$ metric)
 \begin{definition}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $A$ TODO. We say that a measurable function $f:\Omega\to A$ is integrable if $|f|$ is integrable.
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space. Then a Bochner measurable function $f:\Omega\to Y$ is called \udef{Bochner integrable} if there exists a sequence of integrable simple functions $\seq{s_n}\subset\SF(\Omega,Y)$ such that
+\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0. \]
+Take such a sequence $\seq{s_n}$. The \udef{Bochner integral} of $f$ on $\Omega$ w.r.t. $\mu$ is defined as
+\[ \int_\Omega f\diff{\mu} \defeq \lim_{n\to\infty}\int_\Omega s_n\diff{\mu}. \]
 \end{definition}
+
+\begin{lemma}
+The Bochner integral is well-defined: let $\seq{s_n},\seq{t_n}\in \prescript{\N}{}{\SF(\Omega,Y)}$ be sequences such that
+\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0 = \lim_{n\to\infty}\int_\Omega \norm{f-t_n}\diff{\mu}.  \]
+Then
+\begin{enumerate}
+\item the limits $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu}$ and $\lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$ exist;
+\item $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu} = \lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}[Bochner integrability criterion]
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space.
+
+A Bochner measurable function $f$ is Bochner integrable \textup{if and only if}
+\[ \int_\Omega \norm{f} \diff{\mu} < \infty. \]
+\end{proposition}
+
+\begin{proposition}
+Linearity and monotonicity.
+\end{proposition}
+
+\begin{proposition}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space $Y$ a normed vector space and $T$ a closed operator on $Y$. If $T\circ f$ is integrable, then
+\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+If $T$ is bounded, then $T\circ f$ is integrable and
+\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\end{corollary}
+
+TODO Dominated convergence.
+
+\subsubsection{Pettis integration}
+
 
 \section{Further topics}
 TODO rename!
@@ -970,6 +1068,9 @@ where $\mu$ and $\nu_\text{sing}$ are mutually singular and $\nu_\text{ac}$ is a
 
 \subsection{Convolution}
 TODO Young's convolution inequality
+
+\section{Duality in integration}
+Distributions with kernels will be example.
 
 \chapter{Complex analysis}
 \begin{definition}
