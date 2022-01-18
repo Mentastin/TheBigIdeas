@@ -933,6 +933,10 @@ TODO proof
 \begin{proposition}
 Let $X$ be a Banach space. Then $\Compact(X)$ is a closed two-sided ideal in $\Bounded(X)$.
 \end{proposition}
+\begin{proof}
+TODO + $*$-ideal for Hilbert spaces.
+\end{proof}
+
 \begin{definition}
 Let $X$ be a Banach space. The \udef{Calkin algebra} is the quotient $\Bounded(X)/\Compact(X)$.
 \end{definition}
@@ -1708,7 +1712,12 @@ TODO + generalised to self-adjoint operators??
 
 \subsection{Orthogonal projections}
 \url{https://planetmath.org/latticeofprojections}
+
+\url{https://zfn.mpdl.mpg.de/data/Reihe_A/35/ZNA-1980-35a-0437.pdf}
+
 We denote the set op projections on a Hilberts space $\mathcal{H}$ by $\Projections(\mathcal{H})$.
+
+TODO: $\im(P) = \ker{P^*}^\perp$ shows that we need $P= P^*$ for orthogonality.
 
 \begin{proposition}
 Let $P$ be a bounded operator $P$ on a Hilbert space $\mathcal{H}$. Then the following are equivalent:
@@ -1717,7 +1726,6 @@ Let $P$ be a bounded operator $P$ on a Hilbert space $\mathcal{H}$. Then the fol
 \item $P^2 = P$ and $P=P^*$;
 \item $P^2 = P$ and $\norm{P}\in \{0,1\}$;
 \item $P^2 = P$ and $\norm{P}\leq 1$;
-
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -1735,47 +1743,74 @@ We just need to show orthogonality: $Px \perp x- Px$. For this we use \ref{lemma
 \[ \norm{Px} = \norm{Px + aPx - aPx} = \norm{P(Px + a(x-Px))} \leq \norm{P}\cdot \norm{Px + a(x-Px)} \leq \norm{Px + a(x-Px)}. \]
 We conclude $Px \perp x- Px$.
 \end{proof}
-\begin{corollary}
-Orthogonal projections are positive operators.
+
+\begin{proposition}
+Let $\mathcal{H}$ be a Hilbert space and let $P$ be an orthogonal projector on a closed subspace $K$. Then $\id-P$ is the orthogonal projector on $K^\perp$.
+\end{proposition}
+\begin{proof}
+Any $x\in \mathcal{H}$ can be uniquely decomposed as $x_1 + x_2\in K\oplus K^\perp$. If $Px = x_1$, then $(\id - P)x = x_1 +x_2 - x_1 = x_2$.
+\end{proof}
+\begin{corollary} \label{corollary:projectorsIn01}
+The set of projectors $\Projections(\mathcal{H})$ is a subset of $[0,\id]$.
 \end{corollary}
 \begin{proof}
-This follows from $P = P^2 = P^*P$.
+Let $P\in\Projections(\mathcal{H})$. Then $P\geq 0$ follows from $P = P^2 = P^*P$.
 \end{proof}
 
-\begin{lemma} \label{lemma:commutingProjectors}
-The following are equivalent:
+\begin{proposition} \label{lemma:commutingProjectors}
+Let $\mathcal{H}$ be a Hilbert space and $P,Q$ be projections. The following are equivalent:
 \begin{enumerate}
-\item $PQ= QP$;
+\item $PQ = QP$;
 \item $PQ$ is a projection;
 \item $QP$ is a projection;
-\item $P+Q-PQ$ is a projection.
+\item $P+Q-PQ$ is a projection;
+\item $\im(PQP) = \im(P) \cap \im(Q)$;
+\item $PQP = QP$;
+\item $\mathcal{H} = \big(\im(P)\cap\im(Q)\big)\oplus \big(\im(P)\cap\im(Q)^\perp\big) \oplus \big(\im(P)^\perp\cap\im(Q)\big) \oplus \big(\im(P)^\perp\cap\im(Q)^\perp\big)$.
 \end{enumerate}
-If these conditions hold, then $PQ[\mathcal{H}] = P[\mathcal{H}] \cap Q[\mathcal{H}]$. (TODO converse? + integrate in previous prop)
-\end{lemma}
+\end{proposition}
 \begin{proof}
-Points 1., 2., 3. are equivalent by the equation $(PQ)^* = Q^*P^* = QP$, and the fact that 1. implies $(PQ)^2 = PQPQ = PPQQ = PQ$.
+Points (1), (2), (3) are equivalent by the equation $(PQ)^* = Q^*P^* = QP$, and the fact that (1) implies $(PQ)^2 = PQPQ = PPQQ = PQ$.
 
-To prove 4., assume 1. and calculate
+(4) If $P,Q$ commute, then
 \begin{align*}
 (P+Q-PQ)^* &= P+Q-(PQ)^* = P+Q-Q^*P^* =P+Q-QP = P+Q-PQ \\
 (P+Q-PQ)^2 &= P^2 + PQ -P^2Q + QP+Q^2 - QPQ - PQP -PQP +PQPQ \\
 &= P + Q + 3PQ - 4PQ= P+Q-PQ.
 \end{align*}
+Assume (4), then $(P+Q-PQ)^* = P+Q-QP = P+Q-PQ$. This implies $PQ=QP$.
 
+$\boxed{(1)\Rightarrow (5)}$ Clearly $\im(PQP) \subseteq \im(P) \cap \im(Q)$.
+For the inverse inequality, take $x\in im(P)\cap\im(Q)$. Then $PQP(x) = PQ(x) = P(x) = x$, so $x\in\im(PQP)$.
 
-Finally assume 4., then $(P+Q-PQ)^* = P+Q-QP = P+Q-PQ$. This implies $PQ=QP$.
+$\boxed{(5)\Rightarrow (6)}$ We decompose $\mathcal{H} = \im(PQP) \oplus \ker(PQP)$ and show that the operators are the same on both parts. For all $x\in \mathcal{H}$ we have
+\[ x\in \ker(PQP) \iff \inner{x,PQPx} = 0 \iff \inner{QPx,QPx} = 0 \iff \norm{QPx} = 0 \iff x\in\ker{QP}.  \]
+Now let $x\in\im(PQP) = \im(P)\cap\im(Q)$. Then $QPx = Qx = x = PQPx$.
+
+$\boxed{(6)\Rightarrow (3)}$ $PQP$ is always a projection.
+
+$\boxed{(6)\Rightarrow (7)}$ Take some $x\in \mathcal{H}$. Then we can uniquely decompose $x = P(x) + (x-P(x)) = x_P + x_{P^\perp} \in \im(P)\oplus \im(P)^\perp$. We can then further decompose $x_P = x_{P,Q} + x_{P,Q^\perp}$ and $x_{P^\perp} = x_{P^\perp, Q} + x_{P^\perp, Q^\perp}$. In order to have the decomposition of the proposition, we need to show that $x_{P,Q},x_{P,Q^\perp}\in \im(P)$ and $x_{P^\perp, Q},x_{P^\perp, Q^\perp}\in\im(P)^\perp$.
+
+First take $x_{P,Q} = QPx$. From (6) we have $P(QPx) = PQPx = QPx$, so $x_{P,Q}\in \im(P)$. For the others we have similar calculations (also using the identity $PQP = PQ$):
+\begin{align*}
+P(x_{P,Q^\perp}) &= P\big((\id-Q)P\big)x = Px - PQPx = Px - QPx = (\id-Q)Px = x_{P,Q^\perp} \\
+(\id-P)(x_{P^\perp,Q}) &= (\id-P)\big(Q(\id-P)\big)x = (Q-QP-PQ+PQP)x = (Q-QP)x = Q(\id-P)x = x_{P^\perp,Q} \\
+(\id-P)(x_{P^\perp,Q^\perp}) &= (\id-P)\big((\id-Q)(\id-P)\big)x = (\id-P-Q+QP-P+P+PQ-PQP)x \\
+&= (\id-Q-P+QP)x = (\id-Q)(\id-P)x = x_{P^\perp,Q^\perp}.
+\end{align*}
+$\boxed{(7)\Rightarrow (1)}$ Take $x\in \mathcal{H}$ and decompose it as $x_{P,Q} + x_{P,Q^\perp} + x_{P^\perp, Q} + x_{P^\perp, Q^\perp}$. Then $PQx = P(x_{P,Q} + x_{P^\perp, Q}) = x_{P,Q}$ and $QP = Q(x_{P,Q} + x_{P, Q^\perp}) = x_{P,Q}$, so $PQ = QP$. 
 \end{proof}
 
-\begin{proposition}
-Let $P,Q$ be orthogonal projections onto subspaces $P[\mathcal{H}]$ and $Q[\mathcal{H}]$ of $\mathcal{H}$.
+\begin{proposition} \label{prop:perpendicularProjections} \label{prop:subspaceProjections}
+Let $P,Q$ be orthogonal projections onto subspaces $\im(P)$ and $\im(Q)$ of $\mathcal{H}$.
 \begin{enumerate}
-\item The following are equivalent to $P[\mathcal{H}] \perp Q[\mathcal{H}]$:
+\item The following are equivalent to $\im(P) \perp \im(Q)$:
 \begin{enumerate}
 \item $QP = 0$;
 \item $PQ = 0$;
 \item $Q+P$ is an orthogonal projection.
 \end{enumerate}
-\item The following are equivalent to $P[\mathcal{H}] \subset Q[\mathcal{H}]$:
+\item The following are equivalent to $\im(P) \subseteq \im(Q)$:
 \begin{enumerate}
 \item $QP = P$;
 \item $PQ = P$;
@@ -1786,11 +1821,11 @@ Let $P,Q$ be orthogonal projections onto subspaces $P[\mathcal{H}]$ and $Q[\math
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) This follows from the following statements:
+(1) We have:
 
-$\boxed{(a)\Leftrightarrow (b)}$ By \ref{lemma:commutingProjectors}.
+$\boxed{(a)\Leftrightarrow (b) \Leftrightarrow \im(P) \perp \im(Q)}$ By \ref{lemma:commutingProjectors}.
 
-$\boxed{(b)\Leftrightarrow (c)}$ We know $(P+Q)^* = P^*+Q^* =P+Q$ and we can write
+$\boxed{(a, b)\Leftrightarrow (c)}$ We know $(P+Q)^* = P^*+Q^* =P+Q$ and we can write
 \[ (P+Q)^2 = P^2 + Q^2 + PQ + QP = P+Q+ PQ+QP,  \]
 So clearly (a) or (b) imply (c). Conversely, assume $PQ + QP = 0$, implying $PQ=-QP$. By left- and right-multiplication by $P$ this implies both
 \[ PPQ = PQ = -PQP \qquad \text{and} \qquad PQP = -QPP = -QP. \]
@@ -1798,7 +1833,7 @@ So $PQ = -PQP = QP$, meaning $PQ = 1/2(PQ+QP) = 0$.
 
 (2) We prove the following:
 
-$\boxed{(a)\Leftrightarrow (b)}$ By \ref{lemma:commutingProjectors}.
+$\boxed{(a)\Leftrightarrow (b) \Leftrightarrow \im(P) \subseteq \im(Q)}$ By \ref{lemma:commutingProjectors}.
 
 $\boxed{(a,b)\Rightarrow (c)}$ Obviously $(Q-P)^*= Q-P$. Also
 \[ (Q-P)^2 = Q+P-PQ-QP= Q+P-2P = Q-P. \]
@@ -1807,18 +1842,52 @@ $\boxed{(c)\Rightarrow (a,b)}$ Now from
 \[ Q-P = (Q-P)^2 = Q+P-PQ-QP \]
 we obtain $2P = PQ+QP$. The result then follows if we can show that $PQ=QP$. This follows by multiplying the equality on the left and on the right by $P$ to obtain $QP = 2P-PQP$ and $PQ = 2P-PQP$, respectively. 
 
-$\boxed{(c)\Rightarrow (d)}$ Is immediate as all projections are positive.
+$\boxed{(c)\Rightarrow (d)}$ This follows because all projections are positive.
 
-$\boxed{(d)\Rightarrow (c)}$ TODO (use (?) $\sigma(a+b)\subseteq\sigma(a)+\sigma(b)$ and $\sigma(ab)\subseteq\sigma(a)\sigma(b)$ in unital Banach algebras(TODO!, from Gelfand spectrum))
+$\boxed{(d)\Rightarrow (a, b)}$ Assume, towards a contradiction, that $\im(P)\nsubseteq \im(Q)$. Then we can take $v\in\im(P)\setminus \im(Q)$. Then
+\[ \inner{v,(Q-P)v} = \inner{v,Qv} - \inner{v,v} = \inner{Qv,Qv} - \inner{Qv,Qv} - \inner{v-Qv, v-Qv} = -\norm{v-Qv}^2. \]
+Because $v\notin \im(Q)$, $\norm{v-Qv}$ is not zero and thus $Q-P$ is not positive.
 
 $\boxed{(d)\Leftrightarrow (e)}$ By the equivalence
 \[ \norm{Px} \leq \norm{Qx} \iff \inner{Px,Px} \leq \inner{Qx,Qx} \iff \inner{Px,x}\leq \inner{Qx,x} \iff \inner{(Q-P)x,x}\geq 0. \]
 \end{proof}
 
+We can generalise part 2(d) of the previous proposition to a slightly larger class of operators.
+\begin{lemma} \label{lemma:comparisonSelfAdjointProjection}
+Let $P\in \Projections(\mathcal{H})$ and $T \in [0,\id]$, then the following are equivalent:
+\begin{enumerate}
+\item $\im(T) \subseteq \im(P)$;
+\item $T\leq P$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+As $T$ is self-adjoint, we have $\norm{T} = \nr(T) \leq 1$ by \ref{prop:normNumRadius}.
+
+Assume (1) so that for all $x\in \mathcal{H}$ we get
+\[ \inner{x,Tx} = \inner{x, PTx} = \inner{Px,PTx} \leq \norm{Px}^2\nr(T) \leq \norm{Px}^2 = \inner{Px,Px} = \inner{x,Px}. \]
+So $\inner{x, (P-T)x}\geq 0$ and thus $T\leq P$.
+
+Assume (2). The energy form associated with $T$ is a pre-inner product by \ref{lemma:positiveOperatorPositiveEnergyForm}. The Cauchy-Schwarz inequality \ref{theorem:CauchySchwarz} gives
+\[ |\inner{v,Tw}|^2 \leq \inner{v,Tv}\inner{w,Tw} \leq \inner{v,Pv}\inner{w,Pw}. \]
+So if $v\in\im(P)^\perp$, then $\inner{v,Tw} = 0$ for all $w\in \mathcal{H}$. So $\im(T)\perp \im(P)^\perp$, implying $\im(T)\subseteq \im(P)^{\perp\perp} = \im(P)$.
+\end{proof}
+
 \begin{proposition}
-Let $\mathcal{H}$ be a Hilbert space. The set of projections on $\mathcal{H}$ is a complete lattice.
+Let $\mathcal{H}$ be a Hilbert space. Let $\{P_i\}_{i\in I}$ be an arbitrary subset of $\Projections(\mathcal{H})$ and let $K_i = \im(P_i)$ for all $i\in I$. Then, as a subset of $[0,\id]$,
+\begin{enumerate}
+\item $\inf \{P_i\}_{i\in I} = P_M$ where $M = \bigcap_{i\in I}K_i$;
+\item $\sup \{P_i\}_{i\in I} = P_N$ where $N = \bigcap\setbuilder{K \subseteq \mathcal{H}}{\text{$K$ is closed} \land \forall i\in I: K_i \subseteq K}$.
+\end{enumerate}
+The set of projections on $\mathcal{H}$ is thus a complete lattice as a subset of $[0,\id]$.
+
+If $I$ is finite, then $N = \bigcup_{i\in I}K_i$.
 \end{proposition}
-In fact $\Projections(\mathcal{H})$ is still a complete lattice as a subset of $\setbuilder{T\in\SelfAdjoints(\mathcal{H})}{0 \leq T \leq \id}$ and each subset has the same supremum and infimum. TODO: Not as a subset of $\SelfAdjoints(\mathcal{H})$??.
+In particular this means $\Projections(\mathcal{H})$ is a complete lattice as itself, with the same suprema and infima. It is not a lattice as a subset of $\SelfAdjoints(\mathcal{H})$ (TODO + example ??).
+\begin{proof}
+(1) By \ref{prop:subspaceProjections} $P_M$ is a lower bound of $\{P_i\}_{i\in I}$ in $[0,\id]$. Let $T$ be a lower bound of $\{P_i\}_{i\in I}$ in $[0,\id]$. By \ref{lemma:comparisonSelfAdjointProjection} $\im(T)\subseteq K_i$ for all $i\in I$, so $\im(T)\subseteq M$ and thus $T\leq P$ again by \ref{lemma:comparisonSelfAdjointProjection}. This means $P$ is the greatest lower bound.
+
+(2) The mapping $T\mapsto \id-T$ keeps $[0,\id]$ invariant and inverts the order. Then $\inf \{\id - P_i\}_{i\in I}$ is a projection due to the previous point and so $\sup \{P_i\}_{i\in I}$ is also a projection. The expression for $N$ is clear from \ref{prop:subspaceProjections}.
+\end{proof}
 
 \subsection{Isometries}
 
@@ -1899,6 +1968,73 @@ using \ref{prop:ominusUnderIsometry} and \ref{lemma:cancellationOminus}, which i
 Finally $T|_{\mathcal{H}_0}$ is unitary because it is an isometry and surjective on $\mathcal{H}_0$.
 \end{proof}
 
+\subsubsection{Partial isometries}
+\begin{definition}
+An operator $T\in \Lin(H, H')$ is called a \udef{partial isometry} if there is a closed subspace $K\subseteq H$ such that
+\begin{itemize}
+\item $T|_K$ is an isometry;
+\item $T|_{K^\perp} = 0$.
+\end{itemize}
+\end{definition}
+
+Clearly every partial isometry is bounded.
+
+\begin{lemma}
+An operator $T\in \Lin(H, H')$ is a partial isometry \textup{if and only if} $T|_{\ker(T)^\perp}$ is an isometry.
+\end{lemma}
+
+\begin{proposition}
+Let $T\in \Bounded(H,H')$. The following are equivalent:
+\begin{enumerate}
+\item $T$ is a partial isometry;
+\item $T^*TT^* = T^*$;
+\item $TT^*T = T$;
+\item $TT^*: H' \to H'$ is a projection;
+\item $T^*T: H \to H$ is a projection;
+\item $T^*$ is a partial isometry.
+\end{enumerate}
+Moreover,
+\begin{enumerate}
+\item $T^*T$ is the projection onto $\ker(T)^\perp$;
+\item $\im(T)$ is closed and $TT^*$ is the projection onto $\im(T)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+
+$\boxed{(1)\Rightarrow (2)}$ By \ref{lemma:elementaryOrthogonality} it is enough to show that $\inner{T^*TT^*x,y} = \inner{T^*x,y}$ for all $x\in H', y\in H$. Take such $x,y$. We decompose $y = y_1\oplus y_2 \ker(T)\oplus \ker(T)^\perp$. Then
+\[ \inner{T^*TT^*x, y_1} = \inner{TT^*x, Ty} = 0 = \inner{x,Ty_1} = \inner{T^*x, y_1} \]
+and
+\[ \inner{T^*TT^*x, y_2} = \inner{TT^*x, Ty_2} = \inner{T^*x,y_2}, \]
+where we have used the fact that both $y_2$ and $T^*x$ are elements of $\ker(T)^\perp = \overline{\im(T^*)}$, and $T$ is an isometry on this space. In conclusion, we have
+\[ \inner{T^*TT^*x,y} = \inner{T^*TT^*x,y_1} + \inner{T^*TT^*x,y_2} = \inner{T^*x,y_1} + \inner{T^*x,y_2} = \inner{T^*x,y} \]
+for all $x\in H', y\in H$, so $T^*TT^* = T^*$.
+
+$\boxed{(2) \Leftrightarrow (3)}$ By taking adjoints: $(TT^*T)^* = T^*TT^*$.
+
+$\boxed{(2) \Rightarrow (4,5)}$ Clearly $T^*T$ and $TT^*$ are self-adjoint. We just need to show idempotency:
+\[ (T^*T)^2 = (T^*T)(T^*T) = (T^*TT^*)T = T^*T \qquad (TT^*)^2 = (TT^*)(TT^*) = T(T^*TT^*) = TT^*. \]
+
+$\boxed{(4) \Rightarrow (1)}$ Assume $TT^*$ a projection. Let $v\in \ker(T)^\perp = \overline{\im(T^*)}$. Then there exists a sequence $\seq{v_n}\in H^{\prime\N}$ such that $\lim_{n\to\infty}T^*v_n = v$. Then
+\begin{align*}
+\norm{Tv}^2 &= \lim_{n\to\infty}\norm{TT^*v_n}^2 = \lim_{n\to\infty}\inner{TT^*v_n,TT^*v_n} \\
+&= \lim_{n\to\infty}\inner{(TT^*)^2v_n,v_n} = \lim_{n\to\infty}\inner{TT^*v_n,v_n} \\
+&= \lim_{n\to\infty}\inner{T^*v_n,T^*v_n} = \lim_{n\to\infty}\norm{T^*v_n}^2 = \norm{v}^2,
+\end{align*}
+so $T$ is a partial isometry.
+
+$\boxed{(5,6)}$ Applying the proposition to $T^*$ instead of $T$ yields the equivalences with $T=TT^*T$, and thus with the rest of the statements.
+
+
+\end{proof}
+
+\begin{definition}
+Let $T$ be a partial isometry. We call
+\begin{itemize}
+\item $T^*T$ the \udef{support projection} or \udef{initial projection} of $T$;
+\item $TT^*$ the \udef{range projection} or \udef{final projection} of $T$.
+\end{itemize}
+\end{definition}
+
 \subsubsection{Unitaries}
 \paragraph{Bilateral shifts}
 
@@ -1919,25 +2055,39 @@ Let $T: H\not\to K$ be a densely defined, positive, symmetric operator between H
 \url{file:///C:/Users/user/Downloads/Abdus%20Salam,%20E.P.%20Wigner%20(Ed.)%20-%20Aspects%20of%20Quantum%20Theory%20-%20Dedicated%20to%20Dirac%E2%80%99s%2070th%20Birthday-Cambridge%20University%20Press%20(1972).pdf}
 \url{https://aip.scitation.org/doi/pdf/10.1063/1.1705001}
 
+\begin{lemma}
+\begin{enumerate}
+\item $T\ketbra{\varphi}{\psi} = \ketbra{T\varphi}{\psi} = \ketbra{\varphi}{\psi}T = \ketbra{\varphi}{T^*\psi}$;
+\item $\ketbra{\varphi}{\psi}\ketbra{\xi}{\eta} = \inner{\psi, \xi}\ketbra{\varphi}{\eta}$;
+\item $(\ketbra{\varphi}{\psi})^* = \ketbra{\psi}{\varphi}$.
+\end{enumerate}
+\end{lemma}
+
 \section{Bounded operators on Hilbert spaces}
 
 \subsection{Finite-rank operators}
-\begin{lemma} \label{lemma:finiteRankSingularValues}
+\begin{proposition}[Finite rank singular value decomposition] \label{lemma:finiteRankSingularValues}
 Let $V$ be an inner product space and $T\in\Hom(V)$. Then $T$ is a finite-rank operator \textup{if and only if} $T$ can be written in the form
 \[ T = \sum_{i=1}^N \lambda_i \ketbra{v_i}{w_i}, \]
 where $(v_i)_{i=1}^N$ and $(w_i)_{i=1}^N$ are orthonormal sets of vectors and $(\lambda_i)_{i=1}^N$ are positive (non-zero) numbers.
-\end{lemma}
-The numbers $(\lambda_i)_{i=1}^N$ in this decomposition are uniquely determined by the operator and called the \udef{singular values} of the operator.
+
+The numbers $(\lambda_i)_{i=1}^N$ in this decomposition are uniquely determined by the operator.
+\end{proposition}
+The numbers $(\lambda_i)_{i=1}^N$ are called the \udef{singular values} of the operator.
 \begin{proof}
 Because $\im(T)$ is finite-dimensional, we can find an orthonormal basis $(v_i)_{i=1}^N$ for it. Then $T$ can be written as $T(x) = \sum_{i=1}^N c_i(x)v_i$ for some linear functionals $c_i$. By \ref{theorem:rieszRepresentation} these functionals can be uniquely written in the form $\lambda_i\bra{w_i}$ where $w_i$ is a unit vector and $\lambda_i$ is positive (it is the norm of the Riesz vector). This gives the claimed form of $T$. We just need to show that $(w_i)_{i=1}^N$ is an orthogonal set and the values of $(\lambda_i)_{i=1}^N$ do not depend on the chosen basis $(v_i)_{i=1}^N$.
 
 For \undline{orthogonality} of $(w_i)_{i=1}^N$: let $i\neq j$, then orthogonality of $(v_i)_{i=1}^N$ implies $c_i(w_j) = 0$, which in turn implies $\inner{w_i,w_j} = 0$.
 
-For \undline{uniqueness} of $(\lambda_i)_{i=1}^N$: we claim it is equal to $L = \setbuilder{\sqrt{|\norm{T(v)}}}{v\in\im(T)\land\norm{v}=1}$, which is independent of the choice of $(v_i)_{i=1}^N$. TODO!!!!
+For \undline{uniqueness} of $(\lambda_i)_{i=1}^N$: we claim it is equal to $L = \setbuilder{\sqrt{\norm{T(v)}}}{v\in\im(T)\land\norm{v}=1}$, which is independent of the choice of $(v_i)_{i=1}^N$. TODO!!!!
 \end{proof}
 \begin{corollary}
 Every finite rank operator on a Hilbert space is a finite sum of rank-1 operators.
 \end{corollary}
+
+\begin{lemma}
+Let $H$ be Hilbert space. The set of finite rank operators on $H$ is a $*$-ideal in $H$.
+\end{lemma}
 
 \subsection{Compact operators}
 \begin{proposition}
@@ -1959,9 +2109,12 @@ where $(v_i)_{i=1}^\infty$ and $(w_i)_{i=1}^\infty$ are orthonormal sets and $(\
 \end{corollary}
 As in \ref{lemma:finiteRankSingularValues} for finite-rank operators we call $(\lambda_i)_{i=1}^\infty$ the \udef{singular values} of $T$. They are uniquely determined by the operator.
 \begin{proof}
-
+TODO
 \end{proof}
 
+\begin{lemma}
+Let $H$ be a Hilbert space. Then the set of compact operators on $H$, $\Compact(H)$ is a $*$-ideal of $H$. 
+\end{lemma}
 
 \begin{proposition}
 Let $H$ be a Hilbert space with orthonormal basis $(e_i)_{i\in I}$. If $T\in\Bounded(H)$ and
@@ -1985,6 +2138,10 @@ Let $T$ be an operator on a Hilbert space. Then the following are equivalent:
 \end{enumerate} 
 \end{proposition}
 
+\begin{lemma}
+Let $H$ be a Hilbert space and $P\in\Projections(H)$. If $P$ is compact, then $P$ has finite rank.
+\end{lemma}
+
 \subsubsection{The real spectral theorem}
 \subsubsection{The complex spectral theorem}
 
@@ -1997,7 +2154,7 @@ Let $T$ be an operator on a Hilbert space. Then the following are equivalent:
 \section{Dilation theory}
 \subsection{Dilations, $N$-dilations and power dilations}
 \begin{definition}
-Let $\mathcal{H} \subseteq \mathcal{H}'$ be Hilbert spaces and let $P_\mathcal{H}$ be the projector on $\mathcal{H}$. If a pair of linear maps $S: \mathcal{H}'\to\mathcal{H}'$ and $T: \mathcal{H}\to \mathcal{H}$ satisfy the relation
+Let $\mathcal{H} \subseteq \mathcal{H}'$ be Hilbert spaces and let $P_\mathcal{H}$ be the projection on $\mathcal{H}$. If a pair of linear maps $S: \mathcal{H}'\to\mathcal{H}'$ and $T: \mathcal{H}\to \mathcal{H}$ satisfy the relation
 \[ T = P_\mathcal{H} S |_\mathcal{H} \]
 then $T$ is called a \udef{compression} of $S$ and $S$ a \udef{dilation} of $T$. This is abbreviated $T\prec U$.
 
