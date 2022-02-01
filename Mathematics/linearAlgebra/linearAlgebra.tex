@@ -36,8 +36,8 @@ Almost always we will actually be interested in $\mathbb{F} = \R$ or $\mathbb{F}
 \item The $n$-tuples in $\mathbb{F}^n$ with pointwise addition and multiplication. If the entries of the $n$-tuples are written one above the other in a column, it is called a \udef{column vector}.
 \item The polynomials in $\mathbb{F}[X]$.
 \item The polynomials in $\mathbb{F}[X]_{\leq n}$ of maximally degree $n$.
-\item For any set $S$, the functions $S\to \mathbb{F}$, denoted $\mathbb{F}^S$, with pointwise addition and multiplication.
-\item The real functions $[a,b]\to \R$ that are $i$ times continuously differentiable, $\mathcal{C}^i[a,b]$.
+\item For any set $S$, the functions $(S\to \mathbb{F})$, denoted $\mathbb{F}^S$, with pointwise addition and multiplication.
+\item For any topological space $X$, the continuous functions in $(X\to \C)$, denoted $\cont(X)$.
 \item The trivial vector space $\{ 0\}$. A vector space can never be empty, because a commutative group always has a neutral element.
 \item The set of all possible \textit{displacements} in (Euclidean) space forms a vector space. Once we have chosen an origin, we can view space as a vector space.
 \end{enumerate}
@@ -772,12 +772,28 @@ So we have $V = \im P + \ker P$. To show that the sum is direct, we take $u\in \
 \end{proof}
 \subsubsection{Nilpotents}
 
-\section{Translation invariance}
+\section{Sets of vectors}
+\subsection{Cones}
+\begin{definition}
+A subset $C$ of a real or complex vector space $V$ is called a \udef{cone} if for all real $r>0$, $rC \subseteq C$. A cone is called \udef{pointed} if it contains the origin.
+\end{definition}
+
+\begin{lemma} \label{lemma:convexityAdditiveClosure}
+A cone $C$ is convex if and only if $C + C \subseteq C$. 
+\end{lemma}
+\begin{proof}
+Assume $C$ convex. Take $v,w\in C$, then $v/2 + w/2\in C$ by convexity and so $v+w = 2(v/2+w/2)\in C$.
+
+Assume $C$ closed under addition. Take $v,w\in C$ and $\lambda\in[0,1]$. Then $(1-\lambda)v$ and $\lambda w$ are elements of $C$ and so the convex combination $(1-\lambda)v + \lambda w$ is too.
+\end{proof}
+
+
+\subsection{Translation invariance}
 TODO Unique factorisation through $(x,y)\mapsto y-x$. (Universal property)
 
 eg kernel, commutator, metric
 
-\subsection{Quotient spaces}
+\subsubsection{Quotient spaces}
 TODO: need closed $U$? For quotient map to be continuous? TODO show quotient topology.
 
 \begin{proposition}
@@ -1030,6 +1046,311 @@ Or: $(A^\transp)_{ab} = A_{ba}$ and $\tensor{(A^\transp)}{_i^j} = \tensor{A}{^j_
 &= \frac{1}{n!}\varepsilon_{i_1\ldots i_n}\varepsilon^{j_1\ldots j_n}\tensor{A}{^{i_1}_{j_1}}\ldots \tensor{A}{^{i_n}_{j_n}}
 \end{align*}
 
+\chapter{Ordered vector spaces}
+TODO link ordered groups.
+\begin{definition}
+Let $\seq{\R, V, +}$ be a real vector space and $\precsim$ a preorder on the set $V$. Then $\precsim$ is a \udef{vector preorder} if it is compatible with the vector space structure as follows: $\forall x,y,z\in V, \lambda\in\R$
+\begin{enumerate}
+\item $x\precsim y$ implies $x+z \precsim y+z$;
+\item if $\lambda\geq 0$, then $x \precsim y$ implies $\lambda x \precsim \lambda y$.
+\end{enumerate}
+We call $(\R, V, +, \precsim)$ a \udef{preordered vector space}.
+
+\begin{itemize}
+\item If $\precsim$ is a partial order, we call $(\R, V, +, \precsim)$ a \udef{partially ordered vector space} or simply a \udef{ordered vector space}.
+\item If $\seq{V, \precsim}$ is a lattice, we call $(\R, V, +, \precsim)$ a \udef{vector lattice} or a \udef{Riesz space}.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $\seq{\R, V, +}$ be a real vector space and $\precsim$ a preorder on the set $V$. The compatibility of the order can equivalently be expressed by:
+$\forall x,y,z\in V, \lambda\in\R$
+\begin{enumerate}
+\item $x \precsim y$ implies $x+z \precsim y+z$;
+\item if $\lambda\geq 0$ and $0 \precsim x$, then $0 \precsim \lambda x$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $V$ be a preordered vector space. For all $v,w \in V$ we have
+\[ v \precsim w \;\iff\; 0 \precsim  w - v \;\iff\; -w \precsim -v.  \]
+\end{lemma}
+\begin{proof}
+We get the implications
+\[ v \precsim w \implies 0 \precsim  w - v \implies -w \precsim -v \implies v-w \precsim 0 \implies v\precsim w \]
+by subsequently adding $-v, -w, v,w$ to both sides by compatibility of the order.
+\end{proof}
+\begin{corollary}
+Let $V$ be a preordered vector space and $\alpha \in \R\setminus\{0\}$. Then for all $v,w\in V$
+\[ v \precsim w \quad \iff \quad \begin{cases}
+\alpha v \precsim \alpha w & (0 < \alpha) \\
+\alpha v \succsim \alpha w & (\alpha > 0)
+\end{cases}. \] 
+\end{corollary}
+
+\begin{lemma}
+Let $V$ be a preordered vector space. For all $v,w, x, y \in V$ we have
+\[ \begin{cases}
+v \precsim w \\ x \precsim y
+\end{cases} \implies v+ x \precsim w+y. \]
+\end{lemma}
+\begin{proof}
+We calculate $v + x \leq w + x \leq w+y$.
+\end{proof}
+
+\begin{example}
+\begin{itemize}
+\item The finite-dimensional vector spaces $\R^n$ with coordinate-wise addition, scalar multiplication and order are Riesz spaces.
+\item The finite-dimensional vector spaces $\R^n$ with coordinate-wise addition, scalar multiplication and lexicographical order are Riesz spaces.
+\item Let $X$ be a set. The set $(X\to \R)$ is a real vector space with point-wise addition and scalar multiplication. If the order is also defined point-wise, i.e. $f \leq g$ iff $\forall x\in X: f(x) \leq g(x)$, then $(X\to \R)$ is a Riesz space.
+\end{itemize}
+\end{example}
+
+\begin{lemma}
+Let $X$ be a topological space. The spaces
+\begin{enumerate}
+\item $\cont(X,\R)$;
+\item $\cont_0(X,\R)$;
+\item $\cont_c(X,\R)$; and
+\item $\cont_b(X,\R)$
+\end{enumerate}
+with point-wise operations are Riesz spaces.
+\end{lemma}
+\begin{proof}
+In all these cases the join and meet of $f,g$ are given by
+\begin{align*}
+f \vee g &= \frac{1}{2}(f+g)+ \frac{1}{2}|f-g| \\
+f \wedge g &= \frac{1}{2}(f+g) - \frac{1}{2}|f-g|.
+\end{align*}
+So the join and meet are still continuous and have the same properties as $f,g$.
+\end{proof}
+
+\section{The positive cone}
+\begin{definition}
+Let $V$ be a preordered vector space. The subset
+\[ V^+ \defeq \setbuilder{v\in V}{0 \precsim v} \]
+is called the \udef{positive cone} of $V$. The elements of the positive cone $V^+$ are called the \udef{positive elements} of $V$.
+\end{definition}
+
+\begin{lemma}
+Let $V$ be a preordered vector space. Then
+\begin{enumerate}
+\item $V^+$ is a pointed cone;
+\item $V^+$ is convex;
+\item $V^+$ is closed under addition.
+\end{enumerate}
+If the order on $V$ is a partial order, then
+\begin{enumerate} \setcounter{enumi}{3}
+\item if $v\in V^+$ and $-v\in V^+$, then $v = 0$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) $V^+$ is clearly a cone by compatibility of the order. It is pointed by reflexivity: $0\precsim 0$.
+
+(2) and (3) are equivalent by \ref{lemma:convexityAdditiveClosure} and (3) is also an immediate consequence of the compatibility of the order.
+
+(4) If $v\in V^+$ and $-v\in V^+$, then $v\precsim 0$ and $0\precsim v$, so $v=0$ by anti-symmetry.
+\end{proof}
+
+\section{Riesz spaces}
+
+\begin{lemma}
+Let $V$ be a Riesz space, $u,v,w\in V$ and $\alpha\in \R$, then
+\begin{enumerate}
+\item $-(v \wedge w) = (-v)\vee (-w)$ and $-(v \vee w) = (-v)\wedge (-w)$;
+\item if $\alpha \geq 0$, then $\alpha(v \wedge w) = (\alpha v)\wedge (\alpha w)$ and $\alpha(v \vee w) = (\alpha v)\vee (\alpha w)$;
+\item if $\alpha \leq 0$, then $\alpha(v \wedge w) = (\alpha v)\vee (\alpha w)$ and $\alpha(v \vee w) = (\alpha v)\wedge (\alpha w)$;
+\item $u+(v \wedge w) = (u+v)\wedge (u+w)$ and $u+(v \vee w) = (u+v)\vee (u+w)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We apply \ref{corollary:bijectiveOrderEmbeddingBounds} to
+
+(1) the reverse order-embedding $v\mapsto -v$;
+
+(2) the order-embedding $v\mapsto \alpha v$ for $\alpha > 0$; (if $\alpha = 0$ the result is trivial);
+
+(3) the reverse order-embedding $v\mapsto \alpha v$ for $\alpha > 0$; (if $\alpha = 0$ the result is trivial);
+
+(4) the order-embedding $v\mapsto u+v$.
+\end{proof}
+
+\begin{proposition} \label{prop:sumAsMeetJoin}
+Let $V$ be a Riesz space and $v,w\in V$, then
+\[ (v \vee w) + (v \wedge w) = v+w. \]
+\end{proposition}
+\begin{proof}
+We calculate
+\[ (v \vee w) + (v \wedge w) = v + 0 \vee (w-v) + w + (v-w)\wedge 0 = (v + w) + 0 \vee (w-v) - 0 \vee (w-v) = v + w. \]
+\end{proof}
+
+\subsection{Derivative positive elements}
+\subsubsection{Positive and negative parts}
+\begin{definition}
+Let $V$ be a Riesz space and $v\in V$. Then we define
+\begin{align*}
+v^+ &\defeq v \vee 0 \\
+v^- &\defeq (-v) \vee 0 = - (v \wedge 0).
+\end{align*}
+We call $v^+$ the \udef{positive part} of $v$ and $v^-$ the \udef{negative part} of $v$.
+\end{definition}
+
+\begin{lemma} \label{lemma:PositiveNegativeElements}
+Let $V$ be a Riesz space and $v,w\in V$. Then
+\begin{enumerate}
+\item $v^+, v^- \in V^+$;
+\item $(-v)^- = v^+$ and $(-v)^+ = v^-$;
+\item if $\alpha \geq 0$, then $(\alpha v)^+ = \alpha v^+$ and $(\alpha v)^- = \alpha v^-$;
+\item $v= v^+ - v^-$;
+\item $v^+ \wedge v^- = 0$;
+\item $-v^- \leq v \leq v^+$;
+\item $v\leq w$ \textup{if and only if} $v^+ \leq w^+$ and $v^- \geq w^-$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1), (2) Evident from definitions.
+
+(3) We calculate $\alpha v^+ = \alpha (v \vee 0) = (\alpha v) \vee 0 = (\alpha v)^+$; the calculation for $\alpha v^-$ is similar.
+
+(4) We calculate $v^+ - v = (v \vee 0) - v = (v-v) \vee (0-v) = 0\vee (-v) = v^-$.
+
+(5) We calculate $0 = v^- - v^- = v^-  + (v\wedge 0) = (v^- + v)\wedge (0 + v^-) = v^+ \wedge v^-$.
+
+(6) This is clear from $-v^- = v\wedge 0 \;\leq\; v \;\leq\; v \vee 0 = v^+$.
+
+(7) $v\leq w$ implies $v^+ = v\vee 0 \leq w\vee 0 = w^+$ and $-v^- = v\wedge 0 \leq w\wedge 0 = - w^-$.
+
+Conversely, we have $v = v^+ - v^- \leq w^+ - w^- = w$.
+\end{proof}
+
+\begin{lemma} \label{lemma:MeetJoinAsPositiveNegative}
+Let $V$ be a Riesz space and $v,w\in V$. Then
+\begin{enumerate}
+\item $v\vee w = (v-w)^+ + w = (v-w)^- + v$;
+\item $v\wedge w = v - (v-w)^+ = w - (v-w)^-$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We calculate $v\vee w = (v-w)\vee 0 + w = (v-w)^+ + w$. The other equalities are similar.
+\end{proof}
+
+\begin{proposition} \label{prop:triangleInequalityPositiveNegativeElements}
+Let $V$ be a Riesz space and $v,w\in V$. Then
+\begin{enumerate}
+\item $(v+w)^+ \leq v^+ + w^+$;
+\item $(v+w)^- \leq v^- + w^-$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+From \ref{lemma:PositiveNegativeElements} we get $v \leq v^+$ and $w\leq w^+$, so $v+w \leq v^+ + w^+$. Also $0 \leq v^+ + w^+$. So
+\[ (v+w)^+ = (v+w)\vee 0 \leq v^+ + w^+. \]
+Then we also have
+\[ (v+w)^- = (-v-w)^+ \leq (-v)^+ + (-w)^+ = v^- + w^-. \]
+\end{proof}
+
+\subsubsection{Absolute value}
+\begin{definition}
+Let $V$ be a Riesz space and $v\in V$. Then the \udef{absolute value} of $v$ is
+\[ |v| \defeq v\vee (-v) = -(v\wedge (-v)). \]
+\end{definition}
+
+\begin{lemma} \label{lemma:absoluteValue}
+Let $V$ be a Riesz space, $v,w\in V$ and $\alpha\in \R$. Then
+\begin{enumerate}
+\item $|v| = v^+ + v^-$;
+\item $|v| \in V^+$;
+\item $|v| = |-v|$;
+\item $|\alpha v| = |\alpha|\cdot |v|$;
+\item $\big||v|\big| = |v|$;
+\item $0 \leq v^+ \leq |v|$ and $0 \leq v^- \leq |v|$;
+\item $|v| = 0$ \textup{if and only if} $v = 0$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We prove (1):
+\[ |v| = v\vee (-v) = (2v)\vee 0 - v = 2v^+ - v = 2v^+ - (v^+ - v^-) = v^+ - v^- \]
+and (5), using the absorption law:
+\[ \big||v|\big| = |v|\vee (-|v|) = v \vee (-v) \vee \big( v\wedge (-v) \big) = v \vee (-v) = |v|. \]
+The rest are immediate consequences, using the results of \ref{lemma:PositiveNegativeElements}.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $v,w\in V$, then
+\[ |v - w| = (v \vee w) - (v \wedge w) \]
+and hence
+\begin{enumerate}
+\item $v \vee w = \frac{1}{2}\big(v+w + |v - w|\big)$;
+\item $v \wedge w = \frac{1}{2}\big(v+w - |v - w|\big)$;
+\end{enumerate}
+or, equivalently,
+\begin{enumerate} \setcounter{enumi}{2}
+\item $(v+w)\vee (v-w) = v + |w|$;
+\item $(v+w)\wedge (v-w) = v - |w|$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The first equality follows from \ref{lemma:MeetJoinAsPositiveNegative} and \ref{lemma:absoluteValue}.
+
+The next two follow from the first and \ref{prop:sumAsMeetJoin}.
+
+The last two are equivalent to the previous two by the replacements $v \leftrightarrow v+w$ and $w \leftrightarrow v-w$.
+\end{proof}
+\begin{corollary} \label{corollary:meetJoinAbsoluteValues}
+Let $V$ be a Riesz space and $v,w\in V$, then
+\begin{enumerate}
+\item $|v| \vee |w| = \frac{1}{2}\Big(|v|+|w| + \big||v| - |w|\big|\Big)$;
+\item $|v| \wedge |w| = \frac{1}{2}\Big(|v|+|w| - \big||v| - |w|\big|\Big)$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Substitute $v\to |v|$ and $w\to |w|$.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $v,w\in V$, then
+\begin{enumerate}
+\item $|v|\vee |w| = \frac{1}{2}\Big( |v+w| + |v - w| \Big)$;
+\item $|v|\wedge |w| = \frac{1}{2}\Big| |v+w| - |v - w| \Big|$;
+\end{enumerate}
+or, equivalently,
+\begin{enumerate} \setcounter{enumi}{2}
+\item $|v+w|\vee |v-w| = |v| + |w|$;
+\item $|v+w|\wedge |v-w| = \big| |v| - |w| \big|$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) we calculate
+\begin{align*}
+|v|\vee |w| &= v\vee (-v)\vee w \vee (-w) = \big(v\vee(-w)\big)\vee \big((-v)\vee w\big) \\
+&= \frac{1}{2}\Big((v-w) + |v + w|\Big)\vee \frac{1}{2}\Big( (-v+w) + |- v - w| \Big) \\
+&= \frac{1}{2}|v+ w| + \frac{1}{2}\big((v-w)\vee (-v+w)\big) = \frac{1}{2}\Big( |v+w| + |v - w| \Big).
+\end{align*}
+
+(3) This is equivalent to (1) by the replacements $v \leftrightarrow v+w$ and $w \leftrightarrow v-w$.
+
+(2) We use (1), (3) and \ref{corollary:meetJoinAbsoluteValues} to calculate
+\begin{align*}
+|v|\wedge |w| &= |v| + 0\wedge \big(|w| - |v|\big) = |v| + |w| + \big(-|w|\big) \wedge \big(- |v|\big) = |v| + |w| - \big(|v|\vee |w|\big) \\
+&= |v| + |w| - \frac{1}{2}\Big( |v+w| + |v - w| \Big) = |v+w|\vee |v-w| - \frac{1}{2}\Big( |v+w| + |v - w| \Big) \\
+&= \frac{1}{2}\Big(|v+w|+|v-w| + \big||v+w| - |v-w|\big|\Big) - \frac{1}{2}\Big( |v+w| + |v - w| \Big) \\
+&= \frac{1}{2}\Big| |v+w| - |v - w| \Big|.
+\end{align*}
+
+(4) This is equivalent to (2) by the replacements $v \leftrightarrow v+w$ and $w \leftrightarrow v-w$.
+\end{proof}
+\begin{corollary}
+Let $V$ be a Riesz space and $v,w\in V$, then the following are equivalent:
+\begin{enumerate}
+\item $|v|\wedge |w| = 0$;
+\item $|v+w| = |v-w|$;
+\item $|v|\vee |w| = |v+w|$.
+\end{enumerate}
+\end{corollary}
+
+The absolute value also satisfies the triangle inequality.
+\begin{proposition}[Triangle inequality]
+
+\end{proposition}
 
 \chapter{Some results and applications}
 \section{Rotations}
