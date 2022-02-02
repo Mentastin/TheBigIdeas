@@ -1125,6 +1125,16 @@ f \wedge g &= \frac{1}{2}(f+g) - \frac{1}{2}|f-g|.
 So the join and meet are still continuous and have the same properties as $f,g$.
 \end{proof}
 
+\section{Upsets and downsets}
+\begin{lemma} \label{lemma:sumMultipleUpDownsets}
+Let $V$ be a preordered vector space, $S\subseteq V$ a subset, $v\in V$ and $\alpha\in \R$. Then
+\begin{enumerate}
+\item if $\alpha > 0$, then $(\alpha S)^u = \alpha S^u$ and $(\alpha S)^l = \alpha S^l$;
+\item if $\alpha < 0$, then $(\alpha S)^u = \alpha S^l$ and $(\alpha S)^l = \alpha S^u$;
+\item $(S+v)^u = S^u + v$ and $(S+v)^l = S^l + v$.
+\end{enumerate}
+\end{lemma}
+
 \section{The positive cone}
 \begin{definition}
 Let $V$ be a preordered vector space. The subset
@@ -1164,7 +1174,7 @@ Let $V$ be a Riesz space, $u,v,w\in V$ and $\alpha\in \R$, then
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-We apply \ref{corollary:bijectiveOrderEmbeddingBounds} to
+We apply \ref{corollary:orderPreservingReversingBounds} to
 
 (1) the reverse order-embedding $v\mapsto -v$;
 
@@ -1183,6 +1193,22 @@ Let $V$ be a Riesz space and $v,w\in V$, then
 We calculate
 \[ (v \vee w) + (v \wedge w) = v + 0 \vee (w-v) + w + (v-w)\wedge 0 = (v + w) + 0 \vee (w-v) - 0 \vee (w-v) = v + w. \]
 \end{proof}
+
+
+\begin{proposition}[Infinite distributivity in Riesz spaces]
+Let $V$ be a Riesz space, $v\in V$ and $S\subseteq V$ a subset. Then
+\begin{enumerate}
+\item if $\bigvee S$ exists, then $\left(\bigvee S\right) \wedge v = \bigvee (S\wedge v)$;
+\item if $\bigwedge S$ exists, then $\left(\bigwedge S\right) \vee v = \bigwedge (S\vee v)$;
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We calculate using \ref{lemma:sumMultipleUpDownsets} and \ref{prop:sumAsMeetJoin}
+\[ \left(\bigvee S\right) \wedge v = \left(\bigvee S\right) + v - \left(\bigvee S\right) \vee v = \left(\bigvee S + v\right) - \left(\bigvee S\vee v\right). \]
+\end{proof}
+\begin{corollary}
+Riesz spaces are distributive lattices.
+\end{corollary}
 
 \subsection{Positive elements}
 \subsubsection{Positive and negative parts}
@@ -1249,12 +1275,13 @@ Then we also have
 \end{proof}
 
 \begin{proposition} \label{prop:minimalPositiveDecomposition}
-Let $V$ be a Riesz space and $v\in V$. Assume $p,q\in V^+$ are such that $v = p-q$. Then
+Let $V$ be a Riesz space and $v\in V$. Assume that $v$ can be decomposed as $v = p-q$ for some $p,q\in V^+$. Then
 \begin{enumerate}
 \item $v^+ \leq p$ and $v^- \leq q$;
 \item $v^+ = p$ and $v^- = q$ \textup{if and only if} $p\wedge q = 0$.
 \end{enumerate}
 \end{proposition}
+We may thus say that $v = v^+ - v^-$ is the minimal such decomposition.
 \begin{proof}
 (1) From $v\leq p$ and $0\leq p$, we get $v^+ = v \vee 0 \leq p$. Then we also have $v^- = v^+ - v \leq p - v = q$.
 
@@ -1268,6 +1295,8 @@ so $p = v^+$ and $q = p - v = v^+ - v = v^-$.
 Let $V$ be a Riesz space and $v\in V$. Then the \udef{absolute value} of $v$ is
 \[ |v| \defeq v\vee (-v) = -(v\wedge (-v)). \]
 \end{definition}
+
+If the Riesz space is a real function space with pointwise order, then $|f| = |\cdot|\circ f$ as usual, where $|\cdot|: \R\to \R$ is the usual absolute value function.
 
 \begin{lemma} \label{lemma:absoluteValue}
 Let $V$ be a Riesz space, $v,w\in V$ and $\alpha\in \R$. Then
@@ -1332,26 +1361,37 @@ or, equivalently,
 \item $|v+w|\vee |v-w| = |v| + |w|$;
 \item $|v+w|\wedge |v-w| = \big| |v| - |w| \big|$.
 \end{enumerate}
+Also
+\begin{enumerate} \setcounter{enumi}{4}
+\item $|v|+|w| = |v+w| + |v-w| - \big||v|-|w|\big|$;
+\item $|v+w|+|v-w| = 2|v| + 2|w| - \big||v+w|-|v-w|\big|$;
+\end{enumerate}
+and
+\begin{enumerate} \setcounter{enumi}{6}
+\item $|v|+|w| = \big||v|-|w|\big| + \big||v+w|-|v-w|\big|$.
+\end{enumerate}
 \end{proposition}
+The only real trick is in the proof of (1). All the other results follow from elementary substitutions.
 \begin{proof}
-(1) we calculate
+(3,4,6) Are equivalent to (1,2,5) by the replacements $v \leftrightarrow v+w$ and $w \leftrightarrow v-w$.
+
+(1) We calculate
 \begin{align*}
 |v|\vee |w| &= v\vee (-v)\vee w \vee (-w) = \big(v\vee(-w)\big)\vee \big((-v)\vee w\big) \\
 &= \frac{1}{2}\Big((v-w) + |v + w|\Big)\vee \frac{1}{2}\Big( (-v+w) + |- v - w| \Big) \\
 &= \frac{1}{2}|v+ w| + \frac{1}{2}\big((v-w)\vee (-v+w)\big) = \frac{1}{2}\Big( |v+w| + |v - w| \Big).
 \end{align*}
 
-(3) This is equivalent to (1) by the replacements $v \leftrightarrow v+w$ and $w \leftrightarrow v-w$.
-
-(2) We use (1), (3) and \ref{corollary:meetJoinAbsoluteValues} to calculate
+(5) Using \ref{prop:sumAsMeetJoin}, (1) and \ref{corollary:meetJoinAbsoluteValues} we get
 \begin{align*}
-|v|\wedge |w| &= |v| + 0\wedge \big(|w| - |v|\big) = |v| + |w| + \big(-|w|\big) \wedge \big(- |v|\big) = |v| + |w| - \big(|v|\vee |w|\big) \\
-&= |v| + |w| - \frac{1}{2}\Big( |v+w| + |v - w| \Big) = |v+w|\vee |v-w| - \frac{1}{2}\Big( |v+w| + |v - w| \Big) \\
-&= \frac{1}{2}\Big(|v+w|+|v-w| + \big||v+w| - |v-w|\big|\Big) - \frac{1}{2}\Big( |v+w| + |v - w| \Big) \\
-&= \frac{1}{2}\Big| |v+w| - |v - w| \Big|.
+|v|+|w| &= |v|\vee|w| + |v|\wedge |w| \\
+&= \frac{1}{2}\Big( |v+w| + |v - w| \Big) + \frac{1}{2}\Big(|v|+|w| - \big||v| - |w|\big|\Big).
 \end{align*}
+This simplifies to the required equation.
 
-(4) This is equivalent to (2) by the replacements $v \leftrightarrow v+w$ and $w \leftrightarrow v-w$.
+(7) Follows from substituting (6) into (5).
+
+(2) Follows from (7) and \ref{corollary:meetJoinAbsoluteValues}.
 \end{proof}
 \begin{corollary}
 Let $V$ be a Riesz space and $v,w\in V$, then the following are equivalent:
@@ -1372,6 +1412,10 @@ The first inequality is the triangle inequality. It follows straight from \ref{p
 
 The second inequality is the reverse triangle inequality and follows from the triangle inequality as in \ref{prop:reverseTriangleInequality}.
 \end{proof}
+
+\subsection{Ideal and bands}
+
+\subsection{Disjointness}
 
 \chapter{Some results and applications}
 \section{Rotations}
