@@ -376,8 +376,16 @@ These statements hold for all sets $A,B$ iff we use an unrelativised intersectio
 
 \begin{definition}
 Let $A,B$ be sets. We call $A$ and $B$ \udef{disjoint} if $A\cap B = \emptyset$. We write $A\perp B$.
+
+A family of sets $\mathcal{E}$ is called \udef{pairwise disjoint} if $\forall A,B\in\mathcal{E}: A\perp B$.
 \end{definition}
 The notation $A\perp B$ is not standard in general set theory, but is somewhat standard for disjoint elements in lattice theory.
+
+\begin{definition}
+Let $A,B$ be sets. We call the union $A\cup B$ a \udef{(inner) disjoint union} if $A$ and $B$ are disjoint. We may write $A\uplus B$ for the union if it is disjoint.
+
+If a family of sets $\mathcal{E}$ is pairwise disjoint, we may denote its union $\biguplus \mathcal{E}$.
+\end{definition}
 
 \subsubsection{Difference}
 \begin{definition}
@@ -588,6 +596,8 @@ This gives the table
 \times & \checkmark & \checkmark &  & \checkmark &
 \end{array} \]
 \end{lemma}
+
+TODO: intersection distributes over disjoint union.
 
 For more identities, see \url{https://en.wikipedia.org/wiki/List_of_set_identities_and_relations}.
 
@@ -1104,7 +1114,7 @@ Let $\sim$ be an equivalence relation on $A$. The quotient set of $A$ by $\sim$ 
 \item every element of $A$ is in an equivalence class, i.e.
 \[ A = \bigcup (A/\sim); \]
 \item any two equivalence classes are either disjoint or the same:
-\[ \forall x,y\in A: \qquad[x]_\sim \cap [y]_\sim = \emptyset \quad \lor \quad [x]_\sim = [y]_\sim. \]
+\[ \forall x,y\in A: \qquad[x]_\sim \perp [y]_\sim \quad \lor \quad [x]_\sim = [y]_\sim. \]
 \end{enumerate}
 Conversely, every partition defines an equivalence relation.
 \end{proposition}
@@ -1165,89 +1175,6 @@ If $A\subseteq B$ sets, then there exists a canonical injection $\iota: A\to B$,
 The inclusion map is often denoted $A\hookrightarrow B$.
 \end{lemma}
 
-\subsection{Constructing new functions from old}
-Constructions defined for relations are in particular applicable to functions.
-\subsubsection{Composition}
-\begin{lemma}
-The functions $f:A\to B$ and $g:B\to C$ are composable as relations and the relation
-\[ f;g = g\circ f \]
-is a function. In particular it has functional form
-\[ g\circ f: A\to C: x\mapsto g(f(x)). \]
-\end{lemma}
-Because of the simplicity of $(g\circ f)(x) = g(f(x))$, the notation $\circ$ is almost exclusively used, when dealing with functions.
-
-\begin{definition}
-Let $f, g:A\to A$ be functions. We say $f$ and $g$ \udef{commute} if $f\circ g = g\circ f$.
-\end{definition}
-
-\subsubsection{Restriction and extension}
-\begin{lemma}
-Let $f: A\to B$ be a function and $S\subset A$. Then $f|_S$ is a function.
-\end{lemma}
-When talking about the restriction of a function, this left restriction is always the one that is meant. Right restrictions $f|^K$ are sometimes called \udef{corestrictions} and are in general not functions.
-
-\begin{definition}
-Let $A\subset B$ and $C$ be sets. Let $f: A\to C$ be a function. A function $\tilde{f}: B\to C$ such that $\tilde{f}|_A = f$ is called an \udef{extension} of $f$.
-\end{definition}
-Given a function, a different function with as codomain a superset of the original codomain, which is otherwise identical, is sometimes called a \udef{coextension} of the function.
-
-When given a function prescription, we may need to verify the function is \emph{well-defined} in the sense that the prescription always gives an element in the codomain for every element in the domain.
-
-\subsubsection{Inverses of functions}
-All identity relations are functions.
-
-\begin{definition}
-Let $f:X\to Y$ be a function.
-\begin{itemize}
-\item A \udef{left inverse} (or \udef{retraction}) of $f$ is a function $g: Y\to X$ such that
-\[ g\circ f = \id_X. \]
-\item A \udef{right inverse} (or \udef{section}) of $f$ is a function $h: Y\to X$ such that
-\[ f\circ h = \id_Y. \]
-\item A \udef{(two-sided) inverse} of $f$ is a function that is both a left and a right inverse.
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-Let $f:X\to Y$ be a function. The following are equivalent:
-\begin{enumerate}
-\item $f$ has a left inverse $g$;
-\item $f^\transp$ is a partial function from $X$ to $Y$; 
-\item $f^\transp \leq g$;
-\item $f$ is injective.
-\end{enumerate}
-\end{lemma}
-There is also a result linking the existence of a right inverse and surjectivity, but this in general only holds assuming the axiom of choice. (TODO ref)
-
-\begin{lemma} \label{lemma:leftRightInverse}
-If $f$ has a left inverse $g$ and a right inverse $h$, then $g=h$.
-\end{lemma}
-\begin{proof}
-By the simple calculation
-\[ g = g\circ (f\circ h) = (g\circ f) \circ h = h. \]
-\end{proof}
-Thus the two-sided inverse of $f$ is unique and exists \textup{if and only if} $f$ has a left and a right inverse. The unique two-sided inverse is denoted $f^{-1}$.
-
-\begin{lemma}
-Let $f:X\to Y$ be a function. The following are equivalent:
-\begin{enumerate} 
-\item the inverse exists;
-\item the inverse exists and $f^{-1} = f^\transp$;
-\item $f^\transp$ is a function from $X$ to $Y$;
-\item $f$ is a bijection;
-\item $f^\transp$ is a bijective function from $X$ to $Y$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma} \label{lemma:commutationInverse}
-Let $f, g:A\to A$ be commuting and bijective functions. Then $f^{-1}$ and $g^{-1}$ commute.
-\end{lemma}
-\begin{proof}
-We calculate
-\[ f^{-1}\circ g^{-1} = f^{-1}\circ g^{-1}\circ (f\circ g \circ g^{-1} \circ f^{-1}) = f^{-1}\circ g^{-1}\circ (g\circ f) \circ g^{-1} \circ f^{-1} = g^{-1} \circ f^{-1} \]
-\end{proof}
-
-
-
 \subsection{Sets associated to functions}
 \subsubsection{Image and preimage}
 As functions are relations they have images and preimages. Let $f:A\to B$ be a function. We write
@@ -1260,8 +1187,6 @@ We can associate to $f$
 \item an \udef{image function} $\powerset(A) \to \powerset(B)$ that maps subsets of $A$ to their image under $f$;
 \item a \udef{preimage function} $\powerset(B) \to \powerset(A)$ that maps subsets of $B$ to their preimage under $f$.
 \end{itemize}
-
-A \udef{constant function} is a function whose range is a singleton.
 
 \begin{lemma}
 Let $f:A\to B$ be a function. Then the active domain of $f$ is the whole domain of $f$, i.e. $f^{-1}[B] = A$.
@@ -1344,6 +1269,7 @@ We can easily give a function multiple inputs from multiple domains by first joi
 A function $f$ that takes an input in $A$ and one in $B$ to generate an output in $C$ can be written as
 \[ f: A\times B \to C: (a,b)\mapsto f(a,b). \]
 \end{example}
+
 \subsubsection{Currying}
 \begin{definition}
 Given a function $f: A\times B \to C$, we can \udef{curry} it to obtain a new function
@@ -1353,13 +1279,122 @@ where $f(a,-)$ is the function
 \end{definition}
 \begin{lemma}
 For given sets $A,B,C$ the act of currying defines a bijective function
-\[ \operatorname{curry}: (A\times B \to C) \to (A \to (B\to C)). \]
+\[ \operatorname{curry}: (A\times B \to C) \twoheadrightarrowtail (A \to (B\to C)). \]
 \end{lemma}
 
 \subsubsection{Partial application}
 \begin{definition}
 Let $f: A\times B \to C$ be a function. A \udef{partial application} $p$ of $f$ is an element of the image of the curried function:
 \[ p\in \operatorname{curry}(f)[A]. \]
+\end{definition}
+
+\subsection{Constructing new functions}
+Constructions defined for relations are in particular applicable to functions.
+
+\subsubsection{Composition}
+\begin{lemma}
+The functions $f:A\to B$ and $g:B\to C$ are composable as relations and the relation
+\[ f;g = g\circ f \]
+is a function. In particular it has functional form
+\[ g\circ f: A\to C: x\mapsto g(f(x)). \]
+\end{lemma}
+Because of the simplicity of $(g\circ f)(x) = g(f(x))$, the notation $\circ$ is almost exclusively used, when dealing with functions.
+
+\begin{definition}
+Let $f, g:A\to A$ be functions. We say $f$ and $g$ \udef{commute} if $f\circ g = g\circ f$.
+\end{definition}
+
+\begin{note}
+Let $X,Y,Z$ be sets. Using composition we can view any function $f: X\to Y$ also as a function
+\[ f: (Z\to X)\to (Z\to Y): g\mapsto f(g) = (z\mapsto (f\circ g)(z)). \]
+\end{note}
+
+\subsubsection{Restriction and extension}
+\begin{lemma}
+Let $f: A\to B$ be a function and $S\subset A$. Then $f|_S$ is a function.
+\end{lemma}
+When talking about the restriction of a function, this left restriction is always the one that is meant. Right restrictions $f|^K$ are sometimes called \udef{corestrictions} and are in general not functions.
+
+\begin{definition}
+Let $A\subset B$ and $C$ be sets. Let $f: A\to C$ be a function. A function $\tilde{f}: B\to C$ such that $\tilde{f}|_A = f$ is called an \udef{extension} of $f$.
+\end{definition}
+Given a function, a different function with as codomain a superset of the original codomain, which is otherwise identical, is sometimes called a \udef{coextension} of the function.
+
+When given a function prescription, we may need to verify the function is \emph{well-defined} in the sense that the prescription always gives an element in the codomain for every element in the domain.
+
+\subsubsection{Inverses of functions}
+All identity relations are functions.
+
+\begin{definition}
+Let $f:X\to Y$ be a function.
+\begin{itemize}
+\item A \udef{left inverse} (or \udef{retraction}) of $f$ is a function $g: Y\to X$ such that
+\[ g\circ f = \id_X. \]
+\item A \udef{right inverse} (or \udef{section}) of $f$ is a function $h: Y\to X$ such that
+\[ f\circ h = \id_Y. \]
+\item A \udef{(two-sided) inverse} of $f$ is a function that is both a left and a right inverse.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $f:X\to Y$ be a function. The following are equivalent:
+\begin{enumerate}
+\item $f$ has a left inverse $g$;
+\item $f^\transp$ is a partial function from $X$ to $Y$; 
+\item $f^\transp \leq g$;
+\item $f$ is injective.
+\end{enumerate}
+\end{lemma}
+There is also a result linking the existence of a right inverse and surjectivity, but this in general only holds assuming the axiom of choice. (TODO ref)
+
+\begin{lemma} \label{lemma:leftRightInverse}
+If $f$ has a left inverse $g$ and a right inverse $h$, then $g=h$.
+\end{lemma}
+\begin{proof}
+By the simple calculation
+\[ g = g\circ (f\circ h) = (g\circ f) \circ h = h. \]
+\end{proof}
+Thus the two-sided inverse of $f$ is unique and exists \textup{if and only if} $f$ has a left and a right inverse. The unique two-sided inverse is denoted $f^{-1}$.
+
+\begin{lemma}
+Let $f:X\to Y$ be a function. The following are equivalent:
+\begin{enumerate} 
+\item the inverse exists;
+\item the inverse exists and $f^{-1} = f^\transp$;
+\item $f^\transp$ is a function from $X$ to $Y$;
+\item $f$ is a bijection;
+\item $f^\transp$ is a bijective function from $X$ to $Y$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma} \label{lemma:commutationInverse}
+Let $f, g:A\to A$ be commuting and bijective functions. Then $f^{-1}$ and $g^{-1}$ commute.
+\end{lemma}
+\begin{proof}
+We calculate
+\[ f^{-1}\circ g^{-1} = f^{-1}\circ g^{-1}\circ (f\circ g \circ g^{-1} \circ f^{-1}) = f^{-1}\circ g^{-1}\circ (g\circ f) \circ g^{-1} \circ f^{-1} = g^{-1} \circ f^{-1} \]
+\end{proof}
+
+\subsubsection{Constant functions}
+\begin{definition}
+Let $X,Y$ be sets. A function $f:X\to Y$ is called \udef{constant} if there exists a $y_0$ such that $\forall x\in X: f(x) = y_0$.
+
+We denote this function $\underline{y_0}$.
+\end{definition}
+
+A function is constant if and only if its range is a singleton.
+
+\begin{lemma}
+Let $X,Y$ be sets and $y\in Y$. Then
+\[ \graph(\underline{y}) = X\times \{y\}. \]
+\end{lemma}
+
+\subsubsection{Tuples of functions}
+\begin{definition}
+Let $f: A\to B$ and $g: X\to Y$ be functions. Then the \udef{tuple function} of $f$ and $g$ is the function
+\[ (f,g): A\times X \to G\times Y: (a,x) \mapsto (f(a), g(x)). \]
+
+In particular if $f=g$, we say the tuple function is the \udef{pointwise application} of $f$. We write $f$ instead of $(f,f)$.
 \end{definition}
 
 \section{Partial functions}
@@ -1921,11 +1956,22 @@ Let $\{A_{i,j}\}_{(i,j) \in I\times J}$ be an indexed family of sets. Then
 
 \subsection{Disjoint union}
 \begin{definition}
-The \udef{disjoint union} of a family of sets $\{A_i\}_{i\in I}$ is defined as
+The \udef{(outer) disjoint union} of a family of sets $\{A_i\}_{i\in I}$ is defined as
 \[ \bigsqcup_{i\in I}A_i \defeq \bigcup_{i\in I}\{i\}\times A_i. \]
 If $A,B$ are sets, then we define
 \[ A\sqcup B \defeq (\{0\}\times A)\cup (\{1\}\times B). \]
 \end{definition}
+
+Notice the difference between the inner and outer disjoint union: one is a normal union that happens to be disjoint, while the other is a separate operation that may be applied to any indexed family of sets.
+
+\begin{lemma}
+Let $\{A_i\}_{i\in I}$ be an indexed family of sets. If $\{A_i\}_{i\in I}$ is pairwise disjoint, then
+\[ \bigsqcup_{i\in I}A_i \twoheadrightarrowtail \biguplus_{i\in I}A_i: (i, a) \mapsto a. \]
+is a bijection.
+\end{lemma}
+\begin{proof}
+The function is clearly surjective. Now assume, towards a contradiction, that it is not injective. Then there exist distinct $(i,a)$ and $(j,a)$ in $\bigsqcup_{i\in I}A_i$, which means $a\in A_i$ and $a\in A_j$. So $a\in A_i\cap A_j$ and $\{A_i\}_{i\in I}$ is not pairwise disjoint.
+\end{proof}
 
 \begin{lemma}
 Let $\{A_i\}_{i\in I}$ be a family of sets.
@@ -2071,8 +2117,8 @@ Let $A,B$ be subsets of $U$. Then
 \begin{enumerate}
 \item $\chi_{A\cap B} = \min\{\chi_A,\chi_B\} = \chi_A\cdot \chi_B$;
 \item $\chi_{A\cup B} = \max\{\chi_A,\chi_B\} = \chi_A + \chi_B - \chi_A\cdot \chi_B$;
-\item $\chi_{A^c} = 1-\chi_A$;
-\item $\chi_{A\Delta B} \begin{aligned}[t] &= \chi_A + \chi_B - 2\chi_A\cdot \chi_B \\
+\item $\chi_{A^c} = \underline{1}-\chi_A$; and thus $\chi_A + \chi_{A^c} = 1$;
+\item $\chi_{A\Delta B} \begin{aligned}[t] &= \chi_A + \chi_B - \underline{2}\cdot\chi_A\cdot \chi_B \\
 &= |\chi_A - \chi_B| \\
 &= \chi_A + \chi_B \mod 2 \defeq \begin{cases}
 1 & (\chi_A + \chi_B = 1) \\
@@ -2101,7 +2147,7 @@ and
 \begin{itemize}
 \item \udef{closed under finite unions} if $A\cup B \in\mathcal{F}$ for all $A,B\in\mathcal{F}$;
 \item \udef{closed under finite intersections} if $A\cap B \in\mathcal{F}$ for all $A,B\in\mathcal{F}$;
-\item \udef{closed under disjoint unions} if $\bigcup_{i\in I}A_i \in\mathcal{F}$ for any indexed family of disjoint sets $\{A_i\}_{i\in I}$;
+\item \udef{closed under disjoint unions} if $\biguplus_{i\in I}A_i \in\mathcal{F}$ for any indexed family of disjoint sets $\{A_i\}_{i\in I}$;
 \item \udef{closed under countable monotone unions} if $\bigcup_{i=1}^\infty A_i \in\mathcal{F}$ for any indexed family of sets $\{A_i\}_{i\in \N}$ such that $i\leq j \implies A_i \subseteq A_j$;
 \item \udef{closed under countable monotone intersections} if $\bigcap_{i=1}^\infty A_i \in\mathcal{F}$ for any indexed family of sets $\{A_i\}_{i\in \N}$ such that $i\leq j \implies A_i \supseteq A_j$.
 \end{itemize}
@@ -2119,7 +2165,7 @@ Let $\mathcal{F}$ be a family of sets that is closed under finite (disjoint) uni
 \end{tikzcd} \]
 \end{lemma}
 \begin{proof}
-Assume $A\supset B$, then $A\setminus B = A^c \cup B$. This is a disjoint union.
+Assume $A\supset B$, then $A\setminus B = A^c \uplus B$. This is a disjoint union.
 \end{proof}
 
 \begin{lemma}
@@ -2135,7 +2181,7 @@ $A\setminus B = A\cap B^c$ and $A\setminus B = A\setminus (B\cap A)$.
 \begin{lemma} \label{lemma:unionsIntersectionClosureImplications}
 Let $\mathcal{F}$ be a family of sets. Then we have the following implications for closure under unions:
 \[ \begin{tikzcd}[row sep=tiny]
-&& \text{countable disjoint $\cup$} \\
+&& \text{countable disjoint $\uplus$} \\
 \text{arbitrary $\cup$} \arrow[r, Rightarrow] & \text{countable $\cup$} \arrow[ur, Rightarrow] \arrow[r, Rightarrow] \arrow[dr, Rightarrow] & \text{countable monotone $\cup$} \\
 && \text{finite $\cup$}
 \end{tikzcd} \]
@@ -2152,7 +2198,7 @@ The implications in \ref{lemma:unionsIntersectionClosureImplications} for unions
 \begin{lemma} \label{lemma:typesOfUnionsRelativeComplementation}
 Let $\mathcal{F}$ be a family of sets that is closed under relative complementation. Then we have the following implications for closure under unions:
 \[ \begin{tikzcd}[row sep=0em]
-\text{arbitrary $\cup$} \arrow[r, Rightarrow] & \text{countable $\cup$} \arrow[r, Rightarrow] \arrow[dr, Rightarrow] & \text{countable disjoint $\cup$} \arrow[r, Rightarrow] & \text{countable monotone $\cup$} \\
+\text{arbitrary $\cup$} \arrow[r, Rightarrow] & \text{countable $\cup$} \arrow[r, Rightarrow] \arrow[dr, Rightarrow] & \text{countable disjoint $\uplus$} \arrow[r, Rightarrow] & \text{countable monotone $\cup$} \\
 && \text{finite $\cup$} &
 \end{tikzcd} \]
 \end{lemma}
@@ -2168,7 +2214,7 @@ These implications can be further simplified, if $\mathcal{F}$ is closed under s
 \begin{lemma}
 Let $\mathcal{F}$ be a family of sets that is closed under set differences. Then we have the following implications for closure under unions:
 \[ \begin{tikzcd}[row sep=0em]
-\text{arbitrary $\cup$} \arrow[r, Rightarrow] & \text{countable $\cup$} \arrow[r, Leftrightarrow] & \text{countable disjoint $\cup$} \arrow[r, Rightarrow] \arrow[dr, Rightarrow] & \text{countable monotone $\cup$} \\
+\text{arbitrary $\cup$} \arrow[r, Rightarrow] & \text{countable $\cup$} \arrow[r, Leftrightarrow] & \text{countable disjoint $\uplus$} \arrow[r, Rightarrow] \arrow[dr, Rightarrow] & \text{countable monotone $\cup$} \\
 &&& \text{finite $\cup$}
 \end{tikzcd} \]
 \end{lemma}
@@ -2200,7 +2246,7 @@ A \udef{Dynkin system} of sets (also known as a \udef{$\lambda$-system} or \udef
 \begin{itemize}
 \item $\Omega\in D$;
 \item if $A\in D$, then $A^c\in D$;
-\item if $(A_i)_{i\in\N}$ is a countable sequence of pairwise disjoint sets in $D$, then $\bigcup_{i=1}^\infty A_i\in D$.
+\item if $(A_i)_{i\in\N}$ is a countable sequence of pairwise disjoint sets in $D$, then $\biguplus_{i=1}^\infty A_i\in D$.
 \end{itemize}
 \end{definition}
 
@@ -2218,7 +2264,7 @@ Call the original set of axioms Ax1 and this set of axioms Ax2.
 $\boxed{\text{Ax1}\implies\text{Ax2}}$ Point (2) follows from \ref{lemma:complementTypesUnionClosure} and point (3) follows from \ref{lemma:typesOfUnionsRelativeComplementation}.
 
 $\boxed{\text{Ax2}\implies\text{Ax1}}$ Point (2) follows immediately. For point (3): let $A,B$ be disjoint sets. Then $A^c \supset B$ and so $A\cup B = (A^c\setminus B)^c \in D$, meaning $D$ is closed under finite unions of disjoint sets. Now let $(A_i)_{i\in\N}$ be a countable sequence of pairwise disjoint sets. Then
-\[ \bigcup_{i=1}^\infty A_i = \bigcup_{i=1}^\infty \left(\bigcup_{j=1}^i A_j\right) \]
+\[ \biguplus_{i=1}^\infty A_i = \bigcup_{i=1}^\infty \left(\biguplus_{j=1}^i A_j\right) \]
 which is a countable monotone union.
 \end{proof}
 
@@ -2314,15 +2360,15 @@ By the identities $A\cup B = (A\symdiff B)\symdiff (A\cap B)$ and $A\setminus B 
 
 \begin{lemma}
 Let $\mathcal{S}$ be a semi-ring. Then the smallest ring $\mathcal{R}$ containing $\mathcal{S}$ is
-\[ \mathfrak{R}\{\mathcal{S}\} = \setbuilder{E_1\cup\ldots\cup E_n}{\text{$E_i\in \mathcal{S}$ are pairwise disjoint}}. \]
+\[ \mathfrak{R}\{\mathcal{S}\} = \setbuilder{E_1\uplus\ldots\uplus E_n}{\text{$E_i\in \mathcal{S}$ are pairwise disjoint}}. \]
 We call this the ring \udef{generated} by $\mathcal{S}$.
 \end{lemma}
 \begin{proof}
 Every ring containing $\mathcal{S}$ must contain $\mathfrak{R}\{\mathcal{S}\}$, so if it is a ring it is automatically the smallest. We just need to show it is a ring. Let $E,F$ be arbitrary elements of $\mathfrak{R}\{\mathcal{S}\}$. We need to show that both $E\setminus F$ and $E\cup F$ are in $\mathfrak{R}\{\mathcal{S}\}$.
 
-Now $E\cup F = (E\setminus F) \cup F$ can be written as a disjoint union, so we just need to write $E\setminus F$ as a pairwise disjoint union of elements of $\mathcal{S}$. To that end write $E = \bigcup_{i=0}^nE_i$ and $\bigcup_{j= 0}^mF_j$ where the $E_i$ are pairwise disjoint, as are the $F_j$. Then
-\[ E\setminus F = \bigcup_{i=0}^n \left[ \Big(\big((E_j\setminus F_1)\setminus F_2\big)\setminus \ldots\Big)\setminus F_m \right]. \]
-By industion and using the semi-ring property we can see that this is expressible as a finite pairwise disjoint union of elements of $\mathcal{S}$, and thus is an element of $mathfrak{R}\{\mathcal{S}\}$.
+Now $E\cup F = (E\setminus F) \uplus F$ can be written as a disjoint union, so we just need to write $E\setminus F$ as a pairwise disjoint union of elements of $\mathcal{S}$. To that end write $E = \biguplus_{i=0}^nE_i$ and $\biguplus_{j= 0}^mF_j$. Then
+\[ E\setminus F = \biguplus_{i=0}^n \left[ \Big(\big((E_j\setminus F_1)\setminus F_2\big)\setminus \ldots\Big)\setminus F_m \right]. \]
+By industion and using the semi-ring property we can see that this is expressible as a finite pairwise disjoint union of elements of $\mathcal{S}$, and thus is an element of $\mathfrak{R}\{\mathcal{S}\}$.
 \end{proof}
 
 \begin{definition}
@@ -2472,7 +2518,7 @@ which we claim is a Dynkin system.
 \item[$\boxed{A^c\in\mathcal{D}_B}$] Let $A\in\mathcal{D}_B$. Then
 \[ A^c\cap B = (\Omega\setminus A)\cap B = (\Omega\cap B)\setminus(A\cap B) \in \mathfrak{D}\{\mathcal{F}\}, \]
 so $A^c\in\mathcal{D}_B$.
-\item[$\boxed{\bigcup_\text{disjoint}A_i \in \mathcal{D}_B}$] Let $(A_i)_{i=1}^\infty$ be a disjoint family of sets in $\mathcal{D}_B$. Then, using \ref{lemma:setDistributivity},
+\item[$\boxed{\biguplus_{i\in \N}A_i \in \mathcal{D}_B}$] Let $(A_i)_{i=1}^\infty$ be a disjoint family of sets in $\mathcal{D}_B$. Then, using \ref{lemma:setDistributivity},
 \[ \left(\bigcup_{i=1}^\infty A_i\right)\cap B = \bigcup_{i=1}^\infty (A_i\cap B) \in \mathfrak{D}\{\mathcal{F}\}, \]
 so $\bigcup_{i=1}^\infty A_i\in\mathcal{D}_B$.
 \end{itemize}
@@ -2505,8 +2551,13 @@ All types of orders are transitive.
 \item A \udef{total preorder} is also reflexive and connex.
 \item A \udef{partial order} $\preceq$ is also reflexive and anti-symmetric.
 \item A \udef{strict partial order} $\prec$ is also irreflexive and anti-symmetric.
-\item A \udef{total order} $\leq$ is also reflexive, anti-symmetric and connex.
+\item A \udef{total order} $\leq$ is also reflexive, anti-symmetric and connex. Connex means all elements are comparable.
 \item A \udef{strict total order} $<$ is also trichotomous.
+\end{itemize}
+An \udef{ordered set} is a pair $\seq{P,\Yleft}$ such that $P$ is a set and $\Yleft$ is an order on $P$. We call this ordered set
+\begin{itemize}
+\item a \udef{proset} if $\Yleft$ is a preorder;
+\item a \udef{poset} if $\Yleft$ is a partial order;
 \end{itemize}
 \end{definition}
 Notice that
@@ -2514,31 +2565,17 @@ Notice that
 \text{irreflexive} \\ \text{anti-symmetric} \\ \text{\textit{semi}-connex}
 \end{cases}. \]
 
-\subsection{The dual of an ordered set}
-\begin{definition}
-For any ordered set $(P, \precsim)$ the \udef{dual} of $P$ is the ordered set $(P^o, \precsim^o)$, where $P^o=P$ and $\precsim^o \defeq \precsim^\transp$.
-\end{definition}
-This means $\forall a,b\in P: a\precsim b \iff b\precsim^o a$.
+If we say $\seq{P,\Yleft}$ is an ordered set without any other qualifiers, we only assume $\Yleft$ is transitive.
 
-\begin{lemma}
-The dual of an ordered set is an ordered set.
-\end{lemma}
-\begin{corollary}
-All statements about all ordered sets also hold for all duals of ordered sets.
-\end{corollary}
-
-\subsection{Preorder}
-\begin{definition}
-If $\precsim$ is a preorder on a set $P$, the structured set $(P,\precsim)$ is called a \udef{preordered set} or \udef{proset}.
-\end{definition}
-Note that a symmetric preorder is an equivalence relation.
-
-\begin{lemma}
-Let $(P, \precsim)$ be a proset. The relation defined by
-\[ x\precnsim y \defequiv (x\precsim y)\land (\neg y\precsim x) \]
-is a strict preorder.
-\end{lemma}
-This is the order we mean when talking about a strict preorder associated to a preorder. In general $\precsim$ cannot be reconstructed from $\precnsim$.
+\begin{example}
+\begin{itemize}
+\item Every equivalence relation is a preorder. Conversely, symmetric preorders are equivalence relations.
+\item Let $A$ be a set and $\id_A$ the identity relation on $A$. Then $\seq{A,\id_A}$ is a poset. Such posets are called \udef{discrete posets}.
+\item Let $B$ be a set and $\bot\in B$. Then the order $\preceq$ defined by
+\[ x \preceq y \defequiv (x=\bot) \lor (x = y) \]
+is a partial order. Such posets are called \udef{flat posets}.
+\end{itemize}
+\end{example}
 
 \begin{lemma}
 Let $(P, \precsim)$ be a proset. The relation defined by
@@ -2554,27 +2591,91 @@ For any binary homogeneous relation $R$,
 \end{enumerate}
 \end{lemma}
 
-\subsubsection{Down- and up-sets}
+\begin{proposition} \label{prop:posetPowerset}
+The subset relation $\subseteq$ is a partial ordering. Every partially ordered set $(P,\preceq)$ is isomorphic to a subset of a power set, ordered by the subset relation.
+\end{proposition}
+\begin{proof}
+Define
+\[ \phi: P \to \powerset(P): x \mapsto \{ y\in P\;|\; y\preceq x \}. \]
+We claim $\phi$ is injective and respects order. Then we can take $\phi':P\to \phi[P]$ to be the isomorphism.
+
+For injectivity, suppose $a,b\in P$ such that $\phi(a)=\phi(b)$. Since $a\preceq a$ by reflexivity, $a\in \phi(a) = \phi(b)$. Thus $a\preceq b$. Similarly $b \preceq a$. By anti-symmetry, $a=b$.
+
+Now we prove $a \preceq b \iff \phi(a)\subseteq \phi(b)$. First suppose $a\preceq b$ and take an arbitrary $x\in\phi(a)$. Then $x \preceq a$. By transitivity with $a\preceq b$, we have $x\preceq b$ and thus $x\in\phi(b)$. Conversely assume $\phi(a)\subseteq \phi(b)$. Then $a\in\phi(b)$ because $a\in\phi(a)$, by reflexivity. So $a\preceq b$.
+\end{proof}
+
+\begin{proposition}
+We can associate a strict order to a non-strict order.
+\begin{enumerate}
+\item Let $(P, \precsim)$ be a proset. The relation defined by
+\[ x\precnsim y \defequiv (x\precsim y)\land (\neg y\precsim x) \]
+is a strict preorder.
+\item Let $(P, \preceq)$ be a poset. The relation defined by
+\[ x\prec y \defequiv (x\preceq y)\land \neg(y\preceq x) \quad \Leftrightarrow \quad (x\preceq y)\land (y\neq x) \]
+is a strict partial order.
+\item Let $(P, \leq)$ be a totally ordered set. The relation defined by
+\[ x < y \defequiv (x\leq y)\land \neg(y\leq x) \quad \Leftrightarrow \quad (x\leq y)\land (y\neq x) \quad \Leftrightarrow \quad \neg(y\leq x)  \]
+is a strict total order.
+\end{enumerate}
+Multiple different preorders are associated to the same strict preorder. For partial and total orders the association is one-to-one.
+\end{proposition}
+Notice that for a proset $(P, \precsim)$ we cannot simply define the strict order as $ x\precnsim y \defequiv (x\precsim y)\land (x\neq y)$ as this is not transitive in general.
+
+\subsection{The dual of an ordered set}
 \begin{definition}
-Let $P$ be a proset and $Q\subseteq P$. We call
+For any ordered set $(P, \Yleft)$ the \udef{dual} of $P$ is the ordered set $(P^o, \Yleft^o)$, where $P^o=P$ and $\Yleft^o \defeq \Yleft^\transp = \Yright$.
+\end{definition}
+This means $\forall a,b\in P: a\Yleft b \iff b\Yleft^o a$.
+
+\begin{lemma}
+The dual of an ordered set of a particular type is an ordered set of the same type.
+\end{lemma}
+\begin{corollary}
+All statements about all ordered sets also hold for all duals of ordered sets.
+\end{corollary}
+
+\subsection{Subsets of ordered sets}
+\subsubsection{Up- and down-sets}
+\begin{definition}
+Let $\seq{P, \Yleft}$ be an ordered set and $Q\subseteq P$. We call
 \begin{itemize}
-\item $Q$ a \udef{down-set} or \udef{order ideal} if $\forall x\in Q: \forall y\in P: y\precsim x \implies y\in Q$;
-\item $Q$ an \udef{up-set} or \udef{order filter} if $\forall x\in Q: \forall y\in P: y\succsim x \implies y\in Q$;
+\item $Q$ an \udef{up-set} or \udef{order filter} if $\forall x\in Q: \forall y\in P: x\Yleft y \implies y\in Q$;
+\item $Q$ a \udef{down-set} or \udef{order ideal} if $\forall x\in Q: \forall y\in P: y\Yleft x \implies y\in Q$.
 \end{itemize}
-The set of down-sets in $P$ is denoted $\mathcal{O}(P)$. We define
-\[ \downset Q \defeq \setbuilder{y\in P}{\exists x\in Q: y\precsim x} \qquad \text{and} \qquad \upset Q \defeq \setbuilder{y\in P}{\exists x\in Q: y\succsim x} \]
+We define
+\[ \upset Q \defeq \setbuilder{y\in P}{\exists x\in Q: x\Yleft y} \qquad \text{and} \qquad \downset Q \defeq \setbuilder{y\in P}{\exists x\in Q: y\Yleft x} \]
 and, for $x\in P$,
 \begin{itemize}
-\item $\downset x \defeq \downset\{x\}$ is the \udef{principle down-set} generated by $x$;
-\item $\upset x \defeq \upset\{x\}$ is the \udef{principle up-set} generated by $x$.
+\item $\upset x \defeq \upset\{x\}$ is the \udef{principle up-set} generated by $x$;
+\item $\downset x \defeq \downset\{x\}$ is the \udef{principle down-set} generated by $x$.
 \end{itemize}
 \end{definition}
 
-\begin{lemma} \label{lemma:QsubseteDownQ}
-Let $P$ be a proset and $Q\subseteq P$, then
+\begin{lemma}
+Let $P$ be a proset. Then $\downset\emptyset = \emptyset = \upset\emptyset$.
+\end{lemma}
+
+\begin{lemma}
+Let $\seq{P,\Yleft}$ be an ordered set and $x\in P$. Then
 \begin{enumerate}
-\item $Q \subseteq \downset Q$;
-\item $Q \subseteq \upset Q$.
+\item $\upset x = \setbuilder{y\in P}{x\Yleft y}$;
+\item $\downset x = \setbuilder{y\in P}{y\Yleft x}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $P$ be an ordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $\upset Q = \bigcup_{x\in Q}\upset x$;
+\item $\downset Q = \bigcup_{x\in Q}\downset x$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma} \label{lemma:QsubseteqDownQ}
+Let $\seq{P,\precsim}$ be a preordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $Q \subseteq \upset Q$;
+\item $Q \subseteq \downset Q$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -2582,58 +2683,56 @@ Reflexivity.
 \end{proof}
 
 \begin{lemma}
-Let $P$ be a proset and $Q\subseteq P$. Then
+Let $\seq{P,\Yleft}$ be an ordered set and $Q,R\subseteq P$. Then
 \begin{enumerate}
-\item $Q$ a down-set iff 
-\[ \forall y\in P: \Big(\exists x\in Q:  y\precsim x\Big) \implies y\in Q; \]
+\item $Q \subseteq R$ implies $\downset Q \subseteq \downset R$ and $\upset Q \subseteq \upset R$;
+\item if $\Yleft$ is a preorder, then
+\[ \downset Q \subseteq \downset R \iff Q \subseteq R \iff \upset Q \subseteq \upset R. \]
+\end{enumerate}
+Let $x, y \in P$. Then
+\begin{enumerate} \setcounter{enumi}{2}
+\item $x\Yleft y \iff x\in \downset y$;
+\item $x\Yleft y \implies \downset x \subseteq \downset y$;
+\item if $\Yleft$ is a preorder, then $x\Yleft y \iff \downset x \subseteq \downset y$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $\seq{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
+\begin{enumerate}
 \item $Q$ an up-set iff 
-\[ \forall y\in P: \Big(\exists x\in Q:  y\succsim x\Big) \implies y\in Q. \]
+\[ \forall y\in P: \Big(\exists x\in Q:  x\Yleft y\Big) \implies y\in Q; \]
+\item $Q$ a down-set iff 
+\[ \forall y\in P: \Big(\exists x\in Q:  y\Yleft x\Big) \implies y\in Q. \]
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 The following propositions are equivalent $\forall y\in P$:
 \begin{align*}
-&\forall x\in Q: y\precsim x \implies y\in Q \\
-&\forall x\in Q: \neg(y\precsim x) \lor (y\in Q) \\
-&\Big(\forall x\in Q: \neg(y\precsim x)\Big) \lor (y\in Q) \\
-&\neg \Big(\exists x\in Q: y\precsim x \Big) \lor (y\in Q) \\
-&\Big(\exists x\in Q:  y\precsim x\Big) \implies y\in Q.
+&\forall x\in Q: x\Yleft y \implies y\in Q \\
+&\forall x\in Q: \neg(x\Yleft y) \lor (y\in Q) \\
+&\Big(\forall x\in Q: \neg(x\Yleft y)\Big) \lor (y\in Q) \\
+&\neg \Big(\exists x\in Q: x\Yleft y \Big) \lor (y\in Q) \\
+&\Big(\exists x\in Q:  x\Yleft y\Big) \implies y\in Q.
 \end{align*}
 TODO justify (in particular line 2 to 3).
 \end{proof}
 \begin{corollary}
-Let $P$ be a proset and $Q\subseteq P$, then
+Let $\seq{P,\precsim}$ be a preordered set and $Q\subseteq P$, then
 \begin{enumerate}
-\item $Q$ is a down-set \textup{if and only if} $Q = \downset Q$ \textup{if and only if} $Q \supseteq \downset Q$;
-\item $Q$ is an up-set \textup{if and only if} $Q = \upset Q$ \textup{if and only if} $Q \supseteq \upset Q$.
+\item $Q$ is an up-set \textup{if and only if} $Q = \upset Q$ \textup{if and only if} $Q \supseteq \upset Q$;
+\item $Q$ is a down-set \textup{if and only if} $Q = \downset Q$ \textup{if and only if} $Q \supseteq \downset Q$.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-The equivalence of $Q = \downset Q$ and $Q \supseteq \downset Q$ is given by \ref{lemma:QsubseteDownQ}.
+The equivalence of $Q = \upset Q$ and $Q \supseteq \upset Q$ is given by \ref{lemma:QsubseteqDownQ}.
 
-We just need to show that $Q$ is a down-set iff $Q \supseteq \downset Q$. By the lemma both these statements are equivalent to
-\[ \forall y\in P: y\in \downset Q \implies y\in Q. \]
+We just need to show that $Q$ is an up-set iff $Q \supseteq \upset Q$. By the lemma both these statements are equivalent to
+\[ \forall y\in P: y\in \upset Q \implies y\in Q. \]
 \end{proof}
 
 \begin{lemma}
-Let $P$ be a proset and $Q\subseteq P$. Then
-\begin{enumerate}
-\item $\downset Q = \bigcup_{x\in Q}\downset x$;
-\item $\upset Q = \bigcup_{x\in Q}\upset x$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $P$ be a proset and $Q,R\subseteq P$. Then
-\[ \downset Q \subseteq \downset R \iff Q \subseteq R \iff \upset Q \subseteq \upset R. \]
-\end{lemma}
-
-\begin{lemma}
-Let $P$ be a proset. Then $\downset\emptyset = \emptyset = \upset\emptyset$.
-\end{lemma}
-
-\begin{lemma}
-Let $P$ be a proset and $\{Q_i\}\subset \mathcal{O}(P)$ be a set of down-sets in $P$. Then
+Let $P$ be an ordered set and $\{Q_i\}\subset \mathcal{O}(P)$ be a set of down-sets in $P$. Then
 \begin{enumerate}
 \item $\bigcup Q_i$ is a down-set;
 \item $\bigcap Q_i$ is a down-set.
@@ -2641,53 +2740,61 @@ Let $P$ be a proset and $\{Q_i\}\subset \mathcal{O}(P)$ be a set of down-sets in
 The same is true for up-sets.
 \end{lemma}
 
-If $P$ is an antichain, then $\mathcal{O}(P) = \powerset(P)$.
 
-\begin{lemma}
-Let $P$ be an ordered set and $x, y \in P$. Then
-\[ x\precsim y \quad\iff\quad \downset x \subseteq \downset y \quad\iff\quad x\in \downset y. \]
-\end{lemma}
-
-\begin{lemma}
-Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
-\begin{enumerate}
-\item $\mathcal{O}(P)^o \cong \mathcal{O}(P^o)$;
-\item $\mathcal{O}(P\oplus \mathbb{1}) \cong \mathcal{O}(P)\oplus \mathbb{1}$;
-\item $\mathcal{O}(\mathbb{1}\oplus \mathbb{1}) \cong \mathbb{1}\oplus \mathcal{O}(P)$;
-\item $\mathcal{O}(P_1\sqcup P_2)\cong \mathcal{O}(P_1)\times \mathcal{O}(P_2)$.
-\end{enumerate}
-\end{lemma}
-
-\subsubsection{Distinguished elements of ordered (sub)sets}
+\subsubsection{Upper and lower bounds}
 TODO: picture!
 \begin{definition}
-Let $(P,\precsim)$ be a proset and $S$ a subset of $P$.
+Let $(P,\Yleft)$ be an ordered set and $S$ a subset of $P$.
 \begin{itemize}
-\item A \udef{greatest element}, \udef{largest element} or \udef{maximum} of $S$ is an element $x\in S$ that is greater than or equal to every other element in $S$: $\forall y\in S: y\precsim x$.
-\item A \udef{maximal element} of $S$ is an element $x\in S$ such that no element $y$ is greater than $x$: $\forall y\in S: x\precsim y \implies y \precsim x$.
-\item An \udef{upper bound} of $S$ is an element $x\in P$ that is greater than or equal to every element in $S$: $\forall y\in S: y\precsim x$.
+\item An \udef{upper bound} of $S$ is an element $x\in P$ that is greater than or equal to every element in $S$:
+\[\forall y\in S: y\Yleft x. \]
+\item A \udef{greatest element}, \udef{largest element} or \udef{maximum} of $S$ is an upper bound of $S$ that is an element of $S$.
+\item A \udef{maximal element} of $S$ is an element $x\in S$ such that no element $y$ is strictly greater than $x$:
+\[ \forall y\in S: x\Yleft y \implies y \Yleft x. \]
 \end{itemize}
 And dually we have the following:
 \begin{itemize}
-\item A \udef{least element}, \udef{smallest element} or \udef{minimum} of $S$ is an element $x\in S$ that is smaller than or equal to every other element in $S$: $\forall y\in S: x\precsim y$.
-\item A \udef{minimal element} of $S$ is an element $x\in S$ such that no element $y$ is smaller than $x$: $\forall y\in S: y\precsim x \implies x \precsim y$.
-\item A \udef{lower bound} of $S$ is an element $x\in S$ that is smaller than or equal to every element in $S$: $\forall y\in S: x\precsim y$.
+\item A \udef{lower bound} of $S$ is an element $x\in P$ that is smaller than or equal to every element in $S$:
+\[ \forall y\in S: x\Yleft y. \]
+\item A \udef{least element}, \udef{smallest element} or \udef{minimum} of $S$ is a lower bound of $S$ that is an element of $S$.
+\item A \udef{minimal element} of $S$ is an element $x\in S$ such that no element $y$ is strictly smaller than $x$:
+\[ \forall y\in S: y\Yleft x \implies x \Yleft y. \]
 \end{itemize}
-We denote the set of all upper bounds of $S$ as $S^u$ and all lower bounds as $S^l$.
-
-We denote the set of greatest elements of $S$ as $\max(S)$ and the set of minimal elements as $\min(S)$.
-
-We also have:
+We denote
 \begin{itemize}
-\item A \udef{supremum} of $S$, $\sup S$, or \udef{join} is a least upper bound of $S$, i.e. a least element in $S^u$.
-\item An \udef{infimum} of $S$, $\inf S$, or \udef{meet} is a greatest lower bound of $S$, i.e. a greatest element in $S^l$.
+\item the set of all upper bounds of $S$ as $S^u$;
+\item the set of all lower bounds of $S$ as $S^l$;
+\item the set of greatest elements of $S$ as $\max(S)$;
+\item the set of least elements of $S$ as $\min(S)$.
 \end{itemize}
-We denote the set of suprema of $S$ as $\sup(S)$ and the set of infima as $\inf(S)$.
+We say $S$ is
+\begin{itemize}
+\item \udef{bounded above} if $S^u \neq \emptyset$;
+\item \udef{bounded below} if $S^l \neq \emptyset$.
+\end{itemize}
+We also define:
+\begin{itemize}
+\item $\sup(S) = \min(S^u)$; an element of $\sup(S)$ is a \udef{least upper bound}, \udef{supremum}, or \udef{join};
+\item $\inf(S) = \max(S^l)$; an element of $\inf(S)$ is a \udef{greatest lower bound}, \udef{infimum}, or \udef{meet}.
+\end{itemize}
 \end{definition}
-None of these these things have guaranteed existence or uniqueness in general. If a set $S$ has an upper bound, it is called \udef{bounded above}; if it has a lower bound, then it is called \udef{bounded below}.
+
+\begin{lemma}
+Let $(P,\Yleft)$ be an ordered set and $S$ a subset of $P$. Then
+\begin{enumerate}
+\item $\max(S) = S\cap S^u$;
+\item $\min(S) = S\cap S^l$;
+\item $\sup(S) = S^u\cap (S^u)^l$;
+\item $\inf(S) = S^l\cap (S^l)^u$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$. Then $S^u$ is an up-set and $S^l$ a down-set.
+\end{lemma}
 
 \begin{lemma} \label{lemma:boundsFromUpDownSets}
-Let $(P,\precsim)$ be a proset and $S$ a non-empty subset of $P$. Then
+Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$. Then
 \begin{enumerate}
 \item $S^u = \bigcap_{x\in S}\upset x$;
 \item $S^l = \bigcap_{x\in S}\downset x$.
@@ -2705,49 +2812,19 @@ If $S$ is empty, then we have
 This also means that every set of upper bounds is an up-set and every set of lower bounds is a down-set.
 
 \begin{lemma}
-Let $(P,\precsim)$ be a proset and $S$ a subset of $P$. Then
-\begin{enumerate}
-\item $\max(S) = S\cap S^u$;
-\item $\min(S) = S\cap S^l$;
-\item $\sup(S) = S^u\cap (S^u)^l$;
-\item $\inf(S) = S^l\cap (S^l)^u$.
-\end{enumerate}
+If $\seq{P, \precsim}$ is a poset and $S\subseteq P$, then $\max(S), \min(S), \sup(S), \inf(S)$ are either singletons or empty.
 \end{lemma}
+\begin{proof}
+We prove for $\max(S)$. The other cases follow dually or a fortiori. Let $x,y\in \max(S)$. Then $x\precsim y$ and $y\precsim x$, so $x=y$ by anti-symmetry.
+\end{proof}
+For posets we sometimes use $\max/\min/\sup/\inf$ to denote the contents of the singleton rather than the singleton itself. If the set is empty, we say the $\max/\min/\sup/\inf$ does not exist.
+
 
 \begin{lemma}
-Let $(P,\precsim)$ be a proset and $S$ a subset of $P$. Then
-\begin{enumerate}
-\item $S^u = (\sup(S))^u$;
-\item $S^l = (\inf(S))^l$.
-\end{enumerate}
+Let $(P,\Yleft)$ be an ordered set and $A,B$ subsets of $P$. Then
+\[ A\subseteq B^l \iff \Big[\forall a\in A, b\in B: a\precsim b \Big] \iff B\subseteq A^u. \]
 \end{lemma}
-
-\begin{lemma}
-Every greatest element is
-\begin{enumerate}
-\item a maximal element;
-\item a supremum (and thus an upper bound).
-\end{enumerate}
-Every least element is
-\begin{enumerate}
-\item a minimal element;
-\item an infimum (and thus a lower bound).
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-In posets the greatest and least elements are unique, if they exist. Consequently suprema and infima are unique; if they exist.
-\end{lemma}
-
-\begin{lemma}
-Let $(P,\precsim)$ be a proset and $A,B$ subsets of $P$. Then
-\begin{enumerate}
-\item $A^u$ is an up-set and $A^l$ a down-set;
-\item $(A^u)^u = \max(P)$ and $(A^l)^l = \min(P)$;
-\item $A\subseteq B^l \iff \Big[\forall a\in A, b\in B: a\precsim b \Big] \iff B\subseteq A^u$.
-\end{enumerate}
-\end{lemma}
-The last point identifies $(^u,^l)$ as a Galois connection.
+This lemma identifies $(^u,^l)$ as a Galois connection.
 \begin{corollary}
 Let $(P,\precsim)$ be a proset and $A,B$ subsets of $P$. Then
 \begin{enumerate}
@@ -2764,14 +2841,176 @@ These are all corollaries of point (3) of the lemma.
 
 (3) $(A^l)^u \subseteq (A^l)^u \implies A^l \subseteq ((A^l)^u)^l$ and by 1. and 2. $A\subseteq (A^l)^u \implies ((A^l)^u)^l \subseteq A^l$.
 \end{proof}
+\begin{corollary} \label{corollary:maxSupMinInf}
+If $\seq{P, \precsim}$ is a poset and $S\subseteq P$, then
+\begin{enumerate}
+\item $\max(S)\subset \sup(S)$;
+\item $\min(S)\subset \inf(S)$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+For (1) we calculate $\max(S) = S \cap S^u \subseteq (S^u)^l \cap S^u = \sup(S)$; (2) is dual.
+\end{proof}
 
-\subsubsection{Completeness}
+\subsubsection{Chains}
 \begin{definition}
-A proset $(P,\precsim)$ is 
+Let $(P,\Yleft)$ be an ordered set. A \udef{chain} in $P$ is a linearly ordered subset $S$ of $P$, i.e.
+\[ \forall x,y\in S: x\Yleft y \lor y\Yleft x. \]
+
+An \udef{antichain} is a subset $A$ such that no two elements of $A$ are comparable.
+\end{definition}
+
+\begin{example}
+For every $n\in \N$ there exists a chain $\mathbb{n}$ of $n$ elements and an antichain $\overline{\mathbb{n}}$ of $n$ elements:
+\[ \mathbb{1}: \begin{tikzcd}
+\circ
+\end{tikzcd} \qquad \mathbb{2}: \begin{tikzcd}
+\circ \ar[d, dash] \\ \circ
+\end{tikzcd} \qquad \mathbb{3}: \begin{tikzcd}
+\circ \ar[d, dash] \\ \circ \ar[d, dash] \\ \circ
+\end{tikzcd} \qquad \hdots \]
+\[ \overline{\mathbb{1}}: \begin{tikzcd}
+\circ
+\end{tikzcd} \qquad \overline{\mathbb{2}}: \begin{tikzcd}
+\circ & \circ
+\end{tikzcd} \qquad \overline{\mathbb{3}}: \begin{tikzcd}
+\circ & \circ & \circ
+\end{tikzcd} \qquad \hdots \]
+\end{example}
+
+\begin{lemma} \label{lemma:boundsFiniteChain}
+Let $P$ be an ordered set. If $C$ is a non-empty, finite chain in $P$, then
+\begin{enumerate}
+\item $\sup(C) \supseteq \max(C) \neq \emptyset$;
+\item $\inf(C) \supseteq \min(C) \neq \emptyset$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The $\supseteq$-relation is due to \ref{corollary:maxSupMinInf}.
+
+The proof that $\max(C)$ is non-empty is by induction on the cardinality of $C$. For the base case, assume $C$ has one element $x$. Then $x \leq x$, so $x\in \max(C)$.
+
+Now assume all chains with one fewer element than $C$ have a maximal element. Pick some $x_0\in C$, then $y = \max(C\setminus \{x_0\})$ exists. We can compare $x_0$ and $y$ because $C$ is a chain. If $x_0 \leq y$, then $\max(C) = y$. If $y \leq x_0$, then $\max(C) = x_0$. This exhausts the possibilities.
+\end{proof}
+
+\begin{definition}
+An ordered set $P$
+\begin{itemize}
+\item is \udef{chain-complete} or \udef{inductive} if every chain in $P$ has a least upper bound;
+\item satisfies the \udef{ascending chain condition} (ACC) if each chain in $P$ that has a least element is finite;
+\item satisfies the \udef{descending chain condition} (DCC) if each chain in $P$ that has a greatest element is finite.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Every inductive poset has a least element.
+\end{lemma}
+\begin{proof}
+The empty set $\emptyset$ is a chain in any poset $P$. Then $\sup(\emptyset) = \min(\emptyset^u) = \min(P)$.
+\end{proof}
+
+\begin{lemma}
+Let $P$ be a poset. If $P$ satisfies the ascending chain condition and has a least element, then $P$ is inductive.
+\end{lemma}
+\begin{proof}
+Assume $P$ satisfies the ascending chain condition and take a chain $C\subset P$. If $C=\emptyset$, then $\sup(C) = \min(\emptyset^u) = \min(P)$ is not empty. Now assume $C$ non-empty and take some $x_0\in C$. Define $C' = \setbuilder{c\in C}{x_0 \Yleft c}$, which is finite by assumption. Clearly $\sup(C) = \sup(C')$, which is not empty by \ref{lemma:boundsFiniteChain}.
+\end{proof}
+
+\begin{example}
+The set $\N$ is not inductive, because $\N$ itself does not have a least upper bound. It therefore does also not satisfy the ascending chain condition.
+
+It does satisfy the descending chain condition.
+\end{example}
+
+
+\begin{proposition} \label{prop:inductive}
+Let $A,B$ be sets and $P$ an ordered set. Then the following posets are inductive:
+\begin{enumerate}
+\item $\powerset(A)$, ordered by inclusion;
+\item $(A \not\to B)$, ordered by inclusion;
+\item the set of chains in $P$, ordered by inclusion.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+In all cases the least upper bound of a chain $S$ is given by $\bigcup S$.
+\end{proof}
+
+\subsubsection{Intervals}
+\begin{definition}
+Let $(P,\Yleft)$ be an ordered set and $m,n\in P$. We define
+\begin{itemize}
+\item the \udef{closed interval} $[m,n] \defeq \setbuilder{k\in P}{m\Yleft k \land k\Yleft n}$;
+\item the \udef{open interval} $]m,n[ \defeq [m,n]\setminus\{m,n\}$;
+\item the \udef{half-open intervals}
+\begin{align*}
+[m,n[ &\defeq [m,n]\setminus\{n\}; \\
+]m,n] &\defeq [m,n]\setminus\{m\}.
+\end{align*}
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{lemma:emptyInterval}
+Let $(P,\Yleft)$ be an ordered set and $m,n\in P$.
+\begin{enumerate}
+\item If $m \cancel\Yleft n$, then $[m,n] = \emptyset$.
+\item If $\Yleft$ is a preorder, then
+\begin{enumerate}
+\item $m \cancel\Yleft n$ \textup{if and only if} $[m,n] = \emptyset$;
+\item either $[m,n] = \emptyset$ or $\{m,n\} \subseteq [m,n]$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We prove by contraposition. Assume $k\in [m,n]$, then $m\Yleft k$ and $k\Yleft n$, so $m\Yleft n$ by transitivity.
+
+(2) (a) The direction $\Rightarrow$ is given by \ref{lemma:emptyInterval}. Now assume $m \Yleft n$. Also $m\Yleft m$ and $n \Yleft n$ by reflexivity. So $m,n\in [m,n]$ by definition. This also gives point (b).
+\end{proof}
+
+\subsection{Covering relations}
+\begin{definition}
+Let $(P,\Yleft)$ be a an order relation and $x,y\in P$. We say $y$ \udef{covers} $x$ if
+\begin{itemize}
+\item $x\Yleft y$;
+\item $x\neq y$
+\item $\nexists z\in P\setminus\{x,y\}: x\Yleft z \Yleft y$).
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $P$ be a preordered set. Then $y$ covers $x$ \textup{if and only if} $x\neq y$ and $[x,y] = \{x,y\}$.
+\end{lemma}
+
+\subsubsection{Hasse diagrams}
+A \udef{Hasse diagram} is a graphical depiction of an order relation. Each element of the ordered set is a point and points are connected such that:
+\begin{enumerate}
+\item if $x \Yleft y$, then the point for $x$ is drawn lower than the point for $y$;
+\item two elements $x,y$ are connected if $y$ covers $x$ or $x$ covers $y$.
+\end{enumerate}
+
+\begin{lemma}
+The Hasse diagrams of partial orders are acyclic due to anti-symmetry.
+\end{lemma}
+
+\begin{example}
+The power set $\powerset\{a,b,c\}$ can be ordered by the inclusion relation $\subseteq$. The following is a Hasse diagram for this ordered set:
+\begin{center}
+\begin{tikzcd}
+ & \{a,b,c\} & \\
+\{a,b\}\ar[ru, dash] & \{a,c\}\ar[u,dash] & \{b,c\}\ar[lu,dash] \\
+\{a\} \ar[u,dash] \ar[ru, dash] & \{b\} \ar[lu, dash] \ar[ru, dash] & \{c\} \ar[lu,dash] \ar[u, dash] \\
+ & \emptyset \ar[lu, dash] \ar[u, dash] \ar[ru, dash] &
+\end{tikzcd}
+\end{center}
+\end{example}
+
+
+\subsection{Completeness}
+\begin{definition}
+An ordered set $P$ is 
 \begin{itemize}
 \item \udef{order complete} (or simply \udef{complete}) if each subset has a supremum and an infimum;
 \item \udef{order $\sigma$-complete} if each countable subset has a supremum and an infimum;
-\item a \udef{lattice} if each finite non-empty subset has a supremum and an infimum;
+\item \udef{finitely order complete} if each finite subset has a supremum and an infimum;
 \item \udef{Dedekind complete} if
 \begin{itemize}
 \item each non-empty subset that is bounded above has a supremum; and
@@ -2782,18 +3021,22 @@ A proset $(P,\precsim)$ is
 \item each non-empty countable subset that is bounded above has a supremum; and
 \item each non-empty countable subset that is bounded below has an infimum.
 \end{itemize}
+\item \udef{finitely Dedekind complete} if
+\begin{itemize}
+\item each non-empty finite subset that is bounded above has a supremum; and
+\item each non-empty finite subset that is bounded below has an infimum.
+\end{itemize}
 \end{itemize}
 \end{definition}
 Some authors use ``order completeness'' to mean what we have called Dedekind completeness.
-
-Because all finite subsets are bounded, ``finite Dedekind completeness'' is the same as ``finite order completeness'', i.e. the property of being a lattice.
 
 \begin{example}
 The closed unit disk in $\R^2$ with coordinatewise ordering is Dedekind complete, but not order complete and is not a lattice.
 \end{example}
 
+
 \begin{proposition} \label{prop:existenceSupremaInfima}
-Let $(P,\precsim)$ be a proset. Then the following are equivalent:
+Let $(P,\precsim)$ be an ordered set. Then the following are equivalent:
 \begin{enumerate}
 \item $P$ is order complete;
 \item each subset of $P$ has a supremum;
@@ -2809,7 +3052,7 @@ The following are also equivalent:
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-We show that (2) implies (3).
+We show that (2) and (3) are equivalent.
 
 Suppose each subset has a supremum and let $S$ be a subset. Then in particular $S^l$ has a supremum. This supremum of $S^l$ is an infimum of $S$:
 \[ \sup(S^l) = (S^l)^u\cap((S^l)^u)^l = (S^l)^u\cap S^l = \inf(S).  \]
@@ -2818,12 +3061,15 @@ The converse is similar.
 
 For equivalence with (3) and (4), we just need to remark that $\sup(\emptyset) = \min(P)$ and $\inf(\emptyset) = \max(P)$.
 
-For Dedekind completeness, we just need to remark that if $S$ is non-empty and bounded below, then $S^l$ is non-empty and bounded above.
+For Dedekind completeness the argument is similar, we just need to remark that if $S$ is non-empty and bounded below, then $S^l$ is non-empty and bounded above.
 \end{proof}
 
 \begin{lemma}
-Let $P$ be a proset that contains a least and a greatest element. Then $P$ is order complete \textup{if and only if} $P$ is Dedekind complete.
+Let $P$ be an ordered set that contains a least and a greatest element. Then $P$ is order complete \textup{if and only if} $P$ is Dedekind complete.
 \end{lemma}
+\begin{proof}
+Every set is bounded (by the least and greatest elements).
+\end{proof}
 
 \begin{lemma}
 The ordered natural numbers $(\N,\leq)$ are complete.
@@ -2832,36 +3078,109 @@ The ordered natural numbers $(\N,\leq)$ are complete.
 Any set of natural numbers has a least element by \ref{proposition:wellOrderingN}. Any non-empty set $S$ of natural numbers that is bounded above, we can take $\max(S) = \min(\N\setminus S)-1$.
 \end{proof}
 
-\subsubsection{Functions on ordered sets}
+\subsubsection{Directed sets}
 \begin{definition}
-Let $(P, \precsim_P)$ and $(Q, \precsim_Q)$ be prosets and $f: P\to Q$ a function. We say
+An ordered set $(D,\Yleft)$ is a \udef{directed set} if any pair of elements $a,b\in D$ has an upper bound. We call the relation $\Yleft$ a \udef{direction}.
+\end{definition}
+\begin{proposition}
+Let $\{(D_i,\Yleft_i)\}_{i\in I}$ be a family of directed sets. Then $D= \prod_{i\in I}D_i$ is a directed set with direction defined by
+\[ (a_i)_{i\in I} \Yleft (b_i)_{i\in I} \iff \forall i\in I: a_i\Yleft_i b_i. \]
+The directed set $(D,\Yleft)$ is called a \udef{product direction}.
+\end{proposition}
+
+\subsection{Functions on ordered sets}
+\begin{definition}
+Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be prosets and $f: P\to Q$ a function. We say
 \begin{itemize}
 \item $f$ is \udef{order-preserving}, \udef{monotonically increasing} or just \udef{increasing} if
-\[ \forall x,y\in P: x\precsim_P y \implies f(x)\precsim_Q f(y); \]
+\[ \forall x,y\in P: x\Yleft_P y \implies f(x)\Yleft_Q f(y); \]
 \item $f$ is \udef{order-reflecting} if
-\[ \forall x,y\in P: f(x)\precsim_Q f(y) \implies x\precsim_P y; \]
+\[ \forall x,y\in P: f(x)\Yleft_Q f(y) \implies x\Yleft_P y; \]
 \item $f$ is an \udef{order embedding} if it is order-preserving and order-reflecting:
-\[ \forall x,y\in P: x\precsim_P y \iff f(x)\precsim_Q f(y); \]
+\[ \forall x,y\in P: x\Yleft_P y \iff f(x)\Yleft_Q f(y); \]
 \end{itemize}
 and, dually, we say
 \begin{itemize}
 \item $f$ is \udef{order-reversing}, \udef{antitone}, \udef{monotonically decreasing} or just \udef{decreasing} if
-\[ \forall x,y\in P: x\precsim_P y \implies f(x) \succsim_Q f(y); \]
+\[ \forall x,y\in P: x\Yleft_P y \implies f(x) \Yright_Q f(y); \]
 \item $f$ is \udef{reverse order-reflecting} if
-\[ \forall x,y\in P: f(x)\precsim_Q f(y) \implies x\succsim_P y; \]
+\[ \forall x,y\in P: f(x)\Yleft_Q f(y) \implies x\Yright_P y; \]
 \item $f$ is a \udef{reverse order embedding} if it is order-reversing and reverse order-reflecting:
-\[ \forall x,y\in P: x\precsim_P y \iff f(x)\succsim_Q f(y). \]
+\[ \forall x,y\in P: x\Yleft_P y \iff f(x)\Yright_Q f(y). \]
 \end{itemize}
 Finally
 \begin{itemize}
 \item $f$ is \udef{monotone} or \udef{monotonic} if it is either order-preserving or order-reversing.
 \end{itemize}
 
-The adjective ``strict'' can be added to any of these cases if $\precsim_P$ and $\precsim_Q$ are replaced by $\prec_P$ and $\prec_Q$.
-
-The adjective ``weak'' may be employed to emphasise the monotonicity is not strict.
+The adjectives ``strict'' and ``weak'' can be added to any of these cases to identify whether the (weak) order or the associated strict order is meant.
 \end{definition}
 An order isomorphism, or \udef{similarity}, is a bijective order embedding. Let $U,V$ be ordered sets. We write $U =_o V$ if $U$ and $V$ are order isomorphic and $U \neq_o V$ if not.
+
+\begin{lemma} \label{lemma:orderReflectionIsInjective} \label{lemma:strictOrderPreservationIsInjective}
+Let $P,Q$ be posets and $f: P\to Q$. The following are sufficient conditions for $f$ to be injective:
+\begin{enumerate}
+\item $f$ is order-reflecting;
+\item $f$ is strictly order-preserving and $P$ is totally ordered.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) If $f(x) = f(y)$, then $x\preceq y$ and $y\preceq x$, so $x=y$ by anti-symmetry.
+
+(2) Let $f$ be the strict order-preserving function and $x,y\in P$. Assume $f(x)=f(y)$. Assume, towards a contradiction, that $x\neq y$, then either (by totality) $x< y$ and $f(x) < f(y)$ or $y < x$ and $f(y)<f(x)$. Both cases contradict $f(x)=f(y)$.
+\end{proof}
+
+\begin{lemma}
+Let $f:P\to Q$ be a function between posets. Then
+\begin{enumerate}
+\item If $f$ preserves strict order, then it is order-preserving.
+\item If $f$ is order-reflecting, then it reflects strict order.
+\end{enumerate}
+If $f$ is injective, the opposite implications also hold.
+\end{lemma}
+\begin{corollary}
+Let $f: P\to Q$ be a function between posets.
+\begin{enumerate}
+\item If $f$ is an order embedding, then it is a strict order embedding.
+\item If $P$ is totally ordered, the converse implication holds as well.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Use \ref{lemma:orderReflectionIsInjective}.
+\end{proof}
+
+The converse does not hold in general if $P$ is a poset because a strict order embedding between posets is not necessarily injective. A counterexample is
+\[
+\begin{tikzcd}
+& \top & \\
+x \ar[ur, dash] & & y \ar[ul, dash] \\
+& \bot \ar[ul, dash] \ar[ur, dash] &
+\end{tikzcd} \qquad \begin{tikzcd} {} \arrow[rr, "f"] & {}& {}\end{tikzcd} \qquad \begin{tikzcd}
+f(\top) \\ f(x) = f(y) \ar[u,dash] \\ f(\bot) \ar[u,dash]
+\end{tikzcd}.
+\]
+
+\begin{lemma} \label{lemma:equivalenceOrderPreservingReflecting}
+Let $f:P\to Q$ be a function between totally ordered sets. Then
+\begin{enumerate}
+\item If $f$ preserves strict order, then it is order-preserving.
+\item If $f$ is order-reflecting, then it reflects strict order.
+\end{enumerate}
+If $f$ is injective, the opposite implications also hold.
+\end{lemma}
+\begin{proof}
+(1) Assume $f$ order-reflecting. Assume $x\leq y$. Either $f(x)\leq f(y)$ or $f(y)\leq f(x)$. If $f(y)\leq f(x)$, then
+\[ y\leq x \implies x=y \implies f(x)=f(y) \implies f(x)\leq f(y). \]
+So in both cases $f(x)\leq f(y)$.
+
+(2) Assume $f$ preserves strict order. Assume $f(x) < f(y)$. Either $x<y, y<x$ or $x=y$. If either $y<x$ or $x=y$ hold, preservation of strict order yields a contradiction. So $x<y$.
+
+(1') Assume $f$ order-preserving and injective. Assume $f(x)\leq f(y)$. Either $x\leq y$ or $y\leq x$. If $y\leq x$, then
+\[ f(y)\leq f(x) \implies f(x)=f(y) \implies x= y \implies x\leq y. \]
+So in both cases $x\leq y$.
+
+(2') Assume $f$ is injective reflects strict order. Assume $x < y$. Either $f(x)<f(y), f(y)<f(x)$ or $f(x)=f(y)$. If $f(y)<f(x)$, preservation of strict order yields a contradiction. If $f(x)=f(y)$, injectivity yields a contradiction. So $f(x)<f(y)$.
+\end{proof}
 
 \begin{lemma}
 Let $(P, \precsim_P)$ and $(Q, \precsim_Q)$ be prosets, $f: P\to Q$ a function and $S\subseteq P$ a subset.
@@ -2949,258 +3268,18 @@ A function $f: P\to P$ on a proset $(P,\precsim)$ into itself is
 \end{itemize}
 \end{definition}
 
-\subsubsection{Intervals}
-\begin{definition}
-Let $(P,\precsim)$ be a proset and $m,n\in P$. We define
-\begin{itemize}
-\item the \udef{closed interval} $[m,n] \defeq \{k\in P\;|\; m\precsim k \land k\precsim n\}$;
-\item the \udef{open interval} $]m,n[ \defeq \{k\in P\;|\; m \precnsim k \land k \precnsim n\}$;
-\item the \udef{half-open intervals}
-\begin{align*}
-[m,n[ &\defeq \{k\in P\;|\; m \precsim k \land k \precnsim n\}; \\
-]m,n] &\defeq \{k\in P\;|\; m \precnsim k \land k \precsim n\}.
-\end{align*}
-\end{itemize}
-\end{definition}
-
-We also define
-\begin{align*}
-[m, +\infty[ &\defeq \{k\in P\;|\; m \precsim k\} \\
-]m, +\infty[ &\defeq \{k\in P\;|\; m \precnsim k\} \\
-]-\infty, m] &\defeq \{k\in P\;|\; k \precsim m\} \\
-]-\infty, m[ &\defeq \{k\in P\;|\; k \precnsim m\}.
-\end{align*}
-
-
-\subsubsection{Covering relation}
-\begin{definition}
-Let $(P,\precsim)$ be a proset and $x,y\in P$. We say $y$ \udef{covers} $x$ if
-\begin{itemize}
-\item $x\precnsim y$;
-\item $[x,y] = \{x,y\}$ (or, $\nexists z: x\precnsim z \precnsim y$).
-\end{itemize}
-\end{definition}
-\subsubsection{Hasse diagrams}
-A \udef{Hasse diagram} is a graphical depiction of an order relation. Each element of the ordered set is a point and points are connected such that:
-\begin{enumerate}
-\item if $x \precnsim y$, then the point for $x$ is associated to a point lower than $y$
-\item two elements $x,y$ are connected if $y$ covers $x$ or $x$ covers $y$.
-\end{enumerate}
-
-The Hasse diagrams of partial orders are acyclic due to anti-symmetry.
-
-\begin{example}
-The power set $\powerset\{a,b,c\}$ can be ordered by the inclusion relation $\subseteq$. The following is a Hasse diagram for this ordered set:
-\begin{center}
-\begin{tikzcd}
- & \{a,b,c\} & \\
-\{a,b\}\ar[ru, dash] & \{a,c\}\ar[u,dash] & \{b,c\}\ar[lu,dash] \\
-\{a\} \ar[u,dash] \ar[ru, dash] & \{b\} \ar[lu, dash] \ar[ru, dash] & \{c\} \ar[lu,dash] \ar[u, dash] \\
- & \emptyset \ar[lu, dash] \ar[u, dash] \ar[ru, dash] &
-\end{tikzcd}
-\end{center}
-\end{example}
-
-\subsection{Partial order}
-\begin{definition}
-If $P$ is a set and $\preceq$ a partial ordering on a set $P$, the structured set $(P,\preceq)$ is called a \udef{partially ordered set} or \udef{poset}.
-\end{definition}
-
-\begin{example}
-\begin{itemize}
-\item Any set $A$ can be viewed as a \udef{discrete poset}, with the order $\forall x,y\in A$:
-\[ x\preceq y \iff x=y. \]
-\item A \udef{flat poset} has a least element $\bot$, the only element involved in any comparisons between different elements:
-\[ x \preceq y \iff x=\bot \lor x = y. \]
-\end{itemize}
-\end{example}
-
-\begin{lemma}
-Let $(P,\preceq)$ be a poset and $S\subseteq P$.
-\begin{enumerate}
-\item The greatest and least elements of $S$ are unique, if they exist. They are then denoted, respectively, $\max(S)$ and $\min(S)$.
-\item Consequently, the supremum and infimum of $S$ are unique, if they exists. They are then denoted, respectively, $\sup(S)$ and $\inf(S)$.
-\end{enumerate}
-\end{lemma}
-
-
-As before we can define an associated strict order:
-\begin{lemma}
-Let $(P, \preceq)$ be a poset. The relation defined by
-\[ x\prec y \defequiv (x\preceq y)\land \neg(y\preceq x) \quad \Leftrightarrow \quad (x\preceq y)\land (y\neq x) \]
-is a strict partial order.
-\end{lemma}
-
-Using anti-symmetry we have:
-\begin{lemma}
-Let $f:P\to Q$ be a function between posets.
-\begin{enumerate}
-\item If $f$ preserves strict order, it is order-preserving.
-\item If $f$ is injective and order-preserving, it also preserves strict order.
-\end{enumerate}
-Similar for order reflection:
-\begin{enumerate}
-\setcounter{enumi}{2}
-\item If $f$ is injective and reflects strict order, it is also order-reflecting.
-\item If $f$ is order-reflecting, it also reflects strict order.
-\end{enumerate}
-\end{lemma}
-\begin{lemma} \label{lemma:orderReflectionIsInjective}
-An order-reflecting function (and a fortiori any order embedding) between posets is always injective.
-\end{lemma}
-\begin{proof}
-If $f(x) = f(y)$, then $x\preceq y$ and $y\preceq x$, so $x=y$ by anti-symmetry.
-\end{proof}
-The last two lemmas show that for posets every order embedding is a strict order embedding. The converse is not true because as strict order embedding between posets is not necessarily injective. A counterexample is
-\[
-\begin{tikzcd}
-& \top & \\
-x \ar[ur, dash] & & y \ar[ul, dash] \\
-& \bot \ar[ul, dash] \ar[ur, dash] &
-\end{tikzcd} \qquad \begin{tikzcd} {} \arrow[rr, "f"] & {}& {}\end{tikzcd} \qquad \begin{tikzcd}
-f(\top) \\ f(x) = f(y) \ar[u,dash] \\ f(\bot) \ar[u,dash]
-\end{tikzcd}.
-\]
-
-\begin{proposition} \label{prop:posetPowerset}
-The subset relation $\subseteq$ is a partial ordering. Every partially ordered set $(P,\preceq)$ is isomorphic to a subset of a power set, ordered by the subset relation.
-\end{proposition}
-\begin{proof}
-Define
-\[ \phi: P \to \powerset(P): x \mapsto \{ y\in P\;|\; y\preceq x \}. \]
-We claim $\phi$ is injective and respects order. Then we can take $\phi':P\to \phi[P]$ to be the isomorphism.
-
-For injectivity, suppose $a,b\in P$ such that $\phi(a)=\phi(b)$. Since $a\preceq a$ by reflexivity, $a\in \phi(a) = \phi(b)$. Thus $a\preceq b$. Similarly $b \preceq a$. By anti-symmetry, $a=b$.
-
-Now we prove $a \preceq b \iff \phi(a)\subseteq \phi(b)$. First suppose $a\preceq b$ and take an arbitrary $x\in\phi(a)$. Then $x \preceq a$. By transitivity with $a\preceq b$, we have $x\preceq b$ and thus $x\in\phi(b)$. Conversely assume $\phi(a)\subseteq \phi(b)$. Then $a\in\phi(b)$ because $a\in\phi(a)$, by reflexivity. So $a\preceq b$.
-\end{proof}
 
 
 
-\subsection{Total order}
-A total, or linear, order is a partial order that is also connex, i.e. all elements are comparable.
-
-As before we can define an associated strict order:
-\begin{lemma}
-Let $(P, \leq)$ be a totally ordered set. The relation defined by
-\[ x < y \defequiv (x\leq y)\land \neg(y\leq x) \quad \Leftrightarrow \quad (x\leq y)\land (y\neq x) \quad \Leftrightarrow \quad \neg(y\leq x)  \]
-is a strict total order.
-\end{lemma}
-This strict total order is trichotomous, as it should be.
-
-\begin{lemma} \label{lemma:equivalenceOrderPreservingReflecting}
-Let $f: P\to Q$ be a function between totally ordered sets. Then
-\begin{enumerate}
-\item if $f$ is order-reflecting, then $f$ is order-preserving;
-\item if $f$ is order-preserving and injective, then $f$ is order-reversing.
-\end{enumerate}
-Similar for strict order:
-\begin{enumerate}
-\setcounter{enumi}{2}
-\item if $f$ preserves strict order, it also reflects strict order;
-\item if $f$ reflects strict order and is injective, it also preserves strict order.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-\hspace{1em}
-\begin{enumerate}
-\item Assume $f$ order-reflecting. Assume $x\leq y$. Either $f(x)\leq f(y)$ or $f(y)\leq f(x)$. If $f(y)\leq f(x)$, then
-\[ y\leq x \implies x=y \implies f(x)=f(y) \implies f(x)\leq f(y). \]
-So in both cases $f(x)\leq f(y)$.
-\item Assume $f$ order-preserving and injective. Assume $f(x)\leq f(y)$. Either $x\leq y$ or $y\leq x$. If $y\leq x$, then
-\[ f(y)\leq f(x) \implies f(x)=f(y) \implies x= y \implies x\leq y. \]
-So in both cases $x\leq y$.
-\item Assume $f$ preserves strict order. Assume $f(x) < f(y)$. Either $x<y, y<x$ or $x=y$. If either $y<x$ or $x=y$ hold, preservation of strict order yields a contradiction. So $x<y$.
-\item Assume $f$ is injective reflects strict order. Assume $x < y$. Either $f(x)<f(y), f(y)<f(x)$ or $f(x)=f(y)$. If $f(y)<f(x)$, preservation of strict order yields a contradiction. If $f(x)=f(y)$, injectivity yields a contradiction. So $f(x)<f(y)$.
-\end{enumerate}
-\end{proof}
-
-\begin{lemma} \label{lemma:strictOrderPreservationIsInjective}
-A strict order-preserving function between totally ordered sets is always injective.
-\end{lemma}
-\begin{proof}
-Let $f:A\to B$ be the strict order-preserving function and $x,y\in A$. Assume $f(x)=f(y)$. Assume, towards a contradiction, that $x\neq y$, then either (by totality) $x< y$ and $f(x) < f(y)$ or $y < x$ and $f(y)<f(x)$. Both cases contradict $f(x)=f(y)$.
-\end{proof}
-As a consequence:
-\begin{lemma}
-A function $f$ is an order embedding between totally ordered sets \textup{if and only if} it is a strict order embedding.
-\end{lemma}
-
-\subsubsection{Chains}
-\begin{definition}
-Let $(P,\preceq)$ be a poset. A \udef{chain} in $P$ is a linearly ordered subset $S$ of $P$, i.e.
-\[ \forall x,y\in S: x\preceq y \lor y\preceq x. \]
-
-An \udef{antichain} is a subset $A$ such that no two elements of $A$ are comparable.
-
-A poset $P$
-\begin{itemize}
-\item is \udef{chain-complete} or \udef{inductive} if every chain in $P$ has a least upper bound;
-\item satisfies the \udef{ascending chain condition} (ACC) if each chain in $P$ that has a least element is finite;
-\item satisfies the \udef{descending chain condition} (DCC) if each chain in $P$ that has a greatest element is finite.
-\end{itemize}
-\end{definition}
-
-\begin{example}
-For every $n\in \N$ there exists a chain $\mathbb{n}$ of $n$ elements and an antichain $\overline{\mathbb{n}}$ of $n$ elements:
-\[ \mathbb{1}: \begin{tikzcd}
-\circ
-\end{tikzcd} \qquad \mathbb{2}: \begin{tikzcd}
-\circ \ar[d, dash] \\ \circ
-\end{tikzcd} \qquad \mathbb{3}: \begin{tikzcd}
-\circ \ar[d, dash] \\ \circ \ar[d, dash] \\ \circ
-\end{tikzcd} \qquad \hdots \]
-\[ \overline{\mathbb{1}}: \begin{tikzcd}
-\circ
-\end{tikzcd} \qquad \overline{\mathbb{2}}: \begin{tikzcd}
-\circ & \circ
-\end{tikzcd} \qquad \overline{\mathbb{3}}: \begin{tikzcd}
-\circ & \circ & \circ
-\end{tikzcd} \qquad \hdots \]
-\end{example}
-
-\begin{lemma}
-Every inductive poset has a least element.
-\end{lemma}
-\begin{proof}
-The empty set $\emptyset$ is a chain in any poset.
-\end{proof}
-
-\begin{lemma}
-Let $P$ be a poset. If $P$ satisfies the ascending chain condition and has a least element, then $P$ is inductive.
-\end{lemma}
-\begin{proof}
-Assume $P$ satisfies the ascending chain condition and take a chain $C\subset P$. If $C=\emptyset$, then $\sup(C)$ is the least element of $P$. Now assume $C$ non-empty and take some $x_0\in C$. Define $C' = \setbuilder{c\in C}{c\succeq x_0}$, which is finite by assumption. Clearly $\sup(C) = \max(C')$.
-\end{proof}
-
-\begin{example}
-The set $\N$ is not inductive, because $\N$ itself does not have a least upper bound. It therefore does also not satisfy the ascending chain condition.
-
-It does satisfy the descending chain condition.
-\end{example}
 
 
-\begin{proposition} \label{prop:inductive}
-Let $A,B$ be sets and $P$ a poset. Then the following posets are inductive:
-\begin{enumerate}
-\item $\powerset(P)$, ordered by inclusion;
-\item $(A \not\to B)$, ordered by inclusion;
-\item the set of chains in $P$, ordered by inclusion.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-In all cases the least upper bound of a chain $S$ is given by $\bigcup S$.
-\end{proof}
 
-\subsection{Directed sets}
-\begin{definition}
-A preordered set $(D,\precsim)$ is a \udef{directed set} if any pair of elements $a,b\in D$ has an upper bound. We call the relation $\precsim$ a \udef{direction}.
-\end{definition}
-\begin{proposition}
-Let $\{(D_i,\precsim_i)\}_{i\in I}$ be a family of directed sets. Then $D= \prod_{i\in I}D_i$ is a directed set with direction defined by
-\[ (a_i)_{i\in I} \precsim (b_i)_{i\in I} \iff \forall i\in I: a_i\precsim_i b_i. \]
-The directed set $(D,\precsim)$ is called a \udef{product direction}.
-\end{proposition}
+
+
+
+
+
+
 
 \subsection{Combining ordered sets}
 \begin{definition}
@@ -3249,6 +3328,26 @@ Let $P,Q$ be ordered sets. Then
 \end{itemize}
 \end{definition}
 
+\subsection{Ordered sets of subsets}
+\subsubsection{The ordered set of downsets}
+\begin{definition}
+Let $P$ be an ordered set. The set of down-sets in $P$ is denoted $\mathcal{O}(P)$.
+\end{definition}
+
+\begin{lemma}
+Let $P$ be an ordered set.
+If $P$ is a discrete poset, then $\mathcal{O}(P) = \powerset(P)$.
+\end{lemma}
+
+\begin{lemma}
+Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
+\begin{enumerate}
+\item $\mathcal{O}(P)^o \cong \mathcal{O}(P^o)$;
+\item $\mathcal{O}(P\oplus \mathbb{1}) \cong \mathcal{O}(P)\oplus \mathbb{1}$;
+\item $\mathcal{O}(\mathbb{1}\oplus \mathbb{1}) \cong \mathbb{1}\oplus \mathcal{O}(P)$;
+\item $\mathcal{O}(P_1\sqcup P_2)\cong \mathcal{O}(P_1)\times \mathcal{O}(P_2)$.
+\end{enumerate}
+\end{lemma}
 
 \section{Well-founded ordered sets}
 \begin{definition}
