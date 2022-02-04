@@ -34,7 +34,7 @@ is a partial order. Such posets are called \udef{flat posets}.
 \end{itemize}
 \end{example}
 
-\begin{lemma}
+\begin{lemma} \label{lemma:preorderEquivalence}
 Let $(P, \precsim)$ be a proset. The relation defined by
 \[ x \sim_{(\precsim)} y \defequiv (a\precsim b)\land (b\precsim a) \]
 is an equivalence relation.
@@ -205,6 +205,31 @@ For $x\in P$,
 \end{itemize}
 \end{definition}
 
+\begin{lemma} \label{lemma:QsubseteqDownQ}
+Let $\sSet{P,\precsim}$ be a preordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $Q \subseteq \upset Q$;
+\item $Q \subseteq \downset Q$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Reflexivity.
+\end{proof}
+
+\begin{lemma} \label{lemma:upwardDownwardClosure}
+Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $\upset\upset Q \subseteq \upset Q$;
+\item $\downset\downset Q \subseteq \downset Q$.
+\end{enumerate}
+If $\Yleft$ is a preorder, then the subset relations become equalities.
+\end{lemma}
+\begin{proof}
+First take $x\in \upset\upset Q$. Then there exists $y\in \upset Q$ such that $y\Yleft x$ and $q\in Q$ such that $q\Yleft y$. By transitivity $q \Yleft x$, so $x\in \upset Q$.
+
+The other statement is dual. The statement about equalities follows form \ref{lemma:QsubseteqDownQ}.
+\end{proof}
+
 \begin{lemma}
 Let $P$ be a proset. Then $\downset\emptyset = \emptyset = \upset\emptyset$.
 \end{lemma}
@@ -224,17 +249,6 @@ Let $P$ be an ordered set and $Q\subseteq P$. Then
 \item $\downset Q = \bigcup_{x\in Q}\downset x$.
 \end{enumerate}
 \end{lemma}
-
-\begin{lemma} \label{lemma:QsubseteqDownQ}
-Let $\sSet{P,\precsim}$ be a preordered set and $Q\subseteq P$. Then
-\begin{enumerate}
-\item $Q \subseteq \upset Q$;
-\item $Q \subseteq \downset Q$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-Reflexivity.
-\end{proof}
 
 \begin{lemma}
 Let $\sSet{P,\Yleft}$ be an ordered set and $Q,R\subseteq P$. Then
@@ -734,6 +748,99 @@ A function $f: P\to P$ on an ordered set $(P,\Yleft)$ into itself is
 \end{itemize}
 \end{definition}
 
+\section{Ordered sets of subsets}
+\subsection{The ``finer than'' relation}
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be an ordered set and $A,B \subseteq P$. We say $A$ is \udef{finer} than $B$ (or $B$ is \udef{coarser} than $A$) if $B\subseteq \upset A$.
+
+If $A$ is finer than $B$ and $B$ is finer than $A$, we write $A \approx B$.
+\end{definition}
+
+Alternatively, we say $A$ is finer than $B$ iff
+\[ \forall b\in B: \exists a\in A: \; a \Yleft b. \]
+
+\begin{lemma}
+Let $\sSet{P,\Yleft}$ be an ordered set and $A,B,C \subseteq P$. Then
+\begin{enumerate}
+\item if $A$ is finer than $B$ and $B$ is finer than $C$, then $A$ is finer than $C$;
+\item if $\Yleft$ is a preorder, then $A$ is finer than $A$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $A$ is finer than $B$ and $B$ is finer than $C$. Then $B \subseteq \upset A$ and $C\subseteq \upset B$, so $C \subseteq \upset\upset A \subseteq \upset A$.
+
+(2) from \ref{lemma:QsubseteqDownQ}.
+\end{proof}
+\begin{corollary}
+Let $\sSet{P,\Yleft}$ be a preordered set.
+\begin{enumerate}
+\item The ``finer than'' relation is a preorder on $\powerset(P)$.
+\item The equivalence derived from this relation is an equivalence relation.
+\end{enumerate}
+\end{corollary}
+The equivalence relation is the equivalence from \ref{lemma:preorderEquivalence}.
+
+\begin{lemma}
+Let $\sSet{P,\Yleft}$ be an ordered set and $A \subseteq P$. Then
+\begin{enumerate}
+\item $A$ is finer than $\upset A$;
+\item if $\Yleft$ is a preorder, then $A \approx \upset A$;
+\item $A \approx B$ implies $\upset A = \upset B$;
+\item if $\Yleft$ is a preorder, then $A \approx B$ \textup{if and only if} $\upset A = \upset B$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) is equivalent to $\upset A \subseteq \upset A$.
+
+(2) We need to show that $\upset A$ is finer than $A$, i.e. $A\subseteq \upset\upset A$. This follows from \ref{lemma:QsubseteqDownQ}.
+
+(3) Assume $A \approx B$. Then $A \subseteq \upset B$ and $B \subseteq \upset A$. This implies $\upset A \subseteq \upset\upset B \subseteq \upset B$ and $\upset B \subseteq \upset\upset A \subseteq \upset A$.
+
+(4) Assume $\upset A = \upset B$. Then $A$ is finer than $\upset B$ and $B$ is finer than $\upset A$. The result then follows using (2).
+\end{proof}
+
+
+\subsubsection{Refinement}
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be an ordered set and $A,B \subseteq P$. We say $A$ \udef{refines} $B$ (or $A$ is a \udef{refinement} of $B$) if $A\subseteq \downset B$.
+\end{definition}
+
+\begin{lemma}
+Let $f:P\to Q$ be an order reversing function between ordered sets. Let $A,B\in P$. Then
+\begin{enumerate}
+\item if $A$ refines $B$, then $f[B]$ is finer than $f[A]$;
+\item if $A$ is finer than $B$, then $f[B]$ refines $f[A]$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) $A \subseteq \downset B$ implies $f[A] \subseteq f[\downset B] \subseteq \upset f[B]$.
+
+(2) $B \subseteq \upset A$ implies $f[B] \subseteq f[\upset A] \subseteq \downset f[A]$.
+\end{proof}
+
+\subsection{The ordered set of downsets}
+\begin{definition}
+Let $P$ be an ordered set. The set of down sets in $P$ is denoted $\mathcal{O}(P)$.
+\end{definition}
+
+\begin{lemma}
+Let $P$ be an ordered set.
+If $P$ is a discrete poset, then $\mathcal{O}(P) = \powerset(P)$.
+\end{lemma}
+
+\begin{lemma}
+Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
+\begin{enumerate}
+\item $\mathcal{O}(P)^o \cong \mathcal{O}(P^o)$;
+\item $\mathcal{O}(P\oplus \mathbb{1}) \cong \mathcal{O}(P)\oplus \mathbb{1}$;
+\item $\mathcal{O}(\mathbb{1}\oplus \mathbb{1}) \cong \mathbb{1}\oplus \mathcal{O}(P)$;
+\item $\mathcal{O}(P_1\sqcup P_2)\cong \mathcal{O}(P_1)\times \mathcal{O}(P_2)$.
+\end{enumerate}
+\end{lemma}
+
+\section{Galois connections}
+\input{galoisConnections}
+
 \section{Filters and ideals}
 \begin{definition}
 Let $\sSet{P,\Yleft}$ be an ordered set. A subset $F\subseteq P$ is called
@@ -763,6 +870,21 @@ Let $P$ be an ordered set and $x\in P$.
 \end{enumerate}
 \end{lemma}
 If the order is not a preorder, then a principle filter/ideal may be empty.
+
+\begin{example}
+Let $X$ be a set.
+\begin{itemize}
+\item The set of finite subsets of $X$ is an ideal.
+\item The set of countable subsets $X$ is an ideal.
+\item A subset $A$ of $X$ is called \udef{cofinite} if $X\setminus A$ is finite. The set of cofinite subsets of $X$ is a filter.
+\item A subset $A$ of $X$ is called \udef{cocountable} if $X\setminus A$ is countable. The set of cocountable subsets of $X$ is a filter.
+\end{itemize}
+\end{example}
+
+\begin{proposition}
+Let $\sSet{P,\Yleft}$ be an ordered set and $\{F_i\}_{i\in I} \in \filters(P)^I$ a set of filters. Then $\bigcap_{i\in I}F_i$ is a filter.
+\end{lemma}
+We can replace ``filter'' by ``ideal'' in the previous lemma.
 
 \subsection{Filter bases and subbases}
 
@@ -803,24 +925,11 @@ Let $\sSet{P,\Yleft}$ be an ordered set.
 If $P$ is downward directed and $\exists \bot \in \min(P)$ and $B \subseteq P$ a filter basis, then $\mathfrak{F}\{B\}$ is a proper filter \textup{if and only if} $\bot \notin B$; 
 \end{lemma}
 
-\begin{definition}
-Let $\sSet{P,\Yleft}$ be an ordered set and $B,C\subseteq P$ be filter bases.
-\begin{itemize}
-\item We say $B$ is \udef{finer} than $C$ if
-\[ \forall c\in C: \exists b\in B: \; b \Yleft c. \]
-\item If $B$ is finer than $C$ and $C$ is finer than $B$, we call $B$ and $C$ \udef{equivalent}.
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-The ``finer than'' relation on the set of filter bases in an ordered set is a preorder.
-\end{lemma}
-
 \begin{proposition}
 Let $\sSet{P,\Yleft}$ be an ordered set. Then for all filter bases $B,C$ in $P$: $B$ is finer than $C$ \textup{if and only if} $\mathfrak{F}\{B\} \supseteq \mathfrak{F}\{C\}$.
 \end{proposition}
 
-\subsection{Combining ordered sets}
+\section{Combining ordered sets}
 \begin{definition}
 Let $P,Q$ be ordered sets. Then
 \begin{itemize}
@@ -867,29 +976,6 @@ Let $P,Q$ be ordered sets. Then
 \end{itemize}
 \end{definition}
 
-\section{Ordered sets of subsets}
-\subsection{The ordered set of downsets}
-\begin{definition}
-Let $P$ be an ordered set. The set of down sets in $P$ is denoted $\mathcal{O}(P)$.
-\end{definition}
-
-\begin{lemma}
-Let $P$ be an ordered set.
-If $P$ is a discrete poset, then $\mathcal{O}(P) = \powerset(P)$.
-\end{lemma}
-
-\begin{lemma}
-Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
-\begin{enumerate}
-\item $\mathcal{O}(P)^o \cong \mathcal{O}(P^o)$;
-\item $\mathcal{O}(P\oplus \mathbb{1}) \cong \mathcal{O}(P)\oplus \mathbb{1}$;
-\item $\mathcal{O}(\mathbb{1}\oplus \mathbb{1}) \cong \mathbb{1}\oplus \mathcal{O}(P)$;
-\item $\mathcal{O}(P_1\sqcup P_2)\cong \mathcal{O}(P_1)\times \mathcal{O}(P_2)$.
-\end{enumerate}
-\end{lemma}
-
-\section{Galois connections}
-\input{galoisConnections}
 
 \chapter{Lattices}
 \section{Semilattice}
