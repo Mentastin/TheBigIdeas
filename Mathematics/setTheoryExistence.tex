@@ -1,0 +1,779 @@
+\chapter{Comparing sets}
+\section{Equinumerosity: comparing sets in size}
+\begin{definition}
+Two sets $A,B$ are \udef{equinumerous} or \udef{equal in cardinality} if there exists an bijection between them:
+\[ A =_c B \defequiv \exists f: A\twoheadrightarrowtail B. \]
+The set $A$ is \udef{less than or equal to $B$ in size} if it is equinumerous with some subset of $B$:
+\[ A \leq_c B \defequiv \exists C: C\subseteq B \land A=_c C. \]
+\end{definition}
+We might think $=_c$ and $\leq_c$ are relations, but there is no set of all sets, so they are not defined on any set. If we restrict $A,B$ to be subsets of a set $U$, they become relations on $\powerset(U)$.
+\begin{proposition}
+For all sets $A,B,C$:
+\begin{enumerate}
+\item $A =_c A$;
+\item if $A=_c B$, then $B =_c A$;
+\item if $A=_c B$ and $B =_c C$, then $A =_c C$.
+\end{enumerate}
+Restricted to $U$, equinumerosity is an equivalence relation on $\powerset(U)$.
+\end{proposition}
+
+Note that $\emptyset =_c \emptyset$, because $\emptyset$ is a function $\emptyset\to \emptyset$ which is bijective.
+
+\begin{lemma} \label{lemma:welldefinedCardinalArithemtic}
+Let $A_1,A_2,B_1,B_2$ be sets such that $A_1=_c A_2$ and $B_1=_cB_2$. Then
+\begin{enumerate}
+\item $A_1 \sqcup B_1 =_c A_2\sqcup B_2$;
+\item $A_1 \times B_1 =_c A_2\times B_2$;
+\item $(A_1\to B_1) =_c (A_2\to B_2)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition} \label{lemma:injectivityCardinality}
+Let $A,B$ be sets. Then
+\[ A\leq_c B \iff \exists f: f:A\rightarrowtail B. \]
+TODO rewrite + add surjectivity
+\end{proposition}
+\begin{corollary}
+If $A\subseteq B$, then $A\leq_c B$.
+\end{corollary}
+This follows from the existence of the inclusion map $A \hookrightarrow B$.
+
+\begin{proposition}
+For all sets $A,B,C$
+\begin{enumerate}
+\item $A\leq_c A$;
+\item if $A\leq_c B$ and $B\leq_c C$, then $A\leq_c C$.
+\end{enumerate}
+Restricted to $U$, $\leq_c$ is a preorder on $\powerset(U)$.
+\end{proposition}
+Even restricting to $U$, $\leq_c$ is not anti-symmetric and so not generally a partial order, but the Schröder-Bernstein theorem (theorem \ref{theorem:SchroederBernstein}) does give a result in this vein (with $=_c$ instead of $=$!).
+
+\begin{theorem}[Schröder-Bernstein] \label{theorem:SchroederBernstein}
+Let $A, B$ be sets. If there exist injective functions $f: A\rightarrowtail B$ and $g: B\rightarrowtail A$, then there exists a bijective function $h: A\twoheadrightarrowtail B$.
+\end{theorem}
+\begin{proof}
+In general $f[A]\subset B$ and $g[B]\subset A$. First we identify subsets $A^*\subset A$ and $B^*\subset B$ such that $f[A^*] = A^*$ and $g[B^*] = B$. To that end we define $A_n,B_n$ recursively
+\[ \begin{cases}
+A_0 = A \\ A_{n+1} = (g\circ f)[A_n],
+\end{cases} \qquad \begin{cases}
+B_0 = B \\ B_{n+1} = (f\circ g)[B_n].
+\end{cases} \]
+Then we can take
+\[ A^* = \bigcap_{n=0}^\infty A_n \qquad B^* = \bigcap_{n=0}^\infty B_n. \]
+By induction we can see that we have chains of inclusions:
+\[ A_n\subseteq g[B_n] \subseteq A_{n+1}, \qquad B_n\subseteq g[A_n] \subseteq B_{n+1}. \]
+Then $B^* = \bigcup_{n=0}^\infty f[A_n]$ by
+\[ B^* = \bigcup_{n=0}^\infty B_n \subseteq \bigcup_{n=0}^\infty f[A_n]\subseteq \bigcup_{n=0}^\infty B_{n+1} = B^{*}. \]
+So, because $f$ is injective, we have
+\[ f[A^*] = f[\bigcup_{n=0}^\infty A_n] = \bigcup_{n=0}^\infty f[A_n] = B^* \]
+as required. Similarly $g[B^*] = A^*$.
+
+Then notice that
+\begin{align*}
+A &= A^* \cup \left[ \bigcup_{n=0}^\infty (A_n\setminus g[B_n])\cup (g[B_n]\setminus A_{n+1}) \right] \\
+B &= B^* \cup \left[ \bigcup_{n=0}^\infty (B_n\setminus f[A_n])\cup (f[A_n]\setminus B_{n+1}) \right] \\
+\end{align*}
+and these are partitions of $A$ and $B$.
+
+Finally we can construct the bijection $\pi: A\twoheadrightarrowtail B$
+\[ \pi(x) = \begin{cases}
+f(x) & x\in A^* \lor \exists n\in \N: x\in (A_n\setminus g[B_n]) \\
+g^{-1}(x) & x\notin A^* \land \exists n\in \N: x\in (g[B_n]\setminus A_{n+1}).
+\end{cases} \]
+\end{proof}
+We can also give a more condensed proof TODO write proof (this is not yet a proof!) and express this as fixed point?:
+\begin{proof}
+Define $Q = f[A]\setminus (g\circ f)[A]$,
+\[ \mathcal{J} = \{ X\in \powerset(A)\;|\; Q\cup (g\circ f)[X] \subseteq X \} \]
+and $T = \bigcap \mathcal{J}$. We can show that $T = Q\cup (g\circ f)[T]$. Then
+\[ f[A] = Q\cup (g\circ f)[A] = Q\cup (g\circ f)[T]\cup [(g\circ f)[A]\setminus (g\circ f)[T]] = T\cup [(g\circ f)[A]\setminus (g\circ f)[T]] \]
+\end{proof}
+\begin{corollary}
+If $A\leq_c  B$ and $B\leq_c A$, then $A=_c B$.
+\end{corollary}
+
+\begin{theorem}[Cantor's theorem] \label{theorem:Cantor}
+For every set $A$,
+\[ A <_c \powerset(A) \]
+i.e. $A\leq_c \powerset(A)$ but $A\neq_c \powerset(A)$.
+\end{theorem}
+\begin{proof}
+That $A\leq_c \powerset(A)$ follows from the existence of the injection $A\to \powerset(A): x\mapsto \{x\}$.
+
+Assume, towards a contradiction, that there exists a surjection
+\[ \pi: A\twoheadrightarrow \powerset(A), \]
+and define the set $B = \{x \in A \;|\; x \notin \pi(x)\}$.
+Now $B$ is a subset of $A$ and $\pi$ is a surjection, so there must exist some $b \in A$ such that $B = \pi(b)$. We get
+\[ b \in B \iff b \notin B. \]
+A contradiction.
+\end{proof}
+
+
+\subsection{Cantor's paradox}
+We can use Cantor's theorem to disprove the existence of a set of all sets. It is similar to Russell's paradox, but predates it.
+
+Assume there was a set $V$ of all sets. Consider the power set $\powerset(V)$. Since every element of $\powerset(V)$ is a set, $\powerset(V) \subseteq V$ and thus $\powerset(V) \leq_c V$. This contradicts Cantor's theorem, yielding a paradox.
+
+Looking at the proof of Cantor's theorem, we see a strong analogy with Russell's paradox.
+
+\subsection{Countability}
+TODO: this definition excludes $\emptyset$ (i.e $0$) from being countable. Is this ok?
+\begin{definition}
+Let $A$ be a set. We say
+\begin{itemize}
+\item $A$ is \udef{finite} if there exists some $n\in \N$ such that
+\[ A =_c [0, n[ = \{i\in \N\;|\; i<n\}, \]
+otherwise $A$ is \udef{infinite}.
+\item $A$ is \udef{countable} if it is equinumerous to a subset of $\N$, otherwise it is \udef{uncountable}.
+\end{itemize}
+\end{definition}
+Notice the link between $[0,n[$ and the Von Neumann ordinals.
+
+If we have a hundred pigeons, a hundred pigeonholes and are not allowed to put two pigeons in the same hole, all pigeonholes must be filled. This principle is formalised in the pigeonhole principle.
+\begin{theorem}[Pigeonhole principle]
+Every injection $f:A\rightarrowtail A$ of a finite set into itself is also a surjection, i.e. $f[A] = A$.
+\end{theorem}
+\begin{proof}
+It is enough to prove that every injection $g: [0,m[ \rightarrowtail [0,m[$ is surjective. (By finiteness $A$ is bijectively related to some $[0,m[$.)
+The proof is by induction on $m$ to prove the assertion:
+\[ \forall g: \left(g: [0,m[ \rightarrowtail [0,m[\right) \implies g[\,[0,m[\,] = [0,m[. \]
+\begin{itemize}[leftmargin=2.5cm]
+\item[\textbf{Basis step}] If $m=1$, there is only one such function, namely $0\mapsto 0$, which is bijective.
+\item[\textbf{Induction step}] It is easy to see that $[0,Sm[ = [0,m[\cup \{m\}$. Taking a $g: [0,m[ \rightarrowtail [0,m[$ and letting $h = g\setminus \{(m,g(m))\}$ (which is still injective), we have three cases:
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{m\notin \im(g)}$] By the induction hypothesis, $h[\,[0,m[\,] = [0,m[$. Because also $g(m)\in [0,m[$, $g$ would not be injective, making this case impossible.
+\item[$\boxed{g(m) = m}$] Now $h[\,[0,m[\,] = [0,m[$ and $g(m)=m$, so $g[\,[0,Sm[\,] = [0,m[\cup \{m\} = [0,Sm[$. Thus $g$ is a surjection.
+\item[$\boxed{\exists u<m: g(u) = m}$] In this case there must be a $v<m$ such that $g(m) = v$. Now we apply the induction hypothesis to
+\[ h': [0,m[ \to [0,m[: i\mapsto \begin{cases}
+g(i) & i\neq u \\
+v & i=u.
+\end{cases} \]
+So $h'$ is surjective and $g[\,[0,m[\,] = [0,m[\cup \{m\} = [0,Sm[$, so $g$ is surjective.
+\end{itemize}
+\end{itemize}
+\end{proof}
+\begin{corollary}
+The set $\N$ of natural numbers is infinite.
+\end{corollary}
+\begin{proof}
+The function $\N\to \N\setminus\{0\}: n\mapsto Sn$ is injective.
+\end{proof}
+\begin{corollary}
+For each finite set $A$, there exists exactly one $n\in\N$ such that $A =_c [0,n[$. We call this $n$ the number of elements of $A$, $\#(A)$.
+\end{corollary}
+\begin{corollary}
+Every surjection $f:A\twoheadrightarrow A$ of a finite set into itself is also an injection.
+\end{corollary}
+\begin{proof}
+Let $\#(A) = n$ and $f$ be surjective. Fix a bijection $\pi: [0,n[ \twoheadrightarrowtail A$. Construct the sets
+\[ X = \{j \in \N\;|\; \exists i<j: f(\pi(i)) = f(\pi(j)) \}\qquad \text{and}\qquad Y = \{j \in \N\;|\; \forall i<j: f(\pi(i)) \neq f(\pi(j)) \}. \]
+Then $X\cup Y = [0,n[$. Now $f': A/\sim \to A$ is a bijection and we have a bijection $A/\sim \leftrightarrow Y$ given by
+\[ [a] \quad \leftrightarrow \quad \min\{i\in \N\;|\; \pi(i)\in [a]\}, \]
+so we have a bijection $A\leftrightarrow Y$ and thus $\#(Y) = n$.
+Assume $f$ not injective, in which case $X$ is not empty and let $\#(X) = m \neq 0$.
+
+Now because $X,Y$ disjunct, $\#(X\cup Y) = \#(X)+\#(Y) = m+n >n$, by the uniqueness of $\#$. This is a contradiction.
+\end{proof}
+
+\begin{proposition}
+The following are equivalent for every set $A$:
+\begin{enumerate}
+\item $A$ is countable;
+\item there is a surjection $\pi:\N\twoheadrightarrow A$;
+\item $A$ is finite or equinumerous with $\N$.
+\end{enumerate}
+We call such a $\pi$ an \udef{enumeration}. Then
+\[ A = \pi[\N] = \{\pi(0),\pi(1),\pi(2),\ldots \}. \]
+\end{proposition}
+\begin{proof}
+The proof is cyclic:
+\begin{enumerate}[leftmargin=2cm]
+\item[$\boxed{(1)\rightarrow (2)}$] If $A = \emptyset$, any $\pi:\N\to A$ is surjective. Assume $A\neq \emptyset$ and choose an $a_0\in A$. By lemma \ref{lemma:injectivityCardinality}, there is an $f:A\rightarrowtail$. Define
+\[ \pi: \N\to A: i\mapsto \begin{cases}
+a_0 & (i\notin f[A]) \\ f^{-1}(i) & (i\in f[A]).
+\end{cases} \]
+\item[$\boxed{(2)\rightarrow (3)}$] Assume 2, so we have a surjective $\pi:\N\twoheadrightarrow A$. We need to prove that if $A$ is not finite, it is equinumerous with $\N$. Define the function $f:\N\to A$ recursively by
+\[ \begin{cases}
+f(0) = \pi(0) \\
+f(n+1) = \pi\left(\;\text{the least $m$ such that}\; \pi(m)\neq \{f(0),\ldots,f(n)\}\right).
+\end{cases} \]
+Note that because $A$ is infinite, the set $\{ m\in\N\;|\; \pi(m)\notin \{ f(0),\ldots,f(n) \}$ is not empty. Due to the well-ordering on $\N$, every such set has a least element.
+
+Then $f$ is a bijection. Injectivity is obvious. Surjectivity follows from the fact that $\forall n\in \N: \pi(n)\in f[\N]$.
+\item[$\boxed{(3)\rightarrow (1)}$] All intervals $[0, n[$ are subsets of $\N$ and $\N$ is a subset of $\N$.
+\end{enumerate}
+\end{proof}
+By Cantor's theorem:
+\begin{corollary}
+There exists no set $A$ such that $\powerset(A) =_c \N$.
+\end{corollary}
+
+\begin{lemma}
+We have the following characterisation of countable infinity:
+\begin{align*}
+A =_c \N \quad \Leftrightarrow \quad (\exists \mathcal{E})&[A = \bigcup \mathcal{E} \\
+&\& \emptyset \in \mathcal{E} \\
+&\& (\forall u\in \mathcal{E})(\exists ! y \notin u)[u\cup \{ y \}\in \mathcal{E}] \\
+&\& (\forall Z)[[\emptyset \in Z \& (\forall u \in Z)(\exists ! y \notin u)u\cup \{y\} \in Z \cap \mathcal{E} \Rightarrow \mathcal{E}\subseteq Z]].
+\end{align*}
+This is directly in terms of the membership relation with no appeal to the defined notions of $\N$ and function.
+\end{lemma}
+
+\begin{proposition}[Cantor]
+A countable union of countable sets is countable:
+
+For each sequence $A_0, A_1, \ldots$ of countable sets, the union
+\[ A = \bigcup_{n=0}^\infty A_n \]
+is countable.
+\end{proposition}
+\begin{proof}
+We may assume none of the $A_n$ are empty (otherwise we can just take a superset and if this is countable, the subset will be as well). We can find an enumeration $\pi^n: \N\twoheadrightarrow A_n$ for each $A_n$. Let $\rho^{-1}$ be an enumeration of $\N\times\N$, as in lemma \ref{lemma:pairEnumeration}. Then
+\[ \N \twoheadrightarrow  \bigcup_{n=0}^\infty A_n: m\mapsto \pi^{x}(y) \]
+where $x(m) = \rho^{-1}_0(m)$ and $y(m) = \rho^{-1}_1(m)$, is an enumeration.
+\end{proof}
+
+\begin{proposition}
+The set of infinite, binary sequences
+\[ \Delta = \{ (a_i)_{i\in\N} \;|\; \forall i\in\N: a_i=0\lor a_i=1 \} \]
+is uncountable.
+\end{proposition}
+\begin{proof}
+Assume, towards a contradiction, that there exists an enumeration $(\alpha_n)_{n\in\N}$ of $\Delta$. The diagonal argument is then to construct the binary sequence
+\[ \alpha_0(0),\alpha_1(1), \alpha_2(2), \alpha_3(3), \alpha_4(4),\ldots  \]
+and make every $0$ a $1$ and vice versa. This new is not an element of the enumeration by construction (it is different from every element of the enumeration in at least one digit).
+\end{proof}
+
+\section{Comparing well-ordered sets in length}
+\begin{definition}
+Let $U,V$ be well-ordered sets. We say $U$ is \udef{less than or equal to $V$ in length}, $U\leq_o V$ if $U$ is order isomorphic to an initial segment of $V$.
+\[ U\leq_o V \defequiv \exists I\sqsubseteq V: U =_o I. \]
+We also write
+\[ U <_o V \defequiv U\leq_o V \land U\neq_o V. \]
+\end{definition}
+Every proper initial segment is of the form $\seg(x)$, so using corollary \ref{corollary:properInitialSegmentNotIsomorphic} gives
+\begin{lemma}
+Let $U,V$ be well-ordered sets.
+\[ U <_o V \quad \iff \quad \exists x\in V: U =_o \seg_V(x). \]
+\end{lemma}
+
+Clearly $=_o$ and $\leq_o$ imply $=_c$ and $\leq_c$.
+
+\begin{lemma} \label{lemma:preorderingWosets}
+For all well-ordered sets $U,V,W$:
+\begin{enumerate}
+\item $U \leq_o U$;
+\item $[U\leq_o V \land V\leq_o W] \implies U\leq_o W$;
+\item $[U \leq_o V \land V \leq_o U] \implies U =_o V$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+For point 3., if $U \neq_o V$, then composing the order isomorphisms would yield an isomorphism between $U$ and a proper initial segment of $U$. Because such an isomorphism must be expansive we have a contradiction.
+\end{proof}
+
+\begin{theorem}[Comparability of well-ordered sets]\label{theorem:comparabilityWosets}
+For any two well-ordered sets $U,V$: either $U\leq_o V$ or $V\leq_o U$.
+\end{theorem}
+\begin{proof}
+The result is trivial if $V=\emptyset$, so we may assume the minimum $0_V$ exists.
+
+Define, by transfinite recursion the function $f:U\to V$ such that $f(x) = h(f|_{\seg(x)})$ where $h$ sends each partial function to the least element of $V$ not in the image:
+\[ h: (U\not\to V) \to V: \sigma \mapsto \begin{cases}
+\min_V\{v\in V\;|\; v\notin \sigma[U]\} & (\{v\in V\;|\; v\notin \sigma[U]\} \neq \emptyset) \\
+0_V  & (\{v\in V\;|\; v\notin \sigma[U]\} = \emptyset).
+\end{cases} \]
+We immediately note two properties of $f$:
+\begin{enumerate}
+\item It is order-preserving. Indeed, assume $x\leq_U y$, which implies
+\begin{align*}
+\seg(x) \sqsubseteq \seg(y) &\implies f[\seg(x)] \subseteq f[\seg(y)] \implies f|_{\seg(x)}[U] \subseteq f|_{\seg(y)}[U] \\
+&\implies \{v\in V\;|\; v\notin f|_{\seg(x)}[U]\} \supset \{v\in V\;|\; v\notin f|_{\seg(y)}[U]\} \\
+&\implies \min\{v\in V\;|\; v\notin f|_{\seg(x)}[U]\} \leq \min\{v\in V\;|\; v\notin f|_{\seg(y)}[U]\} \\ &\implies f(x) \leq f(y).
+\end{align*}
+\item Every point in $V$, other than $0_V$, can only be the image of at most one point in $U$.
+\end{enumerate}
+We distinguish three cases for $0_V$: it may be the image of zero, one or multiple points in $U$. If $0_V$ is the image of no points in $U$, there must be no points in $U$ and the result is trivial.
+\begin{itemize}
+\item If $0_V$ is the image of one point in $U$, then $f$ is injective. Then the function $f: U\to f[U]$ is bijective and order-preserving, so an order isomorphism by lemma \ref{lemma:equivalenceOrderPreservingReflecting}. We just need to show $f[U]$ is an initial segment of $V$. Take an arbitrary $x\in V$ and $y\in f[U]$ and assume $x\leq y$. There is a $u$ such that $f(u) = y$. If $x$ were not in $f[U]$, then $x\in\{v\in V\;|\; v\notin f|_{\seg(u)}[U]\}$, but $x$ is smaller than the minimum yielding a contradiction. In this case $U\leq_o V$.
+\item If $0_V$ is the image of multiple points in $U$, there is an $x\in U$ such that
+\[ \{v\in V\;|\; v\notin f|_{\seg(x)}[U]\} = \emptyset. \]
+We take the least such $x$ and then $f|_{\seg(x)}$ is bijective. In this case $V \leq_o U$.
+\end{itemize}
+\end{proof}
+\begin{corollary}
+For all well-ordered set $U,V$,
+\[ U \leq_o V \quad \iff \quad \exists: \text{order-preserving injection} \;U\rightarrowtail V. \]
+\end{corollary}
+\begin{proof}
+If $U \leq_o V$, then $U$ is order isomorphic to an initial segment of $V$; this order isomorphism is an order-preserving injection into $V$.
+
+Conversely, assume there is an order-preserving injection $f:U\rightarrowtail V$. Assume, towards a contradiction that $U \nleq_o V$; by the theorem this means $V <_o U$. Then $V=_o \seg_U(x)$ for some $x\in U$ and composing $f$ with this isomorphism gives an order-preserving injection $U\rightarrowtail \seg_U(x)$. This is obviously not expansive, so by proposition \ref{prop:injectionsExpansive} we have a contradiction.
+\end{proof}
+\begin{corollary}[Wellfoundedness of $\leq_o$]\label{corollary:wellfoundednessOfWosetComparison}
+Every non-empty class $\mathcal{E}$ of well-ordered sets has a $\leq_o$-least member.
+\end{corollary}
+I.e. for some $U_0\in \mathcal{E}$ and all $U\in \mathcal{E}$: $U_0\leq_o U$.
+\begin{proof}
+Because $\mathcal{E}$ is non-empty, we have a $W\in\mathcal{E}$. If $W$ is $\leq_o$-least in $\mathcal{E}$, we are finished. If $W$ is not $\leq_o$-least, there are sets $U$ in $\mathcal{E}$ such that $U\leq_o W$ and the set
+\[ J \defeq \{x\in W\;|\;\exists U\in\mathcal{E}: U =_o \seg_W(x)\} \]
+is not empty. Take the least element of $J$; it is easy to prove that the corresponding set $U$ is the $\leq_o$-least member of $\mathcal{E}$.
+\end{proof}
+\begin{corollary}
+Let $U,V$ be well-ordered sets. Then $U\nleq_o V \iff V <_o U$.
+\end{corollary}
+
+\subsection{Hartogs number}
+The Hartogs number of any set $X$ is a bigger well-ordered set.
+
+A set $X$ may not be well-orderable itself, but it definitely has well-orderable subsets. Some subsets may even have inequivalent well-orderings.
+\begin{definition}
+Let $X$ be a set. Let $\operatorname{WO}(X)$ be the set
+\[ \operatorname{WO}(X) = \{ (U,\leq_U) \in \powerset(X)\times\powerset(X\times X) \;|\; \leq_U\; \text{is a well-ordering of $U$}\;  \}. \]
+Then \udef{Hartogs number} of $X$ is the set
+\[ \aleph(X) \defeq \operatorname{WO}(X)/=_o. \]
+Here $=_o$ is restricted to $\powerset(X)$ and thus is an equivalence relation (see lemma \ref{lemma:isomorphismEquivalence}).
+\end{definition}
+If the natural numbers are viewed as Von Neumann ordinals, we have the following:
+\[ \aleph(0) = 1, \quad \aleph(1) = 2, \quad \aleph(2) = 3, \quad \ldots \]
+This follows because each finite set can be well-ordered exactly one way, up to order isomorphism and well-ordered finite sets of the same size are order isomorphic.
+
+\begin{lemma} \label{lemma:wellorderingHartogsNumber}
+Let $X$ be a set and $\aleph(X)$ its Hartogs number. Then $\leq$ defined by
+\[ \forall \alpha, \beta \in \aleph(X):\quad \alpha \leq \beta \defequiv \alpha = [U] \land \beta = [V] \land U\leq_o V \]
+makes $(\aleph(X), \leq)$ a well-ordered set.
+\end{lemma}
+\begin{proof}
+First we show $\leq$ is well-defined: let $[U] = [U']$ and $[V] = [V']$. Then $U =_o U'$ and thus $U'\leq_o U$; also $U \leq_V$ and $V\leq_o V'$. By point 2 of lemma \ref{lemma:preorderingWosets} we have $U' \leq_o V'$, showing the definition is well-defined.
+
+A simple application of lemma \ref{lemma:preorderingWosets} shows us $(\aleph(X), \leq)$ is a poset.
+
+The order is total by the comparability of well-ordered sets, theorem \ref{theorem:comparabilityWosets}, and well-founded by its corollary, corollary \ref{corollary:wellfoundednessOfWosetComparison}.
+\end{proof}
+
+\begin{lemma} \label{lemma:HartogsNumberAsOrdinal}
+Let $X$ be a set and $\alpha = [U] \in \aleph(X)$. Then
+\[ \seg_{\aleph(X)}(\alpha) = \{ [\seg_U(x)] \;|\; x\in U \} =_o U. \]
+\end{lemma}
+\begin{proof}
+The identity is clear by the previous lemma \ref{lemma:wellorderingHartogsNumber}. The isomorphism follows from proposition \ref{prop:wosetIsomorphicToInitialSegments} and the fact that each $[\seg_U(x)]$ contains exactly one initial segment of $U$, by lemma \ref{lemma:orderingInitialSegments}.
+\end{proof}
+
+\begin{theorem}[Hartogs' lemma] \label{theorem:HartogsLemma}
+Let $X$ be a set. There is no injection $\aleph(X) \rightarrowtail X$, i.e. $\aleph(X) \nleq_c X$.
+\end{theorem}
+\begin{proof}
+Suppose, towards a contradiction, that there exists an injection
+\[ f: \aleph(X) \rightarrowtail X \]
+and let $Y = f[\aleph(X)] \subseteq X$ be its image. Then $f: \aleph(X) \to Y$ is a bijection, meaning $Y$ is well-ordered by lemma \ref{lemma:wellOrderingSubsets}. So $Y =_o \aleph(X)$.
+But also $[Y]\in \aleph(X)$, because $Y\subseteq X$, and by lemma \ref{lemma:HartogsNumberAsOrdinal} $Y$ is similar to a proper initial segment of $\aleph(X)$.
+So $\aleph(X)$ would seem to be similar to a proper initial segment, but this contradicts the expansiveness of order embeddings on well-ordered sets, see corollary \ref{corollary:properInitialSegmentNotIsomorphic}.
+\end{proof}
+
+
+\begin{proposition} \label{proposition:HartogsLeast}
+Let $X$ be a set. The Hartogs number $\aleph(X)$ is the $\leq_o$-least well-ordered set not smaller than or equal to $X$ in size. I.e.
+\[ \forall \;\text{well-ordered sets $U$}:\quad U \nleq_c X \implies \aleph(X)\leq_o U. \]
+\end{proposition}
+\begin{proof}
+We prove the contrapositive:
+\[ W <_o \aleph(X) \implies W \leq_c X. \]
+Assume $W <_o \aleph(X)$. Then $W =_o \seg_{\aleph(X)}(\alpha)$ for some $\alpha = [U]\in \aleph(X)$, so $W=_o U$ and thus $W =_c U \subseteq X$. So $W\leq_c X$.
+\end{proof}
+
+\subsubsection{Burali-Forti's paradox}
+Burali-Forti's paradox is like Cantor's paradox for well-ordered sets. It shows we cannot have a set of well-ordered sets.
+
+One way to put it is as follows: assume we have a set $WO$ of all well ordered sets. Then $\aleph(WO)$, which is a set of well-ordered sets, must be a subset of $WO$, so $\aleph(WO) \leq_c WO$. This contradicts Hartogs' lemma.
+
+A (slightly) more historical\footnote{See \url{https://zenodo.org/record/2362091/files/article.pdf}} approach: let $\Omega \defeq WO/=_o$.
+The elements of $\Omega$ are well-ordered by $\leq_o$ (like in lemma \ref{lemma:wellorderingHartogsNumber}).
+Consider $\Omega+1 \defeq \operatorname{Succ}(\Omega)$. Because $\Omega = \seg(t_\Omega)$, we have $[\Omega] < [\Omega +1]$.
+On the other hand, by proposition \ref{prop:wosetIsomorphicToInitialSegments} we see that $\Omega =_o \seg[\Omega]$, so that each element of $\Omega$ is comparable to $\Omega$.
+Thus all well-ordered sets are $\leq_o \Omega$ and in particular $[\Omega + 1] \leq [\Omega]$. By $[\Omega] < [\Omega +1]$ and $[\Omega + 1] \leq [\Omega]$ we see that the elements of $\Omega$ are not well-ordered, which is a contradiction.
+
+The paradox is nowadays more commonly stated for (von Neumann) ordinals (see later).
+
+
+
+
+\chapter{Choice}
+TODO: Ultrafilter lemma, Szpilrajn extension theorem
+
+\section{The axiom and equivalent formulations}
+The axiom of choice deals with the following situation: given a family of (non-empty) sets, we want to be able to pick one element from each set. The axiom of choice posits that this is possible.
+
+The function that takes a set in the family and returns our pick is called a choice function:
+\begin{definition}
+Let $\mathcal{E}$ be a collection of non-empty sets. A \udef{choice function} is any function
+\[ f: \mathcal{E} \to \bigcup \mathcal{E} \]
+such that $\forall X\in\mathcal{E}: f(X) \in X$.
+\end{definition}
+
+If there is a criterion by which to choose the object, then clearly we can find a choice function, without needing to appeal to the axiom of choice.
+
+For example, if all sets in $\mathcal{E}$ are well-ordered, we can choose the least element from each set. The choice function is then
+\[ f = \setbuilder{ (X,x)\in \mathcal{E}\times \bigcup \mathcal{E}}{x\in X \land \forall y \in X: x\leq X }. \]
+This is a well defined choice function and we did not need the axiom of choice.
+
+For some collections of sets $\mathcal{E}$ we do need the axiom of choice to find a choice function.
+
+There is a well-known analogy due to Russell: if we have a collection $\mathcal{E}$ of pairs of shoes, it is easy to give a choice function, just always take the left shoe for example. If we have a collection $\mathcal{E}'$ of pairs of socks this choice function does not work. We cannot construct a choice function because the socks are indistinguishable. In order to pick one sock from each pair we need to axiom of choice.
+
+We now properly state the axiom:
+\begin{enumerate}[(I)]
+\setcounter{enumi}{6}
+\item \textbf{Axiom of choice (AC)}: for any non-empty set of sets $\mathcal{E}$ there is a choice function:
+\[ \emptyset \notin \mathcal{E} \implies \exists f \in \left(\mathcal{E} \to \bigcup \mathcal{E}\right): \forall X \in \mathcal{E}: f(X)\in X. \]
+\end{enumerate}
+
+\begin{definition}
+A set $S$ is a \udef{choice set} for a family of sets $\mathcal{E}$ if
+\begin{itemize}
+\item $S\subseteq \bigcup \mathcal{E}$;
+\item $\forall X \in \mathcal{E}: S\cap X$ is a singleton.
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{proposition:choiceEquivalents}
+The following statements are equivalent to the axiom of choice:
+\begin{enumerate}
+\item The Cartesian product of any family of non-empty sets is non-empty.
+\item \textup{Zermelo Postulate} Every family $\mathcal{E}$ of non-empty and pairwise disjoint sets admits a choice set.
+\item For every set $A$ the family $\powerset(A)\setminus \emptyset$ admits a choice function.
+\item For any sets $A,B$ and binary relation $P\subseteq A\times B$,
+\[ \left [\forall x\in A: \exists y \in B: P(x,y)\right] \implies \left[ \exists f\in(A\to B): \forall x\in A: P(x,f(x)) \right].  \]
+\end{enumerate}
+\end{proposition}
+
+\section{Some equivalent theorems}
+
+\begin{theorem}
+The following results are equivalent to the axiom of choice:
+\begin{enumerate}
+\item \undline{Zorn's lemma}: If every chain in a poset $P$ has an upper bound, then $P$ has a maximal element.
+\item \undline{Zorn's lemma (dual)}: If every chain in a poset $P$ has an lower bound, then $P$ has a minimal element.
+\item \undline{Hypothesis of cardinal comparability}: for all sets $A,B$: $A\leq_c B$ or $B\leq_c A$.
+\item \undline{Well-ordering theorem}: every set is well-orderable.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We proceed round-robin-style:
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{(\text{AC}) \Rightarrow (1)}$] Assume every chain in a poset $P$ has an upper bound. Let $f$ be a choice function on $\powerset(P)\setminus \emptyset$. We define a function $g: \aleph(P) \to P$ by transfinite recursion as follows:
+\[ g(x) = \begin{cases}
+f\left( \{\text{upper bounds of $g[\seg(x)]$}  \} \setminus g[\seg(x)] \right) & \text{(if defined, i.e. we are not choosing from $\emptyset$)} \\
+f\left( \{\text{upper bounds of $g[\seg(x)]$}  \} \right) & (\text{else}).
+\end{cases} \]
+This is well defined because $g[\seg(x)]$ is a chain in $P$ and thus $\{\text{upper bounds of $g[\seg(x)]$}  \}$ cannot be empty by assumption, so the second case always works.
+
+By Hartogs' lemma, theorem \ref{theorem:HartogsLemma}, the function $g$ cannot be injective, so there exists an $m\in P$ that is the image of multiple elements $x_1,x_2\in\aleph(P)$. Assume $x_1 < x_2$, then $g(x_2)$ must have been defined by the second case in the recursion, meaning $m$ is a maximal element of $P$.
+\item[$\boxed{(1) \Leftrightarrow (2)}$] By duality.
+\item[$\boxed{(1) \Rightarrow (3)}$] Every chain in the set $(A \not\rightarrowtail B)$ of injective partial functions from $A$ to $B$, ordered by inclusion, is inductive by proposition \ref{prop:inductive}, and thus has a maximal element. If this maximal element is a total function, then $A\leq_c B$. If it is not a total function, it is surjective and we have a bijection from a subset of $A$ to be, i.e. $B\leq_c A$.
+\item[$\boxed{(3) \Rightarrow (4)}$] Let $A$ be a set. By Hartogs' lemma, theorem \ref{theorem:HartogsLemma}, $\aleph(A) \nleq_c A$. By cardinal comparability this implies $A \leq_c \aleph(A)$. The bijection between $A$ and a subset of $\aleph(A)$ determines a well-ordering on $A$.
+\item[$\boxed{(4) \Rightarrow (\text{AC})}$] Let $A$ be a set. Then we can define a well-ordering $\leq$ on $A$. We can then define a choice function on $\powerset(A)\setminus \emptyset$ by returning the $\leq$-least member of each subset.
+\end{itemize}
+\end{proof}
+
+\begin{lemma} \label{lemma:surjectiveInverse}
+Every surjective function has a right inverse \textup{if and only if} the axiom of choice holds.
+\end{lemma}
+
+\begin{definition}
+A family of sets $\mathcal{E}$ is of \udef{finite character} if
+\[ X\in \mathcal{E} \qquad \iff \qquad \text{every finite subset of $X$ belongs to $\mathcal{E}$.} \]
+\end{definition}
+An immediate property of families of finite character: for each $X\in \mathcal{E}$, every (finite or infinite) subset of $X$ belongs to $\mathcal{E}$.
+
+\begin{lemma} \label{lemma:finiteCharacterInductive}
+Any family of sets $\mathcal{E}$ of finite character ordered by inclusion is inductive.
+\end{lemma}
+\begin{proof}
+Let $S$ be a chain in $\mathcal{E}$, then we claim $\bigcup S \in \mathcal{E}$. Indeed every (finite) subset of $\bigcup S$ is a subset of an element of $S$ and so $\bigcup S\in \mathcal{E}$.
+\end{proof}
+
+Some more principles reminiscent of (and equivalent to) Zorn's lemma:
+\begin{theorem} \label{theorem:ZornEquivalents}
+The following results are equivalent to the axiom of choice:
+\begin{enumerate}
+\item \undline{Teichmüller-Tukey lemma}: Every non-empty collection of finite character has a maximal element with respect to inclusion.
+\item \undline{Hausdorff maximal principle}: Let $P$ be a poset. Every chain in $P$ is contained in a maximal chain in $P$.
+\item \undline{Maximal chain principle}: Every non-empty poset has a maximal chain.
+\end{enumerate}
+\end{theorem}
+The Hausdorff maximal principle is also known as the ``Kuratowski lemma''. The name ``Hausdorff maximal principle'' may be reserved for the specific case where $P$ is a family of sets ordered by inclusion. These formulations are equivalent, by \ref{prop:posetPowerset}.
+\begin{proof}
+We prove equivalence with Zorn's lemma round-robin-style:
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{(\text{Zorn}) \Rightarrow (1)}$] Assume Zorn's lemma. Let $\mathcal{E}$ be a non-empty collection of finite character, which is partially ordered by inclusion. Because $\mathcal{E}$ is inductive, by lemma \ref{lemma:finiteCharacterInductive}, each chain has an upper bound and thus $\mathcal{E}$ has a maximal element.
+\item[$\boxed{(1) \Rightarrow (2)}$] Being a chain is a property of finite character. Let $C$ be a chain in $P$. Then the family of all chains in $P$ containing $C$ is a family of finite character and $P$ is contained in the maximal element.
+\item[$\boxed{(2) \Rightarrow (3)}$] Take one element in the poset. The set of this element is a chain.
+\item[$\boxed{(3) \Rightarrow (\text{Zorn})}$] Assume there is a maximal chain and every chain has an upper bound. Any upper bound of a maximal chain is a maximal element.
+\end{itemize}
+\end{proof}
+
+\section{Weaker axioms}
+\subsection{Countable choice}
+It is in general clear we can make a finite number of choices, by the definition of the existence quantifier (TODO). The axiom of choice says we can make an arbitrary number of choices. The axiom of countable choice is weaker, it says we can make a countable number of choices. Compare also to point 4. of \ref{proposition:choiceEquivalents}.
+\begin{enumerate}[(I)]
+\setcounter{enumi}{6}
+\item[(VII')] \textbf{Axiom of countable choice ($\text{AC}_{\N}$)}: for any set $B$ and binary relation $P\subseteq \N\times B$,
+\[ [\forall n\in \N: \exists y\in B: P(n,y)] \implies [\exists f\in (\N\to B): \forall n \in \N: P(n,f(n))]. \]
+\end{enumerate}
+
+\subsection{Dependent choice}
+The axioms
+
+\begin{proposition} \label{prop:welfoundedACC}
+Assume the axiom of dependent choice and let $P$ be a poset. Then
+\begin{enumerate}
+\item $P$ satisfies the descending chain condition \textup{if and only if} $P$ is well-founded;
+\item $P$ satisfies the ascending chain condition \textup{if and only if} $P$ is converse well-founded.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+A poset $P$ has no infinite chains \textup{if and only if} it satisfies both the ascending and the descending chain condition.
+\end{corollary}
+\begin{proof}
+Clearly if $P$ has no infinite chains, then it satisfies both the ascending and the descending chain condition.
+
+Suppose, towards a contradiction, that $P$ satisfies both the ascending and the descending chain condition and contains an infinite chain $C$. Then $C$ has both a maximal en and a minimal element by the proposition. Because $C$ is totally ordered, these maximal and minimal elements are greatest and least elements. Then $C$ is finite by the ascending and the descending chain conditions.
+\end{proof}
+
+
+\chapter{Replacement}
+
+\undline{Maximal antichain principle}: Every non-empty poset has a maximal antichain.
+
+\chapter{Cardinals and ordinals}
+\url{http://euclid.colorado.edu/~monkd/monk11.pdf}
+\section{Cardinals}
+
+The idea behind the cardinals is to have a set of objects that witnesses the size, or potency, of sets. These two conditions define the cardinal assignment.
+\begin{definition}
+Define an operation $A\mapsto |A|$ on the class of sets such that
+\begin{itemize}
+\item $A=_c |A|$;
+\item for each set of sets $\mathcal{E}$, $\{ |X|\;|\; X\in\mathcal{E} \}$ is a set.
+\end{itemize}
+Such an operation is called a \udef{(weak) cardinal assignment}. The \udef{cardinal numbers} (relative to a given
+cardinal assignment) are its values:
+\[ \operatorname{Card}(\kappa) \quad\Leftrightarrow\quad \kappa \in \operatorname{Card} \defequiv \exists A: \kappa = |A|. \]
+
+If the cardinal assignment also satisfies
+\begin{itemize}
+\item if $A=_c B$, then $|A|=|B|$,
+\end{itemize}
+then it is called a \udef{strong cardinal assignment}.
+\end{definition}
+In particular, notice that cardinals are sets. Indeed the assignment $A\mapsto |A|$ is a weak cardinal assignment, so practically all results in this section hold in particular for sets.
+
+\begin{lemma}
+If cardinal numbers are defined using a strong cardinal assignment, then for all cardinals $\kappa,\lambda$:
+\[ |\kappa| = \kappa \quad \text{and}\quad \kappa =_c\lambda \iff \kappa = \lambda \]
+\end{lemma}
+
+\begin{lemma}
+For any cardinal assignment and any two sets $A,B$,
+\begin{enumerate}
+\item $|A| = |B| \implies A=_c B$;
+\item $|\emptyset| = \emptyset$.
+\end{enumerate}
+\end{lemma}
+
+\subsection{Cardinal arithmetic without choice}
+\begin{definition}
+Fix a specific, possibly weak, cardinal assignment. We define the arithmetic operations on the cardinal numbers $\kappa, \lambda$ as
+\begin{align*}
+\kappa + \lambda &\defeq |\kappa \sqcup \lambda | & &=_c \kappa \sqcup \lambda, \\
+\kappa \cdot \lambda &\defeq |\kappa \times \lambda | & &=_c \kappa \times \lambda, \\
+\kappa^\lambda &\defeq |(\lambda \to \kappa) | & &=_c (\lambda \to \kappa).
+\end{align*}
+Also
+\begin{align*}
+\sum_{i\in I}\kappa_i &\defeq \left|\bigsqcup_{i\in I}\kappa_i\right|, \\
+\prod_{i\in I}\kappa_i &\defeq \left| \prod_{i\in I}\kappa_i \right|.
+\end{align*}
+We fix the following symbols for some empty set, singleton and doubleton cardinals:
+\[ 0 \defeq |\emptyset|=\emptyset \qquad 1 \defeq |\{0\}| \qquad 2\defeq |\{0,1\}|.   \]
+\end{definition}
+The definition of $0,1,2$ does not conflict with the natural numbers.
+
+\begin{lemma}
+Let $\kappa_1,\kappa_2,\lambda_1,\lambda_2$ be cardinal numbers such that $\kappa_1=_c \kappa_2$ and $\lambda_1=_c\lambda_2$. Then
+\begin{enumerate}
+\item $\kappa_1 + \lambda_1 =_c \kappa_2 + \lambda_2$;
+\item $\kappa_1 \cdot \lambda_1 =_c \kappa_2\cdot \lambda_2$;
+\item $\kappa_1^{\lambda_1} =_c \kappa_2^{\lambda_2}$.
+\end{enumerate}
+\end{lemma}
+The proof is the same as for lemma \ref{lemma:welldefinedCardinalArithemtic}.
+
+\begin{lemma}
+For all sets $A,B$ and thus for all cardinals $\kappa,\lambda$:
+\[ \prod_{i\in A}B = (A\to B), \qquad \prod_{i\in\lambda}\kappa = \kappa^\lambda. \]
+\end{lemma}
+Notice that there is equality, $=$, not just equinumerosity $=_c$.
+
+Cardinal arithmetic has properties reminiscent of a commutative semiring (i.e. ring where additive inverses are not guaranteed, see later). Of course cardinal arithmatic is not defined on a set, but on a class, so this is not completely true.
+\begin{lemma} \label{lemma:cardinalArithmetic}
+Let $\kappa,\lambda, \mu$ be cardinal numbers. Then $+$ is like a commutative monoid:
+\begin{enumerate}
+\item $\kappa + (\lambda+\mu) =_c (\kappa+\lambda)+\mu$;
+\item $0+\kappa =_c \kappa+0 =_c \kappa$;
+\item $\kappa+\lambda =_c \lambda+\kappa$;
+\end{enumerate}
+and $\cdot$ is also like a commutative monoid:
+\begin{enumerate}
+\setcounter{enumi}{3}
+\item $\kappa \cdot (\lambda\cdot\mu) =_c (\kappa\cdot\lambda)\cdot\mu$;
+\item $1\cdot\kappa =_c \kappa\cdot 1 =_c \kappa$;
+\item $\kappa\cdot\lambda =_c \lambda\cdot\kappa$.
+\end{enumerate}
+Multiplication distributes over addition:
+\begin{enumerate}
+\setcounter{enumi}{6}
+\item $\kappa\cdot(\lambda +\mu) =_c \kappa\cdot \lambda+\kappa\cdot\mu$.
+\end{enumerate}
+Multiplication by $0$ annihilates:
+\begin{enumerate}
+\setcounter{enumi}{7}
+\item $0\cdot \kappa =_c 0$.
+\end{enumerate}
+There are no zero divisors:
+\begin{enumerate}
+\setcounter{enumi}{8}
+\item $\kappa\neq 0 \neq \lambda \implies \kappa\cdot\lambda \neq 0$.
+\end{enumerate}
+\end{lemma}
+\begin{lemma}
+Let $\kappa_i$ be cardinals for all $i\in I$. Then
+\[ \exists i\in I: \kappa_i = 0 \implies \prod_{i\in I}\kappa_i. \]
+\end{lemma}
+The other implication depends on the axiom of choice!
+
+\begin{lemma}
+Let $\kappa$ be a cardinal number. Then
+\[ \kappa^0 =_c 1, \qquad \kappa^1 =_c \kappa, \qquad \kappa^2 =_c \kappa\cdot \kappa. \]
+\end{lemma}
+
+\begin{lemma}
+Let $\kappa,\lambda, \mu$ be cardinal numbers. Then
+\begin{enumerate}
+\item $(\kappa\cdot\lambda)^\mu =_c \kappa^\mu\cdot\lambda^\mu$;
+\item $\kappa^{(\lambda+\mu)} =_c \kappa^\lambda\cdot \kappa^\mu$;
+\item $\left(\kappa^\lambda\right)^\mu =_c \kappa^{\lambda\cdot \mu}$.
+\end{enumerate}
+\end{lemma}
+By Cantor's theorem \ref{theorem:Cantor}, this also gives $\kappa \leq_c 2^\kappa$.
+
+\begin{lemma}
+Let $\kappa,\lambda_i$ be cardinals for all $i\in I$. Then
+\[ \kappa\cdot \sum_{i\in I}\lambda_i =_c \sum_{i\in I}\kappa\cdot \lambda_i. \]
+\end{lemma}
+\begin{proof}
+We compute
+\begin{align*}
+\kappa\cdot \sum_{i\in I}\lambda_i &=_c \kappa\times\left(\bigsqcup_{i\in I}\lambda_i\right) = \kappa\times \left(\bigcup_{i\in I}\{i\}\times \lambda_i\right) = \bigcup_{i\in I}\kappa\times(\{i\}\times \lambda_i) \\
+&=_c \bigcup_{i\in I}\{i\}\times(\kappa\times \lambda_i) = \bigsqcup_{i\in I}\kappa\times \lambda_i =_c \sum_{i\in I}\kappa\cdot \lambda_i.
+\end{align*}
+\end{proof}
+TODO: expand on such computations?
+
+\begin{lemma}
+Let $\kappa,\lambda, \mu$ be cardinal numbers. Then
+\begin{enumerate}
+\item $\kappa\leq_c \mu \implies \kappa+\lambda \leq_c \mu+\lambda$;
+\item $\kappa\leq_c \mu \implies \kappa\cdot\lambda \leq_c \mu\cdot\lambda$;
+\item $\kappa\leq_c \mu \implies \kappa^\lambda \leq_c \mu^\lambda$;
+\item $\kappa\leq_c \mu \implies \lambda^\kappa \leq_c \lambda^\mu$ if $\lambda\neq 0$.
+\end{enumerate}
+\end{lemma}
+These implications do not necessarily hold for strict inequalities.
+
+For the last implication: if $\lambda = 0$, then
+\[ \forall \kappa \in \operatorname{Card}: \lambda^\kappa = (\kappa\to\emptyset) = \begin{cases}
+\emptyset & \kappa \neq 0 \\
+\{\emptyset\} & \kappa = 0.
+\end{cases} \]
+So if $\kappa = 0$ and $\mu\neq 0$, there exists an injection $\kappa\to\mu$, namely $\emptyset$ and so $\kappa\leq_c \mu$, but there is no injection (in fact no function) $\{\emptyset\}\to\emptyset$, so $\lambda^\kappa \nleq_c \lambda^\mu$.
+
+\subsection{Cardinal arithmetic with choice}
+\[ |\mathbb{F}|^{|\beta|} > |\beta| \]
+In this section we assume the axiom of choice.
+\begin{definition}
+Given any cardinal $\kappa$, we can define the \udef{successor cardinal} as
+\[ \kappa^+ \defeq \left|\aleph(\kappa)\right|. \]
+\end{definition}
+
+\begin{lemma}
+For any cardinal $\kappa$, the cardinal $\kappa^+$ is $\leq_c$-least among the cardinals bigger than $\kappa$.
+\end{lemma}
+\begin{proof}
+By Hartogs' lemma and cardinal comparability, we know $\kappa <_c \kappa^+$. By proposition \ref{proposition:HartogsLeast} $\kappa^+$ is $\leq_o$-least (and thus $\leq_c$-least) with this property.
+\end{proof}
+
+Tarski's theorem about choice: For every infinite set $A$, there is a bijective map between the sets $A$ and $A\times A$.
+
+\subsection{The cardinality of natural numbers}
+\begin{definition}
+We define
+\[ \aleph_0 \defeq |\N|. \]
+This is the cardinality of countably infinite sets. If we have a strong cardinal assignment is is uniquely so.
+
+We also define for each $n\in \N$:
+\[ \kappa^n \defeq |\kappa^{(n)}|. \]
+\end{definition}
+We also define $\aleph_1 \defeq \aleph_0^+,\aleph_2 \defeq \aleph_1^+,\ldots $
+
+If we take the natural numbers to be Von Neumann ordinals, then for all finite sets $A$, $\#(A) =_c A$. Then $\#$ is a strong cardinal assignment on the finite sets and all the previous results apply.
+
+
+\begin{proposition}
+For each countably infinite set $A$ and each $n>0$,
+\[A =_c A\times A =_c A^{(n)} =_c A^*. \]
+The equivalent expression in cardinal arithmetic is
+\[ \aleph_0 =_c \aleph_0\cdot\aleph_0 =_c \aleph_0^n =_c |\aleph_0^*|. \]
+\end{proposition}
+\begin{proof}
+If all $=_c$ are replaced by $\leq_c$, the claim is trivial, thus, by the Schröder-Bernstein theorem \ref{theorem:SchroederBernstein}, it is enough to show $\N^*\leq_c \N$.
+
+Choose a bijection $\rho: \N\times\N\twoheadrightarrowtail \N$ as in lemma \ref{lemma:pairEnumeration}.
+
+Define by recursion a function $f:\N\to (\N^{(n+1)}\rightarrowtail \N): n\mapsto \pi_n$, such that
+\begin{align*}
+\pi_0(u) &= u(0) \\
+\pi_{n+1}(u) &= \rho(\pi_n(u|_{[0,n+1[}), u(n+1)).
+\end{align*}
+Then the function
+\[ \pi(u) = (\len(u)-1, \pi_{\len(u)-1}(u)) \]
+is injective, proving
+\[ \bigcup_{n=0}^\infty \N^{(n+1)}\leq_c \N\times \N. \]
+
+Using $\rho$ we see that $\bigcup_{n=0}^\infty \N^{(n+1)}\leq_c \N$.
+\end{proof}
+
+\begin{lemma}
+For all cardinals $\kappa$, $2^\kappa \neq_c \aleph_0$.
+\end{lemma}
+\begin{proof}
+We split into two cases $\kappa$ countable and uncountable:
+\begin{enumerate}
+\item If $\kappa$ is countable, then either $\kappa =_c \aleph_0$ and $2^\kappa \neq_c \aleph_0$ by Cantor's theorem, \ref{theorem:Cantor}, or $\kappa$ is finite in which case $2^\kappa =_c \#(2^{\kappa}) = 2^{\#(\kappa)}$ which is finite.
+\item If $\kappa$ is uncountable and $2^\kappa =_c \aleph_0$, then $\kappa \leq_c 2^\kappa =_c \aleph_0$ and $\kappa$ would be countable. A contradiction.
+\end{enumerate}
+\end{proof}
+This is an expression of the fact that we can compare cardinals to countable cardinals, even without choice.
+
+\subsection{The continuum}
+\begin{definition}
+We define the \udef{continuum}
+\[ \mathfrak{c} \defeq |\powerset(\N)| =_c 2^\aleph_0. \]
+\end{definition}
+The continuum hypothesis is that there are no cardinals between $\aleph_0$ and $\mathfrak{c}$. This is independent of ZFC.
+
+From cardinal arithmetic we can immediately obtain some results, like
+\[ \mathfrak{c}\cdot\mathfrak{c} =_c 2^{\aleph_0}\cdot 2^{\aleph_0} =_c 2^{\aleph_0+\aleph_0} =_c 2^{\aleph_0} =_c \mathfrak{c}\]
+and
+\[ \mathfrak{c} =_c 2^{\aleph_0} \leq_c \aleph_0^{\aleph_0} \leq_c \mathfrak{c}^{\aleph_0} =_c \left(2^{\aleph_0}\right)^{\aleph_0} =_c 2^{\aleph_0\cdot \aleph_0} =_c \mathfrak{c}.\]

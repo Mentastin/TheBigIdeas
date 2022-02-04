@@ -1,0 +1,2476 @@
+\chapter{Ordered sets}
+\section{Order relations}
+\begin{definition}
+All types of orders are transitive.
+\begin{itemize}
+\item A \udef{preorder} or \udef{quasiorder} $\precsim$ is also reflexive.
+\item A \udef{strict preorder} $\precnsim$ is also irreflexive.
+\item A \udef{total preorder} is also reflexive and connex.
+\item A \udef{partial order} $\preceq$ is also reflexive and anti-symmetric.
+\item A \udef{strict partial order} $\prec$ is also irreflexive and anti-symmetric.
+\item A \udef{total order} $\leq$ is also reflexive, anti-symmetric and connex. Connex means all elements are comparable.
+\item A \udef{strict total order} $<$ is also trichotomous.
+\end{itemize}
+An \udef{ordered set} is a pair $\sSet{P,\Yleft}$ such that $P$ is a set and $\Yleft$ is an order on $P$. We call this ordered set
+\begin{itemize}
+\item a \udef{proset} if $\Yleft$ is a preorder;
+\item a \udef{poset} if $\Yleft$ is a partial order;
+\end{itemize}
+\end{definition}
+Notice that
+\[ \text{trichotomous} \iff \begin{cases}
+\text{irreflexive} \\ \text{anti-symmetric} \\ \text{\textit{semi}-connex}
+\end{cases}. \]
+
+If we say $\sSet{P,\Yleft}$ is an ordered set without any other qualifiers, we only assume $\Yleft$ is transitive.
+
+\begin{example}
+\begin{itemize}
+\item Every equivalence relation is a preorder. Conversely, symmetric preorders are equivalence relations.
+\item Let $A$ be a set and $\id_A$ the identity relation on $A$. Then $\sSet{A,\id_A}$ is a poset. Such posets are called \udef{discrete posets}.
+\item Let $B$ be a set and $\bot\in B$. Then the order $\preceq$ defined by
+\[ x \preceq y \defequiv (x=\bot) \lor (x = y) \]
+is a partial order. Such posets are called \udef{flat posets}.
+\end{itemize}
+\end{example}
+
+\begin{lemma}
+Let $(P, \precsim)$ be a proset. The relation defined by
+\[ x \sim_{(\precsim)} y \defequiv (a\precsim b)\land (b\precsim a) \]
+is an equivalence relation.
+\end{lemma}
+
+\begin{lemma}
+For any binary homogeneous relation $R$,
+\begin{enumerate}
+\item the reflexive transitive closure, $R^{+=}$, is a preorder;
+\item the left residual, $R\backslash R = \overline{R^\transp;\overline{R}}$ is a preorder.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition} \label{prop:posetPowerset}
+The subset relation $\subseteq$ is a partial ordering. Every partially ordered set $(P,\preceq)$ is isomorphic to a subset of a power set, ordered by the subset relation.
+\end{proposition}
+\begin{proof}
+Define
+\[ \phi: P \to \powerset(P): x \mapsto \{ y\in P\;|\; y\preceq x \}. \]
+We claim $\phi$ is injective and respects order. Then we can take $\phi':P\to \phi[P]$ to be the isomorphism.
+
+For injectivity, suppose $a,b\in P$ such that $\phi(a)=\phi(b)$. Since $a\preceq a$ by reflexivity, $a\in \phi(a) = \phi(b)$. Thus $a\preceq b$. Similarly $b \preceq a$. By anti-symmetry, $a=b$.
+
+Now we prove $a \preceq b \iff \phi(a)\subseteq \phi(b)$. First suppose $a\preceq b$ and take an arbitrary $x\in\phi(a)$. Then $x \preceq a$. By transitivity with $a\preceq b$, we have $x\preceq b$ and thus $x\in\phi(b)$. Conversely assume $\phi(a)\subseteq \phi(b)$. Then $a\in\phi(b)$ because $a\in\phi(a)$, by reflexivity. So $a\preceq b$.
+\end{proof}
+
+\begin{proposition}
+We can associate a strict order to a non-strict order.
+\begin{enumerate}
+\item Let $(P, \precsim)$ be a proset. The relation defined by
+\[ x\precnsim y \defequiv (x\precsim y)\land (\neg y\precsim x) \]
+is a strict preorder.
+\item Let $(P, \preceq)$ be a poset. The relation defined by
+\[ x\prec y \defequiv (x\preceq y)\land \neg(y\preceq x) \quad \Leftrightarrow \quad (x\preceq y)\land (y\neq x) \]
+is a strict partial order.
+\item Let $(P, \leq)$ be a totally ordered set. The relation defined by
+\[ x < y \defequiv (x\leq y)\land \neg(y\leq x) \quad \Leftrightarrow \quad (x\leq y)\land (y\neq x) \quad \Leftrightarrow \quad \neg(y\leq x)  \]
+is a strict total order.
+\end{enumerate}
+Multiple different preorders are associated to the same strict preorder. For partial and total orders the association is one-to-one.
+\end{proposition}
+Notice that for a proset $(P, \precsim)$ we cannot simply define the strict order as $ x\precnsim y \defequiv (x\precsim y)\land (x\neq y)$ as this is not transitive in general.
+
+\section{The dual of an ordered set}
+\begin{definition}
+For any ordered set $(P, \Yleft)$ the \udef{dual} of $P$ is the ordered set $(P^o, \Yleft^o)$, where $P^o=P$ and $\Yleft^o \defeq \Yleft^\transp = \Yright$.
+\end{definition}
+This means $\forall a,b\in P: a\Yleft b \iff b\Yleft^o a$.
+
+\begin{lemma}
+The dual of an ordered set of a particular type is an ordered set of the same type.
+\end{lemma}
+\begin{corollary}
+All statements about all ordered sets also hold for all duals of ordered sets.
+\end{corollary}
+
+\section{Functions on ordered sets}
+\begin{definition}
+Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be prosets and $f: P\to Q$ a function. We say
+\begin{itemize}
+\item $f$ is \udef{order-preserving}, \udef{monotonically increasing} or just \udef{increasing} if
+\[ \forall x,y\in P: x\Yleft_P y \implies f(x)\Yleft_Q f(y); \]
+\item $f$ is \udef{order-reflecting} if
+\[ \forall x,y\in P: f(x)\Yleft_Q f(y) \implies x\Yleft_P y; \]
+\item $f$ is an \udef{order embedding} if it is order-preserving and order-reflecting:
+\[ \forall x,y\in P: x\Yleft_P y \iff f(x)\Yleft_Q f(y); \]
+\end{itemize}
+and, dually, we say
+\begin{itemize}
+\item $f$ is \udef{order-reversing}, \udef{antitone}, \udef{monotonically decreasing} or just \udef{decreasing} if
+\[ \forall x,y\in P: x\Yleft_P y \implies f(x) \Yright_Q f(y); \]
+\item $f$ is \udef{reverse order-reflecting} if
+\[ \forall x,y\in P: f(x)\Yleft_Q f(y) \implies x\Yright_P y; \]
+\item $f$ is a \udef{reverse order embedding} if it is order-reversing and reverse order-reflecting:
+\[ \forall x,y\in P: x\Yleft_P y \iff f(x)\Yright_Q f(y). \]
+\end{itemize}
+Finally
+\begin{itemize}
+\item $f$ is \udef{monotone} or \udef{monotonic} if it is either order-preserving or order-reversing.
+\end{itemize}
+
+The adjectives ``strict'' and ``weak'' can be added to any of these cases to identify whether the (weak) order or the associated strict order is meant.
+\end{definition}
+An order isomorphism, or \udef{similarity}, is a bijective order embedding. Let $U,V$ be ordered sets. We write $U =_o V$ if $U$ and $V$ are order isomorphic and $U \neq_o V$ if not.
+
+\begin{lemma} \label{lemma:orderReflectionIsInjective} \label{lemma:strictOrderPreservationIsInjective}
+Let $P,Q$ be posets and $f: P\to Q$. The following are sufficient conditions for $f$ to be injective:
+\begin{enumerate}
+\item $f$ is order-reflecting;
+\item $f$ is strictly order-preserving and $P$ is totally ordered.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) If $f(x) = f(y)$, then $x\preceq y$ and $y\preceq x$, so $x=y$ by anti-symmetry.
+
+(2) Let $f$ be the strict order-preserving function and $x,y\in P$. Assume $f(x)=f(y)$. Assume, towards a contradiction, that $x\neq y$, then either (by totality) $x< y$ and $f(x) < f(y)$ or $y < x$ and $f(y)<f(x)$. Both cases contradict $f(x)=f(y)$.
+\end{proof}
+
+\begin{lemma}
+Let $f:P\to Q$ be a function between posets. Then
+\begin{enumerate}
+\item If $f$ preserves strict order, then it is order-preserving.
+\item If $f$ is order-reflecting, then it reflects strict order.
+\end{enumerate}
+If $f$ is injective, the opposite implications also hold.
+\end{lemma}
+\begin{corollary}
+Let $f: P\to Q$ be a function between posets.
+\begin{enumerate}
+\item If $f$ is an order embedding, then it is a strict order embedding.
+\item If $P$ is totally ordered, the converse implication holds as well.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Use \ref{lemma:orderReflectionIsInjective}.
+\end{proof}
+
+The converse does not hold in general if $P$ is a poset because a strict order embedding between posets is not necessarily injective. A counterexample is
+\[
+\begin{tikzcd}
+& \top & \\
+x \ar[ur, dash] & & y \ar[ul, dash] \\
+& \bot \ar[ul, dash] \ar[ur, dash] &
+\end{tikzcd} \qquad \begin{tikzcd} {} \arrow[rr, "f"] & {}& {}\end{tikzcd} \qquad \begin{tikzcd}
+f(\top) \\ f(x) = f(y) \ar[u,dash] \\ f(\bot) \ar[u,dash]
+\end{tikzcd}.
+\]
+
+\begin{lemma} \label{lemma:equivalenceOrderPreservingReflecting}
+Let $f:P\to Q$ be a function between totally ordered sets. Then
+\begin{enumerate}
+\item If $f$ preserves strict order, then it is order-preserving.
+\item If $f$ is order-reflecting, then it reflects strict order.
+\end{enumerate}
+If $f$ is injective, the opposite implications also hold.
+\end{lemma}
+\begin{proof}
+(1) Assume $f$ order-reflecting. Assume $x\leq y$. Either $f(x)\leq f(y)$ or $f(y)\leq f(x)$. If $f(y)\leq f(x)$, then
+\[ y\leq x \implies x=y \implies f(x)=f(y) \implies f(x)\leq f(y). \]
+So in both cases $f(x)\leq f(y)$.
+
+(2) Assume $f$ preserves strict order. Assume $f(x) < f(y)$. Either $x<y, y<x$ or $x=y$. If either $y<x$ or $x=y$ hold, preservation of strict order yields a contradiction. So $x<y$.
+
+(1') Assume $f$ order-preserving and injective. Assume $f(x)\leq f(y)$. Either $x\leq y$ or $y\leq x$. If $y\leq x$, then
+\[ f(y)\leq f(x) \implies f(x)=f(y) \implies x= y \implies x\leq y. \]
+So in both cases $x\leq y$.
+
+(2') Assume $f$ is injective reflects strict order. Assume $x < y$. Either $f(x)<f(y), f(y)<f(x)$ or $f(x)=f(y)$. If $f(y)<f(x)$, preservation of strict order yields a contradiction. If $f(x)=f(y)$, injectivity yields a contradiction. So $f(x)<f(y)$.
+\end{proof}
+
+\section{Subsets of ordered sets}
+\subsection{Up and down sets}
+\begin{definition}
+Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. We call
+\begin{itemize}
+\item $Q$ an \udef{up set} if $\forall x\in Q: \forall y\in P: x\Yleft y \implies y\in Q$;
+\item $Q$ a \udef{down set} if $\forall x\in Q: \forall y\in P: y\Yleft x \implies y\in Q$.
+\end{itemize}
+We define
+\begin{itemize}
+\item the \udef{upward closure} of $Q$ as $\upset Q \defeq \setbuilder{y\in P}{\exists x\in Q: x\Yleft y}$;
+\item the \udef{downward closure} of $Q$ as $\downset Q \defeq \setbuilder{y\in P}{\exists x\in Q: y\Yleft x}$.
+\end{itemize}
+For $x\in P$,
+\begin{itemize}
+\item $\upset x \defeq \upset\{x\}$ is the \udef{principle up set} generated by $x$;
+\item $\downset x \defeq \downset\{x\}$ is the \udef{principle down set} generated by $x$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $P$ be a proset. Then $\downset\emptyset = \emptyset = \upset\emptyset$.
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{P,\Yleft}$ be an ordered set and $x\in P$. Then
+\begin{enumerate}
+\item $\upset x = \setbuilder{y\in P}{x\Yleft y}$;
+\item $\downset x = \setbuilder{y\in P}{y\Yleft x}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $P$ be an ordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $\upset Q = \bigcup_{x\in Q}\upset x$;
+\item $\downset Q = \bigcup_{x\in Q}\downset x$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma} \label{lemma:QsubseteqDownQ}
+Let $\sSet{P,\precsim}$ be a preordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $Q \subseteq \upset Q$;
+\item $Q \subseteq \downset Q$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Reflexivity.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{P,\Yleft}$ be an ordered set and $Q,R\subseteq P$. Then
+\begin{enumerate}
+\item $Q \subseteq R$ implies $\downset Q \subseteq \downset R$ and $\upset Q \subseteq \upset R$;
+\item if $\Yleft$ is a preorder, then
+\[ \downset Q \subseteq \downset R \iff Q \subseteq R \iff \upset Q \subseteq \upset R. \]
+\end{enumerate}
+Let $x, y \in P$. Then
+\begin{enumerate} \setcounter{enumi}{2}
+\item $x\Yleft y \iff x\in \downset y$;
+\item $x\Yleft y \implies \downset x \subseteq \downset y$;
+\item if $\Yleft$ is a preorder, then $x\Yleft y \iff \downset x \subseteq \downset y$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $Q$ an up set iff 
+\[ \forall y\in P: \Big(\exists x\in Q:  x\Yleft y\Big) \implies y\in Q; \]
+\item $Q$ a down set iff 
+\[ \forall y\in P: \Big(\exists x\in Q:  y\Yleft x\Big) \implies y\in Q. \]
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The following propositions are equivalent $\forall y\in P$:
+\begin{align*}
+&\forall x\in Q: x\Yleft y \implies y\in Q \\
+&\forall x\in Q: \neg(x\Yleft y) \lor (y\in Q) \\
+&\Big(\forall x\in Q: \neg(x\Yleft y)\Big) \lor (y\in Q) \\
+&\neg \Big(\exists x\in Q: x\Yleft y \Big) \lor (y\in Q) \\
+&\Big(\exists x\in Q:  x\Yleft y\Big) \implies y\in Q.
+\end{align*}
+TODO justify (in particular line 2 to 3).
+\end{proof}
+\begin{corollary}
+Let $\sSet{P,\precsim}$ be a preordered set and $Q\subseteq P$, then
+\begin{enumerate}
+\item $Q$ is an up set \textup{if and only if} $Q = \upset Q$ \textup{if and only if} $Q \supseteq \upset Q$;
+\item $Q$ is a down set \textup{if and only if} $Q = \downset Q$ \textup{if and only if} $Q \supseteq \downset Q$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+The equivalence of $Q = \upset Q$ and $Q \supseteq \upset Q$ is given by \ref{lemma:QsubseteqDownQ}.
+
+We just need to show that $Q$ is an up set iff $Q \supseteq \upset Q$. By the lemma both these statements are equivalent to
+\[ \forall y\in P: y\in \upset Q \implies y\in Q. \]
+\end{proof}
+
+\begin{lemma}
+Let $P$ be an ordered set and $\{Q_i\}\subset \mathcal{O}(P)$ be a set of down sets in $P$. Then
+\begin{enumerate}
+\item $\bigcup Q_i$ is a down set;
+\item $\bigcap Q_i$ is a down set.
+\end{enumerate}
+The same is true for up sets.
+\end{lemma}
+
+\begin{lemma} \label{lemma:imageUpDownsets}
+Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be prosets, $f: P\to Q$ a function and $S\subseteq P$ a subset.
+\begin{enumerate}
+\item If $f$ is order-preserving, then $f[\upset S] \subseteq \upset f[S]$ and $f[\downset S] \subseteq \downset f[S]$.
+\item If $f$ is order-reversing, then $f[\upset S] \subseteq \downset f[S]$ and $f[\downset S] \subseteq \upset f[S]$.
+\item If $f$ is order-reflecting and surjective, then $f[\upset S] \supseteq \upset f[S]$ and $f[\downset S] \supseteq \downset f[S]$.
+\item If $f$ is reverse order-reflecting and surjective, then $f[\downset S] \supseteq \upset f[S]$ and $f[\upset S] \supseteq \downset f[S]$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $f$ is order-preserving and take $y\in f[\upset S]$. Then $\exists x\in \upset S: f(x) = y$ and $\exists s\in S: s\Yleft_P x$. So $f(s) \Yleft_Q f(x) = y$, meaning $y\in \upset f[S]$. The second part is dual.
+
+(2) Like the previous point, except now $y = f(x) \Yleft_Q f(s)$, so $y \in \downset f[S]$.
+
+(3) Assume $f$ is order-reflecting and surjective and take $y\in \upset f[S]$. Then $\exists t\in f[S]: t \Yleft_Q y$ and $\exists s\in S: f(s) = t$. Now because $f$ is surjective, we can find an $x\in P$ such that $f(x) = y$. So $t \Yleft_Q y$ is equivalent to $f(s) \Yleft_Q f(x)$, which implies $s \Yleft_P x$, meaning $x\in \upset S$ and so $y = f(x) \in f[\upset S]$. The second part is dual.
+
+(4) Like the previous point, except now $x\Yleft_P s$, meaning $x\in \downset S$ and so $y = f(x) \in f[\downset S]$.
+\end{proof}
+TODO: reverse image.
+
+\subsection{Upper and lower bounds}
+TODO: picture!
+\begin{definition}
+Let $(P,\Yleft)$ be an ordered set and $S$ a subset of $P$.
+\begin{itemize}
+\item An \udef{upper bound} of $S$ is an element $x\in P$ that is greater than or equal to every element in $S$:
+\[\forall y\in S: y\Yleft x. \]
+\item A \udef{greatest element}, \udef{largest element} or \udef{maximum} of $S$ is an upper bound of $S$ that is an element of $S$.
+\item A \udef{maximal element} of $S$ is an element $x\in S$ such that no element $y$ is strictly greater than $x$:
+\[ \forall y\in S: x\Yleft y \implies y \Yleft x. \]
+\end{itemize}
+And dually we have the following:
+\begin{itemize}
+\item A \udef{lower bound} of $S$ is an element $x\in P$ that is smaller than or equal to every element in $S$:
+\[ \forall y\in S: x\Yleft y. \]
+\item A \udef{least element}, \udef{smallest element} or \udef{minimum} of $S$ is a lower bound of $S$ that is an element of $S$.
+\item A \udef{minimal element} of $S$ is an element $x\in S$ such that no element $y$ is strictly smaller than $x$:
+\[ \forall y\in S: y\Yleft x \implies x \Yleft y. \]
+\end{itemize}
+We denote
+\begin{itemize}
+\item the set of all upper bounds of $S$ as $S^u$;
+\item the set of all lower bounds of $S$ as $S^l$;
+\item the set of greatest elements of $S$ as $\max(S)$;
+\item the set of least elements of $S$ as $\min(S)$.
+\end{itemize}
+We say $S$ is
+\begin{itemize}
+\item \udef{bounded above} if $S^u \neq \emptyset$;
+\item \udef{bounded below} if $S^l \neq \emptyset$.
+\end{itemize}
+We also define:
+\begin{itemize}
+\item $\sup(S) = \min(S^u)$; an element of $\sup(S)$ is a \udef{least upper bound}, \udef{supremum}, or \udef{join};
+\item $\inf(S) = \max(S^l)$; an element of $\inf(S)$ is a \udef{greatest lower bound}, \udef{infimum}, or \udef{meet}.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $(P,\Yleft)$ be an ordered set and $S$ a subset of $P$. Then
+\begin{enumerate}
+\item $\max(S) = S\cap S^u$;
+\item $\min(S) = S\cap S^l$;
+\item $\sup(S) = S^u\cap (S^u)^l$;
+\item $\inf(S) = S^l\cap (S^l)^u$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$. Then $S^u$ is an up set and $S^l$ a down set.
+\end{lemma}
+
+\begin{lemma} \label{lemma:boundsFromUpDownSets}
+Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$. Then
+\begin{enumerate}
+\item $S^u = \bigcap_{x\in S}\upset x$;
+\item $S^l = \bigcap_{x\in S}\downset x$.
+\end{enumerate}
+In particular $\{x\}^u = \upset x$ and $\{x\}^l = \downset x$.
+
+This also holds for empty $S$, if we relativise our intersection to $P$ (TODO!!).
+
+If $S$ is empty, then we have
+\begin{enumerate}
+\item $\emptyset^u = P$;
+\item $\emptyset^l = P$.
+\end{enumerate}
+\end{lemma}
+This also means that every set of upper bounds is an up set and every set of lower bounds is a down set.
+
+\begin{lemma}
+If $\sSet{P, \precsim}$ is a poset and $S\subseteq P$, then $\max(S), \min(S), \sup(S), \inf(S)$ are either singletons or empty.
+\end{lemma}
+\begin{proof}
+We prove for $\max(S)$. The other cases follow dually or a fortiori. Let $x,y\in \max(S)$. Then $x\precsim y$ and $y\precsim x$, so $x=y$ by anti-symmetry.
+\end{proof}
+For posets we sometimes use $\max/\min/\sup/\inf$ to denote the contents of the singleton rather than the singleton itself. If the set is empty, we say the $\max/\min/\sup/\inf$ does not exist.
+
+
+\begin{lemma}
+Let $(P,\Yleft)$ be an ordered set and $A,B$ subsets of $P$. Then
+\[ A\subseteq B^l \iff \Big[\forall a\in A, b\in B: a\precsim b \Big] \iff B\subseteq A^u. \]
+\end{lemma}
+This lemma identifies $(^u,^l)$ as a Galois connection.
+\begin{corollary}
+Let $(P,\precsim)$ be a proset and $A,B$ subsets of $P$. Then
+\begin{enumerate}
+\item $A\subseteq (A^l)^u$ and $A\subseteq (A^u)^l$;
+\item if $A\subseteq B$, then $B^u\subseteq A^u$ and $B^l \subseteq A^l$;
+\item $A^l = ((A^l)^u)^l$ and $A^u = ((A^u)^l)^u$.
+\end{enumerate}
+\end{corollary}
+These are all corollaries of point (3) of the lemma.
+\begin{proof}
+(1) $A^l \subseteq A^l \implies A = (A^l)^u$.
+
+(2) $A\subseteq B \implies A \subseteq (B^u)^l \implies B^u\subseteq A^u$.
+
+(3) $(A^l)^u \subseteq (A^l)^u \implies A^l \subseteq ((A^l)^u)^l$ and by 1. and 2. $A\subseteq (A^l)^u \implies ((A^l)^u)^l \subseteq A^l$.
+\end{proof}
+\begin{corollary} \label{corollary:maxSupMinInf}
+If $\sSet{P, \precsim}$ is a poset and $S\subseteq P$, then
+\begin{enumerate}
+\item $\max(S)\subset \sup(S)$;
+\item $\min(S)\subset \inf(S)$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+For (1) we calculate $\max(S) = S \cap S^u \subseteq (S^u)^l \cap S^u = \sup(S)$; (2) is dual.
+\end{proof}
+
+\begin{lemma} \label{corollary:orderPreservingReversingBounds}
+Let $(P, \precsim_P)$ and $(Q, \precsim_Q)$ be prosets, $f: P\to Q$ a function and $S\subseteq P$ a subset.
+\begin{enumerate}
+\item If $f$ is order-preserving, then
+\begin{enumerate}
+\item $f[S^u] \subseteq f[S]^u$;
+\item $f[S^l] \subseteq f[S]^l$;
+\item $f[\max(S)] \subseteq \max(f[S])$;
+\item $f[\min(S)] \subseteq \min(f[S])$.
+\end{enumerate}
+\item If $f$ is order-reversing, then
+\begin{enumerate}
+\item $f[S^u] \subseteq f[S]^l$;
+\item $f[S^l] \subseteq f[S]^u$;
+\item $f[\max(S)] \subseteq \min(f[S])$;
+\item $f[\min(S)] \subseteq \max(f[S])$.
+\end{enumerate}
+\item If $f$ is a bijective order-embedding, then
+\begin{enumerate}
+\item $f[S^u] = f[S]^u$;
+\item $f[S^l] = f[S]^l$;
+\item $f[\max(S)] = \max(f[S])$;
+\item $f[\min(S)] = \min(f[S])$;
+\item $f[\sup(S)] = \sup(f[S])$;
+\item $f[\inf(S)] = \inf(f[S])$.
+\end{enumerate}
+\item If $f$ is a bijective reverse order-embedding, then
+\begin{enumerate}
+\item $f[S^u] = f[S]^l$;
+\item $f[S^l] = f[S]^u$;
+\item $f[\max(S)] = \min(f[S])$;
+\item $f[\min(S)] = \max(f[S])$;
+\item $f[\sup(S)] = \inf(f[S])$;
+\item $f[\inf(S)] = \sup(f[S])$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We prove the properties of the order-preserving function.
+
+(a) We calculate, using \ref{lemma:boundsFromUpDownSets} and \ref{lemma:imageUpDownsets},
+\[ f[S^u] = f\left[\bigcap_{x\in S}\upset x\right] \subseteq \bigcap_{x\in S}f[\upset x] \subseteq \bigcap_{x\in S}\upset f(x) = \bigcap_{y\in f[S]}\upset y =  f[S]^u. \]
+
+(b) Dual to (a).
+
+(c) We calculate $f[\max(S)] = f[S\cap S^u] \subseteq f[S]\cap f[S^u] \subseteq f[S]\cap f[S]^u = \max(f[S])$.
+
+(d) Dual to (c).
+
+The properties of the embedding are proved by replacing $\subseteq$ with equality. For the supremum and infimum we have:
+
+(e) $f[\sup(S)] = f[S^u\cap (S^u)^l] = f[S]^u \cap (f[S]^u)^l = \sup(f[S])$ and (f) dual to (e).
+
+The properties of the order reversing functions are similarly proved.
+\end{proof}
+We cannot say anything about the supremum or infimum for general order-preserving (or order-reversing) functions, because $f[S^u] \subseteq f[S]^u$ implies $f[S^u]^l \supseteq (f[S]^u)^l$, so the calculation would be
+\[ f[\sup(S)] = f[S^u\cap (S^u)^l] \subseteq f[S]^u \cap f[(S^u)]^l \supseteq f[S]^u \cap (f[S]^u)^l = \sup(f[S]), \]
+from which we cannot conclude anything.
+
+\subsection{Directed sets}
+\begin{definition}
+An ordered set $(D,\Yleft)$ is called
+\begin{itemize}
+\item \udef{(upward) directed} if every finite subset has an upper bound;
+\item \udef{downward directed} if every finite subset has a lower bound.
+\end{itemize}
+If $(D,\Yleft)$ is a directed set, we call the relation $\Yleft$ a \udef{direction}.
+\end{definition}
+
+\begin{proposition}
+Let $\{(D_i,\Yleft_i)\}_{i\in I}$ be a family of directed sets. Then $D= \prod_{i\in I}D_i$ is a directed set with direction defined by
+\[ (a_i)_{i\in I} \Yleft (b_i)_{i\in I} \iff \forall i\in I: a_i\Yleft_i b_i. \]
+The directed set $(D,\Yleft)$ is called a \udef{product direction}.
+\end{proposition}
+
+\subsection{Chains}
+\begin{definition}
+Let $(P,\Yleft)$ be an ordered set. A \udef{chain} in $P$ is a linearly ordered subset $S$ of $P$, i.e.
+\[ \forall x,y\in S: x\Yleft y \lor y\Yleft x. \]
+
+An \udef{antichain} is a subset $A$ such that no two elements of $A$ are comparable.
+\end{definition}
+
+\begin{example}
+For every $n\in \N$ there exists a chain $\mathbb{n}$ of $n$ elements and an antichain $\overline{\mathbb{n}}$ of $n$ elements:
+\[ \mathbb{1}: \begin{tikzcd}
+\circ
+\end{tikzcd} \qquad \mathbb{2}: \begin{tikzcd}
+\circ \ar[d, dash] \\ \circ
+\end{tikzcd} \qquad \mathbb{3}: \begin{tikzcd}
+\circ \ar[d, dash] \\ \circ \ar[d, dash] \\ \circ
+\end{tikzcd} \qquad \hdots \]
+\[ \overline{\mathbb{1}}: \begin{tikzcd}
+\circ
+\end{tikzcd} \qquad \overline{\mathbb{2}}: \begin{tikzcd}
+\circ & \circ
+\end{tikzcd} \qquad \overline{\mathbb{3}}: \begin{tikzcd}
+\circ & \circ & \circ
+\end{tikzcd} \qquad \hdots \]
+\end{example}
+
+\begin{lemma} \label{lemma:boundsFiniteChain}
+Let $P$ be an ordered set. If $C$ is a non-empty, finite chain in $P$, then
+\begin{enumerate}
+\item $\sup(C) \supseteq \max(C) \neq \emptyset$;
+\item $\inf(C) \supseteq \min(C) \neq \emptyset$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The $\supseteq$-relation is due to \ref{corollary:maxSupMinInf}.
+
+The proof that $\max(C)$ is non-empty is by induction on the cardinality of $C$. For the base case, assume $C$ has one element $x$. Then $x \leq x$, so $x\in \max(C)$.
+
+Now assume all chains with one fewer element than $C$ have a maximal element. Pick some $x_0\in C$, then $y = \max(C\setminus \{x_0\})$ exists. We can compare $x_0$ and $y$ because $C$ is a chain. If $x_0 \leq y$, then $\max(C) = y$. If $y \leq x_0$, then $\max(C) = x_0$. This exhausts the possibilities.
+\end{proof}
+
+\begin{definition}
+An ordered set $P$
+\begin{itemize}
+\item is \udef{chain-complete} or \udef{inductive} if every chain in $P$ has a least upper bound;
+\item satisfies the \udef{ascending chain condition} (ACC) if each chain in $P$ that has a least element is finite;
+\item satisfies the \udef{descending chain condition} (DCC) if each chain in $P$ that has a greatest element is finite.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Every inductive poset has a least element.
+\end{lemma}
+\begin{proof}
+The empty set $\emptyset$ is a chain in any poset $P$. Then $\sup(\emptyset) = \min(\emptyset^u) = \min(P)$.
+\end{proof}
+
+\begin{lemma}
+Let $P$ be a poset. If $P$ satisfies the ascending chain condition and has a least element, then $P$ is inductive.
+\end{lemma}
+\begin{proof}
+Assume $P$ satisfies the ascending chain condition and take a chain $C\subset P$. If $C=\emptyset$, then $\sup(C) = \min(\emptyset^u) = \min(P)$ is not empty. Now assume $C$ non-empty and take some $x_0\in C$. Define $C' = \setbuilder{c\in C}{x_0 \Yleft c}$, which is finite by assumption. Clearly $\sup(C) = \sup(C')$, which is not empty by \ref{lemma:boundsFiniteChain}.
+\end{proof}
+
+\begin{example}
+The set $\N$ is not inductive, because $\N$ itself does not have a least upper bound. It therefore does also not satisfy the ascending chain condition.
+
+It does satisfy the descending chain condition.
+\end{example}
+
+
+\begin{proposition} \label{prop:inductive}
+Let $A,B$ be sets and $P$ an ordered set. Then the following posets are inductive:
+\begin{enumerate}
+\item $\powerset(A)$, ordered by inclusion;
+\item $(A \not\to B)$, ordered by inclusion;
+\item the set of chains in $P$, ordered by inclusion.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+In all cases the least upper bound of a chain $S$ is given by $\bigcup S$.
+\end{proof}
+
+\subsection{Intervals}
+\begin{definition}
+Let $(P,\Yleft)$ be an ordered set and $m,n\in P$. We define
+\begin{itemize}
+\item the \udef{closed interval} $[m,n] \defeq \setbuilder{k\in P}{m\Yleft k \land k\Yleft n}$;
+\item the \udef{open interval} $]m,n[ \defeq [m,n]\setminus\{m,n\}$;
+\item the \udef{half-open intervals}
+\begin{align*}
+[m,n[ &\defeq [m,n]\setminus\{n\}; \\
+]m,n] &\defeq [m,n]\setminus\{m\}.
+\end{align*}
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{lemma:emptyInterval}
+Let $(P,\Yleft)$ be an ordered set and $m,n\in P$.
+\begin{enumerate}
+\item If $m \cancel\Yleft n$, then $[m,n] = \emptyset$.
+\item If $\Yleft$ is a preorder, then
+\begin{enumerate}
+\item $m \cancel\Yleft n$ \textup{if and only if} $[m,n] = \emptyset$;
+\item either $[m,n] = \emptyset$ or $\{m,n\} \subseteq [m,n]$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We prove by contraposition. Assume $k\in [m,n]$, then $m\Yleft k$ and $k\Yleft n$, so $m\Yleft n$ by transitivity.
+
+(2) (a) The direction $\Rightarrow$ is given by \ref{lemma:emptyInterval}. Now assume $m \Yleft n$. Also $m\Yleft m$ and $n \Yleft n$ by reflexivity. So $m,n\in [m,n]$ by definition. This also gives point (b).
+\end{proof}
+
+\section{Covering relations}
+\begin{definition}
+Let $(P,\Yleft)$ be a an order relation and $x,y\in P$. We say $y$ \udef{covers} $x$ if
+\begin{itemize}
+\item $x\Yleft y$;
+\item $x\neq y$
+\item $\nexists z\in P\setminus\{x,y\}: x\Yleft z \Yleft y$).
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $P$ be a preordered set. Then $y$ covers $x$ \textup{if and only if} $x\neq y$ and $[x,y] = \{x,y\}$.
+\end{lemma}
+
+\subsection{Hasse diagrams}
+A \udef{Hasse diagram} is a graphical depiction of an order relation. Each element of the ordered set is a point and points are connected such that:
+\begin{enumerate}
+\item if $x \Yleft y$, then the point for $x$ is drawn lower than the point for $y$;
+\item two elements $x,y$ are connected if $y$ covers $x$ or $x$ covers $y$.
+\end{enumerate}
+
+\begin{lemma}
+The Hasse diagrams of partial orders are acyclic due to anti-symmetry.
+\end{lemma}
+
+\begin{example}
+The power set $\powerset\{a,b,c\}$ can be ordered by the inclusion relation $\subseteq$. The following is a Hasse diagram for this ordered set:
+\begin{center}
+\begin{tikzcd}
+ & \{a,b,c\} & \\
+\{a,b\}\ar[ru, dash] & \{a,c\}\ar[u,dash] & \{b,c\}\ar[lu,dash] \\
+\{a\} \ar[u,dash] \ar[ru, dash] & \{b\} \ar[lu, dash] \ar[ru, dash] & \{c\} \ar[lu,dash] \ar[u, dash] \\
+ & \emptyset \ar[lu, dash] \ar[u, dash] \ar[ru, dash] &
+\end{tikzcd}
+\end{center}
+\end{example}
+
+
+\section{Completeness}
+\begin{definition}
+An ordered set $P$ is 
+\begin{itemize}
+\item \udef{order complete} (or simply \udef{complete}) if each subset has a supremum and an infimum;
+\item \udef{order $\sigma$-complete} if each countable subset has a supremum and an infimum;
+\item \udef{finitely order complete} if each finite subset has a supremum and an infimum;
+\item \udef{Dedekind complete} if
+\begin{itemize}
+\item each non-empty subset that is bounded above has a supremum; and
+\item each non-empty subset that is bounded below has an infimum;
+\end{itemize}
+\item \udef{Dedekind $\sigma$-complete} if
+\begin{itemize}
+\item each non-empty countable subset that is bounded above has a supremum; and
+\item each non-empty countable subset that is bounded below has an infimum.
+\end{itemize}
+\item \udef{finitely Dedekind complete} if
+\begin{itemize}
+\item each non-empty finite subset that is bounded above has a supremum; and
+\item each non-empty finite subset that is bounded below has an infimum.
+\end{itemize}
+\end{itemize}
+\end{definition}
+Some authors use ``order completeness'' to mean what we have called Dedekind completeness.
+
+\begin{example}
+The closed unit disk in $\R^2$ with coordinatewise ordering is Dedekind complete, but not order complete and is not a lattice.
+\end{example}
+
+
+\begin{proposition} \label{prop:existenceSupremaInfima}
+Let $(P,\precsim)$ be an ordered set. Then the following are equivalent:
+\begin{enumerate}
+\item $P$ is order complete;
+\item each subset of $P$ has a supremum;
+\item each subset of $P$ has an infimum;
+\item each non-empty subset of $P$ has a supremum and $P$ has a least element;
+\item each non-empty subset of $P$ has an infimum and $P$ has a greatest element.
+\end{enumerate}
+The following are also equivalent:
+\begin{enumerate}
+\item $P$ is Dedekind complete
+\item each non-empty set that is bounded above has a supremum;
+\item each non-empty set that is bounded below has an infimum.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We show that (2) and (3) are equivalent.
+
+Suppose each subset has a supremum and let $S$ be a subset. Then in particular $S^l$ has a supremum. This supremum of $S^l$ is an infimum of $S$:
+\[ \sup(S^l) = (S^l)^u\cap((S^l)^u)^l = (S^l)^u\cap S^l = \inf(S).  \]
+
+The converse is similar.
+
+For equivalence with (3) and (4), we just need to remark that $\sup(\emptyset) = \min(P)$ and $\inf(\emptyset) = \max(P)$.
+
+For Dedekind completeness the argument is similar, we just need to remark that if $S$ is non-empty and bounded below, then $S^l$ is non-empty and bounded above.
+\end{proof}
+
+\begin{lemma}
+Let $P$ be an ordered set that contains a least and a greatest element. Then $P$ is order complete \textup{if and only if} $P$ is Dedekind complete.
+\end{lemma}
+\begin{proof}
+Every set is bounded (by the least and greatest elements).
+\end{proof}
+
+\begin{lemma}
+The ordered natural numbers $\sSet{\N,\leq}$ are complete.
+\end{lemma}
+\begin{proof}
+Any set of natural numbers has a least element by \ref{proposition:wellOrderingN}. Any non-empty set $S$ of natural numbers that is bounded above, we can take $\max(S) = \min(\N\setminus S)-1$.
+\end{proof}
+
+\begin{definition}
+A function $f: P\to P$ on an ordered set $(P,\Yleft)$ into itself is
+\begin{itemize}
+\item \udef{expansive} if $\forall x\in P: x\Yleft f(x)$;
+\item \udef{contractive} if $\forall x\in P: f(x)\Yleft x$.
+\end{itemize}
+\end{definition}
+
+\section{Filters and ideals}
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be an ordered set. A subset $F\subseteq P$ is called
+\begin{itemize}
+\item an \udef{order filter} if
+\begin{itemize}
+\item $F$ is downward directed;
+\item $F$ is an up set in $P$;
+\end{itemize}
+\item an \udef{order ideal} if
+\begin{itemize}
+\item $F$ is upward directed;
+\item $F$ is a down set in $P$.
+\end{itemize}
+\end{itemize}
+In addition $F$ is called \udef{proper} if $F \neq P$.
+
+The set of ideals on $P$ is denoted $\ideals(P)$ and the set of filters on $P$ is denoted $\filters(P)$.
+\end{definition}
+Many authors also require filters and ideals to be non-empty.
+
+\begin{lemma}
+Let $P$ be an ordered set and $x\in P$.
+\begin{enumerate}
+\item The principle up set $\upset x$ is an order filter.
+\item The principle down set $\downset x$ is an order ideal.
+\end{enumerate}
+\end{lemma}
+If the order is not a preorder, then a principle filter/ideal may be empty.
+
+\subsection{Filter bases and subbases}
+
+\begin{lemma}
+Let $\sSet{P,\Yleft}$ be an ordered set and $\{F_i\}_{i\in I}$ a family of subsets.
+\begin{enumerate}
+\item If $F_i$ is a filter for all $i\in I$, then $\bigcap_{i\in I}F_i$ is a filter;
+\item If $F_i$ is an ideal for all $i\in I$, then $\bigcap_{i\in I}F_i$ is an ideal.
+\end{enumerate}
+\end{lemma}
+
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be an ordered set and $B\subseteq P$ a subset. Then
+\begin{itemize}
+\item the \emph{filter generated by $B$} is
+\[ \mathfrak{F}\{B\} \defeq \bigcap\setbuilder{B \subseteq S\subseteq P}{\text{$S$ is a filter}} \]
+we call $B$ a \udef{filter subbasis} of $F$. If $B$ is downward directed, it is called a \udef{filter basis} of $F$;
+\item the \emph{filter basis generated by $B$} as
+\[ \mathfrak{FB}\{B\} \defeq \bigcap\setbuilder{B \subseteq S\subseteq P}{\text{$S$ is downward directed}}. \]
+\end{itemize}
+\end{definition}
+
+If $P$ is not downward directed, there may not exists any $S \supseteq B$ that is downward directed, in which case $\mathfrak{FB}\{B\} =$ TODO.
+
+\begin{proposition}
+Let $\sSet{P,\Yleft}$ be an ordered set and $B\subseteq P$ a subset. Then
+\begin{enumerate}
+\item if $P$ is downward directed, then $\mathfrak{FB}\{B\}$ is a filter basis;
+\item $\mathfrak{F}\{B\} = \upset\mathfrak{FB}\{B\}$.
+\end{enumerate}
+\end{proposition}
+In particular, if $S$ is a filter base, then $\upset S$ is a filter.
+
+
+\begin{lemma}
+Let $\sSet{P,\Yleft}$ be an ordered set.
+
+If $P$ is downward directed and $\exists \bot \in \min(P)$ and $B \subseteq P$ a filter basis, then $\mathfrak{F}\{B\}$ is a proper filter \textup{if and only if} $\bot \notin B$; 
+\end{lemma}
+
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be an ordered set and $B,C\subseteq P$ be filter bases.
+\begin{itemize}
+\item We say $B$ is \udef{finer} than $C$ if
+\[ \forall c\in C: \exists b\in B: \; b \Yleft c. \]
+\item If $B$ is finer than $C$ and $C$ is finer than $B$, we call $B$ and $C$ \udef{equivalent}.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+The ``finer than'' relation on the set of filter bases in an ordered set is a preorder.
+\end{lemma}
+
+\begin{proposition}
+Let $\sSet{P,\Yleft}$ be an ordered set. Then for all filter bases $B,C$ in $P$: $B$ is finer than $C$ \textup{if and only if} $\mathfrak{F}\{B\} \supseteq \mathfrak{F}\{C\}$.
+\end{proposition}
+
+\subsection{Combining ordered sets}
+\begin{definition}
+Let $P,Q$ be ordered sets. Then
+\begin{itemize}
+\item the \udef{disjoint union} $P\sqcup Q$ is ordered by
+\[ x\precsim y \iff \begin{cases}
+x,y\in P \;\text{and}\; x\precsim y \\
+x,y\in Q \;\text{and}\; x\precsim y
+\end{cases} \]
+\item the \udef{linear sum} $P\oplus Q$ is the disjoint union ordered by
+\[ x\precsim y \iff \begin{cases}
+x,y\in P \;\text{and}\; x\precsim y \\
+x,y\in Q \;\text{and}\; x\precsim y \\
+x\in P \;\text{and}\; y\in Q
+\end{cases} \]
+\end{itemize}
+\end{definition}
+
+\begin{example}
+We define $\mathbf{M}_n \defeq \mathbb{1}\oplus \overline{\mathbb{n}} \oplus \mathbb{1}$:
+\[ \mathbf{M}_1: \begin{tikzcd}
+\circ \ar[d, dash] \\ \circ \ar[d, dash] \\ \circ
+\end{tikzcd} \qquad \mathbf{M}_2: \begin{tikzcd}
+&\circ \ar[ld, dash] \ar[rd, dash] & \\ \circ \ar[rd, dash] && \circ \ar[ld, dash] \\ &\circ &
+\end{tikzcd} \qquad \mathbf{M}_3: \begin{tikzcd}
+&\circ \ar[ld, dash] \ar[d,dash] \ar[rd, dash] &\\ \circ \ar[rd, dash]& \circ \ar[d, dash] & \circ \ar[ld, dash] \\ &\circ &
+\end{tikzcd} \qquad \hdots \]
+\end{example}
+
+\begin{lemma}
+For ordered sets taking the disjoint union or linear sum is associative.
+\end{lemma}
+
+\begin{lemma}
+Let $m,n\in \N$. If $p = m+n$, then $\mathbb{m}\oplus\mathbb{n} = \mathbb{p}$.
+\end{lemma}
+
+\begin{definition}
+Let $P,Q$ be ordered sets. Then
+\begin{itemize}
+\item  the standard order on $P\times Q$ is defined by
+\[ (x_1,x_2) \precsim (y_1,y_2) \iff x_1\precsim y_1 \;\text{and}\; x_2\precsim y_2 \]
+\item the \udef{lexicographic order} on $P\times Q$ is defined by
+\[ (x_1,x_2) \precsim (y_1,y_2) \iff (x_1\precsim y_1) \;\text{or}\; (x_1=y_1 \;\text{and}\; x_2\precsim y_2). \]
+\end{itemize}
+\end{definition}
+
+\section{Ordered sets of subsets}
+\subsection{The ordered set of downsets}
+\begin{definition}
+Let $P$ be an ordered set. The set of down sets in $P$ is denoted $\mathcal{O}(P)$.
+\end{definition}
+
+\begin{lemma}
+Let $P$ be an ordered set.
+If $P$ is a discrete poset, then $\mathcal{O}(P) = \powerset(P)$.
+\end{lemma}
+
+\begin{lemma}
+Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
+\begin{enumerate}
+\item $\mathcal{O}(P)^o \cong \mathcal{O}(P^o)$;
+\item $\mathcal{O}(P\oplus \mathbb{1}) \cong \mathcal{O}(P)\oplus \mathbb{1}$;
+\item $\mathcal{O}(\mathbb{1}\oplus \mathbb{1}) \cong \mathbb{1}\oplus \mathcal{O}(P)$;
+\item $\mathcal{O}(P_1\sqcup P_2)\cong \mathcal{O}(P_1)\times \mathcal{O}(P_2)$.
+\end{enumerate}
+\end{lemma}
+
+\section{Galois connections}
+\input{galoisConnections}
+
+\chapter{Lattices}
+\section{Semilattice}
+\begin{definition}
+A \udef{semilattice} is an algebraic structure $\seq{S,\vee}$ where $\vee$ is a binary operation on the set $S$ satisfying
+\begin{itemize}[leftmargin=2.5cm]
+\item[\textbf{Associativity}] $x\vee (y\vee z) = (x\vee y) \vee z$;
+\item[\textbf{Commutativity}] $x \vee y = y \vee x$;
+\item[\textbf{Idempotency}] $x\vee x = x$.
+\end{itemize}
+We call a semilattice \udef{bounded} if it contains an identity.
+\end{definition}
+In other words a semilattice is a commutative band.
+
+\begin{proposition}
+Let $(P,\leq)$ be a poset and let $\{x,y,z\}\subseteq P$ be such that each subset has a supremum. Then
+\[ \sup\{\sup\{x,y\},z\} = \sup\{x,y,z\} = \sup\{x,\sup\{y,z\}\} \]
+and, dually,
+\[ \inf\{\inf\{x,y\},z\} = \inf\{x,y,z\} = \inf\{x,\inf\{y,z\}\}. \]
+\end{proposition}
+\begin{corollary}
+Let $(P,\leq)$ be a poset.
+\begin{enumerate}
+\item If $\sup\{x,y\}$ exists for all $x,y\in P$, then $(P,\sup)$ is a semilattice.
+\item If $\inf\{x,y\}$ exists for all $x,y\in P$, then $(P,\inf)$ is a semilattice.
+\end{enumerate}
+\end{corollary}
+The converse to this corollary also holds:
+\begin{proposition} \label{prop:orderSemilattice}
+Let $\seq{L,\vee}$ be a semilattice. Define the relation $\leq$ on $L$ by
+\[ \forall x,y\in L:\; x\leq y \qquad \iff \qquad x\vee y = y. \]
+Then $\seq{L,\leq}$ is a poset such that $\forall x,y\in L: x\vee y = \sup\{x,y\}$.
+\end{proposition}
+\begin{proof}
+First we prove $\seq{L,\leq}$ is a poset:
+\begin{itemize}
+\item Reflexivity follows from idempotency.
+\item Antisymmetry follows from commutativity:
+\[ x\leq y, y\leq x \quad\implies\quad y = x\vee y = y \vee x = x. \]
+\item For transitivity: assume $x\leq y$ and $y\leq z$. This implies $x\vee y = y$ and $y\vee z = z$, and so $z = (x\vee y)\vee z =x\vee (y\vee z) =x\vee z$. This implies $x\leq z$.
+\end{itemize}
+If $x,y$ are comparable, the $x \vee y$ is clearly $\sup\{x,y\}$. Because $x\vee(x\vee y) = (x\vee x)\vee y = x\vee y$, we have $x\leq (x\vee y)$. So $x\vee y$ is an upper bound of $\{x,y\}$. Let $u$ be an upper bound of $\{x,y\}$. Then $u = x\vee u = x\vee (y\vee u) = (x\vee y)\vee u$. So $x\vee y \leq u$, meaning $x\vee y$ is the supremum.
+\end{proof}
+Dually we also have:
+\begin{corollary}
+Let $\seq{L,\wedge}$ be a semilattice. Define the relation $\leq$ on $L$ by
+\[ x\leq y \qquad \iff \qquad x\wedge y = x. \]
+Then $\seq{L,\leq}$ is a poset such that $\forall x,y\in L: x\wedge y = \inf\{x,y\}$.
+\end{corollary}
+
+\section{Lattices}
+\url{file:///C:/Users/user/Downloads/Gr%C3%A4tzer,%20George%20-%20General%20lattice%20theory-Birkh%C3%A4user%20(2007).pdf}
+\url{file:///C:/Users/user/Downloads/R.%20Padmanabhan,%20S.%20Rudeanu%20-%20Axioms%20for%20lattices%20and%20Boolean%20algebras-World%20Scientific%20(2008).pdf}
+\begin{definition}
+A \udef{lattice} is an algebraic structure $\seq{L,\vee, \wedge}$, where $\vee, \wedge$ are binary operations on the set $L$ such that $\seq{L,\vee}$ and $\seq{L,\wedge}$ are semilattices and $\vee,\wedge$ are linked by the absorption law:
+\[ \forall a,b\in L: \; a \vee (a \wedge b) = a = a \wedge (a\vee b). \]
+We call
+\begin{itemize}
+\item $\seq{L,\vee}$ the \udef{join-semilattice} and $a\vee b$ the \udef{join} of $a$ and $b$;
+\item $\seq{L,\wedge}$ the \udef{meet-semilattice} and $a\wedge b$ the \udef{meet} of $a$ and $b$.
+\end{itemize}
+We call a lattice \udef{bounded} if both the join- and the meet-semilattice are bounded. We denote
+\begin{itemize}
+\item the identity of the join-semilattice by $\top$;
+\item the identity of the meet-semilattice by $\bot$.
+\end{itemize}
+\end{definition}
+By \ref{lemma:absorptionIdempotency} the absortion law renders the axiom of  idempotency of the semilattices redundant. So we just need that $\seq{L,\vee}$ and $\seq{L,\wedge}$ are commutative semigroups that are linked by the absorption law.
+
+\begin{proposition}
+Observations from universal algebra:
+\begin{enumerate}
+\item Subset closed under $\vee,\wedge$ is sublattice.
+\item Product lattices
+\item Inverse of homomorphism is homomorphism
+\end{enumerate}
+\end{proposition}
+
+
+\subsection{Lattices and order}
+As for semilattices, we can equivalently characterise lattices as posets with certain conditions.
+\begin{proposition}
+Let $L$ be a set.
+\begin{enumerate}
+\item If $\seq{L,\vee, \wedge}$ is a lattice, then $\seq{L,\leq}$ is a poset such that every two element set has a supremum and an infimum, where
+\[ \forall x,y\in L:\; x\leq y \qquad \iff \qquad x\vee y = y \]
+or, equivalently,
+\[ \forall x,y\in L:\; x\leq y \qquad \iff \qquad x\wedge y = x. \]
+\item If $\seq{L,\leq}$ is a poset such that every two element set has a supremum and an infimum, then $\seq{L,\vee, \wedge}$ is a lattice, where
+\[ \forall x,y\in L: \; x\vee y = \sup\{x,y\} \quad \text{and} \quad x\wedge y = \inf\{x,y\}. \]
+\end{enumerate}
+The order can also be defined by
+\[ \forall x,y\in L:\; x\leq y \qquad \iff \qquad x\wedge y = x. \]
+\end{proposition}
+\begin{proof}
+Mostly this follows from \ref{prop:orderSemilattice}. We just need to show the two definitions of order are equivalent. This follows from the absorption law:
+\begin{align*}
+x\vee y &= y \implies x\wedge y = x\wedge (x\vee y) = x \\
+x\wedge y &= x \implies x\vee y = (x\wedge y) \vee y = y.
+\end{align*}
+\end{proof}
+
+\begin{lemma} \label{lemma:orderLattice}
+Let $L$ be a lattice and $a,b,c,d\in L$. If $a\leq b$ and $c\leq d$, then
+\[ a\vee c\leq b\vee d \qquad\text{and}\qquad a\wedge c \leq b\wedge d. \]
+\end{lemma}
+\begin{proof}
+If $a\leq b$ and $c\leq d$, then we have
+\[ \begin{cases}
+a = a\wedge b \\ c = c\wedge d
+\end{cases} \quad \text{and} \quad \begin{cases}
+b = a\vee b \\ d = c\vee d.
+\end{cases}\]
+We calculate
+\[ (a\vee c)\wedge (b\vee d) = (a\vee c)\wedge (a\vee b\vee c\vee d) = (a\vee c)\wedge ((a\vee c)\vee (b\vee d)) = a\vee c, \]
+so $a\vee c\leq b\vee d$.
+Similarly
+\[ (a\wedge c)\vee (b\wedge d) = (a\wedge b\wedge c\wedge d)\vee (b\wedge d) = ((a\wedge c)\wedge (b\wedge d))\vee (b\wedge d) = b\wedge d, \]
+so $a\wedge c \leq b\wedge d$.
+\end{proof}
+\begin{corollary} \label{corollary:orderLattice}
+Let $L$ be a lattice and $a,b,c,d\in L$. Then
+\begin{enumerate}
+\item if $a\leq b$ then $a\vee c \leq b \vee c$ and $a\wedge c \leq b\wedge c$;
+\item if $a\leq c$ and $b\leq c$, then $a\vee b \leq c$;
+\item if $a\leq b$ and $a\leq c$, then $a\leq b\wedge c$.
+\end{enumerate}
+\end{corollary}
+
+\begin{lemma}
+Let $X$ be a set. Then $\mathcal{P}(X)$ ordered by inclusion is a lattice and $\cup, \cap$ are the corresponding join and meet operations.
+
+In particular, for all $A,B\in \mathcal{P}(X)$:
+\begin{enumerate}
+\item $\inf\{A,B\} = A\cap B$;
+\item $\sup\{A,B\} = A\cup B$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+The natural numbers forms a lattice if ordered by division. The meet and join are given by
+\[ m\vee n = \lcm\{m,n\} \qquad \text{and}\qquad m\wedge n = \gcd\{m,n\}. \]
+\end{lemma}
+
+\begin{lemma}
+Let $L,K$ be lattices and $f:L\to K$ a function. The following are equivalent:
+\begin{enumerate}
+\item $f$ is order-preserving;
+\item $\forall x,y\in L:\; f(a\vee b)\geq f(a)\vee f(b)$;
+\item $\forall x,y\in L:\; f(a\wedge b)\leq f(a)\wedge f(b)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition}[Mini-max theorem]
+Let $L$ be a lattice and let $\seq{a_{i,j}}\subset L$ be indexed by $i,j\in \N$. Then
+\[ \bigvee_{j=1}^n \left(\bigwedge_{i=1}^m a_{i,j}\right) \leq \bigwedge_{i=1}^m \left(\bigvee_{j=1}^n a_{i,j}\right). \]
+\end{proposition}
+\begin{proof}
+For all $k,l$ we have $a_{k,l}\leq \bigvee_{j=1}^n a_{k,j}$. This implies $\bigwedge_{i=1}^m a_{i,l} \leq \bigwedge_{i=1}^m \left(\bigvee_{j=1}^n a_{i,j}\right)$ for all $l$. Taking the supremum over $l$ gives the result.
+\end{proof}
+\begin{corollary}[Median inequality]
+Let $L$ be a lattice and $a,b,c \in L$, then
+\[ (a\wedge b) \vee (b\wedge c) \vee (c\wedge a) \leq (a\vee b)\wedge (b\vee c) \wedge (c\vee a). \]
+\end{corollary}
+\begin{proof}
+Use $a_{i,j} = \begin{pmatrix}
+a & b & a \\ b & b & c \\ a & c & c
+\end{pmatrix}$.
+\end{proof}
+\begin{corollary}[Distributive inequalities] \label{corollary:distributiveInequality}
+Let $L$ be a lattice and $a,b,c \in L$, then
+\begin{align*}
+(a\wedge b)\vee (a\wedge c) &\leq a\wedge (b \vee c); \\
+(a\vee b)\wedge (a\vee c) &\geq a\vee (b \wedge c).
+\end{align*}
+In particular this also means
+\[ c \leq a \implies (a\wedge b)\vee c \leq a\wedge (b\vee c).  \]
+\end{corollary}
+\begin{proof}
+Use $a_{i,j} = \begin{pmatrix}
+a & a \\ b & c 
+\end{pmatrix}$ and $a_{i,j} = \begin{pmatrix}
+a & b \\ a & c 
+\end{pmatrix}$. The particular cases follow because in this case $a\wedge c = c$. This statement is self-dual.
+\end{proof}
+The distributive inequalities are fairly elementary and do not need to be derived from mini-max theorem. 
+In fact they are corollary to the following lemma which can be obtained by more elementary means:
+\begin{lemma}
+Let $L$ be a lattice $x\in L$ and $S\subseteq L$ a subset. Then
+\begin{enumerate}
+\item $S^u\vee x \subseteq (S\vee x)^u$ and $S^l\vee x \subseteq (S\vee x)^l$;
+\item $S^u\wedge x \subseteq (S\wedge x)^u$ and $S^l\wedge x \subseteq (S\wedge x)^l$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The maps $y\mapsto y\vee x$ and $y\mapsto y \wedge x$ are order-preserving, so we can use \ref{corollary:orderPreservingReversingBounds}.
+\end{proof}
+\begin{corollary}[Infinite distributive inequalities]
+Let $L$ be a lattice $x\in L$ and $S\subseteq L$ a subset. Assume all relevant suprema exist, then
+\begin{enumerate}
+\item $\sup(S)\wedge x \geq \sup(S \wedge x)$;
+\item $\inf(S)\vee x \leq \inf(S \vee x)$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Because $\sup(S)\in S^u$, we have $\sup(S)\wedge x \in S^u\wedge x$, so $\sup(S)\wedge x \in (S\wedge x)^u$ and $\sup(S)\wedge x \geq \min((S\wedge x)^u) = \sup(S\wedge x)$. The second part is dual.
+\end{proof}
+In particular if $S$ has two elements, we recover the distributive inequalities.
+
+\subsection{Filters and ideals}
+Since lattices are posets, we can define filters and ideal on them.
+We can give alternative characterisations of filters and ideals using the lattice operations.
+\begin{lemma}
+Let $L$ be a lattice and $J$ a subset. Then
+\begin{enumerate}
+\item $J$ is an ideal \textup{if and only if}
+\begin{enumerate}
+\item $a,b\in J \implies a\vee b\in J$;
+\item $x\in L, b\in J$ and $x\leq b$ implies $x\in J$;
+\end{enumerate}
+\textup{if and only if}
+\begin{enumerate}
+\item $\forall a,b\in J: \qquad a\vee b\in J$;
+\item $\forall x\in L, \forall b\in J: \quad x\wedge b \in J$;
+\end{enumerate}
+\item $J$ is a filter \textup{if and only if}
+\begin{enumerate}
+\item $a,b\in J \implies a\wedge b\in J$;
+\item $x\in L, b\in J$ and $x\geq b$ implies $x\in J$;
+\end{enumerate}
+\textup{if and only if}
+\begin{enumerate}
+\item $\forall a,b\in J: \qquad a\wedge b\in J$;
+\item $\forall x\in L, \forall b\in J: \quad x\vee b \in J$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $L$ be a lattice. Then
+\begin{enumerate}
+\item if $L$ contains $\top$, then an ideal in $L$ is proper \textup{if and only if} is does not contain $\top$;
+\item if $L$ contains $\bot$, then a filter in $L$ is proper \textup{if and only if} is does not contain $\bot$.
+\end{enumerate}
+\end{lemma}
+
+\subsubsection{Prime and maximal filters and ideals}
+
+\subsubsection{Sequential filters}
+\begin{definition}
+Let $A$ be a set and $x: I\to A$ a sequence in $A$. The \udef{sequential filter} associated with $x$
+\end{definition}
+
+\subsection{Complete lattices}
+\begin{lemma}
+Let $L$ be a lattice. For every finite set $S\subset L$, $\sup(S)$ and $\inf(S)$ exist.
+\end{lemma}
+\begin{definition}
+Let $L$ be a lattice. We call $L$ a \udef{complete lattice} if each subset $S\subseteq L$ has both a supremum and an infimum. We write
+\[ \sup(S) = \bigvee S \qquad \inf(S) = \bigwedge S. \]
+If we want to emphasise that the supremum/infimum of $S$ is taken as a subset of $L$, we write $\bigvee_L S$ and $\bigwedge_L S$.
+\end{definition}
+Clearly every finite lattice is complete.
+
+\begin{lemma} \label{lemma:supInfFiniteSubsetsLattice}
+Let $L$ be a lattice and $F\subseteq L$ a finite subset. Then $\bigvee F$ and $\bigwedge F$ exist. 
+\end{lemma}
+
+\begin{example}
+For any set $X$, $\powerset(X)$ is a complete lattice.
+\end{example}
+
+\begin{lemma}
+Let $P$ be an ordered set such that all relevant suprema and infima exist and $S,T\subseteq P$. Then
+\begin{enumerate}
+\item $\bigvee S \leq \bigwedge T$ if and only if $s\leq t$ for all $s\in S,t\in T$;
+\item if $S\subseteq T$, then $\bigvee S \leq \bigvee T$ and $\bigwedge S \geq \bigwedge T$;
+\item $\bigvee(S\cup T) = \left(\bigvee S\right)\vee \left(\bigvee T\right)$ and $\bigwedge(S\cup T) = \left(\bigwedge S\right)\wedge \left(\bigwedge T\right)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition} \label{prop:completeLatticeBasic}
+Let $P$ be a non-empty ordered set. Then the following are equivalent:
+\begin{enumerate}
+\item $P$ is a complete lattice;
+\item $\bigvee S$ exists for all subsets $S\subseteq P$;
+\item $\bigwedge S$ exists for all subsets $S\subseteq P$;
+\item $P$ has a bottom element $\bot$ and $\bigvee S$ exists for all non-empty $S\subseteq P$;
+\item $P$ has a top element $\top$ and $\bigwedge S$ exists for all non-empty $S\subseteq P$;
+\item for all $x\in P$ both $\upset x$ and $\downset x$ are complete lattices.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The only difficult implication is $(5)\Rightarrow (1)$. All infima exist because $\inf(\emptyset) = \top \in P$. New each non-empty set $S$ in $P$ has an upper bound, $\top$, so $\bigvee S$ exists in $P$ by \ref{prop:existenceSupremaInfima}. Finally $\bigvee \emptyset = \bot = \bigwedge P \in P$.
+\end{proof}
+
+\begin{theorem}[Knaster-Tarski fixed-point theorem]
+Let $L$ be a complete lattice and $f:L\to L$ an order-preserving map. Then 
+\[ \bigvee \setbuilder{x\in L}{x\leq f(x)} \qquad\text{and}\qquad \bigwedge \setbuilder{x\in L}{x\geq f(x)} \]
+are, resp., the greatest and the least fixed point of $f$.
+\end{theorem}
+\begin{proof}
+Let $P$ be the set of fixed points, set $H = \setbuilder{x\in L}{x\leq f(x)}$ and $\alpha = \bigvee H$. It is clear that $\alpha$ is an upper bound of $P$ because $P \subset  \setbuilder{x\in L}{x\leq f(x)}$. So we just need to show that $\alpha$ is a fixed point.
+
+Now $f(\alpha)$ is an upper bound of $H$ due to $f$ being order preserving: $x \leq f(x) \leq  f(\alpha)$ for all $x\in P$. So $\alpha \leq f(\alpha)$.
+Conversely, $f(\alpha) \leq f(f(\alpha))$ because $f$ is order preserving. This means $f(\alpha)\in H$, so $f(\alpha)\leq \alpha$. We have thus shown that $\alpha = f(\alpha)$.
+
+The proof that $\bigwedge \setbuilder{x\in L}{x\geq f(x)}$ is the least fixed point is completely dual.
+\end{proof}
+\begin{corollary}
+The set of fixed points of $f$ forms a complete lattice.
+\end{corollary}
+\begin{proof}
+Let $P$ be the set of fixed points. To show $P$ is a complete lattice, take any subset $S\subset P$.
+Set $w = \bigvee S$, where $S$ is considered as a subset of $L$. For all $x\in W$: $x\leq w$, which implies $x=f(x)\leq f(w)$. As $w$ is the least upper bound, we have $w\leq f(w)$. This implies $f[\upset w]\subseteq \upset w$, meaning we can view $f$ as a function on the complete lattice $\upset w$. In particular $f|_{\upset w}$ has a least fixed point by the theorem, so $S$ has a supremum in $P$. The existence of the infimum is dual.
+\end{proof}
+\begin{corollary}[Banach decomposition theorem]
+Let $X,Y$ be sets and $f:X\to Y$ and $g:Y\to X$ functions. There exist partitions $X_1,X2$ and $Y_1,Y_2$ of $X$ and $Y$ such that
+\[ f[X_1] = Y_1 \qquad\text{and}\qquad g[Y_2] = X_2. \]
+\end{corollary}
+\begin{proof}
+Consider the map $F: \powerset(X)\to\powerset(X): S\mapsto X\setminus g[Y\setminus f[S]]$. By the theorem this map has a fixed point, which we call $X_1$. We then need to set $Y_1 = f[X_1], X_2 = X\setminus X_1$ and $Y_2 = Y\setminus Y_1$. The fact $X_1$ is a fixed point means that $X_1 = X\setminus g[Y\setminus f[X_1]] = g[Y\setminus Y_1] = g[Y_2]$.
+\end{proof}
+\begin{corollary}[Schröder-Bernstein]
+Let $X,Y$ be sets and $f:X\rightarrowtail Y$ and $g:Y\rightarrowtail X$ injective functions. Then there exists a bijective function $h: X\twoheadrightarrowtail Y$.
+\end{corollary}
+\begin{proof}
+Use the Banach decomposition theorem to obtain partitions $X_1,X_2$ and $Y_1,Y_2$. Then $f|_{X_1}: X_1\twoheadrightarrowtail Y_1$ and $g|_{Y_2}: Y_2 \twoheadrightarrowtail X_2$ are bijective, so we can construct
+\[ h: X\twoheadrightarrowtail Y: x \mapsto \begin{cases}
+f(x) & x\in X_1 \\ (g|_{Y_2})^{-1}(x) & x\in X_2
+\end{cases}. \]
+\end{proof}
+The Schröder-Bernstein theorem was already proven in \ref{theorem:SchroederBernstein}.
+
+\subsubsection{Chain conditions}
+The following requires dependent choice:
+\begin{proposition} \label{prop:ascendingDescendingChainLattice}
+Let $L$ be a lattice. Then
+\begin{enumerate}
+\item if $L$ satisfies the ascending chain condition, then for all non-empty subsets $S\subset L$ there exists a finite set $F\subset L$ such that $\bigvee S = \bigvee F$;
+\item if $L$ satisfies the descending chain condition, then for all non-empty subsets $S\subset L$ there exists a finite set $F\subset L$ such that $\bigwedge S = \bigwedge F$;
+\item if $L$ has a bottom element and satisfies the ascending chain condition, then $L$ is complete;
+\item if $L$ has a top element and satisfies the descending chain condition, then $L$ is complete;
+\item if $L$ has no infinite chains, then $L$ is complete.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume $L$ satisfies the ascending chain condition and let $S\subset L$ be non-empty. Define
+\[ B = \setbuilder{\bigvee G}{\text{$G$ is a finite, non-empty subset of $S$}}. \]
+This is well-defined by \ref{lemma:supInfFiniteSubsetsLattice}. Then $B$ has a maximal element $m = \bigvee F$ for some finite $F$ by \ref{prop:welfoundedACC}.
+
+Now $m$ is an upper bound of $S$. Indeed, let $x\in S$. Then $m= \bigvee F \leq \bigvee (F\cup\{x\})$ because $F\subseteq (F\cup \{x\})$. Since $m$ is maximal in $B$, we have $m = \bigvee (F\cup\{x\}) \geq x$. It is clearly also the least upper bound, otherwise it was not the least upper bound of $F$.
+
+(2) Dual of 1.
+
+(3) This follows from 1. and \ref{prop:completeLatticeBasic}.
+
+(4) Dual of 3.
+
+(5) A lattice with no infinite chains satisfies the ascending chain condition. Also a lattice
+with no infinite chains has a bottom element. (TODO: need dependent/countable choice?)
+\end{proof}
+
+\subsection{Join- and meet-irreducible elements}
+\begin{definition}
+Let $L$ be a lattice. We call $x\in L$ \udef{join-irreducible} if
+\begin{itemize}
+\item $x$ is not a least element of $L$,
+\item for all $a,b\in L$: $x= a\vee b$ implies $x=a$ or $x=b$.
+\end{itemize}
+The definition of \udef{meet-irreducible} is dual.
+
+We denote the set of join-irreducible elements in $L$ as $\joinIr(L)$ and the set of meet-irreducible elements in $L$ as $\meetIr(L)$.
+\end{definition}
+
+\begin{lemma}
+Let $L$ be a lattice and $x\in L$ not a least element. Then the following are equivalent:
+\begin{enumerate}
+\item $x$ is join-irreducible;
+\item for all $a,b\in L$: $x= a\vee b$ implies $x \leq a$ or $x \leq b$;
+\item for all $a,b\in L$: $x > a$ and $x > b$ implies $x > a\vee b$;
+\item for all finite $F\subseteq L$: $x = \bigvee F$ implies $x\in F$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+In a finite lattice $L$, an element is join-irreducible if and only if it
+has exactly one lower cover.
+\end{lemma}
+
+\begin{example}
+Consider the lattice $\seq{\N,\lcm, \gcd}$. A non-zero element of $\N$ is join irreducible if and only if it is of the form $p^r$ for some prime $p$ and $r\in\N$.
+\end{example}
+
+\begin{proposition} \label{prop:joinIrreducibilityDescendingChainLattice}
+Let $L$ be a lattice satisfing the descending chain condition. Then
+\begin{enumerate}
+\item $\forall a,b\in L:\; a\nleq b \implies \exists x\in \joinIr(L): \; x\leq a$ and $x\nleq b$;
+\item $\forall a\in L:\; a = \bigvee\setbuilder{x\in\joinIr(L)}{x\leq a}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Set $S = \setbuilder{x\in L}{\text{$x\leq a$ and $x\nleq b$}}$, which is non-empty and thus contains a minimal element $m$ by \ref{prop:welfoundedACC}. We claim $m$ is join-irreducible. Assume, towards a contradiction, $x = c\vee d$ and $c < x > d$. By minimality of $x$, $c,d\notin S$. As $c,d< x \leq a$, we must have $c,d\leq b$. But this means $x\leq b$, so $x\notin S$ which is a contradiction.
+
+(2) Set $T = \setbuilder{x\in\joinIr(L)}{x\leq a}$. Clearly $a$ is an upper bound of $T$. To see that it is the least upper bound, take a different upper bound $c$. Assume, towards a contradiction, that $a\nleq c$. Then $a\nleq a\wedge c$. By point 1. there exists an $x\in\joinIr(L)$ such that $x\leq a$ (meaning $x\in T$) and $x\nleq a\wedge c$. But if $c$ were an upper bound of $T$, then $x\leq a\wedge c$, which is a contradiction.
+\end{proof}
+
+
+\subsubsection{Join- and meet-dense subsets}
+\begin{definition}
+Let $P$ be a poset and let $Q\subset P$ be a subset. Then $Q$ is called \udef{join-dense} in $P$ if for every $x\in P$, there exists a subset $S\subset Q$ such that $x= \bigvee_P S$.
+
+The dual of join-dense is \udef{meet-dense}.
+\end{definition}
+
+\begin{proposition}
+Let $L$ be a lattice.
+\begin{enumerate}
+\item If $L$ satisfies the descending chain condition, then any subset $Q\supseteq \joinIr(L)$ is join-dense in $L$.
+\item If $L$ satisfies the ascending chain condition and $Q$ is join-dense in $L$, then for all $a\in L$ there exists a finite subset $F$ of $Q$ such that $a = \bigvee F$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) is a corollary of \ref{prop:joinIrreducibilityDescendingChainLattice}. (2) is a corollary of \ref{prop:ascendingDescendingChainLattice}.
+\end{proof}
+\begin{corollary}
+Let $L$ be a lattice with no infinite chains. Then
+\begin{enumerate}
+\item for each $a \in L$, there exists a finite subset $F$ of $\joinIr(L)$ such that $a = F$.
+\item $Q\subseteq L$ is join-dense in $L$ if and only if $Q \supseteq \joinIr(L)$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+If $L$ has no finite chains, then it satisfies the ascending and descending chain conditions.
+
+Only the $\Rightarrow$ direction of (2) is not immediately obvious. Assume $Q$ is join-dense and let $x\in \joinIr(L)$. By the proposition there exists a finite $F\subseteq Q$ such that $x = \bigvee F$. Since $x$ is join-irreducible, we have $x \in F$ and hence $x \in Q$. Thus, $\joinIr(L) \subseteq Q$.
+\end{proof}
+
+\subsection{Distributive lattices}
+For all lattices $L$ the distributive inequalities, \ref{corollary:distributiveInequality}, hold: $\forall a,b,c \in L$:
+\begin{align*}
+a \vee (b\wedge c) &\leq (a\vee b) \wedge (a\vee c); \\
+a\wedge (b \vee c) &\geq (a\wedge b)\vee (a\wedge c).
+\end{align*}
+
+The two corresponding equalities are equivalent:
+\begin{proposition} \label{lemma:equivalenceDistributiveLaws}
+Let $L$ be a lattice. Then the following are equivalent:
+\begin{enumerate}
+\item $\forall a,b,c \in L: \; a \vee (b\wedge c) = (a\vee b) \wedge (a\vee c)$;
+\item $\forall a,b,c \in L: \; a\wedge (b \vee c) = (a\wedge b)\vee (a\wedge c)$.
+\end{enumerate}
+\end{proposition}
+These equivalent equalities are known as the \udef{distributive laws}.
+\begin{proof}
+We show $(1)\Rightarrow (2)$. Then other implication follows by duality.
+
+Assume (1). Then, for all $a,b,c \in L$:
+\begin{align*}
+(a\wedge b)\vee (a\wedge c) &= ((a\wedge b)\vee a) \wedge ((a\wedge b)\vee c) & \text{by (1)}\\
+&= (a\wedge (c\vee (a\wedge b))  & \text{by the absorption law}\\
+&= (a \wedge ((c\vee b) \wedge (c\vee a))  & \text{by (1)}\\
+&= a\wedge (b\vee c) & \text{by the absorption law.}
+\end{align*}
+\end{proof}
+Note that it is \emph{not} true that
+\[ \forall a,b,c \in L: \; a \vee (b\wedge c) = (a\vee b) \wedge (a\vee c) \iff a\wedge (b \vee c) = (a\wedge b)\vee (a\wedge c). \]
+
+\begin{definition}
+A lattice $L$ is called \udef{distributive} if it satisfies the distributive laws.
+\end{definition}
+
+\begin{lemma}
+A lattice is distributive \textup{if and only if} its dual is distributive.
+\end{lemma}
+
+\begin{lemma}
+Let $L$ be a lattice. The following are equivalent:
+\begin{enumerate}
+\item $L$ is distributive;
+\item for all $x,y,z,w\in L: \quad x\wedge y \leq w \;\text{and}\; x\wedge z\leq w \implies x\wedge (y\vee z) \leq w;$
+\item for all $x,y,z,w\in L: \quad x\vee y \geq w \;\text{and}\; x\vee z\geq w \implies x\vee (y\wedge z) \geq w$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Point (1) is self-dual and points (2) and (3) are dual, so it is enough to show that (1) and (2) are equivalent.
+
+Assume $L$ distributive. By \ref{corollary:orderLattice}, $ x\vee y \geq w$ and $x\vee z\geq w$ imply $(x\wedge y)\vee (x\wedge z) \leq w$. By distributivity, we get (2).
+
+Conversely, we can take $w = (x\wedge y)\vee (x\wedge z)$. Then (2) gives $x\wedge (y\vee z) \leq (x\wedge y)\vee (x\wedge z)$ and the distributive inequality \ref{corollary:distributiveInequality} gives the other inequality. 
+\end{proof}
+
+\subsection{Modular lattices}
+For all lattices $L$ the modular inequality holds: $\forall a,b,c \in L$:
+\[ a\leq c \implies a \vee (b\wedge c) \leq (a\vee b) \wedge c. \]
+See \ref{corollary:distributiveInequality}.
+
+\begin{proposition} \label{prop:modularEquivalences}
+Let $L$ be a lattice. Then the following are equivalent:
+\begin{enumerate}
+\item $\forall a,b,c\in L$: $a \vee (b\wedge c) = (a\vee b) \wedge c$ if $a\leq c$;
+\item $\forall a,b,c\in L$: $a \vee (b\wedge c) = (a\vee b) \wedge (a\vee c)$ if $a\leq b$ or $a\leq c$; the dual of (2);
+\item $\forall a,b,c\in L$: $a\vee (b\wedge (a\vee c)) = (a\vee b)\wedge (a\vee c)$; the dual of (3);
+\item \textup{Shearing identity}: $\forall a,b,c\in L$: $(a\vee b) \wedge c = (a\vee (b\wedge (a\vee c)))\wedge c$; the dual of the shearing identity.
+\end{enumerate}
+\end{proposition}
+The first of these is referred to as the \udef{modular law}. Notice that it is self-dual.
+\begin{proof}
+(1) is equivalent to its dual by replacing $a\leftrightarrow c$. This will imply all statements are equivalent to their duals once the equivalence with (1) has been established. 
+
+$\boxed{(1)\Rightarrow (2)}$ Assume (1). Assume $a\leq b$ or $a\leq c$. By relabelling we can assume $a\leq c$.  Then $a\vee c = c$ and (2) clearly follows from (1).
+
+
+$\boxed{(2)\Rightarrow (3)}$ Apply (2) to $a\leq a\vee c$.
+
+$\boxed{(3)\Rightarrow (1)}$ Assume $a\leq c$. Then $a\vee c = c$ and $a\vee (b\wedge (a\vee c)) = (a\vee b)\wedge (a\vee c)$ reduces to $a \vee (b\wedge c) = (a\vee b) \wedge c$.
+
+$\boxed{(3)\Rightarrow (4)}$ We calculate, using (3),
+\[ (a\vee (b\wedge (a\vee c)))\wedge c = ((a\vee b)\wedge (a\vee c))\wedge c = (a\vee b) \wedge (a\vee c) \wedge c = (a\vee b) \wedge c. \]
+
+$\boxed{(4)\Rightarrow (3)}$ TODO????
+\end{proof}
+
+\begin{definition}
+A lattice $L$ is called \udef{modular} if it satisfies the modular law.
+\end{definition}
+
+\begin{lemma}
+If a lattice is distributive, it is also modular.
+\end{lemma}
+\begin{proof}
+If the lattice is distributive, point (2) of \ref{prop:modularEquivalences} holds unconditionally, and so in particular also conditionally.
+\end{proof}
+
+\section{Complementation}
+\subsection{Disjoint elements and disjoint complement}
+\begin{definition}
+Let $L$ be a lattice with a bottom $\bot$.
+
+We say $x,y\in L$ are \udef{disjoint} if $x\wedge y = \bot$. We write $x \perp y$.
+
+Let $S\subset L$. Then the set
+\[ S^\perp \defeq \setbuilder{x\in L}{\forall y\in S: x\perp y} \]
+is called the \udef{disjoint complement} of $Y$.
+\end{definition}
+
+\begin{lemma}
+Let $L$ be a distributive lattice with a bottom $\bot$ and $S\subset L$. Then $S^\perp$ is an ideal.
+\end{lemma}
+\begin{proof}
+Let $a,b\in S^\perp$. Then for all $x\in S$, we have
+\[ (a\vee b)\wedge x = (a\wedge x)\vee (b\wedge x) = \bot\vee \bot = \bot, \]
+so $a\vee b\in S^\perp$.
+
+It is also clear $S^\perp$ must be a down set by \ref{corollary:orderLattice}.
+\end{proof}
+
+\subsection{Complementation}
+\begin{definition}
+Let $L$ be a bounded lattice and $x\in L$. We call $y$ a \udef{complement} of $x$ if
+\[ x \vee y = \top \qquad \text{and} \qquad x\wedge y = \bot. \]
+\end{definition}
+
+\begin{proposition} \label{prop:distributiveComplementUnique}
+Let $L$ be a bounded lattice. If $L$ is distributive, then any $x\in L$ has at most one complement.
+\end{proposition}
+\begin{proof}
+Let $y,y'$ be complements of $x$. Then
+\[ y = y\vee \bot = y\vee (x\wedge y') = (y\vee x)\wedge (y\vee y') = \top \wedge (y\vee y') = y\vee y'. \]
+Similarly $y' = y'\vee y$, so $y= y'$.
+\end{proof}
+
+\subsubsection{Complemented lattices}
+\begin{definition}
+A \udef{complemented lattice} is a bounded lattice with a function $c:L\to L$, called the \udef{complementation}, such that $c(x)$ is a complement of $x$ for all $x\in L$.
+
+A lattice in which every element has exactly one complement is called a \udef{uniquely complemented lattice}.
+
+A lattice with the property that every interval (viewed as a sublattice) is complemented is called a \udef{relatively complemented lattice}.
+\end{definition}
+A distributive complemented lattice is uniquely complemented.
+
+\begin{lemma}
+Let $L$ be a complemented lattice with complementation $c:L\to L$. Then $c(\top) = \bot$ and $c(\bot) = \top$.
+\end{lemma}
+\begin{proof}
+For $c(\top)$ to be a complement of $\top$, we need $\top \wedge c(\top) = \bot$. But for all $x\in L$ we have $x\leq \top$, so $\top\wedge x = x$. This means we have $c(\top) = \bot$.
+\end{proof}
+
+\begin{lemma} \label{lemma:uniqueComplementInvolution}
+Let $L$ be a uniquely complemented lattice. Then the complementation $c:L\to L$ is an involution.
+\end{lemma}
+\begin{proof}
+Clearly if $c(x)$ is a complement of $x$, then $x$ is a complement of $c(x)$. By uniqueness $c(c(x)) = x$.
+\end{proof}
+
+\subsubsection{Orthocomplemented lattices}
+\begin{definition}
+Let $L$ be a bounded lattice. An \udef{orthocomplementation} is a function $L \to L: x \to \overline{x}$ that maps each element $x\in L$ to an \udef{orthocomplement} $\overline{x}$ such that
+\begin{itemize}
+\item $x$ and $\overline{x}$ are complements;
+\item $x\mapsto \overline{x}$ is an involution: $\overline{\overline{x}} = x$;
+\item $x\mapsto \overline{x}$ is order-reversing: $x\leq y \implies \overline{y} \leq \overline{x}$.
+\end{itemize}
+An \udef{orthocomplemented lattice} or \udef{ortholattice} is a bounded lattice equipped with an orthocomplementation.
+\end{definition}
+An orthocomplemented lattice is not necessarily uniquely complemented.
+
+\begin{lemma}
+The dual lattice of an ortholattice is an ortholattice. We can view an orthocomplementation as an isomorphism between an ortholattice and its dual.
+\end{lemma}
+
+\begin{proposition}
+The cardinality of any finite ortholattice is either even or $1$.
+\end{proposition}
+\begin{proof}
+Let $L$ be a finite ortholattice.
+The orthocomplementation pairs elements $x,y$ such that $\overline{x} = y$ and $\overline{y} = x$. If for all such pairs we have $x\neq y$, then the cardinality of $L$ is even. Now assume there exists an $x\in L$ such that $\overline{x} = x$. Then 
+\[ \bot = x\wedge \overline{x} = x\wedge x = x = x\vee x = x\vee \overline{x} = \top. \]
+So $\bot = \top$, which is only possible if $L = \{\bot\}$.
+\end{proof}
+
+\begin{example}
+\begin{itemize}
+\item The lattice $\mathbf{M}_2 = \begin{tikzcd}[column sep={2em,between origins},row sep={2em,between origins}]
+&\circ \ar[ld, dash] \ar[rd, dash] & \\ \circ \ar[rd, dash] && \circ \ar[ld, dash] \\ &\circ &
+\end{tikzcd}$ admits a unique orthocomplementation.
+\item The lattice $\mathbf{M}_3 = \begin{tikzcd}[column sep={2em,between origins},row sep={2em,between origins}]
+&\circ \ar[ld, dash] \ar[d,dash] \ar[rd, dash] &\\ \circ \ar[rd, dash]& \circ \ar[d, dash] & \circ \ar[ld, dash] \\ &\circ &
+\end{tikzcd}$ admits no orthocomplementations.
+\item The lattice $\mathbf{M}_4 = \begin{tikzcd}[column sep={1em,between origins},row sep={2em,between origins}]
+&&&\circ \ar[llld, dash] \ar[ld,dash] \ar[rd, dash] \ar[rrrd, dash] &&&\\ \circ \ar[rrrd, dash]&& \circ \ar[rd, dash] && \circ \ar[ld, dash] && \circ \ar[llld, dash] \\ &&&\circ &&&
+\end{tikzcd}$ admits three orthocomplementations.
+\item The hexagon lattice $\begin{tikzcd}[column sep={1.5em,between origins},row sep={1.7em,between origins}]
+& \circ \ar[ld, dash] \ar[rd, dash] & \\
+a \ar[d, dash] & & b \ar[d, dash] \\
+c \ar[rd, dash] & & d \ar[ld, dash] \\
+& \circ &
+\end{tikzcd}$ admits a unique orthocomplementation, but it is not uniquely complemented. Indeed both of the functions $f: \begin{tikzcd}[column sep={1.5em,between origins},row sep={1.7em,between origins}]
+& \circ \ar[ld, dash] \ar[rd, dash] & \\
+a \ar[d, dash] \ar[rr, leftrightarrow] & & b \ar[d, dash] \\
+c \ar[rd, dash] \ar[rr, leftrightarrow] & & d \ar[ld, dash] \\
+& \circ &
+\end{tikzcd}$ and $g: \begin{tikzcd}[column sep={1.5em,between origins},row sep={1.7em,between origins}]
+& \circ \ar[ld, dash] \ar[rd, dash] & \\
+a \ar[d, dash] \ar[rrd, leftrightarrow] & & b \ar[d, dash] \\
+c \ar[rd, dash] \ar[rru, leftrightarrow] & & d \ar[ld, dash] \\
+& \circ &
+\end{tikzcd}$ are complementations. Only $g$ is an orthocomplementation, because $f$ does not reverse order: $a \geq c$  and $f(a) = b \geq d = f(c)$.
+\end{itemize}
+\end{example}
+
+\begin{theorem}[De Morgan's laws]
+Let $L$ be an ortholattice, then for all $x,y\in L$
+\begin{enumerate}
+\item $\overline{(x\vee y)} = \overline{x} \wedge \overline{y}$;
+\item $\overline{(x\wedge y)} = \overline{x} \vee \overline{y}$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+From $x\leq x\vee y$ and $y\leq x\vee b$, we have $\overline{(x\vee b)} \leq \overline{x}$ and $\overline{(x\vee b)} \leq \overline{y}$. By \ref{corollary:orderLattice} we have $\overline{(x\vee y)}\leq \overline{x} \wedge \overline{y}$. For the other inequality we start with $\overline{x} \geq \overline{x} \wedge \overline{y}$ and $\overline{y} \geq \overline{x} \wedge \overline{y}$ to obtain $x\vee y \leq \overline{(\overline{x} \wedge \overline{y})}$, which implies $\overline{x} \wedge \overline{y} \leq \overline{(x\vee y)}$.
+\end{proof}
+
+\begin{proposition}
+Let $L$ be a complemented lattice.
+
+If the complement is an involution and satisfies either of the de Morgan laws, then $L$ is an ortholattice.
+\end{proposition}
+\begin{proof}
+Assume the de Morgan law $\overline{(x\vee y)} = \overline{x} \wedge \overline{y}$ holds. Assume $x\leq y$. Then $x\vee y = y$, so
+\[ \overline{y} = \overline{(x\vee y)} = \overline{x} \wedge \overline{y} \]
+meaning $\overline{y} \leq \overline{x}$.
+\end{proof}
+
+The requirement that the complement be an involution is important. There are lattices in which the de Morgan laws hold that are not ortholattices.
+
+\begin{example}
+The lattice $\mathbf{M}_3 = \begin{tikzcd}[column sep={2em,between origins},row sep={2em,between origins}]
+&\top \ar[ld, dash] \ar[d,dash] \ar[rd, dash] &\\ a \ar[rd, dash]& b \ar[d, dash] & c \ar[ld, dash] \\ &\bot &
+\end{tikzcd}$ admits a complementation $'$ such that $a' = b$, $b' = c$ and $c' = a$ that is clearly not an orthocomplementation, but does satisfy the de Morgan laws.
+\end{example}
+
+TODO Ockham algebras, De Morgan algebras, Kleene algebras, Stone algebras.
+
+\subsection{Boolean lattices}
+\begin{definition}
+A distributive complemented lattice is called a \udef{Boolean lattice} or \udef{Boolean algebra}.
+\end{definition}
+
+\begin{proposition} \label{prop:BooleanComplementLargestDisjoint}
+Let $L$ be a Boolean lattice. For all $x\in L$ the complement $\overline{x}$ is the largest element disjoint from $x$.
+\end{proposition}
+\begin{proof}
+Let $x\in L$. We need to show that $y\leq \overline{x}$ for all $y\in \{x\}^\perp$, or, equivalently, $\overline{x} \vee y = \overline{x}$. By the uniqueness of the complement, \ref{prop:distributiveComplementUnique}, it is enough to prove that $\overline{x} \vee y$ is a complement. Indeed
+\begin{align*}
+x \vee (\overline{x} \vee y) &= (x\vee \overline{x}) \vee y = \top \vee y = \top \\
+x \wedge (\overline{x} \vee y) &= (x\wedge \overline{x})\vee (x\wedge y) = \bot \vee \bot = \bot.
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Every Boolean lattice is an ortholattice.
+\end{proposition}
+\begin{proof}
+By \ref{prop:distributiveComplementUnique} we know that a Boolean lattice is uniquely complemented, so its complement is an involution by \ref{lemma:uniqueComplementInvolution}. We just need to check the complementation reverses order.
+
+Let $x\leq y$. Then $\overline{y} \wedge x \leq \overline{y} \wedge y = \bot$, so $\overline{y} \wedge x = \bot$ and thus $\overline{y}$ is disjoint from $x$. Then $\overline{y} \leq \overline{x}$ follows from \ref{prop:BooleanComplementLargestDisjoint}.
+\end{proof}
+\begin{corollary}
+The laws of de Morgan hold in Boolean lattices.
+\end{corollary}
+
+\begin{proposition}
+Let $L$ be a Boolean lattice with complement and $a,b\in L$. Then $[a,b]$ is a Boolean lattice with complementation $x\mapsto \widetilde{x} = (\overline{x} \wedge b)\vee a$. 
+\end{proposition}
+\begin{proof}
+Clearly $[a,b]$ inherits distributivity from $L$. All we need to show is that for all $x\in [a,b]$ the complement of $x$ in $[a,b]$ is $\widetilde{x}$. We calculate
+\begin{align*}
+x \wedge \widetilde{x} &= x\wedge ((\overline{x} \wedge b)\vee a) = (x\wedge(\overline{x} \wedge b))\vee (x\wedge a) = (( x\wedge \overline{x}) \wedge b)\vee (x\wedge a) = (\bot \wedge b)\vee a = \bot \vee a = a \\
+x \vee \widetilde{x} &= x\vee ((\overline{x} \wedge b)\vee a) = ((x\vee \overline{x}) \wedge (x\vee b))\vee a = (\top \wedge b) \vee a = b\vee a = b.
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+An algebra of sets is a Boolean algebra with as top the unit $\Omega$, as bottom the empty set $\emptyset$ and as complement $A\mapsto A^c = \Omega\setminus A$.
+\end{proposition}
+
+\subsubsection{Duality and complementation}
+TODO: dual expression can be obtained by taking the complement? Dual statement of equality is equality of complements?
+
+\subsubsection{Identities in Boolean algebras}
+TODO rewrite!!!!
+
+Given any set $U$ we can form the family $\powerset(U)$ for which $U$ is a universe set.
+
+The set theoretic operations of union, intersection, difference, symmetric difference and complementation can be restricted to $\powerset(U)$. In other words $\powerset(U)$ is closed w.r.t. these operations.
+
+\begin{proposition} \label{lemma:setBooleanAlgebra}
+Given a set $U$, the operations $\cap, \cup, ^c$ form a Boolean algebra with bottom $\emptyset$ and top $U$: $\forall A,B,C\subset U$: $\powerset(U)$ is closed under $\cap, \cup, ^c$ and
+\[ \begin{array}{l c c}
+\text{\textbf{Commutativity}} & A\cup B= B\cup A & A\cap B = B\cap A \\
+\text{\textbf{Identity}} & A\cup\emptyset = A & A\cap U = A \\
+\text{\textbf{Distributivity}} & A\cup(B\cap C) = (A\cup B)\cap(A\cup C) & A\cap(B\cup C) = (A\cap B)\cup(A\cap C) \\
+\text{\textbf{Complements}} & A\cup A^c = U & A\cap A^c = \emptyset
+\end{array} \]
+\end{proposition}
+The two columns are duals of each other.
+
+TODO: distributivity for arbitrary union and intersection.
+
+\begin{corollary} \label{lemma:BooleanConsequences}
+Let $A,B\subseteq U$ be sets. Then
+\[ \begin{array}{l c c}
+\text{\textbf{Idempotency}} & A\cup A = A & A\cap A = A \\
+\text{\textbf{Domination}} & A\cup U = U & A\cap \emptyset = \emptyset \\
+\text{\textbf{Absorption}} & A\cup(A\cap B) = A & A\cap(A\cup B) = A \\
+\text{\textbf{Associativity}} & A\cup(B\cup C) = (A\cup B)\cup C & A\cap(B\cap C) = (A\cap B)\cap C
+\end{array} \]
+\end{corollary}
+\begin{proof}
+Using set theory the proof of these statements is simple. It is also possible to prove the equalities using only the properties of Boolean algebras listed in lemma \ref{lemma:setBooleanAlgebra} and the properties derived here. We only prove the first column. The proof of the second column can be obtained easily by duality.
+
+(1) $A = A\cup(A\cap A^c) = (A\cup A)\cap (A\cup A^c) = (A\cup A)\cap U = A\cup A$.
+
+(2) $U = U\cup (U\cap A) = (U\cup U)\cap (U\cup A) = U\cap (U\cup A) = (A\cup U)\cap U = (A\cup U)$.
+
+(3) $A\cup(A\cap B) = (A\cap U)\cup(A\cap B) = A\cap(U\cup B) = A\cap U = A$.
+
+(4) TODO \url{https://proofwiki.org/wiki/Operations_of_Boolean_Algebra_are_Associative}
+\end{proof}
+
+\section{Completions}
+TODO: Dedekind-MacNeille completion.
+
+\section{Lattices of subgroups}
+
+\section{Formal concept analysis}
+\url{file:///C:/Users/user/Downloads/978-3-540-31881-1.pdf}
+\url{file:///C:/Users/user/Downloads/978-3-662-49291-8.pdf}
+
+\begin{definition}
+A \udef{context} is a triple $\seq{G,M,I}$ where $G$ is a set of \udef{objects}, $M$ is a set of \udef{attributes} and $I\subseteq G\times M$ is a binary relation.
+
+For $g\in G, m\in M$ we interpret $gIm$ as ``the object $g$ has the attribute $m$''.
+
+
+
+A \udef{concept} is a pair $\seq{A,B}$ where $A\subset G$ is a set of objects and $B\subset M$ is a set of attributes such that
+\begin{itemize}
+\item $A = \setbuilder{g\in G}{\forall m\in B: gIm}$;
+\item $B = \setbuilder{m\in M}{\forall g\in A: gIm}$
+\end{itemize}
+\end{definition}
+The letters $G$ and $M$ come from the German: Gegenstände and Merkmale. The $I$ is for ``incidence relation'' (I think).
+
+\chapter{The poset of subsets}
+\begin{definition}
+Let $U$ be a set. Then $\sSet{\powerset(U), \subseteq}$ is a partially ordered set. We call $U$ the \udef{universe} of this poset.
+\end{definition}
+
+Any family of sets $\mathcal{F}$ may be seen as a subset of the poset with universe $\bigcup \mathcal{F}$.
+
+\section{The complete Boolean lattice of subsets}
+\begin{lemma}
+Let $U$ be a universe set. Consider the poset $\sSet{\powerset(U), \subseteq}$ and let $\mathcal{F}\subseteq \powerset(U)$. Then
+\begin{enumerate}
+\item $\sup(\mathcal{F}) = \bigcup \mathcal{F}$;
+\item $\inf(\mathcal{F}) = \bigcap \mathcal{F}$.
+\end{enumerate}
+(Assuming relativised intersection TODO!)
+\end{lemma}
+\begin{corollary}
+Let $U$ be a universe set. Then $\sSet{\powerset(U), \subseteq}$ is a bounded, complete, distributive lattice with top $U$ and bottom $\emptyset$.
+\end{corollary}
+\begin{proof}
+TODO ref distributivity.
+\end{proof}
+
+\subsection{Complementation}
+\begin{definition}
+Let $U$ be a universe and $A\subseteq U$. The \udef{complement} of $A$ w.r.t. $U$ is
+\[ A^c \defeq U\setminus A. \]
+\end{definition}
+
+\begin{lemma}
+The complement $^c$ is a lattice-theoretical complement.
+\end{lemma}
+\begin{proof}
+For all $A\subseteq U$ we have $A\cup A^c = U$ and $A\cap A^c = \emptyset$ from \ref{lemma:differenceProperties}.
+\end{proof}
+\begin{corollary}
+Let $U$ be a universe set. Then $\sSet{\powerset(U), \subseteq}$ is a Boolean lattice.
+\end{corollary}
+
+In particular de Morgan's laws can be formulated in this context as:
+\begin{proposition}
+Let $U,A,B$ be sets, then
+\begin{align*}
+(A\cup B)^c &= (A^c)\cap (B^c); \\
+(A\cap B)^c &= (A^c)\cup (B^c).
+\end{align*}
+Where complementation is with respect to $U$.
+
+This can be extended to arbitrary families of sets:
+\begin{align*}
+\left(\bigcup \mathcal{E}\right)^c &= \bigcap\setbuilder{A^c}{A\in\mathcal{E}} \\
+\left(\bigcap \mathcal{E}\right)^c &= \bigcup\setbuilder{A^c}{A\in\mathcal{E}}
+\end{align*}
+where $\mathcal{E}$ is a family of sets.
+\end{proposition}
+
+\subsection{Expressing set theoretic operations with $\cup,\cap, ^c$}
+\begin{proposition}
+Let $A,B\subseteq U$ be sets. Then
+\begin{enumerate}
+\item $A\setminus B = A \cap B^c$;
+\item $A\symdiff B = (A\cup B)\cap (A^c\cup B^c)$.
+\end{enumerate}
+\end{proposition}
+\begin{corollary}
+Let $A,B \subseteq U$ be sets. Then
+\begin{enumerate}
+\item $A\setminus B = B^c\setminus A^c$;
+\item $A \symdiff B = A^c \symdiff B^c$;
+\item $A \symdiff A^c = U$.
+\end{enumerate}
+\end{corollary}
+
+
+\section{Indicator functions}
+The family $\powerset(U)$ can be bijectively mapped to the family of functions $(U\to \{0,1\})$, by mapping each set $A$ to its indicator function $\chi_A$.
+
+\begin{definition}
+Let $U$ be a set and $A\subseteq U$. The \udef{indicator function} or \udef{characteristic function} of $A$ as an element of $\powerset(U)$ is defined as
+\[ \chi_A: U\to \{0,1\}: x\mapsto \begin{cases}
+1 & x\in A \\ 0 & x\notin A.
+\end{cases} \]
+\end{definition}
+\begin{lemma}
+Let $A,B$ be elements of $\powerset(U)$. Then
+\begin{enumerate}
+\item $\chi_{A\cap B} = \min\{\chi_A,\chi_B\} = \chi_A\cdot \chi_B$;
+\item $\chi_{A\cup B} = \max\{\chi_A,\chi_B\} = \chi_A + \chi_B - \chi_A\cdot \chi_B$;
+\item $\chi_{A^c} = \underline{1}-\chi_A$; and thus $\chi_A + \chi_{A^c} = \underline{1}$;
+\item $\chi_{A\Delta B} \begin{aligned}[t] &= \chi_A + \chi_B - \underline{2}\cdot\chi_A\cdot \chi_B \\
+&= |\chi_A - \chi_B| \\
+&= \chi_A + \chi_B \mod 2 \defeq \begin{cases}
+1 & (\chi_A + \chi_B = 1) \\
+0 & \text{(else)}
+\end{cases}
+\end{aligned}$.
+\end{enumerate}
+Where all operations are defined point-wise.
+\end{lemma}
+
+\begin{proposition}
+The indicator functions define a bijection between $\powerset(U)$ and $(U\to \{0,1\})$.
+\end{proposition}
+
+\section{Closure under set operations}
+We say a family of sets $\mathcal{F}$ is closed under an operation if the result of this operation acting on sets in $\mathcal{F}$ is again in $\mathcal{F}$.
+
+\begin{definition}
+A family of sets $\mathcal{F}\subseteq\powerset(U)$ is called
+\begin{itemize}
+\item \udef{closed under complementation} if $A^c\in\mathcal{F}$ for all $A\in\mathcal{F}$;
+\item \udef{closed under relative complements} if $A\setminus B\in\mathcal{F}$ for all $A \supset B\in\mathcal{F}$;
+\item \udef{closed under set difference} if $A\setminus B\in\mathcal{F}$ for all $A, B\in\mathcal{F}$;
+\end{itemize}
+and
+\begin{itemize}
+\item \udef{closed under finite unions} if $A\cup B \in\mathcal{F}$ for all $A,B\in\mathcal{F}$;
+\item \udef{closed under finite intersections} if $A\cap B \in\mathcal{F}$ for all $A,B\in\mathcal{F}$;
+\item \udef{closed under disjoint unions} if $\biguplus_{i\in I}A_i \in\mathcal{F}$ for any indexed family of disjoint sets $\{A_i\}_{i\in I}$;
+\item \udef{closed under countable monotone unions} if $\bigcup_{i=1}^\infty A_i \in\mathcal{F}$ for any indexed family of sets $\{A_i\}_{i\in \N}$ such that $i\leq j \implies A_i \subseteq A_j$;
+\item \udef{closed under countable monotone intersections} if $\bigcap_{i=1}^\infty A_i \in\mathcal{F}$ for any indexed family of sets $\{A_i\}_{i\in \N}$ such that $i\leq j \implies A_i \supseteq A_j$.
+\end{itemize}
+Our definition of closure under relative complements is \emph{not} the same as closure under set difference! Our definition is non-standard as they are usually taken to be the same thing.
+\end{definition}
+
+\subsection{Complementation, relative complementation and set difference}
+In general the notions of closure under complementation, relative complementation and set difference are distinct, the only implication being from set difference to relative complementation.
+
+\begin{lemma} \label{lemma:complementTypesUnionClosure}
+Let $\mathcal{F}$ be a family of sets that is closed under finite (disjoint) unions. Then
+\[ \begin{tikzcd}[row sep=0]
+\text{$\mathcal{F}$ is closed under set differences} \arrow[dr, Rightarrow] & \\
+\text{$\mathcal{F}$ is closed under complementation} \arrow[r,Rightarrow] & \text{$\mathcal{F}$ is closed under relative complements.}
+\end{tikzcd} \]
+\end{lemma}
+\begin{proof}
+Assume $A\supset B$, then $A\setminus B = A^c \uplus B$. This is a disjoint union.
+\end{proof}
+
+\begin{lemma}
+Let $\mathcal{F}$ be a family of sets that is closed under finite intersections. Then
+\[ \text{closure under complements} \quad\implies\quad \text{closure under set difference} \quad\iff\quad \text{closure under relative complements.} \]
+All three are equivalent if $\mathcal{F}$ contains the universe set.
+\end{lemma}
+\begin{proof}
+$A\setminus B = A\cap B^c$ and $A\setminus B = A\setminus (B\cap A)$.
+\end{proof}
+
+\begin{lemma} \label{lemma:closureSetDifference}
+Let $\mathcal{F}$ be a family of sets. Then
+\[ \text{closure under set differences} \quad\implies\quad \text{closure under finite intersections.} \]
+\end{lemma}
+\begin{proof}
+$A\cap B = A\setminus (A\setminus B)$.
+\end{proof}
+
+Any non-empty family of sets that is closed under set differences is also an order-theoretic ring.
+
+\subsection{Types of closure for unions and intersections}
+\begin{lemma} \label{lemma:unionsIntersectionClosureImplications}
+Let $\mathcal{F}$ be a family of sets. Then we have the following implications for closure under unions:
+\[ \begin{tikzcd}[row sep=tiny]
+&& \text{countable disjoint $\uplus$} \\
+\text{arbitrary $\cup$} \arrow[r, Rightarrow] & \text{countable $\cup$} \arrow[ur, Rightarrow] \arrow[r, Rightarrow] \arrow[dr, Rightarrow] & \text{countable monotone $\cup$} \\
+&& \text{finite $\cup$}
+\end{tikzcd} \]
+and for closure under intersections:
+\[ \begin{tikzcd}[row sep=0em]
+&& \text{countable monotone $\cap$} \\
+\text{arbitrary $\cap$} \arrow[r, Rightarrow] & \text{countable $\cap$} \arrow[ur, Rightarrow] \arrow[dr, Rightarrow] &  \\
+&& \text{finite $\cap$}
+\end{tikzcd} \]
+\end{lemma}
+
+
+The implications in \ref{lemma:unionsIntersectionClosureImplications} for unions can be simplified, if $\mathcal{F}$ is closed under relative complementation:
+\begin{lemma} \label{lemma:typesOfUnionsRelativeComplementation}
+Let $\mathcal{F}$ be a family of sets that is closed under relative complementation. Then we have the following implications for closure under unions:
+\[ \begin{tikzcd}[row sep=0em]
+\text{arbitrary $\cup$} \arrow[r, Rightarrow] & \text{countable $\cup$} \arrow[r, Rightarrow] \arrow[dr, Rightarrow] & \text{countable disjoint $\uplus$} \arrow[r, Rightarrow] & \text{countable monotone $\cup$} \\
+&& \text{finite $\cup$} &
+\end{tikzcd} \]
+\end{lemma}
+\begin{proof}
+We need to prove that closure under countable disjoint unions implies closure under countable monotone unions.
+
+Assume $\mathcal{F}$ closed under countable disjoint unions. Let $\{A_i\}_{i\in \N}$ be a monotonically increasing family of sets. Then we can recursively define a family $\{D_i\}_{i\in \N}$ by $D_0=\emptyset$ and
+\[ D_{i+1} = A_{i+1}\setminus D_i. \]
+This is allowed because $A_{i+1}\supset A_i \supset D_i$. By induction we see that $\{D_i\}_{i\in \N}$ is a disjoint family and has the same union as $\{A_i\}_{i\in \N}$.
+\end{proof}
+
+These implications can be further simplified, if $\mathcal{F}$ is closed under set differences:
+\begin{lemma}
+Let $\mathcal{F}$ be a family of sets that is closed under set differences. Then we have the following implications for closure under unions:
+\[ \begin{tikzcd}[row sep=0em]
+\text{arbitrary $\cup$} \arrow[r, Rightarrow] & \text{countable $\cup$} \arrow[r, Leftrightarrow] & \text{countable disjoint $\uplus$} \arrow[r, Rightarrow] \arrow[dr, Rightarrow] & \text{countable monotone $\cup$} \\
+&&& \text{finite $\cup$}
+\end{tikzcd} \]
+\end{lemma}
+\begin{proof}
+We just need to prove that closure under countable disjoint unions implies closure under countable unions.
+
+This can be done with the same construction of $\{D_i\}_{i\in \N}$ as before because now the assignment $D_{i+1} = A_{i+1}\setminus D_i$ works for arbitrary families $\{A_i\}_{i\in \N}$, not just monotone ones.
+\end{proof}
+
+\section{Monotone classes}
+\begin{definition}
+A family of sets $\mathcal{F}$ is called a \udef{monotone class} if it is closed under both countable monotone unions and countable monotone intersections.
+\end{definition}
+\begin{lemma}
+Any arbitrary intersection of monotone classes is a monotone class.
+\end{lemma}
+
+\subsection{Dynkin systems}
+\begin{definition}
+A \udef{Dynkin system} of sets (also known as a \udef{$\lambda$-system} or \udef{d-system}) is a pair of a set $\Omega$ and a collection of sets $D\subset\powerset(\Omega)$ such that
+\begin{itemize}
+\item $\Omega\in D$;
+\item if $A\in D$, then $A^c\in D$;
+\item if $(A_i)_{i\in\N}$ is a countable sequence of pairwise disjoint sets in $D$, then $\biguplus_{i=1}^\infty A_i\in D$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+A pair of a set $\Omega$ and a family of subsets $D$ is a Dynkin system \textup{if and only if}
+\begin{itemize}
+\item $\Omega\in D$;
+\item $D$ is closed under relative complements: if $A,B\in D$ and $A\supset B$, then $A\setminus B\in D$;
+\item $D$ is closed under countable monotone unions.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+Call the original set of axioms Ax1 and this set of axioms Ax2.
+
+$\boxed{\text{Ax1}\implies\text{Ax2}}$ Point (2) follows from \ref{lemma:complementTypesUnionClosure} and point (3) follows from \ref{lemma:typesOfUnionsRelativeComplementation}.
+
+$\boxed{\text{Ax2}\implies\text{Ax1}}$ Point (2) follows immediately. For point (3): let $A,B$ be disjoint sets. Then $A^c \supset B$ and so $A\cup B = (A^c\setminus B)^c \in D$, meaning $D$ is closed under finite unions of disjoint sets. Now let $(A_i)_{i\in\N}$ be a countable sequence of pairwise disjoint sets. Then
+\[ \biguplus_{i=1}^\infty A_i = \bigcup_{i=1}^\infty \left(\biguplus_{j=1}^i A_j\right) \]
+which is a countable monotone union.
+\end{proof}
+
+\begin{lemma}
+A Dynkin system is a monotone class.
+\end{lemma}
+\begin{proof}
+If $\bigcap_{i=1}^\infty A_i$ is a countable monotone intersection, then $\left(\bigcap_{i=1}^\infty A_i\right)^c = \bigcup_{i=1}^\infty A_i^c$ is a countable monotone union.
+\end{proof}
+\begin{lemma}
+Any arbitrary intersection of Dynkin systems is a Dynkin system.
+\end{lemma}
+
+\section{$\pi$-systems}
+TODO: directed set!
+\begin{definition}
+A \udef{$\pi$-system} is a collection of sets $P$ such that
+\begin{itemize}
+\item $P$ is not empty;
+\item if $A,B\in P$, then $A\cap B\in P$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $\mathcal{F}$ be a collection of sets. If $\mathcal{F}$ is closed under set differences, then it is a $\pi$-system.
+\end{lemma}
+\begin{proof}
+By \ref{lemma:closureSetDifference}.
+\end{proof}
+
+For $\pi$-systems the intersection implications in \ref{lemma:unionsIntersectionClosureImplications} reduce to:
+\begin{lemma} \label{lemma:unionsIntersectionClosureImplications}
+Let $\mathcal{F}$ be a $\pi$-system. Then we have the following implications for closure under intersections:
+\[ \text{arbitrary $\cap$} \quad\implies\quad \text{countable $\cap$} \quad\iff\quad \text{countable monotone $\cap$} \]
+\end{lemma}
+\begin{proof}
+We need to prove that closure under countable monotone intersections implies closure under countable intersections.
+
+Assume $\mathcal{F}$ is a $\pi$-system closed under countable monotone intersections. Let $\{A_i\}_{i\in \N}$ be an indexed family of sets. Then we can define the family $\{B_i\}_{i\in \N}$ recursively by $B_1 = A_1$ and
+\[ B_{i+1} = B_i \cap A_{i+1}. \]
+By induction we see that $\{B_i\}_{i\in \N}$ is monotone and has the same intersection as $\{A_i\}_{i\in \N}$.
+\end{proof}
+
+\subsection{Intersections structures}
+\begin{definition}
+Let $\mathcal{F} \subseteq \powerset(U)$ be a family of sets. We call $\mathcal{F}$ an \udef{intersection structure} if it is closed under arbitrary intersections.
+
+If an intersection structure contains the universe set, it is called a \udef{topped intersection structure} or \udef{closure system}.
+\end{definition}
+
+\subsection{Ring}
+\subsubsection{Order-theoretic ring}
+TODO: sublattice!
+\begin{definition}
+An \udef{order-theoretic ring} of sets is a non-empty collection of sets $\mathcal{R}$ such that
+\begin{itemize}
+\item if $A,B\in \mathcal{R}$, then $A\cup B\in \mathcal{R}$;
+\item if $A,B\in \mathcal{R}$, then $A\cap B\in \mathcal{R}$.
+\end{itemize}
+\end{definition}
+
+\subsubsection{Semi-rings}
+\begin{definition}
+A \udef{semi-ring} is a non-empty collection of sets $\mathcal{S}$ such that
+\begin{itemize}
+\item if $A,B\in \mathcal{S}$, then $A\cap B\in \mathcal{S}$;
+\item if $A,B\in \mathcal{S}$, then $A\setminus B$ is a finite disjoint union of sets in $\mathcal{S}$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $\mathcal{S}$ be a semi-ring. Then $\emptyset \in \mathcal{S}$.
+\end{lemma}
+\begin{proof}
+Because $\mathcal{S}$ is non-empty, we can take $A\in \mathcal{S}$. Then $A\setminus A = \emptyset$ is a finite disjoint union of sets in $\mathcal{S}$, so $\emptyset \in \mathcal{S}$.
+\end{proof}
+
+\subsubsection{Measure-theoretic rings}
+\begin{definition}
+A \udef{(measure-theoretic) ring} of sets is a non-empty collection of sets $\mathcal{R}$ such that
+\begin{itemize}
+\item if $A,B\in \mathcal{R}$, then $A\cup B\in \mathcal{R}$;
+\item if $A,B\in \mathcal{R}$, then $A\setminus B\in \mathcal{R}$.
+\end{itemize}
+\end{definition}
+By \ref{lemma:closureSetDifference} a measure-theoretic ring is in particular a $\pi$-system and an order-theoretic ring.
+
+\begin{lemma}
+A non-empty collection of sets $\mathcal{R}$ is a measure-theoretic ring \textup{if and only if}
+\begin{itemize}
+\item it is closed under finite intersections;
+\item it is closed under symmetric differences.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+By the identities $A\cup B = (A\symdiff B)\symdiff (A\cap B)$ and $A\setminus B = A\symdiff (A\cap B)$.
+\end{proof}
+
+\begin{lemma}
+Let $\mathcal{S}$ be a semi-ring. Then the smallest ring $\mathcal{R}$ containing $\mathcal{S}$ is
+\[ \mathfrak{R}\{\mathcal{S}\} = \setbuilder{E_1\uplus\ldots\uplus E_n}{\text{$E_i\in \mathcal{S}$ are pairwise disjoint}}. \]
+We call this the ring \udef{generated} by $\mathcal{S}$.
+\end{lemma}
+\begin{proof}
+Every ring containing $\mathcal{S}$ must contain $\mathfrak{R}\{\mathcal{S}\}$, so if it is a ring it is automatically the smallest. We just need to show it is a ring. Let $E,F$ be arbitrary elements of $\mathfrak{R}\{\mathcal{S}\}$. We need to show that both $E\setminus F$ and $E\cup F$ are in $\mathfrak{R}\{\mathcal{S}\}$.
+
+Now $E\cup F = (E\setminus F) \uplus F$ can be written as a disjoint union, so we just need to write $E\setminus F$ as a pairwise disjoint union of elements of $\mathcal{S}$. To that end write $E = \biguplus_{i=0}^nE_i$ and $\biguplus_{j= 0}^mF_j$. Then
+\[ E\setminus F = \biguplus_{i=0}^n \left[ \Big(\big((E_j\setminus F_1)\setminus F_2\big)\setminus \ldots\Big)\setminus F_m \right]. \]
+By industion and using the semi-ring property we can see that this is expressible as a finite pairwise disjoint union of elements of $\mathcal{S}$, and thus is an element of $\mathfrak{R}\{\mathcal{S}\}$.
+\end{proof}
+
+\subsubsection{$\sigma$- and $\delta$-rings}
+\begin{definition}
+A \udef{$\sigma$-ring} of sets is a collection of sets $\mathcal{R}$ such that
+\begin{itemize}
+\item $\mathcal{R}$ is a measure-theoretic ring;
+\item $\mathcal{R}$ is closed under countable unions.
+\end{itemize}
+A \udef{$\delta$-ring} of sets is a collection of sets $\mathcal{R}$ such that
+\begin{itemize}
+\item $\mathcal{R}$ is a measure-theoretic ring;
+\item $\mathcal{R}$ is closed under countable intersections.
+\end{itemize}
+\end{definition}
+
+\subsection{Algebras of sets}
+\begin{definition}
+An \udef{algebra of sets} on a set $\Omega$ (also known as a \udef{field of sets}) is a ring that contains $\Omega$.
+\end{definition}
+
+In principle we can thus define
+\begin{itemize}
+\item order-theoretic algebra;
+\item semi-algebra;
+\item measure-theoretic algebra;
+\item $\sigma$-algebra;
+\item $\delta$-algebra.
+\end{itemize}
+
+Some of these notions coincide.
+
+\begin{lemma}
+Let $\mathcal{A}$ be a family of sets. Then
+\begin{enumerate}
+\item $\mathcal{A}$ is an order-theoretic algebra \textup{if and only if} it is a measure-theoretic algebra;
+\item $\mathcal{A}$ is a $\sigma$-algebra \textup{if and only if} it is a $\delta$-algebra.
+\end{enumerate}
+\end{lemma}
+
+So we define define \udef{semi-algebra}, \udef{algebra} and \udef{$\sigma$-algebra}.
+
+\begin{lemma} \label{lemma:setAlgebraCriteria}
+A family of sets $\mathcal{A}$ is a semi-algebra on $\Omega$ \textup{if and only if}
+\begin{itemize}
+\item $\Omega\in\mathcal{A}$;
+\item if $A,B\in \mathcal{A}$, then $A\cap B\in \mathcal{A}$;
+\item if $A\in \mathcal{A}$, then $A^c$ is a finite disjoint union of sets in $\mathcal{A}$.
+\end{itemize}
+A family of sets $\mathcal{A}$ is an algebra on $\Omega$ \textup{if and only if}
+\begin{itemize}
+\item $\Omega\in\mathcal{A}$;
+\item if $A\in \mathcal{A}$, then $A^c\in \mathcal{A}$;
+\item if $A,B\in \mathcal{A}$, then $A\cup B\in \mathcal{A}$.
+\end{itemize}
+A family of sets $\mathcal{A}$ is a $\sigma$-algebra on $\Omega$ \textup{if and only if}
+\begin{itemize}
+\item $\Omega\in\mathcal{A}$;
+\item if $A\in \mathcal{A}$, then $A^c\in \mathcal{A}$;
+\item if $(A_i)_{i\in\N}$ is a countable sequence of sets in $\mathcal{A}$, then $\bigcup_{i=1}^\infty A_i\in \mathcal{A}$.
+\end{itemize}
+\end{lemma}
+
+\begin{example}
+For any set $\Omega$, the power set $\powerset(\Omega)$ is a $\sigma$-algebra on $\Omega$.
+\end{example}
+
+\begin{lemma} \label{lemma:algebraMonotoneClass}
+An algebra $\mathcal{A}$ is a $\sigma$-algebra \textup{if and only if} $\mathcal{A}$ is a monotone class.
+\end{lemma}
+\begin{lemma} \label{lemma:DynkinPiSystem}
+A Dynkin system is a $\sigma$-algebra \textup{if and only if} it is a $\pi$-system.
+\end{lemma}
+
+
+\begin{lemma}
+\begin{enumerate}
+\item The countable monotone union of a sequence of $\sigma$-algebras is an algebra, but not necessarily a $\sigma$-algebra.
+\item Any arbitrary intersection of $\sigma$-algebras is a $\sigma$-algebra.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $\mathcal{A}$ be a $\sigma$-algebra on $\Omega$ and $B\subset \Omega$. Then $B\cap \mathcal{A} = \setbuilder{B\cap A}{A\in\mathcal{A}}$ is a $\sigma$-algebra on $B$.
+\end{lemma}
+
+\section{Generators}
+\begin{definition}
+Let $\mathcal{F}$ be a family of subsets of $\Omega$. Then we define
+\begin{itemize}
+\item the $\sigma$-algebra generated by $\mathcal{F}$, $\sigma\{\mathcal{F}\}$;
+\item the monotone class generated by $\mathcal{F}$, $\mathfrak{M}\{\mathcal{F}\}$; and
+\item the Dynkin system generated by $\mathcal{F}$, $\mathfrak{D}\{\mathcal{F}\}$;
+\end{itemize}
+the intersection of all such families $\subseteq \powerset(\Omega)$ that contain $\mathcal{F}$.
+
+In each case we call $\mathcal{F}$ the \udef{generator} of the system.
+\end{definition}
+These intersections are again $\sigma$-algebras, monotone classes and Dynkin systems, respectively. So these generated families are the smallest such families containing $\mathcal{F}$.
+
+\begin{example}
+\begin{itemize}
+\item If $\mathcal{A}$ is a $\sigma$-algebra, then $\sigma\{\mathcal{A}\} = \mathcal{A}$.
+\item If $\mathcal{A} = \{A\}$, a single set, then $\sigma\{\mathcal{A}\} = \{\emptyset, A,A^c,\Omega\}$.
+\end{itemize}
+\end{example}
+
+\begin{lemma} \label{lemma:unitGeneratedSets}
+A universe set for $\mathcal{F}$ is also a universe set for $\sigma\{\mathcal{F}\}$, $\mathfrak{M}\{\mathcal{F}\}$ and $\mathfrak{D}\{\mathcal{F}\}$.
+\end{lemma}
+
+\begin{proposition}[Monotone class theorem]
+Let $\mathcal{A}$ be an algebra. Then
+\[ \mathfrak{M}\{\mathcal{A}\} = \sigma\{\mathcal{A}\}. \]
+\end{proposition}
+\begin{proof}
+Every $\sigma$-algebra is a monotone class, so $\mathfrak{M}\{\mathcal{A}\} \subset \sigma\{\mathcal{A}\}$.
+
+For the other inclusion it is enough to show that $\mathfrak{M}\{\mathcal{A}\}$ is an algebra: using \ref{lemma:algebraMonotoneClass} we have
+\[ \text{$\mathfrak{M}\{\mathcal{A}\}$ is an algebra} \implies \text{$\mathfrak{M}\{\mathcal{A}\}$ is a $\sigma$-algebra} \implies \sigma\{\mathcal{A}\}\subset\mathfrak{M}\{\mathcal{A}\}. \]
+In particular, due to \ref{lemma:setAlgebraCriteria}, we verify $\Omega\in \mathfrak{M}\{\mathcal{A}\}$, $B^c \in \mathfrak{M}\{\mathcal{A}\}$ and $B\cup C \in \mathfrak{M}\{\mathcal{A}\}$.
+
+$\boxed{\Omega\in \mathfrak{M}\{\mathcal{A}\}}$ By \ref{lemma:unitGeneratedSets}.
+
+$\boxed{B^c \in \mathfrak{M}\{\mathcal{A}\}}$ Define
+\[ \mathcal{E}_1 = \setbuilder{B\in\mathfrak{M}\{\mathcal{A}\}}{B^c\in\mathfrak{M}\{\mathcal{A}\}} \]
+which is a monotone class by De Morgan's laws:
+\[ (B_i)_{i=1}^\infty\subset \mathcal{E}_1 \implies (B_i^c)_{i=1}^\infty\subset \mathfrak{M}\{\mathcal{A}\} \implies \bigcup_{i=1}^\infty B_i^c = \left(\bigcap_{i=1}^\infty B_i\right)^c \in\mathfrak{M}\{\mathcal{A}\} \implies \bigcap_{i=1}^\infty B_i \in \mathcal{E}_1. \]
+Also $\mathcal{E}_1\subset \mathfrak{M}\{\mathcal{A}\}$, so $\mathcal{E}_1 = \mathfrak{M}\{\mathcal{A}\}$ by minimality, so
+\[ B\in\mathfrak{M}\{\mathcal{A}\} \iff B\in\mathcal{E}_1 \implies B^c\in\mathfrak{M}\{\mathcal{A}\}. \]
+
+$\boxed{B\cup C \in \mathfrak{M}\{\mathcal{A}\}}$ Define
+\begin{align*}
+\mathcal{E}_2 &= \setbuilder{B\in\mathfrak{M}\{\mathcal{A}\}}{\forall C\in\mathcal{A}: B\cup C \in\mathfrak{M}\{\mathcal{A}\}} \\
+\mathcal{E}_3 &= \setbuilder{B\in\mathfrak{M}\{\mathcal{A}\}}{\forall C\in\mathfrak{M}\{\mathcal{A}\}: B\cup C \in\mathfrak{M}\{\mathcal{A}\}}.
+\end{align*}
+Now $\mathcal{E}_2$ and $\mathcal{E}_3$ are monotone classes: by \ref{lemma:setAssociativityCommutativity} and \ref{lemma:setDistributivity}, for $k=1,2$
+\[ (B_i)_{i=1}^\infty\subset \mathcal{E}_k \implies \forall C: (B_i\cup C)_{i=1}^\infty\subset \mathfrak{M}\{\mathcal{A}\} \implies \forall C: \bigcup_{i=1}^\infty B_i\cup C = \left(\bigcup_{i=1}^\infty B_i\right)\cup C \in\mathfrak{M}\{\mathcal{A}\} \implies \bigcup_{i=1}^\infty B_i \in \mathcal{E}_k. \]
+Now clearly $\mathcal{A}\subseteq\mathcal{E}_2$, so by minimality $\mathcal{E}_2 = \mathfrak{M}\{\mathcal{A}\}$. Moreover,
+\[ D\in\mathcal{A}\implies \forall C\in \mathcal{E}_2: C\cup D\in \mathfrak{M}\{\mathcal{A}\} \implies \forall C\in \mathfrak{M}\{\mathcal{A}\}: D\cup C\in \mathfrak{M}\{\mathcal{A}\} \implies D\in \mathcal{E}_3. \]
+So $\mathcal{A}\subseteq\mathcal{E}_3$ and by minimality $\mathcal{E}_3 = \mathfrak{M}\{\mathcal{A}\}$, which means that
+\[ B\in\mathfrak{M}\{\mathcal{A}\} \iff B\in\mathcal{E}_3 \implies \forall C\in\mathfrak{M}\{\mathcal{A}\}: B\cup C\in\mathfrak{M}\{\mathcal{A}\}. \]
+\end{proof}
+\begin{corollary}
+Let $\mathcal{A}$ be an algebra and $M$ a monotone class with $\mathcal{A}\subseteq M$, then $\sigma\{\mathcal{A}\}\subseteq M$.
+\end{corollary}
+
+\begin{proposition} \label{prop:generatedDynkinSigma}
+If $\mathcal{F}$ is a $\pi$-system on $\Omega$, then
+\[ \mathfrak{D}\{\mathcal{F}\} = \sigma\{\mathcal{F}\}. \]
+\end{proposition}
+\begin{proof}
+Every $\sigma$-algebra is a Dynkin system, so $\mathfrak{D}\{\mathcal{F}\} \subset \sigma\{\mathcal{F}\}$.
+
+For the other inclusion it is enough to show that $\mathfrak{D}\{\mathcal{F}\}$ is a $\pi$-system: using \ref{lemma:DynkinPiSystem}, we have
+\[ \text{$\mathfrak{D}\{\mathcal{F}\}$ is a $\pi$-system} \implies \text{$\mathfrak{D}\{\mathcal{F}\}$ is a $\sigma$-algebra} \implies \sigma\{\mathcal{F}\}\subset\mathfrak{D}\{\mathcal{F}\}. \]
+
+To this end we define
+\[ \mathcal{D}_B = \setbuilder{A\subset\Omega}{A\cap B\in\mathfrak{D}\{\mathcal{F}\}} \qquad \text{for some $B\in\mathfrak{D}\{\mathcal{F}\}$,} \]
+which we claim is a Dynkin system.
+\begin{itemize}[leftmargin=2.5cm]
+\item[$\boxed{\Omega\in\mathcal{D}_B}$] Because $\Omega\cap B = B$.
+\item[$\boxed{A^c\in\mathcal{D}_B}$] Let $A\in\mathcal{D}_B$. Then
+\[ A^c\cap B = (\Omega\setminus A)\cap B = (\Omega\cap B)\setminus(A\cap B) \in \mathfrak{D}\{\mathcal{F}\}, \]
+so $A^c\in\mathcal{D}_B$.
+\item[$\boxed{\biguplus_{i\in \N}A_i \in \mathcal{D}_B}$] Let $(A_i)_{i=1}^\infty$ be a disjoint family of sets in $\mathcal{D}_B$. Then, using \ref{lemma:setDistributivity},
+\[ \left(\bigcup_{i=1}^\infty A_i\right)\cap B = \bigcup_{i=1}^\infty (A_i\cap B) \in \mathfrak{D}\{\mathcal{F}\}, \]
+so $\bigcup_{i=1}^\infty A_i\in\mathcal{D}_B$.
+\end{itemize}
+Now because $\mathcal{F}$ is a $\pi$-system, we have $\mathcal{F}\subset\mathcal{D}_B$ and thus $\mathcal{D}_B\subset\mathfrak{D}\{\mathcal{F}\}$.
+
+Now for all $B\in\mathcal{F}$, we have
+\[ A\in\mathcal{F}\implies A\cap B\in\mathcal{F}\implies A\cap B\in\mathfrak{D}\{\mathcal{F}\} \implies A\in \mathcal{D}_B. \]
+So $\mathcal{F}\subset \mathcal{D}_B$ if $B\in\mathcal{F}$. In this case we then also have $\mathfrak{D}\{\mathcal{F}\}\subset \mathcal{D}_B$.
+
+In fact this holds for all $B\in\mathfrak{D}\{\mathcal{F}\}$:
+\[ B\in\mathfrak{D}\{\mathcal{F}\} \implies \forall A\in\mathcal{F}: B\in\mathcal{D}_A \implies  \forall A\in\mathcal{F}: B\cap A \in \mathfrak{D}\{\mathcal{F}\} \implies \mathcal{F}\subset\mathcal{D}_B \implies \mathfrak{D}\{\mathcal{F}\}\subset \mathcal{D}_B. \]
+Consequently,
+\[ B,C\in\mathfrak{D}\{\mathcal{F}\} \implies C\in\mathcal{D}_B \implies C\cap B\in\mathfrak{D}\{\mathcal{F}\}, \]
+meaning $\mathfrak{D}\{\mathcal{F}\}$ is a $\pi$-system.
+\end{proof}
+\begin{corollary}[$\pi$-$\lambda$ theorem] \label{corollary:piLambdaTheorem}
+Let $P$ be a $\pi$-system and $D$ a Dynkin system with $P\subseteq D$, then $\sigma\{P\} \subseteq D$.
+\end{corollary}
+\begin{corollary}
+If $\mathcal{A}$ is an algebra, then $\mathfrak{M}\{\mathcal{A}\} = \mathfrak{D}\{\mathcal{A}\} = \sigma\{\mathcal{A}\}$.
+\end{corollary}
+
+
+
+
+\chapter{Well-founded ordered sets}
+\begin{definition}
+A poset is called
+\begin{itemize}
+\item \udef{well-founded} if every non-empty subset has a minimal element;
+\item \udef{converse well-founded} if every non-empty subset has a maximal element.
+\end{itemize}
+
+A \udef{well-ordering} on a set $U$ is a total order $\leq$ on $U$ such that $\sSet{U,\leq}$ is well-founded.
+
+A set $A$ is \udef{well-orderable} if it admits a well-ordering.
+\end{definition}
+It turns out a well-order is what is needed to do recursion and induction.
+
+\begin{lemma}
+Every well-ordering has a least element.
+\end{lemma}
+\begin{proof}
+A minimal element for a total order is always a least element.
+\end{proof}
+
+\begin{lemma} \label{lemma:wellOrderingSubsets}
+Let $(U,\leq_U)$ be a well-ordered set and $f: W \rightarrowtail U$ an injection. Then $W$ is well-ordered by
+\[ \forall x,y\in W: x\leq_W y \defequiv f(x) \leq_U f(y). \]
+
+
+In particular, if $W\subseteq U$ is a subset, then $\leq_W$ is the left- and right-restriction of $\leq$ to $W$, $\leq|_W^W$.
+\end{lemma}
+
+\section{Succession}
+Every well-ordered set $U$ must have a least element and at its low end it looks like $\N$:
+\begin{itemize}
+\item let $0_U$ denote the least element of $U$;
+\item we can define $S_U(x) \defeq \min\{y\in P\;|\;x<y\}$.
+\end{itemize}
+This successor function is defined for all $x\in U$, except the maximum (if it exists).
+
+\begin{definition}
+Let $(U,\leq)$ be a well-ordered set.
+\begin{itemize}
+\item The values of the partial function $S: U\not\to U$ are the \udef{successor points} of $U$.
+\item A \udef{limit point} is an element $x\in U$ that is neither $0_U$ nor a successor. The first limit point (i.e. the least point in the set of limit points) is denoted $\omega$ or $\omega_U$.
+\item The points below $\omega$ are called \udef{finite points} and the points above, and including, $\omega$ are the \udef{infinite points} of $U$.
+\end{itemize}
+\end{definition}
+
+If $P$ is a poset, we can always add a point on top of all the rest: We can take, e.g. the set
+\[ t_P = \{ x\in P\;|\;x\notin x \}. \]
+This is guaranteed, by proposition \ref{prop:russelParadox}, not to be in $P$.
+The poset $P\cup t_P$ is called the \udef{successor} $\operatorname{Succ}(P)$ of $P$.
+
+\section{Initial segments}
+TODO: streamline
+\begin{definition}
+Let $(U,\leq)$ be a well-ordered set. An \udef{initial segment} $I$ of $U$ is a downward closed subset:
+\[ \forall y\in I: \forall x\in U: x\leq y \implies x\in I. \]
+We write $I \sqsubseteq U$.
+\end{definition}
+Each element $y$ of $U$ determines a proper initial segment of points strictly below $y$:
+\[ \seg(y) \defeq \{ x\in U\;|\; x < y \} \sqsubsetneq U. \]
+We have $\seg(S_U(y)) = \seg(y)\cup\{y\}$.
+
+Conversely, each proper initial segment is of the form $\seg(x)$:
+\begin{proposition}
+Let $(U,\leq)$ be a well-ordered set and $W$ a subset of $U$. Then $W$ is an initial segment \textup{if and only if} either $W=U$ or $\exists! x\in U: W = \seg(x)$.
+\end{proposition}
+\begin{proof}
+The direction $\Rightarrow$ is trivial. For the other direction, assume $W \sqsubsetneq U$ and let $x= \min(U\setminus W)$. Showing that $W=\seg(x)$ is not difficult.
+\end{proof}
+We may then, in some sense, view $x$ as the length of $\seg(x)$. We identify $t_U$ as the length of $U$. Let $U$ be a well-ordered set. We define $\len_U$ which maps initial segments of $U$ to $\operatorname{Succ}(U)$ by
+\[ \len_U(V) = \begin{cases}
+x & \exists x\in U: V=\seg(x) \\
+t_U & V = U.
+\end{cases} \]
+
+Each well-ordered set $U$ can be viewed as a proper initial segment of another:
+\[ U = \seg_{\operatorname{Succ}(U)}(t_U)\sqsubsetneq \operatorname{Succ}(U). \]
+\begin{lemma} \label{lemma:orderingInitialSegments}
+Let $(U,\leq)$ be a well-ordered set and $x,y\in U$, then
+\begin{align*}
+\seg(x) = \seg(y) &\iff x = y; \\
+\seg(x) \sqsubseteq \seg(y) &\iff x \leq y; \\
+\seg(x) \sqsubsetneq \seg(y) &\iff x < y.
+\end{align*}
+\end{lemma}
+\begin{proposition} \label{prop:wosetIsomorphicToInitialSegments}
+Any well-ordered set $(U,\leq)$ is order isomorphic to the set of its proper initial segments ordered by inclusion, $(\seg_U[U], \sqsubseteq)$.
+\end{proposition}
+\begin{proof}
+The function $\seg_U$ is an order embedding by lemma \ref{lemma:orderingInitialSegments}. By lemma \ref{lemma:orderReflectionIsInjective} it must be injective and thus $U =_o \seg_U[U]$.
+\end{proof}
+\begin{lemma}
+The family of initial segments of a well-ordered set $U$ is
+\begin{enumerate}
+\item well-ordered by $\sqsubseteq$; and
+\item closed under arbitrary unions.
+\end{enumerate}
+\end{lemma}
+\begin{lemma} \label{lemma:unionInitialSegments}
+Let $(U,\leq)$ be a well-ordered set and $t\in U$. Then $\bigcup\{ \seg(u)\;|\; u<t \}$ is an initial segment and thus equal to $\seg(v)$ for some $v$. Also
+\[ \seg(v) \leq \seg(t) \leq \seg(S_U(v)). \]
+\end{lemma}
+\begin{proof}
+For the first inequality: let $x\in \seg(v)$, so $\exists u<t: x\in\seg(u)$ so $x<t$ and $x\in \seg(t)$.
+
+For the second inequality: assume, towards a contradiction, that $\seg(t)>\seg(S_U(v))$. Then $S_U(v) < t$ and so $\seg(S_U(v))\subseteq \seg(v)$ and thus $v\in\seg(v)$, a contradiction.
+\end{proof}
+
+\begin{proposition} \label{prop:injectionsExpansive}
+Every order-preserving injection $f: U\rightarrowtail U$ of a well-ordered set into itself is expansive.
+\end{proposition}
+\begin{proof}
+Assume $f: U\rightarrowtail U$ injective but not expansive, i.e. $\exists x\in U: f(x)<x$ then let
+\[ x^* = \min\{x\in U\;|\;f(x)<x\}. \]
+Then $f(x^*)<x^*$ and $f(f(x^*)) < f(x^*)$ by order preservation. Then $f(x^*)$ is a smaller element in the set, yielding a contradiction.
+\end{proof}
+\begin{corollary} \label{corollary:properInitialSegmentNotIsomorphic}
+No well-ordered set is isomorphic with one of its proper initial
+segments, and hence no two distinct initial segments of a well-ordered set are
+isomorphic.
+\end{corollary}
+
+
+\section{Transfinite induction and recursion}
+The principles of induction and recursion can be generalised to well-ordered sets.
+
+In general induction and recursion use the predecessor to define / prove a property of the successor. In general well-ordered sets, there are limit points that have no predecessor. For this reason it is easiest to generalize the principles of proof by \textit{complete
+induction} and definition by \textit{complete recursion}. Then we take the set of all predecessors, not the one predecessor that may or may not exist.
+
+\begin{theorem}[Transfinite induction]
+Let $U$ be a well-ordered set and $P$ a unary definite predicate. We can prove $P(x)$ holds for all $x\in U$ by proving the strong induction step $\forall x\in U: \forall y<x: P(y)\implies P(x)$.
+
+Or, in other symbols,
+\[ \text{if}\quad  \forall x\in U: \left[\forall y < x: P(y)\implies P(x)\right] \quad \text{then}\quad \forall x\in U: P(x) \]
+\end{theorem}
+\begin{proof}
+Assume, towards a contradiction, the induction step and that $\exists x\in P: \neg P(x)$. Then the set of all such $x$ has a least element (due to $U$ being well-ordered). Let
+\[ x^* = \min\{ x\in U\;|\; \neg P(x) \}, \]
+then all elements smaller than $x^*$ must not be in this set: $\forall y<x^*: P(y)$, so that by the induction step $P(x^*)$.
+\end{proof}
+Notice that the ``base step'' ($\nexists y\in U: y<0$, so $\forall y<0: P(y)\implies P(x)$) is vacuously true.
+
+It is often as easy to repeat this argument as appeal to the theorem.
+
+\begin{theorem}[Transfinite recursion]
+Let $U$ be a well-ordered set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
+
+There is exactly one function $f:U\to E$ which satisfies
+\[ f(x) = h(f|_{\seg(x)}) \qquad \forall x\in U. \]
+\end{theorem}
+\begin{proof}
+Like when proving recursion on $\N$, we will consider ``approximations'' of the function $f$, i.e. functions $\seg(t) \to E$ which satisfy the requirement for all $x<t$.
+
+This is the subject of the following lemma:
+\begin{lemma*}
+Let $U$ be a well-ordered set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
+
+For all $t\in U$, there is exactly one function $\sigma_t:\seg(t)\to E$ which satisfies
+\[ \sigma_t(x) = h(\sigma_t|_{\seg(x)}) \qquad \forall x < t. \]
+\end{lemma*}
+\begin{proof}[Proof of lemma] \renewcommand{\qedsymbol}{$\dashv$ (Lemma)}
+The proof goes by transfinite induction. Fix an arbitrary $t\in U$. Assume the induction hypothesis:
+\[ \forall u<t: \exists! \sigma_u\in (\seg(u)\to E): \forall x<u: \sigma_u(x) = h(\sigma_u|_{\seg(x)}). \]
+We need to prove that this implies there exists exactly one $\sigma_t$ satisfying the condition. We consider three cases: $t$ is the least point $0_U$, a successor point or a limit point.
+\begin{itemize}[leftmargin=2.5cm]
+\item[\boxed{t = 0_U}] Then $\seg(t) = \emptyset$ and we must have $\sigma_t = \emptyset$.
+\item[\boxed{t = S_U(v)}] If $t$ is the successor of $v$, we can set
+\[ \sigma_t = \sigma_v\cup\{ (v,h(\sigma_v)) \}. \]
+\item[\boxed{t\in \operatorname{Limit}(U)}] The set of functions $\{\sigma_u\;|\; u<t\}$ is a chain in the poset $((U\not\to E),\subseteq)$ which is inductive, see \ref{prop:inductive}. Let $\sigma_t$ be the least upper bound.
+
+To prove $\{\sigma_u\;|\; u<t\}$ is a chain, assume not i.e.
+\[ x<u<v<t \implies \sigma_u(x) = \sigma_v(x) \]
+fails for some $x<u<v$. Take the least such $x$ (we are effectively doing transfinite induction) so then
+\[ \sigma_u|_{\seg(x)} = \sigma_v|_{\seg(x)}, \]
+and by the induction hypothesis
+\[ \sigma_u(x) = h(\sigma_u|_{\seg(x)}) = h(\sigma_v|_{\seg(x)}) = \sigma_v(x). \]
+This is a contradiction, proving we do indeed have a chain.
+
+Finally we verify
+\begin{itemize}
+\item the domain of $\sigma_t$ is $\seg(t)$; indeed
+\[ \dom(\sigma_t) = \bigcup\{\dom(\sigma_u)\;|\; u< t \} = \bigcup\{ \seg(u)\;|\; u<t \} \]
+which is an initial segment and thus equal to $\seg(v)$ for some $v$. By lemma \ref{lemma:unionInitialSegments}
+\[ v\leq t \leq S_U(v). \]
+Then either $t=v$ or $t=S_U(v)$. The latter is excluded because $t$ was a limit point.
+\item $\sigma_t$ satisfies the condition (easily by transfinite induction);
+\item $\sigma_t$ is unique (also easily by transfinite induction).
+\end{itemize}
+\end{itemize}
+\end{proof}
+
+Now consider the well-ordered set $\operatorname{Succ}(U)$ and extend $h$ to $h': (\operatorname{Succ}(U)\not\to E) \to E$ by
+\[ h'(\sigma) = \begin{cases}
+h(\sigma) & \sigma\in (U\not\to E) \\
+\text{an arbitrary element of $E$} & \sigma \notin (U\not\to E).
+\end{cases} \]
+We can then apply the lemma to $\operatorname{Succ}(U)$ and $h'$. Because $\seg(t_U) = U$, this gives a unique function $\sigma_{t_U}: U\to E$. We take this as our $f$.
+\end{proof}
+
+
+\chapter{Fixed points}
+
+\begin{definition}
+A monotone mapping $\pi : P \to Q$ on a inductive posets
+ is \udef{countably continuous} if for every non-empty, countable chain $S\subseteq P$:
+ \[ \pi(\sup S) = \sup\pi[S]. \]
+\end{definition}
+
+\begin{definition}
+Let $(P,\leq)$ be a poset and $f: P\to P$ a function from $P$ to $P$.
+\begin{itemize}
+\item A \udef{fixed point} is an element $x^*\in P$ such that
+\[ f(x^*) = x^*. \]
+\item A \udef{strongly least fixed point} is a fixed point such that
+\[ \forall y\in P: f(y)\leq y \implies x^* \leq y. \]
+\item The \udef{orbit} of an element $p$ of $P$ is a sequence $\N\to P$ defined recursively:
+\begin{align*}
+p_0 &= p \\
+p_{n+1} &= f(p).
+\end{align*}
+Sometimes we use orbit to mean the set $\{p_n\in P\;|\; n\in \N\}$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Continuous least fixed point theorem]
+Let $\pi:P\to P$ be a countably continuous, monotone mapping on an inductive poset $(P,\leq)$. Then $\pi$ has a unique strongly least fixed point $x^*\in P$.
+\end{theorem}
+\begin{proof}
+As $P$ is inductive, it has a least element $\bot$. The orbit $\{x_n\in P\;|\; n\in \N\}$ of $\bot$ is a chain: $\bot \leq \pi(\bot)$ and the rest follows by induction on $n$, using the monotonicity of $\pi$. Thus the orbit has a supremum. Let $x^*$ be this supremum.
+
+Then, by countable continuity,
+\[ \pi(x^*) = \pi(\sup\{x_n\in P\;|\; n\in \N\}) = \sup\pi[\{x_n\in P\;|\; n\in \N\}] = \sup\{x_{n+1}\in P\;|\; n\in \N\} = x^*. \]
+
+To prove $x^*$ is a strongly least fixed point, let $y\in P$ assume $\pi(y)\leq y$. Then we apply induction on $n$:
+\begin{itemize}[leftmargin=3cm]
+\item[Basis step] $x_0 = \bot \leq y$.
+\item[Induction step] $x_n \leq y \implies x_{n+1} = \pi(x_n)\leq \pi(y) \leq y$.
+\end{itemize}
+\end{proof}
+
+Iteration lemma.
+
+Fixed point theorem.
+
+Least fixed point theorem.
+
+Hitchhiker's guide:
+Knaster-Tarski fixed point; Tarksi fixed point
+
+\chapter{Graphs}
+\chapter{Trees}
