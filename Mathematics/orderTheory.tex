@@ -27,7 +27,8 @@ If we say $\sSet{P,\Yleft}$ is an ordered set without any other qualifiers, we o
 \begin{example}
 \begin{itemize}
 \item Every equivalence relation is a preorder. Conversely, symmetric preorders are equivalence relations.
-\item Let $A$ be a set and $\id_A$ the identity relation on $A$. Then $\sSet{A,\id_A}$ is a poset. Such posets are called \udef{discrete posets}.
+\item Let $X$ be a set. Then $\sSet{\powerset(X), \subseteq}$ is a poset.
+\item Let $A$ be a set and $\id_A$ the identity relation on $A$. Then $\sSet{A,\id_A}$ is a poset. Such posets are called \udef{discrete posets}. Two elements $x,y\in A$ are comparable if and only if $x=y$.
 \item Let $B$ be a set and $\bot\in B$. Then the order $\preceq$ defined by
 \[ x \preceq y \defequiv (x=\bot) \lor (x = y) \]
 is a partial order. Such posets are called \udef{flat posets}.
@@ -48,19 +49,6 @@ For any binary homogeneous relation $R$,
 \end{enumerate}
 \end{lemma}
 
-\begin{proposition} \label{prop:posetPowerset}
-The subset relation $\subseteq$ is a partial ordering. Every partially ordered set $(P,\preceq)$ is isomorphic to a subset of a power set, ordered by the subset relation.
-\end{proposition}
-\begin{proof}
-Define
-\[ \phi: P \to \powerset(P): x \mapsto \{ y\in P\;|\; y\preceq x \}. \]
-We claim $\phi$ is injective and respects order. Then we can take $\phi':P\to \phi[P]$ to be the isomorphism.
-
-For injectivity, suppose $a,b\in P$ such that $\phi(a)=\phi(b)$. Since $a\preceq a$ by reflexivity, $a\in \phi(a) = \phi(b)$. Thus $a\preceq b$. Similarly $b \preceq a$. By anti-symmetry, $a=b$.
-
-Now we prove $a \preceq b \iff \phi(a)\subseteq \phi(b)$. First suppose $a\preceq b$ and take an arbitrary $x\in\phi(a)$. Then $x \preceq a$. By transitivity with $a\preceq b$, we have $x\preceq b$ and thus $x\in\phi(b)$. Conversely assume $\phi(a)\subseteq \phi(b)$. Then $a\in\phi(b)$ because $a\in\phi(a)$, by reflexivity. So $a\preceq b$.
-\end{proof}
-
 \begin{proposition}
 We can associate a strict order to a non-strict order.
 \begin{enumerate}
@@ -80,7 +68,7 @@ Notice that for a proset $(P, \precsim)$ we cannot simply define the strict orde
 
 \section{The dual of an ordered set}
 \begin{definition}
-For any ordered set $(P, \Yleft)$ the \udef{dual} of $P$ is the ordered set $(P^o, \Yleft^o)$, where $P^o=P$ and $\Yleft^o \defeq \Yleft^\transp = \Yright$.
+For any ordered set $(P, \Yleft)$ the \udef{dual} of $P$ is the ordered set $(P^o, \Yleft^o)$, where $P^o \defeq P$ and $\Yleft^o \defeq \Yleft^\transp = \Yright$.
 \end{definition}
 This means $\forall a,b\in P: a\Yleft b \iff b\Yleft^o a$.
 
@@ -95,7 +83,7 @@ All statements about all ordered sets also hold for all duals of ordered sets.
 \begin{definition}
 Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be prosets and $f: P\to Q$ a function. We say
 \begin{itemize}
-\item $f$ is \udef{order-preserving}, \udef{monotonically increasing} or just \udef{increasing} if
+\item $f$ is \udef{order-preserving}, \udef{isotone}, \udef{monotonically increasing} or just \udef{increasing} if
 \[ \forall x,y\in P: x\Yleft_P y \implies f(x)\Yleft_Q f(y); \]
 \item $f$ is \udef{order-reflecting} if
 \[ \forall x,y\in P: f(x)\Yleft_Q f(y) \implies x\Yleft_P y; \]
@@ -120,6 +108,16 @@ The adjectives ``strict'' and ``weak'' can be added to any of these cases to ide
 \end{definition}
 An order isomorphism, or \udef{similarity}, is a bijective order embedding. Let $U,V$ be ordered sets. We write $U =_o V$ if $U$ and $V$ are order isomorphic and $U \neq_o V$ if not.
 
+\begin{lemma}
+Let $P,Q$ be ordered sets and $f: P\to Q$ order-reflecting. Then
+\[ \forall y,z \in f^{-1}[f(x)]: y\Yleft z \land z\Yleft y. \]
+\end{lemma}
+\begin{proof}
+We calculate
+\[ y\in f^{-1}[f(x)] \iff f(y) = f(x) \implies y\Yleft x \land x\Yleft y. \]
+The same is true for $z f^{-1}[f(x)]$, so we conclude by transitivity.
+\end{proof}
+TODO: make corollary:
 \begin{lemma} \label{lemma:orderReflectionIsInjective} \label{lemma:strictOrderPreservationIsInjective}
 Let $P,Q$ be posets and $f: P\to Q$. The following are sufficient conditions for $f$ to be injective:
 \begin{enumerate}
@@ -185,13 +183,24 @@ So in both cases $x\leq y$.
 (2') Assume $f$ is injective reflects strict order. Assume $x < y$. Either $f(x)<f(y), f(y)<f(x)$ or $f(x)=f(y)$. If $f(y)<f(x)$, preservation of strict order yields a contradiction. If $f(x)=f(y)$, injectivity yields a contradiction. So $f(x)<f(y)$.
 \end{proof}
 
+\begin{definition}
+A function $f: P\to P$ on an ordered set $(P,\Yleft)$ into itself is
+\begin{itemize}
+\item \udef{expansive} if $\forall x\in P: x\Yleft f(x)$;
+\item \udef{contractive} if $\forall x\in P: f(x)\Yleft x$.
+\end{itemize}
+\end{definition}
+
+\section{Galois connections}
+\input{galoisConnections}
+
 \section{Subsets of ordered sets}
 \subsection{Up and down sets}
 \begin{definition}
 Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. We call
 \begin{itemize}
-\item $Q$ an \udef{up set} if $\forall x\in Q: \forall y\in P: x\Yleft y \implies y\in Q$;
-\item $Q$ a \udef{down set} if $\forall x\in Q: \forall y\in P: y\Yleft x \implies y\in Q$.
+\item $Q$ \udef{upwards closed} or an \udef{up set} if $\forall x\in Q: \forall y\in P: x\Yleft y \implies y\in Q$;
+\item $Q$ \udef{downwards closed} or a \udef{down set} if $\forall x\in Q: \forall y\in P: y\Yleft x \implies y\in Q$.
 \end{itemize}
 We define
 \begin{itemize}
@@ -205,67 +214,8 @@ For $x\in P$,
 \end{itemize}
 \end{definition}
 
-\begin{lemma} \label{lemma:QsubseteqDownQ}
-Let $\sSet{P,\precsim}$ be a preordered set and $Q\subseteq P$. Then
-\begin{enumerate}
-\item $Q \subseteq \upset Q$;
-\item $Q \subseteq \downset Q$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-Reflexivity.
-\end{proof}
 
-\begin{lemma} \label{lemma:upwardDownwardClosure}
-Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
-\begin{enumerate}
-\item $\upset\upset Q \subseteq \upset Q$;
-\item $\downset\downset Q \subseteq \downset Q$.
-\end{enumerate}
-If $\Yleft$ is a preorder, then the subset relations become equalities.
-\end{lemma}
-\begin{proof}
-First take $x\in \upset\upset Q$. Then there exists $y\in \upset Q$ such that $y\Yleft x$ and $q\in Q$ such that $q\Yleft y$. By transitivity $q \Yleft x$, so $x\in \upset Q$.
-
-The other statement is dual. The statement about equalities follows form \ref{lemma:QsubseteqDownQ}.
-\end{proof}
-
-\begin{lemma}
-Let $P$ be a proset. Then $\downset\emptyset = \emptyset = \upset\emptyset$.
-\end{lemma}
-
-\begin{lemma}
-Let $\sSet{P,\Yleft}$ be an ordered set and $x\in P$. Then
-\begin{enumerate}
-\item $\upset x = \setbuilder{y\in P}{x\Yleft y}$;
-\item $\downset x = \setbuilder{y\in P}{y\Yleft x}$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $P$ be an ordered set and $Q\subseteq P$. Then
-\begin{enumerate}
-\item $\upset Q = \bigcup_{x\in Q}\upset x$;
-\item $\downset Q = \bigcup_{x\in Q}\downset x$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $\sSet{P,\Yleft}$ be an ordered set and $Q,R\subseteq P$. Then
-\begin{enumerate}
-\item $Q \subseteq R$ implies $\downset Q \subseteq \downset R$ and $\upset Q \subseteq \upset R$;
-\item if $\Yleft$ is a preorder, then
-\[ \downset Q \subseteq \downset R \iff Q \subseteq R \iff \upset Q \subseteq \upset R. \]
-\end{enumerate}
-Let $x, y \in P$. Then
-\begin{enumerate} \setcounter{enumi}{2}
-\item $x\Yleft y \iff x\in \downset y$;
-\item $x\Yleft y \implies \downset x \subseteq \downset y$;
-\item if $\Yleft$ is a preorder, then $x\Yleft y \iff \downset x \subseteq \downset y$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
+\begin{lemma} \label{lemma:definitionUpsetDownset}
 Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
 \begin{enumerate}
 \item $Q$ an up set iff 
@@ -285,21 +235,80 @@ The following propositions are equivalent $\forall y\in P$:
 \end{align*}
 TODO justify (in particular line 2 to 3).
 \end{proof}
-\begin{corollary}
-Let $\sSet{P,\precsim}$ be a preordered set and $Q\subseteq P$, then
-\begin{enumerate}
-\item $Q$ is an up set \textup{if and only if} $Q = \upset Q$ \textup{if and only if} $Q \supseteq \upset Q$;
-\item $Q$ is a down set \textup{if and only if} $Q = \downset Q$ \textup{if and only if} $Q \supseteq \downset Q$.
-\end{enumerate}
-\end{corollary}
-\begin{proof}
-The equivalence of $Q = \upset Q$ and $Q \supseteq \upset Q$ is given by \ref{lemma:QsubseteqDownQ}.
 
-We just need to show that $Q$ is an up set iff $Q \supseteq \upset Q$. By the lemma both these statements are equivalent to
+\begin{lemma} \label{lemma:QsubseteqDownQ} \label{lemma:upwardDownwardClosure}
+Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $Q$ is upwards closed \textup{if and only if} $\upset Q \subseteq Q$;
+\item $Q$ is downwards closed \textup{if and only if} $\downset Q \subseteq Q$;
+\end{enumerate}
+also
+\begin{enumerate} \setcounter{enumi}{2}
+\item if $\Yleft$ is a preorder, then $Q \subseteq \upset Q$ and $Q \subseteq \downset Q$;
+\item $\upset\upset Q \subseteq \upset Q$ and $\downset\downset Q \subseteq \downset Q$;
+\item if $\Yleft$ is a preorder, then $\upset\upset Q = \upset Q$ and $\downset\downset Q = \downset Q$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1,2) By \ref{lemma:definitionUpsetDownset} both statements are equivalent to
 \[ \forall y\in P: y\in \upset Q \implies y\in Q. \]
+
+(3) Reflexivity.
+
+(4) First take $x\in \upset\upset Q$. Then there exists $y\in \upset Q$ such that $y\Yleft x$ and $q\in Q$ such that $q\Yleft y$. By transitivity $q \Yleft x$, so $x\in \upset Q$. The other statement is dual.
+
+(5) Combine (3) and (4).
 \end{proof}
 
 \begin{lemma}
+Let $P$ be an ordered set. Then $\downset\emptyset = \emptyset = \upset\emptyset$.
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{P,\Yleft}$ be an ordered set and $x\in P$. Then
+\begin{enumerate}
+\item $\upset x = \setbuilder{y\in P}{x\Yleft y}$;
+\item $\downset x = \setbuilder{y\in P}{y\Yleft x}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
+\begin{enumerate}
+\item $\upset Q = \bigcup_{x\in Q} \upset x$;
+\item $\downset Q = \bigcup_{x\in Q} \downset x$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma} \label{lemma:upDownsetUnionIntersection}
+Let $P$ be an ordered set and $\mathcal{A}\subseteq \powerset(P)$. Then
+\begin{enumerate}
+\item $\upset \bigcup \mathcal{A} = \bigcup \upset \mathcal{A}$ and $\downset \bigcup \mathcal{A} = \bigcup \downset \mathcal{A}$;
+\item $\upset \bigcap \mathcal{A} = \bigcap \upset \mathcal{A}$ and $\downset \bigcap \mathcal{A} = \bigcap \downset \mathcal{A}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We calculate TODO
+\[ \upset \bigcup \mathcal{A} = \bigcup_{x\in \bigcup\mathcal{A}} \upset x = \bigcup \setbuilder{\upset x}{x\in \bigcup \mathcal{A}} \]
+\end{proof}
+
+\begin{lemma} \label{lemma:upDownsetInclusion}
+Let $\sSet{P,\Yleft}$ be an ordered set and $Q,R\subseteq P$. Then
+\begin{enumerate}
+\item $\downset$ and $\upset$ are isotone:
+\[Q \subseteq R \implies \downset Q \subseteq \downset R\qquad\text{and}\qquad Q \subseteq R \implies \upset Q \subseteq \upset R; \]
+\item if $\Yleft$ is a preorder, then $\downset$ and $\upset$ are order embeddings:
+\[ \downset Q \subseteq \downset R \iff Q \subseteq R \iff \upset Q \subseteq \upset R. \]
+\end{enumerate}
+Let $x, y \in P$. Then
+\begin{enumerate} \setcounter{enumi}{2}
+\item $x\Yleft y \iff x\in \downset y$;
+\item $x\Yleft y \implies \downset x \subseteq \downset y$;
+\item if $\Yleft$ is a preorder, then $x\Yleft y \iff \downset x \subseteq \downset y$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma} \label{lemma:unionIntersectionDownUpSets}
 Let $P$ be an ordered set and $\{Q_i\}\subset \mathcal{O}(P)$ be a set of down sets in $P$. Then
 \begin{enumerate}
 \item $\bigcup Q_i$ is a down set;
@@ -308,10 +317,44 @@ Let $P$ be an ordered set and $\{Q_i\}\subset \mathcal{O}(P)$ be a set of down s
 The same is true for up sets.
 \end{lemma}
 
+
+
+\begin{lemma}
+Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be ordered sets and $f: P\to Q$ a function. Then
+\begin{enumerate}
+\item the following are equivalent:
+\begin{enumerate}
+\item $f$ is order-preserving;
+\item for all $x\in P$: $f[\upset x] \subseteq \upset f(x)$;
+\item for all $x\in P$: $f[\downset x] \subseteq \downset f(x)$;
+\item for all $x\in P$: $\upset f^{-1}[\upset x] \subseteq f^{-1}[\upset x]$;
+\item for all $x\in P$: $\downset f^{-1}[\downset x] \subseteq f^{-1}[\downset x]$;
+\end{enumerate}
+\item as are
+\begin{enumerate}
+\item $f$ is order-reversing;
+\item for all $x\in P$: $f[\upset x] \subseteq \downset f(x)$;
+\item for all $x\in P$: $f[\downset x] \subseteq \upset f(x)$;
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+All statements pertaining to images are variations on the calculation
+\[ y\in \upset x \iff x\Yleft y \Rightarrow f(x) \Yleft f(y) \iff f(y) \in \upset f(x). \]
+
+For the reverse, images: take $y\in \upset f^{-1}[\upset x]$
+\end{proof}
 \begin{lemma} \label{lemma:imageUpDownsets}
-Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be prosets, $f: P\to Q$ a function and $S\subseteq P$ a subset.
+Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be ordered sets, $f: P\to Q$ a function and $S\subseteq P$ a subset.
 \begin{enumerate}
 \item If $f$ is order-preserving, then $f[\upset S] \subseteq \upset f[S]$ and $f[\downset S] \subseteq \downset f[S]$.
+\item If $f$ is order-reversing, then $f[\upset S] \subseteq \downset f[S]$ and $f[\downset S] \subseteq \upset f[S]$.
+\item If $f$ is order-reflecting and surjective, then $f[\upset S] \supseteq \upset f[S]$ and $f[\downset S] \supseteq \downset f[S]$.
+\item If $f$ is reverse order-reflecting and surjective, then $f[\downset S] \supseteq \upset f[S]$ and $f[\upset S] \supseteq \downset f[S]$.
+\end{enumerate}
+Also:
+\begin{enumerate}
+\item If $f$ is order-preserving, then $\upset f^{-1}[S] \subseteq \upset f[S]$ and $f[\downset S] \subseteq \downset f[S]$.
 \item If $f$ is order-reversing, then $f[\upset S] \subseteq \downset f[S]$ and $f[\downset S] \subseteq \upset f[S]$.
 \item If $f$ is order-reflecting and surjective, then $f[\upset S] \supseteq \upset f[S]$ and $f[\downset S] \supseteq \downset f[S]$.
 \item If $f$ is reverse order-reflecting and surjective, then $f[\downset S] \supseteq \upset f[S]$ and $f[\upset S] \supseteq \downset f[S]$.
@@ -380,6 +423,16 @@ Let $(P,\Yleft)$ be an ordered set and $S$ a subset of $P$. Then
 Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$. Then $S^u$ is an up set and $S^l$ a down set.
 \end{lemma}
 
+\begin{lemma} \label{lemma:minMaxUpsetDownset}
+Let $(P,\Yleft)$ be an ordered set, $x\in P$ and $S$ a non-empty subset of $P$, then
+\begin{enumerate}
+\item $x \in \max(\downset x)$;
+\item $x \in \min(\upset x)$;
+\item if $\max(S)\neq \emptyset$, then $\downset S = \downset \max(S)$;
+\item if $\min(S)\neq \emptyset$, then $\upset S = \upset \min(S)$.
+\end{enumerate}
+\end{lemma}
+
 \begin{lemma} \label{lemma:boundsFromUpDownSets}
 Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$. Then
 \begin{enumerate}
@@ -398,7 +451,7 @@ If $S$ is empty, then we have
 \end{lemma}
 This also means that every set of upper bounds is an up set and every set of lower bounds is a down set.
 
-\begin{lemma}
+\begin{lemma} \label{lemma:minMaxSingletons}
 If $\sSet{P, \precsim}$ is a poset and $S\subseteq P$, then $\max(S), \min(S), \sup(S), \inf(S)$ are either singletons or empty.
 \end{lemma}
 \begin{proof}
@@ -409,18 +462,17 @@ For posets we sometimes use $\max/\min/\sup/\inf$ to denote the contents of the 
 
 \begin{lemma}
 Let $(P,\Yleft)$ be an ordered set and $A,B$ subsets of $P$. Then
-\[ A\subseteq B^l \iff \Big[\forall a\in A, b\in B: a\precsim b \Big] \iff B\subseteq A^u. \]
+\[ A\subseteq B^l \iff \Big[\forall a\in A, b\in B: a\Yleft b \Big] \iff B\subseteq A^u. \]
 \end{lemma}
 This lemma identifies $(^u,^l)$ as a Galois connection.
 \begin{corollary}
-Let $(P,\precsim)$ be a proset and $A,B$ subsets of $P$. Then
+Let $(P,\Yleft)$ be an ordered set and $A,B$ subsets of $P$. Then
 \begin{enumerate}
 \item $A\subseteq (A^l)^u$ and $A\subseteq (A^u)^l$;
 \item if $A\subseteq B$, then $B^u\subseteq A^u$ and $B^l \subseteq A^l$;
 \item $A^l = ((A^l)^u)^l$ and $A^u = ((A^u)^l)^u$.
 \end{enumerate}
 \end{corollary}
-These are all corollaries of point (3) of the lemma.
 \begin{proof}
 (1) $A^l \subseteq A^l \implies A = (A^l)^u$.
 
@@ -429,7 +481,7 @@ These are all corollaries of point (3) of the lemma.
 (3) $(A^l)^u \subseteq (A^l)^u \implies A^l \subseteq ((A^l)^u)^l$ and by 1. and 2. $A\subseteq (A^l)^u \implies ((A^l)^u)^l \subseteq A^l$.
 \end{proof}
 \begin{corollary} \label{corollary:maxSupMinInf}
-If $\sSet{P, \precsim}$ is a poset and $S\subseteq P$, then
+If $\sSet{P, \Yleft}$ is an ordered set and $S\subseteq P$, then
 \begin{enumerate}
 \item $\max(S)\subset \sup(S)$;
 \item $\min(S)\subset \inf(S)$.
@@ -438,9 +490,19 @@ If $\sSet{P, \precsim}$ is a poset and $S\subseteq P$, then
 \begin{proof}
 For (1) we calculate $\max(S) = S \cap S^u \subseteq (S^u)^l \cap S^u = \sup(S)$; (2) is dual.
 \end{proof}
+\begin{corollary}
+If $\sSet{P, \Yleft}$ is an ordered set and $S\subseteq P$, then
+\begin{enumerate}
+\item $(A\cup B)^u \subseteq A^u\cap B^u$ and $(A\cup B)^l \subseteq A^l\cap B^l$;
+\item $(A\cap B)^u \supseteq A^u\cup B^u$ and $(A\cap B)^l \supseteq A^l\cup B^l$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+From $A\subseteq A\cup B$, we get $(A\cup B)^u \subseteq A^u$. Similary $(A\cup B)^u \subseteq B^u$, so $(A\cup B)^u \subseteq A^u\cap B^u$. The other cases are similar.
+\end{proof}
 
 \begin{lemma} \label{corollary:orderPreservingReversingBounds}
-Let $(P, \precsim_P)$ and $(Q, \precsim_Q)$ be prosets, $f: P\to Q$ a function and $S\subseteq P$ a subset.
+Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be ordered sets, $f: P\to Q$ a function and $S\subseteq P$ a subset.
 \begin{enumerate}
 \item If $f$ is order-preserving, then
 \begin{enumerate}
@@ -497,22 +559,6 @@ The properties of the order reversing functions are similarly proved.
 We cannot say anything about the supremum or infimum for general order-preserving (or order-reversing) functions, because $f[S^u] \subseteq f[S]^u$ implies $f[S^u]^l \supseteq (f[S]^u)^l$, so the calculation would be
 \[ f[\sup(S)] = f[S^u\cap (S^u)^l] \subseteq f[S]^u \cap f[(S^u)]^l \supseteq f[S]^u \cap (f[S]^u)^l = \sup(f[S]), \]
 from which we cannot conclude anything.
-
-\subsection{Directed sets}
-\begin{definition}
-An ordered set $(D,\Yleft)$ is called
-\begin{itemize}
-\item \udef{(upward) directed} if every finite subset has an upper bound;
-\item \udef{downward directed} if every finite subset has a lower bound.
-\end{itemize}
-If $(D,\Yleft)$ is a directed set, we call the relation $\Yleft$ a \udef{direction}.
-\end{definition}
-
-\begin{proposition}
-Let $\{(D_i,\Yleft_i)\}_{i\in I}$ be a family of directed sets. Then $D= \prod_{i\in I}D_i$ is a directed set with direction defined by
-\[ (a_i)_{i\in I} \Yleft (b_i)_{i\in I} \iff \forall i\in I: a_i\Yleft_i b_i. \]
-The directed set $(D,\Yleft)$ is called a \udef{product direction}.
-\end{proposition}
 
 \subsection{Chains}
 \begin{definition}
@@ -740,13 +786,33 @@ The ordered natural numbers $\sSet{\N,\leq}$ are complete.
 Any set of natural numbers has a least element by \ref{proposition:wellOrderingN}. Any non-empty set $S$ of natural numbers that is bounded above, we can take $\max(S) = \min(\N\setminus S)-1$.
 \end{proof}
 
+\subsection{Directed sets}
 \begin{definition}
-A function $f: P\to P$ on an ordered set $(P,\Yleft)$ into itself is
+An ordered set $(D,\Yleft)$ is called
 \begin{itemize}
-\item \udef{expansive} if $\forall x\in P: x\Yleft f(x)$;
-\item \udef{contractive} if $\forall x\in P: f(x)\Yleft x$.
+\item \udef{(upward) directed} if every finite subset has an upper bound;
+\item \udef{downward directed} if every finite subset has a lower bound.
 \end{itemize}
+If $(D,\Yleft)$ is a directed set, we call the relation $\Yleft$ a \udef{direction}.
 \end{definition}
+TODO: use $\closure_\vee$ and $\closure_\wedge$.
+
+TODO: important note: $\closure_\vee$ only implies closure under finite $\vee$
+
+\begin{example}
+\begin{itemize}
+\item Any non-empty chain is directed.
+\item An antichain is directed iff it is a singleton.
+\end{itemize}
+\end{example}
+
+TODO: move:
+\begin{proposition}
+Let $\{(D_i,\Yleft_i)\}_{i\in I}$ be a family of directed sets. Then $D= \prod_{i\in I}D_i$ is a directed set with direction defined by
+\[ (a_i)_{i\in I} \Yleft (b_i)_{i\in I} \iff \forall i\in I: a_i\Yleft_i b_i. \]
+The directed set $(D,\Yleft)$ is called a \udef{product direction}.
+\end{proposition}
+
 
 \section{Ordered sets of subsets}
 \subsection{The ``finer than'' relation}
@@ -828,6 +894,17 @@ Let $P$ be an ordered set.
 If $P$ is a discrete poset, then $\mathcal{O}(P) = \powerset(P)$.
 \end{lemma}
 
+\begin{proposition} \label{prop:orderedSetPowerset}
+Let $P$ be a preordered ordered set. Then $x\mapsto \downset x$ is an order embedding between $P$ and the principle down sets in $P$.
+
+If $P$ is a partial order, then the map is bijective and thus an order isomorphism.
+\end{proposition}
+\begin{proof}
+The first part is just \ref{lemma:upDownsetInclusion}.
+
+For the second part, $x\mapsto \downset x$ is surjective by definition. For injectivity: the inverse map is given by $Q\mapsto \max(Q)$. This is a function by \ref{lemma:minMaxSingletons} and an inverse by \ref{lemma:minMaxUpsetDownset}.
+\end{proof}
+
 \begin{lemma}
 Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
 \begin{enumerate}
@@ -837,9 +914,6 @@ Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
 \item $\mathcal{O}(P_1\sqcup P_2)\cong \mathcal{O}(P_1)\times \mathcal{O}(P_2)$.
 \end{enumerate}
 \end{lemma}
-
-\section{Galois connections}
-\input{galoisConnections}
 
 \section{Filters and ideals}
 \begin{definition}
@@ -881,11 +955,6 @@ Let $X$ be a set.
 \end{itemize}
 \end{example}
 
-\begin{proposition}
-Let $\sSet{P,\Yleft}$ be an ordered set and $\{F_i\}_{i\in I} \in \filters(P)^I$ a set of filters. Then $\bigcap_{i\in I}F_i$ is a filter.
-\end{lemma}
-We can replace ``filter'' by ``ideal'' in the previous lemma.
-
 \subsection{Filter bases and subbases}
 
 \begin{lemma}
@@ -917,7 +986,6 @@ Let $\sSet{P,\Yleft}$ be an ordered set and $B\subseteq P$ a subset. Then
 \end{enumerate}
 \end{proposition}
 In particular, if $S$ is a filter base, then $\upset S$ is a filter.
-
 
 \begin{lemma}
 Let $\sSet{P,\Yleft}$ be an ordered set.
@@ -1185,49 +1253,6 @@ Because $\sup(S)\in S^u$, we have $\sup(S)\wedge x \in S^u\wedge x$, so $\sup(S)
 \end{proof}
 In particular if $S$ has two elements, we recover the distributive inequalities.
 
-\subsection{Filters and ideals}
-Since lattices are posets, we can define filters and ideal on them.
-We can give alternative characterisations of filters and ideals using the lattice operations.
-\begin{lemma}
-Let $L$ be a lattice and $J$ a subset. Then
-\begin{enumerate}
-\item $J$ is an ideal \textup{if and only if}
-\begin{enumerate}
-\item $a,b\in J \implies a\vee b\in J$;
-\item $x\in L, b\in J$ and $x\leq b$ implies $x\in J$;
-\end{enumerate}
-\textup{if and only if}
-\begin{enumerate}
-\item $\forall a,b\in J: \qquad a\vee b\in J$;
-\item $\forall x\in L, \forall b\in J: \quad x\wedge b \in J$;
-\end{enumerate}
-\item $J$ is a filter \textup{if and only if}
-\begin{enumerate}
-\item $a,b\in J \implies a\wedge b\in J$;
-\item $x\in L, b\in J$ and $x\geq b$ implies $x\in J$;
-\end{enumerate}
-\textup{if and only if}
-\begin{enumerate}
-\item $\forall a,b\in J: \qquad a\wedge b\in J$;
-\item $\forall x\in L, \forall b\in J: \quad x\vee b \in J$.
-\end{enumerate}
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $L$ be a lattice. Then
-\begin{enumerate}
-\item if $L$ contains $\top$, then an ideal in $L$ is proper \textup{if and only if} is does not contain $\top$;
-\item if $L$ contains $\bot$, then a filter in $L$ is proper \textup{if and only if} is does not contain $\bot$.
-\end{enumerate}
-\end{lemma}
-
-\subsubsection{Prime and maximal filters and ideals}
-
-\subsubsection{Sequential filters}
-\begin{definition}
-Let $A$ be a set and $x: I\to A$ a sequence in $A$. The \udef{sequential filter} associated with $x$
-\end{definition}
 
 \subsection{Complete lattices}
 \begin{lemma}
@@ -1414,7 +1439,74 @@ If $L$ has no finite chains, then it satisfies the ascending and descending chai
 Only the $\Rightarrow$ direction of (2) is not immediately obvious. Assume $Q$ is join-dense and let $x\in \joinIr(L)$. By the proposition there exists a finite $F\subseteq Q$ such that $x = \bigvee F$. Since $x$ is join-irreducible, we have $x \in F$ and hence $x \in Q$. Thus, $\joinIr(L) \subseteq Q$.
 \end{proof}
 
-\subsection{Distributive lattices}
+
+\subsection{Filters and ideals}
+Since lattices are posets, we can define filters and ideal on them.
+We can give alternative characterisations of filters and ideals using the lattice operations.
+\begin{lemma}
+Let $L$ be a lattice and $J$ a subset. Then
+\begin{enumerate}
+\item $J$ is an ideal \textup{if and only if}
+\begin{enumerate}
+\item $a,b\in J \implies a\vee b\in J$;
+\item $x\in L, b\in J$ and $x\leq b$ implies $x\in J$;
+\end{enumerate}
+\textup{if and only if}
+\begin{enumerate}
+\item $\forall a,b\in J: \qquad a\vee b\in J$;
+\item $\forall x\in L, \forall b\in J: \quad x\wedge b \in J$;
+\end{enumerate}
+\item $J$ is a filter \textup{if and only if}
+\begin{enumerate}
+\item $a,b\in J \implies a\wedge b\in J$;
+\item $x\in L, b\in J$ and $x\geq b$ implies $x\in J$;
+\end{enumerate}
+\textup{if and only if}
+\begin{enumerate}
+\item $\forall a,b\in J: \qquad a\wedge b\in J$;
+\item $\forall x\in L, \forall b\in J: \quad x\vee b \in J$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $L$ be a lattice. Then
+\begin{enumerate}
+\item if $L$ contains $\top$, then an ideal in $L$ is proper \textup{if and only if} is does not contain $\top$;
+\item if $L$ contains $\bot$, then a filter in $L$ is proper \textup{if and only if} is does not contain $\bot$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition}[The lattice of filters]
+Let $L$ be a lattice. Consider the set of filters $\filters{L}$ to be ordered by inclusion. Then $\filters{L}$ is a complete bounded lattice with top $L$ and bottom $\emptyset$.
+
+Let $\{F_i\}_{i\in I} \in \filters(L)^I$ be a set of filters. Then
+\begin{align*}
+\bigwedge \{F_i\}_{i\in I} &= \bigcap_{i\in I}F_i; \\
+\bigvee \{F_i\}_{i\in I} &=  \closure_\wedge\left(\bigcup_{i\in I}F_i\right).
+\end{align*}
+Note that $\closure_\wedge$ only means closure under finite meets.
+\end{proposition}
+\begin{proof}
+We just need to verify that the proposed suprema and infima are indeed filters.
+
+($\wedge$) The union $\bigcap_{i\in I}F_i$ is an up set by \ref{lemma:unionIntersectionDownUpSets}.
+
+Take $a,b \in \bigcap_{i\in I}F_i$. Then $a\wedge b \in \bigcap_{i\in I}F_i$ for all $i\in I$, so $a \wedge b\in \bigcap_{i\in I}F_i$.
+
+($\vee$) TODO!!
+\end{proof}
+
+
+\subsubsection{Prime and maximal filters and ideals}
+
+\subsubsection{Sequential filters}
+\begin{definition}
+Let $A$ be a set and $x: I\to A$ a sequence in $A$. The \udef{sequential filter} associated with $x$
+\end{definition}
+
+\subsection{Distributive and modular lattices}
+\subsubsection{Distributive lattices}
 For all lattices $L$ the distributive inequalities, \ref{corollary:distributiveInequality}, hold: $\forall a,b,c \in L$:
 \begin{align*}
 a \vee (b\wedge c) &\leq (a\vee b) \wedge (a\vee c); \\
@@ -1468,7 +1560,7 @@ Assume $L$ distributive. By \ref{corollary:orderLattice}, $ x\vee y \geq w$ and 
 Conversely, we can take $w = (x\wedge y)\vee (x\wedge z)$. Then (2) gives $x\wedge (y\vee z) \leq (x\wedge y)\vee (x\wedge z)$ and the distributive inequality \ref{corollary:distributiveInequality} gives the other inequality. 
 \end{proof}
 
-\subsection{Modular lattices}
+\subsubsection{Modular lattices}
 For all lattices $L$ the modular inequality holds: $\forall a,b,c \in L$:
 \[ a\leq c \implies a \vee (b\wedge c) \leq (a\vee b) \wedge c. \]
 See \ref{corollary:distributiveInequality}.
@@ -1510,6 +1602,35 @@ If a lattice is distributive, it is also modular.
 If the lattice is distributive, point (2) of \ref{prop:modularEquivalences} holds unconditionally, and so in particular also conditionally.
 \end{proof}
 
+\subsubsection{Derived lattices}
+
+\begin{proposition}
+(i) If L is a modular (distributive) lattice, then every sublattice of L
+is modular (distributive).
+
+(ii) If L and K are modular (distributive) lattices, then L × K is
+modular (distributive).
+
+(iii) If L is modular (distributive) and K is the image of L under a
+homomorphism, then K is modular (distributive).
+\end{proposition}
+\begin{corollary}
+If a lattice is isomorphic to a sublattice of a product
+of distributive (modular) lattices,then it is distributive (modular).
+\end{corollary}
+
+\begin{theorem}[$\mathbf{M}_3-\mathbf{N}_5$ theorem]
+Let $L$ be a lattice.
+\begin{enumerate}
+\item $L$ is non-modular \textup{if and only if} $\mathbf{N}_5 \rightarrowtail L$;
+\item $L$ is non-distributive \textup{if and only if} $\mathbf{N}_5 \rightarrowtail L$ or $\mathbf{M}_3 \rightarrowtail L$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+TODO!
+\end{proof}
+
+
 \section{Complementation}
 \subsection{Disjoint elements and disjoint complement}
 \begin{definition}
@@ -1547,6 +1668,11 @@ Let $y,y'$ be complements of $x$. Then
 \[ y = y\vee \bot = y\vee (x\wedge y') = (y\vee x)\wedge (y\vee y') = \top \wedge (y\vee y') = y\vee y'. \]
 Similarly $y' = y'\vee y$, so $y= y'$.
 \end{proof}
+
+A lattice element may also have no complements.
+\begin{example}
+The only elements with a complement in a bounded chain are $\top$ and $\bot$.
+\end{example}
 
 \subsubsection{Complemented lattices}
 \begin{definition}
@@ -1665,6 +1791,10 @@ TODO Ockham algebras, De Morgan algebras, Kleene algebras, Stone algebras.
 A distributive complemented lattice is called a \udef{Boolean lattice} or \udef{Boolean algebra}.
 \end{definition}
 
+\begin{lemma}
+Let $L$ be a Boolean lattice and $x,y\in L$. Then $x\wedge \overline{y} = \bot$ \textup{if and only if} $x\leq y$.
+\end{lemma}
+
 \begin{proposition} \label{prop:BooleanComplementLargestDisjoint}
 Let $L$ be a Boolean lattice. For all $x\in L$ the complement $\overline{x}$ is the largest element disjoint from $x$.
 \end{proposition}
@@ -1777,6 +1907,34 @@ Let $U$ be a set. Then $\sSet{\powerset(U), \subseteq}$ is a partially ordered s
 \end{definition}
 
 Any family of sets $\mathcal{F}$ may be seen as a subset of the poset with universe $\bigcup \mathcal{F}$.
+
+\begin{proposition} \label{prop:posetPowerset}
+Let $\mathcal{F}$ be a family of sets. Then $\sSet{\mathcal{F}, \subseteq}$ is a poset.
+
+Conversely, every poset $(P,\preceq)$ is isomorphic to $\sSet{\mathcal{F}, \subseteq}$ for some family of sets $\mathcal{F}$ with universe $P$.
+\end{proposition}
+\begin{proof}
+This is just a reformulation of \ref{prop:orderedSetPowerset}.
+\end{proof}
+\begin{corollary}
+Let $\mathcal{F}$ be a family of sets. If
+\begin{itemize}
+\item $\mathcal{F}$ is closed under arbitrary intersections; and
+\item $\bigcup \mathcal{F}\in \mathcal{F}$;
+\end{itemize}
+then $\sSet{\mathcal{F},\subseteq}$ is a complete lattice.
+
+Conversely, every complete lattice is isomorphic to such a lattice.
+\end{corollary}
+Note that in general the join in such a lattice is \emph{not} given by the union, $\bigvee \neq \bigcup$!
+\begin{proof}
+Such a family of sets is a complete lattice by \ref{prop:completeLatticeBasic}.
+
+For the converse, the isomorphism is given by $x\mapsto \downset x$, as in \ref{prop:orderedSetPowerset}. We just need to show that the meet translates to the intersection, i.e. $\downset \bigwedge Q = \bigcap_{x\in Q}\downset x$. We calculate, using \ref{lemma:minMaxUpsetDownset}, \ref{lemma:boundsFromUpDownSets}, \ref{lemma:upDownsetUnionIntersection} and \ref{lemma:upwardDownwardClosure} (noting that a lattice order is in particular a preorder):
+\[ \downset \bigwedge Q = \downset \max(Q^l) = \downset Q^l = \downset \bigcap_{x\in Q} \downset x = \bigcap_{x\in Q} \downset\downset x = \bigcap_{x\in Q} \downset x. \]
+\end{proof}
+
+TODO: join is given by union if directed?? (+CPO)??
 
 \section{The complete Boolean lattice of subsets}
 \begin{lemma}
