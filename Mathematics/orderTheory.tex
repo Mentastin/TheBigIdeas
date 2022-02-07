@@ -115,7 +115,7 @@ Let $P,Q$ be ordered sets and $f: P\to Q$ order-reflecting. Then
 \begin{proof}
 We calculate
 \[ y\in f^{-1}[f(x)] \iff f(y) = f(x) \implies y\Yleft x \land x\Yleft y. \]
-The same is true for $z f^{-1}[f(x)]$, so we conclude by transitivity.
+The same is true for $z \in f^{-1}[f(x)]$, so we conclude by transitivity.
 \end{proof}
 TODO: make corollary:
 \begin{lemma} \label{lemma:orderReflectionIsInjective} \label{lemma:strictOrderPreservationIsInjective}
@@ -191,6 +191,14 @@ A function $f: P\to P$ on an ordered set $(P,\Yleft)$ into itself is
 \end{itemize}
 \end{definition}
 
+\begin{lemma}
+Let $f:P\to P$ be a function on an ordered set $(P,\Yleft)$. Consider $(P\to P)$ to be ordered by pointwise order. Then
+\begin{enumerate}
+\item $f$ is expansive \textup{if and only if} $f \geq \id_P$;
+\item $f$ is contractive \textup{if and only if} $f \leq \id_P$.
+\end{enumerate}
+\end{lemma}
+
 \section{Galois connections}
 \input{galoisConnections}
 
@@ -229,9 +237,9 @@ The following propositions are equivalent $\forall y\in P$:
 \begin{align*}
 &\forall x\in Q: x\Yleft y \implies y\in Q \\
 &\forall x\in Q: \neg(x\Yleft y) \lor (y\in Q) \\
-&\Big(\forall x\in Q: \neg(x\Yleft y)\Big) \lor (y\in Q) \\
-&\neg \Big(\exists x\in Q: x\Yleft y \Big) \lor (y\in Q) \\
-&\Big(\exists x\in Q:  x\Yleft y\Big) \implies y\in Q.
+\Big(&\forall x\in Q: \neg(x\Yleft y)\Big) \lor (y\in Q) \\
+\neg \Big(&\exists x\in Q: x\Yleft y \Big) \lor (y\in Q) \\
+\Big(&\exists x\in Q:  x\Yleft y\Big) \implies y\in Q.
 \end{align*}
 TODO justify (in particular line 2 to 3).
 \end{proof}
@@ -265,32 +273,43 @@ Let $P$ be an ordered set. Then $\downset\emptyset = \emptyset = \upset\emptyset
 \end{lemma}
 
 \begin{lemma}
-Let $\sSet{P,\Yleft}$ be an ordered set and $x\in P$. Then
-\begin{enumerate}
-\item $\upset x = \setbuilder{y\in P}{x\Yleft y}$;
-\item $\downset x = \setbuilder{y\in P}{y\Yleft x}$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
 Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
 \begin{enumerate}
+\item $\upset x = \setbuilder{y\in P}{x\Yleft y}$;
+\item $\downset x = \setbuilder{y\in P}{y\Yleft x}$;
+\end{enumerate}
+and
+\begin{enumerate} \setcounter{enumi}{2}
 \item $\upset Q = \bigcup_{x\in Q} \upset x$;
 \item $\downset Q = \bigcup_{x\in Q} \downset x$.
 \end{enumerate}
 \end{lemma}
-
-\begin{lemma} \label{lemma:upDownsetUnionIntersection}
+\begin{corollary} \label{lemma:upDownsetUnionIntersection}
 Let $P$ be an ordered set and $\mathcal{A}\subseteq \powerset(P)$. Then
 \begin{enumerate}
-\item $\upset \bigcup \mathcal{A} = \bigcup \upset \mathcal{A}$ and $\downset \bigcup \mathcal{A} = \bigcup \downset \mathcal{A}$;
-\item $\upset \bigcap \mathcal{A} = \bigcap \upset \mathcal{A}$ and $\downset \bigcap \mathcal{A} = \bigcap \downset \mathcal{A}$.
+\item $\upset \bigcup \mathcal{A} = \bigcup_{A\in \mathcal{A}} \upset A$ and $\downset \bigcup \mathcal{A} = \bigcup_{A\in \mathcal{A}} \downset A$;
+\item $\upset \bigcap \mathcal{A} \subseteq \bigcap_{A\in \mathcal{A}} \upset A$ and $\downset \bigcap \mathcal{A} \subseteq \bigcap_{A\in \mathcal{A}} \downset A$.
 \end{enumerate}
-\end{lemma}
+\end{corollary}
 \begin{proof}
-We calculate TODO
-\[ \upset \bigcup \mathcal{A} = \bigcup_{x\in \bigcup\mathcal{A}} \upset x = \bigcup \setbuilder{\upset x}{x\in \bigcup \mathcal{A}} \]
+(1) We calculate using \ref{lemma:unionIntersectionLabelSet}:
+\[ \upset \bigcup \mathcal{A} = \bigcup_{x\in \bigcup\mathcal{A}} \upset x = \bigcup_{A\in \mathcal{A}}\bigcup_{x\in A}\upset x = \bigcup_{A\in \mathcal{A}} \upset A. \]
+
+(2) Again we calculate using \ref{lemma:unionIntersectionLabelSet}:
+\[ \upset \bigcap \mathcal{A} = \bigcup_{x\in \bigcap\mathcal{A}} \upset x \subseteq \bigcap_{A\in \mathcal{A}}\bigcup_{x\in A}\upset x = \bigcap_{A\in \mathcal{A}} \upset A. \]
 \end{proof}
+\begin{corollary} \label{lemma:unionIntersectionDownUpSets}
+Let $P$ be an ordered set and $\{Q_i\}_{i\in I}$ be a set of down sets in $P$. Then
+\begin{enumerate}
+\item $\bigcup Q_i$ is a down set;
+\item $\bigcap Q_i$ is a down set.
+\end{enumerate}
+The same is true for up sets.
+\end{corollary}
+\begin{proof}
+This follows from $\downset \bigcup Q_i = \bigcup \downset Q_i = \bigcup Q_i$ and $\downset \bigcap Q_i \subseteq \bigcap \downset Q_i = \bigcap Q_i$ by \ref{lemma:upwardDownwardClosure}.
+\end{proof}
+
 
 \begin{lemma} \label{lemma:upDownsetInclusion}
 Let $\sSet{P,\Yleft}$ be an ordered set and $Q,R\subseteq P$. Then
@@ -302,21 +321,11 @@ Let $\sSet{P,\Yleft}$ be an ordered set and $Q,R\subseteq P$. Then
 \end{enumerate}
 Let $x, y \in P$. Then
 \begin{enumerate} \setcounter{enumi}{2}
-\item $x\Yleft y \iff x\in \downset y$;
+\item $x\in \downset y \iff x\Yleft y \iff y \in \upset x$;
 \item $x\Yleft y \implies \downset x \subseteq \downset y$;
 \item if $\Yleft$ is a preorder, then $x\Yleft y \iff \downset x \subseteq \downset y$.
 \end{enumerate}
 \end{lemma}
-
-\begin{lemma} \label{lemma:unionIntersectionDownUpSets}
-Let $P$ be an ordered set and $\{Q_i\}\subset \mathcal{O}(P)$ be a set of down sets in $P$. Then
-\begin{enumerate}
-\item $\bigcup Q_i$ is a down set;
-\item $\bigcap Q_i$ is a down set.
-\end{enumerate}
-The same is true for up sets.
-\end{lemma}
-
 
 
 \begin{lemma}
@@ -327,22 +336,29 @@ Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be ordered sets and $f: P\to Q$ a functi
 \item $f$ is order-preserving;
 \item for all $x\in P$: $f[\upset x] \subseteq \upset f(x)$;
 \item for all $x\in P$: $f[\downset x] \subseteq \downset f(x)$;
-\item for all $x\in P$: $\upset f^{-1}[\upset x] \subseteq f^{-1}[\upset x]$;
-\item for all $x\in P$: $\downset f^{-1}[\downset x] \subseteq f^{-1}[\downset x]$;
+\item for all $x\in P$: $f^{-1}[\downset x]$ is downwards closed;
+\item for all $x\in P$: $f^{-1}[\upset x]$ is upwards closed;
 \end{enumerate}
 \item as are
 \begin{enumerate}
 \item $f$ is order-reversing;
 \item for all $x\in P$: $f[\upset x] \subseteq \downset f(x)$;
 \item for all $x\in P$: $f[\downset x] \subseteq \upset f(x)$;
+\item for all $x\in P$: $f^{-1}[\downset x]$ is upwards closed;
+\item for all $x\in P$: $f^{-1}[\upset x]$ is downwards closed.
 \end{enumerate}
+\item If 
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 All statements pertaining to images are variations on the calculation
-\[ y\in \upset x \iff x\Yleft y \Rightarrow f(x) \Yleft f(y) \iff f(y) \in \upset f(x). \]
+\[ y\in \upset x \iff x\Yleft y \implies f(x) \Yleft f(y) \iff f(y) \in \upset f(x). \]
 
-For the reverse, images: take $y\in \upset f^{-1}[\upset x]$
+Now assume $f$ order-preserving. Then we have the equivalences
+\[ a\in f^{-1}[\downset x] \iff f(a) \in \downset x \iff f(a) \Yleft x. \]
+Let $b \in \downset f^{-1}[\downset x]$. Then $\exists a \in f^{-1}[\downset x]: b \Yleft a$. Because $f$ is order-preserving, we have $f(b) \Yleft f(a) \Yleft x$. Thus $b \in f^{-1}[\downset x]$ and so $f^{-1}[\downset x]$ is downwards closed.
+
+Conversely, assume $f^{-1}[\downset x]$ is downwards closed for all $x\in Q$. Take $a \Yleft b \in P$.
 \end{proof}
 \begin{lemma} \label{lemma:imageUpDownsets}
 Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be ordered sets, $f: P\to Q$ a function and $S\subseteq P$ a subset.
@@ -886,12 +902,12 @@ Let $f:P\to Q$ be an order reversing function between ordered sets. Let $A,B\in 
 
 \subsection{The ordered set of downsets}
 \begin{definition}
-Let $P$ be an ordered set. The set of down sets in $P$ is denoted $\mathcal{O}(P)$.
+Let $P$ be an ordered set. The set of down sets in $P$ is denoted $\downsets(P)$.
 \end{definition}
 
 \begin{lemma}
 Let $P$ be an ordered set.
-If $P$ is a discrete poset, then $\mathcal{O}(P) = \powerset(P)$.
+If $P$ is a discrete poset, then $\downsets(P) = \powerset(P)$.
 \end{lemma}
 
 \begin{proposition} \label{prop:orderedSetPowerset}
@@ -908,10 +924,10 @@ For the second part, $x\mapsto \downset x$ is surjective by definition. For inje
 \begin{lemma}
 Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
 \begin{enumerate}
-\item $\mathcal{O}(P)^o \cong \mathcal{O}(P^o)$;
-\item $\mathcal{O}(P\oplus \mathbb{1}) \cong \mathcal{O}(P)\oplus \mathbb{1}$;
-\item $\mathcal{O}(\mathbb{1}\oplus \mathbb{1}) \cong \mathbb{1}\oplus \mathcal{O}(P)$;
-\item $\mathcal{O}(P_1\sqcup P_2)\cong \mathcal{O}(P_1)\times \mathcal{O}(P_2)$.
+\item $\downsets(P)^o \cong \downsets(P^o)$;
+\item $\downsets(P\oplus \mathbb{1}) \cong \downsets(P)\oplus \mathbb{1}$;
+\item $\downsets(\mathbb{1}\oplus \mathbb{1}) \cong \mathbb{1}\oplus \downsets(P)$;
+\item $\downsets(P_1\sqcup P_2)\cong \downsets(P_1)\times \downsets(P_2)$.
 \end{enumerate}
 \end{lemma}
 
@@ -1490,11 +1506,7 @@ Note that $\closure_\wedge$ only means closure under finite meets.
 \begin{proof}
 We just need to verify that the proposed suprema and infima are indeed filters.
 
-($\wedge$) The union $\bigcap_{i\in I}F_i$ is an up set by \ref{lemma:unionIntersectionDownUpSets}.
-
-Take $a,b \in \bigcap_{i\in I}F_i$. Then $a\wedge b \in \bigcap_{i\in I}F_i$ for all $i\in I$, so $a \wedge b\in \bigcap_{i\in I}F_i$.
-
-($\vee$) TODO!!
+TODO
 \end{proof}
 
 
@@ -1790,25 +1802,24 @@ TODO Ockham algebras, De Morgan algebras, Kleene algebras, Stone algebras.
 \begin{definition}
 A distributive complemented lattice is called a \udef{Boolean lattice} or \udef{Boolean algebra}.
 \end{definition}
+We will use $\overline{x}$ to denote the (necessarily unique, \ref{prop:distributiveComplementUnique}) completement of $x$.
 
-\begin{lemma}
-Let $L$ be a Boolean lattice and $x,y\in L$. Then $x\wedge \overline{y} = \bot$ \textup{if and only if} $x\leq y$.
+\begin{lemma} \label{prop:BooleanComplementLargestDisjoint}
+Let $L$ be a Boolean lattice and $x\in L$. Then $\overline{x} = \max(\{x\}^\perp)$.
 \end{lemma}
-
-\begin{proposition} \label{prop:BooleanComplementLargestDisjoint}
-Let $L$ be a Boolean lattice. For all $x\in L$ the complement $\overline{x}$ is the largest element disjoint from $x$.
-\end{proposition}
 \begin{proof}
-Let $x\in L$. We need to show that $y\leq \overline{x}$ for all $y\in \{x\}^\perp$, or, equivalently, $\overline{x} \vee y = \overline{x}$. By the uniqueness of the complement, \ref{prop:distributiveComplementUnique}, it is enough to prove that $\overline{x} \vee y$ is a complement. Indeed
+By definition $\overline{x} \in \{x\}^\perp$. We just need to show that $y\leq \overline{x}$ for all $y\in \{x\}^\perp$, or, equivalently, $\overline{x} \vee y = \overline{x}$. By the uniqueness of the complement, \ref{prop:distributiveComplementUnique}, it is enough to prove that $\overline{x} \vee y$ is a complement. Indeed
 \begin{align*}
 x \vee (\overline{x} \vee y) &= (x\vee \overline{x}) \vee y = \top \vee y = \top \\
 x \wedge (\overline{x} \vee y) &= (x\wedge \overline{x})\vee (x\wedge y) = \bot \vee \bot = \bot.
 \end{align*}
 \end{proof}
-
-\begin{proposition}
+\begin{corollary}
+Let $L$ be a Boolean lattice and $x,y\in L$. Then $x\perp y \iff x \leq \overline{y}$.
+\end{corollary}
+\begin{corollary}
 Every Boolean lattice is an ortholattice.
-\end{proposition}
+\end{corollary}
 \begin{proof}
 By \ref{prop:distributiveComplementUnique} we know that a Boolean lattice is uniquely complemented, so its complement is an involution by \ref{lemma:uniqueComplementInvolution}. We just need to check the complementation reverses order.
 
@@ -1930,8 +1941,9 @@ Note that in general the join in such a lattice is \emph{not} given by the union
 \begin{proof}
 Such a family of sets is a complete lattice by \ref{prop:completeLatticeBasic}.
 
-For the converse, the isomorphism is given by $x\mapsto \downset x$, as in \ref{prop:orderedSetPowerset}. We just need to show that the meet translates to the intersection, i.e. $\downset \bigwedge Q = \bigcap_{x\in Q}\downset x$. We calculate, using \ref{lemma:minMaxUpsetDownset}, \ref{lemma:boundsFromUpDownSets}, \ref{lemma:upDownsetUnionIntersection} and \ref{lemma:upwardDownwardClosure} (noting that a lattice order is in particular a preorder):
-\[ \downset \bigwedge Q = \downset \max(Q^l) = \downset Q^l = \downset \bigcap_{x\in Q} \downset x = \bigcap_{x\in Q} \downset\downset x = \bigcap_{x\in Q} \downset x. \]
+For the converse, the isomorphism is given by $x\mapsto \downset x$, as in \ref{prop:orderedSetPowerset}. We just need to show that the meet translates to the intersection, i.e. $\downset \bigwedge Q = \bigcap_{x\in Q}\downset x$. We calculate, using \ref{lemma:minMaxUpsetDownset} and \ref{lemma:boundsFromUpDownSets}:
+\[ \downset \bigwedge Q = \downset \max(Q^l) = \downset Q^l = \downset \bigcap_{x\in Q} \downset x \subseteq \bigcap_{x\in Q} \downset x. \]
+For the other inclusion we just note that a lattice order is in particular a  preorder and so we can use \ref{lemma:QsubseteqDownQ}.
 \end{proof}
 
 TODO: join is given by union if directed?? (+CPO)??
