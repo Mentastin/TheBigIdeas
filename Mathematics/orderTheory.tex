@@ -635,10 +635,20 @@ The empty set $\emptyset$ is a chain in any poset $P$. Then $\sup(\emptyset) = \
 \end{proof}
 
 \begin{lemma}
-Let $P$ be a poset. If $P$ satisfies the ascending chain condition and has a least element, then $P$ is inductive.
+Let $P$ be an ordered set.
+\begin{enumerate}
+\item If $P$ satisfies to ascending chain condition, then for each non-empty chain $C$ in $P$ we have $\max(C) \neq \emptyset$;
+\item If $P$ satisfies to descending chain condition, then for each non-empty chain $C$ in $P$ we have $\min(C) \neq \emptyset$,
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-Assume $P$ satisfies the ascending chain condition and take a chain $C\subset P$. If $C=\emptyset$, then $\sup(C) = \min(\emptyset^u) = \min(P)$ is not empty. Now assume $C$ non-empty and take some $x_0\in C$. Define $C' = \setbuilder{c\in C}{x_0 \Yleft c}$, which is finite by assumption. Clearly $\sup(C) = \sup(C')$, which is not empty by \ref{lemma:boundsFiniteChain}.
+Assume $P$ satisfies the ascending chain condition and take a non-empty chain $C\subset P$. Take some $x_0\in C$ and define $C' = \setbuilder{c\in C}{x_0 \Yleft c}$. Clearly $x_0$ is a leat element of $C'$, so $C'$ is finite by ACC and $\max(C) = \max(C') \neq \emptyset$ by \ref{lemma:boundsFiniteChain}.
+\end{proof}
+\begin{corollary}
+Let $P$ be an ordered set. If $P$ satisfies the ascending chain condition and has a least element, then $P$ is inductive.
+\end{corollary}
+\begin{proof}
+We have $\sup(C) \supseteq \max(C)$ by \ref{corollary:maxSupMinInf}.
 \end{proof}
 
 \begin{example}
@@ -1190,6 +1200,13 @@ Let $L$ be a lattice and $a,b,c,d\in L$. Then
 \end{enumerate}
 \end{corollary}
 
+\begin{lemma} \label{lemma:cancellationGeneralLattices}
+Let $L$ be a lattice and $a,b\in L$. If for all $x\in L$: $a\vee x = b\vee x$ and $a\wedge x = b\wedge x$, then $a = b$.
+\end{lemma}
+\begin{proof}
+Setting $x = a$ gives $a = a\vee b$ and $a = a\wedge b$. Thus $a \leq b$ and $b \leq a$, meaning $a = b$.
+\end{proof}
+
 \begin{lemma}
 Let $X$ be a set. Then $\mathcal{P}(X)$ ordered by inclusion is a lattice and $\cup, \cap$ are the corresponding join and meet operations.
 
@@ -1557,6 +1574,13 @@ A lattice $L$ is called \udef{distributive} if it satisfies the distributive law
 A lattice is distributive \textup{if and only if} its dual is distributive.
 \end{lemma}
 
+\begin{example}
+\begin{itemize}
+\item Any totally ordered set is a distributive lattice.
+\item For any set $X$, the poset $\sSet{\powerset(X), \subseteq}$ is a distributive lattice.
+\end{itemize}
+\end{example}
+
 \begin{lemma}
 Let $L$ be a lattice. The following are equivalent:
 \begin{enumerate}
@@ -1571,6 +1595,16 @@ Point (1) is self-dual and points (2) and (3) are dual, so it is enough to show 
 Assume $L$ distributive. By \ref{corollary:orderLattice}, $ x\vee y \geq w$ and $x\vee z\geq w$ imply $(x\wedge y)\vee (x\wedge z) \leq w$. By distributivity, we get (2).
 
 Conversely, we can take $w = (x\wedge y)\vee (x\wedge z)$. Then (2) gives $x\wedge (y\vee z) \leq (x\wedge y)\vee (x\wedge z)$ and the distributive inequality \ref{corollary:distributiveInequality} gives the other inequality. 
+\end{proof}
+
+\begin{proposition}[Cancellation law for distributive lattices] \label{prop:cancellationDistributiveLattices}
+Let $L$ be a distributive lattice and $a,b,c\in L$. Then
+\[ \text{$a\vee c = b \vee c$ and $a\wedge c = b \wedge c$ implies $a = b$.} \]
+\end{proposition}
+Note that we only assume the equalities hold for some $c$, not all $c$. If these equalities hold for all $c$, then we have cancellation in all lattices, not just distributive ones. See \ref{lemma:cancellationGeneralLattices}.
+\begin{proof}
+We calculate, using the absorption law and distributivity,
+\[ a = a\vee (a\wedge c) = a \vee (b\wedge c) = (a\vee b)\wedge (a\vee c) = (a\vee b) \wedge (b\vee c) = b \vee (a \wedge c) = b \vee (b\wedge c) = b. \]
 \end{proof}
 
 \subsubsection{Modular lattices}
@@ -1656,7 +1690,7 @@ Let $S\subset L$. Then the set
 is called the \udef{disjoint complement} of $Y$.
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{lemma:disjointComplementIdeal}
 Let $L$ be a distributive lattice with a bottom $\bot$ and $S\subset L$. Then $S^\perp$ is an ideal.
 \end{lemma}
 \begin{proof}
@@ -1677,9 +1711,7 @@ Let $L$ be a bounded lattice and $x\in L$. We call $y$ a \udef{complement} of $x
 Let $L$ be a bounded lattice. If $L$ is distributive, then any $x\in L$ has at most one complement.
 \end{proposition}
 \begin{proof}
-Let $y,y'$ be complements of $x$. Then
-\[ y = y\vee \bot = y\vee (x\wedge y') = (y\vee x)\wedge (y\vee y') = \top \wedge (y\vee y') = y\vee y'. \]
-Similarly $y' = y'\vee y$, so $y= y'$.
+This follows from the cancellation law \ref{prop:cancellationDistributiveLattices}. Let $y,y'$ be complements of $x$. Then $y\vee x = \top = y'\vee x$ and $y\wedge x = \bot = y'\wedge x$, so $y=y'$.
 \end{proof}
 
 A lattice element may also have no complements.
@@ -1724,8 +1756,21 @@ An \udef{orthocomplemented lattice} or \udef{ortholattice} is a bounded lattice 
 An orthocomplemented lattice is not necessarily uniquely complemented.
 
 \begin{lemma}
-The dual lattice of an ortholattice is an ortholattice. We can view an orthocomplementation as an isomorphism between an ortholattice and its dual.
+Let $L$ be an ortholattice with completement $c$. Then $c: L \to L$ is a reverse order-isomorphism.
 \end{lemma}
+\begin{corollary}
+The dual lattice of an ortholattice is an ortholattice. We can view an orthocomplementation as an isomorphism between an ortholattice and its dual.
+\end{corollary}
+\begin{corollary}
+Let $A\subseteq L$. Then
+\begin{enumerate}
+\item $c\left[\bigvee A\right] = \bigwedge c[A]$;
+\item $c\left[\bigwedge A\right] = \bigvee c[A]$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+See \ref{corollary:orderPreservingReversingBounds}.
+\end{proof}
 
 \begin{proposition}
 The cardinality of any finite ortholattice is either even or $1$.
@@ -1806,18 +1851,15 @@ A distributive complemented lattice is called a \udef{Boolean lattice} or \udef{
 We will use $\overline{x}$ to denote the (necessarily unique, \ref{prop:distributiveComplementUnique}) completement of $x$.
 
 \begin{lemma} \label{prop:BooleanComplementLargestDisjoint}
-Let $L$ be a Boolean lattice and $x\in L$. Then $\overline{x} = \max(\{x\}^\perp)$.
+Let $L$ be a Boolean lattice and $x\in L$. Then $\{x\}^\perp = \downset \overline{x}$.
 \end{lemma}
 \begin{proof}
-By definition $\overline{x} \in \{x\}^\perp$. We just need to show that $y\leq \overline{x}$ for all $y\in \{x\}^\perp$, or, equivalently, $\overline{x} \vee y = \overline{x}$. By the uniqueness of the complement, \ref{prop:distributiveComplementUnique}, it is enough to prove that $\overline{x} \vee y$ is a complement. Indeed
-\begin{align*}
-x \vee (\overline{x} \vee y) &= (x\vee \overline{x}) \vee y = \top \vee y = \top \\
-x \wedge (\overline{x} \vee y) &= (x\wedge \overline{x})\vee (x\wedge y) = \bot \vee \bot = \bot.
-\end{align*}
+From the requirement $x\wedge \overline{x} = \bot$, we see that $\overline{x}\in \{x\}^\perp$. Now $\{\overline{x}\} \subseteq \{x\}^\perp$ implies $\downset \overline{x} \subseteq \downset\{x\}^\perp = \{x\}^\perp$. For the last equality we have used the fact that $\{x\}^\perp$ is downwards closed (in fact even an ideal), see \ref{lemma:disjointComplementIdeal}.
+
+Now we prove the other inclusion: $\{x\}^\perp \subseteq \downset \overline{x}$.
+Take $y\in \{x\}^\perp$. We just need to show that $y\leq \overline{x}$, or, equivalently, $y = y\wedge \overline{x}$. Indeed
+\[ y = y \wedge \top = y\wedge (x\vee \overline{x}) = (y\wedge x)\vee (y\wedge \overline{x}) = \bot \vee (y\wedge \overline{x}) = y\wedge \overline{x}. \]
 \end{proof}
-\begin{corollary}
-Let $L$ be a Boolean lattice and $x,y\in L$. Then $x\perp y \iff x \leq \overline{y}$.
-\end{corollary}
 \begin{corollary}
 Every Boolean lattice is an ortholattice.
 \end{corollary}
@@ -1829,6 +1871,17 @@ Let $x\leq y$. Then $\overline{y} \wedge x \leq \overline{y} \wedge y = \bot$, s
 \begin{corollary}
 The laws of de Morgan hold in Boolean lattices.
 \end{corollary}
+
+\begin{proposition}[Infinite distributive laws]
+Let $L$ be a Boolean lattice. Then for all $x\in L$ and all $A\subseteq L$:
+\begin{enumerate}
+\item if $\bigvee A$ exists, then $x\wedge \bigvee A = \bigvee x\wedge A$;
+\item if $\bigwedge A$ exists, then $x\vee \bigwedge A = \bigwedge x\vee A$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+
+\end{proof}
 
 \begin{proposition}
 Let $L$ be a Boolean lattice with complement and $a,b\in L$. Then $[a,b]$ is a Boolean lattice with complementation $x\mapsto \widetilde{x} = (\overline{x} \wedge b)\vee a$. 
@@ -1928,11 +1981,11 @@ Conversely, every poset $(P,\preceq)$ is isomorphic to $\sSet{\mathcal{F}, \subs
 \begin{proof}
 This is just a reformulation of \ref{prop:orderedSetPowerset}.
 \end{proof}
-\begin{corollary}
-Let $\mathcal{F}$ be a family of sets. If
+\begin{corollary} \label{corollary:MooreFamily}
+Let $\mathcal{F}$ be a family of subsets of $U$. If
 \begin{itemize}
 \item $\mathcal{F}$ is closed under arbitrary intersections; and
-\item $\bigcup \mathcal{F}\in \mathcal{F}$;
+\item $U \in \mathcal{F}$;
 \end{itemize}
 then $\sSet{\mathcal{F},\subseteq}$ is a complete lattice.
 
@@ -1946,6 +1999,15 @@ For the converse, the isomorphism is given by $x\mapsto \downset x$, as in \ref{
 \[ \downset \bigwedge Q = \downset \max(Q^l) = \downset Q^l = \downset \bigcap_{x\in Q} \downset x \subseteq \bigcap_{x\in Q} \downset x. \]
 For the other inclusion we just note that a lattice order is in particular a  preorder and so we can use \ref{lemma:QsubseteqDownQ}.
 \end{proof}
+
+\begin{definition}
+A family of sets $\mathcal{F}$ satisfying the hypothesis of \ref{corollary:MooreFamily}, i.e.
+\begin{itemize}
+\item $\mathcal{F}$ is closed under arbitrary intersections; and
+\item $U \in \mathcal{F}$;
+\end{itemize}
+is called a \udef{Moore family} or \udef{topped intersection structure}.
+\end{definition}
 
 TODO: join is given by union if directed?? (+CPO)??
 
