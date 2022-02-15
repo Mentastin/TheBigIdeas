@@ -1163,21 +1163,6 @@ Conversely, every partition defines an equivalence relation.
 Let $A,B$ be sets. Then the empty relation on $(A,B)$, the universal relation $U_{A,B}$ and the identity relation $\id_A$ are equivalence relations.
 \end{lemma}
 
-\subsection{A calculus of relations}
-\begin{proposition}
-\begin{itemize}
-\item transitive equivalent with $\graph(R^2) \subseteq \graph(R)$
-\item reflexive implies $\graph(R) \subseteq \graph(R^2)$
-\end{itemize}
-\end{proposition}
-so preorder sufficient, but not necessary for idempotent.
-
-\begin{lemma}
-if $A \subseteq B$ and $C\subseteq D$, then $AC\subseteq BD$.
-\end{lemma}
-
-Relation completely determined by images of singletons.
-
 \section{Functions}
 TODO: equiv for equality!
 
@@ -1463,23 +1448,83 @@ For all $a\in A$ we write
 \[ f(a)\downarrow \defequiv a\in\dom(f),\qquad f(a)\uparrow \defequiv a\notin\dom(f) \]
 We can read $f(a)\downarrow$ as ``$f$ converges at $a$'' and $f(a)\uparrow$ as ``$f$ diverges at $a$''.
 
-\section{Identical domain and codomain}
-TODO after natural numbers?
+\section{A calculus of relations}
+\begin{proposition}
+\begin{itemize}
+\item transitive equivalent with $\graph(R^2) \subseteq \graph(R)$
+\item reflexive implies $\graph(R) \subseteq \graph(R^2)$
+\end{itemize}
+\end{proposition}
+so preorder sufficient, but not necessary for idempotent.
 
-Let $f: A\to A$ be a function with $\dom(f) = \codom(f)$. Then we can define $f^n$ as the $n$-fold composition of $f$:
-\[ f^n \defeq \underbrace{f\circ f \circ \ldots \circ f}_{\text{$n$ times}}. \]
-
-\subsection{Fixed points}
-\begin{definition}
-Let $f: A\to A$ be a function with $\dom(f) = \codom(f)$. Then $x\in A$ is called a \udef{fixed point} if $f(x) = x$. 
-\end{definition}
-
-\begin{lemma} \label{fixedPointsMultipleComposition}
-If $x\in A$ is a fixed point of $f:A\to A$, then $x$ is a fixed point of $f^n$ for all $n\in \N$.
+\begin{lemma}
+Let $A,B,C,D$ be relations such that $\graph(A) \subseteq \graph(B)$ and $\graph(C)\subseteq \graph(D)$ and both $A,B$ and $C,D$ are composable, then $\graph(A;C)\subseteq \graph(B;D)$.
 \end{lemma}
+\begin{proof}
+Assume the hypotheses of the lemma and let $(x,y) \in graph(AC)$. Then there exists a $z$ such that $xAz$ and $zCy$. By hypothesis this means $xBz$ and $zDy$, so $x(B;D)y$.
+\end{proof}
+
+Relation completely determined by images of singletons.
+
+\begin{proposition}
+Let $X,Y$ be sets and $f: X \to Z$ a function. Then
+\begin{enumerate}
+\item $f;f^\transp = \ker f$;
+\item $f^\transp;f = \id_{\im(f)}$.
+\end{enumerate}
+In particular $f^\transp;f \subseteq \id_Z$ and $\id_X \subseteq f;f^\transp$.
+\end{proposition}
+\begin{proof}
+(1) Let $x,y\in X$. Then
+\[ x(f;f^\transp) y \iff \exists z\in Z: f(x) = z = f(y) \iff (x,y)\in \ker f. \]
+
+(2) Let $x,y\in Z$. Then
+\[ x(f^\transp;f) y \iff \exists z\in X: x = f(z) = y \iff x=y \in \im f. \]
+\end{proof}
+TODO: general relations! + link inclusions with totality and uniqueness (also injectivity and sujectivity)
+
+TODO: $\upset q = q\leq$ and $\downset q = \leq q$.
+
+\subsection{Relational structures}
+\subsubsection{Functions on relational structures}
+
+function $f$ is $R$-preserving iff $R \subseteq f;R;f^\transp$.
+
+\begin{lemma}
+Let $\sSet{X, R}$ and $\sSet{Y, S}$ be relational structures and $f: X\to Y$ a function. Then
+\begin{enumerate}
+\item the following are equivalent:
+\begin{enumerate}
+\item $f$ is relation-preserving;
+\item $R \subseteq f;S;f^\transp$;
+\item $R;f \subseteq f;S$;
+\item $R^\transp;f \subseteq f;S^\transp$;
+\end{enumerate}
+\item as are
+\begin{enumerate}
+\item $f$ is relation-reversing;
+\item $f': X\to Y^o$ is relation-preserving;
+\item $R \subseteq f;S^\transp;f^\transp$;
+\item $R;f \subseteq f;S^\transp$;
+\item $R^\transp;f \subseteq f;S$.
+\end{enumerate}
+\item If $f$ is an embedding or reverse embedding, the inclusions become equalities.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(b) implies (c):
+\[ R;f \subseteq (f;S;f^\transp);f = f;S;(f^\transp;f) \subseteq f;S;\id = f;S. \]
+
+(c) implies (b):
+\[ R \subseteq R;(f;f^\transp) \subseteq f;S;f^\transp. \]
+
+(b) implies (d):
+\[ R^\transp;f \subseteq (f;S;f^\transp)^\transp;f = (f;S^\transp;f^\transp);f = f;S^\transp;(f^\transp;f) \subseteq f;S^\transp;\id = f;S^\transp \]
+\end{proof}
 
 
-\section{Relation isomorphisms}
+
+\subsubsection{Relation isomorphisms}
 \begin{definition}
 Let $(A_1, R_1)$ and $(A_2, R_2)$ be relational structures. A bijection $\phi:A_1 \twoheadrightarrowtail A_2$ such that
 \[ \forall (s_1,t_1)\in R_1: (\phi(s_1),\phi(t_1))\in R_2 \qquad \text{and} \qquad \forall (s_2,t_2)\in R_2: (\phi^{-1}(s_2),\phi^{-1}(t_2))\in R_1, \]
@@ -1500,6 +1545,23 @@ Consequently, relation isomorphism would be an equivalence relation on all struc
 Let $(A_1, R_1)$ and $(A_2, R_2)$ be isomorphic relational structures. Then $R_1$ has the same properties as $R_2$.
 \end{lemma}
 E.g.: reflexivity, symmetry, transitivity, being an equivalence relation etc.
+
+
+\subsection{Identical domain and codomain}
+TODO after natural numbers?
+
+Let $f: A\to A$ be a function with $\dom(f) = \codom(f)$. Then we can define $f^n$ as the $n$-fold composition of $f$:
+\[ f^n \defeq \underbrace{f\circ f \circ \ldots \circ f}_{\text{$n$ times}}. \]
+
+\subsection{Fixed points}
+\begin{definition}
+Let $f: A\to A$ be a function with $\dom(f) = \codom(f)$. Then $x\in A$ is called a \udef{fixed point} if $f(x) = x$. 
+\end{definition}
+
+\begin{lemma} \label{fixedPointsMultipleComposition}
+If $x\in A$ is a fixed point of $f:A\to A$, then $x$ is a fixed point of $f^n$ for all $n\in \N$.
+\end{lemma}
+
 
 
 \chapter{The natural numbers}
