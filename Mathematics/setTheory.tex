@@ -14,7 +14,7 @@ Let $\mathcal{W}$ be a universe with urelements $\mathcal{U}$.
 \[ \acc(a) \defeq \setbuilder{x}{x\in \mathcal{U} \lor \left[\exists b\in a: x\in b \lor x\subseteq b\right]}. \]
 \item A collection $V$ is called a \udef{history} if
 \[ \forall v\in V: v = \acc(V\cap v). \]
-\item The accumulation of a history is called a level.
+\item The accumulation of a history is called a \udef{level}.
 \end{itemize}
 \end{definition}
 
@@ -605,6 +605,44 @@ This gives the table
 
 TODO: intersection distributes over disjoint union.
 
+\begin{lemma} \label{unionIntersectionLabelSet}
+Let $\mathcal{I}$ be a family of index sets and let $A_i$ be a set for all $i\in \bigcup \mathcal{I}$. Then
+\begin{enumerate}
+\item $\bigcup_{i\in \bigcup \mathcal{I}} A_i = \bigcup_{I\in \mathcal{I}}\bigcup_{i\in I} A_i$;
+\item $\bigcap_{i\in \bigcap \mathcal{I}} A_i = \bigcap_{I\in \mathcal{I}}\bigcap_{i\in I} A_i$;
+\item $\bigcup_{i\in \bigcap \mathcal{I}} A_i \subseteq \bigcap_{I\in \mathcal{I}}\bigcup_{i\in I} A_i$;
+\item $\bigcap_{i\in \bigcup \mathcal{I}} A_i \supseteq \bigcup_{I\in \mathcal{I}}\bigcap_{i\in I} A_i$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We calculate
+\begin{align*}
+x\in \bigcup_{i\in \bigcup \mathcal{I}} A_i &\iff \exists i\in \bigcup \mathcal{I}: x\in A_i \\
+&\iff \exists i: (i\in \bigcup \mathcal{I}) \land (x\in A_i) \\
+&\iff \exists i: (\exists I \in \mathcal{I}: i\in I) \land (x\in A_i) \\
+&\iff \exists i: \exists I: (I \in \mathcal{I}) \land (i\in I) \land (x\in A_i) \\
+&\iff \exists I\in \mathcal{I}: \exists i \in I: x\in A_i \\
+&\iff x\in \bigcup_{I\in \mathcal{I}}\bigcup_{i\in I} A_i
+\end{align*}
+
+(2) Replace $\exists$ by $\forall$ and $\land$ by $\Rightarrow$ in the proof of (1).
+
+(3) We calculate
+\begin{align*}
+x\in \bigcup_{i\in \bigcap \mathcal{I}} A_i &\iff \exists i\in \bigcap \mathcal{I}: x\in A_i \\
+&\iff \exists i: (i\in \bigcap \mathcal{I}) \land (x\in A_i) \\
+&\iff \exists i: (\forall I \in \mathcal{I}: i\in I) \land (x\in A_i) \\
+&\iff \exists i: (\forall I: (I \in \mathcal{I}) \Rightarrow (i\in I)) \land (x\in A_i) \\
+&\implies \exists i: \forall I: (I \in \mathcal{I}) \Rightarrow ((i\in I) \land (x\in A_i)) \\
+&\implies \forall I: \exists i: (I \in \mathcal{I}) \Rightarrow ((i\in I) \land (x\in A_i)) \\
+&\iff \forall I: (I \in \mathcal{I}) \Rightarrow (\exists i:(i\in I) \land (x\in A_i)) \\
+&\iff \forall I\in \mathcal{I}: \exists i \in I: x\in A_i \\
+&\iff x\in \bigcap_{I\in \mathcal{I}}\bigcup_{i\in I} A_i
+\end{align*}
+
+(4) TODO
+\end{proof}
+
 For more identities, see \url{https://en.wikipedia.org/wiki/List_of_set_identities_and_relations}.
 
 \section{Classes}
@@ -618,39 +656,26 @@ In essence we are just rephrasing the logical content of $P$ is a language remin
 A unary condition $P$ is \udef{coextensive} with a set $A$ if the objects which satisfy it are exactly the members of $A$. Not every $P$ is coextensive with a set and $P$ is coextensive with at most one set.
 
 \chapter{Relations and functions}
-Based on the definitions and axioms posited so far we can start to construct the objects that form the focus of mathematical study.
-\section{Tuples}
-Tuples represent a finite ordered collection of objects. They are usually written using parentheses.
-\begin{example}
+\section{Pairs}
+\begin{definition}
+A definition of $(a,b)$ for all $a,b$ is called an \udef{(ordered) pair operation} if it satisfies
 \begin{itemize}
-\item The tuple $(a,b)$ contains $a$ as its first element and $b$ as its second element.
-\item The tuple $(1,2,3)$ contains $1$ as its first element, $2$ as its second and $3$ as its third.
+\item $(a,b) = (x,y) \iff (a=x)\land (b=y)$;
+\item for all sets $A,B$, $\setbuilder{(a,b)}{a\in A\land b\in B}$ is a set.
 \end{itemize}
-\end{example}
-There are multiple set-theoretical implementations of tuples.
-
-Using our notion of tuple, we can construct the \udef{Cartesian product} of two sets $A,B$:
-\[ A\times B \defeq \left\{ (a,b) \;|\; a\in A\land b\in B \right\}. \]
+We call $\setbuilder{(a,b)}{a\in A\land b\in B}$ the \udef{Cartesian product} of $A$ and $B$ and denote it $A\times B$.
+\end{definition}
+Note that for the second condition it is enough to check that $A\times B$ is a subset of some set $S$. Then, by separation, $A\times B$ is the set
+\[ A\times B = \setbuilder{x\in S}{\exists a\in A:\exists b\in B: x = (a,b)}. \]
 
 \begin{lemma}
 Let $A$ be a set. Then
-\[ A\times \emptyset = \emptyset\times A = \emptyset. \]
+\[ A\times \emptyset = \emptyset = \emptyset\times A. \]
 \end{lemma}
 
 \begin{definition}
-An \udef{(ordered) pair operation} satisfies:
-\begin{itemize}
-\item $(a,b) = (x,y) \iff (a=x)\land (b=y)$;
-\item the Cartesian product $A\times B = \left\{ (a,b) \;|\; a\in A\land b\in B \right\}$ is a set.
-\end{itemize}
-\end{definition}
-Note that for the second condition it is enough to check that $A\times B$ is a subset of some set $S$. Then, by separation, $A\times B$ is the set
-\[ A\times B = \{ x\in S\;|\; \exists a\in A:\exists b\in B: x = (a,b) \}. \]
-
-
-\begin{definition}
 Let $p = (a,b)$ be a pair, we use $\pi_1(p)$ to denote the first element of $p$ and $\pi_2(p)$ to denote the second element:
-\[ p = (\pi_1(p),\pi_2(p)). \]
+\[ (a,b) = p = (\pi_1(p),\pi_2(p)). \]
 We can convert a pair to a set:
 \[ \operatorname{set}((a,b)) = \{a,b\}. \]
 \end{definition}
@@ -729,20 +754,6 @@ The Wiener definition of a pair is
 This definition satisfies the requirements for a pair.
 \end{proposition}
 
-\subsection{Tuples as nested pairs}
-Once we have an implementation of a pair (i.e. $2$-tuple) of objects, the other tuples can then be readily constructed as follows:
-\begin{enumerate}
-\item The $0$-tuple is represented by the empty set $\emptyset$;
-\item A $1$-tuple containing $a$ is represented by $(a,\emptyset)$;
-\item An n-tuple, with $n > 1$, can be defined as an ordered pair of its first entry and an $(n − 1)$-tuple which contains the remaining entries:
-\[ (a_1,a_2,a_3,\ldots,a_n) = (a_1, (a_2,a_3,\ldots, a_n)). \]
-\end{enumerate}
-For example:
-\begin{align*}
-(1,2,3) &= (1,(2,(3,\emptyset))) \\
-(1,2,3,4) &= (1,(2,(3,(4,\emptyset)))).
-\end{align*}
-
 \subsection{Structured sets}
 \begin{definition}
 A \udef{structured set} is a pair $U = (A,S)$ where $A$ is a set and $S$ is an arbitrary object.
@@ -757,107 +768,167 @@ Often the frame $S$ is a $n$-tuple. In this case we may write the structured set
 
 \section{Relations}
 \begin{definition}
-Let $A,B$ be sets and $G$ any subset of the Cartesian product $A\times B$. A \udef{binary relation} $R$ on $(A, B)$ is a structured set $(G,(A,B))$. The \udef{graph} of the binary relation is the set $\graph(R) \defeq G$.
-We write
-\[ xRy \defequiv  (x,y)\in \graph(R). \]
-Analogously we can define \udef{ternary relations} on $(A,B,C)$ as structured sets $(G,(A,B,C))$ where $G \subset A\times B\times C$. A similar definition can be made for $n$-ary relations.
-\end{definition}
+Let $A,B$ be sets and $G$ any subset of the Cartesian product $A\times B$. A \udef{(binary) relation} $R$ on $(A, B)$ is a tuple $(G,(A,B))$. The \udef{graph} of the binary relation $R$ is the set $\graph(R) \defeq G$.
 
-\subsection{Binary relations}
-\begin{definition}
-Let $R = (G,(A\times B))$ be a binary relation.
+We write
+\[ xRy \defequiv  (x,y)\in \graph(R) \]
+and say $x$ is \udef{left related} to $y$ or $y$ is \udef{right related} to $x$.
+
+We call
 \begin{itemize}
-\item $A$ is the \udef{domain} of the relation, denoted $\dom(R)$.
-\item $B$ is the \udef{codomain} of the relation, denoted $\codom(R)$.
+\item $\dom(R) \defeq A$ the \udef{domain} of the relation;
+\item $\codom(R) \defeq B$ the \udef{codomain} of the relation.
 \end{itemize}
-A binary relation is \udef{homogeneous} or an \udef{endorelation} if it has the same domain and codomain.
-If we say $R$ is a relation on $A$, we mean it is an endorelation on $(A,A)$. 
+A relation $R$ is \udef{homogeneous} or an \udef{endorelation} if $\dom(R) = \codom(R)$.
+If we say $R$ is a (homogenous) relation on $A$, we mean $\dom(R) = A = \codom(R)$. 
 
 A relation is \udef{heterogeneous} is the domain and codomain are different.
 \end{definition}
 
-\subsubsection{Related elements: image, preimage and polars}
+\subsection{Related elements}
 \begin{definition}
 Let $R$ be a binary relation. We say
 \begin{itemize}
-\item $x$ is \udef{related to} or \udef{comparable with} $y$ if either $xRy$ or $yRx$; we denote this $x\nparallel_R y$ or just $x\nparallel y$;
-\item $x$ is \udef{unrelated to}, \udef{incomparable with} or \udef{parallel with} $y$ if neither $xRy$ nor $yRx$; we denote this $x\parallel_R y$ or just $x\parallel y$;
-\item $x$ is \udef{left related} to $y$ if $xRy$;
-\item $x$ is \udef{right related} to $y$ if $yRx$.
+\item $x$ is \udef{related to} or \udef{comparable with} $y$ if $xRy$ or $yRx$; we denote this $x\nparallel_R y$ or just $x\nparallel y$;
+\item $x$ is \udef{unrelated to}, \udef{incomparable with} or \udef{parallel with} $y$ if neither $xRy$ nor $yRx$; we denote this $x\parallel_R y$ or just $x\parallel y$.
 \end{itemize}
 \end{definition}
 
+\subsection{Relations and sets}
+\subsubsection{Images and preimages}
 \begin{definition}
 Let $R$ be a relation on $(A, B)$.
 \begin{itemize}
 \item The \udef{image} of a subset $X\subset A$ under $R$ is the set
-\[ XR \defeq \setbuilder{b\in B}{\exists x\in X: xRb}. \]
+\[ X^R \defeq \setbuilder{b\in B}{\exists x\in X: xRb}. \]
 \item The \udef{preimage} of a subset $Y\subset B$ under $R$ is the set
-\[ RY \defeq \setbuilder{a\in A}{\exists y\in Y: aRy}. \]
+\[ ^RY \defeq \setbuilder{a\in A}{\exists y\in Y: aRy}. \]
 \end{itemize}
 In particular for $X=A$ and $Y=B$:
 \begin{enumerate}
-\item The set $AR$ is the \udef{active codomain}, \udef{codomain of definition}, \udef{image} or \udef{range} of the relation, also denoted $\im(R)$.
-\item The set $RB$ is the \udef{active domain}, \udef{domain of definition}, \udef{preimage} or \udef{prerange} of the relation.
+\item The set $A^R$ is the \udef{active codomain}, \udef{codomain of definition}, \udef{image} or \udef{range} of the relation, also denoted $\im(R)$.
+\item The set $^RB$ is the \udef{active domain}, \udef{domain of definition}, \udef{preimage} or \udef{prerange} of the relation.
 \end{enumerate}
-Replacing ``$\exists$'' by ``$\forall$'' in the previous definitions gives the definitions of the \udef{derivation operators} or \udef{polars}: TODO!
+In particular for $X = \{x\}$ and $Y = \{y\}$ we define:
 \begin{itemize}
-\item The \udef{image} of a subset $X\subset A$ under $R$ is the set
-\[ XR \defeq \setbuilder{b\in B}{\exists x\in X: xRb}. \]
-\item The \udef{preimage} of a subset $Y\subset B$ under $R$ is the set
-\[ RY \defeq \setbuilder{a\in A}{\exists y\in Y: aRy}. \]
+\item $xR \defeq \{x\}^R$;
+\item $Ry \defeq {^R\{x\}}$.
 \end{itemize}
 \end{definition}
 
-\begin{lemma} \label{monotonicityImage}
+\begin{lemma}
+Let $R$ be a relation on $(A, B)$, $X\subset A$ and $Y\subset B$. Then
+\begin{enumerate}
+\item $X^R = \displaystyle\bigcup_{x\in X}xR = \bigcup \setbuilder{xR}{x\in X}$;
+\item $^RY = \displaystyle\bigcup_{y\in Y}Ry = \bigcup \setbuilder{Ry}{y\in Y}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{corollary} \label{monotonicityImage}
 Let $R$ be a relation on $(A, B)$ and $X,Y\subset A$. Then
 \begin{enumerate}
-\item if $X\subseteq Y$, then $XR \subseteq YR$;
-\item if $X\subseteq Y$, then $RX \subseteq RY$.
+\item if $X\subseteq Y$, then $X^R \subseteq Y^R$;
+\item if $X\subseteq Y$, then ${^RX} \subseteq {^RY}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) We can write $Y = X \cup (Y\setminus X)$. Then
+\[ Y^R = \bigcup \setbuilder{xR}{x\in Y} = \bigcup \setbuilder{xR}{x\in X}\cup\setbuilder{xR}{x\in (Y\setminus X)} = X^R \cup (Y\setminus X)^R \supseteq X^R. \]
+
+(2) Similar.
+\end{proof}
+\begin{corollary} \label{imageRelation} \label{preimageRelation}
+Let $R$ be a relation on $(A, B)$, $X,Y\subset A$ and $Z,W\subset B$. Then
+\begin{enumerate}
+\item $(X\cup Y)^R = X^R\cup Y^R$;
+\item $(X\cap Y)^R \subseteq X^R\cap Y^R$;
+\item $(X\setminus Y)^R \supseteq X^R\setminus Y^R$;
+\item $(X\symdiff Y)^R \supseteq X^R\symdiff Y^R$.
+\end{enumerate}
+and
+\begin{enumerate}
+\item $^R(Z\cup W) = {^RZ}\cup {^RW}$;
+\item $^R(Z\cap W) \subseteq {^RZ}\cap {^RW}$;
+\item $^R(Z\setminus W) \supseteq {^RZ}\setminus {^RW}$;
+\item $^R(Z\symdiff W) \supseteq {^RZ}\symdiff {^RW}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}\mbox{}
+
+(1) $\begin{aligned}[t]
+(X\cup Y)^R &= \bigcup \setbuilder{xR}{x\in (X\cup Y)} = \bigcup \setbuilder{xR}{x\in X}\cup \setbuilder{xR}{x\in Y} \\
+&= \left(\bigcup \setbuilder{xR}{x\in X}\right)\cup \left(\bigcup \setbuilder{xR}{x\in Y}\right) = X^R \cup Y^R.
+\end{aligned}$
+
+(2) We have both $X\cap Y \subseteq X$ and $X\cap Y \subseteq Y$, so $(X\cap Y)^R \subseteq X^R$ and $(X\cap Y)^R \subseteq Y^R$ by \ref{monotonicityImage}. Thus $(X\cap Y)^R \subseteq X^R\cap Y^R$.
+
+(3), (4) TODO
+\end{proof}
+
+
+\subsubsection{Commonalities and precommonalities}
+\begin{definition}
+Let $R$ be a relation on $(A, B)$.
+\begin{itemize}
+\item The \udef{commonality} of a subset $X\subset A$ under $R$ is the set
+\[ X^{\overrightarrow{R}} \defeq \setbuilder{b\in B}{\forall x\in X: xRb}. \]
+\item The \udef{precommonality} of a subset $Y\subset B$ under $R$ is the set
+\[ ^{\overleftarrow{R}}Y \defeq \setbuilder{a\in A}{\forall y\in Y: aRy}. \]
+\end{itemize}
+The term \udef{polar} is also used to denote both ``commonality'' and ``precommonality''.\footnote{The terms ``commonality'' and ``precommonality'' are my invention. Birkhoff states (TODO ref) that the term ``polar'' was chosen due to the link with the polars of conic sections.}
+
+In particular for $X=A$ and $Y=B$:
+\begin{enumerate}
+\item The set $A^{\overrightarrow{R}}$ is the \udef{common goal} of the relation.
+\item The set $^{\overleftarrow{R}}B$ is the \udef{common ground} of the relation.
+\end{enumerate}
+\end{definition}
+Note that the definition of commonality is similar to the definition of image. The only difference is that ``$\exists$'' is replaced by ``$\forall$''.
+
+Consequently, we can state results similar to the ones above.
+
+\begin{lemma}
+Let $R$ be a relation on $(A, B)$, $X\subset A$ and $Y\subset B$. Then
+\begin{enumerate}
+\item $X^{\overrightarrow{R}} = \displaystyle\bigcap_{x\in X}xR = \bigcap \setbuilder{xR}{x\in X}$;
+\item $^{\overleftarrow{R}}Y = \displaystyle\bigcap_{y\in Y}Ry = \bigcap \setbuilder{Ry}{y\in Y}$.
 \end{enumerate}
 \end{lemma}
 
-\begin{lemma} \label{imageRelation}
+\begin{corollary} \label{monotonicityCommonality}
 Let $R$ be a relation on $(A, B)$ and $X,Y\subset A$. Then
-\begin{itemize}
-\item $(X\cup Y)R = XR\cup YR$;
-\item $(X\cap Y)R \subset XR\cap YR$;
-\item $(X\setminus Y)R \supset XR\setminus YR$;
-\item $(X\symdiff Y)R \supset XR\symdiff YR$.
-\end{itemize}
-\end{lemma}
-\begin{lemma} \label{preimageRelation}
-Let $R$ be a relation on $(A, B)$ and $X,Y\subset B$. Then
-\begin{itemize}
-\item $R(X\cup Y) = RX\cup RY$;
-\item $R(X\cap Y) \subset RX\cap RY$;
-\item $R(X\setminus Y) \supset RX\setminus RY$;
-\item $R(X\symdiff Y) \supset RX\symdiff RY$.
-\end{itemize}
-\end{lemma}
+\begin{enumerate}
+\item if $X\subseteq Y$, then $X^{\overrightarrow{R}} \supseteq Y^{\overrightarrow{R}}$;
+\item if $X\subseteq Y$, then ${^{\overleftarrow{R}}X} \supseteq {^{\overleftarrow{R}}Y}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) We can write $Y = X \cup (Y\setminus X)$. Then
+\[ Y^{\overrightarrow{R}} = \bigcap \setbuilder{xR}{x\in Y} = \bigcap \setbuilder{xR}{x\in X}\cap\setbuilder{xR}{x\in (Y\setminus X)} = X^{\overrightarrow{R}} \cap (Y\setminus X)^{\overrightarrow{R}} \subseteq X^{\overrightarrow{R}}. \]
 
-\subsubsection{Properties of binary relations}
-\begin{definition}
-Let $R$ be a relation on $(A, B)$. We call $R$
-\begin{itemize}
-\item \udef{left-unique} or \udef{injective} if
-\[ \forall x_1,x_2\in A\forall y\in B: x_1Ry \land x_2Ry \implies x_1=x_2; \]
-\item \udef{right-unique} or \udef{functional} if
-\[ \forall x\in A\forall y_1,y_2\in B: xRy_1 \land xRy_2 \implies y_1=y_2; \]
-\item \udef{left-total} or \udef{serial} if
-\[ \forall x\in A:\exists y\in B: xRy; \]
-\item \udef{right-total} or \udef{surjective} or \udef{onto} if
-\[ \forall y\in B:\exists x\in A: xRy; \]
-\end{itemize}
-\end{definition}
-A binary relation may be
-\begin{itemize}
-\item \textbf{one-to-one}: injective and functional;
-\item \textbf{one-to-many}: injective and not functional;
-\item \textbf{many-to-one}: not injective and functional;
-\item \textbf{many-to-many}: not injective and not functional.
-\end{itemize}
+(2) Similar.
+\end{proof}
+\begin{corollary} \label{commonalityRelation} \label{precommonalityRelation}
+Let $R$ be a relation on $(A, B)$, $X,Y\subset A$ and $Z,W\subset B$. Then
+\begin{enumerate}
+\item $(X\cup Y)^{\overrightarrow{R}} \subseteq X^{\overrightarrow{R}}\cup Y^{\overrightarrow{R}}$;
+\item $(X\cap Y)^{\overrightarrow{R}} = X^{\overrightarrow{R}}\cap Y^{\overrightarrow{R}}$;
+\item $(X\setminus Y)^{\overrightarrow{R}} \supseteq X^{\overrightarrow{R}}\setminus Y^{\overrightarrow{R}}$;
+\item $(X\symdiff Y)^{\overrightarrow{R}} \supseteq X^{\overrightarrow{R}}\symdiff Y^{\overrightarrow{R}}$.
+\end{enumerate}
+and
+\begin{enumerate}
+\item $^{\overleftarrow{R}}(Z\cup W) \subseteq {^{\overleftarrow{R}}Z}\cup {^{\overleftarrow{R}}W}$;
+\item $^{\overleftarrow{R}}(Z\cap W) = {^{\overleftarrow{R}}Z}\cap {^{\overleftarrow{R}}W}$;
+\item $^{\overleftarrow{R}}(Z\setminus W) \supseteq {^{\overleftarrow{R}}Z}\setminus {^{\overleftarrow{R}}W}$;
+\item $^{\overleftarrow{R}}(Z\symdiff W) \supseteq {^{\overleftarrow{R}}Z}\symdiff {^{\overleftarrow{R}}W}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}\mbox{}
+TODO
+\end{proof}
 
+\subsection{Homogeneous relations}
 \subsubsection{Properties of homogeneous relations}
 \begin{definition}
 Let $R$ be a homogeneous binary relation on a set $A$. We say
@@ -918,132 +989,14 @@ Let $A,B$ be sets. We have the following relations:
 \end{definition}
 The identity relation on $A$ is also known as the \udef{diagonal relation} on $A$.
 
-TODO graph of dependencies.
-
-\subsubsection{Operations on binary relations}
-\paragraph{Converse relation}
-\begin{definition}
-Let $R$ be a relation on $(A, B)$. The \udef{converse} $R^\transp$ of $R$ is the relation on $B\times A$ with graph
-\[ \graph(R^{\transp}) = \setbuilder{(y,x)}{(x,y)\in \graph(R)} \subset B\times A. \]
-It is also known as the \udef{inverse}, \udef{transpose}, \udef{reciprocal}, \udef{opposite} or \udef{dual} of $R$.
-\end{definition}
-
 \begin{lemma}
-Let $R$ be a relation on $(A, B)$. Then
-\begin{enumerate}
-\item $(R^\transp)^\transp = R$;
-\item $\dom(R^\transp) = \codom(R)$ and $\codom(R^\transp) = \dom(R)$;
-\item $R^\transp A = AR$ and $BR^\transp = RB$.
-\end{enumerate}
+Let $R$ be a homogeneous relation on $A$. Then
+\[ R \;\text{is connex} \iff U_A \subseteq R\cup R^\transp \iff \overline{R}\subseteq R^\transp \iff \overline{R}\; \text{is asymmetric}. \]
+\[ R\; \text{is semiconnex} \iff \overline{I}_A \subseteq R\cup R^\transp \iff \overline{R}\subseteq R^\transp\cup I_A \iff \overline{R}\; \text{is anti-symmetric}. \]
 \end{lemma}
 
-\begin{lemma}
-Let $R$ be a homogeneous relation on $A$. Then $R$ is symmetric \textup{if and only if} $R = R^\transp$.
-\end{lemma}
-\begin{proof}
-The symmetry of $R$ is equivalent to
-\[ \forall x,y\in A: \; xRy \iff yRx \qquad\iff\qquad \forall x,y\in A: \; xRy \iff xR^\transp y \qquad\iff\qquad R = R^\transp. \]
-\end{proof}
-
-\begin{lemma}
-The following properties of binary endorelations are conserved under taking the converse:
-\begin{enumerate}
-\item all forms of reflexivity, except left and right quasi-reflexivity are swapped;
-\item all forms of symmetry;
-\item all forms of transitivity;
-\item all forms of connexity and trichotomy;
-\item density.
-\end{enumerate}
-Left and right Euclideanness are swapped.
-\end{lemma}
-\paragraph{Complementary relation}
-\begin{definition}
-Let $R$ be a binary relation on $(A, B)$. The \udef{complementary relation} $\overline{R}$ of $R$ is the relation on $(A, B)$ with graph
-\[ \graph(\overline{R}) = \setbuilder{(x,y)}{\neg xRy}. \]
-\end{definition}
-\begin{lemma}
-Let $R$ be a binary relation.
-\begin{enumerate}
-\item $\overline{\overline{R}} = R$;
-\item $\overline{R^\transp} = \overline{R}^\transp$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $R$ be a homogeneous relation on $A$. Then $R$ is asymmetric \textup{if and only if} $R = \overline{R}^\transp$.
-\end{lemma}
-\begin{proof}
-The asymmetry of $R$ is equivalent to
-\[ \forall x,y\in A: \; xRy \iff \neg yRx \qquad\iff\qquad \forall x,y\in A: \; xRy \iff x\overline{R}^\transp y \qquad\iff\qquad R = R^\transp. \]
-\end{proof}
-
-\begin{lemma}
-The following properties of binary endorelations are conserved under taking the converse:
-\begin{enumerate}
-\item symmetry;
-\item asymmetry.
-\end{enumerate}
-The following properties are swapped:
-\begin{enumerate}
-\item reflexivity $\leftrightarrow$ irreflexivity.
-\end{enumerate}
-\end{lemma}
-\paragraph{Composition of relations}
-\begin{definition}
-Let $R$ be a relation on $(A, B)$ and $S$ a relation on $(B, C)$. Then the \udef{composition} of $R$ and $S$ is a new relation $R;S$ on $(A, C)$ with graph
-\[ \graph(R;S) = \setbuilder{(x,z)\in A\times C}{\exists y\in B: xRy \land ySz}. \]
-If $R$ and $S$ are relations such that the codomain of one is the domain of the other, they are called \udef{composable}.
-
-If $R$ and $S$ are composable we also define the notation
-\[ S\circ R \defeq R;S. \]
-\end{definition}
-\begin{lemma}
-Let $R,S,T$ be composable relations.
-\begin{enumerate}
-\item The composition is associative: $R;(S;T) = (R;S);T$.
-\item The converse of $R;S$ is
-\[ (R;S)^\transp = S^\transp ; R^\transp. \]
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $R$ be a relation on $(A, B)$ and $S$ a relation on $(B, C)$. Let $X\subset A$ and $Y\subset C$. Then
-\begin{enumerate}
-\item $X(R;S) = (XR)S$ and $X(S\circ R) = ((X)R)S$;
-\item $(R;S)Y = R(SY)$ and $(S\circ R)Y = R(SY)$.
-\end{enumerate}
-\end{lemma}
-
-\paragraph{Restrictions and extensions}
-\begin{definition}
-Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y \subseteq B$. The \udef{restriction} of $R$ to $(X,Y)$ is the relation $R|^Y_X$ on $(X,Y)$ with graph
-\[ \graph(R|^Y_X) = \graph(R)\cap (X\times Y). \]
-\begin{itemize}
-\item If $Y = B$, then the restriction is called the \udef{left-restriction} of $R$ to $X$ and denoted $\left.R\right|_X$.
-\item If $X = A$, then the restriction is called the \udef{right-restriction} of $R$ to $Y$ and denoted $\left.R\right|^Y$.
-\end{itemize}
-If $S$ is a restriction of $R$, then $R$ is called an \udef{extension} of $S$.
-\end{definition}
-
-\begin{lemma}
-Let $R$ be a relation on $(A, B)$, $X_1,X_2\subseteq A$ and $Y_1,Y_2 \subseteq B$. Then
-\[ \left.\left(R|_{X_1}^{Y_1}\right)\right|_{X_2}^{Y_2} = R|_{X_1\cap X_2}^{Y_1\cap Y_2}. \]
-\end{lemma}
-
-\begin{lemma} \label{relationPropertiesRestriction}
-The following properties of binary endorelations are conserved under taking left- and right-restrictions to the same set:
-\begin{enumerate}
-\item all forms of reflexivity;
-\item all forms of symmetry;
-\item all forms of transitivity;
-\item all forms of connexity and trichotomy;
-\item Euclideanness.
-\end{enumerate}
-\end{lemma}
-Basically only not density.
-
-\subsubsection{Operations on homogeneous relations}
-\paragraph{Closures}
+\subsubsection{Closures}
+TODO use Galois theory
 \begin{definition}
 Let $R$ be a homogeneous relation on a set $A$.
 \begin{itemize}
@@ -1097,7 +1050,7 @@ Let $R$ be a homogeneous relation over a set $A$.
 \end{lemma}
 TODO: equivalence relations are defined below.
 
-\paragraph{Direct product}
+\subsubsection{Direct product}
 TODO: extend: heterogeneous relations + direct product of two different relations.
 \begin{definition}
 Let $R$ be a homogeneous relation over a set $A$. We can turn $R$ into a relation over $(A, A)$ as follows:
@@ -1120,14 +1073,8 @@ The following properties are not necessarily conserved:
 \end{enumerate}
 \end{lemma}
 
-\subsubsection{Some lemmas}
-\begin{lemma}
-Let $R$ be a homogeneous relation on $A$. Then
-\[ R \;\text{is connex} \iff U_A \subseteq R\cup R^\transp \iff \overline{R}\subseteq R^\transp \iff \overline{R}\; \text{is asymmetric}. \]
-\[ R\; \text{is semiconnex} \iff \overline{I}_A \subseteq R\cup R^\transp \iff \overline{R}\subseteq R^\transp\cup I_A \iff \overline{R}\; \text{is anti-symmetric}. \]
-\end{lemma}
 
-\subsection{Tolerance relations}
+\subsubsection{Tolerance relations}
 \begin{definition}
 A \udef{tolerance relation} is a binary relation that is reflexive and symmetric.
 
@@ -1136,10 +1083,16 @@ If $T$ is a tolerance relation on a set $X$, then $\sSet{X,T}$ is called a \udef
 A tolerance relation expresses the idea of `resembling' or `being within tolerance'.
 
 
-\subsection{Equivalence relations}
+\subsubsection{Equivalence relations}
 \begin{definition}
 An \udef{equivalence relation} is a binary relation that is reflexive, symmetric and transitive.
+\end{definition}
 
+\begin{lemma}
+Let $A,B$ be sets. Then the empty relation on $(A,B)$, the universal relation $U_{A,B}$ and the identity relation $\id_A$ are equivalence relations.
+\end{lemma}
+
+\begin{definition}
 Let $\sim$ be an equivalence relation on $A$. Let $x\in A$. The \udef{equivalence class} of $x$ is the set
 \[ [x]_\sim \defeq \{ y\in A\;|\; x\sim y \}. \]
 Then $x$ is called a \udef{representative} of this equivalence class.
@@ -1147,6 +1100,7 @@ Then $x$ is called a \udef{representative} of this equivalence class.
 The set of all equivalence classes is called the \udef{quotient set} of $A$ by $\sim$
 \[ A/\sim \defeq \{ [x]_\sim \in \powerset(A) \;|\; x\in A \}. \]
 \end{definition}
+
 \begin{proposition}
 Let $\sim$ be an equivalence relation on $A$. The quotient set of $A$ by $\sim$ defines a \udef{partition} of $A$:
 \begin{enumerate}
@@ -1159,116 +1113,190 @@ Let $\sim$ be an equivalence relation on $A$. The quotient set of $A$ by $\sim$ 
 Conversely, every partition defines an equivalence relation.
 \end{proposition}
 
-\begin{lemma}
-Let $A,B$ be sets. Then the empty relation on $(A,B)$, the universal relation $U_{A,B}$ and the identity relation $\id_A$ are equivalence relations.
-\end{lemma}
-
-\section{Functions}
-TODO: equiv for equality!
-
+\subsection{Constructing new relations}
+\subsubsection{Converse relation}
 \begin{definition}
-A \udef{function} is a binary relation that is functional and serial.
+Let $R$ be a relation on $(A, B)$. The \udef{converse} $R^\transp$ of $R$ is the relation on $B\times A$ with graph
+\[ \graph(R^{\transp}) = \setbuilder{(y,x)}{(x,y)\in \graph(R)} \subset B\times A. \]
+It is also known as the \udef{inverse}, \udef{transpose}, \udef{reciprocal}, \udef{opposite} or \udef{dual} of $R$.
 \end{definition}
-If a relation $f$ on $(A, B)$ is a function, then for every $x\in A$, there is a unique $y\in B$ such that $xfy$. We write $f(x)$ or $fx$ to denote this unique element.
-
-Conceptually we can rephrase this as saying that for each ``input'' in the domain $A$, the function $f$ produces a unique ``output'' in the codomain $B$.
-
-\begin{note}
-We write
-\[f:A \to B: x\mapsto f(x) \]
-to show $f$ is a function with domain $A$ and codomain $B$ that maps $x\in A$ to $f(x)\in B$. We say $f$ is a function from $A$ to $B$ or $f$ maps $A$ to $B$. The set of all functions from $A$ to $B$ is denoted $(A\to B)$.
-\end{note}
-
-Depending on the context, functions may also be called \udef{maps} or \udef{transformations}. These are synonyms with slightly different connotations.
 
 \begin{lemma}
-Let $f_1: A_1\to B_1$ and $f_2: A_2\to B_2$ be functions. Then $f_1$ and $f_2$ are the same functions \textup{if and only if}
+Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$. Then
 \begin{enumerate}
-\item $A_1 = A_2$ and $B_1 = B_2$;
-\item $\forall x\in A_1: f_1(x) = f_2(x)$.
+\item $(R^\transp)^\transp = R$;
+\item $\dom(R^\transp) = \codom(R)$ and $\codom(R^\transp) = \dom(R)$;
+\item $^{R^\transp}X = X^R$ and $Y^{R^\transp} = {^RY}$.
 \end{enumerate}
 \end{lemma}
 
-\subsection{Injectivity, surjectivity and bijectivity}
+\begin{lemma}
+Let $R$ be a homogeneous relation on $A$. Then $R$ is symmetric \textup{if and only if} $R = R^\transp$.
+\end{lemma}
+\begin{proof}
+The symmetry of $R$ is equivalent to
+\[ \forall x,y\in A: \; xRy \iff yRx \qquad\iff\qquad \forall x,y\in A: \; xRy \iff xR^\transp y \qquad\iff\qquad R = R^\transp. \]
+\end{proof}
+
+\begin{lemma}
+The following properties of binary endorelations are conserved under taking the converse:
+\begin{enumerate}
+\item all forms of reflexivity, except left and right quasi-reflexivity are swapped;
+\item all forms of symmetry;
+\item all forms of transitivity;
+\item all forms of connexity and trichotomy;
+\item density.
+\end{enumerate}
+Left and right Euclideanness are swapped.
+\end{lemma}
+
+\subsubsection{Complementary relation}
 \begin{definition}
-The terms injective and surjective are commonly applied to functions. A function that is both injective and surjective is \udef{bijective}.
+Let $R$ be a binary relation on $(A, B)$. The \udef{complementary relation} $\overline{R}$ of $R$ is the relation on $(A, B)$ with graph
+\[ \graph(\overline{R}) = \setbuilder{(x,y)}{\neg xRy}. \]
 \end{definition}
-In the context of functions the notions of injectivity and one-to-one coincide.
 \begin{lemma}
-Let $f:A\to B$ be a function. We say
-\begin{itemize}
-\item $f$ is injective, denoted $f: A\rightarrowtail B$, if
-\[ \forall x_1,x_2\in A: f(x_1) = f(x_2) \implies x_1 = x_2; \]
-\item $f$ is surjective, denoted $f: A\twoheadrightarrow B$, if
-\[ \forall y\in B: \exists x\in A: f(x) = y; \]
-\item $f$ is bijective, denoted $f: A\twoheadrightarrowtail B$, if
-\[ \forall y\in B: \exists! x\in A: f(x) = y; \]
-\end{itemize}
-We also say $f$ is an injection, a surjection or a bijection if it is injective, surjective or bijective, respectively.
-
-We will also sometimes write $A \leftrightarrow B$, instead of $A\twoheadrightarrowtail B$, to denote a bijection between $A$ and $B$.
+Let $R$ be a binary relation.
+\begin{enumerate}
+\item $\overline{\overline{R}} = R$;
+\item $\overline{R^\transp} = \overline{R}^\transp$.
+\end{enumerate}
 \end{lemma}
 
 \begin{lemma}
-If $A\subseteq B$ sets, then there exists a canonical injection $\iota: A\to B$, the \udef{inclusion map}
-\[ \iota: A\to B: a\mapsto a. \]
-The inclusion map is often denoted $A\hookrightarrow B$.
+Let $R$ be a homogeneous relation on $A$. Then $R$ is asymmetric \textup{if and only if} $R = \overline{R}^\transp$.
 \end{lemma}
-
-\subsection{Sets associated to functions}
-\subsubsection{Image and preimage}
-As functions are relations they have images and preimages. Let $f:A\to B$ be a function. We write
-\begin{itemize}
-\item $f[X]$ for the image $Xf$;
-\item $f^{-1}[X]$ for the preimage $fX$.
-\end{itemize}
-We can associate to $f$
-\begin{itemize}
-\item an \udef{image function} $\powerset(A) \to \powerset(B)$ that maps subsets of $A$ to their image under $f$;
-\item a \udef{preimage function} $\powerset(B) \to \powerset(A)$ that maps subsets of $B$ to their preimage under $f$.
-\end{itemize}
+\begin{proof}
+The asymmetry of $R$ is equivalent to
+\[ \forall x,y\in A: \; xRy \iff \neg yRx \qquad\iff\qquad \forall x,y\in A: \; xRy \iff x\overline{R}^\transp y \qquad\iff\qquad R = R^\transp. \]
+\end{proof}
 
 \begin{lemma}
-Let $f:A\to B$ be a function. Then the active domain of $f$ is the whole domain of $f$, i.e. $f^{-1}[B] = A$.
-\end{lemma}
-For any subset $X\subseteq B$: $f[f^{-1}[X]]\subseteq X$.
-
-Let $f:A\to B$ be a function and $X,Y\subseteq B$. Then by the general theory of relations (\ref{preimageRelation})
-\begin{itemize}
-\item $f^{-1}[X\cup Y] = f^{-1}[X]\cup f^{-1}[Y]$;
-\item $f^{-1}[X\cap Y] \subset f^{-1}[X]\cap f^{-1}[Y]$;
-\item $f^{-1}[X\setminus Y] \supset f^{-1}[X]\setminus f^{-1}[Y]$;
-\item $f^{-1}[X\symdiff Y] \supset f^{-1}[X]\symdiff f^{-1}[Y]$.
-\end{itemize}
-For functions we additionally have the following:
-\begin{lemma} \label{preimageProperties}
-Let $f:A\to B$ be a function and $X,Y\subseteq B$. Then
-\begin{itemize}
-\item $f^{-1}[X\cap Y] = f^{-1}[X]\cap f^{-1}[Y]$;
-\item $f^{-1}[X\setminus Y] = f^{-1}[X]\setminus f^{-1}[Y]$;
-\item $f^{-1}[X\symdiff Y] = f^{-1}[X]\symdiff f^{-1}[Y]$.
-\end{itemize}
+The following properties of binary endorelations are conserved under taking the complement:
+\begin{enumerate}
+\item symmetry;
+\item asymmetry.
+\end{enumerate}
+The following properties are swapped:
+\begin{enumerate}
+\item reflexivity $\leftrightarrow$ irreflexivity.
+\end{enumerate}
 \end{lemma}
 
-Let $f:A\to B$ be a function and $X,Y\subseteq A$. Then by the general theory of relations (\ref{imageRelation})
-\begin{itemize}
-\item $f[X\cup Y] = f[X]\cup f[Y]$;
-\item $f[X\cap Y] \subset f[X]\cap f[Y]$;
-\item $f[X\setminus Y] \supset f[X]\setminus f[Y]$;
-\item $f[X\symdiff Y] \supset f[X]\symdiff f[Y]$.
-\end{itemize}
-For \emph{injective} functions we additionally have the following:
+\subsubsection{Composition of relations}
+\begin{definition}
+Let $R$ be a relation on $(A, B)$ and $S$ a relation on $(B, C)$. Then the \udef{composition} of $R$ and $S$ is a new relation $R;S$ on $(A, C)$ with graph
+\[ \graph(R;S) = \setbuilder{(x,z)\in A\times C}{\exists y\in B: xRy \land ySz}. \]
+If $R$ and $S$ are relations such that the codomain of one is the domain of the other, they are called \udef{composable}.
+
+If $R$ and $S$ are composable we also define the notation
+\[ S\circ R \defeq R;S. \]
+\end{definition}
 \begin{lemma}
-Let $f:A\to B$ be an injective function and $X,Y\subseteq A$. Then
-\begin{itemize}
-\item $f[X\cap Y] = f[X]\cap f[Y]$;
-\item $f[X\setminus Y] = f[X]\setminus f[Y]$;
-\item $f[X\symdiff Y] = f[X]\symdiff f[y]$.
-\end{itemize}
-In fact any of these equalities is equivalent to $f$ being injective.
+Let $R,S,T$ be composable relations.
+\begin{enumerate}
+\item The composition is associative: $R;(S;T) = (R;S);T$.
+\item $(R;S)^\transp = S^\transp ; R^\transp$.
+\end{enumerate}
 \end{lemma}
 
-\subsubsection{The kernel of a function}
+\begin{lemma}
+Let $R$ be a relation on $(A, B)$ and $S$ a relation on $(B, C)$. Let $X\subset A$ and $Y\subset C$. Then
+\begin{enumerate}
+\item $X^{R;S} = (X^R)^S = X^{S\circ R}$ and $ = ((X)R)S$;
+\item $^{R;S}Y = {^R({^SY})} = {^{S\circ R}Y}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $A,B,C,D$ be relations such that $\graph(A) \subseteq \graph(B)$ and $\graph(C)\subseteq \graph(D)$ and both $A,B$ and $C,D$ are composable, then $\graph(A;C)\subseteq \graph(B;D)$.
+\end{lemma}
+\begin{proof}
+Assume the hypotheses of the lemma and let $(x,y) \in \graph(AC)$. Then there exists a $z$ such that $xAz$ and $zCy$. By hypothesis this means $xBz$ and $zDy$, so $x(B;D)y$.
+\end{proof}
+
+
+\begin{definition}
+Let $R$ be a homogeneous relation on a set $A$. Then we can define $R^n$ as the $n$-fold composition of $f$:
+\[ R^n \defeq \underbrace{R;R; \ldots ;R}_{\text{$n$ times}}. \]
+\end{definition}
+
+TODO: refine
+\begin{proposition}
+\begin{itemize}
+\item transitive equivalent with $\graph(R^2) \subseteq \graph(R)$
+\item reflexive implies $\graph(R) \subseteq \graph(R^2)$
+\end{itemize}
+\end{proposition}
+so preorder sufficient, but not necessary for idempotent.
+
+\subsubsection{Restrictions and extensions}
+\begin{definition}
+Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y \subseteq B$. The \udef{restriction} of $R$ to $(X,Y)$ is the relation $R|^Y_X$ on $(X,Y)$ with graph
+\[ \graph(R|^Y_X) = \graph(R)\cap (X\times Y). \]
+\begin{itemize}
+\item If $Y = B$, then the restriction is called the \udef{left-restriction} of $R$ to $X$ and denoted $\left.R\right|_X$.
+\item If $X = A$, then the restriction is called the \udef{right-restriction} of $R$ to $Y$ and denoted $\left.R\right|^Y$.
+\end{itemize}
+If $S$ is a restriction of $R$, then $R$ is called an \udef{extension} of $S$.
+\end{definition}
+
+\begin{lemma}
+Let $R$ be a relation on $(A, B)$, $X_1,X_2\subseteq A$ and $Y_1,Y_2 \subseteq B$. Then
+\[ \left.\left(R|_{X_1}^{Y_1}\right)\right|_{X_2}^{Y_2} = R|_{X_1\cap X_2}^{Y_1\cap Y_2}. \]
+\end{lemma}
+
+\begin{lemma} \label{relationPropertiesRestriction}
+The following properties of binary endorelations are conserved under taking left- and right-restrictions to the same set:
+\begin{enumerate}
+\item all forms of reflexivity;
+\item all forms of symmetry;
+\item all forms of transitivity;
+\item all forms of connexity and trichotomy;
+\item Euclideanness.
+\end{enumerate}
+\end{lemma}
+Basically only not density.
+
+\subsection{Unicity and totality}
+\begin{definition}
+Let $R$ be a relation on $(A, B)$. We call $R$
+\begin{itemize}
+\item \udef{left-total} or \udef{serial} if $A^R = B$;
+\item \udef{right-total} or \udef{surjective} or \udef{onto} if $A = {^RB}$;
+\item \udef{left-unique} or \udef{injective} if
+\[ \forall x_1,x_2\in A: \forall y\in B: \; x_1Ry \land x_2Ry \implies x_1=x_2; \]
+\item \udef{right-unique} or \udef{functional} if
+\[ \forall x\in A: \forall y_1,y_2\in B: \; xRy_1 \land xRy_2 \implies y_1=y_2. \]
+\end{itemize}
+We may also call a binary relation
+\begin{itemize}
+\item \textbf{one-to-one} if it is injective and functional;
+\item \textbf{one-to-many} if it is injective and not functional;
+\item \textbf{many-to-one} if it is not injective and functional;
+\item \textbf{many-to-many} if it is not injective and not functional.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{imagePreimageUniqueness}
+Let $R$ be a relation on $(A, B)$, $X,Y\subset A$ and $Z,W\subset B$. If $R$ is left-unique, then
+\begin{enumerate}
+\item $(X\cup Y)^R = X^R\cup Y^R$;
+\item $(X\cap Y)^R = X^R\cap Y^R$;
+\item $(X\setminus Y)^R = X^R\setminus Y^R$;
+\item $(X\symdiff Y)^R = X^R\symdiff Y^R$.
+\end{enumerate}
+If $R$ is right-unique, then
+\begin{enumerate}
+\item $^R(Z\cup W) = {^RZ}\cup {^RW}$;
+\item $^R(Z\cap W) = {^RZ}\cap {^RW}$;
+\item $^R(Z\setminus W) = {^RZ}\setminus {^RW}$;
+\item $^R(Z\symdiff W) = {^RZ}\symdiff {^RW}$.
+\end{enumerate}
+\end{lemma}
+
+\subsubsection{Kernels}
+
 \begin{definition}
 Let $f:A\to B$ be a function. The \udef{kernel} of $f$ is
 \[ \ker f \defeq \setbuilder{(x,y)\in A\times A}{f(x) = f(y)}. \]
@@ -1302,31 +1330,96 @@ We show $f''$ is well-defined. Let $[x]_{\ker f}\in A/(\ker f)$ and let $x_1,x_2
 so $f''$ is well-defined.
 \end{proof}
 
-\subsection{Functions with multiple inputs}
-We can easily give a function multiple inputs from multiple domains by first joining them into an $n$-tuple, i.e. considering the Cartesian product of the domains as the domain of the function.
 
-\begin{example}
-A function $f$ that takes an input in $A$ and one in $B$ to generate an output in $C$ can be written as
-\[ f: A\times B \to C: (a,b)\mapsto f(a,b). \]
-\end{example}
+\begin{proposition}
+Let $X,Y$ be sets and $f: X \to Z$ a function. Then
+\begin{enumerate}
+\item $f;f^\transp = \ker f$;
+\item $f^\transp;f = \id_{\im(f)}$.
+\end{enumerate}
+In particular $f^\transp;f \subseteq \id_Z$ and $\id_X \subseteq f;f^\transp$.
+\end{proposition}
+\begin{proof}
+(1) Let $x,y\in X$. Then
+\[ x(f;f^\transp) y \iff \exists z\in Z: f(x) = z = f(y) \iff (x,y)\in \ker f. \]
 
-\subsubsection{Currying}
+(2) Let $x,y\in Z$. Then
+\[ x(f^\transp;f) y \iff \exists z\in X: x = f(z) = y \iff x=y \in \im f. \]
+\end{proof}
+
+
+
+
+
+\section{Functions}
+TODO: equiv for equality!
+
 \begin{definition}
-Given a function $f: A\times B \to C$, we can \udef{curry} it to obtain a new function
-\[ h: A \to (B\to C): a\mapsto f(a,-) \]
-where $f(a,-)$ is the function
-\[ f(a,-): B \to C: b\mapsto f(a,b). \]
+A \udef{function} is a binary relation that is functional and serial.
 \end{definition}
+If a relation $f$ on $(A, B)$ is a function, then for every $x\in A$, there is a unique $y\in B$ such that $xfy$. We write $f(x)$ to denote this unique element.
+
+Conceptually we can rephrase this as saying that for each ``input'' in the domain $A$, the function $f$ produces a unique ``output'' in the codomain $B$.
+
+\begin{note}
+We write
+\[f:A \to B: x\mapsto f(x) \]
+to show $f$ is a function with domain $A$ and codomain $B$ that maps $x\in A$ to $f(x)\in B$. We say $f$ is a function from $A$ to $B$ or $f$ maps $A$ to $B$. The set of all functions from $A$ to $B$ is denoted $(A\to B)$.
+\end{note}
+
+Depending on the context, functions may also be called \udef{maps} or \udef{transformations}. These are synonyms with slightly different connotations.
+
 \begin{lemma}
-For given sets $A,B,C$ the act of currying defines a bijective function
-\[ \operatorname{curry}: (A\times B \to C) \twoheadrightarrowtail (A \to (B\to C)). \]
+Let $f_1: A_1\to B_1$ and $f_2: A_2\to B_2$ be functions. Then $f_1$ and $f_2$ are the same functions \textup{if and only if}
+\begin{enumerate}
+\item $A_1 = A_2$ and $B_1 = B_2$;
+\item $\forall x\in A_1: f_1(x) = f_2(x)$.
+\end{enumerate}
 \end{lemma}
 
-\subsubsection{Partial application}
+\subsection{Image and preimage}
+As functions are relations they have images and preimages. Let $f:A\to B$ be a function. We write
+\begin{itemize}
+\item $f[X]$ for the image $X^f$;
+\item $f^{-1}[X]$ for the preimage $^fX$.
+\end{itemize}
+
+We can associate to any relation $R$ on $(A,B)$
+\begin{itemize}
+\item an \udef{image function} $\powerset(A) \to \powerset(B): X \mapsto X^R$;
+\item a \udef{preimage function} $\powerset(B) \to \powerset(A): X \mapsto {^RX}$;
+\item a \udef{commonality function} $\powerset(A) \to \powerset(B): X \mapsto X^{\overrightarrow{R}}$;
+\item a \udef{precommonality function} $\powerset(B) \to \powerset(A): X \mapsto {^{\overleftarrow{R}}X}$.
+\end{itemize}
+
+\subsection{Injectivity, surjectivity and bijectivity}
 \begin{definition}
-Let $f: A\times B \to C$ be a function. A \udef{partial application} $p$ of $f$ is an element of the image of the curried function:
-\[ p\in \operatorname{curry}(f)[A]. \]
+The terms injective and surjective are commonly applied to functions. A function that is both injective and surjective is \udef{bijective}.
 \end{definition}
+In the context of functions the notions of injectivity and one-to-one coincide.
+\begin{lemma}
+Let $f:A\to B$ be a function. We say
+\begin{itemize}
+\item $f$ is injective, denoted $f: A\rightarrowtail B$, if
+\[ \forall x_1,x_2\in A: f(x_1) = f(x_2) \implies x_1 = x_2; \]
+\item $f$ is surjective, denoted $f: A\twoheadrightarrow B$, if
+\[ \forall y\in B: \exists x\in A: f(x) = y; \]
+\item $f$ is bijective, denoted $f: A\twoheadrightarrowtail B$, if
+\[ \forall y\in B: \exists! x\in A: f(x) = y; \]
+\end{itemize}
+We also say $f$ is an injection, a surjection or a bijection if it is injective, surjective or bijective, respectively.
+
+We will also sometimes write $A \leftrightarrow B$, instead of $A\twoheadrightarrowtail B$, to denote a bijection between $A$ and $B$.
+\end{lemma}
+
+\begin{lemma}
+If $A\subseteq B$ sets, then there exists a canonical injection $\iota: A\to B$, the \udef{inclusion map}
+\[ \iota: A\to B: a\mapsto a. \]
+The inclusion map is often denoted $A\hookrightarrow B$.
+\end{lemma}
+
+
+
 
 \subsection{Constructing new functions}
 Constructions defined for relations are in particular applicable to functions.
@@ -1338,7 +1431,7 @@ The functions $f:A\to B$ and $g:B\to C$ are composable as relations and the rela
 is a function. In particular it has functional form
 \[ g\circ f: A\to C: x\mapsto g(f(x)). \]
 \end{lemma}
-Because of the simplicity of $(g\circ f)(x) = g(f(x))$, the notation $\circ$ is almost exclusively used, when dealing with functions.
+Because of the simplicity of $(g\circ f)(x) = g(f(x))$, the notation $\circ$ is almost exclusively used when dealing with functions.
 
 \begin{definition}
 Let $f, g:A\to A$ be functions. We say $f$ and $g$ \udef{commute} if $f\circ g = g\circ f$.
@@ -1381,7 +1474,7 @@ Let $f:X\to Y$ be a function. The following are equivalent:
 \begin{enumerate}
 \item $f$ has a left inverse $g$;
 \item $f^\transp$ is a partial function from $X$ to $Y$; 
-\item $f^\transp \leq g$;
+\item $\graph(f^\transp) \subseteq \graph(g)$;
 \item $f$ is injective.
 \end{enumerate}
 \end{lemma}
@@ -1437,7 +1530,33 @@ Let $f: A\to B$ and $g: X\to Y$ be functions. Then the \udef{tuple function} of 
 In particular if $f=g$, we say the tuple function is the \udef{pointwise application} of $f$. We write $f$ instead of $(f,f)$.
 \end{definition}
 
-\section{Partial functions}
+\subsection{Functions with multiple inputs}
+We can easily give a function multiple inputs from multiple domains by first joining them into an $n$-tuple, i.e. considering the Cartesian product of the domains as the domain of the function.
+
+\begin{example}
+A function $f$ that takes an input in $A$ and one in $B$ to generate an output in $C$ can be written as
+\[ f: A\times B \to C: (a,b)\mapsto f(a,b). \]
+\end{example}
+
+\subsubsection{Currying}
+\begin{definition}
+Given a function $f: A\times B \to C$, we can \udef{curry} it to obtain a new function
+\[ h: A \to (B\to C): a\mapsto f(a,-) \]
+where $f(a,-)$ is the function
+\[ f(a,-): B \to C: b\mapsto f(a,b). \]
+\end{definition}
+\begin{lemma}
+For given sets $A,B,C$ the act of currying defines a bijective function
+\[ \operatorname{curry}: (A\times B \to C) \twoheadrightarrowtail (A \to (B\to C)). \]
+\end{lemma}
+
+\subsubsection{Partial application}
+\begin{definition}
+Let $f: A\times B \to C$ be a function. A \udef{partial application} $p$ of $f$ is an element of the image of the curried function:
+\[ p\in \operatorname{curry}(f)[A]. \]
+\end{definition}
+
+\subsection{Partial functions}
 \begin{definition}
 A \udef{partial function} is a relation that is functional (but not necessarily serial). If we wish to emphasise a function is both functional and serial, we may call it a \udef{total function}.
 \end{definition}
@@ -1448,45 +1567,142 @@ For all $a\in A$ we write
 \[ f(a)\downarrow \defequiv a\in\dom(f),\qquad f(a)\uparrow \defequiv a\notin\dom(f) \]
 We can read $f(a)\downarrow$ as ``$f$ converges at $a$'' and $f(a)\uparrow$ as ``$f$ diverges at $a$''.
 
-\section{A calculus of relations}
-\begin{proposition}
+
+\section{Relational structures}
+\begin{definition}
+A \udef{relational structure} is a structured set $\sSet{A, R}$ where $R$ is a homogeneous relation on the set $A$.
+\end{definition}
+
+
+\subsection{Duality}
+\begin{definition}
+Let $\sSet{A,R}$ be a relational structure.
+
+The relational structure \udef{dual} to $\sSet{A,R}$ is $\sSet{A^o,R^o}\defeq \sSet{A,R^\transp}$.
+\end{definition}
+
+
+
+\subsection{Functions on relational structures}
+\begin{definition}
+Let $(A, R)$ and $(B, S)$ be relational structures and $f: A\to B$ a function. We say
 \begin{itemize}
-\item transitive equivalent with $\graph(R^2) \subseteq \graph(R)$
-\item reflexive implies $\graph(R) \subseteq \graph(R^2)$
+\item $f$ is \udef{relation-preserving} if
+\[ \forall x,y\in A: xRy \implies f(x)Sf(y); \]
+\item $f$ is \udef{relation-reflecting} if
+\[ \forall x,y\in A: f(x)Sf(y) \implies xRy; \]
+\item $f$ is a \udef{relation embedding} if it is relation-preserving and -reflecting:
+\[ \forall x,y\in A: xRy \iff f(x)Sf(y). \]
 \end{itemize}
-\end{proposition}
-so preorder sufficient, but not necessary for idempotent.
+\end{definition}
 
 \begin{lemma}
-Let $A,B,C,D$ be relations such that $\graph(A) \subseteq \graph(B)$ and $\graph(C)\subseteq \graph(D)$ and both $A,B$ and $C,D$ are composable, then $\graph(A;C)\subseteq \graph(B;D)$.
+Let $(A, R)$ and $(B, S)$ be relational structures and $f: A\to B$ a function. Then
+\begin{enumerate}
+\item $f$ is relation-preserving \textup{if and only if} $\graph(R) \subseteq \graph{f;S;f^\transp}$;
+\item $f$ is relation-reflecting \textup{if and only if} $\graph(R) \supseteq \graph{f;S;f^\transp}$;
+\item $f$ is a relation embedding \textup{if and only if} $\graph(R) = \graph{f;S;f^\transp}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $P,Q$ be ordered sets and $f: P\to Q$ order-reflecting. Then
+\[ \forall y,z \in f^{-1}[f(x)]: y\Yleft z \land z\Yleft y. \]
 \end{lemma}
 \begin{proof}
-Assume the hypotheses of the lemma and let $(x,y) \in graph(AC)$. Then there exists a $z$ such that $xAz$ and $zCy$. By hypothesis this means $xBz$ and $zDy$, so $x(B;D)y$.
+We calculate
+\[ y\in f^{-1}[f(x)] \iff f(y) = f(x) \implies y\Yleft x \land x\Yleft y. \]
+The same is true for $z \in f^{-1}[f(x)]$, so we conclude by transitivity.
 \end{proof}
-
-Relation completely determined by images of singletons.
-
-\begin{proposition}
-Let $X,Y$ be sets and $f: X \to Z$ a function. Then
+TODO: make corollary:
+\begin{lemma} \label{orderReflectionIsInjective} \label{strictOrderPreservationIsInjective}
+Let $P,Q$ be posets and $f: P\to Q$. The following are sufficient conditions for $f$ to be injective:
 \begin{enumerate}
-\item $f;f^\transp = \ker f$;
-\item $f^\transp;f = \id_{\im(f)}$.
+\item $f$ is order-reflecting;
+\item $f$ is strictly order-preserving and $P$ is totally ordered.
 \end{enumerate}
-In particular $f^\transp;f \subseteq \id_Z$ and $\id_X \subseteq f;f^\transp$.
-\end{proposition}
+\end{lemma}
 \begin{proof}
-(1) Let $x,y\in X$. Then
-\[ x(f;f^\transp) y \iff \exists z\in Z: f(x) = z = f(y) \iff (x,y)\in \ker f. \]
+(1) If $f(x) = f(y)$, then $x\preceq y$ and $y\preceq x$, so $x=y$ by anti-symmetry.
 
-(2) Let $x,y\in Z$. Then
-\[ x(f^\transp;f) y \iff \exists z\in X: x = f(z) = y \iff x=y \in \im f. \]
+(2) Let $f$ be the strict order-preserving function and $x,y\in P$. Assume $f(x)=f(y)$. Assume, towards a contradiction, that $x\neq y$, then either (by totality) $x< y$ and $f(x) < f(y)$ or $y < x$ and $f(y)<f(x)$. Both cases contradict $f(x)=f(y)$.
 \end{proof}
-TODO: general relations! + link inclusions with totality and uniqueness (also injectivity and sujectivity)
 
-TODO: $\upset q = q\leq$ and $\downset q = \leq q$.
+\begin{lemma}
+Let $f:P\to Q$ be a function between posets. Then
+\begin{enumerate}
+\item If $f$ preserves strict order, then it is order-preserving.
+\item If $f$ is order-reflecting, then it reflects strict order.
+\end{enumerate}
+If $f$ is injective, the opposite implications also hold.
+\end{lemma}
+\begin{corollary}
+Let $f: P\to Q$ be a function between posets.
+\begin{enumerate}
+\item If $f$ is an order embedding, then it is a strict order embedding.
+\item If $P$ is totally ordered, the converse implication holds as well.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Use \ref{orderReflectionIsInjective}.
+\end{proof}
 
-\subsection{Relational structures}
-\subsubsection{Functions on relational structures}
+The converse does not hold in general if $P$ is a poset because a strict order embedding between posets is not necessarily injective. A counterexample is
+\[
+\begin{tikzcd}
+& \top & \\
+x \ar[ur, dash] & & y \ar[ul, dash] \\
+& \bot \ar[ul, dash] \ar[ur, dash] &
+\end{tikzcd} \qquad \begin{tikzcd} {} \arrow[rr, "f"] & {}& {}\end{tikzcd} \qquad \begin{tikzcd}
+f(\top) \\ f(x) = f(y) \ar[u,dash] \\ f(\bot) \ar[u,dash]
+\end{tikzcd}.
+\]
+
+\begin{lemma} \label{equivalenceOrderPreservingReflecting}
+Let $f:P\to Q$ be a function between totally ordered sets. Then
+\begin{enumerate}
+\item If $f$ preserves strict order, then it is order-preserving.
+\item If $f$ is order-reflecting, then it reflects strict order.
+\end{enumerate}
+If $f$ is injective, the opposite implications also hold.
+\end{lemma}
+\begin{proof}
+(1) Assume $f$ order-reflecting. Assume $x\leq y$. Either $f(x)\leq f(y)$ or $f(y)\leq f(x)$. If $f(y)\leq f(x)$, then
+\[ y\leq x \implies x=y \implies f(x)=f(y) \implies f(x)\leq f(y). \]
+So in both cases $f(x)\leq f(y)$.
+
+(2) Assume $f$ preserves strict order. Assume $f(x) < f(y)$. Either $x<y, y<x$ or $x=y$. If either $y<x$ or $x=y$ hold, preservation of strict order yields a contradiction. So $x<y$.
+
+(1') Assume $f$ order-preserving and injective. Assume $f(x)\leq f(y)$. Either $x\leq y$ or $y\leq x$. If $y\leq x$, then
+\[ f(y)\leq f(x) \implies f(x)=f(y) \implies x= y \implies x\leq y. \]
+So in both cases $x\leq y$.
+
+(2') Assume $f$ is injective reflects strict order. Assume $x < y$. Either $f(x)<f(y), f(y)<f(x)$ or $f(x)=f(y)$. If $f(y)<f(x)$, preservation of strict order yields a contradiction. If $f(x)=f(y)$, injectivity yields a contradiction. So $f(x)<f(y)$.
+\end{proof}
+
+\begin{definition}
+A function $f: P\to P$ on an ordered set $(P,\Yleft)$ into itself is
+\begin{itemize}
+\item \udef{expansive} if $\forall x\in P: x\Yleft f(x)$;
+\item \udef{contractive} if $\forall x\in P: f(x)\Yleft x$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $f:P\to P$ be a function on an ordered set $(P,\Yleft)$. Consider $(P\to P)$ to be ordered by pointwise order. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is expansive;
+\item $\id_P \Yleft f$;
+\item $\graph(f) \subseteq \graph(\Yleft)$.
+\end{enumerate}
+The following are also equivalent:
+\begin{enumerate}
+\item $f$ is contractive;
+\item $f \Yleft \id_P$;
+\item $\graph(f) \subseteq \graph(\Yleft^\transp)$.
+\end{enumerate}
+\end{lemma}
+
 
 function $f$ is $R$-preserving iff $R \subseteq f;R;f^\transp$.
 
@@ -1524,7 +1740,7 @@ Let $\sSet{X, R}$ and $\sSet{Y, S}$ be relational structures and $f: X\to Y$ a f
 
 
 
-\subsubsection{Relation isomorphisms}
+\subsection{Relation isomorphisms}
 \begin{definition}
 Let $(A_1, R_1)$ and $(A_2, R_2)$ be relational structures. A bijection $\phi:A_1 \twoheadrightarrowtail A_2$ such that
 \[ \forall (s_1,t_1)\in R_1: (\phi(s_1),\phi(t_1))\in R_2 \qquad \text{and} \qquad \forall (s_2,t_2)\in R_2: (\phi^{-1}(s_2),\phi^{-1}(t_2))\in R_1, \]
@@ -1547,20 +1763,9 @@ Let $(A_1, R_1)$ and $(A_2, R_2)$ be isomorphic relational structures. Then $R_1
 E.g.: reflexivity, symmetry, transitivity, being an equivalence relation etc.
 
 
-\subsection{Identical domain and codomain}
-TODO after natural numbers?
 
-Let $f: A\to A$ be a function with $\dom(f) = \codom(f)$. Then we can define $f^n$ as the $n$-fold composition of $f$:
-\[ f^n \defeq \underbrace{f\circ f \circ \ldots \circ f}_{\text{$n$ times}}. \]
 
-\subsection{Fixed points}
-\begin{definition}
-Let $f: A\to A$ be a function with $\dom(f) = \codom(f)$. Then $x\in A$ is called a \udef{fixed point} if $f(x) = x$. 
-\end{definition}
 
-\begin{lemma} \label{fixedPointsMultipleComposition}
-If $x\in A$ is a fixed point of $f:A\to A$, then $x$ is a fixed point of $f^n$ for all $n\in \N$.
-\end{lemma}
 
 
 
@@ -1958,7 +2163,61 @@ Let $s:\N\to\N$ be a non-decreasing sequence of natural numbers.
 \end{definition}
 
 
-\chapter{Indexing and indexed sets}
+\chapter{Going from two to many}
+
+\section{Tuples}
+\begin{definition}
+Let $a_1, \ldots, a_n$ be objects. A definition of $(a_1, \ldots, a_n)$ is called an \udef{$n$-tuple operation} (or just \udef{tuple operation}) if it satisfies
+\begin{itemize}
+\item $(a_1, \ldots, a_n) = (b_1, \ldots, b_n) \iff \forall i\in (1:n): a_i=b_i$;
+\item for all sets $A,\ldots, A_n$, $\setbuilder{(a_1,\ldots, a_n)}{\forall i\in (1:n): a_i \in A_i}$ is a set.
+\end{itemize}
+We call
+\[ \bigtimes_{i=1}^nA_i = \setbuilder{(a_1,\ldots, a_n)}{\forall i\in (1:n): a_i \in A_i} \]
+the \udef{Cartesian product} of $A_1,\ldots, A_n$.
+\end{definition}
+
+\begin{proposition} \label{pairNTupleDefinition}
+Let $a_1, \ldots, a_n$ be objects. Defining $(a_1, \ldots, a_n)$ as the string $\seq{a_1, \ldots, a_n}$ of length $n$ is a valid $n$-tuple operation.
+\end{proposition}
+
+We can also directly use a pair operation to define a $n$-tuple operation.
+\begin{proposition}
+Let $a_1, \ldots, a_n$ be objects. Define the function $f_a$ recursively by
+\[ \begin{cases}
+f_a(0) = \emptyset \\
+f_a(i+1) = \begin{cases}
+(f_a(i), a_{i+1}) & i < n \\
+(f_a(i), \emptyset) & i \geq n
+\end{cases}
+\end{cases} \]
+Defining $(a_1, \ldots, a_n)$ as $f_a(n)$ is a valid $n$-tuple operation.
+\end{proposition}
+
+Informally, this construction can be described as follows:
+\begin{itemize}
+\item The $0$-tuple is defined as the empty set $\emptyset$;
+\item A $1$-tuple containing $a$ is defined as $(\emptyset, a)$;
+\item An $n$-tuple, with $n > 1$, is defined as an ordered pair of its last entry and an $(n - 1)$-tuple which contains the preceding entries:
+\[ (a_1, \ldots, a_n) = ((a_1, \ldots, a_{n-1}), a_n) = ((\ldots((\emptyset, a_1), a_2), \ldots), a_n). \]
+\end{itemize}
+For example $(1,2,3,4) = ((((\emptyset, 1), 2), 3), 4)$.
+
+\subsection{Association relations}
+TODO: $((a,b),c) \approx (a,(b,c))$.
+
+
+\section{$n$-ary relations}
+\begin{definition}
+Let $A_1, \ldots, A_n$ be sets and $G \subseteq \bigtimes_{i=1}^nA_i$. We call $R = (G, (A_1, \ldots, A_n))$ an \udef{$n$-ary relation} on $(A_1, \ldots, A_n)$ and $\graph(R) \defeq G$ the \udef{graph} of $R$.
+\end{definition}
+In particular a \udef{ternary relation} on $(A,B,C)$ is a structured sets $(G,(A,B,C))$ where $G \subset A\times B\times C$.
+
+\begin{proposition}
+Let $A_1, \ldots, A_n$ be sets and $G \subseteq \bigtimes_{i=1}^nA_i$. Using the definition of $n$-tuple in \ref{pairNTupleDefinition}, $R = (G, (A_1 \times \ldots \times A_{n-1}), A_n))$ is a binary relation.
+\end{proposition}
+
+\section{Operations on sequences of sets}
 \begin{definition}
 Let $I$ be an arbitrary index set, $A$ some set and let there be a surjective function $a: I\twoheadrightarrow A: i \mapsto a_i$.
 
@@ -1970,7 +2229,7 @@ Notice we do not require the function $a$ to be injective and thus multiple inde
 
 Sometimes the notation $(a_i)_{i\in I}$ is used, if $I$ is ordered, to emphasise the ordering of $\{a_i\}_{i\in I}$ by $I$.
 
-\section{Union and intersection of indexed families of sets}
+\subsection{Union and intersection of indexed families of sets}
 Let $\{A_i\}_{i\in I}$ be an indexed family of sets. Then we write
 \begin{align*}
 \bigcup_{i\in I} A_i &\defeq \bigcup A[I] \\
@@ -1989,7 +2248,7 @@ A\times \bigcap_{i\in I} B_i &= \bigcap_{i\in I}A\times B_i.
 \end{align*}
 \end{lemma}
 
-\subsection{Multiple indices}
+\subsubsection{Multiple indices}
 If the index set $I$ is a Cartesian product $I=J\times K$, then we also write
 \[ \bigcup_{(j,k)\in I} A_{j,k} = \bigcup_{\substack{j\in J \\ k\in K}} A_{j,k} \qquad\text{and}\qquad \bigcap_{(j,k)\in I} A_{j,k} = \bigcap_{\substack{j\in J \\ k\in K}} A_{j,k}. \]
 
@@ -1997,7 +2256,7 @@ If $\{A_{j,k}\}_{(j,k) \in J\times K}$ is such an indexed family of sets, then $
 \[ \bigcup_{j\in J}A_{j,k} \defeq \left(k'\mapsto \bigcup_{j\in J}A_{j,k'}\right) \qquad\text{and}\qquad \bigcap_{j\in J}A_{j,k} \defeq \left(k'\mapsto \bigcap_{j\in J}A_{j,k'}\right) \]
 as well as something similar for the first argument.
 
-\subsection{Associativity and commutativity}
+\subsubsection{Associativity and commutativity}
 \begin{lemma} \label{setAssociativityCommutativity}
 Let $\{A_{j,k}\}_{(j,k) \in J\times K}$ be an indexed family of sets. Then
 \begin{align*}
@@ -2021,7 +2280,7 @@ Let $\{A_{i}\}_{i \in I}$ and $\{B_{j}\}_{j \in J}$ be indexed families of sets.
 If both families are indexed by the same index set $I$, we may take the union/intersection over just $I$, not $I\times I$.
 \end{corollary}
 
-\subsection{Distributivity}
+\subsubsection{Distributivity}
 \begin{lemma} \label{setDistributivity}
 Let $\{A_{i}\}_{i \in I}, \{B_{j}\}_{j \in J}$ be indexed families of sets and $C$ a set. Then
 \[ \left(\bigcup_{i\in I}A_i\right)\cap B = \bigcup_{i\in I}(A_i\cap B) \qquad\text{and}\qquad \left(\bigcap_{i\in I}A_i\right)\cup B = \bigcap_{i\in I}(A_i\cup B). \]
@@ -2035,7 +2294,7 @@ Let $\{A_{j,k}\}_{(j,k) \in J\times K}$ be an indexed family of sets. Then
 \end{lemma}
 In general these two sets are not equal!
 
-\subsection{Union and intersection of index sets}
+\subsubsection{Union and intersection of index sets}
 
 \begin{lemma} \label{unionIntersectionLabelSet}
 Let $\mathcal{I}$ be a family of index sets and let $A_i$ be a set for all $i\in \bigcup \mathcal{I}$. Then
@@ -2075,7 +2334,7 @@ x\in \bigcup_{i\in \bigcap \mathcal{I}} A_i &\iff \exists i\in \bigcap \mathcal{
 (4) TODO
 \end{proof}
 
-\section{Arbitrary Cartesian products}
+\subsection{Arbitrary Cartesian products}
 \begin{definition}
 Let $\{A_i\}_{i\in I}$ be an arbitrary indexed family of sets, then we define the \udef{Cartesian product} of $\{A_i\}_{i\in I}$ to be
 \[ \prod_{i\in I}A_i \defeq \left\{ f\in \left(\left. I \to \bigcup_{i\in I}A_i \right) \; \right| \; \forall i\in I: f(i) \in A_i \right\}. \]
@@ -2100,7 +2359,7 @@ The bijection is given by
 \[ (a,b) \quad\leftrightarrow\quad \{(0,a),(1,b)\} \qquad \forall a\in A_0, b\in A_1. \]
 \end{proof}
 
-\subsection{Distributing over unions and intersections}
+\subsubsection{Distributing over unions and intersections}
 \begin{lemma}
 Let $\{A_{i}\}_{i \in I}$ and $\{B_{j}\}_{j \in J}$ be indexed families of sets, indexed over the same index family $I$. Then
 \[ \left(\prod_{i\in I}A_i\right)\cap\left(\prod_{i\in I}B_i\right) = \prod_{i\in I}(A_i\cap B_i) \qquad\text{but}\qquad \left(\prod_{i\in I}A_i\right)\cup\left(\prod_{i\in I}B_i\right) \subset \prod_{i\in I}(A_i\cup B_i). \]
@@ -2111,7 +2370,7 @@ Let $\{A_{i,j}\}_{(i,j) \in I\times J}$ be an indexed family of sets. Then
 \[ \bigcap_{i\in I}\left(\prod_{j\in J}A_{i,j}\right) = \prod_{j\in J}\left(\bigcap_{i\in I}A_{i,j}\right) \qquad\text{but}\qquad \bigcup_{i\in I}\left(\prod_{j\in J}A_{i,j}\right) \subset \prod_{j\in J}\left(\bigcup_{i\in I}A_{i,j}\right). \]
 \end{lemma}
 
-\section{Disjoint union}
+\subsection{Disjoint union}
 \begin{definition}
 The \udef{(outer) disjoint union} of a family of sets $\{A_i\}_{i\in I}$ is defined as
 \[ \bigsqcup_{i\in I}A_i \defeq \bigcup_{i\in I}\{i\}\times A_i. \]
@@ -2135,7 +2394,7 @@ Let $\{A_i\}_{i\in I}$ be a family of sets.
 \[ \bigsqcup_{i\in I}A_i = \left\{ (i,a)\in I\times \bigcup_{i\in I}A_i \;|\; a\in A_i \right\} \]
 \end{lemma}
 
-\section{Images and preimages}
+\subsection{Images and preimages}
 \begin{lemma}
 Let $R \subseteq A\times B$ be a relation, $\{X_i\}_{i\in I}$ a family of subsets of $A$ and $\{Y_j\}_{j\in J}$ a familiy of subsets of $B$. Then
 \begin{enumerate}
