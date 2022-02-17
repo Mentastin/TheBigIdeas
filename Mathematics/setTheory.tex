@@ -785,6 +785,8 @@ If we say $R$ is a (homogenous) relation on $A$, we mean $\dom(R) = A = \codom(R
 A relation is \udef{heterogeneous} is the domain and codomain are different.
 \end{definition}
 
+Often we will write $R \subseteq S$ as a shorthand for $\graph(R)\subseteq \graph(S)$ if $\dom(R) = \dom(S)$ and $\codom(R) = \codom(S)$. Similarly we may write $R\cup S$, $R\cap S$ etc.
+
 \begin{definition}
 Let $A,B$ be sets. We have the following relations:
 \begin{itemize}
@@ -792,8 +794,28 @@ Let $A,B$ be sets. We have the following relations:
 \item the \udef{universal relation} $U_{A,B}$ on $(A, B)$ has graph $A\times B$;
 \item the \udef{identity relation} $\id_A$ on $A$ has graph $\setbuilder{(x,y)\in A\times A}{x=y}$.
 \end{itemize}
+We may also write $U_A$ instead of $U_{A,A}$ and $E_A$ instead of $E_{A,A}$.
 \end{definition}
 The identity relation on $A$ is also known as the \udef{diagonal relation} on $A$.
+
+\begin{lemma}
+Let $A,B,C,D$ be sets. Then
+\begin{enumerate}
+\item $\graph(\id_{A\cup B}) = \graph(\id_A)\cup \graph(\id_B)$;
+\item $\graph(\id_{A\cap B}) = \graph(\id_A)\cap \graph(\id_B)$;
+\item $\graph(E_{A\cup C, B\cup D}) = \graph(E_{A,B})\cup \graph(E_{C,D})$;
+\item $\graph(E_{A\cap C, B\cap D}) = \graph(E_{A,B})\cap \graph(E_{C,D})$;
+\item $\graph(U_{A\cap C, B\cap D}) = \graph(U_{A,B})\cap \graph(U_{C,D})$.
+\end{enumerate}
+\end{lemma}
+Note that writing $\graph$ is important here because the types (i.e. domain and codomain) do not match, even though the graph does.
+\begin{proof}
+(1,2) $(x,x)\in \graph(\id_{A\cup B})$ iff $x\in A\lor x\in B$ iff $(x,x)\in \graph(\id_A) \lor (x,x)\in\graph(\id_B)$ iff $(x,x)\in \graph(\id_A)\cup \graph(\id_B)$. For the second part replace $\lor$ with $\land$.
+
+(3,4) Trivial because all sets are $\emptyset$.
+
+(5) $(x,y)\in \graph(U_{A\cap C, B\cap D})$ iff $(x\in A\cap C) \land (y\in B\cap D)$ iff $(x\in A)\land (y\in B)\land(x\in C)\land(y\in D)$ iff $\big((x,y)\in \graph(U_{A, B})\big)\land\big((x,y)\in \graph(U_{A, B})\big)$ iff $(x,y)\in \graph(U_{A,B})\cap \graph(U_{C,D})$.
+\end{proof}
 
 \subsection{Related elements}
 \begin{definition}
@@ -817,7 +839,7 @@ Let $R$ be a relation on $(A, B)$.
 In particular for $X=A$ and $Y=B$:
 \begin{enumerate}
 \item The set $A^R$ is the \udef{active codomain}, \udef{codomain of definition}, \udef{image} or \udef{range} of the relation, also denoted $\im(R)$.
-\item The set $^RB$ is the \udef{active domain}, \udef{domain of definition}, \udef{preimage} or \udef{prerange} of the relation.
+\item The set $^RB$ is the \udef{active domain}, \udef{domain of definition}, \udef{preimage} or \udef{prerange} of the relation, also denoted $\preim(R)$.
 \end{enumerate}
 In particular for $X = \{x\}$ and $Y = \{y\}$ we define:
 \begin{itemize}
@@ -981,6 +1003,10 @@ We say
 \end{definition}
 
 \begin{lemma}
+Let $R$ be a homogeneous relation on $A$. Then $R$ is reflexive \textup{if and only if} $\id_A \subseteq R$.
+\end{lemma}
+
+\begin{lemma}
 \begin{enumerate}
 \item An anti-transitive relation is always irreflexive.
 \item An irreflexive and left- (or right-) unique relation is always anti-transitive.
@@ -988,6 +1014,7 @@ We say
 \end{enumerate}
 \end{lemma}
 
+TODO: move lower
 \begin{lemma}
 Let $R$ be a homogeneous relation on $A$. Then
 \[ R \;\text{is connex} \iff U_A \subseteq R\cup R^\transp \iff \overline{R}\subseteq R^\transp \iff \overline{R}\; \text{is asymmetric}. \]
@@ -1126,7 +1153,8 @@ Let $R,S$ be relations on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$. Then
 \item $(R^\transp)^\transp = R$;
 \item $\dom(R^\transp) = \codom(R)$ and $\codom(R^\transp) = \dom(R)$;
 \item $^{R^\transp}X = X^R$ and $Y^{R^\transp} = {^RY}$;
-\item if $\graph(R)\subseteq \graph(S)$, then $\graph(R^\transp)\subseteq \graph(S^\transp)$.
+\item $\im(R^\transp) = \preim(R)$;
+\item if $R\subseteq S$, then $R^\transp \subseteq S^\transp$.
 \end{enumerate}
 \end{lemma}
 
@@ -1169,7 +1197,7 @@ Let $R,S$ be binary relations.
 \begin{enumerate}
 \item $\overline{\overline{R}} = R$;
 \item $\overline{R^\transp} = \overline{R}^\transp$;
-\item if $\graph(R) \subseteq \graph(S)$, then $\graph(\overline{R}) \supseteq \graph(\overline{S})$.
+\item if $R \subseteq S$, then $\overline{R} \supseteq \overline{S}$.
 \end{enumerate}
 \end{lemma}
 
@@ -1234,8 +1262,19 @@ If $R$ and $S$ are composable we also define the notation
 Let $R,S,T$ be composable relations.
 \begin{enumerate}
 \item The composition is associative: $R;(S;T) = (R;S);T$.
-\item $(R;S)^\transp = S^\transp ; R^\transp$.
+\item $(R;S)^\transp = S^\transp ; R^\transp$;
+\item $(R\cup S);T = R;T \cup S;T$;
+\item $x(R;S)y \iff xR \mesh Sy$ and $x(\overline{R;S})y \iff xR\perp Sy$;
+\item $\overline{R;S} = \overline{R};S\cup R;\overline{S}$.
 \end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}
+Let $R,S$ be composable and $T$ a relation. Then
+\[ R;S \subseteq T \qquad\iff\qquad \forall x,y,z:\; xRy \land ySz \implies xTz. \]
 \end{lemma}
 
 \begin{lemma}
@@ -1243,18 +1282,26 @@ Let $A,B,X, Y$ be sets and $R$ a relation on $(A, B)$. Then
 \begin{enumerate}
 \item $\id_A;R = R = R;\id_B$;
 \item $E_{X,A};R = E_{X,B}$ and $R; E_{B,Y} = E_{A,Y}$;
-\item $U_{X,A};R = \U_{X,A^R}$ and $R; U_{B,Y} = U_{^RB, Y}$;
+\item $U_{X,A};R = \U_{X,B}|^{\im(R)}$ and $R; U_{B,Y} = U_{A, Y}|_{\preim(R)}$;
 \item $U_{X,A};R;U_{B,Y} = \begin{cases}
-U_{X,Y} & \graph{R} \neq \emptyset \\
-\emptyset & \graph{R} = \emptyset.
+U_{X,Y} & \graph(R) \neq \emptyset \\
+E_{X,Y} & \graph(R) = \emptyset.
 \end{cases}$
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $R$ be a relation. Then
+\begin{enumerate}
+\item $\graph(\id_{\preim(R)}) \subseteq R;R^\transp \subseteq \graph(U_{\preim(R)})$;
+\item $\graph(\id_{\im(R)}) \subseteq R^\transp;R \subseteq \graph(U_{\im(R)})$.
 \end{enumerate}
 \end{lemma}
 
 \begin{lemma}
 Let $R$ be a relation on $(A, B)$ and $S$ a relation on $(B, C)$. Let $X\subset A$ and $Y\subset C$. Then
 \begin{enumerate}
-\item $X^{R;S} = (X^R)^S = X^{S\circ R}$ and $ = ((X)R)S$;
+\item $X^{R;S} = (X^R)^S = X^{S\circ R}$;
 \item $^{R;S}Y = {^R({^SY})} = {^{S\circ R}Y}$.
 \end{enumerate}
 \end{lemma}
