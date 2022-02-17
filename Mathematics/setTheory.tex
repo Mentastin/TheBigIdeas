@@ -785,7 +785,9 @@ If we say $R$ is a (homogenous) relation on $A$, we mean $\dom(R) = A = \codom(R
 A relation is \udef{heterogeneous} is the domain and codomain are different.
 \end{definition}
 
-Often we will write $R \subseteq S$ as a shorthand for $\graph(R)\subseteq \graph(S)$ if $\dom(R) = \dom(S)$ and $\codom(R) = \codom(S)$. Similarly we may write $R\cup S$, $R\cap S$ etc.
+Often we will write $R \subseteq S$ as a shorthand for $\graph(R)\subseteq \graph(S)$. Similarly we may write $R\cup S$, $R\cap S$ etc.
+
+
 
 \begin{definition}
 Let $A,B$ be sets. We have the following relations:
@@ -801,20 +803,25 @@ The identity relation on $A$ is also known as the \udef{diagonal relation} on $A
 \begin{lemma}
 Let $A,B,C,D$ be sets. Then
 \begin{enumerate}
-\item $\graph(\id_{A\cup B}) = \graph(\id_A)\cup \graph(\id_B)$;
-\item $\graph(\id_{A\cap B}) = \graph(\id_A)\cap \graph(\id_B)$;
-\item $\graph(E_{A\cup C, B\cup D}) = \graph(E_{A,B})\cup \graph(E_{C,D})$;
-\item $\graph(E_{A\cap C, B\cap D}) = \graph(E_{A,B})\cap \graph(E_{C,D})$;
-\item $\graph(U_{A\cap C, B\cap D}) = \graph(U_{A,B})\cap \graph(U_{C,D})$.
+\item $\id_{A\cup B} = \id_A\cup \id_B$ and $\id_{A\cap B} = \id_A\cap \id_B$;
+\item $E_{A\cup C, B\cup D} = E_{A,B}\cup E_{C,D}$ and $E_{A\cap C, B\cap D} = E_{A,B}\cap E_{C,D}$;
+\item $U_{A\cap C, B\cap D} = U_{A,B}\cap U_{C,D}$.
 \end{enumerate}
 \end{lemma}
-Note that writing $\graph$ is important here because the types (i.e. domain and codomain) do not match, even though the graph does.
+Note that the equalities mean the graphs are equal. The relations are not the same as they have different domains and codomains.
 \begin{proof}
-(1,2) $(x,x)\in \graph(\id_{A\cup B})$ iff $x\in A\lor x\in B$ iff $(x,x)\in \graph(\id_A) \lor (x,x)\in\graph(\id_B)$ iff $(x,x)\in \graph(\id_A)\cup \graph(\id_B)$. For the second part replace $\lor$ with $\land$.
+(1) Assume $(x,x)\in \id_{A\cup B}$. We have the equivalences
+\[ (x\in A)\lor (x\in B) \iff \Big((x,x)\in \id_A\Big) \lor \Big((x,x)\in\id_B\Big) \iff (x,x)\in \id_A\cup \id_B. \]
+For the second part replace $\lor$ with $\land$.
 
-(3,4) Trivial because all sets are $\emptyset$.
+(2) Trivial because all sets are $\emptyset$.
 
-(5) $(x,y)\in \graph(U_{A\cap C, B\cap D})$ iff $(x\in A\cap C) \land (y\in B\cap D)$ iff $(x\in A)\land (y\in B)\land(x\in C)\land(y\in D)$ iff $\big((x,y)\in \graph(U_{A, B})\big)\land\big((x,y)\in \graph(U_{A, B})\big)$ iff $(x,y)\in \graph(U_{A,B})\cap \graph(U_{C,D})$.
+(3) Take $(x,y)\in U_{A\cap C, B\cap D}$. We have the equivalences
+\begin{align*}
+(x\in A\cap C) \land (y\in B\cap D) &\iff (x\in A)\land (y\in B)\land(x\in C)\land(y\in D) \\
+&\iff \big((x,y)\in U_{A, B})\big)\land\big((x,y)\in U_{A, B}\big) \\
+&\iff (x,y)\in U_{A,B}\cap U_{C,D}.
+\end{align*}
 \end{proof}
 
 \subsection{Related elements}
@@ -1192,7 +1199,7 @@ Left and right Euclideanness are swapped.
 Let $R$ be a binary relation on $(A, B)$. The \udef{complementary relation} $\overline{R}$ of $R$ is the relation on $(A, B)$ with graph
 \[ \graph(\overline{R}) = \setbuilder{(x,y)}{\neg xRy}. \]
 \end{definition}
-\begin{lemma}
+\begin{lemma} \label{relationalComplementProperties}
 Let $R,S$ be binary relations.
 \begin{enumerate}
 \item $\overline{\overline{R}} = R$;
@@ -1263,16 +1270,16 @@ Let $R,S,T$ be composable relations.
 \begin{enumerate}
 \item The composition is associative: $R;(S;T) = (R;S);T$.
 \item $(R;S)^\transp = S^\transp ; R^\transp$;
-\item $(R\cup S);T = R;T \cup S;T$;
-\item $x(R;S)y \iff xR \mesh Sy$ and $x(\overline{R;S})y \iff xR\perp Sy$;
-\item $\overline{R;S} = \overline{R};S\cup R;\overline{S}$.
+\item $(R\cup S);T = (R;T) \cup (S;T)$;
+\item $\overline{R;S} = (\overline{R};S) \cup (R;\overline{S})$;
+\item $x(R;S)y \iff xR \mesh Sy$ and $x(\overline{R;S})y \iff xR\perp Sy$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 TODO
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{universalQuantificationForCompositionSuperset}
 Let $R,S$ be composable and $T$ a relation. Then
 \[ R;S \subseteq T \qquad\iff\qquad \forall x,y,z:\; xRy \land ySz \implies xTz. \]
 \end{lemma}
@@ -1293,10 +1300,17 @@ E_{X,Y} & \graph(R) = \emptyset.
 \begin{lemma}
 Let $R$ be a relation. Then
 \begin{enumerate}
-\item $\graph(\id_{\preim(R)}) \subseteq R;R^\transp \subseteq \graph(U_{\preim(R)})$;
-\item $\graph(\id_{\im(R)}) \subseteq R^\transp;R \subseteq \graph(U_{\im(R)})$.
+\item $\id_{\preim(R)} \subseteq R;R^\transp \subseteq U_{\preim(R)}$;
+\item $\id_{\im(R)} \subseteq R^\transp;R \subseteq U_{\im(R)}$.
 \end{enumerate}
 \end{lemma}
+\begin{corollary}
+Let $R$ be a relation on $(A,B)$. Then
+\begin{enumerate}
+\item $\id_A \;\subseteq\; R;R^\transp \cup \overline{R};\overline{R}^\transp$;
+\item $\id_A \;\subseteq\; R^\transp;R \cup \overline{R}^\transp;\overline{R}$.
+\end{enumerate}
+\end{corollary}
 
 \begin{lemma}
 Let $R$ be a relation on $(A, B)$ and $S$ a relation on $(B, C)$. Let $X\subset A$ and $Y\subset C$. Then
@@ -1307,10 +1321,10 @@ Let $R$ be a relation on $(A, B)$ and $S$ a relation on $(B, C)$. Let $X\subset 
 \end{lemma}
 
 \begin{lemma}
-Let $A,B,C,D$ be relations such that $\graph(A) \subseteq \graph(B)$ and $\graph(C)\subseteq \graph(D)$ and both $A,B$ and $C,D$ are composable, then $\graph(A;C)\subseteq \graph(B;D)$.
+Let $A,B,C,D$ be relations such that $A \subseteq B$ and $C\subseteq D$ and both $A,B$ and $C,D$ are composable, then $A;C\subseteq B;D$.
 \end{lemma}
 \begin{proof}
-Assume the hypotheses of the lemma and let $(x,y) \in \graph(AC)$. Then there exists a $z$ such that $xAz$ and $zCy$. By hypothesis this means $xBz$ and $zDy$, so $x(B;D)y$.
+Assume the hypotheses of the lemma and let $(x,y) \in \graph(A;C)$. Then there exists a $z$ such that $xAz$ and $zCy$. By hypothesis this means $xBz$ and $zDy$, so $x(B;D)y$.
 \end{proof}
 
 \begin{lemma}
@@ -1322,6 +1336,7 @@ $x \overline{A;B}z$ iff $xA \subseteq z \overline{B}^\transp$.
 \begin{definition}
 Let $R$ be a homogeneous relation on a set $A$. Then we can define $R^n$ as the $n$-fold composition of $f$:
 \[ R^n \defeq \underbrace{R;R; \ldots ;R}_{\text{$n$ times}}. \]
+We call $R$ \udef{idempotent} if $R^2 = R$.
 \end{definition}
 
 TODO: refine
@@ -1333,6 +1348,50 @@ TODO: refine
 \end{proposition}
 so preorder sufficient, but not necessary for idempotent.
 
+\subsubsection{Left and right residuals}
+\begin{definition}
+Let $R,S$ be relations.
+\begin{itemize}
+\item If $R,S$ have the same domain, we define the \udef{left residual} as $R\diagdown S \defeq \overline{R^\transp; \overline{S}}$.
+\item If $R,S$ have the same codomain, we define the \udef{right residual} as $R\diagup S \defeq \overline{\overline{R}; S^\transp}$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{residualsAsUnion}
+Let $R,S$ be relations. Then
+\begin{enumerate}
+\item $R\diagdown S = \overline{R^\transp; \overline{S}} = R^\transp; S \;\cup\; \overline{R}^\transp; \overline{S}$;
+\item $R\diagup S = \overline{\overline{R}; S^\transp} = R;S^\transp \;\cup\; \overline{R}; \overline{S}^\transp$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition}[Schröder rule]
+Let $R,S,T$ be relations. Then
+\begin{align*}
+R;S \subseteq T &\quad\iff\quad \overline{R} \supseteq \overline{T};S^\transp \quad\iff\quad R \subseteq T\diagup S \\
+&\quad\iff\quad \overline{S} \supseteq R^\transp ; \overline{T} \quad\iff\quad S \subseteq R\diagdown T
+\end{align*}
+\end{proposition}
+\begin{proof}
+The second line follows from the first by applying the first to $S^\transp;R^\transp \subseteq T^\transp$. The second equivalence is immediate by \ref{relationalComplementProperties} and $\overline{\overline{T};S^\transp} = T\diagup S$. For the first equivalence we only need to prove the direction $\Rightarrow$: applying this implication to $\overline{T};S^\transp \subseteq \overline{R}$ gives $\overline{\overline{T}}\supseteq \overline{\overline{R}};S^{\transp\transp}$. i.e. $R;S \subseteq T$.
+
+So assume $R;S \subseteq T$. By \ref{universalQuantificationForCompositionSuperset} this is equivalent to
+\[ \forall x,y,z:\; xRy \land ySz \implies xTz. \]
+Fix arbitrary $x,y,z$. Assume $ySz$ and $\neg xTz$. This means we must have $\neg xRy$, or we could also derive $xTz$, leading to a contradiction. Thus $ySz \land x\overline{T}z$ imply $x\overline{R}y$. Using \ref{universalQuantificationForCompositionSuperset} again, we get $\overline{T};S^\transp \subseteq \overline{R}$.
+\end{proof}
+We can also give a proof by a direct calculation of $T\diagup S$.
+\begin{proof}
+It is enough to prove that $R;S \subseteq T$ implies $R \subseteq T\diagup S$. Everything else follows by taking complements and converses as before.
+
+So assume $R;S \subseteq T$. We calculate, using \ref{residualsAsUnion}
+\[ T\diagup S = T;S^\transp \;\cup\; \overline{T}; \overline{S}^\transp \supseteq (R;S);S^\transp \;\cup\; \overline{T}; \overline{S}^\transp \]
+\end{proof}
+
+\begin{corollary}[Dedekind formula]
+Let $R,S,T$ be compatible relations. Then
+\[ (R;S)\cap T \subseteq (R\cap (T; S^\transp));(S\cap (R^\transp;T)). \]
+\end{corollary}
+We can recover the formula $(R;S)^\transp = S^\transp;R^\transp$ as a special case of the Dedkind formula
 
 
 \subsection{Unicity and totality}
