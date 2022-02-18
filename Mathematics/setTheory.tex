@@ -572,6 +572,14 @@ Let $A,B$ be sets. Then following are equivalent:
 \item $A\setminus B = B\setminus A$.
 \end{enumerate}
 \end{corollary}
+\begin{corollary}
+Let $A,B\subseteq \Omega$ be sets. Then following are equivalent:
+\begin{enumerate}
+\item $A\perp B$;
+\item $A \subseteq \Omega\setminus B$;
+\item $B \subseteq \Omega\setminus A$.
+\end{enumerate}
+\end{corollary}
 
 \subsubsection{Distributivity}
 TODO: tables complete / correct?? TODO: only works for relativised intersection.
@@ -932,6 +940,11 @@ Let $R$ be a relation on $(A, B)$, $X\subset A$ and $Y\subset B$. Then
 \item $X^{\overrightarrow{R}} = \displaystyle\bigcap_{x\in X}xR = \bigcap \setbuilder{xR}{x\in X}$;
 \item $^{\overleftarrow{R}}Y = \displaystyle\bigcap_{y\in Y}Ry = \bigcap \setbuilder{Ry}{y\in Y}$.
 \end{enumerate}
+In particular for $x\in A$ and $y\in B$:
+\begin{enumerate}
+\item $\{x\}^{\overrightarrow{R}} = xR = \{x\}^R$;
+\item $^{\overleftarrow{R}}\{y\} = Ry = {^R\{y\}}$.
+\end{enumerate}
 \end{lemma}
 
 \begin{corollary} \label{monotonicityCommonality}
@@ -1204,9 +1217,28 @@ Let $R,S$ be binary relations.
 \begin{enumerate}
 \item $\overline{\overline{R}} = R$;
 \item $\overline{R^\transp} = \overline{R}^\transp$;
+\item $\overline{R\cup S} = \overline{R}\cap \overline{S}$;
+\item $\overline{R\cap S} = \overline{R}\cup \overline{S}$;
+\item $U = R \cup \overline{R}$;
 \item if $R \subseteq S$, then $\overline{R} \supseteq \overline{S}$.
 \end{enumerate}
 \end{lemma}
+
+\begin{lemma}
+Let $R$ be a relation on $(A,B)$, $X\subseteq A$ and $Y\subseteq B$. Then
+\begin{enumerate}
+\item $X^{\overline{R}} = B\setminus X^{\overrightarrow{R}}$;
+\item $^{\overline{R}}Y = A\setminus {^{\overleftarrow{R}}Y}$.
+\end{enumerate}
+In particular for $x\in A$ and $y\in B$:
+\begin{enumerate}
+\item $x\overline{R} = B\setminus (xR)$;
+\item $\overline{R}y = A\setminus (Ry)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+
+\end{proof}
 
 \begin{lemma}
 Let $R$ be a homogeneous relation on $A$. Then $R$ is asymmetric \textup{if and only if} $R = \overline{R}^\transp$.
@@ -1265,18 +1297,30 @@ If $R$ and $S$ are relations such that the codomain of one is the domain of the 
 If $R$ and $S$ are composable we also define the notation
 \[ S\circ R \defeq R;S. \]
 \end{definition}
-\begin{lemma}
+\begin{lemma} \label{relationalComposition}
 Let $R,S,T$ be composable relations.
 \begin{enumerate}
 \item The composition is associative: $R;(S;T) = (R;S);T$.
 \item $(R;S)^\transp = S^\transp ; R^\transp$;
 \item $(R\cup S);T = (R;T) \cup (S;T)$;
-\item $\overline{R;S} = (\overline{R};S) \cup (R;\overline{S})$;
-\item $x(R;S)y \iff xR \mesh Sy$ and $x(\overline{R;S})y \iff xR\perp Sy$.
+\item $(R\cap S);T \subseteq R;T \cap S;T$;
+\item $x(R;S)y \iff xR \mesh Sy$;
+\item $x(\overline{R;S})y \begin{aligned}[t]
+&\iff xR\perp Sy \\
+&\iff xR \subseteq \overline{S}y;
+\end{aligned}$
+\item $x(\overline{R;\overline{S}})y \iff xR \subseteq Sy$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 TODO
+\end{proof}
+
+\begin{lemma}
+Let $A,B,C,D$ be relations such that $A \subseteq B$ and $C\subseteq D$ and both $A,B$ and $C,D$ are composable, then $A;C\subseteq B;D$.
+\end{lemma}
+\begin{proof}
+Assume the hypotheses of the lemma and let $(x,y) \in \graph(A;C)$. Then there exists a $z$ such that $xAz$ and $zCy$. By hypothesis this means $xBz$ and $zDy$, so $x(B;D)y$.
 \end{proof}
 
 \begin{lemma} \label{universalQuantificationForCompositionSuperset}
@@ -1297,13 +1341,16 @@ E_{X,Y} & \graph(R) = \emptyset.
 \end{enumerate}
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma} \label{kernelInclusions}
 Let $R$ be a relation. Then
 \begin{enumerate}
 \item $\id_{\preim(R)} \subseteq R;R^\transp \subseteq U_{\preim(R)}$;
 \item $\id_{\im(R)} \subseteq R^\transp;R \subseteq U_{\im(R)}$.
 \end{enumerate}
 \end{lemma}
+\begin{corollary}
+Let $R$ be a relation, then $R \subseteq R;R^\transp;R$.
+\end{corollary}
 \begin{corollary}
 Let $R$ be a relation on $(A,B)$. Then
 \begin{enumerate}
@@ -1320,17 +1367,16 @@ Let $R$ be a relation on $(A, B)$ and $S$ a relation on $(B, C)$. Let $X\subset 
 \end{enumerate}
 \end{lemma}
 
-\begin{lemma}
-Let $A,B,C,D$ be relations such that $A \subseteq B$ and $C\subseteq D$ and both $A,B$ and $C,D$ are composable, then $A;C\subseteq B;D$.
-\end{lemma}
+\begin{proposition}[Dedekind formula]
+Let $R,S,T$ be compatible relations. Then
+\[ (R;S)\cap T \subseteq (R\cap (T; S^\transp));(S\cap (R^\transp;T)). \]
+\end{proposition}
 \begin{proof}
-Assume the hypotheses of the lemma and let $(x,y) \in \graph(A;C)$. Then there exists a $z$ such that $xAz$ and $zCy$. By hypothesis this means $xBz$ and $zDy$, so $x(B;D)y$.
+Take $(x,z)\in \graph((R;S)\cap T)$. Then $xTy$ and $xR \mesh Sy$, meaning we can take a $z\in xR\cap Sy$, i.e. satisfying $xRz$ and $zSy$. It is then easy to show that $x(R\cap (T; S^\transp))z$ and $z(S\cap (R^\transp;T))y$.
 \end{proof}
 
 \begin{lemma}
-TODO: if $A;B = C$, then $A|^{^BZ} = C;B^\transp$.
-
-$x \overline{A;B}z$ iff $xA \subseteq z \overline{B}^\transp$.
+Let $R,S,T, Q$ be relations. Then $R^\transp; S \subseteq T$ implies $R;Q\cap S \subseteq R; (Q\cap T)$.
 \end{lemma}
 
 \begin{definition}
@@ -1352,18 +1398,26 @@ so preorder sufficient, but not necessary for idempotent.
 \begin{definition}
 Let $R,S$ be relations.
 \begin{itemize}
-\item If $R,S$ have the same domain, we define the \udef{left residual} as $R\diagdown S \defeq \overline{R^\transp; \overline{S}}$.
 \item If $R,S$ have the same codomain, we define the \udef{right residual} as $R\diagup S \defeq \overline{\overline{R}; S^\transp}$.
+\item If $R,S$ have the same domain, we define the \udef{left residual} as $S\diagdown R \defeq \overline{S^\transp; \overline{R}}$.
 \end{itemize}
 \end{definition}
 
-\begin{lemma} \label{residualsAsUnion}
-Let $R,S$ be relations. Then
+\begin{lemma} \label{residuals}
+Let $R,S,T$ be relations. Then
 \begin{enumerate}
-\item $R\diagdown S = \overline{R^\transp; \overline{S}} = R^\transp; S \;\cup\; \overline{R}^\transp; \overline{S}$;
-\item $R\diagup S = \overline{\overline{R}; S^\transp} = R;S^\transp \;\cup\; \overline{R}; \overline{S}^\transp$.
+\item $(R\diagdown S)^\transp = R^\transp\diagup S^\transp$ and $(R\diagup S)^\transp = R^\transp\diagdown S^\transp$;
+\item $R^\transp\diagdown S = \overline{R}\diagup \overline{S}^\transp$ and $R^\transp\diagup S = \overline{R}\diagdown \overline{S}^\transp$;
+\item $R \diagdown (T\cap S) = R\diagdown T \cap R\diagdown S$ and $(T\cap S)\diagup R = T\diagup R \cap S\diagup R$;
+\item $R \diagdown (T\cup S) = R\diagdown T \cup R\diagdown S$ and $(T\cap S)\diagup R = T\diagup R \cup S\diagup R$;
+\item $(R\cap S) \diagdown T = R\diagdown T \cup S\diagdown T$ and $T\diagup (R\cap S) = T\diagup R \cup T\diagup S$;
+\item $(R\cup S) \diagdown T = R\diagdown T \cap S\diagdown T$ and $T\diagup (R\cup S) = T\diagup R \cap T\diagup S$;
+\item if $R\subseteq T$, then $R\diagup S \subseteq T\diagup S$ and $S\diagdown R \subseteq S\diagdown T$;
+\item if $S\subseteq T$, then $R\diagup S \supseteq R\diagup T$ and $S\diagdown R \supseteq T\diagdown R$.
 \end{enumerate}
 \end{lemma}
+
+As an aide-mémoire: the residuals are monotone in the ``numerator'' and antitone in the ``denominator'', where the numerator and denominator refer the the relation above, resp. below, the line in both residuals. The left residual has the denominator on the left; the right residual has it on the right.
 
 \begin{proposition}[Schröder rule]
 Let $R,S,T$ be relations. Then
@@ -1379,26 +1433,83 @@ So assume $R;S \subseteq T$. By \ref{universalQuantificationForCompositionSupers
 \[ \forall x,y,z:\; xRy \land ySz \implies xTz. \]
 Fix arbitrary $x,y,z$. Assume $ySz$ and $\neg xTz$. This means we must have $\neg xRy$, or we could also derive $xTz$, leading to a contradiction. Thus $ySz \land x\overline{T}z$ imply $x\overline{R}y$. Using \ref{universalQuantificationForCompositionSuperset} again, we get $\overline{T};S^\transp \subseteq \overline{R}$.
 \end{proof}
-We can also give a proof by a direct calculation of $T\diagup S$.
+We can also give a proof using image and preimage sets.
 \begin{proof}
-It is enough to prove that $R;S \subseteq T$ implies $R \subseteq T\diagup S$. Everything else follows by taking complements and converses as before.
+As before it is enough to prove the first implication. So assume $R;S \subseteq T$; we want to prove $R \subseteq T\diagup S = \overline{\overline{T}; S^\transp}$.
 
-So assume $R;S \subseteq T$. We calculate, using \ref{residualsAsUnion}
-\[ T\diagup S = T;S^\transp \;\cup\; \overline{T}; \overline{S}^\transp \supseteq (R;S);S^\transp \;\cup\; \overline{T}; \overline{S}^\transp \]
+Take $x,y$ such that $xRy$. Then $yS \subseteq xT$, because
+\[ \forall z: \quad ySz \implies xRy\land ySz \implies x(R;S)z \implies xTz. \]
+We have the following equivalences:
+\[ yS \subseteq xT \iff S^\transp y \subseteq xT \iff \overline{S^\transp}y \supseteq \overline{xT} \iff x(\overline{\overline{T}; S^\transp})y, \]
+using \ref{relationalComposition} for the last equivalence.
 \end{proof}
-
-\begin{corollary}[Dedekind formula]
-Let $R,S,T$ be compatible relations. Then
-\[ (R;S)\cap T \subseteq (R\cap (T; S^\transp));(S\cap (R^\transp;T)). \]
+\begin{corollary}
+Let $T,S$ be relations. Then
+\begin{enumerate}
+\item $(R\diagup S);S \subseteq R$ and $S;(S\diagdown R) \subseteq R$;
+\item $(R;S)\diagup S \supseteq R$ and $R\diagdown (R;S) \supseteq S$;
+\item $((R;S)\diagup S);S = R;S$ and $R;(R\diagdown(R;S)) = R;S$.
+\end{enumerate}
 \end{corollary}
-We can recover the formula $(R;S)^\transp = S^\transp;R^\transp$ as a special case of the Dedkind formula
+\begin{proof}
+(1) Setting $R$ in the proposition to $R\diagup S$, we get that the truth $R\diagup S \subseteq R\diagup S$ implies $(R\diagup S);S \subseteq R$. The case for $S\diagdown R$ is similar.
 
+(2) Now we set $T$ in the proposition to $R;S$.
+
+(3) This is a combination of (1) and (2): Set the $R$ in (1) to $R;S$ to get $((R;S)\diagup S);S \subseteq R;S$. From (2) we see that $(R;S)\diagup S \supseteq R$, so $((R;S)\diagup S);S \supseteq R;S$.
+\end{proof}
+\begin{corollary}
+Let $R,S,T$ be relations. Then
+\[ \overline{R}^\transp;\overline{S}^\transp \subseteq T \quad\iff\quad \overline{S}^\transp;\overline{T}^\transp \subseteq R \quad\iff\quad \overline{T}^\transp;\overline{R}^\transp \subseteq S. \]
+\end{corollary}
+
+Suppose we have relations $R$ and $T$ with the same domain and we are interested in finding a relation $X$ such that
+\[ R;X = T. \]
+It will not always be possible to find such an $X$. It is, however, always possible to find an $X$ such that $R;X \subseteq T$ (for example we could take the empty relation). The Schröder rule says that $R\diagdown T$ is the largest $X$ satisfying this inequality (i.e. for all such $X$ we have $X\subseteq R\diagdown T$).
+
+So, if the equation $R;X = T$ has a solution, then it must be the left residual $X = R\diagdown T$. There is a similar result for the right residual.
+
+\begin{corollary}
+Let $R,T$ be relations and suppose they have the same domain. Then
+\begin{align*}
+\text{There exists an $X$ such that $R;X = T$} \quad&\iff\quad R;(R\diagdown T) = T \quad\iff\quad R;(R\diagdown T) \supseteq T \\
+&\implies\quad X = R\diagdown T.
+\end{align*}
+Suppose $R$ and $T$ have the same codomain, then
+\begin{align*}
+\text{There exists an $X$ such that $X;R = T$} \quad&\iff\quad (T\diagup R);R = T \quad\iff\quad (T\diagup R);R \supseteq T \\
+&\implies\quad X = T\diagup R.
+\end{align*}
+\end{corollary}
+
+\subsubsection{Symmetric quotient}
+\begin{definition}
+Let $R,S$ be composable relations. We define the \udef{symmetric quotient} of $R$ and $S$ as
+\[ R \syq S \defeq \overline{R;\overline{S}} \;\cap\; \overline{\overline{R};S}. \]
+\end{definition}
+Usually in the literature the first argument of the symmetric quotient transposed, i.e. it is defined as $R^\transp \syq S$.
+
+\begin{lemma}
+Let $R,S$ be composable relations. Then
+\begin{align*}
+R\syq S &= R^\transp\diagdown S \cap R\diagup S^\transp \\
+&= \overline{R}\diagup \overline{S}^\transp \cap \overline{R}^\transp \diagdown \overline{S}.
+\end{align*}
+\end{lemma}
+
+\begin{lemma}
+Let $R,S$ be composable relations. Then
+\[ x(R\syq S)y \qquad\iff\qquad xR = Sy. \]
+\end{lemma}
+\begin{proof}
+Immediate from \ref{relationalComposition}.
+\end{proof}
 
 \subsection{Unicity and totality}
 \begin{definition}
 Let $R$ be a relation on $(A, B)$. We call $R$
 \begin{itemize}
-\item \udef{left-total} or \udef{serial} if $A^R = B$;
+\item \udef{left-total}, \udef{serial} or simply \udef{total} if $A^R = B$;
 \item \udef{right-total} or \udef{surjective} or \udef{onto} if $A = {^RB}$;
 \item \udef{left-unique} or \udef{injective} if
 \[ \forall x_1,x_2\in A: \forall y\in B: \; x_1Ry \land x_2Ry \implies x_1=x_2; \]
@@ -1413,6 +1524,32 @@ We may also call a binary relation
 \item \textbf{many-to-many} if it is not injective and not functional.
 \end{itemize}
 \end{definition}
+
+\begin{lemma}
+Let $R$ be a relation. Then
+\begin{enumerate}
+\item $R$ is functional \textup{if and only if} $R^\transp; R \subseteq \id_{\codom(R)}$;
+\item $R$ is injective \textup{if and only if} $R; R^\transp \subseteq \id_{\dom(R)}$.
+\end{enumerate}
+We also have
+\begin{enumerate} \setcounter{enumi}{2}
+\item $R$ is functional \textup{if and only if} $R^\transp; R = \id_{\im(R)}$;
+\item $R$ is injective \textup{if and only if} $R; R^\transp = \id_{\preim(R)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume that there exist $x,y_1,y_2$ such that $xRy_1$ and $xRy_2$. This means $y_1R^\transp x$ and $xRy_2$, so $y_1(R^\transp; R) y_2$. Then $R$ is functional iff $y_1 = y_2$ iff $R^\transp; R \subseteq \id_{\codom(R)}$.
+
+(2) Similar.
+
+(3, 4) Due to the inclusions in \ref{kernelInclusions}.
+\end{proof}
+\begin{corollary}
+Let $R, S$ be relations. Then
+\begin{enumerate}
+\item if $R$ and $S$ are left/right-unique, then $R;S$ is left/right-unique;
+\end{enumerate}
+\end{corollary}
 
 \begin{lemma} \label{imagePreimageUniqueness}
 Let $R$ be a relation on $(A, B)$, $X,Y\subset A$ and $Z,W\subset B$. If $R$ is left-unique, then
