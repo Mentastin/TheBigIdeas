@@ -4,10 +4,9 @@
 All types of orders are transitive.
 \begin{itemize}
 \item A \udef{preorder} or \udef{quasiorder} $\precsim$ is also reflexive.
-\item A \udef{strict preorder} $\precnsim$ is also irreflexive.
-\item A \udef{total preorder} is also reflexive and connex.
+\item A \udef{total preorder} is also connex.
 \item A \udef{partial order} $\preceq$ is also reflexive and anti-symmetric.
-\item A \udef{strict partial order} $\prec$ is also irreflexive and anti-symmetric.
+\item A \udef{strict partial order} $\prec$ is also irreflexive (or, equivalently, asymmetric).
 \item A \udef{total order} $\leq$ is also reflexive, anti-symmetric and connex. Connex means all elements are comparable.
 \item A \udef{strict total order} $<$ is also trichotomous.
 \end{itemize}
@@ -17,9 +16,16 @@ An \udef{ordered set} is a pair $\sSet{P,\Yleft}$ such that $P$ is a set and $\Y
 \item a \udef{poset} if $\Yleft$ is a partial order;
 \end{itemize}
 \end{definition}
-Notice that
-\[ \text{trichotomous} \iff \begin{cases}
-\text{irreflexive} \\ \text{anti-symmetric} \\ \text{\textit{semi}-connex}
+
+A total preorder is necessarily also reflexive by \ref{connexityConsequences}.
+
+A strict partial order is necessarily also anti-symmetric by \ref{asymmetricIrreflexive} and \ref{asymmetryAntisymmetry} (which is why there is no separate notion of ``strict preorder'').
+
+A strict total order is like a total order that is strict (i.e. irreflexive instead of reflexive).  However by \ref{connexityConsequences}, no irreflexive relation can be connex, so we relax the requirement to semi-connexity:
+\[ \begin{cases}
+\text{transitive} \\ \text{trichotomous}
+\end{cases} \iff \begin{cases}
+\text{transitive} \\ \text{irreflexive} \\ \text{\textit{semi}-connex}
 \end{cases}. \]
 
 If we say $\sSet{P,\Yleft}$ is an ordered set without any other qualifiers, we only assume $\Yleft$ is transitive.
@@ -35,12 +41,6 @@ is a partial order. Such posets are called \udef{flat posets}.
 \end{itemize}
 \end{example}
 
-\begin{lemma} \label{preorderEquivalence}
-Let $(P, \precsim)$ be a proset. The relation defined by
-\[ x \sim_{(\precsim)} y \defequiv (a\precsim b)\land (b\precsim a) \]
-is an equivalence relation.
-\end{lemma}
-
 \begin{lemma}
 For any binary homogeneous relation $R$,
 \begin{enumerate}
@@ -49,22 +49,77 @@ For any binary homogeneous relation $R$,
 \end{enumerate}
 \end{lemma}
 
+\begin{lemma} \label{preorderEquivalence}
+Let $(P, \precsim)$ be a proset. Then $\precsim \cap \precsim^\transp$ is an equivalence relation.
+\end{lemma}
+
+
+We can decompose $\Yleft = \Yleft_S \cup \Yleft_A$, as in \ref{symmetricAsymmetricDecomposition}, into a symmetric and asymmetric part.
+\begin{itemize}
+\item By \ref{asymmetricIrreflexive} an order is strict (i.e. irreflexive) if and only if it is asymmetric: $\Yleft_S = E$ and $\Yleft_A = \Yleft$.
+\item For non-strict partial and total orders we have $\Yleft_S = \id$.
+\end{itemize}
+
+So we can turn a partial / total order into a strict partial / total order by removing $\id$. Conversely, we can turn a strict partial / total order into a partial / total order by adding $\id$.
+
 \begin{proposition}
-We can associate a strict order to a non-strict order.
+\mbox{}
 \begin{enumerate}
-\item Let $(P, \precsim)$ be a proset. The relation defined by
-\[ x\precnsim y \defequiv (x\precsim y)\land (\neg y\precsim x) \]
-is a strict preorder.
-\item Let $(P, \preceq)$ be a poset. The relation defined by
-\[ x\prec y \defequiv (x\preceq y)\land \neg(y\preceq x) \quad \Leftrightarrow \quad (x\preceq y)\land (y\neq x) \]
+\item Let $(P, \precsim)$ be a proset. The relation $\precsim \cap\; \overline{\precsim}^\transp$
 is a strict partial order.
-\item Let $(P, \leq)$ be a totally ordered set. The relation defined by
-\[ x < y \defequiv (x\leq y)\land \neg(y\leq x) \quad \Leftrightarrow \quad (x\leq y)\land (y\neq x) \quad \Leftrightarrow \quad \neg(y\leq x)  \]
+\item Let $(P, \preceq)$ be a poset. The relation $\preceq \cap \;\overline{\preceq}^\transp = \preceq \cap\; \overline{\id}_P$
+is a strict partial order.
+\item Let $(P, \prec)$ be a strict partial order. Then $\prec \cup \id_P$ is a partial order.
+\item Let $(P, \leq)$ be a totally ordered set. The relation $\leq \cap\; \overline{\leq}^\transp = \leq \cap\; \overline{\id}_P = \overline{\leq}^\transp$
 is a strict total order.
+\item Let $(P, <)$ be a strict total order. Then $< \cup \id_P$ is a total order.
 \end{enumerate}
-Multiple different preorders are associated to the same strict preorder. For partial and total orders the association is one-to-one.
+Multiple different preorders are associated to the same strict partial orders. For partial and total orders the association is one-to-one.
 \end{proposition}
-Notice that for a proset $(P, \precsim)$ we cannot simply define the strict order as $ x\precnsim y \defequiv (x\precsim y)\land (x\neq y)$ as this is not transitive in general.
+
+\section{Covering relations}
+\begin{definition}
+Let $(P,\Yleft)$ be a an order relation and $x,y\in P$. We say $y$ \udef{covers} $x$ if
+\begin{itemize}
+\item $x\Yleft y$;
+\item $x\neq y$
+\item $\nexists z\in P\setminus\{x,y\}: x\Yleft z \Yleft y$).
+\end{itemize}
+We write $x\lessdot y$.
+\end{definition}
+
+\begin{lemma}
+Let $(P,\Yleft)$ be an ordered set. Let $\Yleft_A$ be the asymmetric part of $\Yleft$. Then $\lessdot = \Yleft_A \cap \overline{\Yleft_A^2}$.
+\end{lemma}
+
+\begin{lemma}
+Let $P$ be a preordered set. Then $y$ covers $x$ \textup{if and only if} $x\neq y$ and $[x,y] = \{x,y\}$.
+\end{lemma}
+
+\subsection{Hasse diagrams}
+A \udef{Hasse diagram} is a graphical depiction of an order relation. Each element of the ordered set is a point and points are connected such that:
+\begin{enumerate}
+\item if $x \Yleft y$, then the point for $x$ is drawn lower than the point for $y$;
+\item two elements $x,y$ are connected if $y$ covers $x$ or $x$ covers $y$.
+\end{enumerate}
+
+TODO is transitive (reflective) reduction! (+ link Galois)
+
+\begin{lemma}
+The Hasse diagrams of partial orders are acyclic due to anti-symmetry.
+\end{lemma}
+
+\begin{example}
+The power set $\powerset\{a,b,c\}$ can be ordered by the inclusion relation $\subseteq$. The following is a Hasse diagram for this ordered set:
+\begin{center}
+\begin{tikzcd}
+ & \{a,b,c\} & \\
+\{a,b\}\ar[ru, dash] & \{a,c\}\ar[u,dash] & \{b,c\}\ar[lu,dash] \\
+\{a\} \ar[u,dash] \ar[ru, dash] & \{b\} \ar[lu, dash] \ar[ru, dash] & \{c\} \ar[lu,dash] \ar[u, dash] \\
+ & \emptyset \ar[lu, dash] \ar[u, dash] \ar[ru, dash] &
+\end{tikzcd}
+\end{center}
+\end{example}
 
 \section{The dual of an ordered set}
 \begin{definition}
@@ -183,6 +238,30 @@ So in both cases $x\leq y$.
 
 (2') Assume $f$ is injective reflects strict order. Assume $x < y$. Either $f(x)<f(y), f(y)<f(x)$ or $f(x)=f(y)$. If $f(y)<f(x)$, preservation of strict order yields a contradiction. If $f(x)=f(y)$, injectivity yields a contradiction. So $f(x)<f(y)$.
 \end{proof}
+
+
+\begin{proposition}
+Let $\sSet{P,R}$ be a relational structure, $\sSet{Q,\Yleft}$ a preordered set and $f:P\to Q$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is relation-preserving;
+\item $R;f;\Yleft \subseteq f;\Yleft$;
+\item the inverse image of every principle down-set is closed under $R^\transp$;
+\item $\Yleft;f^\transp; R \subseteq \Yleft;f^\transp$
+\item the inverse image of every principle up-set is closed under $R$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1 \Rightarrow 2)$ By \ref{relationPreserving} we have $R;f \subseteq f;\Yleft$. Then $R;f;\Yleft \subseteq f;\Yleft^2 \subseteq f;\Yleft$ by transitivity.
+
+$(2 \Rightarrow 1)$ By reflexivity we have $\id_Q \subseteq \Yleft$ and so $R;f \subseteq R;f;\Yleft \subseteq f;\Yleft$. Thus $f$ is relation-preserving by \ref{relationPreserving}.
+
+$(3)$ Is simply a translation of $\forall x: R;f;Sx \subseteq f;Sx$.
+
+$(4)$ Similar to (2), except using a different part of \ref{relationPreserving}.
+
+$(3)$ Is simply a translation of $\forall x: xS;f^\transp; R \subseteq xS;f^\transp;f^\transp$.
+\end{proof}
+
 
 \begin{definition}
 A function $f: P\to P$ on an ordered set $(P,\Yleft)$ into itself is
@@ -745,45 +824,6 @@ Let $(P,\Yleft)$ be an ordered set and $m,n\in P$.
 
 (2) (a) The direction $\Rightarrow$ is given by \ref{emptyInterval}. Now assume $m \Yleft n$. Also $m\Yleft m$ and $n \Yleft n$ by reflexivity. So $m,n\in [m,n]$ by definition. This also gives point (b).
 \end{proof}
-
-\section{Covering relations}
-\begin{definition}
-Let $(P,\Yleft)$ be a an order relation and $x,y\in P$. We say $y$ \udef{covers} $x$ if
-\begin{itemize}
-\item $x\Yleft y$;
-\item $x\neq y$
-\item $\nexists z\in P\setminus\{x,y\}: x\Yleft z \Yleft y$).
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-Let $P$ be a preordered set. Then $y$ covers $x$ \textup{if and only if} $x\neq y$ and $[x,y] = \{x,y\}$.
-\end{lemma}
-
-\subsection{Hasse diagrams}
-A \udef{Hasse diagram} is a graphical depiction of an order relation. Each element of the ordered set is a point and points are connected such that:
-\begin{enumerate}
-\item if $x \Yleft y$, then the point for $x$ is drawn lower than the point for $y$;
-\item two elements $x,y$ are connected if $y$ covers $x$ or $x$ covers $y$.
-\end{enumerate}
-
-TODO is transitive (reflective) reduction! (+ link Galois)
-
-\begin{lemma}
-The Hasse diagrams of partial orders are acyclic due to anti-symmetry.
-\end{lemma}
-
-\begin{example}
-The power set $\powerset\{a,b,c\}$ can be ordered by the inclusion relation $\subseteq$. The following is a Hasse diagram for this ordered set:
-\begin{center}
-\begin{tikzcd}
- & \{a,b,c\} & \\
-\{a,b\}\ar[ru, dash] & \{a,c\}\ar[u,dash] & \{b,c\}\ar[lu,dash] \\
-\{a\} \ar[u,dash] \ar[ru, dash] & \{b\} \ar[lu, dash] \ar[ru, dash] & \{c\} \ar[lu,dash] \ar[u, dash] \\
- & \emptyset \ar[lu, dash] \ar[u, dash] \ar[ru, dash] &
-\end{tikzcd}
-\end{center}
-\end{example}
 
 
 \section{Completeness}
@@ -1920,7 +1960,7 @@ Now we prove the other inclusion: $\{x\}^\perp \subseteq \downset \overline{x}$.
 Take $y\in \{x\}^\perp$. We just need to show that $y\leq \overline{x}$, or, equivalently, $y = y\wedge \overline{x}$. Indeed
 \[ y = y \wedge \top = y\wedge (x\vee \overline{x}) = (y\wedge x)\vee (y\wedge \overline{x}) = \bot \vee (y\wedge \overline{x}) = y\wedge \overline{x}. \]
 \end{proof}
-\begin{corollary}
+    \begin{corollary} \label{BooleanInequalities}
 Let $L$ be a Boolean lattice and $x,y\in L$. Then the following are equivalent:
 \begin{enumerate}
 \item $x \leq y$;
