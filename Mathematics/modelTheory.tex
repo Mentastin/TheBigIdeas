@@ -104,22 +104,20 @@ An algebra is \udef{simple} if there are no congruences on it other than the tri
 \begin{lemma} \label{basicCongruenceLemma}
 Let $\mathfrak{q}$ be a congruence on an $\Omega$-algebra $A$ and $B$ an $\Omega$-subalgebra of $A$. Then
 \begin{enumerate}
-\item $\mathfrak{q}$ can be extended pointwise to a congruence on $A^2$, that is
-\[ (a,b)\mathfrak{q}(c,d) \iff a\mathfrak{q}c \land b\mathfrak{q}d; \]
-\item 
+\item $\mathfrak{q}^n$ is a congruence on $A^n$ for all $n\in \N$,
 \item $\mathfrak{q}|_B^B$ is a congruence on $B$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 (1) The extension of $\mathfrak{q}$ is an equivalence relation by \ref{relationPropertiesDirectProduct}.
 
-We then need to prove that this extension is a subalgebra of $(A^2)^2$. This is easily verified using pointwise operations. (TODO develop easier machinery for this?)
+TODO subalgebra of $(A^n)^2$ with canonical isomorphism.
 
-(2) The restriction is an equivalence relation by \ref{relationPropertiesRestriction} and an $\Omega$-algebra by \ref{intersectionSubalgebra}.
+(2) The restriction is clearly still reflexive, symmetric and transitive. It is an $\Omega$-algebra by \ref{intersectionSubalgebra}.
 \end{proof}
 For simplicity we may write $B/\mathfrak{q}$ instead of $B/(\mathfrak{q}|_B^B)$.
 
-\begin{proposition}
+\begin{proposition} \label{kernelCongruence}
 Let $f:A\to B$ be a homomorphism. Then $\ker f$ is a congruence on $A$.
 \end{proposition}
 
@@ -148,8 +146,9 @@ The $\Omega$-algebra $A/\mathfrak{q}$ is called the \udef{quotient algebra} of $
 \begin{proposition}[Factor theorem] \label{factorTheorem}
 Let $f:A\to B$ be a homomorphism of $\Omega$-algebras and $\mathfrak{q}$ a congruence on $A$ such that $\mathfrak{q}\subseteq \ker f$. Then
 \[ f': A/\mathfrak{q} \to B: [a]_\mathfrak{q} \mapsto f'([a]_\mathfrak{q}) = f(a) \]
-is a well-defined homomorphism. Further, $f'$ is injective \textup{if and only if} $\mathfrak{q} = \ker f$.
+is a well-defined homomorphism with $\im f' = \im f$. Further, $f'$ is injective \textup{if and only if} $\mathfrak{q} = \ker f$.
 \end{proposition}
+Note that $\ker f$ is a congruence by \ref{kernelCongruence}. TODO: universal property.
 \begin{proof}
 To show the function is well defined, take $a,a'\in A$ such that $[a]_\mathfrak{q} = [a']_\mathfrak{q}$, i.e. $(a,a')\in \mathfrak{q}$. This implies $(a,a')\in\ker f$, so $f(a) = f(a')$ and $f'$ is well-defined.
 
@@ -159,6 +158,16 @@ f'(\omega_{A/\mathfrak{q}}([a_1], \ldots, [a_{\alpha(\omega)}])) &= f'([\omega_{
 &= \omega_B(f(a_1), \ldots f(a_{\alpha(\omega)})) = \omega_B(f'([a_1]), \ldots, f'([a_{\alpha(\omega)}])).
 \end{align*}
 Finally $f'$ is injective iff no two distinct $\mathfrak{q}$-classes are identified by $f'$, which is exactly the condition $\mathfrak{q} = \ker f$.
+\end{proof}
+
+\begin{lemma}
+Let $A$ be an $\Omega$-algebra and $\mathfrak{q}$ a congruence on $A$. Then
+\[ [(x,y)]_{\mathfrak{q}^2} = [x]_\mathfrak{q}\times [y]_\mathfrak{q}. \]
+In particular $A^2/\mathfrak{q}^2 = \setbuilder{[x]_\mathfrak{q}\times [y]_\mathfrak{q}}{x,y\in A}$.
+\end{lemma}
+\begin{proof}
+We calculate
+\[ (a,b) \in [(x,y)]_{\mathfrak{q}^2} \iff a\mathfrak{q}x \land b\mathfrak{q}y \iff a\in [x]_\mathfrak{q} \land b\in [y]_\mathfrak{q} \iff (a,b)\in [x]_\mathfrak{q}\times [y]_\mathfrak{q}. \]
 \end{proof}
 
 \subsubsection{Isomorphism theorems}
@@ -180,12 +189,18 @@ Take the homomorphism $[\cdot]_\mathfrak{q}:A \to A/\mathfrak{q}$ as defined in 
 \end{proof}
 
 \begin{theorem}[Third isomorphism theorem]
-Let $A$ be an $\Omega$-algebra and $\mathfrak{q},\mathfrak{r}$ congruences on $A$ such that $\mathfrak{q} \subseteq \mathfrak{r}$. Then we have the isomorphism
+Let $A$ be an $\Omega$-algebra and $\mathfrak{q},\mathfrak{r}$ congruences on $A$ such that $\mathfrak{q} \subseteq \mathfrak{r}$. Then $\mathfrak{r}/\mathfrak{q}$ is a congruence on $A/\mathfrak{q}$ and we have the isomorphism
 \[ (A/\mathfrak{q})/(\mathfrak{r}/\mathfrak{q}) \cong A/\mathfrak{r}. \]
 \end{theorem}
-In order to properly interpret $\mathfrak{r}/\mathfrak{q}$, we need to first extend $\mathfrak{q}$ to $A^2$ and then restrict to $\mathfrak{r}$, both as in \ref{basicCongruenceLemma}.
+This is a slight abuse of notation: clearly $\mathfrak{q}$ is a congruence on $A$, but $\mathfrak{r}\subseteq A^2$. What we mean is that we take the quotient ``pointwise'':
+\[ \mathfrak{r}/\mathfrak{q} = \setbuilder{([x]_\mathfrak{q}, [y]_\mathfrak{q})}{(x,y)\in \mathfrak{r}}. \]
 \begin{proof}
-Applying the factor theorem \ref{factorTheorem} to the homomorphism $A\to A/\mathfrak{r}$ from \ref{quotientAlgebra}. We get a homomorphism $f: A/\mathfrak{q} \to A/\mathfrak{r}$. We apply the first isomorphism theorem \ref{firstIsomorphism} to this homomorphism. Then we just need to show that $\ker f = \mathfrak{r}/\mathfrak{q}$. TODO!
+Applying the factor theorem \ref{factorTheorem} to the homomorphism $A\to A/\mathfrak{r}$ from \ref{quotientAlgebra}. We get a surjective homomorphism
+\[ f: A/\mathfrak{q} \to A/\mathfrak{r}: [a]_\mathfrak{q} \mapsto [a]_{\mathfrak{r}}. \]
+We apply the first isomorphism theorem \ref{firstIsomorphism} to this homomorphism to get $(A/\mathfrak{q})/\ker f \cong A/\mathfrak{r}$. We just need to show that $\ker f = \mathfrak{r}/\mathfrak{q}$.
+
+Indeed
+\[ ([x]_\mathfrak{q},[y]_\mathfrak{q}) \in \ker f \iff [x]_\mathfrak{r} = [y]_\mathfrak{r} \iff (x, y)\in \mathfrak{r} \iff ([x]_\mathfrak{q},[y]_\mathfrak{q}) \in \mathfrak{r}/\mathfrak{q}. \]
 \end{proof}
 In particular, we see that $A/\mathfrak{q}$ is simple if and only if $\mathfrak{q}$ is a maximal proper congruence on $A$.
 
@@ -224,7 +239,7 @@ TODO require that absorbing element is no identity?
 
 TODO expand signature to include: identity / absorbing element / inverse
 
-\begin{lemma}
+\begin{lemma} \label{leftRightIdentity}
 Let $(\Omega, \alpha)$ be a signature, $A$ an $\Omega$-structure and $\omega$ a binary operator.
 \begin{enumerate}
 \item If $A$ has both a left-identity $e_L$ and a right-identity $e_R$, then $A$ has an identity $e$ and

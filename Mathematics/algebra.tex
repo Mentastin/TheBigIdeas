@@ -2,27 +2,29 @@
 \begin{definition}
 A \udef{Magma} is an algebra whose signature contains a single ginary operator.
 
-Let $A$ be the carrier of the algebra and $\cdot$ the interpretation of the operator. We denote the magma as $\sSet{A,\cdot}$.
-\end{definition}
+Let $A$ be the carrier of the algebra and $\boldsymbol{\cdot}$ the interpretation of the operator. We denote the magma as $\sSet{A,\boldsymbol{\cdot}}$. We call $\sSet{A,\boldsymbol{\cdot}}$
+\begin{itemize}
+\item a \udef{semigroup} if $\boldsymbol{\cdot}$ is associative;
+\item a \udef{monoid} if $\boldsymbol{\cdot}$ is associative and has an identity;
+\item a \udef{group} if $\boldsymbol{\cdot}$ is associative, has an identity and every $a\in A$ has an inverse.
+\end{itemize}
 We call a magma \udef{commutative} if its operation is commutative.
 
-Let $x,y\in A$. We usually write $x\cdot y$ instead of $\cdot(x,y)$. (TODO ref infix notation)
+If $\sSet{A,\boldsymbol{\cdot}}$ is a monoid or group with identity $e$, we denote the monoid/group as $\sSet{A,\boldsymbol{\cdot}, e}$.
+\end{definition}
+TODO: change of signature for monoid!
+
+Let $x,y\in A$. We usually write $x\boldsymbol{\cdot} y$ instead of $\boldsymbol{\cdot}(x,y)$. (TODO ref infix notation)
 
 \begin{definition}
-We write $x^n$ to abbreviate $\underbrace{\text{$n$ times}}{x\cdot x\cdot \ldots \cdot x}$.
+We write $x^n$ to abbreviate $\underbrace{x\cdot x\cdot \ldots \cdot x}_{\text{$n$ times}}$.
 
 If $x^2 = x$, we say $x$ is an \udef{idempotent}.
 \end{definition}
 
-\section{Semigroups and monoids}
-\begin{definition}
-Let $\sSet{A,\cdot}$ be a magma. We call $\sSet{A,\cdot}$
-\begin{itemize}
-\item a \udef{semigroup} if $\cdot$ is associative;
-\item a \udef{monoid} if $\cdot$ is associative and has an identity.
-\end{itemize}
-If $\sSet{A,\cdot}$ is a monoid with identity $e$, we denote the monoid as $\sSet{A,\cdot, e}$.
-\end{definition}
+\begin{lemma}
+Let $\sSet{M,\cdot}$ be a magma and $a\in M$. Then $a\cdot M \subseteq M$.
+\end{lemma}
 
 \begin{proposition} \label{leftRightInverseMonoid}
 Let $(M,\cdot,e)$ be a monoid and $a\in M$. If $a$ has both a left inverse $l$ and a right inverse $r$, then $l=r$.
@@ -32,11 +34,7 @@ We calculate
 \[ l = l\cdot e = l\cdot(a\cdot r) = (l\cdot a)\cdot r= e\cdot r = r. \]
 \end{proof}
 
-\begin{lemma}
-A locally small category with a single object is a monoid.
-\end{lemma}
-TODO: \udef{delooping} $\cat{B}M$.
-
+\section{Semigroups}
 \begin{lemma}
 Let $S$ be a semigroup. If $a\in S$ is idempotent, then $\{a\}$ is a subsemigroup.
 \end{lemma}
@@ -48,17 +46,31 @@ Let $S$ be a semigroup.
 \end{enumerate}
 \end{corollary}
 
+\begin{proposition} \label{groupCriterion}
+Let $S$ be a semigroup. Then $S$ is a group \textup{if and only if} for all $a\in S$
+\[ aS = S = Sa. \]
+\end{proposition}
+\begin{proof}
+If $S$ is a group, then we have for all $a\in S$
+\[ S \supseteq aS \supseteq aa^{-1}S = S. \]
+Similarly we also have $S = Sa$.
+
+For the converse: from $aS = S$, we het that there exists an $x\in S$ such that $ax = a$. We claim $x$ is a right-identity for $S$. Indeed, take arbitrary $b\in S$. Then $b = ya$ for some $y$ and so $bx = yax = ya b$. In the same way we can also find a left-identity. So $S$ contains an identity $e$ by \ref{leftRightIdentity}.
+
+Then for all $a$ we can find $u,v\in S$ such that $au = e = va$. This means $a$ has an inverse by \ref{leftRightInverseMonoid}.
+\end{proof}
+
 \subsection{Adjoining identities and absorbing elements}
 \subsubsection{Adjoining identity}
 \begin{definition}
-Let $\sSet{S,\cdot}$ be a semigroup. We define
+Let $\sSet{S,\boldsymbol{\cdot}}$ be a semigroup. We define
 \[ \widetilde{S} \defeq \begin{cases}
 S & \text{if $S$ has an identity} \\
 S\uplus \{e\} & \text{if $S$ has no identity.}
 \end{cases} \]
 and also
-\[ \widetilde{\cdot} \quad\defeq\quad \widetilde{S}\times \widetilde{S}\to \widetilde{S}: (a,b) \mapsto \begin{cases}
-a\cdot b & a,b\in S \\
+\[ \widetilde{\boldsymbol{\cdot}} \quad\defeq\quad \widetilde{S}\times \widetilde{S}\to \widetilde{S}: (a,b) \mapsto \begin{cases}
+a\boldsymbol{\cdot} b & a,b\in S \\
 b & a = e \\
 a & b = e.
 \end{cases} \]
@@ -73,8 +85,8 @@ S & \text{if $S$ has an absorbing element} \\
 S\uplus \{u\} & \text{if $S$ has no absorbing element.}
 \end{cases} \]
 and also
-\[ \widehat{\cdot} \quad\defeq\quad \widehat{S}\times \widehat{S}\to \widehat{S}: (a,b) \mapsto \begin{cases}
-a\cdot b & a,b\in S \\
+\[ \widehat{\boldsymbol{\cdot}} \quad\defeq\quad \widehat{S}\times \widehat{S}\to \widehat{S}: (a,b) \mapsto \begin{cases}
+a\boldsymbol{\cdot} b & a,b\in S \\
 u & (a = u \lor b = u.
 \end{cases} \]
 \end{definition}
@@ -115,6 +127,9 @@ We call
 \subsubsection{Generated semigroups}
 TODO!
 
+\subsubsection{Periodic semigroups}
+Period and index.
+
 \subsection{Homomorphism}
 
 \begin{proposition}
@@ -138,26 +153,237 @@ We call $\lambda$ ($\rho$) the \udef{extended left (right) regular representatio
 
 \subsubsection{Congruences}
 \begin{definition}
-Let $\sSet{S,\cdot}$ be a semigroup. A relation $R$ on $S$ is called a \udef{}
+Let $\sSet{S,\boldsymbol{\cdot}}$ be a semigroup and $R$ a relation on $S$. Then $R$ is called
+\begin{itemize}
+\item \udef{left compatible} if it is $\Omega$-compatible with $\Omega = \setbuilder{\lambda_a}{a\in S}$;
+\item \udef{right compatible} if it is $\Omega$-compatible with $\Omega = \setbuilder{\rho_a}{a\in S}$;
+\item \udef{compatible} if it is $\Omega$-compatible with $\Omega = \{\boldsymbol{\cdot}\}$.
+\end{itemize}
+If the relation $R$ is additionally an equivalence relation, then $R$ is called a \udef{( left / right) congruence}.
 \end{definition}
 
-\subsection{Green's equivalences}
+In other words:
+\begin{itemize}
+\item $R$ is left compatible if $\forall x,y,a\in S: \; xRy \implies (ax)R(ay)$;
+\item $R$ is right compatible if $\forall x,y,a\in S: \; xRy \implies (xa)R(ya)$;
+\item $R$ is compatible if $\forall x,y,v,w\in S: \; xRy \land vRw \implies (xv)R(yw)$.
+\end{itemize}
+
+\begin{proposition}
+A relation $R$ on a semigroup $S$ is a congruence \textup{if and only if} it is a left and a right congruence.
+\end{proposition}
+\begin{proof}
+($\Rightarrow$) If $R$ is a congruence, then $aRa$ by reflexivity. So $xRy$ implies $(ax)R(ay)$ and $(xa)R(ya)$, meaning that $R$ is a left and a right congruence.
+
+($\Leftarrow$) Assume $R$ a left and a right congruence. Take $x,y,v,w$ such that $xRy$ and $vRw$. Then $(xv)R(yv)$ and $(yv)R(yw)$ by left and right compatibility. We conclude $(xv)R(yw)$ by transitivity.
+\end{proof}
+
+\subsection{Green's relations}
 \begin{definition}
 Let $\sSet{S,\cdot}$ be a semigroup. Let
 \begin{itemize}
 \item $\mathcal{L}$ be a relation on $S$ defined by $a\mathcal{L}b \defequiv \widetilde{S}a = \widetilde{S}b$;
 \item $\mathcal{R}$ be a relation on $S$ defined by $a\mathcal{R}b \defequiv a\widetilde{S} = b\widetilde{S}$;
-\item $\mathcal{H} = \mathcal{L}\cap \mathcal{R}$.
+\item $\mathcal{H} \defeq \mathcal{L}\cap \mathcal{R}$;
+\item $\mathcal{D} \defeq \mathcal{L}\vee \mathcal{R}$; TODO: which lattice?
+\item $\mathcal{J}$ be a relation on $S$ defined by $a\mathcal{J}b \defequiv \widetilde{S}a\widetilde{S} = \widetilde{S}b\widetilde{S}$.
 \end{itemize}
+These five relations are known as \udef{Green's relations}.
 \end{definition}
+
+Clearly we have $\mathcal{D} \subseteq \mathcal{J}$.
 
 \begin{lemma}
 Let $\sSet{S,\cdot}$ be a semigroup and $a,b\in S$. Then
 \begin{enumerate}
-\item $a\mathcal{L}b$ \textup{if and only if} $\exists x,y\in S: (xa = b) \land (yb = a)$;
-\item $a\mathcal{R}b$ \textup{if and only if} $\exists x,y\in S: (ax = b) \land (by = a)$.
+\item $a\mathcal{L}b$ \textup{if and only if} $\exists x,y\in \widetilde{S}: (xa = b) \land (yb = a)$;
+\item $a\mathcal{R}b$ \textup{if and only if} $\exists x,y\in \widetilde{S}: (ax = b) \land (by = a)$;
+\item $a\mathcal{J}b$ \textup{if and only if} $\exists x,y, u,v\in \widetilde{S}: (xay = b) \land (ubv = a)$.
 \end{enumerate}
 \end{lemma}
+\begin{proof}
+We prove (1), (2) is analogous.
+
+($\Rightarrow$) $a\in \widetilde{S}a = \widetilde{S}b$, so there exists $y\in \widetilde{S}$ such that $a = yb$. The other equation is similar.
+
+($\Leftarrow$) Because $\widetilde{S}x \subseteq \widetilde{S}$, we have $\widetilde{S}a \subseteq \widetilde{S}xa = \widetilde{S}b$. Similarly $\widetilde{S}b \subseteq \widetilde{S}a$.
+\end{proof}
+\begin{corollary}
+$\mathcal{L}$ is a \emph{right} congruence and $\mathcal{R}$ a \emph{left} congruence.
+\end{corollary}
+
+\begin{proposition}
+The relations $\mathcal{L}$ and $\mathcal{R}$ commute.
+\end{proposition}
+\begin{proof}
+Assume $a(\mathcal{L};\mathcal{R})b$, meaning $\exists c: a\mathcal{L}c$ and $c\mathcal{R}b$. Then there exist $x,y,u,v\in \widetilde{S}$ such that
+\[ (xa = c) \land (yc = a) \;\land\; (cu = b) \land (bv = c). \]
+Now define $d = ycu$. Then $a\mathcal{R}d$ because
+\[ d = (yc)u = au \;\text{and}\; a = yc = ybv = ycuv = dv \]
+and $d\mathcal{L}b$ because
+\[ d = ycu = yb \;\text{and}\; b = cu = xau = xycu = xd. \]
+So $a(\mathcal{R};\mathcal{L})b$. The other inclusion is similar.
+\end{proof}
+\begin{corollary}
+$\mathcal{D} = \mathcal{L};\mathcal{R} = \mathcal{R};\mathcal{L}$.
+\end{corollary}
+In other words, $a\mathcal{D}b \iff a\mathcal{L} \mesh \mathcal{R}b \iff a\mathcal{R} \mesh \mathcal{L}b$.
+
+\begin{proposition}
+Let $S$ be a periodic semigroup. Then $\mathcal{D} = \mathcal{J}$.
+\end{proposition}
+\begin{proof}
+The inclusion $\mathcal{D} \subseteq \mathcal{J}$ is generally true. We want to prove the other inclusion.
+
+Suppose $a\mathcal{J}b$. Then we can find $x,y,u,v\in \widetilde{S}$ such that
+\[ xay = b, \quad ubv = a. \]
+We see that $a = (ux)a(yu) = (ux)^2a(yu)^2 = \ldots$. By periodicity (TODO ref) we can find an $m\in \N$ such that $(ux)^m$ is idempotent. Then set $c= xa$, so that
+\[ a = (ux)^ma(yu)^m = (ux)^m(ux)^ma(yu)^m = (ux)^ma = (ux)^{m-1}uc, \]
+which means that $a\mathcal{L}c$.
+
+Similarly we can choose $n\in \N$ such that $(vy)^n$ is idempotent, so from $b = (xu)b(vy) = (xu)^2b(vy)^2 = \ldots$
+we get
+\begin{align*}
+c &= xa = x(ux)^{n+1}a(yu)^{n+1} = (xu)^{n+1}xay(vy)^nv \\
+&= (xu)^{n+1}b(vy)^{2n}v = (xu)^{n+1}b(vy)^{n+1}(vy)^{n-1}v \\
+&= b(vy)^{n-1}v.
+\end{align*}
+This along with $cy = xay = b$, gives $c\mathcal{R}b$. Thus $a\mathcal{L};\mathcal{R}b$, i.e. $a\mathcal{D}b$.
+\end{proof}
+\begin{corollary}
+If the semigroup is finite, then $\mathcal{D} = \mathcal{J}$.
+\end{corollary}
+
+\begin{proposition}
+Let $S$ be a semigroup. If $\sSet{S/\mathcal{L}, \subseteq}$ and $\sSet{S/\mathcal{R}, \subseteq}$ are well-founded, then $\mathcal{D} = \mathcal{J}$.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsubsection{Egg-box diagrams}
+\begin{definition}
+In an \udef{egg-box diagram} a semigroup $S$ is depicted as a grid. Each element is put in this grid such that
+\begin{itemize}
+\item the rows are $\mathcal{R}$-classes; and
+\item the columns are $\mathcal{L}$-classes.
+\end{itemize} 
+\end{definition}
+
+Thus for $a,b\in S$, $[a]_\mathcal{L} = [b]_\mathcal{L}$ if and only if $a$ and $b$ are in the same column. Similarly, $[a]_\mathcal{R} = [b]_\mathcal{R}$ if and only if $a$ and $b$ are in the same row.
+
+\begin{lemma}
+Let $S$ be a semigroup and $a,b\in S$. Then
+\begin{enumerate}
+\item the cells in the egg-box diagram are $\mathcal{H}$-equivalence classes;
+\item $a\mathcal{D}b$ \textup{if and only if} there is an element in the intersection of the row of $a$ and the column of $b$ or vice versa.
+\end{enumerate}
+\end{lemma}
+
+\begin{example}
+Consider the semigroup $(\{1,2,3\} \to \{1,2,3\})$ with composition $\circ$. We can represent an element $f$ of this semigroup as $(f(1) f(2) f(3))$. We have
+\begin{itemize}
+\item $f\mathcal{L}g$ if $f$ and $g$ have the same image;
+\item $f\mathcal{R}g$ if $f$ and $g$ have the same kernel.
+\end{itemize}
+An egg-box diagram can be drawn as follows:
+\[ \begin{array}{|c|c|c|c|c|c|c|}
+\hline
+\mathbf{(1 1 1)} & \mathbf{(2 2 2)} & \mathbf{(3 3 3)} &&& &  \\ \hline
+&& & \mathbf{(1 2 2)}, & \mathbf{(1 3 3)}, & (2 3 3), &  \\
+&& & (2 1 1)  & (3 1 1)  & (3 2 2)  &  \\ \hline
+&& & (2 1 2), & (3 1 3), & \mathbf{(3 2 3)},  &  \\
+&& & \mathbf{(1 2 1)}  & (1 3 1)  & (2 3 2)  &  \\ \hline
+&& & (2 2 1), & (3 3 1), & (3 3 2),  &  \\
+&& & (1 1 2)  & \mathbf{(1 1 3)}  & \mathbf{(2 2 3)}  &  \\ \hline
+&& &&& & \mathbf{(1 2 3)}, (2 3 1) (3 1 2)  \\
+&& &&& & (1 3 2), (2 1 3) (3 2 1)  \\ \hline
+\end{array} \]
+The bold elements are idempotents.
+\end{example}
+
+
+\begin{proposition}[Green's lemma] \label{GreensLemma}
+Let $S$ be a semigroup and $a,b,x \in S$.
+\begin{enumerate}
+\item If $ax = b$ and $a\mathcal{R}b$, then
+\begin{enumerate}
+\item $\rho_x|_{[a]_\mathcal{L}}: [a]_\mathcal{L} \to [b]_\mathcal{L}$ is a bijection;
+\item if $by = a$ for some $y\in \widetilde{S}$, then $\rho_y|_{[b]_\mathcal{L}}$ is the inverse;
+\item $\rho_x|_{[a]_\mathcal{L}}$ preserves $\mathcal{R}$-classes.
+\end{enumerate}
+\item If $xa = b$ and $a\mathcal{L}b$, then
+\begin{enumerate}
+\item $\lambda_x|_{[a]_\mathcal{R}}: [a]_\mathcal{R} \to [b]_\mathcal{R}$ is a bijection with inverse $\lambda_y|_{[b]_\mathcal{R}}$;
+\item if $yb = a$ for some $y\in \widetilde{S}$, then $\lambda_y|_{[b]_\mathcal{R}}$ is the inverse;
+\item $\lambda_x|_{[a]_\mathcal{R}}$ preserves $\mathcal{L}$-classes.
+\end{enumerate} 
+\end{enumerate}
+In particular
+\begin{enumerate}
+\item if $a\mathcal{R}b$, then there exists $x\in \widetilde{S}$ such that $ax = b$ and thus $|[a]_\mathcal{L}| = |[b]_\mathcal{L}|$;
+\item if $a\mathcal{L}b$, then there exists $x\in \widetilde{S}$ such that $xa = b$ and thus $|[a]_\mathcal{R}| = |[b]_\mathcal{R}|$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The function $\rho_x$ is well-defined: let $u\in [a]_\mathcal{L}$ so that $u = va$ for some $v\in \widetilde{S}$. Then $\rho_x(u) = vax = vb \in [b]_\mathcal{L}$.
+
+Because $a\mathcal{R}b$, we can always find a $y\in \widetilde{S}$ such that $by = a$. The function $\rho_y|_{[b]_\mathcal{L}}$ is clearly the inverse: $\rho_y(\rho_x(u)) = \rho_y(vb) = vby = va = u$. This shows that $\rho_x$ is bijective.
+
+It is clear that $\rho_x$ preserves $\mathcal{R}$-classes, because it operates on the right.
+
+The arguments for $\lambda_x$ and $\lambda_y$ are completely analogous.
+\end{proof}
+\begin{corollary}
+Let $S$ be a semigroup and $a,b\in S$ such that $a\mathcal{D}b$, then $|[a]_\mathcal{H}| = |[b]_\mathcal{H}|$.
+\end{corollary}
+\begin{proof}
+If $a(\mathcal{L};\mathcal{R})b$, then there exists a $c\in S$ such that $c = sa$ and $b = ct$. Then $\lambda_s\circ \rho_t$ is the required bijection.
+\end{proof}
+
+\begin{theorem}[Green's theorem]
+Let $S$ be a semigroup and $H$ an $\mathcal{H}$-class in $S$. Then either
+\begin{enumerate}
+\item $H^2\perp H$; or
+\item $H^2 = H$ and $H$ is a subgroup of $S$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Suppose $H^2\cap H \neq \emptyset$, then there exist $a,b\in H$ such that $ab = c\in H$. By the Green's lemma \ref{GreensLemma} we have that $\rho_b:H\to H$ and $\lambda_a: H\to H$ are bijections.
+
+Then for all $h\in H$, $\rho_b(h) = hb \in H$. Again by the Green's lemma, this means that $\lambda_h: H\to H$ is a bijection. Similarly $\rho_h: H\to H$ is a bijection for all $h$. So for all $h\in H$ we have $hH = H = Hh$. This means $H^2 = H$ and $H$ is a group by \ref{groupCriterion}.
+\end{proof}
+\begin{corollary}
+Let $S$ be a semigroup and $H$ an $\mathcal{H}$-class in $S$. Then
+\begin{enumerate}
+\item if $x$ is an idempotent in $H$, then $H$ is a subgroup of $S$;
+\item no $\mathcal{H}$-class can contain more than one idempotent. 
+\end{enumerate}
+\end{corollary}
+
+\subsubsection{Regular elements $\mathcal{D}$-classes}
+\begin{definition}
+Let $S$ be a semigroup. An element $a\in S$ is called \udef{regular} if there exists $x\in S$ such that $axa = a$.
+\end{definition}
+
+\begin{proposition}
+Let $S$ be a semigroup. If $a\in S$ is regular, then every element in $[a]_{\mathcal{D}}$ is regular.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+\begin{corollary}
+
+\end{corollary}
+
+\section{Monoids}
+
+
+\begin{lemma}
+A locally small category with a single object is a monoid.
+\end{lemma}
+TODO: \udef{delooping} $\cat{B}M$.
+
 
 \subsection{Ordered monoids}
 \begin{definition}
