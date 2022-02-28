@@ -935,15 +935,17 @@ The directed set $(D,\Yleft)$ is called a \udef{product direction}.
 
 
 \section{Ordered sets of subsets}
-\subsection{The ``finer than'' relation}
+\subsection{The ``finer than / coarser than'' relation}
 \begin{definition}
 Let $\sSet{P,\Yleft}$ be an ordered set and $A,B \subseteq P$. We say $A$ is \udef{finer} than $B$ (or $B$ is \udef{coarser} than $A$) if $B\subseteq \upset A$.
 
-If $A$ is finer than $B$ and $B$ is finer than $A$, we write $A \approx B$.
+If $A$ is finer than $B$ and $B$ is finer than $A$, we write $A \approx B$ and say $A$ and $B$ are \udef{equally fine} or \udef{equally coarse}.
 \end{definition}
 
 Alternatively, we say $A$ is finer than $B$ iff
 \[ \forall b\in B: \exists a\in A: \; a \Yleft b. \]
+
+For up upwards closed sets, ``finer than'' is $\supseteq$ and ``coarser than'' is $\subseteq$.
 
 \begin{lemma}
 Let $\sSet{P,\Yleft}$ be an ordered set and $A,B,C \subseteq P$. Then
@@ -1126,38 +1128,6 @@ If $P$ is downward directed and $\exists \bot \in \min(P)$ and $B \subseteq P$ a
 Let $\sSet{P,\Yleft}$ be an ordered set. Then for all filter bases $B,C$ in $P$: $B$ is finer than $C$ \textup{if and only if} $\mathfrak{F}\{B\} \supseteq \mathfrak{F}\{C\}$.
 \end{proposition}
 
-\subsection{Free and principal filters}
-\begin{definition}
-Let $\sSet{P,\Yleft}$ be a complete ordered set and $F\subseteq P$ a filter.
-\begin{itemize}
-\item The \udef{kernel} of the filter is $\ker F \defeq \bigwedge F$.
-\item A filter is called \udef{principal} if $\ker F \in F$;
-\item A filter is called \udef{free} if $\ker F = \bot$.
-\end{itemize}
-The set of principal filters in $P$ is denoted $\filters_*(P)$ and the set of free filters in $P$ is denoted $\filters_0(P)$.
-\end{definition}
-A proper filter cannot be both principal and free. Each filter on a finite set is principal.
-
-\begin{proposition}
-Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ is finer than the cofinite filter of $A$.
-\end{proposition}
-\begin{proof}
-We need to show that each cofinite subset $C$ of $A$ is in $F$. First $A\setminus C = \{x_1, \ldots, x_n\}$ is a finite set. Now for each $x_i$ we can find a set $f_i\in F$ such that $x_i\notin f_i$, because if this was not possible, then $x_i \in \bigcap F$, but $\bigcap F = \emptyset$ due to $F$ being free. Also $\bigcap_{i=1}^n f_i \in F$, because $F$ is closed under finite intersections.
-
-So $(A\setminus C)\cap (\bigcap_{i=1}^n f_i) = \emptyset$, or equivalently $\bigcap_{i=1}^n f_i \subseteq X\setminus (A\setminus C)$, meaning $X\setminus (A\setminus C) \in F$ and thus $C = A\cap (X\setminus (A\setminus C)) \in F$.
-\end{proof}
-\begin{corollary}
-A filter of subsets of $X$ is free \textup{if and only if} it is finer than the cofinite filter of $X$.
-\end{corollary}
-
-\begin{proposition}
-Let $\sSet{P,\Yleft}$ be a complete ordered set (TODO: do we need Boolean lattice??) and $F\subseteq P$ a filter. Then there exists a unique pair of filters $F^*$ and $F^0$ such that $F^*$ is principal, $F^0$ is free and
-\[ F = F^* \wedge F^0 \qquad P = F^* \vee F^0. \]
-\end{proposition}
-We call $F^*$ the \udef{principal part} and $F^0$ the \udef{free part} of the filter.
-\begin{proof}
-
-\end{proof}
 
 \section{Combining ordered sets}
 \begin{definition}
@@ -1371,7 +1341,7 @@ The natural numbers forms a lattice if ordered by division. The meet and join ar
 \[ m\vee n = \lcm\{m,n\} \qquad \text{and}\qquad m\wedge n = \gcd\{m,n\}. \]
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma} \label{orderPreservingFunctionLatticeOperations}
 Let $L,K$ be lattices and $f:L\to K$ a function. The following are equivalent:
 \begin{enumerate}
 \item $f$ is order-preserving;
@@ -1688,6 +1658,38 @@ We just need to verify that the proposed suprema and infima are indeed filters.
 TODO
 \end{proof}
 
+\subsubsection{Free and principal filters}
+\begin{definition}
+Let $L$ be a complete lattice and $F\subseteq P$ a filter.
+\begin{itemize}
+\item The \udef{kernel} of the filter $F$ is $\ker F \defeq \bigwedge F$.
+\item A filter is called \udef{principal} if $\ker F \in F$;
+\item A filter is called \udef{free} if $\ker F = \bot$.
+\end{itemize}
+The set of principal filters in $P$ is denoted $\filters_*(P)$ and the set of free filters in $P$ is denoted $\filters_0(P)$.
+\end{definition}
+A proper filter cannot be both principal and free. Each filter on a finite set is principal.
+
+\begin{proposition}
+Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ is finer than the cofinite filter of $A$.
+\end{proposition}
+\begin{proof}
+As filters are upwards closed, ``$F$ finer than the cofinite filter of $A$'' means the cofinite filter of $A$ is a subset of $F$. So take some cofinite subset $C$ of $A$, such that $A\setminus C = \{x_1, \ldots, x_n\}$ is finite. Now for each $x_i$ we can find a set $f_i\in F$ such that $x_i\notin f_i$, because if this was not possible, then $x_i \in \bigcap F$, but $\bigcap F = \emptyset$ due to $F$ being free. Also $\bigcap_{i=1}^n f_i \in F$, because $F$ is closed under finite intersections.
+
+So $(A\setminus C)\cap (\bigcap_{i=1}^n f_i) = \emptyset$, or equivalently $\bigcap_{i=1}^n f_i \subseteq X\setminus (A\setminus C)$, meaning $X\setminus (A\setminus C) \in F$ and thus $C = A\cap (X\setminus (A\setminus C)) \in F$.
+\end{proof}
+\begin{corollary}
+A filter of subsets of $X$ is free \textup{if and only if} it is finer than the cofinite filter of $X$.
+\end{corollary}
+
+\begin{proposition}
+Let $\sSet{P,\Yleft}$ be a complete ordered set (TODO: do we need Boolean lattice??) and $F\subseteq P$ a filter. Then there exists a unique pair of filters $F_*$ and $F_0$ such that $F_*$ is principal, $F_0$ is free and
+\[ F = F_* \wedge F_0 \qquad P = F_* \vee F_0. \]
+\end{proposition}
+We call $F^*$ the \udef{principal part} and $F^0$ the \udef{free part} of the filter.
+\begin{proof}
+
+\end{proof}
 
 \subsubsection{Prime and maximal filters and ideals}
 
