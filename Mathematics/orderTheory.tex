@@ -372,10 +372,12 @@ and
 \end{enumerate}
 \end{lemma}
 \begin{corollary} \label{upDownsetUnionIntersection}
-Let $P$ be an ordered set and $\mathcal{A}\subseteq \powerset(P)$. Then
+Let $\sSet{P,\Yleft}$ be an ordered set and $\mathcal{A}\subseteq \powerset(P)$. Then
 \begin{enumerate}
 \item $\upset \bigcup \mathcal{A} = \bigcup_{A\in \mathcal{A}} \upset A$ and $\downset \bigcup \mathcal{A} = \bigcup_{A\in \mathcal{A}} \downset A$;
-\item $\upset \bigcap \mathcal{A} \subseteq \bigcap_{A\in \mathcal{A}} \upset A$ and $\downset \bigcap \mathcal{A} \subseteq \bigcap_{A\in \mathcal{A}} \downset A$.
+\item $\upset \bigcap \mathcal{A} \subseteq \bigcap_{A\in \mathcal{A}} \upset A$ and $\downset \bigcap \mathcal{A} \subseteq \bigcap_{A\in \mathcal{A}} \downset A$;
+\item if $\Yleft$ is a preorder, then
+\[ \upset \bigcap_{A\in \mathcal{A}} \upset A = \bigcap_{A\in \mathcal{A}} \upset A \quad\text{and} \downset \bigcap_{A\in \mathcal{A}} \downset A = \bigcap_{A\in \mathcal{A}} \downset A \]
 \end{enumerate}
 \end{corollary}
 \begin{proof}
@@ -384,6 +386,9 @@ Let $P$ be an ordered set and $\mathcal{A}\subseteq \powerset(P)$. Then
 
 (2) Again we calculate using \ref{unionIntersectionLabelSet}:
 \[ \upset \bigcap \mathcal{A} = \bigcup_{x\in \bigcap\mathcal{A}} \upset x \subseteq \bigcap_{A\in \mathcal{A}}\bigcup_{x\in A}\upset x = \bigcap_{A\in \mathcal{A}} \upset A. \]
+
+(3) We calculate using (2) and \ref{upwardDownwardClosure}:
+\[ \bigcap_{A\in \mathcal{A}} \upset A = \bigcap_{A\in \mathcal{A}} \upset\upset A \supseteq \upset \bigcap_{A\in \mathcal{A}} \upset A \supseteq \bigcap_{A\in \mathcal{A}} \upset A. \]
 \end{proof}
 \begin{corollary} \label{unionIntersectionDownUpSets}
 Let $P$ be an ordered set and $\{Q_i\}_{i\in I}$ be a set of down sets in $P$. Then
@@ -1121,6 +1126,39 @@ If $P$ is downward directed and $\exists \bot \in \min(P)$ and $B \subseteq P$ a
 Let $\sSet{P,\Yleft}$ be an ordered set. Then for all filter bases $B,C$ in $P$: $B$ is finer than $C$ \textup{if and only if} $\mathfrak{F}\{B\} \supseteq \mathfrak{F}\{C\}$.
 \end{proposition}
 
+\subsection{Free and principal filters}
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be a complete ordered set and $F\subseteq P$ a filter.
+\begin{itemize}
+\item The \udef{kernel} of the filter is $\ker F \defeq \bigwedge F$.
+\item A filter is called \udef{principal} if $\ker F \in F$;
+\item A filter is called \udef{free} if $\ker F = \bot$.
+\end{itemize}
+The set of principal filters in $P$ is denoted $\filters_*(P)$ and the set of free filters in $P$ is denoted $\filters_0(P)$.
+\end{definition}
+A proper filter cannot be both principal and free. Each filter on a finite set is principal.
+
+\begin{proposition}
+Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ is finer than the cofinite filter of $A$.
+\end{proposition}
+\begin{proof}
+We need to show that each cofinite subset $C$ of $A$ is in $F$. First $A\setminus C = \{x_1, \ldots, x_n\}$ is a finite set. Now for each $x_i$ we can find a set $f_i\in F$ such that $x_i\notin f_i$, because if this was not possible, then $x_i \in \bigcap F$, but $\bigcap F = \emptyset$ due to $F$ being free. Also $\bigcap_{i=1}^n f_i \in F$, because $F$ is closed under finite intersections.
+
+So $(A\setminus C)\cap (\bigcap_{i=1}^n f_i) = \emptyset$, or equivalently $\bigcap_{i=1}^n f_i \subseteq X\setminus (A\setminus C)$, meaning $X\setminus (A\setminus C) \in F$ and thus $C = A\cap (X\setminus (A\setminus C)) \in F$.
+\end{proof}
+\begin{corollary}
+A filter of subsets of $X$ is free \textup{if and only if} it is finer than the cofinite filter of $X$.
+\end{corollary}
+
+\begin{proposition}
+Let $\sSet{P,\Yleft}$ be a complete ordered set (TODO: do we need Boolean lattice??) and $F\subseteq P$ a filter. Then there exists a unique pair of filters $F^*$ and $F^0$ such that $F^*$ is principal, $F^0$ is free and
+\[ F = F^* \wedge F^0 \qquad P = F^* \vee F^0. \]
+\end{proposition}
+We call $F^*$ the \udef{principal part} and $F^0$ the \udef{free part} of the filter.
+\begin{proof}
+
+\end{proof}
+
 \section{Combining ordered sets}
 \begin{definition}
 Let $P,Q$ be ordered sets. Then
@@ -1172,7 +1210,7 @@ Let $P,Q$ be ordered sets. Then
 \chapter{Lattices}
 \section{Semilattice}
 \begin{definition}
-A \udef{semilattice} is an algebraic structure $\seq{S,\vee}$ where $\vee$ is a binary operation on the set $S$ satisfying
+A \udef{semilattice} is an algebraic structure $\sSet{S,\vee}$ where $\vee$ is a binary operation on the set $S$ satisfying
 \begin{itemize}[leftmargin=2.5cm]
 \item[\textbf{Associativity}] $x\vee (y\vee z) = (x\vee y) \vee z$;
 \item[\textbf{Commutativity}] $x \vee y = y \vee x$;
@@ -1197,12 +1235,12 @@ Let $(P,\leq)$ be a poset.
 \end{corollary}
 The converse to this corollary also holds:
 \begin{proposition} \label{orderSemilattice}
-Let $\seq{L,\vee}$ be a semilattice. Define the relation $\leq$ on $L$ by
+Let $\sSet{L,\vee}$ be a semilattice. Define the relation $\leq$ on $L$ by
 \[ \forall x,y\in L:\; x\leq y \qquad \iff \qquad x\vee y = y. \]
-Then $\seq{L,\leq}$ is a poset such that $\forall x,y\in L: x\vee y = \sup\{x,y\}$.
+Then $\sSet{L,\leq}$ is a poset such that $\forall x,y\in L: x\vee y = \sup\{x,y\}$.
 \end{proposition}
 \begin{proof}
-First we prove $\seq{L,\leq}$ is a poset:
+First we prove $\sSet{L,\leq}$ is a poset:
 \begin{itemize}
 \item Reflexivity follows from idempotency.
 \item Antisymmetry follows from commutativity:
@@ -1218,6 +1256,19 @@ Let $\seq{L,\wedge}$ be a semilattice. Define the relation $\leq$ on $L$ by
 Then $\seq{L,\leq}$ is a poset such that $\forall x,y\in L: x\wedge y = \inf\{x,y\}$.
 \end{corollary}
 
+\begin{lemma} \label{orderPreservingJoinMeet}
+Let $\sSet{P,\leq}$, $\sSet{P,\leq}$ be ordered sets and $f: P\to Q$ an order-preserving function.
+\begin{enumerate}
+\item If $P,Q$ are $\vee$-semilattices, then $f(x\vee y) \geq f(x)\vee f(y)$.
+\item If $P,Q$ are $\wedge$-semilattices, then $f(x\wedge y) \leq f(x)\wedge f(y)$.
+\end{enumerate} 
+\end{lemma}
+\begin{proof}
+(1) From $x \leq x\vee y$ we get $f(x) \leq f(x\vee y)$. Similarly $f(y) \leq f(x\vee y)$. Together this gives $f(x\vee y) \geq f(x)\vee f(y)$.
+
+(2) Similar.
+\end{proof}
+
 \section{Lattices}
 \url{file:///C:/Users/user/Downloads/Gr%C3%A4tzer,%20George%20-%20General%20lattice%20theory-Birkh%C3%A4user%20(2007).pdf}
 \url{file:///C:/Users/user/Downloads/R.%20Padmanabhan,%20S.%20Rudeanu%20-%20Axioms%20for%20lattices%20and%20Boolean%20algebras-World%20Scientific%20(2008).pdf}
@@ -1226,8 +1277,8 @@ A \udef{lattice} is an algebraic structure $\seq{L,\vee, \wedge}$, where $\vee, 
 \[ \forall a,b\in L: \; a \vee (a \wedge b) = a = a \wedge (a\vee b). \]
 We call
 \begin{itemize}
-\item $\seq{L,\vee}$ the \udef{join-semilattice} and $a\vee b$ the \udef{join} of $a$ and $b$;
-\item $\seq{L,\wedge}$ the \udef{meet-semilattice} and $a\wedge b$ the \udef{meet} of $a$ and $b$.
+\item $\sSet{L,\vee}$ the \udef{join-semilattice} and $a\vee b$ the \udef{join} of $a$ and $b$;
+\item $\sSet{L,\wedge}$ the \udef{meet-semilattice} and $a\wedge b$ the \udef{meet} of $a$ and $b$.
 \end{itemize}
 We call a lattice \udef{bounded} if both the join- and the meet-semilattice are bounded. We denote
 \begin{itemize}
@@ -1588,6 +1639,11 @@ Let $L$ be a lattice and $J$ a subset. Then
 \item $\forall a,b\in J: \qquad a\vee b\in J$;
 \item $\forall x\in L, \forall b\in J: \quad x\wedge b \in J$;
 \end{enumerate}
+\textup{if and only if}
+\begin{enumerate}
+\item $J$ is a sublattice;
+\item $J$ is a down-set;
+\end{enumerate}
 \item $J$ is a filter \textup{if and only if}
 \begin{enumerate}
 \item $a,b\in J \implies a\wedge b\in J$;
@@ -1597,6 +1653,11 @@ Let $L$ be a lattice and $J$ a subset. Then
 \begin{enumerate}
 \item $\forall a,b\in J: \qquad a\wedge b\in J$;
 \item $\forall x\in L, \forall b\in J: \quad x\vee b \in J$.
+\end{enumerate}
+\textup{if and only if}
+\begin{enumerate}
+\item $J$ is a sublattice;
+\item $J$ is a up-set.
 \end{enumerate}
 \end{enumerate}
 \end{lemma}
@@ -2283,6 +2344,33 @@ Let $A,B \subseteq U$ be sets. Then
 \end{enumerate}
 \end{corollary}
 
+\section{Grills}
+\begin{definition}
+Let $X$ be a set. Let $\mathcal{A} \subseteq \powerset(X)$. The \udef{grill} of $\mathcal{A}$ is defined as the commonality $\mathcal{A}^{\overrightarrow{\mesh}}$.
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a set, $\powerset(X)$ be ordered by inclusion, $A, B\in \powerset(X)$ and $\mathcal{A} \subseteq \powerset(X)$. Then
+\begin{enumerate}
+\item $\upset A\mesh$ = $A\mesh$;
+\item $\upset \mathcal{A}^{\overrightarrow{\mesh}} = \mathcal{A}^{\overrightarrow{\mesh}}$;
+\item $(\upset \mathcal{A})^{\overrightarrow{\mesh}} = \mathcal{A}^{\overrightarrow{\mesh}}$;
+\item $((\mathcal{A}^{\overrightarrow{\mesh}})^{\overrightarrow{\mesh}})^{\overrightarrow{\mesh}} = \mathcal{A}^{\overrightarrow{\mesh}}$;
+\item $(\mathcal{A}^{\overrightarrow{\mesh}})^{\overrightarrow{\mesh}} = \upset \mathcal{A}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) If $B$ meshes with $A$, then any superset of $B$ also meshes with $A$. The opposite inclusion is given by \ref{upwardDownwardClosure}.
+
+(2) We calculate using \ref{upDownsetUnionIntersection}
+\[ \upset \mathcal{A}^{\overrightarrow{\mesh}} = \upset \bigcap_{A\in\mathcal{A}} A\mesh = \upset \bigcap_{A\in\mathcal{A}} \upset A\mesh = \bigcap_{A\in\mathcal{A}} \upset A\mesh = \bigcap_{A\in\mathcal{A}} A\mesh = \mathcal{A}^{\overrightarrow{\mesh}} \]
+
+(3) TODO
+
+(4) TODO (general for commonalities using $\mesh^transp = \mesh$ (?)).
+
+(5) By \ref{GreensTheoremCorollary} this is a consequence of (2), (3) and (4).
+\end{proof}
 
 \section{Indicator functions}
 The family $\powerset(U)$ can be bijectively mapped to the family of functions $(U\to \{0,1\})$, by mapping each set $A$ to its indicator function $\chi_A$.
@@ -2414,6 +2502,30 @@ We just need to prove that closure under countable disjoint unions implies closu
 
 This can be done with the same construction of $\{D_i\}_{i\in \N}$ as before because now the assignment $D_{i+1} = A_{i+1}\setminus D_i$ works for arbitrary families $\{A_i\}_{i\in \N}$, not just monotone ones.
 \end{proof}
+
+\section{Filters}
+
+\begin{proposition}
+Let $X$ be a set and $F\in\filters(\powerset(X))$ a proper filter. Then $F \subseteq F^{\overrightarrow{\mesh}}$.
+\end{proposition}
+\begin{proof}
+Every set in $F$ meshes with every other set in $F$. If not, i.e. $f,g\in F$ such that $f\cap g = \emptyset$, then $\emptyset\in F$ and $F$ would not be proper.
+\end{proof}
+
+\subsection{Ultrafilters}
+\begin{definition}
+Let $X$ be a set and $F\in\filters(\powerset(X))$ a filter. We call $F$ an \udef{ultrafilter} if $F = F^{\overrightarrow{\mesh}}$.
+\end{definition}
+
+TODO characterisations. Ultrafilters are maximally fine (-> ~ Zorns lemma).
+
+\begin{proposition}
+An ultrafilter is either principal or free.
+\end{proposition}
+
+\begin{proposition}
+An ultrafilter is sequential \textup{if and only if} it is principal.
+\end{proposition}
 
 \section{Monotone classes}
 \begin{definition}
