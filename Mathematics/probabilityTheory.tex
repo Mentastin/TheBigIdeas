@@ -2,7 +2,7 @@
 \url{https://services.math.duke.edu/~rtd/PTE/PTE5_011119.pdf}
 TODO: Kolmogorov 0-1 law Gut p21
 
-\chapter{Foundations}
+\chapter{Probability spaces}
 \section{Kolmogorov axioms}
 \begin{definition}
 A measure space $\seq{\Omega, \mathcal{A}, P}$ is called a \udef{probability space} if the measure $P$ is normalised: $P(\Omega) = 1$.
@@ -184,7 +184,7 @@ $P(H_k|A) = \frac{P(H_k \cap A)}{P(A)} = \frac{P(A|H_k)\cdot P(H_k)}{P(A)}$.
 \end{proof}
 
 
-\section{Random variables, random vectors and random elements}
+\chapter{Random variables, random vectors and random elements}
 \begin{definition}
 Let $\sSet{\Omega, \mathcal{A}, P}$ be a probability space and $\sSet{S, d}$ a metric space which we consider as a measurable space $\sSet{X,\mathcal{B}}$, where $\mathcal{B}$ is the Borel $\sigma$-algebra.
 \begin{itemize}
@@ -212,15 +212,15 @@ The pushforward probability measure $\mathbb{P}_X$ is called the \udef{induced p
 
 We will often write $P(X\in B)$ for $\mathbb{P}_X(B) = P(X^{-1}(B)) = P(\setbuilder{\omega\in \Omega}{X(\omega)\in B})$
 
-\subsection{Equivalence relations on random vectors}
-\subsubsection{Almost sure equivalence}
+\section{Equivalence relations on random vectors}
+\subsection{Almost sure equivalence}
 \begin{definition}
 Let $X, Y: \sSet{\Omega, \mathcal{A}, P} \to \sSet{S, \mathcal{B}}$ be random elements. We say $X$ and $Y$ are \udef{almost surely (a.s.) equal}, denoted $X\sim Y$, if they differ on at most a null set:
 \[ X\sim Y \iff P(\setbuilder{\omega\in \Omega}{X(\omega) \neq Y(\omega)}) = 0 \iff P(\setbuilder{\omega\in \Omega}{X(\omega) = Y(\omega)}) = 1. \]
 We also say $X$ and $Y$ are \udef{equivalent} random vectors.
 \end{definition}
 
-\subsubsection{Equivalence in distribution}
+\subsection{Equivalence in distribution}
 \begin{definition}
 Let $X, Y: \sSet{\Omega, \mathcal{A}, P} \to \sSet{S, \mathcal{B}}$ be random elements. We say $X$ and $Y$ are \udef{equal in distribution}, denoted $X \overset{d}{=} Y$, if they assign the same probability the each event in $\mathcal{B}$
 \[ X \overset{d}{=} Y \iff \forall B\in\mathcal{B}: \; P(X\in B) = P(Y\in B). \]
@@ -246,11 +246,13 @@ Toss a fair coin. The universe set is $\Omega = \{\text{heads}, \text{tails}\}$.
 Clearly $P(X = 1) = P(X = 0) = P(Y = 1) = P(Y = 0) = 1/2$. Thus we see that $X \overset{d}{=} Y$. But clearly $X$ and $Y$ are not almost surely equal. In fact they are surely unequal.
 \end{example}
 
-\subsection{Distribution functions}
+\section{Distribution functions}
 \begin{definition}
 Let $X$ be a random variable on a probability space $\sSet{\Omega, \mathcal{A}, P}$. The \udef{distribution function} of $X$ is the function
 \[ F_X: \R to \R: x\mapsto P(X \leq x) = P(\setbuilder{\omega\in \Omega}{X(\omega) \leq x}). \]
 \end{definition}
+
+TODO: this is the Riemann-Stieltjes function. Generalise.
 
 \begin{proposition}
 Let $X$ be a random variable on a probability space $\sSet{\Omega, \mathcal{A}, P}$ and $F$ the distribution function of $X$. Then
@@ -265,7 +267,11 @@ Conversely, any function $F:\R\to\R$ that satisfies these properties is the dist
 (1) Let $x\leq y$. Then $\setbuilder{\omega\in \Omega}{X(\omega) \leq x} \subseteq \setbuilder{\omega\in \Omega}{X(\omega) \leq y}$, so
 \[ F(x) =  P(\setbuilder{\omega\in \Omega}{X(\omega) \leq x}) \leq  P(\setbuilder{\omega\in \Omega}{X(\omega) \leq y}) = F(y). \]
 
-(2)
+(2) Follows from \ref{measures}.
+
+(3) TODO
+
+(Converse) TODO
 \end{proof}
 \begin{corollary}
 Every discontinuity is a jump discontinuity, so all left limits exist. Also there are at most countably many discontinuities.
@@ -274,11 +280,44 @@ Every discontinuity is a jump discontinuity, so all left limits exist. Also ther
 By \ref{monotoneDiscontinuities} and \ref{DarbouxFroda}.
 \end{proof}
 
+\begin{proposition}
+Let $X_1, X_2$ be random variables. Then
+\[ F_{X_1+X_2}(u) = \int_{-\infty}^\infty F_{X_1}(u-y)\diff{F_{X_2}(y)}. \]
+If both distributions are absolutely continuous, then
+\[ f_{X_1+X_2}(u) = \int_{-\infty}^\infty f_{X_1}(u-y)f_{X_2}(y)\diff{y}. \]
+\end{proposition}
+\begin{proof}
+Fubini TODO
+\end{proof}
+
+\subsection{Probability density functions}
+
+\section{Convergence}
+\begin{definition}
+Let $\seq{X_n}$ be a sequence of random elements in $(\sSet{\Omega, \mathcal{A}, P} \to \sSet{S,d})$ and $X$ a random element in the same set. We say
+\begin{itemize}
+\item $\seq{X_n}$ \udef{converges almost surely} to $X$ if
+\[ P(\setbuilder{\omega\in\Omega}{X_n(\omega) \to X(\omega)\;\text{as}\; n\to \infty}) = 1. \]
+We write $X_n \overset{a.s.}{\longrightarrow} X$.
+\end{itemize}
+\end{definition}
+
 \begin{lemma}
-
+Suppose $Y,X,X_n$ are random vectors such that $X_n \overset{a.s.}{\longrightarrow} X$, $E[Y]<\infty$ and $|X_n| \leq Y$ for all $n$. Then $E[|X_n -X|] \to 0$ as $n\to \infty$.
 \end{lemma}
+\begin{proof}
+This is just the Lebesgue dominated convergence theorem TODO ref.
+\end{proof}
 
-\subsubsection{Probability density functions}
+\section{Expected value}
+\begin{definition}
+Let $X$ be a random  vector on a probability space $\sSet{\Omega, \mathcal{A}, P}$. We define the \udef{exprectated value} of $X$ as
+\[ E[X] \defeq \int_\Omega X(\omega)\diff{P(\omega)}. \]
+assuming $X$ is integrable.
+\end{definition}
+
+
+
 \subsection{Moments}
 \subsubsection{Raw and central moments}
 \subsubsection{Moment generating function}
@@ -289,10 +328,28 @@ By \ref{monotoneDiscontinuities} and \ref{DarbouxFroda}.
 \paragraph{Skewness}
 \paragraph{Kurtosis}
 \subsection{Cumulants}
-\subsection{Functions of random variables}
-\subsection{Inequalities and bounds}
-\subsubsection{Bounds on first moment}
-\subsubsection{Chebyshev inequality}
+
+\section{Joint distributions}
+\subsection{Marginal distributions}
+
+\section{Independence of random elements}
+\begin{definition}
+A set of random elements $\{X_i\}_{i\in 1:n}$ is called \udef{independent} if for all sets $\{A_i\}_{i\in 1:n}$ of $n$ Borel measurable sets we have that $\{X_i^{-1}[A_i]\}_{i\in 1:n}$ is a set of independent events. i.e.
+\[ P\left(\bigcap_{i=1}^n X_i^{-1}[A_i]\right) = \prod_{i=1}^n P(X_i^{-1}[A_i]). \]
+\end{definition}
+
+\begin{proposition}
+The random variables $X_1, \ldots X_n$ are independent \textup{if and only if}
+\[ F_{X_1,\ldots, X_n}(x_1, \ldots, x_n) = \prod_{i=1}^n F_{X_i}(x_i). \]
+\end{proposition}
+
+\begin{proposition}
+Let $X_1, \ldots X_n$ be independent random elements and $f_1, \ldots, f_n$ measurable functions. Then $f_1\circ X_1, \ldots, f_n\circ X_n$ are independent.
+\end{proposition}
+\begin{proof}
+Let $A_1, \ldots, A_n$ be Borel measurable sets. Since the $f_i^{-1}[A_i]$ are Borel measurable, we have
+\[ P\left(\bigcap_{i=1}^n (f_i\circ X_i)^{-1}[A_i]\right) = P\left(\bigcap_{i=1}^n X_i^{-1}[f^{-1}_i[A_i]]\right) = \prod_{i=1}^n P(X_i^{-1}[f^{-1}_i[A_i]]) = \prod_{i=1}^n P((f_i\circ X_i)^{-1}[A_i]). \]
+\end{proof}
 
 \chapter{Inequalities}
 \chapter{Characteristic functions}
