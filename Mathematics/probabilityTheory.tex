@@ -12,20 +12,22 @@ A measure space $\seq{\Omega, \mathcal{A}, P}$ is called a \udef{probability spa
 Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $A,B\subseteq \Omega$ measurable sets. Then
 \begin{enumerate}
 \item $P(A^c)= 1- P(A)$;
-\item $A\subset B$ implies $P(B)= P(A) + P(B\setminus A)$;
+\item $P(A) = P(A\setminus B)+P(A\cap B)$
 \item $P(A\cup B)+P(A\cap B) = P(A) + P(B)$;
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 (1) $\Omega = A\uplus A^c$ is a disjoint union.
 
-(2) $B = A\uplus (B\setminus A)$ is a disjoint union.
+(2) $B = (B\setminus A)\uplus (A\cap B)$ is a disjoint union.
 
-(3) $A\cup B = \Big(A\setminus (A\cap B)\Big) \uplus \Big(B\setminus (A\cap B)\Big) \uplus (A\cap B)$ is a disjoint union and $(A\cap B)\subseteq A,B$, so we can use (2).
+(3) Using (2) we get
+\[ A\cup B = \Big(A\setminus (A\cap B)\Big) \uplus \Big(B\setminus (A\cap B)\Big) \uplus (A\cap B) = P(A) - P(A\cap B) + P(B)- P(A\cap B)+ P(A\cap B). \]
 \end{proof}
 \begin{corollary} \mbox{}
 \begin{enumerate}
 \item $P(A\cup B) \leq P(A) + P(B)$;
+\item $A\subset B$ implies $P(B)= P(A) + P(B\setminus A)$;
 \item $A\subset B$ implies $P(A) \leq P(B)$.
 \end{enumerate}
 \end{corollary}
@@ -182,21 +184,100 @@ $P(H_k|A) = \frac{P(H_k \cap A)}{P(A)} = \frac{P(A|H_k)\cdot P(H_k)}{P(A)}$.
 \end{proof}
 
 
-\section{Random variables}
+\section{Random variables, random vectors and random elements}
 \begin{definition}
-Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space. A \udef{random variable} (or \udef{r.v.}) $X$ is a measurable function $X:\Omega \to \R$.
-
-A measurable function $X:\Omega\to \overline{\R}=[-\infty,+\infty]$ is called an \udef{extended random variable}.
-
-Given a random variable there is an \udef{induced probability measure} $\mathbb{P}$ on $\R$ given by
-\[ \mathbb{P}: A\mapsto P(X^{-1}(A)) = P(\setbuilder{\omega\in \mathcal{A}}{X(\omega)\in A}). \]
-We will also write $P(X\in A)$ for $\mathbb{P}(A)$.
+Let $\sSet{\Omega, \mathcal{A}, P}$ be a probability space and $\sSet{S, d}$ a metric space which we consider as a measurable space $\sSet{X,\mathcal{B}}$, where $\mathcal{B}$ is the Borel $\sigma$-algebra.
+\begin{itemize}
+\item A measurable function $X:\Omega \to S$ is called a \udef{random element}.
+\item If $S$ is a normed vector space, then $X$ is called a \udef{random vector}.
+\item If $S = \R$, then $X$ is called a \udef{random variable} (or \udef{r.v.}).
+\item If $S = \overline{\R} = [-\infty, +\infty]$, then $X$ is called an \udef{extended random variable}.
+\end{itemize}
 \end{definition}
-The induced probability measure is indeed a probability measure.
 
-\subsection{Equivalence relations on }
+
+\begin{lemma}
+Let $X: \sSet{\Omega, \mathcal{A}, P} \to \sSet{S, d}$ be a random element. Then the pushforward measure
+\[ \mathbb{P}_X: \mathcal{B}\to [0, +\infty]: B\mapsto P(X^{-1}(B)) = P(\setbuilder{\omega\in \Omega}{X(\omega)\in B}) \]
+is a probability measure on $\sSet{V, \mathcal{B}}$.
+\end{lemma}
+\begin{proof}
+The pushforward measure is a measure by \ref{pushforwardMeasure}.
+It is normalised because $X^{-1}[V] = \Omega$, so $\mathbb{P}(V) = P(\Omega) = 1$.
+\end{proof}
+
+\begin{definition}
+The pushforward probability measure $\mathbb{P}_X$ is called the \udef{induced probability measure} or the probability measure \udef{induced} by $X$. The probability space $\sSet{S, \mathcal{B}, \mathbb{P}_X}$ is the \udef{induced probability space}.
+\end{definition}
+
+We will often write $P(X\in B)$ for $\mathbb{P}_X(B) = P(X^{-1}(B)) = P(\setbuilder{\omega\in \Omega}{X(\omega)\in B})$
+
+\subsection{Equivalence relations on random vectors}
+\subsubsection{Almost sure equivalence}
+\begin{definition}
+Let $X, Y: \sSet{\Omega, \mathcal{A}, P} \to \sSet{S, \mathcal{B}}$ be random elements. We say $X$ and $Y$ are \udef{almost surely (a.s.) equal}, denoted $X\sim Y$, if they differ on at most a null set:
+\[ X\sim Y \iff P(\setbuilder{\omega\in \Omega}{X(\omega) \neq Y(\omega)}) = 0 \iff P(\setbuilder{\omega\in \Omega}{X(\omega) = Y(\omega)}) = 1. \]
+We also say $X$ and $Y$ are \udef{equivalent} random vectors.
+\end{definition}
+
+\subsubsection{Equivalence in distribution}
+\begin{definition}
+Let $X, Y: \sSet{\Omega, \mathcal{A}, P} \to \sSet{S, \mathcal{B}}$ be random elements. We say $X$ and $Y$ are \udef{equal in distribution}, denoted $X \overset{d}{=} Y$, if they assign the same probability the each event in $\mathcal{B}$
+\[ X \overset{d}{=} Y \iff \forall B\in\mathcal{B}: \; P(X\in B) = P(Y\in B). \]
+\end{definition}
+
+\begin{lemma}
+Let $X, Y: \sSet{\Omega, \mathcal{A}, P} \to \sSet{S, \mathcal{B}}$ be random elements. If $X$ and $Y$ are a.s. equal, then they are equal in distribution.
+\end{lemma}
+\begin{proof}
+Set $C = \setbuilder{\omega\in \mathcal{A}}{X(\omega)\in B}$, $D = \setbuilder{\omega\in \mathcal{A}}{Y(\omega)\in B}$ and $E = \setbuilder{\omega\in \Omega}{X(\omega)\neq Y(\omega)}$. Clearly $C\cap E$ and $D\cap E$ are measurable null sets, so $P(C\cap E) = 0 = P(D\cap E)$. Also $C\setminus E = D\setminus E$.
+
+We calculate
+\[ P(X\in B) = P(C) = P(C\setminus E) +P(C\cap E) = P(D\setminus E) +P(D\cap E) = P(D) = P(Y\in B). \]
+\end{proof}
+The converse of this lemma is not true.
+\begin{example}
+Toss a fair coin. The universe set is $\Omega = \{\text{heads}, \text{tails}\}$. Consider the random vectors
+\[ X: \omega \mapsto \begin{cases}
+1 & \omega = \text{heads} \\ 0 & \omega = \text{tails}
+\end{cases} \qquad\text{and}\qquad  Y: \omega \mapsto \begin{cases}
+0 & \omega = \text{heads} \\ 1 & \omega = \text{tails}.
+\end{cases} \]
+Clearly $P(X = 1) = P(X = 0) = P(Y = 1) = P(Y = 0) = 1/2$. Thus we see that $X \overset{d}{=} Y$. But clearly $X$ and $Y$ are not almost surely equal. In fact they are surely unequal.
+\end{example}
 
 \subsection{Distribution functions}
+\begin{definition}
+Let $X$ be a random variable on a probability space $\sSet{\Omega, \mathcal{A}, P}$. The \udef{distribution function} of $X$ is the function
+\[ F_X: \R to \R: x\mapsto P(X \leq x) = P(\setbuilder{\omega\in \Omega}{X(\omega) \leq x}). \]
+\end{definition}
+
+\begin{proposition}
+Let $X$ be a random variable on a probability space $\sSet{\Omega, \mathcal{A}, P}$ and $F$ the distribution function of $X$. Then
+\begin{enumerate}
+\item $F$ is monotonically increasing;
+\item $\lim_{x\to-\infty} F(x) = 0$ and $\lim_{x\to+\infty} F(x) = 1$; 
+\item $F$ is right-continuous at every point.
+\end{enumerate}
+Conversely, any function $F:\R\to\R$ that satisfies these properties is the distribution function of some random variable.
+\end{proposition}
+\begin{proof}
+(1) Let $x\leq y$. Then $\setbuilder{\omega\in \Omega}{X(\omega) \leq x} \subseteq \setbuilder{\omega\in \Omega}{X(\omega) \leq y}$, so
+\[ F(x) =  P(\setbuilder{\omega\in \Omega}{X(\omega) \leq x}) \leq  P(\setbuilder{\omega\in \Omega}{X(\omega) \leq y}) = F(y). \]
+
+(2)
+\end{proof}
+\begin{corollary}
+Every discontinuity is a jump discontinuity, so all left limits exist. Also there are at most countably many discontinuities.
+\end{corollary}
+\begin{proof}
+By \ref{monotoneDiscontinuities} and \ref{DarbouxFroda}.
+\end{proof}
+
+\begin{lemma}
+
+\end{lemma}
+
 \subsubsection{Probability density functions}
 \subsection{Moments}
 \subsubsection{Raw and central moments}
