@@ -1170,9 +1170,22 @@ If the order on $V$ is a partial order, then
 (4) If $v\in V^+$ and $-v\in V^+$, then $v\precsim 0$ and $0\precsim v$, so $v=0$ by anti-symmetry.
 \end{proof}
 
+\begin{lemma} \label{scalarMultiplicationInequalities}
+Let $V$ be a preordered vector space, $v\in V^+$ and $\alpha\in \R$.
+\begin{enumerate}
+\item If $\alpha \geq 1$, then $\alpha v \succsim v$.
+\item If $\alpha \leq 1$, then $\alpha v \precsim v$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have $v\succsim 0$ and $(\alpha-1) \geq 0$, so $(\alpha-1)v \succsim 0$ and $\alpha v \succsim v$.
+
+(2) We have $v\succsim 0$ and $(\alpha-1) \leq 0$, so $(\alpha-1)v \precsim 0$ and $\alpha v \precsim v$.
+\end{proof}
+
 \section{Riesz spaces}
 
-\begin{lemma}
+\begin{lemma} \label{lemmaRieszSpaces}
 Let $V$ be a Riesz space, $u,v,w\in V$ and $\alpha\in \R$, then
 \begin{enumerate}
 \item $-(v \wedge w) = (-v)\vee (-w)$ and $-(v \vee w) = (-v)\wedge (-w)$;
@@ -1193,6 +1206,14 @@ We apply \ref{orderPreservingReversingBounds} to
 (4) the order-embedding $v\mapsto u+v$.
 \end{proof}
 
+\begin{proposition}[Riesz decomposition]
+Let $V$ be a Riesz space and $v,w_1,w_2\in V^+$ such that $v \leq w_1 + w_2$. Then $\exists v_1, v_2\in V^+$ such that $v = v_1 + v_2$ and $v_1 \leq w_2, v_2 \leq w_2$.
+\end{proposition}
+\begin{proof}
+Set $v_1 = v\wedge w_1$ and $v_2 = v - v_1$. These satisfy all the properties. We verify the inequality $v_2 \leq w_2$: from $w_2 \geq v - w_1$ we get
+\[ w_2 = 0\vee w_2 \geq 0\vee (v - w_1) = v + (-v)\vee(-w_1) = v - v\wedge w_1 = v-v_1 = v_2. \]
+\end{proof}
+
 \begin{proposition} \label{sumAsMeetJoin}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \[ (v \vee w) + (v \wedge w) = v+w. \]
@@ -1202,6 +1223,21 @@ We calculate
 \[ (v \vee w) + (v \wedge w) = v + 0 \vee (w-v) + w + (v-w)\wedge 0 = (v + w) + 0 \vee (w-v) - 0 \vee (w-v) = v + w. \]
 \end{proof}
 
+\begin{proposition}
+Let $V$ be a Riesz space, $u,v,w\in V$ and $x,y,z\in V^+$. Then
+\begin{enumerate}
+\item $(u+v)\vee (2w) \leq u\vee w + v\vee w$;
+\item $(u+v)\vee z \leq u\vee z + v\vee z$;
+\item $(x+y)\wedge z \leq x\wedge z + y\wedge z$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) From $u\leq u\vee w$ and $v\leq v\vee w$, we get $u+v \leq u\vee w + v\vee w$. Similarly from $w\leq u\vee w$ and $w\leq v\vee w$, we get $2w \leq u\vee w + v\vee w$. Together this gives (1).
+
+(2) We have $2z \geq z$ by \ref{scalarMultiplicationInequalities}.
+
+(3) TODO (use Birkhoff inequality??)
+\end{proof}
 
 \begin{proposition}[Infinite distributivity in Riesz spaces]
 Let $V$ be a Riesz space, $v\in V$ and $S\subseteq V$ a subset. Then
@@ -1228,7 +1264,18 @@ v^- &\defeq (-v) \vee 0 = - (v \wedge 0).
 We call $v^+$ the \udef{positive part} of $v$ and $v^-$ the \udef{negative part} of $v$.
 \end{definition}
 
-\begin{proposition} \label{PositiveNegativeElements} \label{minimalPositiveDecomposition} \label{MeetJoinAsPositiveNegative}
+\begin{lemma} \label{MeetJoinAsPositiveNegative}
+Let $V$ be a Riesz space and $v,w\in V$. Then
+\begin{enumerate}
+\item $v\vee w = (v-w)^+ + w = (v-w)^- + v$;
+\item $v\wedge w = v - (v-w)^+ = w - (v-w)^-$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We calculate $v\vee w = (v-w)\vee 0 + w = (v-w)^+ + w$. The other equalities are similar.
+\end{proof}
+
+\begin{proposition} \label{PositiveNegativeElements} \label{minimalPositiveDecomposition} 
 Let $V$ be a Riesz space and $v,w\in V$. Then
 \begin{enumerate}
 \item $v^+, v^- \in V^+$;
@@ -1242,11 +1289,6 @@ Furthermore,
 \end{enumerate}
 Also
 \begin{enumerate} \setcounter{enumi}{5}
-\item $v\vee w = (v-w)^+ + w = (v-w)^- + v$;
-\item $v\wedge w = v - (v-w)^+ = w - (v-w)^-$;
-\end{enumerate}
-and
-\begin{enumerate} \setcounter{enumi}{7}
 \item $(-v)^- = v^+$ and $(-v)^+ = v^-$;
 \item if $\alpha \geq 0$, then $(\alpha v)^+ = \alpha v^+$ and $(\alpha v)^- = \alpha v^-$;
 \item $-v^- \leq v \leq v^+$;
@@ -1260,21 +1302,19 @@ and
 
 (3) We calculate $0 = v^- - v^- = v^-  + (v\wedge 0) = (v^- + v)\wedge (0 + v^-) = v^+ \wedge v^-$.
 
-(6, 7) We calculate $v\vee w = (v-w)\vee 0 + w = (v-w)^+ + w$. The other equalities are similar.
-
 (4) From $v\leq p$ and $0\leq p$, we get $v^+ = v \vee 0 \leq p$. Then we also have $v^- = v^+ - v \leq p - v = q$.
 
-(5) Assume $p,q\in V$ satisfy (2) and (3), then (1) automatically follows from (3). Using point (7), we calculate
+(5) Assume $p,q\in V$ satisfy (2) and (3), then (1) automatically follows from (3). Using \ref{MeetJoinAsPositiveNegative}, we calculate
 \[ 0 = p\wedge q = p - (p-q)^+ = p - v^+. \]
 So $p = v^+$ and $q = p - v = v^+ - v = v^-$.
 
-(8) It is evident that $(-v)^- = (--v)\vee 0 = v\vee 0$.
+(6) It is evident that $(-v)^- = (--v)\vee 0 = v\vee 0$.
 
-(9) We calculate $\alpha v^+ = \alpha (v \vee 0) = (\alpha v) \vee 0 = (\alpha v)^+$; the calculation for $\alpha v^-$ is similar.
+(7) We calculate $\alpha v^+ = \alpha (v \vee 0) = (\alpha v) \vee 0 = (\alpha v)^+$; the calculation for $\alpha v^-$ is similar.
 
-(10) This is clear from $-v^- = v\wedge 0 \;\leq\; v \;\leq\; v \vee 0 = v^+$.
+(8) This is clear from $-v^- = v\wedge 0 \;\leq\; v \;\leq\; v \vee 0 = v^+$.
 
-(11) $v\leq w$ implies $v^+ = v\vee 0 \leq w\vee 0 = w^+$ and $-v^- = v\wedge 0 \leq w\wedge 0 = - w^-$.
+(9) $v\leq w$ implies $v^+ = v\vee 0 \leq w\vee 0 = w^+$ and $-v^- = v\wedge 0 \leq w\wedge 0 = - w^-$.
 
 Conversely, we have $v = v^+ - v^- \leq w^+ - w^- = w$.
 \end{proof}
@@ -1323,27 +1363,27 @@ and (6), using the absorption law:
 The rest are immediate consequences, using the results of \ref{PositiveNegativeElements}.
 \end{proof}
 
-\begin{proposition}
+\begin{lemma}
 Let $V$ be a Riesz space and $v,w\in V$, then
-\[ |v - w| = (v \vee w) - (v \wedge w) \]
-and hence
 \begin{enumerate}
-\item $v \vee w = \frac{1}{2}\big(v+w + |v - w|\big)$;
-\item $v \wedge w = \frac{1}{2}\big(v+w - |v - w|\big)$;
+\item $(v+w)\vee (v-w) = v + |w|$;
+\item $(v+w)\wedge (v-w) = v - |w|$;
 \end{enumerate}
 or, equivalently,
 \begin{enumerate} \setcounter{enumi}{2}
-\item $(v+w)\vee (v-w) = v + |w|$;
-\item $(v+w)\wedge (v-w) = v - |w|$.
+\item $v \vee w = \frac{1}{2}\big(v+w + |v - w|\big)$;
+\item $v \wedge w = \frac{1}{2}\big(v+w - |v - w|\big)$.
 \end{enumerate}
-\end{proposition}
+\end{lemma}
 \begin{proof}
-The first equality follows from \ref{MeetJoinAsPositiveNegative} and \ref{absoluteValue}.
-
-The next two follow from the first and \ref{sumAsMeetJoin}.
-
-The last two are equivalent to the previous two by the replacements $v \leftrightarrow v+w$ and $w \leftrightarrow v-w$.
+We calculate, using \ref{lemmaRieszSpaces}
+\[ (v+w)\vee (v-w) = v+ w\vee(-w) = v+ |w| \quad\text{and}\quad (v+w)\wedge (v-w) = v + w\wedge(-w) = v-|w|. \]
+The next two equalities follow by the substitutions $v+w \leftrightarrow v$ and $v-w \leftrightarrow w$.
 \end{proof}
+\begin{corollary}
+Let $V$ be a Riesz space and $v,w\in V$, then
+\[ |v - w| = (v \vee w) - (v \wedge w). \]
+\end{corollary}
 \begin{corollary} \label{meetJoinAbsoluteValues}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \begin{enumerate}
@@ -1353,6 +1393,24 @@ Let $V$ be a Riesz space and $v,w\in V$, then
 \end{corollary}
 \begin{proof}
 Substitute $v\to |v|$ and $w\to |w|$.
+\end{proof}
+\begin{corollary}
+Let $V$ be a Riesz space and $u,v,w\in V$, then
+\begin{enumerate}
+\item $|u\vee v - u\vee w| + |u\wedge v - u\wedge w| = |v-w|$;
+\item $|v^+-w^+|\leq |v-w|$ and $|v^- - w^-|\leq |v-w|$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) Using the proposition, we get
+\[ |u\vee v - u\vee w| + |u\wedge v - u\wedge w| = (u\vee v)\vee(u\vee w) - (u\vee v)\wedge (u\vee w) + (u\wedge v)\vee(u\wedge w) - (u\wedge v)\wedge(u\wedge w). \]
+Using distributivity this simplifies to $(v\vee w) - (v\wedge w) = |v-w|$.
+
+(2) Using (1) we have
+\[ |v-w| = |0\vee v - 0\vee w| + |0\wedge v - 0\wedge w| = |v^+ -w^+| + |v^- - w^-| \geq \begin{cases}
+|v^+ -w^+| \\
+|v^- - w^-|.
+\end{cases}  \]
 \end{proof}
 
 \begin{proposition}
@@ -1422,30 +1480,37 @@ The second inequality is the reverse triangle inequality and follows from the tr
 \begin{definition}
 Let $V$ be a Riesz space. A subset $E$ is called
 \begin{itemize}
-\item a \udef{Riesz subspace} if it is both a subspace and a sublattic;
+\item a \udef{Riesz subspace} if it is both a subspace and a sublattice;
 \item \udef{solid} if for all $v\in E$ the interval $[-|v|,|v|]$ is a subset of $E$;
 \item a \udef{band} if for all subsets $S\subseteq E$ we have $\sup(S) \subset E$. 
 \end{itemize}
 \end{definition}
 
 \begin{lemma}
+Let $V$ be a Riesz space and $v,w\in V$, then
+\[ |w|\leq |v| \iff -|v| \leq w \leq |v|. \]
+\end{lemma}
+\begin{proof}
+We have $w \leq |w|$ and $|w| \leq |v|$, so $w\leq |v|$. Also $-w \leq |-w| = |w|$, so $-|v| \leq -|w| \leq w$.
+
+Conversely, $-|v| \leq w$ implies $-w\leq |v|$. So $|w| = w\vee (-w) \leq |v|$.
+\end{proof}
+\begin{corollary}
 Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is solid \textup{if and only if}
 \[ \forall v\in E: \forall w\in V: \; |w|\leq |v| \implies w\in E. \]
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
+\end{corollary}
 
 \begin{lemma}
-Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is an (order) ideal \textup{if and only if} it is a solid linear subspace.
+Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is an (order) ideal \textup{if and only if} it is a solid Riesz subspace.
 \end{lemma}
 \begin{proof}
 TODO
 \end{proof}
-
 
 
 \subsection{Disjointness}
+
+\subsection{Archimedean}
 
 \chapter{Some results and applications}
 \section{Rotations}
