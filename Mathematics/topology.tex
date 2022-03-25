@@ -94,7 +94,15 @@ The \udef{(principal) adherence} of a set $A\subseteq X$ is the adherence of $\{
 Clearly if $\xi,\zeta$ are convergences on $X$, then $\xi \leq \zeta$ implies $\adh_\xi\mathcal{A} \subseteq \adh_\zeta\mathcal{A}$.
 
 \begin{lemma}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. Then
+Let $X$ be a set, $\xi$ a convergence on $X$ and $\{A_i\}_{i\in I} \subseteq \powerset(X)$. Then
+\[ \adh_\xi \{A_i\}_{i\in I} \subseteq \bigcap_{i\in I}\adh_\xi A_i. \]
+\end{lemma}
+\begin{proof}
+We have $x\in \adh_\xi \{A_i\}_{i\in I}$ iff $\exists F: x\in \lim F \land F\mesh \{A_i\}_{i\in I}$ iff $\exists F: \forall i\in I: x\in \lim F \land F\mesh A_i$. This implies $\forall i\in I: \exists F: x\in \lim F \land F\mesh A_i$ iff $\forall i\in I: x\in \adh_\xi A_i$.
+\end{proof}
+
+\begin{lemma}
+Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
 \[ \adh_\xi A = \bigcup_{A \in F^{\overrightarrow{\mesh}}}\lim_\xi F = \bigcup_{\substack{\text{$G$ proper filter} \\ A\in G}}\lim_\xi G. \]
 \end{lemma}
 \begin{proof}
@@ -378,18 +386,43 @@ The existence of initial and final (pre)convergences is given by \ref{continuity
 
 
 
-\chapter{Topological spaces}
+\chapter{Pretopological and topological convergence}
+\section{Pretopological convergence}
+A convergence space $\sSet{X,\xi}$ is pretopological if it $1$-paved, i.e. at each point $x$ there is a filter $G$ that converges to $x$ such that
+\[ F\in \lim_\xi^{-1}(x) \implies G \leq F. \]
 
-\begin{proposition}
+\begin{lemma}
 Let $\xi$ be a convergence on a set $X$. Then the following are equivalent:
 \begin{enumerate}
 \item $\xi$ is a pretopology;
-\item for all $x\in X$: $x\in \lim_\xi \vicinity_\xi(x)$;
-\item $x\in\lim_\xi F \implies \vicinity_\xi(x) \leq F$.
+\item $\lim_\xi^{-1}(x)$ has a least element for all $x\in X$;
+\item $\vicinity_\xi(x) \in \lim_\xi^{-1}(x)$ for all $x\in X$;
+\item $\vicinity_\xi(x) \leq F \implies F\in\lim^{-1}_\xi x$;
+\item $x\in\lim_\xi F \iff \vicinity_\xi(x) \leq F$.
 \end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Leftrightarrow (2)$. Because $G$ converging to $x$ is equivalent to $G\in \lim_\xi^{-1}(x)$, we see that $G$ is a least element of $\lim_\xi^{-1}(x)$.
+
+$(2) \Leftrightarrow (3)$. The vicinity filter $\vicinity_\xi(x)$ is the infimum of $\lim_\xi^{-1}(x)$, and a set contains a least element iff it contains an infimum.
+
+$(3) \Leftrightarrow (4)$. The set $\lim^{-1}_\xi x$ is upwards closed.
+
+$(4) \Leftrightarrow (5)$. The opposite implication to (4) is immediate because $\vicinity_\xi(x)$ is the infimum of $\lim^{-1}_\xi$.
+\end{proof}
+Thus in a pretopological convergence space we can determine whether $x$ is in the limit of a filter $F$ by simply comparing $F$ to the vicinity filter of $x$.
+
+\begin{proposition}
+Let $\xi$ be a convergence on a set $X$. Then $\xi$ is a pretopological convergence \textup{if and only if} $\lim_\xi: \filters(\powerset(X))\to \powerset(X)$ is a meet-semilattice homomorphism, i.e.
+for all families of filters $\mathcal{F} \subseteq \powerset(\filters(\powerset(X)))$,
+\[ \lim_\xi \bigwedge_{F\in \mathcal{F}}F = \bigcap_{F\in\mathcal{F}}\lim_\xi F. \] 
 \end{proposition}
 \begin{proof}
-
+We have
+\begin{align*}
+x\in \lim_\xi \bigwedge_{F\in \mathcal{F}}F &\iff \bigwedge_{F\in \mathcal{F}}F \geq \vicinity_\xi(x) \iff \forall F\in\mathcal{F}: F\geq \vicinity_\xi(x) \\
+&\iff \forall F\in \mathcal{F}: x\in\lim_\xi F \iff x\in \bigcap_{F\in\mathcal{F}}\lim_\xi F.
+\end{align*}
 \end{proof}
 
 \begin{proposition}
@@ -401,6 +434,8 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be two pretopological convergence spaces
 \item for all $B\subseteq Y$: $f^{-1}[\inh_\zeta B] \subseteq \inh_\xi(f^{-1}[B])$.
 \end{enumerate}
 \end{proposition}
+
+\subsection{Pretopological modification}
 
 \chapter{Topological spaces}
 A topology specifies which points are close to each other and which are not. This is useful for determining continuity and the existence of holes for example.
