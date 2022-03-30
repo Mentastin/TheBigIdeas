@@ -451,7 +451,7 @@ meaning that $a\wedge_L b \in f[L]$ and thus $f[L]$ is a $\wedge$-subsemilattice
 
 From $a\vee_L b \leq f(a\vee_L b)$, it is clear that $f(a\vee_L b)$ is an upper bound of $\{a,b\}$. Let $c$ be any other upper bound in $f[L]$. Clearly $a\vee_L b \leq c$, so $f(a\vee_L b) \leq f(c) = c$, meaning $f(a\vee_L b)$ is the least upper bound in $f[L]$.
 \end{proof}
-\begin{proposition}
+\begin{proposition} \label{completeLatticeOperationsUnderClosure}
 Let $L$ be a complete lattice and $f$ a closure. Then $f[L]$ is a complete lattice with lattice operations given by
 \[ \bigwedge A = {\bigwedge}_L A, \qquad \bigvee A = f({\bigvee}_L A). \]
 \end{proposition}
@@ -1524,24 +1524,30 @@ Conversely, $f(f(\alpha)) \leq f(\alpha)$ because $f$ is order preserving. This 
 \end{proof}
 
 \subsection{Semilattice homomorphisms}
-\begin{lemma} \label{orderPreservingFunctionLatticeOperations}
+\begin{proposition} \label{orderPreservingFunctionLatticeOperations}
 Let $\sSet{P,\leq}$, $\sSet{Q,\leq}$ be posets and $f: P\to Q$ an order-preserving function.
 \begin{enumerate}
 \item If $P,Q$ are $\wedge$-semilattices, then
-\[  f(x\wedge y) \leq f(x)\wedge f(y) \quad\iff\quad \text{$f$ is order-preserving}. \]
+\[  \forall x,y\in P: f(x\wedge y) \leq f(x)\wedge f(y) \quad\iff\quad \text{$f$ is order-preserving}. \]
+\item If $P,Q$ are complete $\wedge$-semilattices, then
+\[  \forall D\subseteq P: f(\bigwedge D) \leq \bigwedge f[D] \quad\iff\quad \text{$f$ is order-preserving}. \]
 \item If $P,Q$ are $\vee$-semilattices, then
-\[  f(x\vee y) \geq f(x)\vee f(y) \quad\iff\quad \text{$f$ is order-preserving}. \]
+\[  \forall x,y\in P: f(x\vee y) \geq f(x)\vee f(y) \quad\iff\quad \text{$f$ is order-preserving}. \]
+\item If $P,Q$ are complete $\vee$-semilattices, then
+\[  \forall D\subseteq P: f(\bigvee D) \geq \bigvee f[D] \quad\iff\quad \text{$f$ is order-preserving}. \]
 \end{enumerate} 
-\end{lemma}
+\end{proposition}
 \begin{proof}
 (1) Assume $f(x\wedge y) \leq f(x)\wedge f(y)$. Then $x\leq y$ implies $x = x\wedge y$, which implies $f(x) = f(x\wedge y) \leq f(x)\wedge f(y) \leq f(y)$.
 
 For the converse: From $x\wedge y \leq x$ we get $f(x\wedge y) \leq f(x)$. Similarly $f(x\wedge y) \leq f(y)$. Together this gives $f(x\wedge y) \leq f(x)\wedge f(y)$.
 
-(2) Similar.
+(2) The direction $\Rightarrow$ follows from (1). Assume $f$ order-preserving. Take arbitrary $D\subseteq P$. For all $x\in D$ we have $\bigwedge D \leq x$, so $f(\bigwedge D) \leq f(x)$. This means $f(\bigwedge D)$ is a lower bound of $f[D]$, so $f(\bigwedge D) \leq \bigwedge f[D]$.
+
+(3,4) Similar.
 \end{proof}
 \begin{corollary}
-Let $\sSet{S,\wedge}, \sSet{T, \wedge}$ be a semilattices and $f: S\to T$ a function. If $f$ is a semilattice homomorphism, then it is order-preserving. The converse does not hold.
+Let $\sSet{S,\wedge}, \sSet{T, \wedge}$ be a semilattices and $f: S\to T$ a function. If $f$ is a semilattice homomorphism, then it is order-preserving. The converse does not hold in general.
 \end{corollary}
 \begin{proof}
 We just need to show the converse does not hold. TODO
@@ -1790,6 +1796,14 @@ Let $P$ be an ordered set such that all relevant suprema and infima exist and $S
 \item $\bigvee(S\cup T) = \left(\bigvee S\right)\vee \left(\bigvee T\right)$ and $\bigwedge(S\cup T) = \left(\bigwedge S\right)\wedge \left(\bigwedge T\right)$.
 \end{enumerate}
 \end{lemma}
+
+\begin{proposition}[Mini-max theorem for complete lattices]
+Let $L$ be a complete lattice, $I,J$ index sets and $\setbuilder{a_{i,j}\in L}{i\in I, j\in J}$. Then
+\[ \bigvee_{j\in J}\bigwedge_{i\in I}a_{i,j} \leq \bigwedge_{i\in I}\bigvee_{j\in J} a_{i,j}. \]
+\end{proposition}
+\begin{proof}
+For all $k,l$ we have $a_{k,l}\leq \bigvee_{j\in J} a_{k,j}$. This implies $\bigwedge_{i\in I} a_{i,l} \leq \bigwedge_{i\in I}\bigvee_{j\in J} a_{i,j}$ for all $l$. Taking the supremum over $l$ gives the result.
+\end{proof}
 
 \begin{proposition} \label{completeLatticeBasic}
 Let $P$ be a non-empty ordered set. Then the following are equivalent:
@@ -3168,7 +3182,7 @@ These intersections are again $\sigma$-algebras, monotone classes and Dynkin sys
 A universe set for $\mathcal{F}$ is also a universe set for $\sigma\{\mathcal{F}\}$, $\mathfrak{M}\{\mathcal{F}\}$ and $\mathfrak{D}\{\mathcal{F}\}$.
 \end{lemma}
 
-\begin{proposition}[Monotone class theorem]
+\begin{proposition}[Monotone class theorem] \label{monotoneClassTheorem}
 Let $\mathcal{A}$ be an algebra. Then
 \[ \mathfrak{M}\{\mathcal{A}\} = \sigma\{\mathcal{A}\}. \]
 \end{proposition}
@@ -3263,6 +3277,14 @@ Then $\{a\}\times\{a,b\} \in \setbuilder{A\times B}{A\in \mathcal{A}, B\in\mathc
 \[ (\{a\}\times\{a,b\})^c = \Big(\{b,c\}\times \{a,b,c\}\Big) \cup \Big(\{a, b ,c\}\times\{c\}\Big) \]
 is not in $\setbuilder{A\times B}{A\in \mathcal{A}, B\in\mathcal{B}}$, so it is not a $\sigma$-algebra.
 \end{example}
+
+\begin{lemma}
+Let $X,Y$ be sets and $A\subseteq X, B\subseteq Y$ subsets. Then
+\[ (A\times B)^c = A^c\times B \uplus A\times B^c \uplus A^c\times B^c = A^c\times Y \cup X\times B^c. \]
+\end{lemma}
+\begin{proof}
+We have $X\times Y = (A\uplus A^c)\times (B\uplus B^c)$ and the lemma follows by \ref{productUnionIntersection}.
+\end{proof}
 
 \subsubsection{Infinite products}
 \begin{definition}
