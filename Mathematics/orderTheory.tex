@@ -1303,6 +1303,49 @@ Let $P_1,P_2$ be prosets and $\mathbb{1}$ a singleton. Then
 \end{enumerate}
 \end{lemma}
 
+\section{Join- and meet-density}
+\begin{definition}
+Let $P$ be a poset and let $Q\subset P$ be a subset. Then $Q$ is called \udef{join-dense} in $P$ if for every $x\in P$, there exists a subset $S\subset Q$ such that $x= \bigvee_P S$.
+
+The dual of join-dense is \udef{meet-dense}.
+\end{definition}
+
+\section{Atoms}
+\subsection{Atomic elements}
+\begin{definition}
+Let $\sSet{P,\leq}$ be a poset.
+\begin{itemize}
+\item An element $a\in P$ is called an \udef{atom} if $a$ is minimal in $P\setminus\min(P)$.
+\item An element $a\in P$ is called a \udef{coatom} if $a$ is maximal in $P\setminus\max(P)$.
+\end{itemize}
+We denote the set of atoms of $P$ as $\atoms(P)$. The set of coatoms is denoted $\coatoms(P)$.
+\end{definition}
+If $P$ has a least element $\bot$, then $a$ is an atom if and only if it covers $\bot$.
+
+
+
+\subsection{Atomic posets}
+\begin{definition}
+Let $\sSet{P,\leq}$ be a poset. Then
+\begin{itemize}
+\item $P$ is \udef{atomic} if $\forall x\in L\setminus\min(L): \exists a\in\atoms(L): a\leq x$;
+\item $P$ is \udef{coatomic} if $\forall x\in L\setminus\min(L): \exists a\in\coatoms(L): a\geq x$;
+\end{itemize}
+also
+\begin{itemize}
+\item $P$ is \udef{strongly atomic} if $\forall x,y\in L$ the poset $[x,y]$ is atomic;
+\item $P$ is \udef{strongly coatomic} if $\forall x,y \in L$ the poset $[x,y]$ is coatomic;
+\end{itemize}
+and
+\begin{itemize}
+\item $P$ is \udef{atomistic} if $\atoms(L)$ is join-dense in $L$;
+\item $P$ is \udef{coatomistic} if $\atoms(L)$ is meet-dense in $L$.
+\end{itemize}
+\end{definition}
+
+\url{https://www.emis.de/journals/PM/51f4/pm51f409.pdf}
+
+
 \section{Filters and ideals}
 \begin{definition}
 Let $\sSet{P,\Yleft}$ be an ordered set. A subset $F\subseteq P$ is called
@@ -1553,6 +1596,24 @@ Let $\sSet{S,\wedge}, \sSet{T, \wedge}$ be a semilattices and $f: S\to T$ a func
 We just need to show the converse does not hold. TODO
 \end{proof}
 
+\begin{lemma}
+Let $\sSet{P,\leq}$, $\sSet{Q,\leq}$ be posets and $f: P\to Q$ a bijective order-embedding.
+Then $f$ preserves all meets and joins, i.e. $\forall D\subseteq P$:
+\[ f(\bigwedge D) = \bigwedge f[D] \qquad\text{and}\qquad f(\bigvee D) = \bigvee f[D] \]
+if the relevant meets and joins exist.
+\end{lemma}
+TODO does existence of one side of an equals mean existence of the other???
+\begin{proof}
+We have already proved an inequality in both cases. By bijectivity we can find a $c\in P$ such that $f(c) = \bigwedge f[D]$. By order-reflection, we have that $c$ is a lower bound of $D$, so $c\leq \bigwedge D$. By order-preservation we have $\bigwedge f[D] = f(c) \leq f(\bigwedge D)$.
+
+The other equality is dual.
+\end{proof}
+\begin{corollary} \label{orderReversingSimilarityLatticeOperations}
+Let $\sSet{P,\leq}$, $\sSet{Q,\leq}$ be posets and $f: P\to Q$ a reverse bijective order-embedding. Then $\forall D\subseteq P$
+\[ f(\bigwedge D) = \bigvee f[D] \qquad\text{and}\qquad f(\bigvee D) = \bigwedge f[D] \]
+if the relevant meets and joins exist.
+\end{corollary}
+
 \begin{proposition}
 Let $\sSet{S,\wedge}$ be a semilattice and $X$ a set. Then the pointwise ordering of $(X\to S)$ makes it a semilattice. For all $f,g\in (X\to S)$, the function $f\wedge g$ is defined by
 \[ f\wedge g: X\to S: x\mapsto (f\wedge g)(x) = f(x) \wedge g(x). \]
@@ -1571,6 +1632,51 @@ We calculate for all $x,y\in S$:
 TODO complete notation.
 \end{proof}
 TODO link universal algebra.
+
+\subsection{Join- and meet-irreducible elements}
+\begin{definition}
+Let $L$ be a $\vee$-semilattice. We call $x\in L$ \udef{join-irreducible} if
+\begin{itemize}
+\item $x$ is not a least element of $L$,
+\item for all $a,b\in L$: $x= a\vee b$ implies $x=a$ or $x=b$.
+\end{itemize}
+The definition of \udef{meet-irreducible} is dual on a $\wedge$-semilattice.
+
+We denote the set of join-irreducible elements in $L$ as $\joinIr(L)$ and the set of meet-irreducible elements in $L$ as $\meetIr(L)$.
+\end{definition}
+
+\begin{lemma} \label{joinIrreducibleLemma}
+Let $S$ be a $\vee$-semilattice and $x\in S$ not a least element. Then the following are equivalent:
+\begin{enumerate}
+\item $x$ is join-irreducible;
+\item for all $a,b\in S$: $x= a\vee b$ implies $x \leq a$ or $x \leq b$;
+\item for all $a,b\in S$: $x > a$ and $x > b$ implies $x > a\vee b$;
+\item for all finite $F\subseteq S$: $x = \bigvee F$ implies $x\in F$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+In a finite lattice $L$, an element is join-irreducible if and only if it
+has exactly one lower cover.
+\end{lemma}
+
+\begin{example}
+Consider the lattice $\seq{\N,\lcm, \gcd}$. A non-zero element of $\N$ is join irreducible if and only if it is of the form $p^r$ for some prime $p$ and $r\in\N$.
+\end{example}
+
+\begin{lemma} \label{atomsJoinIrriducible}
+Let $\sSet{P,\leq}$ be a poset. Then
+\begin{enumerate}
+\item $\atoms(P) \subseteq \joinIr(P)$;
+\item $\coatoms(P) \subseteq \meetIr(P)$;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $a\in \atoms(P)$. Then $a$ is not a least element of $P$. Assume there exist $x,y\in P$ such that $a = x\vee y$. Then $x,y\in \downset a \subseteq \{\bot, a\}$. If $x= \bot = y$, then $a = \bot$, which is not an atom. So either $x = a$ or $y = a$.
+
+(2) Dual.
+\end{proof}
+
 
 \subsection{Generalised inverse of inf}
 \begin{proposition}
@@ -1902,37 +2008,6 @@ Now $m$ is an upper bound of $S$. Indeed, let $x\in S$. Then $m= \bigvee F \leq 
 with no infinite chains has a bottom element. (TODO: need dependent/countable choice?)
 \end{proof}
 
-\subsection{Join- and meet-irreducible elements}
-\begin{definition}
-Let $L$ be a lattice. We call $x\in L$ \udef{join-irreducible} if
-\begin{itemize}
-\item $x$ is not a least element of $L$,
-\item for all $a,b\in L$: $x= a\vee b$ implies $x=a$ or $x=b$.
-\end{itemize}
-The definition of \udef{meet-irreducible} is dual.
-
-We denote the set of join-irreducible elements in $L$ as $\joinIr(L)$ and the set of meet-irreducible elements in $L$ as $\meetIr(L)$.
-\end{definition}
-
-\begin{lemma}
-Let $L$ be a lattice and $x\in L$ not a least element. Then the following are equivalent:
-\begin{enumerate}
-\item $x$ is join-irreducible;
-\item for all $a,b\in L$: $x= a\vee b$ implies $x \leq a$ or $x \leq b$;
-\item for all $a,b\in L$: $x > a$ and $x > b$ implies $x > a\vee b$;
-\item for all finite $F\subseteq L$: $x = \bigvee F$ implies $x\in F$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-In a finite lattice $L$, an element is join-irreducible if and only if it
-has exactly one lower cover.
-\end{lemma}
-
-\begin{example}
-Consider the lattice $\seq{\N,\lcm, \gcd}$. A non-zero element of $\N$ is join irreducible if and only if it is of the form $p^r$ for some prime $p$ and $r\in\N$.
-\end{example}
-
 \begin{proposition} \label{joinIrreducibilityDescendingChainLattice}
 Let $L$ be a lattice satisfing the descending chain condition. Then
 \begin{enumerate}
@@ -1945,14 +2020,6 @@ Let $L$ be a lattice satisfing the descending chain condition. Then
 
 (2) Set $T = \setbuilder{x\in\joinIr(L)}{x\leq a}$. Clearly $a$ is an upper bound of $T$. To see that it is the least upper bound, take a different upper bound $c$. Assume, towards a contradiction, that $a\nleq c$. Then $a\nleq a\wedge c$. By point 1. there exists an $x\in\joinIr(L)$ such that $x\leq a$ (meaning $x\in T$) and $x\nleq a\wedge c$. But if $c$ were an upper bound of $T$, then $x\leq a\wedge c$, which is a contradiction.
 \end{proof}
-
-
-\subsubsection{Join- and meet-dense subsets}
-\begin{definition}
-Let $P$ be a poset and let $Q\subset P$ be a subset. Then $Q$ is called \udef{join-dense} in $P$ if for every $x\in P$, there exists a subset $S\subset Q$ such that $x= \bigvee_P S$.
-
-The dual of join-dense is \udef{meet-dense}.
-\end{definition}
 
 \begin{proposition}
 Let $L$ be a lattice.
@@ -2092,6 +2159,41 @@ We call $F^*$ the \udef{principal part} and $F^0$ the \udef{free part} of the fi
 \end{proof}
 
 \subsubsection{Prime and maximal filters and ideals}
+\begin{definition}
+Let $L$ be a lattice.
+\begin{itemize}
+\item a \udef{maximal filter} or \udef{ultrafilter} is a coatom in $\filters(L)$;
+\item a \udef{maximal ideal} is a coatom in $\ideals(L)$;
+\item a \udef{prime filter} is a meet-irreducible element in $\filters(L)$;
+\item a \udef{prime ideal} is a meet-irreducible element in $\ideals(L)$.
+\end{itemize}
+
+We denote the set of ultrafilters on $L$ as $\ultrafilters(F)$.
+\end{definition}
+
+\begin{lemma}
+Let $L$ be a lattice.
+\begin{enumerate}
+\item A filter $F\in \filters(L)$ is prime \textup{if and only if}
+\begin{enumerate}
+\item $F$ is proper;
+\item $\forall x,y\in L$: $x\vee y \in F \implies x\in F$ or $y\in F$.
+\end{enumerate}
+\item An ideal $I\in \ideals(L)$ is prime \textup{if and only if}
+\begin{enumerate}
+\item $I$ is proper;
+\item $\forall x,y\in L$: $x\wedge y \in I \implies x\in I$ or $y\in I$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+If $L$ is only a $\wedge$-semilattice (resp. $\vee$-semilattice), then only the direction $\Rightarrow$ holds in general.
+\begin{proof}
+(1) Assume $F$ is a prime filter. Then $F \neq \top = \powerset(L)$, so it is proper. Now assume $x\vee y\in F$, meaning $\upset x\vee y \subseteq F$. Thus
+\[ F = \Cl_\wedge (F\cup \upset(x\vee y)) = (F\vee \upset x) \cap (F\vee \upset y). \]
+Because $F$ is prime, we have $F = F\vee \upset x$ or $F\vee \upset y$.
+
+Now assume TODO \url{http://www.ascent-journals.com/IJPEM/Vol3No3/1-sagi.pdf} using \ref{joinIrreducibleLemma}.
+\end{proof}
 
 \subsubsection{Sequential filters}
 \begin{definition}
@@ -2332,7 +2434,7 @@ Let $A\subseteq L$. Then
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-See \ref{orderPreservingReversingBounds}.
+See \ref{orderReversingSimilarityLatticeOperations}.
 \end{proof}
 
 \begin{proposition}
@@ -2458,6 +2560,17 @@ Let $L$ be a Boolean lattice and $x,y\in L$. Then
 The second statement is dual.
 
 (3, 4) We calculate $x\wedge (\overline{x}\vee y) = (x\wedge \overline{x})\vee (x\wedge y) = \bot \vee (x\wedge y) = x\wedge y$. The fourth statement is dual.
+\end{proof}
+
+\begin{lemma} \label{atomsJoinIrriducibleBoolean}
+Let $L$ be a Boolean lattice. Then
+\begin{enumerate}
+\item $\atoms(L) = \joinIr(L)$;
+\item $\coatoms(L) = \meetIr(L)$;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We have the inclusion $\subseteq$ from \ref{atomsJoinIrriducible}. Assume $x$ is an atom. Take $y\in \downset x\setminus\{x\}$, which is non-empty due to the existence of $\bot \neq x$. In fact we need to prove $y = \bot$. By \ref{BooleanLatticesLemma} we have $x = x\vee y = (x\wedge \overline{y})\vee y$. By join-irreducibility this means that $x = x\wedge \overline{y}$ (because $x\neq y$ by assumption). So $x\leq \overline{y}$, meaning $y = x\wedge y \leq \overline{y}\wedge y = \bot$.
 \end{proof}
 
 \begin{lemma}
