@@ -53,14 +53,13 @@ For any binary homogeneous relation $R$,
 Let $(P, \precsim)$ be a proset. Then $\precsim \cap \precsim^\transp$ is an equivalence relation.
 \end{lemma}
 
-
-We can decompose $\Yleft = \Yleft_S \cup \Yleft_A$, as in \ref{symmetricAsymmetricDecomposition}, into a symmetric and asymmetric part.
+Let $\sSet{P,\Yleft}$ be an ordered set. We can decompose $\Yleft = \Yleft_S \cup \Yleft_A$, as in \ref{symmetricAsymmetricDecomposition}, into a symmetric and asymmetric part.
 \begin{itemize}
-\item By \ref{asymmetricIrreflexive} an order is strict (i.e. irreflexive) if and only if it is asymmetric: $\Yleft_S = E$ and $\Yleft_A = \Yleft$.
-\item For non-strict partial and total orders we have $\Yleft_S = \id$.
+\item By \ref{asymmetricIrreflexive} an order is strict (i.e. irreflexive) if and only if it is asymmetric: $\Yleft_S = E_P$ and $\Yleft_A = \Yleft$.
+\item For non-strict partial and total orders we have $\Yleft_S = \id_P$.
 \end{itemize}
 
-So we can turn a partial / total order into a strict partial / total order by removing $\id$. Conversely, we can turn a strict partial / total order into a partial / total order by adding $\id$.
+So we can turn a partial / total order into a strict partial / total order by removing $\id_P$. Conversely, we can turn a strict partial / total order into a partial / total order by adding $\id_P$.
 
 \begin{proposition}
 \mbox{}
@@ -267,22 +266,7 @@ The following are also equivalent:
 Let $A$ be a subset of an ordered set $P$. If $A = (A^u)^l$, the $A$ is called \udef{saturated}.
 \end{definition}
 
-The family of saturated sets is a Moore family. The For any $x\in P$, the downset $\downset x$ is saturated.
 
-\begin{definition}
-Let $\sSet{P,\Yleft}$ be an ordered set and let $f:P \to P$ be a function. We say $f$ is a \udef{(Moore) closure} on $P$ if it is
-\begin{itemize}
-\item extensive: $x \Yleft f(x)$;
-\item monotone: if $A \Yleft B$, then $\closure(A) \Yleft \closure(B)$;
-\item idempotent: $\closure(\closure(A)) = \closure(A)$.
-\end{itemize}
-We say $f$ is a \udef{dual closure} if it is
-\begin{itemize}
-\item contractive: $f \leq \id$
-\item monotone
-\item idempotent
-\end{itemize}
-\end{definition}
 
 \begin{proposition}
 Let $L$ be a lattice and $f$ a closure. Then $f[L]$ is a lattice with lattice operations given by
@@ -399,18 +383,24 @@ $\closure_f(A) = \setbuilder{f(a)}{a\in A}$.
 $\closure_g(A) = \setbuilder{g(a,b)}{a,b\in A}$.
 \end{lemma}
 
+TODO $\im$ and $\closure$.
+
 \section{Subsets of ordered sets}
 \subsection{Up and down sets}
+\begin{lemma} \label{imageClosureTransitiveRelations}
+Let $\sSet{P, \Yleft}$ be an ordered set. Then the closure function $\closure_{\Yleft}$ equals the image function $\im_{\Yleft^=}$ of the reflexive closure $\Yleft^=$.
+\end{lemma}
+
 \begin{definition}
-Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. We call
+Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. We denote
 \begin{itemize}
-\item $Q$ \udef{upwards closed} or an \udef{up set} if $\forall x\in Q: \forall y\in P: x\Yleft y \implies y\in Q$;
-\item $Q$ \udef{downwards closed} or a \udef{down set} if $\forall x\in Q: \forall y\in P: y\Yleft x \implies y\in Q$.
+\item the \udef{upward closure} of $Q$ as $\upset Q \defeq \closure_{\Yleft}(Q) = Q_{\Yleft} \cup Q$;
+\item the \udef{downward closure} of $Q$ as $\downset Q \defeq \closure_{\Yleft^\transp}(Q) = Q_{\Yleft^\transp} \cup Q$.
 \end{itemize}
-We define
+We call $Q$
 \begin{itemize}
-\item the \udef{upward closure} of $Q$ as $\upset Q \defeq \setbuilder{y\in P}{\exists x\in Q: x\Yleft y}$;
-\item the \udef{downward closure} of $Q$ as $\downset Q \defeq \setbuilder{y\in P}{\exists x\in Q: y\Yleft x}$.
+\item \udef{upwards closed} or an \udef{up set} if $\upset Q = Q$;
+\item \udef{downwards closed} or a \udef{down set} if $\downset Q = Q$.
 \end{itemize}
 For $x\in P$,
 \begin{itemize}
@@ -419,65 +409,25 @@ For $x\in P$,
 \end{itemize}
 \end{definition}
 
-TODO set theoretic complements!
-
-\begin{lemma} \label{definitionUpsetDownset}
+\begin{lemma} \label{upwardDownwardClosure}
 Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
 \begin{enumerate}
-\item $Q$ an up set iff 
-\[ \forall y\in P: \Big(\exists x\in Q:  x\Yleft y\Big) \implies y\in Q; \]
-\item $Q$ a down set iff 
-\[ \forall y\in P: \Big(\exists x\in Q:  y\Yleft x\Big) \implies y\in Q. \]
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-The following propositions are equivalent $\forall y\in P$:
-\begin{align*}
-&\forall x\in Q: x\Yleft y \implies y\in Q \\
-&\forall x\in Q: \neg(x\Yleft y) \lor (y\in Q) \\
-\Big(&\forall x\in Q: \neg(x\Yleft y)\Big) \lor (y\in Q) \\
-\neg \Big(&\exists x\in Q: x\Yleft y \Big) \lor (y\in Q) \\
-\Big(&\exists x\in Q:  x\Yleft y\Big) \implies y\in Q.
-\end{align*}
-TODO justify (in particular line 2 to 3).
-\end{proof}
-
-\begin{lemma} \label{QsubseteqDownQ} \label{upwardDownwardClosure}
-Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
-\begin{enumerate}
-\item $Q$ is upwards closed \textup{if and only if} $\upset Q \subseteq Q$;
-\item $Q$ is downwards closed \textup{if and only if} $\downset Q \subseteq Q$;
+\item $Q$ is upwards closed \textup{if and only if} $Q_\Yleft \subseteq Q$;
+\item $Q$ is downwards closed \textup{if and only if} $Q_{\Yright} \subseteq Q$;
 \end{enumerate}
 also
 \begin{enumerate} \setcounter{enumi}{2}
-\item if $\Yleft$ is a preorder, then $Q \subseteq \upset Q$ and $Q \subseteq \downset Q$;
-\item $\upset\upset Q \subseteq \upset Q$ and $\downset\downset Q \subseteq \downset Q$;
-\item if $\Yleft$ is a preorder, then $\upset\upset Q = \upset Q$ and $\downset\downset Q = \downset Q$.
+\item if $\Yleft$ is a preorder, then $Q_\Yleft = \upset Q$ and $Q_{\Yright} \subseteq \downset Q$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1,2) By \ref{definitionUpsetDownset} both statements are equivalent to
-\[ \forall y\in P: y\in \upset Q \implies y\in Q. \]
-
-(3) Reflexivity.
-
-(4) First take $x\in \upset\upset Q$. Then there exists $y\in \upset Q$ such that $y\Yleft x$ and $q\in Q$ such that $q\Yleft y$. By transitivity $q \Yleft x$, so $x\in \upset Q$. The other statement is dual.
-
-(5) Combine (3) and (4).
+This follows directly from \ref{imageClosureTransitiveRelations}.
 \end{proof}
 
-\begin{lemma}
-Let $P$ be an ordered set. Then $\downset\emptyset = \emptyset = \upset\emptyset$.
-\end{lemma}
-
+TODO: atomicity??
 \begin{lemma}
 Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. Then
 \begin{enumerate}
-\item $\upset x = \setbuilder{y\in P}{x\Yleft y}$;
-\item $\downset x = \setbuilder{y\in P}{y\Yleft x}$;
-\end{enumerate}
-and
-\begin{enumerate} \setcounter{enumi}{2}
 \item $\upset Q = \bigcup_{x\in Q} \upset x$;
 \item $\downset Q = \bigcup_{x\in Q} \downset x$.
 \end{enumerate}
@@ -487,8 +437,7 @@ Let $\sSet{P,\Yleft}$ be an ordered set and $\mathcal{A}\subseteq \powerset(P)$.
 \begin{enumerate}
 \item $\upset \bigcup \mathcal{A} = \bigcup_{A\in \mathcal{A}} \upset A$ and $\downset \bigcup \mathcal{A} = \bigcup_{A\in \mathcal{A}} \downset A$;
 \item $\upset \bigcap \mathcal{A} \subseteq \bigcap_{A\in \mathcal{A}} \upset A$ and $\downset \bigcap \mathcal{A} \subseteq \bigcap_{A\in \mathcal{A}} \downset A$;
-\item if $\Yleft$ is a preorder, then
-\[ \upset \bigcap_{A\in \mathcal{A}} \upset A = \bigcap_{A\in \mathcal{A}} \upset A \quad\text{and} \downset \bigcap_{A\in \mathcal{A}} \downset A = \bigcap_{A\in \mathcal{A}} \downset A \]
+\item $\upset \bigcap_{A\in \mathcal{A}} \upset A = \bigcap_{A\in \mathcal{A}} \upset A$ and $\downset \bigcap_{A\in \mathcal{A}} \downset A = \bigcap_{A\in \mathcal{A}} \downset A$.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
@@ -498,7 +447,7 @@ Let $\sSet{P,\Yleft}$ be an ordered set and $\mathcal{A}\subseteq \powerset(P)$.
 (2) Again we calculate using \ref{unionIntersectionLabelSet}:
 \[ \upset \bigcap \mathcal{A} = \bigcup_{x\in \bigcap\mathcal{A}} \upset x \subseteq \bigcap_{A\in \mathcal{A}}\bigcup_{x\in A}\upset x = \bigcap_{A\in \mathcal{A}} \upset A. \]
 
-(3) We calculate using (2) and \ref{upwardDownwardClosure}:
+(3) We calculate using (2) and the fact that closures are idempotent:
 \[ \bigcap_{A\in \mathcal{A}} \upset A = \bigcap_{A\in \mathcal{A}} \upset\upset A \supseteq \upset \bigcap_{A\in \mathcal{A}} \upset A \supseteq \bigcap_{A\in \mathcal{A}} \upset A. \]
 \end{proof}
 \begin{corollary} \label{unionIntersectionDownUpSets}
@@ -510,7 +459,7 @@ Let $P$ be an ordered set and $\{Q_i\}_{i\in I}$ be a set of down sets in $P$. T
 The same is true for up sets.
 \end{corollary}
 \begin{proof}
-This follows from $\downset \bigcup Q_i = \bigcup \downset Q_i = \bigcup Q_i$ and $\downset \bigcap Q_i \subseteq \bigcap \downset Q_i = \bigcap Q_i$ by \ref{upwardDownwardClosure}.
+This follows from $\downset \bigcup Q_i = \bigcup \downset Q_i = \bigcup Q_i$ and $\downset \bigcap Q_i \subseteq \bigcap \downset Q_i = \bigcap Q_i$ by \ref{TODO}.
 \end{proof}
 
 
@@ -972,6 +921,12 @@ Some authors use ``order completeness'' to mean what we have called Dedekind com
 The closed unit disk in $\R^2$ with coordinatewise ordering is Dedekind complete, but not order complete and is not a lattice.
 \end{example}
 
+\begin{lemma}
+Let $P$ be an ordered set that contains a least and a greatest element. Then $P$ is order complete \textup{if and only if} $P$ is Dedekind complete.
+\end{lemma}
+\begin{proof}
+Every set is bounded (by the least and greatest elements).
+\end{proof}
 
 \begin{proposition} \label{existenceSupremaInfima}
 Let $(P,\precsim)$ be an ordered set. Then the following are equivalent:
@@ -990,7 +945,7 @@ The following are also equivalent:
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-We show that (2) and (3) are equivalent.
+We show that (2) and (3) are equivalent. The other assertions then follow simply.
 
 Suppose each subset has a supremum and let $S$ be a subset. Then in particular $S^l$ has a supremum. This supremum of $S^l$ is an infimum of $S$:
 \[ \sup(S^l) = (S^l)^u\cap((S^l)^u)^l = (S^l)^u\cap S^l = \inf(S).  \]
@@ -1002,12 +957,6 @@ For equivalence with (3) and (4), we just need to remark that $\sup(\emptyset) =
 For Dedekind completeness the argument is similar, we just need to remark that if $S$ is non-empty and bounded below, then $S^l$ is non-empty and bounded above.
 \end{proof}
 
-\begin{lemma}
-Let $P$ be an ordered set that contains a least and a greatest element. Then $P$ is order complete \textup{if and only if} $P$ is Dedekind complete.
-\end{lemma}
-\begin{proof}
-Every set is bounded (by the least and greatest elements).
-\end{proof}
 
 \begin{lemma}
 The ordered natural numbers $\sSet{\N,\leq}$ are complete.
@@ -1068,7 +1017,7 @@ Let $\sSet{P,\Yleft}$ be an ordered set and $A,B,C \subseteq P$. Then
 \begin{proof}
 (1) Assume $A$ is finer than $B$ and $B$ is finer than $C$. Then $B \subseteq \upset A$ and $C\subseteq \upset B$, so $C \subseteq \upset\upset A \subseteq \upset A$.
 
-(2) from \ref{QsubseteqDownQ}.
+(2) from \ref{TODO}.
 \end{proof}
 \begin{corollary}
 Let $\sSet{P,\Yleft}$ be a preordered set.
@@ -1091,7 +1040,7 @@ Let $\sSet{P,\Yleft}$ be an ordered set and $A \subseteq P$. Then
 \begin{proof}
 (1) is equivalent to $\upset A \subseteq \upset A$.
 
-(2) We need to show that $\upset A$ is finer than $A$, i.e. $A\subseteq \upset\upset A$. This follows from \ref{QsubseteqDownQ}.
+(2) We need to show that $\upset A$ is finer than $A$, i.e. $A\subseteq \upset\upset A$. This follows from \ref{TODO}.
 
 (3) Assume $A \approx B$. Then $A \subseteq \upset B$ and $B \subseteq \upset A$. This implies $\upset A \subseteq \upset\upset B \subseteq \upset B$ and $\upset B \subseteq \upset\upset A \subseteq \upset A$.
 
@@ -2669,7 +2618,7 @@ Such a family of sets is a complete lattice by \ref{completeLatticeBasic}.
 
 For the converse, the isomorphism is given by $x\mapsto \downset x$, as in \ref{orderedSetPowerset}. We just need to show that the meet translates to the intersection, i.e. $\downset \bigwedge Q = \bigcap_{x\in Q}\downset x$. We calculate, using \ref{minMaxUpsetDownset} and \ref{boundsFromUpDownSets}:
 \[ \downset \bigwedge Q = \downset \max(Q^l) = \downset Q^l = \downset \bigcap_{x\in Q} \downset x \subseteq \bigcap_{x\in Q} \downset x. \]
-For the other inclusion we just note that a lattice order is in particular a  preorder and so we can use \ref{QsubseteqDownQ}.
+For the other inclusion we just note that a lattice order is in particular a  preorder and so we can use \ref{TODO}.
 \end{proof}
 
 \begin{definition}
@@ -2764,7 +2713,7 @@ Let $X$ be a set, $\powerset(X)$ be ordered by inclusion, $A, B\in \powerset(X)$
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) If $B$ meshes with $A$, then any superset of $B$ also meshes with $A$. The opposite inclusion is given by \ref{upwardDownwardClosure}.
+(1) If $B$ meshes with $A$, then any superset of $B$ also meshes with $A$. The opposite inclusion is given by \ref{TODO}.
 
 (2) We calculate using \ref{upDownsetUnionIntersection}
 \[ \upset \mathcal{A}^{\overrightarrow{\mesh}} = \upset \bigcap_{A\in\mathcal{A}} A\mesh = \upset \bigcap_{A\in\mathcal{A}} \upset A\mesh = \bigcap_{A\in\mathcal{A}} \upset A\mesh = \bigcap_{A\in\mathcal{A}} A\mesh = \mathcal{A}^{\overrightarrow{\mesh}} \]
