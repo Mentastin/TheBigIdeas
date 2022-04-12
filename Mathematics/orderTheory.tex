@@ -146,7 +146,7 @@ Similarly we say $f$ is (reverse) order-reflecting or a (reverse) order embeddin
 
 The adjectives ``strict'' and ``weak'' can be added to any of these cases to identify whether the (weak, i.e. reflexive) order or the associated strict order is meant.
 \end{definition}
-An order isomorphism, or \udef{similarity}, is a bijective order embedding. Let $U,V$ be ordered sets. We write $U =_o V$ if $U$ and $V$ are order isomorphic and $U \neq_o V$ if not.
+The concept of order isomorphism (or \udef{similarity}) is similarly inherited. Let $U,V$ be ordered sets. We write $U =_o V$ if $U$ and $V$ are order isomorphic and $U \neq_o V$ if not.
 
 \begin{lemma} \label{orderReflectionIsInjective} \label{strictOrderPreservationIsInjective}
 Let $P,Q$ be posets and $f: P\to Q$. The following are sufficient conditions for $f$ to be injective:
@@ -219,9 +219,9 @@ Let $\sSet{P,R}$ and $\sSet{Q,\Yleft}$ be relational structures and $f:P\to Q$ a
 \begin{enumerate}
 \item $f$ is relation-preserving;
 \item $R;f;\Yleft \subseteq f;\Yleft$;
-\item the inverse image of every principle down-set is closed under $R^\transp$;
+\item the inverse image of every principal down-set is closed under $R^\transp$;
 \item $\Yleft;f^\transp; R \subseteq \Yleft;f^\transp$
-\item the inverse image of every principle up-set is closed under $R$.
+\item the inverse image of every principal up-set is closed under $R$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -231,11 +231,18 @@ $(2 \Rightarrow 1)$ By reflexivity we have $\id_Q \subseteq \Yleft$ and so $R;f 
 
 $(3)$ Is simply a translation of $\forall x: R;f;Sx \subseteq f;Sx$.
 
-$(4)$ Similar to (2), except using a different part of \ref{relationPreserving}.
+$(4)$ Equivalent to (2) by taking transposed and using that $f$ is $\Yleft$-preserving iff $f$ is $\Yleft^\transp$-preserving.
 
 $(3)$ Is simply a translation of $\forall x: xS;f^\transp; R \subseteq xS;f^\transp;f^\transp$.
 \end{proof}
 
+\begin{proposition}
+Let $\sSet{P,\leq_P}$ and $\sSet{Q,\leq_Q}$ be posets and $f:P\to Q$ a function. Then $f$ is residuated \textup{if and only if} the inverse image of every principal down-set is a principal down set.
+\end{proposition}
+Clearly we can replace ``down-set'' with ``up-set'' by considering the dual order.
+\begin{proof}
+This follows directly from \ref{preimagesGaloisIdentity} and \ref{preorderGaloisIdentity}.
+\end{proof}
 
 \begin{definition}
 A function $f: P\to P$ on an ordered set $(P,\Yleft)$ into itself is
@@ -262,11 +269,93 @@ The following are also equivalent:
 
 \subsection{Closure}
 
+\subsubsection{Moore closure}
+\begin{definition}
+Let $A$ be a set.
+\begin{itemize}
+\item A \udef{(Moore) closure} is a monad on the poset $\sSet{\powerset(A), \subseteq}$.
+\item A \udef{(Moore) dual closure} is a comonad on the poset $\sSet{\powerset(A), \subseteq}$.
+\end{itemize}
+\end{definition}
+
+\begin{example}
+Let $\sSet{A,R}$ be a relational structure. Then
+\[ \closure_R: \powerset(A) \to \powerset(A): X \mapsto (X^{R})^{R^\transp} \]
+is a closure due to \ref{polarsGaloisConnection}.
+\end{example}
+
+
+\begin{proposition}
+Let $A$ be a set and $f: \powerset(A) \to \powerset(A)$ a function. Then $f$ is a closure \textup{if and only if} $f$ is
+\begin{itemize}
+\item extensive: $\forall X\subseteq A: X \subseteq f(X)$;
+\item isotone: $\forall X,Y\subseteq A: $ if $X \subseteq Y$, then $f(X) \subseteq f(Y)$;
+\item idempotent: $\forall X\subseteq A:  f(f(X)) = f(X)$.
+\end{itemize}
+And $f$ is a dual closure \textup{if and only if} $f$ is
+\begin{itemize}
+\item contractive: $\forall X\subseteq A: X \supseteq f(X)$;
+\item isotone: $\forall X,Y\subseteq A: $ if $X \subseteq Y$, then $f(X) \subseteq f(Y)$;
+\item idempotent: $\forall X\subseteq A:  f(f(X)) = f(X)$.
+\end{itemize}
+\end{proposition}
+The contents of this proposition is often given as the definition of a (Moore) closure.
+\begin{proof}
+Sufficiency $\Rightarrow$ is clear. In particular extensivity/contractivity follows from \ref{preorderGaloisCondition}.
+
+Upper adjoint can be taken to be $\id_{\im(f)}$.
+\end{proof}
+
+
+
+The family of saturated sets is a Moore family. The For any $x\in P$, the downset $\downset x$ is saturated.
+
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be an ordered set and let $f:P \to P$ be a function. We say $f$ is a \udef{(Moore) closure} on $P$ if it is
+\begin{itemize}
+\item extensive: $x \Yleft f(x)$;
+\item monotone: if $A \Yleft B$, then $\closure(A) \Yleft \closure(B)$;
+\item idempotent: $\closure(\closure(A)) = \closure(A)$.
+\end{itemize}
+We say $f$ is a \udef{dual closure} if it is
+\begin{itemize}
+\item contractive: $f \leq \id$
+\item monotone
+\item idempotent
+\end{itemize}
+\end{definition}
+
 \begin{definition}
 Let $A$ be a subset of an ordered set $P$. If $A = (A^u)^l$, the $A$ is called \udef{saturated}.
 \end{definition}
 
+\begin{definition}
+Let $\sSet{A, R}$ be a relational structure. We say a set $X\subseteq A$ is \udef{$R$-closed} if $X_R \subseteq X$.
+\end{definition}
 
+\begin{lemma}
+Let $\sSet{A, R}$ be a relational structure. A set $X\subseteq A$ is $R$-closed \textup{if and only if} $X^c \subseteq X^{\overline{R}}$.
+\end{lemma}
+\begin{proof}
+We have $X_R \subseteq X \iff X^c \subseteq (X_R)^c = X^{\overline{R}}$.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{A,R}$ be a relational structure.
+\begin{enumerate}
+\item For all $X\subseteq A$, the $R$-closure $\closure_R(X)$ is $R$-closed.
+\item The closure function $\closure_R$ is identical to the function
+\[ \powerset(A) \to \powerset(A): X\mapsto \bigcap \setbuilder{Y}{X \subseteq Y \subseteq A \;\text{and $Y$ is $R$-closed}}. \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have $\closure_R(X)_R = X_R$ due to the generalised inverses of \ref{imagePreimageGaloisConnection}.
+
+(2) 
+\end{proof}
+\begin{lemma}
+Every Moore closure is an $R$-closure for some homogeneous relation $R$.
+\end{lemma}
 
 \begin{proposition}
 Let $L$ be a lattice and $f$ a closure. Then $f[L]$ is a lattice with lattice operations given by
@@ -404,8 +493,8 @@ We call $Q$
 \end{itemize}
 For $x\in P$,
 \begin{itemize}
-\item $\upset x \defeq \upset\{x\}$ is the \udef{principle up set} generated by $x$;
-\item $\downset x \defeq \downset\{x\}$ is the \udef{principle down set} generated by $x$.
+\item $\upset x \defeq \upset\{x\}$ is the \udef{principal up set} generated by $x$;
+\item $\downset x \defeq \downset\{x\}$ is the \udef{principal down set} generated by $x$.
 \end{itemize}
 \end{definition}
 
@@ -587,6 +676,7 @@ Let $(P,\Yleft)$ be an ordered set and $S$ a subset of $P$. Then
 \end{enumerate}
 \end{lemma}
 
+TODO: minimal / maximal: $X^{R\cup \overline{R}^\transp}$ (if anti-asymmetric = $X^{\overline{R}^\transp}$).
 
 \begin{lemma} \label{upperBoundUpsetlowerBoundDownset}
 Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$, then
@@ -1077,7 +1167,7 @@ If $P$ is a discrete poset, then $\downsets(P) = \powerset(P)$.
 \end{lemma}
 
 \begin{proposition} \label{orderedSetPowerset}
-Let $P$ be a preordered ordered set. Then $x\mapsto \downset x$ is an order embedding between $P$ and the principle down sets in $P$.
+Let $P$ be a preordered ordered set. Then $x\mapsto \downset x$ is an order embedding between $P$ and the principal down sets in $P$.
 
 If $P$ is a partial order, then the map is bijective and thus an order isomorphism.
 \end{proposition}
@@ -1199,7 +1289,7 @@ A \udef{semilattice} is an algebraic structure $\sSet{S,\star}$ where $\star$ is
 \end{itemize}
 We call a semilattice \udef{bounded} if it contains an identity $e$ for $\star$. We write $\sSet{S, \star, e}$.
 \end{definition}
-In other words a semilattice is a commutative band.
+In other words a semilattice is a commutative idempotent semigroup or commutative band.
 
 \begin{lemma}
 Let $(P,\leq)$ be a poset and let $\{x,y,z\}\subseteq P$ be such that each subset has a supremum. Then
@@ -2363,11 +2453,11 @@ Many authors also require filters and ideals to be non-empty.
 \begin{lemma}
 Let $P$ be an ordered set and $x\in P$.
 \begin{enumerate}
-\item The principle up set $\upset x$ is an order filter.
-\item The principle down set $\downset x$ is an order ideal.
+\item The principal up set $\upset x$ is an order filter.
+\item The principal down set $\downset x$ is an order ideal.
 \end{enumerate}
 \end{lemma}
-If the order is not a preorder, then a principle filter/ideal may be empty.
+If the order is not a preorder, then a principal filter/ideal may be empty.
 
 \begin{example}
 Let $X$ be a set.
