@@ -991,7 +991,7 @@ Let $R$ be a relation on $(A,B)$ and $X\subseteq A, Y\subseteq B$. Then
 \[ Y\subseteq X^R \iff X\times Y \subseteq R. \]
 \end{lemma}
 
-\begin{corollary} \label{monotonicityCommonality}
+\begin{corollary} \label{monotonicityPolars}
 Let $R$ be a relation on $(A, B)$ and $X,Y\subset A$. Then
 \begin{enumerate}
 \item if $X\subseteq Y$, then $X^R \supseteq Y^R$;
@@ -1004,7 +1004,7 @@ Let $R$ be a relation on $(A, B)$ and $X,Y\subset A$. Then
 
 (2) Similar.
 \end{proof}
-\begin{corollary} \label{commonalityRelation} \label{precommonalityRelation}
+\begin{corollary} \label{polarasRelation}
 Let $R$ be a relation on $(A, B)$, $X,Y\subset A$ and $Z,W\subset B$. Then
 \begin{enumerate}
 \item $(X\cup Y)^R \subseteq X^R\cap Y^R$;
@@ -1044,7 +1044,7 @@ We also call
 \end{definition}
 
 \begin{lemma} \label{minMaxSingletons}
-If $\sSet{A, R}$ is an anti-symmetric relational structure and $X\subseteq A$, then $\max(X), \min(X), \sup(X), \inf(X)$ are either singletons or empty.
+If $\sSet{A, R}$ is an anti-symmetric relational structure and $X\subseteq A$, then $\max(X), \min(X), \sup(X)$ and $\inf(X)$ are either singletons or empty.
 \end{lemma}
 \begin{proof}
 We prove for $\max(X)$. The other cases follow dually or a fortiori. Let $x,y\in \max(X)$. Then $xRy$ and $yRx$, so $x=y$ by anti-symmetry.
@@ -1198,6 +1198,10 @@ Let $R,S$ be composable relations. Then for all $x,y$
 \begin{proof}
 TODO
 \end{proof}
+\begin{corollary}
+Let $R,S$ be composable relations. If $R$ is right unique, then $\overline{R;\overline{S}} = R;S$.
+\end{corollary}
+
 
 \begin{lemma}
 Let $A,B,C,D$ be relations such that $A \subseteq B$ and $C\subseteq D$ and both $A,B$ and $C,D$ are composable, then $A;C\subseteq B;D$.
@@ -1217,7 +1221,7 @@ Let $A,B,X, Y$ be sets and $R$ a relation on $(A, B)$. Then
 \item $\id_A;R = R = R;\id_B$;
 \item if $S,T\subseteq A$, then $\id_{S};\id_{T} = \id_{S\cap T}$;
 \item $E_{X,A};R = E_{X,B}$ and $R; E_{B,Y} = E_{A,Y}$;
-\item $U_{X,A};R = \U_{X,B}|^{\im(R)}$ and $R; U_{B,Y} = U_{A, Y}|_{\preim(R)}$;
+\item $U_{X,A};R = \U_{X,A_R}$ and $R; U_{B,Y} = U_{_RB, Y}$;
 \item $U_{X,A};R;U_{B,Y} = \begin{cases}
 U_{X,Y} & \graph(R) \neq \emptyset \\
 E_{X,Y} & \graph(R) = \emptyset.
@@ -1872,7 +1876,7 @@ Let $\sim$ be an equivalence relation on $A$. The quotient set of $A$ by $\sim$ 
 Conversely, every partition defines an equivalence relation.
 \end{proposition}
 
-\subsection{Unicity and totality}
+\subsection{Uniqueness and totality}
 \begin{definition}
 Let $R$ be a relation on $(A, B)$. We call $R$
 \begin{itemize}
@@ -1900,7 +1904,7 @@ Let $R$ be a relation. Then
 \end{enumerate}
 \end{lemma}
 
-\subsubsection{Unicity}
+\subsubsection{Uniqueness}
 \begin{lemma}
 Let $R$ be a relation. Then
 \begin{enumerate}
@@ -1980,16 +1984,18 @@ R;S\cap T &\subseteq (R\cap T;S^\transp);(S\cap R^\transp;T) \subseteq R;(S\cap 
 \end{align*}
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{uniquenessResiduals}
 Let $R,S$ be composable relations.
 \begin{enumerate}
 \item If $R$ is right-unique, then $\begin{aligned}[t]
 \overline{R;S} &= R;\overline{S} \cup \overline{R;U} \\
-R;\overline{S} &= R;U\cap \overline{R;S}.
+R;\overline{S} &= R;U\cap \overline{R;S} \\
+\overline{R;\overline{S}} &= \overline{R;U} \cup R;S.
 \end{aligned}$
 \item If $S$ is left-unique, then $\begin{aligned}[t]
 \overline{R;S} &= \overline{R};S \cup \overline{U;S} \\
-\overline{R};S &= U;S\cap \overline{R;S}.
+\overline{R};S &= U;S\cap \overline{R;S} \\
+\overline{\overline{R};S} &= \overline{U;S}\cup R;S.
 \end{aligned}$
 \end{enumerate}
 \end{lemma}
@@ -2010,10 +2016,10 @@ If $R$ is right-unique, then
 \item $_R(Z\symdiff W) = {_RZ}\symdiff {_RW}$.
 \end{enumerate}
 \end{lemma}
-TODO: similar for totality and commonalities?
+TODO: similar for totality and polars?
 
 \subsubsection{Totality}
-\begin{lemma}
+\begin{lemma} \label{totalityEquivalences}
 Let $R$ be a relation on $(A, B)$. Then
 \begin{enumerate}
 \item the following are equivalent to $R$ being left-total:
@@ -2169,13 +2175,25 @@ We can associate to any relation $R$ on $(A,B)$
 \begin{itemize}
 \item an \udef{image function} $\powerset(A) \to \powerset(B): X \mapsto X_R$;
 \item a \udef{preimage function} $\powerset(B) \to \powerset(A): X \mapsto {_RX}$;
-\item a \udef{commonality function} $\powerset(A) \to \powerset(B): X \mapsto X^R$;
-\item a \udef{precommonality function} $\powerset(B) \to \powerset(A): X \mapsto {^RX}$.
+\item a \udef{right bounds function} $\powerset(A) \to \powerset(B): X \mapsto X^R$;
+\item a \udef{left bounds function} $\powerset(B) \to \powerset(A): X \mapsto {^RX}$.
 \end{itemize}
 
 \begin{lemma}
 Let $f$ be a function. Then $f^{-1}[\biguplus \mathcal{E}] = \biguplus f[\mathcal{E}]$.
 \end{lemma}
+
+\begin{lemma} \label{functionUpperbound}
+Let $A,B,C$ be sets, $f: A\to B$ a function and $R$ a relation on $(B,C)$. Let $X \subseteq A$. Then $f[X]^R = X^{f;R}$.
+\end{lemma}
+\begin{proof}
+We calculate
+\[ (X_f)^{R} = (X_{f;\overline{R}})^c = X^{\overline{f;\overline{R}}} = X^{f;R \cup \overline{f;U_{B,C}}} = X^{f;R}, \]
+where we have used the uniqueness and totality of $f$ in \ref{uniquenessResiduals} and \ref{totalityEquivalences}.
+
+Alternatively we can give the following calculation:
+\[ y\in f[X]^R \iff \forall x\in X: f(x)Ry \iff \forall x\in X: x(f;R)y \iff y\in X^{f;R}. \]
+\end{proof}
 
 \subsection{Injectivity, surjectivity and bijectivity}
 \begin{definition}

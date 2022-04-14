@@ -759,12 +759,18 @@ which is the Galois identity \ref{GaloisIdentity}.
 \end{itemize}
 \end{example}
 
-\begin{lemma}
+\begin{lemma} \label{immediateGaloisCorollaries}
 If $(a,a')$ is a Galois connection between $\sSet{A,R}$ and $\sSet{B,S}$, then
-\[ R^\transp \subseteq aa'R^\transp \qquad\text{and}\qquad S \subseteq a'aS. \]
+\begin{enumerate}
+\item $R^\transp \subseteq aa'R^\transp$ and $S \subseteq a'aS$;
+\item $Raa' \subseteq R$ and $S^\transp a'a \subseteq S^\transp$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-This is a direct application of \ref{expansiveRelationPreserving}. I can also be obtained as a corollary to \ref{GaloisIdentity} (later).
+(1) This is a direct application of \ref{expansiveRelationPreserving}. I can also be obtained as a corollary to \ref{GaloisIdentity} (later).
+
+(2) Follows from the Galois condition and the fact $a'a, aa'$ are relation-preserving (\ref{relationPreserving}):
+\[ Raa' \subseteq aa'R \subseteq R \qquad\text{and}\qquad S^\transp a'a \subseteq a'aS^\transp \subseteq S^\transp. \]
 \end{proof}
 
 In particular, if the relations are reflexive, we have
@@ -955,7 +961,7 @@ Completeness
 \url{https://sciendo.com/pdf/10.2478/ausm-2014-0019}
 
 \begin{proposition} \label{polarsGaloisConnection}
-Let $R$ be a relation on $(A,B)$. Then the commonality and precommonality functions
+Let $R$ be a relation on $(A,B)$. Then the polar functions
 \[ \powerset(A)^o\to\powerset(B): X\mapsto X^R \qquad\text{and}\qquad \powerset(A)^o\to\powerset(B): X\mapsto {^RX} \]
 form a Galois connection. Every antitone Galois connection between powersets is of this form, for some relation.
 \end{proposition}
@@ -984,7 +990,7 @@ Let $R$ be a homogeneous relation on $A$. Then
 These Galois connections are equivalent by replacing $R \leftrightarrow R^\transp$. Every isotone Galois connection between powersets is of this form, for some relation.
 \end{proposition}
 \begin{proof}
-We compose the commonality/precommonality Galois connection of $\overline{R}$ with the Galois connection of complementation to get
+We compose the polar Galois connection of $\overline{R}$ with the Galois connection of complementation to get
 \[ X_R = (X^{\overline{R}})^c \subseteq Y \iff X^{\overline{R}} \supseteq Y^c \iff X \subseteq {^{\overline{R}}(Y^c)}. \]
 Similarly we have
 \[ {_RX} = ({^{\overline{R}}X})^c \subseteq Y \iff {^{\overline{R}}}X \supseteq Y^c \iff X \subseteq (Y^c)^{\overline{R}}. \]
@@ -1040,11 +1046,12 @@ This follows from $\downset \bigcup Q_i = \bigcup \downset Q_i = \bigcup Q_i$ an
 \begin{proposition} \label{imagePolars}
 Let $\sSet{A, R}$ and $\sSet{B, S}$ be relational structures, $f: A\to B$ a relation-preserving function and $X\subseteq A$ a subset. Then
 \begin{enumerate}
-\item $f[X^R] \subseteq f[X]^S$;
-\item $f[{^R}X] \subseteq {^Sf[X]}$;
+\item $f[X^R] \subseteq f[X]^S \cap \im(f)$;
+\item $f[{^R}X] \subseteq {^Sf[X]} \cap \im(f)$;
 \item $f[\max(X)] \subseteq \max(f[X])$;
 \item $f[\min(X)] \subseteq \min(f[X])$.
 \end{enumerate}
+For relation-reflecting functions we have reversed inclusions. For relation embeddings the inclusions become equalities.
 \end{proposition}
 \begin{proof}
 (1) We calculate, using \ref{boundsFromPrincipalImages} and \ref{functionImagesPreimagesAndPrincipalImages},
@@ -1052,7 +1059,8 @@ Let $\sSet{A, R}$ and $\sSet{B, S}$ be relational structures, $f: A\to B$ a rela
 
 (b) Dual to (a).
 
-(c) We calculate $f[\max(X)] = f[X\cap X^R] \subseteq f[X]\cap f[X^R] \subseteq f[X]\cap f[X]^S = \max(f[X])$.
+(c) We calculate
+\[ f[\max(X)] = f[X\cap X^R] \subseteq f[X]\cap f[X^R] \subseteq f[X]\cap f[X]^S \cap \im(f) = f[X]\cap f[X]^S = \max(f[X]). \]
 
 (d) Dual to (c).
 \end{proof}
@@ -1069,8 +1077,15 @@ Let $\sSet{A, R}$ and $\sSet{B, S}$ be relational structures, $f: A\to B$ a func
 \begin{proof}
 Let $f': B\to A$ be a residual of $f$.
 
-From above we see that it is enough to have $f[X^R]^{S^\transp} \subseteq (f[X]^S)^{S^\transp}$.
+From above we see that it is enough to have $f[(X^R)^{R^\transp}] \subseteq (f[X]^S)^{S^\transp}$.
 
+From $ff'R \subseteq R$, we get $X^{ff'R} = (f'\circ f)[X]^{R} \subseteq X^{R}$. We first take the lower bound and then the image under $f$ to obtain
+\begin{align*}
+f[(X^{R})^{R^\transp}] &\subseteq f\big[((f'\circ f)[X]^{R})^{R^\transp}\big] \subseteq f\big[(f'\circ f)[X]^{R}\big]^{R^\transp} \subseteq f\big[(f'\circ f)[X]^{R} \cap \im(f')\big]^{R^\transp} \\
+&= f|_{\im f'}\big[(f'\circ f)[X]^{R}\big]^{R^\transp} = \Big(f|_{\im f'}\big[(f'\circ f)[X]\big]^{R} \cap \im(f|_{\im f'})\Big)^{R^\transp} \\
+&= (f[X]^{R} \cap \im(f|_{\im f'}))^{R^\transp}. 
+\end{align*}
+Using the fact that $f|_{\im f'}$ is a relation embedding (\ref{relationPreservingGeneralisedInversesEmbeddings})
 \end{proof}
 
 \chapter{Groups}
