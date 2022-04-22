@@ -229,7 +229,7 @@ If there exists a basis $\beta$ of $V$ such that the partial derivatives of $f:U
 \begin{proof}
 
 \end{proof}
-This is not a necessary condition for the Fréchet derivative to exist!
+TODO for finite dimensions! Expand to criterion for Gateaux to Fréchet.
 \begin{example}
 
 \end{example}
@@ -240,6 +240,7 @@ Let $f:U\subseteq\R^m\to\R^n$ be a function. Then $A_{\diff{f}}$ is a matrix wit
 \[ [A_{\diff{f}}]_{ij} = [\diff{f}\vec{e}_j]_i = \left[\pd{f}{x^j}\right]_i. \]
 This matrix is called the \udef{Jacobian} $J_f$.
 \end{definition}
+
 
 \subsection{Differentiation of a normed algebra}
 
@@ -534,7 +535,9 @@ TODO: intervals must be closed / open?? In \ref{monotoneDiscontinuities} and \re
 Let $X$ be a compact Hausdorff space. Let $A\subseteq \mathcal{C}(X)$ be a unital $*$-subalgebra. Suppose that $A$ separates points, i.e. for all $x\neq y$ in $X$ there exists $f\in A$ with $f(x) \neq f(y)$. Then $A$ is dense in $\mathcal{X}$ with respect to $\norm{\cdot}_\infty$.
 \end{theorem}
 
-
+\chapter{Taylor and other series}
+TODO: move
+\input{series}
 
 \chapter{Measure theory}
 TODO (bounded) finitely additive signed measures form Riesz spaces.
@@ -1197,6 +1200,14 @@ Distributions with kernels will be example.
 \begin{definition}
 A \udef{complex function} is a function in $(U\subseteq \C \to \C)$.
 \end{definition}
+\section{The complex numbers as a real algebra}
+The set of complex numbers $\C$ is isomorphic to the algebra $\R^2$ where multiplication is defined by
+\[ (a, b)\cdot (x, y) \defeq (ax-by, ay+bx). \]
+Thus the regular representation $\rho_{(a,b)}$ has matrix
+\[ \begin{pmatrix}
+a & -b \\ b & a
+\end{pmatrix}. \]
+
 \section{Holomorphic functions}
 \begin{definition}
 Let $f:U\subseteq \C \to \C$ be a complex function. We say
@@ -1224,14 +1235,115 @@ Let $f,g$ be holomorphic. Then
 \end{lemma}
 
 \subsubsection{Cauchy-Riemann equations}
-The space of complex numbers $\C$ is a real $2$-dimensional vector space. So any 
+The space of complex numbers $\C$ is a real $2$-dimensional vector space.
 
+\begin{lemma}
+Let $f: U\subseteq \C \to C$ be a complex function. Then $f$ is holomorphic \textup{if and only if} it is Fréchet differentiable as a function $F: V\subseteq \R^2 \to \R^2$ and $\diff F$ is the regular representation of some $z\in \C$.
+\end{lemma}
+\begin{corollary}[Cauchy-Riemann equations]
+Let $f: U\subseteq \C \to C$ be a complex function. Then $f$ is complex differentiable at $z_0 = a+bi$ \textup{if and only if} the real derivatives
+\[ \pd{\Re(f(a + ib))}{a},\; \pd{\Re(f(a + ib))}{b},\;
+\pd{\Im(f(a + ib))}{a} \;\;\text{and}\;\; \pd{\Im(f(a + ib))}{b}. \]
+exist, are continuous and the equations
+\[
+\pd{\Re(f(a + ib))}{a} = \pd{\Im(f(a + ib))}{b} \quad\text{and}\quad \pd{\Re(f(a + ib))}{b} = -\pd{\Im(f(a + ib))}{a} \]
+hold. In particular
+\[ |f'(z_0)|^2 = \det J_f(a,b) \]
+where $\det J_f(a,b)$ is the Jacobian determinant of $f$ as a function $V\subseteq \R^2 \to \R^2$.
+\end{corollary}
+\begin{proof}
+We need the Jacobian
+\[ \begin{pmatrix}
+\pd{\Re(f(a + ib))}{a} & \pd{\Re(f(a + ib))}{b} \\
+\pd{\Im(f(a + ib))}{a} & \pd{\Im(f(a + ib))}{b}
+\end{pmatrix} \]
+to be of the form $\begin{pmatrix}
+x & -y \\ y & x
+\end{pmatrix}$ in order for it to be a regular representation of some $f' =\pd{\Re(f(a + ib))}{a} + i\pd{\Im(f(a + ib))}{a} \in \C$. TODO ref requirement continuously differentiable.
 
-isomorphic to $\R^2$ as a real vector space by $x+iy \mapsto \begin{pmatrix}
-x & y
-\end{pmatrix}^\transp$.
+The Jacobian determinant is a simple calculation:
+\begin{align*}
+\det J_f(a,b) &= \pd{\Re(f(a + ib))}{a}\pd{\Im(f(a + ib))}{b} - \pd{\Im(f(a + ib))}{a}\pd{\Re(f(a + ib))}{b} \\
+&= \pd{\Re(f(a + ib))}{a}^2 + \pd{\Im(f(a + ib))}{a}^2 = |f'|^2.
+\end{align*}
+\end{proof}
 
-\subsection{Power series}
+\subsection{Cauchy's theorem and integral formula}
+
+\begin{theorem}[Cauchy's theorem] \label{CauchyTheorem}
+Let $f: U\subseteq \C \to \C$ be a holomorphic complex function and $\gamma$ a simple closed Jordan curve whose interior lies in $U$. Then
+\[ \oint_\gamma f(z)\diff{z} = 0. \]
+\end{theorem}
+TODO: looser requirements for $\gamma$
+\begin{proof}
+TODO: generalised Stokes + Cauchy-Riemann!
+\end{proof}
+\begin{corollary}
+Let $f: U\subseteq \C \to \C$ be a holomorphic complex function. Then there exists a primitive $F: U\to \C$ such that $\od{F}{z} = f$.
+\end{corollary}
+\begin{proof}
+The integral $\int_\gamma f(z)\diff{z}$ depends only on the endpoints of $\gamma$.
+\end{proof}
+
+\begin{theorem}[Cauchy's integral formula]
+Let $f: U\subseteq \C \to \C$ be a holomorphic complex function and $\gamma$ a simple closed Jordan curve whose interior lies in $U$. Then
+\[ f(z) = \frac{1}{2\pi i}\oint_\gamma \frac{f(\zeta)}{\zeta - z}\diff{\zeta} \]
+for any point $z$ in the interior of $\gamma$.
+\end{theorem}
+\begin{proof}
+Let $C_{z,\epsilon}$ be a small circle inside $\gamma$ around $z$ of radius $\epsilon$ and opposite orientation (TODO explicate!). Then $\frac{f(\zeta)}{\zeta - z}$ is holomorphic in the region between $\gamma$ and $C_{z,\epsilon}$, so
+\begin{align}
+\oint_\gamma \frac{f(\zeta)}{\zeta - z}\diff{\zeta} &= -\oint_{C_{z,\epsilon}} \frac{f(\zeta)}{\zeta - z}\diff{\zeta} \\
+&= -\oint_{C_{z,\epsilon}} \frac{f(\zeta)-f(z)}{\zeta - z} + \frac{f(z)}{\zeta - z}\diff{\zeta} \\
+&= -\oint_{C_{z,\epsilon}} \frac{f(\zeta)-f(z)}{\zeta - z}\diff{\zeta} -\oint_{C_{z,\epsilon}}\frac{f(z)}{\zeta - z}\diff{\zeta}.
+\end{align}
+In the limit $\epsilon \to 0$, the first part is bounded by
+\[ |\oint_{C_{z,\epsilon}} \frac{f(\zeta)-f(z)}{\zeta - z}\diff{\zeta}| \leq \sup_\zeta\left|\frac{f(\zeta)-f(z)}{\zeta - z}\right| \cdot |2\pi\epsilon| \to 0 \]
+because $\frac{f(\zeta)-f(z)}{\zeta - z}$ remains bounded. For the second part, we have
+\begin{align*}
+-\oint_{C_{z,\epsilon}} \frac{f(z)}{\zeta - z}\diff{\zeta} &= f(z)\oint_{C_{z,\epsilon}} \frac{\diff{\zeta}}{\zeta - z} \\
+&= f(z)\int_0^{2\pi}\frac{\epsilon ie^{-it}}{\epsilon e^{-it}}\diff{t} \\
+&= f(z)2\pi i.
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $f: U\subseteq \C \to \C$ be a holomorphic complex function. Then $f$ has infinitely many complex derivatives and
+\[ f^{(n)}(z) = \frac{n!}{2\pi i}\oint_\gamma \frac{f(\zeta)}{(\zeta-z)^{n+1}}\diff{\zeta} \]
+for all $z$ in the interior of $\gamma$.
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Suppose $f$ is holomorphic in an open set $\Omega$. If $D$ is a
+disc centered at $z_0$ and whose closure is contained in $\Omega$, then $f$ has a power series expansion at $z_0$
+\[ f(z) = \sum_{n=0}^\infty a_n(z-z_0)^n \]
+for all $z\in D$, and the coefficients are given by
+\[ a_n = \frac{f^{(n)}(z_0)}{n!} \qquad \text{for all $n\geq 0$}. \]
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+If $f$ is holomorphic in an open
+set that contains the closure of a disc $D$ centered at $z_0$ and of radius $R$,
+then
+\[  |f^{(n)}(z_0)| \leq \frac{n1\norm{f}_C}{R^n}, \]
+where $\norm{f}_C = \sup_{z\in C}|f(z)|$.
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}[Liouville's theorem]
+If $f$ is entire and bounded, then $f$ is contant.
+\end{corollary}
+\begin{proof}
+It suffices to show that $f'(z_0) = 0$. This can be seen by taking $R\to\infty$ in the previous inequality.
+\end{proof}
+\begin{corollary}
+Fundamental theorem of algebra (TODO)
+\end{corollary}
+
 
 \section{Meromorphic functions}
 
@@ -1239,9 +1351,7 @@ x & y
 
 \chapter{Calculus}
 \input{calculus}
-\chapter{Taylor and other series}
-TODO: move
-\input{series}
+
 
 \chapter{Distributions}
 \section{The space of test functions}
