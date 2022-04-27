@@ -1028,6 +1028,24 @@ and
 (3), (4) TODO
 \end{proof}
 
+\subsubsection{Extending the relation to powersets}
+\begin{definition}
+Let $R$ be a relation on $(A,B)$. Let $X\subseteq A$ and $Y\subseteq B$ be sets. Then we write $XRY$ if
+\[ \forall x\in X \forall y\in Y: \; xRy. \]
+\end{definition}
+
+\begin{lemma}
+Let $R$ be a relation on $(A,B)$. Let $X\subseteq A$ and $Y\subseteq B$ be sets. Then
+\[ XRY \quad\iff\quad X \subseteq {^RY} \quad\iff\quad Y \subseteq X^R. \]
+\end{lemma}
+
+\begin{definition}
+Let $R$ be a relation on $(A,B)$. Let $\mathcal{E}\subseteq \powerset(A)$. Then we define
+\begin{itemize}
+    \item $\mathcal{E}_R \defeq \setbuilder{X_R}{X\in \mathcal{E}}$;
+    \item $\mathcal{E}^R \defeq \setbuilder{X^R}{X\in \mathcal{E}}$.
+\end{itemize}
+\end{definition}
 
 \subsubsection{Greatest and least elements}
 \begin{definition}
@@ -2349,22 +2367,28 @@ A function $f$ that takes an input in $A$ and one in $B$ to generate an output i
 \[ f: A\times B \to C: (a,b)\mapsto f(a,b). \]
 \end{example}
 
+\subsubsection{Input permutation}
+TODO. Swap in particular.
+
 \subsubsection{Currying}
 \begin{definition}
-Given a function $f: A\times B \to C$, we can \udef{curry} it to obtain a new function
-\[ h: A \to (B\to C): a\mapsto f(a,-) \]
-where $f(a,-)$ is the function
-\[ f(a,-): B \to C: b\mapsto f(a,b). \]
+Given a function $f: A\times B \to C$, we can \udef{curry} it in the first argument to obtain a new function
+\[ \curry(f)_1: A \to (B\to C): a\mapsto f(a,-) \qquad \text{where $f(a,-): B \to C: b\mapsto f(a,b)$} \]
+or in the second argument to obtain
+\[ \curry(f)_2: B \to (A\to C): b\mapsto f(-,b) \qquad \text{where $f(-,b): A \to C: a\mapsto f(a,b)$}. \]
 \end{definition}
 \begin{lemma}
-For given sets $A,B,C$ the act of currying defines a bijective function
-\[ \operatorname{curry}: (A\times B \to C) \twoheadrightarrowtail (A \to (B\to C)). \]
+For given sets $A,B,C$ the act of currying defines two bijective functions
+\begin{align*}
+&\curry_1: (A\times B \to C) \twoheadrightarrowtail (A \to (B\to C)); \\
+&\curry_2: (A\times B \to C) \twoheadrightarrowtail (B \to (A\to C))
+\end{align*}
 \end{lemma}
 
 \subsubsection{Partial application}
 \begin{definition}
 Let $f: A\times B \to C$ be a function. A \udef{partial application} $p$ of $f$ is an element of the image of the curried function:
-\[ p\in \operatorname{curry}(f)[A]. \]
+\[ p\in \curry_1(f)[A] \qquad\text{or}\qquad p\in \curry_2(f)[A]. \]
 \end{definition}
 
 \subsection{Partial functions}
@@ -2378,7 +2402,15 @@ For all $a\in A$ we write
 \[ f(a)\downarrow \defequiv a\in\dom(f),\qquad f(a)\uparrow \defequiv a\notin\dom(f) \]
 We can read $f(a)\downarrow$ as ``$f$ converges at $a$'' and $f(a)\uparrow$ as ``$f$ diverges at $a$''.
 
-
+\subsection{The evaluation map}
+\begin{definition}
+Let $A,B$ be sets. We define the \udef{evaluation map}
+\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
+Often we will consider partial applications of the evaluation map in the second argument, i.e. for $x\in A$
+\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
+which is also called an evaluation map.
+\end{definition}
+We have $\evalMap_x = \operatorname{curry}_2(\evalMap)(x)$.
 
 \chapter{The natural numbers}
 TODO = 1:n!
