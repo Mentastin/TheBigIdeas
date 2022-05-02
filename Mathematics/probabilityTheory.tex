@@ -321,7 +321,35 @@ If both distributions are absolutely continuous, then
 Fubini TODO
 \end{proof}
 
+\begin{lemma}
+Let $X$ be a random variable. Then $P\{X = x\} = \Delta F_X(x)$.
+\end{lemma}
+
 \subsection{Probability density functions}
+
+\subsection{Transformed random variables}
+
+\begin{proposition} \label{transformationRandomVariable}
+Let $X:\Omega \to \R$ be a random variable and $g: \R\to\R$ a Borel measurable function.
+\begin{enumerate}
+\item If $(g, h)$ forms a Galois connection, then $F_{g(X)}(y) = F_X(h(y))$.
+\item If $(g, h)$ forms an antitone Galois connection, then $F_{g(X)}(y) = 1-F_X(h(y)) + \Delta F_X(h(y))$.
+\item If $g$ is either strictly increasing or strictly decreasing, then
+\[ f_{g(X)}(y) = \begin{cases}
+f_X(g^{-1}(y))\left|\od{g^{-1}(y)}{y}\right| & y\in \im(g) \\
+0 & y\notin \im(g).
+\end{cases} \]
+\end{enumerate}
+\end{proposition}
+In particular we can find a Galois connection $(g,h)$ if $g$ is right continuous and increasing.
+\begin{proof}
+(1) We calculate
+\[ F_{g(X)}(y) = P\{g(X) \leq y\} = P\{X \leq h(y) \} = F_X(h(y)). \]
+(2) Similarly,
+\[ F_{g(X)}(y) = P\{g(X) \leq y\} = P\{X \geq h(y) \} = 1 - P\{X < h(y) \} = 1 - P\{X \leq h(y) \} + P\{X = h(y)\} = 1-F_X(h(y)) + \Delta F_X(h(y)). \]
+(3) TODO
+\end{proof}
+
 
 \section{Convergence}
 \begin{definition}
@@ -343,7 +371,7 @@ This is just the Lebesgue dominated convergence theorem TODO ref.
 \section{Expected value}
 \begin{definition}
 Let $X$ be a random  vector on a probability space $\sSet{\Omega, \mathcal{A}, P}$. We define the \udef{exprectated value} of $X$ as
-\[ E[X] \defeq \int_\Omega X(\omega)\diff{P(\omega)}. \]
+\[ \E{X} \defeq \int_\Omega X(\omega)\diff{P(\omega)}. \]
 assuming $X$ is integrable.
 \end{definition}
 
@@ -358,6 +386,22 @@ assuming $X$ is integrable.
 \paragraph{Variance and standard deviation}
 \paragraph{Skewness}
 \paragraph{Kurtosis}
+
+\subsection{Mean and variance}
+
+\begin{proposition}
+Let $\sSet{\Omega, \mathcal{A}, P}$ be a probability space and $X,Y:\Omega \to \R$ random variables with finite means $\mu_X,\mu_Y$ and standard deviations $\sigma_X$, $\sigma_Y$. Then
+\[ |\E[XY] - \mu_X\mu_Y| \leq \sigma_X\sigma_Y. \]
+\end{proposition}
+\begin{proof}
+This follows from the CSB inequality, \ref{CauchySchwarz}:
+\begin{align*}
+\sigma_X\sigma_Y &= \sqrt{\E[(X-\mu_X)^2]}\sqrt{\E[(Y-\mu_Y)^2]} \\
+&\geq |\E[(X-\mu_X)(Y-\mu_Y)]| \\
+&= |\E[XY] + \mu_X\mu_Y -\mu_X\mu_Y -\mu_X\mu_Y| = |\E[XY] - \mu_X\mu_Y|.
+\end{align*}
+\end{proof}
+
 \subsection{Cumulants}
 
 \subsection{Conditional expectation}
@@ -384,7 +428,71 @@ Let $A_1, \ldots, A_n$ be Borel measurable sets. Since the $f_i^{-1}[A_i]$ are B
 \[ P\left(\bigcap_{i=1}^n (f_i\circ X_i)^{-1}[A_i]\right) = P\left(\bigcap_{i=1}^n X_i^{-1}[f^{-1}_i[A_i]]\right) = \prod_{i=1}^n P(X_i^{-1}[f^{-1}_i[A_i]]) = \prod_{i=1}^n P((f_i\circ X_i)^{-1}[A_i]). \]
 \end{proof}
 
-\chapter{Inequalities}
+\chapter{Distributions}
+TODO: uniform distribution
+
+\section{Distributions of discrete random variables}
+\subsection{Bernoulli trials}
+\subsubsection{Bernoulli distribution}
+\subsubsection{Geometric distribution}
+
+\subsection{Iterated Bernoulli trials}
+\subsubsection{Binomial distribution}
+\subsubsection{Negative binomial or Pascal distribution}
+\subsubsection{Hypergeometric distribution}
+\subsubsection{Negative hypergeometric distribution}
+
+\subsection{Poisson distribution}
+\begin{definition}
+Let $\lambda > 0$ be a positive real number. The \udef{Poisson distribution} with parameter $\lambda$ is the distribution of a random variable $X: \sSet{\Omega, \mathcal{A}, P} \to \N$ with probability density
+\[ f_\lambda(k) = \begin{cases}
+\frac{\lambda^k e^{-\lambda}}{k!} & k\in\N \\
+0 & \text{otherwise}
+\end{cases}. \]
+We write $X \sim \Poisson(\lambda)$.
+\end{definition}
+
+\section{Distributions of continuous random variables}
+\subsection{Gamma distribution and subfamilies}
+\subsubsection{Gamma distribution}
+\begin{definition}
+Let $\alpha, \beta$ be positive real numbers. The \udef{gamma distribution} with parameters $\alpha, \beta$ is the distribution of a random variable $X: \sSet{\Omega, \mathcal{A}, P} \to \R_+$ with probability density
+\[ f_{\alpha,\beta}(x) = \frac{x^{\alpha-1}e^{-\beta x}\beta^\alpha}{\Gamma(\alpha)}, \]
+where $\Gamma$ is the Gamma function.
+\begin{itemize}
+\item We call $\alpha$ the \udef{shape parameter}.
+\item We call $\beta$ the \udef{rate parameter}.
+\item We call $1/\beta$ the \udef{scale parameter}.
+\end{itemize}
+We write $X \sim \GammaDist(\alpha,\beta)$.
+\end{definition}
+TODO lower incomplete gamma function.
+
+\begin{lemma}
+Let $\alpha,\beta, k$ be positive real numbers. Let $X \sim \GammaDist(\alpha, \beta)$ be a random variable. Then $kX \sim \GammaDist(\alpha, \beta / k)$.
+\end{lemma}
+
+\subsubsection{Erlang distribution}
+\begin{definition}
+An \udef{Erlang distribution} is a gamma distibution where the shape parameter $\alpha$ is an integer $n$. We wite $\Erlang(n, \beta) \defeq \GammaDist(n, \beta)$.
+\end{definition}
+
+\begin{proposition} \label{ErlangCDF}
+Let $X \sim \Erlang(n, \beta)$. Then the cumulative distribution function of $X$ is given by
+\[ F_{n,\beta}(x) = 1 = \sum_{k=0}^{n-1} \frac{(\beta x)^k}{k!}e^{-\beta x}. \]
+\end{proposition}
+
+\subsubsection{Exponential distribution}
+\begin{definition}
+An \udef{exponential distribution} is an Erlang distribution with shape parameter $n = 1$. Thus $\Exponential(\beta) \defeq \Erlang(1,\beta) = \GammaDist(1, \beta)$.
+\end{definition}
+
+\subsubsection{$\chi^2$-distribution}
+\begin{definition}
+Let $k\in \N^\times$ be strictly positive integer. Then we call a gamma distribution with shape $k/2$ and rate $1$ a \udef{$\chi^2$-distribution} with $k$ \udef{degrees of freedom}. We write $\chi^2_k = \GammaDist(k/2, 1)$.
+\end{definition}
+
+\section{Distributions of random vectors}
 
 \chapter{Convergence}
 \section{Types of convergence}
@@ -633,8 +741,100 @@ is measurable and thus a random element.
 
 \subsubsection{Progressively measurable processes}
 
+\section{Martingales}
+
+\section{Properties and classes of processes}
+\subsection{Processes generated by transition probabilities}
+\url{https://arxiv.org/pdf/1603.00251.pdf}
+\subsubsection{Markov processes}
+\subsubsection{Feller processes}
+``$C_0$-semigroup''??
+\subsubsection{Lévy processes}
+
+\subsection{Processes by distribution}
+\subsubsection{Wiener processes}
+\subsubsection{Bessel processes}
+
+\subsection{Integer-valued processes}
+\subsubsection{Birth-death processes}
+\begin{definition}
+An integer-valued Markov process is called a \udef{birth-death process}.
+\end{definition}
+
+\subsubsection{Counting processes and birth processes}
+\begin{definition}
+A \udef{counting process} is a stochastic process
+\[ N: \sSet{I,\leq}\times \sSet{\Omega, \mathcal{A}, P} \to \N \]
+for some probability space $\Omega$ and ordered set $I$ such that for all $s,t\in I$:
+\[ \forall s,t\in I: \quad s\leq t \implies N(s)\leq N(t). \]
+
+If the counting process $N$ is a Markov process, then it is called a \udef{birth process}.
+\end{definition}
+
+\subsubsection{Poisson processes}
+\begin{definition}
+Let $\Lambda: \R_+\to \R$ be a continuous, increasing function. A stochastic process
+\[ N: \R_+\times \sSet{\Omega, \mathcal{A}, P} \to \N \]
+is called a \udef{Poisson process} if $N_t - N_s \sim \Poisson(\Lambda(t) - \Lambda(s))$ for all $s\leq t$, independently of $\setbuilder{N_u}{u\leq s}$.
+
+If $\Lambda$ is of the form $t\mapsto t\lambda$ for some $\lambda \in \R_+$, then we say $N$ is a \udef{homogenous Poisson process}.
+
+The function $\Lambda$ is called the \udef{cumulative rate}. If $\od{\Lambda(s)}{s}$ exists, it is called the \udef{(instantaneous) rate}.
+\end{definition}
+
+\begin{lemma} \label{PoissonProcessRateTransform}
+Let $\theta: \R_+\to \R$ be a continuous, increasing function and $N_t$ a Poisson process with cumulative rate $\Lambda$. Then $N_{\theta(t)}$ is a Poisson process with cumulative rate $\Lambda\circ \theta$.
+\end{lemma}
+
+\begin{proposition}
+For any continuous, increasing function $\Lambda: \R_+\to \R$, there exists a Poisson processes with cumulative rate $\Lambda$.
+\end{proposition}
+\begin{proof}
+Construct homogenous Poisson process $N_t$ with rate $1$ (TODO ref). Then $N_{\Lambda(t)}$ is a Poisson process with cumulative rate $\Lambda$ by \ref{PoissonProcessRateTransform}.
+\end{proof}
+
+\begin{proposition}
+Let $N$ be a Poisson process. Then
+\begin{enumerate}
+\item $N$ is a Markov process;
+\item if $N$ is a homogenous Poisson process, then it is a Lévy process.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $N$ be a Poisson process with cumulative rate $\Lambda$ such that $N_0 = 0$ and $\Lambda(0) = 0$.
+\begin{enumerate}
+\item For each $t\in \R_+$, we have $N_t \sim \Poisson(\Lambda(t))$.
+\item For each $n\in \N$, consider the stopping time
+\[ \tau_n: \sSet{\Omega, \mathcal{A}, P} \to \R_+: \omega \mapsto \inf\setbuilder{t}{N_t(\omega) \geq n }. \]
+The distribution of $\tau_n$ is given by
+\[ F_{\tau_n}(t) = 1- \sum_{k=0}^{n-1}\frac{\Lambda(t)^k}{k!}e^{-\Lambda(t)} = F_{\Erlang(n, 1)}(\Lambda(t)). \]
+\item If $N$ is a homogenous Poisson process with rate $\lambda$, then $\tau_n \sim \Erlang(n, \lambda)$. In particular $\tau_1 \sim \Exponential(\lambda)$.
+\item If $\Lambda$ is bijective, then $\Lambda(\tau_n) \sim \Erlang(n, 1)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) This follows directly from $N_t = N_t - N_0 \sim \Poisson(\Lambda(t) - \Lambda(0)) = \Poisson(\Lambda(t))$.
+
+(2) We have
+\begin{align*}
+F_{\tau_n}(t) &= P\{\tau_n \leq t\} = P\{N_t \geq n\} \\
+&= \sum_{k=n}^{\infty}P\{N_t = k\} = \sum_{k=n}^{\infty} \frac{\Lambda(t)^k}{k!}e^{-\Lambda(t)} \\
+&= (e^{\Lambda(t)} - \sum_{k=0}^{n-1}\frac{\Lambda(t)^k}{k!})e^{-\Lambda(t)} = 1- \sum_{k=0}^{n-1}\frac{\Lambda(t)^k}{k!}e^{-\Lambda(t)}.
+\end{align*}
+We see this is equal to $F_{\Erlang(n, 1)}(\Lambda(t))$ by comparing with \ref{ErlangCDF}. 
+
+(3) This follows by the substitution $\Lambda(t) = \lambda t$ and comparison with \ref{ErlangCDF}.
+
+(4) We calculate using \ref{transformationRandomVariable}
+\[ F_{\Lambda(\tau_n)} = F_{\tau_n}\circ \Lambda^{-1} = F_{\Erlang(n, 1)}\circ \Lambda\circ \Lambda^{-1} = F_{\Erlang(n, 1)}. \]
+\end{proof}
+
+
+
 \section{Stochastic integration}
+\subsection{Stochastic differential equations}
 
-\section{Stochastic differential equations}
-
-\section{Special processes}
