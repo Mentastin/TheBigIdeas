@@ -59,6 +59,14 @@ We can also define the \udef{arc length} as the function
 \[ s: I \to \R: t\mapsto s(t) \equiv \int_a^t v(u) \diff{u} = \int_a^t \lVert \vec{\gamma'}(u)\lVert \diff{u} \]
 for a given $a\in I$. This is quite simply the length of the curve between $\gamma(a)$ and $\gamma(t)$, if $t\geq a$ and minus the length otherwise.
 
+\begin{lemma} \label{convexityArcLength}
+Let $I\to \mathbb{E}^n$ be a curve and $t,t'\in I$. Then
+\[ \norm{\gamma(t')-\gamma(t)} \leq s(t') - s(t). \]
+\end{lemma}
+\begin{proof}
+Triangle inequality. TODO
+\end{proof}
+
 \subsection{Tangent vectors}
 A \udef{tangent line} to the curve $\gamma$ in $t_0$ is a line through the point $\gamma(t_0)$ in the direction of $\vec{\gamma'}(t_0)$. This is obviously only defined if $\vec{\gamma'}(t_0) \neq 0$.
 
@@ -104,6 +112,32 @@ We call a curve with speed 1 everywhere an \udef{arc length parametrisation}.
 
 Let $\beta$ be an arc length parametrisation, then the arc length is
 \[ s_\beta(t) = \int_a^t \diff{u} = t - a \]
+
+\section{Curves on a sphere}
+\begin{proposition}
+Let $\gamma: I \to S^n$ be a curve on the unit sphere. Then for all $t, \delta$ such that $t,t+\delta\in I$:
+\begin{align*}
+|\inner{\gamma(t)| \gamma(t+\delta)}|^2 &= 1 - \norm{P_{\gamma(t)^\perp}\gamma(t+\delta)}\gamma(t)}^2 \\
+&\leq 1 - \norm{\gamma(t+\delta) - \gamma(t)}^2 \\
+&\leq 1 - (s(t+\delta)-s(t))^2,
+\end{align*}
+where $P_{\gamma(t)^\perp}$ is the orthogonal projection on the subspace perpendicular to $\Span(\gamma(t))$ and $s(t)$ is the path length.
+\end{proposition}
+\begin{proof}
+Once we have proven the equality, the first inequality follows because $P_{\gamma(t)^\perp}\gamma(t+\delta) = P_{\gamma(t)^\perp}\gamma(t+\delta) -  P_{\gamma(t)^\perp$ and $\norm{P_{\gamma(t)^\perp}} \leq 1$. The second follows by \ref{convexityArcLength}.
+
+Now we prove the equality. Set $\Delta \gamma = \gamma(t+\delta) - \gamma(t)$. Using the fact that $\norm{\gamma(t)} = 1 = \norm{\gamma(t+\delta)}$, we have
+\[ 1 = \norm{\gamma(t+\delta)} = \inner{\gamma(t) + \Delta\gamma| \gamma(t) + \Delta\gamma} = 1 + \inner{\gamma(t)| \Delta\gamma} + \inner{\Delta \gamma| \gamma(t)} + \inner{\Delta \gamma| \Delta \gamma}, \]
+which implies that $\inner{\gamma(t)| \Delta\gamma} + \inner{\Delta \gamma| \gamma(t)} = - \inner{\Delta \gamma| \Delta \gamma}$.
+Using this, we can expand
+\begin{align*}
+|\inner{\gamma(t)| \gamma(t+\delta)}|^2 &= \inner{\gamma(t)| \gamma(t)+\Delta \gamma}\inner{\gamma(t)+\Delta \gamma| \gamma(t)} \\
+&= 1 + \inner{\gamma(t)| \Delta\gamma} + \inner{\Delta \gamma| \gamma(t)} + \inner{\Delta \gamma| \gamma(t)}\inner{\gamma(t)| \Delta \gamma} \\
+&= 1 - \inner{\Delta \gamma| \Delta \gamma} + \inner{\Delta \gamma| \gamma(t)}\inner{\gamma(t)| \Delta \gamma} \\
+&= 1 - \bra{\Delta\gamma}(\id - \ketbra{\gamma(t)}{\gamma(t)})\ket{\Delta \gamma} = 1 - \norm{P_{\gamma(t)^\perp}\Delta\gamma}^2.
+\end{align*}
+TODO ref diad projector lemma.
+\end{proof}
 
 \section{Curves in flat Euclidean space}
 \subsection{Frenet frame for regular curves}
