@@ -105,7 +105,7 @@ so
 
 \subsection{Independent collections of events}
 \begin{definition}
-Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space. Let $\{\mathcal{A}_i\}$ be a countable family of sets of events. The sets of events in this family are called \udef{independent} if (the image of) every section of $(\mathcal{A}_i\mapsto i)$ is independent.
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space. Let $\{\mathcal{A}_i\}_{i\in I}$ be a countable family of sets of events. The sets of events in this family are called \udef{independent} if (the image of) every choice function on $\{\mathcal{A}_i\}_{i\in I}$ is independent.
 \end{definition}
 
 \begin{proposition}
@@ -158,29 +158,33 @@ Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $A$ an event with 
 \[ P(\cdot | A): B\mapsto P(B | A) \]
 is a probability measure on the measurable space $\seq{\Omega, \mathcal{A}}$.
 \end{lemma}
+
 \begin{lemma}
-If $A,B$ are independent events, then $P(B|A) = P(B)$.
+Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space, $A, B \in \mathcal{A}$ and $P(A) > 0$. 
+The events $A$ and $B$ are independent \textup{if and only if} $P(B|A) = P(B)$.
 \end{lemma}
 \begin{proof}
-$P(B|A) = \frac{P(A\cap B)}{P(A)} = \frac{P(A)\cdot P(B)}{P(A)} = P(B)$.
+The equations $P(B|A) = \frac{P(A\cap B)}{P(A)} = P(B)$ and $P(A\cap B) = P(A)P(B)$ are equivalent by multiplying / dividing by $P(A)$.
 \end{proof}
 
-\section{Chain rule and law of total probability}
+\subsection{Chain rule and law of total probability}
 \begin{theorem}[Law of total probability]
 Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $\seq{H_i}_{i\in I}$ a (countable) partition of $\Omega$. Then, for any event $A\in \mathcal{A}$
 \[ P(A) = \sum_{i\in I}P(A|H_i)\cdot P(H_i). \]
 \end{theorem}
 \begin{proof}
-$A = A\cap \Omega = \biguplus_{i\in I}(A\cap H_i)$ is a disjoint union.
+$A = A\cap \Omega = \biguplus_{i\in I}(A\cap H_i)$ is a disjoint union. So
+\[ P(A) = P\left(\biguplus_{i\in I}(A\cap H_i)\right) = \sum_{i\in I}P(A\cap H_i) = \sum_{i\in I}P(A|H_i)P(H_i). \]
 \end{proof}
 
-\section{Bayes' formula}
+\subsection{Bayes' formula}
 \begin{theorem}[Bayes' formula]
 Let $\seq{\Omega, \mathcal{A}, P}$ be a probability space and $\seq{H_i}_{i\in I}$ a (countable) partition of $\Omega$. Then, for any event $A$ of non-zero probability,
 \[ P(H_k|A ) = \frac{P(A|H_k)\cdot P(H_k)}{P(A)} = \frac{P(A|H_k)\cdot P(H_k)}{\sum_{i\in I}P(A|H_i)\cdot P(H_i)}. \]
 \end{theorem}
 \begin{proof}
-$P(H_k|A) = \frac{P(H_k \cap A)}{P(A)} = \frac{P(A|H_k)\cdot P(H_k)}{P(A)}$.
+We calculate
+\[ P(H_k|A) = \frac{P(H_k \cap A)}{P(A)} = \frac{P(A|H_k)\cdot P(H_k)}{P(A)}. \]
 \end{proof}
 
 \section{Sequences of events}
@@ -411,7 +415,7 @@ This follows from the CSB inequality, \ref{CauchySchwarz}:
 
 \section{Independence of random elements}
 \begin{definition}
-A set of random elements $\{X_i\}_{i\in 1:n}$ is called \udef{independent} if for all sets $\{A_i\}_{i\in 1:n}$ of $n$ Borel measurable sets we have that $\{X_i^{-1}[A_i]\}_{i\in 1:n}$ is a set of independent events. i.e.
+A set of random elements $\{X_i\}_{i\in 1:n}$ is called \udef{independent} if for all sets $\{A_i\}_{i\in 1:n}$ of $n$ Borel measurable sets we have that $\{X_i^{-1}[A_i]\}_{i\in 1:n}$ is a set of independent events. i.e.\
 \[ P\left(\bigcap_{i=1}^n X_i^{-1}[A_i]\right) = \prod_{i=1}^n P(X_i^{-1}[A_i]). \]
 \end{definition}
 
@@ -426,6 +430,24 @@ Let $X_1, \ldots X_n$ be independent random elements and $f_1, \ldots, f_n$ meas
 \begin{proof}
 Let $A_1, \ldots, A_n$ be Borel measurable sets. Since the $f_i^{-1}[A_i]$ are Borel measurable, we have
 \[ P\left(\bigcap_{i=1}^n (f_i\circ X_i)^{-1}[A_i]\right) = P\left(\bigcap_{i=1}^n X_i^{-1}[f^{-1}_i[A_i]]\right) = \prod_{i=1}^n P(X_i^{-1}[f^{-1}_i[A_i]]) = \prod_{i=1}^n P((f_i\circ X_i)^{-1}[A_i]). \]
+\end{proof}
+
+\section{Derived random elements}
+
+\begin{proposition}
+Let $\seq{X_i}$ be a sequence of i.i.d.\ random vectors. Let $N$ be a positive integer-valued r.v.\ that is independent of each $X_i$. Then
+\[ \E\left[\sum_{i = 1}^N X_i\right] = \E[N]\E[X_1]. \]
+\end{proposition}
+\begin{proof}
+We calculate
+\begin{align*}
+\E\left[\sum_{i = 1}^N X_i\right] &= \sum_{n=0}^{\infty}\E\left[\sum_{i = 1}^n X_i | N = n\right]P\{N = n\} \\
+&= \sum_{n=0}^{\infty}\sum_{i = 1}^n \E\left[X_i | N = n\right]P\{N = n\} \\
+&= \sum_{n=0}^{\infty}\sum_{i = 1}^n \E\left[X_i\right]P\{N = n\} \\
+&= \sum_{n=0}^{\infty} n\E\left[X_1\right]P\{N = n\} \\
+&= \E\left[X_1\right]\sum_{n=0}^{\infty} nP\{N = n\} \\
+&= \E\left[X_1\right]\E[N].
+\end{align*}
 \end{proof}
 
 \chapter{Distributions}
@@ -771,13 +793,17 @@ for some probability space $\Omega$ and ordered set $I$ such that for all $s,t\i
 If the counting process $N$ is a Markov process, then it is called a \udef{birth process}.
 \end{definition}
 
+\subsubsection{Renewal processes}
+\url{https://en.wikipedia.org/wiki/Renewal_theory}
+
 \subsubsection{Poisson processes}
+TODO: renewal Markov
 \begin{definition}
 A stochastic process
 \[ N: \R_+\times \sSet{\Omega, \mathcal{A}, P} \to \Z \]
-is called a \udef{Poisson process} if there exists a continuous, increasing function $\Lambda: \R\to \R$ such that
+is called a \udef{Poisson process} if it has independent increments and there exists a continuous, increasing function $\Lambda: \R\to \R$ such that
 \[ N_t - N_s \sim \Poisson(\Lambda(t) - \Lambda(s)) \]
-for all $s\leq t$, independently of $\setbuilder{N_u}{u\leq s}$.
+for all $s\leq t$.
 
 The function $\Lambda$ is called the \udef{cumulative rate}. If $\od{\Lambda(s)}{s}$ exists, it is called the \udef{(instantaneous) rate}.
 
@@ -846,7 +872,7 @@ using the substitution $u = \Lambda^{-1}(t)$ and TODO ref inf preserving.
 \end{proof}
 
 \begin{proposition}
-Let $N$ be a homogenous Poisson process with rate $\lambda$. Then the interarrival times $S_n = \tau_n - \tau_{n-1}$ are i.i.d. random variables with distribution $\Exponential(\lambda)$.
+Let $N$ be a homogenous Poisson process with rate $\lambda$. Then the interarrival times $S_n = \tau_n - \tau_{n-1}$ are i.i.d.\ random variables with distribution $\Exponential(\lambda)$.
 \end{proposition}
 \begin{proof}
 TODO
