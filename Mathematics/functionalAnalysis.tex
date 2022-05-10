@@ -1401,7 +1401,7 @@ So $\{S_1(x) - S_2(x)\} \in \dom(T)^\perp$.
 For the converse, set $S' = S + \frac{\inner{x,\cdot}_K}{\inner{x,x}_K}v$. This is an adjoint: for all $a\in \dom(T), b\in \dom(S') = \dom(S)$ we have
 \[  \inner{S' b,a}_H = \inner{Sb, a}_H + \frac{\inner{x,b}_K}{\inner{x,x}_K}\inner{v,a}_H = \inner{Sb, a}_H = \inner{b,Ta}_K. \]
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{agreementAdjoints}
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Let $S_1, S_2$ be adjoints of $T$ then for all $x\in \dom(S_1)\cap\dom(S_2)$ we have $S_1(x) = S_2(x)$.
 \end{corollary}
 \begin{proof}
@@ -1423,7 +1423,25 @@ Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. We def
 We denote the set of self-adjoint operators on $H$ by $\SelfAdjoints(H)$.
 \end{definition}
 
-\url{https://link.springer.com/article/10.1007/s43036-020-00068-4}
+\begin{proposition}[Algebraic properties of the adjoint] \label{adjointAlgebraicProperties}
+Let $T,S$ be compatible densely defined operators between Hilbert spaces. Then
+\begin{enumerate}
+\item $\lambda T$ is densely defined for all $\lambda\in \C$ and $(\lambda T)^* = \overline{\lambda}T^*$;
+\item if $ST$ is densely defined, then $(ST)^* \supseteq T^*S^*$;
+\item if $S+T$ is densely defined, then $(S+T)^*\supseteq S^* + T^*$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) If $\lambda = 0$, the result is trivial. Assume $\lambda \neq 0$. First we show that $\overline{\lambda}T^*$ is an adjoint of $\lambda T$. Indeed for all $x\in\dom(T^*), y\in \dom(T)$, we have
+\[ \inner{x, \lambda Ty} = \lambda\inner{x, Ty} = \lambda \inner{T^* x, y} = \inner{\overline{\lambda}T^*x, y}. \]
+Then we note that $\overline{\lambda}T^*x$ must have maximal domain. Indeed, if it did not, then neither would $T^*$, which is a contradiction.
+
+(2) By \ref{agreementAdjoints} it is enough to prove that $T^*S^*$ is an adjoint of $ST$. Indeed, take $x\in \dom(T^*S^*) = \dom(S^*)\cap (S^*)^{-1}[\dom(T^*)]$ and $y\in \dom (ST)$, then
+\[ \inner{x, STy} = \inner{S^*x, Ty} = \inner{T^*S^*x, y}. \]
+
+(3) Similarly, by \ref{agreementAdjoints} it is enough to prove that $S^*+T^*$ is an adjoint of $S+T$. Indeed, take $x\in \dom(S^*+T^*) = \dom(S^*)\cap \dom(T^*)$ and $y\in \dom (S+T)$, then
+\[ \inner{x, (S+T)y} = \inner{x,Sy}+\inner{x, Ty} = \inner{S^*x, y} + \inner{T^*x, y} = \inner{(S^* + T^*)x, y}. \]
+\end{proof}
 
 \begin{lemma}
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
@@ -1513,6 +1531,7 @@ Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Assume
 \end{lemma}
 
 \url{https://arxiv.org/pdf/1507.08418.pdf}
+\url{https://link.springer.com/article/10.1007/s43036-020-00068-4}
 
 \subsection{Bounded operators}
 \begin{proposition}
@@ -1555,10 +1574,14 @@ Let $T\in\Bounded(H_1,H_2), S\in\Bounded(H_2,H_3)$
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-The proofs are elementary manipulations. For example, to prove 1., we take arbitrary $v\in H$ and $w\in K$, Then
+These follow straight from \ref{adjointAlgebraicProperties} and the fact that the operators and adjoints are everywhere defined.
+\end{proof}
+
+\begin{note}
+Useful exercise: The identities of \ref{HilbertAdjointLemma} can also be proven by elementary manipulations. For example, to prove 1., we take arbitrary $v\in H$ and $w\in K$, Then
 \[ \inner{w,Tv} = \inner{T^*w,v} = \overline{\inner{v,T^*w}} = \overline{\inner{(T^*)^*v,w}} = \inner{w, (T^*)^*v}. \]
 By lemma \ref{elementaryOrthogonality} we have $Tv = (T^*)^*v$ for all $v\in V$. 
-\end{proof}
+\end{note}
 
 \begin{proposition}
 Let $H,K$ be Hilbert spaces and $T:H\to K$ a bijective bounded linear operator with bounded inverse. Then $(T^*)^{-1}$ exists and
@@ -1629,6 +1652,7 @@ A normal operator on a Hilbert space is invertible \textup{if and only if} it is
 \end{lemma}
 
 \subsection{Self-adjoint operators}
+\subsubsection{Symmetric operators}
 A symmetric operator $T$ is self-adjoint if and only if $\dom(T) = \dom(T^*)$.
 \begin{lemma}
 Let $T$ be a symmetric densely defined operator on a Hilbert space $H$. Then
@@ -1638,10 +1662,10 @@ Let $T$ be a symmetric densely defined operator on a Hilbert space $H$. Then
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-This is immediate from symmetry: $\inner{Tx,x} = \inner{x,Tx}$ for all $x\in\dom(T)$.
+This is immediate from symmetry: $\inner{Tx,y} = \inner{x,Ty}$ for all $x,y\in\dom(T)$.
 \end{proof}
 It is possible for an unbounded,
-symmetric operator to not have a self-adjoint extension, even if it is densely defined.
+symmetric operator to not have a self-adjoint extension, even if it is densely defined. (TODO example)
 
 \begin{example}
 Consider the operator
@@ -1651,11 +1675,32 @@ with domain
 Then
 \begin{align*}
 \inner{g, Tf} &= \int_{a}^b \overline{g(x)}i\od{f(x)}{x}\diff{x} \\
-&= \overline{g(b)}f(b) - \overline{g(a)f(a)} - \int_{a}^b \Big(i \od{}{x}\overline{g(x)}\Big)f(x)\diff{x} \\
+&= \overline{g(b)}f(b) - \overline{g(a)}f(a) - \int_{a}^b \Big(i \od{}{x}\overline{g(x)}\Big)f(x)\diff{x} \\
 &= \int_a^b \overline{i \od{g(x)}{x}} f(x) \diff{x} = \inner{Tg, f}.
 \end{align*}
-So $T$ is symmetric and $\dom(T^*) = \setbuilder{f\in L^2(a,b)}{\od{f}{x}\in L^2(a,b)}$. We cannot extend $\dom(T)$, because $T$ would no longer be symmetric due to boundary terms.
+So $T$ is symmetric and $\dom(T^*) = \setbuilder{f\in L^2(a,b)}{\od{f}{x}\in L^2(a,b)}$. We cannot extend $\dom(T)$ while keeping $\dom(T^*)$ the same, because $T$ would no longer be symmetric due to boundary terms.
+
+There are, however, multiple ways we can extend $T$ to a self-adjoint operator (in each case $\dom(T^*)$ must shrink).
+
+Let $T_\alpha$, for $\alpha\in \R$, be the operator $T$ with domain
+\[ \dom(T) = \setbuilder{f\in L^2(a,b)}{\od{f}{x}\in L^2(a,b),\; f(b) = e^{i\alpha}f(b)}. \]
+We must have $\forall f\in \dom(T_\alpha)$ and $g\in\dom(T^*_\alpha)$ that
+\[ \overline{g(b)}f(b) - \overline{g(a)}f(a) = f(a)\Big(e^{i\alpha}\overline{g(b)} - \overline{g(a)}\Big) = 0, \]
+so we have $e^{-i\alpha}g(b) = g(a)$ and thus $g(b) = e^{i\alpha}g(a)$, which means $\dom(T_\alpha^*) = \dom(T_\alpha)$. So $T_\alpha$ is a self-adjoint extension of $T$ for all $\alpha\in \R$.
+
+TODO: compare Aharonov-Bohm
 \end{example}
+Notice that the operator
+\[ T: L^2(a,b) \to L^2(a,b): f\mapsto i\od{f}{x} \]
+with domain
+\[ \dom(T) = \setbuilder{f\in L^2(a,b)}{\od{f}{x}\in L^2(a,b)} \]
+is not symmetric. In this case
+\[  \dom(T^*) = \setbuilder{f\in L^2(a,b)}{\od{f}{x}\in L^2(a,b),\; f(a)=0=f(b)}, \]
+so $\dom(T^*) \subseteq \dom(T)$.
+
+
+
+
 
 \subsubsection{Bounded self-adjoint operators}
 \begin{lemma}
@@ -2009,7 +2054,7 @@ Clearly every partial isometry is bounded.
 An operator $T\in \Lin(H, H')$ is a partial isometry \textup{if and only if} $T|_{\ker(T)^\perp}$ is an isometry.
 \end{lemma}
 
-\begin{proposition}
+\begin{proposition} \label{partialIsometryEquivalences}
 Let $T\in \Bounded(H,H')$. The following are equivalent:
 \begin{enumerate}
 \item $T$ is a partial isometry;
@@ -2050,7 +2095,7 @@ so $T$ is a partial isometry.
 
 $\boxed{(5,6)}$ Applying the proposition to $T^*$ instead of $T$ yields the equivalences with $T=TT^*T$, and thus with the rest of the statements.
 
-
+TODO + $\im(T^*) = \ker(T)^\perp$ means support and range are exchanged between $T$ and $T^*$.
 \end{proof}
 
 \begin{definition}
@@ -2060,6 +2105,38 @@ Let $T$ be a partial isometry. We call
 \item $TT^*$ the \udef{range projection} or \udef{final projection} of $T$.
 \end{itemize}
 \end{definition}
+
+\begin{proposition}
+Let $H,H'$ be Hilbert spaces with $K\subseteq H$ and $L\subseteq H'$ closed subspaces. Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is a partial isometry with support $K$ and range $L$;
+\item $(T,T^*)$ is a Galois connection between $\sSet{H, \perp_K}$ and $\sSet{H', \perp_L}$.
+\end{enumerate}
+Here $\perp_K$ is defined by
+\[ x \perp_K y \quad\defequiv\quad P_K(x)\perp P_{K}(y). \]
+\end{proposition}
+\begin{proof}
+The direction $(2) \Rightarrow (1)$ is immediate from \ref{partialIsometryEquivalences}, because $T,T^*$ are generalised inverses.
+
+For the other direction, we first prove $T$ preserves the relational structure. Take arbitrary $x= x_1+x_2$ and $y=y_1+y_2$ in $K\oplus K^\perp$ such that $x\perp_K y$. Then
+\[ \inner{T(x), T(y)} = \inner{T(x_1), T(y_1)} = \inner{x_1, y_1} = 0. \]
+So $T(x)\perp T(y)$ and, because $T(x), T(y) \in L$, we have $T(x)\perp_L T(y)$. The argument for $T^*$ is similar.
+
+For the Galois condition, we need to show that $T^*T(x)\perp_K y \implies x\perp_K y$. Indeed
+\begin{align*}
+T^*T(x)\perp_K y &\iff T^*T(x_1)\perp y_1 \\
+&\iff 0= \inner{T^*T(x_1), y_1} = \inner{T(x_1), T(y_1)} = \inner{x_1,y_1} \\
+&\iff P_K(x)\perp P_K(y).
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $T: H\to H'$ be a partial isometry with support $K$ and range $L$. Then
+\[ T(x) \perp P_L(y) \iff P_K(x) \perp T^*(y) \]
+for all $x\in H, y\in H'$.
+\end{corollary}
+\begin{proof}
+This is the Galois identity \ref{GaloisIdentity}, although the direct proof is also very simple.
+\end{proof}
 
 \subsubsection{Unitaries}
 \paragraph{Bilateral shifts}
@@ -2173,7 +2250,21 @@ Let $H$ be a Hilbert space and $P\in\Projections(H)$. If $P$ is compact, then $P
 
 \subsection{Positive operators}
 
+\subsubsection{Polar decomposition}
+\begin{proposition}
+Let $H$ be a Hilbert space and $T\in \Bounded(H)$. There exists a unique partial isometry $V$ such that $T = V|T|$ and $\ker(V) = \supp(T)$.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{lemma}
+There is only one positive operator $A$ such that $T = VA$ for some partial isometry.
+\end{lemma}
+\begin{proof}
+TODO uniqueness positive squared root.
+\end{proof}
 
+\url{https://encyclopediaofmath.org/wiki/Polar_decomposition}
 
 \section{Unbounded operators}
 
