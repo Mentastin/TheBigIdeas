@@ -1,3 +1,9 @@
+\url{https://en.wikipedia.org/wiki/Cauchy_space}
+
+\url{https://en.wikipedia.org/wiki/Cauchy-continuous_function}
+
+\url{https://en.wikipedia.org/wiki/Proximity_space}
+
 \chapter{Convergence}
 \section{Preconvergences and convergences}
 Intuition: directed sets and refinement.
@@ -9,7 +15,7 @@ Let $X$ be a set and let $\xi$ be a relation between downward directed sets in $
 \item $\xi$ is called a \udef{preconvergence} on $X$ if $\lim_\xi$ is order-preserving when $\directed(\powerset(X))$ is ordered by refinement:
 \[ F \preceq G \implies \lim_\xi F \subseteq \lim_\xi G; \]
 \item $\xi$ is called a \udef{convergence} if it is a preconvergence and it is \udef{centered}:
-\[ \forall x\in X: \quad x\in \lim_\xi \{x\}. \]
+\[ \forall x\in X: \quad x\in \lim_\xi \big\{\{x\}\big\}. \]
 \end{itemize}
 If $\xi$ is a convergence, then we call $\sSet{X, \xi}$ a \udef{convergence space}.
 
@@ -130,12 +136,27 @@ TODO
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset{X}$ a family of subsets. We define
 \begin{itemize}
-\item the \udef{adherence} of $A$ as
-\[ \adh_\xi(A) = \bigcup_{\mathcal{A}\lhd F}\lim_\xi F; \]
-\item the \udef{inherence} of $A$ as
-\[ \inh_\xi(A) = \bigcap_{\mathcal{A}\lhd F}\lim_\xi F. \]
+\item the \udef{adherence} of $\mathcal{A}$ as
+\[ \adh_\xi(\mathcal{A}) = \bigcup_{\mathcal{A}\lhd F}\lim_\xi F; \]
+\item the \udef{inherence} of $\mathcal{A}$ as
+\[ \inh_\xi(\mathcal{A}) = \bigcap_{\mathcal{A}\lhd F}\lim_\xi F. \]
 \end{itemize}
 \end{definition}
+TODO def inherence not correct.
+
+\begin{lemma} \label{singletonAdherence}
+Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then $\adh_\xi(\{x\}) = \lim_\xi \upset\{x\}$.
+\end{lemma}
+\begin{proof}
+If $F$ is a filter such that $\{x\} \lhd F$, then $F = \upset\{x\}$ by \ref{ultrafilterContainment}. So $\adh_\xi \{x\} = \lim_\xi \upset\{x\}$.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space and $F\subseteq \filters(\powerset(X))$ a filter. Then $\ker(F) \subseteq \adh_\xi(F)$
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
 \begin{definition}
 Let $X$ be a set, $\xi$ a convergence on $X$ and $A\subseteq X$ a subset. We define
@@ -373,35 +394,89 @@ A convergence space $\sSet{X,\xi}$ is called \udef{regular} if
 TODO is definition correct??
 
 \subsection{Separation properties}
+\subsubsection{Separation}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated} if $\adh_\xi(A) \perp \adh_\xi(B)$.
+
+We call two points $x,y\in X$ \udef{separated} if $\{x\}$ and $\{y\}$ are separated.
+\end{definition}
+
 \subsubsection{$T_0$ or Kolmogorov}
 \begin{definition}
-Let $X$ be a set and $\xi$ a preconvergence on $X$. Then $\xi$ is called \udef{Kolmogorov} or \udef{$T_0$} if every pair of points in $X$ is distinguishable, that is for all $x,y\in X$:
-\[ x\neq y \implies {\lim_\xi}^{-1}(x) \neq {\lim_\xi}^{-1}(y). \]
+Let $\sSet{X,\xi}$ be a convergence space and $x,y\in X$. We call $x$ and $y$ \udef{distinguishable} if ${\lim_\xi}^{-1}(x) \neq {\lim_\xi}^{-1}(y)$.
+
+We call the convergence space $\xi$ \udef{Kolmogorov} or \udef{$T_0$} if every pair of distinct points in $X$ is distinguishable.
 \end{definition}
 
 In orther words, for all $x,y \in X$ there exists a filter $F \in \filters(\powerset(X))$ such that
 \[ \Big(x\in \lim_\xi F \land y\notin \lim_\xi F\Big)\;\lor\; \Big(x\notin \lim_\xi F \land y\in \lim_\xi F\Big). \]
 
+\subsubsection{$R_0$ or symmetric}
+\begin{definition}
+Let $X$ be a set and $\xi$ a convergence on $X$. Then $\xi$ is called \udef{symmetric} or \udef{$R_0$} if all distinguishable pairs of points are separated.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space.
+\begin{enumerate}
+\item Every pair of separated points is distinguishable.
+\item If $\xi$ is $R_0$, then the converse also holds.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition} \label{R0conditions}
+Let $X$ be a set and $\xi$ a (topological??) convergence on $X$. Then the following are equivalent:
+\begin{enumerate}
+\item $\xi$ is an $R_0$ convergence;
+\item $\adh_\xi(\{x\})$ is the set of points that are indistinguishable from $x$ for all $x\in X$;
+\item the set $\setbuilder{\adh_\xi(\{x\})}{x\in X}$ is a partition of $X$;
+\item every open set is a union of closed sets.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ All points that are indistinguishable from $x$ are in $\adh_\xi(\{x\})$ by construction. Assume $y$ is distinguishable from $x$. Then $y\in \adh_\xi(\{y\})\perp \adh_\xi(\{x\})$, so $y\notin \adh_\xi(\{x\})$.
+
+$(2) \Rightarrow (3)$ Indistinguishability is an equivalence relation.
+
+$(3) \Rightarrow (4)$  TODO requires topological assumption?
+
+\end{proof}
+
 \subsubsection{$T_1$ or Fréchet}
 \begin{definition}
-Let $X$ be a set and $\xi$ a preconvergence on $X$. Then $\xi$ is called \udef{Fréchet} or \udef{$T_1$} if for all $x\in X$: $\lim_\xi \upset\{x\} \subseteq \{x\}$.
+Let $X$ be a set and $\xi$ a preconvergence on $X$. Then $\xi$ is called \udef{Fréchet} or \udef{$T_1$} if all distinct points in $X$ are separated.
 \end{definition}
+\url{https://en.wikipedia.org/wiki/T1_space}
 
 \begin{proposition}
 Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivalent:
 \begin{enumerate}
 \item $\xi$ is a $T_1$ convergence;
+\item $\xi$ is both $T_0$ and $R_0$;
 \item $\forall x\in X: \; \lim_\xi\upset\{x\} = \{x\}$;
+\item $\forall x\in X: \; \lim_\xi \upset\{x\} \subseteq \{x\}$;
+\item every singleton in $X$ is closed;
+\item every finite subset of $X$ is closed;
 \item $\forall x,y\in X: \exists F,G\in \filters(\powerset(X))$ such that
 \[ x\in \lim_\xi F \;\land\; y\in \lim_\xi G \;\land\; x\notin \lim_\xi G \;\land\; y\notin \lim_\xi F; \]
-\item the kernel of a convergent filter is empty or a singleton;
-\item every finite subset of $X$ is closed.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ Convergences are centered.
+$(1) \Leftrightarrow (2)$ Separated points are distinguishable.
 
+$(2) \Leftrightarrow (3)$ From \ref{R0conditions} and \ref{singletonAdherence} we have that $\lim_\xi\upset\{x\}$ is the set of points that are indistinguishable from $x$ iff $\xi$ is $R_0$. This set is $\{x\}$ iff $\xi$ is $T_0$.
 
+$(3) \Leftrightarrow (4)$ Convergences are centered.
+
+$(3) \Leftrightarrow (5)$ Immediate from \ref{singletonAdherence}.
+
+$(5) \Leftrightarrow (6)$ Adherence preserves finite union, ref TODO.
+
+$(3) \Rightarrow (7)$ We may take $F = \upset\{x\}$ and $G = \upset \{y\}$.
+
+$(7) \Rightarrow (3)$ Fix $x\in X$. For all $y\in X$ we take such a filter $G$. Now we have $x\notin \ker\vicinity_\xi(y)$. Indeed
+
+so for all $y\in\{x\}^c$, we have $\{x\}^c \in \vicinity_\xi(y)$ and thus $y\in \inh_\xi(\{x\}^c)$. This means $\{x\}^c \subseteq \inh_\xi(\{x\}^c)$ and thus $\adh_\xi(\{x\}) = \inh_\xi(\{x\}^c)^c \subseteq \{x\}$. The result follows from \ref{singletonAdherence}.
 \end{proof}
 \begin{corollary} \label{finiteConvergenceDiscrete}
 Let $X$ be a finite set, then the only $T_1$ convergence on $X$ is the discrete convergence $\iota_X$.
@@ -417,19 +492,21 @@ If $X$ is a set and $\xi$ is a $T_1$ convergence on $X$, then $\xi$ is $T_0$.
 The filters $\upset\{x\}$ and $\upset\{y\}$ distinguish $x,y\in X$.
 \end{proof}
 
----------------------------------------
-
 \begin{proposition}
 Let $\xi$ be a $T_1$ preconvergence on a set $X$ and $F$ a filter in $\filters(\powerset(X))$. If $x\in \lim F$, then $\ker F \subseteq \{x\}$.
 \end{proposition}
 \begin{proof}
-Suppose there exists a $y \in \ker F$. Then $F \subseteq \upset \{y\}$ and so
+Suppose $\ker F$ in non-empty and take $y \in \ker F$. Then $F \subseteq \upset \{y\}$ and so
 \[ x \in \lim F \subseteq \lim \upset\{y\} \subseteq \{y\}. \]
 This means that $y = x$.
 \end{proof}
 \begin{corollary}
-If $\ker F$ is larger than a singleton, then $\lim F = \emptyset$.
+The kernel of a convergent proper filter is empty or a singleton.
 \end{corollary}
+
+---------------------------------------
+
+
 
 
 
