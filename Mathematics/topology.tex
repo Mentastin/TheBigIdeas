@@ -125,6 +125,14 @@ A subset $V\subseteq X$ is called a \udef{vicinity} of $x$ for $\xi$ if $V\in \v
 \end{definition}
 
 \begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space, $x\in X$ and $V\in\vicinity_\xi(x)$ a vicinity of $x$. Then $x\in V$.
+\end{lemma}
+This also means $\{x\}\in\vicinity_\xi(x)^{\mesh}$.
+\begin{proof}
+We have $\vicinity_\xi(x) \subseteq \upset\{x\}$, so $V\in \upset\{x\}$ and thus $\{x\} \subseteq V$ or $x\in V$. 
+\end{proof}
+
+\begin{lemma}
 Let $X$ be a set, $\xi$ a preconvergence on $X$ and $x\in X$. Then
 \[ \vicinity_\xi(x) = \bigcap_{F\in {\lim_\xi}^{-1}(x)\;\cap\; \ultrafilters(\powerset(X))}F. \]
 \end{lemma}
@@ -139,10 +147,9 @@ Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset{X}
 \item the \udef{adherence} of $\mathcal{A}$ as
 \[ \adh_\xi(\mathcal{A}) = \bigcup_{\mathcal{A}\lhd F}\lim_\xi F; \]
 \item the \udef{inherence} of $\mathcal{A}$ as
-\[ \inh_\xi(\mathcal{A}) = \bigcap_{\mathcal{A}\lhd F}\lim_\xi F. \]
+\[ \inh_\xi(\mathcal{A}) = \setbuilder{x\in X}{x\in \lim_\xi F \implies F\mesh\mathcal{A}}. \]
 \end{itemize}
 \end{definition}
-TODO def inherence not correct.
 
 \begin{lemma} \label{singletonAdherence}
 Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then $\adh_\xi(\{x\}) = \lim_\xi \upset\{x\}$.
@@ -456,9 +463,7 @@ Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivale
 \item $\forall x\in X: \; \lim_\xi\upset\{x\} = \{x\}$;
 \item $\forall x\in X: \; \lim_\xi \upset\{x\} \subseteq \{x\}$;
 \item every singleton in $X$ is closed;
-\item every finite subset of $X$ is closed;
-\item $\forall x,y\in X: \exists F,G\in \filters(\powerset(X))$ such that
-\[ x\in \lim_\xi F \;\land\; y\in \lim_\xi G \;\land\; x\notin \lim_\xi G \;\land\; y\notin \lim_\xi F; \]
+\item every finite subset of $X$ is closed.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -471,12 +476,6 @@ $(3) \Leftrightarrow (4)$ Convergences are centered.
 $(3) \Leftrightarrow (5)$ Immediate from \ref{singletonAdherence}.
 
 $(5) \Leftrightarrow (6)$ Adherence preserves finite union, ref TODO.
-
-$(3) \Rightarrow (7)$ We may take $F = \upset\{x\}$ and $G = \upset \{y\}$.
-
-$(7) \Rightarrow (3)$ Fix $x\in X$. For all $y\in X$ we take such a filter $G$. Now we have $x\notin \ker\vicinity_\xi(y)$. Indeed
-
-so for all $y\in\{x\}^c$, we have $\{x\}^c \in \vicinity_\xi(y)$ and thus $y\in \inh_\xi(\{x\}^c)$. This means $\{x\}^c \subseteq \inh_\xi(\{x\}^c)$ and thus $\adh_\xi(\{x\}) = \inh_\xi(\{x\}^c)^c \subseteq \{x\}$. The result follows from \ref{singletonAdherence}.
 \end{proof}
 \begin{corollary} \label{finiteConvergenceDiscrete}
 Let $X$ be a finite set, then the only $T_1$ convergence on $X$ is the discrete convergence $\iota_X$.
@@ -504,24 +503,20 @@ This means that $y = x$.
 The kernel of a convergent proper filter is empty or a singleton.
 \end{corollary}
 
----------------------------------------
 
-
-
-
-
-
-\begin{lemma}
-Let $X$ be a set and $\xi$ a convergence on $X$. Then $\xi$ is $T_1$ \textup{if and only if} for all $x,y \in X$ there exist filters $F \in \lim^{-1}_\xi(x), G \in \lim^{-1}_\xi(y)$ such that $x\notin \lim_\xi G$ and $y\notin \lim_\xi F$.
-\end{lemma}
+TODO: big question marks:
+\begin{proposition}
+Let $X$ be a set and $\xi$ a convergence on $X$. If $\xi$ is $T_1$, then $\forall x,y\in X: \exists F,G\in \filters(\powerset(X))$ such that
+\[ x\in \lim_\xi F \;\land\; y\in \lim_\xi G \;\land\; x\notin \lim_\xi G \;\land\; y\notin \lim_\xi F. \]
+If $\xi$ is topological, the converse also holds.
+\end{proposition}
 \begin{proof}
-TODO
-\end{proof}
+$\Rightarrow$ We may take $F = \upset\{x\}$ and $G = \upset \{y\}$.
 
-\begin{lemma} \label{convergenceOneElementPrincipals}
-If $\xi$ is a convergence on a set $X$, then $\xi$ is $T_1$ \textup{if and only if}
-\[ \forall x\in X: \quad \lim_\xi\upset\{x\} = \{x\}. \]
-\end{lemma}
+$\Leftarrow$ If $\xi$ is topological, we may take $F = \vicinity_\xi(x)$ and $G = \vicinity_\xi(y)$. It is enough to show that $y\notin \adh_\xi(\{x\})$.
+
+Assume, towards a contradiction, that $y\in \adh_\xi(\{x\})$. Then $\{x\} \in \vicinity_\xi(y)^{\mesh}$
+\end{proof}
 
 \subsubsection{$T_2$ or Hausdorff}
 \begin{definition}
@@ -659,6 +654,7 @@ $\Leftarrow$ Assume $f$ not continuous. TODO
 TODO: initial final not universal property, but product is.
 
 \subsubsection{Product convergence}
+TODO filter converges iff all its components do (pointwise)
 
 \subsubsection{Convergence subspace}
 
@@ -2625,3 +2621,29 @@ On the set $\R^J$, the box topology is finer than the uniform topology is finer 
 \section{Convergence order structures}
 \subsection{Difference operators}
 TODO
+
+\section{Convergence groups}
+\begin{definition}
+Let $G$ be a set and
+\begin{itemize}
+\item $\boldsymbol{\cdot}: G\times G \to G$ a binary operation such that $\sSet{G, \boldsymbol{\cdot}}$ is a group;
+\item $\xi$ a relation on $(\powerset(\powerset(G)), G)$ such that $\sSet{G, \xi}$ is a convergence space;
+\end{itemize}
+such that
+\begin{itemize}
+\item $\boldsymbol{\cdot}: G\times G \to G$ is continuous; and
+\item $^{-1}: G\to G: x\mapsto x^{-1}$ is continuous.
+\end{itemize}
+Then we call $\sSet{G, \boldsymbol{\cdot}, \xi}$ a \udef{convergence group}.
+\end{definition}
+
+\begin{lemma}
+A group $G$ with a convergence structure is a convergence group \textup{if and only if}
+\[ G\times G \to G: (x,y) \mapsto xy^{-1} \]
+is continuous.
+\end{lemma}
+\begin{proof}
+If $G$ is a convergence group, the function $(x,y) \mapsto xy^{-1}$ is the composition of two continuous functions and thus continuous.
+
+Conversely, assume $(x,y) \mapsto xy^{-1}$ continuous. TODO
+\end{proof}
