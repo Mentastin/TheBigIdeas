@@ -1,44 +1,196 @@
-\chapter{Graph theory}
+\begin{definition}
+Let $G = \sSet{V,E}$ be a relational structure. We call $G$
+\begin{itemize}
+\item a \udef{directed graph} or \udef{digraph} if it is irreflexive;
+\item an \udef{undirected graph} or just \udef{graph} if it is irreflexive and asymmetric.
+\end{itemize}
+In either of these cases the elements of $V$ are called \udef{vertices}, \udef{nodes} or \udef{points}. We identify $E$ with its graph and elements of this are called \udef{edges}. If $G$ is a digraph, we also call elements of $E$ \udef{arrows}.
+
+Take $x,y \in V$.
+\begin{itemize}
+\item If $\seq{x,y}$ is an edge in $E$, then we write $xy \defeq \seq{x,y}$.
+\item Take $e\in E$. We say $x$ is
+\begin{itemize}
+\item the \udef{initial vertex} of $e$ if there exists some $a\in V$ such that $e = xa$;
+\item the \udef{terminal vertex} of $e$ if there exists some $a\in V$ such that $e = ax$;
+\item an \udef{end} or \udef{endvertex} of $e$ if it is either an initial of terminal vertex.
+\end{itemize}
+\item If $x \nparallel y$, we say $x$ and $y$ are \udef{adjacent} or \udef{neighbours}. This is equivalent to saying $xy$ is an edge.
+\item Take $e_1,e_2 \in E$. We say $e_1$ and $e_2$ are \udef{adjacent} if they have a common endvertex.
+\item We call $G$ a \udef{complete graph} if $G = U_V$ for some set $V$.
+\end{itemize}
+
+We call $|G| \defeq |V|$ the \udef{order} of the graph. We also define $\norm{G} \defeq |E|$.
+\end{definition}
+
+\begin{lemma}
+A graph $\sSet{V,R}$ can equivalently be encoded as $\sSet{V, E}$ where each element of $E$ is a doubleton subset of $V$. TODO functor
+\[ \seq{x,y} \mapsto \{x,y\} \]
+\end{lemma}
+
+TODO graphs are the same if we can identify them by flipping edges.
+
+TODO subgraph
+
+\section{Properties of graphs and elements}
+\subsection{Edge sets and paths}
+\begin{definition}
+Let $\sSet{V,E}$ be a digraph and $X,Y\subseteq V$. We define the \udef{edge set}
+\[ E(X,Y) \defeq \setbuilder{e\in E}{\exists x\in X, \exists y\in Y: \; e = xy}. \]
+In particular, for $x\in V$, we define $E(x, Y) \defeq E(\{x\}, Y)$ and $E(Y, x) \defeq E(Y,\{x\})$.
+\end{definition}
+
+\subsubsection{Degrees of vertices}
+\begin{definition}
+Let $\sSet{V,E}$ be a digraph and $x\in V$. We define
+\begin{itemize}
+\item the \udef{indegree} of $x$ as $\deg^-(x) \defeq |E(V,x)|$;
+\item the \udef{outdegree} of $x$ as $\deg^+(x) \defeq |E(x, V)|$;
+\item the \udef{degree} or \udef{valency} of $x$ as $\deg(x) \defeq \deg^-(x) + \deg^+(x)$.
+\end{itemize}
+If $\deg^-(x) = \deg^+(x)$ for all $x\in V$, then $G$ is called a \udef{balanced} digraph.
+
+If $\deg(x) = 0$, then $x$ is called \udef{isolated}.
+\end{definition}
+
+\begin{lemma}[Degree sum formula] \label{degreeSumFormula}
+Let $G = \sSet{V,E}$ be a digraph. Then
+\[ \norm{G} = \sum_{x\in V}\deg^-(x) = \sum_{x\in V}\deg^+(x) \]
+and thus
+\[ \norm{G} = \frac{1}{2}\sum_{x\in V}\deg(x). \]
+\end{lemma}
+\begin{corollary}
+Let $\sSet{V,E}$ be a finite digraph. Then the number of vertices of odd degree is even.
+\end{corollary}
+\begin{proof}
+As $\sum_{x\in V}$ is an integer, $\sum_{x\in V}\deg(x)$ must be even.
+\end{proof}
 
 \begin{definition}
-A \udef{graph} $\Gamma$ is a structured set $(V,E)$ where $V$ is a set of \udef{points} or \udef{vertices} and $E$ is a set of \udef{edges} which are sets containing two (not necessarily distinct) \udef{endpoints}.
+Let $G = \sSet{V,E}$ be a finite digraph. We define
+\begin{itemize}
+\item the \udef{average degree} of $G$ $deg(G) \defeq |G|^{-1}\sum_{x\in V}\deg(x)$;
+\item the \udef{minimum degree} of $G$ $\delta(G) \defeq \min\setbuilder{\deg(x)}{x\in V}$;
+\\item the \udef{maximum degree} of $G$ $\Delta(G) \defeq \max\setbuilder{\deg(x)}{x\in V}$.
+\end{itemize}
+We also define $\deg^\pm(G), \delta^\pm(G)$ and $\Delta^\pm(G)$ for in-/outdegree.
+\end{definition}
 
-Given a graph $\Gamma = (V,E)$, a \udef{subgraph} is a graph $\Gamma' = (V', E')$ such that $V'\subseteq V$ and $E'\subseteq E$. This implies the endpoints of all edges in $E'$ must lie in $V'$.
+\begin{lemma}
+Let $G = \sSet{V,E}$ be a finite digraph. Then
+\[ \deg(G) = 2\frac{\norm{G}}{|G|} \]
+\end{lemma}
+\begin{proof}
+By the degree sum formula \ref{degreeSumFormula}.
+\end{proof}
 
-For any set $S$ we can construct the \udef{complete graph} $C(S)$ which contains all possible edges:
-\[C(S) = (S, S\cup\setbuilder{e\in\mathcal{P}(S)}{|e|=2}).\]
-Given a graph $\Gamma = (V,E)$, the \udef{complementary graph} $\Gamma'$ contains all the vertices of $\Gamma$ and all the edges not in $\Gamma$:
-\[ \Gamma' = (V, S\cup\setbuilder{e\in\mathcal{P}(S)}{|e|=2} \setminus E). \]
+\begin{proposition}
+Let $G = \sSet{V,E}$ be a finite digraph with at least one edge. Then there exists a subdigraph $H \subseteq G$ such that
+\[ \delta(H) > \frac{\deg(H)}{2} \geq \frac{\deg(G)}{2}. \]
+\end{proposition}
+\begin{proof}
+We constuct a sequence of subgaphs
+\[ G = G_0 \supseteq G_1 \subseteq \ldots \]
+by deleting a vertex at each step. At each step we choose a vertex $x\in G_i$ such that $\deg(x) \leq \deg(G_i)/2$ and delete it. We stop when no such vertices remain.
+
+Notice that $\deg(G_{i+1}) \geq \deg(G_i)$. Let $v$ be the deleted vertex. Then deleting $v$ removes $2\deg(v)$ from the total degree $\sum_{x\in V_i}\deg(x)$ (because we remove $\deg(v)$ and remove $\deg(v)$ edges that connect $v$). Then
+\[ |G_i|\deg(G_{i}) = |G_{i+1}|\deg(G_{i+1}) + 2\deg(v) = (|G_{i}|-1)\deg(G_{i+1}) + 2\deg(v) \leq |G_{i+1}|\deg(G_{i+1}) + \deg(G_i). \]
+Rearranging gives $\deg(G_i) \leq \deg(G_{i+1})$.
+
+Now this algorithm is well-defined, no $G_i$ is empty, because $\deg(\sSet{V, \emptyset}) = 0$ (and we can always rerun the algorithm with an extra unconnected vertex).
+
+As the algorithms must terminate, we must have that $\deg(x) > \deg(H)/2$ for all $x\in H$ at the end. In particular $\delta(H) > \frac{\deg(H)}{2}$.
+\end{proof}
+
+\subsubsection{Paths and cycles}
+\begin{definition}
+Let $G = \sSet{V,E}$ be a digraph. A \udef{path} is a non-empty sequence $\seq{x_i}_{i=1}^k$ of distinct vertices such that $x_{i}x_{i+1} \in E$ for all $i\in 1..(k-1)$.
+
+If $G$ is a graph, we allow for either $x_{i}x_{i+1} \in E$ or $x_{i+1}x_{i} \in E$.
 
 We call
 \begin{itemize}
-\item an edge whose endpoints are the same a \udef{loop};
-\item a collection of distinct edges that have the same endpoints a \udef{multiple edge};
-\item graphs without loops or multiple edges \udef{simple};
-\item vertices connected by an edge \udef{adjacent};
-\item the number of edges ending in a vertex, the \udef{valency} of the vertex, where loops are counted twice;
-\item a vertex that is not the endpoint of any edge, i.e.\ has valency zero, \udef{isolated}.
+    \item $x_1$ the \udef{initial vertex} of the path;
+    \item $x_k$ the \udef{terminal vertex} of the path;
+    \item $x_1$ and $x_k$ the \udef{ends} or \udef{end vertices} of the path;
+    \item $k - 1$ the \udef{length} of the path, which is the number of edges in the path;
+    \item the path an \udef{$x_1-x_k$ path}.
 \end{itemize}
 
-A \udef{path} of length $n$ from  $p$ to $q$ is a set of edges $\{e_1, \ldots, e_n\}$ such that $e_i$ has endpoints $p_{i-1}, p_i$ and $p_0 =p, p_n = q$.
+We say $\seq{x_i}_{i=0}^k$ is a path from $x_1$ to $x_k$.
 
-We call
-\begin{itemize}
-\item a path from $p$ to $p$ \udef{closed} or a \udef{cycle};
-\item a graph that contains no cycles \udef{acyclic};
-\item a graph in which any two vertices are the endpoints of a path \udef{connected};
-\item a graph in which any two vertices are the endpoints of a \emph{unique} path a \udef{tree}.
-\end{itemize}
+A set of paths is \udef{independent} if it is disjoint.
 \end{definition}
-\begin{example}
-Hasse diagrams are acyclic graphs.
-\end{example}
 
 \begin{definition}
-A \udef{directed graph} or \udef{digraph} is a graph where each edge is an ordered pair instead of just a set, i.e.\ the \udef{initial vertex} is distinguished from the \udef{final vertex}.
+Let $G = \sSet{V,E}$ be a digraph. A \udef{cycle} is a path $\seq{x_i}_{i=1}^k$ such that $x_kx_1 \in E$ (or, if $G$ is a graph, $x_1x_k\in E$).
 
-The edges in a digraph are also called \udef{arrows} and a finite digraph is called a \udef{quiver}.
+Let $P = \seq{x_i}_{i=1}^k$ be a cycle. We call
+\begin{itemize}
+\item $k$ the \udef{length} of the cycle;
+\item $\min\setbuilder{\len(P)}{\text{$P$ is a cycle}}$ the \udef{girth} of $G$;
+\item $\max\setbuilder{\len(P)}{\text{$P$ is a cycle}}$ the \udef{circumference} of $G$;
+\item any edge $xy$ such that $x,y\in P$, but $x$ and $y$ are not adjacent in $P$ a \udef{chord}.
+\end{itemize}
 \end{definition}
-\begin{example}
-Hasse diagrams are directed graphs.
-\end{example}
+
+\begin{proposition}
+Let $G = \sSet{V,E}$ be a finite digraph. Then
+\begin{enumerate}
+\item $G$ contains a path of at least length $\delta^+(G)$;
+\item $G$ contains a cycle of at least length $\delta^+(G)+ 1$, if $\delta^+(G)\geq 2$;
+\item if $G$ is a graph, we may replace $\delta^+(G)$ by $\delta(G)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Let $\seq{x_i}_{i=1}^k$ be a path of maximal length. Then all $v$ such that $x_kx \in E$ must lie on the path, otherwise we could extend the path. Thus $k - 1 \geq \deg^+(v) \geq \delta^+(G)$. Connecting to any of these $v$ yields a cycle.
+\end{proof}
+
+\subsubsection{Distance}
+\begin{definition}
+Let $G = \sSet{V,E}$ be a digraph and $x,y\in V$. The \udef{distance} between $x$ and $y$ is
+\[ d(x,y) \defeq \min\setbuilder{\len(P)}{\text{$P$ is an $x-y$ path}}. \]
+If there do not exist any $x-y$ paths, then we set $d(x,y) \defeq\infty$.
+
+We also define
+\begin{itemize}
+    \item the \udef{diameter} $\diam(G) \defeq \max_{x,y\in V} d(x,y)$;
+    \item the \udef{radius} $\rad(G) \defeq \min_{x\in V}\max{y\in V}d(x,y)$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $G = \sSet{V,E}$ be a digraph. Then $G$ is symmetric \textup{if and only if} $d(x, y) = d(y,x)$ for all $x,y\in V$.
+\end{lemma}
+\begin{proof}
+We have $xy\in E$ iff $d(x,y) = 1$.
+\end{proof}
+
+\begin{lemma}
+Let $G = \sSet{V,E}$ be a digraph. Then
+\[ \rad(G) \leq \diam(G) \leq 2\rad(G). \]
+\end{lemma}
+\begin{proof}
+The first inequality is clear.
+
+For the second inequality: for all $x\in V$ we have 
+\end{proof}
+
+\begin{lemma}
+Let $G = \sSet{V,E}$ be a digraph that contains a cycle. Then
+\[ \text{girth of $G$} \leq 2\diam(G) + 1. \]
+\end{lemma}
+
+\subsection{Trees and forests}
+
+\section{$r$-partite graphs}
+
+\section{Matching, covering and packing}
+
+\section{Connectivity}
+
+\section{Planar graphs}
+
+\section{Colourings}
+
+\section{Flows}
