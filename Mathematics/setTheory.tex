@@ -162,7 +162,9 @@ and indeed we need $I_0\subset I$, but we have not excluded the possibility that
 \end{enumerate}
 
 \section{Von Neumann-Bernays-Gödel and Morse-Kelley set theory}
-NBG / MK are axiomatic systems in first-order predicate logic with equality, whose only primitive notion is the membership relation $\in$. (TODO sometimes class is called primitive notion as well)
+NBG / MK are axiomatic systems in first-order predicate logic with equality (TODO: remove equality, made definition (?), in which case make equivalence relation a lemma. Check definition of empty class and universe class.), whose only primitive notion is the membership relation $\in$. (TODO sometimes class is called primitive notion as well (?))
+
+TODO: replacement, infinity and foundation.
 
 \subsection{Classes}
 \begin{definition}
@@ -176,37 +178,115 @@ We consider a universe $\mathcal{W}$. Let $x$ be an object in $\mathcal{W}$. The
 We define the predicates
 \begin{itemize}
 \item $\Class(x) \defequiv \exists y: y\in x$;
+\item $\Element(x) \defequiv \exists y: x\in y$;
 \item $\Set(x) \defequiv \exists y,z: y\in x \land x\in z$;
 \item $\ProperClass(x) \defequiv (\exists y: y \in x)\land \neg (\exists z: x\in z)$.
 \end{itemize}
 \end{definition}
 
 \begin{enumerate}[(A)]
-\item \textbf{Axiom of class existence}: let $\phi(x)$ be a sentence with free variable $x$. Then there exists a class $\setbuilder{x}{\phi(x)}$ such that
-\[ \forall y: \; y\in \setbuilder{x}{\phi(x)} \iff \phi(y). \]
+\item \textbf{Axiom of extensionality}: For any two classes $A,B$:
+\[ A=B \;\iff\; \left[\forall x:x\in A\iff x\in B\right]. \]
+\item \textbf{Axiom of class existence}: Let $\phi(x)$ be a proposition with free variable $x$. Then there exists a class $\setbuilder{x}{\phi(x)}$ such that
+\[ \forall y: \;\; \Element(y) \;\implies\; \Big( y\in \setbuilder{x}{\phi(x)} \iff \phi(y) \Big). \]
 \end{enumerate}
 This is for MK. In NBG the quantifiers in $\phi$ must be bound to elements.
 
-\subsection{Axioms}
-\begin{enumerate}[(A)] \setcounter{enumi}{1}
-\item \textbf{Axiom of extensionality}: for any two classes $A,B$:
-\[ A=B \;\iff\; \left[\forall x:x\in A\iff x\in B\right]. \]
-\item \textbf{Axiom of replacement}
+Let $A$ be a class and $\phi(x)$ a proposition with free variable $x$. We often abbreviate $\setbuilder{x}{x\in A \land \phi(x)}$ by $\setbuilder{x\in A}{\phi(x)}$.
+
+\subsubsection{Subclasses}
+\begin{definition}
+Let $A,B$ be classes. We say $B$ is a \udef{subclass} of $A$, denoted $B\subseteq A$, if
+\[ \forall x: \; x\in A \implies x\in B. \]
+If $B$ is a subclass of $A$ and $A \neq B$, then we call $B$ a \udef{strict subclass} of $A$, denoted $B \subset A$ or $B \subsetneq A$.
+\end{definition}
+
+\begin{lemma}
+Let $A,B,C$ be classes. Then
+\begin{enumerate}
+\item $A = B$ \textup{if and only if} $A \subseteq B$ and $B \subseteq A$;
+\item if $A \subseteq B$ and $B\subseteq C$, then $A \subseteq C$.
+\end{enumerate}
+\end{lemma}
+
+\begin{enumerate}[(A)] \setcounter{enumi}{2}
+\item \textbf{Axiom of separation}: Any subclass of a set is a set.
+\end{enumerate}
+TODO: consequence of replacement.
+
+In particular, for any set $A$ and proposition $\phi(x)$, the class $\setbuilder{x\in A}{\phi(x)}$ is a set.
+
+\subsubsection{Class construction}
+We can use the axiom of class construction to build some basic classes.
+
+\begin{definition}
+Let $A,B$ be classes. We define
+\begin{itemize}
+\item the \udef{union} of $A$ and $B$ as $A \cup B \defeq \setbuilder{x}{x\in A \lor x\in B}$;
+\item the \udef{intersection} of $A$ and $B$ as $A \cap B \defeq \setbuilder{x}{x\in A \land x\in B}$;
+\item the \udef{complement} of $A$ as $A^c \defeq \setbuilder{x}{x\notin A}$;
+\item the \udef{power set} of $A$ as $\powerset(A) \defeq \setbuilder{B}{B \subseteq A}$.
+\end{itemize}
+We also define
+\begin{itemize}
+\item the \udef{empty class} $\emptyset \defeq \setbuilder{x}{x \neq x}$;
+\item the \udef{universe class} $\mathcal{U} \defeq \setbuilder{x}{x = x}$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $x$ be an element and $A$ a class. Then
+\begin{enumerate}
+\item $x\notin \emptyset$ and $x\in \mathcal{U}$;
+\item $\emptyset \subseteq A$ and $A \subseteq \mathcal{U}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+The empty class is a set \textup{if and only if} there exists a set.
+\end{lemma}
+\begin{proof}
+The direction $\Rightarrow$ is clear.
+
+For the direction $\Leftarrow$, assume there exists a set $A$. Then $\emptyset \subseteq A$. By the axiom of separation, this means $\emptyset$ is a set.
+\end{proof}
+
+\begin{enumerate}[(A)] \setcounter{enumi}{3}
+\item \textbf{Set existence}: There exists a set.
+\end{enumerate}
+TODO: is implied by the axiom of infinity (TODO later!)
+
+\begin{lemma}
+Let $A,B$ be classes and either $A$ or $B$ is a set. Then the intersection $A \cap B$ is a set.
+\end{lemma}
+\begin{proof}
+This follows from the axiom of separation and the fact that $A \cap B$ is a subclass of both $A$ and $B$.
+\end{proof}
+
+We also assert some other classes constructed from sets are sets.
+
+\begin{enumerate}[(A)] \setcounter{enumi}{4}
+\item \textbf{Power set axiom}: Let $A$ be a set. Then $\powerset(A)$ is a set.
+\item \textbf{Union set axiom}: Let $A, B$ be sets. Then $A \cup B$ is a set.
 \end{enumerate}
 
 \begin{definition}
-Function
+Let $a,b, c \ldots$ be objects. Then
+\[ \{a,b, c \ldots\} \defeq \setbuilder{x}{x = a \lor x=b \lor x=c \lor \ldots}. \]
 \end{definition}
 
-\begin{theorem}[Separation]
-If $a$ is a set and $B$ a subclass of $a$, then $B$ is a set.
-\end{theorem}
-
-\begin{enumerate}[(A)] \setcounter{enumi}{3}
-\item \textbf{Power set axiom}
-\item \textbf{Union set axiom}
-\item \textbf{Axiom of infinity}
+\begin{lemma}
+Let $a,b, c \ldots$ be elements. Then
+\begin{enumerate}
+\item $a \in \{a,b, c \ldots\}$;
+\item $\{a,b, c \ldots\}$ is a set.
 \end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By the axiom of class existence.
+
+(2) By definition we can find sets $A,B,C \ldots$ such that $a\in A, b\in B, c\in C \ldots$ Then $\{a,b, c \ldots\} \subseteq A\cup B\cup C \cup \ldots$ and thus a set by the union set axiom and the axiom of separation.
+\end{proof}
 
 \section{Potter-Scott set theory}
 \begin{definition}
@@ -444,7 +524,7 @@ We write $A \# \mathcal{B}$ for $\{A\}\# \mathcal{B}$ and $A\# B$ for $\{A\}\#\{
 \subsubsection{Difference}
 \begin{definition}
 Given two objects $A,B$, we define the \udef{difference} as
-\[A\setminus B \defeq \setbuilder{ x\in A}{x\notin B}. \]
+\[A\setminus B \defeq \setbuilder{x\in A}{x\notin B}. \]
 \end{definition}
 The difference $A\setminus B$ can be represented in a Venn diagram as follows:
 \[ \begin{tikzpicture}[thick,
@@ -710,22 +790,23 @@ A definition of $(a,b)$ for all $a,b$ is called an \udef{(ordered) pair operatio
 \item $(a,b) = (x,y) \iff (a=x)\land (b=y)$;
 \item for all sets $A,B$, $\setbuilder{(a,b)}{a\in A\land b\in B}$ is a set.
 \end{itemize}
-We call $\setbuilder{(a,b)}{a\in A\land b\in B}$ the \udef{Cartesian product} of $A$ and $B$ and denote it $A\times B$.
+We call $\setbuilder{(a,b)}{a\in A\land b\in B}$ the \udef{Cartesian product} of classes $A$ and $B$ and denote it $A\times B$.
 \end{definition}
 Note that for the second condition it is enough to check that $A\times B$ is a subset of some set $S$. Then, by separation, $A\times B$ is the set
 \[ A\times B = \setbuilder{x\in S}{\exists a\in A:\exists b\in B: x = (a,b)}. \]
 
 \begin{lemma}
-Let $A$ be a set. Then
+Let $A$ be a class. Then
 \[ A\times \emptyset = \emptyset = \emptyset\times A. \]
 \end{lemma}
 
 \begin{lemma} \label{productUnionIntersection}
-Let $A,B,C$ be sets. Then
+Let $A,B,C,D$ be classes. Then
 \begin{enumerate}
 \item $(A\cup B)\times C = A\times C \cup B\times C$;
 \item $(A\uplus B)\times C = A\times C \uplus B\times C$;
-\item $(A\cap B)\times C = A\times C\cap B\times C$.
+\item $(A\cap B)\times C = A\times C\cap B\times C$;
+\item $(A\times B)\cap (C\times D) = (A \cap C)\times (B\cap D)$.
 \end{enumerate}
 \end{lemma}
 
@@ -735,7 +816,40 @@ Let $p = (a,b)$ be a pair, we use $\pi_1(p)$ to denote the first element of $p$ 
 We can convert a pair to a set:
 \[ \operatorname{set}((a,b)) = \{a,b\}. \]
 \end{definition}
+
+
+\subsection{Axiomatising pairs}
+Consider the ternary proposition $A = (B,C)$ as primitive. 
+\begin{definition}
+Consider a universe $\mathcal{W}$. Let $p$ be an object in $\mathcal{W}$. We call $p$ a \udef{pair} if $\exists x,y: p = (x,y)$.
+
+We define the predicate
+\begin{itemize}
+\item $\Pair(p) \defequiv \exists x,y: \; p = (x, y)$.
+\end{itemize}
+\end{definition}
+
+\begin{enumerate}[(A)] \setcounter{enumi}{0}
+\item \textbf{Axiom of pair identity}: Let $p,x_1,x_2,y_1,y_2$ be objects. Then
+\[ \big[p = (x_1, y_1)\big] \;\land\; \big[p = (x_2, y_2)\big] \quad\implies\quad \big[x_1 = x_2\big] \;\land\; \big[y_1 = y_2\big]. \]
+\item \textbf{Axiom of pair existence}: Let $x,y$ be objects. Then $\exists p: \; p = (x,y)$ with $p\neq x $ and $p \neq y$.
+\end{enumerate}
+
+Usually an axiomatic system of pairs is integrated with a set theory.
+\begin{definition}
+Let $\mathcal{W}$ be a set theoretic universe satisfying the pair axioms. Let $A,B$ be classes. The \udef{Cartesian product} of $A$ and $B$ is defined as
+\[ A\times B \defeq \setbuilder{p}{\exists a\in A: \exists b\in B: p = (a,b)}. \]
+\end{definition}
+
+In this case we impose the following additional axioms:
+\begin{enumerate}[(A)] \setcounter{enumi}{2}
+\item \textbf{Axiom of element pairs}: Let $A,B$ be classes, $a\in A, b\in B$ and $p = (a,b)$. Then $p\in A\times B$.
+\item \textbf{Cartesian product axiom}: Let $A,B$ be sets. Then $A \times B$ is a set.
+\end{enumerate}
+
 \subsection{Defining pairs}
+TODO: pair axioms conservative extension of ZFC.
+
 \subsubsection{The Kuratowski pair}
 \begin{definition}
 The \udef{Kuratowski pair} is defined as
@@ -810,24 +924,26 @@ The Wiener definition of a pair is
 This definition satisfies the requirements for a pair.
 \end{proposition}
 
-\subsection{Structured sets}
+\subsection{Structured classes and sets}
 \begin{definition}
-A \udef{structured set} is a pair $U = (A,S)$ where $A$ is a set and $S$ is an arbitrary object.
+A \udef{structured class} is a pair $U = (A,S)$ where $A$ is a class and $S$ is an arbitrary object.
 \begin{itemize}
 \item $A$ is the \udef{field} or \udef{space} of $U$, written $\operatorname{Field}(U)$;
 \item $S$ is the \udef{frame} of $U$.
 \end{itemize}
 If we write $x\in U$, we mean $x\in \operatorname{Field}(U)$.
+
+In particular if $A$ is a set, then we call $U$ a \udef{structured set}.
 \end{definition}
 
-Often the frame $S$ is a $n$-tuple. In this case we may write the structured set as an $n+1$-tuple by concatenating the field and the frame. e.g\ $(A,(S_1,S_2,S_3))$ becomes $(A,S_1,S_2,S_3)$.
+Often the frame $S$ is a $n$-tuple. In this case we may write the structured class as an $n+1$-tuple by concatenating the field and the frame. e.g\ $(A,(S_1,S_2,S_3))$ becomes $(A,S_1,S_2,S_3)$.
 
 \section{Relations}
 \begin{definition}
-Let $A,B$ be sets and $G$ any subset of the Cartesian product $A\times B$. A \udef{(binary) relation} $R$ on $(A, B)$ is a tuple $(G,(A,B))$. The \udef{graph} of the binary relation $R$ is the set $\graph(R) \defeq G$.
+Let $A,B$ be classes and $G$ any subclass of the Cartesian product $A\times B$. A \udef{(binary) relation} $R$ on $(A, B)$ is a tuple $(G,(A,B))$. The \udef{graph} of the binary relation $R$ is the class $\graph(R) \defeq G$.
 
 We write
-\[ xRy \defequiv  (x,y)\in \graph(R) \]
+\[ xRy \defequiv (x,y)\in \graph(R) \]
 and say $x$ is \udef{left related} to $y$ or $y$ is \udef{right related} to $x$.
 
 We call
@@ -846,7 +962,7 @@ Often we will write $R \subseteq S$ as a shorthand for $\graph(R)\subseteq \grap
 
 
 \begin{definition}
-Let $A,B$ be sets. We have the following relations:
+Let $A,B$ be classes. We have the following relations:
 \begin{itemize}
 \item the \udef{empty relation} $E_{A,B}$ on $(A, B)$ has graph $\emptyset$;
 \item the \udef{universal relation} $U_{A,B}$ on $(A, B)$ has graph $A\times B$;
