@@ -227,6 +227,13 @@ Let $A,B$ be classes. We define
 \item the \udef{complement} of $A$ as $A^c \defeq \setbuilder{x}{x\notin A}$;
 \item the \udef{power set} of $A$ as $\powerset(A) \defeq \setbuilder{B}{B \subseteq A}$.
 \end{itemize}
+Let $\mathcal{E}$ be a class. We define
+\begin{itemize}
+\item the \udef{union} of $\mathcal{E}$ as
+\[ \bigcup \mathcal{E} \defeq \setbuilder{x}{\exists A\in \mathcal{E}: \; x\in A}; \]
+\item the \udef{intersection} of $\mathcal{E}$ as
+\[ \bigcap \mathcal{E} \defeq \setbuilder{x}{\forall A\in \mathcal{E}: \; x\in A}. \]
+\end{itemize}
 We also define
 \begin{itemize}
 \item the \udef{empty class} $\emptyset \defeq \setbuilder{x}{x \neq x}$;
@@ -257,36 +264,77 @@ For the direction $\Leftarrow$, assume there exists a set $A$. Then $\emptyset \
 TODO: is implied by the axiom of infinity (TODO later!)
 
 \begin{lemma}
-Let $A,B$ be classes and either $A$ or $B$ is a set. Then the intersection $A \cap B$ is a set.
+Let $A,B, \mathcal{E}$ be classes. Then
+\begin{enumerate}
+\item $\bigcap\mathcal{E}$ is either a set or $\mathcal{U}$;
+\item if either $A$ or $B$ is a set, the intersection $A \cap B$ is a set.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-This follows from the axiom of separation and the fact that $A \cap B$ is a subclass of both $A$ and $B$.
+(1) Assume $\bigcap\mathcal{E} \neq \mathcal{U}$. Then there exists an element $x\notin \bigcap\mathcal{E}$, meaning there exists a set $A\in \mathcal{E}$ such that $x\notin A$. Now $\bigcap\mathcal{E} \subseteq A$, so it is a set by separation. 
+
+(2) This follows from the axiom of separation and the fact that $A \cap B$ is a subclass of both $A$ and $B$.
 \end{proof}
 
 We also assert some other classes constructed from sets are sets.
 
 \begin{enumerate}[(A)] \setcounter{enumi}{4}
 \item \textbf{Power set axiom}: Let $A$ be a set. Then $\powerset(A)$ is a set.
-\item \textbf{Union set axiom}: Let $A, B$ be sets. Then $A \cup B$ is a set.
+\item \textbf{Union set axiom}: Let $\mathcal{E}$ be a set. Then $\bigcup\mathcal{E}$ is a set.
 \end{enumerate}
+
+\begin{lemma} \mbox{} \label{distinctElements}
+\begin{enumerate}
+\item $\emptyset \neq \powerset(\emptyset)$;
+\item for any object $a$, we can find an object $b$ such that $a \neq b$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have $\emptyset \in \powerset(\emptyset)$, but $\emptyset \notin \emptyset$.
+
+(2) If $a = \emptyset$, we may take $\powerset(\emptyset)$. Otherwise take $\emptyset$.
+\end{proof}
 
 \begin{definition}
 Let $a,b, c \ldots$ be objects. Then
-\[ \{a,b, c \ldots\} \defeq \setbuilder{x}{x = a \lor x=b \lor x=c \lor \ldots}. \]
+\[ \{a,b, c \ldots\} \defeq \setbuilder{x}{x = a \lor x = b \lor x = c \lor \ldots}. \]
 \end{definition}
 
-\begin{lemma}
-Let $a,b, c \ldots$ be elements. Then
+\begin{enumerate}[(A)] \setcounter{enumi}{6}
+\item \textbf{Doubleton existence axiom}: Let $a,b$ be objects. Then $\{a,b\}$ is a set.
+\end{enumerate}
+
+\begin{lemma} \label{binaryUnionIntersection}
+Let $A,B$ be sets. Then
 \begin{enumerate}
-\item $a \in \{a,b, c \ldots\}$;
+\item $A \cup B = \bigcup\{A, B\}$;
+\item $A \cap B = \bigcap\{A, B\}$;
+\end{enumerate}
+In particular $A\cup B$ is a set.
+\end{lemma}
+
+\begin{lemma}
+Let $a,b, c \ldots$ be an object. Then
+\begin{enumerate}
+\item $\{a\} = \{a, a\}$;
+\item $\{a\}$ is a set;
+\item $a\in \{a\}$ \textup{if and only if} $\Element(a)$;
+\item $\{b,c \ldots\} \subseteq \{a,b,c \ldots\}$;
 \item $\{a,b, c \ldots\}$ is a set.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) By the axiom of class existence.
+(1) $\setbuilder{x}{x = a \lor x = a} = \setbuilder{x}{x = a}$.
 
-(2) By definition we can find sets $A,B,C \ldots$ such that $a\in A, b\in B, c\in C \ldots$ Then $\{a,b, c \ldots\} \subseteq A\cup B\cup C \cup \ldots$ and thus a set by the union set axiom and the axiom of separation.
+(2) By the doubleton existence axiom.
+
+(3) By definition.
+
+(4) Clear.
+
+(5) By definition we can find sets $A,B,C \ldots$ such that $a\in A, b\in B, c\in C \ldots$ Then $\{a,b, c \ldots\} \subseteq A\cup B\cup C \cup \ldots$ and thus a set by \ref{binaryUnionIntersection} and the axiom of separation.
 \end{proof}
+
 
 \section{Potter-Scott set theory}
 \begin{definition}
@@ -847,6 +895,13 @@ In this case we impose the following additional axioms:
 \item \textbf{Cartesian product axiom}: Let $A,B$ be sets. Then $A \times B$ is a set.
 \end{enumerate}
 
+\begin{lemma}
+Let $x,y$ be elements and $p = (x,y)$. Then $p$ is an element.
+\end{lemma}
+\begin{proof}
+Let $A,B$ be classes such that $x\in A$ and $y\in B$. Then $p \in A\times B$.
+\end{proof}
+
 \subsection{Defining pairs}
 TODO: pair axioms conservative extension of ZFC.
 
@@ -973,7 +1028,7 @@ We may also write $U_A$ instead of $U_{A,A}$ and $E_A$ instead of $E_{A,A}$.
 The identity relation on $A$ is also known as the \udef{diagonal relation} on $A$.
 
 \begin{lemma}
-Let $A,B,C,D$ be sets. Then
+Let $A,B,C,D$ be classes. Then
 \begin{enumerate}
 \item $\id_{A\cup B} = \id_A\cup \id_B$ and $\id_{A\cap B} = \id_A\cap \id_B$;
 \item $E_{A\cup C, B\cup D} = E_{A,B}\cup E_{C,D}$ and $E_{A\cap C, B\cap D} = E_{A,B}\cap E_{C,D}$;
@@ -1005,20 +1060,20 @@ Let $R$ be a binary relation. We say
 \end{itemize}
 \end{definition}
 
-\subsection{Relations and sets}
+\subsection{Relations and subclasses}
 \subsubsection{Images and preimages}
 \begin{definition}
 Let $R$ be a relation on $(A, B)$.
 \begin{itemize}
-\item The \udef{image} of a subset $X\subset A$ under $R$ is the set
+\item The \udef{image} of a subclass $X\subset A$ under $R$ is the class
 \[ X_R \defeq \setbuilder{b\in B}{\exists x\in X: xRb}. \]
-\item The \udef{preimage} of a subset $Y\subset B$ under $R$ is the set
+\item The \udef{preimage} of a subclass $Y\subset B$ under $R$ is the class
 \[ _RY \defeq \setbuilder{a\in A}{\exists y\in Y: aRy}. \]
 \end{itemize}
 In particular for $X=A$ and $Y=B$:
 \begin{enumerate}
-\item The set $A_R$ is the \udef{active codomain}, \udef{codomain of definition}, \udef{image} or \udef{range} of the relation, also denoted $\im(R)$.
-\item The set $_RB$ is the \udef{active domain}, \udef{domain of definition}, \udef{preimage} or \udef{prerange} of the relation, also denoted $\preim(R)$.
+\item The class $A_R$ is the \udef{active codomain}, \udef{codomain of definition}, \udef{image} or \udef{range} of the relation, also denoted $\im(R)$.
+\item The class $_RB$ is the \udef{active domain}, \udef{domain of definition}, \udef{preimage} or \udef{prerange} of the relation, also denoted $\preim(R)$.
 \end{enumerate}
 In particular for $X = \{x\}$ and $Y = \{y\}$ we define:
 \begin{itemize}
@@ -1036,7 +1091,7 @@ Let $R$ be a relation on $(A, B)$, $x\in A$ and $y\in B$. Then
 Principal images atoms in lattice of images??
 
 \begin{lemma}
-Let $R$ be a relation on $(A, B)$, $X\subset A$ and $Y\subset B$. Then
+Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$. Then
 \begin{enumerate}
 \item $X_R = {_{R^\transp}X}$;
 \item $_RX = X_{R^\transp}$.
@@ -1046,7 +1101,7 @@ In particular $xR = R^\transp x$ and $Ry = yR^\transp$ for all $x\in A$ and $y\i
 
 TODO: atomicity / atomistic ??
 \begin{lemma}
-Let $R$ be a relation on $(A, B)$, $X\subset A$ and $Y\subset B$. Then
+Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$. Then
 \begin{enumerate}
 \item $X_R = \displaystyle\bigcup_{x\in X}xR = \bigcup \setbuilder{xR}{x\in X}$;
 \item $_RY = \displaystyle\bigcup_{y\in Y}Ry = \bigcup \setbuilder{Ry}{y\in Y}$.
@@ -1102,17 +1157,17 @@ TODO: use lattice properties
 \begin{definition}
 Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$.
 \begin{itemize}
-\item A \udef{right bound} (or \udef{upper bound}) of $X$ under $R$ is an element $b\in B$ such that $b$ is right related to all $x\in X$. We denote the set of right bounds by
+\item A \udef{right bound} (or \udef{upper bound}) of $X$ under $R$ is an element $b\in B$ such that $b$ is right related to all $x\in X$. We denote the class of right bounds by
 \[ X^R \defeq \setbuilder{b\in B}{\forall x\in X: xRb}. \]
-\item A \udef{left bound} (or \udef{lower bound}) of $Y$ under $R$ is an element $a\in A$ such that $a$ is left related to all $y\in Y$. We denote the set of left bounds by
+\item A \udef{left bound} (or \udef{lower bound}) of $Y$ under $R$ is an element $a\in A$ such that $a$ is left related to all $y\in Y$. We denote the class of left bounds by
 \[ ^RY \defeq \setbuilder{a\in A}{\forall y\in Y: aRy}. \]
 \end{itemize}
-The sets $X^R$ and $^RY$ are also called \udef{polars}.\footnote{Birkhoff states (TODO ref) that the term ``polar'' was chosen due to the link with the polars of conic sections.}
+The classes $X^R$ and $^RY$ are also called \udef{polars}.\footnote{Birkhoff states (TODO ref) that the term ``polar'' was chosen due to the link with the polars of conic sections.}
 
 In particular for $X=A$ and $Y=B$:
 \begin{enumerate}
-\item The set $A^R$ is referred to as the \udef{top} of $\sSet{R,(A,B)}$.
-\item The set $^RB$ is the \udef{bottom} of $\sSet{R,(A,B)}$.
+\item The class $A^R$ is referred to as the \udef{top} of $\sSet{R,(A,B)}$.
+\item The class $^RB$ is the \udef{bottom} of $\sSet{R,(A,B)}$.
 \end{enumerate}
 \end{definition}
 Note that the definitions of the polars is similar to the definition of the image/preimage. The only difference is that ``$\exists$'' is replaced by ``$\forall$''.
@@ -1185,12 +1240,12 @@ and
 
 \subsubsection{Extending the relation to powersets}
 \begin{definition}
-Let $R$ be a relation on $(A,B)$. Let $X\subseteq A$ and $Y\subseteq B$ be sets. Then we write $XRY$ if
+Let $R$ be a relation on $(A,B)$. Let $X\subseteq A$ and $Y\subseteq B$ be classes. Then we write $XRY$ if
 \[ \forall x\in X \forall y\in Y: \; xRy. \]
 \end{definition}
 
 \begin{lemma}
-Let $R$ be a relation on $(A,B)$. Let $X\subseteq A$ and $Y\subseteq B$ be sets. Then
+Let $R$ be a relation on $(A,B)$. Let $X\subseteq A$ and $Y\subseteq B$ be classes. Then
 \[ XRY \quad\iff\quad X \subseteq {^RY} \quad\iff\quad Y \subseteq X^R. \]
 \end{lemma}
 
@@ -1206,8 +1261,8 @@ Let $R$ be a relation on $(A,B)$. Let $\mathcal{E}\subseteq \powerset(A)$. Then 
 \begin{definition}
 Let $\sSet{A, R}$ be a relational structure and $X\subseteq A$ a subset.
 \begin{itemize}
-\item A \udef{greatest element}, \udef{largest element} or \udef{maximum} of $X$ is an upper bound of $X$ that is an element of $X$. We denote the set of maxima by $\max(X) \defeq X^R\cap X$.
-\item A \udef{least element}, \udef{smallest element} or \udef{minimum} of $X$ is a lower bound of $X$ that is an element of $X$. We denote the set of minima by $\min(X) \defeq {^RX}\cap X$.
+\item A \udef{greatest element}, \udef{largest element} or \udef{maximum} of $X$ is an upper bound of $X$ that is an element of $X$. We denote the class of maxima by $\max(X) \defeq X^R\cap X$.
+\item A \udef{least element}, \udef{smallest element} or \udef{minimum} of $X$ is a lower bound of $X$ that is an element of $X$. We denote the class of minima by $\min(X) \defeq {^RX}\cap X$.
 \end{itemize}
 We also call
 \begin{itemize}
@@ -1222,7 +1277,7 @@ If $\sSet{A, R}$ is an anti-symmetric relational structure and $X\subseteq A$, t
 \begin{proof}
 We prove for $\max(X)$. The other cases follow dually or a fortiori. Let $x,y\in \max(X)$. Then $xRy$ and $yRx$, so $x=y$ by anti-symmetry.
 \end{proof}
-For posets we sometimes use $\max/\min/\sup/\inf$ to denote the contents of the singleton rather than the singleton itself. If the set is empty, we say the $\max/\min/\sup/\inf$ does not exist.
+In this case we use $\max/\min/\sup/\inf$ to denote the contents of the singleton rather than the singleton itself. If the set is empty, we say the $\max/\min/\sup/\inf$ does not exist.
 
 \begin{lemma} \label{greatestLeastElementsSubsetPoset}
 Let $\sSet{P, \precsim}$ be a poset and $R\subseteq S\subseteq P$.
@@ -1235,6 +1290,7 @@ Let $\sSet{P, \precsim}$ be a poset and $R\subseteq S\subseteq P$.
 By definition $\max(S) \succsim x$ for all $x \in S$. Now $\max(R)\in R\subseteq S$, so in particular $\max(R) \precsim \max(S)$.
 \end{proof}
 
+TODO: set to class?
 \begin{lemma} \label{maxSupMinInf}
 If $\sSet{P, \Yleft}$ is an ordered set and $S\subseteq P$, then
 \begin{enumerate}
@@ -1276,7 +1332,7 @@ Let $R,S$ be relations on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$. Then
 \end{lemma}
 
 \begin{lemma}
-Let $A,B$ be sets. Then
+Let $A,B$ be classes. Then
 \begin{enumerate}
 \item $U_{A,B}^\transp = U_{B,A}$;
 \item $E_{A,B}^\transp = E_{B,A}$;
@@ -1326,9 +1382,9 @@ If $X\subseteq A$ and $Y\subseteq B$. Then
 (4) Similar.
 \end{proof}
 \begin{corollary}
-Let $X\subseteq A$ be sets. Then
+Let $X\subseteq A$ be classes. Then
 \[ X^c = X^{\overline{\id_A}}, \]
-where the converse is taken with respect to $A$.
+where the complement is taken with respect to $A$.
 \end{corollary}
 \begin{proof}
 We have $X = X_{\id_A} = (X^{\overline{\id_A}})^c$.
@@ -1389,7 +1445,7 @@ Let $R,S$ be composable and $T$ a relation. Then
 \end{lemma}
 
 \begin{lemma} \label{compositionCanonicalRelations}
-Let $A,B,X, Y$ be sets and $R$ a relation on $(A, B)$. Then
+Let $A,B,X, Y$ be classes and $R$ a relation on $(A, B)$. Then
 \begin{enumerate}
 \item $\id_A;R = R = R;\id_B$;
 \item if $S,T\subseteq A$, then $\id_{S};\id_{T} = \id_{S\cap T}$;
@@ -1453,7 +1509,7 @@ Let $R,S,T, Q$ be relations. Then $R^\transp; S \subseteq T$ implies $R;Q\cap S 
 \end{lemma}
 
 \begin{definition}
-Let $R$ be a homogeneous relation on a set $A$. Then we can define $R^n$ as the $n$-fold composition of $f$:
+Let $R$ be a homogeneous relation on a class $A$. Then we can define $R^n$ as the $n$-fold composition of $R$:
 \[ R^n \defeq \underbrace{R;R; \ldots ;R}_{\text{$n$ times}}. \]
 We call $R$ \udef{idempotent} if $R^2 = R$.
 \end{definition}
@@ -1506,7 +1562,7 @@ So assume $R;S \subseteq T$. By \ref{universalQuantificationForCompositionSupers
 \[ \forall x,y,z:\; xRy \land ySz \implies xTz. \]
 Fix arbitrary $x,y,z$. Assume $ySz$ and $\neg xTz$. This means we must have $\neg xRy$, or we could also derive $xTz$, leading to a contradiction. Thus $ySz \land x\overline{T}z$ imply $x\overline{R}y$. Using \ref{universalQuantificationForCompositionSuperset} again, we get $\overline{T};S^\transp \subseteq \overline{R}$.
 \end{proof}
-We can also give a proof using image and preimage sets.
+We can also give a proof using image and preimage classes.
 \begin{proof}
 As before it is enough to prove the first implication. So assume $R;S \subseteq T$; we want to prove $R \subseteq T\diagup S = \overline{\overline{T}; S^\transp}$.
 
@@ -1649,7 +1705,7 @@ Let $R$ be a relation on $(A,B)$. Then
 \subsubsection{Closures}
 TODO use Galois theory
 \begin{definition}
-Let $R$ be a homogeneous relation on a set $A$.
+Let $R$ be a homogeneous relation on a class $A$.
 \begin{itemize}
 \item The \udef{reflexive closure} of $R$ is the relation $R^=$ on $A$ with graph
 \begin{align*}
@@ -1669,7 +1725,7 @@ Let $R$ be a homogeneous relation on a set $A$.
 \end{definition}
 
 \begin{lemma}
-Let $R$ be a homogeneous relation on a set $A$.
+Let $R$ be a homogeneous relation on a class $A$.
 \begin{enumerate}
 \item The reflexive closure $R^=$ is the smallest reflexive relation on $A$ that extends $R$.
 \item The reflexive reduction $R^{\neq}$ is the largest irreflexive relation on $A$ that is a restriction of $R$.
@@ -1683,7 +1739,7 @@ The closures (and reduction) are monotone: if $R$ extends $S$, then $R^a$ extend
 \end{lemma}
 
 \begin{lemma}
-Let $R$ be a homogeneous relation over a set $A$. Then all closures commute, i.e.\
+Let $R$ be a homogeneous relation over a class $A$. Then all closures commute, i.e.\
 \[ R^a = R^b \qquad \forall a,b\in\{=,+,\leftrightarrow\}. \]
 \end{lemma}
 \begin{proof}
@@ -1693,7 +1749,7 @@ Conversely, take an $x\in (R^+)^\leftrightarrow$. Then either $x\in R^+$ or $x\i
 \end{proof}
 
 \begin{lemma}
-Let $R$ be a homogeneous relation over a set $A$.
+Let $R$ be a homogeneous relation over a class $A$.
 \begin{enumerate}
 \item The reflexive transitive closure $R^*$ is the smallest preorder containing $R$.
 \item The reflexive transitive symmetric closure $R^\equiv$ is the smallest equivalence relation containing $R$.
@@ -1704,7 +1760,7 @@ TODO: equivalence relations are defined below.
 \subsection{Direct product}
 TODO: extend: heterogeneous relations + direct product of two different relations.
 \begin{definition}
-Let $R$ be a homogeneous relation over a set $A$. We can turn $R$ into a relation over $(A, A)$ as follows:
+Let $R$ be a homogeneous relation over a class $A$. We can turn $R$ into a relation over $(A, A)$ as follows:
 \[ (a,b)R(c,d) \iff aRc \land bRd. \]
 \end{definition}
 \begin{lemma} \label{relationPropertiesDirectProduct}
@@ -1744,7 +1800,7 @@ Let $R$ be a homogeneous relation on $A$. Then
 
 \subsubsection{Reflexivity}
 \begin{definition}
-Let $R$ be a homogeneous binary relation on a set $A$. We say
+Let $R$ be a homogeneous binary relation on a class $A$. We say
 \begin{itemize}
 \item $R$ is \udef{reflexive} if $\forall x\in A: xRx$;
 \item $R$ is \udef{irreflexive} or \udef{anti-reflexive} if $\forall x\in A: \neg xRx$;
@@ -1805,7 +1861,7 @@ We have $\id; R = R \subseteq R$, so $\id \subseteq R\diagup R$ by the Schröder
 
 \subsubsection{Transitivity}
 \begin{definition}
-Let $R$ be a homogeneous binary relation on a set $A$. We say
+Let $R$ be a homogeneous binary relation on a class $A$. We say
 \begin{itemize}
 \item $R$ is \udef{transitive} if $\forall x,y,z\in A: [xRy \land yRz] \implies xRz$;
 \item $R$ is \udef{intransitive} if it is not transitive;
@@ -1831,13 +1887,13 @@ Let $R$ be a homogeneous relation on $A$. If $R$ is transitive / anti-transitive
 \begin{enumerate}
 \item An anti-transitive relation is always irreflexive.
 \item An irreflexive and left- (or right-) unique relation is always anti-transitive.
-\item An anti-transitive relation on a set of more than four elements elements is never connex.
+\item An anti-transitive relation on a class of more than four elements elements is never connex.
 \end{enumerate}
 \end{lemma}
 
 \subsubsection{Symmetry}
 \begin{definition}
-Let $R$ be a homogeneous binary relation on a set $A$. We say
+Let $R$ be a homogeneous binary relation on a class $A$. We say
 \begin{itemize}
 \item $R$ is \udef{symmetric} if $\forall x,y\in A: xRy \implies yRx$;
 \item $R$ is \udef{asymmetric} if $\forall x,y\in A: xRy \implies \neg yRx$;
@@ -1914,7 +1970,7 @@ Using this decomposition we can rephrase the anti-symmetry property as $R_S \sub
 
 \subsubsection{Connexity}
 \begin{definition}
-Let $R$ be a homogeneous binary relation on a set $A$. We say
+Let $R$ be a homogeneous binary relation on a class $A$. We say
 \begin{itemize}
 \item $R$ is \udef{connex} (or \udef{connected} or \udef{complete}) if $\forall x,y\in A: xRy \lor yRx$;
 \item $R$ is \udef{semi-connex} (or \udef{weakly connected} or \udef{total}) if $\forall x,y\in A: xRy \lor yRx \lor x=y$;
@@ -1973,7 +2029,7 @@ Let $R$ be a homogeneous relation on $A$. If $R$ is connex / semi-connex / trich
 
 \subsubsection{Euclideanness}
 \begin{definition}
-Let $R$ be a homogeneous binary relation on a set $A$. We say
+Let $R$ be a homogeneous binary relation on a class $A$. We say
 \begin{itemize}
 \item $R$ is \udef{(right) Euclidean} if $\forall x,y,z\in A: xRy \land xRz \implies yRz$;
 \item $R$ is \udef{left Euclidean} if $\forall x,y,z\in A: yRx \land zRx \implies yRz$.
@@ -1997,7 +2053,7 @@ Let $R$ be a homogeneous relation on $A$. If
 
 \subsubsection{Density}
 \begin{definition}
-Let $R$ be a homogeneous binary relation on a set $A$. We say
+Let $R$ be a homogeneous binary relation on a class $A$. We say
 \begin{itemize}
 \item $R$ is \udef{dense} if $\forall x,y\in A: xRy \implies [\exists z\in A: xRz \land zRy]$.
 \end{itemize}
@@ -2021,7 +2077,7 @@ Let $R$ be a homogeneous relation on $A$. If $R$ is dense, then $R^\transp$ is d
 \begin{definition}
 A \udef{tolerance relation} is a binary relation that is reflexive and symmetric.
 
-If $T$ is a tolerance relation on a set $X$, then $\sSet{X,T}$ is called a \udef{tolerance space}.
+If $T$ is a tolerance relation on a class $X$, then $\sSet{X,T}$ is called a \udef{tolerance space}.
 \end{definition}
 A tolerance relation expresses the idea of `resembling' or `being within tolerance'.
 
@@ -2032,21 +2088,21 @@ An \udef{equivalence relation} is a binary relation that is reflexive, symmetric
 \end{definition}
 
 \begin{lemma}
-Let $A,B$ be sets. Then the empty relation on $(A,B)$, the universal relation $U_{A,B}$ and the identity relation $\id_A$ are equivalence relations.
+Let $A,B$ be classes. Then the empty relation on $(A,B)$, the universal relation $U_{A,B}$ and the identity relation $\id_A$ are equivalence relations.
 \end{lemma}
 
 \begin{definition}
 Let $\sim$ be an equivalence relation on $A$. Let $x\in A$. The \udef{equivalence class} of $x$ is the set
-\[ [x]_\sim \defeq x\sim = \sim x = \setbuilder{y\in A}{x\sim y}. \]
+\[ [x]_\sim \defeq x\sim \; = \; \sim x = \setbuilder{y\in A}{x\sim y}. \]
 Then $x$ is called a \udef{representative} of this equivalence class.
 
-The set of all equivalence classes is called the \udef{quotient set} of $A$ by $\sim$
+If $A$ is a set, there is a set of all equivalence classes. This is called the \udef{quotient set} of $A$ by $\sim$
 \[ A/\sim \defeq \{ [x]_\sim \in \powerset(A) \;|\; x\in A \}. \]
 \end{definition}
 So the equivalence classes are the principle images / preimages of the equivalence relation.
 
 \begin{proposition}
-Let $\sim$ be an equivalence relation on $A$. The quotient set of $A$ by $\sim$ defines a \udef{partition} of $A$:
+Let $\sim$ be an equivalence relation on a set $A$. The quotient set of $A$ by $\sim$ defines a \udef{partition} of $A$:
 \begin{enumerate}
 \item Every equivalence class is non-empty (each equivalence class has a representative);
 \item every element of $A$ is in an equivalence class, i.e.\
@@ -2227,59 +2283,23 @@ $(a \Rightarrow b)$ We calculate using the Dedekind rule:
 \subsubsection{Kernels}
 
 \begin{definition}
-Let $f:A\to B$ be a function. The \udef{kernel} of $f$ is
-\[ \ker f \defeq \setbuilder{(x,y)\in A\times A}{f(x) = f(y)}. \]
+Let $R$ be a relation on $(A, B)$. The \udef{kernel} of $R$ is
+\[ \ker R \defeq \setbuilder{(x,y)\in A\times A}{xR \mesh yR}. \]
 \end{definition}
 
 \begin{lemma}
-Let $f:A\to B$ be a function. Then
+Let $R$ be a relation on $(A, B)$. Then
 \begin{enumerate}
-\item the kernel of $f$ is an equivalence relation on $A$;
-\item viewing $f$ as a binary relation
-\[ \ker f = f;f^\transp = f^{\transp}\circ f. \]
+\item $\ker R$ is a symmetric relation on $A$;
+\item if $R$ is left total, then $\ker$ is a tolerance relation on $A$;
+\item $\ker R = R;R^\transp = R^{\transp}\circ R$.
 \end{enumerate}
 \end{lemma}
-
-\begin{definition}
-An equivalence class $[x]_{\ker f}$ is called a \udef{fibre} of $f$.
-\end{definition}
-
-\begin{proposition}
-Let $f:A\to B$ be a function. We can associate to $f$
-\begin{enumerate}
-\item a surjective function $f': A\to f[A]: x\mapsto f(x)$;
-\item an injective function $f'': A/(\ker f) \;\to B: [x]_{\ker f}\mapsto f(x)$;
-\item a bijective function $f''': A/(\ker f) \;\to f[A]: [x]_{\ker f}\mapsto f(x)$.
-\end{enumerate}
-\end{proposition}
-Whenever a function on a quotient set defines an image of an equivalence class using an element of said equivalence class, we need to verify this definition is \emph{well-defined}, i.e.\ it does not depend on the chosen element in the equivalence class. (In other words it is properly a function of the equivalence class, not of the elements of the equivalence classes.)
-\begin{proof}
-We show $f''$ is well-defined. Let $[x]_{\ker f}\in A/(\ker f)$ and let $x_1,x_2\in [x]_{\ker f}$. Then $f(x) = f(x_1) = f(x_2)$ and
-\[ f''([x_1]_{\ker f}) = f(x_1) = f(x_2) = f''([x_2]_{\ker f}), \]
-so $f''$ is well-defined.
-\end{proof}
-
-
-\begin{proposition}
-Let $X,Y$ be sets and $f: X \to Z$ a function. Then
-\begin{enumerate}
-\item $f;f^\transp = \ker f$;
-\item $f^\transp;f = \id_{\im(f)}$.
-\end{enumerate}
-In particular $f^\transp;f \subseteq \id_Z$ and $\id_X \subseteq f;f^\transp$.
-\end{proposition}
-\begin{proof}
-(1) Let $x,y\in X$. Then
-\[ x(f;f^\transp) y \iff \exists z\in Z: f(x) = z = f(y) \iff (x,y)\in \ker f. \]
-
-(2) Let $x,y\in Z$. Then
-\[ x(f^\transp;f) y \iff \exists z\in X: x = f(z) = y \iff x=y \in \im f. \]
-\end{proof}
 
 
 \subsection{Constant relations and points}
 \begin{definition}
-Let $A,B$ be sets and $R$ a relation on $A,B$. We call $R$
+Let $A,B$ be classes and $R$ a relation on $A,B$. We call $R$
 \begin{itemize}
 \item \udef{right-constant} if $\forall x\in A, \forall y,z \in B: \; xRy \iff xRz$;
 \item \udef{left-constant} if $\forall x, y\in A, \forall z \in B: \; xRz \iff yRz$;
@@ -2324,7 +2344,9 @@ Conceptually we can rephrase this as saying that for each ``input'' in the domai
 \begin{note}
 We write
 \[f:A \to B: x\mapsto f(x) \]
-to show $f$ is a function with domain $A$ and codomain $B$ that maps $x\in A$ to $f(x)\in B$. We say $f$ is a function from $A$ to $B$ or $f$ maps $A$ to $B$. The set of all functions from $A$ to $B$ is denoted $(A\to B)$.
+to show $f$ is a function with domain $A$ and codomain $B$ that maps $x\in A$ to $f(x)\in B$. We say $f$ is a function from $A$ to $B$ or $f$ maps $A$ to $B$. 
+
+If $A, B$ are sets, we can consider the  set of all functions from $A$ to $B$. This set is denoted $(A\to B)$.
 \end{note}
 
 Depending on the context, functions may also be called \udef{maps} or \udef{transformations}. These are synonyms with slightly different connotations.
@@ -2365,7 +2387,7 @@ Let $f$ be a function. Then $f^{-1}[\biguplus \mathcal{E}] = \biguplus f[\mathca
 \end{lemma}
 
 \begin{lemma} \label{functionUpperbound}
-Let $A,B,C$ be sets, $f: A\to B$ a function and $R$ a relation on $(B,C)$. Let $X \subseteq A$. Then $f[X]^R = X^{f;R}$.
+Let $A,B,C$ be classes, $f: A\to B$ a function and $R$ a relation on $(B,C)$. Let $X \subseteq A$. Then $f[X]^R = X^{f;R}$.
 \end{lemma}
 \begin{proof}
 We calculate
@@ -2397,13 +2419,33 @@ We will also sometimes write $A \leftrightarrow B$, instead of $A\twoheadrightar
 \end{lemma}
 
 \begin{lemma}
-If $A\subseteq B$ sets, then there exists a canonical injection $\iota: A\to B$, the \udef{inclusion map}
+If $A\subseteq B$ classes, then there exists a canonical injection $\iota: A\to B$, the \udef{inclusion map}
 \[ \iota: A\to B: a\mapsto a. \]
 The inclusion map is often denoted $A\hookrightarrow B$.
 \end{lemma}
 
+\begin{lemma}
+Let $f:A\to B$ be a function. Then $\ker f$ is an equivalence relation.
+\end{lemma}
 
+\begin{definition}
+Let $f: A\to B$ be a function between sets. An equivalence class $[x]_{\ker f}$ is called a \udef{fibre} of $f$.
+\end{definition}
 
+\begin{proposition}
+Let $f:A\to B$ be a function between sets. We can associate to $f$
+\begin{enumerate}
+\item a surjective function $f': A\to f[A]: x\mapsto f(x)$;
+\item an injective function $f'': A/(\ker f) \;\to B: [x]_{\ker f}\mapsto f(x)$;
+\item a bijective function $f''': A/(\ker f) \;\to f[A]: [x]_{\ker f}\mapsto f(x)$.
+\end{enumerate}
+\end{proposition}
+Whenever a function on a quotient set defines an image of an equivalence class using an element of said equivalence class, we need to verify this definition is \emph{well-defined}, i.e.\ it does not depend on the chosen element in the equivalence class. (In other words it is properly a function of the equivalence class, not of the elements of the equivalence classes.)
+\begin{proof}
+We show $f''$ is well-defined. Let $[x]_{\ker f}\in A/(\ker f)$ and let $x_1,x_2\in [x]_{\ker f}$. Then $f(x) = f(x_1) = f(x_2)$ and
+\[ f''([x_1]_{\ker f}) = f(x_1) = f(x_2) = f''([x_2]_{\ker f}), \]
+so $f''$ is well-defined.
+\end{proof}
 
 \subsection{Constructing new functions}
 Constructions defined for relations are in particular applicable to functions.
@@ -2422,7 +2464,7 @@ Let $f, g:A\to A$ be functions. We say $f$ and $g$ \udef{commute} if $f\circ g =
 \end{definition}
 
 \begin{note}
-Let $X,Y,Z$ be sets. Using composition we can view any function $f: X\to Y$ also as a function
+Let $X,Y,Z$ be classes. Using composition we can view any function $f: X\to Y$ also as a function
 \[ f: (Z\to X)\to (Z\to Y): g\mapsto f(g) = (z\mapsto (f\circ g)(z)). \]
 \end{note}
 
@@ -2433,7 +2475,7 @@ Let $f: A\to B$ be a function and $S\subset A$. Then $f|_S$ is a function.
 When talking about the restriction of a function, this left restriction is always the one that is meant. Right restrictions $f|^K$ are sometimes called \udef{corestrictions} and are in general not functions.
 
 \begin{definition}
-Let $A\subset B$ and $C$ be sets. Let $f: A\to C$ be a function. A function $\tilde{f}: B\to C$ such that $\tilde{f}|_A = f$ is called an \udef{extension} of $f$.
+Let $A\subset B$ and $C$ be classes. Let $f: A\to C$ be a function. A function $\tilde{f}: B\to C$ such that $\tilde{f}|_A = f$ is called an \udef{extension} of $f$.
 \end{definition}
 Given a function, a different function with as codomain a superset of the original codomain, which is otherwise identical, is sometimes called a \udef{coextension} of the function.
 
@@ -2494,7 +2536,7 @@ We calculate
 
 \subsubsection{Constant functions}
 \begin{definition}
-Let $X,Y$ be sets. A function $f:X\to Y$ is called \udef{constant} if there exists a $y_0$ such that $\forall x\in X: f(x) = y_0$.
+Let $X,Y$ be classes. A function $f:X\to Y$ is called \udef{constant} if there exists a $y_0$ such that $\forall x\in X: f(x) = y_0$.
 
 We denote this function $\underline{y_0}$.
 \end{definition}
@@ -2502,7 +2544,7 @@ We denote this function $\underline{y_0}$.
 A function is constant if and only if its range is a singleton.
 
 \begin{lemma}
-Let $X,Y$ be sets and $y\in Y$. Then
+Let $X,Y$ be classes and $y\in Y$. Then
 \[ \graph(\underline{y}) = X\times \{y\}. \]
 \end{lemma}
 
@@ -2514,7 +2556,7 @@ Let $f: A\to B$ and $g: X\to Y$ be functions. Then the \udef{tuple function} of 
 In particular if $f=g$, we say the tuple function is the \udef{pointwise application} of $f$. We write $f$ instead of $(f,f)$.
 \end{definition}
 
-\subsection{Functions with multiple inputs}
+\subsection{Binary functions}
 We can easily give a function multiple inputs from multiple domains by first joining them into an $n$-tuple, i.e.\ considering the Cartesian product of the domains as the domain of the function.
 
 \begin{example}
@@ -2527,6 +2569,8 @@ TODO. Swap in particular.
 
 \subsubsection{Currying}
 \begin{definition}
+Let $A,B,C$ be sets.
+
 Given a function $f: A\times B \to C$, we can \udef{curry} it in the first argument to obtain a new function
 \[ \curry(f)_1: A \to (B\to C): a\mapsto f(a,-) \qquad \text{where $f(a,-): B \to C: b\mapsto f(a,b)$} \]
 or in the second argument to obtain
@@ -2545,6 +2589,84 @@ For given sets $A,B,C$ the act of currying defines two bijective functions
 Let $f: A\times B \to C$ be a function. A \udef{partial application} $p$ of $f$ is an element of the image of the curried function:
 \[ p\in \curry_1(f)[A] \qquad\text{or}\qquad p\in \curry_2(f)[A]. \]
 \end{definition}
+
+\subsubsection{Homogenous binary operators}
+\begin{definition}
+Let $A$ be a class and $f: A\times A \to A$ a binary function. We call $f$
+\begin{itemize}
+\item \udef{associative} if $\forall x,y,z\in A: \;f(f(x,y),z) = f(x,f(y,z))$;
+\item \udef{commutative} if $\forall x,y\in A: \;f(x,y) = f(y,x)$;
+\item \udef{idempotent} if $\forall x\in A:\; f(x,x) = x$.
+\end{itemize}
+We say
+\begin{itemize}
+\item $f$ has a \udef{left-identity} $e_L$ if $\forall x\in A:\; f(e_L, x) = x$;
+\item $f$ has a \udef{right-identity} $e_R$ if $\forall x\in A:\; f(x, e_R) = x$;
+\item $f$ has an \udef{identity} $e$ if $e$ is both a left- and a right-identity of $f$.
+\end{itemize}
+We say
+\begin{itemize}
+\item $f$ has a \udef{left-absorbing element} $u_L$ if $\forall x\in A:\; f(u_L, x) = u_L$;
+\item $f$ has a \udef{right-absorbing element} $u_R$ if $\forall x\in A:\; f(x, u_R) = u_R$;
+\item $f$ has an \udef{absorbing element} $u$ if $u$ is both a left- and a right-absorbing element of $f$.
+\end{itemize}
+Let $f$ have an identity $e$, then we say an element $x\in A$
+\begin{itemize}
+\item has a \udef{left-inverse} $y$ if $f(y,x) = e$;
+\item has a \udef{right-inverse} $y$ if $f(x,y) = e$;
+\item has an \udef{(two-sided) inverse} $y$ if $f(x,y) = e = f(y,x)$.
+\end{itemize}
+\end{definition}
+
+TODO require that absorbing element is no identity?
+
+\begin{lemma} \label{leftRightIdentity}
+Let $A$ be a class and $f: A\times A \to A$ a binary operator.
+\begin{enumerate}
+\item If $f$ has both a left-identity $e_L$ and a right-identity $e_R$, then $f$ has an identity $e$ and
+\[ e = e_L = e_R. \]
+\item If $f$ has both a left-absorbing element $u_L$ and a right-absorbing element $u_R$, then $f$ has an absorbing element $u$ and
+\[ u = u_L = u_R. \]
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $f$ has a left- and a right-identity. Then $e_L = f(e_L, e_R) = e_R$.
+
+(2) Assume $f$ has a left- and a right-absorbing element. Then $u_L = f(u_L, u_R) = u_R$.
+\end{proof}
+\begin{corollary}
+A binary operator may have multiple left-identities or multiple right-identities, but if it has both, then the identity is unique.
+
+An absorbing element is similarly unique.
+\end{corollary}
+
+\subsubsection{Two homogenous binary operators}
+\begin{definition}
+Let $A$ be a class and $f,g: A\times A \to A$ two binary functions. We say
+\begin{itemize}
+\item $f$ is \udef{left-distributive} over $g$ if
+\[ \forall x,y,z\in A: \; f(x,g(y,z)) = g(f(x,y),f(x,z)); \]
+\item $\omega_A$ is \udef{right-distributive} over $\chi_A$ if
+\[ \forall x,y,z\in A: \; f(f(x,y), z) = g(f(x,z),f(y,z)); \]
+\item $f$ is \udef{distributive} over $g$ if it is left- and right-distributive;
+\item $f$ is \udef{self-distributive} if it is distributive over itself.
+\end{itemize}
+We say
+\begin{itemize}
+\item $f, g$ are linked by the \udef{absorption law} if
+\[ \forall x,y\in A:\; f(x,g(x,y)) = x = g(x,f(x,y)). \]
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{absorptionIdempotency}
+Let $A$ be a class and $f,g: A\times A\to A$ binary functions. If $f$ and $g$ are linked by the absorption law, then they are both idempotent.
+\end{lemma}
+\begin{proof}
+For all $x\in A$ we have $f(x,x) = f(x,g(x,f(x,x))) = x$, where the last equality follows from the absorption law with $y = f(x,x)$.
+\end{proof}
+
+\subsubsection{Notation for binary operators}
+Prefix, infix, postfix, Polish, necessity of brackets.
 
 \subsection{Partial functions}
 \begin{definition}
