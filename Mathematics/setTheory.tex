@@ -113,12 +113,12 @@ We write
 When working in a first-order system we do not have variables for predicates and the axiom of separation becomes more properly an \emph{axiom schema}: for every property definable by a first-order formula we add a new axiom with this formula substituted for $P$.
 \end{note}
 \begin{note}
-\begin{proposition} \label{russelParadox}
+\begin{proposition}
 Let $A$ be a set. The set
 \[ r(A) \defeq \{ x\in A\;|\; x\notin x \} \]
 is not a member of $A$.
 \end{proposition}
-\begin{corollary} \label{setOfSets}
+\begin{corollary}
 There is no set of sets.
 \end{corollary}
 \end{note}
@@ -193,6 +193,24 @@ We define the predicates
 This is for MK. In NBG the quantifiers in $\phi$ must be bound to elements.
 
 Let $A$ be a class and $\phi(x)$ a proposition with free variable $x$. We often abbreviate $\setbuilder{x}{x\in A \land \phi(x)}$ by $\setbuilder{x\in A}{\phi(x)}$.
+
+
+\begin{proposition}[Russel's paradox] \label{russelParadox}
+Let $A$ be a set. The set
+\[ r(A) \defeq \setbuilder{x\in A}{ x\notin x } \]
+is not a member of $A$.
+\end{proposition}
+\begin{corollary} \label{setOfSets}
+The class of sets, $\setbuilder{x}{\Set(x)}$, is not a set.
+\end{corollary}
+\begin{corollary} \label{properClassExistence}
+There exists a proper class.
+\end{corollary}
+
+
+\begin{proposition}
+There exists a proper
+\end{proposition}
 
 \subsubsection{Subclasses}
 \begin{definition}
@@ -2096,7 +2114,7 @@ Let $\sim$ be an equivalence relation on $A$. Let $x\in A$. The \udef{equivalenc
 \[ [x]_\sim \defeq x\sim \; = \; \sim x = \setbuilder{y\in A}{x\sim y}. \]
 Then $x$ is called a \udef{representative} of this equivalence class.
 
-If $A$ is a set, there is a set of all equivalence classes. This is called the \udef{quotient set} of $A$ by $\sim$
+If $A$ is a \emph{set}, there is a set of all equivalence classes. This is called the \udef{quotient set} of $A$ by $\sim$
 \[ A/\sim \defeq \{ [x]_\sim \in \powerset(A) \;|\; x\in A \}. \]
 \end{definition}
 So the equivalence classes are the principle images / preimages of the equivalence relation.
@@ -2576,15 +2594,6 @@ where $B^+ = B\cup \{e\}$ for some $e\notin B$, such that $\widehat{f}|_{\preim(
 We can always find an element $e$ by \ref{russelParadox}. Then we let $\widehat{f}$ map all elements in $A\setminus\preim(f)$ to $e$.
 \end{proof}
 
-\subsection{The evaluation map}
-\begin{definition}
-Let $A,B$ be sets. We define the \udef{evaluation map}
-\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
-Often we will consider partial applications of the evaluation map in the second argument, i.e.\ for $x\in A$
-\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
-which is also called an evaluation map.
-\end{definition}
-We have $\evalMap_x = \operatorname{curry}_2(\evalMap)(x)$.
 
 \section{Binary functions}
 We can easily give a function multiple inputs from multiple domains by first joining them into an $n$-tuple, i.e.\ considering the Cartesian product of the domains as the domain of the function.
@@ -2594,12 +2603,31 @@ A function $f$ that takes an input in $A$ and one in $B$ to generate an output i
 \[ f: A\times B \to C: (a,b)\mapsto f(a,b). \]
 \end{example}
 
+We can consider the class of binary functions between sets.
+\begin{lemma}
+There does not exist a class of binary functions between classes.
+\end{lemma}
+\begin{proof}
+There exists a proper class $\mathcal{U}$ by \ref{properClassExistence}. Then
+\[ \mathcal{U}\times \{\emptyset\}\to \mathcal{U}: (x,\emptyset) \mapsto x \]
+is a proper class by replacement (TODO ref! + necesary?) and thus an element. However, it would have to be an element of a class of binary functions between classes. This is a contradiction.
+\end{proof}
+
 \subsection{Input permutation}
-TODO. Swap in particular.
+\begin{definition}
+Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. We define a new function
+\[ \swap(f): B\times A \to C: (b,a) \mapsto f(a,b). \] 
+\end{definition}
+
+If we restrict ourselves to the class of binary functions between sets, then $\swap$ can be considered a function.
+
+\begin{lemma}
+Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. Then $\swap(\swap(f)) = f$.
+\end{lemma}
 
 \subsection{Currying}
 \begin{definition}
-Let $A,B,C$ be sets.
+Let $A,B,C$ be \emph{sets}.
 
 Given a function $f: A\times B \to C$, we can \udef{curry} it in the first argument to obtain a new function
 \[ \curry(f)_1: A \to (B\to C): a\mapsto f(a,-) \qquad \text{where $f(a,-): B \to C: b\mapsto f(a,b)$} \]
@@ -2622,19 +2650,6 @@ Let $f: A\times B \to C$ be a function. A \udef{partial application} $p$ of $f$ 
 
 \subsection{Homogenous binary operators}
 \begin{definition}
-Let $A$ be a class and $f: A\times A \to A$ a partial binary function. We call $f$ \udef{associative} if $\forall x,y,z\in A$ we have
-\begin{itemize}
-\item $f(f(x,y),z) = f(x,f(y,z))$ if $f(x,y)$ and $f(y,z)$ are defined;
-\item if $f(x,y)$ is undefined, then $f(x,f(y,z))$ is also undefined;
-\item if $f(y,z)$ is undefined, then $f(f(x,y), z)$ is also undefined.
-\end{itemize}
-\[ \begin{cases}
-f(f(x,y),z) = f(x,f(y,z)) & \text{if $f(x,y)$ and $f(y,z)$ are defined} \\
-\text{$f(f(x,y),z)$ and $f(x,f(y,z))$ are undefined} & \text{otherwise.}
-\end{cases} \]
-\end{definition}
-
-\begin{definition}
 Let $A$ be a class and $f: A\times A \to A$ a binary function. We call $f$
 \begin{itemize}
 \item \udef{associative} if $\forall x,y, z\in A: \; f(f(x,y),z) = f(x,f(y,z))$;
@@ -2643,6 +2658,18 @@ Let $A$ be a class and $f: A\times A \to A$ a binary function. We call $f$
 \end{itemize}
 If something is equal to an undefined quantity, we require it to be undefined.
 \end{definition}
+
+\subsubsection{Duality}
+Let $A$ be a class and $f: A\times A \to A$ a homogeneous binary function. Then $\swap(f): A\times A \to A$ is also a homogeneous binary function.
+
+Often a property of $f$ can be translated to a different property of $\swap(f)$. In this case we say the properties are \udef{dual} to each other.
+
+\begin{proposition}
+If a certain logical dependence holds between certain properties of binary homogenous functions, for all binary homgenous functions, then the same logical dependence holds between the duals of these properties.
+\end{proposition}
+\begin{proof}
+If the logical dependence holds for all $f$, it in particular holds for all $\swap(f)$.
+\end{proof}
 
 \subsubsection{Notation for binary operators}
 Prefix, infix, postfix, Polish, necessity of brackets.
@@ -2663,6 +2690,8 @@ We say
 \item $f$ has an \udef{absorbing element} $u$ if $u$ is both a left- and a right-absorbing element of $f$.
 \end{itemize}
 \end{definition}
+
+Left and right identity are dual. Left and right absorbing are also dual.
 
 TODO require that absorbing element is no identity?
 
@@ -2722,6 +2751,8 @@ Let $f$ have an identity $e$, then we say an element $x\in A$
 We call $x$ \udef{invertible} if it has an inverse.
 \end{definition}
 
+Left and right cancellative are dual. Left and right inverse are also dual.
+
 \begin{lemma}
 Let $A$ be a class, $f: A\times A \to A$ an associative binary function with identity $e$ and $x$ in $A$. If $x$ has both a left-inverse $l$ and a right-inverse $r$, then $l = r$.
 \end{lemma}
@@ -2775,35 +2806,6 @@ Beacuse $x$ is right-cancellative, this means $f(x,l) = e$ and thus that $l$ is 
 (4) Similar.
 \end{proof}
 
-\begin{definition}
-Let $A$ be a class, $f: A\times A \to A$ a binary function and $x, y\in A$. We call
-\begin{itemize}
-\item $x$ \udef{regular} if $\exists a\in A: \; x = f(f(x, a), x)$
-\item $x$ and $y$ \udef{generalised inverses} if $x = f(f(x, y), x)$ and $y = f(f(y, x), y)$.
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$. Then $x$ is regular \textup{if and only if} it has a generalised inverse.
-\end{lemma}
-\begin{proof}
-Clearly every element with a generalised inverse is regular. Conversely, assume $x$ regular with $x = f(f(x, a), x)$. Then $y = f(f(a, x), a)$ is a generalised inverse of $x$.
-\end{proof}
-Note that we do not have that $x = f(f(x, y), x)$ implies $y = f(f(y, x), y)$.
-
-\subsubsection{Green's relations and principal ideals}
-\begin{definition}
-Let $A$ be a class, $f: A\times A \to A$ a binary function and $x, y\in A$. TODO
-\end{definition}
-
-\begin{lemma}
-Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$ a regular element with $x = f(f(x, y), x)$. Then
-\begin{enumerate}
-\item $f(x,y)$ and $f(y,x)$ are idempotent;
-\item $f(y,x) \mathcal{L} x$ and $x \mathcal{R} f(y,x)$.
-\end{enumerate}
-\end{lemma}
-
 \subsubsection{Distributivity}
 \begin{definition}
 Let $A$ be a class and $f,g: A\times A \to A$ two binary functions. We say
@@ -2830,6 +2832,75 @@ Let $A$ be a class and $f,g: A\times A\to A$ binary functions. If $f$ and $g$ ar
 \begin{proof}
 For all $x\in A$ we have $f(x,x) = f(x,g(x,f(x,x))) = x$, where the last equality follows from the absorption law with $y = f(x,x)$.
 \end{proof}
+
+\subsection{Green's relations and principal ideals}
+\begin{definition}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, y\in A$. Then
+\begin{itemize}
+\item the \udef{left principal ideal} generated by $x$ is $f(A, x)$;
+\item the \udef{right principal ideal} generated by $x$ is $f(x,A)$.
+\end{itemize}
+The \udef{Green's relations} of $f$ are relations on $A$ defined by
+\begin{itemize}
+\item $x\mathcal{L}y \;\defequiv\; f(A,x) = f(A, y) \;\lor\; x=y$;
+\item $x\mathcal{R}y \;\defequiv\; f(x, A) = f(y, A) \;\lor\; x=y$;
+\item $\mathcal{H} \;\defeq\; \mathcal{L}\cap\mathcal{R}$;
+\item $\mathcal{D} \;\defeq\; \mathcal{L}\cup\mathcal{R}$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, y\in A$. Then
+\begin{enumerate}
+\item $f(A, f(x,y)) \subseteq f(A, y)$;
+\item $f(f(x,y), A) \subseteq f(x, A)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $z\in f(A, f(x,y))$
+\end{proof}
+
+\subsubsection{Egg-box diagrams}
+
+\subsubsection{Regular elements}
+\begin{definition}
+Let $A$ be a class, $f: A\times A \to A$ a binary function and $x, y\in A$. We call
+\begin{itemize}
+\item $x$ \udef{regular} if $\exists a\in A: \; x = f(f(x, a), x)$
+\item $x$ and $y$ \udef{generalised inverses} if $x = f(f(x, y), x)$ and $y = f(f(y, x), y)$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$ a regular element with $x = f(f(x, y), x)$. Then
+\begin{enumerate}
+\item $f(x,y)$ and $f(y,x)$ are idempotent;
+\item $f(y,x) \mathcal{L} x$ and $x \mathcal{R} f(y,x)$.
+\end{enumerate}
+\end{lemma}
+
+
+
+\subsubsection{Generalised inverses and idempotents}
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$. Then $x$ is regular \textup{if and only if} it has a generalised inverse.
+\end{lemma}
+\begin{proof}
+Clearly every element with a generalised inverse is regular. Conversely, assume $x$ regular with $x = f(f(x, a), x)$. Then $y = f(f(a, x), a)$ is a generalised inverse of $x$.
+\end{proof}
+Note that we do not have that $x = f(f(x, y), x)$ implies $y = f(f(y, x), y)$.
+
+
+\subsection{The evaluation map}
+\begin{definition}
+Let $A,B$ be sets. We define the \udef{evaluation map}
+\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
+Often we will consider partial applications of the evaluation map in the second argument, i.e.\ for $x\in A$
+\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
+which is also called an evaluation map.
+\end{definition}
+We have $\evalMap_x = \curry_2(\evalMap)(x)$.
+
 
 
 \chapter{The natural numbers}
