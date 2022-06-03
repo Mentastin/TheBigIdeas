@@ -2556,7 +2556,37 @@ Let $f: A\to B$ and $g: X\to Y$ be functions. Then the \udef{tuple function} of 
 In particular if $f=g$, we say the tuple function is the \udef{pointwise application} of $f$. We write $f$ instead of $(f,f)$.
 \end{definition}
 
-\subsection{Binary functions}
+\subsection{Partial functions}
+\begin{definition}
+A \udef{partial function} is a relation that is functional (but not necessarily serial). If we wish to emphasise a function is both functional and serial, we may call it a \udef{total function}.
+\end{definition}
+If $f\subset A\times B$ is a partial function, we write $A\not \to B$. The set of all partial functions from $A$ to $B$ is
+\[ (A\not \to B) = \bigcup _{S\subseteq A}(S\to B). \]
+
+For all $a\in A$ we write
+\[ f(a)\downarrow \defequiv a\in\dom(f),\qquad f(a)\uparrow \defequiv a\notin\dom(f) \]
+We can read $f(a)\downarrow$ as ``$f$ converges at $a$'' and $f(a)\uparrow$ as ``$f$ diverges at $a$''.
+
+\begin{lemma} \label{partialFunctionExtension}
+Let $f: A \not\to B$ be a partial function. Then we can construct a total function
+\[ \widehat{f}: A \to B^+ \]
+where $B^+ = B\cup \{e\}$ for some $e\notin B$, such that $\widehat{f}|_{\preim(f)}^B = f|_{\preim(f)}$.
+\end{lemma}
+\begin{proof}
+We can always find an element $e$ by \ref{russelParadox}. Then we let $\widehat{f}$ map all elements in $A\setminus\preim(f)$ to $e$.
+\end{proof}
+
+\subsection{The evaluation map}
+\begin{definition}
+Let $A,B$ be sets. We define the \udef{evaluation map}
+\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
+Often we will consider partial applications of the evaluation map in the second argument, i.e.\ for $x\in A$
+\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
+which is also called an evaluation map.
+\end{definition}
+We have $\evalMap_x = \operatorname{curry}_2(\evalMap)(x)$.
+
+\section{Binary functions}
 We can easily give a function multiple inputs from multiple domains by first joining them into an $n$-tuple, i.e.\ considering the Cartesian product of the domains as the domain of the function.
 
 \begin{example}
@@ -2564,10 +2594,10 @@ A function $f$ that takes an input in $A$ and one in $B$ to generate an output i
 \[ f: A\times B \to C: (a,b)\mapsto f(a,b). \]
 \end{example}
 
-\subsubsection{Input permutation}
+\subsection{Input permutation}
 TODO. Swap in particular.
 
-\subsubsection{Currying}
+\subsection{Currying}
 \begin{definition}
 Let $A,B,C$ be sets.
 
@@ -2590,14 +2620,36 @@ Let $f: A\times B \to C$ be a function. A \udef{partial application} $p$ of $f$ 
 \[ p\in \curry_1(f)[A] \qquad\text{or}\qquad p\in \curry_2(f)[A]. \]
 \end{definition}
 
-\subsubsection{Homogenous binary operators}
+\subsection{Homogenous binary operators}
+\begin{definition}
+Let $A$ be a class and $f: A\times A \to A$ a partial binary function. We call $f$ \udef{associative} if $\forall x,y,z\in A$ we have
+\begin{itemize}
+\item $f(f(x,y),z) = f(x,f(y,z))$ if $f(x,y)$ and $f(y,z)$ are defined;
+\item if $f(x,y)$ is undefined, then $f(x,f(y,z))$ is also undefined;
+\item if $f(y,z)$ is undefined, then $f(f(x,y), z)$ is also undefined.
+\end{itemize}
+\[ \begin{cases}
+f(f(x,y),z) = f(x,f(y,z)) & \text{if $f(x,y)$ and $f(y,z)$ are defined} \\
+\text{$f(f(x,y),z)$ and $f(x,f(y,z))$ are undefined} & \text{otherwise.}
+\end{cases} \]
+\end{definition}
+
 \begin{definition}
 Let $A$ be a class and $f: A\times A \to A$ a binary function. We call $f$
 \begin{itemize}
-\item \udef{associative} if $\forall x,y,z\in A: \;f(f(x,y),z) = f(x,f(y,z))$;
-\item \udef{commutative} if $\forall x,y\in A: \;f(x,y) = f(y,x)$;
+\item \udef{associative} if $\forall x,y, z\in A: \; f(f(x,y),z) = f(x,f(y,z))$;
+\item \udef{commutative} if $\forall x,y\in A: \; f(x,y) = f(y,x)$;
 \item \udef{idempotent} if $\forall x\in A:\; f(x,x) = x$.
 \end{itemize}
+If something is equal to an undefined quantity, we require it to be undefined.
+\end{definition}
+
+\subsubsection{Notation for binary operators}
+Prefix, infix, postfix, Polish, necessity of brackets.
+
+\subsubsection{Identity and absorbing elements}
+\begin{definition}
+Let $A$ be a class and $f: A\times A \to A$ a binary function. 
 We say
 \begin{itemize}
 \item $f$ has a \udef{left-identity} $e_L$ if $\forall x\in A:\; f(e_L, x) = x$;
@@ -2609,12 +2661,6 @@ We say
 \item $f$ has a \udef{left-absorbing element} $u_L$ if $\forall x\in A:\; f(u_L, x) = u_L$;
 \item $f$ has a \udef{right-absorbing element} $u_R$ if $\forall x\in A:\; f(x, u_R) = u_R$;
 \item $f$ has an \udef{absorbing element} $u$ if $u$ is both a left- and a right-absorbing element of $f$.
-\end{itemize}
-Let $f$ have an identity $e$, then we say an element $x\in A$
-\begin{itemize}
-\item has a \udef{left-inverse} $y$ if $f(y,x) = e$;
-\item has a \udef{right-inverse} $y$ if $f(x,y) = e$;
-\item has an \udef{(two-sided) inverse} $y$ if $f(x,y) = e = f(y,x)$.
 \end{itemize}
 \end{definition}
 
@@ -2640,22 +2686,142 @@ A binary operator may have multiple left-identities or multiple right-identities
 An absorbing element is similarly unique.
 \end{corollary}
 
-\subsubsection{Two homogenous binary operators}
+\begin{lemma}
+Let $A$ be a class and $f: A\times A \to A$ an associative partial binary function with absorbing element $u$. Then we can extend $f$ to an associative total function $\widehat{f}: A \times A \to A$
+by setting
+\[ (x,y) \in A\times A \setminus \preim(f) \quad\implies\quad \widehat{f}(x,y) = u. \]
+\end{lemma}
+\begin{proof}
+We just need to verify associativity.
+
+We have $\widetilde{f}(\widetilde{f}(x,y),z) = \widetilde{f}(x,\widetilde{f}(y,z))$ if $f(f(x,y),z)$ and $f(x,f(y,z))$ are defined.
+
+If $f(f(x,y),z)$ is not defined, we claim $\widetilde{f}(\widetilde{f}(x,y),z) = u$. Indeed,
+\begin{itemize}
+\item if $f(x,y)$ is defined, then $f(\widetilde{f}(x,y),z) = f(f(x,y),z)$ is undefined and thus equal to $u$;
+\item if $f(x,y)$ is undefined, then $\widetilde{f}(\widetilde{f}(x,y),z) = \widetilde{f}(u,z) = f(u,z) = u$.
+\end{itemize}
+
+Similarly, if $f(x, f(y, z))$ is not defined, we have $\widetilde{f}(x, \widetilde{f}(y, z)) = u$.
+\end{proof}
+
+\subsubsection{Inverses and cancellation}
+\begin{definition}
+Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$. 
+We call $x$
+\begin{itemize}
+\item \udef{left-cancellative} if $f(x,\cdot)$ is injective;
+\item $f$ has a \udef{right-cancellative} if $f(\cdot, x)$ is injective.
+\end{itemize}
+Let $f$ have an identity $e$, then we say an element $x\in A$
+\begin{itemize}
+\item has a \udef{left-inverse} $y$ if $f(y,x) = e$;
+\item has a \udef{right-inverse} $y$ if $f(x,y) = e$;
+\item has an \udef{(two-sided) inverse} $y$ if $f(x,y) = e = f(y,x)$.
+\end{itemize}
+We call $x$ \udef{invertible} if it has an inverse.
+\end{definition}
+
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function with identity $e$ and $x$ in $A$. If $x$ has both a left-inverse $l$ and a right-inverse $r$, then $l = r$.
+\end{lemma}
+\begin{proof}
+Using associativity, we have
+\[ l = f(l,e) = f(l, f(x,r)) = f(f(l,x), r) = f(e, r) = r. \]
+\end{proof}
+\begin{corollary}
+If an element has a two-sided inverse, it is unique.
+\end{corollary}
+
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x,y$ in $A$.
+\begin{enumerate}
+\item If $x$ and $y$ are left-, resp. right-,cancellative, then $f(x,y)$ is left-, resp. right-,cancellative.
+\item If $f(x,y)$ is left-cancellative, then $y$ is left-cancellative.
+\item If $f(x,y)$ is right-cancellative, then $x$ is left-cancellative.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Let $z_1, z_2\in A$.
+
+(1) Assume that $f(f(x,y), z_1) = f(f(x,y), z_2)$. By associativity, we have $f(x,f(y, z_1)) = f(x,f(y, z_2))$. Thus by injectivity we get $z_1 = z_2$.
+
+Right-cancellation is similar.
+
+(2) Assume $f(y,z_1) = f(y,z_2)$. Then $f(x, f(y,z_1)) = f(x, f(y,z_2))$. By associativity, we get $f(f(x,y), z_1) = f(f(x,y), z_2)$ and thus $z_1 = z_2$ because $f(x,y)$ is left-cancellative.
+
+(3) Assume $f(z_1, x) = f(z_2, x)$. Then $f(f(z_1, x), y) = f(f(z_2, x), y)$. By associativity, we get $f(z_1, f(x,y)) = f(z_2, f(x,y))$ thus $z_1 = z_2$ because $f(x,y)$ is right-cancellative.
+\end{proof}
+
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x,y$ in $A$. Then
+\begin{enumerate}
+\item if $x$ has a left inverse, it is left-cancellative;
+\item if $x$ has a right inverse, it is right-cancellative;
+\item if $x$ has a left inverse and is right-cancellative, it is invertible;
+\item if $x$ has a right inverse and is left-cancellative, it is invertible.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Let $l$ be a left inverse of $x$ and assume $f(x, z_1) = f(x,z_2)$, then $f(l, f(x,z_1)) = f(l, f(x,z_2))$ and thus
+\[ z_1 = f(e,z_1) = f(f(l,x), z_1) = f(l, f(x,z_1)) = f(l, f(x,z_2)) = f(f(l,x), z_2) = f(e,z_2) = z_2. \]
+
+(2) Similar.
+
+(3) Let $l$ be a left inverse of $x$. It is enough to show that $l$ is also a right inverse of $x$. We calculate
+\[ f(f(x,l), x) = f(x, f(l,x)) = f(x, e) = x = f(e,x). \]
+Beacuse $x$ is right-cancellative, this means $f(x,l) = e$ and thus that $l$ is a right inverse.
+
+(4) Similar.
+\end{proof}
+
+\begin{definition}
+Let $A$ be a class, $f: A\times A \to A$ a binary function and $x, y\in A$. We call
+\begin{itemize}
+\item $x$ \udef{regular} if $\exists a\in A: \; x = f(f(x, a), x)$
+\item $x$ and $y$ \udef{generalised inverses} if $x = f(f(x, y), x)$ and $y = f(f(y, x), y)$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$. Then $x$ is regular \textup{if and only if} it has a generalised inverse.
+\end{lemma}
+\begin{proof}
+Clearly every element with a generalised inverse is regular. Conversely, assume $x$ regular with $x = f(f(x, a), x)$. Then $y = f(f(a, x), a)$ is a generalised inverse of $x$.
+\end{proof}
+Note that we do not have that $x = f(f(x, y), x)$ implies $y = f(f(y, x), y)$.
+
+\subsubsection{Green's relations and principal ideals}
+\begin{definition}
+Let $A$ be a class, $f: A\times A \to A$ a binary function and $x, y\in A$. TODO
+\end{definition}
+
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$ a regular element with $x = f(f(x, y), x)$. Then
+\begin{enumerate}
+\item $f(x,y)$ and $f(y,x)$ are idempotent;
+\item $f(y,x) \mathcal{L} x$ and $x \mathcal{R} f(y,x)$.
+\end{enumerate}
+\end{lemma}
+
+\subsubsection{Distributivity}
 \begin{definition}
 Let $A$ be a class and $f,g: A\times A \to A$ two binary functions. We say
 \begin{itemize}
 \item $f$ is \udef{left-distributive} over $g$ if
 \[ \forall x,y,z\in A: \; f(x,g(y,z)) = g(f(x,y),f(x,z)); \]
-\item $\omega_A$ is \udef{right-distributive} over $\chi_A$ if
+\item $f$ is \udef{right-distributive} over $g$ if
 \[ \forall x,y,z\in A: \; f(f(x,y), z) = g(f(x,z),f(y,z)); \]
 \item $f$ is \udef{distributive} over $g$ if it is left- and right-distributive;
 \item $f$ is \udef{self-distributive} if it is distributive over itself.
 \end{itemize}
-We say
-\begin{itemize}
-\item $f, g$ are linked by the \udef{absorption law} if
+\end{definition}
+
+\subsubsection{The absorption law}
+\begin{definition}
+Let $A$ be a class and $f,g: A\times A \to A$ two binary functions.
+We say $f, g$ are linked by the \udef{absorption law} if
 \[ \forall x,y\in A:\; f(x,g(x,y)) = x = g(x,f(x,y)). \]
-\end{itemize}
 \end{definition}
 
 \begin{lemma} \label{absorptionIdempotency}
@@ -2665,29 +2831,6 @@ Let $A$ be a class and $f,g: A\times A\to A$ binary functions. If $f$ and $g$ ar
 For all $x\in A$ we have $f(x,x) = f(x,g(x,f(x,x))) = x$, where the last equality follows from the absorption law with $y = f(x,x)$.
 \end{proof}
 
-\subsubsection{Notation for binary operators}
-Prefix, infix, postfix, Polish, necessity of brackets.
-
-\subsection{Partial functions}
-\begin{definition}
-A \udef{partial function} is a relation that is functional (but not necessarily serial). If we wish to emphasise a function is both functional and serial, we may call it a \udef{total function}.
-\end{definition}
-If $f\subset A\times B$ is a partial function, we write $A\not \to B$. The set of all partial functions from $A$ to $B$ is
-\[ (A\not \to B) = \bigcup _{S\subseteq A}(S\to B). \]
-
-For all $a\in A$ we write
-\[ f(a)\downarrow \defequiv a\in\dom(f),\qquad f(a)\uparrow \defequiv a\notin\dom(f) \]
-We can read $f(a)\downarrow$ as ``$f$ converges at $a$'' and $f(a)\uparrow$ as ``$f$ diverges at $a$''.
-
-\subsection{The evaluation map}
-\begin{definition}
-Let $A,B$ be sets. We define the \udef{evaluation map}
-\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
-Often we will consider partial applications of the evaluation map in the second argument, i.e.\ for $x\in A$
-\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
-which is also called an evaluation map.
-\end{definition}
-We have $\evalMap_x = \operatorname{curry}_2(\evalMap)(x)$.
 
 \chapter{The natural numbers}
 TODO = 1:n!
