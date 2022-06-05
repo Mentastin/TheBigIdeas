@@ -1030,9 +1030,15 @@ If we say $R$ is a (homogenous) relation on $A$, we mean $\dom(R) = A = \codom(R
 A relation is \udef{heterogeneous} is the domain and codomain are different.
 \end{definition}
 
-Often we will write $R \subseteq S$ as a shorthand for $\graph(R)\subseteq \graph(S)$. Similarly we may write $R\cup S$, $R\cap S$ etc.
+Often we will write $R \subseteq S$ as a shorthand for $\graph(R)\subseteq \graph(S)$.
 
-
+\begin{lemma}
+Let $R,S$ be relations on $(A,B)$. Then
+\begin{enumerate}
+\item $R\cup S \defeq \sSet{\graph(R)\cup \graph(S), (A,B)}$ is a relation on $(A,B)$;
+\item $R\cap S \defeq \sSet{\graph(R)\cap \graph(S), (A,B)}$ is a relation on $(A,B)$.
+\end{enumerate}
+\end{lemma}
 
 \begin{definition}
 Let $A,B$ be classes. We have the following relations:
@@ -2091,7 +2097,7 @@ Assume $R$ reflexive, i.e.\ $\id_A\subseteq R$. Then $R = \id_A ;R \subseteq R;R
 Let $R$ be a homogeneous relation on $A$. If $R$ is dense, then $R^\transp$ is dense.
 \end{lemma}
 
-\subsubsection{Tolerance relations}
+\subsection{Tolerance relations}
 \begin{definition}
 A \udef{tolerance relation} is a binary relation that is reflexive and symmetric.
 
@@ -2100,7 +2106,7 @@ If $T$ is a tolerance relation on a class $X$, then $\sSet{X,T}$ is called a \ud
 A tolerance relation expresses the idea of `resembling' or `being within tolerance'.
 
 
-\subsubsection{Equivalence relations}
+\subsection{Equivalence relations}
 \begin{definition}
 An \udef{equivalence relation} is a binary relation that is reflexive, symmetric and transitive.
 \end{definition}
@@ -2109,6 +2115,7 @@ An \udef{equivalence relation} is a binary relation that is reflexive, symmetric
 Let $A,B$ be classes. Then the empty relation on $(A,B)$, the universal relation $U_{A,B}$ and the identity relation $\id_A$ are equivalence relations.
 \end{lemma}
 
+\subsubsection{Equivalence classes and partitions}
 \begin{definition}
 Let $\sim$ be an equivalence relation on $A$. Let $x\in A$. The \udef{equivalence class} of $x$ is the set
 \[ [x]_\sim \defeq x\sim \; = \; \sim x = \setbuilder{y\in A}{x\sim y}. \]
@@ -2130,6 +2137,80 @@ Let $\sim$ be an equivalence relation on a set $A$. The quotient set of $A$ by $
 \end{enumerate}
 Conversely, every partition defines an equivalence relation.
 \end{proposition}
+
+\subsubsection{Egg-box diagrams and multiple equivalences}
+\begin{lemma}
+Let $A$ be a class and $R_1, R_2$ equivalence relations on $A$. Then $R_1 \cap R_2$ is an equivalence relation.
+\end{lemma}
+
+\begin{definition}
+Let $A$ be a class and $R_1, R_2$ two equivalence relations. We can draw the elements of $A$ in a grid such that
+\begin{itemize}
+\item two elements are in the same column \textup{if and only if} they are $R_1$-equivalent;
+\item two elements are in the same row \textup{if and only if} they are $R_2$-equivalent.
+\end{itemize}
+The cells in the grid are then $R_1\cap R_2$-equivalence classes.
+
+Such a diagram is called an \udef{egg-box diagram}.
+\end{definition}
+
+Usually the term ``egg-box diagram'' specifically refers to the case when $R_1, R_2$ are the Green's relations $\greensL$ and $\greensR$ of a semigroup.
+
+\begin{example}
+Consider the set $\powerset(\{1,2,3,4\})$ with equivalence relations
+\begin{itemize}
+\item $aR_1 b$ if subsets $a$ and $b$ have the number of elements;
+\item $aR_2 b$ if subsets $a$ and $b$ have the number of even elements.
+\end{itemize}
+Then the egg-box diagram of $R_1,R_2$ is
+\[ \begin{array}{|c|c|c|c|c|}
+\hline
+\emptyset & \{1\}, \{3\} & \{1,3\} && \\ \hline
+& \{2\}, \{4\} & \{1,2\}, \{1,4\}, & \{1,2,3\}, \{1,3,4\} & \\
+&  & \{2,3\}, \{3,4\} &  & \\ \hline
+&& \{2,4\} & \{1,2,4\}, \{2,3,4\}  & \{1,2,3,4\}    \\ \hline
+\end{array} \]
+\end{example}
+
+\begin{proposition} \label{commutingEquivalenceRelations}
+Let $A$ be a class and $R_1, R_2$ equivalence relations on $A$. Then the following are equivalent:
+\begin{enumerate}
+\item $R_1;R_2 = R_2;R_1$;
+\item $R_1;R_2$ is an equivalence relation;
+\item the egg-box diagram of $R_1, R_2$ decomposes into blocks, i.e.\
+\begin{itemize}
+\item a block consists of a rectangular region of cells;
+\item each cell in the block is occupied;
+\item no cell not included in the block, but in the same row / column as a cell in the block is occupied;
+\end{itemize}
+these blocks are $R_1;R_2$-equivalence classes;
+\item for any four cells that are the corners of a rectangle in the egg-diagram: if any three of these cells are occupied, all four cells are occupied.
+\end{enumerate}
+In this case $R_1;R_2$ is the smallest equivalence relation containing $R_1\cup R_2$.
+\end{proposition}
+TODO $R_1; R_2$ is transitive closure of $R_1\cup R_2$.
+\begin{proof}
+$(1)\Leftrightarrow (2)$ Assume $R_1;R_2 = R_2;R_1$. We verify
+\begin{itemize}
+\item \emph{reflexivity}: from $\id_A \subseteq R_1$ and $\id_A \subseteq R_2$, we get $\id_A = \id_A^2 \subseteq R_1;R_2$;
+\item \emph{symmetry}: we have $(R_1;R_2)^\transp = R_2^\transp; R_1^\transp = R_2;R_1 = R_1;R_2$;
+\item \emph{transitivity}: we have
+\[ (R_1;R_2);(R_1; R_2) = R_1;R_1;R_2;R_1 = R_1;R_2. \]
+\end{itemize}
+
+The converse follows from symmetry.
+
+$(1)\Leftrightarrow (3, 4)$ On reflection, one may understand that (3) and (4) are equivalent.
+
+First assume (1) and take any three occupied cells that lie on the corners of a rectangle. Take $a,b$ from the diagonally opposing cells. Then $a(R_1;R_2)b$, because there exists a $c$ in the third cell. So also $a(R_2;R_1)b$, meaning there exists an element in the fourth sell, so (4) holds.
+
+We can run the argument in reverse for the converse.
+
+(Final observation) We first show that $R_1\cup R_2 \subseteq R_1;R_2$. Because $\id_A \subseteq R_1, R_2$, we have
+\[ R_1\cup R_2 \subseteq R_1;(R_1\cup R_2);R_2 = R_1;R_1;R_2 \cup R_1;R_2;R_2 = R_1;R_2. \]
+Now assume $R$ is an equivalence class containing $R_1\cup R_2$, then
+\[ R \supseteq (R_1\cup R_2);(R_1\cup R_2) = R_1 \cup R_1;R_2 \cup R_2;R_1 \cup R_2 = R_1;R_2. \]
+\end{proof}
 
 \subsection{Uniqueness and totality}
 \begin{definition}
@@ -2614,18 +2695,28 @@ is a proper class by replacement (TODO ref! + necesary?) and thus an element. Ho
 \end{proof}
 
 \subsection{Input permutation}
+
+Let $A,B$ be classes. Then we can define a swap function as follows:
+\[ \swap_{A,B}: A\times B \to B\times A: (a,b) \mapsto (b,a). \]
+We may write $\swap$ instead of $\swap_{A,B}$ is the classes are clear from the context.
+
+\begin{lemma}
+Let $A, B$ be classes. Then $\swap_{B,A}\circ \swap_{A,B} = \id_{A\times B}$.
+\end{lemma}
+
 \begin{definition}
-Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. We define a new function
-\[ \swap(f): B\times A \to C: (b,a) \mapsto f(a,b). \] 
+Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. We define the \udef{dual} function $f^d: B\times A \to C$ of $f$ as $f^d \defeq f\circ \swap$. 
 \end{definition}
 
 If we restrict ourselves to the class of binary functions between sets, then $\swap$ can be considered a function.
 
 \begin{lemma}
-Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. Then $\swap(\swap(f)) = f$.
+Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. Then $(f^d)^d = f$.
 \end{lemma}
 
 \subsection{Currying}
+TODO cfr residuation
+
 \begin{definition}
 Let $A,B,C$ be \emph{sets}.
 
@@ -2660,15 +2751,15 @@ If something is equal to an undefined quantity, we require it to be undefined.
 \end{definition}
 
 \subsubsection{Duality}
-Let $A$ be a class and $f: A\times A \to A$ a homogeneous binary function. Then $\swap(f): A\times A \to A$ is also a homogeneous binary function.
+Let $A$ be a class and $f: A\times A \to A$ a homogeneous binary function. Then $f^d: A\times A \to A$ is also a homogeneous binary function.
 
-Often a property of $f$ can be translated to a different property of $\swap(f)$. In this case we say the properties are \udef{dual} to each other.
+Often a property of $f$ can be translated to a different property of $f^d$. In this case we say the properties are \udef{dual} to each other.
 
 \begin{proposition}
-If a certain logical dependence holds between certain properties of binary homogenous functions, for all binary homgenous functions, then the same logical dependence holds between the duals of these properties.
+If a certain logical dependence holds between certain properties of binary homogenous functions, for all binary homogenous functions, then the same logical dependence holds between the duals of these properties.
 \end{proposition}
 \begin{proof}
-If the logical dependence holds for all $f$, it in particular holds for all $\swap(f)$.
+If the logical dependence holds for all functions, it in particular holds for all functions of the form $f^d$.
 \end{proof}
 
 \subsubsection{Notation for binary operators}
@@ -2715,6 +2806,33 @@ A binary operator may have multiple left-identities or multiple right-identities
 An absorbing element is similarly unique.
 \end{corollary}
 
+\begin{definition}
+Let $A$ be a class and $f: A\times A \to A$ a binary operator. We define
+\[ \widetilde{A} \defeq \begin{cases}
+A & \text{if $f$ has an identity} \\
+A\uplus \{e\} & \text{if $f$ has no identity.}
+\end{cases} \]
+and also
+\[ \widetilde{f} \quad\defeq\quad \widetilde{A}\times \widetilde{A}\to \widetilde{A}: (a,b) \mapsto \begin{cases}
+f(a, b) & a,b\in A \\
+b & a = e \\
+a & b = e.
+\end{cases} \]
+\end{definition}
+
+\begin{definition}
+Let $A$ be a class and $f: A\times A \to A$ a binary operator. We define
+\[ \widehat{A} \defeq \begin{cases}
+A & \text{if $A$ has an absorbing element} \\
+A\uplus \{u\} & \text{if $A$ has no absorbing element.}
+\end{cases} \]
+and also
+\[ \widehat{f} \quad\defeq\quad \widehat{A}\times \widehat{A}\to \widehat{A}: (a,b) \mapsto \begin{cases}
+f(a, b) & a,b\in A \\
+u & (a = u \lor b = u.
+\end{cases} \]
+\end{definition}
+
 \begin{lemma}
 Let $A$ be a class and $f: A\times A \to A$ an associative partial binary function with absorbing element $u$. Then we can extend $f$ to an associative total function $\widehat{f}: A \times A \to A$
 by setting
@@ -2723,12 +2841,12 @@ by setting
 \begin{proof}
 We just need to verify associativity.
 
-We have $\widetilde{f}(\widetilde{f}(x,y),z) = \widetilde{f}(x,\widetilde{f}(y,z))$ if $f(f(x,y),z)$ and $f(x,f(y,z))$ are defined.
+We have $\widehat{f}(\widehat{f}(x,y),z) = \widehat{f}(x,\widehat{f}(y,z))$ if $f(f(x,y),z)$ and $f(x,f(y,z))$ are defined.
 
-If $f(f(x,y),z)$ is not defined, we claim $\widetilde{f}(\widetilde{f}(x,y),z) = u$. Indeed,
+If $f(f(x,y),z)$ is not defined, we claim $\widehat{f}(\widehat{f}(x,y),z) = u$. Indeed,
 \begin{itemize}
-\item if $f(x,y)$ is defined, then $f(\widetilde{f}(x,y),z) = f(f(x,y),z)$ is undefined and thus equal to $u$;
-\item if $f(x,y)$ is undefined, then $\widetilde{f}(\widetilde{f}(x,y),z) = \widetilde{f}(u,z) = f(u,z) = u$.
+\item if $f(x,y)$ is defined, then $f(\widehat{f}(x,y),z) = f(f(x,y),z)$ is undefined and thus equal to $u$;
+\item if $f(x,y)$ is undefined, then $\widehat{f}(\widehat{f}(x,y),z) = \widehat{f}(u,z) = f(u,z) = u$.
 \end{itemize}
 
 Similarly, if $f(x, f(y, z))$ is not defined, we have $\widetilde{f}(x, \widetilde{f}(y, z)) = u$.
@@ -2837,17 +2955,19 @@ For all $x\in A$ we have $f(x,x) = f(x,g(x,f(x,x))) = x$, where the last equalit
 \begin{definition}
 Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, y\in A$. Then
 \begin{itemize}
-\item the \udef{left principal ideal} generated by $x$ is $f(A, x)$;
-\item the \udef{right principal ideal} generated by $x$ is $f(x,A)$.
+\item the \udef{left principal ideal} generated by $x$ is $f(A, x)\cup \{x\}$;
+\item the \udef{right principal ideal} generated by $x$ is $f(x,A)\cup \{x\}$.
 \end{itemize}
 The \udef{Green's relations} of $f$ are relations on $A$ defined by
 \begin{itemize}
-\item $x\mathcal{L}y \;\defequiv\; f(A,x) = f(A, y) \;\lor\; x=y$;
-\item $x\mathcal{R}y \;\defequiv\; f(x, A) = f(y, A) \;\lor\; x=y$;
-\item $\mathcal{H} \;\defeq\; \mathcal{L}\cap\mathcal{R}$;
-\item $\mathcal{D} \;\defeq\; \mathcal{L}\cup\mathcal{R}$.
+\item $x\greensL y \;\defequiv\; f(A,x) = f(A, y)$;
+\item $x\greensR y \;\defequiv\; f(x, A) = f(y, A)$;
+\item $\greensH \;\defeq\; \greensL \cap\greensR$;
+\item $\greensD \;\defeq\; \greensL;\greensR$.
 \end{itemize}
 \end{definition}
+
+The relations $\greensL$ and $\greensR$ are dual.
 
 \begin{lemma}
 Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, y\in A$. Then
@@ -2855,12 +2975,274 @@ Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, 
 \item $f(A, f(x,y)) \subseteq f(A, y)$;
 \item $f(f(x,y), A) \subseteq f(x, A)$.
 \end{enumerate}
+Also
+\begin{enumerate} \setcounter{enumi}{2}
+\item $f(A, x) \subseteq f(A,y)$ \textup{if and only if} $\forall a\in A: \exists b\in A: \; f(a, x) = f(b, y)$;
+\item $f(x, A) \subseteq f(y, A)$ \textup{if and only if} $\forall a\in A: \exists b\in A: \; f(x, a) = f(y, b)$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) Take $z\in f(A, f(x,y))$
+(1) Take $z\in f(A, f(x,y))$. Then there exists $z'\in A$ such that
+\[ z = f(z', f(x,y)) = f(f(z', x), y) \in f(A, y). \]
+
+(2) By duality.
+
+(3, 4) Straightforward.
 \end{proof}
 
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, y\in A$. Then
+\begin{enumerate}
+\item $x\greensL y$ \textup{if and only if} $f(\widetilde{A},x) = f(\widetilde{A}, y)$;
+\item $x\greensR y$ \textup{if and only if} $f(x, \widetilde{A}) = f(y, \widetilde{A})$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, y\in A$. Then
+\begin{enumerate}
+\item $a\mathcal{L}b$ \textup{if and only if} $\exists x,y\in \widetilde{A}: (xa = b) \land (yb = a)$;
+\item $a\mathcal{R}b$ \textup{if and only if} $\exists x,y\in \widetilde{A}: (ax = b) \land (by = a)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We prove (1), (2) is analogous.
+
+($\Rightarrow$) $a\in f(\widetilde{A}, a) = f(\widetilde{A}, b)$, so there exists $y\in \widetilde{A}$ such that $a = f(y, b)$. The other equation is similar.
+
+($\Leftarrow$) Because $\widetilde{A}x \subseteq \widetilde{A}$, we have $\widetilde{A}a \subseteq \widetilde{A}xa = \widetilde{A}b$. Similarly $\widetilde{A}b \subseteq \widetilde{A}a$.
+\end{proof}
+
+\begin{lemma}
+Let $A$ be a class and $f: A\times A \to A$ an associative binary function. Then the relations $\greensL$ and $\greensR$ are equivalence relations.
+\end{lemma}
+
 \subsubsection{Egg-box diagrams}
+\begin{proposition}
+The relation $\greensD$ is an equivalence relation.
+\end{proposition}
+This is equivalent to $\greensL;\greensR = \greensR;\greensL$ by \ref{commutingEquivalenceRelations}. 
+\begin{proof}
+Assume $a(\mathcal{L};\mathcal{R})b$, meaning $\exists c: a\mathcal{L}c$ and $c\mathcal{R}b$. Then there exist $x,y,u,v\in \widetilde{A}$ such that
+\[ (xa = c) \land (yc = a) \;\land\; (cu = b) \land (bv = c). \]
+Now define $d = ycu$. Then $a\mathcal{R}d$ because
+\[ d = (yc)u = au \;\text{and}\; a = yc = ybv = ycuv = dv \]
+and $d\mathcal{L}b$ because
+\[ d = ycu = yb \;\text{and}\; b = cu = xau = xycu = xd. \]
+So $a(\mathcal{R};\mathcal{L})b$. The other inclusion is similar.
+\end{proof}
+
+From \ref{commutingEquivalenceRelations} we also know that the $\greensL,\greensR$-egg-box diagram decomposes into blocks, which are $\greensD$-equivalence classes. The cells are $\greensH$-equivalence classes.
+
+\begin{example}
+Let $A = (\{1,2,3\} \to \{1,2,3\})$ with the binary function $A\times A \to A: (f,g)\mapsto f;g$. We can represent an element $f$ of $A$ as $(f(1) f(2) f(3))$. We have
+\begin{itemize}
+\item $f\mathcal{L}g$ if $f$ and $g$ have the same image;
+\item $f\mathcal{R}g$ if $f$ and $g$ have the same kernel.
+\end{itemize}
+An egg-box diagram can be drawn as follows:
+\[ \begin{array}{|c|c|c|c|c|c|c|}
+\hline
+\mathbf{(1 1 1)} & \mathbf{(2 2 2)} & \mathbf{(3 3 3)} &&& &  \\ \hline
+&& & \mathbf{(1 2 2)}, & \mathbf{(1 3 3)}, & (2 3 3), &  \\
+&& & (2 1 1)  & (3 1 1)  & (3 2 2)  &  \\ \hline
+&& & (2 1 2), & (3 1 3), & \mathbf{(3 2 3)},  &  \\
+&& & \mathbf{(1 2 1)}  & (1 3 1)  & (2 3 2)  &  \\ \hline
+&& & (2 2 1), & (3 3 1), & (3 3 2),  &  \\
+&& & (1 1 2)  & \mathbf{(1 1 3)}  & \mathbf{(2 2 3)}  &  \\ \hline
+&& &&& & \mathbf{(1 2 3)}, (2 3 1) (3 1 2)  \\
+&& &&& & (1 3 2), (2 1 3) (3 2 1)  \\ \hline
+\end{array} \]
+The bold elements are idempotents.
+\end{example}
+
+
+\begin{proposition}[Green's lemma] \label{GreensLemma}
+Let $S$ be a semigroup and $a,b,x \in S$.
+\begin{enumerate}
+\item If $ax = b$ and $a\mathcal{R}b$, then
+\begin{enumerate}
+\item $\rho_x|_{[a]_\mathcal{L}}: [a]_\mathcal{L} \to [b]_\mathcal{L}$ is a bijection;
+\item if $by = a$ for some $y\in \widetilde{S}$, then $\rho_y|_{[b]_\mathcal{L}}$ is the inverse;
+\item $\rho_x|_{[a]_\mathcal{L}}$ preserves $\mathcal{R}$-classes.
+\end{enumerate}
+\item If $xa = b$ and $a\mathcal{L}b$, then
+\begin{enumerate}
+\item $\lambda_x|_{[a]_\mathcal{R}}: [a]_\mathcal{R} \to [b]_\mathcal{R}$ is a bijection with inverse $\lambda_y|_{[b]_\mathcal{R}}$;
+\item if $yb = a$ for some $y\in \widetilde{S}$, then $\lambda_y|_{[b]_\mathcal{R}}$ is the inverse;
+\item $\lambda_x|_{[a]_\mathcal{R}}$ preserves $\mathcal{L}$-classes.
+\end{enumerate} 
+\end{enumerate}
+In particular
+\begin{enumerate}
+\item if $a\mathcal{R}b$, then there exists $x\in \widetilde{S}$ such that $ax = b$ and thus $|[a]_\mathcal{L}| = |[b]_\mathcal{L}|$;
+\item if $a\mathcal{L}b$, then there exists $x\in \widetilde{S}$ such that $xa = b$ and thus $|[a]_\mathcal{R}| = |[b]_\mathcal{R}|$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The function $\rho_x$ is well-defined: let $u\in [a]_\mathcal{L}$ so that $u = va$ for some $v\in \widetilde{S}$. Then $\rho_x(u) = vax = vb \in [b]_\mathcal{L}$.
+
+Because $a\mathcal{R}b$, we can always find a $y\in \widetilde{S}$ such that $by = a$. The function $\rho_y|_{[b]_\mathcal{L}}$ is clearly the inverse: $\rho_y(\rho_x(u)) = \rho_y(vb) = vby = va = u$. This shows that $\rho_x$ is bijective.
+
+It is clear that $\rho_x$ preserves $\mathcal{R}$-classes, because it operates on the right.
+
+The arguments for $\lambda_x$ and $\lambda_y$ are completely analogous.
+\end{proof}
+\begin{corollary}
+Let $S$ be a semigroup and $a,b\in S$ such that $a\mathcal{D}b$, then $|[a]_\mathcal{H}| = |[b]_\mathcal{H}|$.
+\end{corollary}
+\begin{proof}
+If $a(\mathcal{L};\mathcal{R})b$, then there exists a $c\in S$ such that $c = sa$ and $b = ct$. Then $\lambda_s\circ \rho_t$ is the required bijection.
+\end{proof}
+
+\begin{theorem}[Green's theorem]
+Let $S$ be a semigroup and $H$ an $\mathcal{H}$-class in $S$. Then either
+\begin{enumerate}
+\item $H^2\perp H$; or
+\item $H^2 = H$ and each $x\in H$ is invertible.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Suppose $H^2\cap H \neq \emptyset$, then there exist $a,b\in H$ such that $ab = c\in H$. By the Green's lemma \ref{GreensLemma} we have that $\rho_b:H\to H$ and $\lambda_a: H\to H$ are bijections.
+
+Then for all $h\in H$, $\rho_b(h) = hb \in H$. Again by the Green's lemma, this means that $\lambda_h: H\to H$ is a bijection. Similarly $\rho_h: H\to H$ is a bijection for all $h$. So for all $h\in H$ we have $hH = H = Hh$. This means $H^2 = H$ and $H$ is a group by \ref{groupCriterion}.
+\end{proof}
+\begin{corollary} \label{GreensTheoremCorollary}
+Let $S$ be a semigroup and $H$ an $\mathcal{H}$-class in $S$. Then
+\begin{enumerate}
+\item if $x$ is an idempotent in $H$, then $H$ is a subgroup of $S$;
+\item no $\mathcal{H}$-class can contain more than one idempotent. 
+\end{enumerate}
+\end{corollary}
+
+\subsubsection{Regular elements $\mathcal{D}$-classes}
+\begin{definition}
+Let $S$ be a semigroup. An element $a\in S$ is called \udef{regular} if there exists $x\in S$ such that $axa = a$.
+\end{definition}
+
+\begin{proposition} 
+Let $S$ be a semigroup. If $a\in S$ is regular, then every element in $[a]_{\mathcal{D}}$ is regular.
+\end{proposition}
+So it makes sense to call a $\mathcal{D}$-class \udef{regular} if it consists of regular elements and \udef{irregular} otherwise.
+\begin{corollary}
+If there is an idempotent $x\in [a]_{\mathcal{D}}$, then $[a]_{\mathcal{D}}$ is regular.
+\end{corollary}
+\begin{proof}
+An idempotent is regular: $x = xx = x(xx) = xxx$.
+\end{proof}
+
+\begin{proposition} \label{idempotentsInGreensClasses}
+Let $S$ be a semigroup.
+\begin{enumerate}
+\item If $x\in S$ is an idempotent, then $x$ is a left identity for $[x]_{\mathcal{R}}$ and $x$ is a right identity for $[x]_{\mathcal{L}}$.
+\item If $a$ is regular with $axa = a$, then $xa$ and $ax$ are idempotents.
+\item If $a$ is regular with $axa = a$, then $xa\mathcal{L}a$ and $ax\mathcal{R}a$.
+\item In a regular $\mathcal{D}$-class each $\mathcal{L}$-class and each $\mathcal{R}$-class contains at least one idempotent.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Let $a\in [x]_\mathcal{R}$. Then there exists a $y\in \widetilde{S}$ such that $a = xy$ and thus $xa = xxy = xy = a$. The claim of right-identity is similar.
+
+(2) We have $(xa)(xa) = x(axa) = xa$ and $(ax)(ax) = (axa)x = ax$.
+
+(3) If $a$ is regular with $axa = a$, then $xa$ is idempotent: $(xa)(xa) = x(axa) = xa$ and $xa \in [a]_{\mathcal{L}}$:
+\[ xa = (xa) \qquad a(xa) = a \]
+Similarly $ax \in [a]_{\mathcal{R}}$ and is idempotent.
+
+(4) Let $[a]_\mathcal{L}$ be an $\mathcal{L}$-class in a regular $\mathcal{D}$-class. By regularity there exists an $x\in S$ such that $axa = a$. From (2) and (3), we have that $[a]_\mathcal{L}$ contains the idempotent $xa$ and $[a]_\mathcal{R}$ the idempotent $ax$.
+\end{proof}
+
+\begin{proposition}
+Let $a,b \in S$ such that $a\mathcal{D}b$. Then $ab\in [a]_{\mathcal{R}}\cap [b]_{\mathcal{L}}$ \textup{if and only if} $[b]_{\mathcal{R}}\cap [a]_{\mathcal{L}}$ contains an idempotent.
+\end{proposition}
+\begin{proof}
+Suppose $[b]_{\mathcal{R}}\cap [a]_{\mathcal{L}}$ contains an idempotent $x$. Then $xb = b$ by \ref{idempotentsInGreensClasses}. Then $\rho_b$ maps $[x]_{\mathcal{L}} = [a]_{\mathcal{L}}$ to $[b]_{\mathcal{L}}$ by \ref{GreensLemma}. It preserves $\mathcal{R}$-classes, so in particular it maps $[a]_{\mathcal{H}}$ to $[a]_{\mathcal{R}}\cap [b]_{\mathcal{L}}$. Thus $ab = \rho_b(a) \in [a]_{\mathcal{R}}\cap [b]_{\mathcal{L}}$.
+
+Now assume $ab\in [a]_{\mathcal{R}}\cap [b]_{\mathcal{L}}$. Then there exists a $c\in \widetilde{S}$ such that $abc = a$. By \ref{GreensLemma} this means $\rho_c\in ([ab]_{\mathcal{L}}\to [a]_{\mathcal{L}}) = ([b]_{\mathcal{L}}\to [a]_{\mathcal{L}})$. In particular this restricts to $([b]_{\mathcal{H}}\to [b]_{\mathcal{R}}\cap[a]_{\mathcal{L}})$. Because $ab = (ab)$, $\rho_b$ is the inverse of $\rho_c$ by the same lemma.
+
+So $\rho_c(b) = bc \in [b]_{\mathcal{R}}\cap[a]_{\mathcal{L}}$ and bc is idempotent because
+\[ bcbc = (\rho_c\circ\rho_b\circ\rho_c) (b) = \rho_c(b) = bc. \]
+\end{proof}
+
+\subsubsection{Generalised inverses}
+\begin{definition}
+Let $S$ be a semigroup and $a\in S$. We call $a'$ a \udef{(generalised) inverse} of $a$ if
+\[ aa'a = a, \qquad a'aa' = a'. \]
+\end{definition}
+
+\begin{lemma}
+Let $S$ be a semigroup and $a\in S$. Then $a$ has a generalised inverse \textup{if and only if} it is regular.
+\end{lemma}
+\begin{proof}
+Clearly every element with a generalised inverse is regular. Conversely, assume $a$ regular with $axa = a$. Then $a' = xax$ is a generalised inverse of $a$.
+\end{proof}
+
+\begin{proposition} \label{inversesIdempotentsDclass}
+Let $a$ be an element of a regular $\mathcal{D}$-class $D$ in a semigroup $S$.
+\begin{enumerate}
+\item If $a'$ is a generalised inverse of $a$, then
+\begin{enumerate}
+\item $a' \in D$;
+\item $[aa']_\mathcal{H} = [a]_\mathcal{R}\cap [a']_\mathcal{L}$;
+\item $[a'a]_\mathcal{H} = [a']_\mathcal{R}\cap [a]_\mathcal{L}$.
+\end{enumerate}
+\item If $b\in S$ is such that $[a]_\mathcal{R}\cap [b]_\mathcal{L}$ contains an idempotent $x$ and $[b]_\mathcal{R}\cap [a]_\mathcal{L}$ contains an idempotent $y$, then $[b]_\mathcal{H}$ contains a generalised inverse $a'$ of $a$ such that $aa' = x$ and $a'a = y$.
+\item No $\mathcal{H}$-class contains more than one generalised inverse of $a$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Firstly notice that $[a]_\mathcal{R}\cap [a']_\mathcal{L}$ is an $\mathcal{H}$-class. Also $a\mathcal{R}aa'$ and $a'\mathcal{L}aa'$ by \ref{idempotentsInGreensClasses}.
+
+(2) From $a\mathcal{R}x$, we deduce that there exists a $u\in\widetilde{S}$ such that $au = x$. 
+
+Set $a' = yux$. Then, using that $x$ is a left-identity on $[a]_\mathcal{R}$ and $y$ a right-identity on $[a]_\mathcal{L}$ by \ref{idempotentsInGreensClasses},
+\begin{align*}
+aa'a &= a(yux)a = (ay)u(xa) = aua = (au)a = xa = a \\
+a'aa' &= (yux)a(yux) = (yu)(xay)(ux) = (yu)a(ux) = (yu)(au)x = yux^2 = yux = a' \\
+aa' &= a(yux) = ((ay)u)x = (au)x = x^2 = x.
+\end{align*}
+For the last equality, we need that $a\mathcal{L}y$ implies the existence of $v\in \widetilde{S}$ such that $va = y$. Then
+\[ a'a = (yux)a = (va)u(xa) = (va)(ua) = v(au)a = v(xa) = va = y. \]
+We now just need to show that $a' \in [b]_\mathcal{H}$. By \ref{idempotentsInGreensClasses} we have $a'\in [aa']_{\mathcal{L}}$ and $a'\in [a'a]_{\mathcal{R}}$, so
+\[ a' \in [aa']_{\mathcal{L}} \cap [a'a]_{\mathcal{R}} = [x]_{\mathcal{L}} \cap [y]_{\mathcal{R}} = [b]_{\mathcal{L}} \cap [b]_{\mathcal{R}} = [b]_\mathcal{H}. \]
+
+(3) Suppose $[b]_\mathcal{H}$ is an $\mathcal{H}$-class containing two generalised inverses $a_1', a_2'$ of $a$. Then $aa'_1 = aa'_2$ and $a'_1a = a'_2a$ by \ref{GreensTheoremCorollary} and thus
+\[ a'_1 = a'_1(aa'_1) = a'_1(aa'_2) = (a'_2a)a'_2 = a'_2. \]
+\end{proof}
+\begin{corollary} \label{corollaryInversesIdempotentsDclass}
+Let $S$ be a semigroup and $x,y\in S$ idempotents. Then $x\mathcal{D}y$ \textup{if and only if} we can write $x = aa'$ and $y = a'a$ for some $a\in [x]_\mathcal{R}\cap [y]_\mathcal{L}$ and $a'\in [y]_\mathcal{R}\cap [x]_\mathcal{L}$ that are generalised inverses of each other.
+\end{corollary}
+\begin{proof}
+We have $x\mathcal{D}y$ iff there exist $a,b\in S$ such that $x\mathcal{R}a$, $a\mathcal{L}y$ and $x\mathcal{L}b$, $b\mathcal{R}y$. This means $x\in [a]_\mathcal{R}\cap [b]_\mathcal{L}$ and $y\in [b]_\mathcal{R}\cap [a]_\mathcal{L}$. So by the proposition we can find an $a'\in [b]_\mathcal{H}$ that satisfies the requirements.
+\end{proof}
+
+\begin{proposition}
+Let $S$ be a semigroup and let $H,K$ be $\mathcal{H}$-classes that are subgroups and members of the same $\mathcal{D}$-class. Then $H$ and $K$ are isomorphic groups.
+\end{proposition}
+\begin{proof}
+Let $e$ be the idempotent (and thus identity) in $H$ and $f$ the identity in $K$. By \ref{corollaryInversesIdempotentsDclass} we have mutually inverse $a\in [x]_\mathcal{R}\cap [y]_\mathcal{L}$ and $a'\in [y]_\mathcal{R}\cap [x]_\mathcal{L}$ such that $x = aa'$ and $y = a'a$.
+
+We claim $\lambda_{a'}\circ\rho_{a}|_H$ is an isomorphism $H\to K$. Indeed it is bijective by \ref{GreensLemma}. We need to show that it is a homomorphism: take $u,v\in H$
+\[ (\lambda_{a'}\circ\rho_{a})(u)(\lambda_{a'}\circ\rho_{a})(v) = a'uaa'va = a'uxva = a'uva = (\lambda_{a'}\circ\rho_{a})(uv), \]
+where we have used that $x$ is the identity for $H$.
+\end{proof}
+
+\subsubsection{Regular semigroups}
+\begin{definition}
+A regular semigroup is a semigroup where every element is regular.
+\end{definition}
+
+\begin{lemma}
+Let $S$ be a regular semigroup. Then for all $a\in S$
+\[ \widetilde{S}a = Sa, \qquad  a\widetilde{S} = aS \qquad\text{and}\qquad \widetilde{S}a\widetilde{S} = SaS. \]
+\end{lemma}
+So we can drop all mention of $\widetilde{S}$ when working with ideal. In particular
+\begin{itemize}
+\item $a\mathcal{L}b$ if and only if $Sa = Sb$;
+\item $a\mathcal{R}b$ if and only if $aS = bS$;
+\item $a\mathcal{J}b$ if and only if $SaS = SbS$.
+\end{itemize}
+
 
 \subsubsection{Regular elements}
 \begin{definition}
@@ -2875,7 +3257,7 @@ Let $A$ be a class, $f: A\times A \to A$ a binary function and $x, y\in A$. We c
 Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$ a regular element with $x = f(f(x, y), x)$. Then
 \begin{enumerate}
 \item $f(x,y)$ and $f(y,x)$ are idempotent;
-\item $f(y,x) \mathcal{L} x$ and $x \mathcal{R} f(y,x)$.
+\item $f(y,x) \greensL x$ and $x \greensR f(y,x)$.
 \end{enumerate}
 \end{lemma}
 
