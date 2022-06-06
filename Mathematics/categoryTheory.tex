@@ -8,45 +8,42 @@
 \begin{definition}
 A \udef{category} $\cat{C}$ consists of
 \begin{enumerate}
-\item a collection $\ob(\cat{C})$ of \udef{objects} $X,Y,Z,\ldots$
-\item a collection $\mor(\cat{C})$ of \udef{morphisms} or \udef{arrows} $f,g,h,\ldots$
-\end{enumerate}
-such that
-\begin{itemize}
-\item each morphism $f$ has an associated \udef{domain} object $\dom(f)$ and \udef{codomain} object $\codom(f)$; we write
+\item a class, denoted $\ob(\cat{C})$, of \udef{objects} $X,Y,Z,\ldots$
+\item a class, denoted $\mor(\cat{C})$, of \udef{morphisms} or \udef{arrows} $f,g,h,\ldots$
+\item a partial binary function $\circ: \mor(\cat{C}) \times \mor(\cat{C}) \not\to \mor(\cat{C})$ of \udef{composition}
+\item functions $\dom: \mor(\cat{C}) \to \ob(\cat{C})$ and $\codom: \mor(\cat{C}) \to \ob(\cat{C})$; we call $\dom(f)$ the \udef{domain} and $\codom(f)$ the \udef{codomain} of the morphism $f$; we write
 \[ f: X \to Y \qquad\text{or}\qquad \begin{tikzcd}
 X \rar{f} & Y
 \end{tikzcd}  \]
 to mean $f$ is a morphism with $\dom(f) = X$ and $\codom(f) = Y$;
-\item each object has a designated \udef{identity morphism} $\id_X: X\to X$;
-\item for any pair $f,g$ such that $\codom(f) = \dom(g)$, there exists a \udef{composite morphism}
+\item a function $\id: \ob(\cat{C}) \to \mor(\cat{C}): X\mapsto (\id_X: X\to X)$, whose images are called \udef{identity morphisms};
+\end{enumerate}
+such that
+\begin{itemize}
+\item $g\circ f$ is defined \emph{if and only if} $\codom(f) = \dom(g)$; in this case
 \[ g\circ f: \dom(f) \to \codom(g); \]
-we call such pairs \udef{composable}; any sequence of morphisms may be called composable if each morphism is composable with its neighbours;
-\end{itemize}
-subject to the axioms
-\begin{itemize}[leftmargin=3cm]
-\item[\textbf{Identity}] for any $f: X\to Y$, the composites $\id_Y\circ f = f\circ \id_X = f$;
-\item[\textbf{Associativity}] for any composable triple $f,g,h$ we have
-\[ h\circ (g\circ f) = (h\circ g)\circ f \eqdef h\circ g \circ f. \]
+\item for any $f: X\to Y$, we have $\id_Y\circ f = f\circ \id_X = f$;
+\item $\circ$ is associative.
 \end{itemize}
 We also write $gf$ or $g\cdot f$ instead of $gf$.
 \end{definition}
 
 Two arrows are called \udef{parallel} if they have the same domain and codomain.
 
-The notation heavily suggests that we can think of the objects as sets and the morphisms as functions. Such categories do indeed constitute the main examples of categories. They are called \udef{concrete categories}. The other categories are \udef{abstract categories}.
-
-TODO: concrete categories are categories with a faithful functor to $\cat{Set}$?
-
 \begin{example}
-Some examples of concrete categories are
+The terminology suggests that we can think of the objects as sets and the morphisms as functions. We will indeed often consider categories where the objects are sets (potentially with extra structure) and the morphisms are (a certain class of) functions (e.g.\ structure preserving functions).
+
+Some examples of such categories are
 \begin{itemize}
 \item All sets are objects in the category $\cat{Set}$ and all functions are morphisms.
 \item The category $\cat{Poset}$ has partially ordered sets as objects and order-preserving functions as morphisms.
+\item A set may be identified with the set of its singleton subsets. One way to make this a category is by considering only the identity functions of the form
+\[ \id_{\{a\}}: \{a\} \to \{a\}: a\mapsto a. \]
+A category is \udef{discrete} if every morphism is an identity.
 \end{itemize}
-Some examples of abstract categories are
+
+There are also categories that are not of this type:
 \begin{itemize}
-\item A set may be regarded as a category in which the elements of the set define the objects and the only morphisms are the required identities. A category is \udef{discrete} if every morphism is an identity.
 \item A preorder $(P, \precsim)$ can be regarded as a category. The elements of $P$ are the objects of the category and for $x,y\in P$ there exists a unique morphism $x\to y$ if and only if $x\precsim y$. Transitivity implies the existence of composites and reflexivity the existence of identity morphisms.
 \item In particular (TODO: Von Neumann??) ordinals are preorders and thus define categories. We use the notation $\mathbb{0}, \mathbb{1}, \mathbb{2}, \ldots$ for the categories defined by $0,1,2,\ldots$. Also $\bbomega$ is the category defined by $\omega$.
 \end{itemize}
@@ -77,49 +74,34 @@ We can define the notion of category without referencing objects, as each object
 \upshape
 A category $\cat{C}$ consists of
 \begin{enumerate}
-\item a collection $\mor(\cat{C})$ of arrows $f,g,h,\ldots$
-\item a collection of pairs of arrows, called \udef{composable pairs}
-\item an operation assigning each composable pair to an arrow
-\[ (g,f) \mapsto gf \]
-if $(g,f)$ is a composable pair, we say $gf$ is defined.
+\item a class, denoted $\mor(\cat{C})$, of arrows $f,g,h,\ldots$
+\item a subclass, denoted $\id(\cat{C})\subseteq \mor(\cat{C})$, of identity arrows;
+\item a partial binary function $\circ: \mor(\cat{C}) \times \mor(\cat{C}) \not\to \mor(\cat{C})$;
 \end{enumerate}
-We call an arrow $I$ and \udef{identity arrow} if for all arrows $f$ in $\cat{C}$,
+such that
+\begin{itemize}
+\item for all $I\in \id(\cat{C})$
 \begin{align*}
 If &= f & &\text{whenever $If$ is defined} \\
-fI &= f & &\text{whenever $fI$ is defined.}
+fI &= f & &\text{whenever $fI$ is defined;}
 \end{align*}
-The category must then satisfy the axioms
-\begin{itemize}[leftmargin=3cm]
-\item[\textbf{Associativity}] for any composable triple $f,g,h$ we have
-\begin{align*}
-\text{$hg$ and $gf$ are defined} &\iff \text{$hg$ and $(hg)f$ are defined} \\ &\iff \text{$gf$ and $h(gf)$ are defined}
-\end{align*}
-and if this holds, then
-\[ h(gf) = (hg)f \eqdef hgf; \]
-\item[\textbf{Identity}] for each arrow $f$ there exist identity arrows $I,I'$ in $\cat{C}$ such that $If$ and $fI'$ are defined.
+\item for each arrow there exist identity arrows $I,I'$ such that $If$ and $fI'$ exist;
+\item $\circ$ is associative.
 \end{itemize}
 \end{lemma}
+\begin{proof}
+Clearly a category with objects yields a category in this sense, by just forgetting about the objects.
 
+Conversely, given such an ``arrows only'' category $\cat{C}$, we may identify $\ob(\cat{C}) = \id{\cat{C}}$. For any $f\in \mor(\cat{C})$, there is in fact a unique identity arrow $I$ such that $f = If$. Indeed, assume there were two such arrows, $I_1$ and $I_2$, then $f = I_1f = I_1I_2f$, so $I_1I_2$ is defined and by definition of identity arrow, we must have $I_1 = I_1I_2 = I_2$. Similarly there is a unique identity arrow such that $fI'$ exists. We set $\dom(f) = I$ and $\codom(f) = I'$. The rest is easy to verify.
+\end{proof}
 
-\subsection{Questions of size: are categories graphs?}
-Based on all this we may think a category is a special type of graph, and this would be true if it were not for the question of size. A graph has a \textit{set} of points and a \textit{set} of edges. The collections of objects and morphisms in a category do \emph{not} need to be sets. Indeed the collection of objects in the category $\cat{Set}$ is the collection of all sets, which is not a set by \ref{setOfSets}.
-
+\subsection{Hom sets and sizes of categories}
 \begin{definition}
 A category $\cat{C}$ is \udef{small} if its collection of morphisms is a set.
 
 A category $\cat{C}$ is \udef{locally small} for any objects $X,Y$ if the collection of morphisms from $X$ to $Y$ is a set. This set is called a \udef{hom-set} and is denoted $\Hom(X,Y)$ or $\cat{C}(X,Y)$.
 \end{definition}
 In view of \ref{arrowsOnlyDefinition}, a small category has only a set of objects.
-
-\begin{lemma}
-If a category $\cat{C}$ is small, then
-\begin{align*}
-\dom&: \mor(\cat{C}) \to \ob(\cat{C}) \\
-\codom&: \mor(\cat{C}) \to \ob(\cat{C}) \\
-\id&: \ob(\cat{C}) \to \mor(\cat{C}): X\mapsto \id_X
-\end{align*}
-are functions.
-\end{lemma}
 
 \begin{lemma}
 A small category
@@ -137,28 +119,22 @@ A category with at most one morphism in each category is called \udef{thin}.
 \subsection{Duality}
 Intuitively category-theoretic duality is obtained by ``flipping all the arrows''.
 \begin{definition}
-Let $\cat{C}$ be a category. The \udef{opposite category} $\cat{C^{op}}$ has
-\begin{enumerate}
-\item the objects of $\cat{C}$ as objects;
-\item a morphism $f^\text{o}: Y\to X$ for each morphism $f:X\to Y$ in $\cat{C}$.
-\end{enumerate}
-And
+Let $\cat{C}$ be a category. The \udef{opposite category} $\cat{C^{op}}$ is obtained by
 \begin{itemize}
-\item for each object $X$, $\id_X^\text{o}$ serves as the identity $\id_X$ in $\cat{C^{op}}$;
-\item for all composable $f,g$ in $\mor(\cat{C})$, $(fg)^\text{o} = g^\text{o}f^\text{o}$.
+\item replacing the composition $\circ$ with its dual $\circ^d$;
+\item swapping the domain and codomain functions
+\[ \dom_{\cat{C^{op}}} \defeq \codom_{\cat{C}} \qquad \text{and} \qquad \codom_{\cat{C^{op}}} = \dom_{\cat{C}}.  \]
 \end{itemize}
+In particular $\ob(\cat{C}) = \ob(\cat{C^{op}})$ and $\mor(\cat{C}) = \mor(\cat{C^{op}})$.
 \end{definition}
-It is easy to verify that the opposite category is indeed a category.
+As we often suppress the composition $\circ$, and both the original and dual category have the same objects, it may sometimes be unclear in which category we are working. We then may write $f^o$ the emphasis that we are working in the dual category.
 
 \begin{lemma}
-The category $(\cat{C^{op})^{op}}$ is again the category $\cat{C}$.
+The category $(\cat{C}^{op})^{op}$ is again the category $\cat{C}$.
 \end{lemma}
 
-\begin{lemma}
-Let $f,g$ be morphisms, then $f = g \iff f^o = g^o$.
-\end{lemma}
 
-A statement about the category $\cat{C^{op}}$ can often be interpreted as a statement about $\cat{C}$. This is referred to as the ``dual statement''. In other words: a statement in $\cat{C}$is true if and only if the dual statement is true in $\cat{C^{op}}$.
+A statement about the category $\cat{C^{op}}$ can often be interpreted as a statement about $\cat{C}$. This is referred to as the ``dual statement''. In other words: a statement in $\cat{C}$ is true if and only if the dual statement is true in $\cat{C^{op}}$.
 
 If we prove that something is true in a collection of categories including $\cat{C}$ and $\cat{C^{op}}$, we have in effect proven both the statement and the dual statement. We then say the second follows from the first by duality. For an example see \ref{singleSplitImpliesDoubleSplit} and \ref{monicEpicCompositions}.
 
@@ -200,6 +176,8 @@ Let $\cat{C}$ be a category.
 \end{itemize}
 \end{definition}
 
+\subsubsection{Slice and comma categories}
+
 \subsubsection{Product categories}
 \begin{definition}
 The \udef{product} $\cat{C}\times \cat{D}$ of categories $\cat{C}$ and $\cat{D}$  is a category consisting of
@@ -216,27 +194,43 @@ Composition and identities are defined component-wise.
 \begin{definition}
 A \udef{(covariant) functor} $F:\cat{C}\to\cat{D}$ consists of
 \begin{enumerate}
-\item an object $Fc$ in $\cat{D}$ for each $c\in C$;
-\item a morphism $Ff: Fc\to Fc'$ for each morphism $f:c\to c'$ in $\cat{C}$
+\item a function $F: \ob(\cat{C}) \to \ob(\cat{D})$;
+\item a function $F: \mor(\cat{C}) \to \mor(\cat{D})$;
 \end{enumerate}
 satisfying the functorial properties:
 \begin{itemize}
-\item for any composable pair $g,f$ in $\cat{C}$, $Fg\circ Ff = F(g\circ f)$;
-\item for each object $c$ in $\cat{C}$, $F(\id_c) = \id_{Fc}$.
+\item $F(f: a\to b) = F(f): F(a) \to F(b)$;
+\item for any composable pair $g,f$ in $\cat{C}$, $F(g\circ f) = F(g)\circ F(f)$;
+\item for each object $c$ in $\cat{C}$, $F(\id_c) = \id_{F(c)}$.
 \end{itemize}
-A \udef{contravariant functor} $F:\cat{C}\to\cat{D}$ is similar, except
-\begin{enumerate}
-\item $f:c\to c'$ maps to $Ff: Fc'\to Fc$
-\item if $g,f$ are composable, then $Ff \circ Fg = F(g\circ f)$.
-\end{enumerate}
+A \udef{contravariant functor} $F:\cat{C}\to\cat{D}$ is similar, except it satisfies
+\begin{itemize}
+\item $F(f: a\to b) = F(f): F(b) \to F(a)$;
+\item for any composable pair $g,f$ in $\cat{C}$, $F(g\circ f) = F(f)\circ F(g)$;
+\item for each object $c$ in $\cat{C}$, $F(\id_c) = \id_{F(c)}$.
+\end{itemize}
 An \udef{endofunctor} is a functor between a category and itself.
 \end{definition}
-Functors between small categories are functions.
+
+\begin{lemma}
+The composition of two contravariant functors is covariant.
+\end{lemma}
+
+\begin{lemma}
+Let $\cat{C}$ be a category. The functions
+\begin{itemize}
+\item $\id_{\ob(\cat{C})} = \id_{\ob(\cat{C^{op}})}$;
+\item $\id_{\mor(\cat{C})} = \id_{\mor(\cat{C^{op}})}$
+\end{itemize}
+form a contravariant functor $\operatorname{OP}: \cat{C} \to \cat{C^{op}}$.
+
+We can compose any contravariant functor $F: \cat{C} \to \cat{D}$ with the functor $\operatorname{OP}$ to obtain a covariant functor $F: \cat{C} \to \cat{D^{op}}$ or $F: \cat{C^{op}} \to \cat{D}$.
+\end{lemma}
 
 \begin{example}
 Examples of covariant functors:
 \begin{itemize}
-\item For any category $\cat{C}$, there is an \udef{identity functor} $I_\cat{C}$ that maps objects and morphisms to themselves.
+\item For any category $\cat{C}$, there is an \udef{identity functor} $\id_\cat{C}$ that maps objects and morphisms to themselves.
 \item There is an endofunctor $\mathcal{P}:\cat{Set} \to \cat{Set}$ that maps sets to their powerset and functions $f:A\to B$ to their image function $f[\cdot]:\mathcal{P}(A)\to \mathcal{P}(B)$.
 \item \udef{Forgetful functors} are functors from the category of some type of structured set to a category of structured set with less (or) no structure. For example, we have a forgetful functor $U: \cat{Poset} \to \cat{Set}$ that maps the cateory $\cat{Poset}$ into the category $\cat{Set}$ by forgetting the order. 
 \end{itemize}
@@ -260,6 +254,8 @@ We define $\cat{Cat}$ as the category whose objects are small categories and who
 
 We define $\cat{CAT}$ as the category whose objects are locally small categories and whose morphisms are functors between them.
 \end{definition}
+HOW DOES $\cat{CAT}$ MAKE SENSE?
+
 \begin{lemma}
 $\cat{Cat}$ is not small, but it is locally small.
 
@@ -721,6 +717,12 @@ A category $\cat{C}$ is called
 \begin{lemma}
 Every preorder category is equivalent to a poset category.
 \end{lemma}
+
+\subsection{Abstract and concrete categories}
+\begin{definition}
+A category $\cat{C}$ is called \udef{concrete} if there exists a faithful functor $F: \cat{C} \to \cat{Set}$.
+If a category is not concrete, it is called \udef{abstract}.
+\end{definition}
 
 \section{Monoidal categories}
 \begin{definition}
