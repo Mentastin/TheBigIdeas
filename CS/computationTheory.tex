@@ -1,12 +1,23 @@
 \section{Abstract machines}
 \begin{definition}
-An \udef{abstract machine} is a function $M: I\times T \to S$. Where
+An \udef{abstract machine} is a function $M: I\times T \to S$,where
 \begin{itemize}
 \item $I$ is a set of possible inputs;
 \item $T$ is a set that is supposed to index the progress of the machine; suppose it is a complete lattice;
-\item $S$ is a set of possible states of the machine.
+\item $S$ is a set of possible states of the machine;
 \end{itemize}
+such that there exists a \udef{transition function}
+\[ \mathcal{T}_M: (T\times T)\times S \to S \]
+with the property that
+\[ \forall i\in I: \forall t \geq t'\in T: \quad M(i,t) = \mathcal{T}_M(t,t'; M(i,t')). \]
+We will often work with the partial application
+\[ U_M(t,t') \defeq \mathcal{T}_M(t,t'; -), \]
+which is also called a \udef{transition function}.
+
+We call the machine \udef{serial} if $T$ is totally ordered.
 \end{definition}
+
+\url{https://en.wikipedia.org/wiki/Concurrency_(computer_science)}
 
 \subsection{Halting time and the halting problem}
 \begin{definition}
@@ -17,7 +28,16 @@ The \udef{halting time} is defined as
 It is possible that $h(i,A, M) = \top \in T$. In this case the machine never halts.
 \end{definition}
 
+TODO we want next step to depend only on previous.
+
 \subsection{Complexity}
+\subsubsection{Time complexity}
+\begin{definition}
+Let  $M: I\times T \to S$ be an abstract machine, $A \subseteq S$ a subset of accepted states and $i\in I$ an input.
+
+Then the \udef{time complexity} of $M$ with input $i$ is just the halting time $h(i,A, M)$.
+\end{definition}
+
 \subsubsection{Space complexity}
 \begin{definition}
 Let  $M: I\times T \to S$ be an abstract machine, $A \subseteq S$ a subset of accepted states and $i\in I$ an input.
@@ -26,12 +46,76 @@ Let $c_S: S\to \R^+$ be a function called the \udef{(spatial) cost function}.
 
 The \udef{space complexity} of $M$ with input $i$ is defined as
 \[ \max_{t\leq h(i,A,M)} c_S(M(i,t)). \]
-TODO: worst case, best case, average case.
 \end{definition}
 
-\subsubsection{Time complexity}
-\begin{definition}
+\subsubsection{Worst case, average case, best case}
+TODO
 
+\subsection{Building machines}
+\subsubsection{Serial algorithms}
+\begin{proposition} \label{casesMachine}
+Let $T$ be totally ordered and $\{M_j: I\times T \to S\}_{j\in 1:N}$ be a set abstract machines with transition functions $\{U_{M_j}(t,t')\}_{j\in 1:N}$. Then
+\[ M: I\times T \to S: (i,t) \mapsto \begin{cases}
+M_1(i, t) & (t \leq t_1) \\
+U_{M_2}(t, t_1)M_1(i, t_1) & (t_1\leq t \leq t_2) \\
+U_{M_3}(t, t_2)U_{M_2}(t_2, t_1)M_1(i, t_1) & (t_2\leq t \leq t_3) \\
+\hdots \\
+U_{M_{N}}(t,t_{N-1})\ldots U_{M_2}(t_2, t_1) & (t_{N-1}\leq t)
+\end{cases} \]
+for some $t_1 \leq t_2 \leq \ldots \leq t_{N-1}$.
+
+
+where (setting $s_0\defeq i$)
+\[ \forall j\in 1:N : \qquad n_j \defeq h(s_{j-1}, A_{M_{j}}, M_j) \qquad s_j \defeq M_j(s_{j-1}, n_j-n_{j-1}), \]
+is an abstract machine.
+\end{proposition}
+
+TODO: sort out!!
+
+We depict the machine in \ref{casesMachine} as
+\begin{centeredAlgorithm}
+\KwIn{i}
+$M_1$\;
+$M_2$\;
+\ldots \;
+$M_N$\;
+\end{centeredAlgorithm}
+
+The $s$ in the $j^\text{th}$ row refers to $s_{j-1}$, the last state produced in the $j^\text{th}$ row.
+
+\subsubsection{Parallel and non-deterministic algorithms}
+
+\subsubsection{Subroutines}
+TODO: what product structure??
+\begin{definition}
+Let $M: I\times T\to S$ be a serial abstract machine, where $S$ is a state space that admits a product $\otimes$. 
+If $M$ is of the form
+\begin{centeredAlgorithm}
+\KwIn{i}
+$N_1$\;
+$s\otimes R$\;
+$N_2$\;
+\end{centeredAlgorithm}
+for some serial abstract machines $N_1, R, N_2$, then we say $R$
+is a \udef{subroutine} of $M$ and $M$ \udef{calls} $R$.
+\end{definition}
+
+
+
+\subsection{Recursion}
+\begin{definition}
+Let $M: I\times \N\to S$ be an abstract machine, where $S$ is a state space that admits a product $\otimes$. Then $M$ is called \udef{recursive} if there exists an inclusion $\iota: I\hookrightarrow S$ and machine $M': S\times \N \to S: $
+
+
+
+
+it is of the form, using the terminology of \ref{casesMachine},
+\[ M: I\times \N\to S: (i,n) \mapsto \begin{cases}
+N_1(i,n) & (n \leq h(i,A_{N_1},N_1) \eqdef n_1) \qquad [s_1 \defeq N_1(i,h(i,A_{N_1},N_1))] \\
+s_1 \otimes M(s_1, n - n_1) & (n_1 \leq n \leq n_1 + h(s_1,A_M,M) \eqdef n_2)  \qquad [s_2 \defeq M(s_1,h(s_1,A_{M},M))]  \\
+N_2(s_2, n - n_2) & (n_2 \leq n \leq h(N_2(s_2, A_{N_2}, N_2)) \eqdef n_3) \qquad [s_3 \defeq N_2(s_2,h(s_2,A_{N_2},N_2))] \\
+a\otimes s_3 & (n_3 \leq n)
+\end{cases}  \]
 \end{definition}
 
 \section{Automata}
@@ -47,9 +131,8 @@ An \udef{automaton} is an abstract machine $M: I\times T \to S$ such that
 \end{itemize}
 \end{itemize}
 We also fix a set of accepted states $A\subseteq S$.
-
-
 \end{definition}
+Note that each successive transitition function call receives the next letter from the input word.
 
 \section{Models of computation}
 Stack machine (0-operand machine)
