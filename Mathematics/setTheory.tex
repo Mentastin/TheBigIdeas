@@ -3118,7 +3118,7 @@ Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, 
 
 
 \subsubsection{Egg-box diagrams}
-\begin{proposition}
+\begin{proposition} \label{greensDequivalence}
 The relation $\greensD$ is an equivalence relation.
 \end{proposition}
 This is equivalent to $\greensL;\greensR = \greensR;\greensL$ by \ref{commutingEquivalenceRelations}. 
@@ -3135,7 +3135,7 @@ y' \ar[u, maps to, shift left, "\rho_d"] \ar[r, maps to, shift left, "\lambda_a"
 for some $y' \in A$. Thus $x(\greensR;\greensL)y$. The other inclusion is similar.
 \end{proof}
 
-From \ref{commutingEquivalenceRelations} we also know that the $\greensL,\greensR$-egg-box diagram decomposes into blocks, which are $\greensD$-equivalence classes. The cells are $\greensH$-equivalence classes.
+From \ref{commutingEquivalenceRelations} we also know that the $\greensL,\greensR$-egg-box diagram decomposes into blocks, which are $\greensD$-equivalence classes. The columns are $\greensL$-equivalence classes, the rows are $\greensR$-equivalence classes, and the cells are $\greensH$-equivalence classes.
 
 \begin{example}
 Let $A = (\{1,2,3\} \to \{1,2,3\})$ with the binary function $A\times A \to A: (f,g)\mapsto f;g$. We can represent an element $f$ of $A$ as $(f(1) f(2) f(3))$. We have
@@ -3198,15 +3198,28 @@ If $x'\in [x]_\greensH$, then $\lambda_a(x')\greensL \lambda_a(x) = y$ by \ref{l
 
 Point (2) is dual.
 \end{proof}
-\begin{corollary}
-Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, y\in A$ such that $x\greensD y$. Then $|[x]_\greensH| = |[y]_\greensH|$.
+\begin{corollary} \label{greensDisomorphism}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x, y\in A$ such that $x\greensD y$. Then there exist $a,b,c,d\in \widetilde{A}$ such that
+\[ \lambda_a\circ\rho_b|_{[x]_\greensH}: [x]_\greensH \to [y]_\greensH \qquad \text{is a bijection with inverse} \qquad \lambda_c\circ \rho_d|_{[y]_\greensH}: [y]_\greensH \to [x]_\greensH. \]
 \end{corollary}
 \begin{proof}
-If $x(\greensL ;\greensR)y$, then there exists a $z\in A$ and $a,b\in\widetilde{A}$ such that $z = f(a,x)$ and $y = f(z, b) = f(f(a,x), b)$. Then $\lambda_a\circ \rho_b$ is the required bijection $[x]_\greensH \to [z]_\greensH \to [y]_\greensH$.
+There exists a $z\in A$ such that $x\greensL z$ and $z\greensR y$. We then just compose the bijections in Green's lemma, keeping in mind that $\lambda$ and $\rho$ commute.
+\end{proof}
+\begin{corollary}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x\in A$. If $x$ is an idempotent, then
+\[ \lambda_x|_{[x]_\greensR} = \id_{[x]_\greensR} \qquad \text{and} \qquad \rho_x|_{[x]_\greensL} = \id_{[x]_\greensL}. \]
+Thus $x$ is a left identity for $[x]_\greensR$ and a right identity for $[x]_\greensL$.
+\end{corollary}
+\begin{proof}
+Take $y\in [x]_\greensR$. Then there exist $a,b\in \widetilde{A}$ such that $\begin{tikzcd}
+x \ar[r, maps to, shift left, "\rho_a"] & y \ar[l, maps to, shift left, "\rho_b"]
+\end{tikzcd}$. Then we have
+\[ xy = xxb = xb = y. \]
+The other claim is dual.
 \end{proof}
 
 \begin{theorem}[Green's theorem]
-Let $S$ be a semigroup and $H$ an $\mathcal{H}$-class in $S$. Then either
+Let $f$ be an associative binary function on $A$ and $H$ an $\mathcal{H}$-class in $A$. Then either
 \begin{enumerate}
 \item $H^2\perp H$; or
 \item $H^2 = H$, $f|_{H\times H}$ has an identity and each $x\in H$ is invertible.
@@ -3218,7 +3231,7 @@ Suppose $H^2\cap H \neq \emptyset$, then there exist $a,b\in H$ such that $ab = 
 Then for all $h\in H$, $\rho_b(h) = hb \in H$. Again by the Green's lemma, this means that $\lambda_h: H\to H$ is a bijection. Similarly $\rho_h: H\to H$ is a bijection for all $h$. So for all $h\in H$ we have $hH = H = Hh$. The result follows by \ref{invertibilityFromPrincipalIdeals}.
 \end{proof}
 \begin{corollary} \label{GreensTheoremCorollary}
-Let $S$ be a semigroup and $H$ an $\mathcal{H}$-class in $S$. Then
+Let $f$ be an associative binary function on $A$ and $H$ an $\mathcal{H}$-class in $A$.Then
 \begin{enumerate}
 \item if $x$ is an idempotent in $H$, then we have the second case;
 \item no $\mathcal{H}$-class can contain more than one idempotent. 
@@ -3234,27 +3247,15 @@ Let $A$ be a class, $f: A\times A \to A$ a binary function and $x, y\in A$. We c
 \end{itemize}
 \end{definition}
 
-\begin{lemma}
-Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x\in A$ a regular element with $x = f(f(x, y), x)$. Then
-\begin{enumerate}
-\item $f(x,y)$ and $f(y,x)$ are idempotent;
-\item $f(y,x) \greensL x$ and $x \greensR f(y,x)$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) $f(f(x,y), f(x,y)) = f(f(f(x,y), x), y) = f(x, y)$ and $f(f(y,x), f(y,x)) = f(y, f(x, f(y,x))) = f(y,x)$.
-
-(2) Using \ref{idealAbsorption}, we have
-\[ f(A, x) = f(A, f(x,f(y,x))) \subseteq f(A, f(y,x)) \subseteq f(A,x). \]
-Thus $f(A, x) = f(A, f(y,x))$. The second part is dual.
-\end{proof}
-
 \begin{proposition} 
-Let $A$ be a class and $f: A\times A \to A$ a binary associative function. If $a\in A$ is regular, then every element in $[a]_{\greensD}$ is regular.
+Let $A$ be a class and $f: A\times A \to A$ a binary associative function. If $x\in A$ is regular, then every element in $[x]_{\greensD}$ is regular.
 \end{proposition}
 So it makes sense to call a $\greensD$-class \udef{regular} if it consists of regular elements and \udef{irregular} otherwise.
 \begin{proof}
-TODO
+Let $x$ be regular with $x = xx'x$ and $x\greensD y$. Then we have $a,b,c,d \in \widetilde{A}$ such that
+$\lambda_a\circ\rho_b|_{[x]_\greensH}: [x]_\greensH \to [y]_\greensH$ is a bijection with inverse $\lambda_c\circ \rho_d|_{[y]_\greensH}: [y]_\greensH \to [x]_\greensH$, as in \ref{greensDisomorphism}. Then we have
+\[ y = (\lambda_a\circ\rho_b)(x) = (\lambda_a\circ\rho_b)(xx'x) = axx'xb = a(\lambda_c\circ\rho_d)(y)x'(\lambda_c\circ\rho_d)(y)b = ydx'cy. \]
+So $y$ is regular.
 \end{proof}
 \begin{corollary}
 If there is an idempotent $x\in [a]_{\greensD}$, then $[a]_{\greensD}$ is regular.
@@ -3263,37 +3264,36 @@ If there is an idempotent $x\in [a]_{\greensD}$, then $[a]_{\greensD}$ is regula
 An idempotent is regular: $x = f(x,x) = f(f(x,x), x)$.
 \end{proof}
 
+\begin{proposition}
+Let $A$ be a class, $f: A\times A \to A$ an associative binary function and $x\in A$ a regular element with $x = f(f(x, y), x)$. Then
+\begin{enumerate}
+\item $f(x,y)$ and $f(y,x)$ are idempotent;
+\item $f(y,x) \greensL x$ and $x \greensR f(x, y)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We calculate
+\[ f(f(x,y), f(x,y)) = f(f(f(x,y), x), y) = f(x, y)\] and \[f(f(y,x), f(y,x)) = f(y, f(x, f(y,x))) = f(y,x). \]
 
-\begin{lemma}
+(2) Using \ref{idealAbsorption}, we have
+\[ f(A, x) = f(A, f(x,f(y,x))) \subseteq f(A, f(y,x)) \subseteq f(A,x). \]
+Thus $f(A, x) = f(A, f(y,x))$. The second part is dual.
+\end{proof}
+\begin{corollary}
+In a regular $\mathcal{D}$-class each $\mathcal{L}$-class and each $\mathcal{R}$-class contains at least one idempotent.
+\end{corollary}
+\begin{proof}
+Let $[x]_\mathcal{L}$ be an $\mathcal{L}$-class in a regular $\mathcal{D}$-class. By regularity there exists a $y\in A$ such that $xyx = x$. From the proposition, we have that $[x]_\mathcal{L}$ contains the idempotent $yx$ and $[x]_\mathcal{R}$ the idempotent $xy$.
+\end{proof}
+
+\begin{proposition}
 Let $A$ be a class, $f: A\times A \to A$ a binary function and $x\in A$. Then $x$ is regular \textup{if and only if} it has a generalised inverse.
-\end{lemma}
+\end{proposition}
 \begin{proof}
 Clearly every element with a generalised inverse is regular. Conversely, assume $x$ regular with $x = f(f(x, a), x)$. Then $y = f(f(a, x), a)$ is a generalised inverse of $x$.
 \end{proof}
 Note that we do not have that $x = f(f(x, y), x)$ implies $y = f(f(y, x), y)$.
 
-
-
-\begin{proposition} \label{idempotentsInGreensClasses}
-Let $S$ be a semigroup.
-\begin{enumerate}
-\item If $x\in S$ is an idempotent, then $x$ is a left identity for $[x]_{\mathcal{R}}$ and $x$ is a right identity for $[x]_{\mathcal{L}}$.
-\item If $a$ is regular with $axa = a$, then $xa$ and $ax$ are idempotents.
-\item If $a$ is regular with $axa = a$, then $xa\mathcal{L}a$ and $ax\mathcal{R}a$.
-\item In a regular $\mathcal{D}$-class each $\mathcal{L}$-class and each $\mathcal{R}$-class contains at least one idempotent.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Let $a\in [x]_\mathcal{R}$. Then there exists a $y\in \widetilde{S}$ such that $a = xy$ and thus $xa = xxy = xy = a$. The claim of right-identity is similar.
-
-(2) We have $(xa)(xa) = x(axa) = xa$ and $(ax)(ax) = (axa)x = ax$.
-
-(3) If $a$ is regular with $axa = a$, then $xa$ is idempotent: $(xa)(xa) = x(axa) = xa$ and $xa \in [a]_{\mathcal{L}}$:
-\[ xa = (xa) \qquad a(xa) = a \]
-Similarly $ax \in [a]_{\mathcal{R}}$ and is idempotent.
-
-(4) Let $[a]_\mathcal{L}$ be an $\mathcal{L}$-class in a regular $\mathcal{D}$-class. By regularity there exists an $x\in S$ such that $axa = a$. From (2) and (3), we have that $[a]_\mathcal{L}$ contains the idempotent $xa$ and $[a]_\mathcal{R}$ the idempotent $ax$.
-\end{proof}
 
 \begin{proposition}
 Let $a,b \in S$ such that $a\mathcal{D}b$. Then $ab\in [a]_{\mathcal{R}}\cap [b]_{\mathcal{L}}$ \textup{if and only if} $[b]_{\mathcal{R}}\cap [a]_{\mathcal{L}}$ contains an idempotent.
@@ -3307,17 +3307,6 @@ So $\rho_c(b) = bc \in [b]_{\mathcal{R}}\cap[a]_{\mathcal{L}}$ and bc is idempot
 \[ bcbc = (\rho_c\circ\rho_b\circ\rho_c) (b) = \rho_c(b) = bc. \]
 \end{proof}
 
-\begin{definition}
-Let $S$ be a semigroup and $a\in S$. We call $a'$ a \udef{(generalised) inverse} of $a$ if
-\[ aa'a = a, \qquad a'aa' = a'. \]
-\end{definition}
-
-\begin{lemma}
-Let $S$ be a semigroup and $a\in S$. Then $a$ has a generalised inverse \textup{if and only if} it is regular.
-\end{lemma}
-\begin{proof}
-Clearly every element with a generalised inverse is regular. Conversely, assume $a$ regular with $axa = a$. Then $a' = xax$ is a generalised inverse of $a$.
-\end{proof}
 
 \begin{proposition} \label{inversesIdempotentsDclass}
 Let $a$ be an element of a regular $\mathcal{D}$-class $D$ in a semigroup $S$.
@@ -3358,16 +3347,6 @@ Let $S$ be a semigroup and $x,y\in S$ idempotents. Then $x\mathcal{D}y$ \textup{
 We have $x\mathcal{D}y$ iff there exist $a,b\in S$ such that $x\mathcal{R}a$, $a\mathcal{L}y$ and $x\mathcal{L}b$, $b\mathcal{R}y$. This means $x\in [a]_\mathcal{R}\cap [b]_\mathcal{L}$ and $y\in [b]_\mathcal{R}\cap [a]_\mathcal{L}$. So by the proposition we can find an $a'\in [b]_\mathcal{H}$ that satisfies the requirements.
 \end{proof}
 
-\begin{proposition}
-Let $S$ be a semigroup and let $H,K$ be $\mathcal{H}$-classes that are subgroups and members of the same $\mathcal{D}$-class. Then $H$ and $K$ are isomorphic groups.
-\end{proposition}
-\begin{proof}
-Let $e$ be the idempotent (and thus identity) in $H$ and $f$ the identity in $K$. By \ref{corollaryInversesIdempotentsDclass} we have mutually inverse $a\in [x]_\mathcal{R}\cap [y]_\mathcal{L}$ and $a'\in [y]_\mathcal{R}\cap [x]_\mathcal{L}$ such that $x = aa'$ and $y = a'a$.
-
-We claim $\lambda_{a'}\circ\rho_{a}|_H$ is an isomorphism $H\to K$. Indeed it is bijective by \ref{GreensLemma}. We need to show that it is a homomorphism: take $u,v\in H$
-\[ (\lambda_{a'}\circ\rho_{a})(u)(\lambda_{a'}\circ\rho_{a})(v) = a'uaa'va = a'uxva = a'uva = (\lambda_{a'}\circ\rho_{a})(uv), \]
-where we have used that $x$ is the identity for $H$.
-\end{proof}
 
 
 
