@@ -23,9 +23,7 @@ We call the machine \udef{serial} if $T$ is totally ordered.
 \begin{definition}
 Let $M: I\times T \to S$ be an abstract machine, $A \subseteq S$ a subset of states called \udef{accepted states} and $i\in I$ an input.
 
-The \udef{halting time} is defined as
-\[ h(i,A, M) \defeq \inf\setbuilder{t}{M(i,t) \in A}. \]
-It is possible that $h(i,A, M) = \top \in T$. In this case the machine never halts.
+A \udef{halting time} is a minimal element of $\setbuilder{t\in T}{M(i,t) \in A}$. We denote the set of such minimal elements by $h(i, A, M)$.
 \end{definition}
 
 TODO we want next step to depend only on previous.
@@ -34,9 +32,11 @@ TODO we want next step to depend only on previous.
 \subsubsection{Time complexity}
 \begin{definition}
 Let  $M: I\times T \to S$ be an abstract machine, $A \subseteq S$ a subset of accepted states and $i\in I$ an input.
-
+ra
 Then the \udef{time complexity} of $M$ with input $i$ is just the halting time $h(i,A, M)$.
 \end{definition}
+
+TODO also a priori halting times.
 
 \subsubsection{Space complexity}
 \begin{definition}
@@ -53,35 +53,36 @@ TODO
 
 \subsection{Building machines}
 \subsubsection{Serial algorithms}
-\begin{proposition} \label{casesMachine}
-Let $T$ be totally ordered and $\{M_j: I\times T \to S\}_{j\in 1:N}$ be a set abstract machines with transition functions $\{U_{M_j}(t,t')\}_{j\in 1:N}$. Then
-\[ M: I\times T \to S: (i,t) \mapsto \begin{cases}
-M_1(i, t) & (t \leq t_1) \\
-U_{M_2}(t, t_1)M_1(i, t_1) & (t_1\leq t \leq t_2) \\
-U_{M_3}(t, t_2)U_{M_2}(t_2, t_1)M_1(i, t_1) & (t_2\leq t \leq t_3) \\
-\hdots \\
-U_{M_{N}}(t,t_{N-1})\ldots U_{M_2}(t_2, t_1) & (t_{N-1}\leq t)
-\end{cases} \]
-for some $t_1 \leq t_2 \leq \ldots \leq t_{N-1}$.
+\begin{definition}
+Let $\{M_j: I_j\times T_j \to S_j\}_{j\in 1:N}$ be a set abstract machines and $\{f_j: S_{j-1}\times T_{j-1} \to I_{j}\}_{j\in 2:N}$ a set of functions.
 
+Then we can define a new abstract machine $M: I\times T\to S$ with $I= I_1$, $T = \bigtimes_{j\in 1:N} T_j$ and $S = S_N$ as follows:
+\begin{multline*}
+M: I\times T \to S: (i, \seq{t_j}_{j\in 1:N}) \mapsto \\
+\Big(M_N(-, t_N) \circ f_{N}(-, t_{N-1}) \circ \ldots \circ M_2(-, t_2) \circ f_2(-, t_1) \circ M_1(-, t_1)\Big)(i)
+\end{multline*}
 
-where (setting $s_0\defeq i$)
-\[ \forall j\in 1:N : \qquad n_j \defeq h(s_{j-1}, A_{M_{j}}, M_j) \qquad s_j \defeq M_j(s_{j-1}, n_j-n_{j-1}), \]
-is an abstract machine.
-\end{proposition}
+We define the partial machines $M_{j\to k}: I_j\times T \to S_k$ by
+\begin{multline*}
+M_{j\to k}: I_j\times T \to S_n: (i, (t_j)_{j\in 1:N}) \mapsto \\
+\Big(M_k(-, t_k) \circ f_{k}(-, t_{k-1}) \circ \ldots \circ M_{j+1}(-, t_{j+1}) \circ f_{j+1}(-, t_j) \circ M_j(-, t_j)\Big)(i)
+\end{multline*}
 
-TODO: sort out!!
+We let $\seq{t_j}_{j\in 1:N}$ be a halting time if
+\[ \forall j\in 1:N: \quad \text{$t_j$ is a halting time of $M_j(f_j(M_{1\to j-1}(i, t_{j-1}), t_{j-1}), -)$}. \]
 
-We depict the machine in \ref{casesMachine} as
+We depict the machine $M$ as
 \begin{centeredAlgorithm}
 \KwIn{i}
-$M_1$\;
-$M_2$\;
-\ldots \;
-$M_N$\;
+$M_1(i)$\;
+$M_2(f_2(s))$\;
+\Dots
+$M_N(f_N(s))$\;
 \end{centeredAlgorithm}
 
-The $s$ in the $j^\text{th}$ row refers to $s_{j-1}$, the last state produced in the $j^\text{th}$ row.
+The $s$ in the $j^\text{th}$ row refers to the state $M_{1\to j}(i, t)$, i. e.\ the last state produced by the $(j-1)^\text{th}$ machine. Sometimes we leave the $f_j(s)$ implicit.
+\end{definition}
+
 
 \subsubsection{Parallel and non-deterministic algorithms}
 
@@ -100,23 +101,48 @@ for some serial abstract machines $N_1, R, N_2$, then we say $R$
 is a \udef{subroutine} of $M$ and $M$ \udef{calls} $R$.
 \end{definition}
 
+We may also write a subroutine in a machine as follows:
 
+\begin{centeredAlgorithm}
+\KwIn{i}
+$N_1$\;
+\Subroutine{$R$\;}
+$N_2$ \; 
+\end{centeredAlgorithm}
+
+\begin{algorithm}[H]
+%\SetLine
+\KwData{this text}
+\KwResult{how to write algorithm with \LaTeX2e }
+initialization\;
+\While{not at end of this document}{
+read current\;
+\eIf{understand}{
+go to next section\;
+current section becomes this one\;
+}{
+go back to the beginning of current section\;
+}
+}
+\caption{How to write algorithms}
+\end{algorithm}
+
+\subsubsection{If-then-else blocks}
+\subsubsection{While loops}
+\subsubsection{For loops}
 
 \subsection{Recursion}
 \begin{definition}
-Let $M: I\times \N\to S$ be an abstract machine, where $S$ is a state space that admits a product $\otimes$. Then $M$ is called \udef{recursive} if there exists an inclusion $\iota: I\hookrightarrow S$ and machine $M': S\times \N \to S: $
-
-
-
-
-it is of the form, using the terminology of \ref{casesMachine},
-\[ M: I\times \N\to S: (i,n) \mapsto \begin{cases}
-N_1(i,n) & (n \leq h(i,A_{N_1},N_1) \eqdef n_1) \qquad [s_1 \defeq N_1(i,h(i,A_{N_1},N_1))] \\
-s_1 \otimes M(s_1, n - n_1) & (n_1 \leq n \leq n_1 + h(s_1,A_M,M) \eqdef n_2)  \qquad [s_2 \defeq M(s_1,h(s_1,A_{M},M))]  \\
-N_2(s_2, n - n_2) & (n_2 \leq n \leq h(N_2(s_2, A_{N_2}, N_2)) \eqdef n_3) \qquad [s_3 \defeq N_2(s_2,h(s_2,A_{N_2},N_2))] \\
-a\otimes s_3 & (n_3 \leq n)
-\end{cases}  \]
+An abstract machine $M$ is called \udef{recursive} if it calls itself as a subroutine.
 \end{definition}
+
+Defined this way, recursion is a property of machines. We would also like to use it to define machines.
+
+\subsubsection{Recursive definition of machines}
+
+
+\subsubsection{Space complexity}
+\subsubsection{Tail-call optimisation}
 
 \section{Automata}
 \begin{definition}
