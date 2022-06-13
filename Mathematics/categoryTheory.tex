@@ -84,6 +84,11 @@ If $\cat{C}$ is a small category, then $\ob(\cat{C})$ is a set.
 TODO: replacement with $X\mapsto \id_X$.
 \end{proof}
 
+\subsubsection{Thin categories}
+\begin{definition}
+A category with at most one morphism in each category is called \udef{thin}.
+\end{definition}
+
 \begin{lemma}
 A small category
 \begin{itemize}
@@ -93,9 +98,52 @@ A small category
 \end{lemma}
 We call such categories \udef{preorder categories} and \udef{poset categories}.
 
+\subsubsection{Skeletal categories}
 \begin{definition}
-A category with at most one morphism in each category is called \udef{thin}.
+The \udef{isomorphism class} of an object in a category is the collection of objects isomorphic to the object.
+
+A category $\cat{C}$ is \udef{skeletal} if it contains one object in each isomorphism class.
 \end{definition}
+\begin{lemma}
+Let $\cat{C}$ be a category.
+There is a unique - up to isomorphism - skeletal category equivalent to $\cat{C}$.
+\end{lemma}
+This category is called the \udef{skeleton} of $\cat{C}$, denoted $\cat{skC}$.
+\begin{proof}
+TODO
+\end{proof}
+
+\subsubsection{Initial, terminal and zero objects; zero morphisms}
+\begin{definition}
+Let $\cat{C}$ be a category.
+\begin{itemize}
+\item An object $X\in\ob(\cat{C})$ is called \udef{initial} if $\cat{C}(X,Y)$ contains one element for each $Y\in\ob(\cat{C})$.
+\item An object $Y\in\ob(\cat{C})$ is called \udef{terminal} if $\cat{C}(X,Y)$ contains one element for each $X\in\ob(\cat{C})$.
+\item An object $Z\in\ob(\cat{C})$ is called a \udef{zero object} if $Z$ is both initial and terminal.
+\end{itemize}
+\end{definition}
+Initial and terminal objects are dual notions.
+
+\begin{proposition}
+Let $\cat{C}$ be a category. Any two initial objects are isomorphic. Any two terminal objects are isomorphic.
+\end{proposition}
+\begin{proof}
+Let $X_1,X_2$ be initial objects let $f:X_1\to X_2$ and $g:X_2\to X_1$ be the unique morphisms with these domains / codomains. Then $g\circ f: X_1 \to X_1 \in \cat{C}(X_1, X_1) = \{\id_{X_1}\}$. Similarly $f$ is also a left inverse of $g$. Thus $X_1$ and $X_2$ are isomorphic.
+
+The case for terminal objects is dual.
+\end{proof}
+
+\begin{definition}
+Let $\cat{C}$ be a category with zero object $0$. A \udef{zero morphism} $f: X\to Y$ is a morphism that can be factored as $f = h\circ g$, where $g: X\to 0$ and $h: 0\to Y$.
+\end{definition}
+
+\begin{proposition}
+Let $\cat{C}$ be a category with zero object $0$.
+\begin{enumerate}
+\item Every hom-set contains exactly one zero morphism.
+\item The composition of a zero morphism and any other morphism is a zero morphism.
+\end{enumerate}
+\end{proposition}
 
 \subsection{(Commuting) diagrams}
 Informally a diagram in a category is a drawing with points and arrows.
@@ -218,28 +266,7 @@ Let $\cat{C}$ be a category. Then a morphism $f \in \mor(\cat{C})$ is called
 \end{itemize}
 \end{definition}
 
-\begin{proposition} \label{injectiveMonoSurjectiveEpi}
-In any concrete category
-\begin{enumerate}
-\item $f$ is an injective function implies $f$ is monomorphic;
-\item $f$ is a surjective function implies $f$ is epimorphic.
-\end{enumerate}
-In the category $\cat{Set}$, the opposite implications also hold.
-\end{proposition}
-\begin{proof}
-Set $f:X\to Y$.
-\begin{enumerate}
-\item Assume $f$ injective. Let $g,h: Z\to X$ such that $g\neq h$. Because we are in a concrete category, this means there exists a $z\in Z$ such that $g(z) \neq h(z)$. By injectivity of $f$ this means $f(g(z)) \neq f(h(z))$ and so $fg \neq fh$. We conclude $f$ is monic by contraposition.
-\item Assume $f$ surjective. Let $g,h: Y\to Z$ such that $g\neq h$. Because we are in a concrete category, this means there exists a $y\in Y$ such that $g(y) \neq h(y)$. By surjectivity of $f$ we can find an $x\in X$ such that $f(x) = y$. So $g(f(x)) \neq h(f(x))$ and we conclude $gf \neq hf$, meaning $f$ is epic by contraposition.
-\end{enumerate}
-Suppose we are now in the category $\cat{Set}$.
-\begin{enumerate}
-\item Assume $f$ monic. To prove injectivity, take arbitrary $x_1,x_2\in X$ and assume $f(x_1) = f(x_2)$. Now define the constant functions $x_1: Z\to X: z\mapsto x_1$ and $x_2: Z\to X: z\mapsto x_2$. Then
-\[ fx_1 = f(x_1) = f(x_2) = f(x_2) \qquad \implies \qquad x_1 = x_2 \]
-because $f$ monic.
-\item Assume $f$ epic. Left compose $f$ with both the characteristic function $\chi_{f[X]}$ and the constant function $1: Y\to \{1\}: y\mapsto 1$. It is clear $\chi_{f[X]}f = 1f$, so $\chi_{f[X]} = 1$ meaning $f$ is surjective.
-\end{enumerate}
-\end{proof}
+
 
 
 \subsection{Left and right inverses}
@@ -331,7 +358,18 @@ A \udef{group} is a groupoid with one object.
 For any category $\cat{C}$ there exists a subcategory containing all the objects of $\cat{C}$ and only the morphisms of $\cat{C}$ that are isomorphisms. This subcategory is called the \udef{maximal groupoid} inside $\cat{C}$.
 \end{lemma}
 
-
+\subsection{Subcategories}
+\begin{definition}
+Let $\cat{C}$ be a category. We call $\cat{D}$ a \udef{subcategory} of $\cat{C}$ if
+\begin{itemize}
+\item $\ob(\cat{D}) \subseteq \ob(\cat{C})$;
+\item $\mor(\cat{D}) \subseteq \mor(\cat{C})$;
+\item $\forall f\in \mor(\cat{D}): \; \dom(f)\in\ob(\cat{D}) \land \codom(f)\in\ob(\cat{D})$;
+\item $\forall X\in \ob(\cat{D}): \; \id_X\in \mor(\cat{D})$;
+\item $\forall f,g \in \mor(\cat{D}): \; fg \in \mor(\cat{D})$.
+\end{itemize}
+We call the subcategory \udef{full} if for all $X,Y\in \ob(\cat{D}): \; \cat{C}(X,Y) = \cat{D}(X,Y)$.
+\end{definition}
 
 \section{Functors}
 \begin{definition}
@@ -361,12 +399,11 @@ The composition of two contravariant functors is covariant.
 
 \begin{lemma}
 Let $\cat{C}$ be a category. The functions
-\begin{itemize}
-\item $\id_{\ob(\cat{C})} = \id_{\ob(\cat{C^{op}})}$;
-\item $\id_{\mor(\cat{C})} = \id_{\mor(\cat{C^{op}})}$
-\end{itemize}
-form a contravariant functor $\operatorname{OP}: \cat{C} \to \cat{C^{op}}$.
-
+\[ \begin{cases}
+\id_{\ob(\cat{C})} = \id_{\ob(\cat{C^{op}})} \\
+\id_{\mor(\cat{C})} = \id_{\mor(\cat{C^{op}})}
+\end{cases} \qquad \text{form a contravariant functor $\operatorname{OP}: \cat{C} \to \cat{C^{op}}$.
+} \]
 We can compose any contravariant functor $F: \cat{C} \to \cat{D}$ with the functor $\operatorname{OP}$ to obtain a covariant functor $F: \cat{C} \to \cat{D^{op}}$ or $F: \cat{C^{op}} \to \cat{D}$.
 \end{lemma}
 
@@ -418,37 +455,6 @@ The more natural concept is equivalence of categories.
 Let $F,G$ be composable morphisms in $\cat{CAT}$, i.e.\ functors. Then $FG$ is contravariant if exactly one of $F,G$ is contravariant and covariant otherwise.
 \end{lemma}
 
-\subsection{Opposites and functors}
-\begin{lemma}
-For any category $\cat{C}$, taking the opposite is a contravariant functor $o: \cat{C}\to \cat{C^{op}}$ which maps objects to themselves and morphisms $f:X\to Y$ to $f^\text{o}: Y\to X$.
-
-Dually, taking the opposite is also a contravariant functor $o: \cat{C^{op}}\to \cat{C}$.
-\end{lemma}
-
-We will often just insert $o$ wherever necessary to make the variances match. For example we can view a functor $F:\cat{C}\to \cat{D}$ as a functor $F:\cat{C^{op}}\to \cat{D^{op}}$ where the latter expression would be more correctly written as
-\[ F^o \defeq oFo: \cat{C^{op}}\to \cat{D^{op}} \]
-
-In the same vein, given a contravariant functor $F:\cat{C}\to \cat{D}$ we can construct a functor $Fo: \cat{C^{op}}\to \cat{D}$, which is covariant by \ref{varianceOfComposite}. In identifying the two, we have an alternative definition of contravariant functor:
-
-\begin{lemma}
-A contravariant functor $F:\cat{C}\to\cat{D}$ is a (covariant) functor $F:\cat{C^{op}}\to \cat{D}$.
-\end{lemma}
-
-
-\begin{lemma}
-We can view taking the opposite category as a (covariant) functor $\operatorname{op}: \cat{CAT} \to \cat{CAT}$ which sends categories $\cat{C}$ to $\cat{C^{op}}$ and functors $F$ to $F^o$.
-\end{lemma}
-
-
-For any locally small category $\cat{C}$, functors restricted to hom-sets become functions on those hom-sets. In particular:
-\begin{lemma}
-Let $\cat{C}$ be a locally small category and $A$ a set of morphisms in $\cat{C}$. Then
-\begin{enumerate}
-\item for any objects $X,Y$ in $\cat{C}$
-\[ o[\cat{C}(Y,X)] = \setbuilder{f^o}{f \in \cat{C}(Y,X)} = \cat{C^{op}}(X,Y).  \]
-\item $o|_A: A \to o[A]$ is bijective with inverse $o|_{o[A]}: o[A] \to A$.
-\end{enumerate}
-\end{lemma}
 
 \subsection{Properties of functors}
 \begin{definition}
@@ -463,30 +469,51 @@ These are local definitions. We also call $F$
 \item an \udef{embedding} if it is injective on objects;
 \item a \udef{full embedding} if it is full, faithful and an embedding.
 \end{itemize}
-The domain of a full embedding defines a \udef{full subcategory}.
 \end{definition}
 
 \begin{lemma} \label{isomorphismCreationReflection}
-If $F:\cat{C}\to\cat{D}$ is a full and faithful functor, the $F$ reflects and creates isomorphisms:
+If $F:\cat{C}\to\cat{D}$ is a full and faithful functor, the $F$ reflects isomorphisms:
+If $f$ is a morphism in $\cat{C}$ so that $Ff$ is an isomorphism in $\cat{D}$, then $f$ is an isomorphism.
+\end{lemma}
+Thus, if $x$ and $y$ are objects in $\cat{C}$ such that $Fx$ and $Fy$ are isomorphic in $\cat{D}$, then $x$ and $y$ are isomorphic in $\cat{C}$.
+
+By \ref{functorMorphismPreservation} any functor preserves isomorphisms.
+
+\begin{proposition}
+Let $F:\cat{C}\to\cat{D}$ be a functor.
 \begin{enumerate}
-\item If $f$ is a morphism in $\cat{C}$ so that $Ff$ is an isomorphism in $\cat{D}$, then $f$ is an isomorphism.
-\item If $x$ and $y$ are objects in $\cat{C}$ such that $Fx$ and $Fy$ are isomorphic in $\cat{D}$, then $x$ and $y$ are isomorphic in $\cat{C}$.
+\item If $F$ is an embedding, then the image of $F$ is a subcategory of $\cat{D}$.
+\item If $F$ is a full embedding, then the image of $F$ is a full subcategory of $\cat{D}$.
 \end{enumerate}
-\end{lemma}
-By \ref{functorMorphismPreservation} the converses hold for any functor.
+\end{proposition}
 
+\subsubsection{Abstract and concrete categories}
 \begin{definition}
-The \udef{isomorphism class} of an object in a category is the collection of objects isomorphic to the object.
-
-A category $\cat{C}$ is \udef{skeletal} if it contains one object in each isomorphism class.
+A category $\cat{C}$ is called \udef{concrete} if there exists a faithful functor $F: \cat{C} \to \cat{Set}$.
+If a category is not concrete, it is called \udef{abstract}.
 \end{definition}
-\begin{lemma}
-Let $\cat{C}$ be a category.
-There is a unique - up to isomorphism - skeletal category equivalent to $\cat{C}$.
-\end{lemma}
-This category is called the \udef{skeleton} of $\cat{C}$, denoted $\cat{skC}$.
+
+\begin{proposition} \label{injectiveMonoSurjectiveEpi}
+In any concrete category
+\begin{enumerate}
+\item $f$ is an injective function implies $f$ is monomorphic;
+\item $f$ is a surjective function implies $f$ is epimorphic.
+\end{enumerate}
+In the category $\cat{Set}$, the opposite implications also hold.
+\end{proposition}
 \begin{proof}
-Choose an object in each isomorphism class and define $\cat{skC}$ to be the full subcategory on this collection of objects. The full embedding $\cat{skC} \hookrightarrow \cat{C}$ is an equivalence of categories.
+Set $f:X\to Y$.
+\begin{enumerate}
+\item Assume $f$ injective. Let $g,h: Z\to X$ such that $g\neq h$. Because we are in a concrete category, this means there exists a $z\in Z$ such that $g(z) \neq h(z)$. By injectivity of $f$ this means $f(g(z)) \neq f(h(z))$ and so $fg \neq fh$. We conclude $f$ is monic by contraposition.
+\item Assume $f$ surjective. Let $g,h: Y\to Z$ such that $g\neq h$. Because we are in a concrete category, this means there exists a $y\in Y$ such that $g(y) \neq h(y)$. By surjectivity of $f$ we can find an $x\in X$ such that $f(x) = y$. So $g(f(x)) \neq h(f(x))$ and we conclude $gf \neq hf$, meaning $f$ is epic by contraposition.
+\end{enumerate}
+Suppose we are now in the category $\cat{Set}$.
+\begin{enumerate}
+\item Assume $f$ monic. To prove injectivity, take arbitrary $x_1,x_2\in X$ and assume $f(x_1) = f(x_2)$. Now define the constant functions $x_1: Z\to X: z\mapsto x_1$ and $x_2: Z\to X: z\mapsto x_2$. Then
+\[ fx_1 = f(x_1) = f(x_2) = f(x_2) \qquad \implies \qquad x_1 = x_2 \]
+because $f$ monic.
+\item Assume $f$ epic. Left compose $f$ with both the characteristic function $\chi_{f[X]}$ and the constant function $1: Y\to \{1\}: y\mapsto 1$. It is clear $\chi_{f[X]}f = 1f$, so $\chi_{f[X]} = 1$ meaning $f$ is surjective.
+\end{enumerate}
 \end{proof}
 
 \subsection{Constructions of categories}
@@ -642,11 +669,7 @@ A category $\cat{C}$ is called
 Every preorder category is equivalent to a poset category.
 \end{lemma}
 
-\subsection{Abstract and concrete categories}
-\begin{definition}
-A category $\cat{C}$ is called \udef{concrete} if there exists a faithful functor $F: \cat{C} \to \cat{Set}$.
-If a category is not concrete, it is called \udef{abstract}.
-\end{definition}
+
 
 \section{Monoidal categories}
 \begin{definition}
