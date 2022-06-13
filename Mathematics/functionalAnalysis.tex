@@ -790,16 +790,14 @@ Let $V$ be a Banach space over $\F$, $I$ an arbitrary index set and $\ell(I,\F)$
 
 
 \section{Operators on Banach spaces}
-\begin{proposition}[Bounded linear extension] \label{BLT}
-Let $T:\dom(T)\subseteq X\to Y$ be a bounded operator between normed spaces. Then $T$ has a unique extension
-\[ \widetilde{T}:\overline{\dom(T)}\to Y \]
-where $\widetilde{T}$ is a bounded operator with $\norm*{\widetilde{T}} = \norm{T}$.
+\subsection{Closed operators}
+\begin{proposition}
+Let $X,Y$ be Banach spaces and $S,T\in \Lin(X,Y)$ with $\dom(S) = \dom(T)$. If $S$ is a closed operator and there exist $\alpha,\beta,\gamma\in \R^+$ such that $0 < \gamma \leq 1$ and $\beta < 1/\gamma$ and
+\[ \norm{(S-T)u} \leq \alpha \norm{u} + \beta\norm{Su}^\gamma{u}^{1-\gamma} \qquad\text{for all $u\in \dom(S) = \dom(T)$,} \]
+then $T$ is also closed.
 \end{proposition}
 \begin{proof}
-Normed vector spaces have the unique extension property because they are Hausdorff, \ref{uniqueExtensionHausdorff}. We just need to show the norm stays the same:
-
-Clearly $\norm*{\tilde{T}} \geq \norm{T}$. For the converse take any $x\in X$. As $\overline{\dom(T)} = X$, there exists a sequence $\seq{x_i}\subset \dom(T)$ that converges to $x$. Then
-\[ \norm*{\tilde{T}(x)}_Y = \norm{T\left(\lim_{i\to\infty}x_i\right)}_Y = \lim_{i\to\infty}\norm{T(x_i)}_Y \leq \lim_{i\to\infty}\norm{T}\;\norm{x_i}_X = \norm{T}\;\norm{x}_X. \]
+TODO Jeribi.
 \end{proof}
 
 \section{Bounded operators}
@@ -812,6 +810,18 @@ Let $V$ be a normed space. The continuous dual $X'$ is a Banach space.
 \begin{corollary}
 Topologically reflexive spaces are Banach spaces.
 \end{corollary}
+
+\begin{proposition}[Bounded linear extension] \label{BLT}
+Let $T:\dom(T)\subseteq X\to Y$ be a bounded operator between normed spaces. Then $T$ has a unique extension
+\[ \widetilde{T}:\overline{\dom(T)}\to Y \]
+where $\widetilde{T}$ is a bounded operator with $\norm*{\widetilde{T}} = \norm{T}$.
+\end{proposition}
+\begin{proof}
+Normed vector spaces have the unique extension property because they are Hausdorff, \ref{uniqueExtensionHausdorff}. We just need to show the norm stays the same:
+
+Clearly $\norm*{\tilde{T}} \geq \norm{T}$. For the converse take any $x\in X$. As $\overline{\dom(T)} = X$, there exists a sequence $\seq{x_i}\subset \dom(T)$ that converges to $x$. Then
+\[ \norm*{\tilde{T}(x)}_Y = \norm{T\left(\lim_{i\to\infty}x_i\right)}_Y = \lim_{i\to\infty}\norm{T(x_i)}_Y \leq \lim_{i\to\infty}\norm{T}\;\norm{x_i}_X = \norm{T}\;\norm{x}_X. \]
+\end{proof}
 
 \begin{proposition} \label{boundedBelowClosedRange}
 Let $T$ be a bounded operator with $\dom(T)$ a Banach space that is bounded below. Then the range $\im T$ is closed.
@@ -2632,7 +2642,7 @@ So $T$ is a contraction if $|\lambda| > \sup_{x\in \Omega} \int_{\Omega}|K(x,y)|
 
 
 
-\chapter{Spectral theory}
+\chapter{Spectral theory and functional calculus}
 \section{Invariant subspaces}
 \begin{definition}
 Let $L\in \Hom(V)$ be an endomorphism. A subspace $U$ of $V$ is \udef{invariant} under $L$ if $T|_U$ is an endomorphism on $U$. In other words, $u\in U$ implies $Tu\in U$.
@@ -2656,45 +2666,84 @@ nonstandard eigenvalue problem $A(\gamma)x = 0$.
 
 TODO: consistency $\lambda \id - L$, not $L-\lambda \id$.
 TODO: everything is now in $\C$.
+\subsection{Resolvents}
 
 \begin{definition}
 Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
 
-For $\lambda\in\C$ the \udef{resolvent} $R_\lambda(L)$ is defined as
-\[ R_\lambda(L) \defeq (\lambda \id_V - L)^{-1}: \im(\lambda \id_V - L)\to\dom(L), \]
+For $\lambda\in\C$ the \udef{resolvent} $R_L(\lambda)$ is defined as
+\[ R_L(\lambda) \defeq (\lambda \id_V - L)^{-1}: \im(\lambda \id_V - L)\to\dom(L), \]
 if this inverse exists (i.e.\ if $\lambda \id_V - L$ is injective).
-
-The \udef{resolvent set} $\rho(L)$ is the set
-\[ \rho(L) \defeq \setbuilder{\lambda\in \C}{\text{$R_\lambda(L)$ exists, has domain $V$ and is bounded}}. \]
+\begin{itemize}
+\item The \udef{resolvent set} $\res(L)$ is the set
+\[ \res(L) \defeq \setbuilder{\lambda\in \C}{\text{$R_L(\lambda)$ exists, has domain $V$ and is bounded}}. \]
+\item The \udef{spectrum} of $L$ is the complement of the resolvent set: $\spec(L) \defeq \C\setminus\rho(L)$.
+\item The \udef{spectral radius} $\spr(L)$ is $\sup_{\lambda\in\spec(L)} |\lambda|$.
+\end{itemize}
 \end{definition}
 
-\begin{lemma}[Resolvent identity]
-Let $T$ be a linear operator and $\lambda,\mu\in\C$ such that $R_\lambda(T), R_\mu(T)$ exist. Then $R_\lambda(T)$ and $R_\mu(T)$ commute and
-\[ R_\lambda(T) - R_\mu(T) = (\mu-\lambda)R_\lambda(T)R_\mu(T). \]
-\end{lemma}
+\begin{proposition}[Resolvent identity]
+Let $T$ be a linear operator and $\lambda,\mu\in\C$ such that $R_T(\lambda), R_T(\mu)$ exist. Then $R_T(\lambda)$ and $R_T(\mu)$ commute and
+\[ R_T(\lambda) - R_T(\mu) = (\mu-\lambda)R_T(\lambda)R_T(\mu). \]
+\end{proposition}
 \begin{proof}
 The commutativity of the resolvents follows from \ref{commutationInverse}.
 
 We calculate
 \begin{align*}
-R_\lambda(T) - R_\mu(T) &= R_\lambda(T)R_\mu(T)(\mu\id - T) - R_\mu(T)R_\lambda(T)(\lambda\id - T) \\
-&= \mu R_\lambda(T)R_\mu(T) - R_\lambda(T)R_\mu(T) T - \lambda R_\mu(T)R_\lambda(T) + R_\mu(T)R_\lambda(T) T \\
-&= (\mu - \lambda)R_\lambda(T)R_\mu(T).
+R_T(\lambda) - R_T(\mu) &= R_T(\lambda)R_T(\mu)(\mu\id - T) - R_T(\mu)R_T(\lambda)(\lambda\id - T) \\
+&= \mu R_T(\lambda)R_T(\mu) - R_T(\lambda)R_T(\mu) T - \lambda R_T(\mu)R_T(\lambda) + R_T(\mu)R_T(\lambda) T \\
+&= (\mu - \lambda)R_T(\lambda)R_T(\mu).
 \end{align*}
 \end{proof}
 
+\begin{proposition}
+Let $T$ ba a linear operator. Then
+\begin{enumerate}
+\item $R_T(\lambda)$ is holomorphic in $\rho(T)$;
+\item $R_T'(\lambda) = -R_T(\lambda)^2$;
+\item $R_T^{(n)}(\lambda) = n!(-1)^n R_T(\lambda)^{n+1}$ for all $n\in \N$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition} \label{firstNeumannSeries}
+Let $T$ ba a linear operator and $\lambda_0\in \rho(T)$. Then the Taylor expansion of $R_T(\lambda)$ around $\lambda_0$ is
+\[ R_T(\lambda) = \sum_{n=0}^\infty (\lambda-\lambda_0)^n(-1)^nR_T(\lambda_0)^{n+1} = (1+(\lambda-\lambda_0)R_T(\lambda_0))^{-1}R_T(\lambda_0), \]
+with convergence radius $1/\spr(R_T(\lambda_0))$.
+\end{proposition}
+
+\begin{proposition} \label{secondNeumannSeries}
+Let $T$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_T(\lambda)$ is bounded and given by
+\[ R_T(\lambda) = (\lambda \id_X - T)^{-1} = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
+with uniform convergence. The norm is bounded by
+\[ \norm{R_T(\lambda)} = \norm{(\lambda \id_X - T)^{-1}} \leq \frac{1}{|\lambda|-\norm{T}}. \]
+\end{proposition}
+\begin{proof}
+The operator $T/\lambda$ is a contraction so the Neumann series \ref{operatorNeumannSeries} gives
+\[ \left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \left(\frac{T}{\lambda}\right)^n.  \]
+Now $(\lambda \id_X - L)^{-1} = \frac{1}{\lambda}\left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \frac{T^n}{\lambda^{n+1}}$. The Neumann series also gives us the bound on the norm.
+\end{proof}
+
+\subsection{The spectrum}
 \begin{definition}
 Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
 
-The \udef{spectrum} of $L$ is the complement of the resolvent set: $\sigma(L) \defeq \C\setminus\rho(L)$.
 \begin{itemize}
 \item The \udef{point spectrum} or \udef{discrete spectrum} $\sigma_\text{p}(L)$ contains the values of $\lambda$ where $\lambda \id_V - L$ fails to be injective. These values are called the \udef{eigenvalues} of $L$.
 
-We call $\ker(\lambda \id_V - L)$ the \udef{multiplicity space} and $\dim\ker(\lambda \id_V - L)$ the \udef{multiplicity} of $\lambda$.
+We call
+\begin{itemize}
+\item $\ker(\lambda \id_V - L)$ the \udef{multiplicity space} or \udef{geometric eigenspace} of $\lambda$; and
+\item $\dim\ker(\lambda \id_V - L)$ the \udef{(geometric) multiplicity} of $\lambda$.
+\end{itemize}
 \item The \udef{continuous spectrum} $\sigma_\text{c}(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, $\overline{\im(\lambda \id_V - L)} = V$, but $\im(\lambda \id_V - L) \neq V$.
 \item The \udef{residual spectrum} $\sigma_\text{r}(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, but $\overline{\im(\lambda \id_V - L)} \neq V$.
 
-We call $\im(\lambda \id_V - L)^\perp$ the \udef{deficiency subspace} and $\dim(\im(\lambda \id_V - L)^\perp)$ the \udef{deficiency} of $\lambda$.
+We call
+\begin{itemize}
+\item $\im(\lambda \id_V - L)^\perp$ the \udef{deficiency subspace} of $\lambda$; and 
+\item $\dim(\im(\lambda \id_V - L)^\perp)$ the \udef{deficiency} of $\lambda$.
+\end{itemize}
 \end{itemize}
 The sets $\sigma_\text{p}(T), \sigma_\text{c}(T)$ and $\sigma_\text{r}(T)$ are disjoint.
 \end{definition}
@@ -2733,20 +2782,13 @@ Let $K$ be compact. Then
 TODO
 \end{proposition}
 
-\begin{proposition}
-Let $T$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_\lambda(T)$ is bounded and given by
-\[ R_\lambda(T) = (\lambda \id_X - T)^{-1} = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
-with uniform convergence. The norm is bounded by
-\[ \norm{R_\lambda(T)} = \norm{(\lambda \id_X - T)^{-1}} \leq \frac{1}{|\lambda|-\norm{T}}. \]
-\end{proposition}
-\begin{proof}
-The operator $T/\lambda$ is a contraction so the Neumann series \ref{operatorNeumannSeries} gives
-\[ \left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \left(\frac{T}{\lambda}\right)^n.  \]
-Now $(\lambda \id_X - L)^{-1} = \frac{1}{\lambda}\left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \frac{T^n}{\lambda^{n+1}}$. The Neumann series also gives us the bound on the norm.
-\end{proof}
-\begin{corollary}
+
+\begin{lemma}
 Let $T$ be a bounded operator on a Banach space. Then $\sigma(T)\subset [-\norm{T}, \norm{T}]$.
-\end{corollary}
+\end{lemma}
+\begin{proof}
+Follows from \ref{secondNeumannSeries}.
+\end{proof}
 
 For the point spectrum a simpler argument leads to $\sigma_\text{p}(T)\subset [-\norm{T}, \norm{T}]$: let $\lambda$ be an eigenvalue with eigenvector $x$. Then
 \[ |\lambda|\;\norm{x} = \norm{\lambda x} = \norm{Tx} \leq \norm{T}\;\norm{x}. \]
@@ -2793,6 +2835,14 @@ Let $T$ be an invertible operator. Then for all $\lambda\neq 0$
 We calculate
 \[ \lambda \id - A^{-1} = A^{-1}(\lambda A - \id) = \lambda A^{-1}(A - \frac{\id}{\lambda}). \]
 \end{proof}
+
+\begin{proposition}[Spectral inclusion property of numerical range]
+Let $A$ be an operator. Then $\sigma_p(A)\subseteq W(A)$ and $\sigma(A) \subseteq \overline{W(A)}$.
+\end{proposition}
+
+
+\url{https://mathoverflow.net/questions/264740/non-empty-resolvent-set-then-operator-closed}
+\url{https://math.stackexchange.com/questions/3262168/closed-operator-with-trivial-resolvent-set}
 
 \subsection{Parts of the spectrum}
 \subsubsection{The point spectrum: eigenvalue and eigenvectors}
@@ -3098,6 +3148,38 @@ TODO
 \url{https://digitalcommons.mtu.edu/cgi/viewcontent.cgi?article=2133&context=etdr}
 
 
+\section{Functional calculus}
+\subsection{Holomorphic functional calculus}
+
+\begin{theorem}[Holomorphic functional calculus]
+Let $A$ be a Banach algebra and $x\in A$. Consider the function
+\[ \Phi_x: \cont^\infty(\spec(x),\C) \to A: f\mapsto f(x)\defeq \int_\Gamma f(z)R_x(z)\diff{z}. \]
+Here $\Gamma$ is any simple Jordan curve that contains $\spec(x)$ such that $f$ is holomorphic in a region that contains $\Gamma$ and its interior. Then
+\begin{enumerate}
+\item $\Phi_x$ is well-defined: it does not depend on the particular curve $\Gamma$;
+\item $\Phi_x$ is a homomorphism;
+\item for any polynomial $p\in \C[X]$, we have $\Phi_x(p) = p(x)$; \\
+in particular $\Phi_x(\id_\C) = x$ and $\Phi_x(\underline{1}) = \id_A$;
+\item $\spec(\Phi_x(f)) = f[\spec(x)]$;
+\item $\Phi_x$ is continuous if $\cont^\infty(\spec(x),\C)$ is equipped with continuous convergence (?).
+\end{enumerate}
+\end{theorem}
+TODO: $\cont^\infty(\spec(x))$ should be the space of functions that are analytic in some neighbourhood of $\spec(x)$. Is it??
+\begin{proof}
+TODO
+\end{proof}
+
+TODO unbounded operators
+
+\subsubsection{Riesz eigenprojections}
+Functional calculus applied to indicator functions.
+
+\begin{itemize}
+\item In $C^*$ case immediately orthogonal projectors by spectral mapping.
+\item 
+\end{itemize}
+
+sum to identity immediate.
 
 \chapter{Fourier transforms}
 

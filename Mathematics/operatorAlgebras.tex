@@ -348,6 +348,9 @@ Let $A$ be a Banach algebra and $a\in A$. Then
 TODO
 \end{proof}
 
+\section{Finite elements}
+elements of the socle. \url{https://link.springer.com/content/pdf/10.1023/A:1009717500980.pdf}
+
 \section{The spectrum}
 TODO: remove unital requirement.
 \begin{definition}
@@ -358,10 +361,11 @@ If $A$ is a real Banach algebra, then the spectrum of $x\in A$ is defined as
 The \udef{resolvent set} of an element $x\in A$ is
 \[ \rho(x) = \C\setminus\sigma(x) \]
 and its \udef{resolvent map} is
-\[ R_x: \rho(x) \to A : z\mapsto (x-z)^{-1}. \]
+\[ R_x: \rho(x) \to A : z\mapsto (z-x)^{-1}. \]
 The \udef{spectral radius} of $x\in A$ is
-\[ r(x) = \max\{ |\lambda|\;|\; \lambda\in\sigma(x) \}. \]
+\[ \spr(x) = \max\{ |\lambda|\;|\; \lambda\in\sigma(x) \}. \]
 \end{definition}
+TODO redefine $\spr$ with $\sup$. Max is then proposition (spectrum compact).
 
 \begin{lemma}
 Let $A$ be a non-unital Banach algebra. Then $0\in\sigma_A(a)$ for all $a\in A$.
@@ -373,12 +377,12 @@ Because $A\subset A^\dagger$ as an ideal, $(a,0)\in A^\dagger$ is not invertible
 \begin{lemma}
 Let $A$ be a real Banach algebra. Then for all $a\in A$ and $\mu_1,\mu_2\in \R$:
 \begin{enumerate}
-\item $\sigma(a) = \overline{\sigma(a)}$;
+\item $\spec(a) = \overline{\spec(a)}$;
 \item $\mu_1 + \mu_2 i \in \sigma(a)$ \textup{if and only if} $(a-\mu_1)^2+\mu_2^2$ is not invertible in $\tilde{A}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) Assume $\lambda \notin \sigma(a)$, so $(a-\lambda)^{-1}$ exists. Then
+(1) Assume $\lambda \notin \spec(a)$, so $(a-\lambda)^{-1}$ exists. Then
 \[ \vec{1} = \overline{\vec{1}} = \overline{(a-\lambda)}\overline{(a-\lambda)^{-1}} = (a-\overline{\lambda})\overline{(a-\lambda)^{-1}}, \]
 so $a-\overline{\lambda}$ is invertible and $\overline{\lambda}\notin \sigma(a)$. The converse is identical, using $\overline{\lambda}$.
 
@@ -398,7 +402,7 @@ TODO
 \begin{proposition} \label{spectrumCompact}
 For any $x\in A$, the spectrum $\sigma(x)$ is a compact subset of $\setbuilder{\lambda\in\C}{|\lambda|\leq \norm{x}}$.
 
-In particular, $r(x) \leq \norm{x}$.
+In particular, $\spr(x) \leq \norm{x}$.
 \end{proposition}
 \begin{proof}
 Let $\lambda\in \C$ be such that $|\lambda|>\norm{x}$, then
@@ -408,19 +412,19 @@ By \ref{NeumannSeries}, $\vec{1} - x/\lambda$ is invertible and thus so is $x-\l
 It is then enough to show that $\sigma(x)$ is closed. By \ref{openSetInvertibles}, $\GL(A)$ is open and the set of non-invertibles $A\setminus \GL(A)$ is closed. Consider $f: \C \to A: \lambda \mapsto x-\lambda$. Then $\sigma(x) = f^{-1}[A\setminus \GL(A)]$ is the preimage of a closed set under a continuous map, and hence is closed.
 \end{proof}
 
-\begin{proposition}[Spectral radius formula] \label{proposition:spectralRadiusFormula}
+\begin{proposition}[Spectral radius formula] \label{spectralRadiusFormula}
 Let $A$ be a Banach algebra and $x\in A$. Then
-\[ r(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = \inf_{n\in\N}\norm{x^n}^{1/n}. \]
+\[ \spr(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = \inf_{n\in\N}\norm{x^n}^{1/n}. \]
 \end{proposition}
 \begin{proof}
-TODO, with complex analysis.
+TODO, with complex analysis. Does it imply \ref{spectrumCompact}?
 \end{proof}
 
 \begin{theorem}
 Let $A$ be a unital Banach algebra. For every $x\in A$, the spectrum $\sigma(x)$ is non-empty.
 \end{theorem}
 \begin{proof}
-TODO, uses complex analysis. Also move higher?
+TODO, uses complex analysis (Liouville's theorem). Also move higher?
 \end{proof}
 \begin{corollary}[Gelfand-Mazur] \label{GelfandMazur}
 Let $A$ be a unital complex Banach algebra. If every non-zero element is invertible, then $A=\C\cdot \vec{1}$.
@@ -447,7 +451,7 @@ Assuming $\lambda \neq 0$, we have $\lambda\in\sigma(xy) \iff \frac{xy}{\lambda}
 It is important to include $0$: there are cases when $0\in \sigma(xy)$, but $0\notin \sigma(yx)$.
 
 \begin{lemma} \label{spectrumOfImage}
-Let $A,B$ be unital Banach algebras and $\Psi: A\to B$ a unital algebra homomorphism. Then for all $x\in A$: $\sigma(\Psi(x)) \subseteq \sigma(x)$ and hence $r(\Psi(x)) \leq r(x)$.
+Let $A,B$ be unital Banach algebras and $\Psi: A\to B$ a unital algebra homomorphism. Then for all $x\in A$: $\sigma(\Psi(x)) \subseteq \sigma(x)$ and hence $\spr(\Psi(x)) \leq \spr(x)$.
 \end{lemma}
 \begin{proof}
 By contraposition: Assume $\lambda\notin\sigma(x)$, then $x-\lambda$ has an inverse, call it $a$. Then $(\Psi(x) - \lambda)$ has an inverse by
@@ -462,7 +466,32 @@ Let $A$ be a unital Banach algebra and suppose that $S\subset A$ is a set of pai
 \[ \sigma_A(s) = \sigma_C(s) \qquad \text{for all $s\in S$.} \]
 \end{proposition}
 \begin{proof}
-Consider the
+TODO
+\end{proof}
+
+\subsection{Quasinilpotent operators}
+\begin{definition}
+Let $A$ be a Banach algebra and $x\in A$. If $\spec(x) = \{0\}$, then $x$ is called \udef{quasinilpotent}
+\end{definition}
+\url{https://www.jstor.org/stable/2042882?seq=1}
+\url{https://www.researchgate.net/profile/Zbigniew-Slodkowski/publication/265547661_A_note_on_quasinilpotent_elements_of_a_Banach_algebra/links/5e7e8f94458515efa0b0fe83/A-note-on-quasinilpotent-elements-of-a-Banach-algebra.pdf?origin=publication_detail}
+
+\url{https://www.cambridge.org/core/services/aop-cambridge-core/content/view/AC3CBD3000D16515D0BD83C07B703186/S0013091500015352a.pdf/finite_dimensionality_nilpotents_and_quasinilpotents_in_banach_algebras.pdf}
+
+\url{https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C8F26DDF45A29D689C726A29D8F0BC2A/S0017089500008429a.pdf/algebraic-ideals-of-semiprime-banach-algebras.pdf}
+
+\begin{proposition}
+Every nilpotent element is quasinilpotent. The converse holds for finite elements in semisimple Banach algebras (TODO correct version of finite).
+\end{proposition}
+\begin{proof}
+Let $x$ be a nilpotent element in a (unital) Banach algebra $A$.
+By the spectral radius formula \ref{spectralRadiusFormula}, we have
+\[ \spr(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = 0. \]
+This implies $\spec(x) = \{0\}$.
+
+Now assume $x$ a finite quasimilpotent element. Then $\dim(xAx) = n$ and so $x^2, \ldots x^{n+2}$ a linearly dependent and thus there exists a polynomial $p$ of degree at most $n+2$ such that $p(x) = 0$. We can factorise $p(x) = x^kq(x)$ where $q$ is some polynomial such that $q(0) \neq 0$ and $k\in \N$. Then by spectral mapping, we have that $\spec(q(x)) = q(\spec(x)) = q(\{0\}) \neq \{0\}$. Thus $q(x)$ is invertible and we have
+\[ x^k = x^kq(x)q(x)^{-1} = 0\cdot q(x)^{-1} = 0. \]
+This means $x$ is nilpotent.
 \end{proof}
 
 \section{Characters}
@@ -571,7 +600,7 @@ Let $A$ be a unital commutative Banach algebra with Gelfand transform $\wedge : 
 \begin{enumerate}
 \item $\wedge$ is well-defined, in the sense that $\hat{x} \in C(\hat{A})$;
 \item $\wedge$ is linear and multiplicative;
-\item $\norm{\hat{x}} = r(x) \leq \norm{x}$.
+\item $\norm{\hat{x}} = \spr(x) \leq \norm{x}$.
 \end{enumerate}
 Thus the Gelfand transform is a unital, norm-contractive Banach algebra homomorphism.
 \end{lemma}
@@ -581,7 +610,7 @@ We prove in turn:
 \item We have equipped $\hat{A}$ with the weak-$*$ topology. Then proposition \ref{weak*continuousFunctional} says each $\hat{x}$ is continuous.
 \item $\hat{x}(\lambda \varphi + \psi) = \lambda \varphi(x) + \psi(x) = \lambda\hat{x}(\varphi) + \hat{x}(\psi)$ and $\hat{x}(\varphi\psi) = \varphi(x)\psi(x) = \hat{x}(\varphi)\hat{x}(\psi)$.
 \item For all $x\in A$:
-\[ \norm{\hat{x}} = \sup_{\varphi\in\hat{A}}\left( \frac{|\varphi(x)|}{\norm{\varphi}} \right) = \sup_{\varphi\in\hat{A}}(|\varphi(x)|) = r(x) \leq \norm{x} \]
+\[ \norm{\hat{x}} = \sup_{\varphi\in\hat{A}}\left( \frac{|\varphi(x)|}{\norm{\varphi}} \right) = \sup_{\varphi\in\hat{A}}(|\varphi(x)|) = \spr(x) \leq \norm{x} \]
 where we have used that $\norm{\varphi} = 1$ by \ref{charactersUnital}, $\sigma(x) = \setbuilder{|\varphi(x)|}{\varphi\in\hat{A}}$ by \ref{spectrumFromSpectrum} and the inequality is from \ref{spectrumCompact}.
 \end{enumerate}
 \end{proof}
@@ -655,11 +684,11 @@ Let $A$ be a $C^*$-algebra and $x\in A$ a normal element. Then $r(x) = \norm{x}$
 \begin{proof}
 We compute
 \[ \norm{x}^4 = \norm{x^*x}^2 = \norm{x^*xx^*x} = \norm{(x^*)^2x^2} = \norm{x^2}^2 \]
-where we have repeatedly applied the $C^*$-identity and used normality once. We conclude that $\norm{x^2} = \norm{x}^2$. Inductively we obtain $\norm{x^{(2^n)}} = \norm{x}^{2^n}$. By the spectral radius formula, \ref{proposition:spectralRadiusFormula}, we get
-\[ r(x) = \lim_{n\to\infty}\norm{x^{(2^n)}}^{1/2^n} = \lim_{n\to\infty}\norm{x} = \norm{x}. \]
+where we have repeatedly applied the $C^*$-identity and used normality once. We conclude that $\norm{x^2} = \norm{x}^2$. Inductively we obtain $\norm{x^{(2^n)}} = \norm{x}^{2^n}$. By the spectral radius formula, \ref{spectralRadiusFormula}, we get
+\[ \spr(x) = \lim_{n\to\infty}\norm{x^{(2^n)}}^{1/2^n} = \lim_{n\to\infty}\norm{x} = \norm{x}. \]
 \end{proof}
 \begin{corollary} \label{atMostOneNorm}
-Let $A$ be a $*$-algebra. There exists at most one norm on $A$ turning it into a $C^*$-algebra. If there is such a norm, it is given by $\norm{x} = \sqrt{r(x^*x)}$.
+Let $A$ be a $*$-algebra. There exists at most one norm on $A$ turning it into a $C^*$-algebra. If there is such a norm, it is given by $\norm{x} = \sqrt{\spr(x^*x)}$.
 \end{corollary}
 \begin{proof}
 By the $C^*$-identity $\norm{x} = \sqrt{\norm{x^*x}}$ and $x^*x$ is normal, so we can apply the proposition.
@@ -673,7 +702,7 @@ Let $A,B$ be unital $C^*$-algebras and $\Psi: A\to B$ a unital $*$-homomorphism.
 \end{proposition}
 \begin{proof}
 Because $x^*x$ and $\Psi(x^*x)$ are normal, we calculate using \ref{normNormalElement}
-\[ \norm{x}^2 = \norm{x^*x} = r(x^*x) \geq r(\Psi(x^*x)) = \norm{\Psi(x^*x)} = \norm{\Psi(x)^*\Psi(x)} = \norm{\Psi(x)}^2, \]
+\[ \norm{x}^2 = \norm{x^*x} = \spr(x^*x) \geq \spr(\Psi(x^*x)) = \norm{\Psi(x^*x)} = \norm{\Psi(x)^*\Psi(x)} = \norm{\Psi(x)}^2, \]
 where the inequality follows from an application of lemma \ref{spectrumOfImage} to $x^*x$. Hence $\norm{\Psi}\leq 1$. Equality follows from $\Psi(\vec{1}) = 1$.
 \end{proof}
 \begin{corollary}
@@ -822,7 +851,7 @@ We first prove it is a $*$-homomorphism: $\forall x\in A: \hat{x}^* = (x^*)^\wed
 where the third equality is due to \ref{characters*Preserving}.
 
 For isometry, notice that every element is normal due to commutativity. By \ref{normNormalElement} and \ref{GelfandTransformHomomorphism}, we have
-\[ \norm{x} = r(x) = \norm{\hat{x}}. \]
+\[ \norm{x} = \spr(x) = \norm{\hat{x}}. \]
 
 Then we just need to show the Gelfand transform is bijective (TODO ref). Injectivity follows from isometry, \ref{isometryInjective}. For surjectivity we want to apply the Stone-Weierstrass theorem \ref{StoneWeierstrass}. To show the image of $A$ separates points, take $\varphi \neq \psi$ in $\hat{A}$. Then $\varphi(x) \neq \psi(x)$ for some $x\in A$, meaning $\hat{x}(\varphi) \neq \hat{x}(\psi)$. 
 
@@ -942,6 +971,23 @@ Then $\epsilon/3$ by Stone-Weierstrass.
 \end{proof}
 TODO: also for non-compact $K$ and $K\subseteq \C$. Then $\Omega_K$ set of normal elements.
 
+\begin{proposition}
+Let $A$ be a unital $C^*$-algebra, $x\in A$ a normal element and $f\in \cont(\sigma(x))$. Then
+\[ \norm{f(x)} = \sup_{\lambda\in \sigma(x)}|f(\lambda)|. \]
+\end{proposition}
+\begin{proof}
+We calculate
+\[ \norm{f(x)} = \spr(f(x)) = \sup |\sigma(f(x))| = \sup |f(\sigma(x))| = \sup_{\lambda\in \sigma(x)}|f(\lambda)|. \]
+\end{proof}
+\begin{corollary}
+Let $\lambda_0 \in \rho(x)$. Then $d(\lambda_0, \sigma(x)) \geq \norm{R_x(\lambda_0)}^{-1}$.
+\end{corollary}
+\begin{proof}
+We calculate
+\[ \norm{R_x(\lambda_0)} = \norm{\frac{1}{x-\lambda_0\cdot \vec{1}}} = \sup_{\lambda\in \sigma(x)}\left|\frac{1}{\lambda - \lambda_0}\right| = \frac{1}{\inf_{\lambda\in \sigma(x)}|\lambda- \lambda_0|} = \frac{1}{d(\lambda_0, \sigma(x))}. \]
+\end{proof}
+TODO: also for general closed operators??
+
 \begin{lemma}
 If two polynomials in $z,\overline{z}$ agree on the spectrum of a normal element, they give an equation the element obeys.
 \end{lemma}
@@ -959,7 +1005,7 @@ Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. Then
 \begin{enumerate}
 \item By \ref{selfAdjointSpectrumReal} we have that self-adjoint implies real spectrum. The converse follows from the lemma applied to $z = \overline{z}$.
 \item Assume $x$ unitary. By the $C^*$-identity $\norm{x} = \sqrt{\norm{x^*x}} = 
-\sqrt{\norm{\vec{1}}} = 1$, by \ref{consequencesC*}. By \ref{normNormalElement}, $r(x) = \norm{x} = 1$. Also $\norm{x^{-1}}^{-1} = 1$. So $\sigma(x)\subseteq \mathbb{T}$ by \ref{openSetInvertibles}. The converse follows from the lemma applied to $1 = z\overline{z} = \overline{z}z$.
+\sqrt{\norm{\vec{1}}} = 1$, by \ref{consequencesC*}. By \ref{normNormalElement}, $\spr(x) = \norm{x} = 1$. Also $\norm{x^{-1}}^{-1} = 1$. So $\sigma(x)\subseteq \mathbb{T}$ by \ref{openSetInvertibles}. The converse follows from the lemma applied to $1 = z\overline{z} = \overline{z}z$.
 \item Assume $x$ a projection. Then $x-\lambda$ has an inverse given by $-\lambda^{-1} + (1 - \lambda)^{-1}\lambda^{-1}x$ if $\lambda \notin \{0,1\}$:
 \[ (x-\lambda)\left( - \frac{1}{\lambda} + \frac{x}{(1-\lambda)\lambda} \right) = \vec{1} - \frac{x}{\lambda} + \frac{x-x\lambda}{(1-\lambda)\lambda} =  \vec{1} - \frac{x}{\lambda} + \frac{x}{\lambda} = \vec{1}. \]
 The converse follows from the lemma applied to $z = \overline{z} = z^2$.
@@ -977,6 +1023,7 @@ TODO
 \end{proof}
 
 \section{Positivity}
+\url{https://link.springer.com/content/pdf/10.1023/A:1009717500980.pdf}
 \subsection{Positive elements}
 \begin{definition}
 Let $A$ be a $C^*$-algebra. An element $a\in A$ is \udef{positive} if it is normal and $\sigma(a) \subset [0,+\infty[$. We write $a\geq 0$.
@@ -1064,7 +1111,7 @@ The relation on self-adjoints of a $C^*$-algebra $A$ defined by
 is a vector partial order.
 \end{lemma}
 \begin{proof}
-Transitivity follows from convexity. To prove anti-symmetry, assume $a\geq b$ and $b\geq a$. It follows that $b-a$ is self-adjoint and $\sigma(b-a) \subseteq ]-\infty,0]\cap [0,+\infty[ = \{0\}$. So $\norm{b-a} = r(b-a) = 0$ by \ref{normNormalElement}, meaning $a=b$.
+Transitivity follows from convexity. To prove anti-symmetry, assume $a\geq b$ and $b\geq a$. It follows that $b-a$ is self-adjoint and $\sigma(b-a) \subseteq ]-\infty,0]\cap [0,+\infty[ = \{0\}$. So $\norm{b-a} = \spr(b-a) = 0$ by \ref{normNormalElement}, meaning $a=b$.
 \end{proof}
 
 \begin{lemma}
@@ -1561,7 +1608,7 @@ A polynomial relation $\mathcal{R}$ on $\mathcal{X}$ is said to be \udef{bounded
 \begin{example}
 \begin{itemize}
 \item The relation $(\mathcal{X}\;|\;\mathcal{R}) = (\{a\}\;|\;\{\norm{a-a^*}\leq 0\})$ is not bounded.
-\item The relation $(\mathcal{X}\;|\;\mathcal{R}) = (\{x,y\}\;|\;\{\norm{\vec{1}-x^*x-y^*y}\leq 0\})$ is bounded: writing $x$ for $\pi(x)$, the spectrum of $x^*x = 1-y^*y$ is positive and bounded by $1$ according to the spectral mapping theorem \ref{propertiesContinuousFunctionalCalculus}. Now $\norm{\pi(x)} = \sqrt{r(\pi(x)^*\pi(x))} \leq 1$ by \ref{normNormalElement} and so
+\item The relation $(\mathcal{X}\;|\;\mathcal{R}) = (\{x,y\}\;|\;\{\norm{\vec{1}-x^*x-y^*y}\leq 0\})$ is bounded: writing $x$ for $\pi(x)$, the spectrum of $x^*x = 1-y^*y$ is positive and bounded by $1$ according to the spectral mapping theorem \ref{propertiesContinuousFunctionalCalculus}. Now $\norm{\pi(x)} = \sqrt{\spr(\pi(x)^*\pi(x))} \leq 1$ by \ref{normNormalElement} and so
 \[ \sup\setbuilder{\norm{\pi(x)}}{\pi:\mathcal{X}\to A\;\text{is a representation of}\;(\mathcal{X}\;|\;\mathcal{R})} \leq 1 < \infty. \]
 \item The relation $(\mathcal{X}\;|\;\mathcal{R}) = (\mathcal{X}\;|\;\bigcup_{x\in\mathcal{X}}\{\norm{x-x^*}\leq 0,\norm{x-x^2}\leq 0 \})$ is bounded. It gives rise to a universal $C^*$-algebra generated by projections.
 \end{itemize}
