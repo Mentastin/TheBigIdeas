@@ -1332,6 +1332,7 @@ where $\norm{f}_C = \sup_{z\in C}|f(z)|$.
 \begin{proof}
 TODO
 \end{proof}
+Thus the distance from $z_0$ to the nearest singular point is the radius of convergence of the power series.
 \begin{corollary}[Liouville's theorem] \label{liouvilleTheoremAnalysis}
 If $f$ is entire and bounded, then $f$ is contant.
 \end{corollary}
@@ -1364,6 +1365,13 @@ TODO
 Let $f,g:\Omega\subseteq \C\to \C$ be holomorphic functions on a connected open set $\Omega$. Suppose there exists a sequence of distinct points $\seq{z_n}$ with limit point in $\Omega$ such that $f(z_n) = g(z_n)$ for all $n$. Then $f = g$.
 \end{corollary}
 In particular this holds if $f$ and $g$ agree on some non-empty open subset of $\Omega$.
+\begin{corollary}
+Let $f:\Omega\subseteq \C\to \C$ be a holomorphic function on an open set $\Omega$ and $\Omega'\supseteq \Omega$ a connected open subset of $\C$. Then there exists at most one holomorphic function $f'$ on $\Omega'$ such that $f'|_\Omega = f$.
+\end{corollary}
+
+\begin{definition}
+In this case the function $f'$ is called an \udef{analytic continuation} of $f$ into $\Omega'$.
+\end{definition}
 
 \begin{proposition}[Symmetry principle] \label{symmetryPrinciple}
 Let $\Omega$ be an open subset of $\C$ such that $\overline{\Omega} = \Omega$. Denote by $\Omega^+$ the part of $\Omega$ that lies in the upper half plane and by $\Omega^-$ the part lying in the lower half plane. Set $I = \R \cap \Omega$.
@@ -1385,6 +1393,13 @@ Let $\Omega, \Omega^+, \Omega^-$ and $I$ be as in \ref{symmetryPrinciple} and $f
 \begin{proof}
 Idea: define $g|_{\Omega^-}(z) = \overline{f(\overline{z})}$. TODO details.
 \end{proof}
+
+\subsubsection{Analytic continuation along a curve}
+\begin{theorem}[Monodromy theorem]
+Let $f:D\subseteq \C \to \C$ be a holomorphic function and $\Omega$ the set of all points that admit an analytic continuation.
+
+If two curves are homotopic in $\Omega$, then they give the same analytic continuation.
+\end{theorem}
 
 \subsection{Limits and holomorphic functions}
 \begin{proposition}
@@ -1424,6 +1439,23 @@ Let $K\subseteq \C$ be compact.
 \end{enumerate}
 \end{proposition}
 If inner and outer part of annulus then Laurent series (i.e.\ particular form of approximating rationals)
+
+\section{Singularities}
+\subsection{Laurent series}
+\begin{proposition}
+Let $f:\Omega \to \C$ be a holomorphic function and let $\Omega$ contain two concentric circles with center $z_0$ and radii $0<r< R$. Then $f$ has a Laurent expansion
+\[ f(z) = \sum_{n=-\infty}^{\infty}a_n(z-z_0)^n \]
+that converges on the annulus between the concentric circles.
+\end{proposition}
+\begin{proof}
+Call the outer circle $C_1$ and the inner $C_2$. Then we can use the integral formula to write
+\[ f(z) = \frac{1}{2\pi i}\oint_{C_1}\frac{f(\zeta)}{\zeta - z}\diff{\zeta} - \frac{1}{2\pi i}\oint_{C_2}\frac{f(\zeta)}{\zeta - z}\diff{\zeta} \]
+TODO
+\end{proof}
+
+\subsection{Isolated singularities}
+
+\subsection{Non-isolated singularities}
 
 \section{Meromorphic functions}
 \subsection{Zeros and poles}
@@ -1476,6 +1508,7 @@ for some holomorphic, non-vanishing $g$. Thus $f|_{B(z_0,\epsilon)}(z) = (z-z_0)
 To conclude, we remark that the inner radius of the annulus on which the Laurent series converges is zero: by \ref{LaurentSeriesConvergence}
 \[ r = \limsup_{i\to\infty}\left(|a_{-i}|^{1/i}\right) = 0. \]
 \end{proof}
+TODO: pole iff Laurent series has finite principal part!
 
 \subsubsection{Partial fraction decomposition}
 \begin{proposition}[Partial fraction decomposition] \label{partialFractionDecomposition}
@@ -1564,10 +1597,64 @@ Let $\Omega$ be a simply connected open set with compact closure $\overline{\Ome
 \[ \sup_{z\in \Omega}|f(z)| \leq \sup_{z\in \overline{\Omega}\setminus\Omega}|f(z)|. \]
 \end{corollary}
 
-\section{Singularities}
-\subsection{Isolated singularities}
+\subsection{The ring of polynomials over $\meromorphic_\Omega$}
 
-\subsection{Non-isolated singularities}
+\begin{definition}
+Let $\Omega\subseteq \C$ be an open set. Let $\meromorphic_\Omega$ be the set of meromorphic functions in $(Omega \to \C)$.
+\end{definition}
+
+\begin{proposition}
+For any $\Omega \subseteq \C$, the set $\meromorphic_\Omega$ is a field. With
+\begin{itemize}
+\item as zero the constant function $\underline{0}$;
+\item as identity the constant function $\underline{1}$.
+\end{itemize}
+\end{proposition}
+
+\subsubsection{Poles and roots}
+\begin{definition}
+We say a polynomial in $\meromorphic_\Omega[X]$ has a pole at $z\in \Omega$, if one of its coefficients has a pole at $z$.
+\end{definition}
+
+\begin{lemma} \label{polesProductPolynomial}
+Let $p,q\in \meromorphic_\Omega[X]$ be monic and $r = pq$. If either $p$ or $q$ has a pole at $z_0\in \Omega$, then $r$ has a pole at $z_0$ as well.
+\end{lemma}
+\begin{proof}
+Let $h$ be the maximal order of $z_0$ as a pole among the coefficients of $p$ and $k$ the maximal order of $z_0$ as a pole among the coefficients of $q$. Then both $\lim_{z\to z_0}(z-z_0)^h p(z)$ and $\lim_{z\to z_0}(z-z_0)^k q(z)$ are non-zero polynomials (due to being monic) with constant coefficients and $h+k \geq 1$. 
+
+Now assume $r(z)$ is holomorphic at $z_0$, then
+\[ 0 = \lim_{z\to z_0}(z-z_0)^{h+k}r(z) = \Big(\lim_{z\to z_0}(z-z_0)^h p(z)\Big)\Big(\lim_{z\to z_0}(z-z_0)^k q(z)\Big) \neq 0, \]
+which is a contradiction.
+\end{proof}
+\begin{corollary}
+Let $p \in \meromorphic_\Omega[x]$ be monic and have a prime decomposition $p = \prod_{k=1}^nq_k^{m_k}$. Then $z_0\in \Omega$ is a pole of $p(z)$ \textup{if and only if} it is a pole of one of the $q_k(z)$.
+\end{corollary}
+
+\begin{proposition}
+Let $p,q\in \meromorphic_\Omega[x]$ be monic and relatively prime, then $p(z)$ and $q(z)$ are relatively prime as polynomials in $\C[X]$ for all $z\in \Omega \setminus (S_p \cup S_q \cup H)$, where
+\begin{itemize}
+    \item $S_p$ is the set of poles of $p$;
+    \item $S_q$ is the set of poles of $q$;
+    \item $H$ is isolated and closed in $\Omega$.
+\end{itemize}
+\end{proposition}
+\begin{proof}
+By Bézout's identity, we can write $\alpha[x](z)p[x](z) + \beta[x](z)q[x](z) = f(z)$ for some monic $\alpha,\beta\in \meromorphic_\Omega[x]$. Let $H$ be the set of poles and zeros of $f(z)$ (which contains $S_p \cup S_q$ by \ref{polesProductPolynomial}). For all $z_0\notin H$ we have
+\[ \left(\frac{\alpha[x](z_0)}{f(z_0)}\right)p[x](z_0) + \left(\frac{\beta[x](z_0)}{f(z_0)}\right)q[x](z_0) = 1, \]
+meaning $p[x](z_0)$ and $q[x](z_0)$ are relatively prime (TODO ref).
+\end{proof}
+\begin{corollary}
+Let $p\in \meromorphic_\Omega[x]$ be monic and irreducible. Then $p(z)$ has simple roots for all $z\in\Omega\setminus H$ for some isolated and closed set $H\subseteq \Omega$.
+\end{corollary}
+\begin{proof}
+If the degree of $p$ is $1$, then the result is immediate. Assume the degree of $p$ is greater than $1$.
+
+For any $z\in \Omega$, any non simple root of $p[x](z)$ must also be a root of $\pd{p[x](z)}{x}$. As $p[x]$ is irreducible, $p[x]$ and $\pd{p[x]}{x}$ are relatively prime. By the proposition $p[x](z_0)$ and $\pd{p[x](z_0)}{x}$ are relatively prime for all $z_0\in \Omega\setminus H$, which means they do not share roots.
+\end{proof}
+
+\subsubsection{Algebroid functions}
+
+\subsubsection{Puiseux series}
 
 \section{Conformal mappings}
 
