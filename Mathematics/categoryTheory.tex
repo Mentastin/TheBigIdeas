@@ -210,7 +210,7 @@ X \ar[d, swap, shift right, "f'"] \ar[d, shift left, "g'"] \\ Y
 
 
 \subsubsection{Diagram chasing results}
-\begin{lemma}
+\begin{lemma} \label{commutingRectangle}
 Consider the diagram
 \[ \begin{tikzcd}
 X \rar{f}\dar{k} & Y \rar{g}\dar{h} & Z\dar{l} \\
@@ -347,6 +347,7 @@ Y \rar{g} \ar[rr, bend right, "\id_Y"] & X \rar{f} & Y
 \end{enumerate}
 \end{lemma}
 
+
 \subsubsection{Groups and groupoids}
 \begin{definition}
 A \udef{groupoid} is a category in which every morphism is an isomorphism.
@@ -357,6 +358,16 @@ A \udef{group} is a groupoid with one object.
 \begin{lemma}
 For any category $\cat{C}$ there exists a subcategory containing all the objects of $\cat{C}$ and only the morphisms of $\cat{C}$ that are isomorphisms. This subcategory is called the \udef{maximal groupoid} inside $\cat{C}$.
 \end{lemma}
+
+\subsubsection{The core of a category}
+\begin{definition}
+Let $\cat{C}$ be a category.
+\begin{itemize}
+\item The \udef{core} of $\cat{C}$ is the groupoid whose objects are the objects of $\cat{C}$ and whose morphisms are the isomorphisms of $\cat{C}$.
+\end{itemize}
+\end{definition}
+
+Thus a category is a groupoid if and only if it equals its core.
 
 \subsection{Subcategories}
 \begin{definition}
@@ -516,21 +527,67 @@ because $f$ monic.
 \end{enumerate}
 \end{proof}
 
+\subsection{Comma categories}
+\begin{definition}
+Let $\cat{A}, \cat{B}$ and $\cat{C}$ be categories and $S, T$ functors of type $\begin{tikzcd}
+\cat{A} \ar[r, "S"] & \cat{C} & \lar[swap]{T} \cat{B}
+\end{tikzcd}$. The \udef{comma category} $S\downarrow T$ is the category with
+\begin{itemize}
+\item as objects tuples of the form $((A,B), h)$, where $A\in\ob(\cat{A}), B\in\ob(\cat{B})$ and $h: S(A) \to T(B)$ a morphism in $\cat{C}$;
+\item as morphisms pairs $(f,g): ((A,B), h) \to ((A',B'), h')$ where $f:A\to A'$, $g: B\to B'$ such that
+\[ \begin{tikzcd}
+S(A) \rar{S(f)} \dar{h} & S(A') \dar{h'} \\
+T(B) \rar{T(g)} & T(B')
+\end{tikzcd} \qquad\text{commutes.} \]
+\end{itemize}
+Composition is defined by $(f',g') \circ (f,g) = (f'\circ f, g'\circ g)$ and the identity on $((A,B),h)$ is $(\id_A, \id_B)$.
+\end{definition}
+The composition $(f',g') \circ (f,g) = (f'\circ f, g'\circ g)$ is a morphism in the comma category by \ref{commutingRectangle}.
+
+\subsubsection{Arrow category}
+\begin{definition}
+An \udef{arrow category} is a comma category of type $\begin{tikzcd}
+\cat{C} \ar[r, "\id_\cat{C}"] & \cat{C} & \lar[swap]{\id_\cat{C}} \cat{C}
+\end{tikzcd}$. In is denoted $\cat{C}^\to$.
+\end{definition}
+
+\subsubsection{Slice and coslice categories}
+\begin{definition}
+Let $\cat{A}$ be a category and $a$ an object in $\cat{A}$.
+\begin{itemize}
+\item The \udef{slice category} over $a$, denoted $\cat{A}/a$, is the comma category of $\begin{tikzcd}
+\cat{A} \rar{\id_\cat{A}} & \cat{A} & \lar[swap]{(0\mapsto a)} \cat{\mathbb{1}}
+\end{tikzcd}$.
+\item The \udef{coslice category} under $a$, denoted $a/\cat{A}$, is the comma category of $\begin{tikzcd}
+\cat{\mathbb{1}} \rar{(0\mapsto a)} & \cat{A} & \cat{A} \lar[swap]{\id_\cat{A}} 
+\end{tikzcd}$.
+\end{itemize}
+\end{definition}
+
+Objects in a slice category $\cat{A}/a$ are always of the form $((X, a),h: X\to a)$ and morphisms are always of the form $(f, \id_a)$. So we may drop the dependence on $a$.
+\begin{lemma}
+Let $\cat{A}$ be a category and $a$ an object in $\cat{A}$.
+\begin{enumerate}
+\item The objects of the slice category $\cat{A}/a$ may be written as $(X,h)$. A morphism $f: X\to Y$ in $\cat{A}$ may be seen as a morphism $f: (X, h) \to (Y, h')$ in $\cat{A}/a$ if
+\[ \begin{tikzcd}[column sep=small]
+X \ar[rr, "f"]\arrow[dr, swap, "h"]& & Y \arrow[dl, "h'"]  \\
+& a &
+\end{tikzcd} \qquad\text{commutes.} \]
+\item The objects of the coslice category $a/\cat{A}$ may be written as $(X,h)$. A morphism $f: X\to Y$ in $\cat{A}$ may be seen as a morphism $f: (X, h) \to (Y, h')$ in $\cat{A}/a$ if
+\[ \begin{tikzcd}[column sep=small]
+& a & \\
+X \ar[rr, swap, "f"]\ar[ur, "h"]& & Y \ar[ul, swap, "h'"] 
+\end{tikzcd} \qquad\text{commutes.} \]
+\end{enumerate}
+\end{lemma}
+
+
 \subsection{Constructions of categories}
 \subsubsection{Subcategories}
 \begin{definition}
 Let $\cat{C}$ be a category. A category $\cat{D}$ is a \udef{subcategory} of $\cat{C}$ if all its objects are objects of $\cat{C}$ and all its morphisms are morphisms of $\cat{C}$.
 \end{definition}
 
-\subsubsection{Core and skeleton}
-\begin{definition}
-Let $\cat{C}$ be a category.
-\begin{itemize}
-\item The \udef{core} of $\cat{C}$ is the groupoid whose objects are the objects of $\cat{C}$ and whose morphisms are the isomorphisms of $\cat{C}$.
-\end{itemize}
-\end{definition}
-
-\subsubsection{Slice and comma categories}
 
 \subsubsection{Product categories}
 \begin{definition}
