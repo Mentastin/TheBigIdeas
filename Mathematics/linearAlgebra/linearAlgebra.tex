@@ -871,7 +871,11 @@ Convex hull: TODO Galois connections!
 
 \subsection{Cones}
 \begin{definition}
-A subset $C$ of a real or complex vector space $V$ is called a \udef{cone} if for all real $r>0$, $rC \subseteq C$. A cone is called \udef{pointed} if it contains the origin.
+A subset $C$ of a real or complex vector space $V$ is called a \udef{cone} if for all real $r>0$, $rC \subseteq C$. A cone is called
+\begin{itemize}
+\item \udef{pointed} if it contains the origin and \udef{blunt} if not;
+\item \udef{flat} if $\exists x\neq 0: x\in C \land -x\in C$, and \udef{salient} if not.
+\end{itemize}
 \end{definition}
 
 \begin{lemma} \label{convexityAdditiveClosure}
@@ -1174,16 +1178,16 @@ We call $(\R, V, +, \precsim)$ a \udef{preordered vector space}.
 \end{itemize}
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{positiveConeOrderCharacterisation}
 Let $\sSet{\R, V, +}$ be a real vector space and $\precsim$ a preorder on the set $V$. The compatibility of the order can equivalently be expressed by:
 $\forall x,y,z\in V, \lambda\in\R$
-\begin{enumerate}
-\item $x \precsim y$ implies $x+z \precsim y+z$;
-\item if $\lambda\geq 0$ and $0 \precsim x$, then $0 \precsim \lambda x$.
-\end{enumerate}
+\[ \begin{cases}
+\text{$x \precsim y$ implies $x+z \precsim y+z$;} \\
+\text{if $\lambda\geq 0$ and $0 \precsim x$, then $0 \precsim \lambda x$.}
+\end{cases} \]
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma} \label{elementaryVectorPreorderManipulations}
 Let $V$ be a preordered vector space. For all $v,w \in V$ we have
 \[ v \precsim w \;\iff\; 0 \precsim  w - v \;\iff\; -w \precsim -v.  \]
 \end{lemma}
@@ -1200,7 +1204,7 @@ Let $V$ be a preordered vector space and $\alpha \in \R\setminus\{0\}$. Then for
 \end{cases}. \] 
 \end{corollary}
 
-\begin{lemma}
+\begin{lemma} \label{additionVectorInequalities}
 Let $V$ be a preordered vector space. For all $v,w, x, y \in V$ we have
 \[ \begin{cases}
 v \precsim w \\ x \precsim y
@@ -1261,26 +1265,38 @@ Let $V$ be a preordered vector space. The subset
 \[ V^+ \defeq \setbuilder{v\in V}{0 \precsim v} \]
 is called the \udef{positive cone} of $V$. The elements of the positive cone $V^+$ are called the \udef{positive elements} of $V$.
 \end{definition}
-
-\begin{lemma}
-Let $V$ be a preordered vector space. Then
+That the positive cone is in fact a cone follows from \ref{positiveConeOrderCharacterisation}
+\begin{proposition} \label{positiveCone}
+Let $V$ be a vector space.
 \begin{enumerate}
-\item $V^+$ is a pointed cone;
-\item $V^+$ is convex;
-\item $V^+$ is closed under addition.
+\item A vector preorder on $V$ is uniquely determined by its positive cone:
+\[ x \precsim y \quad\iff\quad y-x \in V^+. \]
+\item The positive cone of a vector preorder is pointed and convex.
+\item Any pointed convex cone in $V$ determines a (unique) vector preorder.
+\item A vector preorder is a partial order \textup{if and only if} the positive cone is salient.
 \end{enumerate}
-If the order on $V$ is a partial order, then
-\begin{enumerate} \setcounter{enumi}{3}
-\item if $v\in V^+$ and $-v\in V^+$, then $v = 0$.
-\end{enumerate}
-\end{lemma}
+\end{proposition}
+Convexity is equivalent to closure under addition (see \ref{convexityAdditiveClosure})
 \begin{proof}
-(1) $V^+$ is clearly a cone by compatibility of the order. It is pointed by reflexivity: $0\precsim 0$.
+(1) This is just \ref{elementaryVectorPreorderManipulations}.
 
-(2) and (3) are equivalent by \ref{convexityAdditiveClosure} and (3) is also an immediate consequence of the compatibility of the order.
+(2) $V^+$  is pointed by reflexivity: $0\precsim 0$. It is closed under addition by \ref{additionVectorInequalities}.
 
-(4) If $v\in V^+$ and $-v\in V^+$, then $v\precsim 0$ and $0\precsim v$, so $v=0$ by anti-symmetry.
+(3) Compatibility with addition is immediate from the definition of the order. Compatibility with scalar multiplication is due to it being a cone (see \ref{positiveConeOrderCharacterisation}). Reflexivity is equivalent with pointedness. Finally transitivity follows from closure under addition:
+\begin{align*}
+ \begin{cases}
+x\precsim y \\ y\precsim x
+\end{cases} &\iff \quad \begin{cases}
+0 \precsim y -x \\ 0 \precsim z-y
+\end{cases} \iff\quad \begin{cases}
+y-x \in V^+ \\ z-y \in V^+
+\end{cases} \\
+&\implies (z-y)+(y-x) = z-x \in V^+ \iff x \precsim z. 
+\end{align*}
+
+(4) We have $x\precsim y$ and $y\precsim x$ iff $(y-x) \in V^+$ and $-(y-x) \in V^+$. Thus both salience and anti-symmetry are equivalent to this situation implying $x-y = 0$.
 \end{proof}
+
 
 \begin{lemma} \label{scalarMultiplicationInequalities}
 Let $V$ be a preordered vector space, $v\in V^+$ and $\alpha\in \R$.
