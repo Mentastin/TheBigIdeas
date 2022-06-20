@@ -2898,6 +2898,16 @@ Let $A$ be a class and $f,g: A\times A\to A$ binary functions. If $f$ and $g$ ar
 For all $x\in A$ we have $f(x,x) = f(x,g(x,f(x,x))) = x$, where the last equality follows from the absorption law with $y = f(x,x)$.
 \end{proof}
 
+\subsection{The evaluation map}
+\begin{definition}
+Let $A,B$ be sets. We define the \udef{evaluation map}
+\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
+Often we will consider partial applications of the evaluation map in the second argument, i.e.\ for $x\in A$
+\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
+which is also called an evaluation map.
+\end{definition}
+We have $\evalMap_x = \curry_2(\evalMap)(x)$.
+
 \section{Associative classes}
 \begin{definition}
 Let $A$ be a class and $f: A\times A \to A$ an associative binary function. We call $\sSet{A,f}$ an \udef{associative class.}
@@ -3390,14 +3400,23 @@ e \ar[u, maps to, shift left, "\lambda_d"] \ar[r, maps to, shift left, "\rho_a"]
 Now we need to show that $e$ is idempotent. Indeed, starting from the three other corners, we see that $e = cx$ and $e = yb$ and $e = c(xy)b = (cx)(yb) = ee$.
 \end{proof}
 
-\subsection{Centraliser of commutant}
+\subsection{Commutation}
 \begin{definition}
-Let $\sSet{A,f}$ be an associative class and $B\subseteq A$ a subclass. The \udef{centraliser} or \udef{commutant} of $B$ is defined as
-\[ Z_A(B) \defeq \setbuilder{a\in A}{\forall b\in B:\;ab = ba}. \]
-In particular we define the \udef{centre} of $A$ as the centraliser of all of $A$:
-\[ Z_A \defeq Z_A(A). \]
-If the surrounding associative class is clear from context, we also denote $Z_A(B)$ as $B'$.
+Let $\sSet{A,f}$ be an associative class and $x,y \in A$. We say $x$ and $y$ \udef{commute} if $f(x,y) = f(y,x)$. We write $x\commute y$.
 \end{definition}
+
+
+\subsubsection{Centraliser or commutant}
+\begin{definition}
+Let $\sSet{A,f}$ be an associative class and $B\subseteq A$ a subclass. The \udef{centraliser} or \udef{commutant} of $B$ is defined as $Z_A(B) \defeq B^\commute$.
+
+In particular we define the \udef{centre} of $A$ as the centraliser of all of $A$: $Z_A \defeq Z_A(A)$.
+\end{definition}
+Thus
+\[ Z_A(B) = \setbuilder{x\in A}{\forall b\in B:\;f(x,b) = f(b,x)}. \].
+
+Note that taking the commuting forms a Galois connection. In particular $B \subseteq B^{\commute\commute}$.
+
 \begin{lemma}
 Let $\sSet{A,f}$ be an associative class and $B\subseteq A$. If $f$ is commutative, then $Z_A(B) = A$.
 \end{lemma}
@@ -3406,48 +3425,36 @@ Let $\sSet{A,f}$ be an associative class and $B\subseteq A$. If $f$ is commutati
 Let $\sSet{A,f}$ be an associative class and $B\subseteq A$. Then $Z_A(B)$ is closed under $f$.
 \end{proposition}
 \begin{proof}
-Take arbitrary $b\in B$ and $x,y\in Z_A(B)$.
+Take arbitrary $x,y\in Z_A(B)$. Take arbitrary $b\in B$. Then
+\[ f(f(x,y),b) = f(x,f(y,b)) = f(x,f(b,y)) = f(f(x,b),y) = f(f(b,x),y) = f(b,f(x,y)), \]
+which means that $f(x,y)\in Z_A(B)$.
 \end{proof}
 
-\subsubsection{Normaliser}
+\subsection{Normaliser}
 \begin{definition}
-Let $G$ be a group and $A\subseteq G$ a subset. Then an element $g\in G$ is said to \udef{normalise} $A$ if $A^x = A$, where
-\[ A^g \defeq \Ad_g[A] = g^{-1}Ag. \]
-The \udef{normaliser} of $A$ in $G$ is the set of all elements in $G$ that normalise $A$:
-\[ N_G(A) \defeq \setbuilder{g\in G}{A^g = A}. \]
+Let $\sSet{A,f}$ be an associative class and $B\subseteq A$ a subclass. An element $x\in A$ is said to \udef{normalise} $B$ if $f(x,B) = f(B,x)$.
+
+The \udef{normaliser} of $B$ in $A$ is the set of all elements in $A$ that normalise $B$:
+\[ N_A(B) \defeq \setbuilder{x\in A}{f(x,B) = f(B,x)}. \]
 \end{definition}
-Let $A$ be a subset of $G$. Then the difference between the centraliser and normaliser of $A$ can be summarised as:
-\begin{itemize}
-\item conjugation of $a\in A$ by an element in the centraliser leaves $a$ fixed, so
-\[ a^g = a \qquad \forall g\in Z_G(A); \]
-\item conjugation of $a\in A$ by an element in the normaliser maps $a$ to an element in $A$, so
-\[ a^g \in A \qquad \forall g\in N_G(A). \]
-\end{itemize}
-\begin{lemma}
-Let $G$ be a group and $A\subseteq G$ a set. Then
+
+\begin{proposition}
+Let $\sSet{A,f}$ be an associative class and $B\subseteq A$. Then
 \begin{enumerate}
-\item $Z_G(A) \lhd N_G(A) \lhd G$;
-\item $N_G(A)$ is the largest subgroup of $G$ in which $A$ is normal.
+\item $N_A(B)$ is closed under $f$;
+\item $Z_A(B) \subseteq N_A(B)$;
+\item $Z_A(\{a\}) = N_A(\{a\})$ for all $a\in A$.
 \end{enumerate}
-\end{lemma}
-\begin{corollary}
-$Z_G\lhd G$.
-\end{corollary}
+\end{proposition}
+\begin{proof}
+(1) Take arbitrary $x,y\in N_A(B)$. Then
+\[ f(f(x,y),B) = f(x,f(y,B)) = f(x,f(B,y)) = f(f(x,B),y) = f(f(B,x),y) = f(B,f(x,y)), \]
+which means that $f(x,y)\in N_A(B)$.
 
-\begin{lemma}
-Let $G$ be a group and $g\in G$. Then $Z_G(\{g\}) = N_G(\{g\})$.
-\end{lemma}
+(2) If $f(x,b) = f(b,x)$ for all $b\in B$, then $f(x,B) = f(B,x)$.
 
-
-\subsection{The evaluation map}
-\begin{definition}
-Let $A,B$ be sets. We define the \udef{evaluation map}
-\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
-Often we will consider partial applications of the evaluation map in the second argument, i.e.\ for $x\in A$
-\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
-which is also called an evaluation map.
-\end{definition}
-We have $\evalMap_x = \curry_2(\evalMap)(x)$.
+(3) $f(x,\{a\}) = f(x,a)$ and $f(\{a\}, x) = f(a,x)$.
+\end{proof}
 
 
 
