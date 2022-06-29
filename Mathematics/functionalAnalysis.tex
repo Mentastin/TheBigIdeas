@@ -585,6 +585,22 @@ TODO 9.2 in lecture notes.
 \end{theorem}
 
 \section{Operators on topological vector spaces}
+
+\subsection{Continuous operators}
+\subsubsection{Closed graph theorem}
+
+\begin{theorem}[Closed graph theorem] \label{closedGraphTheorem}
+Let $f:X\to Y$ be a map from a topological space $X$ into a Hausdorff space $Y$.
+\begin{enumerate}
+\item if $f$ is continuous, then $f$ has closed graph;
+\item if $X$ is compact, then the converse also holds.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+
+
 \subsection{Compact operators}
 \begin{definition}
 A linear operator $T:X\to Y$ between TVSs is \udef{compact} if it maps a neighbourhood of the origin to a precompact set, i.e.\ 
@@ -956,13 +972,7 @@ Now assume $T$ has closed graph and $Y$ is complete. Take $x\in\overline{\dom(T)
 so $(Tx_n)$ is Cauchy by \ref{CauchyCriterion} and thus by completeness has a limit, say $y$. Then $Tx=y$ by continuity. Since $T$ has closed graph, $x\in\dom(T)$. So $\overline{\dom(T)}\subseteq \dom(T)$ and $\dom(T)$ is closed. 
 \end{proof}
 
-\begin{theorem}[Closed graph theorem] \label{closedGraphTheorem}
-Let $X,Y$ be Banach spaces and $T: X\to Y$ a linear operator. Then $T$ is bounded \textup{if and only if} $T$ has closed graph.
-\end{theorem}
-\begin{proof}
-Assume the graph of $T$ is closed. Then the graph, being a closed subset of a Banach space, is a Banach space (TODO: reference). Then the restriction of the bounded map $X\oplus Y \to X: (x,y)\mapsto x$ to the graph of $T$ is bijective. So by corollary \ref{boundedInverse} the inverse is bounded, so $T$ is bounded.
-\end{proof}
-Notice that it is important that the domain of $T$ be the whole of $X$.
+For closed graph theorem, see TVS.
 
 
 \subsection{Compact operators}
@@ -1617,17 +1627,17 @@ We denote the set of self-adjoint operators on $H$ by $\SelfAdjoints(H)$.
 \end{definition}
 Note that, by \ref{maximalAdjointIsOperator}, the adjoint is a function if and only if $T$ is densely defined.
 
-\begin{lemma}
+\begin{lemma} \label{everywhereDefinedAdjointLemma}
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. If $S$ is an adjoint of $T$ that is defined everywhere, then $T^* = S$.
 \end{lemma}
 \begin{corollary}
 Let $H$ be a Hilbert space. Then $\id_H^* = \id_H$.
 \end{corollary}
 
-\begin{lemma}
+\begin{proposition} \label{adjointDomain}
 Let $T: H\not\to K$ be an operator between Hilbert spaces. Then
 \[ \dom(T^*) = \setbuilder{x\in K}{\text{$\dom(T)\to \F: u\mapsto \inner{x, Tu}$ is a bounded functional}}. \]
-\end{lemma}
+\end{proposition}
 \begin{proof}
 $\boxed{\subseteq}$ If $\omega_x: u\mapsto \inner{x, Tu}$ is bounded, then its domain can be extended by linearity to all of $H$ and it has a Riesz vector $x^*$ such that $\omega_x = u\mapsto \inner{x^*, u}$. The linear operator with domain $\Span\{x\}$ that maps $x$ to $x^*$ is then an adjoint.
 
@@ -1816,19 +1826,24 @@ The penultimate equality follows from \ref{perpUnderIsometry}, using the fact th
 
 \subsection{Bounded operators}
 \begin{proposition}
-Let $T\in\Bounded(H,K)$ with $H,K$ Hilbert spaces. Then
-\[ T^* = C_H^{-1}T^tC_K: K\to H, \]
-where $C_K$ is the Riesz isometry from \ref{RieszIsometry}.
-is the unique adjoint of $T$ with $\dom(S) = K$.
+Let $T: H\to K$ be a closed densely defined operator between Hilbert spaces. Then
+\begin{enumerate}
+\item $T\in\Bounded(H,K)$ \textup{if and only if} $T^*\in\Bounded(K,H)$.
+\end{enumerate}
+In this case
+\begin{enumerate} \setcounter{enumi}{1}
+\item $\norm{T} = \norm{T^*}$;
+\item $T^* = C_H^{-1}T^tC_K$, where $C_K$ is the Riesz isometry from \ref{RieszIsometry}.
+\end{enumerate}
 \end{proposition}
-
-\begin{lemma}
-Let $T\in\Bounded(H,K)$. Then the adjoint $T^*$ is a bounded operator in $\Bounded(K,H)$ with $\norm{T^*} = \norm{T}$.
-\end{lemma}
 \begin{proof}
-The function $(w,v)\mapsto \inner{w,Tv}_K$ is sesquilinear. By proposition \ref{sesquilinearRepresentation} the function $T^*$ must be the unique $S$ from the proposition, which is linear and bounded.
+First assume $T\in\Bounded(H,K)$. Then $u\mapsto \inner{x,Tu}$ is a bounded functional for all $x\in K$, so $\dom(T^*) = K$ by \ref{adjointDomain}. Also $T^*$ is closed by \ref{adjointGraph}, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}.
 
-This can also be proved by a direct calculation using $(T^*)^* = T$ from \ref{HilbertAdjointLemma}.
+Now assume $T^*\in\Bounded(K,H)$. By the previous argument $T = \overline{T} = T^{**}\in\Bounded(H,K)$.
+
+The function $(x,u)\mapsto \inner{x,Tu}$ is a bounded sesquilinear form. By proposition \ref{sesquilinearRepresentation}, $T^*$ must be the unique $S$ from the proposition, which has norm $\norm{T}$.
+
+Finally we note that $C_H^{-1}T^tC_K$ is an adjoint with domain $K$ and conclude by \ref{everywhereDefinedAdjointLemma}.
 \end{proof}
 
 \begin{lemma}
@@ -1900,10 +1915,9 @@ The other equality follows by applying the first to $T^*$ and using $\norm{T^*}=
 
 \subsection{Normal operators}
 \begin{definition}
-A densely defined linear operator $T$ on a Hilbert space $H$ is \udef{normal} if
-\[ TT^* = T^*T. \]
+A densely defined linear operator $T$ on a Hilbert space $H$ is \udef{normal} if it is closed and $TT^* = T^*T$.
 \end{definition}
-Self-adjoint and unitary operators are normal, but the converse is not true.
+Self-adjoint and unitary operators are normal.
 
 TODO 3.10 Self-Adjoint, Unitary and Normal Operators from Kreyszig.
 
@@ -1915,13 +1929,16 @@ If $T$ is a normal operator, then $\ker T = \ker T^* = (\im T)^\perp$.
 \end{proof}
 
 \begin{proposition}
-Let $T\in\Bounded(H)$ be a bounded operator. Then $T$ is normal \textup{if and only if} $\forall x\in H: \norm{Tx} = \norm{T^*x}$.
+Let $T: H\not\to H$ be a densely defined operator. Then $T$ is normal \textup{if and only if} $\dom(T) = \dom(T^*)$ and $\forall x\in H: \norm{Tx} = \norm{T^*x}$.
 \end{proposition}
 \begin{proof}
 First, assume $T$ normal. Then
 \[ \norm{Tx}^2 = |\inner{Tx,Tx}| = |\inner{T^*Tx,x}| = |\inner{TT^*x,x}| = |\inner{T^*x,T^*x}| = \norm{T^*x}^2. \]
 
 For the converse, we have $\inner{Tx, Ty} = \inner{T^*x, T^* y}$ for all $x,y\in H$ by polarisation. From this we have $\inner{T^*Tx, y} = \inner{TT^*x, y}$ and normality follows from \ref{equalityOfMapsInnerProductSpaces}.
+
+TODO question of domain.
+\url{https://www.math.drexel.edu/faculty/mjz55/wp-content/uploads/sites/8/2017/01/normalnotes.pdf}.
 \end{proof}
 
 \begin{lemma} \label{normalSpectralRadiusEqualsNorm}
@@ -1933,7 +1950,7 @@ A normal operator on a Hilbert space is invertible \textup{if and only if} it is
 \end{lemma}
 
 \subsection{Self-adjoint operators}
-\subsubsection{Symmetric operators}
+\subsubsection{Symmetric versus self-adjoint operators}
 A symmetric operator $A$ is self-adjoint if and only if $\dom(A) = \dom(A^*)$.
 \begin{lemma} \label{symmetricOperatorAdjointInclusion}
 Let $A$ be a symmetric densely defined operator on a Hilbert space $H$. Then
@@ -2023,6 +2040,29 @@ Every surjective symmetric operator is self-adjoint.
 Take $z=0$.
 \end{proof}
 
+\subsubsection{Self-adjoint extensions of symmetric operators}
+\paragraph{Cayley transform}
+Consider the Möbius transform
+\[ \C\setminus\{\overline{\lambda}\} \to \C: x\mapsto \frac{x - \lambda}{x-\overline{\lambda}} \qquad \text{for some $\lambda\in\C\setminus\R$.} \]
+This transform maps
+\begin{itemize}
+\item the real line to $\T\setminus\{1\}$;
+\item the half-plane above / below the real line containing $\lambda$ to the interior of the unit disk;
+\item the half plane containing $\overline{\lambda}$ to the exterior of the unit disk;
+\item in particular $\lambda \mapsto 0$ and $\overline{\lambda} \mapsto \infty$.
+\end{itemize}
+Conventional choice: $\lambda = i$.
+
+\paragraph{Defect indices}
+Or deficiency(?)
+\url{https://link-springer-com.ezproxy.ulb.ac.be/content/pdf/10.1007/978-94-007-4753-1.pdf}
+
+Cfr. dilation theory through Cayley transform.
+
+\subsubsection{Positive self-adjoint extensions of symmetric operators}
+\begin{theorem}[Friedrich's extension]
+
+\end{theorem}
 
 
 \subsubsection{Bounded self-adjoint operators}
