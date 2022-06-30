@@ -1966,7 +1966,7 @@ Let $A$ be a symmetric densely defined operator on a Hilbert space $H$. Then
 (3) From (1) we see that $A^*$ is densely defined, because the superset of a dense set is dense. The result follows by \ref{adjointDenselyDefinedClosable}.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{selfAdjointMaximal}
 A self-adjoint operator cannot have a proper symmetric extension.
 \end{proposition}
 \begin{proof}
@@ -2024,7 +2024,7 @@ is not symmetric. In this case
 so $\dom(T^*) \subseteq \dom(T)$.
 
 
-\begin{proposition}
+\begin{proposition} \label{rangeSelfAdjointCriterion}
 Let $A$ be a symmetric operator on a Hilbert space $H$ such that
 \[ \exists z \in \C: \quad \im(A+z\id) = H = \im(A+\overline{z}\id), \]
 then $A$ is self-adjoint.
@@ -2061,9 +2061,30 @@ Cfr. dilation theory through Cayley transform.
 
 \subsubsection{Positive self-adjoint extensions of symmetric operators}
 \begin{theorem}[Friedrich's extension]
-
+Let $A$ be a positive symmetric operator on a Hilbert space $H$. Then $A$ has a unique positive self-adjoint extension $\widetilde{A}$ with domain $\dom(\widetilde{A}) \subseteq \closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
 \end{theorem}
+\begin{proof}
+Set $H_A \defeq \closure_{\norm{\cdot}_{A+\id}}(\dom(A))$. By \ref{energyNormTopology}, we have $H_A \subseteq \closure_{\norm{\cdot}}(\dom(A))$.
 
+For \undline{existence}, we can construct the operator $\widetilde{A}$ as follows:
+\begin{align*}
+\dom(\widetilde{A}) &\defeq \setbuilder{x\in H_A}{\exists x'\in H:\forall y\in H_A:\; \inner{y,x}_{A+\id} = \inner{y,x'}} \\
+\widetilde{A}x &\defeq x' - x.
+\end{align*}
+Now $\widetilde{A}$ is an extension of $A$, because for all $x\in \dom(A)$, we can take $x' = Ax + x$. So $\widetilde{A}x = Ax$.
+
+But $\dom(\widetilde{A})$ may be larger than $\dom(A)$, because we can extended $\inner{y,x}_{A+\id}$ to be defined on all of $H_A$ by continuity.
+
+By construction $\dom(\widetilde{A}) \subseteq \closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
+
+Now we claim $\im(\widetilde{A} + \id) = H$. Indeed for any $x'\in H$, the functional $H_A \to H_A: y\mapsto \inner{y,x'}$ is bounded. By Riesz representiation \ref{rieszRepresentation}, we can find an $x\in H_A$ such that $\inner{y,x}_{A+\id} = \inner{y,x'}$. Thus $(\widetilde{A} + \id)x = x'$.
+
+By \ref{rangeSelfAdjointCriterion} we conclude that $\widetilde{A}$ is self-adjoint. 
+
+For \undline{uniqueness}, assume there exists a second such extension $\widehat{A}$. For all $y\in \dom(A)$ and $x\in \dom(\widehat{A})$, we have
+\[ \inner{y, (\widehat{A}+\id)x} = \inner{(\widehat{A}+\id)y, x} = \inner{(A+\id)y, x} = \overline{\inner{x, (A+\id)y}} = \overline{\inner{x, y}_{A+\id}} = \inner{y, x}_{A+\id}. \]
+By continuity this holds for all $y\in H_A$. And thus by definition $\widetilde{A}x = \widehat{A}x$ for all $x\in\dom(\widetilde{A})$. Thus $\widetilde{A} \subseteq \widehat{A}$, but self-adjoint operators are maximal by \ref{selfAdjointMaximal}, so $\widetilde{A} = \widehat{A}$.
+\end{proof}
 
 \subsubsection{Bounded self-adjoint operators}
 \begin{lemma}
@@ -2522,14 +2543,6 @@ This is the Galois identity \ref{GaloisIdentity}, although the direct proof is a
 
 \subsubsection{Unitaries}
 \paragraph{Bilateral shifts}
-
-\subsection{Friedrichs extension}
-\begin{proposition}
-Let $T: H\not\to K$ be a densely defined, positive, symmetric operator between Hilbert spaces. Then $T$ has positive self-adjoint extension.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
 
 
 \section{Dirac notation}
@@ -3019,7 +3032,10 @@ For $\lambda\in\C$ the \udef{resolvent} $R_L(\lambda)$ is defined as
 if this inverse exists (i.e.\ if $\lambda \id_V - L$ is injective).
 \begin{itemize}
 \item The \udef{resolvent set} $\res(L)$ is the set
-\[ \res(L) \defeq \setbuilder{\lambda\in \C}{\text{$R_L(\lambda)$ exists, has domain $V$ and is bounded}}. \]
+\begin{align*}
+\res(L) &\defeq \setbuilder{\lambda\in \C}{R_L(\lambda)\in\Bounded(V)} \\
+&= \setbuilder{\lambda\in \C}{\text{$R_L(\lambda)$ exists, has domain $V$ and is bounded}}.
+\end{align*}
 \item The \udef{spectrum} of $L$ is the complement of the resolvent set: $\spec(L) \defeq \C\setminus\rho(L)$.
 \item The \udef{spectral radius} $\spr(L)$ is $\sup_{\lambda\in\spec(L)} |\lambda|$.
 \end{itemize}
@@ -3027,7 +3043,7 @@ if this inverse exists (i.e.\ if $\lambda \id_V - L$ is injective).
 
 \begin{proposition}[Resolvent identity]
 Let $T$ be a linear operator and $\lambda,\mu\in\C$ such that $R_T(\lambda), R_T(\mu)$ exist. Then $R_T(\lambda)$ and $R_T(\mu)$ commute and
-\[ R_T(\lambda) - R_T(\mu) = (\mu-\lambda)R_T(\lambda)R_T(\mu). \]
+\[ \frac{R_T(\lambda) - R_T(\mu)}{\lambda-\mu} = -R_T(\lambda)R_T(\mu). \]
 \end{proposition}
 \begin{proof}
 The commutativity of the resolvents follows from \ref{commutationInverse}.
@@ -3039,24 +3055,35 @@ R_T(\lambda) - R_T(\mu) &= R_T(\lambda)R_T(\mu)(\mu\id - T) - R_T(\mu)R_T(\lambd
 &= (\mu - \lambda)R_T(\lambda)R_T(\mu).
 \end{align*}
 \end{proof}
-
-\begin{proposition}
+\begin{corollary}
 Let $T$ ba a linear operator. Then
 \begin{enumerate}
 \item $R_T(\lambda)$ is holomorphic in $\rho(T)$;
 \item $R_T'(\lambda) = -R_T(\lambda)^2$;
 \item $R_T^{(n)}(\lambda) = n!(-1)^n R_T(\lambda)^{n+1}$ for all $n\in \N$.
 \end{enumerate}
-\end{proposition}
-
-\begin{proposition} \label{firstNeumannSeries}
+\end{corollary}
+\begin{corollary} \label{firstNeumannSeries}
 Let $T$ ba a linear operator and $\lambda_0\in \rho(T)$. Then the Taylor expansion of $R_T(\lambda)$ around $\lambda_0$ is
-\[ R_T(\lambda) = \sum_{n=0}^\infty (\lambda-\lambda_0)^n(-1)^nR_T(\lambda_0)^{n+1} = (1+(\lambda-\lambda_0)R_T(\lambda_0))^{-1}R_T(\lambda_0), \]
-with convergence radius $1/\spr(R_T(\lambda_0))$.
-\end{proposition}
+\begin{align*}
+R_T(\lambda) &= \sum_{n=0}^\infty (\lambda-\lambda_0)^n(-1)^nR_T(\lambda_0)^{n+1} \\
+&= R_T(\lambda_0) \sum_{n=0}^\infty \Big((\lambda_0-\lambda)R_T(\lambda_0)\Big)^n \\
+&= \frac{R_T(\lambda_0)}{1+(\lambda-\lambda_0)R_T(\lambda_0)},
+\end{align*}
+with convergence radius $1/\norm{R_T(\lambda_0)}$.
+\end{corollary}
+\begin{proof}
+If $|(\lambda_0-\lambda)| \leq 1/\norm{R_T(\lambda_0)}$, then $(\lambda_0-\lambda)R_T(\lambda_0)$ is a contraction and we can use the Neumann series expansion \ref{operatorNeumannSeries}, which gives the last equality.
+\end{proof}
+\begin{corollary} \label{resolventNormDistanceToSpectrum}
+For all $\lambda\in\res(T)$, we have $d(\lambda, \spec(T)) \geq \norm{R_T(\lambda)}^{-1}$.
+\end{corollary}
+\begin{corollary}
+The resolvent set $\res(T)$ is open.
+\end{corollary}
 
 \begin{proposition} \label{secondNeumannSeries}
-Let $T$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_T(\lambda)$ is bounded and given by
+Let $T$ be a \emph{bounded} operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_T(\lambda)$ is bounded and given by
 \[ R_T(\lambda) = (\lambda \id_X - T)^{-1} = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
 with uniform convergence. The norm is bounded by
 \[ \norm{R_T(\lambda)} = \norm{(\lambda \id_X - T)^{-1}} \leq \frac{1}{|\lambda|-\norm{T}}. \]
@@ -3066,6 +3093,9 @@ The operator $T/\lambda$ is a contraction so the Neumann series \ref{operatorNeu
 \[ \left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \left(\frac{T}{\lambda}\right)^n.  \]
 Now $(\lambda \id_X - L)^{-1} = \frac{1}{\lambda}\left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \frac{T^n}{\lambda^{n+1}}$. The Neumann series also gives us the bound on the norm.
 \end{proof}
+
+
+
 
 \subsection{The spectrum}
 \begin{definition}
@@ -3115,6 +3145,37 @@ Let $K$ be a compact operator on a Banach space. Then
 \begin{proof}
 For all $\lambda\neq 0$, we have that $\lambda\id - K$ is Fredholm with index zero (and thus bounded). Then by the Fredholm alternative \ref{FredholmAlternative} $\lambda\id - K$ is either bijective or neither injective nor surjective, meaning $\lambda$ is either in $\rho(T)$ or in $\pspec(T)$. 
 \end{proof}
+
+\begin{proposition}[Weyl sequences] \label{WeylSequence}
+Let $T$ be an operator on a Banach space $X$.
+\begin{enumerate}
+\item If there exists a sequence $\seq{x_n} \subseteq X$ such that
+\[ \forall n: \; \norm{x_n} = 1 \qquad\text{and}\qquad \norm{(\lambda\id - T)x_n}\to 0, \]
+then $\lambda\in\spec(T)$.
+\item If $\lambda \in \sigma(T)\cap \overline{\res(T)}$, then there exists such a sequence for $\lambda$.
+\end{enumerate}
+\end{proposition}
+A sequence as described in \ref{WeylSequence} is called a \udef{Weyl sequence}.
+\begin{proof}
+(1) If $\lambda\in\res(T)$, then
+\[ 1 = \norm{x_n} = \norm{R_T(\lambda)(\lambda\id-T)x_n} \leq \norm{R_T(\lambda)}\;\norm{(\lambda\id-T)x_n} \not\to 0, \]
+which is a contradiction.
+
+(2) Assume $\lambda \in \sigma(T)\cap \overline{\res(T)}$. Then we can find a sequence $\seq{\lambda_n}\subseteq \res(T)$ such that $\lambda_n \to \lambda$.
+Now $d(\lambda_n, \spec(T)) \to 0$, so by \ref{resolventNormDistanceToSpectrum}, we can find a sequence of unit vectors $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} \to \infty$. Now we can rescale $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} = 1$.
+
+Then $\norm{x_n}\to 0$, and hence
+\begin{align*}
+\norm{(\lambda\id - T)R_T(\lambda_n)x_n} &= \norm{\frac{\lambda\id - T}{\lambda_n\id - T}x_n} \\
+&= \norm{\frac{(\lambda\id - T) + (\lambda_n\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}x_n} \\
+&= \norm{\left(\id + \frac{(\lambda\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}\right)x_n} \\
+&= \norm{\left(\id + \frac{\lambda\id - \lambda_n\id}{\lambda_n\id - T}\right)x_n} \\
+&= \norm{x_n + (\lambda\id - \lambda_n\id)R_T(\lambda_n)x_n} \\
+&\leq \norm{x_n} + |\lambda - \lambda_n|\;\norm{R_T(\lambda_n)x_n} \to 0.
+\end{align*}
+Thus $\seq{R_T(\lambda_n)x_n}$ is the kind of sequence we were looking for.
+\end{proof}
+
 
 \begin{proposition} \label{spectrumCompactOperator}
 Let $K$ be a compact operator on a Banach space $X$. Then

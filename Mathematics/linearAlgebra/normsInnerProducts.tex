@@ -95,20 +95,75 @@ Let $V$ be a normed vector space, then the norm $\norm{\cdot}:V\to \R$ is a cont
 The reverse triangle inequality, $|\norm{v}-\norm{w}| \leq \norm{v-w}$, implies that the norm is Lipschitz continuous with Lipschitz constant $1$, so we can use \ref{LipschitzcontinuousContinuous}.
 \end{proof}
 
-\begin{definition}
-Let $V$ be a vector space. Two norms $\norm{\cdot}_1$ and $\norm{\cdot}_2$ on $V$ are \udef{equivalent} if there exist $a,b\in \R$ such that
-\begin{align*}
-\forall v\in V: a\norm{v}_1&\leq \norm{v}_2 \\
-\forall v\in V: b\norm{v}_2&\leq \norm{v}_1
-\end{align*}
-\end{definition}
+\subsubsection{Continuous operators}
+\begin{theorem} \label{boundedLinearMaps}
+Let $L$ be a linear operator between normed spaces $V,W$. The following are equivalent:
+\begin{enumerate}
+\item $L$ is continuous everywhere in $\dom(L)$;
+\item $L$ is continuous at $x_0 \in \dom(L)$;
+\item $L$ is continuous at $0$;
+\item $L$ is Lipschitz continuous.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We proceed round-robin-style:
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{(1) \Rightarrow (2)}$] Trivial.
+\item[$\boxed{(2) \Rightarrow (3)}$] Let $\seq{x_n}$ converge to $0$, then
+\[ \lim_{n\to\infty}L(x_n) = \lim_{n\to\infty}L(x_n+x_0) - L(x_0) = L(\lim_{n\to\infty}x_n+x_0) - L(x_0) = L(x_0) - L(x_0) = 0. \]
+Continuity follows because normed vector spaces are sequential spaces.
+\item[$\boxed{(3) \Rightarrow (4)}$] From continuity at zero, there exists a $\delta>0$ such that $\norm{L(h)} = \norm{L(h)-L(0)} \leq 1$ for all $h\in \dom(L)$ with $\norm{h}\leq \delta$. Thus for all nonzero $v\in \dom(L)$
+\[ \norm{L(v)} = \norm{\frac{\norm{v}}{\delta}L(\delta \frac{v}{\norm{v}})} = \frac{\norm{v}}{\delta}\norm{L(\delta \frac{v}{\norm{v}})}\leq \frac{\norm{v}}{\delta}. \]
+\item[$\boxed{(4) \Rightarrow (1)}$] Lipschitz continuity implies continuity \ref{LipschitzcontinuousContinuous}.
+\end{itemize}
+\end{proof}
 
-\begin{proposition}
-Equivalent norms induce the same topology.
+\begin{definition}
+An operator $L$ between normed vector spaces is called \udef{bounded} if it is (Lipschitz) continuous.
+
+The set of bounded operators from $V$ to $W$ is denoted $\Bounded(V,W)$. If $V=W$, we write $\Bounded(V)$.
+\end{definition}
+In other words, bounded means there exists an $M>0$ such that $\forall v\in \dom(L)$
+\[ \norm{L(v)} \leq M \norm{v}. \]
+
+\begin{proposition} \label{boundedAntiLinearMaps}
+An anti-linear map between complex vector spaces is continuous \textup{if and only if} it is bounded.
 \end{proposition}
 \begin{proof}
-TODO
+An anti-linear map $A:V\to W$ is an $\R$-linear map $A:V_\R\to W_\R$. Now $V_\R, W_\R$ have the same norms as $V,W$ and thus the same topology. So $A:V\to W$ is continuous if and only if $A:V_\R\to W_\R$ is continuous.
 \end{proof}
+
+\subsubsection{Comparison of norm topologies}
+\begin{definition}
+Let $V$ be a vector space and $\norm{\cdot}_1$, $\norm{\cdot}_2$ two norms on $V$. We say
+\begin{itemize}
+\item $\norm{\cdot}_1$ is \udef{bounded} by $\norm{\cdot}_2$ if there exists $C\in \R$ such that $\forall v\in V: \norm{v}_1 \leq C\norm{v}_2$;
+\item $\norm{\cdot}_1$ and $\norm{\cdot}_2$ are \udef{equivalent} if each is bounded by the other.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $V$ be a vector space and $\norm{\cdot}_1$, $\norm{\cdot}_2$ two norms on $V$. These norms are equivalent \textup{if and only if} there exists a $C>0$ such that
+\[ \frac{1}{C}\norm{\cdot}_1 \leq \norm{\cdot}_2 \leq C\norm{\cdot}_1. \]
+\end{lemma}
+
+\begin{proposition} \label{normComparison}
+Let $V$ be a vector space and $\norm{\cdot}_1$, $\norm{\cdot}_2$ two norms on $V$. Then the following are equivalent:
+\begin{enumerate}
+\item $\norm{\cdot}_2$ is bounded by $\norm{\cdot}_1$;
+\item $\id_V: \sSet{V,\norm{\cdot}_1} \to \sSet{V,\norm{\cdot}_2}$ is continuous;
+\item the norm topology of $\norm{\cdot}_1$ is finer than the norm topology of $\norm{\cdot}_2$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Leftrightarrow (2)$ By \ref{boundedLinearMaps} both are equivalent to
+\[ \exists C>0: \forall v\in V: \qquad \norm{v}_2 = \norm{\id_V((v))}_2 \leq C\norm{v}_1. \]
+
+$(2) \Leftrightarrow (3)$ Follows straight from \ref{identityContinuity}.
+\end{proof}
+\begin{corollary}
+Equivalent norms induce the same topology.
+\end{corollary}
 
 \subsubsection{Infinite linear combinations}
 Because normed product spaces are metric spaces, we have a notion of convergence and can define infinite sums:
@@ -233,45 +288,6 @@ This norm can also be seen as a norm on $V$: the \udef{graph norm} induced by $L
 
 
 \subsection{Bounded operators}
-\begin{definition}
-An operator $L$ between normed vector spaces is called \udef{bounded} if it is Lipschitz continuous.
-
-In other words, there exists an $M>0$ such that $\forall v\in \dom(L)$
-\[ \norm{L(v)} \leq M \norm{v}. \]
-
-The set of bounded operators from $V$ to $W$ is denoted $\Bounded(V,W)$. If $V=W$, we write $\Bounded(V)$.
-\end{definition}
-
-\begin{theorem} \label{boundedLinearMaps}
-Let $L$ be a linear operator between normed spaces $V,W$. The following are equivalent:
-\begin{enumerate}
-\item $L$ is continuous everywhere in $\dom(L)$;
-\item $L$ is continuous at $x_0 \in \dom(L)$;
-\item $L$ is continuous at $0$;
-\item $L$ is bounded.
-\end{enumerate}
-\end{theorem}
-\begin{proof}
-We proceed round-robin-style:
-\begin{itemize}[leftmargin=2cm]
-\item[$\boxed{(1) \Rightarrow (2)}$] Trivial.
-\item[$\boxed{(2) \Rightarrow (3)}$] Let $\seq{x_n}$ converge to $0$, then
-\[ \lim_{n\to\infty}L(x_n) = \lim_{n\to\infty}L(x_n+x_0) - L(x_0) = L(\lim_{n\to\infty}x_n+x_0) - L(x_0) = L(x_0) - L(x_0) = 0. \]
-Continuity follows because normed vector spaces are sequential spaces.
-\item[$\boxed{(3) \Rightarrow (4)}$] From continuity at zero, there exists a $\delta>0$ such that $\norm{L(h)} = \norm{L(h)-L(0)} \leq 1$ for all $h\in \dom(L)$ with $\norm{h}\leq \delta$. Thus for all nonzero $v\in \dom(L)$
-\[ \norm{L(v)} = \norm{\frac{\norm{v}}{\delta}L(\delta \frac{v}{\norm{v}})} = \frac{\norm{v}}{\delta}\norm{L(\delta \frac{v}{\norm{v}})}\leq \frac{\norm{v}}{\delta}. \]
-\item[$\boxed{(4) \Rightarrow (1)}$] Lipschitz continuity implies continuity \ref{LipschitzcontinuousContinuous}.
-\end{itemize}
-\end{proof}
-\begin{corollary} \label{boundedAntiLinearMaps}
-An anti-linear map between complex vector spaces is also continuous \textup{if and only if} it is bounded.
-\end{corollary}
-\begin{proof}
-An anti-linear map $A:V\to W$ is an $\R$-linear map $A:V_\R\to W_\R$. Now $V_\R, W_\R$ have the same norms as $V,W$ and thus the same topology. So $A:V\to W$ is continuous if and only if $A:V_\R\to W_\R$ is continuous.
-\end{proof}
-\begin{corollary}
-All norm-decreasing homomorphisms are continuous.
-\end{corollary}
 
 \begin{proposition}
 Let $V,W$ be normed spaces. Then $T:V\to W$ is bounded \textup{if and only if}
@@ -350,6 +366,7 @@ TODO
 \end{proof}
 
 \subsubsection{Operators bounded below}
+TODO: also unbounded operators!
 \begin{definition}
 Let $T$ be a bounded linear operator. We say $T$ is \udef{bounded below} if
 \[ \exists b>0:\forall v\in \dom(T): \quad \norm{Tv}\geq b\norm{v} \]
@@ -1394,7 +1411,36 @@ TODO: restrict to bounded operators??
 The operator partial order is a partial order on the set of operators on an inner product space.
 \end{lemma}
 
-\subsubsection{Dissipative operators}
+\subsubsection{Induced topology}
+We consider the topology induced by an energy norm $\norm{\cdot}_T$.
+
+\begin{proposition} \label{energyNormTopology}
+Let $V$ be an inner product space and $T$ a positive operator on $V$. Then
+\begin{enumerate}
+\item if $T$ is bounded, then $\norm{\cdot}_T$ is bounded by $\norm{\cdot}$;
+\item $\norm{\cdot}$ is bounded by $\norm{\cdot}_{T+\id}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) If $T$ is bounded, then $\forall v\in V$
+\[ \norm{v}_T = \sqrt{\inner{v,Tv}} = \sqrt{|\inner{v,Tv}|} \leq \sqrt{\norm{v}^2\norm{T}} = \sqrt{\norm{T}}\norm{v}, \]
+where we have used the Cauchy-Schwarz inequality \ref{CauchySchwarz}.
+
+(2) For all $v\in V$ we have
+\[ \norm{v} \leq \norm{v} + \norm{v}_T = \inner{v,v} + \inner{v,Tv} = \inner{v,(T+\id)v} = \norm{v}_{T+\id}. \]
+\end{proof}
+\begin{corollary}
+Let $V$ be an inner product space and $T$ a positive operator on $V$. Then
+\begin{enumerate}
+\item if $T$ is bounded, then the topology induced by $\norm{\cdot}$ is finer than the topology induced by $\norm{\cdot}_T$;
+\item the topology induced by $\norm{\cdot}_{T+\id}$ is finer than the topology induced by $\norm{\cdot}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+This follows straight from \ref{normComparison}.
+\end{proof}
+
+\subsection{Dissipative operators}
 \begin{definition}
 Let $T$ be an operator on $H$. Then $T$ is \udef{dissipative} if, for all $x\in\dom(T)$
 \[ \Im \inner{x,Tx} \geq 0. \]
