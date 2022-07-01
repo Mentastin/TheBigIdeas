@@ -599,6 +599,7 @@ Let $f:X\to Y$ be a map from a topological space $X$ into a Hausdorff space $Y$.
 \begin{proof}
 TODO
 \end{proof}
+TODO: for Banach spaces $X$ complete enough!!!!!!
 
 
 \subsection{Compact operators}
@@ -3022,7 +3023,6 @@ nonstandard eigenvalue problem $A(\gamma)x = 0$.
 
 TODO: consistency $\lambda \id - L$, not $L-\lambda \id$.
 TODO: everything is now in $\C$.
-\subsection{Resolvents}
 
 \begin{definition}
 Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
@@ -3040,6 +3040,37 @@ if this inverse exists (i.e.\ if $\lambda \id_V - L$ is injective).
 \item The \udef{spectral radius} $\spr(L)$ is $\sup_{\lambda\in\spec(L)} |\lambda|$.
 \end{itemize}
 \end{definition}
+
+\subsection{The three-way classification of the spectrum}
+\begin{definition}
+Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
+
+\begin{itemize}
+\item The \udef{point spectrum} or \udef{discrete spectrum} $\pspec(L)$ contains the values of $\lambda$ where $\lambda \id_V - L$ fails to be injective, so the resolvent fails to exist. These values are called the \udef{eigenvalues} of $L$.
+
+We call
+\begin{itemize}
+\item $\ker(\lambda \id_V - L)$ the \udef{multiplicity space} or \udef{geometric eigenspace} of $\lambda$; and
+\item $\dim\ker(\lambda \id_V - L)$ the \udef{(geometric) multiplicity} of $\lambda$.
+\end{itemize}
+\item The \udef{continuous spectrum} $\cspec(L)$ is the set of all values of $\lambda\in\spec(L)$ such that the resolvent $R_L(\lambda)$ exists and has dense range.
+\item The \udef{residual spectrum} $\rspec(L)$ is the set of all values of $\lambda\in\spec(L)$ such that the resolvent $R_L(\lambda)$ exists and does not have dense range.
+
+We call
+\begin{itemize}
+\item $\im(\lambda \id_V - L)^\perp$ the \udef{deficiency subspace} of $\lambda$; and 
+\item $\dim(\im(\lambda \id_V - L)^\perp)$ the \udef{deficiency} of $\lambda$.
+\end{itemize}
+\end{itemize}
+The sets $\pspec(T), \cspec(T)$ and $\rspec(T)$ are disjoint.
+\end{definition}
+In finite dimensions we know that
+\[ \text{$\lambda \id_V - L$ is surjective} \quad\iff\quad \text{$\lambda \id_V - L$ is injective} \]
+and all linear operator are bounded.
+So in this case there can only ever be a point spectrum.
+
+
+\subsection{Resolvents}
 
 \begin{proposition}[Resolvent identity]
 Let $T$ be a linear operator and $\lambda,\mu\in\C$ such that $R_T(\lambda), R_T(\mu)$ exist. Then $R_T(\lambda)$ and $R_T(\mu)$ commute and
@@ -3082,48 +3113,54 @@ For all $\lambda\in\res(T)$, we have $d(\lambda, \spec(T)) \geq \norm{R_T(\lambd
 The resolvent set $\res(T)$ is open.
 \end{corollary}
 
-\begin{proposition} \label{secondNeumannSeries}
-Let $T$ be a \emph{bounded} operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_T(\lambda)$ is bounded and given by
-\[ R_T(\lambda) = (\lambda \id_X - T)^{-1} = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
+
+\begin{proposition}
+Let $S$ be a closed, injective linear operator on a Banach space with closed range. Let $T$ be a bounded operator with $\norm{T} < \norm{S^{-1}}^{-1}$, then $S-T$ is invertible and
+\[ (S-T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
+\end{proposition}
+The assumptions are enough to guarantee $S^{-1}$ is bounded, so $\norm{S^{-1}}$ makes sense.
+\begin{proof}
+By injectivity, we can define $S^{-1}$. It is closed by \ref{algebraClosedOperators} and has closed domain, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}. Since $\norm{S^{-1}T} \leq \norm{S^{-1}}\;\norm{T} < 1$, it follows that by \ref{operatorNeumannSeries} that $\id - S^{-1}T$  has bounded inverse and that we can expand its bounded inverse as a Neumann power series. So we can calculate
+\[ (S-T)^{-1} = S^{-1}(\id - S^{-1}T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
+\end{proof}
+\begin{corollary} \label{secondNeumannSeries}
+Let $T$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_T(\lambda)$ is bounded and given by
+\[ R_T(\lambda) = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
 with uniform convergence. The norm is bounded by
-\[ \norm{R_T(\lambda)} = \norm{(\lambda \id_X - T)^{-1}} \leq \frac{1}{|\lambda|-\norm{T}}. \]
+\[ \norm{R_T(\lambda)} \leq \frac{1}{|\lambda|-\norm{T}}. \]
+\end{corollary}
+\begin{proof}
+We use the proposition with $S = \lambda\id$. The norm bound follows from the Neumann series expansion \ref{operatorNeumannSeries}.
+\end{proof}
+\begin{corollary}
+Let $T$ be a bounded linear operator on a Banach space. Then
+\begin{enumerate}
+\item $\spec(T)\subset [-\norm{T}, \norm{T}]$;
+\item $\spec(T)$ is compact.
+\end{enumerate}
+\end{corollary}
+For the point spectrum a simpler argument also leads to $\pspec(T)\subset [-\norm{T}, \norm{T}]$: let $\lambda$ be an eigenvalue with eigenvector $x$. Then
+\[ |\lambda|\;\norm{x} = \norm{\lambda x} = \norm{Tx} \leq \norm{T}\;\norm{x}. \]
+
+\begin{proposition}
+Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
+\[ R_{T^{-1}}(\lambda^{-1}) = -\lambda T R_{T}(\lambda) = -\lambda -\lambda^2 R_T(\lambda). \]
 \end{proposition}
 \begin{proof}
-The operator $T/\lambda$ is a contraction so the Neumann series \ref{operatorNeumannSeries} gives
-\[ \left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \left(\frac{T}{\lambda}\right)^n.  \]
-Now $(\lambda \id_X - L)^{-1} = \frac{1}{\lambda}\left(\id - \frac{T}{\lambda}\right)^{-1} = \sum_{n=0}^\infty \frac{T^n}{\lambda^{n+1}}$. The Neumann series also gives us the bound on the norm.
+This is a reformulation of the calculation
+\[ \frac{1}{\lambda^{-1} - T^{-1}} = \frac{\lambda T}{\lambda T}\frac{1}{\lambda^{-1} - T^{-1}} = \frac{\lambda T}{T - \lambda} = \frac{\lambda T - \lambda^2 + \lambda^2}{T - \lambda} = \frac{\lambda\cancel{(T - \lambda)}}{\cancel{T - \lambda}} + \frac{\lambda^2}{T - \lambda}. \]
+TODO: make rigourous!!
 \end{proof}
+\begin{corollary}
+Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
+\begin{enumerate}
+\item $\spec(T^{-1})\setminus\{0\} = (\spec(T)\setminus \{0\})^{-1}$;
+\item $\pspec(T^{-1})\setminus\{0\} = (\pspec(T)\setminus \{0\})^{-1}$.
+\end{enumerate}
+\end{corollary}
 
+\subsection{Various results}
 
-
-
-\subsection{The spectrum}
-\begin{definition}
-Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
-
-\begin{itemize}
-\item The \udef{point spectrum} or \udef{discrete spectrum} $\pspec(L)$ contains the values of $\lambda$ where $\lambda \id_V - L$ fails to be injective. These values are called the \udef{eigenvalues} of $L$.
-
-We call
-\begin{itemize}
-\item $\ker(\lambda \id_V - L)$ the \udef{multiplicity space} or \udef{geometric eigenspace} of $\lambda$; and
-\item $\dim\ker(\lambda \id_V - L)$ the \udef{(geometric) multiplicity} of $\lambda$.
-\end{itemize}
-\item The \udef{continuous spectrum} $\cspec(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, $\overline{\im(\lambda \id_V - L)} = V$, but $\im(\lambda \id_V - L) \neq V$.
-\item The \udef{residual spectrum} $\rspec(L)$ is the set of all values of $\lambda$ such that $\lambda \id_V - L$ is injective, but $\overline{\im(\lambda \id_V - L)} \neq V$.
-
-We call
-\begin{itemize}
-\item $\im(\lambda \id_V - L)^\perp$ the \udef{deficiency subspace} of $\lambda$; and 
-\item $\dim(\im(\lambda \id_V - L)^\perp)$ the \udef{deficiency} of $\lambda$.
-\end{itemize}
-\end{itemize}
-The sets $\pspec(T), \cspec(T)$ and $\rspec(T)$ are disjoint.
-\end{definition}
-In finite dimensions we know that
-\[ \text{$\lambda \id_V - L$ is surjective} \quad\iff\quad \text{$\lambda \id_V - L$ is injective} \]
-and all linear operator are bounded.
-So in this case there can only ever be a point spectrum.
 
 \begin{proposition}
 Let $X$ be a Banach space and $T$ a closed linear operator on $X$. Then $\lambda \in \spec(T)$ \textup{if and only if} $\lambda \id_X - T: \dom(T) \to V$ is not bijective.
@@ -3193,31 +3230,6 @@ Let $K$ be a compact operator on a Banach space $X$. Then
 TODO: if $K$ is a self-adjoint compact operator on a Hilbert space $H$, then $H$ has an orthonormal basis of eigenvectors of $K$.
 
 
-\begin{lemma}
-Let $T$ be a bounded operator on a Banach space. Then $\spec(T)\subset [-\norm{T}, \norm{T}]$.
-\end{lemma}
-\begin{proof}
-Follows from \ref{secondNeumannSeries}.
-\end{proof}
-
-For the point spectrum a simpler argument leads to $\pspec(T)\subset [-\norm{T}, \norm{T}]$: let $\lambda$ be an eigenvalue with eigenvector $x$. Then
-\[ |\lambda|\;\norm{x} = \norm{\lambda x} = \norm{Tx} \leq \norm{T}\;\norm{x}. \]
-
-\begin{proposition}
-Let $T$ be a closed invertible linear operator on a Banach space. Let $S$ be a bounded operator with $\norm{S} < \norm{T^{-1}}^{-1}$, then $T+S$ is invertible.
-\end{proposition}
-\begin{proof}
-Since $\norm{T^{-1}S} \leq \norm{T^{-1}}\;\norm{S} < 1$, it follows from the Neumann series \ref{operatorNeumannSeries} that $\id + T^{-1}S$ has a bounded inverse so that $(\id + T^{-1}S)^{-1}T^{-1}$ exists and is bounded. Then $(\id + T^{-1}S)^{-1}T^{-1} = (T+S)^{-1} = T^{-1}(\id + ST^{-1})$.
-\end{proof}
-\begin{corollary}
-Let $T$ be a closed linear operator on a Banach space. Then $\spec(T)$ is closed and $\rho(T)$ is open.
-\end{corollary}
-\begin{proof}
-Let $\lambda \in \rho$ such that $(\lambda\id - T)^{-1}$ is bounded. For all $\epsilon \in B(0, 1/\norm{(\lambda\id - T)^{-1}})$ we have that $(\lambda\id - T) + \epsilon\id = (\lambda +\epsilon)\id -T$ has bounded inverse, so $\lambda + \epsilon \in \rho(T)$.
-\end{proof}
-\begin{corollary}
-Let $T$ be a bounded linear operator on a Banach space. Then $\spec(T)$ is compact.
-\end{corollary}
 
 \begin{lemma}
 Let $L$ be an operator on a vector space $V$. If $\lambda \id_V - T$ is not bounded from below, then $\lambda \in \spec(T)$.
@@ -3234,17 +3246,6 @@ Let $T:X\to X$ be an operator on a Banach space and $\lambda\in\cspec$, then $R_
 If $R_\lambda(T)$ is bounded, $\lambda \id_V - T$ then is bounded below by lemma \ref{boundedBelow} and has closed range by proposition \ref{boundedBelowClosedRange}.
 \end{proof}
 
-\begin{proposition}
-Let $T$ be an invertible operator. Then for all $\lambda\neq 0$
-\begin{enumerate}
-\item $\lambda\in\rho(T) \iff \lambda^{-1}\in \rho(T^{-1})$;
-\item $\lambda\in\pspec(T) \iff \lambda^{-1}\in \pspec(T^{-1})$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-We calculate
-\[ \lambda \id - A^{-1} = A^{-1}(\lambda A - \id) = \lambda A^{-1}(A - \frac{\id}{\lambda}). \]
-\end{proof}
 
 \begin{proposition}[Spectral inclusion property of numerical range]
 Let $A$ be an operator. Then $\pspec(A)\subseteq W(A)$ and $\spec(A) \subseteq \overline{W(A)}$.
