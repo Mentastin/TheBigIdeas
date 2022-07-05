@@ -846,15 +846,6 @@ Clearly $\norm*{\tilde{T}} \geq \norm{T}$. For the converse take any $x\in X$. A
 \[ \norm*{\tilde{T}(x)}_Y = \norm{T\left(\lim_{i\to\infty}x_i\right)}_Y = \lim_{i\to\infty}\norm{T(x_i)}_Y \leq \lim_{i\to\infty}\norm{T}\;\norm{x_i}_X = \norm{T}\;\norm{x}_X. \]
 \end{proof}
 
-\begin{proposition} \label{boundedBelowClosedRange}
-Let $T$ be a bounded operator with $\dom(T)$ a Banach space that is bounded below. Then the range $\im T$ is closed.
-\end{proposition}
-\begin{proof}
-Let $y\in \overline{\im T}$ and take a sequence $(Tx_n)$ converging to $y$. Because $T$ is bounded below
-\[ \norm{x_m-x_n} \leq \frac{1}{b}\norm{T(x_m-x_n)} = \frac{1}{b}\norm{Tx_m-Tx_n} \]
-and by proposition \ref{CauchyCriterion} $(x_n)$ is Cauchy. By completeness this sequence has a limit $x$. By boundedness $\lim_n Tx_n = Tx$, meaning $y$ is in $\im T$.
-\end{proof}
-
 \subsection{Contractions}
 A linear operator $T$ on a normed space is a contraction if and only if it is bounded and $\norm{T}<1$. 
 
@@ -1019,6 +1010,789 @@ TODO
 
 
 
+\chapter{Spectral theory and functional calculus}
+\section{Invariant subspaces}
+\begin{definition}
+Let $L\in \Hom(V)$ be an endomorphism. A subspace $U$ of $V$ is \udef{invariant} under $L$ if $T|_U$ is an endomorphism on $U$. In other words, $u\in U$ implies $Tu\in U$.
+\end{definition}
+Clearly this definition only works for endomorphisms, not for linear maps in general. This is true for the rest of the theory about eigenvalues and eigenvectors.
+\begin{example}
+Let $L\in \Hom(V)$. The following are invariant under $L$:
+\begin{itemize}
+\item $\{0\}$;
+\item $\ker L$;
+\item $\im L$.
+\end{itemize}
+\end{example}
+
+\section{The spectrum}
+TODO: eigenvalue problem $Lx = \lambda x$
+
+generalised eigenvalue problem $Lx = \lambda T x$
+
+nonstandard eigenvalue problem $A(\gamma)x = 0$.
+
+TODO: consistency $\lambda \id - L$, not $L-\lambda \id$.
+TODO: everything is now in $\C$.
+
+\begin{definition}
+Let $L: \dom(L)\subset V \to V$ be an operator on a complex normed vector space $V$.
+
+For $\lambda\in\C$ the \udef{resolvent} $R_L(\lambda)$ is defined as
+\[ R_L(\lambda) \defeq (\lambda \id_V - L)^{-1}: \im(\lambda \id_V - L)\to\dom(L), \]
+if this inverse exists (i.e.\ if $\lambda \id_V - L$ is injective).
+\begin{itemize}
+\item The \udef{resolvent set} $\res(L)$ is the set
+\begin{align*}
+\res(L) &\defeq \setbuilder{\lambda\in \C}{R_L(\lambda)\in\Bounded(V)} \\
+&= \setbuilder{\lambda\in \C}{\text{$R_L(\lambda)$ exists, has domain $V$ and is bounded}}.
+\end{align*}
+\item The \udef{spectrum} of $L$ is the complement of the resolvent set: $\spec(L) \defeq \C\setminus\rho(L)$.
+\item The \udef{spectral radius} $\spr(L)$ is $\sup_{\lambda\in\spec(L)} |\lambda|$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $T$ be an operator on a normed vector space $V$. Then $\lambda \in \res(T)$ \textup{if and only if} $\lambda \id_V - T$ is surjective and bounded from below.
+\end{lemma}
+\begin{proof}
+By \ref{boundedBelow}, $\lambda \id_V - T$ has a bounded inverse $(\lambda \id_V - T)^{-1}: \im(\lambda \id_V - T)\to V$ if and only if it is bounded below. In order for $\lambda$ to be in the resolvent set, we need $(\lambda \id_V - T)^{-1}$ to be defined everywhere, i.e. $\im(\lambda \id_V - T) = V$.
+\end{proof}
+
+
+
+\subsection{The three-way classification of the spectrum}
+\begin{definition}
+Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
+
+\begin{itemize}
+\item The \udef{point spectrum} or \udef{discrete spectrum} $\pspec(L)$ contains the values of $\lambda$ where $\lambda \id_V - L$ fails to be injective, so the resolvent fails to exist. These values are called the \udef{eigenvalues} of $L$.
+
+We call
+\begin{itemize}
+\item $\ker(\lambda \id_V - L)$ the \udef{multiplicity space} or \udef{geometric eigenspace} of $\lambda$; and
+\item $\dim\ker(\lambda \id_V - L)$ the \udef{(geometric) multiplicity} of $\lambda$.
+\end{itemize}
+\item The \udef{continuous spectrum} $\cspec(L)$ is the set of all values of $\lambda\in\spec(L)$ such that the resolvent $R_L(\lambda)$ exists and is densely defined.
+\item The \udef{residual spectrum} $\rspec(L)$ is the set of all values of $\lambda\in\spec(L)$ such that the resolvent $R_L(\lambda)$ exists, but is not densely defined.
+
+We call
+\begin{itemize}
+\item $\im(\lambda \id_V - L)^\perp$ the \udef{deficiency subspace} of $\lambda$; and 
+\item $\dim(\im(\lambda \id_V - L)^\perp)$ the \udef{deficiency} of $\lambda$.
+\end{itemize}
+\end{itemize}
+The sets $\pspec(T), \cspec(T)$ and $\rspec(T)$ are disjoint.
+\end{definition}
+In finite dimensions we know that
+\[ \text{$\lambda \id_V - L$ is surjective} \quad\iff\quad \text{$\lambda \id_V - L$ is injective} \]
+and all linear operator are bounded.
+So in this case there can only ever be a point spectrum.
+
+\begin{proposition}
+If $T$ is an operator on a Banach space that is not closed, then $\spec(T) = \C$.
+\end{proposition}
+\begin{proof}
+We can find a sequence $x_n \to x$ such that $Tx_n \to y$, but $Tx \neq y$. Then for all $\lambda\in\C$ we have $z_n = (\lambda\id - T)x_n \to \lambda x - y$. If $R_T(\lambda)$ was a bounded inverse of $(\lambda\id - T)$, then $R_T(\lambda)\circ(\lambda\id - T)x_n \to R_T(\lambda)(\lambda x - y)$. We need to show that $R_T(\lambda)(\lambda x - y) \neq x$. Indeed
+\begin{align*}
+R_T(\lambda)(\lambda x - y) &= R_T(\lambda)(\lambda x - Tx + Tx - y) \\
+&= R_T(\lambda)(\lambda x - Tx) + R_T(\lambda)(Tx - y) \\
+&= x + R_T(\lambda)(Tx - y),
+\end{align*}
+and $R_T(\lambda)(Tx - y) \neq 0$, because $Tx - y \neq 0$ and the kernel of $R_T(\lambda)$ is trivial because it is injective. 
+\end{proof}
+
+\begin{example}
+Closed operators may also have empty resolvent set. \url{https://math.stackexchange.com/questions/3262168/closed-operator-with-trivial-resolvent-set}
+\end{example}
+
+So spectral theory is only interesting for closed operators. In this case the three-way classification exhausts the possibilities.
+
+\begin{proposition}
+Let $X$ be a Banach space and $T$ a closed linear operator on $X$. Then $\lambda \in \spec(T)$ \textup{if and only if} $\lambda \id_X - T: \dom(T) \to V$ is not bijective.
+\end{proposition}
+\begin{proof}
+If $\lambda \id_X - T$ is not bijective, then clearly $\lambda \in \spec(T)$.
+
+Conversely, assume $\lambda \id_X - T$ is bijective. Then $(\lambda \id_X - T)^{-1}: X\to \dom(T)$ is closed by \ref{algebraClosedOperators} and has as domain a Banach space, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}.
+\end{proof}
+\begin{corollary}
+Let $T$ a closed operator on a Banach space. Then
+\[ \spec(T) = \pspec(T) \cup \cspec(T) \cup \rspec(T). \]
+\end{corollary}
+
+
+\begin{proposition}
+Let $T:X\to X$ be an operator on a Banach space and $\lambda\in\cspec$, then $R_\lambda(T)$ is unbounded.
+\end{proposition}
+\begin{proof}
+If $R_\lambda(T)$ is bounded, $\lambda \id_V - T$ then is bounded below by lemma \ref{boundedBelow} and has closed range by proposition \ref{boundedBelowClosedRange}. Then because $\im(\lambda \id_V - T)$ is dense, this means $T$ is surjective, which is a contradiction because then $\lambda\in\res(T)$.
+\end{proof}
+
+\subsection{Resolvents}
+
+\begin{proposition}[Resolvent identity]
+Let $T$ be a linear operator and $\lambda,\mu\in\C$ such that $R_T(\lambda), R_T(\mu)$ exist. Then $R_T(\lambda)$ and $R_T(\mu)$ commute and
+\[ \frac{R_T(\lambda) - R_T(\mu)}{\lambda-\mu} = -R_T(\lambda)R_T(\mu). \]
+\end{proposition}
+\begin{proof}
+The commutativity of the resolvents follows from \ref{commutationInverse}.
+
+We calculate
+\begin{align*}
+R_T(\lambda) - R_T(\mu) &= R_T(\lambda)R_T(\mu)(\mu\id - T) - R_T(\mu)R_T(\lambda)(\lambda\id - T) \\
+&= \mu R_T(\lambda)R_T(\mu) - R_T(\lambda)R_T(\mu) T - \lambda R_T(\mu)R_T(\lambda) + R_T(\mu)R_T(\lambda) T \\
+&= (\mu - \lambda)R_T(\lambda)R_T(\mu).
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $T$ ba a linear operator. Then
+\begin{enumerate}
+\item $R_T(\lambda)$ is holomorphic in $\rho(T)$;
+\item $R_T'(\lambda) = -R_T(\lambda)^2$;
+\item $R_T^{(n)}(\lambda) = n!(-1)^n R_T(\lambda)^{n+1}$ for all $n\in \N$.
+\end{enumerate}
+\end{corollary}
+\begin{corollary} \label{firstNeumannSeries}
+Let $T$ ba a linear operator and $\lambda_0\in \rho(T)$. Then the Taylor expansion of $R_T(\lambda)$ around $\lambda_0$ is
+\begin{align*}
+R_T(\lambda) &= \sum_{n=0}^\infty (\lambda-\lambda_0)^n(-1)^nR_T(\lambda_0)^{n+1} \\
+&= R_T(\lambda_0) \sum_{n=0}^\infty \Big((\lambda_0-\lambda)R_T(\lambda_0)\Big)^n \\
+&= \frac{R_T(\lambda_0)}{1+(\lambda-\lambda_0)R_T(\lambda_0)},
+\end{align*}
+with convergence radius $1/\norm{R_T(\lambda_0)}$.
+\end{corollary}
+\begin{proof}
+If $|(\lambda_0-\lambda)| \leq 1/\norm{R_T(\lambda_0)}$, then $(\lambda_0-\lambda)R_T(\lambda_0)$ is a contraction and we can use the Neumann series expansion \ref{operatorNeumannSeries}, which gives the last equality.
+\end{proof}
+\begin{corollary} \label{resolventNormDistanceToSpectrum}
+For all $\lambda\in\res(T)$, we have $d(\lambda, \spec(T)) \geq \norm{R_T(\lambda)}^{-1}$.
+\end{corollary}
+\begin{corollary}
+The resolvent set $\res(T)$ is open.
+\end{corollary}
+
+
+\begin{proposition} \label{boundedPerturbationClosedOperator}
+Let $S: \dom(S)\subseteq X\to X$ be a closed, bijective linear operator on a Banach space $X$. Let $T\in\Bounded(X)$ be a bounded operator with $\norm{T} < \norm{S^{-1}}^{-1}$, then $S-T$ is invertible and
+\[ (S-T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
+Also $\dom((S-T)^{-1}) = X$.
+\end{proposition}
+The assumptions are enough to guarantee $S^{-1}\in \Bounded(X)$, so $\norm{S^{-1}}$ makes sense.
+\begin{proof}
+By injectivity, we can define $S^{-1}$. It is closed by \ref{algebraClosedOperators} and has closed domain, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}. Since $\norm{S^{-1}T} \leq \norm{S^{-1}}\;\norm{T} < 1$, it follows that by \ref{operatorNeumannSeries} that $\id - S^{-1}T$  has bounded inverse and that we can expand its bounded inverse as a Neumann power series. So we can calculate
+\[ (S-T)^{-1} = S^{-1}(\id - S^{-1}T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
+\end{proof}
+\begin{corollary} \label{secondNeumannSeries}
+Let $T$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_T(\lambda)$ is bounded and given by
+\[ R_T(\lambda) = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
+with uniform convergence. The norm is bounded by
+\[ \norm{R_T(\lambda)} \leq \frac{1}{|\lambda|-\norm{T}}. \]
+\end{corollary}
+\begin{proof}
+We use the proposition with $S = \lambda\id$. The norm bound follows from the Neumann series expansion \ref{operatorNeumannSeries}.
+\end{proof}
+\begin{corollary}
+Let $T$ be a bounded linear operator on a Banach space. Then
+\begin{enumerate}
+\item $\spec(T)\subset [-\norm{T}, \norm{T}]$;
+\item $\spec(T)$ is compact.
+\end{enumerate}
+\end{corollary}
+For the point spectrum a simpler argument also leads to $\pspec(T)\subset [-\norm{T}, \norm{T}]$: let $\lambda$ be an eigenvalue with eigenvector $x$. Then
+\[ |\lambda|\;\norm{x} = \norm{\lambda x} = \norm{Tx} \leq \norm{T}\;\norm{x}. \]
+
+\begin{proposition}
+Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
+\[ R_{T^{-1}}(\lambda^{-1}) = -\lambda T R_{T}(\lambda) = \lambda -\lambda^2 R_T(\lambda). \]
+\end{proposition}
+\begin{proof}
+This is a reformulation of the calculation
+\[ \frac{1}{\lambda^{-1} - T^{-1}} = \frac{\lambda T}{\lambda T}\frac{1}{\lambda^{-1} - T^{-1}} = \frac{\lambda T}{T - \lambda} = \frac{\lambda T - \lambda^2 + \lambda^2}{T - \lambda} = \frac{\lambda\cancel{(T - \lambda)}}{\cancel{T - \lambda}} + \frac{\lambda^2}{T - \lambda} = \lambda - \lambda^2 R_T(\lambda). \]
+TODO: make rigourous!!
+\end{proof}
+\begin{corollary}
+Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
+\begin{enumerate}
+\item $\spec(T^{-1})\setminus\{0\} = (\spec(T)\setminus \{0\})^{-1}$;
+\item $\pspec(T^{-1})\setminus\{0\} = (\pspec(T)\setminus \{0\})^{-1}$.
+\end{enumerate}
+\end{corollary}
+
+\subsection{Approximate spectrum and Weyl sequences}
+\begin{definition}
+The set of all $\lambda$ such that $T-\lambda \id_V$ is not bounded from below is called the \udef{approximate point spectrum} $\apspec$.
+
+If $\lambda\in\apspec(T)$, then $\lambda$ is an \udef{approximate eigenvalue} of $T$.
+\end{definition}
+
+\begin{proposition} \label{approximateSpectrum}
+Let $T$ be an operator. Then
+\begin{enumerate}
+\item $\apspec(T) \subset \spec(T)$;
+\item if $T$ is closed, then $\pspec(T)\cup\cspec(T)\subset\apspec(T)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume $\lambda \notin \spec(T)$. Then $(T-\lambda \id_V)^{-1}$ is bounded, so its inverse $T-\lambda \id_V$ is bounded below by \ref{boundedBelow} and $\lambda\in \apspec(T)$.
+
+(2) Assume $\lambda\notin \apspec(T)$, 
+so $T-\lambda \id_V$ is bounded below. Then $T-\lambda \id_V$ is injective by \ref{boundedBelow} and $\lambda\notin\pspec(T)$. By proposition \ref{boundedBelowClosedRange} the range $\im(T-\lambda \id_V)$ is closed, so it cannot be a proper dense subset of $X$ and $\lambda\notin\cspec(T)$.
+\end{proof}
+
+\begin{proposition}[Weyl sequences] \label{WeylSequence}
+Let $T$ be an operator on a normed vector space $V$. Then $\lambda \in \apspec(T)$ \textup{if and only if} there exists a sequence of unit vectors $(e_n)_{n\in\N}$ for which
+\[ \lim_{n\to\infty}\norm{\lambda e_n - Te_n} = 0. \]
+\end{proposition}
+\begin{proof}
+Assume there is such a sequence $(e_n)_{n\in\N}$. Then for all $\epsilon>0$, we can find a unit  vector $e_k$ such that $\norm{(\lambda \id_V 0 T)e_n} \leq \epsilon = \epsilon \norm{e_n}$. This is clearly not bounded below.
+
+This other direction is just an inversion of this argument.
+\end{proof}
+A sequence as described in \ref{WeylSequence} is called a \udef{Weyl sequence} for $\lambda$. This gives meaning to the name ``approximate eigenvalue''.
+
+\begin{corollary}
+Let $T$ be an operator. Then $\sigma(T)\cap \overline{\res(T)} \subseteq \apspec(T)$.
+\end{corollary}
+\begin{proof}
+Let $\lambda \in \sigma(T)\cap \overline{\res(T)}$. We show there is a Weyl sequence for $\lambda$.
+
+We can find a sequence $\seq{\lambda_n}\subseteq \res(T)$ such that $\lambda_n \to \lambda$.
+Now $d(\lambda_n, \spec(T)) \to 0$, so by \ref{resolventNormDistanceToSpectrum}, we can find a sequence of unit vectors $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} \to \infty$. Now we can rescale $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} = 1$.
+
+Then $\norm{x_n}\to 0$, and hence
+\begin{align*}
+\norm{(\lambda\id - T)R_T(\lambda_n)x_n} &= \norm{\frac{\lambda\id - T}{\lambda_n\id - T}x_n} \\
+&= \norm{\frac{(\lambda\id - T) + (\lambda_n\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}x_n} \\
+&= \norm{\left(\id + \frac{(\lambda\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}\right)x_n} \\
+&= \norm{\left(\id + \frac{\lambda\id - \lambda_n\id}{\lambda_n\id - T}\right)x_n} \\
+&= \norm{x_n + (\lambda\id - \lambda_n\id)R_T(\lambda_n)x_n} \\
+&\leq \norm{x_n} + |\lambda - \lambda_n|\;\norm{R_T(\lambda_n)x_n} \to 0.
+\end{align*}
+Thus $\seq{R_T(\lambda_n)x_n}$ is the kind of sequence we were looking for.
+\end{proof}
+
+
+\subsection{Parts of the spectrum}
+
+\begin{example}
+Operator with empty spectrum. TODO \url{https://math.stackexchange.com/questions/1344287/example-operator-with-empty-spectrum}.
+\end{example}
+
+\subsubsection{The point spectrum: eigenvalue and eigenvectors}
+In this section we study invariant subspaces with dimension $1$, i.e.\ subspaces $U= \Span\{v\}$ such that
+\[ Lv = \lambda v. \]
+\begin{definition}
+Suppose $L\in \Hom_{\mathbb{F}}(V)$.
+\begin{itemize}
+\item  A scalar $\lambda\in \mathbb{F}$ is called an \udef{eigenvalue} of $L$ if there exists a $v\in V$ such that $v\neq 0$ and $Lv = \lambda v$.
+\item Such a vector $v$ is called an \udef{eigenvector}.
+\item The set of all eigenvectors associated with an eigenvalue $\lambda$ is called the \udef{eigenspace} $E_\lambda(L)$. Because
+\[ E_\lambda(L) = \ker(L-\lambda \id_V) \]
+it is indeed a vector space.
+
+The dimension of $E_\lambda(L)$ is the \udef{geometric multiplicity} of $\lambda$.
+\end{itemize}
+\end{definition}
+\begin{proposition}
+Let $L\in \Hom_\mathbb{F}(V)$ and $\lambda\in \mathbb{F}$, then
+\[ \text{$\lambda$ is an eigenvalue of $L$} \qquad \iff \qquad \text{$\lambda$ is in the point spectrum $\pspec(L)$.} \]
+\end{proposition}
+\begin{proof}
+The equation $Lv = \lambda v$ is equivalent to $(L-\lambda \id_V)v = 0$.
+\end{proof}
+
+\begin{proposition}
+Let $L\in\Hom(V)$ be an operator on some vector space. Suppose $\lambda_1, \ldots, \lambda_m$ are distinct eigenvalues of $L$ and $v_1,\ldots, v_m$ are corresponding eigenvectors. Then $\{v_1,\ldots, v_m\}$ is linearly independent.
+\end{proposition}
+\begin{proof}
+The proof goes by contradiction. Assume $\{v_1,\ldots, v_m\}$ is linearly dependent. Let $k$ be the smallest positive integer such that
+\[ v_k \in \Span\{v_1,\ldots, v_{k-1}\}. \]
+So there exists a nontrivial linear combination
+\[ v_k = a_1v_1+\ldots +a_{k-1}v_{k-1}. \]
+Applying $L$ to both sides gives
+\[ \lambda_kv_k = a_1\lambda_kv_1+\ldots +a_{k-1}\lambda_kv_{k-1}. \]
+Multipliying the previous combination by $\lambda_k$ and subtracting both equations gives
+\[ 0= a_1(\lambda_k-\lambda_1)v_1 +\ldots + a_{k-1}(\lambda_k - \lambda_{k-1})v_{k-1}. \]
+By assumption of linear independence of $\{v_1,\ldots, v_{k-1}\}$ this combination must be trivial, however none of the $(\lambda_k-\lambda_i)$ can be zero, so all the $a_i$ must be zero. This is a contradiction with the assumption of linear dependence.
+\end{proof}
+\begin{corollary}
+For each operator on $V$, the set of distinct eigenvalues has at most cardinality $\dim V$.
+\end{corollary}
+\begin{corollary}
+Let $L\in\Hom(V)$. Suppose $\lambda_1, \ldots, \lambda_m$ are distinct eigenvalues of $L$. Then
+\[ E_{\lambda_1}(L) \oplus \ldots \oplus E_{\lambda_m}(L) \]
+is a direct sum. Furthermore, the sum of geometric multiplicities is less than or equal to the dimension of $V$:
+\[ \dim E_{\lambda_1}(L) + \ldots + \dim E_{\lambda_m}(L) \leq \dim V. \]
+\end{corollary}
+
+
+\subsubsection{Residual spectrum}
+\begin{proposition}
+Let $L$ be a densely defined linear operator on a Hilbert space. If $\lambda$ is in the residual spectrum of $L$ with deficiency $m$, then $\overline{\lambda}$ is in the point spectrum of $L^*$ with multiplicity $m$.
+\end{proposition}
+\begin{proof}
+By \ref{kernelImageAdjoint} we have
+\[ \im(\lambda \id - L)^\perp = \ker(\lambda\id - L)^* = \ker(\overline{\lambda}\id - L^*). \]
+\end{proof}
+
+\subsubsection{Compression spectrum}
+\begin{definition}
+The set of $\lambda$ for which $T-\lambda I$ does not have dense range is the \udef{compression spectrum} $\cpspec(T)$ of $T$.
+\end{definition}
+Then $\rspec(T) = \cpspec(T)\setminus\pspec(T)$.
+
+\subsubsection{The essential spectrum}
+TODO \url{https://en.wikipedia.org/wiki/Spectrum_(functional_analysis)#Classification_of_points_in_the_spectrum}
+
+
+\subsection{The spectral radius}
+\begin{definition}
+The \udef{spectral radius} $\spr(T)$ of a operator $T$ is given by
+\[ \spr(T) \defeq \sup_{\lambda\in\spec(T)}|\lambda|. \]
+\end{definition}
+
+
+\subsection{The spectrum of operators on Hilbert spaces}
+\begin{proposition}
+Let $T \in \Bounded(H)$ for some Hilbert space $H$. Then
+\begin{enumerate}
+\item $\spec(T) \neq \emptyset$;
+\item $\rho(T) = \overline{\rho(T^*)}$, where the bar denotes complex conjugation.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Let $x,y\in H$ and define
+\[ f(\lambda) = \inner{x,R_\lambda(T)y}. \]
+If $\spec(T) = \emptyset$, then $f$ is an entire function. Now
+\[ \norm{R_\lambda(T)} \leq \frac{1}{|\lambda| - \norm{T}} \to 0 \quad\text{as}\quad |\lambda| \to \infty. \]
+By Liouville's theorem (TODO ref) we must have $f\equiv 0$. Because the $x,y$ we arbitrary we must have $R_\lambda(T)y = 0$ for all $y\in H$, such that $R_\lambda(T)$ is not injective, which is impossible as it is an inver\begin{proposition}
+Let $K$ be a compact operator on a Banach space. Then
+\[ \spec(K)\setminus\{0\} = \pspec(K)\setminus\{0\}. \]
+\end{proposition}
+\begin{proof}
+For all $\lambda\neq 0$, we have that $\lambda\id - K$ is Fredholm with index zero (and thus bounded). Then by the Fredholm alternative \ref{FredholmAlternative} $\lambda\id - K$ is either bijective or neither injective nor surjective, meaning $\lambda$ is either in $\rho(T)$ or in $\pspec(T)$. 
+\end{proof}
+
+\begin{proposition} \label{spectrumCompactOperator}
+Let $K$ be a compact operator on a Banach space $X$. Then
+\begin{enumerate}
+\item for all $\lambda\in\spec(K)\setminus\{0\}$ there exists a least $m$ such that $\ker(\lambda\id- K)^m = \ker(\lambda\id- K)^{m+1}$. This space is finite dimensional and reducing for $K$;
+\item for $\alpha > 0$ the number of eigenvalues $\lambda$ such that $|\lambda|\geq \alpha$ is finite;
+\item $0$ is the only accumulation point; if $X$ is infinite dimensional, then $0\in\spec(K)$;
+\item $\spec(K)$ is at most countably infinite;
+\item every $\lambda \in \spec(K)\setminus \{0\}$ is a pole of the resolvent $R_K$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\url{https://en.wikipedia.org/wiki/Spectral_theory_of_compact_operators}
+\end{proof}
+TODO: if $K$ is a self-adjoint compact operator on a Hilbert space $H$, then $H$ has an orthonormal basis of eigenvectors of $K$.
+se.
+
+(2) Take $\lambda\in\rho(T)$. Then
+\[ ((\lambda\id - A)^{-1})^* = (\overline{\lambda}\id - A^*)^{-1} \]
+so $\overline{\lambda}\in\rho(T^*)$ iff $((\lambda\id - A)^{-1})^*$ is bounded iff $(\lambda\id - A)^{-1}$ is bounded iff $\lambda\in \rho(T)$.
+\end{proof}
+
+\begin{lemma} \label{eigenspaceOrthogonalAdjoint}
+Let $L$ be a densely defined operator on a Hilbert space $H$. Take $\lambda\in \pspec(L)$ and $\mu\in\pspec(L^*)$. If $\lambda \neq \overline{\mu}$, then
+\[ \ker(\lambda\id - L)\perp \ker(\mu\id - L^*). \]
+\end{lemma}
+\begin{proof}
+Take non-zero eigenvectors $x,y$ such that $Ax = \lambda x$ and $A^*y = \mu y$. Then
+\[ \lambda \inner{y,x} = \inner{y,\lambda x} = \inner{y, Ax} = \inner{A^*y,x} = \inner{\mu y,x} = \overline{\mu}\inner{y,x}. \]
+So we have $(\lambda - \overline{\mu})\inner{y,x} = 0$.
+\end{proof}
+
+\begin{proposition} \label{adjointSpectrumNoResidual}
+Let $L$ be a densely defined operator on a Hilbert space $H$. Then the following are equivalent:
+\begin{enumerate}
+\item the residual spectrum of $L$ is empty;
+\item $\overline{\pspec(L^*)} \subseteq \pspec(L)$;
+\end{enumerate}
+as are the following:
+\begin{enumerate}
+\item the residual spectrum of $L^*$ is empty;
+\item $\pspec(L) \subseteq \overline{\pspec(L^*)}$.
+\end{enumerate}
+In particular all these statements hold if $L$ is normal.
+\end{proposition}
+\begin{proof}
+Consider, for all $x\in \dom(L), y\in\dom(L^*)$, the equality
+\[ \inner{(\lambda\id-L)x,y} = \inner{x,(\overline{\lambda}\id-L^*)y}. \]
+We can make the following inferences:
+\begin{itemize}
+\item If $\lambda\in \overline{\pspec(L^*)}$, then the equality holds in particular for all eigenvectors $y$. This implies $\inner{(\lambda\id-L)x,y} = 0$. By \ref{perpToDenseSet} $\im(\lambda\id-L)$ may then not be dense, so it cannot be injective because the residual spectrum of $L$ is empty.
+\item Assume $\lambda\id-L$ injective and take  $y\perp \im(\lambda\id-L)$. Then by the equality $\inner{x, (\overline{\lambda}\id - L^*)y} = 0$ for all $x\in\dom(L)$, which is dense. So $(\overline{\lambda}\id - L^*)y = 0$ by \ref{perpToDenseSet}. Now $\lambda\notin \pspec(L)$, so $\overline{\lambda}\notin \pspec(L^*)$. Thus $y = 0$ and $\im(\lambda\id-L)^\perp = \{0\}$, meaning $\im(\lambda\id-L)$ is dense.
+\end{itemize}
+The arguments for the second set of statements are similar.
+
+If $L$ is normal, then $\ker(\lambda \id - L) = \ker{\overline{\lambda}\id -L^*}$ by \ref{equalityKernelAdjointNormal}, so $\pspec(L) = \overline{\pspec(L^*)}$.
+\end{proof}
+
+\begin{proposition}
+Let $T$ be a closed, densly defined operator on a Hilbert space.
+\begin{enumerate}
+\item If $\lambda\in\rho(T)$, then $\overline{\lambda}\in\rho(T^*)$.
+\item If $\lambda\in\rspec(T)$, then $\overline{\lambda}\in\pspec(T^*)$.
+\item If $\lambda\in\pspec(T)$, then $\overline{\lambda}\in\rspec(T^*)\cup\pspec(T^*)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO Compare with \ref{adjointSpectrumNoResidual}. CLosure necessary?
+\end{proof}
+
+
+\begin{proposition}
+Let $T$ be a unitary operator. Then
+\begin{enumerate}
+\item $\rspec(T) = \emptyset$;
+\item $\spec(T) \subset \setbuilder{\lambda\in\C}{|\lambda| = 1}$.
+\end{enumerate}
+\end{proposition}
+TODO: move to more general place??
+
+\begin{lemma}
+The eigenvalues of a bounded dissipative linear operator
+lie in the half-plane $\Im\lambda \geq 0$.
+\end{lemma}
+
+\subsubsection{Rayleigh quotient}
+\begin{lemma}
+Let $L$ be an operator on a Hilbert space. If $x$ is an eigenvector with eigenvalue $\lambda$, then
+\[ J_L(x) = \lambda. \]
+\end{lemma}
+\begin{proof}
+Let $x$ be an eigenvector with eigenvalue $\lambda$, then
+\[ J_L(x) = \frac{\inner{x,Lx}}{\inner{x,x}} = \lambda \frac{\inner{x,x}}{\inner{x,x}} = \lambda. \]
+\end{proof}
+
+\begin{proposition}
+If $U$ is unitary, then $\spec(U)\subset \mathbb{T}$.
+\end{proposition}
+
+\section{Spectral theory for types of operators}
+\subsection{Compact operators}
+
+\begin{proposition}
+Let $K$ be a compact operator on a Banach space. Then
+\[ \spec(K)\setminus\{0\} = \pspec(K)\setminus\{0\}. \]
+\end{proposition}
+\begin{proof}
+For all $\lambda\neq 0$, we have that $\lambda\id - K$ is Fredholm with index zero (and thus bounded). Then by the Fredholm alternative \ref{FredholmAlternative} $\lambda\id - K$ is either bijective or neither injective nor surjective, meaning $\lambda$ is either in $\rho(T)$ or in $\pspec(T)$. 
+\end{proof}
+
+\begin{proposition} \label{spectrumCompactOperator}
+Let $K$ be a compact operator on a Banach space $X$. Then
+\begin{enumerate}
+\item for all $\lambda\in\spec(K)\setminus\{0\}$ there exists a least $m$ such that $\ker(\lambda\id- K)^m = \ker(\lambda\id- K)^{m+1}$. This space is finite dimensional and reducing for $K$;
+\item for $\alpha > 0$ the number of eigenvalues $\lambda$ such that $|\lambda|\geq \alpha$ is finite;
+\item $0$ is the only accumulation point; if $X$ is infinite dimensional, then $0\in\spec(K)$;
+\item $\spec(K)$ is at most countably infinite;
+\item every $\lambda \in \spec(K)\setminus \{0\}$ is a pole of the resolvent $R_K$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\url{https://en.wikipedia.org/wiki/Spectral_theory_of_compact_operators}
+\end{proof}
+TODO: if $K$ is a self-adjoint compact operator on a Hilbert space $H$, then $H$ has an orthonormal basis of eigenvectors of $K$.
+
+
+\subsection{Multiplication operators}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. A \udef{multiplication operator} is an operator of the form
+\[ T: L^p(\Omega, \mu) \to L^p(\Omega, \mu): u(x) \mapsto a(x)u(x) \]
+for some $a\in L^\infty(\Omega,\mu)$
+\end{definition}
+
+\begin{proposition}
+Let $T: L^p(\Omega, \mu) \to L^p(\Omega, \mu): u \mapsto a\cdot u$ be a multiplication operator. Then
+\[ \norm{T} = \norm{a}_{L^\infty}. \]
+\end{proposition}
+\begin{proof}
+From the inequality $\norm{Tu}_{L^p}\leq \norm{a}_{L^\infty}\norm{u}_{L^p}$ we get $\norm{T} \leq \norm{a}_{L^\infty}$.
+
+TODO
+\end{proof}
+
+\begin{lemma}
+Let $T: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u \mapsto a\cdot u$ be a multiplication operator with $a\in L^\infty(\Omega,\mu)$. Then $T^*$ is the multiplication operator
+\[ T^*: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u \mapsto \overline{a}\cdot u. \]
+\end{lemma}
+\begin{proof}
+From 
+\[ \inner{Tu,v} = \int_\Omega a\cdot u \cdot \overline{v}\diff{\mu} = \int_\Omega u \cdot \overline{\overline{a}\cdot v}\diff{\mu} \]
+it follows that $T^*v = \overline{a}\cdot v$.
+\end{proof}
+\begin{corollary}
+Then
+\begin{enumerate}
+\item $T$ is self-adjoint if $a$ is real-valued;
+\item $T$ is skew-adjoint if $a$ is purely imaginary;
+\item $T$ is unitary if $|a(x)| \equiv 1$.
+\end{enumerate}
+\end{corollary}
+
+Let $E_\lambda$ be the level set
+\[ E_\lambda = \setbuilder{x\in\Omega}{a(x) = \lambda} \]
+
+\begin{proposition}
+Let $T: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u\mapsto a\cdot u$ be a multiplication operator with $a\in \cont(\Omega)$. Then
+\begin{enumerate}
+\item $\pspec(T) = \setbuilder{\lambda\in \im(a)}{\mu(E_\lambda)>0}$;
+\item $\cspec(T) = \setbuilder{\lambda\in \overline{\im(a)}}{\mu(E_\lambda) = 0}$;
+\item $\rspec(T) = \emptyset$;
+\item $\rho(T) = \C\setminus \overline{\im(T)}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\section{The spectral theorem}
+\url{https://link.springer.com/content/pdf/10.1007%2F978-1-4614-7116-5.pdf}
+
+\url{http://individual.utoronto.ca/jordanbell/notes/SVD.pdf}
+\url{https://digitalcommons.mtu.edu/cgi/viewcontent.cgi?article=2133&context=etdr}
+
+
+\section{Functional calculus}
+\subsection{Holomorphic functional calculus}
+
+\begin{theorem}[Holomorphic functional calculus] 
+\label{holomorphicFunctionalCalculus} \label{holomorphicSpectralMapping}
+Let $A$ be a Banach algebra and $x\in A$. Consider the function
+\[ \Phi_x: \cont^\infty(\spec(x),\C) \to A: f\mapsto f(x)\defeq \oint_\Gamma f(z)R_x(z)\diff{z}. \]
+Here $\Gamma$ is any simple Jordan curve that contains $\spec(x)$ such that $f$ is holomorphic in a region that contains $\Gamma$ and its interior. Then
+\begin{enumerate}
+\item $\Phi_x$ is well-defined: it does not depend on the particular curve $\Gamma$;
+\item $\Phi_x$ is a homomorphism;
+\item for any polynomial $p\in \C[X]$, we have $\Phi_x(p) = p(x)$; \\
+in particular $\Phi_x(\id_\C) = x$ and $\Phi_x(\underline{1}) = \id_A$;
+\item $\spec(\Phi_x(f)) = f[\spec(x)]$;
+\item $\Phi_x$ is continuous if $\cont^\infty(\spec(x),\C)$ is equipped with continuous convergence (?).
+\end{enumerate}
+\end{theorem}
+TODO: $\cont^\infty(\spec(x))$ should be the space of functions that are analytic in some neighbourhood of $\spec(x)$. Is it??
+\begin{proof}
+TODO
+\end{proof}
+
+TODO unbounded operators
+
+\subsubsection{Riesz eigenprojections}
+Holomorphic functional calculus applied to
+\[ \chi_{S,\delta}: A\to \{0,1\}: x\mapsto \begin{cases}
+1 & d(x,S) \leq \delta \\
+0 & \text{otherwise}.
+\end{cases} \]
+
+TODO: spectral measure with only disconnected parts in $\sigma$-algebra??
+
+TODO: $P_\Delta$ and $E_\Delta \defeq \im P_\Delta$.
+
+\begin{lemma}
+$\spec(T|_{E_\Delta}) = \spec(T)\cap\Delta$.
+\end{lemma}
+
+\begin{definition}
+We call $\dim E_\lambda$ the \udef{algebraic multiplicity} of $\lambda$.
+\end{definition}
+
+\subsubsection{Frobenius covariants}
+TODO $P_\lambda$ is a Frobenius covariant. \url{https://en.wikipedia.org/wiki/Frobenius_covariant}
+
+TODO cfr. Lagrange polynomial??
+
+\section{Jordan decomposition}
+\subsection{Eigennilpotent}
+\begin{definition}
+Let $a$ be a finite element in a semisimple Banach algebra and $\lambda\in \spec(a)$. The \udef{eigennilpotent operator} of $a$ at $\lambda$ is defined as
+\[ D_{\lambda} \defeq (a-\lambda)P_{\lambda}. \]
+\end{definition}
+This definition works because we can find a $\delta < d(\lambda, \spec(a)\setminus\{\lambda\})$.
+
+\begin{lemma}
+Let $a$ be a finite element in a semisimple Banach algebra and $\lambda\in \spec(a)$. The eigennilpotent operator $D_\lambda$ is nilpotent.
+\end{lemma}
+\begin{proof}
+By spectral mapping \ref{holomorphicSpectralMapping}, $D_\lambda$ is quasinilpotent. Because $a$ is finite, it is nilpotent by \ref{nilpotentQuasinilpotent}.
+\end{proof}
+
+
+
+\subsection{Jordan vectors}
+\begin{definition}
+Let $V$ be a finite dimensional vector space and $T$ an operator on $V$. A \udef{Jordan vector} of $T$ belonging to the eigenvalue $\lambda$ is a vector $x\in V$ such that
+\[ (\lambda\id_V - T)^kx = 0 \]
+for some $k\in \N$. The least such $k$ is called the \udef{degree} of $x$ and is denoted $\deg_J(x)$.
+\end{definition}
+Eigenvectors are Jordan vectors of degree $1$.
+
+\begin{proposition}
+Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ $\lambda\in\spec(T)$ and $x\in V$. Then $x$ is a Jordan vector of $T$ belonging to the eigenvalue $\lambda$ \textup{if and only if} $x\in E_\lambda$.
+\end{proposition}
+\begin{proof}
+Let $x\in E_\lambda$. Then $x = P_\lambda x$ and thus
+\[ (\lambda\id_V - T)^kx = (\lambda\id_V - T)^kP_\lambda x = \big((\lambda\id_V - T)P_\lambda\big)^k x = D_\lambda^k x, \]
+which is zero for some $k$ because $D_\lambda$ is nilpotent.
+
+Conversely, assume $x$ is a Jordan vector of $T$ belonging to the eigenvalue $\lambda$. We can write $x = x_1+x_2 \in E_{\lambda}\oplus E_{\C\setminus\{\lambda\}}$.
+Then (because $E_\lambda$ is reducing for $T-\lambda\id_V$)
+\[ 0 = (\lambda\id_V - T)^kx = (\lambda\id_V - T)^kx_1 + (\lambda\id_V - T)^kx_2 \in E_{\lambda}\oplus E_{\C\setminus\{\lambda\}} \]
+Thus we have $(\lambda\id_V - T)^kx_1 = 0$ and $(\lambda\id_V - T)^kx_2 = 0$ separately.
+Now $T-\lambda\id_V$ is invertible on $E_{\C\setminus\{\lambda\}}$, so $x_2 = 0$ (TODO ref). This means that $x = x_1 \in E_\lambda$.
+\end{proof}
+
+\begin{definition}
+Let $m = \deg_N(D_\lambda)$. Then we have
+\[ \{0\} \subsetneq \ker(\lambda\id_V - T) \subsetneq \ker(\lambda\id_V - T)^2 \subsetneq \ldots \subsetneq \ker(\lambda\id_V - T)^{m-1} \subsetneq \ker(\lambda\id_V - T)^m = V. \]
+We define $E^k_\lambda \defeq \ker(\lambda\id_V - T)^k$. In particular
+\begin{itemize}
+\item $E^1_\lambda$ is the \udef{geometric eigenspace};
+\item $E^{m-1}_\lambda$ is the \udef{algebraic eigenspace}.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $V$ be a finite dimensional vector space, $T$ an operator on $V$, $\lambda\in\spec(T)$ and $x\in E_\lambda$. Then
+\begin{enumerate}
+\item $1 \leq \dim\ker(\lambda\id_V - T) \leq \dim E_\lambda$;
+\item $1 \leq \deg_J(x) \leq \dim_E\lambda$.
+\end{enumerate}
+\end{lemma}
+The lemma says the geometric multiplicity is smaller than the algebraic multiplicity.
+\begin{proof}
+Every eigenvector is a Jordan vector, so $\ker(\lambda\id_V - T) \subseteq E_\lambda$.
+
+For all $k\in\N$ smaller then the degree of $x$, $(\lambda\id_V - T)^kx$ is a Jordan vector and thus in $E_\lambda$. TODO all $(\lambda\id_V - T)^kx$ are linearly independent (like in \ref{nilpotentQuasinilpotent})
+\end{proof}
+
+\begin{definition}
+Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ and $\lambda\in\spec(T)$. The eigenvalue $\lambda$ is called
+\begin{itemize}
+    \item \udef{simple} if the algebraic multiplicity is $1$;
+    \item \udef{semisimple} if every Jordan vector in $E_\lambda$ has degree $1$;
+    \item \udef{prime} if the geometric multiplicity is $1$.
+\end{itemize}
+If all eigenvalues of $T$ are semisimple, then $T$ is called a \udef{diagonal operator}.
+\end{definition}
+
+\begin{lemma}
+An operator $T$ is diagonal iff $T$ is of the form $\sum_j a_jP_j$, where $a_j\in \F$ and $P_j$ are projectors that commute pairwise.
+\end{lemma}
+
+\subsection{Characteristic polynomial and equation}
+\begin{definition}
+Let $V$ be a finite dimensional vector space and $T$ an operator on $V$. The \udef{characteristic polynomial} $p_T(x)$ of $T$ is the polynomial
+\[ p_T(x) \defeq \det(x\id_V - T). \]
+\end{definition}
+
+\begin{proposition}
+Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ and $\spec(T) = \{\lambda_j\}_{j=1}^r$. Then
+\[ p_T(x) = \prod_{j=1}^r(x - \lambda_j)^{\dim E_{\lambda_j}}. \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+A number $\lambda\in \C$ is an eigenvalue of $T$ \textup{if and only if} it is a root of $p_T(x)$.
+\end{corollary}
+
+\begin{definition}
+The equation $p_T(x) = 0$ is the \udef{characteristic equation} of $T$.
+\end{definition}
+
+\subsection{Spectral representation}
+\begin{proposition}
+Let $V$ be a finite dimensional complex vector space and $T$ an operator on $V$. There exists a unique decomposition $T = S + D$ such that
+\begin{itemize}
+\item $S$ is diagonal;
+\item $D$ is nilpotent;
+\item $SD = DS$.
+\end{itemize}
+If $\spec(T) = \{\lambda_j\}_{j=1}^r$, this decomposition is given by
+\[ T = \sum_{j=1}^r \lambda_r P_{\lambda_r} + \sum_{j=1}^r D_{\lambda_r}. \]
+\end{proposition}
+
+\subsection{Partial fraction decomposition of the resolvent}
+For any operator $T$ on a vector space $V$ with eigenvalue $\lambda_0$, the resolvent $R_T(\lambda)$ has a pole at $\lambda_0$.
+
+\begin{proposition}
+Let $T$ be an operator on a finite dimensional vector space $V$ and $\lambda_0\in\spec(T)$. Then the Laurent expansion of $R_T(\lambda)$ around $\lambda_0$ is of the form
+\[ R_T(\lambda) = \frac{P_0}{\lambda-\lambda_0} + \sum_{n=1}^{\deg_N(D_0)-1}\frac{D_0^{n}}{(\lambda - \lambda_0)^{n+1}} + \sum_{n=0}^\infty(-1)^n S_0^{n+1}(\lambda - \lambda_0)^n, \]
+where $P_0\defeq P_{\lambda_0}, D_0\defeq D_{\lambda_0}$ and $S_0$ is some fixed operator.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{definition}
+The holomorphic part of the Laurent expansion of $R_T(\lambda)$ at $\lambda_0$ is called the \udef{reduced resolvent} of $T$ w.r.t. $\lambda_0$:
+\[ S_{T,\lambda_0}(\lambda) \defeq \sum_{n=0}^\infty(-1)^n S_0^{n+1}(\lambda - \lambda_0)^n = R_T(\lambda) - \left(\frac{P_0}{\lambda-\lambda_0} + \sum_{n=1}^{\deg_N(D_0)-1}\frac{D_0^{n}}{(\lambda - \lambda_0)^{n+1}}\right). \]
+\end{definition}
+
+\begin{proposition}
+Let $T$ be an operator on a finite dimensional vector space $V$ and $\lambda_0\in\spec(T)$. Then
+\[ R_{T|_{(\id_V-P_0)}}(\lambda) = S_{T,\lambda_0}|_{\id_V-P_0}(\lambda). \]
+\end{proposition}
+
+\begin{proposition}
+Let $T$ be an operator on a finite dimensional vector space $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$. The partial fraction decomposition of $R_T(\lambda)$ is given by
+\[ R_T(\lambda) = \sum_{j=1}^r\left(\frac{P_{\lambda_j}}{\lambda - \lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{D_{\lambda_j}^n}{(\lambda - \lambda_j)^{n+1}}\right). \]
+The partial fraction decomposition of $S_{T,\lambda_k}(\lambda)$ is given by
+\[ S_{T,\lambda_k}(\lambda) = \sum_{\substack{j=1 \\ j\neq k}}^r\left(\frac{P_{\lambda_j}}{\lambda - \lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{D_{\lambda_j}^n}{(\lambda - \lambda_j)^{n+1}}\right). \]
+\end{proposition}
+\begin{proof}
+The poles of $R_T(\lambda)$ are exactly the eigenvalues of $T$. There are finitely many of them, so we can use partial fraction decomposition, \ref{partialFractionDecomposition}. We just need to show that the holomorphic part is zero. For that we note that $\lim_{\lambda \to \infty} R_T(\lambda) = 0$ and all principal parts tend to $0$ at infinity as well. Thus the holomorphic part also tends to $0$, making it bounded. By Liouville's theorem, \ref{liouvilleTheoremAnalysis}, we get that it is identically zero.
+\end{proof}
+\begin{corollary}[Sylvester-Lagrange formula]
+Let $f$ be a holomorphic function on an open set that contains $\spec(T)$. Then
+\[ f(T) = \sum_{j=1}^r\left(f(\lambda_j)P_{\lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{f^{(n)}(\lambda_j)D_{\lambda_j}^n}{n!}\right). \] 
+\end{corollary}
+\begin{proof}
+We have
+\[ f(T) = \oint_\Gamma f(\lambda)R_T(\lambda)\diff{\lambda} = 2\pi i\sum_{j=1}^r \Res_{\lambda_j}f(\lambda)R_T(\lambda) \]
+by the residue theorem (TODO ref for operators).
+\end{proof}
+\begin{corollary}[Cayley-Hamilton]
+Let $p_T(x)$ be the characteristic polynomial of $T$. Then $p_T(T) = 0$.
+\end{corollary}
+\begin{proof}
+Since $p_T(x) = \prod_{j=1}^r(x - \lambda_j)^{\dim E_{\lambda_j}}$ and $\dim E_{\lambda_j} \geq \deg_N(D_{\lambda_j})$, we see that $p_T(\lambda)R_T(\lambda)$ has no poles and is holomorphic, meaning that $oint_\Gamma f(\lambda)R_T(\lambda)\diff{\lambda} = 0$ by Cauchy's theorem (TODO ref for operators).
+\end{proof}
+
+\subsection{Normal operators}
+
+
+\begin{proposition}
+If $T$ is a normal operator, then $P_\lambda = P^*_\lambda$ and $D_\lambda = D^*_\lambda = 0$.
+\end{proposition}
+This means normal operators are diagonalisable.
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Let $V$ be a finite dimensional complex vector space and $T$ a normal operator
+on $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$.
+\begin{enumerate}
+\item We have the spectral decompositions
+\[ T = \sum_{j=1}^r \lambda_r P_{\lambda_r} \qquad\text{and}\qquad T^* = \sum_{j=1}^r \overline{\lambda_r} P_{\lambda_r}. \]
+\item We have
+\[ R_T(\lambda) = \sum_{j = 1}^r \frac{P_{\lambda_j}}{\lambda - \lambda_j} \qquad \text{and} \qquad S_{T,\lambda_k}(\lambda) = \sum_{\substack{j = 1 \\ j\neq k}}^r \frac{P_{\lambda_j}}{\lambda - \lambda_j} \]
+\end{enumerate}
+\end{corollary}
+
+\subsection{Jordan decomposition}
+TODO matrix representation + matrix representation of Lagrange-Sylvester. See Baumgärtel
+
+
+
+
+
+
+
 \chapter{Hilbert spaces}
 
 \section{Examples}
@@ -1159,6 +1933,45 @@ Let $\seq{A_n}$ be a sequence of bounded operators on a Hilbert space and $A\in\
 TODO: same for WOT.
 
 TODO: Cauchy sequences are bounded. Does this follow form general Banach theory?
+
+
+\section{Tools to study operators}
+\subsection{Spectrum}
+\subsection{Numerical range}
+\begin{lemma}
+Let $T$ be an operator on a Hilbert space. If $\lambda\in\cspec(T)$, then there exists a Weyl sequence for $\lambda$. 
+\end{lemma}
+\begin{proof}
+If $\lambda\in\cspec(T)$, then $R_T(\lambda)$ is densely defined.
+\end{proof}
+
+\begin{proposition}[Spectral inclusion property of numerical range] \label{spectralInclusionNumericalRange}
+Let $T$ be an operator on a Hilbert space. Then
+\begin{enumerate}
+\item $\pspec(T)\subseteq \NumRange(T)$;
+\item $\rspec(T) \subseteq \NumRange(T)$;
+\item $\apspec(T) \subseteq \overline{\NumRange(T)}$.
+\end{enumerate}
+In particular $\cspec(T) \subseteq \overline{\NumRange(T)}$.
+\end{proposition}
+\begin{proof}
+(1) Let $\lambda \in \pspec(T)$. Then $Tx = \lambda x$ for some unit vector $x$ and so
+\[ \inner{x,Tx} = \inner{x,\lambda x} = \lambda \inner{x,x} = \lambda\norm{x}^2 = \lambda, \]
+which means that $\lambda \in \NumRange(A)$.
+
+(2) Let $\lambda \in \rspec(T)$. Then there exists a unit vector $x \in \im(\lambda\id - T)^\perp$, so
+\[ 0 = \inner{x,(\lambda\id-T)x} = \lambda\inner{x}^2 - \inner{x,Tx} = \lambda - \inner{x,Tx}, \]
+which means that $\lambda \in \NumRange(A)$.
+
+(3) Let $\lambda \in \apspec(T)$. Then there exists a Weyl sequence $\seq{e_n}$ for $\lambda$ by \ref{WeylSequence}. Then
+\[ \norm{(\lambda\id - T)e_n} = \norm{e_n}\;\norm{(\lambda\id - T)e_n} \geq |\inner{e_n, (\lambda\id - T)e_n}| = |\lambda - \inner{e_n,Te_n}| \to 0. \]
+Thus $\lambda\in\overline{\NumRange(T)}$.
+
+Finally we have $\cspec(T)\subseteq\apspec(T)$ by \ref{approximateSpectrum} and so $\cspec(T)\subseteq\overline{\NumRange(T)}$.
+\end{proof}
+\begin{corollary}
+If $T$ is a closed operator on a Hilbert space, then $\spec(T)\subseteq \overline{\NumRange(T)}$.
+\end{corollary}
 
 \section{Projectors and minimisation problems}
 Every subspace is a convex, non-empty subset.
@@ -1944,6 +2757,14 @@ TODO question of domain.
 \url{https://www.math.drexel.edu/faculty/mjz55/wp-content/uploads/sites/8/2017/01/normalnotes.pdf}.
 \end{proof}
 
+\begin{theorem} \label{closureNumericRangeConvexHullSpectrum}
+The closure of the numerical range of a normal operator is the
+convex hull of its spectrum.
+\end{theorem}
+\begin{proof}
+Normal operators $T$ are by definition closed, so $\spec(T)\subseteq \overline{\NumRange(T)}$ by \ref{spectralInclusionNumericalRange}. TODO
+\end{proof}
+
 \begin{lemma} \label{normalSpectralRadiusEqualsNorm}
 For normal elements the spectral radius equals the norm.
 \end{lemma}
@@ -1952,8 +2773,8 @@ For normal elements the spectral radius equals the norm.
 A normal operator on a Hilbert space is invertible \textup{if and only if} it is bounded below.
 \end{lemma}
 
-\subsection{Self-adjoint operators}
-\subsubsection{Symmetric versus self-adjoint operators}
+\subsection{Symmetric and self-adjoint operators}
+\subsubsection{Domain related matters}
 A symmetric operator $A$ is self-adjoint if and only if $\dom(A) = \dom(A^*)$.
 \begin{lemma} \label{symmetricOperatorAdjointInclusion}
 Let $A$ be a symmetric densely defined operator on a Hilbert space $H$. Then
@@ -1967,6 +2788,14 @@ Let $A$ be a symmetric densely defined operator on a Hilbert space $H$. Then
 (1, 2) This is immediate from symmetry: $\inner{Ax,y} = \inner{x,Ay}$ for all $x,y\in\dom(A)$.
 
 (3) From (1) we see that $A^*$ is densely defined, because the superset of a dense set is dense. The result follows by \ref{adjointDenselyDefinedClosable}.
+\end{proof}
+\begin{corollary}
+A closed and densely defined symmetric operator is self-adjoint \textup{if and only if} $A^*$ is symmetric.
+\end{corollary}
+\begin{proof}
+If $A^*$ is not symmetric, $A$ can clearly not be self-adjoint.
+
+Assume $A^*$ is symmetric. Then $\dom(A) \subseteq \dom(A^*) \subseteq \dom(\overline{A}) = \dom(A)$.
 \end{proof}
 
 \begin{proposition} \label{selfAdjointMaximal}
@@ -2026,27 +2855,178 @@ is not symmetric. In this case
 \[  \dom(T^*) = \setbuilder{f\in L^2(a,b)}{\od{f}{x}\in L^2(a,b),\; f(a)=0=f(b)}, \]
 so $\dom(T^*) \subseteq \dom(T)$.
 
+\subsubsection{Spectrum and related criteria}
 
-\begin{proposition} \label{rangeSelfAdjointCriterion}
-Let $A$ be a symmetric operator on a Hilbert space $H$.
-\begin{enumerate}
-\item If $\exists z \in \C\setminus\R: \; \im(A+z\id) = H$, then $A$ is densely defined.
-\item If $\exists z \in \C: \; \im(A+z\id) = H$ and $\im(A+\overline{z}\id) = H$, then $A$ is self-adjoint.
-\end{enumerate}
+\begin{lemma}
+Let $A$ be a symmetric operator on a complex Hilbert space $H$. If $\exists z \in \C\setminus\R: \; \im(A+z\id) = H$, then $A$ is densely defined.
+\end{lemma}
+\begin{proof}
+Let $A+z\id$ be surjective and suppose, towards a contradiction that there exists an $y\perp \dom(A)$. Then $y = (A+z\id)x$ for some $x\in\dom(A)$ by surjectivity. Then
+\[ 0 = \Im\inner{x,y} = \Im\inner{x, (A+z\id)x} = \cancel{\Im\inner{x,Ax}} + \Im \inner{x,zx} = \Im(z)\norm{x}^2. \]
+By assumption, $\Im(z) \neq 0$, so $x=0$, meaning $y = (A+z\id)x = 0$ and thus $\dom(A)^\perp = \{0\}$.
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a symmetric operator on a complex Hilbert space $H$. Then $A + z\id_H$ is bounded below by $|\Im \lambda|$ for all $\lambda \in \C\setminus\R$.
 \end{proposition}
 \begin{proof}
-(1) Let $A+z\id$ be surjective and suppose, towards a contradiction that there exists an $y\perp \dom(A)$. Then $y = (A-z\id)x$ for some $x\in\dom(A)$ by surjectivity. Then
-\[ 0 = \Im\inner{x,y} = \Im\inner{x, (A-z\id)x} = \cancel{\Im\inner{x,Ax}} - \Im \inner{x,zx} = -\Im(z)\norm{x}^2. \]
-By assumption, $\Im(z) \neq 0$, so $x=0$, meaning $y = (A-z\id)x = 0$ and thus $\dom(A)^\perp = \{0\}$.
+We first calculate, $\forall x\in H$:
+\[ \Im\inner{x, (A+ z\id_H)x} = \cancel{\Im\inner{x,Ax}} + \Im z\norm{x}^2. \]
+Thus
+\[ |\Im\lambda|\;\norm{x}^2 = |\Im\inner{x, (A + z\id_H)x}| \leq |\inner{x, (A + z\id_H)x}| \leq \norm{x}\;\norm{(A + z\id_H)x}, \]
+which means that $\norm{(A + z\id_H)x} \geq |\Im\lambda|\;\norm{x}$, so $A + z\id_H$ is bounded below by $|\Im \lambda|$.
+\end{proof}
+\begin{corollary} \label{approximateSpectrumSymmetricOperator}
+Let $A$ be a symmetric operator on a complex Hilbert space $H$. Then $\apspec(A) \subseteq \R$.
+\end{corollary}
+\begin{corollary}
+The eigenvalues of a symmetric operator are real.
+\end{corollary}
+\begin{proof}
+This is immediate using $\pspec(A)\subseteq \apspec(A)$. We can also give a direct calculation:
 
-(2) From \ref{symmetricOperatorAdjointInclusion} and point (5) of \ref{adjointAlgebraicProperties}, we have $A+z\id = (A^* + z\id)\cap(A+z\id) = (A+\overline{z}\id)^*\cap (A+z\id)$.
+Assume there exists an $x\in \ker(\lambda\id_H - A)\setminus\{0\}$. Then $Ax = \lambda x$ and thus
+\[ \lambda\norm{x}^2 = \lambda\inner{x,x} = \inner{x, \lambda x} = \inner{x,Ax} = \inner{Ax,x} = \inner{\lambda x, x} = \overline{\lambda}\inner{x,x} = \overline{\lambda}\norm{x}^2. \]
+Because $\norm{x}^2 \neq 0$, we have $\lambda = \overline{\lambda}$, meaning $\lambda$ is real.
+\end{proof}
+\begin{corollary} \label{symmetricResolvent}
+Let $A$ be a symmetric operator on a complex Hilbert space $H$. Then for all $\lambda\in\C\setminus\R$, the resolvent $R_A(\lambda)$ well-defined and bounded by $\norm{R_A(\lambda)}\leq 1/|\Im \lambda|$.
+\end{corollary}
+Note this does not mean $\C\setminus\R\subseteq \res(A)$, as $\dom(R_A(\lambda))$ may not be all of $H$.
+\begin{proof}
+This is an application of \ref{boundedBelow}.
+\end{proof}
+
+\begin{proposition} \label{rangeSelfAdjointCriterion}
+Let $A$ be a symmetric operator on a Hilbert space $H$. The following are equivalent:
+\begin{enumerate}
+\item $\exists z \in \C: \; \im(A+z\id) = H = \im(A+\overline{z}\id)$;
+\item $A$ is self-adjoint;
+\item $\rspec(A) = \emptyset$.
+\end{enumerate}
+In this case $\spec(A) = \apspec(A)$.
+\end{proposition}
+Notice that in (1) we include $\R$ and in (3) we exclude $\R$.
+\begin{proof}
+$(1) \Rightarrow (2)$ From \ref{symmetricOperatorAdjointInclusion}, we have $A\subseteq A^*$ and thus $A+z\id = (A^* + z\id)\cap(A+z\id)$. From point (5) of \ref{adjointAlgebraicProperties}, we have $A+z\id = (A^* + z\id)\cap(A+z\id) = (A+\overline{z}\id)^*\cap (A+z\id)$.
+
 We then use \ref{adjointRangeCriterion} with $S = A+z\id$ and $T = A+\overline{z}\id$ to obtain $(A+z\id)^* = A+\overline{z}\id$. Subtracting $\overline{z}\id$ from each side yields the result.
+
+$(2) \Rightarrow (3)$ Fix some $z \in \spec(A) \setminus\pspec(A)$ we need to show that $\overline{\im(\lambda\id - A)} = H$. Indeed
+\[ \overline{\im(A+z\id)} = \ker(A^* + \overline{z}\id)^\perp = \ker(A+\overline{z}\id)^\perp = \{0\}^\perp = H. \]
+
+$(3) \Rightarrow (1)$ We have $\spec(A) = \apspec(A)$. Because $\apspec\subseteq \R$, by \ref{approximateSpectrumSymmetricOperator}, we have that $A+z\id$ is surjective for all $\C\setminus\spec(A) = \C\setminus\apspec(A) \supseteq \C\setminus\R$.
 \end{proof}
 \begin{corollary}
 Every surjective symmetric operator is self-adjoint.
 \end{corollary}
 \begin{proof}
-Take $z=0$.
+Take $z=0$ in point (1).
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a closed symmetric operator. Then one of the following cases holds:
+\begin{itemize}
+\item $A$ is self-adjoint, in which case $\spec(A) \subseteq \R$;
+\item $\spec(A) = \overline{\C^{\uparrow}}$;
+\item $\spec(A) = \overline{\C^{\downarrow}}$;
+\item $\spec(A) = \C$.
+\end{itemize}
+If $A$ is not densely-defined, then the last case holds.
+\end{proposition}
+We have denoted the closed upper half plane $\overline{\C^{\uparrow}}$ and the closed lower half plane $\overline{\C^{\downarrow}}$.
+\begin{proof}
+First assume $A$ self-adjoint, then $\spec(A)\subseteq \R$ by a combination of \ref{approximateSpectrumSymmetricOperator} and \ref{rangeSelfAdjointCriterion}.
+
+Now note that if there exists a real $\lambda\in\R$ such that $\lambda \in \res(A)$, then in particular $\lambda\id -A$ is surjective, so $A$ is self-adjoint by \ref{rangeSelfAdjointCriterion}.
+
+Now assume $A$ not self-adjoint and pick a $\lambda\in \C^{\uparrow}$. From \ref{rangeSelfAdjointCriterion} we must have either $\lambda\in\spec(A)$ or $\overline{\lambda}\in\spec(A)$ (or both).
+
+If $\lambda\in \res(A)$, then $\C^\uparrow \subseteq \res(A)$ and if $\overline{\lambda}\in\res(A)$, then $\C^\downarrow \subseteq \res(A)$.
+
+Indeed take some $\mu\in\C$.
+By \ref{symmetricResolvent} we only need to check surjectivity of $\mu\id - A$. Now note that
+\begin{align*}
+(\mu\id - A)R_A(\lambda) &= (\mu\id -\lambda\id+\lambda\id - A)R_A(\lambda) \\
+&= (\mu-\lambda)R_A(\lambda) + (\lambda\id-A)R_A(\lambda) \\
+&= (\mu-\lambda)R_A(\lambda) + \id,
+\end{align*}
+which we can consider as a bounded perturbation of $\id$. Thus by \ref{boundedPerturbationClosedOperator}, $(\mu\id - A)R_A(\lambda)$ is surjective if $\norm{(\mu-\lambda)R_A(\lambda)}< 1$, i.e.\ $|\mu-\lambda| < |\Im(\lambda)|$ using \ref{symmetricResolvent}.
+
+We can iterate this construction to cover the whole of $\C^\uparrow$. The argument for $\overline{\lambda}$ is similar.
+\end{proof}
+
+\begin{example}
+Spectrum half plane TODO \url{https://math.stackexchange.com/questions/893899/spectrum-of-symmetric-non-selfadjoint-operator-on-hilbert-space}
+
+\url{https://math.stackexchange.com/questions/925097/spectrum-of-self-adjoint-operator-on-hilbert-space-real}
+\end{example}
+
+\begin{proposition}
+Let $A$ be a closed symmetric operator on a Hilbert space. Then $A$ is positive \textup{if and only if} $\spec(A)\subseteq [0,\infty[$.
+\end{proposition}
+\begin{proof}
+\ref{closureNumericRangeConvexHullSpectrum}
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a self-adjoint operator. Then
+\begin{enumerate}
+\item $\inf \sigma(A) = \inf\NumRange(A)$;
+\item $\sup \sigma(A) = \sup\NumRange(A)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\ref{closureNumericRangeConvexHullSpectrum}
+\end{proof}
+
+\begin{proposition}
+Let $T$ be a densely defined self-adjoint operator. Then
+\begin{enumerate}
+\item $\rspec(T) = \emptyset$;
+\item let $\lambda_1,\lambda_2 \in \pspec(T)$ and $\lambda_1\neq \lambda_2$, then 
+\[ \Null(\lambda_1\id - T) \perp \Null(\lambda_2 \id - T). \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+
+\begin{proposition}
+Let $T$ be a symmetric operator on a Hilbert space $H$. Then
+\begin{enumerate}
+\item the eigenvalues of $T$ are real;
+\item the eigenvectors corresponding to distinct eigenvalues are orthogonal.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+This is an application of \ref{eigenspaceOrthogonalAdjoint} and \ref{adjointSpectrumNoResidual}.
+\end{proof}
+
+\subsubsection{Compact self-adjoint operators}
+\begin{proposition}
+Every compact self-adjoint operator $L$ on a nontrivial Hilbert space has an eigenvalue $\lambda$ with $|\lambda| = \norm{L}$.
+\end{proposition}
+
+\begin{proposition}
+Let $A$ be a compact self-adjoint operator. Then the only possible accumulation point of $\spec(A)$ is $0$.
+\end{proposition}
+TODO self-adjoint not necessary? See \ref{spectrumCompactOperator}?
+\begin{proof}
+Assume $\spec(A)$ is infinite. Then take $\seq{\lambda_n}\subset \spec(A)$. Any associated sequence $\seq{x_n}$ of eigenvectors is orthogonal. We can take it to be orthonormal. By \ref{limitCompactImageOrthonormalSequence} we have
+\[ 0 = \lim_{n\to\infty} \norm{Ax_n}^2 = \lim_{n\to\infty}\inner{Ax_n,Ax_n} = \lim_{n\to\infty}\lambda_n^2\inner{x_n,x_n} = \lim_{n\to\infty}\lambda_n^2, \]
+so $\seq{\lambda_n}$ converges to $0$.
+\end{proof}
+
+\begin{theorem}
+Every spectral value $\lambda\neq 0$ of a compact self-adjoint linear
+operator $A : H \to H$ is an eigenvalue of finite multiplicity that can only
+accumulate at $\lambda = 0$. Conversely, a self-adjoint operator having these
+properties is compact.
+\end{theorem}
+\begin{proof}
+TODO See \ref{spectrumCompactOperator}
 \end{proof}
 
 \subsubsection{Self-adjoint extensions of symmetric operators}
@@ -3007,843 +3987,6 @@ So $T$ is a contraction if $|\lambda| > \sup_{x\in \Omega} \int_{\Omega}|K(x,y)|
 
 
 
-\chapter{Spectral theory and functional calculus}
-\section{Invariant subspaces}
-\begin{definition}
-Let $L\in \Hom(V)$ be an endomorphism. A subspace $U$ of $V$ is \udef{invariant} under $L$ if $T|_U$ is an endomorphism on $U$. In other words, $u\in U$ implies $Tu\in U$.
-\end{definition}
-Clearly this definition only works for endomorphisms, not for linear maps in general. This is true for the rest of the theory about eigenvalues and eigenvectors.
-\begin{example}
-Let $L\in \Hom(V)$. The following are invariant under $L$:
-\begin{itemize}
-\item $\{0\}$;
-\item $\ker L$;
-\item $\im L$.
-\end{itemize}
-\end{example}
-
-\section{The spectrum}
-TODO: eigenvalue problem $Lx = \lambda x$
-
-generalised eigenvalue problem $Lx = \lambda T x$
-
-nonstandard eigenvalue problem $A(\gamma)x = 0$.
-
-TODO: consistency $\lambda \id - L$, not $L-\lambda \id$.
-TODO: everything is now in $\C$.
-
-\begin{definition}
-Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
-
-For $\lambda\in\C$ the \udef{resolvent} $R_L(\lambda)$ is defined as
-\[ R_L(\lambda) \defeq (\lambda \id_V - L)^{-1}: \im(\lambda \id_V - L)\to\dom(L), \]
-if this inverse exists (i.e.\ if $\lambda \id_V - L$ is injective).
-\begin{itemize}
-\item The \udef{resolvent set} $\res(L)$ is the set
-\begin{align*}
-\res(L) &\defeq \setbuilder{\lambda\in \C}{R_L(\lambda)\in\Bounded(V)} \\
-&= \setbuilder{\lambda\in \C}{\text{$R_L(\lambda)$ exists, has domain $V$ and is bounded}}.
-\end{align*}
-\item The \udef{spectrum} of $L$ is the complement of the resolvent set: $\spec(L) \defeq \C\setminus\rho(L)$.
-\item The \udef{spectral radius} $\spr(L)$ is $\sup_{\lambda\in\spec(L)} |\lambda|$.
-\end{itemize}
-\end{definition}
-
-\subsection{The three-way classification of the spectrum}
-\begin{definition}
-Let $L: \dom(L)\subset V \to V$ be an operator on a complex vector space $V$.
-
-\begin{itemize}
-\item The \udef{point spectrum} or \udef{discrete spectrum} $\pspec(L)$ contains the values of $\lambda$ where $\lambda \id_V - L$ fails to be injective, so the resolvent fails to exist. These values are called the \udef{eigenvalues} of $L$.
-
-We call
-\begin{itemize}
-\item $\ker(\lambda \id_V - L)$ the \udef{multiplicity space} or \udef{geometric eigenspace} of $\lambda$; and
-\item $\dim\ker(\lambda \id_V - L)$ the \udef{(geometric) multiplicity} of $\lambda$.
-\end{itemize}
-\item The \udef{continuous spectrum} $\cspec(L)$ is the set of all values of $\lambda\in\spec(L)$ such that the resolvent $R_L(\lambda)$ exists and has dense range.
-\item The \udef{residual spectrum} $\rspec(L)$ is the set of all values of $\lambda\in\spec(L)$ such that the resolvent $R_L(\lambda)$ exists and does not have dense range.
-
-We call
-\begin{itemize}
-\item $\im(\lambda \id_V - L)^\perp$ the \udef{deficiency subspace} of $\lambda$; and 
-\item $\dim(\im(\lambda \id_V - L)^\perp)$ the \udef{deficiency} of $\lambda$.
-\end{itemize}
-\end{itemize}
-The sets $\pspec(T), \cspec(T)$ and $\rspec(T)$ are disjoint.
-\end{definition}
-In finite dimensions we know that
-\[ \text{$\lambda \id_V - L$ is surjective} \quad\iff\quad \text{$\lambda \id_V - L$ is injective} \]
-and all linear operator are bounded.
-So in this case there can only ever be a point spectrum.
-
-
-\subsection{Resolvents}
-
-\begin{proposition}[Resolvent identity]
-Let $T$ be a linear operator and $\lambda,\mu\in\C$ such that $R_T(\lambda), R_T(\mu)$ exist. Then $R_T(\lambda)$ and $R_T(\mu)$ commute and
-\[ \frac{R_T(\lambda) - R_T(\mu)}{\lambda-\mu} = -R_T(\lambda)R_T(\mu). \]
-\end{proposition}
-\begin{proof}
-The commutativity of the resolvents follows from \ref{commutationInverse}.
-
-We calculate
-\begin{align*}
-R_T(\lambda) - R_T(\mu) &= R_T(\lambda)R_T(\mu)(\mu\id - T) - R_T(\mu)R_T(\lambda)(\lambda\id - T) \\
-&= \mu R_T(\lambda)R_T(\mu) - R_T(\lambda)R_T(\mu) T - \lambda R_T(\mu)R_T(\lambda) + R_T(\mu)R_T(\lambda) T \\
-&= (\mu - \lambda)R_T(\lambda)R_T(\mu).
-\end{align*}
-\end{proof}
-\begin{corollary}
-Let $T$ ba a linear operator. Then
-\begin{enumerate}
-\item $R_T(\lambda)$ is holomorphic in $\rho(T)$;
-\item $R_T'(\lambda) = -R_T(\lambda)^2$;
-\item $R_T^{(n)}(\lambda) = n!(-1)^n R_T(\lambda)^{n+1}$ for all $n\in \N$.
-\end{enumerate}
-\end{corollary}
-\begin{corollary} \label{firstNeumannSeries}
-Let $T$ ba a linear operator and $\lambda_0\in \rho(T)$. Then the Taylor expansion of $R_T(\lambda)$ around $\lambda_0$ is
-\begin{align*}
-R_T(\lambda) &= \sum_{n=0}^\infty (\lambda-\lambda_0)^n(-1)^nR_T(\lambda_0)^{n+1} \\
-&= R_T(\lambda_0) \sum_{n=0}^\infty \Big((\lambda_0-\lambda)R_T(\lambda_0)\Big)^n \\
-&= \frac{R_T(\lambda_0)}{1+(\lambda-\lambda_0)R_T(\lambda_0)},
-\end{align*}
-with convergence radius $1/\norm{R_T(\lambda_0)}$.
-\end{corollary}
-\begin{proof}
-If $|(\lambda_0-\lambda)| \leq 1/\norm{R_T(\lambda_0)}$, then $(\lambda_0-\lambda)R_T(\lambda_0)$ is a contraction and we can use the Neumann series expansion \ref{operatorNeumannSeries}, which gives the last equality.
-\end{proof}
-\begin{corollary} \label{resolventNormDistanceToSpectrum}
-For all $\lambda\in\res(T)$, we have $d(\lambda, \spec(T)) \geq \norm{R_T(\lambda)}^{-1}$.
-\end{corollary}
-\begin{corollary}
-The resolvent set $\res(T)$ is open.
-\end{corollary}
-
-
-\begin{proposition}
-Let $S$ be a closed, injective linear operator on a Banach space with closed range. Let $T$ be a bounded operator with $\norm{T} < \norm{S^{-1}}^{-1}$, then $S-T$ is invertible and
-\[ (S-T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
-\end{proposition}
-The assumptions are enough to guarantee $S^{-1}$ is bounded, so $\norm{S^{-1}}$ makes sense.
-\begin{proof}
-By injectivity, we can define $S^{-1}$. It is closed by \ref{algebraClosedOperators} and has closed domain, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}. Since $\norm{S^{-1}T} \leq \norm{S^{-1}}\;\norm{T} < 1$, it follows that by \ref{operatorNeumannSeries} that $\id - S^{-1}T$  has bounded inverse and that we can expand its bounded inverse as a Neumann power series. So we can calculate
-\[ (S-T)^{-1} = S^{-1}(\id - S^{-1}T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
-\end{proof}
-\begin{corollary} \label{secondNeumannSeries}
-Let $T$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_T(\lambda)$ is bounded and given by
-\[ R_T(\lambda) = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
-with uniform convergence. The norm is bounded by
-\[ \norm{R_T(\lambda)} \leq \frac{1}{|\lambda|-\norm{T}}. \]
-\end{corollary}
-\begin{proof}
-We use the proposition with $S = \lambda\id$. The norm bound follows from the Neumann series expansion \ref{operatorNeumannSeries}.
-\end{proof}
-\begin{corollary}
-Let $T$ be a bounded linear operator on a Banach space. Then
-\begin{enumerate}
-\item $\spec(T)\subset [-\norm{T}, \norm{T}]$;
-\item $\spec(T)$ is compact.
-\end{enumerate}
-\end{corollary}
-For the point spectrum a simpler argument also leads to $\pspec(T)\subset [-\norm{T}, \norm{T}]$: let $\lambda$ be an eigenvalue with eigenvector $x$. Then
-\[ |\lambda|\;\norm{x} = \norm{\lambda x} = \norm{Tx} \leq \norm{T}\;\norm{x}. \]
-
-\begin{proposition}
-Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
-\[ R_{T^{-1}}(\lambda^{-1}) = -\lambda T R_{T}(\lambda) = -\lambda -\lambda^2 R_T(\lambda). \]
-\end{proposition}
-\begin{proof}
-This is a reformulation of the calculation
-\[ \frac{1}{\lambda^{-1} - T^{-1}} = \frac{\lambda T}{\lambda T}\frac{1}{\lambda^{-1} - T^{-1}} = \frac{\lambda T}{T - \lambda} = \frac{\lambda T - \lambda^2 + \lambda^2}{T - \lambda} = \frac{\lambda\cancel{(T - \lambda)}}{\cancel{T - \lambda}} + \frac{\lambda^2}{T - \lambda}. \]
-TODO: make rigourous!!
-\end{proof}
-\begin{corollary}
-Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
-\begin{enumerate}
-\item $\spec(T^{-1})\setminus\{0\} = (\spec(T)\setminus \{0\})^{-1}$;
-\item $\pspec(T^{-1})\setminus\{0\} = (\pspec(T)\setminus \{0\})^{-1}$.
-\end{enumerate}
-\end{corollary}
-
-\subsection{Various results}
-
-
-\begin{proposition}
-Let $X$ be a Banach space and $T$ a closed linear operator on $X$. Then $\lambda \in \spec(T)$ \textup{if and only if} $\lambda \id_X - T: \dom(T) \to V$ is not bijective.
-\end{proposition}
-\begin{proof}
-If $\lambda \id_X - T$ is not bijective, then clearly $\lambda \in \spec(T)$.
-
-Conversely, assume $\lambda \id_X - T$ is bijective. Then $(\lambda \id_X - T)^{-1}: X\to \dom(T)$ is closed by \ref{algebraClosedOperators} and has as domain a Banach space, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}.
-\end{proof}
-TODO: redefine continuous spectrum?? Such that $\spec(T) = \pspec(T) \cup \cspec(T) \cup \rspec(T)$ by definition.
-\begin{corollary}
-Let $T$ a closed linear operator on a Banach space. Then
-\[ \spec(T) = \pspec(T) \cup \cspec(T) \cup \rspec(T). \]
-\end{corollary}
-\begin{corollary}
-Let $K$ be a compact operator on a Banach space. Then
-\[ \spec(K)\setminus\{0\} = \pspec(K)\setminus\{0\}. \]
-\end{corollary}
-\begin{proof}
-For all $\lambda\neq 0$, we have that $\lambda\id - K$ is Fredholm with index zero (and thus bounded). Then by the Fredholm alternative \ref{FredholmAlternative} $\lambda\id - K$ is either bijective or neither injective nor surjective, meaning $\lambda$ is either in $\rho(T)$ or in $\pspec(T)$. 
-\end{proof}
-
-\begin{proposition}[Weyl sequences] \label{WeylSequence}
-Let $T$ be an operator on a Banach space $X$.
-\begin{enumerate}
-\item If there exists a sequence $\seq{x_n} \subseteq X$ such that
-\[ \forall n: \; \norm{x_n} = 1 \qquad\text{and}\qquad \norm{(\lambda\id - T)x_n}\to 0, \]
-then $\lambda\in\spec(T)$.
-\item If $\lambda \in \sigma(T)\cap \overline{\res(T)}$, then there exists such a sequence for $\lambda$.
-\end{enumerate}
-\end{proposition}
-A sequence as described in \ref{WeylSequence} is called a \udef{Weyl sequence}.
-\begin{proof}
-(1) If $\lambda\in\res(T)$, then
-\[ 1 = \norm{x_n} = \norm{R_T(\lambda)(\lambda\id-T)x_n} \leq \norm{R_T(\lambda)}\;\norm{(\lambda\id-T)x_n} \not\to 0, \]
-which is a contradiction.
-
-(2) Assume $\lambda \in \sigma(T)\cap \overline{\res(T)}$. Then we can find a sequence $\seq{\lambda_n}\subseteq \res(T)$ such that $\lambda_n \to \lambda$.
-Now $d(\lambda_n, \spec(T)) \to 0$, so by \ref{resolventNormDistanceToSpectrum}, we can find a sequence of unit vectors $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} \to \infty$. Now we can rescale $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} = 1$.
-
-Then $\norm{x_n}\to 0$, and hence
-\begin{align*}
-\norm{(\lambda\id - T)R_T(\lambda_n)x_n} &= \norm{\frac{\lambda\id - T}{\lambda_n\id - T}x_n} \\
-&= \norm{\frac{(\lambda\id - T) + (\lambda_n\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}x_n} \\
-&= \norm{\left(\id + \frac{(\lambda\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}\right)x_n} \\
-&= \norm{\left(\id + \frac{\lambda\id - \lambda_n\id}{\lambda_n\id - T}\right)x_n} \\
-&= \norm{x_n + (\lambda\id - \lambda_n\id)R_T(\lambda_n)x_n} \\
-&\leq \norm{x_n} + |\lambda - \lambda_n|\;\norm{R_T(\lambda_n)x_n} \to 0.
-\end{align*}
-Thus $\seq{R_T(\lambda_n)x_n}$ is the kind of sequence we were looking for.
-\end{proof}
-
-
-\begin{proposition} \label{spectrumCompactOperator}
-Let $K$ be a compact operator on a Banach space $X$. Then
-\begin{enumerate}
-\item for all $\lambda\in\spec(K)\setminus\{0\}$ there exists a least $m$ such that $\ker(\lambda\id- K)^m = \ker(\lambda\id- K)^{m+1}$. This space is finite dimensional and reducing for $K$;
-\item for $\alpha > 0$ the number of eigenvalues $\lambda$ such that $|\lambda|\geq \alpha$ is finite;
-\item $0$ is the only accumulation point; if $X$ is infinite dimensional, then $0\in\spec(K)$;
-\item $\spec(K)$ is at most countably infinite;
-\item every $\lambda \in \spec(K)\setminus \{0\}$ is a pole of the resolvent $R_K$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-\url{https://en.wikipedia.org/wiki/Spectral_theory_of_compact_operators}
-\end{proof}
-TODO: if $K$ is a self-adjoint compact operator on a Hilbert space $H$, then $H$ has an orthonormal basis of eigenvectors of $K$.
-
-
-
-\begin{lemma}
-Let $L$ be an operator on a vector space $V$. If $\lambda \id_V - T$ is not bounded from below, then $\lambda \in \spec(T)$.
-\end{lemma}
-\begin{proof}
-If $\lambda \notin \spec(T)$, then $R_\lambda(L)$ is bijective and bounded. By lemma \ref{boundedBelow}, $\lambda \id_V - T$ is bounded below.
-\end{proof}
-
-
-\begin{lemma}
-Let $T:X\to X$ be an operator on a Banach space and $\lambda\in\cspec$, then $R_\lambda(T)$ is unbounded.
-\end{lemma}
-\begin{proof}
-If $R_\lambda(T)$ is bounded, $\lambda \id_V - T$ then is bounded below by lemma \ref{boundedBelow} and has closed range by proposition \ref{boundedBelowClosedRange}.
-\end{proof}
-
-
-\begin{proposition}[Spectral inclusion property of numerical range]
-Let $A$ be an operator. Then $\pspec(A)\subseteq W(A)$ and $\spec(A) \subseteq \overline{W(A)}$.
-\end{proposition}
-
-
-\url{https://mathoverflow.net/questions/264740/non-empty-resolvent-set-then-operator-closed}
-\url{https://math.stackexchange.com/questions/3262168/closed-operator-with-trivial-resolvent-set}
-
-\subsection{Parts of the spectrum}
-
-\begin{example}
-Operator with empty spectrum. TODO \url{https://math.stackexchange.com/questions/1344287/example-operator-with-empty-spectrum}.
-\end{example}
-
-\subsubsection{The point spectrum: eigenvalue and eigenvectors}
-In this section we study invariant subspaces with dimension $1$, i.e.\ subspaces $U= \Span\{v\}$ such that
-\[ Lv = \lambda v. \]
-\begin{definition}
-Suppose $L\in \Hom_{\mathbb{F}}(V)$.
-\begin{itemize}
-\item  A scalar $\lambda\in \mathbb{F}$ is called an \udef{eigenvalue} of $L$ if there exists a $v\in V$ such that $v\neq 0$ and $Lv = \lambda v$.
-\item Such a vector $v$ is called an \udef{eigenvector}.
-\item The set of all eigenvectors associated with an eigenvalue $\lambda$ is called the \udef{eigenspace} $E_\lambda(L)$. Because
-\[ E_\lambda(L) = \ker(L-\lambda \id_V) \]
-it is indeed a vector space.
-
-The dimension of $E_\lambda(L)$ is the \udef{geometric multiplicity} of $\lambda$.
-\end{itemize}
-\end{definition}
-\begin{proposition}
-Let $L\in \Hom_\mathbb{F}(V)$ and $\lambda\in \mathbb{F}$, then
-\[ \text{$\lambda$ is an eigenvalue of $L$} \qquad \iff \qquad \text{$\lambda$ is in the point spectrum $\pspec(L)$.} \]
-\end{proposition}
-\begin{proof}
-The equation $Lv = \lambda v$ is equivalent to $(L-\lambda \id_V)v = 0$.
-\end{proof}
-
-\begin{proposition}
-Let $L\in\Hom(V)$ be an operator on some vector space. Suppose $\lambda_1, \ldots, \lambda_m$ are distinct eigenvalues of $L$ and $v_1,\ldots, v_m$ are corresponding eigenvectors. Then $\{v_1,\ldots, v_m\}$ is linearly independent.
-\end{proposition}
-\begin{proof}
-The proof goes by contradiction. Assume $\{v_1,\ldots, v_m\}$ is linearly dependent. Let $k$ be the smallest positive integer such that
-\[ v_k \in \Span\{v_1,\ldots, v_{k-1}\}. \]
-So there exists a nontrivial linear combination
-\[ v_k = a_1v_1+\ldots +a_{k-1}v_{k-1}. \]
-Applying $L$ to both sides gives
-\[ \lambda_kv_k = a_1\lambda_kv_1+\ldots +a_{k-1}\lambda_kv_{k-1}. \]
-Multipliying the previous combination by $\lambda_k$ and subtracting both equations gives
-\[ 0= a_1(\lambda_k-\lambda_1)v_1 +\ldots + a_{k-1}(\lambda_k - \lambda_{k-1})v_{k-1}. \]
-By assumption of linear independence of $\{v_1,\ldots, v_{k-1}\}$ this combination must be trivial, however none of the $(\lambda_k-\lambda_i)$ can be zero, so all the $a_i$ must be zero. This is a contradiction with the assumption of linear dependence.
-\end{proof}
-\begin{corollary}
-For each operator on $V$, the set of distinct eigenvalues has at most cardinality $\dim V$.
-\end{corollary}
-\begin{corollary}
-Let $L\in\Hom(V)$. Suppose $\lambda_1, \ldots, \lambda_m$ are distinct eigenvalues of $L$. Then
-\[ E_{\lambda_1}(L) \oplus \ldots \oplus E_{\lambda_m}(L) \]
-is a direct sum. Furthermore, the sum of geometric multiplicities is less than or equal to the dimension of $V$:
-\[ \dim E_{\lambda_1}(L) + \ldots + \dim E_{\lambda_m}(L) \leq \dim V. \]
-\end{corollary}
-
-\subsubsection{Approximate spectrum}
-\begin{definition}
-The set of all $\lambda$ such that $T-\lambda \id_V$ is not bounded from below is called the \udef{approximate point spectrum} $\apspec$.
-
-If $\lambda\in\apspec(T)$, then $\lambda$ is an \udef{approximate eigenvalue} of $T$.
-\end{definition}
-\begin{lemma}
-Let $T$ be an operator on a vector space $V$. Then $\lambda \in \apspec(T)$ \textup{if and only if} there exists a sequence of unit vectors $(e_n)_{n\in\N}$ for which
-\[ \lim_{n\to\infty}\norm{Te_n - \lambda e_n} = 0. \]
-\end{lemma}
-\begin{proof}
-Assume there is such a sequence $(e_n)_{n\in\N}$. Then for all $\epsilon>0$, we can find a unit  vector $e_k$ such that $\norm{(T - \lambda \id_V)e_n} \leq \epsilon = \epsilon \norm{e_n}$. This is clearly not bounded below.
-
-This other direction is just an inversion of this argument.
-\end{proof}
-
-\begin{lemma}
-Let $T$ be an operator. Then $\pspec(T)\cup\cspec(T)\subset\apspec(T) \subset \spec(T)$.
-\end{lemma}
-\begin{proof}
-First assume $\lambda\notin \apspec(T)$, 
-so $T-\lambda \id_V$ is bounded below. Then $T-\lambda \id_V$ is injective by \ref{boundedBelow} and $\lambda\notin\pspec(T)$. By proposition \ref{boundedBelowClosedRange} the range $\im(T-\lambda \id_V)$ is closed, so it cannot be a proper dense subset of $X$ and $\lambda\notin\cspec(T)$.
-
-Now assume $\lambda \notin \spec(T)$. Then $(T-\lambda \id_V)^{-1}$ is bounded, so its inverse $T-\lambda \id_V$ is bounded below by \ref{boundedBelow} and $\lambda\in \apspec(T)$.
-\end{proof}
-
-\subsubsection{Residual spectrum}
-\begin{proposition}
-Let $L$ be a densely defined linear operator on a Hilbert space. If $\lambda$ is in the residual spectrum of $L$ with deficiency $m$, then $\overline{\lambda}$ is in the point spectrum of $L^*$ with multiplicity $m$.
-\end{proposition}
-\begin{proof}
-By \ref{kernelImageAdjoint} we have
-\[ \im(\lambda \id - L)^\perp = \ker(\lambda\id - L)^* = \ker(\overline{\lambda}\id - L^*). \]
-\end{proof}
-
-\subsubsection{Compression spectrum}
-\begin{definition}
-The set of $\lambda$ for which $T-\lambda I$ does not have dense range is the \udef{compression spectrum} $\cpspec(T)$ of $T$.
-\end{definition}
-Then $\rspec(T) = \cpspec(T)\setminus\pspec(T)$.
-
-\subsubsection{The essential spectrum}
-TODO \url{https://en.wikipedia.org/wiki/Spectrum_(functional_analysis)#Classification_of_points_in_the_spectrum}
-
-
-\subsection{The spectral radius}
-\begin{definition}
-The \udef{spectral radius} $\spr(T)$ of a operator $T$ is given by
-\[ \spr(T) \defeq \sup_{\lambda\in\spec(T)}|\lambda|. \]
-\end{definition}
-
-
-\subsection{The spectrum of operators on Hilbert spaces}
-\begin{proposition}
-Let $T \in \Bounded(H)$ for some Hilbert space $H$. Then
-\begin{enumerate}
-\item $\spec(T) \neq \emptyset$;
-\item $\rho(T) = \overline{\rho(T^*)}$, where the bar denotes complex conjugation.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Let $x,y\in H$ and define
-\[ f(\lambda) = \inner{x,R_\lambda(T)y}. \]
-If $\spec(T) = \emptyset$, then $f$ is an entire function. Now
-\[ \norm{R_\lambda(T)} \leq \frac{1}{|\lambda| - \norm{T}} \to 0 \quad\text{as}\quad |\lambda| \to \infty. \]
-By Liouville's theorem (TODO ref) we must have $f\equiv 0$. Because the $x,y$ we arbitrary we must have $R_\lambda(T)y = 0$ for all $y\in H$, such that $R_\lambda(T)$ is not injective, which is impossible as it is an inverse.
-
-(2) Take $\lambda\in\rho(T)$. Then
-\[ ((\lambda\id - A)^{-1})^* = (\overline{\lambda}\id - A^*)^{-1} \]
-so $\overline{\lambda}\in\rho(T^*)$ iff $((\lambda\id - A)^{-1})^*$ is bounded iff $(\lambda\id - A)^{-1}$ is bounded iff $\lambda\in \rho(T)$.
-\end{proof}
-
-\begin{lemma} \label{eigenspaceOrthogonalAdjoint}
-Let $L$ be a densely defined operator on a Hilbert space $H$. Take $\lambda\in \pspec(L)$ and $\mu\in\pspec(L^*)$. If $\lambda \neq \overline{\mu}$, then
-\[ \ker(\lambda\id - L)\perp \ker(\mu\id - L^*). \]
-\end{lemma}
-\begin{proof}
-Take non-zero eigenvectors $x,y$ such that $Ax = \lambda x$ and $A^*y = \mu y$. Then
-\[ \lambda \inner{y,x} = \inner{y,\lambda x} = \inner{y, Ax} = \inner{A^*y,x} = \inner{\mu y,x} = \overline{\mu}\inner{y,x}. \]
-So we have $(\lambda - \overline{\mu})\inner{y,x} = 0$.
-\end{proof}
-
-\begin{proposition} \label{adjointSpectrumNoResidual}
-Let $L$ be a densely defined operator on a Hilbert space $H$. Then the following are equivalent:
-\begin{enumerate}
-\item the residual spectrum of $L$ is empty;
-\item $\overline{\pspec(L^*)} \subseteq \pspec(L)$;
-\end{enumerate}
-as are the following:
-\begin{enumerate}
-\item the residual spectrum of $L^*$ is empty;
-\item $\pspec(L) \subseteq \overline{\pspec(L^*)}$.
-\end{enumerate}
-In particular all these statements hold if $L$ is normal.
-\end{proposition}
-\begin{proof}
-Consider, for all $x\in \dom(L), y\in\dom(L^*)$, the equality
-\[ \inner{(\lambda\id-L)x,y} = \inner{x,(\overline{\lambda}\id-L^*)y}. \]
-We can make the following inferences:
-\begin{itemize}
-\item If $\lambda\in \overline{\pspec(L^*)}$, then the equality holds in particular for all eigenvectors $y$. This implies $\inner{(\lambda\id-L)x,y} = 0$. By \ref{perpToDenseSet} $\im(\lambda\id-L)$ may then not be dense, so it cannot be injective because the residual spectrum of $L$ is empty.
-\item Assume $\lambda\id-L$ injective and take  $y\perp \im(\lambda\id-L)$. Then by the equality $\inner{x, (\overline{\lambda}\id - L^*)y} = 0$ for all $x\in\dom(L)$, which is dense. So $(\overline{\lambda}\id - L^*)y = 0$ by \ref{perpToDenseSet}. Now $\lambda\notin \pspec(L)$, so $\overline{\lambda}\notin \pspec(L^*)$. Thus $y = 0$ and $\im(\lambda\id-L)^\perp = \{0\}$, meaning $\im(\lambda\id-L)$ is dense.
-\end{itemize}
-The arguments for the second set of statements are similar.
-
-If $L$ is normal, then $\ker(\lambda \id - L) = \ker{\overline{\lambda}\id -L^*}$ by \ref{equalityKernelAdjointNormal}, so $\pspec(L) = \overline{\pspec(L^*)}$.
-\end{proof}
-
-\begin{proposition}
-Let $T$ be a closed, densly defined operator on a Hilbert space.
-\begin{enumerate}
-\item If $\lambda\in\rho(T)$, then $\overline{\lambda}\in\rho(T^*)$.
-\item If $\lambda\in\rspec(T)$, then $\overline{\lambda}\in\pspec(T^*)$.
-\item If $\lambda\in\pspec(T)$, then $\overline{\lambda}\in\rspec(T^*)\cup\pspec(T^*)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO Compare with \ref{adjointSpectrumNoResidual}. CLosure necessary?
-\end{proof}
-
-
-\begin{proposition}
-Let $T$ be a unitary operator. Then
-\begin{enumerate}
-\item $\rspec(T) = \emptyset$;
-\item $\spec(T) \subset \setbuilder{\lambda\in\C}{|\lambda| = 1}$.
-\end{enumerate}
-\end{proposition}
-TODO: move to more general place??
-
-\begin{lemma}
-The eigenvalues of a bounded dissipative linear operator
-lie in the half-plane $\Im\lambda \geq 0$.
-\end{lemma}
-
-\subsubsection{Rayleigh quotient}
-\begin{lemma}
-Let $L$ be an operator on a Hilbert space. If $x$ is an eigenvector with eigenvalue $\lambda$, then
-\[ J_L(x) = \lambda. \]
-\end{lemma}
-\begin{proof}
-Let $x$ be an eigenvector with eigenvalue $\lambda$, then
-\[ J_L(x) = \frac{\inner{x,Lx}}{\inner{x,x}} = \lambda \frac{\inner{x,x}}{\inner{x,x}} = \lambda. \]
-\end{proof}
-
-\begin{proposition}
-If $U$ is unitary, then $\spec(U)\subset \mathbb{T}$.
-\end{proposition}
-
-\subsubsection{Symmetric and self-adjoint operators}
-
-\begin{proposition}
-Let $T$ be a symmetric operator. Then $\spec(T)$ is one of the following:
-\begin{itemize}
-\item $\C$;
-\item $\setbuilder{z\in \C}{\Im(z) \geq 0}$;
-\item $\setbuilder{z\in \C}{\Im(z) \leq 0}$;
-\item a subset of $\R$.
-\end{itemize}
-If $T$ is densely-defined, then either the first or the last case holds.
-
-If $T$ is self-adjoint, then the last case holds.
-\end{proposition}
-\begin{proof}
-TODO \url{https://math.stackexchange.com/questions/893899/spectrum-of-symmetric-non-selfadjoint-operator-on-hilbert-space}
-\end{proof}
-
-\begin{example}
-Spectrum half plane TODO \url{https://math.stackexchange.com/questions/893899/spectrum-of-symmetric-non-selfadjoint-operator-on-hilbert-space}
-
-\url{https://math.stackexchange.com/questions/925097/spectrum-of-self-adjoint-operator-on-hilbert-space-real}
-\end{example}
-
-\begin{proposition}
-If $A$ is a positive operator, then $\spec(A) \subseteq [0,\infty[$.
-\end{proposition}
-\begin{proof}
-\url{https://math.stackexchange.com/questions/1014070/positive-operator-has-a-positive-spectrum}
-\end{proof}
-
-\begin{proposition}
-Let $A$ be a self-adjoint operator. Then
-\begin{enumerate}
-\item $\inf \sigma(A) = \inf\setbuilder{\inner{x,Ax}}{x\in \dom(A), \; \norm{x} = 1}$;
-\item $\sup \sigma(A) = \sup\setbuilder{\inner{x,Ax}}{x\in \dom(A), \; \norm{x} = 1}$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-
-\begin{proposition}
-Let $T$ be a densely defined self-adjoint operator. Then
-\begin{enumerate}
-\item $\spec(T) \subset \R$;
-\item $\rspec(T) = \emptyset$;
-\item let $\lambda_1,\lambda_2 \in \pspec(T)$ and $\lambda_1\neq \lambda_2$, then 
-\[ \Null(\lambda_1\id - T) \perp \Null(\lambda_2 \id - T). \]
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
-
-\begin{proposition}
-Let $T$ be a symmetric operator on a Hilbert space $H$. Then
-\begin{enumerate}
-\item the eigenvalues of $T$ are real;
-\item the eigenvectors corresponding to distinct eigenvalues are orthogonal.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-This is an application of \ref{eigenspaceOrthogonalAdjoint} and \ref{adjointSpectrumNoResidual}.
-\end{proof}
-
-\subsubsection{Compact self-adjoint operators}
-\begin{proposition}
-Every compact self-adjoint operator $L$ on a nontrivial Hilbert space has an eigenvalue $\lambda$ with $|\lambda| = \norm{L}$.
-\end{proposition}
-
-\begin{proposition}
-Let $A$ be a compact self-adjoint operator. Then the only possible accumulation point of $\spec(A)$ is $0$.
-\end{proposition}
-TODO self-adjoint not necessary? See \ref{spectrumCompactOperator}?
-\begin{proof}
-Assume $\spec(A)$ is infinite. Then take $\seq{\lambda_n}\subset \spec(A)$. Any associated sequence $\seq{x_n}$ of eigenvectors is orthogonal. We can take it to be orthonormal. By \ref{limitCompactImageOrthonormalSequence} we have
-\[ 0 = \lim_{n\to\infty} \norm{Ax_n}^2 = \lim_{n\to\infty}\inner{Ax_n,Ax_n} = \lim_{n\to\infty}\lambda_n^2\inner{x_n,x_n} = \lim_{n\to\infty}\lambda_n^2, \]
-so $\seq{\lambda_n}$ converges to $0$.
-\end{proof}
-
-\begin{theorem}
-Every spectral value $\lambda\neq 0$ of a compact self-adjoint linear
-operator $A : H \to H$ is an eigenvalue of finite multiplicity that can only
-accumulate at $\lambda = 0$. Conversely, a self-adjoint operator having these
-properties is compact.
-\end{theorem}
-\begin{proof}
-TODO See \ref{spectrumCompactOperator}
-\end{proof}
-
-\section{Multiplication operators}
-\begin{definition}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. A \udef{multiplication operator} is an operator of the form
-\[ T: L^p(\Omega, \mu) \to L^p(\Omega, \mu): u(x) \mapsto a(x)u(x) \]
-for some $a\in L^\infty(\Omega,\mu)$
-\end{definition}
-
-\begin{proposition}
-Let $T: L^p(\Omega, \mu) \to L^p(\Omega, \mu): u \mapsto a\cdot u$ be a multiplication operator. Then
-\[ \norm{T} = \norm{a}_{L^\infty}. \]
-\end{proposition}
-\begin{proof}
-From the inequality $\norm{Tu}_{L^p}\leq \norm{a}_{L^\infty}\norm{u}_{L^p}$ we get $\norm{T} \leq \norm{a}_{L^\infty}$.
-
-TODO
-\end{proof}
-
-\begin{lemma}
-Let $T: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u \mapsto a\cdot u$ be a multiplication operator with $a\in L^\infty(\Omega,\mu)$. Then $T^*$ is the multiplication operator
-\[ T^*: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u \mapsto \overline{a}\cdot u. \]
-\end{lemma}
-\begin{proof}
-From 
-\[ \inner{Tu,v} = \int_\Omega a\cdot u \cdot \overline{v}\diff{\mu} = \int_\Omega u \cdot \overline{\overline{a}\cdot v}\diff{\mu} \]
-it follows that $T^*v = \overline{a}\cdot v$.
-\end{proof}
-\begin{corollary}
-Then
-\begin{enumerate}
-\item $T$ is self-adjoint if $a$ is real-valued;
-\item $T$ is skew-adjoint if $a$ is purely imaginary;
-\item $T$ is unitary if $|a(x)| \equiv 1$.
-\end{enumerate}
-\end{corollary}
-
-Let $E_\lambda$ be the level set
-\[ E_\lambda = \setbuilder{x\in\Omega}{a(x) = \lambda} \]
-
-\begin{proposition}
-Let $T: L^2(\Omega, \mu) \to L^2(\Omega, \mu): u\mapsto a\cdot u$ be a multiplication operator with $a\in \cont(\Omega)$. Then
-\begin{enumerate}
-\item $\pspec(T) = \setbuilder{\lambda\in \im(a)}{\mu(E_\lambda)>0}$;
-\item $\cspec(T) = \setbuilder{\lambda\in \overline{\im(a)}}{\mu(E_\lambda) = 0}$;
-\item $\rspec(T) = \emptyset$;
-\item $\rho(T) = \C\setminus \overline{\im(T)}$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
-\section{The spectral theorem}
-\url{https://link.springer.com/content/pdf/10.1007%2F978-1-4614-7116-5.pdf}
-
-\url{http://individual.utoronto.ca/jordanbell/notes/SVD.pdf}
-\url{https://digitalcommons.mtu.edu/cgi/viewcontent.cgi?article=2133&context=etdr}
-
-
-\section{Functional calculus}
-\subsection{Holomorphic functional calculus}
-
-\begin{theorem}[Holomorphic functional calculus] 
-\label{holomorphicFunctionalCalculus} \label{holomorphicSpectralMapping}
-Let $A$ be a Banach algebra and $x\in A$. Consider the function
-\[ \Phi_x: \cont^\infty(\spec(x),\C) \to A: f\mapsto f(x)\defeq \oint_\Gamma f(z)R_x(z)\diff{z}. \]
-Here $\Gamma$ is any simple Jordan curve that contains $\spec(x)$ such that $f$ is holomorphic in a region that contains $\Gamma$ and its interior. Then
-\begin{enumerate}
-\item $\Phi_x$ is well-defined: it does not depend on the particular curve $\Gamma$;
-\item $\Phi_x$ is a homomorphism;
-\item for any polynomial $p\in \C[X]$, we have $\Phi_x(p) = p(x)$; \\
-in particular $\Phi_x(\id_\C) = x$ and $\Phi_x(\underline{1}) = \id_A$;
-\item $\spec(\Phi_x(f)) = f[\spec(x)]$;
-\item $\Phi_x$ is continuous if $\cont^\infty(\spec(x),\C)$ is equipped with continuous convergence (?).
-\end{enumerate}
-\end{theorem}
-TODO: $\cont^\infty(\spec(x))$ should be the space of functions that are analytic in some neighbourhood of $\spec(x)$. Is it??
-\begin{proof}
-TODO
-\end{proof}
-
-TODO unbounded operators
-
-\subsubsection{Riesz eigenprojections}
-Holomorphic functional calculus applied to
-\[ \chi_{S,\delta}: A\to \{0,1\}: x\mapsto \begin{cases}
-1 & d(x,S) \leq \delta \\
-0 & \text{otherwise}.
-\end{cases} \]
-
-TODO: spectral measure with only disconnected parts in $\sigma$-algebra??
-
-TODO: $P_\Delta$ and $E_\Delta \defeq \im P_\Delta$.
-
-\begin{lemma}
-$\spec(T|_{E_\Delta}) = \spec(T)\cap\Delta$.
-\end{lemma}
-
-\begin{definition}
-We call $\dim E_\lambda$ the \udef{algebraic multiplicity} of $\lambda$.
-\end{definition}
-
-\subsubsection{Frobenius covariants}
-TODO $P_\lambda$ is a Frobenius covariant. \url{https://en.wikipedia.org/wiki/Frobenius_covariant}
-
-TODO cfr. Lagrange polynomial??
-
-\section{Jordan decomposition}
-\subsection{Eigennilpotent}
-\begin{definition}
-Let $a$ be a finite element in a semisimple Banach algebra and $\lambda\in \spec(a)$. The \udef{eigennilpotent operator} of $a$ at $\lambda$ is defined as
-\[ D_{\lambda} \defeq (a-\lambda)P_{\lambda}. \]
-\end{definition}
-This definition works because we can find a $\delta < d(\lambda, \spec(a)\setminus\{\lambda\})$.
-
-\begin{lemma}
-Let $a$ be a finite element in a semisimple Banach algebra and $\lambda\in \spec(a)$. The eigennilpotent operator $D_\lambda$ is nilpotent.
-\end{lemma}
-\begin{proof}
-By spectral mapping \ref{holomorphicSpectralMapping}, $D_\lambda$ is quasinilpotent. Because $a$ is finite, it is nilpotent by \ref{nilpotentQuasinilpotent}.
-\end{proof}
-
-
-
-\subsection{Jordan vectors}
-\begin{definition}
-Let $V$ be a finite dimensional vector space and $T$ an operator on $V$. A \udef{Jordan vector} of $T$ belonging to the eigenvalue $\lambda$ is a vector $x\in V$ such that
-\[ (\lambda\id_V - T)^kx = 0 \]
-for some $k\in \N$. The least such $k$ is called the \udef{degree} of $x$ and is denoted $\deg_J(x)$.
-\end{definition}
-Eigenvectors are Jordan vectors of degree $1$.
-
-\begin{proposition}
-Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ $\lambda\in\spec(T)$ and $x\in V$. Then $x$ is a Jordan vector of $T$ belonging to the eigenvalue $\lambda$ \textup{if and only if} $x\in E_\lambda$.
-\end{proposition}
-\begin{proof}
-Let $x\in E_\lambda$. Then $x = P_\lambda x$ and thus
-\[ (\lambda\id_V - T)^kx = (\lambda\id_V - T)^kP_\lambda x = \big((\lambda\id_V - T)P_\lambda\big)^k x = D_\lambda^k x, \]
-which is zero for some $k$ because $D_\lambda$ is nilpotent.
-
-Conversely, assume $x$ is a Jordan vector of $T$ belonging to the eigenvalue $\lambda$. We can write $x = x_1+x_2 \in E_{\lambda}\oplus E_{\C\setminus\{\lambda\}}$.
-Then (because $E_\lambda$ is reducing for $T-\lambda\id_V$)
-\[ 0 = (\lambda\id_V - T)^kx = (\lambda\id_V - T)^kx_1 + (\lambda\id_V - T)^kx_2 \in E_{\lambda}\oplus E_{\C\setminus\{\lambda\}} \]
-Thus we have $(\lambda\id_V - T)^kx_1 = 0$ and $(\lambda\id_V - T)^kx_2 = 0$ separately.
-Now $T-\lambda\id_V$ is invertible on $E_{\C\setminus\{\lambda\}}$, so $x_2 = 0$ (TODO ref). This means that $x = x_1 \in E_\lambda$.
-\end{proof}
-
-\begin{definition}
-Let $m = \deg_N(D_\lambda)$. Then we have
-\[ \{0\} \subsetneq \ker(\lambda\id_V - T) \subsetneq \ker(\lambda\id_V - T)^2 \subsetneq \ldots \subsetneq \ker(\lambda\id_V - T)^{m-1} \subsetneq \ker(\lambda\id_V - T)^m = V. \]
-We define $E^k_\lambda \defeq \ker(\lambda\id_V - T)^k$. In particular
-\begin{itemize}
-\item $E^1_\lambda$ is the \udef{geometric eigenspace};
-\item $E^{m-1}_\lambda$ is the \udef{algebraic eigenspace}.
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-Let $V$ be a finite dimensional vector space, $T$ an operator on $V$, $\lambda\in\spec(T)$ and $x\in E_\lambda$. Then
-\begin{enumerate}
-\item $1 \leq \dim\ker(\lambda\id_V - T) \leq \dim E_\lambda$;
-\item $1 \leq \deg_J(x) \leq \dim_E\lambda$.
-\end{enumerate}
-\end{lemma}
-The lemma says the geometric multiplicity is smaller than the algebraic multiplicity.
-\begin{proof}
-Every eigenvector is a Jordan vector, so $\ker(\lambda\id_V - T) \subseteq E_\lambda$.
-
-For all $k\in\N$ smaller then the degree of $x$, $(\lambda\id_V - T)^kx$ is a Jordan vector and thus in $E_\lambda$. TODO all $(\lambda\id_V - T)^kx$ are linearly independent (like in \ref{nilpotentQuasinilpotent})
-\end{proof}
-
-\begin{definition}
-Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ and $\lambda\in\spec(T)$. The eigenvalue $\lambda$ is called
-\begin{itemize}
-    \item \udef{simple} if the algebraic multiplicity is $1$;
-    \item \udef{semisimple} if every Jordan vector in $E_\lambda$ has degree $1$;
-    \item \udef{prime} if the geometric multiplicity is $1$.
-\end{itemize}
-If all eigenvalues of $T$ are semisimple, then $T$ is called a \udef{diagonal operator}.
-\end{definition}
-
-\begin{lemma}
-An operator $T$ is diagonal iff $T$ is of the form $\sum_j a_jP_j$, where $a_j\in \F$ and $P_j$ are projectors that commute pairwise.
-\end{lemma}
-
-\subsection{Characteristic polynomial and equation}
-\begin{definition}
-Let $V$ be a finite dimensional vector space and $T$ an operator on $V$. The \udef{characteristic polynomial} $p_T(x)$ of $T$ is the polynomial
-\[ p_T(x) \defeq \det(x\id_V - T). \]
-\end{definition}
-
-\begin{proposition}
-Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ and $\spec(T) = \{\lambda_j\}_{j=1}^r$. Then
-\[ p_T(x) = \prod_{j=1}^r(x - \lambda_j)^{\dim E_{\lambda_j}}. \]
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-A number $\lambda\in \C$ is an eigenvalue of $T$ \textup{if and only if} it is a root of $p_T(x)$.
-\end{corollary}
-
-\begin{definition}
-The equation $p_T(x) = 0$ is the \udef{characteristic equation} of $T$.
-\end{definition}
-
-\subsection{Spectral representation}
-\begin{proposition}
-Let $V$ be a finite dimensional complex vector space and $T$ an operator on $V$. There exists a unique decomposition $T = S + D$ such that
-\begin{itemize}
-\item $S$ is diagonal;
-\item $D$ is nilpotent;
-\item $SD = DS$.
-\end{itemize}
-If $\spec(T) = \{\lambda_j\}_{j=1}^r$, this decomposition is given by
-\[ T = \sum_{j=1}^r \lambda_r P_{\lambda_r} + \sum_{j=1}^r D_{\lambda_r}. \]
-\end{proposition}
-
-\subsection{Partial fraction decomposition of the resolvent}
-For any operator $T$ on a vector space $V$ with eigenvalue $\lambda_0$, the resolvent $R_T(\lambda)$ has a pole at $\lambda_0$.
-
-\begin{proposition}
-Let $T$ be an operator on a finite dimensional vector space $V$ and $\lambda_0\in\spec(T)$. Then the Laurent expansion of $R_T(\lambda)$ around $\lambda_0$ is of the form
-\[ R_T(\lambda) = \frac{P_0}{\lambda-\lambda_0} + \sum_{n=1}^{\deg_N(D_0)-1}\frac{D_0^{n}}{(\lambda - \lambda_0)^{n+1}} + \sum_{n=0}^\infty(-1)^n S_0^{n+1}(\lambda - \lambda_0)^n, \]
-where $P_0\defeq P_{\lambda_0}, D_0\defeq D_{\lambda_0}$ and $S_0$ is some fixed operator.
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{definition}
-The holomorphic part of the Laurent expansion of $R_T(\lambda)$ at $\lambda_0$ is called the \udef{reduced resolvent} of $T$ w.r.t. $\lambda_0$:
-\[ S_{T,\lambda_0}(\lambda) \defeq \sum_{n=0}^\infty(-1)^n S_0^{n+1}(\lambda - \lambda_0)^n = R_T(\lambda) - \left(\frac{P_0}{\lambda-\lambda_0} + \sum_{n=1}^{\deg_N(D_0)-1}\frac{D_0^{n}}{(\lambda - \lambda_0)^{n+1}}\right). \]
-\end{definition}
-
-\begin{proposition}
-Let $T$ be an operator on a finite dimensional vector space $V$ and $\lambda_0\in\spec(T)$. Then
-\[ R_{T|_{(\id_V-P_0)}}(\lambda) = S_{T,\lambda_0}|_{\id_V-P_0}(\lambda). \]
-\end{proposition}
-
-\begin{proposition}
-Let $T$ be an operator on a finite dimensional vector space $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$. The partial fraction decomposition of $R_T(\lambda)$ is given by
-\[ R_T(\lambda) = \sum_{j=1}^r\left(\frac{P_{\lambda_j}}{\lambda - \lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{D_{\lambda_j}^n}{(\lambda - \lambda_j)^{n+1}}\right). \]
-The partial fraction decomposition of $S_{T,\lambda_k}(\lambda)$ is given by
-\[ S_{T,\lambda_k}(\lambda) = \sum_{\substack{j=1 \\ j\neq k}}^r\left(\frac{P_{\lambda_j}}{\lambda - \lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{D_{\lambda_j}^n}{(\lambda - \lambda_j)^{n+1}}\right). \]
-\end{proposition}
-\begin{proof}
-The poles of $R_T(\lambda)$ are exactly the eigenvalues of $T$. There are finitely many of them, so we can use partial fraction decomposition, \ref{partialFractionDecomposition}. We just need to show that the holomorphic part is zero. For that we note that $\lim_{\lambda \to \infty} R_T(\lambda) = 0$ and all principal parts tend to $0$ at infinity as well. Thus the holomorphic part also tends to $0$, making it bounded. By Liouville's theorem, \ref{liouvilleTheoremAnalysis}, we get that it is identically zero.
-\end{proof}
-\begin{corollary}[Sylvester-Lagrange formula]
-Let $f$ be a holomorphic function on an open set that contains $\spec(T)$. Then
-\[ f(T) = \sum_{j=1}^r\left(f(\lambda_j)P_{\lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{f^{(n)}(\lambda_j)D_{\lambda_j}^n}{n!}\right). \] 
-\end{corollary}
-\begin{proof}
-We have
-\[ f(T) = \oint_\Gamma f(\lambda)R_T(\lambda)\diff{\lambda} = 2\pi i\sum_{j=1}^r \Res_{\lambda_j}f(\lambda)R_T(\lambda) \]
-by the residue theorem (TODO ref for operators).
-\end{proof}
-\begin{corollary}[Cayley-Hamilton]
-Let $p_T(x)$ be the characteristic polynomial of $T$. Then $p_T(T) = 0$.
-\end{corollary}
-\begin{proof}
-Since $p_T(x) = \prod_{j=1}^r(x - \lambda_j)^{\dim E_{\lambda_j}}$ and $\dim E_{\lambda_j} \geq \deg_N(D_{\lambda_j})$, we see that $p_T(\lambda)R_T(\lambda)$ has no poles and is holomorphic, meaning that $oint_\Gamma f(\lambda)R_T(\lambda)\diff{\lambda} = 0$ by Cauchy's theorem (TODO ref for operators).
-\end{proof}
-
-\subsection{Normal operators}
-
-
-\begin{proposition}
-If $T$ is a normal operator, then $P_\lambda = P^*_\lambda$ and $D_\lambda = D^*_\lambda = 0$.
-\end{proposition}
-This means normal operators are diagonalisable.
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-Let $V$ be a finite dimensional complex vector space and $T$ a normal operator
-on $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$.
-\begin{enumerate}
-\item We have the spectral decompositions
-\[ T = \sum_{j=1}^r \lambda_r P_{\lambda_r} \qquad\text{and}\qquad T^* = \sum_{j=1}^r \overline{\lambda_r} P_{\lambda_r}. \]
-\item We have
-\[ R_T(\lambda) = \sum_{j = 1}^r \frac{P_{\lambda_j}}{\lambda - \lambda_j} \qquad \text{and} \qquad S_{T,\lambda_k}(\lambda) = \sum_{\substack{j = 1 \\ j\neq k}}^r \frac{P_{\lambda_j}}{\lambda - \lambda_j} \]
-\end{enumerate}
-\end{corollary}
-
-\subsection{Jordan decomposition}
-TODO matrix representation + matrix representation of Lagrange-Sylvester. See Baumgärtel
 
 \chapter{Fourier transforms}
 
