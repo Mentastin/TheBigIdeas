@@ -1054,13 +1054,14 @@ Assume $D \lhd E \lhd F$. Then $D\subseteq E\subseteq F$, so $D\subseteq F$. Als
 Let $S$ be a bounded $\wedge$-semilattice, let $D \subseteq S$ be a subset and $E\subseteq S$ a proper filter. Then $D\subseteq E$ \textup{if and only if} $D\lhd E$.
 \end{proposition}
 \begin{proof}
-By definition $D\lhd E$ implies $D\subseteq E$. For the opposite inclusion we need to show that $E\subseteq D^{\mesh}$. Assume, towards a contradiction, that this is not the case. Then there exists $a\in E$ and $b\in D$ such that $a\wedge b = 0$. Now because $D\subseteq E$ and $E$ is $\wedge$-closed, this means that $0\in E$. Because $E$ is upward directed, this means $E = S$, which contradicts the assumption of proper filter.
+By definition $D\lhd E$ implies $D\subseteq E$. For the opposite inclusion we need to show that $E\subseteq D^{\mesh}$. Assume, towards a contradiction, that this is not the case. Then there exists $a\in E$ and $b\in D$ such that $a\wedge b = \bot$. Now because $D\subseteq E$ and $E$ is $\wedge$-closed, this means that $\bot\in E$. Because $E$ is upward directed, this means $E = S$, which contradicts the assumption of proper filter.
 \end{proof}
 
 \begin{lemma} \label{ultrafilterContainment}
 Let $S$ be a bounded $\wedge$-semilattice. Let $F,G\subseteq S$ be subsets.
 \begin{enumerate}
 \item If $G$ is a filter, then $F\lhd G$ \textup{if and only if} $\upset F \lhd G$.
+\item If $G$ is a proper filter, then $F\lhd G$ \textup{if and only if} $\mathfrak{F}\{F\} \lhd G$.
 \item If $F$ is an ultafilter, then $F\lhd G$ \textup{if and only if} $F = G$.
 \item If $G$ is an ultrafilter, then $F \lhd G$ \textup{if and only if} $F\subseteq G$.
 \end{enumerate}
@@ -2292,8 +2293,8 @@ Let $\sSet{P,\Yleft}$ be an ordered set. Then for all filter bases $B,C$ in $P$:
 \begin{proposition} \label{filterGenerationSemilattice}
 Let $S$ be a $\wedge$-semilattice and $B\subseteq S$ a subset. Then
 \begin{enumerate}
-\item $\mathfrak{FB}\{B\} = \Cl_\wedge(B)$;
-\item $\mathfrak{F}\{B\} = \upset\Cl_\wedge(B)$.
+\item $\mathfrak{FB}\{B\} = \closure_\wedge(B)$;
+\item $\mathfrak{F}\{B\} = \upset\closure_\wedge(B)$.
 \end{enumerate}
 \end{proposition}
 
@@ -2311,7 +2312,7 @@ The filter $F|_a$ of \ref{traceFilter} is called the \udef{trace filter} of $F$ 
 
 \subsection{Ordering filters and ideals}
 
-\begin{proposition}[The lattices of filters and ideals]
+\begin{proposition}[The lattices of filters and ideals] \label{latticeFiltersIdeals}
 Let $P$ be an ordered set and $I$ an index set.
 \begin{enumerate}
 \item If $P$ is a $\wedge$-semilattice, the set $\filters(P)$ of filters on $P$ is a complete bounded sublattice of $\sSet{\powerset(P), \subseteq}$, with top $P$ and bottom $\{\top\}$. Let $\{F_i\}_{i\in I} \in \filters(L)^I$ be a set of filters. Then
@@ -2323,7 +2324,7 @@ Let $P$ be an ordered set and $I$ an index set.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO
+This is an application of \ref{completeSublattice} (TODO show this is the correct residual). We just need to prove that $\upset\closure_\wedge \left(\bigcup_{i\in I}F_i\right) = \closure_\wedge \left(\bigcup_{i\in I}F_i\right)$ TODO is distributive
 \end{proof}
 
 \begin{proposition} \label{joinProperFilter}
@@ -2331,27 +2332,36 @@ Let $L$ be a $\wedge$-semilattice and $\{F_i\}_{i\in I} \in \filters(L)^I$ be se
 \end{proposition}
 In particular, for $F, G\in\filters(L)$, we have that $F\vee G$ is a proper filter if and only if $F\mesh G$.
 
-\begin{proposition}
+\begin{proposition} \label{infiniteDistributivityFiltersIdeals}
 Let $P$ be an ordered set and $I$ an index set.
 \begin{enumerate}
-\item If $P$ is a lattice that is meet infinitely distributive, then the lattice $\filters(P)$ of filters on $P$ is also meet infinitely distributive:
+\item If $P$ is a join infinitely distributive lattice, then the lattice $\filters(P)$ of filters on $P$ is meet infinitely distributive:
 \[ \forall \mathcal{A}\subseteq \filters(P): \forall F\in \filters(P): \qquad F\vee \bigwedge \mathcal{A} = \bigwedge \setbuilder{F\vee A}{A\in \mathcal{A}}; \]
-\item If $P$ is a $\vee$-semilattice, the lattice $\ideals(P)$ of ideals on $P$ is meet infinitely distributive:
+\item If $P$ is a meet infinitely distributive lattice, the lattice $\ideals(P)$ of ideals on $P$ is meet infinitely distributive:
 \[ \forall \mathcal{A}\subseteq \ideals(P): \forall I\in \ideals(P): \qquad I\vee \bigwedge \mathcal{A} = \bigwedge \setbuilder{I\vee A}{A\in \mathcal{A}}. \]
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-We calculate
+(1) We calculate, using the expression for $\vee$ applicable to distributive lattices in \ref{latticeFiltersIdeals}:
 \begin{align*}
-F\vee \bigwedge \mathcal{A} &= \Cl_\wedge \left(F\cup \bigcap\mathcal{A}\right) \\
+F\vee \bigwedge \mathcal{A} &= \closure_\wedge \left(F\cup \bigcap\mathcal{A}\right) \\
 &= \setbuilder{x\wedge y}{x,y \in F\cup \bigcap\mathcal{A}} \\
 &= \setbuilder{x\wedge y}{x,y \in \bigcap \setbuilder{F\cup A}{A\in \mathcal{A}}} \\
-&\subseteq \bigcap\setbuilder{\setbuilder{x\wedge y}{x\in F\cup B, y \in \bigcap \setbuilder{F\cup A}{A\in \mathcal{A}}}}{B\in\mathcal{A}} \\
 &\subseteq \bigcap\setbuilder{\setbuilder{x\wedge y}{x,y \in F\cup A}}{A\in \mathcal{A}} \\
-&= \bigcap\setbuilder{\Cl_\wedge(F\cup A)}{A\in \mathcal{A}} = \bigwedge\setbuilder{F\vee A}{A\in \mathcal{A}}.
+&= \bigcap\setbuilder{\closure_\wedge(F\cup A)}{A\in \mathcal{A}} = \bigwedge\setbuilder{F\vee A}{A\in \mathcal{A}}.
 \end{align*}
-This inclusion is the easy one that holds for all lattices (see \ref{infiniteDistributiveInequalities}). We need to reverse both inclusions. We start with the first one and (in the interest of brevity) we call $\mathcal{B} = \bigcap \setbuilder{F\cup A}{A\in \mathcal{A}}$. Now take $z\in \bigcap\setbuilder{\setbuilder{x\wedge y}{x\in F\cup B, y \in \mathcal{B}}}{B\in\mathcal{A}}$. Then for all $B\in\mathcal{A}$ we can find 
+This inclusion is the easy one that holds for all lattices (see \ref{infiniteDistributiveInequalities}). We need to reverse the inclusion.
+
+To that end, take $z\in \bigcap\setbuilder{\setbuilder{x\wedge y}{x,y \in F\cup A}}{A\in \mathcal{A}}$. Then for all $A\in\mathcal{A}$ we can find $x_A, y_A\in F\cap A$ such that $x_A\wedge y_A = z$. Now we show that there exist $x,y\in \bigcap \setbuilder{F\cup A}{A\in \mathcal{A}}$ such that $x\wedge y = z$.
+
+We claim $x = \bigvee_{A\in\mathcal{A}}x_A$ and $y = \bigvee_{B\in\mathcal{A}}y_B$ work. Indeed $x,y$ are elements of $\bigcap \setbuilder{F\cup A}{A\in \mathcal{A}}$ by upwards closure of each $F\cup A$. Then for all $A\in \mathcal{A}$ we have
+\[ x_A\wedge y = x_A \wedge \left(\bigvee_{B\in\mathcal{A}}y_B\right) \geq x_A\wedge y_A = z \qquad\text{and}\qquad \text{$x_A \leq z$ and $y \leq z$, so $x_A\wedge y \leq z$.} \]
+Thus combining the inequalities gives $x_A \wedge y = z$. We conclude with the calculation
+\[ x\wedge y = \left(\bigvee_{A\in\mathcal{A}}x_A\right)\wedge y = \bigvee_{A\in\mathcal{A}}(x_A\wedge y) = \bigvee_{A\in\mathcal{A}}z = z. \]
+
+(2) The proof is identical, except all meets and joins on $P$ (but not $\powerset(P)$!) are flipped.
 \end{proof}
+TODO compare with it being a frame see also proof in Stone Spaces - Johnstone
 
 \subsubsection{Maximal filters and ideals}
 \begin{definition}
@@ -2430,7 +2440,7 @@ Let $L$ be a lattice.
 If $L$ is only a $\wedge$-semilattice (resp. $\vee$-semilattice), then only the direction $\Rightarrow$ holds in general.
 \begin{proof}
 (1) Assume $F$ is a prime filter. Then $F \neq \top = \powerset(L)$, so it is proper. Now assume $x\vee y\in F$, meaning $\upset x\vee y \subseteq F$. Thus
-\[ F = \Cl_\wedge (F\cup \upset(x\vee y)) = (F\vee \upset x) \cap (F\vee \upset y). \]
+\[ F = \closure_\wedge (F\cup \upset(x\vee y)) = (F\vee \upset x) \cap (F\vee \upset y). \]
 Because $F$ is prime, we have $F = F\vee \upset x$ or $F\vee \upset y$.
 
 Now assume TODO \url{http://www.ascent-journals.com/IJPEM/Vol3No3/1-sagi.pdf} using \ref{joinIrreducibleLemma}.

@@ -153,17 +153,28 @@ Then $y\in B\subseteq A\cap D \subseteq D$, so this is also a tail of $I_F^D \to
 
 \subsection{The vicinity filter}
 \begin{definition}
-Let $X$ be a set, $\xi$ a preconvergence on $X$ and $x\in X$. The \udef{vicinity filter} of $\xi$ at $x$ is
-\[ \vicinity_\xi(x) \defeq \bigcap \setbuilder{F\in \powerfilters(X)}{x\in \lim_\xi F}. \]
-A subset $V\subseteq X$ is called a \udef{vicinity} of $x$ for $\xi$ if $V\in \vicinity_\xi(x)$.
+Let $X$ be a set, $\xi$ a preconvergence on $X$ and $A\subseteq X$. The \udef{vicinity filter} of $\xi$ at $A$ is
+\[ \vicinity_\xi(A) \defeq \bigcap \setbuilder{F\in \powerfilters(X)}{A\mesh \lim_\xi F}. \]
+A subset $V\subseteq X$ is called a \udef{vicinity} of $A$ for $\xi$ if $V\in \vicinity_\xi(A)$.
+
+In particular we define the vicinity filter at a point $x\in X$ as $\vicinity_\xi(x) \defeq \vicinity_\xi(\{x\})$.
 \end{definition}
 
 \begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space, $x\in X$ and $V\in\vicinity_\xi(x)$ a vicinity of $x$. Then $x\in V$.
+Let $X$ be a set, $\xi$ a preconvergence on $X$ and $A\subseteq X$. Then
+\[ \vicinity_\xi(A) = \bigcap \setbuilder{F\in \powerfilters(X)}{\exists x\in A: \; x\in \lim_\xi F}. \]
+In particular for $x\in X$
+\[ \vicinity_\xi(x) = \bigcap \setbuilder{F\in \powerfilters(X)}{x\in \lim_\xi F}. \]
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$. Then $\vicinity_\xi(A) \subseteq \upset\{A\}$.
+
+In particular for $x\in X$, $\vicinity_\xi(x) \subseteq \pfilter{x}$.
 \end{lemma}
 This also means $\{x\}\in\vicinity_\xi(x)^{\mesh}$.
 \begin{proof}
-We have $\vicinity_\xi(x) \subseteq \pfilter{x}$, so $V\in \pfilter{x}$ and thus $\{x\} \subseteq V$ or $x\in V$. 
+We have $\vicinity_\xi(A) \subseteq \bigcap_{x\in A}\pfilter{x} = \upset \{A\}$. 
 \end{proof}
 
 \begin{lemma}
@@ -217,7 +228,7 @@ If $F$ is a filter such that $\{x\} \lhd F$, then $F = \pfilter{x}$ by \ref{ultr
 Let $\sSet{X,\xi}$ be a convergence space and $F\subseteq \powerfilters(X)$ a filter. Then $\ker(F) \subseteq \adh_\xi(F)$
 \end{proposition}
 \begin{proof}
-TODO
+Take $x\in \ker(F)$. Then $\pfilter{x}\mesh F$, so $F\vee \pfilter{x}$ is a proper filter that converges to $x$. Now $F\lhd F\vee \pfilter{x}$ by \ref{containmentInclusionProperFilter}, so $x\in \lim_\xi F\vee \pfilter{x} \subseteq \adh_\xi(F)$.
 \end{proof}
 
 \begin{definition}
@@ -276,7 +287,7 @@ and
 
 \begin{lemma}
 Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
-\[ \adh_\xi A = \bigcup_{A \in F^{\mesh}}\lim_\xi F = \bigcup_{\substack{\text{$G$ proper filter} \\ A\in G}}. \]
+\[ \adh_\xi A = \bigcup_{A \in F^{\mesh}}\lim_\xi F = \bigcup_{\substack{\text{$G$ proper filter} \\ A\in G}}\lim_\xi G. \]
 \end{lemma}
 \begin{proof}
 The first equality is obvious. For the second equality: Let $F$ be a filter such that $A\in F^{\mesh}$ then $F \vee \upset A$ contains $A$ and is a proper filter by \ref{joinProperFilter}, so $\lim_\xi F \subseteq \lim_x F \vee \upset A \subseteq \bigcup_{A\in G}\lim_\xi G$.
@@ -954,14 +965,31 @@ Let $\sSet{X,\xi}$ be a convergence space and $x,y\in X$. If $x,y$ are separated
 Assume $x,y$ separated. WLOG we can assume $\pfilter{x} \not\to y$. So $\pfilter{x}$ distinguishes $x$ and $y$.
 \end{proof}
 
-\subsubsection{Separation by convergent filters}
+\subsubsection{Separation by vicinities}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by convergent filters} if $\a dh_\xi(A) \perp B$ and $A\perp \adh_\xi(B)$.
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by vicinities} if there exist $U\in \vicinity_\xi(A)$ and $V\in\vicinity_\xi(B)$ such that $U\perp V$.
 
-We call two points $x,y\in X$ \udef{separated} if $\{x\}$ and $\{y\}$ are separated.
+We call two points $x,y\in X$ separated by vicinities if $\{x\}$ and $\{y\}$ are separated by vicinities, i.e.\ there exist vicinities $U,V$ of $x,y$, resp., such that $U\perp V$.
 \end{definition}
 
-\subsubsection{Separation by vicinities}
+\begin{proposition} \label{separationByVicinitiesEquivalences}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. Then the following are equivalent:
+\begin{enumerate}
+\item $A,B$ are separated by vicinities;
+\item $\lim^{-1}(A)\perp \lim^{-1}(B)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Assume $A,B$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $\lim^{-1}(A)\mesh \lim^{-1}(B)$, i.e.\ there exists a filter $F$ that converges to $x\in A$ and $y\in B$. Then $U,V\in F$ and thus $U\cap V = \emptyset \in F$, meaning $F$ is not a proper filter.
+
+$(2) \Rightarrow (1)$ Now assume $A,B$ are not separated by vicinities. Then $\vicinity_\xi(A)\mesh \vicinity_\xi(B)$, meaning $\vicinity_\xi(A)\vee \vicinity_\xi(B)$ is a proper filter by \ref{joinProperFilter}. Now by \ref{infiniteDistributivityFiltersIdeals} we can calculate
+\begin{align*}
+\vicinity_\xi(A)\vee \vicinity_\xi(B) &= \left(\bigwedge \setbuilder{F\in\powerfilters(X)}{A\mesh \lim F}\right)\vee \left(\bigwedge \setbuilder{G\in\powerfilters(X)}{B\mesh \lim G}\right) \\
+&= \bigwedge_{\substack{F,G\in \powerfilters(X)\\ A\mesh \lim F \\ B\mesh \lim G}} F\vee G,
+\end{align*}
+and in order for the right-hand side to be proper, $F\vee G$ must be a proper filter for some $F,G$. Now $\lim F\vee G \supseteq \lim F \cup \lim G$, so $F\vee G\in\lim^{-1}(A)\cap \lim^{-1}(B)$. Thus $\lim^{-1}(A)\mesh \lim^{-1}(B)$.
+\end{proof}
+
 \subsubsection{Separation by closed vicinities}
 \subsubsection{Separation by functions}
 \url{https://en.wikipedia.org/wiki/Separated_sets}
@@ -1083,38 +1111,31 @@ Assume, towards a contradiction, that $y\in \adh_\xi(\{x\})$. Then $\{x\} \in \v
 
 \subsubsection{$R_1$ or reciprocal}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{$R_1$}, \udef{reciprocal} or \udef{preregular} if
-\[ {\lim_\xi}^{-1}(x)\perp {\lim_\xi}^{-1}(y) \]
-any two distinguishable points $x,y\in X$.
+Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{$R_1$}, \udef{reciprocal} or \udef{preregular} if all distinguishable points are separated by vicinities.
 \end{definition}
 \url{https://gdz.sub.uni-goettingen.de/id/PPN235181684_0187?tify={%22pages%22:[191],%22panX%22:0.893,%22panY%22:0.579,%22view%22:%22info%22,%22zoom%22:0.894}}
 
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a pretopological convergence space and $x,y\in X$. Then ${\lim_\xi}^{-1}(x)\perp {\lim_\xi}^{-1}(y)$ \textup{if and only if} there exist disjoint vicinities of $x$ and $y$ (i.e.\ $\neg\big(\vicinity_\xi(x)\mesh \vicinity_\xi(x)\big)$).
-\end{proposition}
-\begin{proof}
-Assume disjoint vicinities $V_x,V_y$ . If $F\in\powerfilters(X)$ converges to $x$ and $y$, then $V_x\in F$ and $V_y\in F$. In this case $V_x\cap V_y = \emptyset \in F$. So $F = \powerset(X)$ and thus not a proper filter.
-
-Now assume there are no disjoint vicinities, i.e.\ $\vicinity_\xi(x)\mesh \vicinity_\xi(y)$. This means that $y$ is an accumulation point of $\vicinity_\xi(x)$. By \ref{subfilterToAccumulationPoint} there exists a filter $F\supseteq \vicinity_\xi(x)$ that converges to $y$. By monotonicity $F$ converges to $x$. Thus $F\in {\lim_\xi}^{-1}(x)\cap {\lim_\xi}^{-1}(y) \neq \emptyset$.
-\end{proof}
 
 \begin{proposition}
 Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivalent:
 \begin{enumerate}
 \item $\xi$ is an $R_1$ convergence;
+\item if $x$ and $y$ are distinguishable, then $\lim_\xi^{-1}(x)\perp \lim_\xi^{-1}(y)$;
 \item $x$ and $y$ are distinguishable \textup{if and only if} $\lim_\xi^{-1}(x)\perp \lim_\xi^{-1}(y)$;
 \item the set $\setbuilder{\lim^{-1}_\xi(x)}{x\in X}$ is a partition of the set on convergent filters on $X$;
 \item if there exists a filter $F$ such that $F \to x$ and $F \to y$, then $x$ and $y$ are indistinguishable.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ If $\lim_\xi^{-1}(x)\perp \lim_\xi^{-1}(y)$, then $x$ and $y$ are definitely distinguishable, e.g.\ by $\pfilter{x}$.
+$(1) \Leftrightarrow (2)$ \ref{separationByVicinitiesEquivalences}.
 
-$(2) \Rightarrow (3)$ All pairs of points are either distinguishable, or indistinguishable. In the first case we have $\lim_\xi^{-1}(x)\perp \lim_\xi^{-1}(y)$, in the second $\lim_\xi^{-1}(x) = \lim_\xi^{-1}(y)$.
+$(2) \Rightarrow (3)$ If $\lim_\xi^{-1}(x)\perp \lim_\xi^{-1}(y)$, then $x$ and $y$ are definitely distinguishable, e.g.\ by $\pfilter{x}$.
 
-$(3) \Rightarrow (4)$ From $F\to x$ and $F\to y$, we get $F\in \lim_\xi^{-1}(x)$ and $F\in \lim_\xi^{-1}(y)$, so $\lim_\xi^{-1}(x)\mesh \lim_\xi^{-1}(y)$. Using (3) this implies $\lim_\xi^{-1}(x) = \lim_\xi^{-1}(y)$.
+$(3) \Rightarrow (4)$ All pairs of points are either distinguishable, or indistinguishable. In the first case we have $\lim_\xi^{-1}(x)\perp \lim_\xi^{-1}(y)$, in the second $\lim_\xi^{-1}(x) = \lim_\xi^{-1}(y)$.
 
-$(4) \Rightarrow (1)$ Clear.
+$(4) \Rightarrow (5)$ From $F\to x$ and $F\to y$, we get $F\in \lim_\xi^{-1}(x)$ and $F\in \lim_\xi^{-1}(y)$, so $\lim_\xi^{-1}(x)\mesh \lim_\xi^{-1}(y)$. Using (3) this implies $\lim_\xi^{-1}(x) = \lim_\xi^{-1}(y)$.
+
+$(5) \Rightarrow (2)$ Clear.
 \end{proof}
 \begin{corollary}
 Any $R_1$ convergence space is also $R_0$.
@@ -1122,6 +1143,7 @@ Any $R_1$ convergence space is also $R_0$.
 \begin{proof}
 Compare point (2) with point (3) of \ref{R0conditions} and note that $\pfilter{x}\to y$ implies $\lim_\xi^{-1}(x)\mesh \lim_\xi^{-1}(y)$. 
 \end{proof}
+
 
 \subsubsection{$T_2$ or Hausdorff}
 \begin{definition}
@@ -1152,7 +1174,7 @@ Every $T_2$ convergence is also $T_1$. If the space is finite, the converse also
 \begin{proof}
 Let $\sSet{X, \xi}$ be a $T_2$ convergence space and $x\in X$. By $T_2$, $\lim_\xi\pfilter{x}$ is a singleton. Definition of convergence this singleton is $\{x\}$.
 
-Now let $X$ be a finite set and let $F$ be a proper filter in $\powerfilters(X)$. Then $F$ is principal by \ref{finiteFiltersPrincipal} and not free because it is proper. So we can take $x\in \ker F$ and $F \subseteq \pfilter{x}$. Thus $\lim F \subseteq \lim \pfilter{x} \supseteq \{x\}$, meaning the convergence is $T_2$.
+Now let $X$ be a finite set and let $F$ be a proper filter in $\powerfilters(X)$. Then $F$ is principal by \ref{finiteFiltersPrincipal} and not free because it is proper. So we can take $x\in \ker F$ and $F \subseteq \pfilter{x}$. Thus $\lim F \subseteq \lim \pfilter{x} \subseteq \{x\}$, meaning the convergence is $T_2$.
 \end{proof}
 \begin{corollary}
 Let $X$ be a finite set, then the only $T_2$ convergence on $X$ is the discrete convergence $\iota_X$.
@@ -1178,22 +1200,18 @@ Let $\sSet{X,\xi}$ be a convergence space. Then the following are equivalent:
 \begin{enumerate}
 \item $\xi$ is an $R_2$ convergence;
 \item for all $F\in\powerfilters(X)$: $F\overset{\xi}{\longrightarrow} x$ \textup{if and only if} $\adh_\xi[F] = \setbuilder{\adh_\xi(A)}{A\in F} \overset{\xi}{\longrightarrow} x$;
-\item for all $A\subseteq X$ and $x\notin \adh_\xi(A)$: $\lim^{-1}(x) \perp \lim^{-1}(\adh_\xi(A))$.
+\item for all $A\subseteq X$ and $x\notin \adh_\xi(A)$: $x$ and $\adh_\xi(A)$ are separated by vicinities.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
 $(1) \Rightarrow (2)$ One direction is given by definition. The other follows by monotonicity because $\adh_\xi[F] \preceq F$.
 
-
+TODO!
 \end{proof}
 
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a pretopological convergence space, $A\subseteq X$ and $x\in X$. Then $\lim^{-1}(x) \perp \lim^{-1}(\adh(A))$ \textup{if and only if} there exist disjoint vicinities of $x$ and $\adh_\xi(A)$.
-\end{proposition}
-
-\begin{proposition}
+\begin{lemma}
 Any $R_2$ convergence is also $R_1$.
-\end{proposition}
+\end{lemma}
 
 \subsubsection{$T_3$ or regular Hausdorff}
 \begin{definition}
