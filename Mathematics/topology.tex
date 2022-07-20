@@ -72,6 +72,11 @@ Clearly $\pfilter{x} \subseteq \powerset(X)$ for all $x\in X$, so
 
 In the sequel we will usually consider convergence as a property of filters, however sometimes it will be easier to consider downward directed sets (e.g.\ for continuity).
 
+\subsubsection{Approaches}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. An \udef{approach} on $X$ is a function $F: X\to \powerfilters(X)$ such that $F(x) \overset{\xi}{\longrightarrow} x$ for all $x\in X$.
+\end{definition}
+
 \subsection{Finite depth and other requirements}
 TODO Kent convergence.
 \begin{definition}
@@ -595,6 +600,19 @@ f[\adh_\xi(A)] &= f\left[\bigcup \setbuilder{\lim_\xi F}{A \lhd F} \right] = \bi
 where we have used that $A \lhd B$ implies $f[A] \lhd f[B]$ (TODO ref).
 \end{proof}
 
+\begin{proposition} \label{continuousMappingVicinities}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $f: X\to Y$ a continuous function and $x\in X$. If $\xi$ is pretopological, then
+\begin{enumerate}
+\item $\upset f[\vicinity_\xi(x)] \supseteq \vicinity_\zeta(f(x))$;
+\item if $U\in \vicinity_\zeta(f(x))$, then there exists $V\in \vicinity_\xi(x)$ such that $f[V] \subseteq U$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have that $\vicinity_\xi(x)$ converges to $x$, so by continuity $f[\vicinity_\xi(x)]$ converges to $f(x)$ and thus $\upset f[\vicinity_\xi(x)] \supseteq \vicinity_\zeta(f(x))$.
+
+(2) From (1) we know that $U\in \upset f[\vicinity_\xi(x)]$. The result follows imemdiately.
+\end{proof}
+
 \begin{lemma} \label{identityContinuity}
 Let $\xi$ and $\zeta$ be two convergences on the same set $X$. Then $\id_X: \sSet{X,\xi} \to \sSet{X,\zeta}$ is continuous \textup{if and only if} $\xi \leq \zeta$. I.e.\ $\xi$ is finer than $\zeta$.
 \end{lemma}
@@ -682,7 +700,7 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. A function $f: X\
 \end{itemize}
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{homeomorphismPreservation}
 If $f$ homeomorphism, then
 \begin{enumerate}
 \item $f[\lim F] = \lim f[F]$;
@@ -783,6 +801,11 @@ The direction $\Leftarrow$ follows straight form \ref{initialFinalConvergence} b
 
 TODO adjoint of $\coprod_{i\in I}p_i$.
 \end{proof}
+\begin{corollary} \label{productVicinity}
+Let $\sSet{X_i, \xi_i}$ be a (pre)convergence space for all $i\in I$, $F \in \powerfilters(\prod_{i\in I}X_i)$ and $x\in \prod_{i\in I}X_i$. Then
+\[\vicinity_{\prod \xi_i}(x) = \upset \setbuilder{\bigtimes_{i\in I}A_i}{\forall i\in I: A_i \in \vicinity_{\xi_i}(p_i(x))}. \]
+In particular $\vicinity_{\xi\otimes \zeta}((x,y)) = \upset \vicinity_\xi(x)\otimes \vicinity_\zeta(y)$.
+\end{corollary}
 
 \begin{definition}
 Let $\{X_i\}_{i\in I}$ be a set of sets and $\setbuilder{F_i \in \powerfilters(X_i)}{i\in I}$ a set of filters. Then the \udef{product filter} is defined by
@@ -799,6 +822,7 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $F\in \powerfilte
 \begin{proof}
 Point (2) follows from point (1) because $p_1(F\otimes G) = F$ and $p_2(F\otimes G) = G$. TODO ref.
 \end{proof}
+
 
 \begin{lemma}
 Let $\sSet{X,\xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergence spaces and $f: X\to Y\times Z$ be a function of the form
@@ -973,21 +997,16 @@ We call two points $x,y\in X$ separated by vicinities if $\{x\}$ and $\{y\}$ are
 \end{definition}
 
 \begin{proposition} \label{separationByVicinitiesEquivalences}
-Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. Then the following are equivalent:
+Let $\sSet{X,\xi}$ be a convergence space.
 \begin{enumerate}
-\item $A,B$ are separated by vicinities;
-\item $\lim^{-1}(A)\perp \lim^{-1}(B)$.
+\item If $A,B \subseteq X$ are separated by vicinities, then .
+\item If $\xi$ is pretopological and $\lim^{-1}(x)\perp \lim^{-1}(y)$ for some $x,y\in X$, then $x,y$ are separated by vicinities.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ Assume $A,B$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $\lim^{-1}(A)\mesh \lim^{-1}(B)$, i.e.\ there exists a filter $F$ that converges to $x\in A$ and $y\in B$. Then $U,V\in F$ and thus $U\cap V = \emptyset \in F$, meaning $F$ is not a proper filter.
+$(1)$ Assume $A,B$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $\lim^{-1}(A)\mesh \lim^{-1}(B)$, i.e.\ there exists a filter $F$ that converges to $x\in A$ and $y\in B$. Then $U,V\in F$ and thus $U\cap V = \emptyset \in F$, meaning $F$ is not a proper filter.
 
-$(2) \Rightarrow (1)$ Now assume $A,B$ are not separated by vicinities. Then $\vicinity_\xi(A)\mesh \vicinity_\xi(B)$, meaning $\vicinity_\xi(A)\vee \vicinity_\xi(B)$ is a proper filter by \ref{joinProperFilter}. Now by \ref{infiniteDistributivityFiltersIdeals} we can calculate
-\begin{align*}
-\vicinity_\xi(A)\vee \vicinity_\xi(B) &= \left(\bigwedge \setbuilder{F\in\powerfilters(X)}{A\mesh \lim F}\right)\vee \left(\bigwedge \setbuilder{G\in\powerfilters(X)}{B\mesh \lim G}\right) \\
-&= \bigwedge_{\substack{F,G\in \powerfilters(X)\\ A\mesh \lim F \\ B\mesh \lim G}} F\vee G,
-\end{align*}
-and in order for the right-hand side to be proper, $F\vee G$ must be a proper filter for some $F,G$. Now $\lim F\vee G \supseteq \lim F \cup \lim G$, so $F\vee G\in\lim^{-1}(A)\cap \lim^{-1}(B)$. Thus $\lim^{-1}(A)\mesh \lim^{-1}(B)$.
+$(2)$ Assume $x,y$ are not separated by vicinities. Then $\vicinity_\xi(x)\mesh \vicinity_\xi(y)$, meaning $x$ is an accumulation point of $\vicinity_\xi(y)$. By \ref{subfilterToAccumulationPoint}, there exists a filter $G\geq \vicinity_\xi(y)$ such that $G\to x$. Then $G\in \lim^{-1}(x)\cap \lim^{-1}(y)$.
 \end{proof}
 
 \subsubsection{Separation by closed vicinities}
@@ -1113,6 +1132,8 @@ Assume, towards a contradiction, that $y\in \adh_\xi(\{x\})$. Then $\{x\} \in \v
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{$R_1$}, \udef{reciprocal} or \udef{preregular} if all distinguishable points are separated by vicinities.
 \end{definition}
+TODO review definition.
+
 \url{https://gdz.sub.uni-goettingen.de/id/PPN235181684_0187?tify={%22pages%22:[191],%22panX%22:0.893,%22panY%22:0.579,%22view%22:%22info%22,%22zoom%22:0.894}}
 
 
@@ -1206,12 +1227,21 @@ Let $\sSet{X,\xi}$ be a convergence space. Then the following are equivalent:
 \begin{proof}
 $(1) \Rightarrow (2)$ One direction is given by definition. The other follows by monotonicity because $\adh_\xi[F] \preceq F$.
 
-TODO!
+$(2) \Rightarrow (3)$ Assume $x$ and $\adh_\xi(A)$ are not separated by vicinities. We then need to show that $x\in \adh_\xi(A)$. By \ref{separationByVicinitiesEquivalences} there exists
 \end{proof}
 
 \begin{lemma}
 Any $R_2$ convergence is also $R_1$.
 \end{lemma}
+
+\begin{proposition} \label{topologicalRegularity}
+Let $\sSet{X,\xi}$ be a topological space. Then $\xi$ is regular \textup{if and only if} for any open set $O\subseteq X$ and $x\in O$ there exists an open set $U$ such that $x\subseteq U\subseteq \overline{U} \subseteq O$.
+\end{proposition}
+\begin{proof}
+Regular means that for any closed set $C$ there exist disjoint open sets $U,V$ such that $x\in U$ and $C\subseteq V$.
+
+The equivalence can be seen by setting $O = C^c$. Then $\overline{U}\subseteq V^c \subseteq C^c = O$.
+\end{proof}
 
 \subsubsection{$T_3$ or regular Hausdorff}
 \begin{definition}
@@ -1239,6 +1269,10 @@ Let $\sSet{X,\xi}$ be a pretopological convergence space and $A,B\subseteq X$. T
 \begin{proposition}
 Any $R_3$ convergence is also $R_2$.
 \end{proposition}
+
+\begin{theorem}[Urysohn's lemma]
+TODO
+\end{theorem}
 
 \subsubsection{$T_4$ or normal Hausdorff}
 \begin{definition}
@@ -3451,16 +3485,36 @@ The direction $\Rightarrow$ is clear, since every Hausdorff convergence is $T_1$
 Conversely, assume $F\to x,y$ in $G$. Then $FF^{-1} \to xy^{-1}$. Now $FF^{-1} \subseteq \pfilter{1}$, so $\pfilter{1} \to xy^{-1}$ and thus $xy^{-1}\in \adh_\xi(\pfilter{1}) = \adh_\xi(\{1\}) = \{1\}$, meaning $x = y$.
 \end{proof}
 
+\begin{lemma} \label{vicinityFactorisation}
+Let $\sSet{G,\cdot, 1, \xi}$ be a pretopological convergence group and $x,y\in G$. If $U\in \vicinity_\xi(xy)$, then there exist $V\in \vicinity_\xi(x)$ and $W\in \vicinity_\xi(y)$ such that $V\cdot W\subseteq U$.
+\end{lemma}
+\begin{proof}
+Consider the function $f: G\times G \to G: (x,y)\mapsto xy$. Then by \ref{continuousMappingVicinities} and \ref{productVicinity} we have
+\[ \vicinity_\xi(xy) \subseteq \upset f[\vicinity_{\xi\otimes\xi}((x,y))] = \upset f[\upset \vicinity_\xi(x)\otimes \vicinity_\xi(y)] = \upset f[\vicinity_\xi(x)\otimes \vicinity_\xi(y)] = \upset (\vicinity_\xi(x)\cdot \vicinity_\xi(y)) \]
+This implies the result.
+\end{proof}
+
 \begin{proposition}
 Each pretopological convergence group is topological.
 \end{proposition}
 \begin{proof}
 Let $\sSet{G,\cdot, 1, \xi}$ be a pretopological convergence group. To prove the convergence it topological, it is enough to prove that $\inh_\xi(A) \subseteq \inh^2_\xi(A)$ for all $A\subseteq X$. Fix such an $A$ and take an arbitrary $x\in \inh_\xi(A)$. Then $A\in \vicinity_\xi(x)$ by \ref{principalAdherenceInherence}.
 
-Now we use that the vicinity filters converge, so $\vicinity_\xi(x)\otimes \vicinity_\xi(1) \to (x,1)$ in $X\times X$ by \ref{convergenceFiniteProductFilter}. By continuity $\vicinity_\xi(x)\cdot \vicinity_\xi(1) \to x\cdot 1 = x$, so $\vicinity_\xi(x) \subseteq \vicinity_\xi(x)\cdot \vicinity_\xi(1)$. This implies that there exists $V\in \vicinity_\xi(x)$ and $W\in\vicinity_\xi(1)$ such that $V\cdot W \subseteq A$.
+By \ref{vicinityFactorisation} there exist $V\in \vicinity_\xi(x)$ and $W\in\vicinity_\xi(1)$ such that $V\cdot W \subseteq A$.
 
 Now for all $y\in V$, $y\cdot W$ is a vicinity of $y$ by \ref{shiftHomeomorphism}, so $V \subseteq \inh_\xi(A)$ by \ref{subsetWithVicinitiesInInherence}. By the upward closure of the vicinity filter, $V\in \vicinity_\xi(x)$ implies $\inh_\xi(A) \in \vicinity_\xi(x)$. Thus $x\in \inh_\xi^2(A)$ by \ref{principalAdherenceInherence}.
 \end{proof}
+
+\begin{proposition}
+Every topological group is regular.
+\end{proposition}
+\begin{proof}
+By \ref{topologicalRegularity} we check that for all open $U$ and $x\in U$ there exists an open set $V$ such that $x\in V\subseteq \overline{V}\subseteq U$. In fact it is enough to check this for $e = 1$.\
+
+Because $1\cdot 1 = 1$, we can find $W\in\neighbourhoods(1)$ such that $W\cdot W \subseteq U$ by \ref{vicinityFactorisation}. We claim $V= W\cap W^{-1}$ works. Indeed it is an open neighbourhood of $1$ and clearly $V\subseteq U$. We just need to show that $\overline{V}\subseteq U$. Take $y\in \overline{V}$. Then $yV\in \vicinity_\xi(y)$ and $V\in \vicinity_\xi(y)^{\mesh}$ by \ref{principalAdherenceInherence}. So $yV\mesh V$ and we can find $v_1,v_2\in V$ such that $v_1 = yv_2$. Thus
+\[ y = v_1v_2^{-1} \in V\cdot V^{-1} = V\cdot V \subseteq U. \]
+\end{proof}
+TODO: in fact completely regular.
 
 \begin{proposition}
 Let $G$ be a convergence group. Then the pseudotopological modification $\chi(G)$ is a convergence
@@ -3476,6 +3530,13 @@ By \ref{convergenceGroupCriterion} we just need to verify that $u: G\times G \to
 for all $x, y \in G$. This means that $f_i\circ u = u_i \circ (f_i\times f_i)$, where $u_i: G_i\times G_i \to G_i: (x,y)\mapsto x\cdot y^{-1}$.
 
 By \ref{productContinuousFunctions} this is a composition of continuous functions and thus continuous.
+\end{proof}
+
+\begin{proposition}
+Let $G$ be a convergence group. Any subgroup $H\in\vicinity(1)$ is closed.
+\end{proposition}
+\begin{proof}
+Take $g\in \adh(H)$, so $H\in \vicinity(g)^{\mesh}$ by \ref{principalAdherenceInherence}. Now, by \ref{homeomorphismPreservation}, $gH\in \vicinity(g)$ because $\lambda_g$ is a homeomorphism by \ref{shiftHomeomorphism}. Thus $gH \mesh H = 1\cdot H$. As cosets are either the same or disjoint (by \ref{differentCosetsDisjoint}), we have $gH = H$ and in particular $g = g\cdot 1 \in gH = H$. So $\adh(H) = H$.
 \end{proof}
 
 \subsection{Cauchy structure}
@@ -3519,6 +3580,17 @@ Then $G \cap \pfilter{y}$ is a Cauchy filter. By finite depth, $F\cap G \cap \pf
 \end{proof}
 
 \subsection{Metrisability and norm}
+
+\begin{theorem}[Birkhoff-Kakutani]
+Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group. Then the following are equivalent:
+\begin{enumerate}
+\item $G$ is metrisable;
+\item the topology on $G$ is induced by a left translation invariant metric;
+\item the topology on $G$ is induced by a right translation invariant metric;
+\item $G$ is Hausdorff (TODO necessary?), first countable and topological;
+\item $\{1\}$ is closed, and $\vicinity_\xi(1)$ has a countable base.
+\end{enumerate}
+\end{theorem}
 
 \begin{theorem}[Birkhoff-Kakutani]
 Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group. Then the following are equivalent:
