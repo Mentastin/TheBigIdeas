@@ -23,7 +23,11 @@ If $\xi$ is a convergence, then we call $\sSet{X, \xi}$ a \udef{convergence spac
 
 If $\lim_\xi F \neq \emptyset$, we say the directed set $F$ \udef{converges}.
 \end{definition}
-We write ${\lim_\xi}^{-1}$ for the preimage function of $\xi$. Thus ${\lim_\xi}^{-1}(x)$ is the set of all directed sets that $\xi$-converge to $x$.
+We write ${\lim_\xi}^{-1}$ for the preimage function of $\xi$ restricted to directed sets $\nsim \powerset(X)$. Thus ${\lim_\xi}^{-1}(x)$ is the set of all directed sets $D$ such that
+\begin{itemize}
+\item $D\overset{\xi}{\longrightarrow} x$;
+\item $D \nsim \powerset(X)$.
+\end{itemize}
 
 \begin{lemma}
 Let $X$ be a set and $x\in X$. A preconvergence $\xi$ on $X$ is a convergence \textup{if and only if} $\forall x\in X: \{x\} \in {\lim_\xi}^{-1}(x)$.
@@ -158,18 +162,23 @@ Then $y\in B\subseteq A\cap D \subseteq D$, so this is also a tail of $I_F^D \to
 
 \subsection{The vicinity filter}
 \begin{definition}
-Let $X$ be a set, $\xi$ a preconvergence on $X$ and $A\subseteq X$. The \udef{vicinity filter} of $\xi$ at $A$ is
-\[ \vicinity_\xi(A) \defeq \bigcap \setbuilder{F\in \powerfilters(X)}{A\mesh \lim_\xi F}. \]
-A subset $V\subseteq X$ is called a \udef{vicinity} of $A$ for $\xi$ if $V\in \vicinity_\xi(A)$.
+Let $X$ be a set, $\xi$ a preconvergence on $X$ and $x\in X$. The \udef{vicinity filter} of $\xi$ at $x$ is
+\[ \vicinity_\xi(A) \defeq \bigcap \setbuilder{F\in \powerfilters(X)}{x\in \lim_\xi F}. \]
+A subset $V\subseteq X$ is called a \udef{vicinity} of $x$ for $\xi$ if $V\in \vicinity_\xi(z)$.
 
-In particular we define the vicinity filter at a point $x\in X$ as $\vicinity_\xi(x) \defeq \vicinity_\xi(\{x\})$.
+We extend the vicinity filters to be defined for elements of $\powerset(X)$ and $\powerset^2(X)$ by contours.
 \end{definition}
 
 \begin{lemma}
 Let $X$ be a set, $\xi$ a preconvergence on $X$ and $A\subseteq X$. Then
-\[ \vicinity_\xi(A) = \bigcap \setbuilder{F\in \powerfilters(X)}{\exists x\in A: \; x\in \lim_\xi F}. \]
-In particular for $x\in X$
-\[ \vicinity_\xi(x) = \bigcap \setbuilder{F\in \powerfilters(X)}{x\in \lim_\xi F}. \]
+\begin{align*}
+\vicinity_\xi(A) &= \bigcap \setbuilder{F\in \powerfilters(X)}{\exists x\in A: \; x\in \lim_\xi F} \\
+&= \bigcap \setbuilder{F\in \powerfilters(X)}{A \mesh \lim_\xi F}.
+\end{align*}
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space. Then $\vicinity_\xi$ is an approach \textup{if and only if} $\xi$ is pretopological.
 \end{lemma}
 
 \begin{lemma}
@@ -255,6 +264,18 @@ Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then
 \end{proposition}
 \begin{proof}
 TODO
+\end{proof}
+\begin{corollary} \label{setAdherenceInherence}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$ subsets. Then
+\[ \adh_\xi(A) \mesh B \qquad\iff\qquad \{A\} \mesh \vicinity_\xi(B). \]
+\end{corollary}
+\begin{proof}
+We have
+\begin{align*}
+\adh_\xi(A) \mesh B &\iff \exists b\in B: b\in \adh_\xi(A) \\
+&\iff \exists b\in B: A\in \vicinity_\xi(b)^{\mesh} \\
+&\iff A \in \bigcup_{b\in B}\vicinity_\xi(b)^{\mesh} = \left(\bigcap_{b\in B}\vicinity_\xi(b)\right)^{\mesh} = \vicinity_\xi(B)^{\mesh}.
+\end{align*}
 \end{proof}
 
 \begin{proposition}
@@ -466,7 +487,15 @@ Being $\kappa$-paved is a pointwise property.
 A finitely deep convergence that is finitely paved is pretopological.
 \end{proposition}
 
+\subsection{A base of a convergence}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. A set $\mathcal{Z}\subseteq \powerset(X)$ is called a \udef{base} of the converence $\xi$ if for each point $x\in X$ and each convergent filter $F\in\lim_\xi^{-1}(x)$ there exists a filter base $G\subseteq \mathcal{Z}$ such that $x\in \lim_\xi G$.
 
+We also say $\xi$ is \udef{based in} $\mathcal{Z}$.
+
+The \udef{weight} of $\xi$ is the least cardinal of a base of $\xi$.
+\end{definition}
+TODO filter based in set.
 
 
 \subsection{Examples of (pre)convergences}
@@ -944,7 +973,7 @@ TODO inherence
 
 \section{Separation axioms and other properties of convergences spaces}
 
-\subsection{Distinguishability and separation}
+\subsection{Distinguishability, separation and regularity}
 \subsubsection{Distinguishable points}
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space and $x,y\in X$. We call $x$ and $y$ \udef{distinguishable} if ${\lim_\xi}^{-1}(x) \neq {\lim_\xi}^{-1}(y)$.
@@ -1009,9 +1038,52 @@ $(1)$ Assume $A,B$ are separated by vicinities $U$ and $V$. Assume, towards a co
 $(2)$ Assume $x,y$ are not separated by vicinities. Then $\vicinity_\xi(x)\mesh \vicinity_\xi(y)$, meaning $x$ is an accumulation point of $\vicinity_\xi(y)$. By \ref{subfilterToAccumulationPoint}, there exists a filter $G\geq \vicinity_\xi(y)$ such that $G\to x$. Then $G\in \lim^{-1}(x)\cap \lim^{-1}(y)$.
 \end{proof}
 
+\subsubsection{Separation by convergent filters}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by convergent filters} if for all approaches $F:X\to \powerfilters(X)$, the contours satisfy $\neg(F(A)\mesh F(B))$.
+
+We call two points $x,y\in X$ separated by convergent filters if $\{x\}$ and $\{y\}$ are separated by convergent filters.
+\end{definition}
+
+\begin{lemma} \label{pointsSeparatedConvergentFilters}
+Let $\sSet{X,\xi}$ be a convergence space. For $x,y\in X$ the following are equivalent
+\begin{enumerate}
+\item $x,y$ are separated by convergent filters;
+\item $\lim^{-1}(x)\perp \lim^{-1}(y)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Assume $\lim^{-1}(x)\mesh \lim^{-1}(y)$, i.e.\ there exists some filter $F\in \lim^{-1}(x)\cap \lim^{-1}(y)$. Then the constant approach $x,y\mapsto F$ has $F(x) = F(y)$, meaning $F(x)\mesh F(y)$ and thus $x,y$ are not separated by convergent filters.
+
+$(2) \Rightarrow (1)$ Assume $\lim^{-1}(x)\perp \lim^{-1}(y)$. Pick an arbitrary approach $F$. If $F(x)\mesh F(y)$, then $F(x)\vee F(y)$ is proper by \ref{joinProperFilter} and in $\lim^{-1}(x)\cap \lim^{-1}(y)$ by monotonicity, which is a contradiction.
+\end{proof}
+
+\begin{proposition} \label{disjointVicinitiesConvergentFilterSeparation}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$.
+\begin{enumerate}
+\item If there exist disjoint vicinities of $A$ and $B$, then $A$ and $B$ are separated by convergent filters.
+\item If $\xi$ is pretopological, the converse also holds.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1)$ Assume $A,B$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $F(A)\mesh F(B)$ for some approach $F$. Then for all $a\in A$, $U\in F(a)$, so $U\in F(A)$. Similarly $V\in F(B)$. This means $U\mesh V$, which is a contradiction.
+
+$(2)$ If $\xi$ is pretopological, then $\vicinity_\xi$ is an approach. Thus $\neg(\vicinity_\xi(A)\mesh \vicinity_\xi(B))$, meaning there exist disjoint vicinities of $A,B$.
+\end{proof}
+Thus in the pretopological case all approaches $F$ satisfy $\neg(F(A)\mesh F(B))$ iff the vicinity filter satisfies $\neg(\vicinity(A)\mesh \vicinity(B))$.
+
 \subsubsection{Separation by closed vicinities}
 \subsubsection{Separation by functions}
 \url{https://en.wikipedia.org/wiki/Separated_sets}
+
+\subsubsection{Regularity}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{Z} \subseteq \powerset(X)$. The convergence $\xi$ is called \udef{$\mathcal{Z}$-regular} if for all $x\in X, F\in\lim_\xi^{-1}(x)$ there exists a filter base $G\subseteq \mathcal{Z}$ such that
+\begin{itemize}
+\item $G \preceq F$;
+\item $G \overset{\xi}{\longrightarrow} x$.
+\end{itemize}
+\end{definition}
 
 \subsection{Separation properties}
 \subsubsection{$T_0$ or Kolmogorov}
@@ -1130,7 +1202,7 @@ Assume, towards a contradiction, that $y\in \adh_\xi(\{x\})$. Then $\{x\} \in \v
 
 \subsubsection{$R_1$ or reciprocal}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{$R_1$}, \udef{reciprocal} or \udef{preregular} if all distinguishable points are separated by vicinities.
+Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{$R_1$}, \udef{reciprocal} or \udef{preregular} if all distinguishable points are separated by convergent filters.
 \end{definition}
 TODO review definition.
 
@@ -1148,7 +1220,7 @@ Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivale
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Leftrightarrow (2)$ \ref{separationByVicinitiesEquivalences}.
+$(1) \Leftrightarrow (2)$ By \ref{pointsSeparatedConvergentFilters}.
 
 $(2) \Rightarrow (3)$ If $\lim_\xi^{-1}(x)\perp \lim_\xi^{-1}(y)$, then $x$ and $y$ are definitely distinguishable, e.g.\ by $\pfilter{x}$.
 
@@ -1210,8 +1282,7 @@ TODO: move: topological Hausdorff implies regular. This does not hold for non-to
 
 \subsubsection{$R_2$ or regular}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{regular} or \udef{$R_2$} if 
-for all $F\in\powerfilters(X)$, $F\overset{\xi}{\longrightarrow} x$ implies $\adh_\xi[F] = \setbuilder{\adh_\xi(A)}{A\in F} \overset{\xi}{\longrightarrow} x$.
+Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{regular} or \udef{$R_2$} if it is based in $\setbuilder{\adh_\xi(A)}{A\in\powerset(X)}$.
 \end{definition}
 
 \url{https://en.wikipedia.org/wiki/Regular_space}
@@ -1220,27 +1291,51 @@ for all $F\in\powerfilters(X)$, $F\overset{\xi}{\longrightarrow} x$ implies $\ad
 Let $\sSet{X,\xi}$ be a convergence space. Then the following are equivalent:
 \begin{enumerate}
 \item $\xi$ is an $R_2$ convergence;
-\item for all $F\in\powerfilters(X)$: $F\overset{\xi}{\longrightarrow} x$ \textup{if and only if} $\adh_\xi[F] = \setbuilder{\adh_\xi(A)}{A\in F} \overset{\xi}{\longrightarrow} x$;
-\item for all $A\subseteq X$ and $x\notin \adh_\xi(A)$: $x$ and $\adh_\xi(A)$ are separated by vicinities.
+\item for all $F\in\powerfilters(X)$, $F\overset{\xi}{\longrightarrow} x$ implies $\adh_\xi[F] = \setbuilder{\adh_\xi(A)}{A\in F} \overset{\xi}{\longrightarrow} x$.
+\item for all $F\in\powerfilters(X)$: $F\overset{\xi}{\longrightarrow} x$ \textup{if and only if} $\adh_\xi[F] = \setbuilder{\adh_\xi(A)}{A\in F} \overset{\xi}{\longrightarrow} x$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ One direction is given by definition. The other follows by monotonicity because $\adh_\xi[F] \preceq F$.
+$(1) \Leftrightarrow (2)$ Assume (1), then there exists a filter $G$ based in $\setbuilder{\adh_\xi(A)}{A\in\powerset(X)}$ such that $G\to x$ and $G\subseteq F$. We just need to show that $G\subseteq \adh[F]$. Indeed take $A\in G$, then $A = \adh(B)$ for some $B\subseteq X$. Now $B\in F$
 
-$(2) \Rightarrow (3)$ Assume $x$ and $\adh_\xi(A)$ are not separated by vicinities. We then need to show that $x\in \adh_\xi(A)$. By \ref{separationByVicinitiesEquivalences} there exists
+Because $\adh_\xi[F]\preceq F$ Then $\adh_\xi(A) \supseteq A$, so $\adh$ 
+
+$(2) \Leftrightarrow (3)$ One direction is given by definition. The other follows by monotonicity because $\adh_\xi[F] \preceq F$.
 \end{proof}
 
 \begin{lemma}
 Any $R_2$ convergence is also $R_1$.
 \end{lemma}
 
-\begin{proposition} \label{topologicalRegularity}
-Let $\sSet{X,\xi}$ be a topological space. Then $\xi$ is regular \textup{if and only if} for any open set $O\subseteq X$ and $x\in O$ there exists an open set $U$ such that $x\subseteq U\subseteq \overline{U} \subseteq O$.
+\begin{proposition} \label{pretopologicalRegularity}
+A pretopology is regular \textup{if and only if} it separates points from the complements of their vicinities by convergent filters.
 \end{proposition}
 \begin{proof}
-Regular means that for any closed set $C$ there exist disjoint open sets $U,V$ such that $x\in U$ and $C\subseteq V$.
+A pretopology is regular iff $\vicinity_\xi(x)\subseteq \upset\adh_\xi[\vicinity_\xi(x)]$ for all $x\in X$. This means
+\begin{align*}
+& \forall x\in X: \forall V\in \vicinity_\xi(x): \exists U \in \vicinity_\xi(x): \quad \adh_\xi(U) \subseteq V \\
+\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \exists U \in \vicinity_\xi(x): \quad (\adh_\xi(U) \perp V^c) \\
+\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \exists U \in \vicinity_\xi(x): \quad \neg(\adh_\xi(U) \mesh V^c) \\
+\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \exists U \in \vicinity_\xi(x): \quad \neg(\{U\} \mesh \vicinity_\xi(V^c)) \\
+\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \quad \neg(\forall U \in \vicinity_\xi(x):\{U\} \mesh \vicinity_\xi(V^c)) \\
+\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \quad \neg(\vicinity_\xi(x) \mesh \vicinity_\xi(V^c)).
+\end{align*}
+We have used \ref{setAdherenceInherence}.
+The last line is equivalent to the separation of points from the complements of their vicinities by \ref{disjointVicinitiesConvergentFilterSeparation}.
+\end{proof}
 
-The equivalence can be seen by setting $O = C^c$. Then $\overline{U}\subseteq V^c \subseteq C^c = O$.
+\begin{proposition} \label{topologicalRegularity}
+Let $\sSet{X,\xi}$ be a topological space. Then the following are equivalent:
+\begin{enumerate}
+\item $\xi$ is regular;
+\item for any closed set $C$ there exist disjoint open sets $U,V$ such that $x\in U$ and $C\subseteq V$;
+\item for any open set $O\subseteq X$ and $x\in O$ there exists an open set $U$ such that $x\subseteq U\subseteq \overline{U} \subseteq O$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Leftrightarrow (2)$ By \ref{pretopologicalRegularity}.
+
+$(2) \Leftrightarrow (3)$ The equivalence can be seen by setting $O = C^c$. Then $\overline{U}\subseteq V^c \subseteq C^c = O$.
 \end{proof}
 
 \subsubsection{$T_3$ or regular Hausdorff}
@@ -1258,8 +1353,7 @@ Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivale
 
 \subsubsection{$R_3$ or normal}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{normal} or \udef{$R_3$} if
-\[ \forall A,B\subseteq X: \qquad \adh_\xi(A)\perp\adh_\xi(B) \implies {\lim}^{-1}(\adh_\xi(A))\perp{\lim}^{-1}(\adh_\xi(B)). \]
+Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{normal} or \udef{$R_3$} if all disjoint closed sets are separated by convergent filters.
 \end{definition}
 
 \begin{proposition}
@@ -1270,9 +1364,6 @@ Let $\sSet{X,\xi}$ be a pretopological convergence space and $A,B\subseteq X$. T
 Any $R_3$ convergence is also $R_2$.
 \end{proposition}
 
-\begin{theorem}[Urysohn's lemma]
-TODO
-\end{theorem}
 
 \subsubsection{$T_4$ or normal Hausdorff}
 \begin{definition}
@@ -1287,6 +1378,59 @@ Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivale
 \item $\xi$ is $R_3$ and $T_0$.
 \end{enumerate}
 \end{proposition}
+
+\subsection{Comparison with reals and metrisability}
+\subsubsection{Functional closure}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$. We call $A$ \udef{functionally closed} if there exists a continuous function $f: X\to \R$ and a closed set $C\subseteq \R$ such that $A = f^{-1}[C]$.
+\end{definition}
+
+\begin{proposition}
+Every functionally closed set if closed. In a metric space the converse holds.
+\end{proposition}
+\begin{proof}
+TODO + see \ref{distanceToSetContinuous}
+\end{proof}
+
+\begin{lemma} \label{functionallyClosedZeroSet}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$. Then $A$ is functionally closed \textup{if and only if} there exists a continuous function $g: X\to \R$ such that $A = g^{-1}[\{0\}]$.
+\end{lemma}
+This means we may take $C = \{0\}$ in the definition of functionally closed.
+\begin{proof}
+If there exists such a function $g$, then $A$ is clearly functionally closed. For the converse, fix a continuous function $f: X\to \R$ and a closed set $C\subseteq \R$ such that $A = f^{-1}[C]$. Then we use the continuity of $d_C: \R\to\R: x\mapsto \inf_{c\in C}d(x,c)$ (see \ref{distanceToSetContinuous}) and set $g = d_C\circ f$.
+\end{proof}
+
+\subsubsection{Functional separation}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. Then $A$ and $B$ are \udef{functionally separated} if there exists a continuous function $f: X\to [0,1]\subseteq \R$ with $f[A] = \{0\}$ and $f[B] = \{1\}$.
+\end{definition}
+
+\begin{proposition}
+Two sets are functionally separated \textup{if and only if} they are included in disjoint functionally closed sets.
+\end{proposition}
+\begin{proof}
+First assume $A,B$ are functionally separated by $f$. Then $f^{-1}[\;\{0\}\;]$ and $f^{-1}[\;\{1\}\;]$ are disjoint functionally closed sets containing $A$, resp. $B$.
+
+Conversely, assume $A\subseteq f^{-1}[\{0\}]$ and $B\subseteq g^{-1}[\{0\}]$ (we can take $C = \{0\}$ by \ref{functionallyClosedZeroSet}) with $f^{-1}[\{0\}]\perp g^{-1}[\{0\}]$. Then
+\[ h: X\to \R: x\mapsto \frac{|f(x)|}{|f(x)|+|g(x)|} \]
+is well-defined everywhere because $f^{-1}[\{0\}]\perp g^{-1}[\{0\}]$ and functionally separated $A$ and $B$.
+\end{proof}
+
+
+\begin{theorem}[Urysohn's lemma]
+Let $\sSet{X,\xi}$ be a normal topological space. If $C_1,C_2$ are disjoint closed sets, then they are functionally separated.
+\end{theorem}
+
+
+
+\subsubsection{Functional regularity}
+\begin{definition}
+Let $\sSet{X, \xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. We call $\xi$ \udef{$\zeta$-functionally regular} if $\xi$ is the initial convergence on $X$ w.r.t. $cont(\xi,\zeta)$.
+
+In particular we call $\xi$ \udef{completely regular} if it is $\R$-functionally regular.
+\end{definition}
+
+
 
 \subsection{Countability properties}
 \subsubsection{$C1$ or first countable}
@@ -1942,9 +2086,7 @@ Assume such an $a$. Then there exists an open neighbourhood $U$ of $a$ in $X$ th
 \end{proof}
 
 \subsection{Topology and order}
-\begin{definition}
 
-\end{definition}
 
 \url{https://planetmath.org/orderedspace}
 \url{https://www.jstor.org/stable/2032122?seq=2#metadata_info_tab_contents}
@@ -3107,6 +3249,16 @@ So $f(U)\subset B(f(x_0), \epsilon)\subset V$.
 TODO: convex sets; distance point to set (as special case of distance set to set).
 
 TODO: A subspace Y of a Banach space X is complete if and only if the set Y is closed in X.
+
+\begin{proposition} \label{distanceToSetContinuous}
+Let $\sSet{X,d}$ be a metric space and $A\subseteq X$. Then the function
+\[ d_A: X\to \R: x\mapsto d(x,A) = \inf\setbuilder{d(x,a)}{a\in A} \]
+is continuous.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+TODO: We have that $x\in \overline{A}$ iff $d_A(x) = 0$.
 
 \subsection{Maps between metric spaces}
 \begin{definition}
