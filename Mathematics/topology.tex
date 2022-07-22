@@ -629,18 +629,27 @@ f[\adh_\xi(A)] &= f\left[\bigcup \setbuilder{\lim_\xi F}{A \lhd F} \right] = \bi
 where we have used that $A \lhd B$ implies $f[A] \lhd f[B]$ (TODO ref).
 \end{proof}
 
-\begin{proposition} \label{continuousMappingVicinities}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $f: X\to Y$ a continuous function and $x\in X$. If $\xi$ is pretopological, then
+\begin{proposition} \label{pretopologicalContinuityVicinities}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $f: X\to Y$ a function and $x\in X$. If $\xi$ and $\zeta$ are pretopological, then the following are equivalent:
 \begin{enumerate}
-\item $\upset f[\vicinity_\xi(x)] \supseteq \vicinity_\zeta(f(x))$;
-\item if $U\in \vicinity_\zeta(f(x))$, then there exists $V\in \vicinity_\xi(x)$ such that $f[V] \subseteq U$.
+\item $f$ is continuous at $x$;
+\item $\vicinity_\zeta(f(x)) \supseteq \upset f[\vicinity_\xi(x)]$;
+\item for all $U\in \vicinity_\zeta(f(x))$, there exists $V\in \vicinity_\xi(x)$ such that $f[V] \subseteq U$;
+\item for all $U\in \vicinity_\zeta(f(x))$, $f^{-1}[U]\in \vicinity_\xi(x)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) We have that $\vicinity_\xi(x)$ converges to $x$, so by continuity $f[\vicinity_\xi(x)]$ converges to $f(x)$ and thus $\upset f[\vicinity_\xi(x)] \supseteq \vicinity_\zeta(f(x))$.
+$(1) \Leftrightarrow (2)$ We have that $\vicinity_\xi(x)$ converges to $x$, so by continuity $f[\vicinity_\xi(x)]$ converges to $f(x)$ and thus $\upset f[\vicinity_\xi(x)] \supseteq \vicinity_\zeta(f(x))$.
 
-(2) From (1) we know that $U\in \upset f[\vicinity_\xi(x)]$. The result follows imemdiately.
+Conversely, take $F\to x$. Then $F\supseteq \vicinity_\xi(x)$ and thus $f[F]\supseteq f[\vicinity_\xi(x)]$. By assumption this means $\upset f[F]\supseteq \upset f[\vicinity_\xi(x)]\supseteq \vicinity_\zeta(f(x))$. So $f[F]\to f(x)$.
+
+$(2) \Leftrightarrow (3)$ Immediate.
+
+$(3) \Leftrightarrow (4)$ Because $V\subseteq f^{-1}[U]$ and $\vicinity_\xi(x)$ is a filter, we have $f^{-1}[U] \in \vicinity_\xi(x)$.
+
+Conversely, we may take $V = f^{-1}[U]$.
 \end{proof}
+Note that the downward implications rely on the pretopologicity of $\xi$ and the upward implication on the pretopologicity of $\zeta$.
 
 \begin{lemma} \label{identityContinuity}
 Let $\xi$ and $\zeta$ be two convergences on the same set $X$. Then $\id_X: \sSet{X,\xi} \to \sSet{X,\zeta}$ is continuous \textup{if and only if} $\xi \leq \zeta$. I.e.\ $\xi$ is finer than $\zeta$.
@@ -1072,6 +1081,20 @@ $(2)$ If $\xi$ is pretopological, then $\vicinity_\xi$ is an approach. Thus $\ne
 \end{proof}
 Thus in the pretopological case all approaches $F$ satisfy $\neg(F(A)\mesh F(B))$ iff the vicinity filter satisfies $\neg(\vicinity(A)\mesh \vicinity(B))$.
 
+\subsubsection{Separation by neighbourhoods}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by neighbourhoods} if there exist disjoint neighbourhoods of $A$ and $B$.
+
+We call two points $x,y\in X$ separated by neighbourhoods if $\{x\}$ and $\{y\}$ are separated by neighbourhoods.
+\end{definition}
+
+\begin{lemma} \label{neighbourhoodSeparationLemma}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. Then $A,B$ are separated by neighbourhoods \textup{if and only if} there exists an open set $U$ such that $A \subseteq U \subseteq \overline{U} \subseteq B^c$.
+\end{lemma}
+\begin{proof}
+WLOG we may take $\overline{U}^c$ to be the neighbourhood of $B$.
+\end{proof}
+
 \subsubsection{Separation by closed vicinities}
 \subsubsection{Separation by functions}
 \url{https://en.wikipedia.org/wiki/Separated_sets}
@@ -1296,7 +1319,7 @@ Let $\sSet{X,\xi}$ be a convergence space. Then the following are equivalent:
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Leftrightarrow (2)$ Assume (1), then there exists a filter $G$ based in $\setbuilder{\adh_\xi(A)}{A\in\powerset(X)}$ such that $G\to x$ and $G\subseteq F$. We just need to show that $G\subseteq \adh[F]$. Indeed take $A\in G$, then $A = \adh(B)$ for some $B\subseteq X$. Now $B\in F$
+$(1) \Leftrightarrow (2)$ Assume (1), then there exists a filter $G$ based in $\setbuilder{\adh_\xi(A)}{A\in\powerset(X)}$ such that $G\to x$ and $G\subseteq F$. We just need to show that $G\subseteq \adh[F]$. Indeed take $A\in G$, then $A = \adh(B)$ for some $B\subseteq X$. Now $B\in F$ TODO: is this wrong?
 
 Because $\adh_\xi[F]\preceq F$ Then $\adh_\xi(A) \supseteq A$, so $\adh$ 
 
@@ -1324,18 +1347,16 @@ We have used \ref{setAdherenceInherence}.
 The last line is equivalent to the separation of points from the complements of their vicinities by \ref{disjointVicinitiesConvergentFilterSeparation}.
 \end{proof}
 
-\begin{proposition} \label{topologicalRegularity}
+\begin{corollary} \label{topologicalRegularity}
 Let $\sSet{X,\xi}$ be a topological space. Then the following are equivalent:
 \begin{enumerate}
 \item $\xi$ is regular;
 \item for any closed set $C$ there exist disjoint open sets $U,V$ such that $x\in U$ and $C\subseteq V$;
 \item for any open set $O\subseteq X$ and $x\in O$ there exists an open set $U$ such that $x\subseteq U\subseteq \overline{U} \subseteq O$.
 \end{enumerate}
-\end{proposition}
+\end{corollary}
 \begin{proof}
-$(1) \Leftrightarrow (2)$ By \ref{pretopologicalRegularity}.
-
-$(2) \Leftrightarrow (3)$ The equivalence can be seen by setting $O = C^c$. Then $\overline{U}\subseteq V^c \subseteq C^c = O$.
+The first equivalence is by the proposition and the second by \ref{neighbourhoodSeparationLemma}.
 \end{proof}
 
 \subsubsection{$T_3$ or regular Hausdorff}
@@ -1379,6 +1400,31 @@ Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivale
 \end{enumerate}
 \end{proposition}
 
+
+\subsection{Countability properties}
+\subsubsection{$C1$ or first countable}
+\begin{definition}
+A convergence space $\sSet{X, \xi}$ is called \udef{first countable} or \udef{$C_1$} if for all $x\in X$ the vicinity filter $\vicinity_\xi(x)$ has a countable base.
+\end{definition}
+
+\subsubsection{Strongly first countable}
+
+\subsubsection{$C2$ or second countable}
+\begin{definition}
+A convergence space $\sSet{X, \xi}$ is called \udef{second countable} or \udef{$C_2$} if $\xi$ has a countable base.
+\end{definition}
+
+\begin{lemma}
+Second countable implies first countable.
+\end{lemma}
+
+\begin{proposition} \label{countableRegularityImpliesNormality}
+Let $\sSet{X,\xi}$ be a topological space. If $\xi$ is regular and second countable, then $\xi$ is normal.
+\end{proposition}
+\begin{proof}
+TOOD eg \url{https://www.math.auckland.ac.nz/~gauld/750-05/section3.pdf}
+\end{proof}
+
 \subsection{Comparison with reals and metrisability}
 \subsubsection{Functional closure}
 \begin{definition}
@@ -1413,34 +1459,62 @@ First assume $A,B$ are functionally separated by $f$. Then $f^{-1}[\;\{0\}\;]$ a
 
 Conversely, assume $A\subseteq f^{-1}[\{0\}]$ and $B\subseteq g^{-1}[\{0\}]$ (we can take $C = \{0\}$ by \ref{functionallyClosedZeroSet}) with $f^{-1}[\{0\}]\perp g^{-1}[\{0\}]$. Then
 \[ h: X\to \R: x\mapsto \frac{|f(x)|}{|f(x)|+|g(x)|} \]
-is well-defined everywhere because $f^{-1}[\{0\}]\perp g^{-1}[\{0\}]$ and functionally separated $A$ and $B$.
+is well-defined everywhere because $f^{-1}[\{0\}]\perp g^{-1}[\{0\}]$ and functionally separates $A$ and $B$.
 \end{proof}
 
+\begin{lemma} \label{UrysohnsLemmaLemma}
+Let $\sSet{X,\xi}$ be a topological space and $D\subseteq \R$ a dense subset of the reals. Suppose $\sSet{U_d}{d\in D}$ is a set of open subsets of $X$ satisfying
+\begin{enumerate}
+\item if $d < t$, then $\overline{U_d}\subseteq U_t$;
+\item $\bigcup_{d\in D}U_d = X$;
+\item $\bigcap_{d\in D}U_d = \emptyset$.
+\end{enumerate}
+Then $f: X\to \R: x\mapsto \inf\setbuilder{d\in D}{x\in U_d}$ is continuous.
+\end{lemma}
+\begin{proof}
+The function $f$ is well-defined, because $\setbuilder{d\in D}{x\in U_d}$ is never empty.
+
+We will prove continuity at $x\in X$ using \ref{pretopologicalContinuityVicinities}. To that end, take some $U\in \vicinity_\R(f(x))$. By density, we can find some $d,t\in D$ such that $[d,t]\subseteq U$ and $d < f(x) < t$.
+
+Now set $V = U_t\setminus\overline{U_d}$. It is then enough to prove that $V\in \vicinity_\xi(x)$ and $f[V]\subseteq [d,t]$. For the first point, note that $V = U_t\cap\overline{U_d}^c$, so $V$ is open.
+
+Next we show $x\in V$. Indeed, from $f(x) < t$, we get that there exists $f(x) \leq s < t$ such that $x\in U_s$. Thus $x\in U_t$. From $d < f(x)$, we get that there exists $s>d$ such that $x\notin U_s$. By assumption ($d < t \implies \overline{U_d}\subseteq U_t$) this means that $x\notin \overline{U_d}$.
+
+Finally note that if $y\in V \subseteq U_t$, then $f(y) \leq t$ and if $y\notin \overline{U_d}$, then $f(y) > s$ for all $s< d$. Thus $d \leq f(y)$ and $f[V]\subseteq [d,t]$.
+\end{proof}
 
 \begin{theorem}[Urysohn's lemma]
 Let $\sSet{X,\xi}$ be a normal topological space. If $C_1,C_2$ are disjoint closed sets, then they are functionally separated.
 \end{theorem}
+\begin{proof}
+We will construct a family $\setbuilder{U_r}{r\in Q}$ of open sets satisfying the conditions of \ref{UrysohnsLemmaLemma}.
+
+First set $U_r = \emptyset$ for all $r<0$ and $U_r = X$ for all $r>1$.
+
+Now set $U_1 = C_2^c$. By normality (TODO ref) there exists an open set $U_0$ such that $C_1 \subseteq U_0 \subseteq \overline{U_0} \subseteq U_1$.
+
+We can enumerate the rationals in a sequence $\seq{r_n}_{n\in \N}$ with $r_0 = 0$ and $r_1 = 1$. We now recursively define $U_{r_n}$ with recursion invariant $d < t \implies \overline{U_d}\subseteq U_t$ as follows: Set
+\[ V =  U_i \qquad \text{where $i = \max_{\substack{k < n \\ r_k < r_n}}k$} \qquad\text{and}\qquad W = U_j \qquad \text{where $j = \min_{\substack{k < n \\ r_k > r_n}}k$}. \]
+By the recursion invariant, we have $\overline{U_i}\subseteq U_j$, so by normality we can define a $U_{r_k}$ such that $\overline{U_i} \subseteq U_{r_k} \subseteq \overline{U_{r_k}} \subseteq U_j$. This assignment satisfies the recursion invariant.
+
+Then by \ref{UrysohnsLemmaLemma} the function $f: X\to \R: x\mapsto \inf\setbuilder{r\in \Q}{x\in U_r}$ is continuous. It functionally separates $C_1$ and $C_2$.
+\end{proof}
+
+\begin{corollary}[Urysohn's metrisation theorem]
+Every regular and second countable topological space is pseudometrisable.
+\end{corollary}
+\begin{proof}
+Let $\sSet{X,\xi}$ be such a topological space. By \ref{countableRegularityImpliesNormality}, $\xi$ is automatically normal. TODO embedding into $[0,1]^F$.
+\end{proof}
 
 
 
 \subsubsection{Functional regularity}
 \begin{definition}
-Let $\sSet{X, \xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. We call $\xi$ \udef{$\zeta$-functionally regular} if $\xi$ is the initial convergence on $X$ w.r.t. $cont(\xi,\zeta)$.
+Let $\sSet{X, \xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. We call $\xi$ \udef{$\zeta$-functionally regular} if $\xi$ is the initial convergence on $X$ w.r.t. $\cont(\xi,\zeta)$.
 
 In particular we call $\xi$ \udef{completely regular} if it is $\R$-functionally regular.
 \end{definition}
-
-
-
-\subsection{Countability properties}
-\subsubsection{$C1$ or first countable}
-\begin{definition}
-A convergence space $\sSet{X, \xi}$ is called \udef{first countable} or \udef{$C1$} if for all $x\in X$ the vicinity filter $\vicinity_\xi(x)$ has a countable base.
-\end{definition}
-
-\subsubsection{Strongly first countable}
-
-\subsubsection{$C2$ or second countable}
 
 
 
@@ -3641,7 +3715,7 @@ Conversely, assume $F\to x,y$ in $G$. Then $FF^{-1} \to xy^{-1}$. Now $FF^{-1} \
 Let $\sSet{G,\cdot, 1, \xi}$ be a pretopological convergence group and $x,y\in G$. If $U\in \vicinity_\xi(xy)$, then there exist $V\in \vicinity_\xi(x)$ and $W\in \vicinity_\xi(y)$ such that $V\cdot W\subseteq U$.
 \end{lemma}
 \begin{proof}
-Consider the function $f: G\times G \to G: (x,y)\mapsto xy$. Then by \ref{continuousMappingVicinities} and \ref{productVicinity} we have
+Consider the function $f: G\times G \to G: (x,y)\mapsto xy$. Then by \ref{pretopologicalContinuityVicinities} and \ref{productVicinity} we have
 \[ \vicinity_\xi(xy) \subseteq \upset f[\vicinity_{\xi\otimes\xi}((x,y))] = \upset f[\upset \vicinity_\xi(x)\otimes \vicinity_\xi(y)] = \upset f[\vicinity_\xi(x)\otimes \vicinity_\xi(y)] = \upset (\vicinity_\xi(x)\cdot \vicinity_\xi(y)) \]
 This implies the result.
 \end{proof}
@@ -3736,22 +3810,10 @@ Then $G \cap \pfilter{y}$ is a Cauchy filter. By finite depth, $F\cap G \cap \pf
 \begin{theorem}[Birkhoff-Kakutani]
 Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group. Then the following are equivalent:
 \begin{enumerate}
-\item $G$ is metrisable;
-\item the topology on $G$ is induced by a left translation invariant metric;
-\item the topology on $G$ is induced by a right translation invariant metric;
-\item $G$ is Hausdorff (TODO necessary?), first countable and topological;
-\item $\{1\}$ is closed, and $\vicinity_\xi(1)$ has a countable base.
-\end{enumerate}
-\end{theorem}
-
-\begin{theorem}[Birkhoff-Kakutani]
-Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group. Then the following are equivalent:
-\begin{enumerate}
-\item $G$ is metrisable;
-\item the topology on $G$ is induced by a left translation invariant metric;
-\item the topology on $G$ is induced by a right translation invariant metric;
-\item $G$ is Hausdorff (TODO necessary?), first countable and topological;
-\item $\{1\}$ is closed, and $\vicinity_\xi(1)$ has a countable base.
+\item $G$ is pseudometrisable;
+\item the topology on $G$ is induced by a left translation invariant pseudometric;
+\item the topology on $G$ is induced by a right translation invariant pseudometric;
+\item $G$ is first countable and topological.
 \end{enumerate}
 \end{theorem}
 
