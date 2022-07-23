@@ -1,6 +1,252 @@
+\chapter{Vector space convergence}
+
+\section{Generalities}
+\begin{definition}
+Let $\sSet{\F,V,+}$ be a vector space and $\xi$ a convergence on $V$. Then $\sSet{\F,V,+, \xi}$ is a \udef{convergence vector space} if
+\begin{itemize}
+\item vector addition $+: V\times V \to V$ is continuous;
+\item scalar multiplication $\cdot: \F\times V \to V$ is continuous.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+If $\sSet{\F,V,+, \xi}$ is a convergence vector space, then $\sSet{V,+, 0, \xi}$ is a convergence group.
+\end{lemma}
+\begin{proof}
+We just need to show that $v\mapsto -v$ is continuous, but this scalar multiplication and thus continuous by assumption.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a vector space, $\{V_i\}_{i\in I}$ a set of convergence vector spaces and $\{L_i: V \to V_i\}_{i\in I}$ a set of linear maps. Then the initial convergence on $V$ w.r.t. $\{L_i: V \to V_i\}_{i\in I}$ makes $V$ a convergence vector space.
+\end{proposition}
+\begin{proof}
+Continuity of vector addition follows from \ref{initialConvergenceGroup}.
+
+We verify continuity of scalar multiplication $m: \F\times V \to V: (\lambda, v) \mapsto \lambda v$. Using \ref{characteristicPropertyInitialFinalConvergence}, we need to verify that $L_i\circ m$ is continuous for all $i\in I$. Because the $L_i$ are linear, we have
+\[ L_i(\lambda v) = \lambda L_i(v) \]
+for all $\lambda \in \F, v \in V$. This means that $L_i\circ m = m_i \circ L_i$, where $m_i$ is scalar multiplication in $V_i$, and thus continuous. So $L_i \circ m$ is continuous.
+\end{proof}
+
+\begin{lemma} \label{vectorSpaceConvergenceConstruction}
+Let $V$ be a vector space over a field $\F$. And $\mathcal{F} \subseteq \powerfilters(V)$ a family of filters. There exists a convergence $\xi$ on $V$ such that $\mathcal{F} = \lim^{-1}_\xi(0)$ \textup{if and only if}
+\begin{enumerate}
+\item $\pfilter{0} \in \mathcal{F}$;
+\item if $F \in \mathcal{F}$ and $G\supseteq F$, then $G\in \mathcal{F}$;
+\item if $F,G \in \mathcal{F}$, then $F + G\in \mathcal{F}$;
+\item if $F\in \mathcal{F}$, then $\vicinity_\F(0)\cdot F \in \mathcal{F}$;
+\item if $v\in V$, then $\vicinity_\F(0)\cdot v \in \mathcal{F}$;
+\item if $F\in \mathcal{F}$ and $\lambda\in \F$, then $\lambda\cdot F \in \mathcal{F}$.
+\end{enumerate}
+\end{lemma}
+Note the similarity with \ref{groupConvergenceConstruction} for convergence groups.
+\begin{proof}
+TODO!
+
+Let $G \to (\lambda, v)$ and take $G \geq \vicinity_\F(\lambda)\otimes H \to (\lambda, v)$. Then
+\begin{align*}
+\vicinity_\F(\lambda)\cdot H &= (\vicinity_\F(0) + \lambda)\cdot((H - v) + v) \\
+&\supseteq \lambda\cdot(H-v) + \lambda \cdot v + \vicinity_\F(0)\cdot (H-v) + \vicinity_\F(0)\cdot v.
+\end{align*}
+\end{proof}
+
+\begin{proposition} \label{initialVectorConvergenceLinearFunctions}
+Let initial convergence w.r.t. a set of linear functions is a vector space convergence.
+\end{proposition}
+
+\subsection{Vicinities and base}
+\begin{proposition}
+Let $\sSet{V,\xi}$ be a convergence vector space. Then
+\begin{enumerate}
+\item every vicinity of the origin is absorbent;
+\item $\xi$ is based in the balanced sets.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\subsubsection{Locally convex convergence}
+
+\section{Topological vector spaces}
+\begin{definition}
+A \udef{topological vector space} (or TVS) is a convergence vector space that is topological.
+\end{definition}
+
+
+\section{General duality theory}
+\subsection{Paired spaces}
+\begin{definition}
+A \udef{pairing} is a triple $(V,W, b)$ where $V,W$ are vector spaces over $\mathbb{F}$ and $b: V\times W\to \mathbb{F}$ is a bilinear form. Often we will write the pairing as just $(V,W)$.
+
+We say $W$ \udef{distinguishes} points of $V$ or is \udef{separating} on $V$ if
+\[ \forall v\in V: \exists w\in W: b(v,w) \neq 0. \]
+
+A \udef{dual system}, \udef{dual pair} or \udef{duality} over a field $\mathbb{F}$ is a pairing $(V,W,b)$ such that $V$ distinguishes points of $W$ and $W$ distinguishes points of $V$.
+\end{definition}
+
+\begin{lemma}
+Let $(V,W, b)$ be a pairing. The curried map $w\mapsto b(\cdot, w)$ is injective \textup{if and only if} $V$ distinguishes points of $W$.
+\end{lemma}
+In this case $W$ is isomorphic with a space of linear functionals (the image of the curried function), so we can also say a dual system is a pair $(V,W)$ where $W$ is a space of linear functionals on $V$ that distinguishes points of $V$.
+
+\begin{example}
+\begin{itemize}
+\item Let $V$ be a vector space. Then $(V,V^*, b)$ with $b:V\times V^*: (v,f)\mapsto f(v)$ is a dual pair.
+\item Let $V$ be a locally convex Hausdorff space. Hahn-Banach implies $(V,V')$ is a dual pair.
+\end{itemize}
+\end{example}
+
+\subsection{Weak topologies}
+\begin{definition}
+Let $(X,Y,b)$ be paired vector spaces. Then for each $y\in Y$, the map
+\[ p_y: X\to \R_{\geq 0} x\mapsto |b(x,y)| \]
+determines a seminorm on $X$.
+
+The weakest topology on $X$ for which the seminorms $\{p_y\;|\;y\in Y\}$ are continuous is called the \udef{weak topology} $\sigma(X,Y)$ on $X$ for the pair $(X,Y)$.
+\end{definition}
+
+\begin{proposition}
+Let $(X,Y,b)$ be a pairing. The following are equivalent:
+\begin{enumerate}
+\item $X$ distinguishes points of $Y$;
+\item the map $Y\to X^*: y\mapsto y^*$ is injective, where $y^*$ is defined by
+\[ y^*: X\to \mathbb{F}: x\mapsto b(x,y); \]
+\item $\sigma(Y,X)$ is Hausdorff.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsubsection{Weak-$*$ topology}
+
+\begin{proposition} \label{weak*continuousFunctional}
+Let $X$ be a Banach space and let $X'$ have the weak-$*$ topology. Then a linear functional $\theta: X'\to \C$ is continuous \textup{if and only if}
+\[ \exists x\in X: \forall \omega\in X': \quad \theta(\omega) = \omega(x). \]
+\end{proposition}
+\begin{proof}
+TODO 9.2 in lecture notes.
+\end{proof}
+
+\subsection{Mackey topology}
+
+\begin{theorem}[Mackey-Arens]
+\end{theorem}
+
+\section{Operators on topological vector spaces}
+
+\subsection{Continuous operators}
+\subsubsection{Closed graph theorem}
+
+\begin{theorem}[Closed graph theorem] \label{closedGraphTheorem}
+Let $f:X\to Y$ be a map from a topological space $X$ into a Hausdorff space $Y$.
+\begin{enumerate}
+\item if $f$ is continuous, then $f$ has closed graph;
+\item if $X$ is compact, then the converse also holds.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+TODO: for Banach spaces $X$ complete enough!!!!!!
+
+
+\subsection{Compact operators}
+\begin{definition}
+A linear operator $T:X\to Y$ between TVSs is \udef{compact} if it maps a neighbourhood of the origin to a precompact set, i.e.\ 
+\[ \exists U \in \neighbourhoods(0): \;  \text{$\overline{T[U]}$ is compact.} \]
+The set of compact linear operators in $(X\to Y)$ is denoted $\Compact(X,Y)$.
+\end{definition}
+TODO: doesn't the neighbourhood need to be bounded in some way?????
+
+\begin{proposition}
+Let $X$ be a normed space and $Y$ a TVS and $T:X\to Y$ a linear operator. Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is a compact operator;
+\item there exists a neighbourhood $U \subset X$ of the origin and a compact set $V\subset Y$ such that $T[U] \subset V$;
+\item the image of the unit ball of $X$, $T[B(\vec{0},1)]$, is precompact in $Y$;
+\item the image of any bounded set in $X$ is precompact in $Y$.
+\end{enumerate}
+If $Y$ is a normed space, these are also equivalent to
+\begin{enumerate} \setcounter{enumi}{4}
+\item for any bounded sequence $(x_{n})_{n\in \mathbb{N}}$ in $X$, the sequence $(Tx_{n})_{n\in \mathbb{N} }$ contains a converging subsequence.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+
+\begin{lemma}
+Let $X,Y$ be TVSs.
+\begin{enumerate}
+\item Then $\Compact(X, Y)$ is a vector space.
+\item If $X,Y$ are normed spaces, then $\Compact(X, Y)$ is a subspace of $\Bounded(X, Y)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Let $K,K':X\to Y$ be compact operators. Then, by \ref{closureGroupOperation} (TODO opposite inclusion!),
+\[ \overline{K[B(0, 1)]+K'[B(0, 1)]} \subseteq \overline{K[B(0, 1)]}+\overline{K'[B(0, 1)]}, \qquad \overline{K[\lambda B(0, 1)]} = \lambda\overline{K[B(0, 1)]}. \]
+
+(2) Let $K\in\Compact(X, Y)$. Then the image of the unit ball is precompact, meaning it is bounded. So $K$ is bounded by \ref{existenceOperatorNorm}.
+\end{proof}
+
+\begin{lemma}
+Let $T:V\to W$ be a bounded operator. If $W$ has the Heine-Borel property, then $T$ is compact.
+\end{lemma}
+\begin{proof}
+The set $T[B(\vec{0},1)]$ is bounded because $T$ is. By the Heine-Borel (TODO ref) property of $W$, $\overline{B(\vec{0},1)}$ is compact.
+\end{proof}
+\begin{corollary}
+Bounded operators with as image a finite dimensional normed space are compact.
+\end{corollary}
+\begin{corollary}
+The identity on a normed space $X$ is compact \textup{if and only if} $X$ is finite-dimensional.
+\end{corollary}
+\begin{proof}
+TODO ref. 
+\end{proof}
+
+\begin{proposition}
+Compact operators map weakly convergent sequences to strongly convergent sequences. TODO! + remove from Hilbert section.
+\end{proposition}
+\begin{corollary} \label{limitCompactImageOrthonormalSequence}
+Let $V$ be an inner product space and $\seq{e_n}$ a sequence of orthonormal vectors in $V$. If $K$ is a compact operator, then $\lim_{n\to\infty}Ke_n = 0$.
+\end{corollary}
+\begin{proof}
+Any sequence of orthonormal vectors $\seq{e_n}$ converges weakly to $0$. Because $K$ is compact, $\seq{Ke_n}$ converges strongly to zero. TODO ref.
+\end{proof}
+\begin{corollary}
+If $V$ is infinite-dimensional and $K$ is invertible, then its inverse is unbounded.
+\end{corollary}
+\begin{proof}
+Due to $\lim_{n\to\infty}Ke_n = 0$ the operator $K$ cannot be bounded below, so $K^{-1}$ is not bounded by \ref{boundedBelow}.
+\end{proof}
+
+\section{Continuity}
+\url{https://en.wikipedia.org/wiki/Bilinear_map#Continuity_and_separate_continuity}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \chapter{Functionals on vector spaces}
 
-\begin{theorem}[Riesz–Markov–Kakutani representation theorem]
+\begin{theorem}[Riesz-Markov-Kakutani representation theorem]
 Let $X$ be a locally compact Hausdorff space. For any positive linear functional $\psi$ on $C_c(X)$, there is a unique Radon measure $\mu$ on $X$ such that
 \[ \forall f\in C_c(X): \quad \psi(f) = \int_X f(x)\diff{\mu(x)}. \]
 \end{theorem}
@@ -445,237 +691,7 @@ TODO
 \end{proof}
 
 
-\chapter{Vector spaces convergence}
 
-\section{Generalities}
-\begin{definition}
-Let $\sSet{\F,V,+}$ be a vector space and $\xi$ a convergence on $V$. Then $\sSet{\F,V,+, \xi}$ is a \udef{convergence vector space} if
-\begin{itemize}
-\item vector addition $+: V\times V \to V$ is continuous;
-\item scalar multiplication $\cdot: \F\times V \to V$ is continuous.
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-If $\sSet{\F,V,+, \xi}$ is a convergence vector space, then $\sSet{V,+, 0, \xi}$ is a convergence group.
-\end{lemma}
-\begin{proof}
-We just need to show that $v\mapsto -v$ is continuous, but this scalar multiplication and thus continuous by assumption.
-\end{proof}
-
-\begin{proposition}
-Let $V$ be a vector space, $\{V_i\}_{i\in I}$ a set of convergence vector spaces and $\{L_i: V \to V_i\}_{i\in I}$ a set of linear maps. Then the initial convergence on $V$ w.r.t. $\{L_i: V \to V_i\}_{i\in I}$ makes $V$ a convergence vector space.
-\end{proposition}
-\begin{proof}
-Continuity of vector addition follows from \ref{initialConvergenceGroup}.
-
-We verify continuity of scalar multiplication $m: \F\times V \to V: (\lambda, v) \mapsto \lambda v$. Using \ref{characteristicPropertyInitialFinalConvergence}, we need to verify that $L_i\circ m$ is continuous for all $i\in I$. Because the $L_i$ are linear, we have
-\[ L_i(\lambda v) = \lambda L_i(v) \]
-for all $\lambda \in \F, v \in V$. This means that $L_i\circ m = m_i \circ L_i$, where $m_i$ is scalar multiplication in $V_i$, and thus continuous. So $L_i \circ m$ is continuous.
-\end{proof}
-
-\begin{lemma} \label{vectorSpaceConvergenceConstruction}
-Let $V$ be a vector space over a field $\F$. And $\mathcal{F} \subseteq \powerfilters(V)$ a family of filters. There exists a convergence $\xi$ on $V$ such that $\mathcal{F} = \lim^{-1}_\xi(0)$ \textup{if and only if}
-\begin{enumerate}
-\item $\pfilter{0} \in \mathcal{F}$;
-\item if $F \in \mathcal{F}$ and $G\supseteq F$, then $G\in \mathcal{F}$;
-\item if $F,G \in \mathcal{F}$, then $F + G\in \mathcal{F}$;
-\item if $F\in \mathcal{F}$, then $\vicinity_\F(0)\cdot F \in \mathcal{F}$;
-\item if $v\in V$, then $\vicinity_\F(0)\cdot v \in \mathcal{F}$;
-\item if $F\in \mathcal{F}$ and $\lambda\in \F$, then $\lambda\cdot F \in \mathcal{F}$.
-\end{enumerate}
-\end{lemma}
-Note the similarity with \ref{groupConvergenceConstruction} for convergence groups.
-\begin{proof}
-TODO!
-
-Let $G \to (\lambda, v)$ and take $G \geq \vicinity_\F(\lambda)\otimes H \to (\lambda, v)$. Then
-\begin{align*}
-\vicinity_\F(\lambda)\cdot H &= (\vicinity_\F(0) + \lambda)\cdot((H - v) + v) \\
-&\supseteq \lambda\cdot(H-v) + \lambda \cdot v + \vicinity_\F(0)\cdot (H-v) + \vicinity_\F(0)\cdot v.
-\end{align*}
-\end{proof}
-
-\begin{proposition} \label{initialVectorConvergenceLinearFunctions}
-Let initial convergence w.r.t. a set of linear functions is a vector space convergence.
-\end{proposition}
-
-\section{Topological vector spaces}
-\begin{definition}
-A \udef{topological vector space} (or TVS) is a vector space $V$ over a field $K$ equipped with a topology $\tau$ such that
-\begin{itemize}
-\item vector addition $V\times V \to V: (v, w) \mapsto v+w$ and
-\item scalar multiplication $K\times V\to V: (\lambda, v) \mapsto \lambda \cdot v$
-\end{itemize}
-are continuous.
-\end{definition}
-
-Clearly the map $p_x: V\to V: v\mapsto v+x$ is a homeomorphism. Thus the topology of $V$ is determined by the neighbourhood filter of the origin $0$.
-
-\begin{lemma} \label{closureSum}
-Let $V$ be a TVS and $A,B$ subsets of $V$. Then
-\[ \overline{A+B} \subseteq \overline{A} + \overline{B} \]
-\end{lemma}
-\begin{proof}
-From the continuity of $+$ and \ref{continuity}.
-\end{proof}
-
-\begin{lemma}
-Let $V$ be a TVS
-\end{lemma}
-
-\section{General duality theory}
-\subsection{Paired spaces}
-\begin{definition}
-A \udef{pairing} is a triple $(V,W, b)$ where $V,W$ are vector spaces over $\mathbb{F}$ and $b: V\times W\to \mathbb{F}$ is a bilinear form. Often we will write the pairing as just $(V,W)$.
-
-We say $W$ \udef{distinguishes} points of $V$ or is \udef{separating} on $V$ if
-\[ \forall v\in V: \exists w\in W: b(v,w) \neq 0. \]
-
-A \udef{dual system}, \udef{dual pair} or \udef{duality} over a field $\mathbb{F}$ is a pairing $(V,W,b)$ such that $V$ distinguishes points of $W$ and $W$ distinguishes points of $V$.
-\end{definition}
-
-\begin{lemma}
-Let $(V,W, b)$ be a pairing. The curried map $w\mapsto b(\cdot, w)$ is injective \textup{if and only if} $V$ distinguishes points of $W$.
-\end{lemma}
-In this case $W$ is isomorphic with a space of linear functionals (the image of the curried function), so we can also say a dual system is a pair $(V,W)$ where $W$ is a space of linear functionals on $V$ that distinguishes points of $V$.
-
-\begin{example}
-\begin{itemize}
-\item Let $V$ be a vector space. Then $(V,V^*, b)$ with $b:V\times V^*: (v,f)\mapsto f(v)$ is a dual pair.
-\item Let $V$ be a locally convex Hausdorff space. Hahn-Banach implies $(V,V')$ is a dual pair.
-\end{itemize}
-\end{example}
-
-\subsection{Weak topologies}
-\begin{definition}
-Let $(X,Y,b)$ be paired vector spaces. Then for each $y\in Y$, the map
-\[ p_y: X\to \R_{\geq 0} x\mapsto |b(x,y)| \]
-determines a seminorm on $X$.
-
-The weakest topology on $X$ for which the seminorms $\{p_y\;|\;y\in Y\}$ are continuous is called the \udef{weak topology} $\sigma(X,Y)$ on $X$ for the pair $(X,Y)$.
-\end{definition}
-
-\begin{proposition}
-Let $(X,Y,b)$ be a pairing. The following are equivalent:
-\begin{enumerate}
-\item $X$ distinguishes points of $Y$;
-\item the map $Y\to X^*: y\mapsto y^*$ is injective, where $y^*$ is defined by
-\[ y^*: X\to \mathbb{F}: x\mapsto b(x,y); \]
-\item $\sigma(Y,X)$ is Hausdorff.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
-\subsubsection{Weak-$*$ topology}
-
-\begin{proposition} \label{weak*continuousFunctional}
-Let $X$ be a Banach space and let $X'$ have the weak-$*$ topology. Then a linear functional $\theta: X'\to \C$ is continuous \textup{if and only if}
-\[ \exists x\in X: \forall \omega\in X': \quad \theta(\omega) = \omega(x). \]
-\end{proposition}
-\begin{proof}
-TODO 9.2 in lecture notes.
-\end{proof}
-
-\subsection{Mackey topology}
-
-\begin{theorem}[Mackey-Arens]
-\end{theorem}
-
-\section{Operators on topological vector spaces}
-
-\subsection{Continuous operators}
-\subsubsection{Closed graph theorem}
-
-\begin{theorem}[Closed graph theorem] \label{closedGraphTheorem}
-Let $f:X\to Y$ be a map from a topological space $X$ into a Hausdorff space $Y$.
-\begin{enumerate}
-\item if $f$ is continuous, then $f$ has closed graph;
-\item if $X$ is compact, then the converse also holds.
-\end{enumerate}
-\end{theorem}
-\begin{proof}
-TODO
-\end{proof}
-TODO: for Banach spaces $X$ complete enough!!!!!!
-
-
-\subsection{Compact operators}
-\begin{definition}
-A linear operator $T:X\to Y$ between TVSs is \udef{compact} if it maps a neighbourhood of the origin to a precompact set, i.e.\ 
-\[ \exists U \in \neighbourhoods(0): \;  \text{$\overline{T[U]}$ is compact.} \]
-The set of compact linear operators in $(X\to Y)$ is denoted $\Compact(X,Y)$.
-\end{definition}
-TODO: doesn't the neighbourhood need to be bounded in some way?????
-
-\begin{proposition}
-Let $X$ be a normed space and $Y$ a TVS and $T:X\to Y$ a linear operator. Then the following are equivalent:
-\begin{enumerate}
-\item $T$ is a compact operator;
-\item there exists a neighbourhood $U \subset X$ of the origin and a compact set $V\subset Y$ such that $T[U] \subset V$;
-\item the image of the unit ball of $X$, $T[B(\vec{0},1)]$, is precompact in $Y$;
-\item the image of any bounded set in $X$ is precompact in $Y$.
-\end{enumerate}
-If $Y$ is a normed space, these are also equivalent to
-\begin{enumerate} \setcounter{enumi}{4}
-\item for any bounded sequence $(x_{n})_{n\in \mathbb{N}}$ in $X$, the sequence $(Tx_{n})_{n\in \mathbb{N} }$ contains a converging subsequence.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
-
-\begin{lemma}
-Let $X,Y$ be TVSs.
-\begin{enumerate}
-\item Then $\Compact(X, Y)$ is a vector space.
-\item If $X,Y$ are normed spaces, then $\Compact(X, Y)$ is a subspace of $\Bounded(X, Y)$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Let $K,K':X\to Y$ be compact operators. Then, by \ref{closureSum},
-\[ \overline{K[B(0, 1)]+K'[B(0, 1)]} \subseteq \overline{K[B(0, 1)]}+\overline{K'[B(0, 1)]}, \qquad \overline{K[\lambda B(0, 1)]} = \lambda\overline{K[B(0, 1)]}. \]
-
-(2) Let $K\in\Compact(X, Y)$. Then the image of the unit ball is precompact, meaning it is bounded. So $K$ is bounded by \ref{existenceOperatorNorm}.
-\end{proof}
-
-\begin{lemma}
-Let $T:V\to W$ be a bounded operator. If $W$ has the Heine-Borel property, then $T$ is compact.
-\end{lemma}
-\begin{proof}
-The set $T[B(\vec{0},1)]$ is bounded because $T$ is. By the Heine-Borel (TODO ref) property of $W$, $\overline{B(\vec{0},1)}$ is compact.
-\end{proof}
-\begin{corollary}
-Bounded operators with as image a finite dimensional normed space are compact.
-\end{corollary}
-\begin{corollary}
-The identity on a normed space $X$ is compact \textup{if and only if} $X$ is finite-dimensional.
-\end{corollary}
-\begin{proof}
-TODO ref. 
-\end{proof}
-
-\begin{proposition}
-Compact operators map weakly convergent sequences to strongly convergent sequences. TODO! + remove from Hilbert section.
-\end{proposition}
-\begin{corollary} \label{limitCompactImageOrthonormalSequence}
-Let $V$ be an inner product space and $\seq{e_n}$ a sequence of orthonormal vectors in $V$. If $K$ is a compact operator, then $\lim_{n\to\infty}Ke_n = 0$.
-\end{corollary}
-\begin{proof}
-Any sequence of orthonormal vectors $\seq{e_n}$ converges weakly to $0$. Because $K$ is compact, $\seq{Ke_n}$ converges strongly to zero. TODO ref.
-\end{proof}
-\begin{corollary}
-If $V$ is infinite-dimensional and $K$ is invertible, then its inverse is unbounded.
-\end{corollary}
-\begin{proof}
-Due to $\lim_{n\to\infty}Ke_n = 0$ the operator $K$ cannot be bounded below, so $K^{-1}$ is not bounded by \ref{boundedBelow}.
-\end{proof}
-
-\section{Continuity}
-\url{https://en.wikipedia.org/wiki/Bilinear_map#Continuity_and_separate_continuity}
 
 
 
