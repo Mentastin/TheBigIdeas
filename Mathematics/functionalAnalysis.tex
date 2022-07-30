@@ -1,6 +1,6 @@
 \chapter{Vector space convergence}
 
-\section{Generalities}
+\section{Vector space convergence}
 \begin{definition}
 Let $\sSet{\F,V,+}$ be a vector space and $\xi$ a convergence on $V$. Then $\sSet{\F,V,+, \xi}$ is a \udef{convergence vector space} if
 \begin{itemize}
@@ -16,6 +16,17 @@ If $\sSet{\F,V,+, \xi}$ is a convergence vector space, then $\sSet{V,+, 0, \xi}$
 We just need to show that $v\mapsto -v$ is continuous, but this scalar multiplication and thus continuous by assumption.
 \end{proof}
 
+\begin{lemma} \label{continuityLemmaVectorConvergence}
+If $\sSet{\F,V,+, \xi}$ is a convergence vector space, then
+\begin{enumerate}
+\item the function $\F \to V: \lambda \mapsto \lambda\cdot v$ is continuous for all $v\in V$;
+\item the function $V \to V: v \mapsto \lambda\cdot v$ is continuous for all $\lambda\in \F$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The functions $\lambda \mapsto (\lambda, v)$ and $v \mapsto (\lambda, v)$ are continuous by \ref{continuousEmbeddingProduct}. Composition with the continuous scalar product gives the result by continuity of composition (\ref{continuityComposition}).
+\end{proof}
+
 \begin{proposition}
 Let $V$ be a vector space, $\{V_i\}_{i\in I}$ a set of convergence vector spaces and $\{L_i: V \to V_i\}_{i\in I}$ a set of linear maps. Then the initial convergence on $V$ w.r.t. $\{L_i: V \to V_i\}_{i\in I}$ makes $V$ a convergence vector space.
 \end{proposition}
@@ -27,20 +38,35 @@ We verify continuity of scalar multiplication $m: \F\times V \to V: (\lambda, v)
 for all $\lambda \in \F, v \in V$. This means that $L_i\circ m = m_i \circ L_i$, where $m_i$ is scalar multiplication in $V_i$, and thus continuous. So $L_i \circ m$ is continuous.
 \end{proof}
 
-\begin{lemma} \label{vectorSpaceConvergenceConstruction}
-Let $V$ be a vector space over a field $\F$. And $\mathcal{F} \subseteq \powerfilters(V)$ a family of filters. There exists a convergence $\xi$ on $V$ such that $\mathcal{F} = \lim^{-1}_\xi(0)$ \textup{if and only if}
+\begin{proposition} \label{vectorSpaceConvergenceConstruction}
+Let $V$ be a vector space over a field $\F$. And $\mathcal{F} \subseteq \powerfilters(V)$ a family of filters. There exists a vector space convergence $\xi$ on $V$ such that $\mathcal{F} = \lim^{-1}_\xi(0)$ \textup{if and only if}
 \begin{enumerate}
-\item $\pfilter{0} \in \mathcal{F}$;
 \item if $F \in \mathcal{F}$ and $G\supseteq F$, then $G\in \mathcal{F}$;
 \item if $F,G \in \mathcal{F}$, then $F + G\in \mathcal{F}$;
 \item if $F\in \mathcal{F}$, then $\vicinity_\F(0)\cdot F \in \mathcal{F}$;
 \item if $v\in V$, then $\vicinity_\F(0)\cdot v \in \mathcal{F}$;
 \item if $F\in \mathcal{F}$ and $\lambda\in \F$, then $\lambda\cdot F \in \mathcal{F}$.
 \end{enumerate}
-\end{lemma}
-Note the similarity with \ref{groupConvergenceConstruction} for convergence groups.
+\end{proposition}
+Note the similarity with \ref{groupConvergenceConstruction} for convergence groups. A group convergence is completely determined by $\lim^{-1}_\xi(0)$ due to the translation homeomorphisms \ref{shiftHomeomorphism}.
 \begin{proof}
-TODO!
+Assume first that $\mathcal{F} = \lim^{-1}_\xi(0)$ for some vector space convergence $\xi$.
+\begin{enumerate}
+\item This is just the monotonicity of the convergence.
+\item If $F,G\to 0$, then $F\otimes G \to (0,0)$ by \ref{convergenceFiniteProductFilter}. By continuity of addition we have $F+G\to 0$.
+\item The convergence on the scalar field is pretopological, so $\vicinity_\F(0)\to 0$. By \ref{convergenceFiniteProductFilter} $\vicinity_\F(0)\otimes F \to (0,0)$ and by continuity of the scalar multiplication $\vicinity_\F(0)\cdot F \to 0$.
+\item By \ref{continuityLemmaVectorConvergence}.
+\item By \ref{continuityLemmaVectorConvergence}.
+\end{enumerate}
+
+Now assume the five points hold. Define the convergence $\xi$ by $F\to v$ iff $F-v \in \mathcal{F}$. We need to show that this is a convergence and that it makes both the vector addition and scalar multiplication continuous.
+
+Monotonicity is guaranteed by (1). To show the convergence is centered, note that $\mathcal{F} \neq \emptyset$ by (4), so long as $V\neq \emptyset$. Then for any $F\in \mathcal{F}$, $\big\{\{0\}\big\} = 0\cdot F \in \mathcal{F}$ by (5).
+
+To show that the vector addition is continuous, take $F\to (v_1, v_2)$. Then $p_1(F) = F_1\to v_1$ and $p_2(F) = F_2 \to v_2$, i.e.\ $F_1-v_1 \in \mathcal{F}$ and $F_2-v_2 \in \mathcal{F}$. By (1), $(F_1-v_1) + (F_2-v_2) = (F_1+F_2) - (v_1 + v_2) \in \mathcal{F}$, so $F_1+F_2 = +[F] \to v_1 + v_2$.
+
+
+
 
 Let $G \to (\lambda, v)$ and take $G \geq \vicinity_\F(\lambda)\otimes H \to (\lambda, v)$. Then
 \begin{align*}
@@ -53,25 +79,71 @@ Let $G \to (\lambda, v)$ and take $G \geq \vicinity_\F(\lambda)\otimes H \to (\l
 Let initial convergence w.r.t. a set of linear functions is a vector space convergence.
 \end{proposition}
 
-\subsection{Vicinities and base}
-\begin{proposition}
-Let $\sSet{V,\xi}$ be a convergence vector space. Then
-\begin{enumerate}
-\item every vicinity of the origin is absorbent;
-\item $\xi$ is based in the balanced sets.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-
-\subsubsection{Locally convex convergence}
-
 \section{Topological vector spaces}
 \begin{definition}
 A \udef{topological vector space} (or TVS) is a convergence vector space that is topological.
 \end{definition}
+As with convergence groups, any pretopological vector space convergence is topological, see \ref{pretopologicalGroupConvergence}.
 
+\subsection{Neighbourhoods and base}
+\begin{proposition}
+Let $V$ be a vector space and $N\in\powerfilters(V)$. Then $N = \neighbourhoods_\xi(0)$ for some topological convergence on $V$ \textup{if and only if}
+\begin{enumerate}
+\item $N$ has an absorbent and balanced base;
+\item for all $A\in N$ and $\lambda\in \F$: $\lambda A\in N$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We adapt \ref{vectorSpaceConvergenceConstruction} to the present situation.
+
+First assume $N$ has a balanced and absorbent base. We check the five conditions for $\mathcal{F} = \pfilter{N}$.
+
+(1) Immediate because $\mathcal{F} = \pfilter{N}$.
+
+(2) Take $F,G\in \pfilter{N}$. We need to show that $\upset (F + G) \supseteq N$, which means that for all $A \in N$ there exist $B\in F$ and $C\in G$ such that $B+C\subseteq A$. Take some balanced subset $A'$ of $A$ and set $B = \frac{1}{2}A' = C$.  TODO
+
+(3) Take $F\in \pfilter{N}$. We need to show that $\upset(\vicinity_\F(0)\cdot F) \supseteq N$, which means that for all $A\in N$ there exists a $\Gamma\in \vicinity_\F(0)$ and $B\in F$ such that $\Gamma \cdot B\subseteq A$. We can take $B = \balancedCore(A) \in N \subseteq F$ and $\Gamma = B(0,1)$.
+
+(4) Take $v\in V$. We need to show that all $A\in N$ contain $\Gamma\cdot v$ for some $\Gamma \in \vicinity_\F(0)$. Because $A$ is absorbent, there exists an $r>0$ such that $v\in cA$ for all $|c|\geq r$. Conversely $c^{-1}v \in A$ for all $|c^{-1}| \leq r^{-1}$. So $\ball(0,r^{-1})\cdot v \subseteq A$ and $B(0,r^{-1}) \in \vicinity_\F(0)$.
+
+(5) Take $F\in \pfilter{N}$ and $\lambda\in \F$. We need to show that for all $A\in N$ there exists a $B\in F$ such that $\lambda\cdot B\subseteq A$. We can take $B = \lambda^{-1}A \in N\subseteq F$.
+\end{proof}
+
+
+\begin{proposition}
+Let $\sSet{V,\xi}$ be a TVS and $U\in\neighbourhoods_\xi(0)$. Then
+\begin{enumerate}
+\item $U$ is absorbent;
+\item $\balancedCore(U)\in\neighbourhoods_\xi(0)$.
+\end{enumerate}
+\end{proposition}
+This means $\neighbourhoods_\xi(0)$ is based in the balanced sets.
+\begin{proof}
+(1) Fix $x\in V$. We need to show that for some $r>0$ and all $|c|\geq r$, we have $x\in cU$.
+
+Consider the function $\lambda\mapsto \lambda x$. Because this function is continuous at $0$ and $U \in \neighbourhoods_\xi(0) = \neighbourhoods_\xi(0\cdot x)$, there exists $W\in \neighbourhoods_\F(0)$ such that $W\cdot x \subseteq U$ by \ref{pretopologicalContinuityVicinities}. Now $W$ contains an open ball $B(0,\epsilon)$. We may take $r = \epsilon^{-1}$. Indeed, take $|c|\geq \epsilon^{-1}$. Then $c^{-1}\in B(0,\epsilon) \subseteq W$ and thus $1\in cW$, so $x\in cW\cdot x \subseteq U$.
+
+(2) Consider the function $\F\times V\to V: (\lambda,x)\mapsto \lambda x$. Because this function is continuous at $(0,0)$ and $U \in \neighbourhoods_\xi(0) = \neighbourhoods_\xi(0\cdot 0)$, there exists $W_s\times W_v\in \neighbourhoods_\F(0)\times \neighbourhoods_\xi(0)$ such that $W_s\cdot W_v \subseteq U$ by \ref{pretopologicalContinuityVicinities}. Then $W_s$ contains an open ball $B(0,\epsilon)$, so $\lambda W_v \subseteq U$ for all $|\lambda| \leq \epsilon$. Thus $\epsilon W_v \subseteq \frac{\epsilon}{\lambda} U$ and, setting $\mu = \epsilon/\lambda$, we have that $|\mu|\geq 1$ iff $|\lambda| \leq \epsilon$. Thus $\epsilon W_v \subseteq \bigcap_{|\mu|\geq 1}\mu U = \balancedCore(U)$ and $\epsilon W_v\in \neighbourhoods(0)$, so $\balancedCore(U) \in \neighbourhoods(0)$.
+\end{proof}
+Point (2) is partially implied by \ref{symmetricBase}.
+
+\subsubsection{Locally convex convergence}
+\begin{definition}
+Let $\sSet{V,\xi}$ be a TVS. If $\xi$ is based in the convex sets, then $\xi$ is called \udef{locally convex}.
+\end{definition}
+\begin{lemma}
+Let $\sSet{V,\xi}$ be a TVS. Then the following are equivalent:
+\begin{enumerate}
+\item $\xi$ is locally convex;
+\item $\neighbourhoods_\xi(0)$ is based in the convex sets;
+\item $\neighbourhoods_\xi(0)$ is based in the absolutely convex sets.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Leftrightarrow (2)$ One direction is immediate, for the other it is enough to note that if $U$ is convec, then so is the translated set $x+U$ for all $x\in V$.
+
+$(2) \Leftrightarrow (3)$ One direction is immediate, the other follows because the balanced core of a convex set is convex by \ref{balancedCoreConvexSet}.
+\end{proof}
 
 \section{General duality theory}
 \subsection{Paired spaces}

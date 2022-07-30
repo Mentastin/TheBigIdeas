@@ -1186,7 +1186,7 @@ Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$.
 \item A \udef{left bound} (or \udef{lower bound}) of $Y$ under $R$ is an element $a\in A$ such that $a$ is left related to all $y\in Y$. We denote the class of left bounds by
 \[ ^RY \defeq \setbuilder{a\in A}{\forall y\in Y: aRy}. \]
 \end{itemize}
-The classes $X^R$ and $^RY$ are also called \udef{polars}.\footnote{Birkhoff states (TODO ref) that the term ``polar'' was chosen due to the link with the polars of conic sections.}
+The classes $X^R$ and $^RY$ are also called \udef{polars}.\footnote{According to Birkhoff (TODO ref), the term ``polar'' was chosen due to the link with the polars of conic sections.}
 
 In particular for $X=A$ and $Y=B$:
 \begin{enumerate}
@@ -2476,26 +2476,83 @@ Let $f,g: A\to B$ be functions. Then $f = g$ \textup{if and only if} $\id_A \sub
 \end{lemma}
 
 \subsection{Image and preimage}
-As functions are relations they have images and preimages. Let $f:A\to B$ be a function. We write
-\begin{itemize}
-\item $f[X]$ for the image $X_f$;
-\item $f^{-1}[X]$ for the preimage $_fX$.
-\end{itemize}
-
+\subsubsection{Functions associated to a relation}
 We can associate to any relation $R$ on $(A,B)$
 \begin{itemize}
-\item an \udef{image function} $\powerset(A) \to \powerset(B): X \mapsto X_R$;
-\item a \udef{preimage function} $\powerset(B) \to \powerset(A): X \mapsto {_RX}$;
+\item an \udef{image function} $R^{\imf}: \powerset(A) \to \powerset(B): X \mapsto X_R$;
+\item a \udef{preimage function} $R^{\preimf}: \powerset(B) \to \powerset(A): X \mapsto {_RX}$;
 \item a \udef{right bounds function} $\powerset(A) \to \powerset(B): X \mapsto X^R$;
 \item a \udef{left bounds function} $\powerset(B) \to \powerset(A): X \mapsto {^RX}$.
 \end{itemize}
 
+Clearly $R^{\preimf} = (R^\transp)^\imf$.
+
 \begin{lemma}
-Let $f$ be a function. Then $f^{-1}[\biguplus \mathcal{E}] = \biguplus f[\mathcal{E}]$.
+Let $R,S$ be composable relations. Then $(R;S)^\imf = R^\imf;S^\imf$.
+\end{lemma}
+\begin{proof}
+Take some arbitrary $A\subseteq \dom(R)$. Then for all $y\in \codom(S)$ we have
+\begin{align*}
+y \in (R;S)^\imf(A) &\iff \exists x\in A:\; x(R;S)y \\
+&\iff \exists x\in A:\exists z\in \dom(S) = \codom(R): \; xRz\;\wedge\; zSy \\
+&\iff \exists z\in \dom(S) = \codom(R):\exists x\in A: \; xRz\;\wedge\; zSy \\
+&\iff \exists z\in R^\imf(A): zSy \\
+&\iff y\in S^\imf(R^\imf(A)) = (R^\imf;S^\imf)(A).
+\end{align*}
+\end{proof}
+\begin{corollary}
+For any relation $R$, $\ker(R)^\imf = R^\imf;R^\preimf = R^\preimf\circ R^\imf$.
+\end{corollary}
+
+\subsubsection{Applying functions inside sets}
+As functions are relations they have images, preimages and associated image and preimage functions.
+
+\begin{lemma}
+Let $A,B$ be classes and $f:A\to B$ a function. Then
+\begin{enumerate}
+\item $f^{\imf}: \powerset(A) \to \powerset(B): X\mapsto \setbuilder{f(x)\in B}{x\in X}$;
+\item $f^{\preimf}: \powerset(B) \to \powerset{A}: Y\mapsto \setbuilder{x\in A}{f(x) \in Y}$.
+\end{enumerate}
+\end{lemma}
+
+Image and preimage functions are also functions and thus also have images, preimages and associated image and preimage functions.
+
+We have, for a function $f:A\to B$,
+\begin{itemize}
+\item $f^{\imf\imf}\defeq (f^{\imf})^\imf: \powerset^2(A) \to \powerset^2{B}$;
+\item $f^{\preimf\preimf}\defeq (f^{\preimf})^\preimf: \powerset^2(A) \to \powerset^2{B}$;
+\item $f^{\imf\preimf}\defeq (f^{\imf})^\preimf: \powerset^2(B) \to \powerset^2{A}$;
+\item $f^{\preimf\imf}\defeq (f^{\preimf})^\imf: \powerset^2(B) \to \powerset^2{A}$;
+\end{itemize}
+
+Note that in general $f^{\imf\preimf} \neq f^{\preimf\imf}$ and $f^{\preimf\preimf} \neq f^{\imf\imf}$.
+
+\begin{proposition}
+Let $A,B$ be classes and $f:A\to B$ a function. Then
+\begin{enumerate}
+\item $(f^\imf,f^\preimf)$ is a Galois connection between $\sSet{\powerset(A), \subseteq}$ and $\sSet{\powerset(B), \subseteq}$;
+\item $(f^\preimf,f^\imf)$ is a Galois connection between $\sSet{\powerset(A), \subseteq}$ and $\sSet{\powerset(B), \subseteq}$;
+\item $(f^\imf,f^\preimf)$ and $(f^\preimf,f^\imf)$ are Galois connections between $\sSet{\powerset(A), \id_{\powerset(A)}}$ and $\sSet{\powerset(B), \id_{\powerset(B)}}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We have
+\[ f^\imf(X) \subseteq Y \iff \forall x\in X: \exists y\in Y:\; f(x) = y \iff X \subseteq f^{\preimf}(Y) \]
+and
+\[ f^\imf(X) \supseteq Y \iff \forall y\in Y: \exists x\in X:\; f(x) = y \iff X \supseteq f^{\preimf}(Y). \]
+\end{proof}
+
+\begin{lemma}
+Let $A,B$ be classes, $f:A\to B$ a function, $x\in A$ and $Y\subseteq B$. Then $x\in f^\preimf(Y) \iff f(x)\in Y$.
+\end{lemma}
+
+
+\begin{lemma}
+Let $f$ be a function. Then $f^{\preimf}\big(\biguplus \mathcal{E}\big) = \biguplus f^\preimf(\mathcal{E})$.
 \end{lemma}
 
 \begin{lemma} \label{functionUpperbound}
-Let $A,B,C$ be classes, $f: A\to B$ a function and $R$ a relation on $(B,C)$. Let $X \subseteq A$. Then $f[X]^R = X^{f;R}$.
+Let $A,B,C$ be classes, $f: A\to B$ a function and $R$ a relation on $(B,C)$. Let $X \subseteq A$. Then $f^\imf(X)^R = X^{f;R}$.
 \end{lemma}
 \begin{proof}
 We calculate
@@ -2503,7 +2560,7 @@ We calculate
 where we have used the uniqueness and totality of $f$ in \ref{uniquenessResiduals} and \ref{totalityEquivalences}.
 
 Alternatively we can give the following calculation:
-\[ y\in f[X]^R \iff \forall x\in X: f(x)Ry \iff \forall x\in X: x(f;R)y \iff y\in X^{f;R}. \]
+\[ y\in f^\imf(X)^R \iff \forall x\in X: f(x)Ry \iff \forall x\in X: x(f;R)y \iff y\in X^{f;R}. \]
 \end{proof}
 
 \subsection{Injectivity, surjectivity and bijectivity}
