@@ -5,14 +5,14 @@ TODO: \url{https://math.stackexchange.com/questions/2151779/normed-vector-spaces
 \section{Normed spaces}
 \begin{definition}
 A \udef{norm} on a vector space $V$ is a function
-\[ \norm{\cdot}: V \to \mathbb{R} \]
+\[ \norm{\cdot}: V \to \R \]
 that has the following properties:
 \begin{itemize}[leftmargin=6cm]
 \item[\textbf{Triangle inequality}\footnote{Also known as the property of being \udef{subadditive}.}] $\norm{u+v} \leq \norm{u}+\norm{v}$;
 \item[\textbf{Absolute homogeneity}] $\norm{\lambda v} = |\lambda|\cdot\norm{v}$;
 \item[\textbf{Point-separating}] If $\norm{v} = 0$, then $v = 0$.
 \end{itemize}
-A \udef{seminorm} is a function $V\to \mathbb{R}$ that is subadditive and absolutely homogeneous.
+A \udef{seminorm} is a function $V\to \R$ that is subadditive and absolutely homogeneous.
 
 A \udef{normed space} $(\mathbb{F},V,+,\norm{\cdot})$ is a vector space $(\mathbb{F},V,+)$ equipped with a norm $\norm{\cdot}$.
 \end{definition}
@@ -22,7 +22,7 @@ A subadditive, absolutely homogenous function $f:V\to \R$ is non-negative:
 Thus norms and seminorms are functions $V\to \R_{\geq 0}$.
 \end{lemma}
 \begin{proof}
-TODO
+For all $v\in V$ we have $0 = f(v-v) \leq f(v)+f(-v) = 2f(v)$, so $f(v) \geq 0$.
 \end{proof}
 
 \begin{proposition}[Reverse triangle inequality] \label{reverseTriangleInequality}
@@ -31,6 +31,7 @@ Let $V$ be a vector space and $\norm{\cdot}: V\to \R$ a function that satisfies 
 \item $|\norm{v}-\norm{w}|\leq \norm{v-w}$;
 \item $|\norm{v}-\norm{w}|\leq \norm{v+w}$.
 \end{enumerate}
+In particular this holds if $\norm{\cdot}$ is a norm or seminorm.
 \end{proposition}
 \begin{proof}
 We calculate $\norm{v} = \norm{v-w+w} \leq \norm{v-w} + \norm{w}$, so $\norm{v}-\norm{w}\leq \norm{v-w}$. By swapping $v\leftrightarrow w$ we also get $-\norm{v}+\norm{w}\leq \norm{w-v} = \norm{v-w}$ and thus the first inequality is established.
@@ -38,15 +39,51 @@ We calculate $\norm{v} = \norm{v-w+w} \leq \norm{v-w} + \norm{w}$, so $\norm{v}-
 For the second inequality, set $w\to -w$ and use $\norm{-w} = \norm{w}$.
 \end{proof}
 
-\begin{definition}
-A vector with norm 1 is called a \udef{unit vector}. Unit vectors are often written with a hat:
-\[ \norm{\vhat{v}} = 1. \]
-\end{definition}
+
 
 \begin{lemma}
 A subspace of a normed vector space is a normed space, with the norm given by the restriction of the norm in the larger space.
 \end{lemma}
 
+\begin{definition}
+A vector with norm 1 is called a \udef{unit vector}. Unit vectors are often written with a hat:
+\[ \norm{\vhat{v}} = 1. \]
+\end{definition}
+
+\subsection{Seminorms}
+\begin{lemma}
+The kernel of a seminorm is a vector space.
+\end{lemma}
+Note this does not follow from \ref{kernelSubspace} because seminorms are not linear.
+\begin{proof}
+Let $p:V\to \R$ be a seminorm. We verify the subspace criterion \ref{subspaceCriterion}. First $0\in\ker(p)$ because $p(0) = p(0\cdot 0) = |0|p(0) = 0$.
+
+Now take $v,w\in \ker(p)$ and $\lambda\in \F$. Then $0\leq p(v+\lambda w) \leq p(v)+|\lambda|p(w) = 0$, so $v+\lambda w\in\ker(p)$.
+\end{proof}
+
+\begin{proposition} \label{gaugeSeminorms}
+Let $V$ be a vector space.
+\begin{enumerate}
+\item If $p: V\to \R$ is a seminorm and $\lambda\in \F$, then
+\[ \setbuilder{v\in V}{p(v) < \lambda} \qquad\text{and}\qquad \setbuilder{v\in V}{p(v) \leq \lambda} \]
+are absolutely convex and absorbent.
+\item For each absolutely convex and absorbent subset $A\subseteq V$ there exists a seminorm $p$ defined by
+\[ p_A: V\to \R: v\mapsto \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} \]
+with the property that
+\[ \setbuilder{v\in V}{p(v) < \lambda} \subseteq A \subseteq \setbuilder{v\in V}{p(v) \leq \lambda}. \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Take $|\mu| + |\nu| \leq 1$ and $v,w\in\setbuilder{v\in V}{p(v) \leq \lambda}$. Then $p(|\mu|v + |\nu|w)\leq |\mu|p(v) + |\nu|p(w) \leq (|\mu|+|\nu|)\lambda \leq \lambda$.
+
+For absorbence, take $v\in V$. Then $\frac{\lambda}{2p(v)} v\in \setbuilder{v\in V}{p(v) < \lambda}$.
+
+(2) We first show that $p$ is a seminorm.
+\end{proof}
+
+\begin{definition}
+The seminorm $pc_A$ defined in \ref{gaugeSeminorms} is called the \udef{gauge} of $A$.
+\end{definition}
 
 \subsection{The topology of a normed space}
 \begin{definition}
