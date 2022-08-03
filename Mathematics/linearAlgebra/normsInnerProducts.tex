@@ -4,42 +4,8 @@ In this chapter we will always use either $\mathbb{F} = \R$ or $\mathbb{F} = \C$
 TODO: \url{https://math.stackexchange.com/questions/2151779/normed-vector-spaces-over-finite-fields/2568231}
 \section{Normed spaces}
 \begin{definition}
-A \udef{norm} on a vector space $V$ is a function
-\[ \norm{\cdot}: V \to \R \]
-that has the following properties:
-\begin{itemize}[leftmargin=6cm]
-\item[\textbf{Triangle inequality}\footnote{Also known as the property of being \udef{subadditive}.}] $\norm{u+v} \leq \norm{u}+\norm{v}$;
-\item[\textbf{Absolute homogeneity}] $\norm{\lambda v} = |\lambda|\cdot\norm{v}$;
-\item[\textbf{Point-separating}] If $\norm{v} = 0$, then $v = 0$.
-\end{itemize}
-A \udef{seminorm} is a function $V\to \R$ that is subadditive and absolutely homogeneous.
-
-A \udef{normed space} $(\mathbb{F},V,+,\norm{\cdot})$ is a vector space $(\mathbb{F},V,+)$ equipped with a norm $\norm{\cdot}$.
+A \udef{normed space} is a vector space equipped with a norm.
 \end{definition}
-\begin{lemma}
-A subadditive, absolutely homogenous function $f:V\to \R$ is non-negative:
-\[ f: V\to \R_{\geq 0}. \]
-Thus norms and seminorms are functions $V\to \R_{\geq 0}$.
-\end{lemma}
-\begin{proof}
-For all $v\in V$ we have $0 = f(v-v) \leq f(v)+f(-v) = 2f(v)$, so $f(v) \geq 0$.
-\end{proof}
-
-\begin{proposition}[Reverse triangle inequality] \label{reverseTriangleInequality}
-Let $V$ be a vector space and $\norm{\cdot}: V\to \R$ a function that satisfies the triangle inequality and has $\norm{-v} = \norm{v}$ for all $v\in V$. Then $\forall v,w\in V$:
-\begin{enumerate}
-\item $|\norm{v}-\norm{w}|\leq \norm{v-w}$;
-\item $|\norm{v}-\norm{w}|\leq \norm{v+w}$.
-\end{enumerate}
-In particular this holds if $\norm{\cdot}$ is a norm or seminorm.
-\end{proposition}
-\begin{proof}
-We calculate $\norm{v} = \norm{v-w+w} \leq \norm{v-w} + \norm{w}$, so $\norm{v}-\norm{w}\leq \norm{v-w}$. By swapping $v\leftrightarrow w$ we also get $-\norm{v}+\norm{w}\leq \norm{w-v} = \norm{v-w}$ and thus the first inequality is established.
-
-For the second inequality, set $w\to -w$ and use $\norm{-w} = \norm{w}$.
-\end{proof}
-
-
 
 \begin{lemma}
 A subspace of a normed vector space is a normed space, with the norm given by the restriction of the norm in the larger space.
@@ -49,114 +15,6 @@ A subspace of a normed vector space is a normed space, with the norm given by th
 A vector with norm 1 is called a \udef{unit vector}. Unit vectors are often written with a hat:
 \[ \norm{\vhat{v}} = 1. \]
 \end{definition}
-
-\subsection{Seminorms}
-\begin{lemma}
-The kernel of a seminorm is a vector space.
-\end{lemma}
-Note this does not follow from \ref{kernelSubspace} because seminorms are not linear.
-\begin{proof}
-Let $p:V\to \R$ be a seminorm. We verify the subspace criterion \ref{subspaceCriterion}. First $0\in\ker(p)$ because $p(0) = p(0\cdot 0) = |0|p(0) = 0$.
-
-Now take $v,w\in \ker(p)$ and $\lambda\in \F$. Then $0\leq p(v+\lambda w) \leq p(v)+|\lambda|p(w) = 0$, so $v+\lambda w\in\ker(p)$.
-\end{proof}
-
-\begin{proposition} \label{gaugeSeminorms}
-Let $V$ be a vector space, $p: V\to \R$ a seminorm and $\lambda\in \F$. Then
-\[ \setbuilder{v\in V}{p(v) < \lambda} \qquad\text{and}\qquad \setbuilder{v\in V}{p(v) \leq \lambda} \]
-are absolutely convex and absorbent.
-\end{proposition}
-\begin{proof}
-Take $|\mu| + |\nu| \leq 1$ and $v,w\in\setbuilder{v\in V}{p(v) \leq \lambda}$. Then $p(|\mu|v + |\nu|w)\leq |\mu|p(v) + |\nu|p(w) \leq (|\mu|+|\nu|)\lambda \leq \lambda$.
-
-For absorbence, take $v\in V$. Then $\frac{\lambda}{2p(v)} v\in \setbuilder{v\in V}{p(v) < \lambda}$.
-\end{proof}
-
-\subsubsection{Gauges}
-\begin{definition}
-Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. The function
-\[ p_A: V\to \R^{\geq 0}: v\mapsto \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} \]
-is called the \udef{gauge} or \udef{Minkowski functional} of $A$.
-\end{definition}
-The function $p_A$ is well-defined (i.e.\ $p_A(v)$ is finite for all $v\in V$) because $A$ is absorbent.
-
-\begin{lemma} \label{gaugeLemma}
-Let $V$ be a vector space and $A\subseteq V$ an absorbent subset and $\lambda\in \R^{\geq 0}$. Then
-\begin{enumerate}
-\item $\lambda > p_A(v) \implies \lambda^{-1}v\in A$;
-\item $\lambda^{-1}v\in A \implies \lambda \geq p_A(v)$.
-\end{enumerate}
-In particular, we have
-\[ p_A^{\preimf}[\ball(0,1)] = \setbuilder{v\in V}{p_A(v) < 1} \subseteq A \subseteq \setbuilder{v\in V}{p_A(v) \leq 1} = p_A^{\preimf}[\cball(0,1)]. \]
-\end{lemma}
-
-\begin{proposition} \label{gaugeClassification}
-Let $V$ be a vector space and $f: V\to \R^{\geq 0}$ a function.
-Then the following are equivalent:
-\begin{enumerate}
-\item $f$ is positively homogenous (i.e.\ $f(tv) = tf(v)$ for all $v\in V$ and $t\geq 0$);
-\item for all $A\subseteq V$ such that $f^{\preimf}(\ball(0,1)) \subseteq A \subseteq f^{\preimf}(\cball(0,1))$, $A$ is absorbent and $f = p_A$;
-\item $f = p_A$ for some absorbent subset $A$.
-\end{enumerate}
-\end{proposition}
-Note that positive homogeneity is equivalent to strictly positive homogeneity.
-\begin{proof}
-$(1) \Rightarrow (2)$ To show absorbence, take some $v\in V$. Then for any $\epsilon>0$, $f\big((f(v)+\epsilon)^{-1}v\big) = \frac{f(v)}{f(v)+\epsilon} < 1$, so $(f(v)+\epsilon)^{-1}v\in A$.
-
-Now take some $A$ and fix some arbitrary $v\in V$. We have $p_A(v) = \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A}$, so
-\[ \begin{aligned}
-p_A(v) &\leq \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda f^{\preimf}(\ball(0,1))} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in f^{\preimf}(\ball(0,\lambda))} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{f(v) < \lambda} = f(v)
-\end{aligned} \quad\text{and}\quad \begin{aligned}
-p_A(v) &\geq \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda f^{\preimf}(\cball(0,1))} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in f^{\preimf}(\cball(0,\lambda))} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{f(v) \leq \lambda} = f(v).
-\end{aligned} \]
-We conclude that $f(v) = p_A(v)$.
-
-$(2) \Rightarrow (3)$ Immediate.
-
-$(3) \Rightarrow (1)$ We calculate for $t \geq 0$
-\begin{align*}
-f(tv) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{tv\in \lambda A} = \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in t^{-1}\lambda A} \\
-&= \inf\setbuilder{t\lambda\in \R^{\geq 0}}{v\in \lambda A} = t\inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} = tf(v).
-\end{align*}
-\end{proof}
-
-\begin{proposition}
-Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. Then
-\begin{enumerate}
-\item $p_A$ is absolutely homogenous if $A$ is balanced;
-\item $p_A$ is subadditive if $A$ is convex;
-\item $p_A$ is point-separating if $A$ is balanced and contains only the trivial subspace.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) By \ref{balancedLemma} we have $\mu A = |\mu| A$ and thus
-\begin{align*}
-p_A(\mu\cdot v) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{\mu\cdot v\in \lambda A} = \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \frac{\lambda}{\mu} A} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \frac{\lambda}{|\mu|} A} = \inf\setbuilder{|\mu|\lambda\in \R^{\geq 0}}{v\in \lambda A} = |\mu|\cdot p_A(v).
-\end{align*}
-
-(2) Take $v,w\in V$. Now take arbitrary $\epsilon > 0$, so $(p_A(v)+\epsilon)^{-1}v \in A$ and $(p_A(w)+\epsilon)^{-1}w \in A$ by \ref{gaugeLemma}. By convexity of $A$, we have
-\[ \frac{v+w}{p_A(v)+p_A(w)+2\epsilon} = \frac{p_A(v)+\epsilon}{p_A(v)+p_A(w)+2\epsilon}(p_A(v)+\epsilon)^{-1}v + \frac{p_A(w)+\epsilon}{p_A(v)+p_A(w)+2\epsilon}(p_A(w)+\epsilon)^{-1}w \in A. \]
-By \ref{gaugeLemma} this means $p_A(v)+p_A(w)+2\epsilon \geq p_A(v+w)$ and because $\epsilon$ was arbitrary, we conclude that $p_A(v+w) \leq p_A(v)+p_A(w)$.
-
-(3) Assume $A$ contains only the trivial subspace. Then for all $v\in V$ there exists some $\lambda\in \F$ such that $\lambda\cdot v\notin A$. Now for all $|c|\geq |\lambda|$, $c\cdot v\notin A$ because $A$ is balanced. Then $p_A(2\lambda\cdot v) \neq 0$ and because $p_A$ is absolutely homogeneous we have $p_A(v) = (2\lambda)^{-1}p_A(2\lambda\cdot v) \neq 0$.
-\end{proof}
-\begin{corollary}
-The gauge of an absolutely convex and absorbent subset is a seminorm. If the subset contains only the trivial subspace, then the gauge is a norm.
-\end{corollary}
-
-\begin{proposition}
-Let $V$ be a vector space and $A,B\subseteq V$ absolutely convex and absorbent subsets.
-\begin{enumerate}
-\item For all $\lambda\in \F\setminus\{0\}$, the gauge of $\lambda A$ is $|\lambda|^{-1}p_A$.
-\item The gauge of $A\cap B$ is $\max\{p_A,p_B\}$.
-\item If $A\subseteq B$, then $p_B \leq p_A$.
-\end{enumerate}
-\end{proposition}
 
 \subsection{The topology of a normed space}
 \begin{definition}
@@ -227,6 +85,10 @@ Continuity follows because normed vector spaces are sequential spaces.
 \item[$\boxed{(4) \Rightarrow (1)}$] Lipschitz continuity implies continuity \ref{LipschitzcontinuousContinuous}.
 \end{itemize}
 \end{proof}
+\begin{corollary}
+A linear operator $L:V\to W$ between normed spaces is a homeomorphism \textup{if and only if} there exists $C_1,C_2> 0$ such that
+\[ \forall x\in V:\qquad C_1\norm{x}\leq \norm{L(x)} \leq C_2\norm{x}. \]
+\end{corollary}
 
 \begin{definition}
 An operator $L$ between normed vector spaces is called \udef{bounded} if it is (Lipschitz) continuous.
@@ -242,6 +104,12 @@ An anti-linear map between complex vector spaces is continuous \textup{if and on
 \begin{proof}
 An anti-linear map $A:V\to W$ is an $\R$-linear map $A:V_\R\to W_\R$. Now $V_\R, W_\R$ have the same norms as $V,W$ and thus the same topology. So $A:V\to W$ is continuous if and only if $A:V_\R\to W_\R$ is continuous.
 \end{proof}
+
+\subsubsection{Equicontinuity}
+\begin{proposition}
+Let $\mathcal{F}$ be a set of linear operators in $(V\to W)$. Then $\mathcal{F}$ is equicontinuous at $x_0\in V$ \textup{if and only if} there exists $C>0$ such that
+\[ \forall f\in\mathcal{F}:\qquad \norm{f(x_0)} \leq C\norm{x_0}. \]
+\end{proposition}
 
 \subsubsection{Comparison of norm topologies}
 \begin{definition}

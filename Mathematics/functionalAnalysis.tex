@@ -137,6 +137,36 @@ Now assume $\xi$ is a topological vector space convergence and $N = \neighbourho
 \end{enumerate}
 \end{proof}
 
+\subsection{Continuity}
+\begin{lemma}
+Let $V$ be a TVS and $W$ a normed space. A function $f: V\to W$ is continuous \textup{if and only if} there exists a neighbourhood $U\in \neighbourhoods_V(0)$ such that $f$ is bounded on $U$.
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a TVS. A linear functional $f:V\to \F$ on $V$ is continuous \textup{if and only if} its kernel is closed.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+TODO???
+\begin{proposition}
+Let $V$ and $W$ be TVSs and $f: V\to W$ a linear function.
+\begin{enumerate}
+\item If $f$ is continuous and $W$ is Hausdorff, then $\ker(f)$ is closed.
+\item If $f$ has closed kernel and finite-dimensional image, then $f$ is continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Because $W$ is Hausdorff, it is also $T_1$ and thus $\{0\}$ is closed by \ref{FrechetCharacterisation}. Then $\ker(f) = f^{\preimf}(\{0\})$ is closed by \ref{continuity}.
+
+(2) 
+\end{proof}
+??
+
 
 \subsection{Locally convex convergence}
 \begin{definition}
@@ -169,7 +199,7 @@ This almost completely follows from \ref{TVSconstruction} and \ref{locallyConvex
 \end{proof}
 
 \subsubsection{Seminorms and gauges}
-\begin{proposition}
+\begin{proposition} \label{seminormContinuity}
 Let $\sSet{V,\xi}$ be a TVS and $p_K:V\to \R^{\geq 0}$ the gauge of some absorbent set $K$. Then the following are equivalent:
 \begin{enumerate}
 \item $p_K$ is continuous;
@@ -180,15 +210,25 @@ Let $\sSet{V,\xi}$ be a TVS and $p_K:V\to \R^{\geq 0}$ the gauge of some absorbe
 \begin{proof}
 $(1) \Rightarrow (2)$ Immediate.
 
-$(2) \Rightarrow (3)$
+$(2) \Rightarrow (3)$ We have $p_K^{\preimf}[\ball(0,1)] \subseteq K$ by \ref{gaugeClassification}. If $p_K$ is continuous at $0$, then $K$ is a neighbourhood of $0$ by \ref{pretopologicalContinuityVicinities}.
 
-
-First assume $p_K$ continuous. Then $p_K^{\preimf}[\ball(0,1)] \subseteq K$ by \ref{gaugeClassification}, so $K$ is a neighbourhood of $0$ by \ref{pretopologicalContinuityVicinities}.
-
-Conversely assume $K$ a neighbourhood of $0$ and take some neighbourhood $\Gamma$ of $0$ in $\R$. Then $\Gamma$ contains a ball $\ball{0,\epsilon}$. By \ref{pretopologicalContinuityVicinities}, it is enough to show that $p_K^{\preimf}[\ball(0,\epsilon)]$ is a neighbourhood. Indeed
+$(3) \Rightarrow (1)$ Assume $K$ a neighbourhood of $0$ and take some neighbourhood $\Gamma$ of $0$ in $\R$. Then $\Gamma$ contains a ball $\ball(0,\epsilon)$. By \ref{pretopologicalContinuityVicinities}, it is enough to show that $p_K^{\preimf}[\ball(0,\epsilon)]$ is a neighbourhood. Indeed
 \[ p_K^{\preimf}[\ball(0,\epsilon)] \supseteq p_K^{\preimf}\left[\cball\left(0,\frac{\epsilon}{2}\right)\right] = p_K^{\preimf}\left[\frac{\epsilon}{2}\cball(0,1)\right] = \frac{\epsilon}{2} p_K^{\preimf}[\cball(0,1)] \supseteq \frac{\epsilon}{2} K, \]
 and the result follows because $\frac{\epsilon}{2}K$ is a neighbourhood of $0$ by \ref{TVSconstruction}.
 \end{proof}
+
+\begin{proposition}
+Let $V$ be a vector space. A topology on $V$ is locally convex \textup{if and only if} it is the initial topology w.r.t. some set $S$ of seminorms on $V$.
+\end{proposition}
+\begin{proof}
+Assume $V$ is a locally convex TVS. Let $\mathcal{B}$ be a locally convex base of $\neighbourhoods(0)$. Define $S = \setbuilder{p_K}{K\in \mathcal{B}}$. By \ref{seminormContinuity} all seminorms in $S$ are continuous.
+
+By \ref{topologicalInitialFinalConvergence} and \ref{seminormContinuity} each $W$ in the neighbourhood of the origin in the initial topology w.r.t. $S$ contains a scaled version of some $K$ in $\mathcal{B}$. So the topology on $V$ is coarser than the initial topology, meaning they are equal.
+
+TODO converse.
+\end{proof}
+
+Note: metrisable is not equivalent to normable!
 
 \section{General duality theory}
 \subsection{Paired spaces}
@@ -368,145 +408,7 @@ Let $X$ be a locally compact Hausdorff space. For any positive linear functional
 \[ \forall f\in C_c(X): \quad \psi(f) = \int_X f(x)\diff{\mu(x)}. \]
 \end{theorem}
 
-\begin{definition}
-Let $V$ be a vector space over a field $\mathbb{F}$.
-\begin{enumerate}
-\item A \udef{functional} on $V$ is a map $V\to \F$;
-\item A \udef{linear functional} on $V$ is a linear map from $V$ to $\mathbb{F}$.
-\end{enumerate}
-\end{definition}
 
-\section{Non-linear functionals}
-\subsection{Sublinear functionals}
-\begin{definition}
-Let $V$ be a vector space. A functional $p:V\to \R$ is called \udef{sublinear} if it is
-\begin{enumerate}
-\item subadditive: $\forall x,y\in V: p(x+y) \leq p(x) + p(y)$;
-\item positive homogenous: $\forall x\in V,\lambda\geq 0: p(\lambda x) = \lambda p(x)$.
-\end{enumerate}
-\end{definition}
-Thus norms and seminorms are sublinear.
-
-\subsection{Convex functionals}
-\begin{definition}
-Let $V$ be a vector space. A functional $p:V\to \R$ is called \udef{convex} if for all $x,y\in V$ and $\lambda\in [0,1]$
-\[ p(\lambda x + (1-\lambda)y) \leq \lambda p(x) + (1-\lambda)p(y). \]
-\end{definition}
-Clearly every sublinear functional is convex.
-
-\begin{lemma}
-Let $p: V\to\R$ be convex functional. Then
-\[ P: V\to\R: x\mapsto \inf_{t>0} t^{-1}p(tx) \]
-is sublinear and $P(x)\leq p(x)$.
-
-Also, if $f:V\to \R$ is a linear functional, then $f\leq p \iff f\leq P$.
-\end{lemma}
-\begin{proof}
-For sublinearity: let $x,y\in V$, then for all $s,t>0$
-\[ P(x+y) \leq \frac{s+t}{st}p\left(\frac{st}{s+t}(x+y)\right) = \frac{s+t}{st}p\left(\frac{s}{s+t}(tx)+\frac{t}{s+t}(sy)\right) \leq t^{-1}p(tx) + s^{-1}p(sy). \]
-This implies that $P(x+y)\leq P(x)+P(y)$.
-
-For positive homogeneity: let $x\in V,\lambda\geq 0$
-\[ P(\lambda x) = \inf_{t>0} t^{-1}p(t\lambda x) = \inf_{t\lambda>0} \lambda (t\lambda)^{-1}p(t\lambda x) = \inf_{t>0} \lambda (t)^{-1}p(tx) = \lambda P(x). \]
-
-Finally we prove that $f\leq p \implies f\leq P$ for linear functionals $f$. For all $t>0$ we have $f(tx) \leq p(tx)$, which implies $f(x) = t^{-1}f(tx) \leq t^{-1}p(tx)$. So $f\leq P$.
-\end{proof}
-
-\section{Hahn-Banach extension theorems}
-\begin{theorem}[Hahn-Banach majorised by convex functionals] \label{convexHahnBanach}
-Let $V$ be a real vector space, $U\subset V$ a subspace and $p$ a convex functional on $V$. Let $f:U\to\R$ be a linear functional that is bounded by $p$:
-\[ \forall u\in U: \quad f(u) \leq p(u). \]
-Then $f$ has an extension $\tilde{f}: V\to \R$ such that $\tilde{f}$ is a linear functional on $V$ bounded by $p$:
-\[ \forall v\in V: \tilde{f}(v) \leq p(v) \qquad \text{and} \qquad \forall u\in U: \tilde{f}(u) = f(u). \]
-\end{theorem}
-\begin{proof}
-As a first step, we want to extend $f$ to a functional $g$ on a space that is one dimension larger than $U$. This means $g$ is of the form
-\[ g: U\oplus\Span\{v_1\}\to\R: v + \alpha v_1 \mapsto f(v) + \alpha c \]
-for some $v_1\in V\setminus U$.
-
-If we want $g$ to be majorised by $p$, then we need to find a $c$ such that
-\[ \forall v\in U: \forall \alpha\in\R: \; g(\alpha v_1 + v) = \alpha c + f(v) \leq p(\alpha v_1 + v) \]
-this means that we need
-\[ \forall v\in U: \forall \alpha\in\R:\; \frac{-p(v - |\alpha|v_1) + f(v)}{|\alpha|} \leq c \leq \frac{p(v + |\alpha|v_1) - f(v)}{|\alpha|} \]
-and we can find such a $c$ if and only if
-\[ \forall v\in U: \forall \alpha\in\R:\; -p(v - |\alpha|v_1) + f(v) \leq p(v + |\alpha|v_1) - f(v), \]
-which is equivalent to $2f(v) \leq p(v+|\alpha|v_1)+p(v-|\alpha|v_1)$. This follows from
-\begin{align*}
-f(v) \leq p(v) &= p(\tfrac{1}{2}(v+|\alpha|v_1) + \tfrac{1}{2}(v-|\alpha|v_1)) \\
-&\leq \tfrac{1}{2}p(v+|\alpha|v_1) + \tfrac{1}{2}p(v-|\alpha|v_1).
-\end{align*}
-So we can extend the domain of $f$ by one dimension such that it is still majorised by $p$.
-
-An extension by multiple dimensions is determined by a subset of $V\times \R$. Consider the family of all such subsets that determine a majorised extension of $f$. This is a family of finite character. We apply the Teichmüller-Tukey lemma, \ref{ZornEquivalents}, to obtain a maximal element.
-
-This maximal element has domain $V$, because if it did not, it could be extended and was not a maximal element.
-\end{proof}
-Clearly if $V$ has a well-ordered Hamel basis, we do not need choice as we can just take successive $v$s in the basis and find $c$s constructively.
-\begin{corollary}[Hahn-Banach majorised by sublinear functionals] \label{sublinearHahnBanach}
-Any majorant $p$ that is sublinear is also convex and can be used in the Hahn-Banach theorem.
-\end{corollary}
-\begin{corollary}[Hahn-Banach majorised by seminorms] \label{seminormHahnBanach}
-Let $(\mathbb{F},V,+)$ be a real or complex vector space, $U\subset V$ a subspace and $p$ a seminorm on $V$. Let $f:U\to\mathbb{F}$ be a linear functional that is bounded by $p$:
-\[ \forall u\in U: \quad |f(u)| \leq p(u). \]
-Then $f$ has an extension $\tilde{f}: V\to \R$ such that $\tilde{f}$ is a linear functional on $V$ bounded by $p$:
-\[ \forall v\in V: |\tilde{f}(v)| \leq p(v) \qquad \text{and} \qquad \forall u\in U: \tilde{f}(u) = f(u). \]
-\end{corollary}
-\begin{proof}
-For \emph{real} vector fields, we notice that every seminorm is a sublinear function, so we can use \ref{sublinearHahnBanach} to find an extension $\tilde{f}$. We then just need to check it satisfies $\forall v\in V: |\tilde{f}(v)| \leq p(v)$.
-From \ref{sublinearHahnBanach} we know $\forall v\in V: \tilde{f}(v) \leq p(v)$.
-To prove $-\tilde{f}(v) \leq p(v)$, we calculate
-\[ -\tilde{f}(v) = \tilde{f}(-v) \leq p(-v) = |-1|p(v) = p(v). \]
-
-For \emph{complex} vector fields, we can write $f= f_1 + if_2$ with $f_1,f_2$ real functionals on $U$, which can also be seen as a real vector space. First take $f_1$. Now $\forall u\in U f_1(u) \leq |f(x)| \leq p(x)$, so we can extend $f_1$ to $\tilde{f}_1$ by \ref{sublinearHahnBanach}.
-
-Now by complex linearity, $if(u) = f(iu)$ so
-\[ i[f_1(u) + if_2(u)] = -f_2(u) + if_1(u) = f_1(iu) + if_2(iu) \implies f_2(u) = -if_1(iu). \]
-So we set $\tilde{f}(v) = \tilde{f}_1(v)-i\tilde{f}_1(iv)$. It is easy to show $\tilde{f}$ is $\C$-linear. For boundedness, write $\tilde{f}(v) = |\tilde{f}(v)|e^{i\theta}$ then
-\[ |\tilde{f}(v)| = e^{-i\theta}\tilde{f}(v) = \tilde{f}(e^{-i\theta}v) = \tilde{f}_1(e^{-i\theta}v) \leq p(e^{-i\theta}v) = |e^{-i\theta}|p(v) = p(v). \]
-\end{proof}
-
-\begin{corollary}
-Let $X$ be a normed space and $Z\subset X$ a subspace. Any bounded linear functional in $\tdual{Z}$ can be extended to a bounded linear functional in $\tdual{X}$ with the same norm.
-\end{corollary}
-\begin{proof}
-Let $f:Z\to \mathbb{F}$ be such a functional. Extend $f$ by the previous theorem, \ref{seminormHahnBanach}, using $p(x) = \norm{f}_Z\norm{x}$.
-\end{proof}
-\begin{corollary} \label{existenceBoundedFunctionalOfSameNorm}
-Let $X$ be a normed space and $x_0\neq 0$ an element of $X$. Then there exists a bounded linear functional $\omega_{x_0}$ such that
-\[ \norm{\omega_{x_0}} = 1 \qquad \text{and} \qquad \omega_{x_0}(x_0)=\norm{x_0}. \]
-\end{corollary}
-\begin{proof}
-Extend the functional $f: \Span\{x_0\}\to \mathbb{F}$ defined by
-\[ f(x) = f(ax_0) = a\norm{x_0}. \]
-\end{proof}
-\begin{corollary}
-Let $X$ be a normed space. Then $\forall x\in X:$
-\[ \norm{x} = \sup_{\substack{f\in X' \\ f\neq 0}}\frac{|f(x)|}{\norm{f}}. \]
-\end{corollary}
-\begin{proof}
-We calculate
-\[ \norm{x} \geq \sup_{\substack{f\in X' \\ f\neq 0}}\frac{|f(x)|}{\norm{f}} \geq \frac{|\omega_{x}(x)|}{\norm{\omega_{x}}} = \frac{\norm{x}}{1} = \norm{x} \]
-where the first inequality follows from $|f(x)|\leq \norm{f}\norm{x}$ for all $f\in X', x\in X$.
-\end{proof}
-
-TODO: locally convex Hausdorff spaces.
-
-\subsection{Banach limits}
-\begin{proposition}
-There exists a linear map $L:l^\infty(\N) \to \C$ satisfying
-\begin{enumerate}
-\item $\displaystyle L(x) = \lim_{n\to \infty}x_n$ if the limit exists;
-\item $L((x_{n+1})_{n\in\N}) = L((x_n)_{n\in\N})$;
-\item if $\forall n\in\N:x_n\geq 0$, then $L(x) \geq 0$;
-\item $\norm{L} = 1$.
-\end{enumerate}
-Such a linear map is called a \udef{Banach limit}.
-\end{proposition}
-\begin{proof}
-TODO, after Cesàro means.
-\end{proof}
-
-\subsection{Hahn-Banach separation}
 
 
 
