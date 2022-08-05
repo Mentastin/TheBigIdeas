@@ -88,15 +88,39 @@ Let initial convergence w.r.t. a set of linear functions is a vector space conve
 Let $\sSet{V,\xi}$ be a vector space convergence and $A\subseteq V$. Then
 \begin{enumerate}
 \item if $A$ is balanced, then $\adh_\xi(A)$ is balanced;
-\item if $A$ is convex, then $\adh_\xi(A)$ is convex.
+\item if $A$ is convex, then $\adh_\xi(A)$ is convex;
+\item if $A$ is a subspace, then $\adh_\xi(A)$ is a subspace.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Take $|\lambda|\leq 1$ and $v\in \adh_\xi(A)$, then we need to show that $\lambda v \in \adh_\xi(A)$. We have $A\in \vicinity_\xi(v)^{\mesh}$ and $A\subseteq \lambda^{-1}A$. So for all $B\in \vicinity_\xi(v)$:
+(1) We use \ref{productAdherence} and \ref{adherenceContinuity} to compute
+\begin{align*}
+\cball(0,1)\cdot \adh_\xi(A) &= \cdot^\imf[\adh_\F(\cball(0,1))\times \adh_\xi(A)] = \cdot^\imf[\adh_{\F\otimes \xi}(\cball(0,1)\times A)] \\
+&\subseteq \adh_{\xi}\big(\cdot^\imf[\cball(0,1)\times A]\big) = \adh_{\xi}(\cball(0,1)\cdot A) = \adh_\xi(A).
+\end{align*}
+\textit{Alternative proof:}
+Take $|\lambda|\leq 1$ and $v\in \adh_\xi(A)$, then we need to show that $\lambda v \in \adh_\xi(A)$. We have $A\in \vicinity_\xi(v)^{\mesh}$ and $A\subseteq \lambda^{-1}A$. So for all $B\in \vicinity_\xi(v)$:
 \[ A\mesh B \quad\implies\quad \lambda^{-1}A\mesh B \quad\implies\quad A\mesh \lambda B. \]
 Thus $A\in \vicinity_\xi(\lambda v)^{\mesh}$, which is what we needed to show by \ref{principalAdherenceInherence}.
 
 (2) Take $0\leq r \leq 1$ and $v,w\in \adh_\xi(A)$, then we need to show that $rv + (1-r)w \in \adh_\xi(A)$. To that end, take some arbitrary $B\in \vicinity_\xi(rv+(1-r)w)$. Now $B - (rv+(1-r)w) \in \vicinity_\xi(0)$, so by \ref{vicinityFactorisation} we can find a $U\in\vicinity_\xi(0)$ such that $U+U \subseteq B - (rv+(1-r)w)$, which means $r\big(r^{-1}U + v\big) + (1-r)\big((1-r)^{-1}U + w\big) \subseteq B$. Now $r^{-1}U, (1-r)^{-1}U\in \vicinity_\xi(0)$ because $v\mapsto\lambda\cdot v$ is a homeomorphism (\ref{continuityLemmaVectorConvergence}) and \ref{homeomorphismPreservation}, so $r^{-1}U + v \mesh A$ and $(1-r)^{-1}U + w \mesh A$. We take $v'\in r^{-1}U + v \cap A$ and $w'\in (1-r)^{-1}U + w \cap A$. Then $rv'+(1-r)w'$ is in $A$ by convexity and in $B$ by construction, so $A\mesh B$.
+
+(3) Clearly $\adh_\xi(A)$ is not empty. It is then enough to verify that $\adh_\xi(A)+\adh_\xi(A)\subseteq \adh_\xi(A)$ and $\F\cdot \adh_\xi(A) \subseteq \adh_\xi(A)$. We use \ref{productAdherence} and \ref{adherenceContinuity} to compute
+\begin{align*}
+\adh_\xi(A) + \adh_\xi(A) &= +^\imf[\adh_\xi(A)\times \adh_\xi(A)] = +^\imf[\adh_{\xi\otimes \xi}(A\times A)] \\
+&\subseteq \adh_{\xi}\big(+^\imf[A\times A]\big) = \adh_{\xi}(A + A) = \adh_\xi(A)
+\end{align*}
+and
+\begin{align*}
+\F\cdot \adh_\xi(A) &= \cdot^\imf[\adh_\F(\F)\times \adh_\xi(A)] = \cdot^\imf[\adh_{\F\otimes \xi}(\F\times A)] \\
+&\subseteq \adh_{\xi}\big(\cdot^\imf[\F\times A]\big) = \adh_{\xi}(\F\cdot A) = \adh_\xi(A).
+\end{align*}
+\end{proof}
+\begin{corollary} \label{hyperplaneClosedDense}
+A hyperplane in a convergence vector space is either closed or dense.
+\end{corollary}
+\begin{proof}
+Let $H$ be a hyperplane in a vector space $V$. Then $H \subseteq \adh(H)$ and $\adh(H)$ is a subspace. Because $H$ is a coatom, we have either $\adh(H) = H$ or $\adh(H) = V$. In the first case $H$ is closed, in the second dense.
 \end{proof}
 
 \section{Topological vector spaces}
@@ -138,19 +162,35 @@ Now assume $\xi$ is a topological vector space convergence and $N = \neighbourho
 \end{proof}
 
 \subsection{Continuity}
-\begin{lemma}
-Let $V$ be a TVS and $W$ a normed space. A function $f: V\to W$ is continuous \textup{if and only if} there exists a neighbourhood $U\in \neighbourhoods_V(0)$ such that $f$ is bounded on $U$.
+\begin{lemma} \label{continuityToNormedSpace}
+Let $V$ be a TVS and $W$ a normed space. A linear function $f: V\to W$ is continuous \textup{if and only if} there exists a neighbourhood $U\in \neighbourhoods_V(0)$ such that $f$ is bounded on $U$.
 \end{lemma}
 \begin{proof}
+Assume $f$ continuous, then $\ball(0,1)\in \neighbourhoods_W(0) = \neighbourhoods_W(f(0))$ implies $U = f^{\preimf}(\ball(0,1)) \in \neighbourhoods_V(0)$ by \ref{pretopologicalContinuityVicinities} and $f$ is bounded on $U$ by construction.
 
+Now assume there exists a neighbourhood $U\in \neighbourhoods_V(0)$ such that $f$ is bounded on $U$. Then $f^{\imf}(U)\subseteq \ball_W(0,C)$. It is then enough to show that for all $\ball_W(0,\epsilon)$, $f^{\preimf}(\ball_W(0,\epsilon)) \in \neighbourhoods_V(0)$. Indeed
+\[ f^{\preimf}(\ball_W(0,\epsilon)) = \frac{\epsilon}{C} f^{\preimf}(\ball_W(0,C)) = \frac{\epsilon}{C}U \in \neighbourhoods_V(0). \]
 \end{proof}
 
 \begin{proposition}
-Let $V$ be a TVS. A linear functional $f:V\to \F$ on $V$ is continuous \textup{if and only if} its kernel is closed.
+Let $V$ be a TVS and $f:V\to \F$ a linear functional on $V$. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is continuous;
+\item $\ker(f)$ is closed;
+\item $\ker(f)$ is not dense.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO
+$(1) \Rightarrow (2)$ Because $\ker(f) = f^{\preimf}(\{0\})$, it is closed by \ref{continuity}.
+
+$(2) \Rightarrow (1)$ Now assume $\ker(f)$ closed. If $\ker(f) = V$, then $f$ is constant and thus continuous by \ref{continuityConstructions}. If $\ker(f) \neq V$, we can find some some $x\in \ker(f)^c$, which is open. Thus $\ker(f)^c - x$ is a neighbourhood of the origin, meaning we can take a balanced subset $A$ by \ref{TVSconstruction}. Now $(x+A)\perp \ker(f)$ by construction, so $f$ is bounded on $A$ by \ref{functionalBoundedNeighbourhood} and thus $f$ is continuous by \ref{continuityToNormedSpace}.
+
+$(2) \Leftrightarrow (3)$ By \ref{kernelHyperplane} $\ker(f)$ is a hyperplane and by \ref{hyperplaneClosedDense} this hyperplane is either closed or dense.
 \end{proof}
+
+\begin{proposition}
+Let $V$ be a TVS and $f: V\to \F$ a linear functional. Then $\ker(f)$ is either closed or dense.
+\end{proposition}
 
 TODO???
 \begin{proposition}
@@ -2173,7 +2213,7 @@ We claim $D$ is the orthonormal set we want:
 Firstly it is maximal.
 Assume, towards a contradiction, that $D$ is not maximal in $H$, so there exists an orthonormal set $D'\supsetneq D$. Take $w\in D'\setminus D$ and let $w'$ be the normalisation of $w - \inner{v,w}v$. Then $w' \perp v$ and $w' \perp D$, so $\{v\}\cup D\cup\{w'\}$ is an orthonormal set in $\Span\{v\} + H$, which contradicts the maximality of $\{v\}\cup D$.
 
-Secondly it cannot be total. Indeed if $\closure_H(\Span(D)) = H\cap\overline{\Span(D)}$ were equal to $H$, then $H \subseteq \overline{\Span(D)}$ and thus $\mathcal{H} = \overline{H} \subseteq \overline{\Span(D)} \subseteq \mathcal{H}$, meaning $\overline{\Span(D)} = \mathcal{H}$. But $v\notin \overline{\Span(D)}$, so $\overline{\Span(D)} \neq \mathcal{H}$.
+Secondly it cannot be total. Indeed if $\Closure_H(\Span(D)) = H\cap\overline{\Span(D)}$ were equal to $H$, then $H \subseteq \overline{\Span(D)}$ and thus $\mathcal{H} = \overline{H} \subseteq \overline{\Span(D)} \subseteq \mathcal{H}$, meaning $\overline{\Span(D)} = \mathcal{H}$. But $v\notin \overline{\Span(D)}$, so $\overline{\Span(D)} \neq \mathcal{H}$.
 
 \item 2. clearly implies 1. We can also adapt the proof above to show 2. implies $H$ is a Hilbert space:
 Assume $H$ is not complete and let $\mathcal{H}$ be the completion of $H$. There exists a $v\in \mathcal{H}\setminus H$. All orthogonal complements are taken in the completion.
@@ -3102,10 +3142,10 @@ Cfr. dilation theory through Cayley transform.
 
 \subsubsection{Positive self-adjoint extensions of symmetric operators}
 \begin{theorem}[Friedrich's extension]
-Let $A$ be a positive symmetric operator on a Hilbert space $H$. Then $A$ has a unique positive self-adjoint extension $\widetilde{A}$ with domain $\dom(\widetilde{A}) \subseteq \closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
+Let $A$ be a positive symmetric operator on a Hilbert space $H$. Then $A$ has a unique positive self-adjoint extension $\widetilde{A}$ with domain $\dom(\widetilde{A}) \subseteq \Closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
 \end{theorem}
 \begin{proof}
-Set $H_A \defeq \closure_{\norm{\cdot}_{A+\id}}(\dom(A))$. By \ref{energyNormTopology}, we have $H_A \subseteq \closure_{\norm{\cdot}}(\dom(A))$.
+Set $H_A \defeq \Closure_{\norm{\cdot}_{A+\id}}(\dom(A))$. By \ref{energyNormTopology}, we have $H_A \subseteq \Closure_{\norm{\cdot}}(\dom(A))$.
 
 For \undline{existence}, we can construct the operator $\widetilde{A}$ as follows:
 \begin{align*}
@@ -3116,7 +3156,7 @@ Now $\widetilde{A}$ is an extension of $A$, because for all $x\in \dom(A)$, we c
 
 But $\dom(\widetilde{A})$ may be larger than $\dom(A)$, because we can extended $\inner{y,x}_{A+\id}$ to be defined on all of $H_A$ by continuity.
 
-By construction $\dom(\widetilde{A}) \subseteq \closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
+By construction $\dom(\widetilde{A}) \subseteq \Closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
 
 Now we claim $\im(\widetilde{A} + \id) = H$. Indeed for any $x'\in H$, the functional $H_A \to H_A: y\mapsto \inner{y,x'}$ is bounded. By Riesz representiation \ref{rieszRepresentation}, we can find an $x\in H_A$ such that $\inner{y,x}_{A+\id} = \inner{y,x'}$. Thus $(\widetilde{A} + \id)x = x'$.
 
