@@ -228,13 +228,12 @@ Every linearly independent set of vectors in $V$ with length $\dim V$ is a basis
 Every spanning set of vectors in $V$ with length $\dim V$ is a basis of $V$.
 \end{corollary}
 
-\begin{proposition}
+\begin{proposition} \label{vectorSpaceEquality}
 Let $V$ be a finite-dimensional vector space and $U$ a subspace of $V$. Then
 \begin{enumerate}
 \item $U$ is finite-dimensional and $\dim U \leq \dim V$;
 \item $\dim U = \dim V \iff U=V$.
 \end{enumerate}
-\label{vectorSpaceEquality}
 \end{proposition}
 \begin{proof}
 We construct a basis for $U$ using the following process:
@@ -863,10 +862,19 @@ Most of the types of sets of vectors in this section are of this form.
 \begin{definition}
 A subset $S$ of a real or complex vector space $V$ is called
 \begin{itemize}
-\item \udef{star-shaped} at $a\in V$ if for all $x\in S$ and $0\leq r \leq 1$, $rx + (1-r)a\in C$;
-\item \udef{absolutely star-shaped} at $a\in V$ if for all $x\in S$ and $|r| \leq 1$, $rx + (1-r)a\in C$.
+\item \udef{star-shaped at} $a\in V$ if for all $x\in S$ and $0\leq r \leq 1$, $rx + (1-r)a\in C$;
+\item \udef{absolutely star-shaped at} $a\in V$ if for all $x\in S$ and $|r| \leq 1$, $rx + (1-r)a\in C$;
+\item \udef{(absolutely) star-shaped} if there exists $a\in V$ such that $S$ is (absolutely) star-shaped at $a$.
 \end{itemize}
 \end{definition}
+
+\begin{lemma}
+Let $V$ be a vector space and $S\subseteq V$ a subset. Then the following are equivalent:
+\begin{enumerate}
+\item $S$ is star-shaped at $a$;
+\item $r S + (1-r)a \subseteq S$ for all $0\leq r \leq 1$.
+\end{enumerate}
+\end{lemma}
 
 \subsection{Affine sets}
 \begin{definition}
@@ -922,11 +930,12 @@ Let $V$ be a vector space and $B\subseteq V$ a subset. Then
 Let $V$ be a vector space and $B\subseteq V$ a subset. Then the following are equivalent:
 \begin{enumerate}
 \item $B$ is balanced;
+\item $B\cap U$ is balanced for all subspaces $U\subseteq V$;
 \item $\balanced(B) = \cball(0,1)\cdot B \subseteq B$;
 \item $\balanced(B) = \cball(0,1)\cdot B = B$;
 \item $B\subseteq \balancedCore(B)$;
 \item for all $|r|\geq 1$, $C\subseteq rC$;
-\item $B$ is symmetric and star-shaped at $0$.
+\item $B$ is absolutely star-shaped at $0$.
 \end{enumerate}
 \end{lemma}
 
@@ -937,20 +946,16 @@ Let $V$ be a vector space and $B\subseteq V$ a balanced subset. Then
 \end{enumerate}
 \end{lemma}
 
-\begin{lemma} \label{balancedCoreConvexSet}
-The balanced core of a convex set is convex.
-\end{lemma}
-\begin{proof}
-Let $B\subseteq V$ be a convex subset of a vector space $V$. Then
-$\balancedCore(B) = \begin{cases}
-\bigcap_{|r|\geq 1}rB & 0\in B\\
-\emptyset & 0\notin B
-\end{cases}$. The empty set is convex. For all $r\in \F$, $rB$ is convex by \ref{translationScalingConvexSet} and arbitrary intersections of convex sets are convex.
-\end{proof}
 
-\subsection{Convex sets}
+
+\subsection{Convex combinations and sets}
 \begin{definition}
-A subset $C$ of a real or complex vector space $V$ is called \udef{convex} if for all $x,y\in C$ and $0\leq r \leq 1$, $rx + (1-r)y\in C$.
+Let $V$ be a vector space and $N\in \N$. A \udef{convex combination} of $\seq{x_n}_{n=0}^N \in V^N$ is a vector of the form
+\[ \sum_{n=0}^N \lambda_n x_n \qquad \text{where $\seq{\lambda_n}_{n=0}^N \in \R^N$ is a set of reals such that} \sum_{n=0}^N \lambda_n = 1. \]
+\end{definition}
+
+\begin{definition}
+A subset $C$ of a real or complex vector space $V$ is called \udef{convex} if for all $x,y\in C$, all convex combinations of $x$ and $y$ are in $C$. In other words, $rx + (1-r)y\in C$ for all $0\leq r \leq 1$.
 
 The closure of a set $X\subseteq V$ into the lattice of convex sets is called the \udef{convex hull} of $X$ and is denoted $\convex(X)$.
 \end{definition}
@@ -967,7 +972,10 @@ Let $V$ be a vector space and $X\subseteq V$ a subset. Then $\convex(X) = \setbu
 Let $V$ be a vector space an $X\subseteq V$ a subset. Then the following are equivalent:
 \begin{enumerate}
 \item $X$ is convex;
-\item for all $0\leq r \leq 1$, $rX + (1-r)X \subseteq X$.
+\item $U\cap X$ is convex for all subspaces $U\subseteq V$;
+\item $rX + (1-r)X \subseteq X$ for all $0\leq r \leq 1$;
+\item any convex combination of any finite set of vectors in $X$ is in $X$;
+\item $X$ is star-shaped at each $x\in X$.
 \end{enumerate}
 \end{lemma}
 
@@ -979,12 +987,31 @@ Take $v+\lambda x_1, v+\lambda x_2 \in v+\lambda X$ and $r\in [0,1]$. Then
 \[ r(v+\lambda x_1) + (1-r)(v+\lambda x_2) = v + \lambda(rx_1 + (1-r)x_2) \in v+\lambda X. \]
 \end{proof}
 
+\begin{lemma}
+Let $V$ be a real or complex vector space, $U\subseteq V$ a subspace and $A\subseteq V$ a convex subset. If $A\cap U = \emptyset$, then there exists an absolutely star-shaped $B\supseteq A$ such that $B\cap U = \emptyset$.
+\end{lemma}
+TODO!!
+\begin{proof}
+Pick some $a\in A$ and consider $\bigcup_{r\in \ball(0,1)}rA + (1-r)a$. If $\bigcup_{r\in \ball(0,1)}rA + (1-r)a\cap U = \emptyset$, we can take $B = \bigcup_{r\in \ball(0,1)}rA + (1-r)a$ and we are done. Assume this is not the case, meaning there exists $x\in \bigcup_{r\in \ball(0,1)}rA + (1-r)a\cap U$. We can find a $b\in A$ and $\lambda \in \ball(0,1)$ such that $x = \lambda a + (1-\lambda) b$
+\end{proof}
+
 \subsubsection{Absolutely convex sets}
 \begin{definition}
 A subset $B$ of a vector space $V$ over a field $\F$ with valuation $|\cdot|$ is called \udef{absolutely convex} or \udef{disked} if for all $x,y\in C$ and $|r| \leq 1$, $rx + (1-r)y\in C$.
 
 The closure of a set $X\subseteq V$ into the lattice of absolutely convex sets is called the \udef{absolute convex hull} or \udef{disked hull} of $X$ and is denoted $\disked(X)$.
 \end{definition}
+
+\begin{lemma} \label{balancedCoreConvexSet}
+The balanced core of a convex set is convex.
+\end{lemma}
+\begin{proof}
+Let $B\subseteq V$ be a convex subset of a vector space $V$. Then
+$\balancedCore(B) = \begin{cases}
+\bigcap_{|r|\geq 1}rB & 0\in B\\
+\emptyset & 0\notin B
+\end{cases}$. The empty set is convex. For all $r\in \F$, $rB$ is convex by \ref{translationScalingConvexSet} and arbitrary intersections of convex sets are convex.
+\end{proof}
 
 \begin{lemma}
 Let $V$ be a vector space and $X\subseteq V$ a subset. Then the following are equivalent:
