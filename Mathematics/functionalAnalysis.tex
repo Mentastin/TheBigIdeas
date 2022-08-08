@@ -842,11 +842,11 @@ Let $V$ be a vector space, $A\subseteq V$ an absorbent subset and $a\in A$. If t
 For all $\epsilon > 0$, $\epsilon^{-1}a\in A$, so $a\in \epsilon A$.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{gaugeProperties}
 Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. Then
 \begin{enumerate}
 \item $p_A$ is absolutely homogenous if $A$ is balanced;
-\item $p_A$ is subadditive if $A$ is convex;
+\item $p_A$ is sublinear if $A$ is convex;
 \item $p_A$ is point-separating if $A$ is balanced and contains only the trivial subspace.
 \end{enumerate}
 \end{proposition}
@@ -857,7 +857,7 @@ p_A(\mu\cdot v) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{\mu\cdot v\in \lambda
 &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \frac{\lambda}{|\mu|} A} = \inf\setbuilder{|\mu|\lambda\in \R^{\geq 0}}{v\in \lambda A} = |\mu|\cdot p_A(v).
 \end{align*}
 
-(2) Take $v,w\in V$. Now take arbitrary $\epsilon > 0$, so $(p_A(v)+\epsilon)^{-1}v \in A$ and $(p_A(w)+\epsilon)^{-1}w \in A$ by \ref{gaugeLemma}. By convexity of $A$, we have
+(2) We just need to show subadditivity. Positive homogeneity is automatic by \ref{gaugeClassification}. Take $v,w\in V$. Now take arbitrary $\epsilon > 0$, so $(p_A(v)+\epsilon)^{-1}v \in A$ and $(p_A(w)+\epsilon)^{-1}w \in A$ by \ref{gaugeLemma}. By convexity of $A$, we have
 \[ \frac{v+w}{p_A(v)+p_A(w)+2\epsilon} = \frac{p_A(v)+\epsilon}{p_A(v)+p_A(w)+2\epsilon}(p_A(v)+\epsilon)^{-1}v + \frac{p_A(w)+\epsilon}{p_A(v)+p_A(w)+2\epsilon}(p_A(w)+\epsilon)^{-1}w \in A. \]
 By \ref{gaugeLemma} this means $p_A(v)+p_A(w)+2\epsilon \geq p_A(v+w)$ and because $\epsilon$ was arbitrary, we conclude that $p_A(v+w) \leq p_A(v)+p_A(w)$.
 
@@ -895,7 +895,7 @@ $(3) \Rightarrow (1)$ Assume $K$ a neighbourhood of $0$ and take some neighbourh
 and the result follows because $\frac{\epsilon}{2}K$ is a neighbourhood of $0$ by \ref{TVSconstruction}.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{gaugeMajorisation}
 Let $\sSet{V,\xi}$ be a TVS and $f:V\to \F$ a linear functional. Then $f\in V^*$ \textup{if and only if} $|f| \leq p_K$ for some $K\in \neighbourhoods_\xi(0)$.
 \end{proposition}
 \begin{proof}
@@ -980,8 +980,11 @@ So we set $\tilde{f}(v) = \tilde{f}_1(v)-i\tilde{f}_1(iv)$. It is easy to show $
 Let $V$ be a locally convex vector space, $U\subseteq V$ a subspace and $f:U\to \F$ a continuous functional. Then $f$ has a continuous extension to $V$.
 \end{corollary}
 \begin{proof}
-TODO
+We have that $|f|\leq p_K$ for some $K\in \neighbourhoods_U(0)$ by \ref{gaugeMajorisation}. By continuity of the inclusion map, we can find an $M \in \neighbourhoods_V(0)$ such that $M\cap U = K$. Then $|f|\leq p_M$ and $f$ can be extended by the Hahn-Banach extension theorem. By \ref{gaugeMajorisation} this extension is continuous.
 \end{proof}
+\begin{corollary}
+Let $V$ be a Hausdorff locally convex vector space and $v\in V$. If $f(v) = 0$ for all $f\in V^*$, then $v = 0$.
+\end{corollary}
 \begin{corollary}
 Let $X$ be a normed space and $Z\subset X$ a subspace. Any bounded linear functional in $\tdual{Z}$ can be extended to a bounded linear functional in $\tdual{X}$ with the same norm.
 \end{corollary}
@@ -1020,23 +1023,33 @@ using positive homogeneity (\ref{gaugeClassification}).
 \begin{proposition}
 Let $V$ be a real or complex vector space and $A$ an algebraically open and convex set. If $U$ is a subspace such that $A\perp U$, then there exists a hyperplane $H \supseteq U$ such that $A\perp H$.
 \end{proposition}
-TODO!!!!!
 \begin{proof}
-Take $a\in A$ such that $a+\balanced(A-a) \perp U$ (TODO possible!). Then $0\in a-A = \inh_{\mathfrak{a}}(a-A)$, so $a-A$ is absorbing by \ref{coreProperties} and $\balanced(a-A)+U$ is also absorbing. 
+First suppose $V$ is a real vector space. Take $a\in A$. Then $0\in a-A = \inh_{\mathfrak{a}}(a-A)$, so $a-A$ is absorbing by \ref{coreProperties}. 
 
 Then we have
 \[ U\perp A \iff 0\notin U-A \iff a \notin a-A+U. \]
-Consider the functional $f_{a}$ of \ref{gaugeSeparationLemma}, which is majorised by the gauge $p_{a-A+U}$. Then $f_a$ can be extended to all $V$ by the Hahn-Banach extension theorem \ref{seminormHahnBanach}, because $p_{a-A+U}$ is a seminorm.
+Consider the functional $f_{a}$ of \ref{gaugeSeparationLemma}, which is majorised by the gauge $p_{a-A+U}$, which is sublinear by \ref{gaugeProperties}. Then $f_a$ can be extended as an $\R$-linear function to all $V$ by the Hahn-Banach extension theorem \ref{sublinearHahnBanach}.
 
 We note that $U\subseteq \ker(f_a)$, because $p_{a-A+U}(u) = 0$ by \ref{gaugeZeroLemma}.
 
 In order to conclude with \ref{functionalBoundedNeighbourhood}, we need to show that $A-a \subseteq f_a^{\preimf}(\ball(0,|f_a(a)|)) = f_a^{\preimf}(\ball(0,1))$.
 Indeed $A-a \subseteq U+A-a = \inh_\mathfrak{a}(U+A-a) = p_{U+A-a}^\preimf[\ball(0,1)] \subseteq f_{a}^\preimf[\ball(0,1)]$ by \ref{algebraicallyOpen} and \ref{gaugeInherenceAdherence}.
+
+Now suppose $V$ is a complex vector space. We can view $V$ as a real vector space and use the preceding proof to find a real hyperplane $K$ in $V$. Then \ref gives that $H = K\cap iK$ is a complex hyperplane in $V$. Now $H$ and $A$ must be disjoint because $K$ and $A$ are disjoint and $H \subseteq K$.
 \end{proof}
 
 \begin{proposition}[Hahn-Banach separation theorem]
-
+Let $V$ be a TVS. Suppose $A,B$ are disjoint, non-empty, convex sets and that $A$ is open. Then there exists a continuous linear functional and $t\in \R$ such that
+\[ \Re f(a) < t \leq \Re f(b) \]
+for all $a\in A$ and $b\in B$.
 \end{proposition}
+\begin{proof}
+Choose $a_0\in A$ and $b_0\in B$ and set $C = A - B + b_0 - a_0$. Then $C$ is an open, convex neighbourhood of the origin because it is a union of open sets (TODO ref)
+\[ C = \bigcup_{b\in B}A - b + b_0 - a_0. \]
+Now $C$ is absorbing by \ref{TVSconstruction} and $b_0 - a_0 \notin C$ because $A$ and $B$ are disjoint.
+\end{proof}
+
+
 
 
 
