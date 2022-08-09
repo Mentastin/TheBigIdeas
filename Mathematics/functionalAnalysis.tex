@@ -123,6 +123,13 @@ A hyperplane in a convergence vector space is either closed or dense.
 Let $H$ be a hyperplane in a vector space $V$. Then $H \subseteq \adh(H)$ and $\adh(H)$ is a subspace. Because $H$ is a coatom, we have either $\adh(H) = H$ or $\adh(H) = V$. In the first case $H$ is closed, in the second dense.
 \end{proof}
 
+\begin{lemma}
+Let $V$ be a convergence vector space over a field $K$ and $F\subseteq K$ a subfield. Then the $F$-vector space $V_F$ with the same convergence structure is also a convergence vector space.
+\end{lemma}
+\begin{proof}
+It is enough that the restriction of the scalar multiplication to $F$ remains continuous. Alternatively, we can use \ref{vectorSpaceConvergenceConstruction} and note that passing to the field $F$ simply represents a weakening of condition $(5)$.
+\end{proof}
+
 \subsection{Algebraic convergence}
 \begin{definition}
 Let $V$ be a vector space over a field $\F$. The \udef{algebraic convergence} on $V$ is the strongest vector space convergence on $V$. We denote this convergence $\mathfrak{a}$ and thus write $F \overset{\mathfrak{a}}{\longrightarrow} x$ and $x\in \lim_\mathfrak{a} F$.
@@ -140,7 +147,7 @@ Using \ref{vectorSpaceConvergenceConstruction} it is easy to see that this conve
 \end{proof}
 Note that the algebraic convergence of a non-trivial vector space is not topological!
 
-\begin{lemma}
+\begin{lemma} \label{constructionsInAlebraicConvergence}
 Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subset. Then
 \begin{enumerate}
 \item $\begin{aligned}[t]
@@ -149,7 +156,7 @@ Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subse
 &= \setbuilder{\bigcup_{v\in V} \Gamma_v\cdot V}{\forall v\in V:\; \Gamma_v \in \vicinity_\F(0)};
 \end{aligned}$
 \item $\inh_\mathfrak{a}(A) = \setbuilder{x\in V}{\forall v\in V:\exists \Gamma_v \in \vicinity_\F(0):\; x + \Gamma_v\cdot v \subseteq A}$;
-\item $\adh_\mathfrak{a}(A) = \setbuilder{x\in V}{\forall v\in V: \forall \Gamma\in\vicinity_\F(0):\; (x+\Gamma\cdot v)\mesh A}$.
+\item $\adh_\mathfrak{a}(A) = \setbuilder{x\in V}{\exists v\in V: \forall \Gamma\in\vicinity_\F(0):\; (x+\Gamma\cdot v)\mesh A}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -161,7 +168,23 @@ Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subse
 &= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \vicinity_\F(0): x + \Gamma_v\cdot v \subseteq A}.
 \end{align*}
 
-(3) TODO
+(3) We calculate
+\begin{align*}
+\adh_\mathfrak{a}(A) &= \big(\inh_\mathfrak{a}(A^c)\big)^c \\
+&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \vicinity_\F(0):\; \neq(x + \Gamma\cdot v \subseteq A^c)} \\
+&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \vicinity_\F(0):\; (x + \Gamma\cdot v) \mesh A}.
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a vector space. Then every subspace $U\subseteq V$ is algebraically closed.
+\end{lemma}
+\begin{proof}
+We need to show that $\adh_\mathfrak{a}(U)\subseteq U$. Take $x\in \adh_\mathfrak{a}(U)$. Then take a $v\in V$ such that $\forall \Gamma\in\vicinity_\F(0):\; (x+\Gamma\cdot v)\mesh U$.
+
+Pick some $\Gamma\in\vicinity_\F(0)$. Then $x+\lambda v\in U$ for some $\lambda\in \Gamma$. Then take $\ball(0,|\lambda|/2)\in \vicinity_\F(0)$, so $x+\mu v\in U$ for some $\mu\in \ball(0,|\lambda|/2)$. In particular $\lambda \neq \mu$. If either $\lambda =0$ or $\mu = 0$, then $x\in U$ and we are done. Suppose $\lambda\neq 0 \neq \mu$. Then
+\[ \lambda^{-1}(x+\lambda v) - \mu^{-1}(x+\mu v) = (\lambda^{-1} - \mu^{-1})x \in U. \]
+So $x\in U$.
 \end{proof}
 
 \subsubsection{The algebraic interior or core}
@@ -304,8 +327,9 @@ Let $V$ be a vector space over a field $\mathbb{F}$.
 \end{enumerate}
 \end{definition}
 
+\subsection{Linear functionals}
 \begin{lemma} \label{kernelHyperplane}
-Let $V$ be a vector space and $U\subseteq V$ a subspace. Then $U$ is a hyperplane \textup{if and only if} it is the kernel of a functional.
+Let $V$ be a vector space and $U\subseteq V$ a subspace. Then $U$ is a hyperplane \textup{if and only if} it is the kernel of a linear functional.
 \end{lemma}
 
 \begin{lemma} \label{functionalBoundedNeighbourhood}
@@ -317,6 +341,27 @@ Suppose $A \subseteq f^{\preimf}(\ball(0,|f(x)|))$. Then for all $a\in A$: $f(x+
 Conversely, suppose $A \not\subseteq f^{\preimf}(\ball(0,|f(x)|))$, i.e.\ there exists $a\in A$ such that $|f(a)| \geq |f(x)|$. Then $v= -\frac{f(x)}{f(a)}a\in A$, because $A$ is balanced and so $f(x+ v) = f(x)-\frac{f(x)}{f(a)}f(a) = 0$ and so $(x+A) \mesh \ker(f)$.
 \end{proof}
 
+\begin{proposition} \label{linearFunctionalOpen}
+Let $V$ be a convergence vector space and $f:V\to \F$ a non-zero linear functional. Then $f$ is an open map.
+\end{proposition}
+\begin{proof}
+It is enough to show $f$ is open when $V$ is equipped with the algebraic convergence.
+
+Let $A$ be an algebraically open map. We use \ref{openClosedCriteria} to show $f^\imf[A]$ is also open. Because $f$ is non-zero, there exists a $v\in V$ such that $f(v) \neq 0$. Take some $y\in f^\imf[A]$. Then there exists an $x\in A$ such that $f(x) = y$. Because $A$ is open, $x\in \inh_\mathfrak{x}(A)$ and there exists $x+ \Gamma_v\in \vicinity_\F(0)$ such that $x+\Gamma_v\cdot v \subseteq A$ by \ref{constructionsInAlebraicConvergence}.
+
+Now $f^\imf[x+ \Gamma_v\in \vicinity_\F(0)] = y+\Gamma_v \cdot f(v) \subseteq f^\imf[A]$ and $y+\Gamma_v \cdot f(v)$ is a vicinity of $y$, so we are done.
+\end{proof}
+
+\begin{lemma} \label{complexRangeExtensionRealFunctional}
+Let $V$ be a complex vector space and $g: V_\R\to \R$ a linear functional. Then there exists a unique linear functional $f: V\to \C$ such that $g = \Re(f)$.
+\end{lemma}
+\begin{proof}
+We can write $f = g + ih$ for some function $h: V\to \R$. Then for all $x\in V$
+\[ g(ix)+ih(ix) = f(ix) = if(x) = ig(x) - h(x). \]
+Comparing real parts gives $h(x) = - g(ix)$. So $f$ must be given by $f(x) = g(x) - ig(ix)$. Clearly $f$ is real-linear. We just need to verify that this makes $f$ complex-linear. Indeed, take $\lambda = a +ib \in \C = \R+i\R$ arbitrarily. Then for all $v\in V$
+\[ f(\lambda v) = f\big((a+ib)v\big) = af(v) + bf(iv) = af(v) + b\big(g(iv) - ig(i^2v)\big) = af(v) + b\big(g(iv) + ig(v)\big) = af(v) + ib\big(-ig(iv) + g(v)\big) = af(v) + ibf(v) = (a+ib)f(v) = \lambda f(v). \]
+\end{proof}
+
 \subsection{The dual space}
 \begin{definition}
 Let $\sSet{V,\xi}$ be a convergence vector space over a field $\mathbb{F}$.
@@ -326,7 +371,7 @@ The \udef{dual} of $V$ is the vector space of all continuous linear functionals 
 The dual is denoted $\sSet{V,\xi}^{*}$ (or just $V^*$ is the convergence is clear from the context).
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{continuityLinearFunctionals}
 Let $V$ be a TVS and $f:V\to \F$ a linear functional on $V$. Then the following are equivalent:
 \begin{enumerate}
 \item $f\in V^{*}$, i.e.\ $f$ is continuous;
@@ -342,9 +387,8 @@ $(1) \Rightarrow (3)$ Because $\ker(f) = f^{\preimf}(\{0\})$ and $\{0\}$ is clos
 
 $(3) \Rightarrow (1)$ Now assume $\ker(f)$ closed. If $\ker(f) = V$, then $f$ is constant and thus continuous by \ref{continuityConstructions}. If $\ker(f) \neq V$, we can find some some $x\in \ker(f)^c$, which is open. Thus $\ker(f)^c - x$ is a neighbourhood of the origin, meaning we can take a balanced subset $A$ by \ref{TVSconstruction}. Now $(x+A)\perp \ker(f)$ by construction, so $f$ is bounded on $A$ by \ref{functionalBoundedNeighbourhood} and thus $f$ is continuous by \ref{continuityToNormedSpace}.
 
-$(2) \Leftrightarrow (3)$ By \ref{kernelHyperplane} $\ker(f)$ is a hyperplane and by \ref{hyperplaneClosedDense} this hyperplane is either closed or dense.
+$(3) \Leftrightarrow (4)$ By \ref{kernelHyperplane} $\ker(f)$ is a hyperplane and by \ref{hyperplaneClosedDense} this hyperplane is either closed or dense.
 \end{proof}
-
 
 
 \begin{lemma} Let $X$ be a normed space and
@@ -906,13 +950,20 @@ Now assume $f\in V^*$. By \ref{continuityToNormedSpace} $f$ is bounded by some $
 Thus we can take $K = C^{-1}\cdot M$, which is a neighbourhood of the origin by \ref{TVSconstruction}.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{locallyConvexSeminormTopology}
 Let $V$ be a vector space. A topology on $V$ is locally convex \textup{if and only if} it is the initial topology w.r.t. some set $S$ of seminorms on $V$.
+
+In this case
+\begin{align*}
+\neighbourhoods(0) &= \mathfrak{F}\setbuilder{p^\preimf(U)}{p\in S, U\in \neighbourhoods_\R(0)} \\
+&= \mathfrak{F}\setbuilder{p^\preimf([0,\epsilon[)}{p\in S, \epsilon\in \R} \\
+&= \mathfrak{F}\setbuilder{p^\preimf([0,\epsilon])}{p\in S, \epsilon\in \R}.
+\end{align*}
 \end{proposition}
 \begin{proof}
 Assume $V$ is a locally convex TVS. Let $\mathcal{B}$ be a locally convex base of $\neighbourhoods(0)$. Define $S = \setbuilder{p_K}{K\in \mathcal{B}}$. By \ref{seminormContinuity} all seminorms in $S$ are continuous.
 
-By \ref{topologicalInitialFinalConvergence} and \ref{seminormContinuity} each $W$ in the neighbourhood of the origin in the initial topology w.r.t. $S$ contains a scaled version of some $K$ in $\mathcal{B}$. So the topology on $V$ is coarser than the initial topology, meaning they are equal.
+By \ref{topologicalInitialFinalConvergence}(!?!) and \ref{seminormContinuity} each $W$ in the neighbourhood of the origin in the initial topology w.r.t. $S$ contains a scaled version of some $K$ in $\mathcal{B}$. So the topology on $V$ is coarser than the initial topology, meaning they are equal.
 
 TODO converse.
 \end{proof}
@@ -964,17 +1015,15 @@ Then $f$ has an extension $\tilde{f}: V\to \R$ such that $\tilde{f}$ is a linear
 \[ \forall v\in V: |\tilde{f}(v)| \leq p(v) \qquad \text{and} \qquad \forall u\in U: \tilde{f}(u) = f(u). \]
 \end{corollary}
 \begin{proof}
-For \emph{real} vector fields, we notice that every seminorm is a sublinear function, so we can use \ref{sublinearHahnBanach} to find an extension $\tilde{f}$. We then just need to check it satisfies $\forall v\in V: |\tilde{f}(v)| \leq p(v)$.
+First assume $V$ is a \emph{real} vector space. Because every seminorm is a sublinear function, we can use \ref{sublinearHahnBanach} to find an extension $\tilde{f}$. We then just need to check it satisfies $\forall v\in V: |\tilde{f}(v)| \leq p(v)$.
 From \ref{sublinearHahnBanach} we know $\forall v\in V: \tilde{f}(v) \leq p(v)$.
 To prove $-\tilde{f}(v) \leq p(v)$, we calculate
 \[ -\tilde{f}(v) = \tilde{f}(-v) \leq p(-v) = |-1|p(v) = p(v). \]
 
-For \emph{complex} vector fields, we can write $f= f_1 + if_2$ with $f_1,f_2$ real functionals on $U$, which can also be seen as a real vector space. First take $f_1$. Now $\forall u\in U f_1(u) \leq |f(x)| \leq p(x)$, so we can extend $f_1$ to $\tilde{f}_1$ by \ref{sublinearHahnBanach}.
+If $V$ is a \emph{complex} vector space, consider the realification $V_\R$ and apply the preceding proof to obtain a linear functional $g: V_\R \to \R$ that extends $f$ and is majorised by $p$. Then by \ref{complexRangeExtensionRealFunctional} we can find a complex-linear functional $\tilde{f}:V \to \C$ such that $\Re(\tilde{f}) = g$.
 
-Now by complex linearity, $if(u) = f(iu)$ so
-\[ i[f_1(u) + if_2(u)] = -f_2(u) + if_1(u) = f_1(iu) + if_2(iu) \implies f_2(u) = -if_1(iu). \]
-So we set $\tilde{f}(v) = \tilde{f}_1(v)-i\tilde{f}_1(iv)$. It is easy to show $\tilde{f}$ is $\C$-linear. For boundedness, write $\tilde{f}(v) = |\tilde{f}(v)|e^{i\theta}$ then
-\[ |\tilde{f}(v)| = e^{-i\theta}\tilde{f}(v) = \tilde{f}(e^{-i\theta}v) = \tilde{f}_1(e^{-i\theta}v) \leq p(e^{-i\theta}v) = |e^{-i\theta}|p(v) = p(v). \]
+We just need to show that $f$ is bounded by $p$. Take arbitrary $v\in V$ and write $\tilde{f}(v) = |\tilde{f}(v)|e^{i\theta}$ then
+\[ |\tilde{f}(v)| = \Re|\tilde{f}(v)| = \Re\Big(e^{-i\theta}\tilde{f}(v)\Big) = \Re\Big(\tilde{f}(e^{-i\theta}v)\Big) = g(e^{-i\theta}v) \leq p(e^{-i\theta}v) = |e^{-i\theta}|p(v) = p(v). \]
 \end{proof}
 \begin{corollary}
 Let $V$ be a locally convex vector space, $U\subseteq V$ a subspace and $f:U\to \F$ a continuous functional. Then $f$ has a continuous extension to $V$.
@@ -982,7 +1031,7 @@ Let $V$ be a locally convex vector space, $U\subseteq V$ a subspace and $f:U\to 
 \begin{proof}
 We have that $|f|\leq p_K$ for some $K\in \neighbourhoods_U(0)$ by \ref{gaugeMajorisation}. By continuity of the inclusion map, we can find an $M \in \neighbourhoods_V(0)$ such that $M\cap U = K$. Then $|f|\leq p_M$ and $f$ can be extended by the Hahn-Banach extension theorem. By \ref{gaugeMajorisation} this extension is continuous.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{locallyConvexTVSDualPair}
 Let $V$ be a Hausdorff locally convex vector space and $v\in V$. If $f(v) = 0$ for all $f\in V^*$, then $v = 0$.
 \end{corollary}
 \begin{corollary}
@@ -1020,11 +1069,11 @@ Let $x = tx_0$. If $t\leq 0$, then the inequality is immediate. Suppose $t>0$. B
 using positive homogeneity (\ref{gaugeClassification}).
 \end{proof}
 
-\begin{proposition}
-Let $V$ be a real or complex vector space and $A$ an algebraically open and convex set. If $U$ is a subspace such that $A\perp U$, then there exists a hyperplane $H \supseteq U$ such that $A\perp H$.
-\end{proposition}
+\begin{theorem}[Mazur's theorem] \label{MazurTheorem}
+Let $V$ be a real or complex convergence vector space and $A$ an open and convex set. If $U$ is a subspace such that $A\perp U$, then there exists a closed hyperplane $H \supseteq U$ such that $A\perp H$.
+\end{theorem}
 \begin{proof}
-First suppose $V$ is a real vector space. Take $a\in A$. Then $0\in a-A = \inh_{\mathfrak{a}}(a-A)$, so $a-A$ is absorbing by \ref{coreProperties}. 
+First suppose $V$ is a \emph{real} vector space. Because $A$ is open, it is algebraically open. Take $a\in A$. Then $0\in a-A = \inh_{\mathfrak{a}}(a-A)$, so $a-A$ is absorbing by \ref{coreProperties}. 
 
 Then we have
 \[ U\perp A \iff 0\notin U-A \iff a \notin a-A+U. \]
@@ -1035,23 +1084,43 @@ We note that $U\subseteq \ker(f_a)$, because $p_{a-A+U}(u) = 0$ by \ref{gaugeZer
 In order to conclude with \ref{functionalBoundedNeighbourhood}, we need to show that $A-a \subseteq f_a^{\preimf}(\ball(0,|f_a(a)|)) = f_a^{\preimf}(\ball(0,1))$.
 Indeed $A-a \subseteq U+A-a = \inh_\mathfrak{a}(U+A-a) = p_{U+A-a}^\preimf[\ball(0,1)] \subseteq f_{a}^\preimf[\ball(0,1)]$ by \ref{algebraicallyOpen} and \ref{gaugeInherenceAdherence}.
 
-Now suppose $V$ is a complex vector space. We can view $V$ as a real vector space and use the preceding proof to find a real hyperplane $K$ in $V$. Then \ref gives that $H = K\cap iK$ is a complex hyperplane in $V$. Now $H$ and $A$ must be disjoint because $K$ and $A$ are disjoint and $H \subseteq K$.
+Note that $\ker(f_a)^c$ contains the open set $A$ and thus $\ker(f_a)$ is not dense by \ref{openDensityLemma}. By \ref{hyperplaneClosedDense} this means that $\ker(f_a)$ is closed.
+
+Now suppose $V$ is a \emph{complex} vector space. We can consider the realification $V_\R$ with the same convergence, which is a real convergence vector space by \ref. So we can use the preceding proof to find a real hyperplane $K$ in $V$. Then \ref{realComplexHyperplane} gives that $H = K\cap iK$ is a complex hyperplane in $V$. Now $H$ and $A$ must be disjoint because $K$ and $A$ are disjoint and $H \subseteq K$.
+
+Also $H$ is closed because $K$ and $iK$ are closed (the first by the preceding proof, the second because multiplication by $i$ is a homeomorphism \ref{continuityLemmaVectorConvergence}) and the intersection of two closed sets is closed.
 \end{proof}
 
-\begin{proposition}[Hahn-Banach separation theorem]
-Let $V$ be a TVS. Suppose $A,B$ are disjoint, non-empty, convex sets and that $A$ is open. Then there exists a continuous linear functional and $t\in \R$ such that
+\begin{theorem}[Hahn-Banach separation theorem]
+Let $V$ be a convergence vector space. Suppose $A,B$ are disjoint, non-empty, convex sets and that $A$ is open. Then there exists a continuous linear functional $f:V\to \F$ such that $f^\imf[A]$ and $f^\imf[B]$ are disjoint.
+\end{theorem}
+\begin{proof}
+The set $A-B = \bigcup_{b\in B}A-b$ is convex and a union of open sets and thus open by \ref{completeClosureTopology}.
+The set $A-B$ and the vector space $\{0\}$ are disjoint, so by \ref{MazurTheorem} we can find a closed hyperplane that is disjoint with $A-B$.
+
+By \ref{kernelHyperplane} and \ref{continuityLinearFunctionals} this is the kernel of a continuous linear functional $f$.
+\end{proof}
+\begin{corollary}
+Let $V$ be a real or complex convergence vector space and $A,B$ as in the proposition. Then there exists a continuous linear functional $f:V\to \F$ and $t\in \R$ such that
 \[ \Re f(a) < t \leq \Re f(b) \]
 for all $a\in A$ and $b\in B$.
-\end{proposition}
+\end{corollary}
+This means $A$ and $B$ are separated by a closed affine hyperplane $\ker(f)+v$, where $v \in f^\preimf[\{t\}]$.
 \begin{proof}
-Choose $a_0\in A$ and $b_0\in B$ and set $C = A - B + b_0 - a_0$. Then $C$ is an open, convex neighbourhood of the origin because it is a union of open sets (TODO ref)
-\[ C = \bigcup_{b\in B}A - b + b_0 - a_0. \]
-Now $C$ is absorbing by \ref{TVSconstruction} and $b_0 - a_0 \notin C$ because $A$ and $B$ are disjoint.
+Apply the proposition to the realification $V_\R$. This gives us an $\R$-linear functional $g: V\to \R$ such that $g^\imf[A]$ and $g^\imf[B]$ are disjoint convex sets. Additionally $g^{\imf}[A]$ is open in $\R$ by \ref{linearFunctionalOpen}.
+
+Because $g^\imf[A]$ and $g^\imf[B]$ are convex, we either have $g^\imf[A]\leq g^\imf[B]$ or $g^\imf[A]\geq g^\imf[B]$. In the second case we simply replace $g$ by $-g$ to obtain the first case. We may take $t= \sup g^\imf[A]$. This is not in $g^\imf[A]$ because it is open.
+
+If $V$ is a real vector space we take $f=g$ are done. If $V$ is complex, we can find a suitable $f$ by \ref{complexRangeExtensionRealFunctional}.
 \end{proof}
-
-
-
-
+\begin{corollary}
+Let $V$ be a locally convex TVS. Suppose $A,B$ are disjoint, non-empty, convex sets and that $A$ is compact, $B$ is closed. Then there exists a continuous linear functional $f:V\to \F$ and $s,t\in \R$ such that
+\[ \Re f(a) < t < s < \Re f(b) \]
+for all $a\in A$ and $b\in B$.
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
 
 \subsubsection{Banach limits}
 \begin{proposition}
@@ -1090,47 +1159,41 @@ Let $V$ and $W$ be TVSs and $f: V\to W$ a linear function.
 \section{General duality theory}
 \subsection{Paired spaces}
 \begin{definition}
-A \udef{pairing} is a triple $(V,W, b)$ where $V,W$ are vector spaces over $\mathbb{F}$ and $b: V\times W\to \mathbb{F}$ is a bilinear form. Often we will write the pairing as just $(V,W)$.
+A \udef{pairing} is a triple $\sSet{V,W, b}$ where $V,W$ are vector spaces over $\mathbb{F}$ and $b: V\times W\to \mathbb{F}$ is a bilinear form. Often we will write the pairing as just $\sSet{V,W}$.
 
-We say $W$ \udef{distinguishes} points of $V$ or is \udef{separating} on $V$ if
-\[ \forall v\in V: \exists w\in W: b(v,w) \neq 0. \]
+We say $W$ \udef{distinguishes} points of $V$ or is \udef{separating} on $V$ if $b(v,\cdot)$ is injective for all $v\in V$.
 
-A \udef{dual system}, \udef{dual pair} or \udef{duality} over a field $\mathbb{F}$ is a pairing $(V,W,b)$ such that $V$ distinguishes points of $W$ and $W$ distinguishes points of $V$.
+A \udef{dual system}, \udef{dual pair} or \udef{duality} over a field $\mathbb{F}$ is a pairing $\sSet{V,W, b}$ such that $V$ distinguishes points of $W$ and $W$ distinguishes points of $V$.
 \end{definition}
-
-\begin{lemma}
-Let $(V,W, b)$ be a pairing. The curried map $w\mapsto b(\cdot, w)$ is injective \textup{if and only if} $V$ distinguishes points of $W$.
-\end{lemma}
-In this case $W$ is isomorphic with a space of linear functionals (the image of the curried function), so we can also say a dual system is a pair $(V,W)$ where $W$ is a space of linear functionals on $V$ that distinguishes points of $V$.
+We have that $W$ is separating on $V$ \textup{if and only if}
+\[ \forall v\in V: \exists w\in W: b(v,w) \neq 0. \]
 
 \begin{example}
 \begin{itemize}
-\item Let $V$ be a vector space. Then $(V,V^*, b)$ with $b:V\times V^*: (v,f)\mapsto f(v)$ is a dual pair.
-\item Let $V$ be a locally convex Hausdorff space. Hahn-Banach implies $(V,V')$ is a dual pair.
+\item Let $V$ be a vector space. Then $\sSet{V^*, V, b}$ with $b:V^*\times V: (f,v)\mapsto f(v)$ is a dual pair. In this case we write $\pair{f, v}$ instead of $b(f,v)$. 
+\item Let $\sSet{V,\xi}$ be a Hausdorff locally convex TVS. Then $\sSet{\sSet{V,\xi}^*, V, \pair{\cdot,\cdot}}$ is a dual pair by \ref{locallyConvexTVSDualPair}.
 \end{itemize}
 \end{example}
+
+\begin{lemma}
+Let $\sSet{V,W,b}$ be a dual pair. Then $\sSet{W,V,b^d}$ is also a dual pair.
+\end{lemma}
 
 \subsection{Weak topologies}
 \begin{definition}
 Let $(X,Y,b)$ be paired vector spaces. Then for each $y\in Y$, the map
-\[ p_y: X\to \R_{\geq 0} x\mapsto |b(x,y)| \]
-determines a seminorm on $X$.
+\[ p_x: Y\to \R_{\geq 0} y\mapsto |b(x,y)| \]
+determines a seminorm on $Y$.
 
-The weakest topology on $X$ for which the seminorms $\{p_y\;|\;y\in Y\}$ are continuous is called the \udef{weak topology} $\sigma(X,Y)$ on $X$ for the pair $(X,Y)$.
+The initial topology on $Y$ w.r.t. $\setbuilder{p_x: Y \to \R}{x\in X}$ is called the \udef{weak topology} $\sigma(X,Y)$ on $Y$ for the pair $\sSet{X,Y}$.
 \end{definition}
-
-\begin{proposition}
-Let $(X,Y,b)$ be a pairing. The following are equivalent:
-\begin{enumerate}
-\item $X$ distinguishes points of $Y$;
-\item the map $Y\to X^*: y\mapsto y^*$ is injective, where $y^*$ is defined by
-\[ y^*: X\to \mathbb{F}: x\mapsto b(x,y); \]
-\item $\sigma(Y,X)$ is Hausdorff.
-\end{enumerate}
-\end{proposition}
+\begin{lemma}
+Let $\sSet{X,Y,b}$ be a pairing. The weak topology $\sigma(X,Y)$ on $Y$ is locally convex.
+\end{lemma}
 \begin{proof}
-TODO
+Immediate by \ref{locallyConvexSeminormTopology}.
 \end{proof}
+
 
 \subsubsection{Weak-$*$ topology}
 
