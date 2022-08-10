@@ -730,10 +730,38 @@ These properties mean that for any vector space $V$, $\Lin(V)$ forms a unital al
 \end{proposition}
 Note that multiplication of linear maps is not commutative, not even for maps that are compatible both ways.
 
+\subsection{Set-valued functions}
+\begin{definition}
+Let $V,W$ be vector spaces over a field $\F$ and $F: \powerset(V)\to \powerset(W)$. Then $F$ is called \udef{linear} if
+\[ F(A+\lambda B) = F(A) + \lambda F(B) \]
+for all $\lambda \in \F$ and $A,B\subseteq V$.
+\end{definition}
+
+\begin{lemma} \label{linearImageFunction}
+Let $V,W$ be vector spaces over a field $\F$ and $f: V\to W$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is linear;
+\item $f^\imf$ is linear.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ We calculate, for arbitrary $A,B\subseteq V$ and $\lambda\in \F$:
+\begin{align*}
+f^\imf[A+\lambda B] &= f^\imf\Big\{\setbuilder{a+\lambda b}{a\in A, b\in B}\Big\} \\
+&= \setbuilder{f(a+\lambda b)}{a\in A, b\in B} \\
+&= \setbuilder{f(a)+\lambda f(b)}{a\in A, b\in B} \\
+&= \setbuilder{f(a)}{a\in A, b\in B} + \setbuilder{\lambda f(b)}{a\in A, b\in B} \\
+&= f^\imf[A]+ \lambda f^\imf[B].
+\end{align*}
+
+$(2) \Rightarrow (1)$ We calculate, for arbitrary $u,v\in V$ and $\lambda\in \F$:
+\[ f(u+\lambda v) \in f^\imf[\{u+\lambda v\}] = f^\imf[\{u\}] + \lambda f^\imf[\{v\}] = \{f(u)\} +\{\lambda f(v)\} = \{f(u+\lambda v)\}. \]
+\end{proof}
+
 \subsection{Invertibility and isomorphisms}
-\begin{proposition} \label{inverseLinear}
+\begin{lemma} \label{inverseLinear}
 Let $L$ be a linear map. If $L$ is invertible as a function (i.e.\ bijective), its inverse $L^{-1}$ is linear.
-\end{proposition}
+\end{lemma}
 \begin{proof}
 We calculate for $x,y$ vectors and $a\in\mathbb{F}$
 \[ L^{-1}(ax + y) = L^{-1}(aLL^{-1}x + LL^{-1}y) = L^{-1}L(aL^{-1}x + L^{-1}y) = aL^{-1}x + L^{-1}y. \]
@@ -940,7 +968,7 @@ $(3) \Rightarrow (1)$ Assume $A-x$ is a vector subspace for some $x\in A$. Take 
 \end{proof}
 
 
-\subsection{Balanced set}
+\subsection{Balanced sets}
 \begin{definition}
 A subset $B$ of a vector space $V$ over a field $\F$ with valuation $|\cdot|$ is called \udef{balanced} if for all $|r|\leq 1$, $rC \subseteq C$.
 
@@ -984,12 +1012,13 @@ Let $V$ be a vector space and $B\subseteq V$ a balanced subset. Then
 
 
 
-\subsection{Convex combinations and sets}
+\subsection{Convexity}
 \begin{definition}
 Let $V$ be a vector space and $N\in \N$. A \udef{convex combination} of $\seq{x_n}_{n=0}^N \in V^N$ is a vector of the form
 \[ \sum_{n=0}^N \lambda_n x_n \qquad \text{where $\seq{\lambda_n}_{n=0}^N \in \R^N$ is a set of reals such that} \sum_{n=0}^N \lambda_n = 1. \]
 \end{definition}
 
+\subsubsection{Convex sets}
 \begin{definition}
 A subset $C$ of a real or complex vector space $V$ is called \udef{convex} if for all $x,y\in C$, all convex combinations of $x$ and $y$ are in $C$. In other words, $rx + (1-r)y\in C$ for all $0\leq r \leq 1$.
 
@@ -1023,12 +1052,17 @@ Take $v+\lambda x_1, v+\lambda x_2 \in v+\lambda X$ and $r\in [0,1]$. Then
 \[ r(v+\lambda x_1) + (1-r)(v+\lambda x_2) = v + \lambda(rx_1 + (1-r)x_2) \in v+\lambda X. \]
 \end{proof}
 
-\begin{lemma}
-Let $V$ be a real or complex vector space, $U\subseteq V$ a subspace and $A\subseteq V$ a convex subset. If $A\cap U = \emptyset$, then there exists an absolutely star-shaped $B\supseteq A$ such that $B\cap U = \emptyset$.
+\begin{lemma} \label{imagePreimageConvexSet}
+Let $V,W$ be vector spaces, $f\in \Lin(V,W)$ and $A\subseteq V, B\subseteq W$ convex sets. Then
+\begin{enumerate}
+\item $f^\imf[A]$ is convex;
+\item $f^\preimf[B]$ is convex.
+\end{enumerate}
 \end{lemma}
-TODO!!
 \begin{proof}
-Pick some $a\in A$ and consider $\bigcup_{r\in \ball(0,1)}rA + (1-r)a$. If $\bigcup_{r\in \ball(0,1)}rA + (1-r)a\cap U = \emptyset$, we can take $B = \bigcup_{r\in \ball(0,1)}rA + (1-r)a$ and we are done. Assume this is not the case, meaning there exists $x\in \bigcup_{r\in \ball(0,1)}rA + (1-r)a\cap U$. We can find a $b\in A$ and $\lambda \in \ball(0,1)$ such that $x = \lambda a + (1-\lambda) b$
+(1) Take $0\leq r \leq 1$. We have that $f^\imf$ is linear by \ref{linearImageFunction}. So $rf^\imf[A] + (1-r)f^\imf[A] = f^\imf[rA + (1-r)A] \subseteq f^\imf[A]$ and $A$ is convex by \ref{convexCriteria}.
+
+(2) Take $0\leq r \leq 1$ and $x_1,x_2\in f^\preimf[B]$. Then $f(x_1),f(x_2)\in B$ and $rf(x_1) + (1-r)f(x_2) = f(rx_1 + (1-r)x_2)\in B$ by convexity. Thus $rx_1 + (1-r)x_2\in f^\preimf[B]$.
 \end{proof}
 
 \subsubsection{Absolutely convex sets}
