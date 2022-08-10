@@ -512,7 +512,18 @@ The topology $\topology_\xi$ is a complete sublattice of $\powerset(X)$.
 \begin{lemma} \label{openClosedCriteria}
 Let $\sSet{X,\xi}$ be a convergence space and $O,C\subseteq X$ subsets. The following are equivalent:
 \begin{enumerate}
-\item $O$ is open \textup{if and only if} or all $x\in O$ there exists $U_x\in \vicinity(x)$ such that $U_x\subseteq O$;
+\item $O$ is open;
+\item $O\subseteq \inh(O)$;
+\item $O\subseteq \interior(O)$;
+\item $O\in \vicinity(O)$;
+\item $O\in \neighbourhoods(O)$;
+\item for all $x\in O$ there exists $U_x\in \vicinity(x)$ such that $U_x\subseteq O$;
+\end{enumerate}
+as are the following:
+\begin{enumerate}
+\item $C$ is closed;
+\item $\adh(C)\subseteq C$;
+\item $\closure(C)\subseteq C$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -539,6 +550,10 @@ Let $\sSet{X,\xi}$ be a convergence space.
 \end{itemize}
 The \udef{boundary} of $A\in\powerset(X)$ is $\partial A \defeq \overline{A}\setminus A^{\circ}$
 \end{definition}
+
+\begin{lemma}
+$\interior^2 = \interior$ and $\closure^2 = \closure$.
+\end{lemma}
 
 \begin{proposition}
 ???
@@ -575,6 +590,27 @@ Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $x\in X$. Then
 
 We clearly have $\mathcal{A} \preceq \interior^{\imf}(\mathcal{A})$ because $\interior(A) \subseteq A$. For the opposite inequality, we need to show that for all $A\in \mathcal{A}$, $\interior(A)$ is a neighbourhood of $x$. This is point (1).
 \end{proof}
+
+\subsubsection{Topological convergence}
+\begin{definition}
+A pretopological convergence space $\sSet{X,\xi}$ is called \udef{topological} if $\adh_\xi^2 = \adh_\xi$.
+\end{definition}
+TODO pretopological assumption necessary?
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a pretopological convergence space. The following are equivalent:
+\begin{enumerate}
+\item $\xi$ is topological;
+\item $\inh_\xi^2 = \inh_\xi$;
+\item $\adh_\xi = \closure_\xi$;
+\item $\inh_\xi = \interior_\xi$;
+\item $\vicinity_\xi(x) = \neighbourhoods_\xi(x)$ for all $x\in X$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a topological convergence space. Then $\xi$ is topological \textup{if and only if} $\neighbourhoods_\xi(x) \overset{\xi}{\longrightarrow} x$ for all $x\in X$.
+\end{proposition}
 
 \subsection{Dense sets}
 \begin{definition}
@@ -790,7 +826,7 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $f: X\to Y$ a fun
 \item $f$ is continuous at $x$;
 \item $\vicinity_\zeta(f(x)) \supseteq \upset f[\vicinity_\xi(x)]$;
 \item for all $U\in \vicinity_\zeta(f(x))$, there exists $V\in \vicinity_\xi(x)$ such that $f[V] \subseteq U$;
-\item for all $U\in \vicinity_\zeta(f(x))$, $f^{-1}[U]\in \vicinity_\xi(x)$.
+\item for all $U\in \vicinity_\zeta(f(x))$, $f^{\preimf}[U]\in \vicinity_\xi(x)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -800,11 +836,25 @@ Conversely, take $F\to x$. Then $F\supseteq \vicinity_\xi(x)$ and thus $f[F]\sup
 
 $(2) \Leftrightarrow (3)$ Immediate.
 
-$(3) \Leftrightarrow (4)$ Because $V\subseteq f^{-1}[U]$ and $\vicinity_\xi(x)$ is a filter, we have $f^{-1}[U] \in \vicinity_\xi(x)$.
+$(3) \Leftrightarrow (4)$ Because $V\subseteq f^{\preimf}[U]$ and $\vicinity_\xi(x)$ is a filter, we have $f^{-1}[U] \in \vicinity_\xi(x)$.
 
-Conversely, we may take $V = f^{-1}[U]$.
+Conversely, we may take $V = f^{\preimf}[U]$.
 \end{proof}
 Note that the downward implications rely on the pretopologicity of $\xi$ and the upward implication on the pretopologicity of $\zeta$.
+\begin{corollary} \label{preimageOpenClosed}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be pretopological convergence spaces and  $f: X\to Y$ a continuous function. Then
+\begin{enumerate}
+\item if $O\subseteq Y$ is open, then $f^\preimf(O)$ is open;
+\item if $C\subseteq Y$ is closed, then $f^\preimf(C)$ is closed.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) We use \ref{openClosedCriteria}, so take $x\in f^\preimf(O)$. Then $f(x)\in O$ and by \ref{openClosedCriteria} there exists a $U_{f(x)}\in \vicinity_\zeta\big(f(x)\big)$ such that $U_{f(x)} \subseteq O$. Then $f^\preimf(U_{f(x)}) \subseteq f^\preimf(O)$ and $f^\preimf(U_{f(x)})\in \vicinity_\xi(x)$.
+
+(2) We use the fact that $C^c$ is open and \ref{imagePreimageUniqueness} to calculate
+\[ f^\preimf(C) = f^\preimf(Y\setminus C^c) = f^\preimf(Y)\setminus f^\preimf(C^c) = X\setminus f^\preimf(C^c) = f^\preimf(C^c)^c. \]
+This is closed because $f^\preimf(C^c)$ is open by (1).
+\end{proof}
 
 \begin{lemma} \label{identityContinuity}
 Let $\xi$ and $\zeta$ be two convergences on the same set $X$. Then $\id_X: \sSet{X,\xi} \to \sSet{X,\zeta}$ is continuous \textup{if and only if} $\xi \leq \zeta$. I.e.\ $\xi$ is finer than $\zeta$.
@@ -1031,17 +1081,30 @@ TODO
 
 \begin{proposition} \label{pretopologicalInitialFinalConvergence}
 Let $X$ be a set and $\xi$ the initial convergence on $X$ w.r.t. a set of functions $\{f_i: X\to \sSet{Y_i, \zeta_i}\}_{i\in I}$ from $X$ to pretopological spaces $Y_i$. Then $\xi$ is pretopological and
-\[ \vicinity_\xi(x) = \mathfrak{F}\setbuilder{f_i^\preimf(U)}{i\in I, U\in \vicinity_{\zeta_i}(f(x))}. \]
+\[ \vicinity_\xi(x) = \bigvee_{i\in I} f_i^{\preimf\imf}\Big(\vicinity_{\zeta_i}\big(f_i(x)\big)\Big) = \Closure_\wedge\setbuilder{f_i^\preimf(U)}{i\in I, U\in \vicinity_{\zeta_i}(f(x))}. \]
 \end{proposition}
 \begin{proof}
-TODO
+We have, by \ref{initialFinalConvergence}
+\begin{align*}
+F \overset{\xi}{\longrightarrow} x &\iff \forall i\in I: f_i^{\imf\imf}[F] \overset{\zeta_i}{\longrightarrow} f_i(x) \\
+&\iff \forall i\in I: \vicinity_{\zeta_i}\big(f_i(x)\big) \subseteq \upset f_i^{\imf\imf}[F] \\
+&\iff \forall i\in I: \forall U\in \vicinity_{\zeta_i}\big(f_i(x)\big): \exists M\in f_i^{\imf\imf}[F]: \; M \subseteq U \\
+&\iff \forall i\in I: \forall U\in \vicinity_{\zeta_i}\big(f_i(x)\big): \exists N\in F: \; f_i^{\imf}[N] \subseteq U \\
+&\iff \forall i\in I: \forall U\in \vicinity_{\zeta_i}\big(f_i(x)\big): \exists N\in F: \; N \subseteq f_i^{\preimf}[U] \\
+&\iff \forall i\in I: \forall U\in \vicinity_{\zeta_i}\big(f_i(x)\big): f_i^{\preimf}[U] \in F \\
+&\iff \forall i\in I: f^{\preimf\imf}\Big(\vicinity_{\zeta_i}\big(f_i(x)\big)\Big) \subseteq F \\
+&\iff \bigvee_{i\in I} f^{\preimf\imf}\Big(\vicinity_{\zeta_i}\big(f_i(x)\big)\Big) \subseteq F
+\end{align*}
+Thus the initial convergence is pretopological and $\vicinity_\xi(x) = \bigvee_{i\in I} f_i^{\preimf\imf}\Big(\vicinity_{\zeta_i}\big(f_i(x)\big)\Big)$. The final equality follows from \ref{latticeFiltersIdeals}.
 \end{proof}
 
 \begin{proposition} \label{topologicalInitialFinalConvergence}
-Initial convergence of topological is topological.
+Let $X$ be a set and $\xi$ the initial convergence on $X$ w.r.t. a set of functions $\{f_i: X\to \sSet{Y_i, \zeta_i}\}_{i\in I}$ from $X$ to topological spaces $Y_i$. Then $\xi$ is topological and $\topology_\xi$ is generated by $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$.
 \end{proposition}
 \begin{proof}
-See Dolecki-Mynard p.143
+By \ref{pretopologicalInitialFinalConvergence}, $\xi$ is pretopological. Each $U\in \vicinity_{\zeta_i}(f(x)) = \neighbourhoods_{\zeta_i}(f(x))$ contains an open set, so $f_i^\preimf(U)$ also contains an open set by \ref{preimageOpenClosed}. Thus $\vicinity_\xi(x)$ is based in open sets. This means that the initial convergence is topological.
+
+Finally $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$ is a set of open sets. TODO: a set of open sets that generates the convergence also generates the topology. 
 \end{proof}
 
 \subsection{Constructions}
