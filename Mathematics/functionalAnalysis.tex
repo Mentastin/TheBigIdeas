@@ -360,7 +360,53 @@ Let $V$ be a complex vector space and $g: V_\R\to \R$ a linear functional. Then 
 We can write $f = g + ih$ for some function $h: V\to \R$. Then for all $x\in V$
 \[ g(ix)+ih(ix) = f(ix) = if(x) = ig(x) - h(x). \]
 Comparing real parts gives $h(x) = - g(ix)$. So $f$ must be given by $f(x) = g(x) - ig(ix)$. Clearly $f$ is real-linear. We just need to verify that this makes $f$ complex-linear. Indeed, take $\lambda = a +ib \in \C = \R+i\R$ arbitrarily. Then for all $v\in V$
-\[ f(\lambda v) = f\big((a+ib)v\big) = af(v) + bf(iv) = af(v) + b\big(g(iv) - ig(i^2v)\big) = af(v) + b\big(g(iv) + ig(v)\big) = af(v) + ib\big(-ig(iv) + g(v)\big) = af(v) + ibf(v) = (a+ib)f(v) = \lambda f(v). \]
+\begin{align*}
+f(\lambda v) &= f\big((a+ib)v\big) \\
+&= af(v) + bf(iv) \\
+&= af(v) + b\big(g(iv) - ig(i^2v)\big) \\
+&= af(v) + b\big(g(iv) + ig(v)\big) \\
+&= af(v) + ib\big(-ig(iv) + g(v)\big) \\
+&= af(v) + ibf(v) = (a+ib)f(v) = \lambda f(v).
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a vector space and $f_0,\ldots, f_n, f$ linear functionals in $(V\to \F)$. Then a linear funcctional $f: V\to \F$ is a linear combination of $f_0,\ldots, f_n$ \textup{if and only if} .
+\end{lemma}
+\begin{proof}
+The direction $\Rightarrow$ is immediate: if $f_i(v) = 0$ for all $0\leq i\leq n$, then any linear combination is also zero.
+
+Now assume 
+\end{proof}
+
+\begin{lemma} \label{linearDependenceLinearFunctionals}
+Let $V$ be a vector space and $f_0,\ldots, f_n, f$ linear functionals in $(V\to \F)$. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is a linear combination of $f_0,\ldots, f_n$;
+\item there exists a $C>0$ such that $f(v) \leq C \max_{0\leq i\leq n}|f_i(v)|$;
+\item $\ker(f) \supseteq \bigcap_{0\leq i \leq n}\ker(f_i)$;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The implications $(1) \Rightarrow (2) \Rightarrow (3)$ are clear.
+
+Now assume $(3)$ holds and consider the linear function $f_0\times \ldots \times f_n: V\to \F^{n+1}$. Because of (3), the functional
+\[ F: \im(f_0\times \ldots \times f_n) \to \F: x\mapsto \sunp\circ f^\imf\circ (f_0\times \ldots \times f_n)^\preimf(\{x\}) \]
+is well-defined. Extend $F$ to the whole of $\F^{n+1}$. By \ref{ellIsomorphism} we can represent this as:
+\[ F: \F^{n+1}\to \F: (u_0, \ldots, u_n)\mapsto \sum_{i=0}^n \alpha_iu_i. \]
+From $f(v) = F\big((f_0\times \ldots \times f_n)(v)\big)$, we get
+\[ f(v) = \sum_{i=0}^n \alpha_i f_i(v) \qquad \forall v\in V. \]
+So $f = \sum_{i=0}^n \alpha_i f_i$.
+\end{proof}
+\begin{corollary}
+Let $V$ be a vector space and $f_0,\ldots, f_n$ linearly independent linear functionals in $(V\to \F)$. Then there exist $v_0, \ldots, v_n$ such that $f_i(v_j) = \delta_{i,j}$.
+\end{corollary}
+\begin{proof}
+The proof is by induction. The case $n=1$ is clear: if there was no such $a_1$, then $f_1$ would be zero and thus not linearly independent.
+
+Suppose the statement holds for $n-1$ and take $f_0,\ldots, f_n$ linearly independent linear functionals with corresponding $v_0,\ldots, v_{n-1}$. By point (3) of the proposition we can find $v_n \in \bigcap_{0\leq i \leq n}\ker(f_i)\setminus \ker(f_n)$, which after rescaling can be taken to be such that $f_n(v_n) = 1$. By construction $f_i(v_n) = 0$ for $i<n$.
+
+Now replace $v_i$ with $v_i-f_n(v_i)v_n$ and rescale.
 \end{proof}
 
 \subsection{The dual space}
@@ -453,7 +499,7 @@ using $\dim_{K}W \geq |K| \geq \aleph_0$.
 Let $\sSet{V,\xi}$ be a convergence vector space. If $V$ is finite-dimensional, then $\sSet{V,\xi}^* = \sSet{V,\mathfrak{a}}^*$.
 \end{corollary}
 \begin{proof}
-We have $\sSet{V,\xi}^* \subseteq \sSet{V,\mathfrak{a}}^*$ by \ref{algebraicDual}. Because $V$ is finite-dimensional, we obtain equality by \ref{vectorSpaceEquality}.
+We have $\sSet{V,\xi}^* \subseteq \sSet{V,\mathfrak{a}}^*$ by \ref{algebraicDual}. Because $V$ is finite-dimensional, we obtain equality equality of space from equality of dimension by \ref{vectorSpaceEquality}.
 \end{proof}
 
 \subsubsection{The bidual space}
@@ -1275,27 +1321,22 @@ y \in \setbuilder{\abspair{x,\cdot}^{\preimf}(\,[0,\epsilon]\,)}{x\in X, \epsilo
 
 \begin{lemma} \label{functionalContinuityWeakTopology}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $f: Y\to \F$ a linear functional. Then
-\[ f\in \sSet{Y, \sigma(X,Y)}^* \iff \exists \;\text{finite}\; A\subseteq X: \forall y\in Y: \; |f(y)| \leq \max_{x\in A}\abspair{x,y}.  \]
+\[ f\in \sSet{Y, \sigma(X,Y)}^* \iff \exists \{x_0,\ldots, x_n\}\subseteq X: \exists \{\alpha_0,\ldots, \alpha_n\}\subseteq \F: f = \sum_{i=0}^n \alpha_i \pair{x_i, \cdot}.  \]
 \end{lemma}
 \begin{proof}
-By point (3) of \ref{initialSeminormConvergence} we have
-\[ f\in \sSet{Y, \sigma(X,Y)}^* \iff \exists \;\text{finite}\; A\subseteq X: \exists C >0:  \forall y\in Y: \; |f(y)| \leq C \max_{x\in A}\abspair{x,y}.  \]
-Because $C \max_{x\in A}\abspair{x,y} = \max_{x\in A}\abspair{Cx,y} = \max_{x\in C\cdot A}\abspair{x,y}$, we can eliminate the $C$ by replacing $A$ by $C\cdot A$.
+By a comparison of \ref{linearDependenceLinearFunctionals} and point (3) of \ref{initialSeminormConvergence}.
 \end{proof}
 
 \begin{proposition}
 Let $V$ be a locally convex TVS. Then $V^* = \sSet{V, \sigma(V^*, V)}^*$.
 \end{proposition}
 \begin{proof}
-From \ref{functionalContinuityWeakTopology}, it is easy to see that $V^* \subseteq \sSet{V, \sigma(V^*, V)}^*$: take $f\in V^*$ and note that $|f(v)| \leq |f(v)| = \max_{x\in \{f\}}|x(v)| = \max_{x\in \{f\}}\abspair{x,v}$.
+This follows easily from \ref{functionalContinuityWeakTopology}:
 
-Now take $f\in \sSet{V, \sigma(V^*, V)}^*$
+If $f\in V^*$, then $f = \pair{f,\cdot}$ and thus $f\in \sSet{V, \sigma(V^*, V)}^*$.
+
+If $f\in \sSet{V, \sigma(V^*, V)}^*$, then $f$ is a linear combination of continuous functions and thus continuous, because the composition of linear functions is continuous.
 \end{proof}
-
-\subsubsection{Polar sets}
-\begin{definition}
-
-\end{definition}
 
 \subsubsection{Weak-$*$ topology}
 
@@ -1306,6 +1347,55 @@ Let $X$ be a Banach space and let $X'$ have the weak-$*$ topology. Then a linear
 \begin{proof}
 TODO 9.2 in lecture notes.
 \end{proof}
+
+\subsection{Polar sets}
+\begin{definition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. The \udef{polar} of $B$ is the polar w.r.t. the relation $\pol$ on $(Y,X)$ defined by
+\[ y\pol x \qquad\iff\qquad \abspair{x, y} \leq 1. \]
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then
+\[ B^\pol = \setbuilder{x\in X}{\sup_{y\in B}\abspair{x,y} \leq 1}. \]
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then
+\begin{enumerate}
+\item for all $\lambda \neq 0$: $(\lambda B)^\pol = |\lambda|^{-1}B^\pol$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then $B^\pol$ is absolutely convex and $\sigma(X,Y)$-closed.
+\end{proposition}
+
+TODO $(\bigcup A)^\pol = \bigcap A^\pol$.
+
+
+
+\subsubsection{Annihilator subspaces}
+\begin{lemma}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $V\subseteq Y$ a subspace. Then
+\[ V^\pol = \setbuilder{x\in X}{\forall y\in V:\;\pair{x,y} = 0}. \]
+\end{lemma}
+
+
+\subsection{The pair $(V^*, V)$}
+\begin{definition}
+Let $V$ be a vector space and $V^*$ the continuous dual under some convergence. Any convergence on $V$ such that the continuous dual is still $V^*$ is called a \udef{convergence of the dual pair}.
+\end{definition}
+Any property that only depends on continuous linear functionals is the same for ant convergence of the dual pair.
+
+\begin{proposition}
+Let $V$ be a vector space and $A\subseteq V$ a convex subset. Let $\xi,\zeta$ be two vector space convergences on $V$. Then
+\[ \sSet{V,\xi}^* = \sSet{V,\zeta}^* \qquad\implies\qquad \adh_\xi(A) = \adh_\zeta(A). \]
+\end{proposition}
+TODO closures? or only topological convergences? 
+\begin{proof}
+TODO Robertson p34
+\end{proof}
+
 
 \subsection{Mackey topology}
 
