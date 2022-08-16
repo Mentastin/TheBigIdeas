@@ -799,6 +799,15 @@ Then $(\Omega,\mathcal{A},\delta_x)$ is a measure space and $\delta_x$ is called
 \end{itemize}
 \end{example}
 
+\begin{lemma} \label{countingMeasureCriterion}
+Let $\Omega$ be a set. A measure on $\powerset(\Omega)$ is the counting measure \textup{if and only if} $\mu(\{\omega\}) = 1$ for all $\omega\in\Omega$.
+\end{lemma}
+\begin{proof}
+For any finite $A\subseteq \Omega$ we have $A = \biguplus_{a\in A}\{a\}$ and thus $\mu(A) = \#(A)$ be $\sigma$-additivity.
+
+If $A\subseteq \Omega$ is infinite, take $k\in \N$. We can find a subset $B\subseteq A$ of cardinality $k$ and thus we can write $\mu(A) = \mu(B) + \mu(A\setminus B) \geq \mu(B) = k$. Thus $\mu(A) \geq k$ for all $k\in \N$, meaning $\mu(A)$ is infinite.
+\end{proof}
+
 \begin{proposition}[Pushforward measure] \label{pushforwardMeasure}
 Let $\sSet{\Omega_1, \mathcal{A}, \mu}$ be a measure space and $\sSet{\Omega_2, \mathcal{B}}$ a measurable space. Let $f: \Omega_1 \to \Omega_2$ be a measurable function. Then
 \[ \nu = \mu\circ f^{-1}|_{\mathcal{B}}: \mathcal{B}\to [0,\infty]: B \mapsto \mu(f^{-1}[B]) \]
@@ -895,6 +904,11 @@ TODO initial convergence
 
 \subsection{Measures on topological spaces}
 \begin{definition}
+Let $\sSet{X, \topology_X}$ be a topological space. Any measure on the Borel-measurable space is called a \udef{Borel} measure. 
+\end{definition}
+
+
+\begin{definition}
 Let $\sSet{X, \topology_X}$ be a topological space with Borel $\sigma$-algebra $\mathcal{B}$. A measure $\mu: \mathcal{B} \to [0,\infty]$ is called \udef{locally finite} if every $x\in X$ has a neighbourhood $U_x$ such that $\mu(U_x)$ is finite.
 \end{definition}
 
@@ -909,25 +923,6 @@ Let $\sSet{X, \topology_X}$ be a topological space with associated Borel $\sigma
 We say $\mu$ is \udef{outer regular} and \udef{weakly inner regular}.
 \end{definition}
 
-\subsubsection{Haar measures}
-\begin{theorem}[Haar measure]
-Let $G$ be a locally compact group. There exists a non-zero measure $\mu$ on the Borel $\sigma$-algebra $\mathcal{B}$ such that
-\[ \forall x\in G: \forall A\in \mathcal{B}:\quad \mu(x\cdot A) = \mu(A). \]
-It is uniquely determined up to scalar multiples.
-\end{theorem}
-This measure is called the \udef{Haar measure} of $G$.
-
-\begin{lemma}
-Let $\mu$ be the Haar measure on a locally compact group $G$.
-\begin{enumerate}
-\item Let $A\subseteq G$ be an open set, then $\mu(A) =0 \iff A = \emptyset$.
-\item Let $f: G\to \R^{\geq 0}$ be a positive continuous function, then $\int_G f \diff{\mu} = 0 \iff f= 0$.
-\item Every compact set has finite measure.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-
-\end{proof}
 
 
 \subsubsection{The Lebesgue measure}
@@ -1150,14 +1145,14 @@ This shows that $f$ is measurable by \ref{pointWiseConvergenceMeasurable}. Then 
 using monotonicity of the integral \ref{propertiesIntegralPositiveFunctions} and liminf \ref{propertiesIntegralPositiveFunctions} for the last inequality.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{functionPropertiesFromIntegral}
 Let $\seq{\Omega, \mathcal{A}, \mu}$ be a measure space and $f:\Omega\to[0,+\infty]$ a positive measurable function. Then
 \begin{enumerate}
 \item $\int_\Omega f\diff{\mu} = 0$ \textup{if and only if} $f(x) = 0$ a.e.;
-\item if $f$ is integrable, then $f(x)< +\infty$ a.e.
+\item if $f$ is integrable, then $f(x)< +\infty$ a.e.\
 \end{enumerate}
 \end{proposition}
-\begin{proof}(1) Set $E = \setbuilder{x\in\R}{f(x) \neq 0}$. Then $f(x) = 0$ a.e. is equivalent to $\mu(E) = 0$.
+\begin{proof}(1) Set $E = \setbuilder{x\in\R}{f(x) \neq 0}$. Then $f(x) = 0$ a.e.\ is equivalent to $\mu(E) = 0$.
 
 Assume $\mu(E) = 0$, then 
 \[ \int_\Omega f\diff{\mu} = \int_{\Omega\setminus E} f\diff{\mu} + \int_E f\diff{\mu} = 0+\int_E f\diff{\mu} \leq \sup_{x\in E}(f(x)). \]
@@ -1196,7 +1191,7 @@ is measurable and
 \[ \int_\Omega f\diff{\mu} \geq \limsup_{n\to\infty}\int_\Omega h_n\diff{\mu}. \]
 \end{proposition}
 \begin{proof}
-By the corollary $g(x)<+\infty$ a.e. and so also $g-h_n<+\infty$ a.e. Applying Fatou's lemma \ref{FatouLemma} gives
+By the corollary $g(x)<+\infty$ a.e.\ and so also $g-h_n<+\infty$ a.e. Applying Fatou's lemma \ref{FatouLemma} gives
 \[ \int\liminf g-h_n \leq \liminf\int g-h_n\]
 \end{proof}
 
@@ -1281,7 +1276,7 @@ Let $\mu,\nu$ be measures on the measurable space $(\Omega,\mathcal{A})$. We say
 \begin{theorem}[Radon-Nikodym]
 Let $\mu,\nu$ be measures on the measurable space $(\Omega,\mathcal{A})$. Then $\nu$ is absolutely continuous w.r.t. $\mu$ \textup{if and only if} there exists a measurable function $f:\Omega\to\R$ (or $\C$?) such that
 \[ \nu(A) = \int_\Omega f\cdot \chi_A \diff{\mu} \qquad \forall A\in\mathcal{A}. \]
-The function $f$ is uniquely determined a.e. (w.r.t. $\mu$).
+The function $f$ is uniquely determined a.e.\ (w.r.t. $\mu$).
 \end{theorem}
 
 \subsection{Lebesgue decomposition}

@@ -1679,9 +1679,149 @@ Let $S\subset \Bounded(\mathcal{H})$ be a set for some Hilbert space $\mathcal{H
 \end{enumerate}
 \end{proposition}
 
+\chapter{Harmonic analysis}
+\section{Functions on locally compact groups}
 
-\chapter{Group $C^*$-algebras and crossed products}
-I also like the name ``Automorphism groups''.
+\begin{proposition}
+Let $G$ be a locally compact group. Then any function $f\in \cont_c(G)$ is uniformly continuous.
+\end{proposition}
+
+\begin{proposition} \label{integralCompactSupportContinuous}
+Let $G$ be a locally compact group, $\mu$ a Borel measure on $G$ and $f\in \cont_c(G)$.
+Then the function $g\mapsto \int_G f(xg)\diff{\mu(x)}$ is continuous on $G$.
+\end{proposition}
+
+\section{Haar integration}
+
+\begin{lemma}
+Let $G$ be a topological group and $\mathcal{B}$ the Borel $\sigma$-algebra of $G$. Then $x\cdot A$ and $A\cdot x$ are measurable for all $A\in \mathcal{B}$ and $x\in G$.
+\end{lemma}
+
+\begin{definition}
+Let $G$ be a group. A measure $\mu$ on $G$ such that $\mu(x\cdot A) = \mu(A)$ for all measureable sets $A$ and $x\in G$,
+is called \udef{left-invariant}.
+\end{definition}
+
+\begin{theorem}[Haar measure]
+Let $G$ be a locally compact group. There exists a non-zero left-invariant Radon measure $\mu$ $G$.
+It is uniquely determined up to scalar multiples.
+\end{theorem}
+This measure is called the \udef{Haar measure} of $G$. Let $\mu$ be the Haar measure of $G$. We abbreviate $L^p(G,\mu)$ by $L^p(G)$.
+\begin{proof}
+TODO
+\end{proof}
+
+
+\begin{lemma}
+Let $\mu$ be the Haar measure on a locally compact group $G$. For any non-empty open $U\subseteq G$ and compact $K\subseteq G$ there exists an $n\in \N$ such that $\mu(K)\leq n\mu(U)$.
+\end{lemma}
+\begin{proof}
+Because $\bigcup_{x\in G} x\cdot U = G$, the family $\setbuilder{x\cdot U}{x\in G}$ is an open cover of $G$. For any compact $K\subseteq G$, $\setbuilder{x\cdot U \cap K}{x\in G}$ is an open cover of $K$, which has a finite subcover $\setbuilder{x_i\cdot U \cap K}{x_1,\ldots, x_n \in G}$ by \ref{topologyCompactnessOpenCover}. Then
+\[ \mu(K) = \mu\left(\bigcup_{i=1}^n x_i\cdot U \cap K\right) \leq \sum_{i=1}^n \mu(x_i\cdot U \cap K) \leq \sum_{i=1}^n \mu(x_i\cdot U) = \sum_{i=1}^n \mu(U) = n\mu(U). \]
+\end{proof}
+\begin{corollary} \label{HaarConsequences}
+Let $\mu$ be the Haar measure on a locally compact group $G$.
+\begin{enumerate}
+\item Let $U\subseteq G$ be an open set, then $\mu(U) =0 \iff U = \emptyset$.
+\item Let $f: G\to \R^{\geq 0}$ be a positive continuous function, then $\int_G f \diff{\mu} = 0 \iff f= 0$.
+\item Every compact set has finite measure.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) If $U = \emptyset$, then $\mu(U) = 0$ by definition. Assume, towards a contradiction, $\mu(U) = 0$ but $U \neq \emptyset$. Then for any compact $K\subseteq G$ we have $\mu(K) \leq n\mu(U) = 0$ by the lemma.
+
+By weak inner regularity all open sets are null sets. By outer regularity all sets are null sets and thus $\mu$ is the zero measure, which is not the Haar measure.
+
+(2) By \ref{functionPropertiesFromIntegral} the open set $f^\preimf\big(\,]0, \infty[\,\big)$ has measure zero and so must be empty by (1).
+
+(3) By local finiteness, there exists an open set $U$ of finite measure. Take $K$ a compact set. Then $\mu(K) \leq n\mu(U)$, which is finite.
+\end{proof}
+
+\begin{proposition}
+Let G be a locally compact group. The following are equivalent:
+\begin{enumerate}
+\item there exist $x\in G$ such that $\{x\}$ has non-zero Haar measure;
+\item the counting measure is a Haar measure;
+\item $G$ is a discrete group.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Let $\mu$ be a Haar measure and let $\{x\}$ have non-zero Haar measure. Then $\mu(\{x\})^{-1}\mu$ is also a Haar measure. For all $y\in G$ we have
+\[ mu(\{x\})^{-1}\mu(\{y\}) = mu(\{x\})^{-1}\mu(xy^{-1}\cdot\{y\}) = mu(\{x\})^{-1}\mu(\{x\}) = 1, \]
+so $\mu(\{x\})^{-1}\mu$ is the counting measure by \ref{countingMeasureCriterion}.
+
+$(2) \Rightarrow (3)$ Every point (in particular $1$) has a compact neighbourhood. By \ref{HaarConsequences} this compact neighbourhood has finite measure and thus is a finite set. The neighbourhood contains an open set of finite measure. TODO use Hausdorff!
+
+$(3) \Rightarrow (1)$ If $G$ is discrete, then $\{x\}$ is open and has non-vanishing Haar measure by \ref{HaarConsequences}.
+\end{proof}
+
+\begin{proposition}
+Let $G$ be a locally compact group. Then $G$ has finite Haar measure \textup{if and only if} $G$ is compact.
+\end{proposition}
+\begin{proof}
+If $G$ is compact, then it has finite Haar measure by \ref{HaarConsequences}.
+
+Now assume $G$ has finite Haar measure. Let $U$ be a compact neighbourhood of $1$. By \ref{HaarConsequences}, $\mu(U) \neq 0$. Consider the set
+\[ \setbuilder{x_1\cdot U\cup \ldots \cup x_n\cdot U}{n\in \N, \forall i < j \leq n: x_i\cdot U \perp x_j\cdot U} \]
+as a subset of the poset $\sSet{\powerset(G), \subseteq}$. Every chain in this set is finite as $n = \mu(U)^{-1}\mu(x_1\cdot U\cup \ldots \cup x_n\cdot U) \leq \mu(G)$. Take a maximal chain with maximum $K = y_1\cdot U\cup \ldots \cup y_n\cdot U$. Now $K$ is compact (TODO ref) and for all $z\in G$ we have $K\mesh z\cdot K$, because otherwise the chain would not have been maximal. Thus $G = K\cdot K^{-1}$, which is a compact set by (TODO ref).
+\end{proof}
+
+\subsection{The modular function}
+\begin{definition}
+Let $G$ be a locally compact group and $\mu$ a Haar measure on $G$. Then $\mu_x$ defined by
+\[ \mu_x(A) \defeq \mu(A \cdot x) \]
+is also a Haar measure. There exists a unique function $\Delta: G \to \R^{> 0}$ such that
+\[ \mu_x = \Delta(x)\mu. \]
+This function is called the \udef{modular function} of $G$.
+
+If $\Delta = \underline{1}$, then $G$ is called \udef{unimodular}.
+\end{definition}
+The modular function is independent of the choice of Haar measure. Clearly every commutative group is unimodular.
+
+\begin{lemma} \label{rightShiftHaarIntegral}
+Let $G$ be a locally compact group, $f\in L^1(G)$ and $y\in G$. Then
+\begin{enumerate}
+\item $\int_G f(yx)\diff{x} = \int_G f(x)\diff{x}$;
+\item $\int_G f(xy)\diff{x} = \Delta(y^{-1})\int_G f(x)\diff{x}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO 
+\end{proof}
+
+\begin{proposition}
+Let $G$ be a locally compact group. The modular function $\Delta: G \to \sSet{\R^{> 0},\cdot}$ is a continuous group homomorphism.
+\end{proposition}
+\begin{proof}
+Let $\mu$ be a Haar measure.
+
+To show $\Delta$ is a group homomorphism, take $x,y\in G$. Let $A$ be a measurable set with finite and non-zero measure. Then
+\[ \Delta(xy)\mu(A) = \mu(A \cdot xy) = \mu\big((A\cdot x)\cdot y\big) = \Delta(y)\mu(A\cdot x) = \Delta(y)\Delta(x)\mu(A). \]
+
+For continuity, take some $f\in\cont_c(G)$ with non-zero integral (TODO show existence). Set $c = \int_G f\diff{\mu} \neq 0$. Then by \ref{rightShiftHaarIntegral} we have
+\[ \Delta(y) = c^{-1}\int_G f(xy^{-1})\diff{x} = \int_G f\circ \rho_{y^{-1}}(x)\diff{x}, \]
+which is continuous by \ref{integralCompactSupportContinuous} because $f\circ \rho_{y^{-1}} \in \cont_c(G)$ (TODO ref).
+\end{proof}
+\begin{corollary}
+Every compact group is unimodular.
+\end{corollary}
+\begin{proof}
+The image $f^{\imf}[G]$ is a compact subgroup of $\sSet{\R^{> 0},\cdot}$ by \ref{compactConstructions}. The only compact subgroup of $\sSet{\R^{> 0},\cdot}$ is $\{1\}$ (TODO ref).
+\end{proof}
+
+\subsection{The character group}
+\begin{definition}
+Let $A$ be a locally compact abelian group. A \udef{character} of $A$ is a continuous group homomorphism $\chi: A\to \T$.
+
+The set of all characters forms a group under pointwise multiplication, called the \udef{character group}. It is denoted $\widehat{A}$.
+\end{definition}
+
+\subsection{The Fourier transform}
+\begin{definition}
+Let $A$ be a locally compact abelian group and $f\in L^1(A)$. The \udef{Fourier transform} of $f$ is the function
+\[ \hat{f}: \widehat{A} \to \C: \chi \mapsto \hat{f}(\chi) = \int_A f(x)\overline{\chi(x)}\diff{x}. \]
+\end{definition}
+
 \section{Group $C^*$-algebras}
 \subsection{Discrete groups}
 \begin{definition}
@@ -1696,7 +1836,31 @@ The group algebra $\C G$ has an involution:
 And it admits a norm making it a $C^*$-algebra.
 
 \subsection{Locally compact Hausdorff groups}
-For topological groups we are not restricted to finite sums. For locally compact Hasdorff groups we can in fact define multiplication, involution and a norm on the space $C_c(G)$ of complex-valued continuous functions of compact support.
+For topological groups we are not restricted to finite sums.
+
+\begin{definition}
+Let $G$ be a locally compact group and $f,g\in L^1(G)$. The \udef{convolution product} $f\star g$ of $f$ and $g$ is the partial function defined by
+\[ (f\star g)(x) = \int_Gf(y)g(y^{-1}x)\diff{y}, \]
+whenever the integral exists.
+\end{definition}
+
+\begin{proposition}
+Let $G$ be a locally compact group and $f,g\in L^1(G)$. Then convolution makes $L^1(G)$ a Banach-$*$-algebra.
+\end{proposition}
+We need to show:
+\begin{enumerate}
+\item $f\star g$ exists a.e.;
+\item $\norm{f\star g}_1 = \int_G |f\star g|\diff{\mu}< \infty$;
+\item $\norm{f \star g}_1 \leq \norm{f}_1\norm{g}_1$;
+\item the convolution is a bilinear and associative.
+\end{enumerate}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+The algebra $L^1(G)$ is commutative \textup{if and only if} $G$ is a commutative group.
+\end{proposition}
 
 \begin{lemma}
 Let $G$ be a locally compact Hausdorff group. Convolution is a bilinear operation that maps $C_c(G)\times C_c(G)\to C_c(G)$ defined by
