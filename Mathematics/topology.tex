@@ -81,6 +81,10 @@ In the sequel we will usually consider convergence as a property of filters, how
 Let $\sSet{X,\xi}$ be a convergence space. An \udef{approach} on $X$ is a function $F: X\to \powerfilters(X)$ such that $F(x) \overset{\xi}{\longrightarrow} x$ for all $x\in X$.
 \end{definition}
 
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space. The function $X\to \powerfilters(X): x\mapsto \pfilter{x}$ is an approach.
+\end{lemma}
+
 \subsection{Finite depth and other requirements}
 TODO Kent convergence.
 \begin{definition}
@@ -91,6 +95,8 @@ Let $\sSet{X,\xi}$ be a convergence space. Take arbitrary $F,G \in \powerfilters
 \end{itemize}
 \end{definition}
 TODO replace finite depth with limit space.
+
+The point of a Kent space is that if $F\to x$, then ``essentially'' every $A\in F$ contains $x$.
 
 \begin{lemma}
 Let $X$ be a set and $\xi$ a preconvergence on $X$. Then $\xi$ is finitely deep \textup{if and only if}
@@ -1309,29 +1315,9 @@ Let $\sSet{X,\xi}$ be a convergence space and $x,y\in X$. If $x,y$ are separated
 Assume $x,y$ separated. WLOG we can assume $\pfilter{x} \not\to y$. So $\pfilter{x}$ distinguishes $x$ and $y$.
 \end{proof}
 
-\subsubsection{Separation by vicinities}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by vicinities} if there exist $U\in \vicinity_\xi(A)$ and $V\in\vicinity_\xi(B)$ such that $U\perp V$.
-
-We call two points $x,y\in X$ separated by vicinities if $\{x\}$ and $\{y\}$ are separated by vicinities, i.e.\ there exist vicinities $U,V$ of $x,y$, resp., such that $U\perp V$.
-\end{definition}
-
-\begin{proposition} \label{separationByVicinitiesEquivalences}
-Let $\sSet{X,\xi}$ be a convergence space.
-\begin{enumerate}
-\item If $A,B \subseteq X$ are separated by vicinities, then .
-\item If $\xi$ is pretopological and $\lim^{-1}(x)\perp \lim^{-1}(y)$ for some $x,y\in X$, then $x,y$ are separated by vicinities.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-$(1)$ Assume $A,B$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $\lim^{-1}(A)\amesh \lim^{-1}(B)$, i.e.\ there exists a filter $F$ that converges to $x\in A$ and $y\in B$. Then $U,V\in F$ and thus $U\cap V = \emptyset \in F$, meaning $F$ is not a proper filter.
-
-$(2)$ Assume $x,y$ are not separated by vicinities. Then $\vicinity_\xi(x)\amesh \vicinity_\xi(y)$, meaning $x$ is an accumulation point of $\vicinity_\xi(y)$. By \ref{subfilterToAccumulationPoint}, there exists a filter $G\geq \vicinity_\xi(y)$ such that $G\to x$. Then $G\in \lim^{-1}(x)\cap \lim^{-1}(y)$.
-\end{proof}
-
 \subsubsection{Separation by convergent filters}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by convergent filters} if for all approaches $F:X\to \powerfilters(X)$, the contours satisfy $\neg(F(A)\mesh F(B))$.
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by convergent filters} if for all approaches $F:X\to \powerfilters(X)$, the contours satisfy $\neg(F(A)\amesh F(B))$.
 
 We call two points $x,y\in X$ separated by convergent filters if $\{x\}$ and $\{y\}$ are separated by convergent filters.
 \end{definition}
@@ -1349,19 +1335,49 @@ $(1) \Rightarrow (2)$ Assume $\lim^{-1}(x)\amesh \lim^{-1}(y)$, i.e.\ there exis
 $(2) \Rightarrow (1)$ Assume $\lim^{-1}(x)\perp \lim^{-1}(y)$. Pick an arbitrary approach $F$. If $F(x)\amesh F(y)$, then $F(x)\vee F(y)$ is proper by \ref{joinProperFilter} and in $\lim^{-1}(x)\cap \lim^{-1}(y)$ by monotonicity, which is a contradiction.
 \end{proof}
 
-\begin{proposition} \label{disjointVicinitiesConvergentFilterSeparation}
-Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$.
+
+\subsubsection{Separation by vicinities}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by vicinities} if there exist $U\in \vicinity_\xi(A)$ and $V\in\vicinity_\xi(B)$ such that $U\perp V$.
+
+We call two points $x,y\in X$ separated by vicinities if $\{x\}$ and $\{y\}$ are separated by vicinities, i.e.\ there exist vicinities $U,V$ of $x,y$, resp., such that $U\perp V$.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. The following are equivalent:
 \begin{enumerate}
-\item If there exist disjoint vicinities of $A$ and $B$, then $A$ and $B$ are separated by convergent filters.
+\item $A$ and $B$ are separated by vicinities;
+\item $\neg(\vicinity_\xi(A)\amesh \vicinity_\xi(B))$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition} \label{disjointVicinitiesConvergentFilterSeparation}
+Let $\sSet{X,\xi}$ be a convergence space.
+\begin{enumerate}
+\item Separation by vicinities implies separation by convergent filters.
 \item If $\xi$ is pretopological, the converse also holds.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1)$ Assume $A,B$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $F(A)\amesh F(B)$ for some approach $F$. Then for all $a\in A$, $U\in F(a)$, so $U\in F(A)$. Similarly $V\in F(B)$. This means $U\mesh V$, which is a contradiction.
+$(1)$ Assume $A,B\subseteq X$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $F(A)\amesh F(B)$ for some approach $F$. Then for all $a\in A$, $U\in F(a)$, so $U\in F(A)$. Similarly $V\in F(B)$. This means $U\mesh V$, which is a contradiction.
 
 $(2)$ If $\xi$ is pretopological, then $\vicinity_\xi$ is an approach. Thus $\neg(\vicinity_\xi(A)\amesh \vicinity_\xi(B))$, meaning there exist disjoint vicinities of $A,B$.
 \end{proof}
 Thus in the pretopological case all approaches $F$ satisfy $\neg(F(A)\mesh F(B))$ iff the vicinity filter satisfies $\neg(\vicinity(A)\mesh \vicinity(B))$.
+
+
+\begin{proposition} \label{separationByVicinitiesEquivalences}
+Let $\sSet{X,\xi}$ be a convergence space.
+\begin{enumerate}
+\item If $A,B \subseteq X$ are separated by vicinities, then .
+\item If $\xi$ is pretopological and $\lim^{-1}(x)\perp \lim^{-1}(y)$ for some $x,y\in X$, then $x,y$ are separated by vicinities.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1)$ Assume $A,B$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $\lim^{-1}(A)\amesh \lim^{-1}(B)$, i.e.\ there exists a filter $F$ that converges to $x\in A$ and $y\in B$. Then $U,V\in F$ and thus $U\cap V = \emptyset \in F$, meaning $F$ is not a proper filter.
+
+$(2)$ Assume $x,y$ are not separated by vicinities. Then $\vicinity_\xi(x)\amesh \vicinity_\xi(y)$, meaning $x$ is an accumulation point of $\vicinity_\xi(y)$. By \ref{subfilterToAccumulationPoint}, there exists a filter $G\geq \vicinity_\xi(y)$ such that $G\to x$. Then $G\in \lim^{-1}(x)\cap \lim^{-1}(y)$.
+\end{proof}
 
 \subsubsection{Separation by neighbourhoods}
 \begin{definition}
@@ -1627,21 +1643,30 @@ $(2) \Leftrightarrow (3)$ One direction is given by definition. The other follow
 Any $R_2$ convergence is also $R_1$.
 \end{lemma}
 
-\begin{proposition} \label{pretopologicalRegularity}
-A pretopology is regular \textup{if and only if} it separates points from the complements of their vicinities by convergent filters.
+\begin{proposition} \label{regularityBySeparation}
+Let $\xi$ be a convergence.
+\begin{itemize}
+\item If $\xi$ is regular, then $\xi$ separates points from the complements of their vicinities by convergent filters.
+\item If $\xi$ is pretopological, then the converse also holds.
+\end{itemize}
 \end{proposition}
 \begin{proof}
-A pretopology is regular iff $\vicinity_\xi(x)\subseteq \upset\adh_\xi[\vicinity_\xi(x)]$ for all $x\in X$. This means
+(1) Fix an arbitrary approach $F: X\to \powerfilters(X)$ and $V_x\in \vicinity(x)$ for all $x\in X$.
+
+By regularity we have $\vicinity(x)\subseteq \upset\adh[F(x)]$ for all $x\in X$.
+This means
 \begin{align*}
-& \forall x\in X: \forall V\in \vicinity_\xi(x): \exists U \in \vicinity_\xi(x): \quad \adh_\xi(U) \subseteq V \\
-\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \exists U \in \vicinity_\xi(x): \quad (\adh_\xi(U) \perp V^c) \\
-\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \exists U \in \vicinity_\xi(x): \quad \neg(\adh_\xi(U) \mesh V^c) \\
-\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \exists U \in \vicinity_\xi(x): \quad \neg(\{U\} \amesh \vicinity_\xi(V^c)) \\
-\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \quad \neg(\forall U \in \vicinity_\xi(x):\{U\} \amesh \vicinity_\xi(V^c)) \\
-\iff& \forall x\in X: \forall V\in \vicinity_\xi(x): \quad \neg(\vicinity_\xi(x) \amesh \vicinity_\xi(V^c)).
+& \forall x\in X: \forall V\in \vicinity(x): \exists U \in F(x): \quad \adh_\xi(U) \subseteq V \\
+\iff& \forall x\in X: \forall V\in \vicinity(x): \exists U \in F(x): \quad (\adh_\xi(U) \perp V^c) \\
+\iff& \forall x\in X: \forall V\in \vicinity(x): \exists U \in F(x): \quad \neg(\adh_\xi(U) \mesh V^c) \\
+\iff& \forall x\in X: \forall V\in \vicinity(x): \exists U \in F(x): \quad \neg(\{U\} \amesh \vicinity(V^c)) \\
+\iff& \forall x\in X: \forall V\in \vicinity(x): \quad \neg(\forall U \in F(x):\{U\} \amesh \vicinity(V^c)) \\
+\iff& \forall x\in X: \forall V\in \vicinity(x): \quad \neg(F(x) \amesh \vicinity(V^c)) \\
+\implies& \forall x\in X: \forall V\in \vicinity(x): \quad \neg(F(x) \amesh F(V^c)).
 \end{align*}
 We have used \ref{setAdherenceInherence}.
-The last line is equivalent to the separation of points from the complements of their vicinities by \ref{disjointVicinitiesConvergentFilterSeparation}.
+
+(2) In the pretopological case, we can take $F = \vicinity$ and we can run the argument in reverse, because regularity is implied by $\vicinity(x)\subseteq \upset\adh[\vicinity(x)]$ for all $x\in X$.
 \end{proof}
 
 \begin{proposition} \label{topologicalRegularity}
@@ -1656,7 +1681,7 @@ Let $\sSet{X,\xi}$ be a topological space. Then the following are equivalent:
 \begin{proof}
 $(1) \Leftrightarrow (2)$ TODO ref.
 
-$(1) \Leftrightarrow (3)$ By \ref{pretopologicalRegularity}.
+$(1) \Leftrightarrow (3)$ By \ref{regularityBySeparation}.
 
 $(2) \Leftrightarrow (4)$ By \ref{neighbourhoodSeparationLemma}.
 \end{proof}
