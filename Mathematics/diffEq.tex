@@ -69,10 +69,11 @@ A $C_0$-semigroup
 \end{definition}
 
 \section{One-parameter semigroups on Banach spaces}
-\subsection{The generator}
+In this section we will study functions $T: \R^+\to \Bounded(X)$ that are strongly continuous semigroups on a Banach spaces $X$. We will shorten this description to \udef{operator semigroup}.
 
+\subsection{Orbit maps}
 \begin{lemma}
-Let $T: \R^+\to \Lin(X)$ be a strongly continuous semigroup on a Banach space $X$. Consider the orbit map $\xi_x: \R^+ \to X: t\mapsto T(t)x$ for some $x\in X$. The following are equivalent:
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup. Consider the orbit map $\xi_x: \R^+ \to X: t\mapsto T(t)x$ for some $x\in X$. The following are equivalent:
 \begin{enumerate}
 \item $\xi_x$ is differentiable;
 \item $\xi_x$ is differentiable at $0$.
@@ -88,15 +89,182 @@ Clearly $(1)$ implies $(2)$. Now assume $(2)$, we show $\xi_x$ is left and right
 TODO
 \end{proof}
 
+\begin{lemma} \label{integrabilityOrbitMaps}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup. For all $x\in X$, the orbit map $\xi_x$ is integrable on any compact $K\subseteq [0,\infty]$.
+\end{lemma}
+\begin{proof}
+By \ref{BochnerIntegrabilityCondition} we just need to show $\int_K\norm{\xi_x(s)}\diff{s} < \infty$. We have $\int_K\norm{\xi_x(s)}\diff{s} \leq \sup_{s\in K}\norm{\xi_x(s)}\lambda(K)$. Now $\lambda(K)$ is finite by \ref{HaarConsequences} and $\sup_{s\in K}\norm{\xi_x(s)}$ is finite by (TODO ref: extreme value theorem), as $\R \to \R: t\mapsto \norm{\xi_x(t)}$ is a continuous function.
+\end{proof}
+
+\subsection{The generator}
 \begin{definition}
-Let $T: \R^+\to \Lin(X)$ be a strongly continuous semigroup on a Banach space $X$. The \udef{generator} of $T$ is the operator $A: X\not\to X$ defined by
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup. The \udef{generator} of $T$ is the operator $A: X\not\to X$ defined by
 \[ Ax \defeq \xi_x'(0) = \lim_{h\downarrow 0}\frac{1}{h}\big(T(h)x - x\big) \]
 with domain
 \[ \dom(A) = \setbuilder{x\in X}{\text{$\xi_x$ is differentiable}}. \]
 \end{definition}
 Notice that the generator is indeed a linear operator.
 
+\begin{lemma} \label{differentialOperatorSemigroupGenerator}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. If $x\in\dom(A)$, then $T(t)x\in\dom(A)$ and
+\[ \od{}{t}T(t)x = T(t)Ax = AT(t)x \]
+for all $t\in [0,\infty]$.
+\end{lemma}
 
+\begin{proposition} \label{integralOperatorSemigroupGenerator}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. For all $x\in X$, then $\int_0^t T(s)x\diff{s}\in\dom(A)$ and
+\begin{align*}
+T(t)x - x &= A\int_0^t T(s)x\diff{s}
+\end{align*}
+for all $t\in [0,\infty]$. Also
+\begin{align*}
+T(t)x - x &= \int_0^t T(s)Ax\diff{s}
+\end{align*}
+for all $x\in\dom(A)$ and $t\in [0,\infty]$.
+\end{proposition}
+This is an integrated version of \ref{differentialOperatorSemigroupGenerator}, except it holds for all $x\in X$.
+\begin{proof}
+Firstly $\int_0^t T(s)x\diff{s}$ exists and is finite by \ref{integrabilityOrbitMaps}.
+
+To show $A\int_0^t T(s)x\diff{s}$ is well-defined, we calculate
+\begin{align*}
+A\int_0^t T(s)x\diff{s} &= \left.\dod{}{h}\right|_{h=0}T(h)\int_0^t T(s)x\diff{s} \\
+&= \left.\dod{}{h}\right|_{h=0}\int_0^t T(h)T(s)x\diff{s} \\
+&= \left.\dod{}{h}\right|_{h=0}\int_0^t T(s+h)x\diff{s} \\
+&= \left.\dod{}{h}\right|_{h=0}\int_h^{t+h} T(s)x\diff{s} \\
+&= \left.\dod{}{h}\right|_{h=0}\left(\int_0^{t+h} T(s)x\diff{s}-\int_0^{h} T(s)x\diff{s}\right) \\
+&= \left.\dod{}{h}\right|_{h=t}\int_0^{h} T(s)x\diff{s}-\left.\dod{}{h}\right|_{h=0}\int_0^{h} T(s)x\diff{s} \\
+&= T(t)x - x,
+\end{align*}
+where we have used \ref{boundedOperatorUnderIntegral} and (TODO ref: fundamental theorem calculus for Bochner integral+continuity to deal with equality a.e.).
+
+Finally $\int_0^t T(s)Ax\diff{s}$ exists and is finite by \ref{integrabilityOrbitMaps} applied to $Ax$. We conclude using \ref{differentialOperatorSemigroupGenerator} and (TODO ref: second fundamental theorem of calculus).
+\end{proof}
+
+\begin{proposition}
+The generator of an operator semigroup is closed and densely defined.
+\end{proposition}
+\begin{proof}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. To show $A$ is closed, consider $\seq{x_n}\subseteq \dom(A)$ such that $x_n\to x$ and $Ax_n \to y$. From \ref{integralOperatorSemigroupGenerator} we have $T(t)x_n - x_n = \int_0^tT(s)Ax_n\diff{s}$. Thus
+\[ T(t)x-x = \lim_{n\to\infty} T(t)x_n - x_n = \lim_{n\to\infty} \int_0^tT(s)Ax_n\diff{s}. \]
+Now $Ax_n \to y$ means the sequence $\seq{Ax_n}$ is bounded by some constant $M$. Then $\norm{T(s)Ax_n} \leq M\cdot\sup_{0\leq s \leq t}\norm{T(s)}$, meaning we can apply the dominated convergence theorem (TODO ref). So $T(t)x-x = \int_0^tT(s)y\diff{s}$ and thus
+\[ Ax = \lim_{t\downarrow 0}\frac{1}{t}(T(t)x-x) = \lim_{t\downarrow 0}\frac{1}{t}\int_0^tT(s)y\diff{s} = \left.\dod{}{t}\right|_{t=0}\int_0^tT(s)y\diff{s} = T(0)y = y, \]
+by the fundamental theorem of calculus (TODO ref).
+
+For any $x\in X$ we can find a sequence $\seq{x_n}$ in $\dom(A)$ that converges to $x$, namely
+\[ \frac{1}{t_n}\int^{t_n}_0T(s)x\diff{s} \qquad \text{for any sequence $\seq{t_n}$ in $[0,\infty[$ converging to $0$.}  \]
+This is a sequence in $\dom(A)$ by \ref{integralOperatorSemigroupGenerator} and converges to $x$ by TODO ref. Thus $\dom(A)$ is dense in $X$ by TODO ref.
+\end{proof}
+
+\begin{proposition}
+An operator is the generator of at most one operator semigroup.
+\end{proposition}
+\begin{proof}
+Let $T: \R^+\to \Bounded(X)$ and $S: \R^+\to \Bounded(X)$ be two operator semigroups with the same generator $A$. Then for any $t\in [0,\infty[$ and $x\in \dom(A)$,
+\begin{align*}
+\dod{}{s} \left(T(t-s)S(s)x\right) &= T(t-s)S'(s)x - T'(t-s)S(s)x \\
+&= T(t-s)As(s)x - T(t-s)As(s)x \\
+&= 0
+\end{align*}
+by (TODO ref!!!). TODO rest.
+\end{proof}
+
+\begin{proposition}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. Then the following are equivalent:
+\begin{enumerate}
+\item $A$ is bounded;
+\item $A$ is defined everywhere;
+\item $T$ is uniformly continuous.
+\end{enumerate}
+In each case $T(t) = e^{tA}$.
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Because $A$ is closed, $\dom(A)$ is closed by the closed graph theorem \ref{closedGraphTheorem}. As $\dom(A)$ is dense in $X$, this means $\dom(A) = X$.
+
+$(2) \Rightarrow (1)$ TODO also closed graph.
+
+$(3)$ TODO
+\end{proof}
+
+\subsubsection{Cores of the generator}
+TODO move:
+\begin{lemma} \label{uniformContinuityAverage}
+Let $\seq{f_n: [a,b]\to X}$ be a sequence of functions from $[a,b]\subseteq \R$ to a Banach space $X$ that converges uniformly to $f: X\to Y$. Then
+\[ [a,b]\to X: t\mapsto \frac{1}{t}\int_{0}^tf_n(s)\diff{s} \quad\longrightarrow\quad [a,b]\to X: t\mapsto \frac{1}{t}\int_{0}^tf(s)\diff{s} \qquad \text{uniformly.} \]
+\end{lemma}
+\begin{proof}
+We have
+\begin{align*}
+\sup_{t\in[a,b]}\frac{1}{t}\int_0^t \norm{f_n(s) - f(s)}\diff{s} &\leq \sup_{t\in[a,b]}\frac{1}{t}\int_0^t \diff{s}\sup_{s\in [a,b]} \norm{f_n(s) - f(s)} \\
+&= \sup_{s\in [a,b]} \norm{f_n(s) - f(s)} \to 0.
+\end{align*}
+\end{proof}
+
+\begin{lemma} \label{uniformContinuityOrbitMapsConvergentSequence}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup and $\seq{x_n} \to x$ a convergent sequence in $X$. Then $f_n: [0,1]\to X: t\mapsto T(t)x_n$ converges uniformly to $f: [0,1]\to X: t\mapsto T(t)x$.
+\end{lemma}
+\begin{proof}
+The image of $[0,1]$ under $t\mapsto \norm{T(t)}$ is compact and thus bounded, with bound $M$. Then
+\begin{align*}
+\sup_{t\in [0,1]}\norm{f_n(t) - f(t)} &= \sup_{t\in [0,1]}\norm{T(t)x_n - T(t)x} \\
+&= \sup_{t\in [0,1]}\norm{T(t)(x_n - x)} \\
+&\leq M\norm{(x_n - x)} \to 0.
+\end{align*}
+\end{proof}
+
+\begin{proposition} \label{coreGeneratorCriterion}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$ and $D$ a subspace of $\dom(A)$. If $D$ is norm dense in $X$ and invariant under $T(t)$ for all $t\in [0,+\infty]$, then $D$ is a core for $A$.
+\end{proposition}
+Note norm density in $X$ is the same as norm density in $\dom(A)$, because $A$ is densely defined.
+\begin{proof}
+We use \ref{operatorCoreCriterion}. Take $x\in \dom(A)$; we need to show that $x\in\closure_{\norm{\cdot}_A}(D)$.
+
+Because $D$ is norm dense in $X$, we can find a sequence $\seq{x_n}$ in $D$ that norm converges to $x$. We claim it also converges in the graph norm. To show that, it is enough to show that $\seq{Ax_n} \to Ax$ in norm.
+
+Combining \ref{uniformContinuityOrbitMapsConvergentSequence} and \ref{uniformContinuityAverage} gives that
+\[ [0,1] \to X: t\mapsto \frac{1}{t}\int_0^t T(s)x_n\diff{s} \]
+converges uniformly in $n$. Thus by \ref{integralOperatorSemigroupGenerator} and Moore-Osgood (TODO ref) we have
+\begin{align*}
+\lim_{n\to \infty} Ax_n &= \lim_{n\to \infty} \lim_{t\downarrow 0}\frac{1}{t}\int_0^t T(s)Ax_n \diff{s} \\
+&= \lim_{n\to \infty} \lim_{t\downarrow 0}\frac{1}{t}(T(t)x_n - x_n) \\
+&= \lim_{t\downarrow 0}\frac{1}{t}\lim_{n\to \infty}(T(t)x_n - x_n) \\
+&= \lim_{t\downarrow 0}\frac{1}{t}(T(t)x - x) = Ax.
+\end{align*}
+
+TODO
+
+Take a sequence $\seq{t_n}\to 0$ in $\R$. Then we claim
+\[ \seq{x'_n} = \seq{\frac{1}{t_n}\int_0^{t_n}T(s)x_n\diff{s}} \]
+is a sequence in $D$ that converges to $x$ in the graph norm. It is definitely a sequence in $D$ by the invariance of $D$ under $T(t)$. It is now enough to show $\seq{x'_n}$ norm converges to $x$ and $\seq{Ax'_n}$ norm converges to $Ax$.
+\end{proof}
+
+\begin{proposition}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. Then $\bigcap_{n\in\N}\dom(A^n)$ is a core for $A$.
+\end{proposition}
+\begin{proof}
+The space $\bigcap_{n\in\N}\dom(A^n)$ is invariant under $T$ by \ref{differentialOperatorSemigroupGenerator}. In order to use \ref{coreGeneratorCriterion}, we need to verify that $\bigcap_{n\in\N}\dom(A^n)$ is norm dense in $\dom (A)$. TODO
+\end{proof}
+
+\subsubsection{Spectral properties of resolvents}
+\begin{proposition}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$ and growth bound $\norm{T(t)}\leq Me^{wt}$. If $\int_0^\infty e^{-\lambda s}T(s)x\diff{s}$ exists for all $x\in X$, then $\lambda\in\res(A)$ and
+\[ R_A(\lambda)x = \int_0^\infty e^{-\lambda s}T(s)x\diff{s} \]
+for all $x\in X$.
+\end{proposition}
+\begin{proof}
+We use \ref{elementResolventSetNormedSpace}.
+\end{proof}
+\begin{corollary}
+et $T: \R^+\to \Bounded(X)$ be an operator semigroup with growth bound $\norm{T(t)}\leq Me^{wt}$. Then
+\begin{enumerate}
+\item $\Re \lambda > w$ implies $\lambda \in\res(A)$;
+\item $\norm{R_A(\lambda)} \leq \frac{M}{\Re \lambda - w}$ for all $\lambda$ such that $\Re \lambda > w$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+We estimate
+\[ \norm{\int_0^t e^{-\lambda s}T(s)x\diff{s}} \leq M\int_0^t e^{(w-\Re\lambda)s}\diff{s}\norm{x} \]
+\end{proof}
 
 
 \chapter{Operator equations}
