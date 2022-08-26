@@ -112,15 +112,11 @@ for all $t\in [0,\infty]$.
 \end{lemma}
 
 \begin{proposition} \label{integralOperatorSemigroupGenerator}
-Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. For all $x\in X$, then $\int_0^t T(s)x\diff{s}\in\dom(A)$ and
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. For all $x\in X$, then $\int_0^t T(s)x\diff{s}\in\dom(A)$ and, for all $t\in [0,\infty]$,
 \begin{align*}
-T(t)x - x &= A\int_0^t T(s)x\diff{s}
+T(t)x - x &= A\int_0^t T(s)x\diff{s} \qquad\text{for all $x\in X$} \\
+&= \int_0^t T(s)Ax\diff{s} \qquad\text{if $x\in\dom(A)$}.
 \end{align*}
-for all $t\in [0,\infty]$. Also
-\begin{align*}
-T(t)x - x &= \int_0^t T(s)Ax\diff{s}
-\end{align*}
-for all $x\in\dom(A)$ and $t\in [0,\infty]$.
 \end{proposition}
 This is an integrated version of \ref{differentialOperatorSemigroupGenerator}, except it holds for all $x\in X$.
 \begin{proof}
@@ -141,7 +137,9 @@ where we have used \ref{boundedOperatorUnderIntegral} and (TODO ref: fundamental
 Finally $\int_0^t T(s)Ax\diff{s}$ exists and is finite by \ref{integrabilityOrbitMaps} applied to $Ax$. We conclude using \ref{differentialOperatorSemigroupGenerator} and (TODO ref: second fundamental theorem of calculus).
 \end{proof}
 
-\begin{proposition}
+TODO Taylor theorem!
+
+\begin{proposition} \label{generatorClosedDenselyDefined}
 The generator of an operator semigroup is closed and densely defined.
 \end{proposition}
 \begin{proof}
@@ -246,16 +244,74 @@ The space $\bigcap_{n\in\N}\dom(A^n)$ is invariant under $T$ by \ref{differentia
 \end{proof}
 
 \subsubsection{Spectral properties of resolvents}
+
+\begin{lemma} \label{expScaledSemigroupLemma}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. Take $\lambda\in \C$ and $t> 0$. Then
+\begin{align*}
+e^{-\lambda t}T(t)x - x &= (A- \lambda\id)\int_0^t e^{-\lambda s}T(s)x\diff{s} \qquad\text{for all $x\in X$} \\
+&= \int_0^t e^{-\lambda s}T(s)(A-\lambda\id)x\diff{s} \qquad\text{if $x\in\dom(A)$}.
+\end{align*}
+\end{lemma}
+\begin{proof}
+Consider the operator semigroup $t\mapsto e^{-\lambda t}T(t)$. Its generator is $A-\lambda\id$ with domain equal to $\dom(A)$, TODO ref. The lemma is then a straightforward application of \ref{integralOperatorSemigroupGenerator}.
+\end{proof}
+\begin{corollary} \label{limitInftyExpScaledSemigroup}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup. If both
+\[ \int_0^\infty e^{-\lambda s}T(s)x\diff{s} \qquad\text{and}\qquad \int_0^{\infty}e^{-\lambda s}T(s)(A-\lambda\id)x\diff{s} \]
+exist, then $\lim_{t\to\infty}e^{-\lambda t}T(t)x = 0$.
+\end{corollary}
+\begin{proof}
+First we show that if $\lim_{t\to\infty}e^{-\lambda t}T(t)x$ converges, it must converge to $0$. Indeed assume it converges to $y \neq 0$, then there exists $t_0 > 0$ such that for all $t\geq t_0$, $\norm{e^{-\lambda t}T(t)x} \geq \norm{y}/2$. Thus
+\begin{align*}
+\int_0^\infty \norm{e^{-\lambda s}T(s)x}\diff{s} &= \int_0^{t_0}\norm{e^{-\lambda s}T(s)x}\diff{s} + \int_{t_0}^{\infty}\norm{e^{-\lambda s}T(s)x}\diff{s} \\
+&\geq \int_0^{t_0}\norm{e^{-\lambda s}T(s)x}\diff{s} + \int_{t_0}^{\infty}\norm{y}/2\diff{s} \\
+&= \infty,
+\end{align*}
+meaning $\int_0^\infty e^{-\lambda s}T(s)x\diff{s}$ does not exists by \ref{BochnerIntegrabilityCondition}.
+
+Then $x + \int_0^{\infty}e^{-\lambda t}T(t)x(A-\lambda\id)x\diff{s}$ exists by assumption and
+\begin{align*}
+x + \int_0^{\infty}e^{-\lambda t}T(t)x(A-\lambda\id)x\diff{s} &= x+\lim_{t\to\infty}\int_0^{t}e^{-\lambda s}T(s)x(A-\lambda\id)x\diff{s} \\
+&= \lim_{t\to\infty}x+\int_0^{t}e^{-\lambda s}T(s)x(A-\lambda\id)x\diff{s} \\
+&= \lim_{t\to\infty} e^{-\lambda t}T(t)x.
+\end{align*}
+\end{proof}
+
+
 \begin{proposition}
-Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$ and growth bound $\norm{T(t)}\leq Me^{wt}$. If $\int_0^\infty e^{-\lambda s}T(s)x\diff{s}$ exists for all $x\in X$, then $\lambda\in\res(A)$ and
-\[ R_A(\lambda)x = \int_0^\infty e^{-\lambda s}T(s)x\diff{s} \]
-for all $x\in X$.
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. If $\int_0^\infty e^{-\lambda s}T(s)x\diff{s}$ exists for all $x\in X$, then
+\begin{enumerate}
+\item $\lambda\in\res(A)$;
+\item $R_A(\lambda) = \int_0^\infty e^{-\lambda s}T(s)\diff{s}$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-We use \ref{elementResolventSetNormedSpace}.
+(1) By \ref{closedOperatorBanachSpaceSpectrumCriterion} it is enough to show that $\lambda\id - A$ is bijective in this case. 
+
+We verify injectivity: take $x,y\in \dom(A)$ such that $(\lambda\id - A)x = (\lambda\id - A)y$. We use \ref{expScaledSemigroupLemma} and \ref{limitInftyExpScaledSemigroup} to calculate
+\begin{align*}
+x-y &= x-y + \int_0^\infty e^{-\lambda s}T(s)(\lambda\id - A)(x-y)\diff{s} \\
+&= \lim_{t\to \infty}x-y + \int_0^t e^{-\lambda s}T(s)(\lambda\id - A)(x-y)\diff{s} \\
+&= \lim_{t\to \infty}e^{-\lambda t}T(t)(x-y) \\
+&= 0.
+\end{align*}
+
+We verify surjectivity: consider \ref{expScaledSemigroupLemma} and \ref{limitInftyExpScaledSemigroup}. Note that for all $x\in X$ both $\lim_{t\to \infty}\int_0^t e^{-\lambda s}T(s)x\diff{s}$ and
+\[ \lim_{t\to \infty}(\lambda\id-A)\int_0^t e^{-\lambda s}T(s)x\diff{s} = \lim_{t\to \infty}x - e^{-\lambda t}T(t)x = x \]
+converge. So, because $\lambda \id - A$ is closed,
+\begin{align}
+    x &= \lim_{t\to \infty}(\lambda\id-A)\int_0^t e^{-\lambda s}T(s)x\diff{s} \nonumber \\
+    &= (\lambda\id-A)\lim_{t\to \infty}\int_0^t e^{-\lambda s}T(s)x\diff{s} \nonumber \\
+    &= (\lambda\id-A)\int_0^\infty e^{-\lambda s}T(s)x\diff{s}. \label{eq:resolventGenerator}
+\end{align}
+Thus each $x\in X$ is in $\im(\lambda\id-A)$.
+
+(2) From \eqref{eq:resolventGenerator} we see that $R_A(\lambda)x = \int_0^\infty e^{-\lambda s}T(s)x\diff{s}$. TODO: show that $R$ is integrable!!!
+
+Then we conclude with \ref{integralBoundedOperator}.
 \end{proof}
-\begin{corollary}
-et $T: \R^+\to \Bounded(X)$ be an operator semigroup with growth bound $\norm{T(t)}\leq Me^{wt}$. Then
+\begin{corollary} \label{resolventGeneratorEstimate}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with growth bound $\norm{T(t)}\leq Me^{wt}$. Then
 \begin{enumerate}
 \item $\Re \lambda > w$ implies $\lambda \in\res(A)$;
 \item $\norm{R_A(\lambda)} \leq \frac{M}{\Re \lambda - w}$ for all $\lambda$ such that $\Re \lambda > w$.
@@ -263,7 +319,85 @@ et $T: \R^+\to \Bounded(X)$ be an operator semigroup with growth bound $\norm{T(
 \end{corollary}
 \begin{proof}
 We estimate
-\[ \norm{\int_0^t e^{-\lambda s}T(s)x\diff{s}} \leq M\int_0^t e^{(w-\Re\lambda)s}\diff{s}\norm{x} \]
+\[ \norm{R_A(\lambda)} \leq \int_0^\infty\norm{e^{-\lambda s}T(s)x\diff{s}} \leq M\int_0^\infty e^{(w-\Re\lambda)s}\diff{s}\norm{x} = \frac{M}{\Re\lambda - w}\norm{x} \]
+if $\Re \lambda > w$. 
+\end{proof}
+\begin{corollary}
+Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with growth bound $\norm{T(t)}\leq Me^{wt}$. Then for all $n\in \N$
+\begin{enumerate}
+\item $R_A(\lambda)^n x = \frac{1}{(n-1)!}\int_0^\infty s^{n-1}e^{-\lambda s}T(s)x\diff{s}$;
+\item $\norm{R_A(\lambda)^n} \leq \frac{M}{(\Re \lambda - w)^n}$ for all $\lambda$ such that $\Re \lambda > w$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsubsection{Generation theorems}
+\begin{lemma}
+Let $A$ be a densely defined operator on a Banach space $X$. Suppose
+\begin{itemize}
+\item there exists $w\in \R$ such that $[w,\infty[ \subseteq \res(A)$;
+\item there exists $M>0$ such that $\norm{r R_A(r)}\leq M$ for all $r \geq w$.
+\end{itemize}
+Then $\lim_{r\to \infty} r R_A(r)x = x$ for all $x\in X$.
+\end{lemma}
+\begin{proof}
+Take $y\in \dom(A)$. Then $R_A(r)(r\id - A)y = y$ implies $r R_A(r)y = R_A(r)Ay + y$. The right-hand side converges to $y$ as $r\to\infty$ because $\norm{R_A(r)Ay} \leq \frac{M}{r}\norm{Ay} \to 0$.
+
+Now we need to extend this result to all of $X$. Take $x\in X$, then we can find a sequence $\seq{x_n}$ in $\dom(A)$ that converges to $x$, because $A$ is densely defined. By assumption $r \to r R_A(r)$ is uniformly bounded and thus uniformly continuous (TODO ref), meaning we can use the Moore-Osgood theorem (TODO ref):
+\begin{align*}
+\lim_{r\to \infty} r R_A(r)x &= \lim_{r\to \infty} r R_A(r)\left(\lim_{n\to\infty}x_n\right) \\
+&= \lim_{n\to\infty}\lim_{r\to \infty} r R_A(r)x_n \\
+&= \lim_{n\to\infty}x_n = x.
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Hille-Yosida theorem] \label{HilleYosidaContraction}
+Let $A$ be an operator on a Banach space $X$. The following are equivalent:
+\begin{enumerate}
+\item $A$ generates a strongly continuous contraction semigroup;
+\item $A$ is closed, densely defined, $\R^{>0}\subseteq \res(A)$ and for all $r > 0$, $\norm{rR_A(r)} \leq 1$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+$(1)\Rightarrow (2)$ Follows from \ref{generatorClosedDenselyDefined} and \ref{resolventGeneratorEstimate}, setting $M = 1$ and $w = 0$.
+
+$(2)\Rightarrow (1)$ Consider, for each $n\in \N$, the operator
+\[ A_n \defeq nAR_A(n) = n^2R_A(n) - n\id_X. \]
+\end{proof}
+
+\begin{theorem}[Feller-Miyadera-Phillips theorem]
+
+\end{theorem}
+This theorem is the general case of the Hille-Yosida theorem \ref{HilleYosidaContraction} and sometimes goes by the same name.
+\begin{proof}
+
+\end{proof}
+
+\subsection{Contraction semigroups}
+
+\begin{proposition}[Landau-Kallman-Rota inequality]
+Let $A$ be the generator of a contraction semigroup on a Banach space $X$, then
+\[ \norm{Ax}^2 \leq 4 \norm{A^2x}\cdot\norm{x} \]
+for all $x\in\dom(A^2)$.
+\end{proposition}
+The constant can be improved to 2 for groups of isometries. (TODO)
+\begin{proof}
+From Taylor's formula (TODO ref)
+\[ T(t)x = x + tAx + \int_0^t(t-s)T(s)A^2x \diff{s} \]
+we get
+\begin{align*}
+\norm{Ax} &\leq \frac{\norm{T(t)x}}{t} + \frac{\norm{x}}{t} + \frac{1}{t}\int_0^t(t-s)\norm{T(s)}\cdot\norm{A^2x}\diff{s} \\
+&\leq 2\frac{\norm{x}}{t} + \frac{1}{t}\int_0^t(t-s)\diff{s}\norm{A^2x} \\
+&= 2\frac{\norm{x}}{t} + \frac{1}{t}\left(t^2 - \frac{t^2}{2}\right)\norm{A^2x} \\
+&= 2\frac{\norm{x}}{t} + \frac{t}{2}\norm{A^2x}.
+\end{align*}
+This holds for all $t$. In particular this holds if $t = 2\sqrt{\frac{\norm{x}}{\norm{A^x}}}$ (this is in fact the minimum). Then we get
+\begin{align*}
+\norm{Ax}^2 &\leq \left(\sqrt{\norm{x}\cdot\norm{A^2x}} + \sqrt{\norm{x}\cdot\norm{A^2x}}\right)^2 \\
+&= 4\norm{x}\cdot\norm{A^2x}.
+\end{align*}
 \end{proof}
 
 
