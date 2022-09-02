@@ -346,7 +346,7 @@ TODO
 \subsubsection{Operators bounded below}
 TODO: also unbounded operators!
 \begin{definition}
-Let $T$ be a bounded linear operator. We say $T$ is \udef{bounded below} if
+Let $T$ be a linear operator. We say $T$ is \udef{bounded below} if
 \[ \exists b>0:\forall v\in \dom(T): \quad \norm{Tv}\geq b\norm{v} \]
 \end{definition}
 
@@ -376,6 +376,30 @@ This also shows that $1/\norm{T^{-1}}$ is a lower bound, so $1/\norm{T^{-1}} \le
 Let $T:\dom(T)\subseteq X\to Y$ be an operator. Then $T$ is a \udef{closed operator} if $\graph(T)$ is closed in $X\oplus Y$.
 \end{definition}
 This is not the same as a closed map in the topological sense!
+
+\begin{lemma} \label{graphNormConvergenceLemma}
+Let $T: X\not\to Y$ be an operator between normed spaces and $\seq{x_n}$ a sequence in $\dom(T)$. Then the following are equivalent:
+\begin{enumerate}
+\item $x_n \overset{\norm{\cdot}_T}{\longrightarrow} x$;
+\item $(x_n, Tx_n) \overset{\norm{\cdot}_{X\oplus Y}}{\longrightarrow} (x, Tx)$;
+\item $x_n\overset{\norm{\cdot}_X}{\longrightarrow} x$ and $Tx_n\overset{\norm{\cdot}_Y}{\longrightarrow} Tx$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We have the equivalences
+\begin{align*}
+x_n \overset{\norm{\cdot}_T}{\longrightarrow} x &\iff \norm{x_n - x}_T \longrightarrow 0 \\
+&\iff \norm{x_n - x}_X + \norm{Tx_n - Tx}_Y \longrightarrow 0 \\
+&\iff \norm{(x_n - x, Tx_n - Tx)}_{X\oplus Y} \longrightarrow 0 \\
+&\iff \norm{(x_n, Tx_n) - (x, Tx)}_{X\oplus Y} \longrightarrow 0 \\
+&\iff (x_n, Tx_n) \overset{\norm{\cdot}_{X\oplus Y}}{\longrightarrow} (x, Tx).
+\end{align*}
+Now if $x_n\overset{\norm{\cdot}_X}{\longrightarrow} x$ and $Tx_n\overset{\norm{\cdot}_Y}{\longrightarrow} Tx$, then $\norm{x_n - x}_X + \norm{Tx_n - Tx}_Y \longrightarrow 0$. 
+
+Conversely, from
+\[ 0 \leq \norm{x_n - x}_X\leq \norm{x_n - x}_X + \norm{Tx_n - Tx}_Y, \]
+we get $x_n\overset{\norm{\cdot}_X}{\longrightarrow} x$ by the squeeze theorem (TODO ref). We similarly get $Tx_n\overset{\norm{\cdot}_Y}{\longrightarrow} Tx$.
+\end{proof}
 
 The most important property of closed operators is given by the following proposition. It is sometimes taken as the definition.
 \begin{proposition} \label{closedGraphEquivalence}
@@ -435,7 +459,7 @@ So we can find $x\in X,y\in Y$ such that $x_n\to x$ and $Tx_n\to y$. By closedne
 A linear operator is called \udef{closable} if it has closed extension.
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{closableCriterion}
 A linear operator $T$ is closable \textup{if and only if} for all sequences $\seq{x_n}\subset\dom(T)$
 \[ \left(x_n\to 0 \land T(x_n)\to v\right) \quad\implies\quad v = 0. \]
 \end{proposition}
@@ -450,24 +474,21 @@ A closable operator $T$ has a minimal closed extension $\overline{T}$, which is 
 TODO
 \end{proof}
 
+\begin{lemma} \label{domImClosureOperator}
+Let $T$ be a closable operator. Then
+\begin{enumerate}
+\item $\dom(T)$ is dense in $\dom(\overline{T})$;
+\item $\im(T)$ is dense in $\im(\overline{T})$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We have $(x,\overline{T}x)\in\graph(\overline{T})$ iff there exists a sequence $\seq{x_n}$ in $\dom(T)$ such that $\seq{x_n,Tx_n}\overset{\norm{\cdot}_{X\oplus Y}}{\longrightarrow} (x,\overline{T}x)$. So we can conclude using \ref{graphNormConvergenceLemma}.
+\end{proof}
+
 \subsubsection{Domain and core}
 \begin{definition}
 Let $T: X\not\to Y$ be a closed operator between normed spaces and $D\subseteq \dom(T)$ a subspace. We call $D$ a \udef{core} or \udef{essential domain} for $T$ if $\setbuilder{(x,Tx)}{x\in D}$ is dense in $\graph(T)\subseteq X\oplus Y$.
 \end{definition}
-
-\begin{lemma} \label{graphNormConvergenceLemma}
-Let $T: X\not\to Y$ be an operator between normed spaces and $\seq{x_n}$ a sequence in $\dom(T)$. Then $x_n \overset{\norm{\cdot}_T}{\longrightarrow} x$ \textup{if and only if} $(x_n, Tx_n) \overset{\norm{\cdot}_{X\oplus Y}}{\longrightarrow} (x, Tx)$.
-\end{lemma}
-\begin{proof}
-We have the equivalences
-\begin{align*}
-x_n \overset{\norm{\cdot}_T}{\longrightarrow} x &\iff \norm{x_n - x}_T \longrightarrow 0 \\
-&\iff \norm{x_n - x}_X + \norm{Tx_n - Tx}_Y \longrightarrow 0 \\
-&\iff \norm{(x_n - x, Tx_n - Tx)}_{X\oplus Y} \longrightarrow 0 \\
-&\iff \norm{(x_n, Tx_n) - (x, Tx)}_{X\oplus Y} \longrightarrow 0 \\
-&\iff (x_n, Tx_n) \overset{\norm{\cdot}_{X\oplus Y}}{\longrightarrow} (x, Tx).
-\end{align*}
-\end{proof}
 
 \begin{proposition} \label{operatorCoreCriterion}
 Let $T: X\not\to Y$ be a closed operator between normed spaces and $D\subseteq \dom(T)$ a subspace. Then $D$ is a core of $T$ \textup{if and only if} $D$ is dense in $\dom(T)$ w.r.t. the graph norm $\norm{\cdot}_T$ of $T$.

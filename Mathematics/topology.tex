@@ -370,9 +370,9 @@ Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
 \begin{proof}
 TODO
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{inherenceComplementAdherence}
 Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. Then
-\[ (\inh_\xi A)^c = (\adh_\xi A^c)^c. \]
+\[ (\inh_\xi A)^c = (\adh_\xi A^c). \]
 \end{corollary}
 \begin{corollary} \label{inherenceAdherenceProperties}
 Let $X$ be a set, $\xi$ a convergence on $X$ and $A,B \subseteq X$. Then
@@ -818,11 +818,88 @@ Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be (pre)convergence spaces and $f\in \cont_\t
 (2) Let $F\overset{\xi}{\longrightarrow} x \in X$, then $f[F]\overset{\zeta}{\longrightarrow} f(x)$, so $f[F]\overset{\tau}{\longrightarrow} f(x)$  (because $\zeta \leq \tau$), meaning $f\in \cont_\text{(pre)}(\xi, \tau)$.
 \end{proof}
 
-\begin{proposition} \label{adherenceContinuity}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $f: X\to Y$ a continuous function and $A\subseteq X$ a subset. Then
-\[ f[\adh_\xi(A)] \subseteq \adh_\zeta(f[A]). \]
+\begin{proposition} \label{continuityVicinityFilter} \label{adherenceInherenceContinuity}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $f: X\to Y$ a function, $A\subseteq X$ a subset and $x\in X$. Then the following are equivalent:
+\begin{enumerate}
+\item $\vicinity_\zeta(f(x)) \subseteq \upset f^{\imf\imf}[\vicinity_\xi(x)]$;
+\item for all $U\in \vicinity_\zeta(f(x))$, there exists $V\in \vicinity_\xi(x)$ such that $f^\imf[V] \subseteq U$;
+\item for all $U\in \vicinity_\zeta(f(x))$, $f^{\preimf}[U]\in \vicinity_\xi(x)$;
+\item $f^{\preimf\imf}\vicinity_\zeta(f(x)) \subseteq \vicinity_\xi(x)$;
+\item $f^\preimf[\adh_\zeta(A)] \supseteq \adh_\xi(f^\preimf[A])$;
+\item $f^\imf[\adh_\xi(A)] \subseteq \adh_\zeta(f^\imf[A])$;
+\item $f^\preimf[\inh_\zeta(A)] \subseteq \inh_\xi(f^\preimf[A])$.
+\end{enumerate}
+All these points hold if $f$ is continuous.
 \end{proposition}
 \begin{proof}
+We first show that continuity of $f$ implies (1): We have
+\[ \vicinity_\zeta(f(x)) = \bigcap\setbuilder{G\in\powerfilters(Y)}{G\to f(x)} \subseteq \bigcap\setbuilder{\upset f^{\imf\imf}(F)\in\powerfilters(Y)}{F\to x}. \]
+Now take $B\in \bigcap\setbuilder{\upset f^{\imf\imf}(F)\in\powerfilters(Y)}{F\to x}$. This means that for all $F\in\lim^{-1}_\xi(x)$, there exists an $A_F\in F$ such that $f^\imf[A_F]\subseteq B$. By the upward closure of the filters $F$, the set $A = \bigcup_{F\in \lim^{-1}_\xi(x)}A_F$ is an element of each $F$ and
+\[ f^\imf[A] = \bigcup_{F\in \lim^{-1}_\xi(x)}f^{\imf}[A_F] \subseteq B.  \]
+Now $A\in \vicinity_\xi(x)$ and thus $B\in \upset f^{\imf\imf}[\vicinity_\xi(x)]$.
+
+
+$(1) \Leftrightarrow (2)$ Reformulation.
+
+$(2) \Leftrightarrow (3)$ We get (3) from (2) by noting that $V\subseteq f^{\preimf}f^\imf(V) \subseteq f^\preimf(U)$ and that $\vicinity_\xi(x)$ is a filter, so this implies $f^\preimf(U)\in \vicinity_\xi(x)$.
+
+Conversely, we may take $V = f^{\preimf}[U]$.
+
+$(3) \Leftrightarrow (4)$ Reformulation.
+
+$(4) \Rightarrow (5)$ We calculate
+\begin{align*}
+x\in \adh_\zeta(f^\preimf[A]) \iff& f^\preimf[A]\in \vicinity_\xi(x)^{\mesh} \subseteq \left(f^{\preimf\imf}\vicinity_\zeta(f(x))\right)^{\mesh} \\
+\implies& f^\imf f^\preimf[A] \in f^{\imf\imf}\left(\left(f^{\preimf\imf}\vicinity_\zeta(f(x))\right)^{\mesh}\right) \subseteq \left(f^{\imf\imf} f^{\preimf\imf}\vicinity_\zeta(f(x))\right)^{\mesh} \subseteq \left(\vicinity_\zeta(f(x))\right)^{\mesh} \\
+\implies& A \in \left(\vicinity_\zeta(f(x))\right)^{\mesh} \\
+\iff& f(x)\in \adh_\zeta(A) \\
+\iff& x\in f^{\preimf}(\adh_\zeta(A)).
+\end{align*}
+We have used that (TODO ref)
+\begin{itemize}
+\item $F\subseteq G$ implies $G^{\mesh} \subseteq F^{\mesh}$;
+\item $f^{\imf\imf}(F^{\mesh}) \subseteq \left(f^{\imf\imf}(F)\right)^{\mesh}$;
+\item $F^{\mesh}$ is a filter if $F$ is a directed set;
+\item $f^\imf f^\preimf[A] \subseteq A$.
+\end{itemize}
+
+$(1) \Rightarrow (6)$ We calculate
+\begin{align*}
+y\in f^\imf(\adh(A)) \iff& \exists x\in \adh(A):\;f(x) = y\\
+\iff& \exists x\in X: \; x\in \adh(A) \land f(x) = y\\
+\iff& \exists x\in X: \; A\in\vicinity(x)^{\mesh}  \land f(x) = y \\
+\implies& \exists x\in X: \; f(x) = y \land f^\imf(A)\in f^{\imf\imf}\left(\vicinity(x)^{\mesh}\right) \subseteq f^{\imf\imf}\left(\vicinity(x)\right)^{\mesh} \subseteq \vicinity(f(x))^{\mesh} \\
+\iff& \exists x\in X: \; f(x) = y \land f(x)\in \adh\Big(f^\imf(A)\Big) \\
+\implies& y\in \adh\Big(f^\imf(A)\Big).
+\end{align*}
+
+$(5) \Rightarrow (7)$ We calculate, using \ref{inherenceComplementAdherence},
+\begin{align*}
+f^\preimf[\inh_\xi(A)] &= f^\preimf[\adh_\xi(A^c)^c] \\
+&= \im(f)\setminus f^{\preimf}[\adh_\xi(A^c)] \\
+&\subseteq f^{\preimf}[\adh_\xi(A^c)]^c \\
+&\subseteq \left(\adh_\zeta(f^{\preimf}[A^c])\right)^c \\
+&\subseteq \left(\adh_\zeta(f^{\preimf}[A]^c)\right)^c \\
+&= \inh_\zeta(f^{\preimf}[A]).
+\end{align*}
+
+$(6) \Rightarrow (7)$ We calculate
+\begin{align*}
+x\in f^\preimf[\inh_\xi(A)] \iff& f(x) \in \inh_\zeta(A) = \adh_\zeta(A^c)^c \subseteq \adh_\zeta\Big(f^\imf\circ f^{\preimf}(A^c)\Big)^c \\
+\iff& f(x) \in \adh_\zeta\Big(f^\imf\big(f^{\preimf}(A)^c\big)\Big)^c \subseteq f^\imf\Big(\adh_\xi\Big(f^{\preimf}(A)^c\big)\Big)^c \\
+\implies& x\in \adh_\xi\Big(f^{\preimf}(A)^c\big)^c = \inh_\xi\big(f^{\preimf}(A)\big).
+\end{align*}
+
+$(7) \Rightarrow (1)$ We calculate
+\begin{align*}
+B\in \vicinity_\zeta(f(x)) \iff& f(x) \in \inh_\zeta(B) \\
+\implies& x\in f^{\preimf}\Big(\inh_\zeta(B)\Big) \subseteq \inh_\xi\Big(f^\preimf(B)\Big) \\
+\implies& f^\preimf(B) \in \vicinity_\xi(x) \\
+\implies& f^\imf\big(f^\preimf(B)\big) \in f^{\imf\imf}[\vicinity_\xi(x)] \\
+\implies& B \in \upset f^{\imf\imf}[\vicinity_\xi(x)].
+\end{align*}
+\end{proof}
+\begin{proof}[Alternative proof of (2), given continuity of $f$]
 We calculate
 \begin{align*}
 f[\adh_\xi(A)] &= f\left[\bigcup \setbuilder{\lim_\xi F}{A \lhd F} \right] = \bigcup f\left[ \setbuilder{\lim_\xi F}{A \lhd F} \right] = \bigcup \setbuilder{f\left[\lim_\xi F\right]}{A \lhd F} \\
@@ -831,30 +908,16 @@ f[\adh_\xi(A)] &= f\left[\bigcup \setbuilder{\lim_\xi F}{A \lhd F} \right] = \bi
 \end{align*}
 where we have used that $A \lhd B$ implies $f[A] \lhd f[B]$ (TODO ref).
 \end{proof}
-
-\begin{proposition} \label{pretopologicalContinuityVicinities}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $f: X\to Y$ a function and $x\in X$. If $\xi$ and $\zeta$ are pretopological, then the following are equivalent:
-\begin{enumerate}
-\item $f$ is continuous at $x$;
-\item $\vicinity_\zeta(f(x)) \supseteq \upset f[\vicinity_\xi(x)]$;
-\item for all $U\in \vicinity_\zeta(f(x))$, there exists $V\in \vicinity_\xi(x)$ such that $f[V] \subseteq U$;
-\item for all $U\in \vicinity_\zeta(f(x))$, $f^{\preimf}[U]\in \vicinity_\xi(x)$.
-\end{enumerate}
-\end{proposition}
+\begin{corollary} \label{pretopologicalContinuityVicinities}
+If $\zeta$ is pretopological, then any of these points implies that $f$ is continuous.
+\end{corollary}
 \begin{proof}
-$(1) \Leftrightarrow (2)$ We have that $\vicinity_\xi(x)$ converges to $x$, so by continuity $f[\vicinity_\xi(x)]$ converges to $f(x)$ and thus $\upset f[\vicinity_\xi(x)] \supseteq \vicinity_\zeta(f(x))$.
-
-Conversely, take $F\to x$. Then $F\supseteq \vicinity_\xi(x)$ and thus $f[F]\supseteq f[\vicinity_\xi(x)]$. By assumption this means $\upset f[F]\supseteq \upset f[\vicinity_\xi(x)]\supseteq \vicinity_\zeta(f(x))$. So $f[F]\to f(x)$.
-
-$(2) \Leftrightarrow (3)$ Immediate.
-
-$(3) \Leftrightarrow (4)$ Because $V\subseteq f^{\preimf}[U]$ and $\vicinity_\xi(x)$ is a filter, we have $f^{-1}[U] \in \vicinity_\xi(x)$.
-
-Conversely, we may take $V = f^{\preimf}[U]$.
+We prove that in this case (1) implies the continuity of $f$. Take $F\to x$. Then $F\supseteq \vicinity_\xi(x)$ and thus $f[F]\supseteq f[\vicinity_\xi(x)]$. By assumption this means $\upset f[F]\supseteq \upset f[\vicinity_\xi(x)]\supseteq \vicinity_\zeta(f(x))$. So $f[F]\to f(x)$.
 \end{proof}
-Note that the downward implications rely on the pretopologicity of $\xi$ and the upward implication on the pretopologicity of $\zeta$.
+
+If $\xi$ is pretopological, we can also give a simplified proof that the continuity of $f$ implies (1): We have that $\vicinity_\xi(x)$ converges to $x$, so by continuity $f[\vicinity_\xi(x)]$ converges to $f(x)$ and thus $\upset f[\vicinity_\xi(x)] \supseteq \vicinity_\zeta(f(x))$ by the pretopological property.
 \begin{corollary} \label{preimageOpenClosed}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be pretopological convergence spaces and  $f: X\to Y$ a continuous function. Then
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces and $f: X\to Y$ a continuous function. Then
 \begin{enumerate}
 \item if $O\subseteq Y$ is open, then $f^\preimf(O)$ is open;
 \item if $C\subseteq Y$ is closed, then $f^\preimf(C)$ is closed.
@@ -1142,23 +1205,38 @@ TODO adjoint of $\coprod_{i\in I}p_i$.
 \end{proof}
 \begin{corollary} \label{productVicinity}
 Let $\sSet{X_i, \xi_i}$ be a (pre)convergence space for all $i\in I$ and $x\in \prod_{i\in I}X_i$. Then
-\[\vicinity_{\prod \xi_i}(x) = \upset \setbuilder{\bigtimes_{i\in I}A_i}{\forall i\in I: A_i \in \vicinity_{\xi_i}(p_i(x))}. \]
+\[\vicinity_{\prod \xi_i}(x) = \upset \setbuilder{\bigtimes_{i\in I}A_i}{\forall i\in I: A_i \in \vicinity_{\xi_i}(p_i(x)) \;\land\; A_i = X_i, \,\text{except for finitely many $A_i$}}. \]
 In particular $\vicinity_{\xi\otimes \zeta}((x,y)) = \upset \vicinity_\xi(x)\otimes \vicinity_\zeta(y)$.
 \end{corollary}
 
 \begin{corollary} \label{productAdherence}
 Let $\sSet{X_i, \xi_i}$ be a (pre)convergence space and $A_i\subseteq X_i$ for all $i\in I$. Then
-\[ \adh_{\prod_{i\in I}X_i}\left(\bigtimes_{i\in I}A_i\right) = \bigtimes_{i\in I}\adh_{\xi_i}(A_i). \]
+\[ \adh_{\prod_{i\in I}\xi_i}\left(\bigtimes_{i\in I}A_i\right) = \bigtimes_{i\in I}\adh_{\xi_i}(A_i). \]
 In particular $\adh_{\xi\otimes \zeta}(A\times B) = \adh_\xi(A) \times \adh_\zeta(B)$.
 \end{corollary}
 \begin{proof}
 We have
 \begin{align*}
-\seq{x_i}_{i\in I} \in \adh_{\prod_{i\in I}X_i}\left(\bigtimes_{i\in I}A_i\right) &\iff \bigtimes_{i\in I}A_i \in \vicinity_{\prod \xi_i}(\seq{x_i}_{i\in I}) = \upset \setbuilder{\bigtimes_{i\in I}B_i}{\forall i\in I: B_i \in \vicinity_{\xi_i}(x_i)} \\
-&\iff \forall i\in I: \exists B_i \in \vicinity_{\xi_i}(x_i): B_i \subseteq A_i \\
-&\iff \forall i\in I: A_i \in \vicinity_{\xi_i}(x_i) \\
+\seq{x_i}_{i\in I} \in \adh_{\prod_{i\in I}\xi_i}\left(\bigtimes_{i\in I}A_i\right) &\iff \bigtimes_{i\in I}A_i \in \vicinity_{\prod \xi_i}(\seq{x_i}_{i\in I})^{\mesh} \\
+&\iff \forall i\in I: \forall B \in \vicinity_{\xi_i}(x_i): A_i\mesh B \\
+&\iff \forall i\in I: A_i \in \vicinity_{\xi_i}(x_i)^{\mesh} \\
 &\iff \forall i\in I: x_i \in \adh_{\xi_i}(A_i) \\
 &\iff \seq{x_i}_{i\in I} \in \bigtimes_{i\in I}\adh_{\xi_i}(A_i).
+\end{align*}
+\end{proof}
+\begin{corollary} \label{productInherence}
+Let $\sSet{X_i, \xi_i}$ be a (pre)convergence space and $A_i\subseteq X_i$ for all $i\in I$. Then
+\[ \inh_{\prod_{i\in I}\xi_i}\left(\bigtimes_{i\in I}A_i\right) = \bigtimes_{i\in I}\inh_{\xi_i}(A_i). \]
+In particular $\inh_{\xi\otimes \zeta}(A\times B) = \inh_\xi(A) \times \inh_\zeta(B)$.
+\end{corollary}
+\begin{proof}
+We have
+\begin{align*}
+\seq{x_i}_{i\in I} \in \inh_{\prod_{i\in I}\xi_i}\left(\bigtimes_{i\in I}A_i\right) &\iff \bigtimes_{i\in I}A_i \in \vicinity_{\prod \xi_i}(\seq{x_i}_{i\in I}) \\
+&\iff \forall i\in I: \exists B_i \in \vicinity_{\xi_i}(x_i): B_i\subseteq A_i \\
+&\iff \forall i\in I: A_i \in \vicinity_{\xi_i}(x_i) \\
+&\iff \forall i\in I: x_i \in \inh_{\xi_i}(A_i) \\
+&\iff \seq{x_i}_{i\in I} \in \bigtimes_{i\in I}\inh_{\xi_i}(A_i).
 \end{align*}
 \end{proof}
 
@@ -4119,7 +4197,7 @@ Let $\sSet{G, \boldsymbol{\cdot}, \xi}$ be a convergence group and $A,B$ subsets
 \[ \adh_\xi(A)\cdot \adh_\xi(B) \subseteq \adh_\xi{A\cdot B}. \]
 \end{lemma}
 \begin{proof}
-From the continuity of $\cdot$ and \ref{adherenceContinuity} together with $\adh_{\xi\otimes\xi}(A\times B) = \adh_\xi(A)\times \adh_\xi(B)$ (TODO ref).
+From the continuity of $\cdot$ and \ref{adherenceInherenceContinuity} together with $\adh_{\xi\otimes\xi}(A\times B) = \adh_\xi(A)\times \adh_\xi(B)$ (TODO ref).
 \end{proof}
 
 \begin{lemma} \label{shiftHomeomorphism}
