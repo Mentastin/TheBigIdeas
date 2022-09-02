@@ -336,18 +336,18 @@ TODO
 \end{proof}
 
 \subsubsection{Hille-Yosida generation theorems}
-\begin{lemma}
-Let $A$ be a densely defined operator on a Banach space $X$. Suppose
+\begin{lemma} \label{resolventLimitLemma}
+Let $A$ be an operator on a Banach space $X$. Suppose
 \begin{itemize}
 \item there exists $w\in \R$ such that $[w,\infty[ \subseteq \res(A)$;
 \item there exists $M>0$ such that $\norm{r R_A(r)}\leq M$ for all $r \geq w$.
 \end{itemize}
-Then $\lim_{r\to \infty} r R_A(r)x = x$ for all $x\in X$.
+Then $\lim_{r\to \infty} r R_A(r)x = x$ for all $x\in \overline{\dom(A)}$.
 \end{lemma}
 \begin{proof}
 Take $y\in \dom(A)$. Then $R_A(r)(r\id - A)y = y$ implies $r R_A(r)y = R_A(r)Ay + y$. The right-hand side converges to $y$ as $r\to\infty$ because $\norm{R_A(r)Ay} \leq \frac{M}{r}\norm{Ay} \to 0$.
 
-Now we need to extend this result to all of $X$. Take $x\in X$, then we can find a sequence $\seq{x_n}$ in $\dom(A)$ that converges to $x$, because $A$ is densely defined. By assumption $r \to r R_A(r)$ is uniformly bounded and thus uniformly continuous (TODO ref), meaning we can use the Moore-Osgood theorem (TODO ref):
+Now we need to extend this result to $\overline{\dom(A)}$. Take $x\in \overline{\dom(A)}$, then we can find a sequence $\seq{x_n}$ in $\dom(A)$ that converges to $x$. By assumption $r \to r R_A(r)$ is uniformly bounded and thus uniformly continuous (TODO ref), meaning we can use the Moore-Osgood theorem (TODO ref):
 \begin{align*}
 \lim_{r\to \infty} r R_A(r)x &= \lim_{r\to \infty} r R_A(r)\left(\lim_{n\to\infty}x_n\right) \\
 &= \lim_{n\to\infty}\lim_{r\to \infty} r R_A(r)x_n \\
@@ -355,7 +355,8 @@ Now we need to extend this result to all of $X$. Take $x\in X$, then we can find
 \end{align*}
 \end{proof}
 \begin{corollary} \label{YosidaApproximantsLemma}
-If $A$ is closed in addition to the other requirements, then $\lim_{r\to \infty} r AR_A(r)x = Ax$ for all $x\in \dom(A)$.
+If $A$ is closed in addition to the other requirements, then
+\[ \lim_{r\to \infty} r AR_A(r)x = Ax \qquad \text{for all $x\in \dom(A)$.} \]
 \end{corollary}
 \begin{proof}
 Because $A$ and $R_A(r)$ commute, we have $\lim_{r\to \infty} r AR_A(r)x = \lim_{r\to \infty} r R_A(r)Ax =Ax$.
@@ -389,11 +390,81 @@ Applying the Hille-Yosida theorem to $A-w\id$ yields a semigroup $S(t)$. The res
 \end{proof}
 Semigroups satisfying $\norm{T(t)} \leq e^{wt}$ are called \udef{quasi-contractive}.
 
+\begin{lemma} \label{dissipativeYosidaOperators}
+Let $A$ be an operator on a Banach space $X$. The following are equivalent:
+\begin{enumerate}
+\item $A$ is dissipative;
+\item $R_A(r)$ exists and $\norm{rR_A(r)}\leq 1$ for all $r>0$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Direct application of \ref{dissipativeResolventBound}.
+\end{proof}
+
+\begin{theorem}[Lumer-Phillips theorem]
+Let $A$ be an operator on a Banach space $X$. The following are equivalent:
+\begin{enumerate}
+\item $\overline{A}$ generates a strongly continuous contraction semigroup;
+\item $A$ is densely defined, dissipative and $\im(\lambda\id-A)$ is dense in $X$ for some $\lambda > 0$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+$(1) \Rightarrow (2)$  This is a combination of \ref{dissipativeYosidaOperators} and the Hille-Yosida theorem \ref{HilleYosidaContraction}. The surjectivity of $\lambda\id-\overline{A}$ for all $\lambda > 0$ implies the density of $\im(\lambda\id-A)$ by \ref{dissipativeOperatorClosable}.
+
+$(2) \Rightarrow (1)$ Because $A$ is densely defined and dissipative, it is closable by \ref{dissipativeOperatorClosable}.
+Also by \ref{dissipativeOperatorClosable}, $\lambda\id-\overline{A}$ is surjective. Thus by \ref{dissipativeYosidaOperators}, we have $r\in \res(A)$. Then $]0,+\infty[\,\subseteq \res(A)$ by \ref{spectrumDissipativeOperator}.
+For all $r>0$, the resolvent $R_A(r)$ exists and is bounded by \ref{dissipativeResolventBound}. It is surjective by\ref{rangeDisjunctionDissipativeOperator}.
+
+We have verified all the conditions of the Hille-Yosida theorem \ref{HilleYosidaContraction}.
+\end{proof}
+\begin{corollary}
+Let $A$ be a densely defined operator on a Banach space $X$. If both $A$ and $A^t$ are dissipative, then $\overline{A}$ generates a contraction semigroup on $X$.
+\end{corollary}
+\begin{proof}
+It is enough to prove that $\im(\id - A)$ is dense in $X$.
+
+Assume, towards a contradiction, that $\overline{\im(\id - A)} \neq X$. Then by \ref{functionalZeroOnClosedSubSpace} we can find a non-zero bounded functional $f$ that is zero on $\overline{\im(\id - A)}$. Thus for all $x\in \dom(A)$:
+\[ 0 = f((\id- A)x) = (\id-A)^t(f)(x). \]
+Because $\dom(A)$ is dense in $X$, we conclude that $(\id-A)^t(f) = 0$ and thus that $(\id-A)^t = \id - A^t$ is not dissipative.
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a dissipative operator on a Banach space $X$. If $\lambda\id - A$ is surjective for some $\lambda > 0$, then $A|^{\overline{\dom(A)}}: \overline{\dom(A)}\not\to \overline{\dom(A)}$ generates a contraction semigroup on $\overline{\dom(A)}$.
+\end{proposition}
+\begin{proof}
+First note that $A|^{\overline{\dom(A)}}$ is still dissipative. 
+
+The surjectivity of $\lambda\id - A$ implies the surjectivity of $(\lambda\id_X - A)|^{\overline{\dom(A)}} = \lambda\id_{\overline{\dom(A)}} - A|^{\overline{\dom(A)}}$.
+
+Using \ref{dissipativeYosidaOperators} and \ref{spectrumDissipativeOperator}, we get that $]0,+\infty[\,\subseteq \res(A|^{\overline{\dom(A)}})$.
+Also $A|^{\overline{\dom(A)}}$ is closed by \ref{closureDissipativeOperator}.
+
+In order to conclude with \ref{dissipativeYosidaOperators} and the Hille-Yosida theorem \ref{HilleYosidaContraction}, we need to show that $A|^{\overline{\dom(A)}}$ is densely defined.
+To that end take an $x\in \overline{\dom(A)}$ and consider $\seq{nR_A(n)x}$. By \ref{dissipativeYosidaOperators} and \ref{resolventLimitLemma}, we have $nR_A(n)x \to x$.
+
+We just need to verify that $nR_A(n)x\in \dom\Big(A|^{\overline{\dom(A)}}\Big)$. Indeed $nR_A(n)x\in\dom(A)$ by construction and
+\[ A(nR_A(n)x) = n^2R_A(n)x - nx \in \overline{\dom(A)}. \]
+\end{proof}
+\begin{corollary}
+Let $A$ be a dissipative operator on a reflexive Banach space $X$. If $\lambda\id - A$ is surjective for some $\lambda > 0$, then $A$ generates a contraction semigroup on $\overline{\dom(A)}$.
+\end{corollary}
+In particular note that $A$ is densely defined.
+\begin{proof}
+It is enough to show the density of $\dom(A)$. Take $x\in X$. As before, we consider the sequence $\seq{nR_A(n)x}$, which is bounded by $\norm{nR_A(n)x} \leq \norm{nR_A(n)}\,\norm{x} \leq \norm{x}$. By reflexivity (TODO ref!) this sequence has a weakly convergent subsequence $\seq{n_kR_A(n_k)x}_k$ with limit $x'$. 
+
+It remains to be shown that $x=x'$. Indeed, using \ref{resolventLimitLemma} and the fact that $R_A(1)y\in \dom(A)$ for all $y\in X$,
+\[ R_A(1)x' = R_A(1)\lim^w_{k\to \infty}n_kR_A(n_k)x = \lim^w_{k\to \infty}n_kR_A(n_k)R_A(1)x = \lim_{k\to \infty}n_kR_A(n_k)R_A(1)x = R_A(1)x, \]
+by the weak continuity of $R_A(1)$, TODO ref(\url{https://math.stackexchange.com/questions/3834847/weakly-continuous-vs-weakly-sequentially-continuous-operator}).
+
+So $x'= (\id - A)R_A(1)x' = (\id - A)R_A(1)x = x$.
+\end{proof}
+
+
 \begin{theorem}[Feller-Miyadera-Phillips theorem]
 Let $A$ be an operator on a Banach space $X$. The following are equivalent:
 \begin{enumerate}
 \item $A$ generates a strongly continuous semigroup $T: \R^+\to \Bounded(X)$ satisfying $\norm{T(t)}\leq Me^{wt}$ for some $w\in \R$, $M\geq 1$ and all $t\in\R^+$;
-\item $A$ is closed, densely defined, and $\lambda\in  \res(A)$, $\norm{(r-w)^nR_A(r)^n} \leq M$ for all $r>w$ and $n\in \N$.
+\item $A$ is closed, densely defined, and $r\in \res(A)$, $\norm{(r-w)^nR_A(r)^n} \leq M$ for all $r>w$ and $n\in \N$.
 \end{enumerate}
 \end{theorem}
 This theorem is the general case of the Hille-Yosida theorem \ref{HilleYosidaContraction} and sometimes goes by the same name.
@@ -408,41 +479,22 @@ it is easy to see that all $\norm{\cdot}_{r}$ are norms and
 \[ \norm{x} \leq \norm{x}_r \leq M\norm{x}. \]
 So $\norm{\cdot}_{r}$ is equivalent to $\norm{\cdot}$ for all $r>0$. Also $\norm{(r-w)^nR_A(r)^nx}_r$
 \end{proof}
-
-\subsubsection{Generation theorems for dissipative operators}
-
-\begin{theorem}[Lumer-Phillips]
-Let $A$ be an operator on a Banach space $X$. The following are equivalent:
+\begin{corollary}
+Let $A$ be an operator on a Banach space $X$ such that $r\in \res(A)$, $\norm{(r-w)^nR_A(r)^n} \leq M$ for all $r>w$ and $n\in \N$. Then
 \begin{enumerate}
-\item $A$ generates a strongly continuous contraction semigroup;
-\item $A$ is closed, densely defined, dissipative and $\im(\lambda\id-A) = X$ for some (and hence all) $\lambda > 0$.
+\item $A|^{\overline{\dom(A)}}$ generates a strongly continuous semigroup $T: \R^+\to \Bounded(X)$ satisfying $\norm{T(t)}\leq Me^{wt}$ for all $t\in\R^+$;
+\item if $X$ is reflexive, then $\overline{\dom(A)} = X$.
 \end{enumerate}
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{theorem}[Stone's theorem]
+Let $A$ be a densely defined operator on a Hilbert space $H$. Then $iA$ generates a unitary group $T: \R \to \Bounded(H)$ \textup{if and only if} $A$ is self-adjoint.
 \end{theorem}
 \begin{proof}
-$(1) \Rightarrow (2)$ The Hille-Yosida theorem \ref{HilleYosidaContraction} gives that $A$ is closed and densely defined. The surjectivity of $\lambda\id-A$ for all $\lambda > 0$ is immediately implied by $\R^{>0}\subseteq \res(A)$. We just need to verify that $A$ is dissipative. This follows from $\norm{\lambda R_T(\lambda)}\leq 1$ by \ref{dissipativeResolventBound}.
 
-$(2) \Rightarrow (1)$ Again we use the Hille-Yosida theorem \ref{HilleYosidaContraction}. We have that $\norm{\lambda R_T(\lambda)}\leq 1$ for all $\lambda>0$ by \ref{dissipativeResolventBound}. Also by \ref{dissipativeResolventBound}, the equation $\im(\lambda\id-A) = X$ implies $\lambda\in\res(A)$. So $]0,+\infty[\,\subseteq \res(A)$ by \ref{spectrumDissipativeOperator}.
-\end{proof}
-\begin{corollary}
-Let $A$ be a densely defined operator on a Banach space $X$. If both $A$ and $A^t$ are dissipative, then $\overline{A}$ generates a contraction semigroup on $X$.
-\end{corollary}
-Note that $A$ is closable by \ref{dissipativeOperatorClosable}.
-\begin{proof}
-It is enough to prove that $\id - \overline{A}$ is surjective, which is equivalent to proving $\im(\id - A)$ is dense by \ref{dissipativeOperatorClosable}.
-
-Assume, towards a contradiction, that $\overline{\im(\id - A)} \neq X$. Then by \ref{functionalZeroOnClosedSubSpace} we can find a non-zero bounded functional $f$ that is zero on $\overline{\im(\id - A)}$. Thus for all $x\in \dom(A)$:
-\[ 0 = f((\id- A)x) = (\id-A)^t(f)(x). \]
-Because $\dom(A)$ is dense in $X$, we conclude that $(\id-A)^t(f) = 0$ and thus that $(\id-A)^t = \id - A^t$ is not dissipative.
-\end{proof}
-\begin{corollary}
-Let $A$ be a dissipative operator on a Banach space $X$. If $\lambda\id - A$ is surjective for some $\lambda > 0$, then $A|^{\dom(A)}: \dom(A)\to \dom(A)$ generates a contraction semigroup on $\overline{\dom(A)}$.
-\end{corollary}
-\begin{proof}
-$\im(\lambda\id-A)$ is closed, so $A|^{\dom(A)}$ closed.
-
-$\im(\lambda\id-A)$ still surjective, so dense in $\overline{\dom(A)}$
-
-we just need densely defined
 \end{proof}
 
 \subsection{Contraction semigroups}
@@ -469,6 +521,8 @@ This holds for all $t$. In particular this holds if $t = 2\sqrt{\frac{\norm{x}}{
 &= 4\norm{x}\cdot\norm{A^2x}.
 \end{align*}
 \end{proof}
+
+\subsection{Analytic semigroups}
 
 
 \chapter{Operator equations}

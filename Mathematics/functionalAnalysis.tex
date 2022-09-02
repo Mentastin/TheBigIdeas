@@ -1406,28 +1406,42 @@ Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Th
 
 \begin{lemma}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then
-\[ B^\pol = \setbuilder{x\in X}{\sup_{y\in B}\abspair{x,y} \leq 1}. \]
+\[ B^{\pol} = \setbuilder{x\in X}{\sup_{y\in B}\abspair{x,y} \leq 1}. \]
 \end{lemma}
 
 \begin{lemma}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then
 \begin{enumerate}
-\item for all $\lambda \neq 0$: $(\lambda B)^\pol = |\lambda|^{-1}B^\pol$.
+\item for all $\lambda \neq 0$: $(\lambda B)^{\pol} = |\lambda|^{-1}B^{\pol}$;
+\item $B^{\pol}$ is absolutely convex;
+\item $B^{\pol}$ is $\sigma(X,Y)$-closed.
 \end{enumerate}
 \end{lemma}
+\begin{proof}
+(1) We calculate
+\begin{align*}
+(\lambda B)^{\pol} &= \setbuilder{x\in X}{\sup_{y\in \lambda B}\abspair{x,y} \leq 1} \\
+&= \setbuilder{x\in X}{\sup_{y\in B}\abspair{x,\lambda y} \leq 1} \\
+&= \setbuilder{x\in X}{\sup_{y\in B}\abspair{\lambda x, y} \leq 1} \\
+&= \setbuilder{x\in X}{\sup_{y\in B}\abspair{|\lambda| x, y} \leq 1} \\
+&= \setbuilder{|\lambda|x\in X}{\sup_{y\in B}\abspair{x, y} \leq 1}.
+\end{align*}
+
+(2) 
+\end{proof}
 
 \begin{proposition}
-Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then $B^\pol$ is absolutely convex and $\sigma(X,Y)$-closed.
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then $B^{\pol}$ is absolutely convex and 
 \end{proposition}
 
-TODO $(\bigcup A)^\pol = \bigcap A^\pol$.
+TODO $(\bigcup A)^{\pol} = \bigcap A^{\pol}$.
 
 
 
 \subsubsection{Annihilator subspaces}
 \begin{lemma}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $V\subseteq Y$ a subspace. Then
-\[ V^\pol = \setbuilder{x\in X}{\forall y\in V:\;\pair{x,y} = 0}. \]
+\[ V^{\pol} = \setbuilder{x\in X}{\forall y\in V:\;\pair{x,y} = 0}. \]
 \end{lemma}
 
 
@@ -1451,6 +1465,21 @@ TODO Robertson p34
 
 \begin{theorem}[Mackey-Arens]
 \end{theorem}
+
+\subsection{Duality sets for normed spaces}
+\begin{definition}
+Consider a dual system $\sSet{V, W, \pair{\cdot,\cdot}}$ where $V,W$ are normed spaces. For all $v\in V$ we have the \udef{duality set} of $v$
+\[ \mathfrak{d}(v) \defeq \setbuilder{w\in W}{\norm{v}^2 = \pair{v,w} = \norm{w}^2}. \]
+Similarly the duality set of $w\in W$ is
+\[ \mathfrak{d}(w) \defeq \setbuilder{v\in V}{\norm{v}^2 = \pair{v,w} = \norm{w}^2}. \]
+\end{definition}
+
+\begin{proposition}
+Consider the dual pair $\sSet{V^*, V}$ for some normed space $V$. Then for all $v\in V$, $\mathfrak{d}(v)$ is not empty.
+\end{proposition}
+\begin{proof}
+Take $\norm{v}\cdot \omega_v$, where $\omega_v$ is defined in Corollary \ref{existenceBoundedFunctionalOfSameNorm} of the Hahn-Banach extension theorem.
+\end{proof}
 
 \section{Operators on topological vector spaces}
 
@@ -2039,13 +2068,20 @@ For $\lambda\in\C$ the \udef{resolvent} $R_L(\lambda): \im(\lambda \id_V - L)\to
 \begin{itemize}
 \item The \udef{resolvent set} $\res(L)$ is the set
 \begin{align*}
-\res(L) &\defeq \setbuilder{\lambda\in \C}{R_L(\lambda)\in\Bounded(V)} \\
+\res(L) &\defeq \setbuilder{\lambda\in \C}{R_L(\lambda)\in\Bounded(V, \dom(L))} \\
 &= \setbuilder{\lambda\in \C}{\text{$R_L(\lambda)$ exists, has domain $V$ and is bounded}}.
 \end{align*}
 \item The \udef{spectrum} of $L$ is the complement of the resolvent set: $\spec(L) \defeq \C\setminus\rho(L)$.
 \item The \udef{spectral radius} $\spr(L)$ is $\sup_{\lambda\in\spec(L)} |\lambda|$.
 \end{itemize}
 \end{definition}
+
+\begin{lemma}
+Let $T\in\Lin(V)$ be an operator and $\lambda\in\C$ such that $\lambda\id_V - T$ is injective. Then $\im(R_T(\lambda)) = \dom(T)$.
+\end{lemma}
+\begin{proof}
+For all $x\in \dom(T)$ we have $x = R_T(\lambda)(\lambda\id_V - T)x$.
+\end{proof}
 
 \begin{lemma} \label{elementResolventSetNormedSpace}
 Let $T$ be an operator on a normed vector space $V$. Then $\lambda \in \res(T)$ \textup{if and only if} $\lambda \id_V - T$ is surjective and bounded from below.
@@ -2564,14 +2600,22 @@ Assume $R_T(\lambda): \im(T)\to V$ exists. Then
 
 Thus $\lambda>0$ is in $\res(T)$ if and only if $\lambda\id - T$ is surjective.
 
+
 \begin{proposition} \label{spectrumDissipativeOperator}
 Let $T\in \Lin(V, W)$ be a dissipative operator between Banach spaces. Then either $]0,+\infty[\,\perp \res(T)$ or $]0,+\infty[\,\subseteq \res(T)$.
 \end{proposition}
 \begin{proof}
-We need to show that $\lambda\in\res(T)$ for some $\lambda >0$, then $\lambda\id - T$ is surjective for all $\lambda>0$.
+By \ref{dissipativeResolventBound}, it is enough to show that if $\lambda\in\res(T)$ for some $\lambda >0$, then $\lambda\id - T$ is surjective for all $\lambda>0$.
 
 Assume $\lambda\in\res(T)$ for some $\lambda >0$. Then \ref{dissipativeResolventBound} and \ref{firstNeumannSeries} combine the give $]0, 2\lambda[ \subseteq \res(T)$. We can repeat this to cover the whole of $]0,+\infty[$.
 \end{proof}
+\begin{corollary} \label{rangeDisjunctionDissipativeOperator}
+Either
+\begin{enumerate}
+\item $\lambda\id-T$ is surjective for no $\lambda > 0$; or
+\item $\lambda\id-T$ is surjective for all $\lambda > 0$.
+\end{enumerate}
+\end{corollary}
 
 \begin{proposition} \label{closureDissipativeOperator}
 Let $T\in \Lin(V, W)$ be a dissipative operator between Banach spaces. Then the following are equivalent:
@@ -2610,7 +2654,21 @@ Taking the limit $n\to\infty$ gives $\norm{(\lambda\id-\overline{T})x} \geq \lam
 (3) By \ref{domImClosureOperator}, $\im(\lambda\id - T)$ is dense in $\im(\lambda\id-\overline{T})$ and by \ref{closureDissipativeOperator}, $\im(\lambda\id-\overline{T})$ is closed.
 \end{proof}
 
+\begin{proposition}
+Let $T\in\Lin(V,W)$ be an operator between Banach spaces. Then $T$ is dissipative \textup{if and only if} for all $x\in V$, there exists an $x'\in \mathfrak{d}(x)$ such that
+\[ \Re\pair{x', Tx} \leq 0. \]
+\end{proposition}
+\begin{proof}
+$\boxed{\Leftarrow}$ Take $x\in V$ and fix some $x'\in \mathfrak{d}(x)$ for which the inequality holds. By definition of the duality set, we have $\norm{x}^2 = x'(x) = \norm{x'}^2$. To verify dissipativity, we calculate
+\begin{align*}
+\norm{(\lambda\id-T)x}\,\norm{x'} &\geq |x'\big((\lambda\id-T)x\big)| \\
+&\geq \Re x'\big((\lambda\id-T)x\big) = \Re x'(\lambda x) - \Re x'(Tx) \\
+&\geq \lambda \Re x'(x) = \lambda \norm{x}^2.
+\end{align*}
+Noting $\norm{x'} = \norm{x}$ and dividing both sides by $\norm{x}$ yields dissipativity.
 
+$\boxed{\Rightarrow}$ TODO
+\end{proof}
 
 \section{The spectral theorem}
 \url{https://link.springer.com/content/pdf/10.1007%2F978-1-4614-7116-5.pdf}
