@@ -705,6 +705,106 @@ A convergence space is discete if and only if each point is isolated. A discrete
 \subsection{Preconvergences on thee-point sets}
 
 \subsection{Convergences on ordered sets}
+\subsubsection{Ordering of filters}
+\begin{definition}
+Let $\sSet{X,\leq}$ be a poset and $F,G\in\powerfilters(X)$. We define
+\begin{align*}
+F \leq_w G \qquad&\defequiv\qquad \liminf F \leq \limsup G; \\
+F \leq_s G \qquad&\defequiv\qquad \limsup F \leq \liminf G.
+\end{align*}
+We call $\leq_w$ the \udef{weak ordering} of filters and $\leq_s$ the \udef{strong ordering} of filters.
+\end{definition}
+
+\begin{lemma} \label{filterInequalityCriterion}
+Let $\sSet{X,\leq}$ be a poset and $F,G\in\powerfilters(X)$. Then
+\begin{align*}
+F \leq_w G \qquad &\iff\qquad \forall A\in F, B\in G: \exists x\in A, y\in B: \; x \leq y; \\
+F \leq_s G \qquad &\iff\qquad \exists A\in F, B\in G: \forall x\in A, y\in B: \; x \leq y.
+\end{align*}
+\end{lemma}
+\begin{proof}
+We have the equivalences
+\begin{align*}
+F \leq_w G &\iff \forall A\in F, B\in G: \exists x\in A, y\in B: \; x \leq y \\
+&\iff \forall A\in F, B\in G: \bigwedge A \leq \bigvee B \\
+&\iff \bigvee_{A\in F}\bigwedge A \leq \bigwedge_{B\in G}\bigvee B \\
+&\iff \liminf F \leq \limsup G.
+\end{align*}
+The other equivalence is proved similarly.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\leq}$ be a poset and $F,G\in\powerfilters(X)$. Then
+\begin{align*}
+F \leq_w G \qquad &\iff\qquad \forall C\in F\otimes G: \exists (x,y) \in A: \; x \leq y; \\
+F \leq_s G \qquad &\iff\qquad \exists C\in F\otimes G: \forall (x,y) \in A: \; x \leq y.
+\end{align*}
+\end{lemma}
+\begin{proof}
+First assume $F\leq_w G$. Take $C\in F\otimes G$. Then there exist $A\in F, B\in G$ such that $A\times B \subseteq C$. By assumption, we can find $x\in A$ and $y\in B$ such that $x\leq y$. In this case $(x,y)\in C$.
+
+For the converse, take $A\in F$ and $B\in G$. Then $A\times B\in F\otimes G$ and by assumption there exists $(x,y)\in A\times B$ such that $x\leq y$.
+
+TODO $\leq_s$
+\end{proof}
+TODO contours for propositions.
+
+
+\subsubsection{Convergence compatible with the order}
+\begin{definition}
+Let $\sSet{X,\leq}$ be a poset. A convergence $\xi$ in $X$ is called
+\begin{itemize}
+\item \udef{compatible with the weak order} if $F \leq_w G$, $x\in\lim_\xi F$ and $y\in \lim_\xi G$ imply $x\leq y$;
+\item \udef{compatible with the strong order} if $F \leq_s G$, $x\in\lim_\xi F$ and $y\in \lim_\xi G$ imply $x\leq y$.
+\end{itemize}
+\end{definition}
+
+
+\begin{lemma}
+Let $\sSet{X,\leq}$ be a poset and $\xi$ a convergence on $X$. Then
+\begin{enumerate}
+\item $\xi$ is compatible with the weak order \textup{if and only if} $\lim_\xi F\subseteq \{\liminf F\}\cap\{\limsup F\}$ for all $F\in\powerfilters(X)$;
+\item $\xi$ is compatible with the strong order \textup{if and only if} $\lim_\xi F\subseteq \interval{\liminf F, \limsup F}$ for all $F\in\powerfilters(X)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We have $F \leq \pfilter{x} \iff \liminf F \leq x$ by \ref{filterInequalityCriterion}. This implies 
+$F \leq \pfilter{\liminf F}$ and thus for all $y\in\lim_\xi F$ we must have $y\leq \liminf F$ by compatability of the order. By a similar argument, we have $\limsup F \leq y$.
+\end{proof}
+\begin{corollary} \mbox{}
+The weakest convergence compatible with the weak order is given by $\lim F = \liminf F =\limsup F$, if they coincide, for all $F\in \powerfilters(X)$.
+\end{corollary}
+TODO: there is no weakest convergence compatible with the strong order??
+
+\subsubsection{Order closure and order regularity}
+\begin{definition}
+Let $\sSet{X, \leq}$ be a poset and $A\subseteq X$ a subset. The \udef{order closure} of $A$ is the set
+\[ \closure_o(A) \defeq \setbuilder{x\in X}{\exists a,b\in A: a\leq x\leq b}. \]
+We call a convergence $\xi$ on $X$ \udef{order-regular} if for all $F\in \powerfilters(X)$, the filter
+\[ \setbuilder{\closure_o(A)}{A\in F} \]
+converges to the same points as $F$.
+\end{definition}
+Order closure is closure into the lattice of (closed) intervals TODO. $\interval{a,b}\vee \interval{c,d} = \interval{(a\wedge c), (b\vee d)}$ and $\interval{a,b}\wedge \interval{c,d} = \interval{(a\vee c), (b\wedge d)}$.
+
+
+\begin{lemma}
+A convergence is order-regular \textup{if and only if} it is based in the closed intervals.
+\end{lemma}
+
+\begin{proposition}
+Let $\sSet{X,\leq}$ be a poset with order-regular convergence $\xi$ and $F,G,H\in \powerfilters(X)$. If $F,G\overset{\xi}{\longrightarrow} x\in X$ and
+\[ \forall A\in F,B\in G: \exists C\in H: \;\exists a\in A, b\in B:\; C\subseteq \interval{a,b},  \]
+then $H\overset{\xi}{\longrightarrow} x$.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}[Squeeze theorem]
+Let $\seq{x_n}, \seq{y_n}$ and $\seq{z_n}$ be sequences in $X$ such that $\seq{x_n}, \seq{y_n}\overset{\xi}{\longrightarrow} x\in X$ and
+\[ \forall n\in \N: \quad x_n \leq z_n \leq y_n, \]
+then $\seq{y_n} \overset{\xi}{\longrightarrow} x$.
+\end{corollary}
+
 \subsubsection{Order convergence}
 \url{https://core.ac.uk/download/pdf/82382859.pdf}
 TODO move down!
@@ -2504,11 +2604,11 @@ Now assume $\mathcal{U} \subseteq \Xi(\mathcal{F})$ and take $H\in \Theta(\mathc
 \end{proof}
 
 \subsubsection{Uniformities from convergences on product spaces}
-\begin{lemma}
+\begin{lemma} \label{uniformityFromConvergenceProductSpace}
 Let $X$ be a set and $\psi$ a convergence on $X^2$ such that
 \begin{itemize}
-\item if $H\overset{\psi}{\longrightarrow} (x,y)$, then $H^\transp \overset{\psi}{\longrightarrow} (y,x)$;
-\item if $H_1\overset{\psi}{\longrightarrow} (x,y)$ and $H_2\overset{\psi}{\longrightarrow} (y,z)$, then $H_1;H_2 \overset{\psi}{\longrightarrow} (x, z)$.
+\item if $H\overset{\psi}{\longrightarrow} (x,x)$, then $H^\transp \overset{\psi}{\longrightarrow} (x,x)$;
+\item if $H_1\overset{\psi}{\longrightarrow} (x,x)$ and $H_2\overset{\psi}{\longrightarrow} (x,x)$, then $H_1;H_2 \overset{\psi}{\longrightarrow} (x, x)$.
 \end{itemize}
 Then the set
 \[ \mathcal{F} \defeq \setbuilder{H\overset{\psi}{\longrightarrow}(x,x)}{x\in X, H\in\powerfilters(X^2)} \]
@@ -2528,13 +2628,16 @@ This filter is proper and converges to both $(x,x)$ and $(y,y)$. Now
 so $H_1; H_2\in\mathcal{F}$.
 \end{proof}
 
-\subsection{Properties of uniform spaces}
-\subsubsection{Pretopological uniform spaces}
-\subsubsection{Topological uniform spaces}
 
-\subsection{The Arzelà-Ascoli theorem}
+\subsubsection{Separate and joint continuity of binary functions}
+\begin{proposition}
+Let $f: X\times Y \to Z$ be a binary function and $\mathcal{F}$ a uniform filter set on $Z$. We say $F\in\powerfilters(X)$ converges \udef{$f$-uniformly} to $x\in X$ if
+\[ \exists G\in \powerfilters(Y): \forall y\in Y: \; TODO \]
+\end{proposition}
 
-\subsection{Continuous uniform convergence}
+\subsubsection{The Arzelà-Ascoli theorem}
+
+\subsubsection{Continuous uniform convergence}
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\mathcal{U}}$ a uniform space. The \udef{continuous uniform convergence structure} $\mathcal{U}_c$ on $\cont(X,Y)$ is defined as
 \[ H_1\mathrel{\mathcal{U}_c} H_2 \quad \defequiv \quad \forall F\overset{\xi}{\longrightarrow} x: \;\; \evalMap^{\imf\imf}(H_1\otimes F) \mathrel{\mathcal{U}} \evalMap^{\imf\imf}(H_2\otimes F). \]
@@ -2551,6 +2654,14 @@ Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\mathcal{U}}$ a uniform s
 \item The symmetry and transitivity of $\mathcal{U}_c$ follow from the symmetry and transitivity of $\mathcal{U}$.
 \end{itemize}
 \end{proof}
+
+\begin{proposition}[Universal property of continuous convergence]
+Let $\sSet{X, \xi},\sSet{Y,\sigma}$ and $\sSet{Z, \zeta}$ be convergence spaces. A function $f: Z \to \cont_c(X,Y)$ is continuous \textup{if and only if} $\curry_1^{-1}(f): Z\times X\to Y$ is continuous.
+\end{proposition}
+
+\subsection{Properties of uniform spaces}
+\subsubsection{Pretopological uniform spaces}
+\subsubsection{Topological uniform spaces}
 
 \section{Uniform convergence}
 \begin{definition}
@@ -2659,6 +2770,51 @@ Let $\sSet{Y,\mathcal{U}}$ be a uniform space and $X$ a set. Let $I$ be a direct
 \end{enumerate}
 \end{proposition}
 
+\section{Metric spaces}
+\begin{definition}
+Let $X$ be a set. A \udef{metric} on $X$ is a function $d: X\times X\to \R$ satisfying, for all $x,y,z\in X$,
+\begin{itemize}
+\item \emph{positivity}: $d(x,y) \geq 0$;
+\item \emph{definiteness}: $d(x,y) = 0$ \textup{if and only if} $x=y$;
+\item \emph{symmetry}: $d(x,y) = d(y,x)$;
+\item the \emph{triangle inequality}: $d(x,z) \leq d(x,y) + d(y,z)$.
+\end{itemize}
+The structured set $\sSet{X,d}$ is called a \udef{metric space}.
+\end{definition}
+
+\subsection{Uniform structures on a metric space}
+\begin{proposition}
+Let $\sSet{X,d}$ be a metric space and $\sigma$ an order-regular convergence on $\R^{\geq 0}$ such that addition is continuous. Then the relation $\mathcal{U}^\sigma$ on $\powerfilters(X)$ defined by
+\[ F\mathrel{\mathcal{U}^\sigma}G \qquad\defequiv\qquad d^{\imf\imf}\big[F\otimes G\big] \overset{\sigma}{\longrightarrow} 0 \]
+is a uniformity on $X$.
+\end{proposition}
+\begin{proof}
+We have that $F\mathrel{\mathcal{U}^N}G$ iff $F\otimes G$ converges to a point in $d^\preimf\{0\}$ in the initial convergence $\psi$ of $d$. Now $d^\preimf\{0\} = \setbuilder{(x,x)}{x\in X}$. In order to apply \ref{uniformityFromConvergenceProductSpace}, we just need to verify the two points. 
+\begin{itemize}
+\item Let $H\in \powerfilters{X\times X}$. Then, by symmetry of the metric,
+\[ H\overset{\psi}{\longrightarrow} (x,x) \iff d^{\imf\imf}[H] \to 0 \iff d^{\imf\imf}[H^\transp] \to 0 \iff H^\transp\overset{\psi}{\longrightarrow} (x,x). \]
+\item Assume $H_1\overset{\psi}{\longrightarrow} (x,x)$ and $H_2\overset{\psi}{\longrightarrow} (x,x)$. Then $d^{\imf\imf}[H_1] \overset{\sigma}{\longrightarrow} 0$ and $d^{\imf\imf}[H_2] \overset{\sigma}{\longrightarrow} 0$. By continuity of addition, $d^{\imf\imf}[H_1]+d^{\imf\imf}[H_2] \overset{\sigma}{\longrightarrow} 0$. Now $\pfilter{0} \leq d^{\imf\imf}[H_1;H_2] \leq d^{\imf\imf}[H_1]+d^{\imf\imf}[H_2]$, then $H_1;H_2 \overset{\psi}{\longrightarrow} (x, x)$. TODO squeeze theorem, order closure.
+\end{itemize}
+\end{proof}
+
+\subsubsection{Lipschitz and Hölder uniformities}
+\begin{definition}
+Let $\sSet{X,d}$ be a metric space. The \udef{$M$-Lipschitz uniformity}
+\end{definition}
+$\vicinity_\sigma(0) = \upset\{\interval{0,1}\}$
+
+\subsection{Continuous convergence structure}
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a compact convergence space and $\sSet{Y,d}$ a metric space. The continuous convergence on $\cont(X,Y)$ is given by
+\[ \forall H\in\powerset(\cont(X,Y)_c): \qquad H\to f \iff \sup_{x\in X}d(H(x), f(x)) \to 0. \]
+\end{proposition}
+\begin{proof}
+First assume $\sup_{x\in X}d(H(x), f(x)) \to 0$. 
+
+Now assume $\sup_{x\in X}d(H(x), f(x)) \not\to 0$. Then there exists $A\in \neighbourhood(0)$ such that $A \notin \sup_{x\in X}d(H(x), f(x))$ we can construct the set
+\[ \setbuilder{\setbuilder{x\in X}{d(h(x), f(x)) \notin A \forall h\in S}}{S\in H}. \]
+We claim this is a proper filter in $X$. It is contained in an ultrafilter by the ultrafilter lemma \ref{ultrafilterLemma} and this ultrafilter $F$ converges by compactness. Thus $d(H[F], f[F]) \not\to 0$ and so $H\not\to f$.
+\end{proof}
 
 \chapter{Topological convergence and topological spaces}
 A topology specifies which points are close to each other and which are not. This is useful for determining continuity and the existence of holes for example.
