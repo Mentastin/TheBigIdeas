@@ -1478,7 +1478,7 @@ Similarly the duality set of $w\in W$ is
 Consider the dual pair $\sSet{V^*, V}$ for some normed space $V$. Then for all $v\in V$, $\mathfrak{d}(v)$ is not empty.
 \end{proposition}
 \begin{proof}
-Take $\norm{v}\cdot \omega_v$, where $\omega_v$ is defined in Corollary \ref{existenceBoundedFunctionalOfSameNorm} of the Hahn-Banach extension theorem.
+We have $\norm{v}\cdot \omega_v\in \mathfrak{d}(v)$, where $\omega_v$ is defined in Corollary \ref{existenceBoundedFunctionalOfSameNorm} of the Hahn-Banach extension theorem.
 \end{proof}
 
 \section{Operators on topological vector spaces}
@@ -1832,7 +1832,7 @@ Alternatively we could have used the inequality $\norm{T^nb} \leq \norm{T}^n\nor
 \end{proof}
 \begin{corollary}[Neumann series] \label{operatorNeumannSeries}
 Let $T$ be a bounded linear operator with $\norm{T}<1$. Then
-\[ (\id - T)^{-1} = \sum_{i=1}^\infty T^i \]
+\[ (\id - T)^{-1} = \sum_{i=0}^\infty T^i \]
 with uniform convergence. Also
 \[ \norm{(\id - T)^{-1}} \leq \frac{1}{1-\norm{T}}. \]
 \end{corollary}
@@ -1842,10 +1842,26 @@ Let $x\in X$. Then set $(\id - T)^{-1}x = y$. This is equivalent to $x = y-Ty$ a
 The convergence is uniform by TODO ref.
 
 Finally we have
-\[ \norm{(\id - T)^{-1}} = \norm{\sum_{i=1}^\infty T^i} \leq \sum_{i=1}^\infty \norm{T^i} = \frac{1}{1-\norm{T}} \]
+\[ \norm{(\id - T)^{-1}} = \norm{\sum_{i=0}^\infty T^i} \leq \sum_{i=0}^\infty \norm{T^i} = \frac{1}{1-\norm{T}} \]
 by the geometric series.
 \end{proof}
 TODO ref: uniform convergence if $\sum_i \norm{T_i} < \infty$??
+\begin{corollary} \label{operatorNeumannSeriesEventuallyContractive}
+Let $T$ be a bounded linear operator with $\norm{T^k}<1$ for some $k>0$. Then the Neumann series $(\id - T)^{-1} = \sum_{i=0}^\infty T^i$ converges uniformly.
+\end{corollary}
+\begin{proof}
+From the previous corollary, the Neumann series $\sum_{i=0}^\infty(T^k)^i$ converges uniformly. So
+\[ \sum_{i=0}^\infty T^i = (\id + T + T^2 +\ldots + T^{k-1})\sum_{i=0}^\infty(T^k)^i \]
+also converges uniformly.
+
+To show this convergent sequence acturally gives the correct inverse, we calculate
+\begin{align*}
+(\id-T)(\id + T + T^2 +\ldots + T^{k-1})(\id - T^k)^{-1} &= \Big(\id + T + T^2 +\ldots + T^{k-1} - T - T^2 -\ldots - T^{k}\Big)(\id - T^k)^{-1} \\
+&= (\id - T^k)(\id - T^k)^{-1} = \id.
+\end{align*}
+This shows that $\sum_{i=0}^\infty T^i$ is the correct right inverse. To show it is also a left inverse, we expand $(\id - T^k)^{-1}(\id + T + T^2 +\ldots + T^{k-1})(\id-T)$.
+\end{proof}
+
 
 \subsection{The uniform boundedness principle}
 TODO: if a family of bounded operators on a Banach space is pointwise bounded, then it is uniformly bounded.
@@ -2162,6 +2178,14 @@ If $R_\lambda(T)$ is bounded, $\lambda \id_V - T$ then is bounded below by lemma
 
 \subsection{Resolvents}
 
+\begin{lemma}
+Let $T$ be a linear operator and $\lambda,\mu\in\C$. Assume $\lambda\in \spec(T)$. Then $\mu\lambda\in \spec(\mu T)$ and
+\[ R_T(\lambda) = \mu R_{\mu T}(\mu \lambda). \]
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
 \begin{proposition}[Resolvent identity]
 Let $T$ be a linear operator and $\lambda,\mu\in\C$ such that $R_T(\lambda), R_T(\mu)$ exist. Then $R_T(\lambda)$ and $R_T(\mu)$ commute and
 \[ \frac{R_T(\lambda) - R_T(\mu)}{\lambda-\mu} = -R_T(\lambda)R_T(\mu). \]
@@ -2214,14 +2238,20 @@ The assumptions are enough to guarantee $S^{-1}\in \Bounded(X)$, so $\norm{S^{-1
 By injectivity, we can define $S^{-1}$. It is closed by \ref{algebraClosedOperators} and has closed domain, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}. Since $\norm{S^{-1}T} \leq \norm{S^{-1}}\;\norm{T} < 1$, it follows that by \ref{operatorNeumannSeries} that $\id - S^{-1}T$  has bounded inverse and that we can expand its bounded inverse as a Neumann power series. So we can calculate
 \[ (S-T)^{-1} = S^{-1}(\id - S^{-1}T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
 \end{proof}
-\begin{corollary} \label{secondNeumannSeries}
+\begin{proposition} \label{secondNeumannSeries}
 Let $T$ be a bounded operator on a Banach space $X$. For $|\lambda|>\norm{T}$ the resolvent $R_T(\lambda)$ is bounded and given by
 \[ R_T(\lambda) = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}} \]
 with uniform convergence. The norm is bounded by
 \[ \norm{R_T(\lambda)} \leq \frac{1}{|\lambda|-\norm{T}}. \]
-\end{corollary}
+The expansion $R_T(\lambda) = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}}$ also works if $|\lambda|>\spr{T}$.
+\end{proposition}
 \begin{proof}
-We use the proposition with $S = \lambda\id$. The norm bound follows from the Neumann series expansion \ref{operatorNeumannSeries}.
+If $|\lambda|>\norm{T}$, then $\lambda^{-1}T$ is a contraction and so we can use a Neumann series expansion, \ref{operatorNeumannSeries}, to obtain
+\[ R_T(\lambda) = (\lambda\id - T)^{-1} = \lambda(\id - \lambda^{-1}T)^{-1} = \lambda \sum_{n=0}^\infty (\lambda^{-1}T)^n = \sum_{n=0}^\infty\frac{T^n}{\lambda^{n+1}}. \]
+
+The norm bound also follows from \ref{operatorNeumannSeries}.
+
+If $|\lambda|>\spr{T}$, $\norm{T^k} < 1$ for some $k$, by the spectral radius formula \ref{spectralRadiusFormula}. In this case we can use \ref{operatorNeumannSeriesEventuallyContractive}.
 \end{proof}
 \begin{corollary}
 Let $T$ be a bounded linear operator on a Banach space. Then
@@ -2229,6 +2259,7 @@ Let $T$ be a bounded linear operator on a Banach space. Then
 \item $\spec(T)\subset [-\norm{T}, \norm{T}]$;
 \item $\spec(T)$ is compact.
 \end{enumerate}
+In particular, $\spr(T)\leq \norm{T}$.
 \end{corollary}
 For the point spectrum a simpler argument also leads to $\pspec(T)\subset [-\norm{T}, \norm{T}]$: let $\lambda$ be an eigenvalue with eigenvector $x$. Then
 \[ |\lambda|\;\norm{x} = \norm{\lambda x} = \norm{Tx} \leq \norm{T}\;\norm{x}. \]
