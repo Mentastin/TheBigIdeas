@@ -1875,7 +1875,6 @@ By injectivity, we can define $S^{-1}$. It is closed by \ref{algebraClosedOperat
 
 
 \subsection{The uniform boundedness principle}
-TODO: if a family of bounded operators on a Banach space is pointwise bounded, then it is uniformly bounded.
 \begin{theorem}[Uniform boundedness principle] \label{uniformBoundednessPrinciple}
 Let $\mathcal{F}\subset \Bounded(X,Y)$ be a family of bounded operators where $X$ is a Banach space and $Y$ a normed space, such that
 \[ \sup\setbuilder{\norm{Tx}}{T\in\mathcal{F}} < \infty \qquad \text{for all $x\in X$}. \]
@@ -1889,11 +1888,18 @@ These are closed because the functional $f_T: X\to \R: x\mapsto \norm{Tx}$ is bo
 By assumption, $X=\bigcup_{n\in\N} K_n$. As $X$ is a Banach space, and thus a complete metric space, we can apply the Baire category theorem, \ref{BaireCategory}, to conclude that there is a $K_n$ with non-empty interior (by contraposition of the Baire condition). Take $x_0\in K_n^\circ$, then $-x_0+K_n^\circ \subset K_{n2}$. So $\vec{0}\in (K_{2n})^\circ$ and we can find a $\rho$ such that $B(\vec{0},\rho)\subset K_{2n}$. By proposition \ref{existenceOperatorNorm} we have $\norm{T}\leq 2n/\rho$ for all $T\in\mathcal{F}$.
 \end{proof}
 \begin{corollary}[Banach-Steinhaus] \label{BanachSteinhaus}
-Let $X$ be a Banach space and $Y$ a normed space. Let $T_n: X\to Y$ be a sequence of bounded operators. If $T_n$ converges pointwise to $T:X\to Y: Tx = \lim_n T_n x$, then $\sup_n\norm{T_n} <\infty$ and thus $T$ is bounded.
+Let $X$ be a Banach space and $Y$ a normed space. Let $T_n: X\to Y$ be a sequence of bounded operators that converges pointwise to $T$. Then
+\begin{enumerate}
+\item $T$ is bounded;
+\item $\seq{T_n}$ converges in the continuous convergence.
+\end{enumerate}
 \end{corollary}
 \begin{proof}
-Any convergent sequence in a normed space is bounded, so we can apply the uniform boundedness principle.
+For all $x\in X$ we have $\norm{T_nx} \to \norm{Tx}$, so $\seq{\norm{T_nx}}$ is a bounded sequence and $\sup_{n}\norm{T_nx} <\infty$. By the uniform boundedness principle, $\sup_{n}\norm{T_n}$ is bounded by some constant $M$.
+
+Now for all $x\in X$ we have $\norm{T_nx} \leq M$ for all $n\in\N$ and thus $\norm{Tx}\leq M$. This means that $T$ is bounded and $\norm{T} \leq M$.
 \end{proof}
+This does not imply that $\seq{T_n}$ converges to $T$ in norm!
 
 \subsection{Open mapping and closed graph theorems}
 
@@ -2296,7 +2302,7 @@ Let $\mathcal{R}:\Lambda \subseteq \C \to \Bounded(X)$ be a pseudoresolvent. The
 In this case $\im(\mathcal{R}(\lambda)) = \dom(T)$ for all $\lambda\in \Lambda$ and the operator $T$ is unique.
 \end{proposition}
 \begin{proof}
-$\boxed{\Rightarrow}$ Because in particular $\Lambda = \dom(\mathcal{R}) = \dom(R_T|_\Lambda)$, we need to have that $\Lambda \subseteq \res(T)$. The resolvent $R_T(\lambda): \dom(T) \to X$ is bijective for all $\lambda\in \res(T)\subseteq \Lambda$. It is in particular injective.
+$\boxed{\Rightarrow}$ Because in particular $\Lambda = \dom(\mathcal{R}) = \dom(R_T|_\Lambda)$, we need to have that $\Lambda \subseteq \res(T)$. The resolvent $R_T(\lambda): X\to \dom(T)$ is bijective for all $\lambda\in \res(T)\subseteq \Lambda$. It is in particular injective.
 
 $\boxed{\Leftarrow}$ By \ref{commutativityImageRangePseudoresolvents}, $\mathcal{R}(\lambda)$ is injective for all $\lambda\in\Lambda$. By restricting the codomain of $\mathcal{R}(\lambda)$ to its image, $\mathcal{R}(\lambda)$ becomes invertible. We can define $T: \im(\mathcal{R}(\lambda)) \to X = \lambda\id - \mathcal{R}(\lambda)^{-1}$. Then
 \[ \mathcal{R}(\lambda)(\lambda\id - T) = \mathcal{R}(\lambda)\mathcal{R}(\lambda)^{-1} = \id_{\im(\mathcal{R}(\lambda))} = \id_{\dom(T)}. \]
@@ -2304,14 +2310,35 @@ Thus $\mathcal{R}(\lambda)$ is the resolvent of $T$ at $\lambda$.
 The definition of $T$ is the only one that makes $\mathcal{R}(\lambda)$ a resolvent of $T$ at $\lambda$, so $T$ is unique.
 \end{proof}
 \begin{corollary}
-Let $\mathcal{R}:\Lambda \subseteq \C \to \Bounded(X)$ be a pseudoresolvent and assume that $\Lambda$ contains an unbounded sequence $\seq{\lambda_n}$.
+Let $\mathcal{R}:\Lambda \subseteq \C \to \Bounded(X)$ be a pseudoresolvent and assume that $\Lambda$ contains an unbounded sequence $\seq{\lambda_n}$. If either
 \begin{enumerate}
-\item If $\norm{\lambda_n \mathcal{R}(\lambda_n)} \leq M$ for some $M\geq 0$ and all $n\in\N$, then $\mathcal{R}$ is the resolvent map of an operator.
-\item If $\lim_{n\to\infty}\lambda_n\mathcal{R}(\lambda_n)x = x$ for all $x\in X$, then $\mathcal{R}$ is the resolvent map of a densely defined operator.
+\item $\lim_{n\to\infty}\lambda_n\mathcal{R}(\lambda_n)x = x$ for all $x\in X$; or
+\item $\im\mathcal{R}(\lambda)$ is dense in $X$ for some $\lambda\in \Lambda$ and $\norm{\lambda_n \mathcal{R}(\lambda_n)} \leq M$ for some $M\geq 0$ and all $n\in\N$;
 \end{enumerate}
+then $\mathcal{R}$ is the resolvent map of a densely defined operator.
 \end{corollary}
 \begin{proof}
-TODO
+(1) If $x\in \ker\mathcal{R}(\lambda)$ for some $\lambda\in\Lambda$, then it is in the kernel for all $\lambda\in\Lambda$. Thus $\lim_{n\to\infty}\lambda_n\mathcal{R}(\lambda_n)x = 0 = x$, meaning that $\ker\mathcal{R}(\lambda) = \{0\}$ and $\mathcal{\lambda} = R_T(\lambda)$ for some operator $T$. Also
+\[ X = \overline{\bigcup_{n\in\N}\im\mathcal{R}(\lambda_n)} = \overline{\im\mathcal{R}(\lambda)} = \overline{\dom(T)}, \]
+meaning $T$ is densely defined.
+
+(2) From the resolvent identity we have, for some $\lambda\in \Lambda$,
+\[ \lambda_n\mathcal{R}(\lambda_n)\mathcal{R}(\lambda) - \mathcal{R}(\lambda) = \lambda\mathcal{R}(\lambda_n)\mathcal{R}(\lambda) - \mathcal{R}(\lambda_n) \]
+and thus
+\begin{align*}
+\norm{(\lambda_n\mathcal{R}(\lambda_n) - \id)\mathcal{R}(\lambda)} &= \norm{\lambda\mathcal{R}(\lambda_n)\mathcal{R}(\lambda) - \mathcal{R}(\lambda_n)} \\
+&\leq |\lambda|\,\norm{\mathcal{R}(\lambda_n)}\,\norm{\mathcal{R}(\lambda)} + \norm{\mathcal{R}(\lambda_n)} \to 0
+\end{align*}
+because $\norm{\mathcal{R}(\lambda_n)} \leq |\lambda_n^{-1}|\,M \to 0$. So for all $x\in\im\mathcal{R}(\lambda)$, we have $\lim_{n\to\infty}\lambda_n\mathcal{R}(\lambda_n)x = x$.
+
+Now take $x\in X$. Because of density, we can find a sequence $\seq{x_n}$ in $\im\mathcal{R}(\lambda)$ that converges to $x$. By the continuity of the maps $\lambda_n\mathcal{R}(\lambda_n)$ and their uniform bound in conjunction with (TODO ref!!!), we get
+\begin{align*}
+\lim_{n\to\infty}\lambda_n\mathcal{R}(\lambda_n)x &= \lim_{n\to\infty}\lambda_n\mathcal{R}(\lambda_n)\lim_{k\to\infty}x_k \\
+&= \lim_{n\to\infty}\lim_{k\to\infty}\lambda_n\mathcal{R}(\lambda_n)x_k \\
+&= \lim_{k\to\infty}\lim_{n\to\infty}\lambda_n\mathcal{R}(\lambda_n)x_k \\
+&= \lim_{k\to\infty}x_k = x.
+\end{align*}
+We conclude with point (1).
 \end{proof}
 
 \subsubsection{Properties of the spectrum}
@@ -2366,60 +2393,6 @@ Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
 \end{corollary}
 
 
-\subsection{Approximate spectrum and Weyl sequences}
-\begin{definition}
-The set of all $\lambda$ such that $T-\lambda \id_V$ is not bounded from below is called the \udef{approximate point spectrum} $\apspec$.
-
-If $\lambda\in\apspec(T)$, then $\lambda$ is an \udef{approximate eigenvalue} of $T$.
-\end{definition}
-
-\begin{proposition} \label{approximateSpectrum}
-Let $T$ be an operator. Then
-\begin{enumerate}
-\item $\apspec(T) \subset \spec(T)$;
-\item if $T$ is closed, then $\pspec(T)\cup\cspec(T)\subset\apspec(T)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Assume $\lambda \notin \spec(T)$. Then $(T-\lambda \id_V)^{-1}$ is bounded, so its inverse $T-\lambda \id_V$ is bounded below by \ref{boundedBelow} and $\lambda\in \apspec(T)$.
-
-(2) Assume $\lambda\notin \apspec(T)$, 
-so $T-\lambda \id_V$ is bounded below. Then $T-\lambda \id_V$ is injective by \ref{boundedBelow} and $\lambda\notin\pspec(T)$. By proposition \ref{boundedBelowClosedRange} the range $\im(T-\lambda \id_V)$ is closed, so it cannot be a proper dense subset of $X$ and $\lambda\notin\cspec(T)$.
-\end{proof}
-
-\begin{proposition}[Weyl sequences] \label{WeylSequence}
-Let $T$ be an operator on a normed vector space $V$. Then $\lambda \in \apspec(T)$ \textup{if and only if} there exists a sequence of unit vectors $(e_n)_{n\in\N}$ for which
-\[ \lim_{n\to\infty}\norm{\lambda e_n - Te_n} = 0. \]
-\end{proposition}
-\begin{proof}
-Assume there is such a sequence $(e_n)_{n\in\N}$. Then for all $\epsilon>0$, we can find a unit  vector $e_k$ such that $\norm{(\lambda \id_V - T)e_n} \leq \epsilon = \epsilon \norm{e_n}$. This is clearly not bounded below.
-
-This other direction is just an inversion of this argument.
-\end{proof}
-A sequence as described in \ref{WeylSequence} is called a \udef{Weyl sequence} for $\lambda$. This gives meaning to the name ``approximate eigenvalue''.
-
-\begin{corollary}
-Let $T$ be an operator. Then $\sigma(T)\cap \overline{\res(T)} \subseteq \apspec(T)$.
-\end{corollary}
-\begin{proof}
-Let $\lambda \in \sigma(T)\cap \overline{\res(T)}$. We show there is a Weyl sequence for $\lambda$.
-
-We can find a sequence $\seq{\lambda_n}\subseteq \res(T)$ such that $\lambda_n \to \lambda$.
-Now $d(\lambda_n, \spec(T)) \to 0$, so by \ref{resolventNormDistanceToSpectrum}, we can find a sequence of unit vectors $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} \to \infty$. Now we can rescale $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} = 1$.
-
-Then $\norm{x_n}\to 0$, and hence
-\begin{align*}
-\norm{(\lambda\id - T)R_T(\lambda_n)x_n} &= \norm{\frac{\lambda\id - T}{\lambda_n\id - T}x_n} \\
-&= \norm{\frac{(\lambda\id - T) + (\lambda_n\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}x_n} \\
-&= \norm{\left(\id + \frac{(\lambda\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}\right)x_n} \\
-&= \norm{\left(\id + \frac{\lambda\id - \lambda_n\id}{\lambda_n\id - T}\right)x_n} \\
-&= \norm{x_n + (\lambda\id - \lambda_n\id)R_T(\lambda_n)x_n} \\
-&\leq \norm{x_n} + |\lambda - \lambda_n|\;\norm{R_T(\lambda_n)x_n} \to 0.
-\end{align*}
-Thus $\seq{R_T(\lambda_n)x_n}$ is the kind of sequence we were looking for.
-\end{proof}
-
-
 \subsection{Parts of the spectrum}
 
 \begin{example}
@@ -2472,6 +2445,59 @@ Let $L\in\Hom(V)$. Suppose $\lambda_1, \ldots, \lambda_m$ are distinct eigenvalu
 is a direct sum. Furthermore, the sum of geometric multiplicities is less than or equal to the dimension of $V$:
 \[ \dim E_{\lambda_1}(L) + \ldots + \dim E_{\lambda_m}(L) \leq \dim V. \]
 \end{corollary}
+
+\subsubsection{Approximate spectrum and Weyl sequences}
+\begin{definition}
+The set of all $\lambda$ such that $T-\lambda \id_V$ is not bounded from below is called the \udef{approximate point spectrum} $\apspec$.
+
+If $\lambda\in\apspec(T)$, then $\lambda$ is an \udef{approximate eigenvalue} of $T$.
+\end{definition}
+
+\begin{proposition} \label{approximateSpectrum}
+Let $T$ be an operator. Then
+\begin{enumerate}
+\item $\apspec(T) \subset \spec(T)$;
+\item if $T$ is closed, then $\pspec(T)\cup\cspec(T)\subset\apspec(T)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume $\lambda \notin \spec(T)$. Then $(T-\lambda \id_V)^{-1}$ is bounded, so its inverse $T-\lambda \id_V$ is bounded below by \ref{boundedBelow} and $\lambda\in \apspec(T)$.
+
+(2) Assume $\lambda\notin \apspec(T)$, 
+so $T-\lambda \id_V$ is bounded below. Then $T-\lambda \id_V$ is injective by \ref{boundedBelow} and $\lambda\notin\pspec(T)$. By proposition \ref{boundedBelowClosedRange} the range $\im(T-\lambda \id_V)$ is closed, so it cannot be a proper dense subset of $X$ and $\lambda\notin\cspec(T)$.
+\end{proof}
+
+\begin{proposition}[Weyl sequences] \label{WeylSequence}
+Let $T$ be an operator on a normed vector space $V$. Then $\lambda \in \apspec(T)$ \textup{if and only if} there exists a sequence of unit vectors $(e_n)_{n\in\N}$ for which
+\[ \lim_{n\to\infty}\norm{\lambda e_n - Te_n} = 0. \]
+\end{proposition}
+\begin{proof}
+Assume there is such a sequence $(e_n)_{n\in\N}$. Then for all $\epsilon>0$, we can find a unit  vector $e_k$ such that $\norm{(\lambda \id_V - T)e_n} \leq \epsilon = \epsilon \norm{e_n}$. This is clearly not bounded below.
+
+This other direction is just an inversion of this argument.
+\end{proof}
+A sequence as described in \ref{WeylSequence} is called a \udef{Weyl sequence} for $\lambda$. This gives meaning to the name ``approximate eigenvalue''.
+
+\begin{corollary}
+Let $T$ be an operator. Then $\sigma(T)\cap \overline{\res(T)} \subseteq \apspec(T)$.
+\end{corollary}
+\begin{proof}
+Let $\lambda \in \sigma(T)\cap \overline{\res(T)}$. We show there is a Weyl sequence for $\lambda$.
+
+We can find a sequence $\seq{\lambda_n}\subseteq \res(T)$ such that $\lambda_n \to \lambda$.
+Now $d(\lambda_n, \spec(T)) \to 0$, so by \ref{resolventNormDistanceToSpectrum}, we can find a sequence of unit vectors $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} \to \infty$. Now we can rescale $\seq{x_n}$ such that $\norm{R_T(\lambda_n)x_n} = 1$.
+
+Then $\norm{x_n}\to 0$, and hence
+\begin{align*}
+\norm{(\lambda\id - T)R_T(\lambda_n)x_n} &= \norm{\frac{\lambda\id - T}{\lambda_n\id - T}x_n} \\
+&= \norm{\frac{(\lambda\id - T) + (\lambda_n\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}x_n} \\
+&= \norm{\left(\id + \frac{(\lambda\id - T) - (\lambda_n\id - T)}{\lambda_n\id - T}\right)x_n} \\
+&= \norm{\left(\id + \frac{\lambda\id - \lambda_n\id}{\lambda_n\id - T}\right)x_n} \\
+&= \norm{x_n + (\lambda\id - \lambda_n\id)R_T(\lambda_n)x_n} \\
+&\leq \norm{x_n} + |\lambda - \lambda_n|\;\norm{R_T(\lambda_n)x_n} \to 0.
+\end{align*}
+Thus $\seq{R_T(\lambda_n)x_n}$ is the kind of sequence we were looking for.
+\end{proof}
 
 
 \subsubsection{Residual spectrum}

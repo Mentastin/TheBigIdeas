@@ -2095,16 +2095,7 @@ Assume $R$ reflexive, i.e.\ $\id_A\subseteq R$. Then $R = \id_A ;R \subseteq R;R
 Let $R$ be a homogeneous relation on $A$. If $R$ is dense, then $R^\transp$ is dense.
 \end{lemma}
 
-\subsection{Tolerance relations}
-\begin{definition}
-A \udef{tolerance relation} is a binary relation that is reflexive and symmetric.
-
-If $T$ is a tolerance relation on a class $X$, then $\sSet{X,T}$ is called a \udef{tolerance space}.
-\end{definition}
-A tolerance relation expresses the idea of `resembling' or `being within tolerance'.
-
-
-\subsection{Equivalence relations}
+\subsection{Equivalence relations and generalisations}
 \begin{definition}
 An \udef{equivalence relation} is a binary relation that is reflexive, symmetric and transitive.
 \end{definition}
@@ -2211,6 +2202,62 @@ We can run the argument in reverse for the converse.
 \[ R_1\cup R_2 \subseteq R_1;(R_1\cup R_2);R_2 = R_1;R_1;R_2 \cup R_1;R_2;R_2 = R_1;R_2. \]
 Now assume $R$ is an equivalence class containing $R_1\cup R_2$, then
 \[ R \supseteq (R_1\cup R_2);(R_1\cup R_2) = R_1 \cup R_1;R_2 \cup R_2;R_1 \cup R_2 = R_1;R_2. \]
+\end{proof}
+
+\subsubsection{Tolerance relations}
+\begin{definition}
+A \udef{tolerance relation} is a binary relation that is reflexive and symmetric.
+
+If $T$ is a tolerance relation on a class $X$, then $\sSet{X,T}$ is called a \udef{tolerance space}.
+\end{definition}
+A tolerance relation expresses the idea of `resembling' or `being within tolerance'.
+
+\subsubsection{Quasi-equivalence relations}
+\begin{definition}
+A \udef{quasi-equivalence relation} is a binary relation $R$ such that
+\begin{itemize}
+\item $R$ is symmetric;
+\item $R$ is transitive.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{quasiEquivalenceLemma}
+Let $R$ be a quasi-equivalence relation on a class $A$ and $x\in A$. If $xR$ is not empty, then $xRx$.
+\end{lemma}
+\begin{proof}
+If $xR$ is not empty, then there exists an $a\in xR$, i.e.\ $xRa$. By symmetry and transitivity, we have $xRaRx$, so $xRx$.
+\end{proof}
+
+\begin{definition}
+Let $X$ be a set. We call $P\in\powerset^2(X)$ a \udef{quasi-partition} if any two elements are either disjoint or the same:
+\[ \forall A,B\in P: \quad A\perp B \quad\lor\quad A=B. \]
+\end{definition}
+
+TODO: what about empty set?
+
+\begin{proposition}
+Let $X$ be a set. The function
+\[ \operatorname{QP}: \{\text{quasi-equivalence relations on $X$}\} \to \{\text{quasi-partitions on $X$}\}: R\mapsto \setbuilder{xR}{x\in X} \]
+is bijective and its inverse is given by
+\[ \operatorname{QP}^{-1}(P) = \setbuilder{(x,y)\in X^2}{\exists A\in P: \{x,y\}\subseteq A}. \]
+\end{proposition}
+\begin{proof}
+We first prove that $\operatorname{QP}$ is well-defined, i.e.\ $\operatorname{QP}(R)$ is a quasipartition on $X$ for each quasi-equivalence relation $R$ on $X$.
+
+Take $xR,yR\in \operatorname{QP}(R)$ and assume that $xR\mesh yR$. We will show that in this case $xR = yR$. By assumption we can find a $z\in xR\cap yR$. Take $a\in xR$, so that we have $aRx, zRx$ and $zRy$. Then by symmetry and transitivity, we have $aRy$, because $aRxRzRy$. This gives us $xR\subseteq yR$. Similarly $yR\subseteq xR$, so $xR=yR$.
+
+Next we show that $\operatorname{QP}^{-1}$ is a left-inverse.
+Let $R$ be a quasi-equivalence relation on $X$ and take $(a,b)\in R$. Then $\{a,b\}\in aR$ by \ref{quasiEquivalenceLemma} and thus $(a,b)\in \operatorname{QP}^{-1}(\operatorname{QP}(R))$.
+Now take $(a,b)\in \operatorname{QP}^{-1}(\operatorname{QP}(R))$. Then there exists $z\in X$ such that $\{a,b\}\subseteq zR$. Thus $aRzRb$ and so $(a,b)\in R$.
+
+Finally we show that $\operatorname{QP}^{-1}$ is a right-inverse. Take a quasi-partition $P$ on $X$, $A\in P$ and $a\in A$ (TODO: what about empty set??). Then
+\begin{align*}
+P \ni A &= a\setbuilder{(a,b)}{b\in A} \\
+&= a\setbuilder{(a,b)}{\exists A\in P: b\in A} \\
+&= a\setbuilder{(a,b)}{\exists A\in P: \{a,b\}\subseteq A} \\
+&= a\operatorname{QP}^{-1}(P) \in \operatorname{QP}(\operatorname{QP}^{-1}(P)).
+\end{align*}
+This shows that $P = \operatorname{QP}(\operatorname{QP}^{-1}(P))$.
 \end{proof}
 
 \subsection{Uniqueness and totality}
