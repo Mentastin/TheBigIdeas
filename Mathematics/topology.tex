@@ -2526,8 +2526,10 @@ TODO with Galois connection??
 
 \begin{lemma} \label{compositionProductFilters}
 Let $X$ be a set and $F,G, G', H\in\powerfilters(X)$. Then
-\[ (F\otimes G);(G'\otimes H) = F\otimes H \]
-\textup{if and only if} $G\amesh G'$.
+\[ (F\otimes G);(G'\otimes H) = \begin{cases}
+F\otimes H & (G\amesh G') \\
+\powerset(X ^2) & (\text{otherwise}).
+\end{cases}  \]
 \end{lemma}
 \begin{proof}
 TODO
@@ -2651,23 +2653,54 @@ Let $\sSet{X, \mathcal{U}}$ be a uniform space. Then
 \[ \entourage_\mathcal{U} \defeq \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G} \]
 is called the \udef{entourage filter} of $\mathcal{U}$ and the elements of $\entourage_\mathcal{U}$ are called \udef{entourages}.
 
-We call the uniform space \udef{topological} if
-\[ F\mathrel{\mathcal{U}}G \qquad\iff\qquad \entourage_\mathcal{U}\subseteq F\otimes G. \]
+We call the uniform space \udef{topological} if $\mathcal{U} = \Theta\big(\upset\{\entourage_\mathcal{U}\}\big)$.
 \end{definition}
 
-Note that even in the topological case, $\entourage_\mathcal{U}$ is not, in general, an element of the uniform filter set!
+\begin{lemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. Then $\mathcal{U}$ is topological \textup{if and only if}
+\[ F\mathrel{\mathcal{U}}G \qquad\iff\qquad \entourage_\mathcal{U}\subseteq F\otimes G. \]
+\end{lemma}
 
 \begin{lemma}
-Let $X$ be a set and $\mathcal{E}\in \powerfilters(X\times X)$. Then $\mathcal{E}$ is the entourage filter of a topological uniform structure on $X$ \textup{if and only if}
-\begin{itemize}
-\item $\mathcal{E}\subseteq \upset\{\setbuilder{(x,x)}{x\in X}\}$;
-\item $\mathcal{E}^\transp = \mathcal{E}$;
-\item $\mathcal{E};\mathcal{E} = \mathcal{E}$.
-\end{itemize}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space with entourage filter $\entourage$. Then
+\begin{enumerate}
+\item $\entourage\subseteq \upset\{\Delta\}$, where $\Delta = \setbuilder{(x,x)}{x\in X}$;
+\item $\entourage^\transp = \entourage$;
+\item $\entourage;\entourage = \entourage$.
+\end{enumerate}
+Any filter in $\powerfilters(X\times X)$ satisfying these properties is the entourage filter of a topological uniformity.
 \end{lemma}
 \begin{proof}
-First assume $\mathcal{E}$ is the entourage filter of a topological 
-\[ \mathcal{E} = \]
+(1) We have
+\[ \mathcal{E} = \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G} \subseteq \bigcap \setbuilder{\pfilter{x}\otimes \pfilter{x}}{x\in X} = \upset\big\{\setbuilder{(x,x)}{x\in X}\big\}. \]
+
+(2) We have
+\[ \mathcal{E}^\transp = \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G}^\transp = \bigcap \setbuilder{G\otimes F}{G\mathrel{\mathcal{U}}F} = \mathcal{E}, \]
+because the transpose is bijective and thus its image function is preserved under intersection.
+
+(3) First take $A;B \in\entourage;\entourage$. We claim $A\subseteq A;B$. Indeed take $(a,b)\in A$. By (1), we have $(b,b)\in B$ and so $(a,b)\in A;B$. Thus $\entourage;\entourage \subseteq \entourage$.
+
+For the converse, we have
+\begin{align*}
+\entourage = \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G} &\subseteq \bigcap \setbuilder{(F_1\otimes G_1);(F_2\otimes G_2)}{F_1\mathrel{\mathcal{U}}G_1, F_2\mathrel{\mathcal{U}}G_2}.
+\end{align*}
+Take $A\in \entourage$. For each Cauchy filter $F$, we can find $B_{F},C_{F}\in F\otimes F$ such that $B_{F};C_{F} \subseteq A$. Take $B \defeq \bigcup_{F\,\text{Cauchy}} B_F$
+
+
+
+
+--------------------------------------------------------
+
+
+Take $A\in \entourage$. For each Cauchy filter $F$, we can find $C_{F},D_{F}\in F\otimes F$ such that $C_{F};D_{F} \subseteq A$. Consider $E_F \defeq (C_F\cap D_F)\cup \Delta \in F\otimes F$. Then $E_F;E_F\subseteq A$ by (1). By upwards closure, we have that $E \defeq \bigcup_{F\,\text{Cauchy}} E_F$ is an element of all Cauchy filters $F$. We now show that $E;E\subseteq A$. Indeed, take $(a,b)\in E;E$. Then there exists $x$ such that $(a,x),(x,b)\in E$. There exist $E_F, E_G$ such that $(a,x)\in E_F$ and $(x,b)\in E_G$. Then $(a,x)\in C_G^\transp, D_G$, so $(x,x)\in C_G;D_G \subseteq A$.
+
+
+Define $E_{F,G}\defeq C_{F,G}\cap D_{F,G}$, so that $E_{F,G};E_{F,G}\subseteq A$.
+
+
+Now $\bigcup_{F\mathrel{\mathcal{U}}G}C_{F,G};D_{F,G} \subseteq A$ and also $\bigcup_{F\mathrel{\mathcal{U}}G}C_{F,G};D_{F,G}\in F$
+
+Now take $A\in \entourage$. Then $A\cap A^\transp\in \entourage$, so $(A\cap A^\transp);(A\cap A^\transp)\in\entourage;\entourage$. We now have $(A\cap A^\transp);(A\cap A^\transp) \subseteq A$, indeed take $(a,b)\in (A\cap A^\transp);(A\cap A^\transp)$, then there exist $(a,x), (x,b)\in A\cap A^\transp$
 \end{proof}
 
 TODO: any entourage filter satisfies these. Also any entourage filter is the entourage filter of a topological uniform space.
@@ -2677,7 +2710,7 @@ Let $\sSet{X,\mathcal{U}}$ be a topological uniform space. Then the associated c
 \[ \neighbourhood_{\Gamma(\mathcal{U})}(x) = \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}. \]
 \end{proposition}
 \begin{proof}
-We first show that $\Gamma(\mathcal{U})$ is pretopological with vicinity filter $upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}$:
+We first show that $\Gamma(\mathcal{U})$ is pretopological with vicinity filter $\upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}$:
 
 Because $\entourage_\mathcal{U}$ is a topological entourage filter, we have
 \begin{align*}
@@ -2771,6 +2804,19 @@ Star refinement is not reflexive in general.
 
 Consider the set $X = \{0,1,2\}$ and the cover $U = \big\{\{0,1\}, \{1,2\}\big\}$. Then $U^* = \big\{\{0,1,2\}\big\}$, but $\{0,1,2\}\notin \downset U$.
 \end{example}
+
+\begin{lemma}
+Let $V$ be a tolerance relation on $X$ and $U = \setbuilder{xV}{x\in X}$. Then
+\[ \operatorname{star}_U(xV) = x(V;V;V). \]
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\operatorname{star}_U(xV) &= \bigcup \setbuilder{yV}{xV\mesh yV} \\
+&= \bigcup \setbuilder{yV}{x(V;V)y} \\
+&= x(V;V;V).
+\end{align*}
+\end{proof}
 
 \subsubsection{Uniform covers}
 \begin{definition}
