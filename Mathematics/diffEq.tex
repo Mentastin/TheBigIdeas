@@ -301,7 +301,7 @@ x + \int_0^{\infty}e^{-\lambda t}T(t)x(A-\lambda\id)x\diff{s} &= x+\lim_{t\to\in
 \end{proof}
 
 
-\begin{proposition}
+\begin{proposition} \label{integralRepresentationOfResolvent}
 Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. If $\int_0^\infty e^{-\lambda s}T(s)x\diff{s}$ exists for all $x\in X$, then
 \begin{enumerate}
 \item $\lambda\in\res(A)$;
@@ -845,14 +845,50 @@ If $X$ is a reflexive Banach space and $a_0 = 1$, then the closure of $A+B$ gene
 \subsection{Trotter-Kato approximation theorems}
 \begin{theorem}[Trotter-Kato approximation theorem]
 Let $X$ be a Banach space, $T, T_n$ be strongly continuous operator semigroups on $X$ with generators $A, A_n$, all satisfying the same growth estimate
-\[ \norm{T(t)}, \norm{T_N(t)} \leq Me^{wt} \qquad \forall t\geq 0, n\in \N. \]
-Let $D$ be a core for $A$. The following are equivalent:
+\[ \norm{T(t)}, \norm{T_n(t)} \leq Me^{wt} \qquad \forall t\geq 0, n\in \N. \]
+The following are equivalent:
 \begin{enumerate}
-\item 
-\item 
+\item there exists a core $D$ of $A$ such that for all $x\in D$ there exists $\seq{x_n} \to x$ such that $x_n\in\dom(A_n)$ and $\seq{A_nx_n}\to Ax$;
+\item $R_{A_n}(r)x \overset{n\to\infty}{\longrightarrow} R_{A}(r)x$ for all $x\in X$ and some/all $r>w$;
+\item $T_n(t)x\overset{n\to\infty}{\longrightarrow} T(t)x$ for all $x\in X$, uniformly for $t$ in compact intervals;
+\item $T_n \to T$ in continuous convergence.
 \end{enumerate}
 These are true if $D\subseteq \dom(A_n)$ for all $n\in\N$ and $\seq{A_n}\to A$ pointwise on $D$.
 \end{theorem}
+\begin{proof}
+$(1) \Rightarrow (2)$ Take some $r > w$. Because $\norm{R_{A_n}(r)}\leq M/(r-w)$, it is enough to prove pointwise convergence on a dense subset of $X$ (TODO ref).
+
+By \ref{densityCoreLemma}, $(r\id_X - A)D$ is dense in $X$ and we take some $y = (r\id_X - A)x\in (r\id_X - A)D$.
+
+By assumption, (1), there exists $\seq{x_n} \to x$ such that $A_nx_n \to Ax$. Then
+\[ y_n\defeq (r\id - A_n)x_n = r x_n - A_nx_n \to r x - Ax = y. \]
+Therefore
+\begin{align*}
+\norm{R_{A_n}(r)y - R_A(r)y} &\leq \norm{R_{A_n}(r)y - R_{A_n}(r)y_n} + \norm{R_{A_n}(r)y_n - R_A(r)y} \\
+&\leq \norm{R_{A_n}(r)}\norm{y-y_n} - \norm{x_n - x} \to 0.
+\end{align*}
+
+$(2) \Rightarrow (1)$ Take $x\in X$ and set $x_n = R_{A_n}(r)(r\id - A)x$. By pointwise convergence of the resolvents, we have $x_n\to x$. By construction $x_n\in\dom(A_n)$. Finally we consider
+\begin{align*}
+A_nx_n &= A_nR_{A_n}(r)(r\id - A)x \\
+&= \big(rR_{A_n}(r) - \id_X\big)(r\id - A)x \\
+&\to \big(rR_{A}(r) - \id_X\big)(r\id - A)x \\
+&= A\big(R_A(r\id - A)\big)x \\
+&= Ax.
+\end{align*}
+
+$(2) \Rightarrow (3)$ Take arbitrary $t_0\in\R^{\geq 0}$. Take some $r>0$ such that $R_{A_n}(r)x\to R_{A}(r)x$ for all $x\in X$. By (TODO ref), it is enough to prove $T_n(t)x\to T(t)x$ uniformly on some dense subset of $X$. 
+
+$(3) \Rightarrow (2)$ We have, using \ref{integralRepresentationOfResolvent},
+\begin{align*}
+\norm{R_{A_n}(r)y - R_A(r)y} &= \norm{\int_0^\infty e^{-rs}T_n(s)\diff{s} - \int_0^\infty e^{-rs}T(s)\diff{s}} \\
+&\leq \int_0^\infty e^{-rs}\norm{T_n(s)x - T(s)x}\diff{s}.
+\end{align*}
+Now for all $t\in \R^{\geq 0}$, we have that $T_n(s)$ is uniformly bounded on $[0,t]$ by TODO ref. By \ref{boundedConvergenceTheorem} we may swap the limit and integral. So
+\[ \int_0^t e^{-rs}\norm{T_n(s)x - T(s)x}\diff{s} = 0. \]
+Then, by TODO ref,
+\[ \int_0^\infty e^{-rs}\norm{T_n(s)x - T(s)x}\diff{s} = \lim_{t\to \infty}\int_0^t e^{-rs}\norm{T_n(s)x - T(s)x}\diff{s} = \lim_{t\to \infty}0 = 0. \]
+\end{proof}
 
 \subsection{The Chernoff product formula}
 
