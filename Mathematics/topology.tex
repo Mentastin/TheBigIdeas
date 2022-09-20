@@ -2584,6 +2584,8 @@ Let $X$ be a set. Let $\mathcal{F}$ be a set of filters in $\powerfilters(X^2)$.
 \item if $F, G\in \mathcal{F}$, then $F;G\in\mathcal{F}$.
 \end{itemize}
 Then we call $\mathcal{F}$ a \udef{uniform filter set} for $X$.
+
+We call a uniformity $\mathcal{U}$ on $X$ \udef{diagonal} if $\upset\{\Delta\} \in \mathcal{U}$, where $\Delta = \setbuilder{(x,x)}{x\in X}$.
 \end{definition}
 
 \begin{lemma} \label{uniformFilterSetFactorisable}
@@ -2923,10 +2925,10 @@ Let $X$ be a set. A \udef{uniform cover set} of $X$ is a filter of covers in $\s
 \section{Function spaces}
 \subsection{Uniform convergences and equicontinuity}
 \begin{definition}
-Let $X$ be a set and $\sSet{Y, \mathcal{U}}$ a uniform space. For any set $S$, let $\Delta_S = \setbuilder{(s,s)\in S^2}{s\in S}$ be the diagonal on $S$.
+Let $X$ be a set and $\sSet{Y, \mathcal{U}}$ a diagonal uniform space. For any set $S$, let $\Delta_S = \setbuilder{(s,s)\in S^2}{s\in S}$ be the diagonal on $S$.
 \begin{itemize}
 \item If $\mathcal{S}$ is a set of subsets of $X$. Then
-\[ \mathcal{U}_\mathcal{S} \defeq \setbuilder{H\in \powerfilters\big((X\to Y)^2\big)}{\forall S\in \mathcal{S}:\; (\evalMap\times \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp \in \mathcal{U}} \]
+\[ \mathcal{U}_\mathcal{S} \defeq \setbuilder{H\in \powerfilters\big((X\to Y)^2\big)}{\forall S\in \mathcal{S}:\; (\evalMap, \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp \in \mathcal{U}} \]
 is the uniformity of \udef{$\mathcal{S}$-uniform convergence}.
 \item If $\mathcal{S}$ is a set of subsets of $X$ and $K\subseteq (X\to Y)$. Then $K$ is called \udef{$\mathcal{S}$-equicontinuous} if
 \[ \forall S\in \mathcal{S}:\; \upset\big\{(\evalMap, \evalMap)^\imf(\Delta_K, \Delta_S)\big\}\in \mathcal{U}. \]
@@ -2939,6 +2941,22 @@ In particular:
 \item $\{X\}$-equicontinuity is called \udef{uniform equicontinuity}.
 \end{itemize}
 \end{definition}
+
+\begin{lemma}
+Let $X$ be a set, $\sSet{Y, \mathcal{U}}$ a diagonal uniform space and $\mathcal{S}$ a set of subsets of $X$. The uniformity of $\mathcal{S}$-uniform convergence is a uniformity on $(X\to Y)$.
+\end{lemma}
+\begin{proof}
+We verify the conditions:
+\begin{itemize}
+\item Take $f\in(X\to Y)$. For any $S\in \mathcal{S}$, we have
+\begin{align*}
+(\evalMap, \evalMap)^{\imf\imf}\big((\pfilter{f}\otimes \pfilter{f})\otimes \{\Delta_S\}\big)^\ttransp &= \upset \Big\{ (\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \Delta_S\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{x\in S}(\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \{(x,x)\}\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{x\in S}\big{(\evalMap, \evalMap)\big((f,x),(f,x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \bigcup_{x\in S}\big{\big(f(x), f(x)\big)\big\} \Big\} \\
+\end{align*}
+\end{itemize}
+\end{proof}
 
 \begin{lemma}
 Let $X$ be a set and $\sSet{Y, \mathcal{U}}$ a uniform space. Then the uniformity of pointwise convergence induces pointwise convergence on $(X\to Y)$.
@@ -3076,7 +3094,7 @@ Let $\sSet{X,d}$ be a metric space. The metric uniformity is topological and a b
 \end{lemma}
 \begin{corollary}
 Let $\sSet{X, d_X}$ and $\sSet{Y, d_Y}$ be metric spaces and $f:X\to Y$ a function. Then $f$ is uniformly continuous \textup{if and only if}
-\[ \forall \epsilon >0: \exists \delta >0: \forall x,y\in X: \; d_X(x,y) \leq \delta \implies d_Y(f(x), f(y)) \leq \epsilon. \]
+\[ \forall \epsilon >0: \exists \delta >0: \forall x,y\in X: \quad d_X(x,y) \leq \delta \implies d_Y(f(x), f(y)) \leq \epsilon. \]
 \end{corollary}
 \begin{proof}
 By \ref{uniformContinuityEntourages} we have that $f$ is uniformly continuous \textup{if and only if}
@@ -3090,7 +3108,7 @@ By \ref{uniformContinuityEntourages} we have that $f$ is uniformly continuous \t
 
 \begin{lemma}
 Let $\sSet{X,d}$ be a metric space and $\seq{x_n}$ a sequence in $X$. Then $\seq{x_n}$ is a Cauchy sequence \textup{if and only if}
-\[ \forall \epsilon >0: \exists N\in\N: \forall m,n \geq N: d(x_m, x_n)\leq \epsilon. \]
+\[ \forall \epsilon >0: \exists N\in\N: \forall m,n \geq N: \quad d(x_m, x_n)\leq \epsilon. \]
 \end{lemma}
 \begin{proof}
 We have that $\TailsFilter\seq{x_n}$ is a Cauchy filter \textup{if and only if} $\entourage_d \subseteq \TailsFilter\seq{x_n}\otimes \TailsFilter\seq{x_n}$. This is true iff $\forall \epsilon>0$:
@@ -3116,7 +3134,35 @@ The metric convergence is topological by \ref{topologicalInducedUniformConvergen
 \end{proof}
 \begin{corollary}
 Let $\sSet{X,d}$ be a metric space and $\seq{x_n}$ a sequence in $X$. Then $\seq{x_n}$ converges to $x\in X$ \textup{if and only if}
-\[ \forall \epsilon>0: \exists N\in\N: \forall n\geq N: d(x,x_n)\leq \epsilon. \]
+\[ \forall \epsilon>0: \exists N\in\N: \forall n\geq N: \quad d(x_n,x)\leq \epsilon. \]
+\end{corollary}
+
+\subsubsection{Uniform convergence}
+\begin{proposition}
+Let $X$ be a set, $\sSet{Y,d}$ a metric space and $\seq{f_n}$ a sequence in $(X\to Y)$. The following are equivalent:
+\begin{enumerate}
+\item  $\seq{f_n}$ converges uniformly to $f: X\to Y$;
+\item $\forall \epsilon > 0: \exists N\in \N: \forall n \geq N: \forall x\in X:  d(f_n(x), f(x)) \leq \epsilon$;
+\item $\forall \epsilon > 0: \exists N\in \N: \forall n \geq N: \sup_{x\in X} d(f_n(x), f(x)) \leq \epsilon$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The equivalence of (2) and (3) is clear. We prove $(1) \Leftrightarrow (2)$.
+\begin{align*}
+\seq{f_n} \overset{\text{unif.}}{\longrightarrow} f &\iff \TailsFilter\seq{f_n} \otimes \pfilter{f} \in \mathcal{U}_{(X\to Y)} \\
+&\iff (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\Delta_X\}\big)^\ttransp \in \mathcal{U}_d \\
+&\iff \{V_\epsilon\}_\epsilon \subseteq (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\Delta_X\}\big)^\ttransp \\
+&\iff \forall \epsilon>0: \exists N\in \N: \; (\evalMap, \evalMap)^{\imf}\big((\setbuilder{f_n}{n\geq N} \times \{f\})\times \Delta_X\big)^\ttransp \subseteq V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \; \bigcup_{n\geq N}\bigcup_{x\in X}(\evalMap, \evalMap)^{\imf}\big((\{f_n\} \times \{f\})\times \{(x,x)\}\big)^\ttransp \subseteq V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \;(\evalMap, \evalMap)^{\imf}\big((\{f_n\} \times \{f\})\times \{(x,x)\}\big)^\ttransp \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (\evalMap, \evalMap)^{\imf}\big(\{((f_n, f), (x,x))^\ttransp\}\big) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (\evalMap, \evalMap)\big((f_n,x),(f,x)\big) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (f_n(x), f(x)) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; d(f_n(x), f(x)) \leq \epsilon.
+\end{align*}
+\end{proof}
+\begin{corollary}
+
 \end{corollary}
 
 \subsubsection{Lipschitz and Hölder diagonal spaces}
