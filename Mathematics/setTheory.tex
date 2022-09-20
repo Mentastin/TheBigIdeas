@@ -353,6 +353,8 @@ Let $a,b, c \ldots$ be an object. Then
 (5) By definition we can find sets $A,B,C \ldots$ such that $a\in A, b\in B, c\in C \ldots$ Then $\{a,b, c \ldots\} \subseteq A\cup B\cup C \cup \ldots$ and thus a set by \ref{binaryUnionIntersection} and the axiom of separation.
 \end{proof}
 
+\section{Finite sets}
+Nex axiomatised element: finite sets. Classes may be members of finite sets.
 
 \section{Potter-Scott set theory}
 \begin{definition}
@@ -896,10 +898,19 @@ We define the predicate
 \end{definition}
 
 \begin{enumerate}[(A)] \setcounter{enumi}{0}
-\item \textbf{Axiom of pair identity}: Let $p,x_1,x_2,y_1,y_2$ be objects. Then
-\[ \big[p = (x_1, y_1)\big] \;\land\; \big[p = (x_2, y_2)\big] \quad\implies\quad \big[x_1 = x_2\big] \;\land\; \big[y_1 = y_2\big]. \]
+\item \textbf{Axiom of pair identity}: Let $p_1, p_2,x_1,x_2,y_1,y_2$ be objects such that
+\[ p_1 = (x_1, y_1) \qquad \text{and}\qquad p_2 = (x_2, y_2). \]
+Then
+\[ p_1 = p_2 \quad\iff\quad \big[x_1 = x_2\big] \;\land\; \big[y_1 = y_2\big]. \]
 \item \textbf{Axiom of pair existence}: Let $x,y$ be objects. Then $\exists p: \; p = (x,y)$ with $p\neq x $ and $p \neq y$.
 \end{enumerate}
+
+\begin{lemma}
+Let $x,y$ be objects. Then $\exists! p: \; p = (x,y)$ with $p\neq x $ and $p \neq y$.
+\end{lemma}
+\begin{proof}
+Existence is given by the axiom of pair existence. We just need to show uniqueness. Assume there exist $p_1, p_2$ such that $p_1 = (x,y)$ and $p_2 = (x,y)$. Then $p_1 = p_2$ by the axiom of pair identity.
+\end{proof}
 
 Usually an axiomatic system of pairs is integrated with a set theory.
 \begin{definition}
@@ -909,16 +920,17 @@ Let $\mathcal{W}$ be a set theoretic universe satisfying the pair axioms. Let $A
 
 In this case we impose the following additional axioms:
 \begin{enumerate}[(A)] \setcounter{enumi}{2}
-\item \textbf{Axiom of element pairs}: Let $A,B$ be classes, $a\in A, b\in B$ and $p = (a,b)$. Then $p\in A\times B$.
+\item \textbf{Axiom of element pairs}: Let $a,b$ be elements and $p=(a,b)$. Then $p$ is an element.
 \item \textbf{Cartesian product axiom}: Let $A,B$ be sets. Then $A \times B$ is a set.
 \end{enumerate}
 
 \begin{lemma}
-Let $x,y$ be elements and $p = (x,y)$. Then $p$ is an element.
+Let $A, B$ be classes $a\in A, b\in B$ and $p = (a,b)$. Then $p\in A\times B$.
 \end{lemma}
 \begin{proof}
-Let $A,B$ be classes such that $x\in A$ and $y\in B$. Then $p \in A\times B$.
+In this case $a,b$ are elements. So $p$ is an element by the axiom of element pairs and thus $p\in A\times B$ by class comprehension.
 \end{proof}
+
 
 \subsection{Defining pairs}
 TODO: pair axioms conservative extension of ZFC.
@@ -2804,14 +2816,6 @@ Let $X,Y$ be classes and $y\in Y$. Then
 \[ \graph(\underline{y}) = X\times \{y\}. \]
 \end{lemma}
 
-\subsubsection{Tuples of functions}
-\begin{definition}
-Let $f: A\to B$ and $g: X\to Y$ be functions. Then the \udef{tuple function} of $f$ and $g$ is the function
-\[ (f,g): A\times X \to G\times Y: (a,x) \mapsto (f(a), g(x)). \]
-
-In particular if $f=g$, we say the tuple function is the \udef{pointwise application} of $f$. We write $f$ instead of $(f,f)$.
-\end{definition}
-
 \subsection{Partial functions}
 \begin{definition}
 A \udef{partial function} is a relation that is functional (but not necessarily serial). If we wish to emphasise a function is both functional and serial, we may call it a \udef{total function}.
@@ -4019,6 +4023,7 @@ Define a function $\phi: \N \times A^*\to E$ recursively such that it satisfies
 and set $f(u) = \phi(\len(u), u)$. Proving that $f$ satisfies the second equality and the uniqueness of $f$ goes by induction on $\len(u)$.
 \end{proof}
 Like before, a version of the theorem can also be stated for recursion with parameters.
+
 \subsubsection{Functions on finite sequences}
 Let $f: A^{(m)}\to A^{(n)}$. We write
 \[ f_k(a) = f(a)(k) \]
@@ -4034,3 +4039,45 @@ Let $s:\N\to\N$ be a non-decreasing sequence of natural numbers.
 \end{definition}
 
 
+\subsection{Tuples}
+\begin{definition}
+Let $\{A,B,C \ldots \}$ be a finite set of classes and $a\in A, b\in B, c\in C \ldots$. We define
+\begin{itemize}
+\item $(a,b,c,\ldots) \defeq (a, (b,(c,\ldots)))$;
+\item $A\times B\times C\times\ldots \defeq A\times(B\times (C\times \ldots))$.
+\end{itemize}
+\end{definition}
+Clearly $(a,b,c,\ldots)\in A\times B\times C\times\ldots$.
+
+TODO link tuples - finite sequences.
+
+\subsubsection{Transposition of tuples}
+\begin{definition}
+Let $\mathcal{E}$ be the class of all elements and $x,X$ elements. Then we define the function $^\ttransp: \mathcal{E}\to \mathcal{E}$ recursively by
+\[ x^\ttransp \defeq \begin{cases}
+((a,c), (b,d)^t) & \exists a,b,c,d:\; x = ((a,b), (c,d)) \\
+\setbuilder{p^\ttransp}{p\in x} & \text{$x$ is a set} \\
+x & \text{$x$ is not of these forms.}
+\end{cases} \]
+\end{definition}
+TODO: why valid recursion??
+\begin{lemma}
+Let $X$ be a set. Then
+\[ X^\ttransp \defeq \begin{cases}
+(A\times C) \times (B\times D)^t & \exists A,B,C,D:\; X = (A\times B)\times (C\times D) \\
+x & \text{$x$ is not of this form.}
+\end{cases} \]
+\end{lemma}
+\begin{proof}
+TODO!
+\end{proof}
+
+\subsubsection{Tuples of functions}
+\begin{definition}
+Let $f: A\to B$ and $g: X\to Y$ be functions. Then the \udef{tuple function} of $f$ and $g$ is the function
+\[ (f,g): A\times X \to G\times Y: (a,x) \mapsto (f(a), g(x)). \]
+
+In particular if $f=g$, we say the tuple function is the \udef{pointwise application} of $f$. We write $f$ instead of $(f,f)$.
+\end{definition}
+
+TODO extend??
