@@ -1131,41 +1131,6 @@ If $f$ homeomorphism, then
 \end{enumerate}
 \end{proposition}
 
-\subsection{Continuous convergence structure}
-\begin{definition}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. The \udef{continuous convergence} on $(X \to Y)$ is the coarses convergences such that the evaluation map $\evalMap: (X\to Y)\times X \to Y$ is continuous.
-
-We denote the congergence space $(X\to Y)$ equipped with the continuous convergence by $(X\to Y)_c$.
-\end{definition}
-
-\begin{proposition}
-Concrete description of continuous convergence.
-\end{proposition}
-
-\begin{proposition}[Universal property of the continuous convergence structure] \label{universalPropertyContinuousConvergence}
-Let $\sSet{X, \xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergences spaces. A function $h: X\to (Y \to Z)_c$ if continuous \textup{if and only if} $\curry_1^{-1}(h): (X\times Y)\to Z$ is continuous.
-\end{proposition}
-
-\begin{corollary}
-The category of convergence spaces is cartesian closed.
-\end{corollary}
-
-\begin{proposition}
-$\cont_c(X,Y)$ is closed subset of $(X\to Y)_c$??
-\end{proposition}
-
-\begin{proposition}
-Let $\sSet{X, \xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergences spaces. The composition operation
-\[ \circ: (Y\to Z)_c \times (X\to Y)_c \to (X\to Z)_c \]
-is continuous.
-\end{proposition}
-\begin{proof}
-By \ref{universalPropertyContinuousConvergence}, this is equivalent to the continuity of $\curry_1^{-1}(\circ): (Y\to Z)_c \times (X\to Y)_c \times X \to Z$, which follows from the commutativity of the following diagram:
-\[\begin{tikzcd}
-(Y\to Z)_c \times (X\to Y)_c \times X \ar[d, swap, "\id_{(Y\to Z)}\times \evalMap"] \ar[dr, "\curry_1^{-1}(\circ)"] & \\
-(Y\to Z)_c\times Y \ar[r, "\evalMap"] & Z.
-\end{tikzcd} \]
-\end{proof}
 
 \subsection{Directional continuity}
 \begin{definition}
@@ -2584,9 +2549,32 @@ Let $X$ be a set. Let $\mathcal{F}$ be a set of filters in $\powerfilters(X^2)$.
 \item if $F, G\in \mathcal{F}$, then $F;G\in\mathcal{F}$.
 \end{itemize}
 Then we call $\mathcal{F}$ a \udef{uniform filter set} for $X$.
-
-We call a uniformity $\mathcal{U}$ on $X$ \udef{diagonal} if $\upset\{\Delta\} \in \mathcal{U}$, where $\Delta = \setbuilder{(x,x)}{x\in X}$.
 \end{definition}
+
+\begin{lemma}
+Let $X$ be a set, $\mathcal{F}$ an upwards closed set of filters in $\powerfilters(X)$ and $\mathcal{C}$ a cover of $X$. If
+\[ \forall C\in\mathcal{C}: \; \upset\{\Delta_C\} \in \mathcal{F}, \]
+where $\Delta_C = \setbuilder{(c,c)}{c\in C}$, then $\pfilter{x}\otimes\pfilter{x}\in\mathcal{F}$ for all $x\in X$.
+\end{lemma}
+\begin{proof}
+Because $\{(x,x)\}\subseteq \Delta_C$ for some $C\in\mathcal{C}$ and $\pfilter{x}\otimes\pfilter{x}\in\mathcal{F} = \upset \big\{\{(x,x)\}\big\}$.
+\end{proof}
+
+\begin{definition}
+Let $X$ be a set and $\mathcal{S}$ be a set of subsets of $X$. A uniformity $\mathcal{U}$ on $X$ is called \udef{$\mathcal{S}$-diagonal} if $\forall S\in\mathcal{S}: \; \upset\{\Delta_S\} \in \mathcal{U}$.
+
+The uniformity is simply called \udef{diagonal} if $\mathcal{S} = \{X\}$.
+\end{definition}
+We may call the first requirement in the definition of uniform space ``pointwise diagonality''.
+
+\begin{lemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space and $\mathcal{S}_1, \mathcal{S}_2$ sets of subsets of $X$. If $\mathcal{S}_1 \subseteq \downset \mathcal{S}_2$, then $\mathcal{S}_2$-diagonality implies $\mathcal{S}_1$-diagonality.
+\end{lemma}
+\begin{proof}
+Assume $\mathcal{S}_1 \subseteq \downset \mathcal{S}_2$ and that $\mathcal{U}$ is $\mathcal{S}_2$-diagonal.
+
+Take $S\in \mathcal{S}_1$. Then there exists an $S'\in \mathcal{S}_2$ such that $S\subseteq S'$. Thus $\upset\{\Delta_{S'}\} \subseteq \upset\{\Delta_{S}\}$ and $\upset\{\Delta_{S'}\}\in \mathcal{U}$. By upwards closure, $\upset\{\Delta_{S}\} \in \mathcal{U}$.
+\end{proof}
 
 \begin{lemma} \label{uniformFilterSetFactorisable}
 Let $X$ be a set, $\mathcal{F}$ a uniform filter set for $X$ and $H\in \mathcal{F}$. Then
@@ -2602,52 +2590,6 @@ Let $X$ be a set, $\mathcal{F}$ a uniform filter set for $X$ and $H\in \mathcal{
 (2) Similar, by applying point (1) of \ref{filterFactorisationLemma} to $H^\transp$.
 
 (3) Follows from point (2) of \ref{filterFactorisationLemma}.
-\end{proof}
-
-\begin{proposition}
-Let $X$ be a set and $\mathcal{F}$ a uniform filter set on $X$. We define a uniform structure $\Theta(\mathcal{F})$ on $X$ by
-\[ \forall F,G\in\powerfilters(X)\setminus\{\powerset(X)\}:\qquad F\mathrel{\Theta(\mathcal{F})}G \quad\defequiv\quad F\otimes G\in \mathcal{F}.  \]
-The function
-\[ \Theta: \{\text{uniform filter sets on $X$}\} \to \{\text{uniformities on $X$}\} \]
-is an order isomorphism.
-\end{proposition}
-\begin{proof}
-We claim $\Theta$ has an inverse, $\Theta^{-1}$ defined by
-\[ \forall H\in \powerfilters(X^2):\qquad H\in\Theta^{-1}(\mathcal{U}) \quad\defequiv\quad p_1^{\imf\imf}[H]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H]. \]
-
-Clearly $\Theta$ and $\Theta^{-1}$ preserve order.
-
-We verify both $\Theta$ and $\Theta^{-1}$ are well defined.
-
-The prove $\Theta(\mathcal{F})$ is a uniformity, we verify the conditions:
-\begin{itemize}
-\item From $\pfilter{x}\otimes \pfilter{x}\in\mathcal{F}$, we get $\pfilter{x}\mathrel{\Theta(\mathcal{F})}\pfilter{x}$.
-\item Assume $F\mathrel{\Theta(\mathcal{F})}G$ and $G\subseteq G'$. Then $F\otimes G\in \mathcal{F}$ and $F\otimes G\subseteq F\otimes G'$. By upwards closure, $F\otimes G'\in\mathcal{F}$.
-\item Symmetry is immediate from $(F\otimes G)^\transp = G\otimes F$. Transitivity is immediate from $(F\otimes G);(G\otimes H) = F\otimes H$ by \ref{compositionProductFilters}.
-\end{itemize}
-The prove $\Theta^{-1}(\mathcal{U})$ is a uniform filter set, we verify the conditions:
-\begin{itemize}
-\item From $\pfilter{x}\mathrel{\mathcal{U}}\pfilter{x}$, we get $\pfilter{x}\otimes \pfilter{x}\in\Theta^{-1}(\mathcal{U})$.
-\item If $H\in\Theta^{-1}(\mathcal{U})$ and $H\subseteq H'$, then $p_1^{\imf\imf}[H]\subseteq p_1^{\imf\imf}[H']$ and $p_2^{\imf\imf}[H]\subseteq p_2^{\imf\imf}[H']$. Thus by upwards closure of $\mathcal{U}$, we have $p_1^{\imf\imf}[H']\mathrel{\mathcal{U}} p_1^{\imf\imf}[H']$ and so $H'\in\Theta^{-1}(\mathcal{U})$.
-\item Take $H\in \Theta^{-1}(\mathcal{U})$. Then
-\[ p_1^{\imf\imf}[H]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H] \iff p_2^{\imf\imf}[H^\transp]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H^\transp] \iff p_1^{\imf\imf}[H^\transp]\mathrel{\mathcal{U}} p_2^{\imf\imf}[H^\transp] \iff H^\transp\in \Theta^{-1}(\mathcal{U}). \]
-\item Take $H_1, H_2\in \Theta^{-1}(\mathcal{U})$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\Theta^{-1}(\mathcal{U})$ by upwards closure. If $H_1;H_2 \neq \powerset(X^2)$, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$ by \ref{meshingFilterComposition} and thus $p_2^{\imf\imf}[H_1]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H_2]$ by \ref{uniformityMeshingFilters}. So we have, by definition of $\Theta^{-1}(\mathcal{U})$
-\[ p_1^{\imf\imf}[H_1]\;\mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_1] \;\mathrel{\mathcal{U}} \;p_1^{\imf\imf}[H_2]\; \mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_2]. \]
-By \ref{componentInclusionsFilterComposition} and upward closure, we get $p_1^{\imf\imf}[H_1;H_2]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H_1;H_2]$, which means $H_1;H_2\in \Theta^{-1}(\mathcal{U})$.
-\end{itemize}
-
-Finally we show $\Theta$ and $\Theta^{-1}$ are inverses of each other. First take a uniform filter set $\mathcal{F}$. Then, using \ref{uniformFilterSetFactorisable}, we have
-\begin{align*}
-H\in \mathcal{F} &\iff p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H] \in \mathcal{F} \\
-&\iff p_1^{\imf\imf}[H]\mathrel{\Theta(\mathcal{F})} p_2^{\imf\imf}[H] \\
-&\iff H\in \Theta^{-1}(\Theta(\mathcal{F})).
-\end{align*}
-Similarly, for any uniformity $\mathcal{U}$ on $X$,
-\begin{align*}
-F\mathrel{\mathcal{U}}G &\iff p_1^{\imf\imf}[F\otimes G]\mathrel{\mathcal{U}}p_2^{\imf\imf}[F\otimes G] \\
-&\iff F\otimes G \in \Theta^{-1}(\mathcal{U}) \\
-&\iff F\mathrel{\Theta(\Theta^{-1}(\mathcal{U}))} G.
-\end{align*}
 \end{proof}
 
 
@@ -2943,19 +2885,44 @@ In particular:
 \end{definition}
 
 \begin{lemma}
-Let $X$ be a set, $\sSet{Y, \mathcal{U}}$ a diagonal uniform space and $\mathcal{S}$ a set of subsets of $X$. The uniformity of $\mathcal{S}$-uniform convergence is a uniformity on $(X\to Y)$.
+Let $X$ be a set, $\sSet{Y, \mathcal{U}}$ a diagonal uniform space and $\mathcal{S}$ a set of subsets of $X$. The uniformity of $\mathcal{S}$-uniform convergence is a diagonal uniformity on $(X\to Y)$.
 \end{lemma}
 \begin{proof}
 We verify the conditions:
 \begin{itemize}
-\item Take $f\in(X\to Y)$. For any $S\in \mathcal{S}$, we have
+\item Diagonality: For any $S\in \mathcal{S}$, we have
 \begin{align*}
-(\evalMap, \evalMap)^{\imf\imf}\big((\pfilter{f}\otimes \pfilter{f})\otimes \{\Delta_S\}\big)^\ttransp &= \upset \Big\{ (\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \Delta_S\big)^\ttransp \Big\} \\
-&= \upset \Big\{ \bigcup_{x\in S}(\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \{(x,x)\}\big)^\ttransp \Big\} \\
-&= \upset \Big\{ \bigcup_{x\in S}\big{(\evalMap, \evalMap)\big((f,x),(f,x)\big)\big\} \Big\} \\
-&= \upset \Big\{ \bigcup_{x\in S}\big{\big(f(x), f(x)\big)\big\} \Big\} \\
+(\evalMap, \evalMap)^{\imf\imf}\big(\{\Delta_{(X\to Y)}\}\otimes \{\Delta_S\}\big)^\ttransp &= \upset \Big\{ (\evalMap, \evalMap)^{\imf}\big(\Delta_{(X\to Y)}\times \Delta_S\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}(\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \{(x,x)\}\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{(\evalMap, \evalMap)\big((f,x),(f,x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{\big(f(x), f(x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \Delta_{Y} \Big\} \in \mathcal{U}.
+\end{align*}
+This means that $\upset \{\Delta_{(X\to Y)}\} \in \mathcal{U}_\mathcal{S}$.
+\item Upwards closure: If $G\subseteq H$ for some $G,H\in\powerfilters(X\to Y)$, then
+\[ (\evalMap, \evalMap)^{\imf\imf}(G\otimes \{\Delta_S\})^\ttransp \subseteq (\evalMap, \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp \]
+and so we conclude by the upwards closure of $\mathcal{U}$.
+\item Closure under transposition: we have
+\[ (\evalMap, \evalMap)^{\imf\imf}(H^\transp\otimes \{\Delta_S\})^\ttransp = \Big((\evalMap, \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp\Big)^\transp, \]
+and so we conclude by the closure under transposition of $\mathcal{U}$.
+\item Closure under composition: take $G,H\in\mathcal{U}_\mathcal{S}$ and $S\in\mathcal{S}$. It is enough to show, because they form bases, that for all $A\in G, B\in H$,
+\[ (\evalMap, \evalMap)^\imf\big(A;B \times \Delta_S\big)^\ttransp \subseteq (\evalMap, \evalMap)^\imf\big(A \times \Delta_S\big)^\ttransp ; (\evalMap, \evalMap)^\imf\big(B \times \Delta_S\big)^\ttransp. \]
+We first pick an arbitrary element of the left-hand set. Take $(x,x)\in\Delta_S$ and $(f, g)\in A;B$, so there exists $h:X\to Y$ such that $(f,h)\in A$ and $(h,g)\in B$. Then
+\[ (\evalMap, \evalMap)\big((f,g), (x,x)\big)^\ttransp = (f(x), g(x)) \]
+and also
+\begin{align*}
+(f(x), g(x)) &\in \big\{\big(f(x), h(x)\big)\big\};\big\{\big(h(x), g(x)\big)\big\} \\
+&= \big\{(\evalMap, \evalMap)\big((f,h), (x,x)\big)^\ttransp\big\};\big\{(\evalMap, \evalMap)\big((h,g), (x,x)\big)^\ttransp\big\} \\
+&\subseteq (\evalMap, \evalMap)^\imf\big(A \times \Delta_S\big)^\ttransp ; (\evalMap, \evalMap)^\imf\big(B \times \Delta_S\big)^\ttransp.
 \end{align*}
 \end{itemize}
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X, \xi}$ be a convergence set, $\sSet{Y, \mathcal{U}}$ a uniform space and $\mathcal{S}$ a set of compact subsets of $X$. Then the $\mathcal{S}$-uniformity is equal to the pointwise uniformity.
+\end{proposition}
+\begin{proof}
+
 \end{proof}
 
 \begin{lemma}
@@ -2975,16 +2942,101 @@ H\overset{\text{pt-wise}}{\longrightarrow} f &\iff \forall x\in X: \; \evalMap^{
 \end{align*}
 \end{proof}
 
-\subsubsection{The Arzelà-Ascoli theorem}
-
-\subsection{Continuous uniform convergence}
+\subsection{Continuous convergence}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\mathcal{U}}$ a uniform space. The \udef{continuous uniform convergence structure} $\mathcal{U}_c$ on $\cont(X,Y)$ is defined as
-\[ H_1\mathrel{\mathcal{U}_c} H_2 \quad \defequiv \quad \forall F\overset{\xi}{\longrightarrow} x: \;\; \evalMap^{\imf\imf}(H_1\otimes F) \mathrel{\mathcal{U}} \evalMap^{\imf\imf}(H_2\otimes F). \]
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. A filter $H\in(X\to Y)$ converges in \udef{continuous preconvergence} to $f\in(X\to Y)$ if
+\[ \evalMap^{\imf\imf}(H\otimes F) \overset{\zeta}{\longrightarrow} f(x) \]
+for all $F\overset{\xi}{\longrightarrow} x$.
+
+The space $(X\to Y)$ equipped with the continuous convergence is denoted $(X \to Y)_c$.
+\end{definition}
+
+The space $\cont(X,Y)$, when viewed as a convergence subspace of $(X\to Y)_c$, is denoted $\cont_c(X,Y)$
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. Then
+\begin{enumerate}
+\item $(X\to Y)_c$ is a preconvergence space;
+\item $\cont_c(X,Y)$ is a convergence space.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+It is clear that the continuous preconvergence is monotonic. We just need to show that it is centered, when restricted to $\cont(X,Y)$. Take $f\in \cont(X,Y)$. The for all $F\to x\in X$ we have $\evalMap^{\imf\imf}(\pfilter{f}\otimes F) = f^{\imf\imf}[F] \to f(x)$ by continuity. Thus $\pfilter{f}\to f$ in $\cont_c(X,Y)$.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. The continuous preconvergence on $(X\to Y)$ is the coarsest preconvergence such that the evaluation map $\evalMap: (X\to Y)\times X \to Y$ is continuous.
+\end{lemma}
+\begin{proof}
+We first show that the continuous convergence makes the evaluation map continuous. A filter $G\in\powerfilters\big((X\to Y)_c\times X\big)$ converges iff $p_1[G]\to f$ and $p_2[G]\to x$ converge. By definition of continuous convergence $\evalMap^{\imf\imf}(p_1[G] \otimes p_2[G]) \to f(x)$ and thus $\evalMap^{\imf\imf}(p_1[G] \otimes p_2[G]) \subseteq \evalMap^{\imf\imf}(G) \to f(x)$.
+
+Now assume there is some other preconvergence $\sigma$ on $(X\to Y)$ that makes the evaluation map continuous. Take $H \overset{\sigma}{\longrightarrow} f$. Then for all $F\overset{\xi}{\longrightarrow}x$ we have $H\otimes F\overset{\sigma\otimes \xi}{\longrightarrow} (f,x)$, so $\evalMap^{\imf\imf}(H\otimes F) \overset{\zeta}{\longrightarrow} f(x)$ by continuity of the evaluation map.
+
+Thus $H\overset{(X,Y)_c}{\longrightarrow} f$.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, then the continuous convergence is finer than pointwise convergence on $(X\to Y)$.
+\end{lemma}
+\begin{proof}
+Assume $H\to f$ in continuous convergence. Then
+\[ \forall x\in X: \; \evalMap^{\imf\imf}(H\otimes \pfilter{x}) \to f(x), \]
+because $\pfilter{x}\to x$. This is exactly the requirement for $H\to f$ in pointwise convergence.
+\end{proof}
+
+\begin{proposition}[Universal property of the continuous convergence structure] \label{universalPropertyContinuousConvergence}
+Let $\sSet{X, \xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergences spaces. A function $h: X\to (Y \to Z)_c$ if continuous \textup{if and only if} $\curry_1^{-1}(h): (X\times Y)\to Z$ is continuous.
+\end{proposition}
+\begin{proof}
+First assume $h$ is continuous. Then $\curry_1^{-1}(h) = \evalMap \circ (h,\id_Y)$ and thus $\curry_1^{-1}(h)$ is continuous. (TODO ref).
+
+Now assume $\curry_1^{-1}(h): (X\times Y)\to Z$ is continuous and take $F\to x\in X$. Now for all $G\to y\in Y$ we have that
+\begin{align*}
+\evalMap^{\imf\imf}\Big(h^{\imf\imf}[F]\otimes G\Big) &= \big(\evalMap \circ (h,\id_Y)\big)^{\imf\imf}(F\otimes G) \\
+&= \curry_1^{-1}(h)^{\imf\imf}(F\otimes G) \\
+&\to \curry_1^{-1}(h)(x,y) = h(x)(y)
+\end{align*}
+by continuity of $\curry_1^{-1}(h)$. Thus $h^{\imf\imf}[F]$ converges to $h(x)$ by definition of continuous convergence.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X, \xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergences spaces. Then
+\[ \curry_1: (X\times Y \to Z)_c \to (X\to (Y\to Z)_c)_c \]
+is a homeomorphism.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+The category of convergence spaces is cartesian closed.
+\end{corollary}
+
+\begin{proposition}
+$\cont_c(X,Y)$ is closed subset of $(X\to Y)_c$??
+\end{proposition}
+
+\begin{proposition}
+Let $\sSet{X, \xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergences spaces. The composition operation
+\[ \circ: (Y\to Z)_c \times (X\to Y)_c \to (X\to Z)_c \]
+is continuous.
+\end{proposition}
+\begin{proof}
+By \ref{universalPropertyContinuousConvergence}, this is equivalent to the continuity of $\curry_1^{-1}(\circ): (Y\to Z)_c \times (X\to Y)_c \times X \to Z$, which follows from the commutativity of the following diagram:
+\[\begin{tikzcd}
+(Y\to Z)_c \times (X\to Y)_c \times X \ar[d, swap, "\id_{(Y\to Z)}\times \evalMap"] \ar[dr, "\curry_1^{-1}(\circ)"] & \\
+(Y\to Z)_c\times Y \ar[r, "\evalMap"] & Z.
+\end{tikzcd} \]
+\end{proof}
+
+
+\subsubsection{Continuous uniform convergence}
+\begin{definition}
+Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{U}}$ a uniform space. The \udef{uniformity of continuous convergence} is defined by
+\[ \mathcal{U}_c \defeq \setbuilder{H\in \powerfilters\big((X\to Y)^2\big)}{\forall F\overset{\xi}{\longrightarrow} x:\; (\evalMap, \evalMap)^{\imf\imf}\Big(H\otimes (F\otimes F)\Big)^\ttransp \in \mathcal{U}}. \]
 \end{definition}
 
 \begin{lemma}
-The continuous uniform convergence structure is a uniform structure.
+The uniformity of continuous convergence is a uniform structure.
 \end{lemma}
 \begin{proof}
 Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\mathcal{U}}$ a uniform space. We verify the three conditions
@@ -2995,45 +3047,8 @@ Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\mathcal{U}}$ a uniform s
 \end{itemize}
 \end{proof}
 
-\begin{proposition}[Universal property of continuous convergence]
-Let $\sSet{X, \xi},\sSet{Y,\sigma}$ and $\sSet{Z, \zeta}$ be convergence spaces. A function $f: Z \to \cont_c(X,Y)$ is continuous \textup{if and only if} $\curry_1^{-1}(f): Z\times X\to Y$ is continuous.
-\end{proposition}
+\subsection{The Arzelà-Ascoli theorem}
 
-\subsection{Properties of uniform spaces}
-\subsubsection{Topological uniform spaces}
-
-
-\section{Function spaces}
-\begin{definition}
-Let $\sSet{Y,\mathcal{U}}$ be a uniform space and $X$ a set. We define the following uniformities on $X\to Y$:
-\begin{itemize}
-\item the uniformity $\mathcal{U}_p$ of \udef{pointwise convergence} is the product uniformity:
-\[ \mathcal{U}_p = \upset\setbuilder{\setbuilder{(f,g)\in (X\to Y)^2}{\forall x\in S: f(x)Eg(x)}}{E\in \mathcal{U}, \emptyset \neq S\subseteq X \;\text{finite}}; \]
-\item the uniformity $\mathcal{U}_u$ of \udef{uniform convergence}:
-\[ \mathcal{U}_u \defeq \upset\setbuilder{\setbuilder{(f,g)\in (X\to Y)^2}{\forall x\in X: f(x)Eg(x)}}{E\in \mathcal{U}}. \]
-\end{itemize}
-We say a filter, net or sequence of functions in $(X\to Y)$ converges pointwise if it converges w.r.t. the uniformity of pointwise convergence. We say it converges uniformly if it converges w.r.t. the uniformity of uniform convergence.
-\end{definition}
-TODO: compare box topology!
-
-\begin{lemma}
-Let $\sSet{Y,\mathcal{U}}$ be a uniform space and $X$ a set. The uniformities of pointwise and uniform convergence are uniformities.
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
-
-\url{https://arxiv.org/pdf/1209.1619.pdf}
-
-\begin{proposition}
-Let $\sSet{Y,\mathcal{U}}$ be a uniform space and $X$ a set. Let $I$ be a directed set and $\{f_n\}_{n\in I}$ a net of functions in $(X\to Y)$. Then
-\begin{enumerate}
-\item $f_n$ converges uniformly to $f$ \textup{if and only if}
-\[ \forall E\in\mathcal{U}: \exists n_0\in I: \forall n \geq n_0: \forall x\in X: \; (f(x), f_n(x)) \in E; \]
-\item $f_n$ converges pointwise to $f$ \textup{if and only if}
-\[ \forall x\in X: \forall E\in \mathcal{U}: \exists n_0\in \N: \forall n\geq n_0: \; (f(x), f_n(x)) \in E. \]
-\end{enumerate}
-\end{proposition}
 
 \section{Metric spaces}
 \begin{definition}
