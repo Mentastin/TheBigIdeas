@@ -906,8 +906,115 @@ These are true if $A_n$ converges strongly to $A$ on a core of $A$, $A$ is dense
 $(2) \Rightarrow (1)$ Holds by the previous
 \end{proof}
 
+\begin{lemma}
+Let $X$ be a Banach space, $T, T_n$ strongly continuous operator semigroups on $X$ with generators $A, A_n$, all satisfying the same growth estimate
+\[ \norm{T(t)}, \norm{T_n(t)} \leq Me^{wt} \qquad \forall t\geq 0, n\in \N. \]
+Assume $A_n$ bounded and $A_nT(t) = T(t)A_n$ for all $t,n$. If $A_n\to A$ pointwise on a core of $A$, then $T_n(t)\to T(t)$ pointwise on all of $X$ and uniformly in $\interval{0,t_0}$.
+\end{lemma}
+\begin{proof}
+We have
+\begin{align}
+T_n(t)x - T(t)x &= -\int_0^t\od{}{s}\big(T_n(t-s)T(s)x\big)\diff{s} \\
+&= \int_0^tT_n(t-s)(A_n-A)T(s)x\diff{s} \\
+&= \int_0^tT_n(t-s)T(s)\big(A_nx - Ax\big)\diff{s}.
+\end{align}
+Hence $\norm{T_n(t)x - T(t)x} \leq tM^2e^{2wt}\norm{A_nx - Ax}$.
+\end{proof}
+
+TODO Weierstrass approximation.
 
 \subsection{The Chernoff product formula}
+\begin{lemma}
+Let $S\in\Bounded(X)$ be a bounded operator such that $\norm{S^m}\leq M$ for some $M\geq 1$ and all $m\in \N$. Then
+\begin{enumerate}
+\item $\norm{S^kx - S^nx} \leq |n-k|\cdot M\norm{Sx-x}$ for all $n,k\in\N$;
+\item $\norm{e^{n(S-\id_X)}x-S^nx} \leq \sqrt{n}M\norm{Sx - x}$ for all $n\in\N$, $x\in X$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) For $k>n$, we write
+\[ S^k - S^n = \sum_{j=n}^{k-1}(S^{j+1}- S^j) = \sum_{j=n}^{k-1}S^j(S- \id_X).  \]
+Because $\norm{S^j}\leq M$, we obtain the result.
+
+(2) We calculate, using (1),
+\begin{align*}
+\norm{e^{n(S-\id_X)}x-S^nx} &= \norm{e^{-n}(e^{nS}-e^n S^n)} \\
+&= \norm{e^{-n}\sum_{k=0}^\infty\frac{n^k}{k!}(S^k-S^n)} \\
+&\leq e^{-n}\sum_{k=0}^\infty\frac{n^k}{k!} \norm{S^k - S^n} \\
+&\leq  M\norm{Sx-x} e^{-n}\sum_{k=0}^\infty\frac{n^k}{k!} |n-k|.
+\end{align*}
+Now we have, using Cauchy-Schwarz (TODO?),
+\begin{align*}
+\sum_{k=0}^\infty\frac{n^k}{k!} |n-k| &= \sum_{k=0}^\infty\left(\frac{n^k}{k!}\right)^{1/2}\left(\frac{n^k}{k!}(n-k)^2\right)^{1/2} \\
+&\leq \left(\sum_{k=0}^\infty\frac{n^k}{k!}\right)^{1/2}\left(\sum_{k=0}^\infty\frac{n^k}{k!}(n-k)^2\right)^{1/2} \\
+&= (e^n)^{1/2}(ne^n)^{1/2}.
+\end{align*}
+Combining these inequalities gives the result.
+\end{proof}
+
+\begin{theorem}[Chernoff product formula]
+Let $X$ be a Banach space and consider a function $V: \R^{\geq 0}\to \Bounded(X)$ satisfying $V(0) = \id_X$ and $\norm{V(t)^m}\leq Me^{mwt}$ for some $M\geq 1, w\in\R$ and all $t\geq 0, m\in \N$.
+
+Assume that
+\[ Ax \defeq \lim_{h\downarrow 0}\frac{V(h)x-x}{h} \]
+exists for all $x\in D$, where $D$ is a dense subspace of $X$ such that $(\lambda_0 - A)D$ is also a dense subspace of $X$ for some $\lambda_0$.
+
+Then $\overline{A}$ generated a bounded strongly continuous semigroup $T(t)$ given by
+\[ T(t)x = \lim_{n\to \infty}\big(V(t/n)\big)^n x \]
+for all $x\in X$. The limit is uniform for $t\in\interval{0,t_0}$.
+\end{theorem}
+\begin{proof}
+TODO + rescaling argument
+\end{proof}
+\begin{corollary}
+Fix $t >0$ and take sequences $\seq{t_n}\subseteq \R, \seq{k_n}\subseteq \N$ such that $t_n \to 0$ and $t_nk_n \to t$. Then
+\[ T(t)x = \lim_{n\to \infty}\big(V(t_n)\big)^{k_n} x \]
+for all $x\in X$.
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}[Post-Widder inversion formula]
+Let $T(t)$ be a strongly continuous semigroup on a Banach space $X$ with generator $A$. Then
+\[ T(t)x = \lim_{n\to\infty}\left(\frac{n}{t} R_{A}\left(\frac{n}{t}\right)\right)^nx = \lim_{n\to\infty}\left(\id_X - \frac{n}{t} A\right)^{-n}x \]
+for all $x\in X$, uniformly for $t\in\interval{0,t_0}$.
+\end{corollary}
+\begin{proof}
+Assume that $\norm{T(t)}\leq Me^{wt}$ for $M\geq 1, w> 0$. Define
+\[ V(t) \defeq \begin{cases}
+\id_X & (t=0) \\
+1/t R_A(1/t) & (0<t<\delta) \\
+0 & (t\geq \delta)
+\end{cases} \]
+for some $0<\delta<1/w$. Then
+\[ \norm{V(t)^m} \leq \frac{1}{t^m}\norm{R_A(\frac{1}{t})^m} \leq \frac{M}{t^m (1/t - w)^m} = \frac{M}{(1-wt)^m} \leq Me^{m(w+1)t}. \]
+\end{proof}
+\begin{corollary}[Trotter product formula]
+Let $T(t)$ and $S(t)$ be strongly continuous semigroups.
+\end{corollary}
+
+\chapter{Evolution equations}
+\begin{definition}
+A function $U: \{t\geq s\}\to \Bounded(X)$ is called a \udef{(strongly continuous) evolution family} if
+\begin{itemize}
+\item $U(t,s) = U(t,r)U(r,s)$ and $U(s,s) = \id_X$;
+\item it is strongly continuous.
+\end{itemize}
+\end{definition}
+
+\section{Operator-valued semigroups}
+
+
+\section{Solving nACP}
+\begin{proposition}
+Let $X$ be a Banach space and $A: \R\to \Bounded(X)$ a continuous function. Consider
+\[ U: \R\to \Bounded(X): t\mapsto \lim_{n\to\infty}\prod_{k=1}^ne^{\frac{t}{n}A\left(\frac{kt}{n}\right)}, \]
+where the limit is taken in the strong operator topology and is uniform for $t$ in compact intervals. This limit exists for all $t$ and
+\[ \dod{U(t)x}{t} = A(t)x \]
+\end{proposition}
+\begin{proof}
+
+\end{proof}
 
 \chapter{Operator equations}
 Linear Operator Equations: Approximation and Regularization
