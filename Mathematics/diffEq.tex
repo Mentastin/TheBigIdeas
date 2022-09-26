@@ -238,7 +238,7 @@ Take a sequence $\seq{t_n}\to 0$ in $\R$. Then we claim
 is a sequence in $D$ that converges to $x$ in the graph norm. It is definitely a sequence in $D$ by the invariance of $D$ under $T(t)$. It is now enough to show $\seq{x'_n}$ norm converges to $x$ and $\seq{Ax'_n}$ norm converges to $Ax$.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{domAinftyCore}
 Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. Then $\bigcap_{n\in\N}\dom(A^n)$ is a core for $A$.
 \end{proposition}
 \begin{proof}
@@ -843,6 +843,27 @@ If $X$ is a reflexive Banach space and $a_0 = 1$, then the closure of $A+B$ gene
 
 \section{Approximation of semigroups}
 \subsection{Trotter-Kato approximation theorems}
+\begin{lemma}
+Let $T(t), S(t)$ be strongly continuous operator semigroups with generators $A,B$, resp. Then for all $\lambda \in \res(A)\cap \res(B)$
+\[ R_A(\lambda)\big( T(t) - S(t)\big)R_B(\lambda) = \int_0^s T(s)\big(R_A(\lambda) - R_B(\lambda)\big)S(t-s)\diff{s}. \]
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+R_A(\lambda)\big( T(t) - S(t)\big)R_B(\lambda) &= R_A(\lambda)T(t)R_B(\lambda) - R_A(\lambda)S(t)R_B(\lambda) \\
+&= T(t)R_A(\lambda)R_B(\lambda)S(0) - T(0)R_A(\lambda)R_B(\lambda)S(t) \\
+&= \Big[T(s)R_A(\lambda)R_B(\lambda)S(t-s)\Big]_{s=0}^{s=t} \\
+&= \int_0^s \dod{}{s}\Big[T(s)R_A(\lambda)R_B(\lambda)S(t-s)\Big]\diff{s} \\
+&= \int_0^s \Big[T(s)AR_A(\lambda)R_B(\lambda)S(t-s) - T(s)R_A(\lambda)BR_B(\lambda)S(t-s)\Big]\diff{s} \\
+&= \int_0^s \begin{multlined}[t]\Big[
+\cancel{T(s)\lambda R_A(\lambda)R_B(\lambda)S(t-s)} - T(s)R_B(\lambda)S(t-s) \\
+- \cancel{T(s)R_A(\lambda)\lambda R_B(\lambda)S(t-s)} + T(s)R_A(\lambda)S(t-s)
+\Big]\diff{s} \end{multlined}\\
+&= \int_0^s \Big[T(s)R_A(\lambda)S(t-s) - T(s)R_B(\lambda)S(t-s)\Big]\diff{s} \\
+&= \int_0^s T(s)\big(R_A(\lambda) - R_B(\lambda)\big)S(t-s)\diff{s}.
+\end{align*}
+\end{proof}
+
 \begin{theorem}[Trotter-Kato approximation theorem]
 Let $X$ be a Banach space, $T, T_n$ strongly continuous operator semigroups on $X$ with generators $A, A_n$, all satisfying the same growth estimate
 \[ \norm{T(t)}, \norm{T_n(t)} \leq Me^{wt} \qquad \forall t\geq 0, n\in \N. \]
@@ -877,7 +898,19 @@ A_nx_n &= A_nR_{A_n}(r)(r\id - A)x \\
 &= Ax.
 \end{align*}
 
-$(2) \Rightarrow (3)$ Take arbitrary $t_0\in\R^{\geq 0}$. Take some $r>0$ such that $R_{A_n}(r)x\to R_{A}(r)x$ for all $x\in X$. TODO Banach-Steinhaus!
+$(2) \Rightarrow (3)$ Take arbitrary $t_0\in\R^{\geq 0}$. Take some $r>0$ such that $R_{A_n}(r)x\to R_{A}(r)x$ for all $x\in X$. By (ref TODO Banach-Steinhaus!) it is enough to prove that $T_n(t) \to T(t)$ pointwise on a dense subset of $X$. Now $\dom(A^2)$ is a dense by \ref{domAinftyCore}. Any $x\in \dom(A^2)$ can be written as $x = \big(R_A(r)\big)^2z$. Then
+\begin{align*}
+\norm{\big(T_n(t) - T(t)\big)x} &= \norm{\big(T_n(t) - T(t)\big)\big(R_A(r)\big)^2z} \\
+&= \begin{multlined}[t]\Big\Vert\Big( \big(T_n(t)R_A(r) - R_A(r)T(t)\big) + \big(R_{A_n}(r)T_n(t) - R_{A_n}(r)T_n(t)\big) \\ + \big( R_{A_n}(r)T(t) - R_{A_n}(r)T(t) \big)  \Big)R_A(r)z \Big\Vert \end{multlined} \\
+&= \begin{multlined}[t]\Big\Vert\Big( \big(T_n(t)R_A(r) - R_{A_n}(r)T_n(t)\big) + \big(R_{A_n}(r)T_n(t) - R_{A_n}(r)T(t) \big) \\ + \big( R_{A_n}(r)T(t) - R_A(r)T(t) \big)  \Big)R_A(r)z \Big\Vert \end{multlined} \\
+&\leq \begin{multlined}[t]\norm{\big(T_n(t)R_A(r) - R_{A_n}(r)T_n(t)\big)R_A(r)z} + \norm{\big(R_{A_n}(r)T_n(t) - R_{A_n}(r)T(t) \big)R_A(r)z} \\ + \norm{\big( R_{A_n}(r)T(t) - R_A(r)T(t) \big)R_A(r)z} \end{multlined} \\
+&= \begin{multlined}[t]\norm{T_n(t)\big(R_A(r) - R_{A_n}(r)\big)R_A(r)z} + \norm{R_{A_n}(r)\big(T_n(t) - T(t) \big)R_A(r)z} \\ + \norm{\big( R_{A_n}(r) - R_A(r) \big) T(t)R_A(r)z}. \end{multlined}
+\end{align*}
+We show that all three terms converge to zero, uniformly for $t$ in compact intervals.
+
+Because $\norm{T_n(t)}\leq Me^{wt_0}$ for all $t\in\interval{0,t_0}$, the first term clearly converges as it should.
+
+
 
 $(3) \Rightarrow (2)$ We have, using \ref{integralRepresentationOfResolvent},
 \begin{align*}
