@@ -959,7 +959,14 @@ All these points hold if $f$ is continuous.
 \end{proposition}
 \begin{proof}
 We first show that continuity of $f$ implies (1): We have
-\[ \vicinity_\zeta(f(x)) = \bigcap\setbuilder{G\in\powerfilters(Y)}{G\to f(x)} \subseteq \bigcap\setbuilder{\upset f^{\imf\imf}(F)\in\powerfilters(Y)}{F\to x}. \]
+\begin{align*}
+\vicinity_\zeta(f(x)) &= \bigcap\setbuilder{G\in\powerfilters(Y)}{G\to f(x)} \\
+&\subseteq \bigcap\setbuilder{\upset f^{\imf\imf}(F)\in\powerfilters(Y)}{F\to x} \\
+&= \bigcap (\upset\circ f^{\imf\imf})^{\imf}\Big[\setbuilder{F\in\powerfilters(X)}{F\to x}\Big] \\
+&= \upset f^{\imf\imf}\Big[\bigcap \setbuilder{F\in\powerfilters(X)}{F\to x}\Big] = \upset f^{\imf\imf}[\vicinity_\xi(x)],
+\end{align*}
+where we have used \ref{imageFiltersPreservesIntersection}.
+
 Now take $B\in \bigcap\setbuilder{\upset f^{\imf\imf}(F)\in\powerfilters(Y)}{F\to x}$. This means that for all $F\in\lim^{-1}_\xi(x)$, there exists an $A_F\in F$ such that $f^\imf[A_F]\subseteq B$. By the upward closure of the filters $F$, the set $A = \bigcup_{F\in \lim^{-1}_\xi(x)}A_F$ is an element of each $F$ and
 \[ f^\imf[A] = \bigcup_{F\in \lim^{-1}_\xi(x)}f^{\imf}[A_F] \subseteq B.  \]
 Now $A\in \vicinity_\xi(x)$ and thus $B\in \upset f^{\imf\imf}[\vicinity_\xi(x)]$.
@@ -1350,7 +1357,7 @@ Let $X,Y$ be sets, $x\in X$ and $y\in Y$. Then $\pfilter{(x,y)} = \pfilter{x} \o
 It is enough to check that $(x,y)\in\pfilter{x}\otimes\pfilter{y}$ and that $\pfilter{x}\otimes\pfilter{y}$ is not trivial. Both these statements are immediately clear.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{intersectionProductFilters}
 Let $X,Y$ be sets, $F,G\in \powerfilters(X)$ and $H\in\powerfilters(Y)$. Then
 \[ (F\cap G)\otimes H = (F\otimes H)\cap (G\otimes H). \]
 \end{lemma}
@@ -3036,21 +3043,34 @@ Assume $H\to f$ in continuous convergence. Then
 because $\pfilter{x}\to x$. This is exactly the requirement for $H\to f$ in pointwise convergence.
 \end{proof}
 
+
 \begin{lemma}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. If $X$ and $Y$ are Kent spaces, then so is $(X\to Y)_c$. ???
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. If $Y$ is of finite depth, then so is $(X\to Y)_c$.
 \end{lemma}
 \begin{proof}
-Let $H\overset{(X\to Y)_c}{\longrightarrow} f$. We need to show that $\evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big) \overset{\zeta}{\longrightarrow} f(x)$ for all $F\overset{\xi}{\longrightarrow} x$. Because $X$ is a Kent space, it is enough to show $\evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes (F\cap \pfilter{x})\big) \overset{\zeta}{\longrightarrow} f(x)$ for all $F\overset{\xi}{\longrightarrow} x$.
-
-We first prove $(H\cap \pfilter{f})\otimes (F\cap \pfilter{x}) \supseteq (H\otimes F) \cap (\pfilter{f}\otimes \pfilter{x})$. Take $A \in  (H\otimes F) \cap (\pfilter{f}\otimes \pfilter{x})$. Then there exist $B\in H, C\in F$ such that $B\times C \subseteq A$. Define $B' \defeq B\cup\{f\}$ and $C'\defeq C\cup \{x\}$. Then $B'\in H, C'\in F$
+Let $G, H\overset{(X\to Y)_c}{\longrightarrow} f$. Then for all $F\to x\in X$, we have
+\begin{align*}
+\evalMap^{\imf\imf}\big((G\cap H)\otimes F\big) &= \evalMap^{\imf\imf}\big((G \otimes F) \cap (H \otimes F)\big) \\
+&= \evalMap^{\imf\imf}(G \otimes F) \cap \evalMap^{\imf\imf}(H \otimes F) \; \overset{\zeta}{\longrightarrow} f(x),
+\end{align*}
+using \ref{intersectionProductFilters}, \ref{imageFiltersPreservesIntersection} and the finite depth of $Y$.
 \end{proof}
-\begin{corollary}
-Let $\sSet{X,\xi}$, $\sSet{Y,\zeta}$ be convergence spaces and $H\in \powerfilters(X\to Y)$. If $Y$ is a Kent space, then $H\overset{(X\to Y)_c}{\longrightarrow} f$ implies $f\in\cont(X,Y)$.
-\end{corollary}
+Note that this does not imply the Kent property, because $(X\to Y)_c$ is only a preconvergence space.
+
+\begin{lemma}
+Let $\sSet{X,\xi}$, $\sSet{Y,\zeta}$ be convergence spaces such that $(X\to Y)_c$ is a Kent space. Then all limit functions are continuous.
+\end{lemma}
 \begin{proof}
-
+Take $H\in\powerfilters\big((X\to Y)\big)$ such that $H\overset{(X\to Y)_c}{\longrightarrow} f$. We have, for all $F\to x\in X$,
+\begin{align*}
+\evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big) &= \evalMap^{\imf\imf}\big((H \otimes F) \cap (\pfilter{f} \otimes F)\big) \\
+&= \evalMap^{\imf\imf}(H \otimes F) \cap \evalMap^{\imf\imf}(\pfilter{f} \otimes F),
+\end{align*} 
+using \ref{intersectionProductFilters} and \ref{imageFiltersPreservesIntersection}. By the Kent property this converges to $f(x)$. And thus by monotonicity of the convergence,
+\[ \evalMap^{\imf\imf}(\pfilter{f} \otimes F) = f^{\imf\imf}[F] \overset{\zeta}{\longrightarrow} f(x). \]
+Thus $f$ is continuous.
 \end{proof}
-The hypothesis of $Y$ being a Kent space is necessary.
+The hypothesis of $(X\to Y)_c$ being a Kent space is necessary.
 \begin{example}
 There exist non-continuous limit points in spaces of continuous convergence.
 
