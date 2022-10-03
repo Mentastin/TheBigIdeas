@@ -1026,6 +1026,43 @@ for some $0<\delta<1/w$. Then
 Let $T(t)$ and $S(t)$ be strongly continuous semigroups.
 \end{corollary}
 
+\section{Examples and constructions}
+\subsection{Multiplication semigroups}
+\begin{proposition}
+Let $X$ be a Banach space. Let $E$ be the function space $\cont(\R,X)$ equipped with the supremum norm. Consider a function $A: \R\to \Lin(X)$ such that
+\begin{itemize}
+\item there exists a common core $D\subseteq \bigcap_{s\in R}\dom\big(A(s)\big)$ such that $A$ is strongly continuous on $D$;
+\item each $A(s)$ is the generator of a semigroup $T_s$ satisfying the common growth bound $\norm{T_s(t)}\leq Me^{wt}$.
+\end{itemize}
+Then $\mathcal{M}: \R^{\geq 0}\to \Bounded\big(E\big)$ defined by
+\[ \mathcal{M}(t)f(s) \defeq T_s(t)f(s) \]
+for all $s\in R$, $t\geq 0$ and $f\in E$, is a strongly continuous semigroup satisfying the common growth bound $\norm{\mathcal{M}(t)}_{\infty} \leq Me^{wt}$.
+
+The generator of this semigroup is the operator $\mathcal{A}:E\to E$ defined by
+\[ \big(\mathcal{A}f\big)(s) \defeq A(s)f(s) \]
+for all $s\in \R$. Its domain is given by
+\[ \dom(\mathcal{A}) = \setbuilder{f\in E}{\forall s\in \R: f(s)\in \dom\big(A(s)\big)\;\text{and}\; \big(s\mapsto A(s)f(s)\big)\in E}. \]
+\end{proposition}
+The semigroup $\mathcal{M}$ is called a \udef{multiplication semigroup}.
+\begin{proof}
+The semigroup property and growth bound of $\mathcal{M}$ are clear. For strong continuity, it is enough by (TODO EN00 I.5.3) and the growth bound to check strong continuity on a dense subset, in this case $\cont_c(\R,X)$, the space of functions with compact support.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a Banach space, let $E$ be the function space $\cont(\R,X)$ equipped with the supremum norm and let $\mathcal{A}$ be a bounded operator on $E$. Then $\mathcal{A}$ is the multiplication operator associated to a family $A: \R\to \cont_b(\R, \Bounded(X))$ \textup{if and only if} $\mathcal{A}(\varphi f) = \varphi\mathcal{A}(f)$ for all $f\in E$ and $\varphi\in\cont_c(\R)$. Moreover,
+\[ \norm{\mathcal{A}}_{\Bounded(E)} = \sup_{t\in\R}\norm{A(t)}_{\Bounded(X)}. \]
+\end{proposition}
+\begin{proof}
+The direction $\Rightarrow$ is immediate by linearity of each $A(s)$.
+
+For the converse, fix $s\in \R$. In order to define $A(s)x$, we take some $f\in E$ such that $f(s) = x$ and set $A(s)x \defeq (\mathcal{A}f)(s)$. Now we just need to show this does not depend on the $f$ chosen. To this end, take $f_1$ and $f_2$ such that $f_1(s) = x = f_2(s)$. Also fix $\epsilon >0$ and choose a $\varphi_\epsilon\in\cont_c(\R)$ such that $\varphi_\epsilon(t) = 1$ and the support of $\varphi_\epsilon$ is contained in $\interval{t-\epsilon, t+\epsilon}$. Then we calculate
+\begin{align*}
+\norm{(\mathcal{A}f_1)(s) - (\mathcal{A}f_2)(s)} &= \norm{\big(\mathcal{A}(f_1 - f_2)\big)(s)} = \norm{\big(\mathcal{A}(\varphi_\epsilon (f_1 - f_2))\big)(s)} \\
+&\leq \norm{\mathcal{A}}\cdot\norm{\varphi_\epsilon (f_1-f_2)}_\infty \leq \norm{\mathcal{A}} \sup_{|t-s|\leq \epsilon}\norm{f_1(s)-f_2(s)}.
+\end{align*}
+In the limit $\epsilon\to 0$, the right hand side goes to zero, so $\norm{(\mathcal{A}f_1)(s) - (\mathcal{A}f_2)(s)} = 0$ for all $s\in \R$, meaning that $\mathcal{A}f_1 = \mathcal{A}f_2$.
+\end{proof}
+
 \chapter{Evolution equations}
 \section{Evolution families}
 \begin{definition}
@@ -1082,23 +1119,34 @@ then $w_0\leq \frac{\ln(M_1)}{t_1}$;
 Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on a Banach space $X$. The associated \udef{evolution semigroup} is a semigroup
 \[ T: \R^{\geq 0} \to \sSet{\cont(\R, X), \norm{\cdot}_\infty} \]
 defined by
-\[ (T(t)f)(s) \defeq U(s,s-t)f(s-t), \]
+\[ \big(T(t)f\big)(s) \defeq U(s,s-t)f(s-t), \]
 for all $s\in R$, $t\in\R^{\geq 0}$ and $f\in \sSet{\cont(\R, X), \norm{\cdot}_\infty}$.
 \end{definition}
 
-\begin{proposition}
-
-\end{proposition}
+Note that the mapping of evolution families to evolution semigroups is injective.
 
 \begin{lemma}
-Evolution semigroups are strongly continuous semigroups.
+Evolution semigroups are semigroups. If the evolution family is exponentially bounded, then the evolution semigroup is strongly continuous.
 \end{lemma}
 \begin{proof}
+The semigroup property is immediate: we have $\big(T(0)f\big)(s) = U(s,s)f(s) = f(s)$, so $T(0) = \id_{\cont(\R,X)}$. Also
+\begin{align*}
+\big(T(t_1+t_2)f\big)(s) &= U(s,s-t_1-t_2)f(s-t_1-t_2) \\
+&= U(s,s-t_1)U(s-t_1,s-t_1-t_2)f(s-t_1-t_2) \\
+&= U(s,s-t_1)\big(T(t_2)f\big)(s-t_1) \\
+&= \Big(T(t_1)\big(T(t_2)f\big)\Big)(s).
+\end{align*}
 
+
+For strong continuity TODO pointwise continuity implies uniform continuity on compact sets ???
 \end{proof}
 
 \begin{proposition}
-There is a one-to-one correspondence between evolution semigroups and exponentially bounded evolution families.
+Let $T$ be a strongly continuous semigroup on $E = cont(\R,X)$ with generator $G$. Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is an evolution semigroup;
+\item TODO
+\end{enumerate}
 \end{proposition}
 
 \section{Solving nACP}
