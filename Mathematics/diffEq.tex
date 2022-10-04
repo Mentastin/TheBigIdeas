@@ -925,7 +925,7 @@ Then, by TODO ref,
 
 In order to apply the previous theorem, we need to know that the limit $A$ is a generator of a semigroup.
 
-\begin{theorem}[Second Trotter-Kato approximation theorem]
+\begin{theorem}[Second Trotter-Kato approximation theorem] \label{secondTrotterKato}
 Let $X$ be a Banach space, $T_n$ strongly continuous operator semigroups on $X$ with generators $A_n$, all satisfying the same growth estimate
 \[ \norm{T_n(t)} \leq Me^{wt} \qquad \forall t\geq 0, n\in \N. \]
 Take $r_0 > w$. The following are equivalent:
@@ -957,7 +957,7 @@ Hence $\norm{T_n(t)x - T(t)x} \leq tM^2e^{2wt}\norm{A_nx - Ax}$.
 TODO Weierstrass approximation.
 
 \subsection{The Chernoff product formula}
-\begin{lemma}
+\begin{lemma} \label{sqrtNlemma}
 Let $S\in\Bounded(X)$ be a bounded operator such that $\norm{S^m}\leq M$ for some $M\geq 1$ and all $m\in \N$. Then
 \begin{enumerate}
 \item $\norm{S^kx - S^nx} \leq |n-k|\cdot M\norm{Sx-x}$ for all $n,k\in\N$;
@@ -997,7 +997,24 @@ Then $\overline{A}$ generated a bounded strongly continuous semigroup $T(t)$ giv
 for all $x\in X$. The limit is uniform for $t\in\interval{0,t_0}$.
 \end{theorem}
 \begin{proof}
-TODO + rescaling argument
+For $s> 0$, define
+\[ A_s \defeq \frac{V(s)-\id_X}{s} \in \Bounded(X). \]
+Now $A_s$ converges strongly to $A$ on $D$. In order to apply \ref{secondTrotterKato}, it is enough to verify all $e^{tA_s}$ satisfy the same growth bound. Indeed
+\begin{align*}
+\norm{e^{tA_s}} &= e^{-t/s}\norm{e^{tV(s)/s}} \\
+&= e^{-t/s}\norm{\sum_{m=0}^\infty \frac{(tV(s)/s)^m}{m!}} \\
+&\leq  e^{-t/s}\sum_{m=0}^\infty \frac{t^m\norm{V(s)^m}}{s^mm!} \\
+&\leq e^{-t/s}\sum_{m=0}^\infty \frac{t^m}{s^mm!}M = e^{-t/s}e^{t/s}M = M.
+\end{align*}
+
+Thus the closure $\overline{A}$ of $A$ generates a strongly continuous semigroup $T(t)$. We just need to show that $T(t)x = \lim_{n\to \infty}\big(V(t/n)\big)^n x$. By (TODO ref) it is enough to check pointwise convergence on a dense subset. We have
+\[ \norm{T(t)x - \big(V(t/n)\big)^n x} \leq \norm{T(t)x - e^{tA_{t/n}} x} + \norm{e^{tA_{t/n}} x - \big(V(t/n)\big)^n x}. \]
+The first part goes to zero as $n\to \infty$ by the Trotter-Kato theorem. For the second part, we have
+\begin{align*}
+\norm{e^{tA_{t/n}} x - \big(V(t/n)\big)^n x} &= \norm{e^{n\big(V(t/n)-\id\big)}x - \big(V(t/n)\big)^n x} \\
+&\leq \sqrt{n}M \norm{V(t/n)x-x} = \frac{tM}{\sqrt{n}}\norm{A_{t/n}x} \overset{n\to\infty}{\longrightarrow}0,
+\end{align*}
+using \ref{sqrtNlemma}.
 \end{proof}
 \begin{corollary}
 Fix $t >0$ and take sequences $\seq{t_n}\subseteq \R, \seq{k_n}\subseteq \N$ such that $t_n \to 0$ and $t_nk_n \to t$. Then
