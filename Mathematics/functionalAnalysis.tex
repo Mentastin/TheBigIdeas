@@ -1976,6 +1976,9 @@ Let $L\in\Hom(V,W)$ with $V,W$ Banach spaces. Then $L$ is compact \textup{if and
 \end{proposition}
 TODO proof
 
+\begin{lemma} \label{identityCompactFiniteDimensional}
+Let $X$ be a Banach space. Then $\id_X$ is compact \textup{if and only if} $X$ is finite dimensional.
+\end{lemma}
 
 \subsubsection{Calkin algebra}
 \begin{proposition}
@@ -1983,6 +1986,12 @@ Let $X$ be a Banach space. Then $\Compact(X)$ is a closed two-sided ideal in $\B
 \end{proposition}
 \begin{proof}
 TODO + $*$-ideal for Hilbert spaces.
+\end{proof}
+\begin{corollary}
+An invertible operator $T$ on $X$ is compact \textup{if and only if} $X$ is finite-dimensional.
+\end{corollary}
+\begin{proof}
+If $T$ is compact, then so is $TT^{-1} = \id_X$, meaning that $X$ is finite-dimensional by \ref{identityCompactFiniteDimensional}. Conversely, all operators on a finite-dimensional Banach space are compact.
 \end{proof}
 
 \begin{definition}
@@ -3664,30 +3673,8 @@ Let $H,K$ be Hilbert spaces and $T: H\not\to K$ an operator. An \udef{adjoint} o
 \[ \inner{w,Tv}_K = \inner{S w,v}_H \quad \forall v\in \dom(T),\; \forall w\in \dom(S). \]
 \end{definition}
 
-\begin{theorem}[Hellinger-Toeplitz]
-Let $T: H\to K$ be an operator between Hilbert spaces (which is defined everywhere), then $T$ has an adjoint that is defined everywhere \textup{if and only if} it is bounded.
-\end{theorem}
-\begin{proof}
-The ``if'' will be shown below by explicit construction. For the ``only if'', take such an operator $T$.
-
-First we show $T$ has closed graph, by using proposition \ref{closedGraphEquivalence}: assume $(x_n)$ converges to $x$ and $(Tx_n)$ converges to $y$. Then
-\[ \inner{z, Tx} = \inner{Sz,x} = \lim_n\inner{Sz, x_n} = \lim_n\inner{z, Tx_n} = \inner{z, y} \]
-where we have used the boundedness of $x\mapsto\inner{z,x}$. By the non-degeneracy of the inner product, $Tx = y$. So the graph of $T$ is closed. Similarly the graph of $S$ is closed. Applying the closed graph theorem \ref{closedGraphTheorem}, yields the boundedness of $T$ and $S$.
-\end{proof}
-\begin{corollary}
-Everywhere-defined symmetric operators are bounded.
-\end{corollary}
-
-\begin{example}
-The adjoint of the left-shift operator
-\[ S_L: \ell^2(\N) \to \ell^2(\N): (x_n)_{n\in\N} \mapsto (x_{n+1})_{n\in\N} \]
-is the right-shift operator
-\[ S_R: \ell^2(\N) \to \ell^2(\N): (x_n)_{n\in\N} \mapsto \left(\begin{cases}
-x_{n-1} & (n\geq 1) \\ 0 &(n=0)
-\end{cases}\right)_{n\in \N}. \]
-\end{example}
-
-\subsection{The adjoint as a relation}
+\subsection{The adjoint}
+\subsubsection{The adjoint as a relation}
 \begin{lemma}
 Let $T: H\not\to K$ be an operator between Hilbert spaces. Let $S_1, S_2$ be adjoints of $T$ then for all $x\in \dom(S_1)\cap\dom(S_2)$ we have $S_1(x) - S_2(x) \in \dom(T)^\perp$.
 
@@ -3731,6 +3718,29 @@ Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. If $S$
 Let $H$ be a Hilbert space. Then $\id_H^* = \id_H$.
 \end{corollary}
 
+\begin{example}
+Consider the left- and right-shift operators
+\begin{align*}
+&S_L: \ell^2(\N) \to \ell^2(\N): (x_n)_{n\in\N} \mapsto (x_{n+1})_{n\in\N} \\
+&S_R: \ell^2(\N) \to \ell^2(\N): (x_n)_{n\in\N} \mapsto \left(\begin{cases}
+x_{n-1} & (n\geq 1) \\ 0 &(n=0)
+\end{cases}\right)_{n\in \N}.
+\end{align*}
+Then $S_L^* = S_R$ and $S_R^* = S_L$. To see this, take $\seq{x_n}, \seq{y_n}\in \ell^2(\N)$. Then
+\[ \inner{S_L\seq{x_n}, \seq{y_n}} = \sum_{n\in\N}\overline{x_{n+1}}y_n = \overline{x_0}\cdot 0 + \sum_{n\in\N\setminus\{0\}}\overline{x_{n}}y_{n-1} = \inner{\seq{x_n}, S_R\seq{y_n}}. \]
+Thus $S_L$ is an adjoint of $S_R$ and $S_R$ is an adjoint of $S_L$. We conclude with \ref{everywhereDefinedAdjointLemma}.
+\end{example}
+
+\begin{lemma} \label{adjointRelationLemma}
+Let $T: H\not\to K$ be an operator between Hilbert spaces and $(x,y)\in H\times K$. Then $(x, y)\in T^*$ \textup{if and only if}
+\[ \forall z\in\dom(T): \; \inner{x, T(z)} = \inner{y, z}. \]
+\end{lemma}
+\begin{proof}
+$\boxed{\Rightarrow}$ If $(x, y)\in T^*$, then there exists an adjoint $f: K\not\to H$ such that $f(x) = y$. Then for all $z\in \dom(T)$ we have $\inner{x, T(z)} = \inner{f(x), z} = \inner{y, z}$.
+
+$\boxed{\Leftarrow}$ The function defined by $f(x) = y$ and extended to $\Span\{x\}$ by linearity is an adjoint.
+\end{proof}
+
 \begin{proposition} \label{adjointDomain}
 Let $T: H\not\to K$ be an operator between Hilbert spaces. Then
 \[ \dom(T^*) = \setbuilder{x\in K}{\text{$\dom(T)\to \F: u\mapsto \inner{x, Tu}$ is a bounded functional}}. \]
@@ -3755,41 +3765,31 @@ Let $H, K$ be Hilbert spaces. Then $(*,*)$ is a Galois connection between $\sSet
 TODO
 \end{proof}
 
-\begin{proposition}[Algebraic properties of the adjoint] \label{adjointAlgebraicProperties}
-Let $T,S$ be compatible operators between Hilbert spaces and $\lambda\in\C$. Then
-\begin{enumerate}
-\item $S^* + T^* \subseteq (S+T)^*$;
-\item $S^*T^* \subseteq (TS)^*$;
-\item $\begin{pmatrix}
+\subsubsection{Properties of the adjoint relation}
+
+\begin{proposition}
+Let $T$ be an operator between Hilbert spaces and $\lambda\in\C$. If $\lambda \neq 0$, then
+\[ \begin{pmatrix}
 \id & 0 \\ 0 & \overline{\lambda}\id
-\end{pmatrix} \graph(T^*) \subseteq (\lambda T)^*$;
-\item if $\lambda \neq 0$, then $\begin{pmatrix}
-\id & 0 \\ 0 & \overline{\lambda}\id
-\end{pmatrix} \graph(T^*) = (\lambda T)^*$;
-\item $(T+\lambda\id)^* = T^*+\overline{\lambda}\id$.
-\end{enumerate}
+\end{pmatrix} \graph(T^*) = (\lambda T)^*. \]
 \end{proposition}
+Note that if $T^*$ is a function (i.e.\ if $T$ is densely defined), then $\begin{pmatrix}
+\id & 0 \\ 0 & \overline{\lambda}\id
+\end{pmatrix} \graph(T^*) = \overline{\lambda}T^*$. We write the former in the proposition, because we have not made this assumption.
+
+If $\lambda = 0$ and $T: H\not\to K$, then
+\[ \begin{pmatrix}
+\id & 0 \\ 0 & 0
+\end{pmatrix} \graph(T^*) = \big(0: \dom(T^*)\to H\big) \subseteq \big(0: K\to H\big) = (0 T)^*, \]
+where the last equality is given by \ref{adjointBoundedEverywhereDefined}.
 \begin{proof}
-(1) Let $f$ be an adjoint of $S$ and $g$ an adjoint of $T$. It is enough to see that $f+g$ is an adjoint of $S+T$. Indeed $\forall w\in \dom(f + g), v\in \dom(S+T)$
-\[ \inner{(f + g)(w), v} = \inner{f(w),v} + \inner{g(w), Tv} = \inner{w,Sv} + \inner{w,Tv} = \inner{w,(S+T)v}. \]
-
-(2) Let $f$ be an adjoint of $T$ and $g$ an adjoint of $S$. It is enough to see that $gf$ is an adjoint of $TS$. Indeed
-\[ \inner{g\circ f(w), v} = \inner{f(w), Sv} = \inner{w,TSv} \qquad \forall w\in \dom(g\circ f), v\in \dom(TS). \] 
-
-(3) Let $f$ be an adjoint of $T$. It is enough to see that $\overline{\lambda}f$ is an adjoint of $\lambda T$. Indeed
+For the inclusion $\subseteq$, take $f$ to be an adjoint of $T$. It is enough to show that $\overline{\lambda}f$ is an adjoint of $\lambda T$. This follows from
 \[ \inner{\overline{\lambda}f(w), v} = \lambda\inner{f(w), v} = \lambda\inner{w,Tv} = \inner{w,\lambda Tv} \qquad \forall w\in \dom(f), v\in \dom(T). \]
 
-(4) One inclusion has already been proved. For the other inclusion, let $f$ be an adjoint of $\lambda T$. It is enough to see that $\overline{\lambda^{-1}}f$ is an adjoint of $T$, because then $f = \overline{\lambda}\cdot\overline{\lambda^{-1}}f \subseteq \begin{pmatrix}
+For the other inclusion, let $f$ be an adjoint of $\lambda T$. It is enough to show that $\overline{\lambda^{-1}}f$ is an adjoint of $T$, because then $f = \overline{\lambda}\cdot\overline{\lambda^{-1}}f \subseteq \begin{pmatrix}
 \id & 0 \\ 0 & \overline{\lambda}\id
 \end{pmatrix} \graph(T^*)$. Indeed
 \[ \inner{\overline{\lambda^{-1}}f(w), v} = \lambda^{-1}\inner{f(w),v} = \inner{w,\lambda^{-1}\lambda Tv} = \inner{w,Tv} \quad \forall w\in \dom(f), v\in \dom(T). \]
-
-(5) From (1) and (3), we have $T^*+\overline{\lambda}\id \subseteq (T+\lambda\id)^*$. Conversely, let $f$ be an adjoint of $(T+\lambda\id)$. It is enough to see that $f-\overline{\lambda}\id$ is an adjoint of $T$. Indeed, $\forall w\in\dom(f-\overline{\lambda}\id), v\in \dom(T)$,
-\begin{align*}
-\inner{(f-\overline{\lambda}\id)(w),v} &= \inner{f(w),v}-\lambda \inner{w,v} \\
-&= \inner{w,(T+\lambda\id)(v)}-\lambda \inner{w,v} \\
-&= \inner{w,Tv} - \lambda\inner{w,v} + \lambda\inner{w,v} = \inner{w,Tv}.
-\end{align*}
 \end{proof}
 
 \begin{proposition} \label{adjointGraph}
@@ -3820,7 +3820,13 @@ The final equality follows from \ref{perpUnderIsometry}, using the fact that $\b
 If $T$ is densely defined, then $T^*$ is a function by \ref{maximalAdjointIsOperator}. It is closed by \ref{orthogonalComplementClosed}.
 \end{proof}
 \begin{corollary} \label{adjointDenselyDefinedClosable}
-Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then $T^*$ is densely defined \textup{if and only if} $T$ is closable. In this case $\overline{T} = T^{**}$.
+Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces.
+Then
+\begin{enumerate}
+\item $\graph(T^{**}) = \overline{\graph(T)}$;
+\item $T^*$ is densely defined \textup{if and only if} $T$ is closable;
+\item If $T$ is closable, then $\overline{T} = T^{**}$.
+\end{enumerate}
 \end{corollary}
 \begin{proof}
 From the proposition we have
@@ -3836,26 +3842,107 @@ From the proposition we have
 &= \begin{pmatrix}
 0 & -\id \\ \id & 0
 \end{pmatrix}^2\graph(T)^{\perp\perp} = -\graph(T)^{\perp\perp}
-= \overline{\graph(T)} = \graph(\overline{T}).
+= \overline{\graph(T)}.
 \end{align*}
 The right-hand side is the graph of an operator iff $T$ is closable and the left-hand side is the graph of an operator iff $T^*$ is densely defined, by \ref{maximalAdjointIsOperator}.
 
-By definition, the left-hand side is equal to $\graph(T^{**})$, so $T^{**} = \overline{T}$.
+For a closable operator, the closure is defined by $\overline{\graph(T)} = \graph(\overline{T})$.
 \end{proof}
 
-\begin{proposition} \label{kernelImageAdjoint}
-Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
+\begin{proposition} \label{adjointBoundedEverywhereDefined}
+Let $T: H\to K$ be a densely defined operator between Hilbert spaces. Then $\dom(T^*) = K$ \textup{if and only if} $T$ is bounded.
+\end{proposition}
+\begin{proof}
+The direction $\Leftarrow$ is given by \ref{adjointDomain}.
+
+For the other direction, note that $T^*$ is closed by \ref{adjointGraph}. Then $T^*$ is bounded by the closed graph theorem \ref{closedGraphTheorem}. We use the direction $\Leftarrow$ to see that $\dom(T^{**}) = H$. Similarly, $T^{**}$ is closed by \ref{adjointGraph} and bounded by the closed graph theorem \ref{closedGraphTheorem}. Thus $T\subseteq \overline{T} = T^{**}$ is bounded.
+\end{proof}
+\begin{corollary}[Hellinger-Toeplitz]
+Everywhere-defined symmetric operators are bounded.
+\end{corollary}
+
+\begin{proposition} \label{adjointAlgebraicProperties}
+Let $T,S$ be compatible operators between Hilbert spaces. Then
 \begin{enumerate}
-\item $\ker(T^*) = \im(T)^\perp$;
-\item $\ker(T) = \im(T^*)^\perp$.
+\item $S^* + T^* \subseteq (S+T)^*$;
+\item $S^*T^* \subseteq (TS)^*$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-First take $v\in \ker(T^*)$, then $T^*(v) = 0$ which implies
-\[ \forall x \in\dom(T): \inner{T^*(v), x} = 0 \;\implies\; \forall x \in\dom(T): \inner{v, T(x)} = 0 \;\implies\; v\perp \im(T).  \]
-Next take $v\perp \im(T)$ TODO complete.
+(1) Let $f$ be an adjoint of $S$ and $g$ an adjoint of $T$. It is enough to see that $f+g$ is an adjoint of $S+T$. Indeed $\forall w\in \dom(f + g), v\in \dom(S+T)$
+\[ \inner{(f + g)(w), v} = \inner{f(w),v} + \inner{g(w), Tv} = \inner{w,Sv} + \inner{w,Tv} = \inner{w,(S+T)v}. \]
+
+(2) Let $f$ be an adjoint of $T$ and $g$ an adjoint of $S$. It is enough to see that $gf$ is an adjoint of $TS$. Indeed
+\[ \inner{g\circ f(w), v} = \inner{f(w), Sv} = \inner{w,TSv} \qquad \forall w\in \dom(g\circ f), v\in \dom(TS). \]
 \end{proof}
-TODO: link with previous? + Drop densely defined.
+
+\begin{example}
+The inclusions in \ref{adjointAlgebraicProperties} are, in general, not equalities.
+\begin{itemize}
+\item If $S,T$ are densely defined, but $\dom(S+T) = \dom(S)\cap \dom(T)$ is not dense, then there can clearly not be an equality.
+\item Let $T: H\to K$ be a densely defined unbounded operator. Then $\dom(T^*) \neq K$ by \ref{adjointBoundedEverywhereDefined}. Now we have
+\[ T^* - T^* = \big(0: \dom(T^*) \to H\big) \subsetneq \big(0: K\to H\big) = \big(0: \dom(T) \to K\big)^* = (T-T)^*. \]
+The penultimate equality follows from \ref{adjointBoundedEverywhereDefined}. In this case the domain of the sum is dense, but still there is no equality.
+\end{itemize}
+\end{example}
+
+There exist various conditions that make the inclusions in \ref{adjointAlgebraicProperties} equalities.
+\begin{proposition} \label{equalityAlgebraicPropertiesAdjoint}
+Let $T,S$ be compatible operators between Hilbert spaces.
+\begin{enumerate}
+\item if $T$ is densely defined, $\dom(S) \subseteq \dom(T)$ and $\dom\big((S+T)^*\big) \subseteq \dom(T^*)$, then $S^* + T^* = (S+T)^*$;
+\item if $T$ is densely defined, $\im(S)\subseteq \dom(T)$ and $\dom\big((TS)^*)\subseteq \dom(T^*)$, then $S^*T^* = (TS)^*$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{adjointAlgebraicProperties}, we have
+\[ (S+T)^* - T^* \subseteq (S+T-T)^* = S^*, \]
+where the last equality is due to $\dom(S) \subseteq \dom(T)$. Now take $x,y$ such that $x\in \dom\big((S+T)^*\big)$. Then $T^*(x)$ exists and we have the implications
+\begin{align*}
+x(S+T)^*y \iff& x\big((S+T)^* - T^* + T^*\big)y \\
+\iff& \exists z: \; x\big((S+T)^* - T^*\big)z \land (z+T^*(x) = y) \\
+\implies& \exists z: \; x(S^*)z \land (z+T^*(x) = y) \\
+\iff& x(S^* + T^*)y.
+\end{align*}
+Thus $(S+T)^* \subseteq S^* + T^*$.
+
+(2) We need to prove $(TS)^* \subseteq S^*T^*$. Assume $(x,y)\in (TS)^*$. By \ref{adjointRelationLemma}, we have
+\[ \forall z\in \dom(TS):\; \inner{x, TS(z)} = \inner{y, z}. \]
+Because $\im(S)\subseteq \dom(T)$, we have $\dom(TS) = \dom(S)$. Also, by assumption, $x\in \dom(T^*)$. So we have
+\[ \forall z\in \dom(S):\; \inner{x, TS(z)} = \inner{T^*(x), S(z)} = \inner{y, z}, \]
+which means that $\big(T^*(x), y\big)\in S^*$, so $(x,y)\in S^*T^*$.
+\end{proof}
+\begin{corollary}
+If $T$ is bounded and everywhere defined, then
+\[ S^* + T^* = (S+T)^* \qquad\text{and}\qquad S^*T^* = (TS)^*. \]
+\end{corollary}
+
+\url{https://arxiv.org/pdf/1507.08418.pdf}
+\url{https://link.springer.com/article/10.1007/s43036-020-00068-4}
+
+\begin{lemma} \label{HilbertAdjointLemma}
+Let $S,T\in\Bounded(H,K)$ and $\lambda \in \mathbb{F}$.
+\begin{enumerate}
+\item $(T^*)^* = T$;
+\item $(S+T)^* = S^* + T^*$;
+\item $(\lambda T)^* = \bar{\lambda}T^*$;
+\item $\id_V^* = \id_V$.
+\end{enumerate}
+Let $T\in\Bounded(H_1,H_2), S\in\Bounded(H_2,H_3)$
+\begin{enumerate}
+\setcounter{enumi}{4}
+\item $(ST)^* = T^*S^*$.
+\end{enumerate}
+\end{lemma}
+
+\begin{note}
+Useful exercise: The identities of \ref{HilbertAdjointLemma} can also be proven by elementary manipulations. For example, to prove (1), we take arbitrary $v\in H$ and $w\in K$, Then
+\[ \inner{w,Tv} = \inner{T^*w,v} = \overline{\inner{v,T^*w}} = \overline{\inner{(T^*)^*v,w}} = \inner{w, (T^*)^*v}. \]
+By lemma \ref{elementaryOrthogonality} we have $Tv = (T^*)^*v$ for all $v\in V$. 
+\end{note}
+
+\subsubsection{Adjoints of densely defined operators}
+The adjoint of an operator is a function if and only the operator is densely defined.
 
 \begin{proposition} \label{adjointRangeCriterion}
 Let $S: K\not\to H$ and $T: H\not\to K$ be linear operators between Hilbert spaces. If
@@ -3876,6 +3963,48 @@ Similarly $\ker(T) = \ker(S^*) = \ker(T^*) = \{0\}$.
 So we have $\ker(S) = \ker(T^*)$, $\im(S)\subseteq \im(S\cap T^*)$ and $\im(T^*)\subseteq \im(S\cap T^*)$. The equality $S = T^*$ follows from \ref{partialFunctionSubset}. The equality $T = S^*$ is similar.
 \end{proof}
 
+
+\begin{proposition} \label{kernelImageAdjoint}
+Let $T: H\not\to K$ be an operator between Hilbert spaces. Then
+\[ \forall v\in K: \; (v,0)\in T^* \iff v\in \im(T)^\perp. \]
+If $T^*$ is densely defined, this reduces to
+\begin{enumerate}
+\item $\ker(T^*) = \im(T)^\perp$;
+\item $\ker(T) \subseteq \im(T^*)^\perp$;
+\item if $T$ is closed, then $\ker(T) = \im(T^*)^\perp$
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Because $\dom(T)$ is dense in $H$, we have $\dom(T)^\perp = \{0\}$ by \ref{orthogonalComplementDenseSpace}. Take $v\in K$. We have the equivalences
+\begin{align*}
+v\in \im(T)^\perp &\iff \forall x \in\dom(T): \inner{v, T(x)} = 0 \\
+&\iff \forall x \in\dom(T): \inner{v, T(x)} = \inner{v, 0} \\
+&\iff (v,0)\in T^*,
+\end{align*}
+using \ref{adjointRelationLemma}.
+
+Point (1) is a direct translation in the case that $T^*$ is a function.
+
+For point (2) note that $T\subseteq T^{**}$ (by \ref{adjointDenselyDefinedClosable}) implies that $(v,0)\in T \implies (v,0)\in T^{**}$.
+
+For point (3): in this case $\ker(T) = \ker(T^{**}) = \im(T^*)^\perp$.
+\end{proof}
+\begin{corollary}[Closed range theorem for Hilbert spaces]
+Let $T$ be a closed, densely defined operator between Hilbert spaces. Then the following are equivalent:
+\begin{enumerate}
+\item $\im(T)$ is closed;
+\item $\im(T^*)$ is closed;
+\item $\im(T) = \ker(T^*)^\perp$;
+\item $\im(T^*) = \ker(T)^\perp$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+By the proposition and \ref{orthogonalComplementClosed}, we have $\overline{\im(T)} = \ker(T^*)^\perp$. This shows $(1) \Leftrightarrow (3)$ and $(2) \Leftrightarrow (4)$.
+
+TODO equivalence $(1)\Leftrightarrow (2)$.
+\end{proof}
+TODO ref closed range theorem for Banach spaces. This is, e.g., the case when $T$ is bounded below, see \ref{boundedBelowClosedRange}.
+
 \begin{proposition}
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
 \begin{enumerate}
@@ -3883,6 +4012,7 @@ Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
 \item if $T$ and $T^*$ are injective, then $(T^*)^{-1} = (T^{-1})^*$;
 \item if $T$ is closable and $\overline{T}$ is injective, then $\overline{T}^{\,-1} = \overline{T^{-1}}$.
 \end{enumerate}
+\end{proposition}
 \begin{proof}
 (1) This is immediate from \ref{kernelImageAdjoint} and \ref{injectivityKernelTriviality}:
 \[ \text{$\im(T)$ is dense} \quad\iff\quad \{0\} = \im(T)^\perp = \ker(T^*). \]
@@ -3916,31 +4046,27 @@ The penultimate equality follows from \ref{perpUnderIsometry}, using the fact th
 \end{pmatrix}$ is a surjective isometry.
 \end{proof}
 
-\end{proposition}
-
-\url{https://arxiv.org/pdf/1507.08418.pdf}
-\url{https://link.springer.com/article/10.1007/s43036-020-00068-4}
-
-\subsection{Bounded operators}
+\subsubsection{Adjoints of bounded operators}
 \begin{proposition}
-Let $T: H\to K$ be a closed densely defined operator between Hilbert spaces. Then
+Let $T: H\to K$ be a densely defined operator between Hilbert spaces. Then
 \begin{enumerate}
-\item $T\in\Bounded(H,K)$ \textup{if and only if} $T^*\in\Bounded(K,H)$.
+\item if $T\in\Bounded(H,K)$, then $T^*\in\Bounded(K,H)$;
+\item if $T^*\in\Bounded(K,H)$, then $T$ is bounded. If $T$ is closed, then $T$ is defined everywhere.
 \end{enumerate}
-In this case
-\begin{enumerate} \setcounter{enumi}{1}
+Assume $T\in\Bounded(H,K)$. Then
+\begin{enumerate} \setcounter{enumi}{2}
 \item $\norm{T} = \norm{T^*}$;
 \item $T^* = C_H^{-1}T^tC_K$, where $C_K$ is the Riesz isometry from \ref{RieszIsometry}.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-First assume $T\in\Bounded(H,K)$. Then $u\mapsto \inner{x,Tu}$ is a bounded functional for all $x\in K$, so $\dom(T^*) = K$ by \ref{adjointDomain}. Also $T^*$ is closed by \ref{adjointGraph}, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}.
+(1) Assume $T\in\Bounded(H,K)$. Then $u\mapsto \inner{x,Tu}$ is a bounded functional for all $x\in K$, so $\dom(T^*) = K$ by \ref{adjointDomain}. Also $T^*$ is closed by \ref{adjointGraph}, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}.
 
-Now assume $T^*\in\Bounded(K,H)$. By the previous argument $T = \overline{T} = T^{**}\in\Bounded(H,K)$.
+(2) Assume $T^*\in\Bounded(K,H)$. By the previous argument $T \subseteq \overline{T} = T^{**}\in\Bounded(H,K)$.
 
-The function $(x,u)\mapsto \inner{x,Tu}$ is a bounded sesquilinear form. By proposition \ref{sesquilinearRepresentation}, $T^*$ must be the unique $S$ from the proposition, which has norm $\norm{T}$.
+(3) The function $(x,u)\mapsto \inner{x,Tu}$ is a bounded sesquilinear form. By proposition \ref{sesquilinearRepresentation}, $T^*$ must be the unique $S$ from the proposition, which has norm $\norm{T}$.
 
-Finally we note that $C_H^{-1}T^tC_K$ is an adjoint with domain $K$ and conclude by \ref{everywhereDefinedAdjointLemma}.
+(4) Finally we note that $C_H^{-1}T^tC_K$ is an adjoint with domain $K$ and conclude by \ref{everywhereDefinedAdjointLemma}.
 \end{proof}
 
 \begin{lemma}
@@ -3951,30 +4077,6 @@ By the proposition the adjoint map is anti-linear. It is also bounded with norm 
 
 TODO
 \end{proof}
-
-\begin{lemma} \label{HilbertAdjointLemma}
-Let $S,T\in\Bounded(H,K)$ and $\lambda \in \mathbb{F}$.
-\begin{enumerate}
-\item $(T^*)^* = T$;
-\item $(S+T)^* = S^* + T^*$;
-\item $(\lambda T)^* = \bar{\lambda}T^*$;
-\item $\id_V^* = \id_V$.
-\end{enumerate}
-Let $T\in\Bounded(H_1,H_2), S\in\Bounded(H_2,H_3)$
-\begin{enumerate}
-\setcounter{enumi}{4}
-\item $(ST)^* = T^*S^*$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-These follow straight from \ref{adjointAlgebraicProperties} and the fact that the operators and adjoints are everywhere defined.
-\end{proof}
-
-\begin{note}
-Useful exercise: The identities of \ref{HilbertAdjointLemma} can also be proven by elementary manipulations. For example, to prove 1., we take arbitrary $v\in H$ and $w\in K$, Then
-\[ \inner{w,Tv} = \inner{T^*w,v} = \overline{\inner{v,T^*w}} = \overline{\inner{(T^*)^*v,w}} = \inner{w, (T^*)^*v}. \]
-By lemma \ref{elementaryOrthogonality} we have $Tv = (T^*)^*v$ for all $v\in V$. 
-\end{note}
 
 \begin{proposition}
 Let $H,K$ be Hilbert spaces and $T:H\to K$ a bijective bounded linear operator with bounded inverse. Then $(T^*)^{-1}$ exists and
@@ -3988,15 +4090,6 @@ We prove $(T^{-1})^*$ is both a left- and a right-inverse of $T^*$: $\forall x\i
 \end{align*}
 So, by lemma \ref{elementaryOrthogonality}, $T^*(T^{-1})^* = \id_H$ and $(T^{-1})^*T^* = \id_K$.
 \end{proof}
-
-\begin{proposition}
-Let $T\in\Bounded(H,K)$. Then
-\[ \ker T = (\im T^*)^\perp \qquad \text{and thus} \qquad \overline{\im(T)} \subseteq \ker(T^*)^\perp. \]
-\end{proposition}
-\begin{proof}
-\[ x\in \ker T \iff Tx = 0 \iff \forall y\in K: \inner{y, Tx}=0 \iff \forall y\in K: \inner{T^*y, x}=0 \iff x\perp T^*[K]. \]
-\end{proof}
-In particular $\im(T)$ is closed iff it is equal to $\ker(T^*)^\perp$. This is sometimes known as the closed range theorem. This is, e.g\, the case when $T$ is bounded below, see \ref{boundedBelowClosedRange}.
 
 \begin{proposition} \label{normOfSquare}
 Let $T\in \Bounded(H,K)$ with $H,K$ Hilbert spaces. Then
@@ -4201,7 +4294,7 @@ In this case $\spec(A) = \apspec(A)$.
 \end{proposition}
 Notice that in (1) we include $\R$ and in (3) we exclude $\R$.
 \begin{proof}
-$(1) \Rightarrow (2)$ From \ref{symmetricOperatorAdjointInclusion}, we have $A\subseteq A^*$ and thus $A+z\id = (A^* + z\id)\cap(A+z\id)$. From point (5) of \ref{adjointAlgebraicProperties}, we have $A+z\id = (A^* + z\id)\cap(A+z\id) = (A+\overline{z}\id)^*\cap (A+z\id)$.
+$(1) \Rightarrow (2)$ From \ref{symmetricOperatorAdjointInclusion}, we have $A\subseteq A^*$ and thus $A+z\id = (A^* + z\id)\cap(A+z\id)$. From point (1) of \ref{equalityAlgebraicPropertiesAdjoint}, we have $A+z\id = (A+\overline{z}\id)^*\cap (A+z\id)$.
 
 We then use \ref{adjointRangeCriterion} with $S = A+z\id$ and $T = A+\overline{z}\id$ to obtain $(A+z\id)^* = A+\overline{z}\id$. Subtracting $\overline{z}\id$ from each side yields the result.
 
@@ -4965,8 +5058,29 @@ TODO uniqueness positive squared root.
 
 \url{https://encyclopediaofmath.org/wiki/Polar_decomposition}
 
-\subsection{Trace class operators}
+\subsection{Trace-class operators}
 TODO Simon
+
+
+\begin{proposition}
+Let $H$ be a Hilbert space and $A,B\in\Lin(X)$ such that $B$ is compact self-adjoint, then $\Tr[A,B] = 0$.
+\end{proposition}
+\begin{proof}
+Let $\seq{e_n}$ be an orthonormal basis of eigenvectors of $B$, with corresponding real eigenvalues $\lambda_n$. This exists by the spectral theorem (TODO ref). Then
+\begin{align*}
+\Tr[A,B] &= \sum_n\inner{e_n, [A,B]e_n} \\
+&= \sum_n\inner{e_n, ABe_n} - \inner{e_n, BAe_n} \\
+&= \sum_n\inner{e_n, ABe_n} - \inner{Be_n, Ae_n} \\
+&= \sum_n\lambda_n\inner{e_n, Ae_n} - \lambda_n\inner{e_n, Ae_n} \\
+&= 0.
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $H$ be a Hilbert space and $A,B\in\Lin(X)$ such that $A$ is self-adjoint and $B$ compact. If $[A,B]$ is trace-class, then $\Tr[A,B] = 0$.
+\end{corollary}
+\begin{proof}
+If $[A,B]$ is trace-class, then $-[A,B]^* = [A,B^*]$ is also 
+\end{proof}
 
 
 \section{Dilation theory}
