@@ -3673,6 +3673,13 @@ Let $H,K$ be Hilbert spaces and $T: H\not\to K$ an operator. An \udef{adjoint} o
 \[ \inner{w,Tv}_K = \inner{S w,v}_H \quad \forall v\in \dom(T),\; \forall w\in \dom(S). \]
 \end{definition}
 
+\begin{lemma} \label{adjointRequirementSymmetric}
+Let $H,K$ be Hilbert spaces, $T\in (H\not\to K)$ and $S\in(K\not\to H)$. Then $T$ is an adjoint of $S$ \textup{if and only if} $S$ is an adjoint of $T$.
+\end{lemma}
+\begin{proof}
+The definition of adjoint is symmetric in $S$ and $T$.
+\end{proof}
+
 \subsection{The adjoint}
 \subsubsection{The adjoint as a relation}
 \begin{lemma}
@@ -3703,11 +3710,6 @@ is the graph of an operator \textup{if and only if} $T$ is densely defined.
 \begin{definition}
 Let $T: H\not\to K$ be an operator between Hilbert spaces. We define the adjoint $T^*$ as the \emph{relation} on $(H,K)$ with graph
 \[ \graph(T^*) \defeq \bigcup\setbuilder{\graph(S)}{\text{$S\in (K\not\to H)$ is an adjoint of $T$}}. \]
-\begin{itemize}
-\item If $T^* = T$, we say $T$ is \udef{self-adjoint}.
-\item If $T^* = -T$, we say $T$ is \udef{skew-adjoint}.
-\end{itemize}
-We denote the set of self-adjoint operators on $H$ by $\SelfAdjoints(H)$.
 \end{definition}
 Note that, by \ref{maximalAdjointIsOperator}, the adjoint is a function if and only if $T$ is densely defined.
 
@@ -3755,16 +3757,18 @@ so the functional $u\mapsto \inner{x, Tu}$ is bounded.
 \begin{corollary}
 The domain $\dom(T^*)$ is a vector space and in particular contains $0$.
 \end{corollary}
+
+\begin{proposition} \label{HilbertAdjointGaloisConnection}
+Let $H, K$ be Hilbert spaces. Take $T\in (H\not\to K)$ and $S\in (K\not\to H)$. Then
+\[ S \subseteq T^* \iff T\subseteq S^*. \]
+Thus $(*,*)$ is an antitone Galois connection between $\sSet{(H\not\to K), \subseteq}$ and $\sSet{(K\not\to H), \subseteq}$.
+\end{proposition}
+\begin{proof}
+We have $S \subseteq T^*$ iff $S$ is an adjoint of $T$ iff $T$ is an adjoint of $S$ (by \ref{adjointRequirementSymmetric}) iff $T\subseteq S^*$.
+\end{proof}
 \begin{corollary} \label{HilbertAdjointAntitone}
 Let $S,T: H\not\to K$ be operators between Hilbert spaces such that $S\subseteq T$. Then $T^* \subseteq S^*$.
 \end{corollary}
-\begin{corollary}
-Let $H, K$ be Hilbert spaces. Then $(*,*)$ is a Galois connection between $\sSet{(H\not\to K), \subseteq}$ and $\sSet{(K\not\to H), \subseteq}$.
-\end{corollary}
-\begin{proof}
-TODO
-\end{proof}
-
 \subsubsection{Properties of the adjoint relation}
 
 \begin{proposition}
@@ -3891,7 +3895,8 @@ There exist various conditions that make the inclusions in \ref{adjointAlgebraic
 Let $T,S$ be compatible operators between Hilbert spaces.
 \begin{enumerate}
 \item if $T$ is densely defined, $\dom(S) \subseteq \dom(T)$ and $\dom\big((S+T)^*\big) \subseteq \dom(T^*)$, then $S^* + T^* = (S+T)^*$;
-\item if $T$ is densely defined, $\im(S)\subseteq \dom(T)$ and $\dom\big((TS)^*)\subseteq \dom(T^*)$, then $S^*T^* = (TS)^*$.
+\item if $T$ is densely defined, $\im(S)\subseteq \dom(T)$ and $\dom\big((TS)^*)\subseteq \dom(T^*)$, then $S^*T^* = (TS)^*$;
+\item if $S$ is densely defined and $\im(S)$ has finite codimension, then $S^*T^* = (TS)^*$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -3911,6 +3916,8 @@ Thus $(S+T)^* \subseteq S^* + T^*$.
 Because $\im(S)\subseteq \dom(T)$, we have $\dom(TS) = \dom(S)$. Also, by assumption, $x\in \dom(T^*)$. So we have
 \[ \forall z\in \dom(S):\; \inner{x, TS(z)} = \inner{T^*(x), S(z)} = \inner{y, z}, \]
 which means that $\big(T^*(x), y\big)\in S^*$, so $(x,y)\in S^*T^*$.
+
+(3)
 \end{proof}
 \begin{corollary}
 If $T$ is bounded and everywhere defined, then
@@ -4112,7 +4119,7 @@ Self-adjoint and unitary operators are normal.
 TODO 3.10 Self-Adjoint, Unitary and Normal Operators from Kreyszig.
 
 
-\begin{proposition}
+\begin{proposition} \label{normalCriterion}
 Let $T: H\not\to H$ be a densely defined operator. Then $T$ is normal \textup{if and only if} $\dom(T) = \dom(T^*)$ and $\forall x\in H: \norm{Tx} = \norm{T^*x}$.
 \end{proposition}
 \begin{proof}
@@ -4131,7 +4138,7 @@ If $T$ is a normal operator, then $\ker T = \ker T^*$.
 We have $x\in\ker(T) \iff \norm{Tx} = 0 \iff \norm{T^*x} = 0 \iff x\in\ker(T^*)$. 
 \end{proof}
 \begin{corollary}
-If $T$ is a normal operatorm then
+If $T$ is a normal operator then
 \begin{enumerate}
 \item $\rspec(T) = \emptyset$;
 \item $\spec(T) = \apspec(T)$.
@@ -4160,29 +4167,60 @@ A normal operator on a Hilbert space is invertible \textup{if and only if} it is
 \end{lemma}
 
 \subsection{Symmetric and self-adjoint operators}
+\begin{definition}
+Let $A$ be an operator on a Hilbert space.
+\begin{itemize}
+\item If $A^* = A$, we say $A$ is \udef{self-adjoint}.
+\item If $A^* = -A$, we say $A$ is \udef{skew-adjoint}.
+\end{itemize}
+We denote the set of self-adjoint operators on a Hilbert space $H$ by $\SelfAdjoints(H)$.
+\end{definition}
+
+\begin{lemma}
+Every self-adjoint operator is normal.
+\end{lemma}
+\begin{proof}
+By \ref{normalCriterion}.
+\end{proof}
+
+\begin{lemma} \label{selfAdjointClosed}
+Every self-adjoint operator is closed.
+\end{lemma}
+\begin{proof}
+For any self-adjoint operator $A$, we have $A = A^{**} = \overline{A}$. Alternatively, note that all normal operators are closed.
+\end{proof}
+
 \subsubsection{Domain related matters}
-A symmetric operator $A$ is self-adjoint if and only if $\dom(A) = \dom(A^*)$.
 \begin{lemma} \label{symmetricOperatorAdjointInclusion}
-Let $A$ be a symmetric densely defined operator on a Hilbert space $H$. Then
+Let $A$ be a densely defined operator on a Hilbert space. Then
 \begin{enumerate}
-\item $\dom(A) \subseteq \dom(A^*)$;
-\item $A = A^*|_{\dom(A)}$;
-\item $A$ is closable and $\overline{A} = A^{**}$.
+\item $A$ is symmetric \textup{if and only if} $A\subseteq A^*$;
+\item if $A$ is symmetric, then is $A$ closable and $\overline{A} = A^{**}$ is symmetric.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1, 2) This is immediate from symmetry: $\inner{Ax,y} = \inner{x,Ay}$ for all $x,y\in\dom(A)$.
+(1) $A$ is symmetric iff it is an adjoint of itself, iff $A\subseteq A^*$.
 
-(3) From (1) we see that $A^*$ is densely defined, because the superset of a dense set is dense. The result follows by \ref{adjointDenselyDefinedClosable}.
+(2) From (1) we see that $A^*$ is densely defined, because the superset of a dense set is dense. Then $A$ is closable by \ref{adjointDenselyDefinedClosable}.
+
+To show symmetry of $\overline{A}$, we have (using the properties implied by \ref{HilbertAdjointGaloisConnection}) $A^{**}\subseteq A^*$ from $A\subseteq A^*$ and thus
+\[ \overline{A} = A^{**} \subseteq A^* = A^{***} = \overline{A}^*. \]
 \end{proof}
+
+A symmetric operator $A$ is self-adjoint if and only if $\dom(A) = \dom(A^*)$.
+
 \begin{corollary}
-A closed and densely defined symmetric operator is self-adjoint \textup{if and only if} $A^*$ is symmetric.
+A closed and densely defined symmetric operator $A$ is self-adjoint \textup{if and only if} $A^*$ is also symmetric.
 \end{corollary}
 \begin{proof}
-If $A^*$ is not symmetric, $A$ can clearly not be self-adjoint.
+If $A$ is self-adjoint, then $A^*$ is self-adjoint and thus symmetric,
 
-Assume $A^*$ is symmetric. Then $\dom(A) \subseteq \dom(A^*) \subseteq \dom(\overline{A}) = \dom(A)$.
+If $A^*$ is symmetric, then $A\subseteq A^* \subseteq A^{**} = A$.
 \end{proof}
+
+\begin{example}
+TODO example of closed symmetric operator that is not self-adjoint (see differential operator below)
+\end{example}
 
 \begin{proposition} \label{selfAdjointMaximal}
 A self-adjoint operator cannot have a proper symmetric extension.
@@ -4231,7 +4269,7 @@ We must have $\forall f\in \dom(A_\alpha)$ and $g\in\dom(A^*_\alpha)$ that
 \[ \overline{g(b)}f(b) - \overline{g(a)}f(a) = f(a)\Big(e^{i\alpha}\overline{g(b)} - \overline{g(a)}\Big) = 0, \]
 so we have $e^{-i\alpha}g(b) = g(a)$ and thus $g(b) = e^{i\alpha}g(a)$, which means $\dom(A_\alpha^*) = \dom(A_\alpha)$. So $A_\alpha$ is a self-adjoint extension of $A$ for all $\alpha\in \R$.
 
-TODO: compare Aharonov-Bohm
+TODO: compare Aharonov-Bohm TODO show closure \url{https://math.stackexchange.com/questions/214218/uniform-convergence-of-derivatives-tao-14-2-7}.
 \end{example}
 Notice that the operator
 \[ T: L^2(a,b) \to L^2(a,b): f\mapsto i\od{f}{x} \]
@@ -4252,15 +4290,15 @@ Let $A+z\id$ be surjective and suppose, towards a contradiction that there exist
 By assumption, $\Im(z) \neq 0$, so $x=0$, meaning $y = (A+z\id)x = 0$ and thus $\dom(A)^\perp = \{0\}$.
 \end{proof}
 
-\begin{proposition}
-Let $A$ be a symmetric operator on a complex Hilbert space $H$. Then $A + z\id_H$ is bounded below by $|\Im \lambda|$ for all $\lambda \in \C\setminus\R$.
+\begin{proposition} \label{symmetricPlusiBoundedBelow}
+Let $A$ be a symmetric operator on a complex Hilbert space $H$. Then $A + z\id_H$ is bounded below by $|\Im z|$ for all $z \in \C\setminus\R$.
 \end{proposition}
 \begin{proof}
 We first calculate, $\forall x\in H$:
 \[ \Im\inner{x, (A+ z\id_H)x} = \cancel{\Im\inner{x,Ax}} + \Im z\norm{x}^2. \]
 Thus
-\[ |\Im\lambda|\;\norm{x}^2 = |\Im\inner{x, (A + z\id_H)x}| \leq |\inner{x, (A + z\id_H)x}| \leq \norm{x}\;\norm{(A + z\id_H)x}, \]
-which means that $\norm{(A + z\id_H)x} \geq |\Im\lambda|\;\norm{x}$, so $A + z\id_H$ is bounded below by $|\Im \lambda|$.
+\[ |\Im z|\;\norm{x}^2 = |\Im\inner{x, (A + z\id_H)x}| \leq |\inner{x, (A + z\id_H)x}| \leq \norm{x}\;\norm{(A + z\id_H)x}, \]
+which means that $\norm{(A + z\id_H)x} \geq |\Im z|\;\norm{x}$, so $A + z\id_H$ is bounded below by $|\Im z|$.
 \end{proof}
 \begin{corollary} \label{approximateSpectrumSymmetricOperator}
 Let $A$ be a symmetric operator on a complex Hilbert space $H$. Then $\apspec(A) \subseteq \R$.
@@ -4286,23 +4324,47 @@ This is an application of \ref{boundedBelow}.
 \begin{proposition} \label{rangeSelfAdjointCriterion}
 Let $A$ be a symmetric operator on a Hilbert space $H$. The following are equivalent:
 \begin{enumerate}
+\item $\forall z \in \C\setminus\R: \; \im(A+z\id) = H = \im(A+\overline{z}\id)$;
 \item $\exists z \in \C: \; \im(A+z\id) = H = \im(A+\overline{z}\id)$;
 \item $A$ is self-adjoint;
-\item $\rspec(A) = \emptyset$.
+\item $\rspec(A) = \emptyset$;
+\item $A$ is closed and $\forall z \in \C\setminus \R: \; \ker(A^*+z\id) = \{0\} = \ker(A^*+\overline{z}\id)$;
+\item $A$ is closed and $\exists z \in \C\setminus \R: \; \ker(A^*+z\id) = \{0\} = \ker(A^*+\overline{z}\id)$.
 \end{enumerate}
 In this case $\spec(A) = \apspec(A)$.
 \end{proposition}
-Notice that in (1) we include $\R$ and in (3) we exclude $\R$.
+Notice that in (2) we include $\R$ and in (7) we exclude $\R$.
 \begin{proof}
-$(1) \Rightarrow (2)$ From \ref{symmetricOperatorAdjointInclusion}, we have $A\subseteq A^*$ and thus $A+z\id = (A^* + z\id)\cap(A+z\id)$. From point (1) of \ref{equalityAlgebraicPropertiesAdjoint}, we have $A+z\id = (A+\overline{z}\id)^*\cap (A+z\id)$.
+$(1) \Rightarrow (2)$ Trivial.
 
-We then use \ref{adjointRangeCriterion} with $S = A+z\id$ and $T = A+\overline{z}\id$ to obtain $(A+z\id)^* = A+\overline{z}\id$. Subtracting $\overline{z}\id$ from each side yields the result.
+$(2) \Rightarrow (3)$ From \ref{symmetricOperatorAdjointInclusion}, we have $A\subseteq A^*$ and thus $A+z\id = (A^* + z\id)\cap(A+z\id)$. From point (1) of \ref{equalityAlgebraicPropertiesAdjoint}, we have $A+z\id = (A+\overline{z}\id)^*\cap (A+z\id)$.
 
-$(2) \Rightarrow (3)$ Fix some $z \in \spec(A) \setminus\pspec(A)$ we need to show that $\overline{\im(\lambda\id - A)} = H$. Indeed
-\[ \overline{\im(A+z\id)} = \ker(A^* + \overline{z}\id)^\perp = \ker(A+\overline{z}\id)^\perp = \{0\}^\perp = H. \]
+We then use \ref{adjointRangeCriterion} with $S = A+z\id$ and $T = A+\overline{z}\id$ to obtain $A^* + \overline{z}\id = (A+z\id)^* = A+\overline{z}\id$. Subtracting $\overline{z}\id$ from each side yields the result.
 
-$(3) \Rightarrow (1)$ We have $\spec(A) = \apspec(A)$. Because $\apspec\subseteq \R$, by \ref{approximateSpectrumSymmetricOperator}, we have that $A+z\id$ is surjective for all $\C\setminus\spec(A) = \C\setminus\apspec(A) \supseteq \C\setminus\R$.
+$(3) \Rightarrow (4)$ Because self-adjoint operators are normal, we can use \ref{equalityKernelAdjointNormal}.
+
+$(4) \Rightarrow (1)$ We have $\spec(A) = \apspec(A)$. Because $\apspec\subseteq \R$, by \ref{approximateSpectrumSymmetricOperator}, we have that $A+z\id$ is surjective for all $\C\setminus\spec(A) = \C\setminus\apspec(A) \supseteq \C\setminus\R$.
+
+$(1,3) \Rightarrow (5)$ The closedness of $A$ follows from its self-adjointness.
+
+Pick arbitrary $z \in \C\setminus\R$. Using \ref{kernelImageAdjoint}, we have
+\[ \ker(A^* + z\id) = \ker(A+\overline{z}\id)^* =\im(A+\overline{z}\id)^\perp = H^\perp = \{0\}, \]
+and something similar for $\ker(A^* + \overline{z}\id)$.
+
+$(5) \Rightarrow (6)$ Trivial.
+
+$(6) \Rightarrow (2)$ Pick some $z\in\C\setminus \R$ for which the statement holds. We have
+\[ \overline{\im(A+z\id)} = \im(A+z\id)^{\perp\perp} = \ker\big((A^*+\overline{z})\big)^\perp = \{0\}^\perp = H. \]
+We now just need to show that $\im(A+z\id)$ is closed. This follows because $A+z\id$ is bounded below by \ref{symmetricPlusiBoundedBelow} and thus we can apply \ref{boundedBelowClosedRange}.
 \end{proof}
+\begin{corollary}
+Let $A$ be a symmetric operator on a Hilbert space $H$. The following are equivalent:
+\begin{enumerate}
+\item $A$ is essentially self-adjoint;
+\item $\exists z \in \C\setminus\R: \; \overline{\im(A+z\id)} = H = \overline{\im(A+\overline{z}\id)}$;
+\item $\exists z \in \C\setminus\R: \; \ker(A^*+z\id) = \{0\} = \ker(A^*+\overline{z}\id)$.
+\end{enumerate}
+\end{corollary}
 \begin{corollary}
 Every surjective symmetric operator is self-adjoint.
 \end{corollary}
@@ -4352,7 +4414,75 @@ Spectrum half plane TODO \url{https://math.stackexchange.com/questions/893899/sp
 \end{example}
 
 \begin{proposition}
-Let $A$ be a closed symmetric operator on a Hilbert space. Then $A$ is positive \textup{if and only if} $\spec(A)\subseteq [0,\infty[$.
+Let $T$ be a densely defined operator on a Hilbert space $H$. Then
+\begin{enumerate}
+\item $T+T^*$ is symmetric;
+\item $T^*T$ and $TT^*$ are symmetric
+\item if $T$ is closed, then $T^*T$ and $TT^*$ are self-adjoint.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We use \ref{adjointAlgebraicProperties} to get
+\[ T+T^* \subseteq T^{**} + T^* \subseteq (T+T^*)^*. \]
+We conclude by \ref{symmetricOperatorAdjointInclusion}.
+
+(2) We use \ref{adjointAlgebraicProperties} to get
+\[ T^*T \subseteq T^*T^{**} \subseteq (T^*T)^* \qquad\text{and}\qquad TT^* \subseteq T^{**}T^* \subseteq (TT^*)^*, \]
+which means that $T^*T$ and $TT^*$ are symmetric by \ref{symmetricOperatorAdjointInclusion}.
+
+(3) Because $T^*$ is closed, $\graph(T^*)$ is closed in $H\oplus H$. Thus
+\begin{align*}
+H\oplus H &= \graph(T^*) \oplus \graph(T^*)^\perp \\
+&= \graph(T^*) \oplus \left(\begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\graph{T}\right)^{\perp\perp} \\
+&= \graph(T^*) \oplus \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\graph{T}.
+\end{align*}
+The last equality holds because $\graph(T)$ is closed (and $\begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}$ is a homeomorphism).
+
+Then for all $v\in H$, we can write
+\[ \begin{pmatrix}
+0 \\ v
+\end{pmatrix} = \begin{pmatrix}
+y \\ T^*y
+\end{pmatrix} + \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\begin{pmatrix}
+x \\ Tx
+\end{pmatrix} = \begin{pmatrix}
+y - Tx \\ T^*y + x
+\end{pmatrix}. \]
+So $y = Tx$ and $v = T^*y + x = T^*Tx + x = (T^*T +\id)x$, which means that $T^*T +\id$ is surjective. Thus $T^*T$ is self-adjoint by \ref{rangeSelfAdjointCriterion}.
+
+We can show $TT^* + \id$ is surjective by writing
+\[ \begin{pmatrix}
+v \\ 0
+\end{pmatrix} = \begin{pmatrix}
+y \\ T^*y
+\end{pmatrix} + \begin{pmatrix}
+0 & -\id \\ \id & 0
+\end{pmatrix}\begin{pmatrix}
+x \\ Tx
+\end{pmatrix} = \begin{pmatrix}
+y - Tx \\ T^*y + x
+\end{pmatrix}, \]
+so $x = -T^*y$ and $v = y - Tx = y+TT^*y = (TT^* + \id)y$.
+\end{proof}
+
+\begin{example}
+Let $T$ be a densely defined operator. Then $T+T^*$ and $T^*T$ are in general not self-adjoint. Closedness of $T$ is enough to make $T^*T$ self-adjoint. This is not the case for $T+T^*$.
+\begin{itemize}
+\item If $T$ is not closed, then $T+T^* \subsetneq T^{**} + T^* \subseteq (T+T^*)^*$.
+\item It is even not necessarily self-adjoint if $T$ is closed. Let $T$ be a closed, symmetric, but not self-adjoint operator, for example.
+\end{itemize}
+\end{example}
+
+\begin{proposition}
+Let $A$ be a self-adjoint operator on a Hilbert space. Then $A$ is positive \textup{if and only if} $\spec(A)\subseteq [0,\infty[$.
 \end{proposition}
 \begin{proof}
 \ref{closureNumericRangeConvexHullSpectrum}
@@ -4436,6 +4566,8 @@ Or deficiency(?)
 \url{https://link-springer-com.ezproxy.ulb.ac.be/content/pdf/10.1007/978-94-007-4753-1.pdf}
 
 Cfr. dilation theory through Cayley transform.
+
+See also Conway.
 
 \subsubsection{Positive self-adjoint extensions of symmetric operators}
 \begin{theorem}[Friedrich's extension]
