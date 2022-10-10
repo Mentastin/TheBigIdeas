@@ -2355,7 +2355,7 @@ Let $\sSet{X, \mathcal{F}}$ be a Cauchy space. A \udef{completion} of $\sSet{X, 
 Let $X$ be a set and $F,G\in\powerfilters(X^2)$. We define
 \[ F^{\transp} \defeq \setbuilder{A^\transp}{A\in F}  \]
 and
-\[ F;G \defeq \upset \setbuilder{A;B}{A\in F, B\in G}. \]
+\[ F;G \defeq \upset \setbuilder{A;B}{A\in F, B\in G,\; A;B\neq \emptyset}. \]
 \end{definition}
 
 We have $F^{\transp} = t^{\imf\imf}[F]$ where $t: X^2 \to X^2: (x,y)\mapsto (y,x)$.
@@ -2460,38 +2460,53 @@ Take $S\in \mathcal{S}_1$. Then there exists an $S'\in \mathcal{S}_2$ such that 
 
 \subsubsection{Entourages}
 \begin{definition}
-Let $\sSet{X, \mathcal{U}}$ be a uniform space. Then
-\[ \entourage_\mathcal{U} \defeq \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G} \]
-is called the \udef{entourage filter} of $\mathcal{U}$ and the elements of $\entourage_\mathcal{U}$ are called \udef{entourages}.
+Let $\sSet{X, \mathcal{U}}$ be a uniform space. Then $\entourage_\mathcal{U} \defeq \bigcap \mathcal{U}$ is called the \udef{entourage filter} of $\mathcal{U}$ and the elements of $\entourage_\mathcal{U}$ are called \udef{entourages}.
 
-We call the uniform space \udef{topological} if $\mathcal{U} = \Theta\big(\upset\{\entourage_\mathcal{U}\}\big)$.
+We call the uniform space \udef{topological} if $\mathcal{U} = \upset\{\entourage_\mathcal{U}\}$.
 \end{definition}
-
-\begin{lemma}
-Let $\sSet{X,\mathcal{U}}$ be a uniform space. Then $\mathcal{U}$ is topological \textup{if and only if}
-\[ F\mathrel{\mathcal{U}}G \qquad\iff\qquad \entourage_\mathcal{U}\subseteq F\otimes G. \]
-\end{lemma}
 
 \begin{lemma}
 Let $\sSet{X,\mathcal{U}}$ be a uniform space with entourage filter $\entourage$. Then
 \begin{enumerate}
 \item $\entourage\subseteq \upset\{\Delta\}$, where $\Delta = \setbuilder{(x,x)}{x\in X}$;
 \item $\entourage^\transp = \entourage$;
+\item $\entourage;\entourage \subseteq \entourage$.
+\end{enumerate}
+If $\sSet{X,\mathcal{U}}$ is a topological uniform space, then
+\begin{enumerate}[1'.] \setcounter{enumi}{2}
 \item $\entourage;\entourage = \entourage$.
 \end{enumerate}
-Any filter in $\powerfilters(X\times X)$ satisfying these properties is the entourage filter of a topological uniformity.
+Any filter in $\powerfilters(X\times X)$ satisfying properties 1., 2. and 3'. is the entourage filter of a topological uniformity.
 \end{lemma}
+TODO: can we improve 3??
 \begin{proof}
 (1) We have
-\[ \mathcal{E} = \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G} \subseteq \bigcap \setbuilder{\pfilter{x}\otimes \pfilter{x}}{x\in X} = \upset\big\{\setbuilder{(x,x)}{x\in X}\big\}. \]
+\[ \entourage = \bigcap \mathcal{U} \subseteq \bigcap \setbuilder{\pfilter{x}\otimes \pfilter{x}}{x\in X} = \upset\big\{\setbuilder{(x,x)}{x\in X}\big\}. \]
 
 (2) We have
-\[ \mathcal{E}^\transp = \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G}^\transp = \bigcap \setbuilder{G\otimes F}{G\mathrel{\mathcal{U}}F} = \mathcal{E}, \]
+\[ \entourage^\transp = \bigcap \setbuilder{H^\transp}{H\in\mathcal{U}} = \bigcap \setbuilder{H}{H\in\mathcal{U}} = \entourage, \]
 because the transpose is bijective and thus its image function is preserved under intersection.
 
 (3) First take $A;B \in\entourage;\entourage$. We claim $A\subseteq A;B$. Indeed take $(a,b)\in A$. By (1), we have $(b,b)\in B$ and so $(a,b)\in A;B$. Thus $\entourage;\entourage \subseteq \entourage$.
 
-For the converse, we have
+(3') In the topological case, we have that $\entourage\in\mathcal{U}$ and thus $\entourage;\entourage\in \mathcal{U}$, so $\entourage \subseteq \entourage;\entourage$.
+
+For the opposite inclusion, write
+\[ \entourage = \bigcap \mathcal{U} \subseteq \bigcap \setbuilder{H;H \cap H^\transp ;H \cap H;H^\transp \cap H^\transp;H^\transp}{H\in\mathcal{U}}. \]
+Now take $A\in \entourage$. Then for all $H\in\mathcal{U}$, there exist $B_H, C_H\in H$ such that $B_H;C_H \subseteq A$. Now consider
+\[ D_H \defeq B_H\cap B_H^\transp \cap C_H \cap C_H^\transp. \]
+
+To show any such filter is an entourage filter, we check the four requirements
+\begin{itemize}
+\item From (1), we have for all $x\in X$
+\[ \entourage \subseteq \upset\{\Delta\} \subseteq \upset\{(x,x)\} = \pfilter{x}\otimes\pfilter{x}. \]
+\item Upwards closure is by construction.
+\item If $\entourage \subseteq H$, then $\entourage = \entourage^\transp \subseteq H^\transp$.
+\item If $\entourage\subseteq G,H$, then $\entourage = \entourage;\entourage \subseteq G;H$.
+\end{itemize}
+
+
+
 \begin{align*}
 \entourage = \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G} &\subseteq \bigcap \setbuilder{(F_1\otimes G_1);(F_2\otimes G_2)}{F_1\mathrel{\mathcal{U}}G_1, F_2\mathrel{\mathcal{U}}G_2}.
 \end{align*}
@@ -2588,55 +2603,42 @@ This filter is proper and converges to both $(x,x)$ and $(y,y)$. Now
 so $H_1; H_2\in\mathcal{F}$.
 \end{proof}
 
+\subsection{Uniform continuity}
+\begin{definition}
+Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if
+\[ H\in \mathcal{U} \quad\implies\quad f^{\imf\imf}[H]\in \mathcal{V}. \]
+\end{definition}
 
-\subsection{Uniform relations}
 \begin{proposition}
-Let $X$ be a set; $\mathcal{U}$ a uniform structure on $X$ and $F$ a uniform filter set on $X$. We define a uniform filter set $\Theta(\mathcal{U})$ and a uniform structure $\Xi(\mathcal{F})$ by
-\begin{align*}
-\forall H\in \powerfilters(X^2):\qquad H\in\Theta(\mathcal{U}) \quad&\defequiv\quad p_1^{\imf\imf}[H]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H]; \\
-\forall F,G\in\powerfilters(X)\setminus\{\powerset(X)\}:\qquad F\mathrel{\Xi(\mathcal{F})}G \quad&\defequiv\quad F\otimes G\in \mathcal{F}. 
-\end{align*}
-Then the functions
-\begin{align*}
-&\Theta: \{\text{uniformities on $X$}\} \to \{\text{uniform filter sets on $X$}\} \\
-&\Xi: \{\text{uniform filter sets on $X$}\} \to \{\text{uniformities on $X$}\}
-\end{align*}
-form a Galois connection $(\Theta, \Xi)$. Additionally,
+Let $X,Y$ be sets, $\sSet{X,\xi}, \sSet{Y,\zeta}$ convergence spaces and $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces. Let $f: X\to Y$ be a function.
 \begin{enumerate}
-\item $\im(\Theta)$ is the set of factorisable uniform filter sets;
-\item $\im(\Xi)$ is the set of uniformities on $X$, i.e.\ $\Xi$ is surjective.
+\item If $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous, then $f: \sSet{X, \Gamma(\mathcal{U})} \to \sSet{Y, \Gamma(\mathcal{V})}$ is continuous.
+\item If $f: \sSet{X,\xi} \to \sSet{Y,\zeta}$ is continuous, then $f: \sSet{X, \Phi(\xi)} \to \sSet{Y, \Phi(\zeta)}$ is uniformly continuous.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-The prove $\Theta(\mathcal{U})$ is a uniform filter set, we verify the conditions:
-\begin{itemize}
-\item From $\pfilter{x}\mathrel{\mathcal{U}}\pfilter{x}$, we get $\pfilter{x}\otimes \pfilter{x}\in\Theta(\mathcal{U})$.
-\item If $H\in\Theta(\mathcal{U})$ and $H\subseteq H'$, then $p_1^{\imf\imf}[H]\subseteq p_1^{\imf\imf}[H']$ and $p_2^{\imf\imf}[H]\subseteq p_2^{\imf\imf}[H']$. Thus by upwards closure of $\mathcal{U}$, we have $p_1^{\imf\imf}[H']\mathrel{\mathcal{U}} p_1^{\imf\imf}[H']$ and so $H'\in\Theta(\mathcal{U})$.
-\item Take $H\in \Theta(\mathcal{U})$. Then
-\[ p_1^{\imf\imf}[H]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H] \iff p_2^{\imf\imf}[H^\transp]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H^\transp] \iff p_1^{\imf\imf}[H^\transp]\mathrel{\mathcal{U}} p_2^{\imf\imf}[H^\transp] \iff H^\transp\in \Theta(\mathcal{U}). \]
-\item Take $H_1, H_2\in \Theta(\mathcal{U})$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\Theta(\mathcal{U})$ by upwards closure. If $H_1;H_2 \neq \powerset(X^2)$, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$ by \ref{meshingFilterComposition} and thus $p_2^{\imf\imf}[H_1]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H_2]$ by \ref{uniformityMeshingFilters}. So we have, by definition of $\Theta(\mathcal{U})$
-\[ p_1^{\imf\imf}[H_1]\;\mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_1] \;\mathrel{\mathcal{U}} \;p_1^{\imf\imf}[H_2]\; \mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_2]. \]
-By \ref{componentInclusionsFilterComposition} and upward closure, we get $p_1^{\imf\imf}[H_1;H_2]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H_1;H_2]$, which means $H_1;H_2\in \Theta(\mathcal{U})$.
-\end{itemize}
+(1) Assume $f$ uniformly continuous and $F\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$. Then $F\mathrel{\mathcal{U}}\pfilter{x}$, so $f^{\imf\imf}[F]\mathrel{\mathcal{V}}f(\pfilter{x})$. This means that $f^{\imf\imf}[F]\overset{\Gamma(\mathcal{V})}{\longrightarrow} f(x)$.
 
-The prove $\Xi(\mathcal{F})$ is a uniformity, we verify the conditions:
-\begin{itemize}
-\item From $\pfilter{x}\otimes \pfilter{x}\in\mathcal{F}$, we get $\pfilter{x}\mathrel{\Xi(\mathcal{F})}\pfilter{x}$.
-\item Assume $F\mathrel{\Xi(\mathcal{F})}G$ and $G\subseteq G'$. Then $F\otimes G\in \mathcal{F}$ and $F\otimes G\subseteq F\otimes G'$. By upwards closure, $F\otimes G'\in\mathcal{F}$.
-\item Symmetry is immediate from $(F\otimes G)^\transp = G\otimes F$. Transitivity is immediate from $(F\otimes G);(G\otimes H) = F\otimes H$ by \ref{compositionProductFilters}.
-\end{itemize}
-
-To show $(\Theta,\Xi)$ is a Galois connection, we need to prove that $\Theta(\mathcal{U}) \subseteq \mathcal{F}$ \textup{if and only if} $\mathcal{U} \subseteq \Xi(\mathcal{F})$.
-
-First assume $\Theta(\mathcal{U}) \subseteq \mathcal{F}$ and take $F,G\in\powerfilters(X)$ such that $F\mathrel{\mathcal{U}} G$. Then $F\otimes G\in \Theta(\mathcal{U})\subseteq\mathcal{F}$ which means that $F\mathrel{\Xi(\mathcal{F})}G$.
-
-Now assume $\mathcal{U} \subseteq \Xi(\mathcal{F})$ and take $H\in \Theta(\mathcal{U})$. Then $p_1^{\imf\imf}[H]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H]$, which implies $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{F})}p_2^{\imf\imf}[H]$. Thus $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{F}$. By upwards closure and \ref{filterFactorisationInequality} we have $H\in \mathcal{F}$.
-
-(1) It is clear that $\im(\Theta)$ consists of factorisable uniform filter sets. For the other inclusion, let $\mathcal{F}$ be a factorisable uniform filter set. It is enough to show that $\mathcal{F} \subseteq \Theta(\Xi(\mathcal{F}))$. Take $H\in \mathcal{F}$. By factorisability $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{F}$. Then $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{F})} p_2^{\imf\imf}[H]$ and thus $H\in \Theta(\Xi(\mathcal{F}))$.
-
-(2) It is enough to prove that for all uniformities $\mathcal{U}$ we have $\mathcal{U} \subseteq \Xi(\Theta(\mathcal{U}))$. Take $F,G\in\powerfilters(X)$. We have
-\[ F\mathrel{\mathcal{U}}G \implies F\otimes G\in\Theta(\mathcal{U}) \implies F\mathrel{\Xi(\Theta(\mathcal{U}))} G. \]
+(2) Assume $f$ is continuous and $F,G\in\powerfilters(X)$ are such that $F\mathrel{\Phi(\xi)} G$. Then $\exists x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By continuity $f^{\imf\imf}[F]\overset{\zeta}{\longrightarrow} f(x)$ and $f^{\imf\imf}[G]\overset{\zeta}{\longrightarrow} f(x)$. Thus $f^{\imf\imf}[F] \mathrel{\Phi(\zeta)}f^{\imf\imf}[G]$ and $f$ is uniformly continuous.
 \end{proof}
+\begin{corollary}
+Let $X,Y$ be sets and $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate} \setcounter{enumi}{2}
+\item If $f: \sSet{X,\Gamma(\mathcal{U})} \to \sSet{Y,\Gamma(\mathcal{V})}$ is continuous and $\sSet{X,\Gamma(\mathcal{U})}$ is complete, then $f: \sSet{X, \mathcal{U}} \to \sSet{Y, \mathcal{V}}$ is uniformly continuous.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+By the proposition we have that $f: \sSet{X,\Phi(\Gamma(\mathcal{U}))} \to \sSet{Y,\Phi(\Gamma(\mathcal{V}))}$ is uniformly continuous. Because $\mathcal{U}$ is complete, we have $\Phi(\Gamma(\mathcal{U})) = \mathcal{U}$ by \ref{uniformConvergenceGaloisConnection}. So $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\Phi(\Gamma(\mathcal{V}))}$ is uniformly continuous and the result follows because $\Phi(\Gamma(\mathcal{V})) \subseteq \mathcal{V}$ by \ref{uniformConvergenceGaloisConnection}.
+\end{proof}
+
+\begin{lemma}
+Uniformly continuous functions map Cauchy filters to Cauchy filters.
+\end{lemma}
+\begin{proof}
+Let $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ be uniformly continuous and $F$ a Cauchy filter. Because $F\mathrel{\mathcal{U}}F$, we have $f^{\imf\imf}[F]\mathrel{\mathcal{V}}f^{\imf\imf}[F]$. Thus $\upset f^{\imf\imf}[F]$ is a Cauchy filter.
+\end{proof}
+
+
 
 
 \section{Uniform relations}
@@ -2776,42 +2778,57 @@ For the other inclusion, $\supseteq$, take a complete uniformity $\mathcal{U}$. 
 So $F\overset{\xi}{\longrightarrow} x$.
 \end{proof}
 
-\subsection{Uniform continuity}
-\begin{definition}
-Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if $\mathcal{U} \subseteq f^{\imf\imf};\mathcal{V};(f^{\imf\imf})^\transp$.
-\end{definition}
-
+\subsection{Uniform relations}
 \begin{proposition}
-Let $X,Y$ be sets, $\sSet{X,\xi}, \sSet{Y,\zeta}$ convergence spaces and $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces. Let $f: X\to Y$ be a function.
+Let $X$ be a set; $\mathcal{U}$ a uniform structure on $X$ and $F$ a uniform filter set on $X$. We define a uniform filter set $\Theta(\mathcal{U})$ and a uniform structure $\Xi(\mathcal{F})$ by
+\begin{align*}
+\forall H\in \powerfilters(X^2):\qquad H\in\Theta(\mathcal{U}) \quad&\defequiv\quad p_1^{\imf\imf}[H]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H]; \\
+\forall F,G\in\powerfilters(X)\setminus\{\powerset(X)\}:\qquad F\mathrel{\Xi(\mathcal{F})}G \quad&\defequiv\quad F\otimes G\in \mathcal{F}. 
+\end{align*}
+Then the functions
+\begin{align*}
+&\Theta: \{\text{uniformities on $X$}\} \to \{\text{uniform filter sets on $X$}\} \\
+&\Xi: \{\text{uniform filter sets on $X$}\} \to \{\text{uniformities on $X$}\}
+\end{align*}
+form a Galois connection $(\Theta, \Xi)$. Additionally,
 \begin{enumerate}
-\item If $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous, then $f: \sSet{X, \Gamma(\mathcal{U})} \to \sSet{Y, \Gamma(\mathcal{V})}$ is continuous.
-\item If $f: \sSet{X,\xi} \to \sSet{Y,\zeta}$ is continuous, then $f: \sSet{X, \Phi(\xi)} \to \sSet{Y, \Phi(\zeta)}$ is uniformly continuous.
+\item $\im(\Theta)$ is the set of factorisable uniform filter sets;
+\item $\im(\Xi)$ is the set of uniformities on $X$, i.e.\ $\Xi$ is surjective.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Assume $f$ uniformly continuous and $F\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$. Then $F\mathrel{\mathcal{U}}\pfilter{x}$, so $f^{\imf\imf}[F]\mathrel{\mathcal{V}}f(\pfilter{x})$. This means that $f^{\imf\imf}[F]\overset{\Gamma(\mathcal{V})}{\longrightarrow} f(x)$.
+The prove $\Theta(\mathcal{U})$ is a uniform filter set, we verify the conditions:
+\begin{itemize}
+\item From $\pfilter{x}\mathrel{\mathcal{U}}\pfilter{x}$, we get $\pfilter{x}\otimes \pfilter{x}\in\Theta(\mathcal{U})$.
+\item If $H\in\Theta(\mathcal{U})$ and $H\subseteq H'$, then $p_1^{\imf\imf}[H]\subseteq p_1^{\imf\imf}[H']$ and $p_2^{\imf\imf}[H]\subseteq p_2^{\imf\imf}[H']$. Thus by upwards closure of $\mathcal{U}$, we have $p_1^{\imf\imf}[H']\mathrel{\mathcal{U}} p_1^{\imf\imf}[H']$ and so $H'\in\Theta(\mathcal{U})$.
+\item Take $H\in \Theta(\mathcal{U})$. Then
+\[ p_1^{\imf\imf}[H]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H] \iff p_2^{\imf\imf}[H^\transp]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H^\transp] \iff p_1^{\imf\imf}[H^\transp]\mathrel{\mathcal{U}} p_2^{\imf\imf}[H^\transp] \iff H^\transp\in \Theta(\mathcal{U}). \]
+\item Take $H_1, H_2\in \Theta(\mathcal{U})$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\Theta(\mathcal{U})$ by upwards closure. If $H_1;H_2 \neq \powerset(X^2)$, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$ by \ref{meshingFilterComposition} and thus $p_2^{\imf\imf}[H_1]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H_2]$ by \ref{uniformityMeshingFilters}. So we have, by definition of $\Theta(\mathcal{U})$
+\[ p_1^{\imf\imf}[H_1]\;\mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_1] \;\mathrel{\mathcal{U}} \;p_1^{\imf\imf}[H_2]\; \mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_2]. \]
+By \ref{componentInclusionsFilterComposition} and upward closure, we get $p_1^{\imf\imf}[H_1;H_2]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H_1;H_2]$, which means $H_1;H_2\in \Theta(\mathcal{U})$.
+\end{itemize}
 
-(2) Assume $f$ is continuous and $F,G\in\powerfilters(X)$ are such that $F\mathrel{\Phi(\xi)} G$. Then $\exists x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By continuity $f^{\imf\imf}[F]\overset{\zeta}{\longrightarrow} f(x)$ and $f^{\imf\imf}[G]\overset{\zeta}{\longrightarrow} f(x)$. Thus $f^{\imf\imf}[F] \mathrel{\Phi(\zeta)}f^{\imf\imf}[G]$ and $f$ is uniformly continuous.
+The prove $\Xi(\mathcal{F})$ is a uniformity, we verify the conditions:
+\begin{itemize}
+\item From $\pfilter{x}\otimes \pfilter{x}\in\mathcal{F}$, we get $\pfilter{x}\mathrel{\Xi(\mathcal{F})}\pfilter{x}$.
+\item Assume $F\mathrel{\Xi(\mathcal{F})}G$ and $G\subseteq G'$. Then $F\otimes G\in \mathcal{F}$ and $F\otimes G\subseteq F\otimes G'$. By upwards closure, $F\otimes G'\in\mathcal{F}$.
+\item Symmetry is immediate from $(F\otimes G)^\transp = G\otimes F$. Transitivity is immediate from $(F\otimes G);(G\otimes H) = F\otimes H$ by \ref{compositionProductFilters}.
+\end{itemize}
+
+To show $(\Theta,\Xi)$ is a Galois connection, we need to prove that $\Theta(\mathcal{U}) \subseteq \mathcal{F}$ \textup{if and only if} $\mathcal{U} \subseteq \Xi(\mathcal{F})$.
+
+First assume $\Theta(\mathcal{U}) \subseteq \mathcal{F}$ and take $F,G\in\powerfilters(X)$ such that $F\mathrel{\mathcal{U}} G$. Then $F\otimes G\in \Theta(\mathcal{U})\subseteq\mathcal{F}$ which means that $F\mathrel{\Xi(\mathcal{F})}G$.
+
+Now assume $\mathcal{U} \subseteq \Xi(\mathcal{F})$ and take $H\in \Theta(\mathcal{U})$. Then $p_1^{\imf\imf}[H]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H]$, which implies $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{F})}p_2^{\imf\imf}[H]$. Thus $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{F}$. By upwards closure and \ref{filterFactorisationInequality} we have $H\in \mathcal{F}$.
+
+(1) It is clear that $\im(\Theta)$ consists of factorisable uniform filter sets. For the other inclusion, let $\mathcal{F}$ be a factorisable uniform filter set. It is enough to show that $\mathcal{F} \subseteq \Theta(\Xi(\mathcal{F}))$. Take $H\in \mathcal{F}$. By factorisability $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{F}$. Then $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{F})} p_2^{\imf\imf}[H]$ and thus $H\in \Theta(\Xi(\mathcal{F}))$.
+
+(2) It is enough to prove that for all uniformities $\mathcal{U}$ we have $\mathcal{U} \subseteq \Xi(\Theta(\mathcal{U}))$. Take $F,G\in\powerfilters(X)$. We have
+\[ F\mathrel{\mathcal{U}}G \implies F\otimes G\in\Theta(\mathcal{U}) \implies F\mathrel{\Xi(\Theta(\mathcal{U}))} G. \]
 \end{proof}
-\begin{corollary}
-Let $X,Y$ be sets and $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces. Let $f: X\to Y$ be a function.
-\begin{enumerate} \setcounter{enumi}{2}
-\item If $f: \sSet{X,\Gamma(\mathcal{U})} \to \sSet{Y,\Gamma(\mathcal{V})}$ is continuous and $\sSet{X,\Gamma(\mathcal{U})}$ is complete, then $f: \sSet{X, \mathcal{U}} \to \sSet{Y, \mathcal{V}}$ is uniformly continuous.
-\end{enumerate}
-\end{corollary}
-\begin{proof}
-By the proposition we have that $f: \sSet{X,\Phi(\Gamma(\mathcal{U}))} \to \sSet{Y,\Phi(\Gamma(\mathcal{V}))}$ is uniformly continuous. Because $\mathcal{U}$ is complete, we have $\Phi(\Gamma(\mathcal{U})) = \mathcal{U}$ by \ref{uniformConvergenceGaloisConnection}. So $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\Phi(\Gamma(\mathcal{V}))}$ is uniformly continuous and the result follows because $\Phi(\Gamma(\mathcal{V})) \subseteq \mathcal{V}$ by \ref{uniformConvergenceGaloisConnection}.
-\end{proof}
-
-\begin{lemma}
-Uniformly continuous functions map Cauchy filters to Cauchy filters.
-\end{lemma}
-\begin{proof}
-Let $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ be uniformly continuous and $F$ a Cauchy filter. Because $F\mathrel{\mathcal{U}}F$, we have $f^{\imf\imf}[F]\mathrel{\mathcal{V}}f^{\imf\imf}[F]$. Thus $\upset f^{\imf\imf}[F]$ is a Cauchy filter.
-\end{proof}
 
 
-\subsection{Star refinement}
+\section{Star refinement}
 \begin{definition}
 Let $X$ be a set and $U,V\subseteq \powerset(X)$ covers of $X$.
 \begin{itemize}
