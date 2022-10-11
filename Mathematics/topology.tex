@@ -2355,7 +2355,7 @@ Let $\sSet{X, \mathcal{F}}$ be a Cauchy space. A \udef{completion} of $\sSet{X, 
 Let $X$ be a set and $F,G\in\powerfilters(X^2)$. We define
 \[ F^{\transp} \defeq \setbuilder{A^\transp}{A\in F}  \]
 and
-\[ F;G \defeq \upset \setbuilder{A;B}{A\in F, B\in G,\; A;B\neq \emptyset}. \]
+\[ F;G \defeq \upset \setbuilder{A;B}{A\in F, B\in G}. \]
 \end{definition}
 
 We have $F^{\transp} = t^{\imf\imf}[F]$ where $t: X^2 \to X^2: (x,y)\mapsto (y,x)$.
@@ -2491,11 +2491,6 @@ because the transpose is bijective and thus its image function is preserved unde
 
 (3') In the topological case, we have that $\entourage\in\mathcal{U}$ and thus $\entourage;\entourage\in \mathcal{U}$, so $\entourage \subseteq \entourage;\entourage$.
 
-For the opposite inclusion, write
-\[ \entourage = \bigcap \mathcal{U} \subseteq \bigcap \setbuilder{H;H \cap H^\transp ;H \cap H;H^\transp \cap H^\transp;H^\transp}{H\in\mathcal{U}}. \]
-Now take $A\in \entourage$. Then for all $H\in\mathcal{U}$, there exist $B_H, C_H\in H$ such that $B_H;C_H \subseteq A$. Now consider
-\[ D_H \defeq B_H\cap B_H^\transp \cap C_H \cap C_H^\transp. \]
-
 To show any such filter is an entourage filter, we check the four requirements
 \begin{itemize}
 \item From (1), we have for all $x\in X$
@@ -2504,32 +2499,133 @@ To show any such filter is an entourage filter, we check the four requirements
 \item If $\entourage \subseteq H$, then $\entourage = \entourage^\transp \subseteq H^\transp$.
 \item If $\entourage\subseteq G,H$, then $\entourage = \entourage;\entourage \subseteq G;H$.
 \end{itemize}
-
-
-
-\begin{align*}
-\entourage = \bigcap \setbuilder{F\otimes G}{F\mathrel{\mathcal{U}}G} &\subseteq \bigcap \setbuilder{(F_1\otimes G_1);(F_2\otimes G_2)}{F_1\mathrel{\mathcal{U}}G_1, F_2\mathrel{\mathcal{U}}G_2}.
-\end{align*}
-Take $A\in \entourage$. For each Cauchy filter $F$, we can find $B_{F},C_{F}\in F\otimes F$ such that $B_{F};C_{F} \subseteq A$. Take $B \defeq \bigcup_{F\,\text{Cauchy}} B_F$
-
-
-
-
---------------------------------------------------------
-
-
-Take $A\in \entourage$. For each Cauchy filter $F$, we can find $C_{F},D_{F}\in F\otimes F$ such that $C_{F};D_{F} \subseteq A$. Consider $E_F \defeq (C_F\cap D_F)\cup \Delta \in F\otimes F$. Then $E_F;E_F\subseteq A$ by (1). By upwards closure, we have that $E \defeq \bigcup_{F\,\text{Cauchy}} E_F$ is an element of all Cauchy filters $F$. We now show that $E;E\subseteq A$. Indeed, take $(a,b)\in E;E$. Then there exists $x$ such that $(a,x),(x,b)\in E$. There exist $E_F, E_G$ such that $(a,x)\in E_F$ and $(x,b)\in E_G$. Then $(a,x)\in C_G^\transp, D_G$, so $(x,x)\in C_G;D_G \subseteq A$.
-
-
-Define $E_{F,G}\defeq C_{F,G}\cap D_{F,G}$, so that $E_{F,G};E_{F,G}\subseteq A$.
-
-
-Now $\bigcup_{F\mathrel{\mathcal{U}}G}C_{F,G};D_{F,G} \subseteq A$ and also $\bigcup_{F\mathrel{\mathcal{U}}G}C_{F,G};D_{F,G}\in F$
-
-Now take $A\in \entourage$. Then $A\cap A^\transp\in \entourage$, so $(A\cap A^\transp);(A\cap A^\transp)\in\entourage;\entourage$. We now have $(A\cap A^\transp);(A\cap A^\transp) \subseteq A$, indeed take $(a,b)\in (A\cap A^\transp);(A\cap A^\transp)$, then there exist $(a,x), (x,b)\in A\cap A^\transp$
 \end{proof}
 
-TODO: any entourage filter satisfies these. Also any entourage filter is the entourage filter of a topological uniform space.
+\subsection{Uniform continuity}
+\begin{definition}
+Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if
+\[ H\in \mathcal{U} \quad\implies\quad \upset (f\times f)^{\imf\imf}[H]\in \mathcal{V}. \]
+\end{definition}
+
+
+\begin{proposition} \label{uniformContinuityEntourages}
+Let $\sSet{X,\mathcal{U}}$, $\sSet{Y,\mathcal{V}}$ be uniform spaces and $f: X\to Y$ a function.
+\begin{enumerate}
+\item If $f$ is uniformly continuous, then $\entourage_\mathcal{V} \subseteq \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}]$;
+\item If $\mathcal{V}$ is topological, then opposite implication also holds.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By uniform continuity we have
+\[ \entourage_\mathcal{V} \subseteq \bigcap\setbuilder{\upset (f\times f)^{\imf\imf}[H]}{H\in \mathcal{U}} = \upset (f\times f)^{\imf\imf}\left[\bigcap \mathcal{U}\right] = \upset (f\times f)^{\imf\imf}\left[\entourage_\mathcal{U}\right]. \]
+The first equality follows from \ref{imageFiltersPreservesIntersection}.
+
+(2) Assume $\entourage_\mathcal{V} \subseteq \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}]$ and take $H\in \mathcal{U}$. Then $\entourage_\mathcal{U}\subseteq H$, so
+\[ \entourage_\mathcal{V} \subseteq \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}] \subseteq \upset (f\times f)^{\imf\imf}[H]. \]
+Thus $\upset (f\times f)^{\imf\imf}[H] \in\mathcal{V}$.
+\end{proof}
+
+\section{Uniform relations}
+\begin{definition}
+Let $X$ be a sets. A \udef{uniformity relation} on $X$ is a relation $R_\mathcal{U}$ on $\powerfilters(X)^2$ such that
+\begin{itemize}
+\item $\pfilter{x}\mathrel{R_\mathcal{U}}\pfilter{x}$ for all $x\in X$;
+\item $F\,R_\mathcal{U}$ is upwards closed for all $F\in \powerfilters(X)$;
+\item $R_\mathcal{U}$ is symmetric and transitive when restricted to $\powerfilters(X)\setminus\{\powerset(X)\}$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{uniformityRelationRelatedElementLemma}
+Let $R_\mathcal{U}$ be a uniform relation on $X$ and $F,G\in\powerfilters(X)$. Assume $F\mathrel{R_\mathcal{U}}$ and $G\mathrel{R_\mathcal{U}}$ are non-empty. Then
+\begin{enumerate}
+\item $F\mathrel{R_\mathcal{U}} F$;
+\item if $F\amesh G$, then $F\mathrel{R_\mathcal{U}} G$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) There exists $H\in\powerfilters(X)$ such that $F\mathrel{R_\mathcal{U}} H$. By symmetry we have $H\mathrel{R_\mathcal{U}} F$ and by transitivity $F\mathrel{R_\mathcal{U}} F$.
+
+(2) If $F\amesh G$, then $F\vee G \neq \powerset(X)$ by \ref{joinProperFilter}. From (1) we have $F\mathrel{R_\mathcal{U}} F$ and $G\mathrel{R_\mathcal{U}} G$. By upwards closure, $F\mathrel{R_\mathcal{U}} (F\vee G)$ and $G\mathrel{R_\mathcal{U}} (F\vee G)$. By transitivity and symmetry, $F\mathrel{R_\mathcal{U}} G$.
+\end{proof}
+
+\begin{lemma} \label{uniformityRelationUpwardsClosure}
+Let $R_\mathcal{U}$ be a uniform relation on $X$ and $F,G, F', G'\in\powerfilters(X)$. If $F \subseteq F'$, $G\subseteq G'$ and $F\mathrel{R_\mathcal{U}} G$, then $F'\mathrel{R_\mathcal{U}} G'$.
+\end{lemma}
+\begin{proof}
+By upwards closure, we have $F\mathrel{R_\mathcal{U}} G'$ and  (using symmetry) $F'\mathrel{R_\mathcal{U}} G$. Thus, again using symmetry,
+\[ F'\mathrel{R_\mathcal{U}} G \;\text{and}\; G \mathrel{R_\mathcal{U}} F \;\text{and}\; F \mathrel{R_\mathcal{U}} G', \]
+so $F'\mathrel{R_\mathcal{U}} G'$ by transitivity.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a set; $\mathcal{U}$ a uniformity on $X$ and $R$ a uniform relation on $X$. We define a uniformity $\Theta(R)$ and a uniform relation $\Xi(\mathcal{U})$ by
+\begin{align*}
+\forall H\in \powerfilters(X^2):\qquad H\in\Theta(R) \quad&\defequiv\quad p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]; \\
+\forall F,G\in\powerfilters(X)\setminus\{\powerset(X)\}:\qquad F\mathrel{\Xi(\mathcal{U})}G \quad&\defequiv\quad F\otimes G\in \mathcal{U}. 
+\end{align*}
+Then the functions
+\begin{align*}
+&\Theta: \{\text{uniform relations on $X$}\} \to \{\text{uniformities on $X$}\} \\
+&\Xi: \{\text{uniformities on $X$}\} \to \{\text{uniform relations on $X$}\}
+\end{align*}
+form a Galois connection $(\Theta, \Xi)$. Additionally,
+\begin{enumerate}
+\item $\im(\Theta)$ is the set of factorisable uniformities on $X$;
+\item $\im(\Xi)$ is the set of uniform relations on $X$, i.e.\ $\Xi$ is surjective.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The prove $\Theta(R)$ is a uniformity, we verify the conditions:
+\begin{itemize}
+\item From $\pfilter{x}\mathrel{R}\pfilter{x}$, we get $\pfilter{x}\otimes \pfilter{x}\in\Theta(R)$.
+\item If $H\in\Theta(R)$ and $H\subseteq H'$, then $p_1^{\imf\imf}[H]\mathrel{R} p_2^{\imf\imf}[H]$, $p_1^{\imf\imf}[H]\subseteq p_1^{\imf\imf}[H']$ and $p_2^{\imf\imf}[H]\subseteq p_2^{\imf\imf}[H']$. Thus, by \ref{uniformityRelationUpwardsClosure}, we have $p_1^{\imf\imf}[H']\mathrel{R} p_2^{\imf\imf}[H']$ and so $H'\in\Theta(R)$.
+\item Take $H\in \Theta(R)$. Then
+\[ p_1^{\imf\imf}[H]\mathrel{R} p_2^{\imf\imf}[H] \iff p_2^{\imf\imf}[H^\transp]\mathrel{R} p_1^{\imf\imf}[H^\transp] \iff p_1^{\imf\imf}[H^\transp]\mathrel{R} p_2^{\imf\imf}[H^\transp] \iff H^\transp\in \Theta(R). \]
+\item Take $H_1, H_2\in \Theta(R)$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\Theta(\mathcal{U})$ by upwards closure. If $H_1;H_2 \neq \powerset(X^2)$, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$ by \ref{meshingFilterComposition} and thus $p_2^{\imf\imf}[H_1]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H_2]$ by \ref{uniformityRelationRelatedElementLemma}. So we have, by definition of $\Theta(\mathcal{U})$
+\[ p_1^{\imf\imf}[H_1]\;\mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_1] \;\mathrel{\mathcal{U}} \;p_1^{\imf\imf}[H_2]\; \mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_2]. \]
+By \ref{componentInclusionsFilterComposition} and upward closure, we get $p_1^{\imf\imf}[H_1;H_2]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H_1;H_2]$, which means $H_1;H_2\in \Theta(\mathcal{U})$.
+\end{itemize}
+
+The prove $\Xi(\mathcal{F})$ is a uniformity, we verify the conditions:
+\begin{itemize}
+\item From $\pfilter{x}\otimes \pfilter{x}\in\mathcal{F}$, we get $\pfilter{x}\mathrel{\Xi(\mathcal{F})}\pfilter{x}$.
+\item Assume $F\mathrel{\Xi(\mathcal{F})}G$ and $G\subseteq G'$. Then $F\otimes G\in \mathcal{F}$ and $F\otimes G\subseteq F\otimes G'$. By upwards closure, $F\otimes G'\in\mathcal{F}$.
+\item Symmetry is immediate from $(F\otimes G)^\transp = G\otimes F$. Transitivity is immediate from $(F\otimes G);(G\otimes H) = F\otimes H$ by \ref{compositionProductFilters}.
+\end{itemize}
+
+To show $(\Theta,\Xi)$ is a Galois connection, we need to prove that $\Theta(\mathcal{U}) \subseteq \mathcal{F}$ \textup{if and only if} $\mathcal{U} \subseteq \Xi(\mathcal{F})$.
+
+First assume $\Theta(\mathcal{U}) \subseteq \mathcal{F}$ and take $F,G\in\powerfilters(X)$ such that $F\mathrel{\mathcal{U}} G$. Then $F\otimes G\in \Theta(\mathcal{U})\subseteq\mathcal{F}$ which means that $F\mathrel{\Xi(\mathcal{F})}G$.
+
+Now assume $\mathcal{U} \subseteq \Xi(\mathcal{F})$ and take $H\in \Theta(\mathcal{U})$. Then $p_1^{\imf\imf}[H]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H]$, which implies $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{F})}p_2^{\imf\imf}[H]$. Thus $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{F}$. By upwards closure and \ref{filterFactorisationInequality} we have $H\in \mathcal{F}$.
+
+(1) It is clear that $\im(\Theta)$ consists of factorisable uniform filter sets. For the other inclusion, let $\mathcal{F}$ be a factorisable uniform filter set. It is enough to show that $\mathcal{F} \subseteq \Theta(\Xi(\mathcal{F}))$. Take $H\in \mathcal{F}$. By factorisability $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{F}$. Then $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{F})} p_2^{\imf\imf}[H]$ and thus $H\in \Theta(\Xi(\mathcal{F}))$.
+
+(2) It is enough to prove that for all uniformities $\mathcal{U}$ we have $\mathcal{U} \subseteq \Xi(\Theta(\mathcal{U}))$. Take $F,G\in\powerfilters(X)$. We have
+\[ F\mathrel{\mathcal{U}}G \implies F\otimes G\in\Theta(\mathcal{U}) \implies F\mathrel{\Xi(\Theta(\mathcal{U}))} G. \]
+\end{proof}
+
+\subsection{Uniform convergence}
+
+\subsection{Uniform Cauchy structure}
+
+\subsection{Induced structures}
+\subsubsection{Induced convergence}
+\begin{definition}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. Then \udef{uniform convergence} $\Gamma(\mathcal{U})$ on $X$ is defined by
+\[ F \overset{\Gamma(\mathcal{U})}{\longrightarrow} x \qquad\defequiv\qquad F\mathrel{\mathcal{U}}\pfilter{x}. \]
+We also denote the uniform convergence by $F\overset{u}{\longrightarrow} x$.
+\end{definition}
+\begin{lemma}
+A uniform convergence is a convergence. It is also reciprocal.
+\end{lemma}
+\begin{proof}
+TODO convergence.
+
+We prove reciprocity of $\Gamma(\mathcal{U})$ using point (5). of \ref{R1Conditions}. Assume $F \overset{\Gamma(\mathcal{U})}{\longrightarrow} x$ and $F \overset{\Gamma(\mathcal{U})}{\longrightarrow} y$. Then $F\mathrel{\mathcal{U}}\pfilter{x}$ and $F\mathrel{\mathcal{U}}\pfilter{y}$, so $\pfilter{x}\mathrel{\mathcal{U}}\pfilter{y}$ by symmetry and transitivity. This implies
+\[ G \in {\lim}_{\Gamma(\mathcal{U})}^{-1}(x) \iff G\mathrel{\mathcal{U}}\pfilter{x}\iff G\mathrel{\mathcal{U}}\pfilter{y} \iff G\in {\lim}_{\Gamma(\mathcal{U})}^{-1}(y), \]
+and so $\lim_{\Gamma(\mathcal{U})}^{-1}(x) = \lim_{\Gamma(\mathcal{U})}^{-1}(y)$.
+\end{proof}
 
 \begin{proposition} \label{topologicalInducedUniformConvergence}
 Let $\sSet{X,\mathcal{U}}$ be a topological uniform space. Then the associated convergence $\Gamma(\mathcal{U})$ is topological and
@@ -2559,56 +2655,6 @@ F\mathrel{\mathcal{U}}\pfilter{x} \implies& \entourage_\mathcal{U}\subseteq F\ot
 Finally to show that $\Gamma(\mathcal{U})$ is topological, we use \ref{pretopologicalSpaceTopological}: Take $Vx\in \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}$. Then because $\entourage_\mathcal{U} = \entourage_\mathcal{U};\entourage_\mathcal{U}$, we can find $U,U'\in \entourage_\mathcal{U}$ such that $V = U;U'$. Consider $U'x$. For all $y\in U'x$, we have that $zUy \implies zU;U'x \iff zVx$, so $Uy \subseteq Vx$. Thus $Vx \in \upset \setbuilder{V y}{V\in \entourage_\mathcal{U}}$.
 \end{proof}
 
-\begin{proposition} \label{uniformContinuityEntourages}
-Let $\sSet{X,\mathcal{U}}$, $\sSet{Y,\mathcal{V}}$ be uniform spaces and $f: X\to Y$ a function.
-\begin{enumerate}
-\item If $f$ is uniformly continuous, then $\entourage_\mathcal{V} \subseteq \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}]$;
-\item If $\mathcal{V}$ is topological, then opposite implication also holds.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) By uniform continuity we have
-\[ \entourage_\mathcal{V} \subseteq \bigcap\setbuilder{\upset f^{\imf\imf}[F]\otimes \upset f^{\imf\imf}[G]}{F\mathrel{\mathcal{U}} G} \]
-Now take $A\in \bigcap\setbuilder{\upset f^{\imf\imf}[F]\otimes \upset f^{\imf\imf}[G]}{F\mathrel{\mathcal{U}} G}$. This means that
-\[ \forall F, G \,\text{Cauchy filters}: \exists B_F\in F, C_G\in G: \; f^\imf[B_F]\otimes f^\imf[C_G] \subseteq A. \]
-Then $\bigcup_{F \,\text{Cauchy}}B_F$ and $\bigcup_{F \,\text{Cauchy}}C_F$ are elements of all Cauchy filters and
-\[ A \supseteq f^{\imf}\left[\bigcup_{F \,\text{Cauchy}}B_F\right] \otimes f^{\imf}\left[\bigcup_{F \,\text{Cauchy}}C_F\right] = (f\times f)^{\imf}\left[\left(\bigcup_{F \,\text{Cauchy}}B_F\right)\otimes \left(\bigcup_{F \,\text{Cauchy}}C_F\right)\right]. \]
-This means that $A\in \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}]$.
-
-(2) Assume $F\mathrel{\mathcal{U}} G$, so $\entourage_\mathcal{U}\subseteq F\otimes G$. By assumption $\entourage_\mathcal{V}\subseteq \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}]\subseteq \upset f^{\imf\imf}[F]\otimes \upset f^{\imf\imf}[G]$. Because $\mathcal{V}$ is topological, we have $\upset f^{\imf\imf}[F]\mathrel{\mathcal{U}} \upset f^{\imf\imf}[G]$, making $f$ uniformly continuous.
-\end{proof}
-
-\subsubsection{Uniformities from convergences on product spaces}
-\begin{lemma} \label{uniformityFromConvergenceProductSpace}
-Let $X$ be a set and $\psi$ a convergence on $X^2$ such that
-\begin{itemize}
-\item if $H\overset{\psi}{\longrightarrow} (x,x)$, then $H^\transp \overset{\psi}{\longrightarrow} (x,x)$;
-\item if $H_1\overset{\psi}{\longrightarrow} (x,x)$ and $H_2\overset{\psi}{\longrightarrow} (x,x)$, then $H_1;H_2 \overset{\psi}{\longrightarrow} (x, x)$.
-\end{itemize}
-Then the set
-\[ \mathcal{F} \defeq \setbuilder{H\overset{\psi}{\longrightarrow}(x,x)}{x\in X, H\in\powerfilters(X^2)} \]
-is a uniform filter set.
-\end{lemma}
-\begin{proof}
-By \ref{productPrincipalUltrafilter} we have $\pfilter{x}\otimes\pfilter{x} = \pfilter{(x,x)} \to (x,x)$, so $\pfilter{x}\otimes\pfilter{x}\in\mathcal{F}$.
-
-The set $\mathcal{F}$ is upwards closed by monotonicity of the convergence.
-
-Clearly $H\in \mathcal{F}$ implies $H^\transp \in\mathcal{F}$.
-
-Finally, take $H_1,H_2\in \mathcal{F}$. Then $H_1\overset{\psi}{\longrightarrow}(x,x)$ and $H_2\overset{\psi}{\longrightarrow}(y,y)$ for some $x,y\in X$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\mathcal{F}$ by upwards closure. If not, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$, so $p_2^{\imf\imf}[H_1]\vee p_1^{\imf\imf}[H_2]$ is proper by \ref{joinProperFilter}. We construct the filter
-\[ H_1 \vee \big(p_1^{\imf\imf}[H_1]\otimes (p_2^{\imf\imf}[H_1]\vee p_1^{\imf\imf}[H_2])\big). \]
-This filter is proper and converges to both $(x,x)$ and $(y,y)$. Now
-\[ H_1; H_2 = \Big(H_1 \vee \big(p_1^{\imf\imf}[H_1]\otimes (p_2^{\imf\imf}[H_1]\vee p_1^{\imf\imf}[H_2])\big)\Big);H_2 \overset{\psi}{\longrightarrow} (y,y), \]
-so $H_1; H_2\in\mathcal{F}$.
-\end{proof}
-
-\subsection{Uniform continuity}
-\begin{definition}
-Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if
-\[ H\in \mathcal{U} \quad\implies\quad f^{\imf\imf}[H]\in \mathcal{V}. \]
-\end{definition}
-
 \begin{proposition}
 Let $X,Y$ be sets, $\sSet{X,\xi}, \sSet{Y,\zeta}$ convergence spaces and $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces. Let $f: X\to Y$ be a function.
 \begin{enumerate}
@@ -2631,51 +2677,6 @@ Let $X,Y$ be sets and $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform space
 By the proposition we have that $f: \sSet{X,\Phi(\Gamma(\mathcal{U}))} \to \sSet{Y,\Phi(\Gamma(\mathcal{V}))}$ is uniformly continuous. Because $\mathcal{U}$ is complete, we have $\Phi(\Gamma(\mathcal{U})) = \mathcal{U}$ by \ref{uniformConvergenceGaloisConnection}. So $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\Phi(\Gamma(\mathcal{V}))}$ is uniformly continuous and the result follows because $\Phi(\Gamma(\mathcal{V})) \subseteq \mathcal{V}$ by \ref{uniformConvergenceGaloisConnection}.
 \end{proof}
 
-\begin{lemma}
-Uniformly continuous functions map Cauchy filters to Cauchy filters.
-\end{lemma}
-\begin{proof}
-Let $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ be uniformly continuous and $F$ a Cauchy filter. Because $F\mathrel{\mathcal{U}}F$, we have $f^{\imf\imf}[F]\mathrel{\mathcal{V}}f^{\imf\imf}[F]$. Thus $\upset f^{\imf\imf}[F]$ is a Cauchy filter.
-\end{proof}
-
-
-
-
-\section{Uniform relations}
-\begin{definition}
-Let $X$ be a sets. A \udef{uniformity relation} on $X$ is a relation $R_\mathcal{U}$ on $\powerfilters(X)^2$ such that
-\begin{itemize}
-\item $\pfilter{x}\mathrel{R_\mathcal{U}}\pfilter{x}$ for all $x\in X$;
-\item $F\,R_\mathcal{U}$ is upwards closed for all $F\in \powerfilters(X)$;
-\item $R_\mathcal{U}$ is symmetric and transitive when restricted to $\powerfilters(X)\setminus\{\powerset(X)\}$.
-\end{itemize}
-We call the pair $\sSet{X,R_\mathcal{U}}$ a \udef{uniform relation space}.
-\end{definition}
-
-\begin{lemma} \label{uniformityMeshingFilters}
-Let $\sSet{X,R_\mathcal{U}}$ be a uniform relation space and $F,G\in\powerfilters(X)$. If $F\amesh G$, then $F\mathrel{\mathcal{U}} G$.
-\end{lemma}
-\begin{proof}
-If $F\amesh G$, then $F\vee G \neq \powerset(X)$ by \ref{joinProperFilter}. By upwards closure and symmetry, $F\mathrel{R_\mathcal{U}} (F\vee G)$ and $G\mathrel{R_\mathcal{U}} (F\vee G)$. By transitivity and symmetry, $F\mathrel{R_\mathcal{U}} G$.
-\end{proof}
-
-\subsection{Induced structures}
-\subsubsection{Induced convergence}
-\begin{definition}
-Let $\sSet{X,\mathcal{U}}$ be a uniform space. Then \udef{uniform convergence} $\Gamma(\mathcal{U})$ on $X$ is defined by
-\[ F \overset{\Gamma(\mathcal{U})}{\longrightarrow} x \qquad\defequiv\qquad F\mathrel{\mathcal{U}}\pfilter{x}. \]
-We also denote the uniform convergence by $F\overset{u}{\longrightarrow} x$.
-\end{definition}
-\begin{lemma}
-A uniform convergence is a convergence. It is also reciprocal.
-\end{lemma}
-\begin{proof}
-TODO convergence.
-
-We prove reciprocity of $\Gamma(\mathcal{U})$ using point (5). of \ref{R1Conditions}. Assume $F \overset{\Gamma(\mathcal{U})}{\longrightarrow} x$ and $F \overset{\Gamma(\mathcal{U})}{\longrightarrow} y$. Then $F\mathrel{\mathcal{U}}\pfilter{x}$ and $F\mathrel{\mathcal{U}}\pfilter{y}$, so $\pfilter{x}\mathrel{\mathcal{U}}\pfilter{y}$ by symmetry and transitivity. This implies
-\[ G \in {\lim}_{\Gamma(\mathcal{U})}^{-1}(x) \iff G\mathrel{\mathcal{U}}\pfilter{x}\iff G\mathrel{\mathcal{U}}\pfilter{y} \iff G\in {\lim}_{\Gamma(\mathcal{U})}^{-1}(y), \]
-and so $\lim_{\Gamma(\mathcal{U})}^{-1}(x) = \lim_{\Gamma(\mathcal{U})}^{-1}(y)$.
-\end{proof}
 
 \subsubsection{Induced uniform space}
 \begin{definition}
@@ -2709,6 +2710,13 @@ Let $\sSet{X, \mathcal{U}}$ be a uniform space, $F$ a Cauchy filter and $F\mathr
 \end{lemma}
 \begin{proof}
 The relationships $F\mathrel{\mathcal{U}} F$ and $F\mathrel{\mathcal{U}} G$ imply $G\mathrel{\mathcal{U}} G$ by transitivity and symmetry.
+\end{proof}
+
+\begin{lemma}
+Uniformly continuous functions map Cauchy filters to Cauchy filters.
+\end{lemma}
+\begin{proof}
+Let $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ be uniformly continuous and $F$ a Cauchy filter. Because $F\mathrel{\mathcal{U}}F$, we have $f^{\imf\imf}[F]\mathrel{\mathcal{V}}f^{\imf\imf}[F]$. Thus $\upset f^{\imf\imf}[F]$ is a Cauchy filter.
 \end{proof}
 
 \begin{lemma} \label{uniformlyConvergentImpliesCauchy}
@@ -2778,54 +2786,6 @@ For the other inclusion, $\supseteq$, take a complete uniformity $\mathcal{U}$. 
 So $F\overset{\xi}{\longrightarrow} x$.
 \end{proof}
 
-\subsection{Uniform relations}
-\begin{proposition}
-Let $X$ be a set; $\mathcal{U}$ a uniform structure on $X$ and $F$ a uniform filter set on $X$. We define a uniform filter set $\Theta(\mathcal{U})$ and a uniform structure $\Xi(\mathcal{F})$ by
-\begin{align*}
-\forall H\in \powerfilters(X^2):\qquad H\in\Theta(\mathcal{U}) \quad&\defequiv\quad p_1^{\imf\imf}[H]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H]; \\
-\forall F,G\in\powerfilters(X)\setminus\{\powerset(X)\}:\qquad F\mathrel{\Xi(\mathcal{F})}G \quad&\defequiv\quad F\otimes G\in \mathcal{F}. 
-\end{align*}
-Then the functions
-\begin{align*}
-&\Theta: \{\text{uniformities on $X$}\} \to \{\text{uniform filter sets on $X$}\} \\
-&\Xi: \{\text{uniform filter sets on $X$}\} \to \{\text{uniformities on $X$}\}
-\end{align*}
-form a Galois connection $(\Theta, \Xi)$. Additionally,
-\begin{enumerate}
-\item $\im(\Theta)$ is the set of factorisable uniform filter sets;
-\item $\im(\Xi)$ is the set of uniformities on $X$, i.e.\ $\Xi$ is surjective.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-The prove $\Theta(\mathcal{U})$ is a uniform filter set, we verify the conditions:
-\begin{itemize}
-\item From $\pfilter{x}\mathrel{\mathcal{U}}\pfilter{x}$, we get $\pfilter{x}\otimes \pfilter{x}\in\Theta(\mathcal{U})$.
-\item If $H\in\Theta(\mathcal{U})$ and $H\subseteq H'$, then $p_1^{\imf\imf}[H]\subseteq p_1^{\imf\imf}[H']$ and $p_2^{\imf\imf}[H]\subseteq p_2^{\imf\imf}[H']$. Thus by upwards closure of $\mathcal{U}$, we have $p_1^{\imf\imf}[H']\mathrel{\mathcal{U}} p_1^{\imf\imf}[H']$ and so $H'\in\Theta(\mathcal{U})$.
-\item Take $H\in \Theta(\mathcal{U})$. Then
-\[ p_1^{\imf\imf}[H]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H] \iff p_2^{\imf\imf}[H^\transp]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H^\transp] \iff p_1^{\imf\imf}[H^\transp]\mathrel{\mathcal{U}} p_2^{\imf\imf}[H^\transp] \iff H^\transp\in \Theta(\mathcal{U}). \]
-\item Take $H_1, H_2\in \Theta(\mathcal{U})$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\Theta(\mathcal{U})$ by upwards closure. If $H_1;H_2 \neq \powerset(X^2)$, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$ by \ref{meshingFilterComposition} and thus $p_2^{\imf\imf}[H_1]\mathrel{\mathcal{U}} p_1^{\imf\imf}[H_2]$ by \ref{uniformityMeshingFilters}. So we have, by definition of $\Theta(\mathcal{U})$
-\[ p_1^{\imf\imf}[H_1]\;\mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_1] \;\mathrel{\mathcal{U}} \;p_1^{\imf\imf}[H_2]\; \mathrel{\mathcal{U}} \;p_2^{\imf\imf}[H_2]. \]
-By \ref{componentInclusionsFilterComposition} and upward closure, we get $p_1^{\imf\imf}[H_1;H_2]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H_1;H_2]$, which means $H_1;H_2\in \Theta(\mathcal{U})$.
-\end{itemize}
-
-The prove $\Xi(\mathcal{F})$ is a uniformity, we verify the conditions:
-\begin{itemize}
-\item From $\pfilter{x}\otimes \pfilter{x}\in\mathcal{F}$, we get $\pfilter{x}\mathrel{\Xi(\mathcal{F})}\pfilter{x}$.
-\item Assume $F\mathrel{\Xi(\mathcal{F})}G$ and $G\subseteq G'$. Then $F\otimes G\in \mathcal{F}$ and $F\otimes G\subseteq F\otimes G'$. By upwards closure, $F\otimes G'\in\mathcal{F}$.
-\item Symmetry is immediate from $(F\otimes G)^\transp = G\otimes F$. Transitivity is immediate from $(F\otimes G);(G\otimes H) = F\otimes H$ by \ref{compositionProductFilters}.
-\end{itemize}
-
-To show $(\Theta,\Xi)$ is a Galois connection, we need to prove that $\Theta(\mathcal{U}) \subseteq \mathcal{F}$ \textup{if and only if} $\mathcal{U} \subseteq \Xi(\mathcal{F})$.
-
-First assume $\Theta(\mathcal{U}) \subseteq \mathcal{F}$ and take $F,G\in\powerfilters(X)$ such that $F\mathrel{\mathcal{U}} G$. Then $F\otimes G\in \Theta(\mathcal{U})\subseteq\mathcal{F}$ which means that $F\mathrel{\Xi(\mathcal{F})}G$.
-
-Now assume $\mathcal{U} \subseteq \Xi(\mathcal{F})$ and take $H\in \Theta(\mathcal{U})$. Then $p_1^{\imf\imf}[H]\mathrel{\mathcal{U}}p_2^{\imf\imf}[H]$, which implies $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{F})}p_2^{\imf\imf}[H]$. Thus $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{F}$. By upwards closure and \ref{filterFactorisationInequality} we have $H\in \mathcal{F}$.
-
-(1) It is clear that $\im(\Theta)$ consists of factorisable uniform filter sets. For the other inclusion, let $\mathcal{F}$ be a factorisable uniform filter set. It is enough to show that $\mathcal{F} \subseteq \Theta(\Xi(\mathcal{F}))$. Take $H\in \mathcal{F}$. By factorisability $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{F}$. Then $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{F})} p_2^{\imf\imf}[H]$ and thus $H\in \Theta(\Xi(\mathcal{F}))$.
-
-(2) It is enough to prove that for all uniformities $\mathcal{U}$ we have $\mathcal{U} \subseteq \Xi(\Theta(\mathcal{U}))$. Take $F,G\in\powerfilters(X)$. We have
-\[ F\mathrel{\mathcal{U}}G \implies F\otimes G\in\Theta(\mathcal{U}) \implies F\mathrel{\Xi(\Theta(\mathcal{U}))} G. \]
-\end{proof}
 
 
 \section{Star refinement}
@@ -3222,7 +3182,7 @@ Let $\sSet{X,d}$ be a metric space and $\sigma$ an order-regular convergence on 
 is a uniformity on $X$.
 \end{proposition}
 \begin{proof}
-We have that $F\mathrel{\mathcal{U}^N}G$ iff $F\otimes G$ converges to a point in $d^\preimf\{0\}$ in the initial convergence $\psi$ of $d$. Now $d^\preimf\{0\} = \setbuilder{(x,x)}{x\in X}$. In order to apply \ref{uniformityFromConvergenceProductSpace}, we just need to verify the two points. 
+We have that $F\mathrel{\mathcal{U}^N}G$ iff $F\otimes G$ converges to a point in $d^\preimf\{0\}$ in the initial convergence $\psi$ of $d$. Now $d^\preimf\{0\} = \setbuilder{(x,x)}{x\in X}$. In order to apply \ref{uniformityFromConvergenceOnSquare} TODO, we just need to verify the two points. 
 \begin{itemize}
 \item Let $H\in \powerfilters{X\times X}$. Then, by symmetry of the metric,
 \[ H\overset{\psi}{\longrightarrow} (x,x) \iff d^{\imf\imf}[H] \to 0 \iff d^{\imf\imf}[H^\transp] \to 0 \iff H^\transp\overset{\psi}{\longrightarrow} (x,x). \]
