@@ -1343,6 +1343,15 @@ Let $\{X_i\}_{i\in I}$ be a set of sets and $\setbuilder{F_i \in \powerfilters(X
 \[ \bigotimes_{i\in I}F_i \defeq \setbuilder{\bigtimes_{i\in I}A_i}{\forall i\in I: A_i \in F_i \;\land\; A_i = X_i, \,\text{except for finitely many $A_i$}}.  \]
 \end{definition}
 
+\begin{lemma}
+The product filter of proper filters is proper.
+\end{lemma}
+\begin{proof}
+Let $\{X_i\}_{i\in I}$ be a set of sets and $\setbuilder{F_i \in \powerfilters(X_i)}{i\in I}$ a set of proper filters. Assume, towards a contradiction, that $\bigotimes_{i\in I}F_i$ is not proper. Take $\bigtimes_{i\in I}A_i\in \bigotimes_{i\in I}F_i$, then $\left(\bigtimes_{i\in I}A_i\right)^c \in \bigotimes_{i\in I}F_i$ and thus we can find $\bigtimes_{i\in I}B_i\in \bigotimes_{i\in I}F_i$ such that $\bigtimes_{i\in I}B_i \subseteq \left(\bigtimes_{i\in I}A_i\right)^c$. We have
+\[ \emptyset = \left(\bigtimes_{i\in I}A_i\right) \cap \left(\bigtimes_{i\in I}B_i\right) = \bigtimes_{i\in I}(A_i\cap B_i). \]
+Now the right-hand side is only empty if there exists $i\in I$ such that $A_i\cap B_i = \emptyset$. In this case $F_i$ is not a proper filter.
+\end{proof}
+
 \begin{lemma} \label{projectionsOfProductFilter}
 Let $X,Y$ be sets, $F\in \powerfilters(X)$ and $G\in \powerfilters(Y)$. Then
 \begin{enumerate}
@@ -1355,10 +1364,24 @@ The elements of $F$ form a basis of $p_1^{\imf\imf}[F\otimes G]$. Similarly the 
 \end{proof}
 
 \begin{lemma} \label{filterFactorisationInequality}
-Let $X,Y$ be sets and $F \in \powerfilters(X\times Y)$. Then $p_1^{\imf\imf}(F)\otimes p_2^{\imf\imf}(F) \subseteq F$.
+Let $X,Y$ be sets and $H \in \powerfilters(X\times Y)$. Then $p_1^{\imf\imf}(H)\otimes p_2^{\imf\imf}(H) \subseteq H$.
 \end{lemma}
 \begin{proof}
-Take some $A\in p_1^{\imf\imf}(F)\otimes p_2^{\imf\imf}(F)$. Then there exist $B,C\in F$ such that $A = p_1^\imf(B)\times p_2^\imf(C)$, which means that $B\cap C\subseteq A$. Now $B\cap C \in F$, so $A\in F$.
+Take some $A\in p_1^{\imf\imf}(H)\otimes p_2^{\imf\imf}(H)$. Then there exist $B,C\in H$ such that $A = p_1^\imf(B)\times p_2^\imf(C)$, which means that $B\cap C\subseteq A$. Now $B\cap C \in H$, so $A\in H$.
+\end{proof}
+
+\begin{lemma} \label{projectionsOfUltrafilterAreUltra}
+Let $X,Y$ be sets and $H \in \powerfilters(X\times Y)$. If $H$ is an ultrafilter, then $p_1^{\imf\imf}[H]$ and $p_2^{\imf\imf}[H]$ are also ultrafilters.
+\end{lemma}
+\begin{proof}
+Assume, towards a contradiction, that $p_1^{\imf\imf}[H]$ is not an ultrafilter. In this case we can find a proper filter $F\supsetneq p_1^{\imf\imf}[H]$.
+
+Now we show that $F\otimes p_2^{\imf\imf}[H] \amesh H$.
+Take $A\in F$ and $B, C\in H$. We need to show that $A\times p_2^{\imf}(B) \mesh C$. Because $B\cap C\in H$ and $p_1^{\imf\imf}[H]\subseteq F$, we have $p_1^\imf(B\cap C)\mesh A$. Take $a\in p_1^\imf(B\cap C)\cap A$. There exists a $b$ such that $(a,b)\in B\cap C$. Also $(a,b) \in A\times p_2^\imf(B\cap C)$. Thus $(B\cap C) \mesh \big(A\times p_2^\imf(B\cap C)\big)$. This implies $C \mesh A\times p_2^{\imf}(B)$.
+
+Then we have that $\big(F\otimes p_2^{\imf\imf}[H]\big)\vee H$ is proper. Because $H$ is an ultrafilter, we must have $\big(F\otimes p_2^{\imf\imf}[H]\big)\vee H = H$, which means that $F\otimes p_2^{\imf\imf}[H] \subseteq H$.
+
+Finally we apply $p_1^{\imf\imf}$ to both sides of the inclusion to get $F \subseteq p_1^{\imf\imf}[H]$. This is a contradiction.
 \end{proof}
 
 \begin{lemma} \label{productPrincipalUltrafilter}
@@ -2381,7 +2404,7 @@ F\otimes H & (G\amesh G') \\
 TODO
 \end{proof}
 
-Note that $\powerset(X)\cancel\amesh\powerset(X)$. So $\big(F\otimes \powerset(X)\big);\big(\powerset(X)\otimes G\big) = \powerset(X^2)$, independent of $F$ and $G$.
+Note that for all proper filters $G$ we have $G\amesh G$. However $\powerset(X)\cancel\amesh\powerset(X)$, so $\big(F\otimes \powerset(X)\big);\big(\powerset(X)\otimes G\big) = \powerset(X^2)$, independent of $F$ and $G$.
 
 \begin{lemma} \label{componentInclusionsFilterComposition}
 Let $X$ be a set and $F,G\in\powerfilters(X^2)$. Then
@@ -2393,21 +2416,32 @@ Let $X$ be a set and $F,G\in\powerfilters(X^2)$. Then
 \begin{proof}
 (1) This follows immediately from $p_1^{\imf}[A;B] = \setbuilder{p_1((x,y))}{(x,y)\in A \land y\in p_1^{\imf}(B)} \subseteq p_1^{\imf}[A]$.
 
-(2) Similar
+(2) Similar.
 \end{proof}
 
-\begin{lemma}
-Let $X$ be a set and $H\in \mathcal{F}$. Then
-\[ p_1^{\imf\imf}(H)\otimes p_2^{\imf\imf}(H) = p_1^{\imf\imf}(H)\otimes p_1^{\imf\imf}(H); H; p_2^{\imf\imf}(H)\otimes p_2^{\imf\imf}(H). \]
+\begin{lemma} \label{filterCompositionFactorisationLemma}
+Let $X$ be a set, $H\in \powerfilters(X^2)\setminus \{\powerset(X^2)\}$ and $F,G\in\powerfilters(X)$. Then
+\[ F\otimes G = F\otimes p_1^{\imf\imf}(H); H; p_2^{\imf\imf}(H)\otimes G. \]
 \end{lemma}
 \begin{proof}
-The inclusion $\supseteq$ follows from \ref{componentInclusionsFilterComposition}.
-
-For the other inclusion, take $A,B,C,D,E\in H$. We need to find $F,G\in H$ such that
-\[ p_1^\imf(F)\times p_2(G) \subseteq p_1^\imf(A)\times p_1^\imf(B); C;p_2^\imf(D)\times p_2^\imf(E). \]
-Take $F= A\cap B\cap C \cap D\cap E = G$ and take $(a,a')\in F$ and $(b', b)\in G$ such that $(a,b)\in p_1^\imf(F)\times p_2(G)$. Then we have $(a,a)\in p_1^\imf(A)\times p_1^\imf(B)$, so $(a,a')\in p_1^\imf(A)\times p_1^\imf(B); C$. Now $(a,a')\in D$ and $(b',b)\in E$, so $(a', b)\in p_2^\imf(D)\times p_2^\imf(E)$. Thus finally we have
-\[ (a,b) \in p_1^\imf(A)\times p_1^\imf(B); C;p_2^\imf(D)\times p_2^\imf(E). \]
+This follows from the fact that for all $A\in F$, $B\in G$ and $C,D,E\in H$,
+\[ A\times B = \big(A \times p_1^{\imf}(C)\big);D;\big(p_2^\imf(E)\times B\big). \]
+Indeed we have
+\begin{align*}
+(a,b)\in \big(A \times p_1^{\imf}(C)\big);D;\big(p_2^\imf(E)\times B\big) &\iff \exists c,d: \begin{cases}
+(a,c)\in A\times p_1^\imf(C),\\ (c,d)\in D,\\ (d,b)\in p_2^\imf(E)\times B
+\end{cases} \\
+&\iff \begin{cases}
+a\in A, b\in B, \\
+\exists c,d: \; (c,d)\in D, c\in p_1^\imf(C), d\in p_2^\imf(E)
+\end{cases} \\
+&\iff a\in A, b\in B \\
+&\iff (a,b)\in A\times B.
+\end{align*}
+The statement $\exists c,d: \; (c,d)\in D, c\in p_1^\imf(C), d\in p_2^\imf(E)$ is true because we may take $(c,d)\in C\cap D\cap E$, which is not empty because $H$ is proper.
 \end{proof}
+Set $I\defeq F\otimes p_1^{\imf\imf}(H); H; p_2^{\imf\imf}(H)\otimes G$. The inclusion $\subseteq$ can also be calculated using \ref{componentInclusionsFilterComposition} and \ref{filterFactorisationInequality}:
+\[ F\otimes G = p_1^{\imf\imf}\big[F\otimes p_1^{\imf\imf}(H)\big] \otimes p_2^{\imf\imf}\big[p_2^{\imf\imf}(H)\otimes G\big] \subseteq p_1^{\imf\imf}[I]\otimes p_2^{\imf\imf}[I] \subseteq I. \]
 
 \subsection{Uniformities}
 \begin{definition}
@@ -2527,7 +2561,7 @@ Let $X$ be a sets. A \udef{uniform relation} on $X$ is a relation $R_\mathcal{U}
 We call the structured set $\sSet{X,R_\mathcal{U}}$ a \udef{uniform relation space}.
 \end{definition}
 
-\begin{lemma} \label{uniformityRelationRelatedElementLemma}
+\begin{lemma} \label{uniformRelationRelatedElementLemma}
 Let $R_\mathcal{U}$ be a uniform relation on $X$ and $F,G\in\powerfilters(X)$. Assume $F\mathrel{R_\mathcal{U}}\setminus\{\powerset(X)\} \neq \emptyset \neq G\mathrel{R_\mathcal{U}}\setminus\{\powerset(X)\}$. Then
 \begin{enumerate}
 \item $F\mathrel{R_\mathcal{U}} F$;
@@ -2540,7 +2574,7 @@ Let $R_\mathcal{U}$ be a uniform relation on $X$ and $F,G\in\powerfilters(X)$. A
 (2) If $F\amesh G$, then $F\vee G \neq \powerset(X)$ by \ref{joinProperFilter}. From (1) we have $F\mathrel{R_\mathcal{U}} F$ and $G\mathrel{R_\mathcal{U}} G$. By upwards closure, $F\mathrel{R_\mathcal{U}} (F\vee G)$ and $G\mathrel{R_\mathcal{U}} (F\vee G)$. By transitivity and symmetry, $F\mathrel{R_\mathcal{U}} G$.
 \end{proof}
 
-\begin{lemma} \label{uniformityRelationUpwardsClosure}
+\begin{lemma} \label{uniformRelationUpwardsClosure}
 Let $R_\mathcal{U}$ be a uniform relation on $X$ and $F,G, F', G'\in\powerfilters(X)$. If $F \subseteq F'$, $G\subseteq G'$ and $F\mathrel{R_\mathcal{U}} G$, then $F'\mathrel{R_\mathcal{U}} G'$.
 \end{lemma}
 \begin{proof}
@@ -2549,7 +2583,7 @@ By upwards closure, we have $F\mathrel{R_\mathcal{U}} G'$ and  (using symmetry) 
 so $F'\mathrel{R_\mathcal{U}} G'$ by transitivity.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{uniformRelationGaloisConnection}
 Let $X$ be a set; $\mathcal{U}$ a uniformity on $X$ and $R$ a uniform relation on $X$. We define a uniformity $\Theta(R)$ and a uniform relation $\Xi(\mathcal{U})$ by
 \begin{align*}
 \forall H\in \powerfilters(X^2):\qquad H\in\Theta(R) \quad&\defequiv\quad p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]; \\
@@ -2570,10 +2604,10 @@ form a Galois connection $(\Theta, \Xi)$. Additionally,
 The prove $\Theta(R)$ is a uniformity, we verify the conditions:
 \begin{itemize}
 \item From $\pfilter{x}\mathrel{R}\pfilter{x}$, we get $\pfilter{x}\otimes \pfilter{x}\in\Theta(R)$.
-\item If $H\in\Theta(R)$ and $H\subseteq H'$, then $p_1^{\imf\imf}[H]\mathrel{R} p_2^{\imf\imf}[H]$, $p_1^{\imf\imf}[H]\subseteq p_1^{\imf\imf}[H']$ and $p_2^{\imf\imf}[H]\subseteq p_2^{\imf\imf}[H']$. Thus, by \ref{uniformityRelationUpwardsClosure}, we have $p_1^{\imf\imf}[H']\mathrel{R} p_2^{\imf\imf}[H']$ and so $H'\in\Theta(R)$.
+\item If $H\in\Theta(R)$ and $H\subseteq H'$, then $p_1^{\imf\imf}[H]\mathrel{R} p_2^{\imf\imf}[H]$, $p_1^{\imf\imf}[H]\subseteq p_1^{\imf\imf}[H']$ and $p_2^{\imf\imf}[H]\subseteq p_2^{\imf\imf}[H']$. Thus, by \ref{uniformRelationUpwardsClosure}, we have $p_1^{\imf\imf}[H']\mathrel{R} p_2^{\imf\imf}[H']$ and so $H'\in\Theta(R)$.
 \item Take $H\in \Theta(R)$. Then
 \[ p_1^{\imf\imf}[H]\mathrel{R} p_2^{\imf\imf}[H] \iff p_2^{\imf\imf}[H^\transp]\mathrel{R} p_1^{\imf\imf}[H^\transp] \iff p_1^{\imf\imf}[H^\transp]\mathrel{R} p_2^{\imf\imf}[H^\transp] \iff H^\transp\in \Theta(R). \]
-\item Take $H_1, H_2\in \Theta(R)$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\Theta(R)$ by upwards closure. If $H_1;H_2 \neq \powerset(X^2)$, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$ by \ref{meshingFilterComposition} and thus $p_2^{\imf\imf}[H_1]\mathrel{R} p_1^{\imf\imf}[H_2]$ by \ref{uniformityRelationRelatedElementLemma} (we have that $p_1^{\imf\imf}[H_1]\mathrel{R}p_2^{\imf\imf}[H_1]$, so $p_1^{\imf\imf}[H_1]\mathrel{R}\neq \emptyset$. Similarly $p_1^{\imf\imf}[H_2]\mathrel{R}p_2^{\imf\imf}[H_2]$ and $p_1^{\imf\imf}[H_2]\mathrel{R}\neq \emptyset$). So we have
+\item Take $H_1, H_2\in \Theta(R)$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\Theta(R)$ by upwards closure. If $H_1;H_2 \neq \powerset(X^2)$, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$ by \ref{meshingFilterComposition} and thus $p_2^{\imf\imf}[H_1]\mathrel{R} p_1^{\imf\imf}[H_2]$ by \ref{uniformRelationRelatedElementLemma} (we have that $p_1^{\imf\imf}[H_1]\mathrel{R}p_2^{\imf\imf}[H_1]$, so $p_1^{\imf\imf}[H_1]\mathrel{R}\neq \emptyset$. Similarly $p_1^{\imf\imf}[H_2]\mathrel{R}p_2^{\imf\imf}[H_2]$ and $p_1^{\imf\imf}[H_2]\mathrel{R}\neq \emptyset$). So we have
 \[ p_1^{\imf\imf}[H_1]\;\mathrel{R} \;p_2^{\imf\imf}[H_1] \;\mathrel{R} \;p_1^{\imf\imf}[H_2]\; \mathrel{R} \;p_2^{\imf\imf}[H_2]. \]
 By \ref{componentInclusionsFilterComposition} and upward closure, we get $p_1^{\imf\imf}[H_1;H_2]\mathrel{R}p_2^{\imf\imf}[H_1;H_2]$, which means $H_1;H_2\in \Theta(R)$.
 \end{itemize}
@@ -2608,7 +2642,7 @@ We also denote the uniform convergence by $F\overset{u}{\longrightarrow} x$.
 If $\mathcal{U}$ is a uniformity, we write $\Gamma(\mathcal{U})$ to mean $\Gamma(\Xi(\mathcal{U}))$. We have
 \[ F \overset{\Gamma(\mathcal{U})}{\longrightarrow} x \qquad\iff\qquad F\otimes \pfilter{x}\in\mathcal{U}. \]
 
-\begin{lemma}
+\begin{lemma} \label{associatedUniformConvergence}
 A uniform convergence is a convergence. It is also reciprocal ($R_1$).
 \end{lemma}
 \begin{proof}
@@ -2721,7 +2755,7 @@ for $F,G\in\powerfilters(X)$.
 Then $\Phi(\xi)$ is the \udef{uniform relation associated to} $\xi$.
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{uniformRelationAssociatedToR1Convergence}
 The uniform relation associated to a reciprocal convergence is a uniform relation.
 \end{lemma}
 \begin{proof}
@@ -2738,84 +2772,155 @@ Thus $G\in \lim^{-1}_\xi(x) \cap\lim^{-1}_\xi(y)$, so $\lim^{-1}_\xi(x) \mesh\li
 \begin{proposition} \label{uniformConvergenceGaloisConnection}
 Let $X$ be a set. The functions
 \begin{align*}
-&\Phi: \{\text{$R_1$ convergences on $X$}\} \to \{\text{uniformities on $X$}\}: \xi \mapsto \text{uniformity associated with $\xi$} \\
-&\Gamma: \{\text{uniformities on $X$}\} \to \{\text{convergences on $X$}\}: \mathcal{U} \mapsto \text{$R_1$ convergence associated with $\mathcal{U}$}
+&\Phi: \{\text{$R_1$ convergences on $X$}\} \to \{\text{uniform relations on $X$}\} \\
+&\Gamma: \{\text{uniform relations on $X$}\} \to \{\text{$R_1$ convergences on $X$}\}
 \end{align*}
 form a Galois connection $(\Phi, \Gamma)$. Additionally,
 \begin{enumerate}
-\item $\im(\Phi)$ is the set of complete uniformities on $X$;
+\item $\im(\Phi)$ is the set of complete uniform relations on $X$;
 \item $\im(\Gamma)$ is the set of all reciprocal convergences on $X$; i.e\ $\Gamma$ is surjective.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-To prove the Galois connection, let $\mathcal{U}$ be a uniformity on $X$ and $\xi$ a convergence on $X$. Then we need to prove $\Phi(\xi) \subseteq \mathcal{U}$ \textup{if and only if} $\xi \subseteq \Gamma(\mathcal{U})$.
+The functions $\Phi$ and $\Gamma$ are well-defined by \ref{associatedUniformConvergence} and \ref{uniformRelationAssociatedToR1Convergence}.
 
-First assume $\Phi(\xi) \subseteq \mathcal{U}$. Take $F\overset{\xi}{\longrightarrow} x$. Because also $\pfilter{x}\overset{\xi}{\longrightarrow} x$, we have $F\mathrel{\Phi(\xi)}\pfilter{x}$. By assumption $F\mathrel{\mathcal{U}}\pfilter{x}$ and by definition $F\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$.
+To prove the Galois connection, let $R$ be a uniform relation on $X$ and $\xi$ a convergence on $X$. Then we need to prove $\Phi(\xi) \subseteq R$ \textup{if and only if} $\xi \subseteq \Gamma(R)$.
 
-Now assume $\xi \subseteq \Gamma(\mathcal{U})$. Take $F,G\in \powerfilters(X)$ such that $F\mathrel{\Phi(\xi)}G$. Then $\exists x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By assumption $F\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$ and $G\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$, so by definition $F\mathrel{\mathcal{U}}\pfilter{x}$ and $G\mathrel{\mathcal{U}}\pfilter{x}$. By symmetry and transitivity $F\mathrel{\mathcal{U}}G$.
+First assume $\Phi(\xi) \subseteq R$. Take $F\overset{\xi}{\longrightarrow} x$. Because also $\pfilter{x}\overset{\xi}{\longrightarrow} x$, we have $F\mathrel{\Phi(\xi)}\pfilter{x}$. By assumption $F\mathrel{R}\pfilter{x}$ and by definition $F\overset{\Gamma(R)}{\longrightarrow} x$.
 
-(1) For the inclusion $\subseteq$: assume $F\mathrel{\Phi(\xi)} F$. Then $F\to x$, so $F\mathrel{\Phi(\xi)} \pfilter{x}$.
+Now assume $\xi \subseteq \Gamma(R)$. Take $F,G\in \powerfilters(X)$ such that $F\mathrel{\Phi(\xi)}G$. Then $\exists x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By assumption $F\overset{\Gamma(R)}{\longrightarrow} x$ and $G\overset{\Gamma(R)}{\longrightarrow} x$, so by definition $F\mathrel{R}\pfilter{x}$ and $G\mathrel{R}\pfilter{x}$. By symmetry and transitivity $F\mathrel{R}G$.
 
-For the other inclusion, $\supseteq$, take a complete uniformity $\mathcal{U}$. It is enough to show that $\mathcal{U} \subseteq \Phi(\Gamma(\mathcal{U}))$. Take $F,G\in \powerfilters(X)$ such that $F\mathrel{\mathcal{U}} G$. By completeness, $F\mathrel{\mathcal{U}} \pfilter{x}$ for some $x\in X$. By symmetry and transitivity, $G\mathrel{\mathcal{U}} \pfilter{x}$ as well. Thus $F\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$ and $G\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$, so $F\mathrel{\Phi(\Gamma(\mathcal{U}))} G$.
+\begin{enumerate}
+\item For the inclusion $\subseteq$: assume $F\mathrel{\Phi(\xi)} F$. Then $F\to x$ for some $x\in X$, so $F\mathrel{\Phi(\xi)} \pfilter{x}$. Thus $F$ converges uniformly to some $x$.
 
-(2) It is enough to prove $\Gamma(\Phi(\xi)) \subseteq \xi$ for any reciprocal convergence $\xi$. Take $F\overset{\Gamma(\Phi(\xi))}{\longrightarrow} x$. Then $F\mathrel{\Phi(\xi)} \pfilter{x}$ and so $\exists y\in X$ such that $F\overset{\xi}{\longrightarrow} y$ and $\pfilter{x}\overset{\xi}{\longrightarrow} y$. By reciprocity (and because $\pfilter{x}\subseteq \lim_{\xi}^{-1}(x) \cap \lim_{\xi}^{-1}(y)$), we have
+For the other inclusion, $\supseteq$, take a complete uniform relation $R$. It is enough to show that $R \subseteq \Phi(\Gamma(R))$. Take $F,G\in \powerfilters(X)$ such that $F\mathrel{R} G$. By completeness, $F\mathrel{R} \pfilter{x}$ for some $x\in X$. By symmetry and transitivity, $G\mathrel{R} \pfilter{x}$ as well. Thus $F\overset{\Gamma(R)}{\longrightarrow} x$ and $G\overset{\Gamma(R)}{\longrightarrow} x$, so $F\mathrel{\Phi(\Gamma(R))} G$.
+
+\item It is enough to prove $\Gamma(\Phi(\xi)) \subseteq \xi$ for any reciprocal convergence $\xi$. Take $F\overset{\Gamma(\Phi(\xi))}{\longrightarrow} x$. Then $F\mathrel{\Phi(\xi)} \pfilter{x}$ and so $\exists y\in X$ such that $F\overset{\xi}{\longrightarrow} y$ and $\pfilter{x}\overset{\xi}{\longrightarrow} y$. By reciprocity (and because $\pfilter{x}\subseteq \lim_{\xi}^{-1}(x) \cap \lim_{\xi}^{-1}(y)$), we have
 \[ F \in {\lim}_{\xi}^{-1}(y) = {\lim}_{\xi}^{-1}(x). \]
 So $F\overset{\xi}{\longrightarrow} x$.
+\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+Let $X$ be a set. The functions
+\begin{align*}
+&\Theta \circ \Phi: \{\text{$R_1$ convergences on $X$}\} \to \{\text{uniformities on $X$}\} \\
+&\Gamma\circ \Xi: \{\text{uniformities on $X$}\} \to \{\text{$R_1$ convergences on $X$}\}
+\end{align*}
+form a Galois connection $(\Theta \circ \Phi, \Gamma\circ \Xi)$. Additionally,
+\begin{enumerate}
+\item $\im(\Theta \circ \Phi)$ is the set of complete, factorisable uniformities on $X$;
+\item $\im(\Gamma\circ \Xi)$ is the set of all reciprocal convergences on $X$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+The Galois connection follows from \ref{uniformRelationGaloisConnection} and \ref{uniformConvergenceGaloisConnection}.
+
+(1) The inclusion $\subseteq$ is immediate, because a uniformity is called complete if and only if its associated uniform relation is complete.
+
+For the inclusion $\supseteq$, take some complete, factorisable uniformity $\mathcal{U}$. Then $\mathcal{U} = \Theta(R)$ for some uniform relation $R$, by \ref{uniformRelationGaloisConnection}. Now it is enough to note that $R$ is also complete, so there exists a reciprocal convergence $\xi$ such that $\mathcal{U} = \Theta(\Phi(\xi))$ by \ref{uniformConvergenceGaloisConnection}.
+
+(2) Immediate because both $\Gamma$ and $\Xi$ are surjective.
+\end{proof}
+
+\subsection{Properties of uniform spaces}
+\begin{definition}
+For any property $\mathbf{P}$ that a convergence space may have, we say a uniform space $\sSet{X,\mathcal{U}}$ has property $\mathbf{P}$ if $\Gamma(\Xi(\mathcal{U}))$ has property $\mathbf{P}$.
+\end{definition}
+
+\subsubsection{Choquet uniform spaces}
+\begin{proposition}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. Then the following are equivalent:
+\begin{enumerate}
+\item $\mathcal{U}$ is Choquet;
+\item $\forall H\in\powerfilters(X^2):$ $H \in \mathcal{U}$ iff each ultrafilter $H'\supseteq H$ is in $\mathcal{U}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsubsection{Compactness}
+\begin{proposition}
+Let $\sSet{X,\mathcal{U}}$ be a compact uniform space. If $H$ is an ultrafilter in $\mathcal{U}$, then $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H] \in\mathcal{U}$.
+\end{proposition}
+\begin{proof}
+Let $H$ be an ultrafilter in $\mathcal{U}$. Then $p_1^{\imf\imf}[H]$ and $p_2^{\imf\imf}[H]$ are ultrafilters by \ref{projectionsOfUltrafilterAreUltra}. By compactness there exist $x,y\in X$ such that $p_1^{\imf\imf}[H] \overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$ and $p_2^{\imf\imf}[H] \overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} y$. Thus $p_1^{\imf\imf}[H]\otimes \pfilter{x}\in\mathcal{U}$ and $p_2^{\imf\imf}[H]\otimes \pfilter{y}\in\mathcal{U}$. 
+
+By \ref{filterCompositionFactorisationLemma} we have
+\[ \pfilter{x}\otimes \pfilter{y} = \pfilter{x}\otimes p_1^{\imf\imf}[H]; H; p_2^{\imf\imf}[H] \otimes \pfilter{y} \in \mathcal{U}. \]
+
+Finally
+\[ p_1^{\imf\imf}[H] \mathrel{\Xi(\mathcal{U})} \pfilter{x}, \quad \pfilter{x} \mathrel{\Xi(\mathcal{U})} \pfilter{y} \quad\text{and}\quad \pfilter{y}\mathrel{\Xi(\mathcal{U})} p_2^{\imf\imf}[H], \]
+so $p_1^{\imf\imf}[H] \mathrel{\Xi(\mathcal{U})} p_2^{\imf\imf}[H]$ by transitivity. Thus $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H] \in \mathcal{U}$.
 \end{proof}
 
 \section{Uniform continuity}
 \begin{definition}
 Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if
-\[ H\in \mathcal{U} \quad\implies\quad \upset (f\times f)^{\imf\imf}[H]\in \mathcal{V}. \]
+\[ H\in \mathcal{U} \quad\implies\quad \upset (f, f)^{\imf\imf}[H]\in \mathcal{V}. \]
 \end{definition}
 
 
 \begin{proposition} \label{uniformContinuityEntourages}
 Let $\sSet{X,\mathcal{U}}$, $\sSet{Y,\mathcal{V}}$ be uniform spaces and $f: X\to Y$ a function.
 \begin{enumerate}
-\item If $f$ is uniformly continuous, then $\entourage_\mathcal{V} \subseteq \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}]$;
+\item If $f$ is uniformly continuous, then $\entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}]$;
 \item If $\mathcal{V}$ is topological, then opposite implication also holds.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
 (1) By uniform continuity we have
-\[ \entourage_\mathcal{V} \subseteq \bigcap\setbuilder{\upset (f\times f)^{\imf\imf}[H]}{H\in \mathcal{U}} = \upset (f\times f)^{\imf\imf}\left[\bigcap \mathcal{U}\right] = \upset (f\times f)^{\imf\imf}\left[\entourage_\mathcal{U}\right]. \]
+\[ \entourage_\mathcal{V} \subseteq \bigcap\setbuilder{\upset (f, f)^{\imf\imf}[H]}{H\in \mathcal{U}} = \upset (f, f)^{\imf\imf}\left[\bigcap \mathcal{U}\right] = \upset (f, f)^{\imf\imf}\left[\entourage_\mathcal{U}\right]. \]
 The first equality follows from \ref{imageFiltersPreservesIntersection}.
 
-(2) Assume $\entourage_\mathcal{V} \subseteq \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}]$ and take $H\in \mathcal{U}$. Then $\entourage_\mathcal{U}\subseteq H$, so
-\[ \entourage_\mathcal{V} \subseteq \upset (f\times f)^{\imf\imf}[\entourage_\mathcal{U}] \subseteq \upset (f\times f)^{\imf\imf}[H]. \]
-Thus $\upset (f\times f)^{\imf\imf}[H] \in\mathcal{V}$.
+(2) Assume $\entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}]$ and take $H\in \mathcal{U}$. Then $\entourage_\mathcal{U}\subseteq H$, so
+\[ \entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}] \subseteq \upset (f, f)^{\imf\imf}[H]. \]
+Thus $\upset (f, f)^{\imf\imf}[H] \in\mathcal{V}$.
 \end{proof}
 
 \begin{proposition}
-Let $X,Y$ be sets, $\sSet{X,\xi}, \sSet{Y,\zeta}$ convergence spaces and $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces. Let $f: X\to Y$ be a function.
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, $\sSet{X,R}, \sSet{Y,S}$ uniform relation spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
 \begin{enumerate}
-\item If $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous, then $f: \sSet{X, \Gamma(\mathcal{U})} \to \sSet{Y, \Gamma(\mathcal{V})}$ is continuous.
-\item If $f: \sSet{X,\xi} \to \sSet{Y,\zeta}$ is continuous, then $f: \sSet{X, \Phi(\xi)} \to \sSet{Y, \Phi(\zeta)}$ is uniformly continuous.
+\item if $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous, then $\big(f: \sSet{X,\Xi(\mathcal{U})} \to \sSet{Y,\Xi(\mathcal{V})}\big)^{\imf\imf}$ is relation preserving;
+\item if $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\Gamma(R)} \to \sSet{Y,\Gamma(S)}$ is continuous;
+\item if $f: \sSet{X,\xi} \to \sSet{Y,\zeta}$ is continuous, then $\big(f: \sSet{X,\Phi(\xi)} \to \sSet{Y,\Phi(\zeta)}\big)^{\imf\imf}$ is relation preserving;
+\item if $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\Theta(R)} \to \sSet{Y,\Theta(S)}$ is uniformly continuous.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Assume $f$ uniformly continuous and $F\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$. Then $F\mathrel{\mathcal{U}}\pfilter{x}$, so $f^{\imf\imf}[F]\mathrel{\mathcal{V}}f(\pfilter{x})$. This means that $f^{\imf\imf}[F]\overset{\Gamma(\mathcal{V})}{\longrightarrow} f(x)$.
+(1) Assume $f$ uniformly continuous and $F\mathrel{\Xi(\mathcal{U})} G$. Then $F\otimes G\in \mathcal{U}$. By uniform continuity $\upset (f, f)^{\imf\imf}[F\otimes G] = f^{\imf\imf}[F] \otimes f^{\imf\imf}[G] \in \mathcal{V}$, so $f^{\imf\imf}[F] \mathrel{\Xi(\mathcal{V})} f^{\imf\imf}[G]$.
 
-(2) Assume $f$ is continuous and $F,G\in\powerfilters(X)$ are such that $F\mathrel{\Phi(\xi)} G$. Then $\exists x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By continuity $f^{\imf\imf}[F]\overset{\zeta}{\longrightarrow} f(x)$ and $f^{\imf\imf}[G]\overset{\zeta}{\longrightarrow} f(x)$. Thus $f^{\imf\imf}[F] \mathrel{\Phi(\zeta)}f^{\imf\imf}[G]$ and $f$ is uniformly continuous.
+(2) Assume $f^{\imf\imf}$ relation preserving and take $F \overset{\Gamma(R)}{\longrightarrow} x$. Then $F\mathrel{R}\pfilter{x}$ and, by relation preservation, $f^{\imf\imf}[F]\mathrel{S}f^{\imf\imf}[\pfilter{x}]$. Now $f^{\imf\imf}[\pfilter{x}] = \pfilter{f}(x)$, so $f^{\imf\imf}[F] \overset{\Gamma(S)}{\longrightarrow} f(x)$.
+
+(3) Assume $f$ is continuous and $F\mathrel{\Phi(\xi)} G$. Then there exists $x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By continuity $f^{\imf\imf}[F]\overset{\zeta}{\longrightarrow} f(x)$ and $f^{\imf\imf}[G]\overset{\zeta}{\longrightarrow} f(x)$, so $f^{\imf\imf}[F] \mathrel{\Phi(\zeta)} f^{\imf\imf}[G]$.
+
+(4) Assume $f^{\imf\imf}$ is relation preserving and take $H\in \Theta(R)$. Then $p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]$, so $f^{\imf\imf}\big[p_1^{\imf\imf}[H]\big]\mathrel{S}f^{\imf\imf}\big[p_2^{\imf\imf}[H]\big]$. Now
+\[ f^{\imf\imf}\big[p_1^{\imf\imf}[H]\big] = (f\circ p_1)^{\imf\imf}[H] = \big(p_1\circ(f,f) \big)^{\imf\imf}[H] = p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]. \]
+Similarly $f^{\imf\imf}\big[p_2^{\imf\imf}[H]\big] = p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]$. Thus $p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]\mathrel{S}p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]$, which means that $(f,f)^{\imf\imf}[H]\in \Theta(S)$.
 \end{proof}
 \begin{corollary}
-Let $X,Y$ be sets and $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces. Let $f: X\to Y$ be a function.
-\begin{enumerate} \setcounter{enumi}{2}
-\item If $f: \sSet{X,\Gamma(\mathcal{U})} \to \sSet{Y,\Gamma(\mathcal{V})}$ is continuous and $\sSet{X,\Gamma(\mathcal{U})}$ is complete, then $f: \sSet{X, \mathcal{U}} \to \sSet{Y, \mathcal{V}}$ is uniformly continuous.
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, $\sSet{X,R}, \sSet{Y,S}$ uniform relation spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate}
+\item if $\mathcal{U}$ is factorisable and $\big(f: \sSet{X,\Xi(\mathcal{U})} \to \sSet{Y,\Xi(\mathcal{V})}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous;
+\item if $R$ is complete and $f: \sSet{X,\Gamma(R)} \to \sSet{Y,\Gamma(S)}$ is continuous, then $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-By the proposition we have that $f: \sSet{X,\Phi(\Gamma(\mathcal{U}))} \to \sSet{Y,\Phi(\Gamma(\mathcal{V}))}$ is uniformly continuous. Because $\mathcal{U}$ is complete, we have $\Phi(\Gamma(\mathcal{U})) = \mathcal{U}$ by \ref{uniformConvergenceGaloisConnection}. So $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\Phi(\Gamma(\mathcal{V}))}$ is uniformly continuous and the result follows because $\Phi(\Gamma(\mathcal{V})) \subseteq \mathcal{V}$ by \ref{uniformConvergenceGaloisConnection}.
+(1) From the proposition, we have that $f: \sSet{X,\Theta(\Xi(\mathcal{U}))} \to \sSet{Y,\Theta(\Xi(\mathcal{V}))}$ is uniformly continuous. Because $\mathcal{U}$ is factorisable, $\Theta(\Xi(\mathcal{U})) = \mathcal{U}$. Also $\Theta(\Xi(\mathcal{V})) \subseteq \mathcal{V}$.
+
+(2) From the proposition, we have that $\big(f: \sSet{X,\Phi(\Gamma(R))} \to \sSet{Y,\Phi(\Gamma(S))}\big)^{\imf\imf}$ is relation preserving. Because $R$ is complete, we have $R = \Phi(\Gamma(R))$. Also $\Phi(\Gamma(S)) \subseteq S$.
 \end{proof}
 
-\begin{lemma}
-Uniformly continuous functions map Cauchy filters to Cauchy filters.
-\end{lemma}
+\begin{proposition}
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate}
+\item if $\mathcal{U}$ is compact and $f: \sSet{X,\Gamma(\Xi(\mathcal{U}))} \to \sSet{Y,\Gamma(\Xi(\mathcal{V}))}$ is continuous, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous.
+\end{enumerate}
+\end{proposition}
 \begin{proof}
-Let $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ be uniformly continuous and $F$ a Cauchy filter. Because $F\mathrel{\mathcal{U}}F$, we have $f^{\imf\imf}[F]\mathrel{\mathcal{V}}f^{\imf\imf}[F]$. Thus $\upset f^{\imf\imf}[F]$ is a Cauchy filter.
-\end{proof}
 
+\end{proof}
 
 \section{Star refinement}
 \begin{definition}
