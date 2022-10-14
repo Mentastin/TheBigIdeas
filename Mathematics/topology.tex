@@ -107,24 +107,62 @@ Let $\sSet{X,\xi}$ be a convergence space. An \udef{approach} on $X$ is a functi
 Let $\sSet{X,\xi}$ be a convergence space. The function $X\to \powerfilters(X): x\mapsto \pfilter{x}$ is an approach.
 \end{lemma}
 
-\subsection{Finite depth and other requirements}
-TODO Kent convergence.
+\subsection{Depth requirements}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Take arbitrary $F,G \in \powerfilters(X)$ and $x\in X$. The convergence space is called
+Let $\sSet{X,\xi}$ be a convergence space. Take arbitrary $F,G \in \powerfilters(X)$, $\mathcal{F}\subseteq \powerfilters(X)$ and $x\in X$. The convergence space is called
 \begin{itemize}
+\item a \udef{Kent space} if $F \to x \implies F\cap \pfilter{x} \to x$;
 \item \udef{finitely deep} or a \udef{limit space} if $\lim_\xi(F\cap G) = \lim_\xi F \cap \lim_\xi G$;
-\item a \udef{Kent space} if $F \to x \implies F\cap \pfilter{x} \to x$.
+\item a \udef{Choquet space} or a \udef{pseudotopological space} if
+\[ F\overset{\xi}{\longrightarrow} x \qquad\iff\qquad \text{$U\overset{\xi}{\longrightarrow} x$ for all ultrafilters $U$ such that $F\subseteq U$.} \]
+\item a \udef{pretopological space} if 
+\[ \lim_\xi\Big(\bigcap \mathcal{F}\Big) = \bigcap \setbuilder{\lim_\xi(F')}{F'\in \mathcal{F}}. \]
 \end{itemize}
 \end{definition}
-TODO replace finite depth with limit space.
 
 The point of a Kent space is that if $F\to x$, then ``essentially'' every $A\in F$ contains $x$.
 
-\begin{lemma}
-Let $X$ be a set and $\xi$ a preconvergence on $X$. Then $\xi$ is finitely deep \textup{if and only if}
-\[ \forall F,G \in \powerfilters(X): \quad \lim_\xi(F\cap G) \supseteq \lim_\xi F \cap \lim_\xi G. \]
+\begin{lemma} \label{finiteDepthLemma}
+Let $X$ be a set and $\xi$ a preconvergence on $X$. Then the following are equivalent:
+\begin{enumerate}
+\item $\xi$ is finitely deep;
+\item $\forall F,G \in \powerfilters(X): \quad \lim_\xi(F\cap G) \supseteq \lim_\xi F \cap \lim_\xi G$;
+\item $\lim_\xi^{-1}(x)\cup \powerset(X)$ is a filter for all $x\in X$.
+\end{enumerate}
 \end{lemma}
 In other words, a preconvergence is finitely deep \textup{if and only if} $\lim_\xi^{-1}(x)$ is \emph{directed} (and thus a filter) for all $x\in X$.
+
+\begin{proposition}
+Let $X$ be a set and $\xi$ a preconvergence on $X$. Then each of the following statements implies the next:
+\begin{enumerate}
+\item $\xi$ is pretopological;
+\item $\xi$ is Choquet;
+\item $\xi$ is finitely deep.
+\end{enumerate}
+If $\xi$ is a convergence space, then these also imply
+\begin{enumerate} \setcounter{enumi}{3}
+\item $\xi$ is Kent.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ By \ref{filtersCoatomistic}, we have
+\[ F = \bigcap_{\substack{U\in \powerultrafilters(X) \\ U\geq F}} U. \]
+By the pretopological property this means
+\[ \lim_\xi(F) = \lim_\xi\left(\bigcap_{\substack{U\in \powerultrafilters(X) \\ U\geq F}} U\right) = \bigcap_{\substack{U\in \powerultrafilters(X) \\ U\geq F}} \lim_\xi(U). \]
+Thus $x\in \lim_\xi(F)$ iff $x\in \lim_\xi(U)$ for all ultrafilters $U$ such that $F\subseteq U$.
+
+$(2) \Rightarrow (3)$ Take $F,G\in\powerfilters(X)$. By \ref{finiteDepthLemma} it is enough to prove $\lim_\xi(F\cap G) \supseteq \lim_\xi F \cap \lim_\xi G$. Take $x\in \lim_\xi F \cap \lim_\xi G$. If $U$ is an ultrafilter such that either $F\subseteq U$ or $G\subseteq U$, then $U\to x$.
+
+Now take an ultrafilter $U' \supseteq F\cap G$. Then either $U'\supseteq F$ or $U'\supseteq G$ by \ref{finiteUltrafilterFactorisation}. By the previous remark $U'\to x$. By the Choquet property we conclude that $x\in \lim_\xi(F\cap G)$.
+
+$(3) \Rightarrow (4)$. This is immediate if $\pfilter(x) \to x$ for all $x\in X$, i.e.\ if $\xi$ is a convergence.
+\end{proof}
+
+\begin{example}
+There exist Choquet spaces that are not pretopological. Take any infinite set $X$. Then there exists a nonprincipal ultrafilter $U$ on $\powerset(X)$ (take the cofinite filter and extend to ultrafilter by ultrafilter lemma, see \ref{filterFreeIFFfinerThanCofinite}).
+
+Take some $x_0$ and let each principal ultrafilter converge to $x_0$. Let no other ultrafilter converge. Define convergence of all other filters by the Choquet property. This convergence is not pretopological: We have $\bigcap \lim^{-1}(x_0) = \big\{\{X\}\big\}$, but $\{X\} \not\to x_0$ because $\{X\}\subseteq U$ and $U \not\to x_0$.
+\end{example}
 
 TODO finitely deep = quotient of (pre)topologies; inf of topologies; prime topologies dense in it (?)
 
@@ -902,6 +940,21 @@ This is due to the distributive inequality TODO ref.
 \end{proof}
 
 \chapter{Continuity}
+
+\section{Mapping filters}
+
+\begin{proposition} \label{preimageFilter}
+Let $X,Y$ be sets, $F\in\powerfilters(X)$, $G\in\powerfilters(Y)$ and $f: X\to Y$ a function.
+\begin{enumerate}
+\item if $\im(f)\in G$, then there exists a $H\in\powerfilters(X)$ such that $G = \upset f^{\imf\imf}[H]$;
+\item if $f^{\imf\imf}[F]\subseteq G$ , then there exists a $H\in\powerfilters(X)$ such that $G = \upset f^{\imf\imf}[H]$;
+\item if $G$ is an ultrafilter, then the $H$ in the previous points may be taken to be an ultrafilter.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO \ref{baseTraceFilter}
+\end{proof}
+
 \section{Continuous functions}
 \begin{definition}
 Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be (pre)convergence spaces. A function $f: X\to Y$ is called \udef{continuous} if it preserves limits: for all $D \in \powerdirected(X)$ and $x\in X$:
@@ -2828,21 +2881,14 @@ For the inclusion $\supseteq$, take some complete, factorisable uniformity $\mat
 For any property $\mathbf{P}$ that a convergence space may have, we say a uniform space $\sSet{X,\mathcal{U}}$ has property $\mathbf{P}$ if $\Gamma(\Xi(\mathcal{U}))$ has property $\mathbf{P}$.
 \end{definition}
 
-\subsubsection{Choquet uniform spaces}
-\begin{proposition}
-Let $\sSet{X,\mathcal{U}}$ be a uniform space. Then the following are equivalent:
-\begin{enumerate}
-\item $\mathcal{U}$ is Choquet;
-\item $\forall H\in\powerfilters(X^2):$ $H \in \mathcal{U}$ iff each ultrafilter $H'\supseteq H$ is in $\mathcal{U}$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
 \subsubsection{Compactness}
-\begin{proposition}
-Let $\sSet{X,\mathcal{U}}$ be a compact uniform space. If $H$ is an ultrafilter in $\mathcal{U}$, then $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H] \in\mathcal{U}$.
+\begin{proposition} \label{compactUltrafilterFactorisation}
+Let $\sSet{X,\mathcal{U}}$ be a compact uniform space. If $H$ is an ultrafilter in $\mathcal{U}$, then 
+\begin{enumerate}
+\item $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H] \in\mathcal{U}$;
+\item $p_1^{\imf\imf}[H]$ and $p_2^{\imf\imf}[H]$ converge in $\Gamma(\Xi(\mathcal{U}))$;
+\item $\lim\big(p_1^{\imf\imf}[H]\big) = \lim\big(p_2^{\imf\imf}[H]\big)$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
 Let $H$ be an ultrafilter in $\mathcal{U}$. Then $p_1^{\imf\imf}[H]$ and $p_2^{\imf\imf}[H]$ are ultrafilters by \ref{projectionsOfUltrafilterAreUltra}. By compactness there exist $x,y\in X$ such that $p_1^{\imf\imf}[H] \overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$ and $p_2^{\imf\imf}[H] \overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} y$. Thus $p_1^{\imf\imf}[H]\otimes \pfilter{x}\in\mathcal{U}$ and $p_2^{\imf\imf}[H]\otimes \pfilter{y}\in\mathcal{U}$. 
@@ -2853,6 +2899,19 @@ By \ref{filterCompositionFactorisationLemma} we have
 Finally
 \[ p_1^{\imf\imf}[H] \mathrel{\Xi(\mathcal{U})} \pfilter{x}, \quad \pfilter{x} \mathrel{\Xi(\mathcal{U})} \pfilter{y} \quad\text{and}\quad \pfilter{y}\mathrel{\Xi(\mathcal{U})} p_2^{\imf\imf}[H], \]
 so $p_1^{\imf\imf}[H] \mathrel{\Xi(\mathcal{U})} p_2^{\imf\imf}[H]$ by transitivity. Thus $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H] \in \mathcal{U}$.
+\end{proof}
+
+\subsubsection{Depth properties}
+\begin{definition}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. We say $\mathcal{U}$ is \udef{uniformly Choquet} if for all $H\in \powerfilters(X^2)$,
+\[ H\in\mathcal{U} \qquad\iff\qquad \text{$I \in \mathcal{U}$ for all ultrafilters $I$ such that $H\subseteq I$.} \]
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. If $\mathcal{U}$ is uniformly Choquet, then $\Gamma(\Xi(\mathcal{U}))$ is Choquet.
+\end{lemma}
+\begin{proof}
+????????????????
 \end{proof}
 
 \section{Uniform continuity}
@@ -2915,11 +2974,15 @@ Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, 
 \begin{proposition}
 Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
 \begin{enumerate}
-\item if $\mathcal{U}$ is compact and $f: \sSet{X,\Gamma(\Xi(\mathcal{U}))} \to \sSet{Y,\Gamma(\Xi(\mathcal{V}))}$ is continuous, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous.
+\item if $\mathcal{U}$ is compact, $\mathcal{V}$ is uniformly Choquet and $f: \sSet{X,\Gamma(\Xi(\mathcal{U}))} \to \sSet{Y,\Gamma(\Xi(\mathcal{V}))}$ is continuous, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
+Take $H\in\mathcal{U}$. Take arbitrary ultrafilter $I\in\powerfilters(Y^2)$ such that $(f,f)^{\imf\imf}[H]\subseteq I$. Then there exists an ultrafilter $J\in \powerfilters(X^2)$ such that $\upset (f,f)^{\imf\imf}[J] = I$ by \ref{preimageFilter}.
 
+By \ref{compactUltrafilterFactorisation}, there exists $x\in X$ such that $p_1^{\imf\imf}[J]\overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$ and $p_2^{\imf\imf}[J]\overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$. By continuity, symmetry and transitivity,
+\[ \mathcal{V} \ni (f\circ p_1)^{\imf\imf}[J]\otimes (f\circ p_2)^{\imf\imf}[J] = p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[J]\big]\otimes p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[J]\big] \subseteq (f,f)^{\imf\imf}[J] = I. \]
+As this is true for arbitrary ultrafilter $I$, we have $(f,f)^{\imf\imf}[H]\in\mathcal{V}$ because $\mathcal{V}$ is uniformly Choquet.
 \end{proof}
 
 \section{Star refinement}
@@ -3269,6 +3332,11 @@ Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\mathcal{U}}$ a uniform s
 \item The symmetry and transitivity of $\mathcal{U}_c$ follow from the symmetry and transitivity of $\mathcal{U}$.
 \end{itemize}
 \end{proof}
+
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{U}}$ a uniform space. If $\mathcal{U}$ is factorisable, then
+\[ \mathcal{U}_c = (\Theta\circ\Phi)\Big(\big(\sSet{X,\xi} \to \sSet{Y, (\Xi\circ\Gamma)(\mathcal{U})}\big)_c\Big). \]
+\end{lemma}
 
 \begin{lemma}
 Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{U}}$ a uniform space. Then the uniformity of continuous convergence induces continous convergence on $\cont(X,Y)$.

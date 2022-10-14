@@ -1940,23 +1940,15 @@ A distributive complemented lattice is called a \udef{Boolean lattice} or \udef{
 We will use $\overline{x}$ to denote the (necessarily unique, \ref{distributiveComplementUnique}) completement of $x$.
 
 \begin{lemma} \label{BooleanComplementLargestDisjoint}
-Let $L$ be a Boolean lattice and $x\in L$. Then $\{x\}^\perp = \downset \overline{x}$.
+Let $L$ be a Boolean lattice and $x\in L$. Then $\{x\}^\perp = \downset \{\overline{x}\}$.
 \end{lemma}
 \begin{proof}
-From the requirement $x\wedge \overline{x} = \bot$, we see that $\overline{x}\in \{x\}^\perp$. Now $\{\overline{x}\} \subseteq \{x\}^\perp$ implies $\downset \overline{x} \subseteq \downset\{x\}^\perp = \{x\}^\perp$. For the last equality we have used the fact that $\{x\}^\perp$ is downwards closed (in fact even an ideal), see \ref{disjointComplementIdeal}.
+From the requirement $x\wedge \overline{x} = \bot$, we see that $\overline{x}\in \{x\}^\perp$. Now $\{\overline{x}\} \subseteq \{x\}^\perp$ implies $\downset \{\overline{x}\} \subseteq \downset\{x\}^\perp = \{x\}^\perp$. For the last equality we have used the fact that $\{x\}^\perp$ is downwards closed (in fact even an ideal), see \ref{disjointComplementIdeal}.
 
-Now we prove the other inclusion: $\{x\}^\perp \subseteq \downset \overline{x}$.
+Now we prove the other inclusion: $\{x\}^\perp \subseteq \downset \{\overline{x}\}$.
 Take $y\in \{x\}^\perp$. We just need to show that $y\leq \overline{x}$, or, equivalently, $y = y\wedge \overline{x}$. Indeed
 \[ y = y \wedge \top = y\wedge (x\vee \overline{x}) = (y\wedge x)\vee (y\wedge \overline{x}) = \bot \vee (y\wedge \overline{x}) = y\wedge \overline{x}. \]
 \end{proof}
-    \begin{corollary} \label{BooleanInequalities}
-Let $L$ be a Boolean lattice and $x,y\in L$. Then the following are equivalent:
-\begin{enumerate}
-\item $x \leq y$;
-\item $x\wedge \overline{y} = \bot$;
-\item $\overline{x} \vee y = \top$.
-\end{enumerate}
-\end{corollary}
 \begin{corollary}
 Every Boolean lattice is an ortholattice.
 \end{corollary}
@@ -1968,6 +1960,19 @@ Let $x\leq y$. Then $\overline{y} \wedge x \leq \overline{y} \wedge y = \bot$, s
 \begin{corollary}
 The laws of de Morgan hold in Boolean lattices.
 \end{corollary}
+\begin{corollary} \label{BooleanInequalities}
+Let $L$ be a Boolean lattice and $x,y\in L$. Then the following are equivalent:
+\begin{enumerate}
+\item $x \leq y$;
+\item $x\wedge \overline{y} = \bot$;
+\item $\overline{x} \vee y = \top$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+We calculate
+\[ x \leq y \iff x\in\downset\{y\} \iff x\in\{\overline{y}\}^\perp \iff x\wedge \overline{y} = \bot. \]
+For the equivalence $(2) \Leftrightarrow (3)$ we use a law of de Morgan.
+\end{proof}
 
 \begin{lemma} \label{BooleanLatticesLemma}
 Let $L$ be a Boolean lattice and $x,y\in L$. Then
@@ -2312,6 +2317,12 @@ Let $S$ be a $\wedge$-semilattice and $B\subseteq S$ a subset. Then
 \end{enumerate}
 \end{proposition}
 
+\begin{proposition} \label{baseTraceFilter}
+Let $S$ be a $\wedge$-semilattice and $F\in\filters(S)$. If $a\in F$, then $F$ has a base contained in $\downset\{a\}$.
+\end{proposition}
+\begin{proof}
+Let $B$ be a base of $F$. Then $\setbuilder{a\wedge b}{b\in B}$ is also a base of $F$.
+\end{proof}
 
 \subsection{Ordering filters and ideals}
 
@@ -2329,6 +2340,7 @@ Let $P$ be an ordered set and $I$ an index set.
 \begin{proof}
 This is an application of \ref{completeSublattice} (TODO show this is the correct residual). We just need to prove that $\upset\Closure_\wedge \left(\bigcup_{i\in I}F_i\right) = \Closure_\wedge \left(\bigcup_{i\in I}F_i\right)$ TODO is distributive
 \end{proof}
+\url{https://ncatlab.org/nlab/show/filter}
 
 \begin{proposition} \label{joinProperFilter}
 Let $L$ be a $\wedge$-semilattice and $\{F_i\}_{i\in I} \in \filters(L)^I$ be set of filters. Then $\bigvee \{F_i\}_{i\in I}$ is a proper filter \textup{if and only if} $\{F_i\}_{i\in I}\aset{\amesh} \{F_i\}_{i\in I}$.
@@ -2361,21 +2373,46 @@ $(1)\Rightarrow (2)$ Assume $F$ is an ultrafilter. Then for all $x\in F$, the fi
 
 $(2)\Rightarrow (1)$ Take some filter $F$ satisfying the condition. Then $F$ is automatically proper ($\bot$ is not in $F$). Assume $G\supseteq F$ is another proper filter. Assume, towards a contradiction, that $G\setminus F \neq \emptyset$. Then take $x\in G\setminus F$. By hypothesis there exists a $y\in F$ (and thus also in $G$) such that $x\wedge y = \bot$, meaning $\bot \in G$ by $\wedge$-closure. Thus $G$ is not proper.
 \end{proof}
+\begin{corollary}
+Let $B$ be a Boolean lattice and $F\in \filters(B)$. The following are equivalent:
+\begin{enumerate}
+\item $F$ is an ultrafilter;
+\item either $x\in F$ or $\overline{x}\in F$ for all $x\in B$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+It is enough to prove that $\exists y\in F: x\wedge y = \bot$ is equivalent to $\overline{x}\in F$. Indeed it is equivalent to $\exists y\in F: y \leq \overline{x}$ by \ref{BooleanInequalities} and thus equivalent to $\overline{x}\in F$ by upwards closure.
+\end{proof}
 
 \begin{proposition}[Ultrafilter lemma] \label{ultrafilterLemma}
 Every proper filter is contained in an ultrafilter.
 \end{proposition}
-\begin{corollary}
+\begin{corollary} \label{filtersCoatomistic}
 Let $B$ be a Boolean lattice. Then $\filters(B)$ is a coatomistic lattice.
 \end{corollary}
 In other words, for every $F\in \filters(B)$: we have
 \[ F = \bigcap_{\substack{U\in \ultrafilters(B) \\ U\geq F}} U. \]
-TODO: do we need Boolean assumption?
 \begin{proof}
 We clearly have
 \[ F \subseteq \bigcap_{\substack{U\in \ultrafilters(B) \\ U\geq F}} U. \]
 We need to show the opposite inclusion. Assume, towards a contradiction, that to opposite inclusion does not hold. Then there exists $a\in \bigcap_{\substack{U\in \ultrafilters(B) \\ U\geq F}} U$ such that $a\notin F$. Then for all $b\in F$ we have $b\not\leq a$, which implies $b\wedge \overline{a} \neq \bot$ by \ref{BooleanInequalities}. Thus $\overline{a} \in F^\mesh$, so $F\vee \upset\{\overline{a}\}$ is a proper filter by \ref{joinProperFilter}. It is contained in an ultrafilter $U$ that also contains $F$. By hypothesis $U$ must contain $a$, which means it is not proper because $a\perp \overline{a}$. This is a contradiction.
 \end{proof}
+The hypothesis of Booleanness is necessary.
+\begin{example}
+Consider the lattice $\sSet{\{0,1,2,3\},\leq}$. It contains only one ultrafilter: $\{1,2,3\}$. The filter $\{3,4\}$ is clearly not the intersection of its containing ultrafilters.
+\end{example}
+
+\begin{lemma} \label{finiteUltrafilterFactorisation}
+Let $S$ be a bounded $\wedge$-semilattice, $F, G\in \filters(S)$ and $U\in\ultrafilters(S)$. Then $F\cap G \subseteq U$ \textup{if and only if} $F\subseteq U$ or $G\subseteq U$.
+\end{lemma}
+\begin{proof}
+The direction $\Leftarrow$ is immediate.
+
+For the direction $\Rightarrow$, assume $F\cap G \subseteq U$. Then
+\[ U = U\vee U \supseteq U\vee (F\cap G) = (U\vee F)\cap (U\vee G) \supseteq U \]
+by distributivity in \ref{latticeFiltersIdeals}. Then either $U = U\vee F$ or $U = U\vee G$, because $U$ is meet-irriducible by \ref{atomsJoinIrriducible}. Thus either $F\subseteq U$ or $G\subseteq U$.
+\end{proof}
+Note this does not work for arbitrary intersections!
 
 \subsubsection{Prime filters and ideals}
 \begin{definition}
@@ -2456,11 +2493,22 @@ The set of principal filters in $P$ is denoted $\filters_*(P)$ and the set of fr
 The only filter that is both principal and free is $L$. A proper filter cannot be both principal and free.
 
 \begin{lemma}
-Let $L$ be a lattice and $F$ a principal filter in $L$. Then $F = \upset \ker F$.
+Let $L$ be a lattice and $F$ a principal filter in $L$. Then
+\begin{enumerate}
+\item $F = \upset \ker F$;
+\item if $\ker(F)$ is an atom, then $F$ is an ultrafilter.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $L$ be a lattice and $F$ a free filter in $L$. Then
+\begin{enumerate}
+\item if $G\supseteq F$, then $G$ is also free.
+\end{enumerate}
 \end{lemma}
 
 \begin{lemma} \label{finiteFiltersPrincipal}
-Let $L$ be a finite lattice. Then every filter in $L$ is principal.
+Let $L$ be a lattice. If $L$ is finite, then every filter in $L$ is principal.
 \end{lemma}
 \begin{proof}
 Every filter $F$ in a finite lattice is finite, so $\bigwedge F$ is a finite meet, and thus must be in $F$.
@@ -2469,12 +2517,13 @@ Every filter $F$ in a finite lattice is finite, so $\bigwedge F$ is a finite mee
 \begin{proposition}
 Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ is finer than the cofinite filter of $A$.
 \end{proposition}
+TODO extend to any filter with infinite atoms.
 \begin{proof}
 As filters are upwards closed, ``$F$ finer than the cofinite filter of $A$'' means the cofinite filter of $A$ is a subset of $F$. So take some cofinite subset $C$ of $A$, such that $A\setminus C = \{x_1, \ldots, x_n\}$ is finite. Now for each $x_i$ we can find a set $f_i\in F$ such that $x_i\notin f_i$, because if this was not possible, then $x_i \in \bigcap F$, but $\bigcap F = \emptyset$ due to $F$ being free. Also $\bigcap_{i=1}^n f_i \in F$, because $F$ is closed under finite intersections.
 
 So $(A\setminus C)\cap (\bigcap_{i=1}^n f_i) = \emptyset$, or equivalently $\bigcap_{i=1}^n f_i \subseteq X\setminus (A\setminus C)$, meaning $X\setminus (A\setminus C) \in F$ and thus $C = A\cap (X\setminus (A\setminus C)) \in F$.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{filterFreeIFFfinerThanCofinite}
 A filter of subsets of $X$ is free \textup{if and only if} it is finer than the cofinite filter of $X$.
 \end{corollary}
 
