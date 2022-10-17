@@ -2876,6 +2876,11 @@ For the inclusion $\supseteq$, take some complete, factorisable uniformity $\mat
 (2) Immediate because both $\Gamma$ and $\Xi$ are surjective.
 \end{proof}
 
+We can summarise the mappings between uniformlities $\mathcal{U}$, uniform relations $R$ and uniform convergences $\xi$ as follows
+\[ \begin{tikzcd}[labels = {font=\large}]
+\mathcal{U} \arrow[bend left, rrr, "\substack{F\mathrel{\Xi(\mathcal{U})}G \Leftrightarrow F\otimes G\in \mathcal{U} \vspace{0.1em} \\ \vspace{0.1em} \Xi}"] &&& \arrow[lll, bend left, "\substack{\Theta \vspace{0.8em} \\ H\in\Theta(R) \Leftrightarrow p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]}"] R \arrow[rrr, bend left, "\substack{F\overset{\Gamma(R)}{\longrightarrow} x \Leftrightarrow F\mathrel{R}\pfilter{x} \vspace{0.1em} \\ \vspace{0.1em} \Gamma}"] &&& \arrow[lll, bend left, "\substack{\Phi \vspace{0.1em} \\ F\mathrel{\Phi(\xi)}G \Leftrightarrow \exists x: (F\to x)\land (G\to x)}"] \xi
+\end{tikzcd} \]
+
 \subsection{Properties of uniform spaces}
 \begin{definition}
 For any property $\mathbf{P}$ that a convergence space may have, we say a uniform space $\sSet{X,\mathcal{U}}$ has property $\mathbf{P}$ if $\Gamma(\Xi(\mathcal{U}))$ has property $\mathbf{P}$.
@@ -3079,14 +3084,24 @@ Let $X$ be a set. A \udef{uniform cover set} of $X$ is a filter of covers in $\s
 
 \section{Function spaces}
 \subsection{Uniform convergences and equicontinuity}
+\subsubsection{Diagonal maps and filters}
+\begin{definition}
+Let $X$ be a set and $A\subseteq X$ be a subset. The \udef{diagonal map} on $X$ is defined as
+\[ \Delta: \powerset(X)\to \powerset(X^2): A\mapsto \setbuilder{(a,a)}{a\in A}. \]
+We usually write $\Delta_A$ instead of $\Delta(A)$. Similarly if $\mathcal{S}\in\powerset^2(X^2)$, then we write $\Delta^\imf_\mathcal{S}$ instead of $\Delta^\imf(\mathcal{S})$.
+\end{definition}
+
+TODO: covers upwards directed.
+
+\subsubsection{Uniform convergences and equicontinuity}
 \begin{definition}
 Let $X$ be a set and $\sSet{Y, \mathcal{U}}$ a diagonal uniform space. For any set $S$, let $\Delta_S = \setbuilder{(s,s)\in S^2}{s\in S}$ be the diagonal on $S$.
 \begin{itemize}
 \item If $\mathcal{S}$ is a set of subsets of $X$. Then
 \[ \mathcal{U}_\mathcal{S} \defeq \setbuilder{H\in \powerfilters\big((X\to Y)^2\big)}{\forall S\in \mathcal{S}:\; (\evalMap, \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp \in \mathcal{U}} \]
-is the uniformity of \udef{$\mathcal{S}$-uniform convergence}.
+is called the \udef{$\mathcal{S}$-uniformity}.
 \item If $\mathcal{S}$ is a set of subsets of $X$ and $K\subseteq (X\to Y)$. Then $K$ is called \udef{$\mathcal{S}$-equicontinuous} if
-\[ \forall S\in \mathcal{S}:\; \upset\big\{(\evalMap, \evalMap)^\imf(\Delta_K, \Delta_S)\big\}\in \mathcal{U}. \]
+\[ \forall S\in \mathcal{S}:\; \upset\big\{(\evalMap, \evalMap)^\imf(\Delta_K\times \Delta_S)\big\}\in \mathcal{U}. \]
 \end{itemize}
 In particular:
 \begin{itemize}
@@ -3097,21 +3112,16 @@ In particular:
 \end{itemize}
 \end{definition}
 
+\[ \mathcal{U}_\mathcal{S} = \left((\evalMap, \evalMap)^{\imf\imf\imf}\big(\{-\}\otimes \{-\}^\imf(\Delta^\imf_\mathcal{S})\big)^\ttransp\right)^\preimf[\powerset(\mathcal{U})]. \]
+
 \begin{lemma}
-Let $X$ be a set, $\sSet{Y, \mathcal{U}}$ a diagonal uniform space and $\mathcal{S}$ a set of subsets of $X$. The uniformity of $\mathcal{S}$-uniform convergence is a diagonal uniformity on $(X\to Y)$.
+Let $X$ be a set, $\sSet{Y, \mathcal{U}}$ a preuniform space and $\mathcal{S}$ a set of subsets of $X$. The preuniformity of $\mathcal{S}$-uniform convergence is a preuniformity on $(X\to Y)$.
+
+If $\sSet{Y, \mathcal{U}}$ is diagonal, then the preuniformity of $\mathcal{S}$-uniform convergence is a diagonal uniformity.
 \end{lemma}
 \begin{proof}
 We verify the conditions:
 \begin{itemize}
-\item Diagonality: For any $S\in \mathcal{S}$, we have
-\begin{align*}
-(\evalMap, \evalMap)^{\imf\imf}\big(\{\Delta_{(X\to Y)}\}\otimes \{\Delta_S\}\big)^\ttransp &= \upset \Big\{ (\evalMap, \evalMap)^{\imf}\big(\Delta_{(X\to Y)}\times \Delta_S\big)^\ttransp \Big\} \\
-&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}(\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \{(x,x)\}\big)^\ttransp \Big\} \\
-&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{(\evalMap, \evalMap)\big((f,x),(f,x)\big)\big\} \Big\} \\
-&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{\big(f(x), f(x)\big)\big\} \Big\} \\
-&= \upset \Big\{ \Delta_{Y} \Big\} \in \mathcal{U}.
-\end{align*}
-This means that $\upset \{\Delta_{(X\to Y)}\} \in \mathcal{U}_\mathcal{S}$.
 \item Upwards closure: If $G\subseteq H$ for some $G,H\in\powerfilters(X\to Y)$, then
 \[ (\evalMap, \evalMap)^{\imf\imf}(G\otimes \{\Delta_S\})^\ttransp \subseteq (\evalMap, \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp \]
 and so we conclude by the upwards closure of $\mathcal{U}$.
@@ -3129,7 +3139,22 @@ and also
 &\subseteq (\evalMap, \evalMap)^\imf\big(A \times \Delta_S\big)^\ttransp ; (\evalMap, \evalMap)^\imf\big(B \times \Delta_S\big)^\ttransp.
 \end{align*}
 \end{itemize}
+Now assume $\sSet{Y, \mathcal{U}}$ diagonal. We verify the diagonality of $\mathcal{U}_\mathcal{S}$.
+
+For any $S\in \mathcal{S}$, we have
+\begin{align*}
+(\evalMap, \evalMap)^{\imf\imf}\big(\{\Delta_{(X\to Y)}\}\otimes \{\Delta_S\}\big)^\ttransp &= \upset \Big\{ (\evalMap, \evalMap)^{\imf}\big(\Delta_{(X\to Y)}\times \Delta_S\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}(\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \{(x,x)\}\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{(\evalMap, \evalMap)\big((f,x),(f,x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{\big(f(x), f(x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \Delta_{Y} \Big\} \in \mathcal{U}.
+\end{align*}
+This means that $\upset \{\Delta_{(X\to Y)}\} \in \mathcal{U}_\mathcal{S}$.
 \end{proof}
+
+\begin{lemma}
+Take $\mathcal{S}_1, \mathcal{S}_2 \in\powerset^2(X)$. If $\mathcal{S}_1 \preceq \mathcal{S}_2$ (i.e.\ $\mathcal{S}_2$ refines $\mathcal{S}_1$), then $\mathcal{U}_{\mathcal{S}_2} \subseteq \mathcal{U}_{\mathcal{S}_1}$.
+\end{lemma}
 
 \begin{proposition}
 Let $\sSet{X, \xi}$ be a convergence set, $\sSet{Y, \mathcal{U}}$ a uniform space and $\mathcal{S}$ a set of compact subsets of $X$. Then the $\mathcal{S}$-uniformity is equal to the pointwise uniformity.

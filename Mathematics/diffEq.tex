@@ -61,7 +61,7 @@ Let $T: I^+ \to \Lin(X)$ be a semigroup of linear operators. We say $T$ is \udef
 \end{definition}
 
 
-\chapter{$C_0$-semigroups}
+\chapter{$C_0$ semigroups}
 In this section we will study functions $T: \R^+\to \Bounded(X)$ that are strongly continuous semigroups on a Banach spaces $X$. We will shorten this description to \udef{operator semigroup}.
 
 \begin{definition}
@@ -137,6 +137,23 @@ Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. If $x\
 for all $t\in [0,\infty]$.
 \end{lemma}
 
+\begin{lemma} \label{domainGeneratorLemma}
+Let $T(t)$ be a $C_0$ semigroup on a Banach space $X$ with generator $A$. If $x,y\in X$ are such that
+\[ T(t)x-x = \int_0^tT(s)y\diff{s} \]
+for all $t\in\interval{0,t_0}$, then $x\in\dom(A)$ and $Ax = y$.
+\end{lemma}
+\begin{proof}
+Divide both sides by $t$ and take the limit $t\to 0$. TODO ref.
+\end{proof}
+
+\begin{lemma} \label{convergenceGeneratorUnderIntegral}
+Let $T(t)$ be a $C_0$ semigroup on a Banach space $X$. Set $A_h \defeq \frac{T(h) - \id_X}{h}$. Then for all $x\in X$
+\[ \lim_{h\to 0}\int_0^t T(s)A_hx\diff{s} = T(t)x-x. \]
+\end{lemma}
+\begin{proof}
+TODO + use in following?
+\end{proof}
+
 \begin{proposition} \label{integralOperatorSemigroupGenerator}
 Let $T: \R^{\geq 0}\to \Bounded(X)$ be a $C_0$ semigroup with generator $A$. For all $x\in X$, then $\int_0^t T(s)x\diff{s}\in\dom(A)$ and, for all $t\in [0,\infty]$,
 \begin{align*}
@@ -163,6 +180,9 @@ where we have used \ref{boundedOperatorUnderIntegral} and (TODO ref: fundamental
 Finally $\int_0^t T(s)Ax\diff{s}$ exists and is finite by \ref{integrabilityOrbitMaps} applied to $Ax$. We conclude using \ref{differentialOperatorSemigroupGenerator} and (TODO ref: second fundamental theorem of calculus).
 \end{proof}
 \begin{corollary}
+If $Ax = 0$, then $T(t)x = x$ for all $t\in\R^{\geq 0}$.
+\end{corollary}
+\begin{corollary}
 Let $T: \R^{\geq 0}\to \Bounded(X)$ be a $C_0$ semigroup with generator $A$, $r\in\N$ and $t\geq 0$.
 \begin{enumerate}
 \item If $x\in \dom(A^r)$, then $T(t)x\in\dom(A^r)$ and
@@ -173,6 +193,27 @@ Let $T: \R^{\geq 0}\to \Bounded(X)$ be a $C_0$ semigroup with generator $A$, $r\
 \[ \big(T(t) - \id_X\big)^rx = \int_0^t\ldots \int_0^t T(s_1 +\ldots +s_r)A^rx \diff{s_1}\ldots \diff{s_r}. \]
 \end{enumerate}
 \end{corollary}
+
+\begin{proposition}
+Let $T(t)$ be a $C_0$ semigroup on a Banach space $X$ with generator $A$. Set $A_h \defeq \frac{T(h) - \id_X}{h}$.
+\begin{enumerate}
+\item Let $x,y\in X$ be such that
+\[ \liminf_{h \to 0^+}\norm{A_hx - y} = 0. \]
+Then $x\in \dom(A)$ and $Ax = y$.
+\item If $X$ is reflexive and $x\in X$ such that
+\[ \liminf_{h\to 0^+}\norm{A_hx} <\infty, \]
+then $x\in \dom(A)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{convergenceGeneratorUnderIntegral},
+\[ \lim_{h\to 0^+}\int_0^t T(s)\big(A_hx - y\big)\diff{s} = \lim_{h\to 0^+}\int_0^t T(s)A_hx\diff{s} - \int_0^t T(s)y\diff{s} = T(t)x - x - \int_0^t T(s)y\diff{s}. \]
+Also
+\[ \liminf_{h\to 0^+}\norm{\int_0^t T(s)\big(A_hx - y\big)\diff{s}} \leq \liminf_{h\to 0^+}\sup_{0\leq s\leq t}\norm{T(s)}t\norm{A_hx - y} = 0. \]
+As the left-hand side converges, it must converge to zero. Thus $T(t)x - x = \int_0^t T(s)y\diff{s}$, meaning that $x\in\dom(A)$ and $Ax = y$ by \ref{domainGeneratorLemma}.
+
+(2) Fix $x\in X$. By assumption there exists a sequence $\seq{h_n}\to 0$ such that the sequence $\seq{A_{h_n}x}$ remains bounded. By (TODO ref) this sequence is contained in a weakly compact set, meaning there exists a weakly convergent subsequence $\seq{A_{h'_n}x}$. 
+\end{proof}
 
 \begin{proposition} \label{generatorClosedDenselyDefined}
 The generator of an operator semigroup is closed and densely defined.
@@ -777,17 +818,17 @@ As $\dom(A+B) = \dom(A)$ and the graph norm of $A+B$ is equivalent to that of $A
 
 \begin{lemma} \label{boundOfResolventOfABoundedSum}
 Let $A$ be a closed operator on a Banach space $X$ and let $B$ be an operator on $X$ that is $A$-bounded with constants $a,b \geq 0$. If $\lambda\in\res(A)$ and
-\[ c \defeq  < 1, \]
+\[ c \defeq a\norm{AR_A(\lambda)} + b\norm{R_A(\lambda)} < 1, \]
 then $\lambda\in\res(A+B)$ and
 \[ \norm{R_{A+B}(\lambda)} \leq (1-c)^{-1}\norm{R_A(\lambda)}. \]
 \end{lemma}
 \begin{proof}
-This is an application of \ref{perturbationLemma}, we just need to show that $\norm{BR_A(\lambda)} < 1$. Indeed
+This is an application of \ref{perturbationLemma}, we just need to show that $\norm{BR_A(\lambda)} < 1$. Indeed, by the $A$-bound of $B$,
 \begin{align*}
-\norm{BR_A(\lambda)} &\leq a\norm{AR_A(\lambda)} + b\norm{R_A(\lambda)} \\
+\norm{BR_A(\lambda)x} &\leq a\norm{AR_A(\lambda)x} + b\norm{R_A(\lambda)x} \\
 &\leq \big(a\norm{AR_A(\lambda)} + b\norm{R_A(\lambda)}\big)\norm{x} = c\norm{x},
 \end{align*}
-which implies $\norm{BR_A(\lambda)} \leq c < 1$.
+for all $x\in X$. This implies $\norm{BR_A(\lambda)} \leq c < 1$.
 \end{proof}
 
 \begin{proposition}
@@ -1057,6 +1098,7 @@ Let $X$ be a Banach space and $T: \R^{> 0}\to \Bounded(X)$ be a function that co
 \end{itemize}
 Then $T$ is said to have \udef{optimal approximation order} $O\big(\phi(1/t)\big)$ or to be \udef{saturated} in $X$ with order $O\big(\phi(1/t)\big)$. The set $\mathcal{F}$ is called its \udef{saturation class} or \udef{Favard class}.
 \end{definition}
+
 
 
 \section{Examples and constructions}
