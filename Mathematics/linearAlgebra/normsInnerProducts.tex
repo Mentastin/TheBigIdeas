@@ -253,14 +253,6 @@ This sequence is not Cauchy and thus not convergent.
 \subsubsection{Direct sum}
 \[ \norm{x\oplus y}_{X\oplus Y} = \norm{x}_X + \norm{y}_Y \]
 TODO + arbitrary direct sums.
-\subsubsection{The graph norm}
-Let $L:V\to W$ be a linear map between normed spaces. The graph of $L$
-\[ \setbuilder{(v,w)\in V\oplus W}{w = Lv} \]
-has a natural norm inherited from the direct sum:
-\[ \norm{(v,Lv)} = \norm{v}_V + \norm{Lv}_W. \]
-This norm can also be seen as a norm on $V$: the \udef{graph norm} induced by $L$ is defined as
-\[ \norm{v}_L := \norm{v}_V + \norm{Lv}_W. \]
-
 
 \section{Operators on normed spaces}
 
@@ -369,6 +361,43 @@ This also shows that $\norm{T^{-1}} \leq 1/b$ for all lower bounds $b$. In other
 Now assume $T^{-1}$ bounded. Then for all $x\in\dom(T)$: $\norm{x} = \norm{T^{-1}Tx} \leq \norm{T^{-1}}\norm{Tx}$, so $T$ is bounded below by $1/\norm{T^{-1}}$.
 
 This also shows that $1/\norm{T^{-1}}$ is a lower bound, so $1/\norm{T^{-1}} \leq \inf_{x\neq 0}\norm{Tx}/\norm{x}$.
+\end{proof}
+
+\subsection{The graph norm}
+Let $L:V\to W$ be a linear map between normed spaces. The graph of $L$
+\[ \setbuilder{(v,w)\in V\oplus W}{w = Lv} \]
+has a natural norm inherited from the direct sum:
+\[ \norm{(v,Lv)} = \norm{v}_V + \norm{Lv}_W. \]
+This norm can also be seen as a norm on $V$: the \udef{graph norm} induced by $L$ is defined as
+\[ \norm{v}_L := \norm{v}_V + \norm{Lv}_W. \]
+
+\begin{proposition}
+Let $L: \sSet{V, \norm{\cdot}_V}\to \sSet{W, \norm{\cdot}_W}$ be a linear map between normed spaces. Then $L: \sSet{V, \norm{\cdot}_L}\to \sSet{W, \norm{\cdot}_W}$ is bounded with norm $K$.
+Also
+\begin{enumerate}
+\item $K \leq 1$;
+\item $K < 1$ \textup{if and only if} $L: \sSet{V, \norm{\cdot}_V}\to \sSet{W, \norm{\cdot}_W}$ is bounded.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Take any $v\in V$. Then
+\[ \norm{L(v)}_W \leq \norm{L(v)}_W + \norm{v}_V = \norm{v}_L. \]
+This shows the $L$ is bounded and the norm is less than or equal to $1$.
+
+Now we can write
+\[ K = \sup_{v\in V\setminus\{0\}}\frac{\norm{L(v)}_W}{\norm{v}_L} = \sup_{v\in V\setminus\{0\}}\frac{\norm{L(v)}_W}{\norm{v}_V + \norm{L(v)}_W} \defeq \sup_{v\in V\setminus\{0\}}K_v, \]
+where we have set $K_v \defeq \frac{\norm{L(v)}_W}{\norm{v}_V + \norm{L(v)}_W}$.
+
+First assume $L: \sSet{V, \norm{\cdot}_V}\to \sSet{W, \norm{\cdot}_W}$ is bounded. Then, from $\norm{L_v}_W = K_v \big(\norm{L(v)}_W + \norm{v}_V\big)$, we calculate
+\[ K_v\norm{v}_V = \norm{L(v)}_W(1-K_v) \leq \norm{L}\;\norm{v}_V(1-K_v), \]
+which implies $K_v \leq \norm{L}(1-K_v)$. This can be written as $K_v \leq \frac{\norm{L}}{1+ \norm{L}}$.
+Thus $K = \sup_v K_v \leq \frac{\norm{L}}{1+ \norm{L}} < 1$.
+
+Now assume $L: \sSet{V, \norm{\cdot}_V}\to \sSet{W, \norm{\cdot}_W}$ is unbounded. We write
+\[ K_v = \frac{\norm{L(v)}_W}{\norm{v}_V + \norm{L(v)}_W} = \frac{\norm{L(v)}_W + \norm{v}_V - \norm{v}_V}{\norm{v}_V + \norm{L(v)}_W} = 1 - \frac{\norm{v}_V}{\norm{v}_V + \norm{L(v)}_W}. \]
+We can find a sequence $\seq{v_n}$ of unit vectors such that $\norm{L(v_n)}_W \to \infty$. Then $K_{v_n} = 1 - \frac{1}{1+\norm{L(v_n)}_W} \to 1$. Thus
+\[ K = \sup_{v\in V}K_v \geq \sup_{v\in \seq{v_n}}K_v \geq \limsup_{n}K_{v_n} \geq \lim_{n}K_{v_n} = 1, \]
+so $K = 1$.
 \end{proof}
 
 \subsection{Closed operators}
