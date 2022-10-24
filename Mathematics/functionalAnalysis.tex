@@ -88,9 +88,11 @@ Let initial convergence w.r.t. a set of linear functions is a vector space conve
 Let $\sSet{V,\xi}$ be a vector space convergence and $A,B\subseteq V$. Then
 \begin{enumerate}
 \item $\adh(A)+\adh(B) \subseteq \adh(A+B)$;
-\item $\inh(A)+\inh(B) \subseteq A+\inh(B) \subseteq \inh(A+B)$.
+\item $\inh(A)+\inh(B) \subseteq A+\inh(B) \subseteq \inh(A+B)$;
+\item $\interior(A)+\interior(B) \subseteq A+\interior(B) \subseteq \interior(A+B)$.
 \end{enumerate}
 \end{proposition}
+TODO: same for closure?
 \begin{proof}
 (1) We use \ref{productAdherence} and \ref{adherenceInherenceContinuity} to compute
 \[ \adh(A)+\adh(B) = +^\imf[\adh(A)\times\adh(B)] = +^\imf[\adh(A\times B)] \subseteq \adh(+^\imf[A\times B]) = \adh(A+B). \]
@@ -98,7 +100,10 @@ Let $\sSet{V,\xi}$ be a vector space convergence and $A,B\subseteq V$. Then
 (2) The inclusion $\inh(A)+\inh(B) \subseteq A+\inh(B)$ is immediate. Now for all $v\in V$ we have $v+\inh(B) = \inh(v+B)$, so
 \[ A+\inh(B) = \bigcup_{v\in A}v+\inh(B) = \bigcup_{v\in A}\inh(v+B) \subseteq \inh\left(\bigcup_{v\in A} v+B\right) = \inh(A+B), \]
 where we have used the monotonicity of $\inh$ and \ref{orderPreservingFunctionLatticeOperations}.
+
+(3) Similar to (2).
 \end{proof}
+Notice that the argument used for (2) and (3) does not work for the adherence because $\adh(A)+\adh(B) \nsubseteq A+\adh(B)$ in general.
 
 \begin{lemma}
 Let $V$ be a convergence vector space over a field $K$ and $F\subseteq K$ a subfield. Then the $F$-vector space $V_F$ with the same convergence structure is also a convergence vector space.
@@ -108,18 +113,26 @@ It is enough that the restriction of the scalar multiplication to $F$ remains co
 \end{proof}
 
 \begin{proposition} \label{continuityToNormedSpace}
-Let $\sSet{V, \xi}$ be a convergence vector space and $\sSet{W, \norm{\cdot}}$ a normed space.
-A positively homogeneous function $f: V\to W$ is continuous \textup{if and only if} there exists a neighbourhood $U\in \vicinity_\xi(0)$ such that $f$ is bounded on $U$.
+Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a function.
+\begin{enumerate}
+\item If $f$ is continuous, then $f$ is bounded on some $U\in \vicinity_\xi(0)$.
+\item If $f$ is positively homogeneous, then the converse also holds.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-First assume $f$ continuous, then $\ball(0,1)\in \neighbourhood_W(0) = \neighbourhood_W(f(0)) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ by \ref{continuityVicinityFilter}. So there exists $U\in \vicinity_\xi(0)$ such that $f^{\imf}[U] \subseteq \ball(0,1)$, which means that $f$ is bounded by $1$ on $U$.
+(1) Assume $f$ continuous, then $\ball(0,1)\in \neighbourhood_W(0) = \neighbourhood_W(f(0)) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ by \ref{continuityVicinityFilter}. So there exists $U\in \vicinity_\xi(0)$ such that $f^{\imf}[U] \subseteq \ball(0,1)$, which means that $f$ is bounded by $1$ on $U$.
 
-Now assume there exists a neighbourhood $U\in \vicinity_\xi(0)$ such that $f$ is bounded on $U$. Then $f^{\imf}(U)\subseteq \ball_W(0,C)$.
-By \ref{pretopologicalContinuityVicinities} it is enough to prove that $\neighbourhood_W(f(0)) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$. It is in fact enough to show that a base of $\neighbourhood_W(f(0))$, to wit the set of open balls centered at $0$, is contained in $f^{\imf\imf}[\vicinity_\xi(0)]$. To that end, take some open ball $\ball(0,\epsilon)$. Then $\frac{\epsilon}{C} U\in \frac{\epsilon}{C}\vicinity_\xi(0) = \vicinity_\xi(\frac{\epsilon}{C}0) = \vicinity_\xi(0)$. So
+(2) Assume $f$ is positively homogeneous and there exists a vicinity $U\in \vicinity_\xi(0)$ such that $f$ is bounded on $U$. Then $f^{\imf}(U)\subseteq \ball_W(0,C)$.
+By \ref{pretopologicalContinuityVicinities} it is enough to prove that $\neighbourhood_W(f(0)) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$. It is in fact enough to show that a base of $\neighbourhood_W(f(0)) = \neighbourhood_W(0)$, to wit the set of open balls centered at $0$, is contained in $f^{\imf\imf}[\vicinity_\xi(0)]$. To that end, take some open ball $\ball(0,\epsilon)$. Then $\frac{\epsilon}{C} U\in \frac{\epsilon}{C}\vicinity_\xi(0) = \vicinity_\xi(\frac{\epsilon}{C}0) = \vicinity_\xi(0)$. So
 \[ f^{\imf}(\frac{\epsilon}{C}U) = \frac{\epsilon}{C}f^{\imf}(U)\subseteq \frac{\epsilon}{C}\ball_W(0,C) = \ball_W(0,\epsilon), \]
 means that $\neighbourhood_W(0) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ and thus that $f$ is continuous.
 \end{proof}
-
+\begin{corollary} \label{majorisedContinuity}
+Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space. Let $f,g: V\to W$ be functions such that $f$ is positively homogeneous and $g$ is continuous. If $f \leq g$, then $f$ is also continuous.
+\end{corollary}
+\begin{proof}
+As $g$ is continuous, it is bounded on some $U\in \vicinity_\xi(0)$. Then $f$ is also bounded on this $U$ and thus continuous by the proposition.
+\end{proof}
 
 \subsection{Algebraic convergence}
 \begin{definition}
@@ -320,19 +333,19 @@ Thus $A\in \vicinity_\xi(\lambda v)^{\mesh}$, which is what we needed to show by
 \begin{proposition} \label{inherenceAdherenceConvex}
 Let $\sSet{V,\xi}$ be a vector space convergence and $A\subseteq V$. Then
 \begin{enumerate}
-\item if $A$ is convex, then $\adh(A)$ is convex;
-\item if $A$ is convex, then $\inh(A)$ is convex;
+\item if $A$ is convex, then $\adh(A)$, $\inh(A)$ and $\interior(A)$ is convex;
 \item if $A$ is open, then $\convex(A)$ is open.
 \end{enumerate}
 \end{proposition}
+TODO same for closure?
 \begin{proof}
 (1) For all $0<r<1$, we have
 \[ r\adh(A) + (1-r)\adh(A) = \adh(rA) + \adh\big((1-r)A\big) \subseteq \adh\big(rA + (1-rA)\big) \subseteq \adh(A) \]
-by \ref{vectorSumInherenceAdherence}.
+by \ref{vectorSumInherenceAdherence}. 
 
-(2) Similar.
+The argument for $\inh(A)$ and $\interior(A)$ is similar.
 
-(3) We have
+(2) We have
 \[ \interior(\convex(A)) = \interior\left(\bigcup_{|r|\leq 1} rA + (1-r)A\right) \supseteq \bigcup_{|r|\leq 1} r\interior(A) + (1-r)\interior(A) = \bigcup_{|r|\leq 1} rA + (1-r)A = \convex(A). \]
 TODO ref.
 \end{proof}
@@ -912,70 +925,119 @@ Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. The function
 \[ p_A: V\to \R^{\geq 0}: v\mapsto \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} \]
 is called the \udef{gauge} or \udef{Minkowski functional} of $A$.
 \end{definition}
-The function $p_A$ is well-defined (i.e.\ $p_A(v)$ is finite for all $v\in V$) because $A$ is absorbent.
 
+\begin{lemma} \label{gaugeWellDefined}
+Let $V$ be a vector space and $A\subseteq V$. The function $p_A$ is well-defined (i.e.\ $p_A(v)$ is finite for all $v\in V$) \textup{if and only if} $A$ is absorbent.
+\end{lemma}
 
-\begin{lemma}
-Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. Then $p_A = p_{\interval[o]{0,1}\cdot A}$.
+\begin{lemma} \label{gaugeScaling}
+Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. For all $v\in V$ and $t\geq 0$:
+\[ p_A(tv) = p_{t^{-1}A}(v) = t p_A(v). \]
+Thus $p_A$ is positively homogeneous.
 \end{lemma}
 \begin{proof}
-TODO
+We calculate
+\begin{align*}
+p_A(tv) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{tv\in \lambda A} \\
+&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in t^{-1}\lambda A} = p_{t^{-1}A}(v) \\
+&= \inf\setbuilder{t\lambda\in \R^{\geq 0}}{v\in \lambda A} \\
+&= t\inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} = tf(v).
+\end{align*}
 \end{proof}
 
-TODO replace with $\interval[o]{0,1}\cdot A$!!!!!!!!!!!!
+\begin{lemma}
+Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. Then $p_A = p_{\semibalanced(A)}$.
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\setbuilder{\lambda\in\R^{\geq 0}}{v\in \lambda \semibalanced(A)} &= \setbuilder{\lambda\in\R^{\geq 0}}{v\in \lambda\cdot\interval{0,1}\cdot A} \\
+&= \setbuilder{\lambda\in\R^{\geq 0}}{\exists k\in \interval{0,1}:\; v\in \lambda k\cdot A} \\
+&= \setbuilder{\lambda\in\R^{\geq 0}}{\exists \lambda'\leq \lambda:\; v\in \lambda' \cdot A} \\
+&= \upset \setbuilder{\lambda'\in\R^{\geq 0}}{v\in \lambda' \cdot A}.
+\end{align*}
+Thus the infima of both $\setbuilder{\lambda\in\R^{\geq 0}}{v\in \lambda \semibalanced(A)}$ and $\setbuilder{\lambda'\in\R^{\geq 0}}{v\in \lambda' \cdot A}$ are the same.
+\end{proof}
+
 \begin{lemma} \label{gaugeLemma}
 Let $V$ be a vector space, $A\subseteq V$ an absorbent subset and $\lambda\in \R^{> 0}$. Then
 \begin{enumerate}
-\item $\lambda > p_A(v) \implies \lambda^{-1}v\in A$;
-\item $\lambda^{-1}v\in A \implies \lambda \geq p_A(v)$.
+\item if $A$ is semibalanced, then $p_A(v) < \lambda \implies \lambda^{-1}v\in A$;
+\item $\lambda^{-1}v\in A \implies p_A(v) \leq \lambda$;
+\item $p_A^{\preimf}[\ball(0,1)] \;\subseteq\; \semibalanced(A) \;\subseteq\; p_A^{\preimf}[\cball(0,1)]$;
+\item $\frac{v}{p_A(v)+\epsilon} \in A$ for all $v\in V$ and $\epsilon >0$.
 \end{enumerate}
-In particular, we have
-\[ p_A^{\preimf}[\ball(0,1)] = \setbuilder{v\in V}{p_A(v) < 1} \subseteq A \subseteq \setbuilder{v\in V}{p_A(v) \leq 1} = p_A^{\preimf}[\cball(0,1)]. \]
 \end{lemma}
+\begin{proof}
+(1) If $p_A(v) < \lambda$, then there exists $\lambda' \leq \lambda$ such that $v\in \lambda' A$. As we can write $\lambda' = k\lambda$ for some $k\in\interval{0,1}$, we have
+\[ v\in \lambda k A \subseteq \lambda \cdot \interval{0,1}\cdot A = \lambda A, \]
+where we have used that $A = \semibalanced(A) = \interval{0,1}\cdot A$. Thus $\lambda^{-1}v \in A$.
 
-TODO reformulate
+(2) Assume $\lambda^{-1}v \in A$. Then $v\in \lambda A$, so we immediately have $p_A \leq \lambda$.
+
+(3) We calculate
+\begin{align*}
+x\in p_{\semibalanced(A)}^\preimf[\ball(0,1)] \iff& p_{\semibalanced(A)}(x) < 1 \\
+\implies& x\in \semibalanced(A) \\
+\implies& p_{\semibalanced(A)}(x) \leq 1 \\
+\iff& x\in p_{\semibalanced(A)}^\preimf[\cball(0,1)].
+\end{align*}
+Reformulating in terms of sets gives the result.
+
+(4) This follows from (1) and the fact that $p_A(v) < p_A(v) + \epsilon$.
+\end{proof}
+
+\begin{lemma} \label{gaugeClassificationLemma}
+Let $V$ be a vector space, $f: V\to \R^{\geq 0}$ a positively homogeneous function and $A \subseteq V$ a semibalanced subset.
+Then the following are equivalent:
+\begin{enumerate}
+\item $f = p_A$;
+\item $f^{\preimf}[\ball(0,1)] \subseteq A \subseteq f^{\preimf}[\cball(0,1)]$;
+\end{enumerate}
+In particular $f^{\preimf}[\ball(0,1)]$ is absorbent.
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ This is immediate by \ref{gaugeLemma}.
+
+$(2) \Rightarrow (1)$ We calculate, for arbitrary $v\in V$,
+\[ \begin{aligned}
+p_A(v) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} \\
+&\leq \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda f^{\preimf}[\ball(0,1)]} \\
+&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in f^{\preimf}[\ball(0,\lambda)]} \\
+&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{f(v) < \lambda} = f(v)
+\end{aligned} \quad\text{and}\quad \begin{aligned}
+p_A(v) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} \\
+&\geq \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda f^{\preimf}[\cball(0,1)]} \\
+&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in f^{\preimf}[\cball(0,lambda)]} \\
+&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{f(v) \leq \lambda} = f(v).
+\end{aligned} \]
+We conclude that $f(v) = p_A(v)$.
+
+(In particular) Because $p_A(v) = f(v)$ is finite for all $v$, $A$ is well-defined (\ref{gaugeWellDefined}). We can also give a direct argument: for all $v\in V$ and any $\epsilon > 0$, we have $f\big((f(v)+\epsilon)^{-1}v\big) = \frac{f(v)}{f(v)+\epsilon} < 1$. Then $(f(v)+\epsilon)^{-1}v\in f^\preimf[\ball(0,1)]$.
+\end{proof}
+
 \begin{proposition} \label{gaugeClassification}
 Let $V$ be a vector space and $f: V\to \R^{\geq 0}$ a function.
 Then the following are equivalent:
 \begin{enumerate}
 \item $f$ is positively homogenous;
-\item for all $A\subseteq V$ such that $f^{\preimf}(\ball(0,1)) \subseteq A \subseteq f^{\preimf}(\cball(0,1))$, $A$ is absorbent and $f = p_A$;
 \item $f = p_A$ for some absorbent subset $A$.
 \end{enumerate}
 \end{proposition}
-Note that positive homogeneity is equivalent to strictly positive homogeneity.
 \begin{proof}
-$(1) \Rightarrow (2)$ To show absorbence, take some $v\in V$. Then for any $\epsilon>0$, $f\big((f(v)+\epsilon)^{-1}v\big) = \frac{f(v)}{f(v)+\epsilon} < 1$, so $(f(v)+\epsilon)^{-1}v\in A$.
+Assume $f$ positively homogeneous. Then we can set $A = f^{\preimf}[\ball(0,1)]$ in \ref{gaugeClassificationLemma} because $f^{\preimf}[\ball(0,1)]$ is semibalanced. Indeed
+\[ \interval{0,1}\cdot f^{\preimf}[\ball(0,1)] = f^{\preimf}[\interval{0,1}\cdot\ball(0,1)] = f^{\preimf}[\ball(0,1)]. \]
 
-Now take some $A$ and fix some arbitrary $v\in V$. We have $p_A(v) = \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A}$, so
-\[ \begin{aligned}
-p_A(v) &\leq \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda f^{\preimf}(\ball(0,1))} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in f^{\preimf}(\ball(0,\lambda))} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{f(v) < \lambda} = f(v)
-\end{aligned} \quad\text{and}\quad \begin{aligned}
-p_A(v) &\geq \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda f^{\preimf}(\cball(0,1))} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in f^{\preimf}(\cball(0,\lambda))} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{f(v) \leq \lambda} = f(v).
-\end{aligned} \]
-We conclude that $f(v) = p_A(v)$.
-
-$(2) \Rightarrow (3)$ Immediate.
-
-$(3) \Rightarrow (1)$ We calculate for $t \geq 0$
-\begin{align*}
-f(tv) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{tv\in \lambda A} = \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in t^{-1}\lambda A} \\
-&= \inf\setbuilder{t\lambda\in \R^{\geq 0}}{v\in \lambda A} = t\inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} = tf(v).
-\end{align*}
+The converse is given by \ref{gaugeScaling}.
 \end{proof}
 
-
-\begin{proposition}
-Let $\sSet{V, \xi}$ be a convergence vector space and $A\subseteq V$ an absorbent subset. Then $p_A: \sSet{V,\xi} \to \F$ is continuous \textup{if and only if} $A\in\vicinity_\xi(0)$.
+\begin{proposition} \label{gaugeContinuity}
+Let $\sSet{V, \xi}$ be a convergence vector space and $A\subseteq V$ an absorbent, semibalanced subset. Then $p_A: \sSet{V,\xi} \to \F$ is continuous \textup{if and only if} $A\in\vicinity_\xi(0)$.
 \end{proposition}
 \begin{proof}
-By \ref{gaugeClassification} we have that $p_A$ is positively homogeneous. Then by \ref{continuityToNormedSpace}, $p_A$ is continuous iff it is bounded on some $B\in\vicinity_\xi(0)$. Now $p_A$ is bounded on $A$ by \ref{gaugeLemma}, so this proves the direction $\Rightarrow$.
+By \ref{gaugeScaling} we have that $p_A$ is positively homogeneous. Then by \ref{continuityToNormedSpace}, $p_A$ is continuous iff it is bounded on some $B\in\vicinity_\xi(0)$. Now $p_A$ is bounded on $A$ by \ref{gaugeLemma}, so this proves the direction $\Rightarrow$.
 
-Now assume $p_A$ continuous. Then $\ball(0,1) \in \neighbourhood_\F(0) = \neighbourhood_\F(p_A(0))$, so $p_A^\preimf[\ball(0,1)] \in \vicinity_\xi(0)$ by \ref{continuityVicinityFilter}. By \ref{gaugeLemma}, $p_A^\preimf[\ball(0,1)] \subseteq A$, so $A\in\vicinity_\xi(0)$.
+Now assume $p_A$ continuous. Then $\ball(0,1) \in \neighbourhood_\F(0) = \neighbourhood_\F(p_A(0))$, so $p_A^\preimf[\ball(0,1)] \in \vicinity_\xi(0)$ by \ref{continuityVicinityFilter}. By \ref{gaugeLemma} (using the fact that $A$ is semibalanced), $p_A^\preimf[\ball(0,1)] \subseteq A$, so $A\in\vicinity_\xi(0)$.
 \end{proof}
 \begin{corollary} \label{gaugeContinuousAlgebraicConvergence}
 Let $V$ be a vector space. Then $p_A: \sSet{V,\mathfrak{a}} \to \F$ is continuous for any absorbent subset $A \subseteq V$.
@@ -983,9 +1045,15 @@ Let $V$ be a vector space. Then $p_A: \sSet{V,\mathfrak{a}} \to \F$ is continuou
 \begin{proof}
 By \ref{coreProperties}, we have $0\in\inh_\mathfrak{a}(A)$. Then $A\in \vicinity_\mathfrak{a}$ by \ref{principalAdherenceInherence}.
 \end{proof}
+\begin{corollary} \label{absoluteFunctionalGauge}
+Let $\sSet{V, \xi}$ be a convergence vector space and $f: V\to \F$ a linear functional. Then $f$ is continuous \textup{if and only if} $|f| = p_K$ for some $K\in\vicinity_\xi(0)$.
+\end{corollary}
+\begin{proof}
+We have that $|f|$ is positively homogeneous, and thus of the form $p_K$ by \ref{gaugeClassification}. The rest follows from the proposition.
+\end{proof}
 
 \begin{proposition} \label{gaugeInherenceAdherence}
-Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. Then
+Let $V$ be a vector space and $A\subseteq V$ an absorbent semibalanced subset. Then
 \begin{enumerate}
 \item $p_A^{\preimf}[\ball(0,1)] = \inh_\mathfrak{a}(A)$;
 \item $p_A^{\preimf}[\cball(0,1)] = \adh_\mathfrak{a}(A)$.
@@ -1000,13 +1068,10 @@ For the other inclusion we use that $p_A$ is continuous by \ref{gaugeContinuousA
 (2) Again we show both inclusions. From \ref{gaugeLemma} we have $A \subseteq p^\preimf_A\big(\cball(0,1)\big)$. Thus, by \ref{adherenceInherenceContinuity},
 \[ \adh_\mathfrak{a}(A) \subseteq \adh_\mathfrak{a}\Big(p^\preimf_A\big(\cball(0,1)\big)\Big) \subseteq p_A^\preimf\big(\overline{\cball(0,1)}\big) = p^\preimf_A\big(\cball(0,1)\big). \]
 
-For the other inclusion, take $x\in p^\preimf_A\big(\cball(0,1)\big)$, which means that $p_A(x) \leq 1$.
+For the other inclusion, take $x\in p^\preimf_A\big(\cball(0,1)\big)$, which means that $p_A(x) \leq 1$, so $p_A(x) < 1+\epsilon$ for all $\epsilon > 0$. By \ref{gaugeLemma}, $(1+\epsilon)^{-1}x = x - \epsilon(1+\epsilon)^{-1}x \in A$. Because $\frac{\epsilon}{1+\epsilon} < \epsilon$, we have $x - \epsilon(1+\epsilon)^{-1}x \in x + \ball(0,\epsilon)\cdot x$ and so $x + \ball(0,\epsilon)\cdot x \mesh A$.
 
-
-First take $x\in \adh_\mathfrak{a}(A)$. Then by \ref{constructionsInAlgebraicConvergence}, there exists $v\in V$ such that for all $\Gamma\in\neighbourhood_\F(0)$, we have $(x+\Gamma\cdot v)\mesh A$. There exists $\lambda \in 1 + \Gamma$ that is real and strictly less than $1$. Thus $p_A(x) <1$, meaning $x\in p^\preimf_A\big(\ball(0,1)\big)$.
+Now for all $\Gamma\in\neighbourhood_\F(0)$, we have $\ball(0,\epsilon) \subseteq \Gamma$ for some $\epsilon >0$. Thus $x+ \Gamma\cdot x \mesh A$ and $x\in\adh_\mathfrak{a}(A)$ by \ref{constructionsInAlgebraicConvergence}.
 \end{proof}
-We can summarise \ref{gaugeLemma} and \ref{gaugeInherenceAdherence} as
-\[ \inh_\mathfrak{a}(A) = \setbuilder{v\in V}{p_A(v) < 1} \subseteq A \subseteq \setbuilder{v\in V}{p_A(v) \leq 1} = \adh_\mathfrak{a}(A). \]
 
 
 \begin{lemma} \label{gaugeZeroLemma}
@@ -1031,7 +1096,7 @@ p_A(\mu\cdot v) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{\mu\cdot v\in \lambda
 &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \frac{\lambda}{|\mu|} A} = \inf\setbuilder{|\mu|\lambda\in \R^{\geq 0}}{v\in \lambda A} = |\mu|\cdot p_A(v).
 \end{align*}
 
-(2) We just need to show subadditivity. Positive homogeneity is automatic by \ref{gaugeClassification}. Take $v,w\in V$. Now take arbitrary $\epsilon > 0$, so $(p_A(v)+\epsilon)^{-1}v \in A$ and $(p_A(w)+\epsilon)^{-1}w \in A$ by \ref{gaugeLemma}. By convexity of $A$, we have
+(2) We just need to show subadditivity. Positive homogeneity is automatic by \ref{gaugeScaling}. Take $v,w\in V$. Now take arbitrary $\epsilon > 0$, so $(p_A(v)+\epsilon)^{-1}v \in A$ and $(p_A(w)+\epsilon)^{-1}w \in A$ by \ref{gaugeLemma} (as $A$ is semibalanced by \ref{convexAbsorbentImpliesSemibalanced}). By convexity of $A$, we have
 \[ \frac{v+w}{p_A(v)+p_A(w)+2\epsilon} = \frac{p_A(v)+\epsilon}{p_A(v)+p_A(w)+2\epsilon}(p_A(v)+\epsilon)^{-1}v + \frac{p_A(w)+\epsilon}{p_A(v)+p_A(w)+2\epsilon}(p_A(w)+\epsilon)^{-1}w \in A. \]
 By \ref{gaugeLemma} this means $p_A(v)+p_A(w)+2\epsilon \geq p_A(v+w)$ and because $\epsilon$ was arbitrary, we conclude that $p_A(v+w) \leq p_A(v)+p_A(w)$.
 
@@ -1042,67 +1107,28 @@ The gauge of an absolutely convex and absorbent subset is a seminorm. If the sub
 \end{corollary}
 
 \begin{proposition} \label{gaugeConstructions}
-Let $V$ be a vector space, $A,B\subseteq V$ absolutely convex and absorbent subsets and $\mathcal{E}$ a set of absolutely convex and absorbent subsets.
+Let $V$ be a vector space and $A,B\subseteq V$ semibalanced subsets. Then
 \begin{enumerate}
-\item The gauge of $\lambda A$ is $|\lambda|^{-1}p_A$ for all balanced sets $A$ and $\lambda\in \F\setminus\{0\}$.
-\item The gauge of $A\cap B$ is $\max\{p_A, p_B\}$ if $A,B$ are balanced.
-\item If $A\subseteq B$, then $p_B \leq p_A$.
+\item the gauge of $A\cap B$ is $\max\{p_A, p_B\}$;
+\item if $A\subseteq B$, then $p_B \leq p_A$;
+\item if $p_B \leq p_A$, then $\adh_\mathfrak{a}(A) \subseteq \adh_\mathfrak{a}(B)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Take $v\in V$. Then
-\[ p_{\lambda A} = \inf\setbuilder{\mu\in\R^{\geq 0}}{v\in \mu\lambda A} = \inf\setbuilder{\mu \in\R^{\geq 0}}{\lambda^{-1}v\in \mu A} = p_A(\lambda^{-1}v) = |\lambda|^{-1}p_A(v), \]
-where we have used that $p_A$ is absolutely homogeneous because $A$ is balanced.
+(1) Clearly $p_A \leq p_{A\cap B}$:
+\begin{align*}
+p_A(v) &= \inf\setbuilder{\lambda\in\R^{\geq 0}}{v\in \lambda A} \\
+&\leq \setbuilder{\lambda\in\R^{\geq 0}}{v\in \lambda (A\cap B)} \\
+&= p_{A\cap B}(v).
+\end{align*}
+Similarly $p_B \leq p_{A\cap B}$. Thus $\max\{p_A, p_B\} \leq p_{A\cap B}$.
 
-(2) TODO
+For the other inequality we use \ref{gaugeLemma}: take $v\in V$ and arbitrary $\epsilon > 0$. Then $\max\{p_A(v)+\epsilon, p_B(v)+\epsilon\} > p_A(v)$, so $\max\{p_A(v)+\epsilon, p_B(v)+\epsilon\}^{-1}v\in A$. Similarly $\max\{p_A(v)+\epsilon, p_B(v)+\epsilon\}^{-1}v\in B$. Thus $\max\{p_A(v)+\epsilon, p_B(v)+\epsilon\}^{-1}v \in A\cap B$ and finally $p_{A\cap B}(v) \leq \max\{p_A(v)+\epsilon, p_B(v)+\epsilon\}$. Taking the limit $\epsilon \to 0$, we have $p_{A\cap B} \leq \max\{p_A, p_B\}$.
+
+(2) First assume $A\subseteq B$. Then $\frac{v}{p_A(v)+\epsilon}\in A$ by \ref{gaugeLemma}, for all $\epsilon >0$. Then $\frac{v}{p_A(v)+\epsilon}\in B$, so $p_B(v) \leq p_A(v)+\epsilon$ (again by \ref{gaugeLemma}). Taking the limit $\epsilon\to 0$ yields the result.
+
+(3) Assume $p_B \leq p_A$ and take $v\in \adh_\mathfrak{a}(A)$. Then $p_B(v) \leq p_A(v) \leq 1$ by \ref{gaugeInherenceAdherence}, which also gives $v\in\adh_\mathfrak{a}(B)$.
 \end{proof}
-
-\begin{proposition} \label{seminormContinuity}
-Let $\sSet{V,\xi}$ be a TVS and $p_K:V\to \R^{\geq 0}$ the gauge of some absorbent set $K$. Then the following are equivalent:
-\begin{enumerate}
-\item $p_K\in \sSet{V,\xi}^*$;
-\item $p_K$ is continuous at $0$;
-\item $K\in \neighbourhood_\xi(0)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-$(1) \Rightarrow (2)$ Immediate.
-
-$(2) \Rightarrow (3)$ We have $p_K^{\preimf}[\ball(0,1)] \subseteq K$ by \ref{gaugeClassification}. If $p_K$ is continuous at $0$, then $K$ is a neighbourhood of $0$ by \ref{pretopologicalContinuityVicinities}.
-
-$(3) \Rightarrow (1)$ Assume $K$ a neighbourhood of $0$ and take some neighbourhood $\Gamma$ of $0$ in $\R$. Then $\Gamma$ contains a ball $\ball(0,\epsilon)$. By \ref{pretopologicalContinuityVicinities}, it is enough to show that $p_K^{\preimf}[\ball(0,\epsilon)]$ is a neighbourhood. Indeed
-\[ p_K^{\preimf}[\ball(0,\epsilon)] \supseteq p_K^{\preimf}\left[\cball\left(0,\frac{\epsilon}{2}\right)\right] = p_K^{\preimf}\left[\frac{\epsilon}{2}\cball(0,1)\right] = \frac{\epsilon}{2} p_K^{\preimf}[\cball(0,1)] \supseteq \frac{\epsilon}{2} K, \]
-and the result follows because $\frac{\epsilon}{2}K$ is a neighbourhood of $0$ by \ref{TVSconstruction}.
-\end{proof}
-
-\begin{proposition} \label{gaugeMajorisation}
-Let $\sSet{V,\xi}$ be a TVS and $f:V\to \F$ a linear functional. Then $f\in V^*$ \textup{if and only if} $|f| \leq p_K$ for some $K\in \neighbourhood_\xi(0)$.
-\end{proposition}
-\begin{proof}
-If $|f| \leq p_K$ for some $K\in \neighbourhood_\xi(0)$, then $f$ is bounded on $K$ and thus continuous by \ref{continuityToNormedSpace}.
-
-Now assume $f\in V^*$. By \ref{continuityToNormedSpace} $f$ is bounded by some $C\in \R$ on some neighbourhood $M$. By \ref{continuity} we have that $f^\imf[\adh_\xi(M)] \subseteq \cball(0,C)$ and by \ref{inherenceAdherenceInclusion} and \ref{gaugeInherenceAdherence}, $f^\imf[p_M^\preimf(\cball(0,1))] = f^\imf[\adh_\mathfrak{a}(M)] \subseteq f^\imf[\adh_\xi(M)]$. This means that $\left|f\left(\frac{x}{p_M(x)}\right)\right| \leq C$ for all $x\in V$. Then $p_M(x)^{-1}|f(x)| \leq C$ and, using \ref{gaugeConstructions},
-\[ |f(x)| \leq C p_M(x) = p_{C^{-1}\cdot M}(x). \]
-Thus we can take $K = C^{-1}\cdot M$, which is a neighbourhood of the origin by \ref{TVSconstruction}.
-\end{proof}
-
-\begin{proposition} \label{gaugeMajorisation}
-Let $\sSet{V,\xi}$ be a convergence vector space and $f:V\to \F$ a linear functional. Then $f\in V^*$ \textup{if and only if} $|f| \leq p_K$ for some $K\in \vicinity_\xi(0)$.
-\end{proposition}
-\begin{proof}
-If $|f| \leq p_K$ for some $K\in \neighbourhood_\xi(0)$, then $f$ is bounded on $K$ because $p_K^\imf[K] \subseteq \cball(0,1)$ by \ref{gaugeLemma}. Thus $f$ is continuous by \ref{continuityToNormedSpace}.
-
-Now assume $f\in V^*$. By \ref{continuityToNormedSpace} $f$ is bounded by some $C\in \R$ on some neighbourhood $M$, which means that $f^\imf(M) \subseteq \cball(0,C)$. By \ref{gaugeInherenceAdherence}, \ref{inherenceAdherenceInclusion} and \ref{adherenceInherenceContinuity}, we have
-\[ f^\imf\Big(p_M^{\preimf}\big(\cball(0,1)\big)\Big) = f^\imf\big(\adh_\mathfrak{a}(M)\big) \subseteq f^\imf\big(\adh_\xi(M)\big) \subseteq \closure_\F\big(f^{\imf}(M)\big) \subseteq \closure_\F\big(\cball(0,C)\big) = \cball(0,C). \]
-
-
-
-
-By \ref{continuity} we have that $f^\imf[\adh_\xi(M)] \subseteq \cball(0,C)$ and by \ref{inherenceAdherenceInclusion} and \ref{gaugeInherenceAdherence}, $f^\imf[p_M^\preimf(\cball(0,1))] = f^\imf[\adh_\mathfrak{a}(M)] \subseteq f^\imf[\adh_\xi(M)]$. This means that $\left|f\left(\frac{x}{p_M(x)}\right)\right| \leq C$ for all $x\in V$. Then $p_M(x)^{-1}|f(x)| \leq C$ and, using \ref{gaugeConstructions},
-\[ |f(x)| \leq C p_M(x) = p_{C^{-1}\cdot M}(x). \]
-Thus we can take $K = C^{-1}\cdot M$, which is a neighbourhood of the origin by \ref{TVSconstruction}.
-\end{proof}
-
 
 \subsection{Initial convergence w.r.t. seminorms}
 
@@ -1155,9 +1181,9 @@ WLOG we may take all $\epsilon_n = \epsilon = \min_{n\leq N}\epsilon_n$. We may 
 Let $V$ be a vector space. A topological convergence on $V$ is locally convex \textup{if and only if} it is the initial convergence w.r.t. some set $S$ of seminorms on $V$.
 \end{proposition}
 \begin{proof}
-If $V$ has the initial convergence w.r.t. $S$, then $V$ is locally convex by \ref{initialSeminormConvergence} because $p^\preimf[\ball(0,\epsilon)]$ is convex.
+If $V$ has the initial convergence w.r.t. $S$, then $V$ is locally convex by \ref{initialSeminormConvergence} because $p^\preimf[\ball(0,\epsilon)]$ is convex for all $p\in S$.
 
-Now let $V$ be a locally convex TVS, meaning there exists a convex base $\mathcal{B}$ of $\neighbourhood(0)$. Then $S = \setbuilder{p_B}{B\in \mathcal{B}}$ is a set of continuous seminorms, by \ref{seminormContinuity}. 
+Now let $V$ be a locally convex TVS, meaning there exists a convex base $\mathcal{B}$ of $\neighbourhood(0)$. Each $B\in\mathcal{B}$ is absorbent by \ref{TVSconstruction} and thus also semibalanced by \ref{convexAbsorbentImpliesSemibalanced}. Then $S = \setbuilder{p_B}{B\in \mathcal{B}}$ is a set of continuous seminorms, by \ref{gaugeContinuity}. 
 
 In order to show that the convergence on $V$ is initial w.r.t. $S$, we verify the form of $\neighbourhood(0)$ given in \ref{initialSeminormConvergence}.
 
@@ -1243,14 +1269,11 @@ We just need to show that $f$ is bounded by $p$. Take arbitrary $v\in V$ and wri
 \[ |\tilde{f}(v)| = \Re|\tilde{f}(v)| = \Re\Big(e^{-i\theta}\tilde{f}(v)\Big) = \Re\Big(\tilde{f}(e^{-i\theta}v)\Big) = g(e^{-i\theta}v) \leq p(e^{-i\theta}v) = |e^{-i\theta}|p(v) = p(v). \]
 \end{proof}
 \begin{corollary}
-Let $V$ be a locally convex vector space, $U\subseteq V$ a subspace and $f:U\to \F$ a continuous functional. Then $f$ has a continuous extension to $V$.
+Let $V$ be a locally convex convergence vector space, $U\subseteq V$ a subspace and $f:U\to \F$ a continuous functional. Then $f$ has a continuous extension to $V$.
 \end{corollary}
 \begin{proof}
-We have that $|f|\leq p_K$ for some $K\in \neighbourhood_U(0)$ by \ref{gaugeMajorisation}. By continuity of the inclusion map, we can find an $M \in \neighbourhood_V(0)$ such that $M\cap U = K$. Then $|f|\leq p_M$ and $f$ can be extended by the Hahn-Banach extension theorem. By \ref{gaugeMajorisation} this extension is continuous.
+We have that $|f| = p_K$ for some $K\in \vicinity_U(0)$ by \ref{absoluteFunctionalGauge}. By continuity of the inclusion map, we can find an $M \in \vicinity_V(0)$ such that $M\cap U = K$. Then $|f|\leq p_M$ and $f$ can be extended by the Hahn-Banach extension theorem. By \ref{majorisedContinuity} this extension is continuous.
 \end{proof}
-\begin{corollary} \label{locallyConvexTVSDualPair}
-Let $V$ be a Hausdorff locally convex vector space and $v\in V$. If $f(v) = 0$ for all $f\in V^*$, then $v = 0$.
-\end{corollary}
 \begin{corollary}
 Let $X$ be a normed space and $Z\subset X$ a subspace. Any bounded linear functional in $\tdual{Z}$ can be extended to a bounded linear functional in $\tdual{X}$ with the same norm.
 \end{corollary}
@@ -1278,19 +1301,19 @@ where the first inequality follows from $|f(x)|\leq \norm{f}\norm{x}$ for all $f
 \subsubsection{Hahn-Banach separation}
 
 \begin{lemma} \label{gaugeSeparationLemma}
-Let $V$ be a real vector space, $A$ an absorbent set and $x_0 \notin A$. Consider the functional $f_{x_0}: \Span\{x_0\}\to \F: tx_0 \mapsto t$. Then $f_{x_0}(x)\leq p_A(x)$ for all $x\in \Span\{x_0\}$.
+Let $V$ be a real vector space, $A$ an absorbent, semibalanced set and $x_0 \notin A$. Consider the functional $f_{x_0}: \Span\{x_0\}\to \F: tx_0 \mapsto t$. Then $f_{x_0}(x)\leq p_A(x)$ for all $x\in \Span\{x_0\}$.
 \end{lemma}
 \begin{proof}
 Let $x = tx_0$. If $t\leq 0$, then the inequality is immediate. Suppose $t>0$. Because $p_A(x_0) \geq 1$ (by the converse of \ref{gaugeLemma}), we have
 \[ f_{x_0}(x) = f_{x_0}(tx_0) = t \leq tp_A(x_0) = p_A(tx_0) = p_A(x)  \]
-using positive homogeneity (\ref{gaugeClassification}).
+using positive homogeneity (\ref{gaugeScaling}).
 \end{proof}
 
 \begin{theorem}[Mazur] \label{MazurTheorem}
 Let $V$ be a real or complex convergence vector space and $A$ an open and convex set. If $U$ is a subspace such that $A\perp U$, then there exists a closed hyperplane $H \supseteq U$ such that $A\perp H$.
 \end{theorem}
 \begin{proof}
-First suppose $V$ is a \emph{real} vector space. Because $A$ is open, it is algebraically open. Take $a\in A$. Then $0\in a-A = \inh_{\mathfrak{a}}(a-A)$, so $a-A$ is absorbing by \ref{coreProperties}. 
+First suppose $V$ is a \emph{real} vector space. Because $A$ is open, it is algebraically open. Take $a\in A$. Then $0\in a-A = \inh_{\mathfrak{a}}(a-A)$, so $a-A$ is absorbing by \ref{coreProperties}. It is also semibalanced (by \ref{convexAbsorbentImpliesSemibalanced} as it is convex by \ref{translationScalingConvexSet}).
 
 Then we have
 \[ U\perp A \iff 0\notin U-A \iff a \notin a-A+U. \]
@@ -1299,11 +1322,11 @@ Consider the functional $f_{a}$ of \ref{gaugeSeparationLemma}, which is majorise
 We note that $U\subseteq \ker(f_a)$, because $p_{a-A+U}(u) = 0$ by \ref{gaugeZeroLemma}.
 
 In order to conclude with \ref{functionalBoundedNeighbourhood}, we need to show that $A-a \subseteq f_a^{\preimf}(\ball(0,|f_a(a)|)) = f_a^{\preimf}(\ball(0,1))$.
-Indeed $A-a \subseteq U+A-a = \inh_\mathfrak{a}(U+A-a) = p_{U+A-a}^\preimf[\ball(0,1)] \subseteq f_{a}^\preimf[\ball(0,1)]$ by \ref{algebraicallyOpen} and \ref{gaugeInherenceAdherence}.
+Indeed $A-a \subseteq U+A-a = \inh_\mathfrak{a}(U+A-a) = p_{U+A-a}^\preimf[\ball(0,1)] \subseteq f_{a}^\preimf[\ball(0,1)]$ by \ref{algebraicallyOpen} and \ref{gaugeInherenceAdherence} ($U+A-a$ is semibalanced because $A-a$ is).
 
 Note that $\ker(f_a)^c$ contains the open set $A$ and thus $\ker(f_a)$ is not dense by \ref{openDensityLemma}. By \ref{hyperplaneClosedDense} this means that $\ker(f_a)$ is closed.
 
-Now suppose $V$ is a \emph{complex} vector space. We can consider the realification $V_\R$ with the same convergence, which is a real convergence vector space by \ref. So we can use the preceding proof to find a real hyperplane $K$ in $V$. Then \ref{realComplexHyperplane} gives that $H = K\cap iK$ is a complex hyperplane in $V$. Now $H$ and $A$ must be disjoint because $K$ and $A$ are disjoint and $H \subseteq K$.
+Now suppose $V$ is a \emph{complex} vector space. We can consider the realification $V_\R$ with the same convergence, which is a real convergence vector space by TODO \ref{}. So we can use the preceding proof to find a real hyperplane $K$ in $V$. Then \ref{realComplexHyperplane} gives that $H = K\cap iK$ is a complex hyperplane in $V$. Now $H$ and $A$ must be disjoint because $K$ and $A$ are disjoint and $H \subseteq K$.
 
 Also $H$ is closed because $K$ and $iK$ are closed (the first by the preceding proof, the second because multiplication by $i$ is a homeomorphism \ref{continuityLemmaVectorConvergence}) and the intersection of two closed sets is closed.
 \end{proof}
@@ -1343,6 +1366,12 @@ for all $a\in A$ and $b\in B$.
 \end{corollary}
 \begin{proof}
 TODO
+\end{proof}
+\begin{corollary} \label{locallyConvexDualPair}
+Let $V$ be a Hausdorff locally convex convergence vector space and $v\in V$. If $f(v) = 0$ for all $f\in V^*$, then $v = 0$.
+\end{corollary}
+\begin{proof}
+We prove the contrapositive. Assume $v\neq 0$. By \ref{FrechetCharacterisation}, we have that $\{0\}$ is closed, so $\{0\}^c$ is a neighbourhood of $v$. By local convexity, $\{0\}^c$ contains a convex vicinity of $x$. We may take this vicinity to be open by taking the interior (which is still convex by \ref{inherenceAdherenceConvex}). Let this open vicinity be $A$ and set $B = \{0\}$. By Hahn-Banach separation, there exists $f\in \dual{V}$ such that $f^\imf[A]$ and $f^\imf[B] = \{0\}$ are disjoint. Thus $f(v) \neq 0$.
 \end{proof}
 
 \subsubsection{Banach limits}
@@ -1393,8 +1422,8 @@ We have that $W$ is separating on $V$ \textup{if and only if}
 
 \begin{example}
 \begin{itemize}
-\item Let $\sSet{V, \xi}$ be a convergence vector space. Then $\sSet{V^*, V, \evalMap(\cdot,\cdot)}$ is a pairing. If $\xi$ is a locally convex, topological, Hausdorff convergence, then the pairing is a dual pair by Hahn-Banach separation \ref{HahnBanachSeparation} and the fact that singletons are closed \ref{FrechetCharacterisation}.
-\item Let $\sSet{V,\xi}$ be a Hausdorff locally convex TVS. Then $\sSet{\sSet{V,\xi}^*, V, \pair{\cdot,\cdot}}$ is a dual pair by \ref{locallyConvexTVSDualPair}. TODO
+\item Let $\sSet{V, \xi}$ be a convergence vector space. Then $\sSet{\dual{V}, V, \evalMap(\cdot,\cdot)}$ is a pairing.
+\item Let $\sSet{V,\xi}$ be a Hausdorff locally convex convergence vector space. Then $\sSet{\dual{V}, V, \pair{\cdot,\cdot}}$ is a dual pair by \ref{locallyConvexDualPair}.
 \end{itemize}
 \end{example}
 
@@ -1458,7 +1487,13 @@ Let $X$ be a Banach space and let $X'$ have the weak-$*$ topology. Then a linear
 TODO 9.2 in lecture notes.
 \end{proof}
 
-\subsection{Polar sets}
+\subsubsection{Orthogonal complements}
+\begin{definition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. The \udef{orthogonal complement} of $B$ is the polar w.r.t. the relation $\perp$ on $(Y,X)$ defined by
+\[ y\perp x \qquad\iff\qquad \pair{x, y} = 0. \]
+\end{definition}
+
+\subsubsection{Polar sets}
 \begin{definition}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. The \udef{polar} of $B$ is the polar w.r.t. the relation $\pol$ on $(Y,X)$ defined by
 \[ y\pol x \qquad\iff\qquad \abspair{x, y} \leq 1. \]
@@ -1516,6 +1551,12 @@ TODO $(\bigcup A)^{\pol} = \bigcap A^{\pol}$.
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $V\subseteq Y$ a subspace. Then
 \[ V^{\pol} = \setbuilder{x\in X}{\forall y\in V:\;\pair{x,y} = 0}. \]
 \end{lemma}
+
+\subsection{Adjoints}
+\begin{definition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ and $\sSet{X',Y',\pair{\cdot,\cdot}'}$ be two pairings and $T: Y\not\to Y'$ a linear operator. An adjoint is a linear operator $S: X'\not\to X$ such that
+\[ \pair{x, Ty}' = \pair{Sx, y} \qquad \forall x\dom(S), \; y\in\dom(T). \]
+\end{definition}
 
 
 \subsection{The pair $(V^*, V)$}
