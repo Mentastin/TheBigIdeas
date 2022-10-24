@@ -162,7 +162,7 @@ Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subse
 (3) We calculate
 \begin{align*}
 \adh_\mathfrak{a}(A) &= \big(\inh_\mathfrak{a}(A^c)\big)^c \\
-&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \vicinity_\F(0):\; \neq(x + \Gamma\cdot v \subseteq A^c)} \\
+&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \vicinity_\F(0):\; \neg(x + \Gamma\cdot v \subseteq A^c)} \\
 &= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \vicinity_\F(0):\; (x + \Gamma\cdot v) \mesh A}.
 \end{align*}
 \end{proof}
@@ -914,6 +914,15 @@ is called the \udef{gauge} or \udef{Minkowski functional} of $A$.
 \end{definition}
 The function $p_A$ is well-defined (i.e.\ $p_A(v)$ is finite for all $v\in V$) because $A$ is absorbent.
 
+
+\begin{lemma}
+Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. Then $p_A = p_{\interval[o]{0,1}\cdot A}$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+TODO replace with $\interval[o]{0,1}\cdot A$!!!!!!!!!!!!
 \begin{lemma} \label{gaugeLemma}
 Let $V$ be a vector space, $A\subseteq V$ an absorbent subset and $\lambda\in \R^{> 0}$. Then
 \begin{enumerate}
@@ -924,6 +933,7 @@ In particular, we have
 \[ p_A^{\preimf}[\ball(0,1)] = \setbuilder{v\in V}{p_A(v) < 1} \subseteq A \subseteq \setbuilder{v\in V}{p_A(v) \leq 1} = p_A^{\preimf}[\cball(0,1)]. \]
 \end{lemma}
 
+TODO reformulate
 \begin{proposition} \label{gaugeClassification}
 Let $V$ be a vector space and $f: V\to \R^{\geq 0}$ a function.
 Then the following are equivalent:
@@ -965,28 +975,32 @@ Let $\sSet{V, \xi}$ be a convergence vector space and $A\subseteq V$ an absorben
 \begin{proof}
 By \ref{gaugeClassification} we have that $p_A$ is positively homogeneous. Then by \ref{continuityToNormedSpace}, $p_A$ is continuous iff it is bounded on some $B\in\vicinity_\xi(0)$. Now $p_A$ is bounded on $A$ by \ref{gaugeLemma}, so this proves the direction $\Rightarrow$.
 
-Now assume $p_A$ continuous. Then $\neighbourhood_\F(p_A(0)) = \neighbourhood_\F(p_A(0)) \subseteq p_A^{\imf\imf}\big(\vicinity_\xi(0)\big)$.
+Now assume $p_A$ continuous. Then $\ball(0,1) \in \neighbourhood_\F(0) = \neighbourhood_\F(p_A(0))$, so $p_A^\preimf[\ball(0,1)] \in \vicinity_\xi(0)$ by \ref{continuityVicinityFilter}. By \ref{gaugeLemma}, $p_A^\preimf[\ball(0,1)] \subseteq A$, so $A\in\vicinity_\xi(0)$.
+\end{proof}
+\begin{corollary} \label{gaugeContinuousAlgebraicConvergence}
+Let $V$ be a vector space. Then $p_A: \sSet{V,\mathfrak{a}} \to \F$ is continuous for any absorbent subset $A \subseteq V$.
+\end{corollary}
+\begin{proof}
+By \ref{coreProperties}, we have $0\in\inh_\mathfrak{a}(A)$. Then $A\in \vicinity_\mathfrak{a}$ by \ref{principalAdherenceInherence}.
 \end{proof}
 
 \begin{proposition} \label{gaugeInherenceAdherence}
 Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. Then
 \begin{enumerate}
-\item $p_A: \sSet{V,\mathfrak{a}} \to \F$ is continuous;
 \item $p_A^{\preimf}[\ball(0,1)] = \inh_\mathfrak{a}(A)$;
 \item $p_A^{\preimf}[\cball(0,1)] = \adh_\mathfrak{a}(A)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) TODO
+(1) We show both inclusions. First take $x\in \inh_\mathfrak{a}(A)$. Then by \ref{constructionsInAlgebraicConvergence}, there exists $\Gamma\in\neighbourhood_\F(0)$ such that $v+\Gamma\cdot v = (1 + \Gamma)\cdot v \subseteq A$. There exists $\lambda \in 1 + \Gamma$ that is real and strictly less than $1$. Thus $p_A(x) <1$, meaning $x\in p^\preimf_A\big(\ball(0,1)\big)$.
 
-(2) We show both inclusions. First take $x\in \inh_\mathfrak{a}(A)$. Then by \ref{constructionsInAlgebraicConvergence}, there exists $\Gamma\in\neighbourhood_\F(0)$ such that $v+\Gamma\cdot v = (1 + \Gamma)\cdot v \subseteq A$. There exists $\lambda \in 1 + \Gamma$ that is real and strictly less than $1$. Thus $p_A(x) <1$, meaning $x\in p^\preimf_A\big(\ball(0,1)\big)$.
-
-For the other inclusion we use that $p_A$ is continuous. By \ref{adherenceInherenceContinuity} and \ref{gaugeLemma} we have
+For the other inclusion we use that $p_A$ is continuous by \ref{gaugeContinuousAlgebraicConvergence}. By \ref{adherenceInherenceContinuity} and \ref{gaugeLemma} we have
 \[ p_A^{\preimf}[\ball(0,1)] = p_A^{\preimf}\Big[\interior_\F\big(\ball(0,1)\big)] \subseteq \inh_\mathfrak{a}\big(p_A^{\preimf}[\ball(0,1)]\big) \subseteq \inh_\mathfrak{a}(A). \]
 
-(2) Again we show both inclusions. From \ref{gaugeLemma} we have $A \subseteq p^\preimf_A\big(\cball(0,1)\big)$. Thus, by \ref{adherenceInherenceContinuity} TODO
+(2) Again we show both inclusions. From \ref{gaugeLemma} we have $A \subseteq p^\preimf_A\big(\cball(0,1)\big)$. Thus, by \ref{adherenceInherenceContinuity},
+\[ \adh_\mathfrak{a}(A) \subseteq \adh_\mathfrak{a}\Big(p^\preimf_A\big(\cball(0,1)\big)\Big) \subseteq p_A^\preimf\big(\overline{\cball(0,1)}\big) = p^\preimf_A\big(\cball(0,1)\big). \]
 
-
+For the other inclusion, take $x\in p^\preimf_A\big(\cball(0,1)\big)$, which means that $p_A(x) \leq 1$.
 
 
 First take $x\in \adh_\mathfrak{a}(A)$. Then by \ref{constructionsInAlgebraicConvergence}, there exists $v\in V$ such that for all $\Gamma\in\neighbourhood_\F(0)$, we have $(x+\Gamma\cdot v)\mesh A$. There exists $\lambda \in 1 + \Gamma$ that is real and strictly less than $1$. Thus $p_A(x) <1$, meaning $x\in p^\preimf_A\big(\ball(0,1)\big)$.
