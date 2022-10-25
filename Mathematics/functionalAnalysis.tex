@@ -31,7 +31,7 @@ They are both clearly invertible (for the first, note that the kernel is $\{0\}$
 For the inverse of the first TODO!?!
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{initialVectorSpaceConvergence}
 Let $V$ be a vector space, $\{V_i\}_{i\in I}$ a set of convergence vector spaces and $\{L_i: V \to V_i\}_{i\in I}$ a set of linear maps. Then the initial convergence on $V$ w.r.t. $\{L_i: V \to V_i\}_{i\in I}$ makes $V$ a convergence vector space.
 \end{proposition}
 \begin{proof}
@@ -448,13 +448,17 @@ Let $V$ be a vector space and $f_0,\ldots, f_n, f$ linear functionals in $(V\to 
 \begin{proof}
 The implications $(1) \Rightarrow (2) \Rightarrow (3)$ are clear.
 
-Now assume $(3)$ holds and consider the linear function $f_0\times \ldots \times f_n: V\to \F^{n+1}$. Because of (3), the functional
-\[ F: \im(f_0\times \ldots \times f_n) \to \F: x\mapsto \sunp\circ f^\imf\circ (f_0\times \ldots \times f_n)^\preimf(\{x\}) \]
-is well-defined. Extend $F$ to the whole of $\F^{n+1}$. By \ref{ellIsomorphism} we can represent this as:
-\[ F: \F^{n+1}\to \F: (u_0, \ldots, u_n)\mapsto \sum_{i=0}^n \alpha_iu_i. \]
-From $f(v) = F\big((f_0\times \ldots \times f_n)(v)\big)$, we get
-\[ f(v) = \sum_{i=0}^n \alpha_i f_i(v) \qquad \forall v\in V. \]
-So $f = \sum_{i=0}^n \alpha_i f_i$.
+Now assume $(3)$ holds. Consider the function
+\[ \begin{pmatrix}
+f_0 \\ \vdots \\ f_n
+\end{pmatrix}: V\to \F^{n+1}: v\mapsto \begin{pmatrix}
+f_0(v) \\ \vdots \\ f_n(v)
+\end{pmatrix}. \]
+Due to the assumption, we can find a linear function $F: \F^{n+1}\to \F$ such that $f = F\circ \begin{pmatrix}
+f_0 \\ \vdots \\ f_n
+\end{pmatrix}$.
+
+This function $F$ can be represented as a matrix by \ref{ellIsomorphism}. Thus $f$ is a linear combination of $f_0,\ldots, f_n$.
 \end{proof}
 \begin{corollary}
 Let $V$ be a vector space and $f_0,\ldots, f_n$ linearly independent linear functionals in $(V\to \F)$. Then there exist $v_0, \ldots, v_n$ such that $f_i(v_j) = \delta_{i,j}$.
@@ -1176,6 +1180,7 @@ f^\imf\Big[\bigcap A\Big] \subseteq \cball(0,D) &\iff \forall v\in V: \; \Big(\f
 \end{align*}
 WLOG we may take all $\epsilon_n = \epsilon = \min_{n\leq N}\epsilon_n$. We may then take $C = D/\epsilon$.
 \end{proof}
+Note that for (1) we cannot use \ref{initialVectorSpaceConvergence}, as the elements of $S$ are not linear.
 
 \begin{proposition} \label{locallyConvexSeminormTopology}
 Let $V$ be a vector space. A topological convergence on $V$ is locally convex \textup{if and only if} it is the initial convergence w.r.t. some set $S$ of seminorms on $V$.
@@ -1439,9 +1444,17 @@ determines a seminorm on $Y$.
 
 The initial topology on $Y$ w.r.t. $\setbuilder{\abspair{x,\cdot}}{x\in X}$ is called the \udef{weak topology} $\sigma(X,Y)$ on $Y$ for the pair $\sSet{X,Y}$\footnote{What we denote $\sigma(X,Y)$ is usually denoted $\sigma(Y,X)$.}.
 \end{definition}
+
+\begin{lemma}
+Let $(X,Y,\pair{\cdot,\cdot})$ be a pairing and $x\in X$. Then $\abspair{x,\cdot} = p_{^\pol\{x\}}$.
+\end{lemma}
+
 \begin{lemma}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing. The weak topology $\sigma(X,Y)$ on $Y$ is locally convex and
-\[ \neighbourhood_{\sigma(X,Y)}(0) = \mathfrak{F}\setbuilder{y\in Y}{\exists x\in X: \abspair{x,y} \leq 1}. \]
+\begin{align*}
+\neighbourhood_{\sigma(X,Y)}(0) &= \mathfrak{F}\setbuilder{y\in Y}{\exists x\in X: \abspair{x,y} \leq 1} \\
+&= \mathfrak{F}(_\pol{X}).
+\end{align*}
 \end{lemma}
 \begin{proof}
 The weak topology is locally convex by \ref{locallyConvexSeminormTopology}. From this we also get the neighbourhood filter: it is enough to show that $\setbuilder{\abspair{x,\cdot}^{\preimf}(\,[0,\epsilon]\,)}{x\in X, \epsilon > 0} = \setbuilder{y\in Y}{\exists x\in X: \abspair{x,y} \leq 1}$. Then
@@ -1454,25 +1467,20 @@ y \in \setbuilder{\abspair{x,\cdot}^{\preimf}(\,[0,\epsilon]\,)}{x\in X, \epsilo
 \end{align*}
 \end{proof}
 
-\begin{lemma} \label{functionalContinuityWeakTopology}
+\begin{proposition} \label{functionalContinuityWeakTopology}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $f: Y\to \F$ a linear functional. Then
-\[ f\in \sSet{Y, \sigma(X,Y)}^* \iff \exists \{x_0,\ldots, x_n\}\subseteq X: \exists \{\alpha_0,\ldots, \alpha_n\}\subseteq \F: f = \sum_{i=0}^n \alpha_i \pair{x_i, \cdot}.  \]
-\end{lemma}
-\begin{proof}
-By a comparison of \ref{linearDependenceLinearFunctionals} and point (3) of \ref{initialSeminormConvergence}.
-\end{proof}
-
-\begin{proposition}
-Let $V$ be a convergence vector space. Then $V^* = \sSet{V, \sigma(V^*, V)}^*$.
+\[ \dual{(Y,\sigma(X,Y))} = \setbuilder{\pair{x,\cdot}}{x\in X}. \]
 \end{proposition}
 \begin{proof}
-This follows easily from \ref{functionalContinuityWeakTopology}:
+This inclusion $\supseteq$ is immediate by the definition of initial topology.
 
-If $f\in V^*$, then $f = \pair{f,\cdot}$ and thus $f\in \sSet{V, \sigma(V^*, V)}^*$.
-
-If $f\in \sSet{V, \sigma(V^*, V)}^*$, then $f$ is a linear combination of continuous functions and thus continuous, because the composition of linear functions is continuous.
+Now take $f\in \dual{(Y,\sigma(X,Y))}$. By point (3) of \ref{initialSeminormConvergence} there exists a finite set $\{x_1, \ldots, x_n\}$ such that $|f(v)| \leq C\max_{i}\abspair{x_i, \cdot}$ for all $v\in V$. By \ref{linearDependenceLinearFunctionals}, this means that $f$ is some linear combination of the $\pair{x_i,\cdot}$, say $\sum_{i=0}^n \alpha_i \pair{x_i, \cdot}$. So
+\[ f = \sum_{i=0}^n \alpha_i \pair{x_i, \cdot} = \pair{\sum_{i=0}^n \alpha_i x_i, \cdot}. \]
 \end{proof}
-Thus for any convergence vector space $\sSet{V,\xi}$, the space $sSet{V, \sigma(V^*, V)}$ is a locally convex TVS with the same continuous functionals.
+\begin{corollary}
+Let $V$ be a convergence vector space. Then $V^* = \sSet{V, \sigma(V^*, V)}^*$.
+\end{corollary}
+Thus for any convergence vector space $\sSet{V,\xi}$, the space $\sSet{V, \sigma(V^*, V)}$ is a locally convex TVS with the same continuous functionals.
 
 \subsubsection{Weak-$*$ topology}
 \begin{definition}
@@ -1487,16 +1495,12 @@ Let $X$ be a Banach space and let $X'$ have the weak-$*$ topology. Then a linear
 TODO 9.2 in lecture notes.
 \end{proof}
 
-\subsubsection{Orthogonal complements}
-\begin{definition}
-Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. The \udef{orthogonal complement} of $B$ is the polar w.r.t. the relation $\perp$ on $(Y,X)$ defined by
-\[ y\perp x \qquad\iff\qquad \pair{x, y} = 0. \]
-\end{definition}
-
+\subsection{Polars}
 \subsubsection{Polar sets}
 \begin{definition}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. The \udef{polar} of $B$ is the polar w.r.t. the relation $\pol$ on $(Y,X)$ defined by
 \[ y\pol x \qquad\iff\qquad \abspair{x, y} \leq 1. \]
+Conventionally, we also use $\pol$ to denote $\pol^\transp$. Thus the \udef{bipolar} $B^{\pol\pol}$ of $B$ is $B^{\pol\pol^\transp}$.
 \end{definition}
 
 \begin{lemma}
@@ -1507,7 +1511,7 @@ B^{\pol} &= \setbuilder{x\in X}{\sup_{y\in B}\abspair{x,y} \leq 1} \\
 \end{align*}
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma} \label{polarPropertiesLemma}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then
 \begin{enumerate}
 \item for all $\lambda \neq 0$: $(\lambda B)^{\pol} = \lambda^{-1}B^{\pol}$;
@@ -1533,18 +1537,40 @@ x\in (\lambda B)^{\pol} &\iff \forall y\in B:\; \abspair{x,\lambda y} \leq 1 \\
 \end{align*}
 where the last inequality follows from $1 = |1 - r + r| \leq |1-r| + |r|$. Since $z\in B$ was chosen arbitrarily, we have $rx + (1-r)y\in B^\pol$.
 
-(3) We have
-\[ B^\pol = \bigcap_{y\in B}\setbuilder{x\in X}{\abspair{x,y}\leq 1} = \bigcap{y\in B}\abspair{\cdot, y}^{\preimf}[\cball(0,1)], \]
+(3) We have, using \ref{polarOfUnion},
+\begin{align*}
+B^\pol &= \left(\bigcup_{y\in B}\{y\}\right)^\pol \\
+&= \bigcap_{y\in B} \{y\}^\pol \\
+&= \bigcap_{y\in B}\setbuilder{x\in X}{\abspair{x,y}\leq 1} \\
+&= \bigcap{y\in B}\abspair{\cdot, y}^{\preimf}[\cball(0,1)],
+\end{align*}
 which is an intersection of closed sets (as each $\abspair{\cdot, y}$ is continuous in the $\sigma(X,Y)$ topology) and thus closed.
 \end{proof}
 
-\begin{proposition}
-Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then $B^{\pol}$ is absolutely convex and 
+\begin{proposition}[Bipolar theorem]
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then
+\[ B^{\pol\pol} = \overline{\disked(B)}^{\sigma(X,Y)}. \]
 \end{proposition}
+\begin{proof}
+We have $B\subseteq B^{\pol\pol}$ by \ref{reflexiveGaloisCorollary}. Then $\disked(B) \subseteq B^{\pol\pol}$ because $B^{\pol\pol}$ is absolutely convex by \ref{polarPropertiesLemma}. Similarly $\overline{\disked(B)}^{\sigma(X,Y)} \subseteq B^{\pol\pol}$, because $B^{\pol\pol}$ is $\sigma(X,Y)$-closed.
+\end{proof}
 
-TODO $(\bigcup A)^{\pol} = \bigcap A^{\pol}$.
+\subsubsection{Orthogonal complements}
+\begin{definition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. The \udef{orthogonal complement} of $B$ is the polar w.r.t. the relation $\perp$ on $(Y,X)$ defined by
+\[ y\perp x \qquad\iff\qquad \pair{x, y} = 0. \]
+\end{definition}
 
+\begin{proposition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then $B^\perp = \Span(B)^\pol$.
+\end{proposition}
+\begin{proof}
+We show both inclusions. First assume $x\in B^\perp$. We need to show that $\abspair{x,y} \leq 1$ for all $y\in \Span(B)$. Indeed we can write $y = \sum_{j=1}^n c_jy_j$ for some $c_j\in\F$ and $y_j\in B$. Then
+\[ \abspair{x,y} = \abspair{x, \sum_{j=1}^n c_jy_j} \leq \sum_{j=1}^n |c_j|\;\abspair{x, y_j} = 0 \leq 1, \]
+as $y_j\perp x$.
 
+Now assume $x\in \Span(B)^\pol$. If $\abspair{x,y} = 0$ for all $y\in B$, then $x\in B^\perp$ and we are done. Now assume, towards a contradiction, that this is not the case. Then there exists $y\in B$ such that $\abspair{x,y} = \epsilon \neq 1$. Then $\abspair{x,2\epsilon^{-1}y} = 2$, but $2\epsilon^{-1}y\in\Span(B)$, so $\abspair{x,2\epsilon^{-1}y} \leq 1$. This is a contradiction.
+\end{proof}
 
 \subsubsection{Annihilator subspaces}
 \begin{lemma}
