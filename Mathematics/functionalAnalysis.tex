@@ -302,7 +302,7 @@ This almost completely follows from \ref{TVSconstruction} and \ref{locallyConvex
 
 
 \section{Properties of subsets}
-\begin{proposition}
+\begin{proposition} \label{inherenceAdherenceBalanced}
 Let $\sSet{V,\xi}$ be a vector space convergence and $A\subseteq V$. Then
 \begin{enumerate}
 \item if $A$ is balanced, then $\adh(A)$ is balanced;
@@ -429,7 +429,7 @@ f(\lambda v) &= f\big((a+ib)v\big) \\
 \end{proof}
 
 \begin{lemma}
-Let $V$ be a vector space and $f_0,\ldots, f_n, f$ linear functionals in $(V\to \F)$. Then a linear funcctional $f: V\to \F$ is a linear combination of $f_0,\ldots, f_n$ \textup{if and only if} .
+Let $V$ be a vector space and $f_0,\ldots, f_n, f$ linear functionals in $(V\to \F)$. Then a linear functional $f: V\to \F$ is a linear combination of $f_0,\ldots, f_n$ \textup{if and only if} .
 \end{lemma}
 \begin{proof}
 The direction $\Rightarrow$ is immediate: if $f_i(v) = 0$ for all $0\leq i\leq n$, then any linear combination is also zero.
@@ -1357,6 +1357,8 @@ Let $V$ be a real or complex convergence vector space and $A,B$ as in the propos
 for all $a\in A$ and $b\in B$.
 \end{corollary}
 This means $A$ and $B$ are separated by a closed affine hyperplane $\ker(f)+v$, where $v \in f^\preimf[\{t\}]$.
+
+We can reverse the inequalities by replacing $f$ by $-f$.
 \begin{proof}
 Apply the proposition to the realification $V_\R$. This gives us an $\R$-linear functional $g: V\to \R$ such that $g^\imf[A]$ and $g^\imf[B]$ are disjoint convex sets. Additionally $g^{\imf}[A]$ is open in $\R$ by \ref{linearFunctionalOpen}.
 
@@ -1428,7 +1430,7 @@ We have that $W$ is separating on $V$ \textup{if and only if}
 \begin{example}
 \begin{itemize}
 \item Let $\sSet{V, \xi}$ be a convergence vector space. Then $\sSet{\dual{V}, V, \evalMap(\cdot,\cdot)}$ is a pairing.
-\item Let $\sSet{V,\xi}$ be a Hausdorff locally convex convergence vector space. Then $\sSet{\dual{V}, V, \pair{\cdot,\cdot}}$ is a dual pair by \ref{locallyConvexDualPair}.
+\item Let $\sSet{V,\xi}$ be a Hausdorff locally convex convergence vector space. Then $\sSet{\dual{V}, V, \evalMap(\cdot,\cdot)}$ is a dual pair by \ref{locallyConvexDualPair}.
 \end{itemize}
 \end{example}
 
@@ -1479,8 +1481,17 @@ Now take $f\in \dual{(Y,\sigma(X,Y))}$. By point (3) of \ref{initialSeminormConv
 \end{proof}
 \begin{corollary}
 Let $V$ be a convergence vector space. Then $V^* = \sSet{V, \sigma(V^*, V)}^*$.
+
+The weak topology is the weakest topology $\tau$ (TODO convergence?) such that $V^* = \sSet{V, \tau}^*$.
 \end{corollary}
 Thus for any convergence vector space $\sSet{V,\xi}$, the space $\sSet{V, \sigma(V^*, V)}$ is a locally convex TVS with the same continuous functionals.
+
+\begin{proposition}
+Let $V$ be a locally convex convergence vector space and $B\subseteq V$ a convex subset. Then $\overline{B} = \overline{B}^{\sigma(\dual{V}, V)}$.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
 \subsubsection{Weak-$*$ topology}
 \begin{definition}
@@ -1553,6 +1564,10 @@ Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Th
 \end{proposition}
 \begin{proof}
 We have $B\subseteq B^{\pol\pol}$ by \ref{reflexiveGaloisCorollary}. Then $\disked(B) \subseteq B^{\pol\pol}$ because $B^{\pol\pol}$ is absolutely convex by \ref{polarPropertiesLemma}. Similarly $\overline{\disked(B)}^{\sigma(X,Y)} \subseteq B^{\pol\pol}$, because $B^{\pol\pol}$ is $\sigma(X,Y)$-closed.
+
+The other inclusion is proved by contradiction. Assume, to this end, that $y_0\in B^{\pol\pol} \setminus \overline{\disked(B)}^{\sigma(X,Y)}$. Then $y_0$ is an element of the open set $\overline{\disked(B)}^c$, so we can find a convex open neighbourhood $U$ of $y_0$ in $\overline{\disked(B)}^c$. Next apply Hahn-Banach separation \ref{HahnBanachSeparation} to obtain a continuous functional $f$ such that $f(y_0) \not\in f^\imf\left[\overline{\disked(B)}\right]$. Now $\overline{\disked(B)}$ is absolutely convex by \ref{inherenceAdherenceBalanced} and \ref{inherenceAdherenceConvex}, so $f^\imf\left[\overline{\disked(B)}\right]$ is also absolutely convex by linearity. Then $|f^\imf\left[\overline{\disked(B)}\right]|$ and $|f^\imf[U]|$ are disjoint and $|f^\imf[U]|$ is open, as $0\in |f^\imf\left[\overline{\disked(B)}\right]|$. This also means that there exists $t\in |f^\imf[U]|$ such that $|f(b)| < t < |f(y_0)|$ for all $b\in \overline{\disked(B)}$. Thus $\sup_{b\in \overline{\disked(B)}}|f(b)| < |f(y_0)|$. By rescaling $f$ we can take $\sup_{b\in \overline{\disked(B)}}|f(b)| \leq 1 < |f(y_0)|$.
+
+By \ref{functionalContinuityWeakTopology}, we can find some $x\in X$ such that $f = \pair{x,\cdot}$. Then $\sup_{b\in \overline{\disked(B)}}\abspair{x, b} \leq 1$ implies $x\in \overline{\disked(B)}^\pol \subseteq B^\pol$. Finally $1 < \abspair{x, y_0}$ implies $y_0\notin B^{\pol\pol}$. This is a contradiction.
 \end{proof}
 
 \subsubsection{Orthogonal complements}
