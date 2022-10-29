@@ -2,7 +2,7 @@
 
 \section{Vector space convergence}
 \begin{definition}
-Let $\sSet{\F,V,+}$ be a vector space and $\xi$ a convergence on $V$. Then $\sSet{\F,V,+, \xi}$ is a \udef{convergence vector space} if
+Let $\sSet{\F,V,+}$ be a vector space and $\xi$ a convergence on $V$. Then $\sSet{\F,V,+, \xi}$ is a \udef{convergence vector space} (or CVS) if
 \begin{itemize}
 \item vector addition $+: V\times V \to V$ is continuous;
 \item scalar multiplication $\cdot: \F\times V \to V$ is continuous.
@@ -19,16 +19,14 @@ We just need to show that $v\mapsto -v$ is continuous, but this scalar multiplic
 \begin{lemma} \label{continuityLemmaVectorConvergence}
 If $\sSet{\F,V,+, \xi}$ is a convergence vector space, then
 \begin{enumerate}
-\item the function $\F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is a homeomorphism for all $v\in V$;
-\item the function $V \to V: v \mapsto \lambda\cdot v$ is a homeomorphism (?) for all $\lambda\in \F$.
+\item the function $V \to V: v \mapsto \lambda\cdot v$ is a homeomorphism for all $\lambda\in \F\setminus\{0\}$;
+\item the function $\F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is continuous and invertible for all $v\in V\setminus\{0\}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 The functions $\lambda \mapsto (\lambda, v)$ and $v \mapsto (\lambda, v)$ are continuous by \ref{continuousEmbeddingProduct}. Composition with the continuous scalar product gives the result by continuity of composition (\ref{continuityComposition}).
 
-They are both clearly invertible (for the first, note that the kernel is $\{0\}$). The inverse of the second is of the same form and thus immediately continuous.
-
-For the inverse of the first TODO!?!
+They are both clearly invertible (for the second, note that the kernel is $\{0\}$). The inverse of the first is of the same form and thus immediately continuous.
 \end{proof}
 
 \begin{proposition} \label{initialVectorSpaceConvergence}
@@ -47,8 +45,8 @@ Let $V$ be a vector space over a field $\F$. And $\mathcal{F} \subseteq \powerfi
 \begin{enumerate}
 \item if $F \in \mathcal{F}$ and $G\supseteq F$, then $G\in \mathcal{F}$;
 \item if $F,G \in \mathcal{F}$, then $F + G\in \mathcal{F}$;
-\item if $F\in \mathcal{F}$, then $\vicinity_\F(0)\cdot F \in \mathcal{F}$;
-\item if $v\in V$, then $\vicinity_\F(0)\cdot v \in \mathcal{F}$;
+\item if $F\in \mathcal{F}$, then $\neighbourhood_\F(0)\cdot F \in \mathcal{F}$;
+\item if $v\in V$, then $\neighbourhood_\F(0)\cdot v \in \mathcal{F}$;
 \item if $F\in \mathcal{F}$ and $\lambda\in \F$, then $\lambda\cdot F \in \mathcal{F}$.
 \end{enumerate}
 \end{proposition}
@@ -58,7 +56,7 @@ Assume first that $\mathcal{F} = \lim^{-1}_\xi(0)$ for some vector space converg
 \begin{enumerate}
 \item This is just the monotonicity of the convergence.
 \item If $F,G\to 0$, then $F\otimes G \to (0,0)$ by \ref{convergenceFiniteProductFilter}. By continuity of addition we have $F+G\to 0$.
-\item The convergence on the scalar field is pretopological, so $\vicinity_\F(0)\to 0$. By \ref{convergenceFiniteProductFilter} $\vicinity_\F(0)\otimes F \to (0,0)$ and by continuity of the scalar multiplication $\vicinity_\F(0)\cdot F \to 0$.
+\item The convergence on the scalar field is pretopological, so $\neighbourhood_\F(0)\to 0$. By \ref{convergenceFiniteProductFilter} $\neighbourhood_\F(0)\otimes F \to (0,0)$ and by continuity of the scalar multiplication $\neighbourhood_\F(0)\cdot F \to 0$.
 \item By \ref{continuityLemmaVectorConvergence}.
 \item By \ref{continuityLemmaVectorConvergence}.
 \end{enumerate}
@@ -69,20 +67,33 @@ Monotonicity is guaranteed by (1). To show the convergence is centered, note tha
 
 To show that the vector addition is continuous, take $F\to (v_1, v_2)$. Then $p_1^{\imf\imf}(F) = F_1\to v_1$ and $p_2^{\imf\imf}(F) = F_2 \to v_2$, i.e.\ $F_1-v_1 \in \mathcal{F}$ and $F_2-v_2 \in \mathcal{F}$. By (1), $(F_1-v_1) + (F_2-v_2) = (F_1+F_2) - (v_1 + v_2) \in \mathcal{F}$, so $F_1+F_2 \to v_1 + v_2$. Thus by \ref{filterFactorisationInequality}, $F_1+F_2 = +^{\imf\imf}[F_1\otimes F_2] \subseteq +^{\imf\imf}[F] \to v_1+v_2$ and the addition is continuous.
 
-Let $G \to (\lambda, v)$. Then $G_1 = p_1^{\imf\imf}(G) \to \lambda$ and $G_2 = p_2^{\imf\imf}(G) \to v$, so $G_1 \supseteq \vicinity_\F(\lambda)$. We have
+Let $G \to (\lambda, v)$. Then $G_1 = p_1^{\imf\imf}(G) \to \lambda$ and $G_2 = p_2^{\imf\imf}(G) \to v$, so $G_1 \supseteq \neighbourhood_\F(\lambda)$. We have
 \begin{align*}
 \cdot^{\imf\imf}[G] - \lambda\cdot v &\supseteq \cdot^{\imf\imf}[G_1\otimes G_2] - \lambda\cdot v = G_1\cdot G_2 - \lambda\cdot v \\
-&\supseteq \vicinity_\F(\lambda) \cdot G_2 - \lambda\cdot v \\
-&= (\vicinity_\F(0) + \lambda)\cdot((G_2 - v) + v) - \lambda\cdot v \\
-&\supseteq \lambda\cdot (G_2 - v) + \vicinity_\F(0)\cdot(G_2-v) + \lambda\cdot v + \vicinity_\F(0)\cdot v - \lambda\cdot v \\
-&= \lambda\cdot (G_2 - v) + \vicinity_\F(0)\cdot(G_2-v) + \vicinity_\F(0)\cdot v \in \mathcal{F}.
+&\supseteq \neighbourhood_\F(\lambda) \cdot G_2 - \lambda\cdot v \\
+&= (\neighbourhood_\F(0) + \lambda)\cdot((G_2 - v) + v) - \lambda\cdot v \\
+&\supseteq \lambda\cdot (G_2 - v) + \neighbourhood_\F(0)\cdot(G_2-v) + \lambda\cdot v + \neighbourhood_\F(0)\cdot v - \lambda\cdot v \\
+&= \lambda\cdot (G_2 - v) + \neighbourhood_\F(0)\cdot(G_2-v) + \neighbourhood_\F(0)\cdot v \in \mathcal{F}.
 \end{align*}
-So $\cdot^{\imf\imf}[G] \to \lambda\cdot v$, making the scalar multiplication continuous. Note the last inclusion is not an equality because we go from one instance of $G_2$ and $\vicinity_\F(0)$ to two!
+So $\cdot^{\imf\imf}[G] \to \lambda\cdot v$, making the scalar multiplication continuous. Note the last inclusion is not an equality because we go from one instance of $G_2$ and $\neighbourhood_\F(0)$ to two!
 \end{proof}
-
-\begin{proposition} \label{initialVectorConvergenceLinearFunctions}
-Let initial convergence w.r.t. a set of linear functions is a vector space convergence.
-\end{proposition}
+\begin{corollary} \label{vicinityFilterAtOrigin}
+Let $\sSet{V, \xi}$ be a vector space. Then
+\begin{enumerate}
+\item for all $A\in \vicinity_\xi(0)$ and $\lambda\in \F\setminus\{0\}$: $\lambda A\in \vicinity_\xi(0)$;
+\item each $A \in \vicinity_\xi(0)$ is absorbent;
+\item if $\xi$ is topological, then $\vicinity_\xi(0)$ has a balanced base.
+\end{enumerate}
+\end{corollary}
+TODO: relax (3)??
+\begin{proof}
+Now assume $\xi$ is a topological vector space convergence and $N = \neighbourhood_\xi(0)$.
+\begin{enumerate}
+\item Take arbitrary $\lambda\in\F\setminus\{0\}$. Then $v\mapsto \lambda v$ is a homeomorphism by \ref{continuityLemmaVectorConvergence}, so $\lambda A \in \vicinity_\xi(\lambda 0) = \vicinity_\xi(0)$, by \ref{homeomorphismPreservation}.
+\item For absorbence, take $A\in \vicinity_\xi(0)$ and $v\in V$. As $\neighbourhood_\F(0)\cdot v \to 0$, we must have $A\in \upset\neighbourhood_\F(0)\cdot v$, so there exists $\Gamma \in \neighbourhood_\F(0)$ such that $\Gamma\cdot v \subseteq A$. Now we can find a $r>0$ such that $\ball(0,r)\subseteq \Gamma$, so for all $|c|\geq r^{-1}$ we have $v\in cA$.
+\item By point (3) of of the proposition, $\neighbourhood_\F(0)\cdot \vicinity_\xi(0)$ converges to $0$ and thus $\vicinity_\xi(0) \subseteq \neighbourhood_\F(0)\cdot\vicinity_\xi(0)$. Take $A\in \vicinity_\xi(0)$. Then there exists a $\Gamma\in\neighbourhood_\F(0)$ and $B\in \vicinity_\xi(0)$ such that $\Gamma\cdot B \subseteq \vicinity_\xi(0)$. We can find sume ball $\ball(0,\epsilon) \subseteq \Gamma$, so $\ball(0,1)\cdot \epsilon B\subseteq \epsilon B \subseteq A$. Thus $\epsilon B$ is balanced and a neighbourhood by point(1). So every $A\in \vicinity_\xi(0)$ contains a balanced set in $\vicinity_\xi(0)$.
+\end{enumerate}
+\end{proof}
 
 \begin{proposition} \label{vectorSumInherenceAdherence}
 Let $\sSet{V,\xi}$ be a vector space convergence and $A,B\subseteq V$. Then
@@ -112,26 +123,34 @@ Let $V$ be a convergence vector space over a field $K$ and $F\subseteq K$ a subf
 It is enough that the restriction of the scalar multiplication to $F$ remains continuous. Alternatively, we can use \ref{vectorSpaceConvergenceConstruction} and note that passing to the field $F$ simply represents a weakening of condition $(5)$.
 \end{proof}
 
-\begin{proposition} \label{continuityToNormedSpace}
-Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a function.
-\begin{enumerate}
-\item If $f$ is continuous, then $f$ is bounded on some $U\in \vicinity_\xi(0)$.
-\item If $f$ is positively homogeneous, then the converse also holds.
-\end{enumerate}
+\subsection{Functions to normed spaces}
+
+\begin{proposition}
+Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a positively homogeneous function. If $f$ is bounded on some $U\in \vicinity_\xi(0)$, then $f$ is continuous at $0$.
 \end{proposition}
 \begin{proof}
-(1) Assume $f$ continuous, then $\ball(0,1)\in \neighbourhood_W(0) = \neighbourhood_W(f(0)) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ by \ref{continuityVicinityFilter}. So there exists $U\in \vicinity_\xi(0)$ such that $f^{\imf}[U] \subseteq \ball(0,1)$, which means that $f$ is bounded by $1$ on $U$.
+We have $f(0) = 0$ by \ref{homogeneousFunctionLemma}. Let $f$ be bounded by $C$ on $U$, i.e.\ $f^{\imf}(U)\subseteq \ball_W(0,C)$. 
 
-(2) Assume $f$ is positively homogeneous and there exists a vicinity $U\in \vicinity_\xi(0)$ such that $f$ is bounded on $U$. Then $f^{\imf}(U)\subseteq \ball_W(0,C)$.
-By \ref{pretopologicalContinuityVicinities} it is enough to prove that $\neighbourhood_W(f(0)) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$. It is in fact enough to show that a base of $\neighbourhood_W(f(0)) = \neighbourhood_W(0)$, to wit the set of open balls centered at $0$, is contained in $f^{\imf\imf}[\vicinity_\xi(0)]$. To that end, take some open ball $\ball(0,\epsilon)$. Then $\frac{\epsilon}{C} U\in \frac{\epsilon}{C}\vicinity_\xi(0) = \vicinity_\xi(\frac{\epsilon}{C}0) = \vicinity_\xi(0)$. So
-\[ f^{\imf}(\frac{\epsilon}{C}U) = \frac{\epsilon}{C}f^{\imf}(U)\subseteq \frac{\epsilon}{C}\ball_W(0,C) = \ball_W(0,\epsilon), \]
-means that $\neighbourhood_W(0) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ and thus that $f$ is continuous.
+By \ref{pretopologicalContinuityVicinities} it is enough to prove that $\neighbourhood_W(f(0)) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$. It is in fact enough to show that a base of $\neighbourhood_W\big(f(0)\big) = \neighbourhood_W(0)$, to wit the set of open balls centered at $0$, is contained in $f^{\imf\imf}[\vicinity_\xi(0)]$. To that end, take some open ball $\ball(0,\epsilon)$. Then $\frac{\epsilon}{C} U\in \frac{\epsilon}{C}\vicinity_\xi(0) = \vicinity_\xi(\frac{\epsilon}{C}0) = \vicinity_\xi(0)$. So
+\[ f^{\imf}\left(\frac{\epsilon}{C}U\right) = \frac{\epsilon}{C}f^{\imf}(U)\subseteq \frac{\epsilon}{C}\ball_W(0,C) = \ball_W(0,\epsilon), \]
+means that $\neighbourhood_W(0) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ and thus that $f$ is continuous at $0$.
 \end{proof}
-\begin{corollary} \label{majorisedContinuity}
-Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space. Let $f,g: V\to W$ be functions such that $f$ is positively homogeneous and $g$ is continuous. If $f \leq g$, then $f$ is also continuous.
+\begin{corollary} \label{continuityToNormedSpace}
+Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a linear function. Then $f$ is continuous \textup{if and only if} $f$ is bounded on some $U\in \vicinity_\xi(0)$.
 \end{corollary}
 \begin{proof}
-As $g$ is continuous, it is bounded on some $U\in \vicinity_\xi(0)$. Then $f$ is also bounded on this $U$ and thus continuous by the proposition.
+Assume $f$ continuous, then $\ball\big(0,1\big)\in \neighbourhood_W(0) = \neighbourhood_W\big(f(0)\big) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ by \ref{continuityVicinityFilter}. So there exists $U\in \vicinity_\xi(0)$ such that $f^{\imf}[U] \subseteq \ball(0,1)$, which means that $f$ is bounded by $1$ on $U$.
+
+Now assume $f$ is bounded on some $U\in \vicinity_\xi(0)$. Then $f$ is continuous at $0$ by the proposition. Then $f$ is continuous everywhere by \ref{shiftHomeomorphism}.
+\end{proof}
+
+\begin{proposition} \label{superSubtractiveContinuityEverywhere}
+Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a function such $f(0) = 0$ and $\norm{f(v) - f(w)} \leq \max\{\norm{f(v-w)}, \norm{f(w-v)}\}$ for all $v,w\in V$.
+
+Then continuity of $f$ at $0$ implies continuity everywhere.
+\end{proposition}
+\begin{proof}
+Take arbitrary $F\overset{\xi}{\longrightarrow} u$. Then $F-u \to 0$, so $\norm{f(F-u)}\to 0$ by continuity at $0$. Similarly $\norm{f(u-F)}\to 0$. Then, by assymption, $\norm{f(F) - f(u)} \leq \max\{\norm{f(F-u)}, \norm{f(u-F)}\} \to 0$, so $\norm{f(F) - f(u)} \to 0$, by TODO ref squeeze theorem. We conclude that $f(F)\to f(u)$.
 \end{proof}
 
 \subsection{Algebraic convergence}
@@ -144,7 +163,7 @@ Note that the algebraic convergence is not just the discrete convergence because
 We need to show that the definition makes sense.
 \begin{proposition} \label{algebraicConvergence}
 Let $V$ be a vector space over a field $\F$. There exists a strongest vector space convergence on $V$ and this convergence is defined by
-\[ \forall F\in \powerfilters(V): \qquad F\in {\lim}^{-1}(0) \iff \exists v\in V: \;F \supseteq \vicinity_\F(0)\cdot v.  \]
+\[ \forall F\in \powerfilters(V): \qquad F\in {\lim}^{-1}(0) \iff \exists v\in V: \;F \supseteq \neighbourhood_\F(0)\cdot v.  \]
 \end{proposition}
 \begin{proof}
 Using \ref{vectorSpaceConvergenceConstruction} it is easy to see that this convergence is a vector space convergence. Conversely, this is the strongest possible convergence by point (4) of \ref{vectorSpaceConvergenceConstruction}.
@@ -155,12 +174,12 @@ Note that the algebraic convergence of a non-trivial vector space is not topolog
 Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subset. Then
 \begin{enumerate}
 \item $\begin{aligned}[t]
-\vicinity_\mathfrak{a}(0) &= \bigcap_{v\in V} \upset \vicinity_\F(0)\cdot v \\
-&= \setbuilder{B\in \powerset(V)}{\forall v\in V: \exists \Gamma_v\in \vicinity_\F(0):\; \Gamma_v\cdot v\subseteq B} \\
-&= \setbuilder{\bigcup_{v\in V} \Gamma_v\cdot v}{\forall v\in V:\; \Gamma_v \in \vicinity_\F(0)};
+\vicinity_\mathfrak{a}(0) &= \bigcap_{v\in V} \upset \neighbourhood_\F(0)\cdot v \\
+&= \setbuilder{B\in \powerset(V)}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0):\; \Gamma_v\cdot v\subseteq B} \\
+&= \setbuilder{\bigcup_{v\in V} \Gamma_v\cdot v}{\forall v\in V:\; \Gamma_v \in \neighbourhood_\F(0)};
 \end{aligned}$
-\item $\inh_\mathfrak{a}(A) = \setbuilder{x\in V}{\forall v\in V:\exists \Gamma_v \in \vicinity_\F(0):\; x + \Gamma_v\cdot v \subseteq A}$;
-\item $\adh_\mathfrak{a}(A) = \setbuilder{x\in V}{\exists v\in V: \forall \Gamma\in\vicinity_\F(0):\; (x+\Gamma\cdot v)\mesh A}$.
+\item $\inh_\mathfrak{a}(A) = \setbuilder{x\in V}{\forall v\in V:\exists \Gamma_v \in \neighbourhood_\F(0):\; x + \Gamma_v\cdot v \subseteq A}$;
+\item $\adh_\mathfrak{a}(A) = \setbuilder{x\in V}{\exists v\in V: \forall \Gamma\in\neighbourhood_\F(0):\; (x+\Gamma\cdot v)\mesh A}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -168,15 +187,15 @@ Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subse
 
 (2) We have $\inh_\mathfrak{a}(A) = \setbuilder{x}{A\in \vicinity_\mathfrak{a}(x)} = \setbuilder{x}{A-x\in \vicinity_\mathfrak{a}(0)}$. From (1) we get 
 \begin{align*}
-\inh_\mathfrak{a}(A) &= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \vicinity_\F(0): \Gamma_v\cdot v \subseteq A-x} \\
-&= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \vicinity_\F(0): x + \Gamma_v\cdot v \subseteq A}.
+\inh_\mathfrak{a}(A) &= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0): \Gamma_v\cdot v \subseteq A-x} \\
+&= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0): x + \Gamma_v\cdot v \subseteq A}.
 \end{align*}
 
 (3) We calculate
 \begin{align*}
 \adh_\mathfrak{a}(A) &= \big(\inh_\mathfrak{a}(A^c)\big)^c \\
-&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \vicinity_\F(0):\; \neg(x + \Gamma\cdot v \subseteq A^c)} \\
-&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \vicinity_\F(0):\; (x + \Gamma\cdot v) \mesh A}.
+&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \neighbourhood_\F(0):\; \neg(x + \Gamma\cdot v \subseteq A^c)} \\
+&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \neighbourhood_\F(0):\; (x + \Gamma\cdot v) \mesh A}.
 \end{align*}
 \end{proof}
 
@@ -184,9 +203,9 @@ Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subse
 Let $V$ be a vector space. Then every subspace $U\subseteq V$ is algebraically closed.
 \end{lemma}
 \begin{proof}
-We need to show that $\adh_\mathfrak{a}(U)\subseteq U$. Take $x\in \adh_\mathfrak{a}(U)$. Then take a $v\in V$ such that $\forall \Gamma\in\vicinity_\F(0):\; (x+\Gamma\cdot v)\mesh U$.
+We need to show that $\adh_\mathfrak{a}(U)\subseteq U$. Take $x\in \adh_\mathfrak{a}(U)$. Then take a $v\in V$ such that $\forall \Gamma\in\neighbourhood_\F(0):\; (x+\Gamma\cdot v)\mesh U$.
 
-Pick some $\Gamma\in\vicinity_\F(0)$. Then $x+\lambda v\in U$ for some $\lambda\in \Gamma$. Then take $\ball(0,|\lambda|/2)\in \vicinity_\F(0)$, so $x+\mu v\in U$ for some $\mu\in \ball(0,|\lambda|/2)$. In particular $\lambda \neq \mu$. If either $\lambda =0$ or $\mu = 0$, then $x\in U$ and we are done. Suppose $\lambda\neq 0 \neq \mu$. Then
+Pick some $\Gamma\in\neighbourhood_\F(0)$. Then $x+\lambda v\in U$ for some $\lambda\in \Gamma$. Then take $\ball(0,|\lambda|/2)\in \neighbourhood_\F(0)$, so $x+\mu v\in U$ for some $\mu\in \ball(0,|\lambda|/2)$. In particular $\lambda \neq \mu$. If either $\lambda =0$ or $\mu = 0$, then $x\in U$ and we are done. Suppose $\lambda\neq 0 \neq \mu$. Then
 \[ \lambda^{-1}(x+\lambda v) - \mu^{-1}(x+\mu v) = (\lambda^{-1} - \mu^{-1})x \in U. \]
 So $x\in U$.
 \end{proof}
@@ -207,14 +226,14 @@ Let $V$ be a vector space and $A \subseteq V$ a subset. Then
 (1) We have that
 \begin{align*}
 \text{$A$ is absorbing} &\iff \forall v\in V: \exists \epsilon >0: \; \ball(0,\epsilon)\cdot v\subseteq A \\
-&\iff \forall v\in V: \exists \Gamma \in \vicinity_\F(0): \; \Gamma\cdot v\subseteq A \\
+&\iff \forall v\in V: \exists \Gamma \in \neighbourhood_\F(0): \; \Gamma\cdot v\subseteq A \\
 &\iff 0\in \inh_\mathfrak{a}(A).
 \end{align*}
 
 (2) We first show convexity: take $x,y \in \inh_\mathfrak{a}(A)$. Then there exist relevant $v,w,\Gamma_v,\Gamma_w$ such that $x+ \Gamma_v\cdot v \subseteq A$ and $y+ \Gamma_w\cdot w \subseteq A$. By \ref{convexCriteria} we have $\lambda \big(x+ \Gamma_v\cdot v\big) + (1-\lambda)\big(y+ \Gamma_w\cdot w\big)\subseteq A$ for all $0\leq \lambda \leq 1$, so
 \[ \lambda x+(1-\lambda)y + (\Gamma_v\cap\Gamma_w)\big(\lambda v+(1-\lambda)w\big) \subseteq \lambda x+(1-\lambda)y + \Gamma_v\cdot \lambda v+\Gamma_w\cdot (1-\lambda)w \subseteq A. \]
 
-To show $\inh_\mathfrak{a}(A)$ is open, we use \ref{openClosedCriteria}. Take $x\in \inh_\mathfrak{a}(A)$. Then for all $v\in V$ we can find a $\Gamma_v\in\vicinity_\F(0)$ such that $x+\Gamma_v\cdot v \subseteq A$. This means $x+\bigcup_{v\in V}\Gamma_v\cdot v \subseteq A$. Because the convergence on $\F$ is topological, we may take the $\Gamma_v$ open. To conclude with \ref{openClosedCriteria} it is enough to show that $x+\bigcup_{v\in V}\Gamma_v\cdot v \subseteq \inh_\mathfrak{a}(A)$.
+To show $\inh_\mathfrak{a}(A)$ is open, we use \ref{openClosedCriteria}. Take $x\in \inh_\mathfrak{a}(A)$. Then for all $v\in V$ we can find a $\Gamma_v\in\neighbourhood_\F(0)$ such that $x+\Gamma_v\cdot v \subseteq A$. This means $x+\bigcup_{v\in V}\Gamma_v\cdot v \subseteq A$. Because the convergence on $\F$ is topological, we may take the $\Gamma_v$ open. To conclude with \ref{openClosedCriteria} it is enough to show that $x+\bigcup_{v\in V}\Gamma_v\cdot v \subseteq \inh_\mathfrak{a}(A)$.
 
 Pick some $y = x+ c_w w \in x+ \bigcup_{v\in V}\Gamma_v\cdot v \subseteq A$, meaning $c_w\in\Gamma_w$. We can find an $0<\epsilon_w<|c_w|$ such that $c_w + \ball(0,\epsilon_w) \subseteq \Gamma_w$ by \ref{openClosedCriteria}. Then for all $1-\frac{\epsilon_w}{|c_w|}<\delta<1$ we have $|c_w - \delta c_w| = (1-\delta)|c_w| < \frac{\epsilon_w}{|c_w|}|c_w| = \epsilon_w$ and so $x+ \delta c_w w \in A$.
 
@@ -243,10 +262,10 @@ As with convergence groups, any pretopological vector space convergence is topol
 \begin{proposition} \label{TVSconstruction}
 Let $V$ be a vector space and $N\in\powerfilters(V)$. Then $N = \neighbourhood_\xi(0)$ for some topological convergence on $V$ \textup{if and only if}
 \begin{enumerate}
-\item for all $A\in N$ and $\lambda\in \F$: $\lambda A\in N$;
-\item for all $A\in N$, there exists some $B\in N$ such that $B+B\subseteq A$;
+\item for all $A\in N$ and $\lambda\in \F\setminus\{0\}$: $\lambda A\in N$;
 \item each $A \in N$ is absorbent;
-\item $N$ has a balanced base.
+\item $N$ has a balanced base;
+\item for all $A\in N$, there exists some $B\in N$ such that $B+B\subseteq A$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -257,18 +276,12 @@ First assume $N$ has a balanced and absorbent base. We check the five conditions
 \begin{enumerate}
 \item Immediate because $\mathcal{F} = \pfilter{N}$.
 \item Take $F,G\in \pfilter{N}$. We need to show that $\upset (F + G) \supseteq N$, which means that for all $A \in N$ there exist $B\in F$ and $C\in G$ such that $B+C\subseteq A$. We can take $B = C$ equal to the $B$ of point (2).
-\item Take $F\in \pfilter{N}$. We need to show that $\upset(\vicinity_\F(0)\cdot F) \supseteq N$, which means that for all $A\in N$ there exists a $\Gamma\in \vicinity_\F(0)$ and $B\in F$ such that $\Gamma \cdot B\subseteq A$. We can take $B = \balancedCore(A) \in N \subseteq F$ and $\Gamma = B(0,1)$.
-\item Take $v\in V$. We need to show that all $A\in N$ contain $\Gamma\cdot v$ for some $\Gamma \in \vicinity_\F(0)$. Because $A$ is absorbent, there exists an $r>0$ such that $v\in cA$ for all $|c|\geq r$. Conversely $c^{-1}v \in A$ for all $|c^{-1}| \leq r^{-1}$. So $\ball(0,r^{-1})\cdot v \subseteq A$ and $B(0,r^{-1}) \in \vicinity_\F(0)$.
+\item Take $F\in \pfilter{N}$. We need to show that $\upset(\neighbourhood_\F(0)\cdot F) \supseteq N$, which means that for all $A\in N$ there exists a $\Gamma\in \neighbourhood_\F(0)$ and $B\in F$ such that $\Gamma \cdot B\subseteq A$. We can take $B = \balancedCore(A) \in N \subseteq F$ and $\Gamma = B(0,1)$.
+\item Take $v\in V$. We need to show that all $A\in N$ contain $\Gamma\cdot v$ for some $\Gamma \in \neighbourhood_\F(0)$. Because $A$ is absorbent, there exists an $r>0$ such that $v\in cA$ for all $|c|\geq r$. Conversely $c^{-1}v \in A$ for all $|c^{-1}| \leq r^{-1}$. So $\ball(0,r^{-1})\cdot v \subseteq A$ and $B(0,r^{-1}) \in \neighbourhood_\F(0)$.
 \item Take $F\in \pfilter{N}$ and $\lambda\in \F$. We need to show that for all $A\in N$ there exists a $B\in F$ such that $\lambda\cdot B\subseteq A$. We can take $B = \lambda^{-1}A \in N\subseteq F$.
 \end{enumerate}
 
-Now assume $\xi$ is a topological vector space convergence and $N = \neighbourhood_\xi(0)$.
-\begin{enumerate}
-\item By point (5) of \ref{vectorSpaceConvergenceConstruction}, we have that for all $\lambda\in \F$, $\lambda\cdot N \supseteq N$, so for all $A\in N$, there exists a $B\in N$ such that $A = \lambda B$. This means $\lambda^{-1}A \in N$ for all $\lambda\in \F, A\in N$.
-\item By \ref{vicinityFactorisation};
-\item For absorbence, take $A\in N$ and $v\in V$. Then there exists a $\Gamma \in \vicinity_\F(0)$ such that $\Gamma\cdot v \subseteq A$. Now we can find a $r>0$ such that $\ball(0,r)\subseteq \Gamma$, so for all $|c|\geq r^{-1}$ we have $v\in cA$.
-\item By point (3) of \ref{vectorSpaceConvergenceConstruction}, $\vicinity_\F(0)\cdot N \supseteq N$. Take $A\in N$. Then there exists a $\Gamma\in\vicinity_\F(0)$ and $B\in N$ such that $\Gamma\cdot B \subseteq A$. We can find sume ball $\ball(0,\epsilon) \subseteq \Gamma$, so $\ball(0,1)\cdot \epsilon^{-1}B\subseteq \epsilon^{-1}B \subseteq A$. Thus $\epsilon^{-1}B$ is balanced and a neighbourhood by point(1). So every $A\in N$ contains a balanced set in $N$.
-\end{enumerate}
+Now assume $\xi$ is a topological vector space convergence and $N = \neighbourhood_\xi(0)$. The first 3 points follow from \ref{vicinityFilterAtOrigin}. The fourth from \ref{vicinityFactorisation}.
 \end{proof}
 
 
@@ -366,7 +379,16 @@ A hyperplane in a convergence vector space is either closed or dense.
 \begin{proof}
 Let $H$ be a hyperplane in a vector space $V$. Then $H \subseteq \adh(H)$ and $\adh(H)$ is a subspace. Because $H$ is a coatom, we have either $\adh(H) = H$ or $\adh(H) = V$. In the first case $H$ is closed, in the second dense.
 \end{proof}
+\begin{corollary}
+Let $\sSet{V,\xi}$ be a complete Hausdorff CVS. Then any finite dimensional subspace $U$ of $V$ is closed.
+\end{corollary}
+\begin{proof}
+Consider $\adh(U)$. This is a vector space by the proposition. If $\adh(U)$ has the same dimension as $U$, then $\adh(U) = U$ by \ref{vectorSpaceEquality} (as $U \subseteq \adh(U)$). In this case $U$ is closed.
 
+Now assume $\adh(U)$ has a strictly larger dimension than $U$. Then pick a basis $\beta$ of $U$ and enlarge it to a basis $\beta'$ of $\adh(U)$, which is possible by \ref{extensionReductionBasisFiniteDimensions}. Take $w\in \beta'\setminus \beta$.
+
+As $w\in\adh(U)$, there exists $F\to w$ such that $U\in F$
+\end{proof}
 
 \section{Functionals}
 \begin{definition}
@@ -406,9 +428,9 @@ Let $V$ be a convergence vector space and $f:V\to \F$ a non-zero linear function
 \begin{proof}
 It is enough to show $f$ is open when $V$ is equipped with the algebraic convergence.
 
-Let $A$ be an algebraically open map. We use \ref{openClosedCriteria} to show $f^\imf[A]$ is also open. Because $f$ is non-zero, there exists a $v\in V$ such that $f(v) \neq 0$. Take some $y\in f^\imf[A]$. Then there exists an $x\in A$ such that $f(x) = y$. Because $A$ is open, $x\in \inh_\mathfrak{x}(A)$ and there exists $x+ \Gamma_v\in \vicinity_\F(0)$ such that $x+\Gamma_v\cdot v \subseteq A$ by \ref{constructionsInAlgebraicConvergence}.
+Let $A$ be an algebraically open map. We use \ref{openClosedCriteria} to show $f^\imf[A]$ is also open. Because $f$ is non-zero, there exists a $v\in V$ such that $f(v) \neq 0$. Take some $y\in f^\imf[A]$. Then there exists an $x\in A$ such that $f(x) = y$. Because $A$ is open, $x\in \inh_\mathfrak{x}(A)$ and there exists $x+ \Gamma_v\in \neighbourhood_\F(0)$ such that $x+\Gamma_v\cdot v \subseteq A$ by \ref{constructionsInAlgebraicConvergence}.
 
-Now $f^\imf[x+ \Gamma_v\in \vicinity_\F(0)] = y+\Gamma_v \cdot f(v) \subseteq f^\imf[A]$ and $y+\Gamma_v \cdot f(v)$ is a vicinity of $y$, so we are done.
+Now $f^\imf[x+ \Gamma_v\in \neighbourhood_\F(0)] = y+\Gamma_v \cdot f(v) \subseteq f^\imf[A]$ and $y+\Gamma_v \cdot f(v)$ is a vicinity of $y$, so we are done.
 \end{proof}
 
 \begin{lemma} \label{complexRangeExtensionRealFunctional}
@@ -426,15 +448,6 @@ f(\lambda v) &= f\big((a+ib)v\big) \\
 &= af(v) + ib\big(-ig(iv) + g(v)\big) \\
 &= af(v) + ibf(v) = (a+ib)f(v) = \lambda f(v).
 \end{align*}
-\end{proof}
-
-\begin{lemma}
-Let $V$ be a vector space and $f_0,\ldots, f_n, f$ linear functionals in $(V\to \F)$. Then a linear functional $f: V\to \F$ is a linear combination of $f_0,\ldots, f_n$ \textup{if and only if} .
-\end{lemma}
-\begin{proof}
-The direction $\Rightarrow$ is immediate: if $f_i(v) = 0$ for all $0\leq i\leq n$, then any linear combination is also zero.
-
-Now assume 
 \end{proof}
 
 \begin{lemma} \label{linearDependenceLinearFunctionals}
@@ -531,7 +544,7 @@ Let $V$ be a vector space. Then the algebraic dual of $V$ is the set of all line
 Thus $V^* \supseteq \sSet{V,\xi}^*$ for all vector space convergences $\xi$ on $V$.
 \end{proposition}
 \begin{proof}
-We need to show that all linear functionals are continuous when $V$ is equipped with the algebraic convergence. Assume $F\overset{\mathfrak{a}}{\longrightarrow} x$. Then there exists a $v\in V$ such that $\vicinity_\F(0)\cdot v+x \subseteq F$ and so $\vicinity_\F(0)\cdot f(v)+f(x) \subseteq f^\imf[F]$, meaning $f^\imf[F] \overset{\F}{\longrightarrow} f(x)$. Thus $f$ is continuous.
+We need to show that all linear functionals are continuous when $V$ is equipped with the algebraic convergence. Assume $F\overset{\mathfrak{a}}{\longrightarrow} x$. Then there exists a $v\in V$ such that $\neighbourhood_\F(0)\cdot v+x \subseteq F$ and so $\neighbourhood_\F(0)\cdot f(v)+f(x) \subseteq f^\imf[F]$, meaning $f^\imf[F] \overset{\F}{\longrightarrow} f(x)$. Thus $f$ is continuous.
 \end{proof}
 
 
@@ -556,6 +569,12 @@ Now we relax the condition $\dim_{\mathbb{F}}V \geq |\mathbb{F}|$. We first note
 \[ \dim_\mathbb{F} V = \dim_K W < \dim_K W^* \leq \dim_{\mathbb{F}} V^* \]
 using $\dim_{K}W \geq |K| \geq \aleph_0$.
 \end{enumerate}
+\end{proof}
+\begin{corollary}
+Let $V$ be a finite-dimensional vector space. Then the algebraic convergence is the unique Hausdorff vector space convergence on $V$.
+\end{corollary}
+\begin{proof}
+Consider a basis $v_1, \ldots, v_n$ of $V$ with dual basis $\varphi_1, \ldots, \varphi_n$. Let $\xi$ be some vector space convergence. By definition we have $\mathfrak{a} \subseteq \xi$. Now take $F \overset{\xi}{\longrightarrow} v$. We have $F = v_1\cdot \varphi_1^{\imf\imf}[F] + \ldots + v_n\cdot \varphi_n^{\imf\imf}[F]$. Now each $\varphi_1^{\imf\imf}[F]$ converges in both $\mathfrak{a}$ and $\xi$ by \ref{algebraicDual} and the proposition, so by continuity of addition and scalar multiplication, $F$ also converges in $\mathfrak{a}$. 
 \end{proof}
 \begin{corollary}
 Let $\sSet{V,\xi}$ be a convergence vector space. If $V$ is finite-dimensional, then $\sSet{V,\xi}^* = \sSet{V,\mathfrak{a}}^*$.
@@ -820,7 +839,7 @@ Let $V$ be a real or complex vector space and $f: V\to \R$ be a real functional.
 \end{lemma}
 Thus norms and seminorms are sublinear.
 
-\begin{lemma}
+\begin{lemma} \label{seminormPositivity}
 A subadditive, absolutely homogenous function $f:V\to \R$ is non-negative:
 \[ f: V\to \R_{\geq 0}. \]
 Thus norms and seminorms are functions $V\to \R_{\geq 0}$.
@@ -901,26 +920,56 @@ For positive homogeneity: let $x\in V,\lambda\geq 0$
 Finally we prove that $f\leq p \implies f\leq P$ for linear functionals $f$. For all $t>0$ we have $f(tx) \leq p(tx)$, which implies $f(x) = t^{-1}f(tx) \leq t^{-1}p(tx) \leq P(x)$. So $f\leq P$.
 \end{proof}
 
-\subsubsection{Seminorms}
-\begin{lemma}
-The kernel of a seminorm is a vector space.
-\end{lemma}
-Note this does not follow from \ref{kernelSubspace} because seminorms are not linear.
-\begin{proof}
-Let $p:V\to \R$ be a seminorm. We verify the subspace criterion \ref{subspaceCriterion}. First $0\in\ker(p)$ because $p(0) = p(0\cdot 0) = |0|p(0) = 0$.
+\subsubsection{Sublinear functionals}
 
-Now take $v,w\in \ker(p)$ and $\lambda\in \F$. Then $0\leq p(v+\lambda w) \leq p(v)+|\lambda|p(w) = 0$, so $v+\lambda w\in\ker(p)$.
+\begin{lemma}
+Let $V$ be a \emph{real} vector space and $f: V \to \R$ a sublinear functional. Then $f': V\to \R: x\mapsto \max\{f(x), f(-x)\}$ is a seminorm.
+\end{lemma}
+We call the seminorm $f'$ the \udef{associated seminorm} of the sublinear functional.
+\begin{proof}
+Take arbitrary $x,y\in V$ and $a\in \R$
+
+For subadditivity, we have
+\begin{align*}
+f'(x+y) &= \max\{f(x+y), f(-x-y)\} \\
+&\leq \max\{f(x)+f(y), f(-x)+ f(-y)\} \\
+&\leq \max\{f(x)+f(y), f(-x)+ f(-y), f(x) + f(-y), f(-x) + f(y)\} \\
+&= \max\{f(x), f(-x)\} + \max\{f(y), f(-y)\} \\
+&= f'(x) + f'(y).
+\end{align*}
+
+For absolute homogeneity, we have,
+\begin{align*}
+f'(ax) &= \begin{cases}
+f'(|a|x) & (a \geq 0) \\ f'(-|a|x) & (a < 0)
+\end{cases} \\
+&= \begin{cases}
+\max\{f(|a|x), f(-|a|x)\} & (a \geq 0) \\ \max\{f(-|a|x), f(|a|x)\} & (a < 0)
+\end{cases} \\
+&= \max\{|a|f(x), |a|f(-x)\} = |a|f'(x).
+\end{align*}
 \end{proof}
 
-\begin{proposition} \label{gaugeSeminorms}
-Let $V$ be a vector space, $p: V\to \R$ a seminorm and $\lambda\in \F$. Then
-\[ \setbuilder{v\in V}{p(v) < \lambda} \qquad\text{and}\qquad \setbuilder{v\in V}{p(v) \leq \lambda} \]
-are absolutely convex and absorbent.
+\begin{proposition} \label{sublinearContinuity}
+Let $\sSet{V,\xi}$ be a convergence vector space and $f: V\to \R$ a sublinear functional. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is continuous;
+\item $f$ is continuous at $0$;
+\item $f$ is bounded on some $U\in\vicinity_\xi(0)$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-Take $|\mu| + |\nu| \leq 1$ and $v,w\in\setbuilder{v\in V}{p(v) \leq \lambda}$. Then $p(|\mu|v + |\nu|w)\leq |\mu|p(v) + |\nu|p(w) \leq (|\mu|+|\nu|)\lambda \leq \lambda$.
+The equivalence $(2) \Leftrightarrow (3)$ is given by \ref{continuityToNormedSpace}.
 
-For absorbence, take $v\in V$. Then $\frac{\lambda}{2p(v)} v\in \setbuilder{v\in V}{p(v) < \lambda}$.
+The implication $(1) \Rightarrow (2)$ is immediate. 
+
+The implication $(2) \Rightarrow (1)$ follows from \ref{superSubtractiveContinuityEverywhere}: 
+for arbitrary $v,w\in V$, we have $f(v) = f(v-w+w) \leq f(v-w) + f(w)$, so $f(v) - f(w) \leq f(v-w)$. Similarly $f(w) - f(v) \leq f(w-v)$, so
+\begin{align*}
+|f(v) - f(w)| &= \max\{f(v) - f(w), f(w) - f(v)\} \\
+&\leq \max\{f(v-w), f(w-v)\} \\
+&\leq \max\{|f(v-w)|, |f(w-v)|\}.
+\end{align*}
 \end{proof}
 
 \subsubsection{Gauges}
@@ -949,7 +998,7 @@ p_A(tv) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{tv\in \lambda A} \\
 \end{align*}
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{semibalancedClosureGauge}
 Let $V$ be a vector space and $A\subseteq V$ an absorbent subset. Then $p_A = p_{\semibalanced(A)}$.
 \end{lemma}
 \begin{proof}
@@ -969,7 +1018,7 @@ Let $V$ be a vector space, $A\subseteq V$ an absorbent subset and $\lambda\in \R
 \item if $A$ is semibalanced, then $p_A(v) < \lambda \implies \lambda^{-1}v\in A$;
 \item $\lambda^{-1}v\in A \implies p_A(v) \leq \lambda$;
 \item $p_A^{\preimf}[\ball(0,1)] \;\subseteq\; \semibalanced(A) \;\subseteq\; p_A^{\preimf}[\cball(0,1)]$;
-\item $\frac{v}{p_A(v)+\epsilon} \in A$ for all $v\in V$ and $\epsilon >0$.
+\item $\frac{v}{p_A(v)+\epsilon} \in \semibalanced(A)$ for all $v\in V$ and $\epsilon >0$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -979,16 +1028,7 @@ where we have used that $A = \semibalanced(A) = \interval{0,1}\cdot A$. Thus $\l
 
 (2) Assume $\lambda^{-1}v \in A$. Then $v\in \lambda A$, so we immediately have $p_A \leq \lambda$.
 
-(3) We calculate
-\begin{align*}
-x\in p_{\semibalanced(A)}^\preimf[\ball(0,1)] \iff& p_{\semibalanced(A)}(x) < 1 \\
-\implies& x\in \semibalanced(A) \\
-\implies& p_{\semibalanced(A)}(x) \leq 1 \\
-\iff& x\in p_{\semibalanced(A)}^\preimf[\cball(0,1)].
-\end{align*}
-Reformulating in terms of sets gives the result.
-
-(4) This follows from (1) and the fact that $p_A(v) < p_A(v) + \epsilon$.
+(3) This follows from (1), the fact that $p_A(v) < p_A(v) + \epsilon$ and the fact that $p_A = p_{\semibalanced(A)}$, \ref{semibalancedClosureGauge}.
 \end{proof}
 
 \begin{lemma} \label{gaugeClassificationLemma}
@@ -1001,7 +1041,14 @@ Then the following are equivalent:
 In particular $f^{\preimf}[\ball(0,1)]$ is absorbent.
 \end{lemma}
 \begin{proof}
-$(1) \Rightarrow (2)$ This is immediate by \ref{gaugeLemma}.
+$(1) \Rightarrow (2)$ We calculate, using \ref{gaugeLemma},
+\begin{align*}
+x\in p_{A}^\preimf[\ball(0,1)] \iff& p_{A}(x) < 1 \\
+\implies& x\in A \\
+\implies& p_{A}(x) \leq 1 \\
+\iff& x\in p_{A}^\preimf[\cball(0,1)].
+\end{align*}
+Reformulating in terms of sets gives the result.
 
 $(2) \Rightarrow (1)$ We calculate, for arbitrary $v\in V$,
 \[ \begin{aligned}
@@ -1012,7 +1059,7 @@ p_A(v) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} \\
 \end{aligned} \quad\text{and}\quad \begin{aligned}
 p_A(v) &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda A} \\
 &\geq \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in \lambda f^{\preimf}[\cball(0,1)]} \\
-&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in f^{\preimf}[\cball(0,lambda)]} \\
+&= \inf\setbuilder{\lambda\in \R^{\geq 0}}{v\in f^{\preimf}[\cball(0,\lambda)]} \\
 &= \inf\setbuilder{\lambda\in \R^{\geq 0}}{f(v) \leq \lambda} = f(v).
 \end{aligned} \]
 We conclude that $f(v) = p_A(v)$.
@@ -1025,7 +1072,7 @@ Let $V$ be a vector space and $f: V\to \R^{\geq 0}$ a function.
 Then the following are equivalent:
 \begin{enumerate}
 \item $f$ is positively homogenous;
-\item $f = p_A$ for some absorbent subset $A$.
+\item $f = p_A$ for some semibalanced, absorbent subset $A$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -1034,49 +1081,6 @@ Assume $f$ positively homogeneous. Then we can set $A = f^{\preimf}[\ball(0,1)]$
 
 The converse is given by \ref{gaugeScaling}.
 \end{proof}
-
-\begin{proposition} \label{gaugeContinuity}
-Let $\sSet{V, \xi}$ be a convergence vector space and $A\subseteq V$ an absorbent, semibalanced subset. Then $p_A: \sSet{V,\xi} \to \F$ is continuous \textup{if and only if} $A\in\vicinity_\xi(0)$.
-\end{proposition}
-\begin{proof}
-By \ref{gaugeScaling} we have that $p_A$ is positively homogeneous. Then by \ref{continuityToNormedSpace}, $p_A$ is continuous iff it is bounded on some $B\in\vicinity_\xi(0)$. Now $p_A$ is bounded on $A$ by \ref{gaugeLemma}, so this proves the direction $\Rightarrow$.
-
-Now assume $p_A$ continuous. Then $\ball(0,1) \in \neighbourhood_\F(0) = \neighbourhood_\F(p_A(0))$, so $p_A^\preimf[\ball(0,1)] \in \vicinity_\xi(0)$ by \ref{continuityVicinityFilter}. By \ref{gaugeLemma} (using the fact that $A$ is semibalanced), $p_A^\preimf[\ball(0,1)] \subseteq A$, so $A\in\vicinity_\xi(0)$.
-\end{proof}
-\begin{corollary} \label{gaugeContinuousAlgebraicConvergence}
-Let $V$ be a vector space. Then $p_A: \sSet{V,\mathfrak{a}} \to \F$ is continuous for any absorbent subset $A \subseteq V$.
-\end{corollary}
-\begin{proof}
-By \ref{coreProperties}, we have $0\in\inh_\mathfrak{a}(A)$. Then $A\in \vicinity_\mathfrak{a}$ by \ref{principalAdherenceInherence}.
-\end{proof}
-\begin{corollary} \label{absoluteFunctionalGauge}
-Let $\sSet{V, \xi}$ be a convergence vector space and $f: V\to \F$ a linear functional. Then $f$ is continuous \textup{if and only if} $|f| = p_K$ for some $K\in\vicinity_\xi(0)$.
-\end{corollary}
-\begin{proof}
-We have that $|f|$ is positively homogeneous, and thus of the form $p_K$ by \ref{gaugeClassification}. The rest follows from the proposition.
-\end{proof}
-
-\begin{proposition} \label{gaugeInherenceAdherence}
-Let $V$ be a vector space and $A\subseteq V$ an absorbent semibalanced subset. Then
-\begin{enumerate}
-\item $p_A^{\preimf}[\ball(0,1)] = \inh_\mathfrak{a}(A)$;
-\item $p_A^{\preimf}[\cball(0,1)] = \adh_\mathfrak{a}(A)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) We show both inclusions. First take $x\in \inh_\mathfrak{a}(A)$. Then by \ref{constructionsInAlgebraicConvergence}, there exists $\Gamma\in\neighbourhood_\F(0)$ such that $v+\Gamma\cdot v = (1 + \Gamma)\cdot v \subseteq A$. There exists $\lambda \in 1 + \Gamma$ that is real and strictly less than $1$. Thus $p_A(x) <1$, meaning $x\in p^\preimf_A\big(\ball(0,1)\big)$.
-
-For the other inclusion we use that $p_A$ is continuous by \ref{gaugeContinuousAlgebraicConvergence}. By \ref{adherenceInherenceContinuity} and \ref{gaugeLemma} we have
-\[ p_A^{\preimf}[\ball(0,1)] = p_A^{\preimf}\Big[\interior_\F\big(\ball(0,1)\big)] \subseteq \inh_\mathfrak{a}\big(p_A^{\preimf}[\ball(0,1)]\big) \subseteq \inh_\mathfrak{a}(A). \]
-
-(2) Again we show both inclusions. From \ref{gaugeLemma} we have $A \subseteq p^\preimf_A\big(\cball(0,1)\big)$. Thus, by \ref{adherenceInherenceContinuity},
-\[ \adh_\mathfrak{a}(A) \subseteq \adh_\mathfrak{a}\Big(p^\preimf_A\big(\cball(0,1)\big)\Big) \subseteq p_A^\preimf\big(\overline{\cball(0,1)}\big) = p^\preimf_A\big(\cball(0,1)\big). \]
-
-For the other inclusion, take $x\in p^\preimf_A\big(\cball(0,1)\big)$, which means that $p_A(x) \leq 1$, so $p_A(x) < 1+\epsilon$ for all $\epsilon > 0$. By \ref{gaugeLemma}, $(1+\epsilon)^{-1}x = x - \epsilon(1+\epsilon)^{-1}x \in A$. Because $\frac{\epsilon}{1+\epsilon} < \epsilon$, we have $x - \epsilon(1+\epsilon)^{-1}x \in x + \ball(0,\epsilon)\cdot x$ and so $x + \ball(0,\epsilon)\cdot x \mesh A$.
-
-Now for all $\Gamma\in\neighbourhood_\F(0)$, we have $\ball(0,\epsilon) \subseteq \Gamma$ for some $\epsilon >0$. Thus $x+ \Gamma\cdot x \mesh A$ and $x\in\adh_\mathfrak{a}(A)$ by \ref{constructionsInAlgebraicConvergence}.
-\end{proof}
-
 
 \begin{lemma} \label{gaugeZeroLemma}
 Let $V$ be a vector space, $A\subseteq V$ an absorbent subset and $a\in A$. If there exists a subspace $U\subseteq A$ such that $a\in U$, then $p_A(a) = 0$.
@@ -1110,12 +1114,67 @@ By \ref{gaugeLemma} this means $p_A(v)+p_A(w)+2\epsilon \geq p_A(v+w)$ and becau
 The gauge of an absolutely convex and absorbent subset is a seminorm. If the subset contains only the trivial subspace, then the gauge is a norm.
 \end{corollary}
 
+\begin{proposition} \label{continuityConvexGauge}
+Let $\sSet{V, \xi}$ be a convergence vector space and $A\subseteq V$ a convex, absorbent subset. Then $p_A: \sSet{V,\xi} \to \F$ is continuous \textup{if and only if} $A\in\vicinity_\xi(0)$.
+\end{proposition}
+\begin{proof}
+First assume $A\in\vicinity_\xi(0)$. By \ref{gaugeProperties}, we have that $p_A$ is sublinear. By \ref{gaugeClassificationLemma}, we have that $A \subseteq p_A^\preimf[\cball(0,1)]$ and thus that $p_A$ is bounded on $A$. Then $p_A$ is continuous by \ref{sublinearContinuity}.
+
+Now assume $p_A$ continuous. Then $\ball(0,1) \in \neighbourhood_\F(0) = \neighbourhood_\F(p_A(0))$, so $p_A^\preimf[\ball(0,1)] \in \vicinity_\xi(0)$ by \ref{continuityVicinityFilter}. By \ref{gaugeClassificationLemma} (using the fact that $A$ is semibalanced, \ref{convexSemibalanced}), $p_A^\preimf[\ball(0,1)] \subseteq A$, so $A\in\vicinity_\xi(0)$.
+\end{proof}
+\begin{corollary} \label{gaugeContinuousAlgebraicConvergence}
+Let $V$ be a vector space. Then $p_A: \sSet{V,\mathfrak{a}} \to \F$ is continuous for any convex, absorbent subset $A \subseteq V$.
+\end{corollary}
+\begin{proof}
+By \ref{coreProperties}, we have $0\in\inh_\mathfrak{a}(A)$. Then $A\in \vicinity_\mathfrak{a}(0)$ by \ref{principalAdherenceInherence}.
+\end{proof}
+
+\begin{lemma} \label{absoluteFunctionalGauge}
+Let $\sSet{V, \xi}$ be a convergence vector space and $f: V\to \F$ a linear functional. Then $f$ is continuous \textup{if and only if} $|f| = p_K$ for some $K\in\vicinity_\xi(0)$.
+\end{lemma}
+\begin{proof}
+We have that $|f|$ is positively homogeneous. Set $K \defeq |f|^{preimf}[\ball(0,1)] = |f|^{preimf}(\interval[o]{0,1})$. Then $|f| = p_{K}$, by \ref{gaugeClassificationLemma}. 
+
+First assume $f$ is continuous. Then $p_K^\preimf\big[\ball(0,1)\big] = K$ is in $\vicinity_\xi(0)$ by \ref{continuityVicinityFilter}.
+
+Now assume $K\in\vicinity_\xi(0)$. As $K \subseteq p_K^\preimf\big[\cball(0,1)\big]$ (\ref{gaugeClassificationLemma}), we have that $|f|$ is bounded on $K$. It is also sublinear and thus continuous by \ref{sublinearContinuity}.
+\end{proof}
+
+
+\begin{proposition} \label{gaugeInherenceAdherence}
+Let $V$ be a vector space and $A\subseteq V$ an absorbent semibalanced subset. Then
+\begin{enumerate}
+\item $\inh_\mathfrak{a}(A) \subseteq p_A^{\preimf}[\ball(0,1)]$;
+\item $p_A^{\preimf}[\cball(0,1)] \subseteq \adh_\mathfrak{a}(A)$.
+\end{enumerate}
+The inclusions are equalities if $A$ is convex.
+\end{proposition}
+\begin{proof}
+(1) Take $x\in \inh_\mathfrak{a}(A)$. Then by \ref{constructionsInAlgebraicConvergence}, there exists $\Gamma\in\neighbourhood_\F(0)$ such that $v+\Gamma\cdot v = (1 + \Gamma)\cdot v \subseteq A$. There exists $\lambda \in 1 + \Gamma$ that is real and strictly less than $1$. Thus $p_A(x) <1$, meaning $x\in p^\preimf_A\big(\ball(0,1)\big)$.
+
+(Convex) For the other inclusion we use that $p_A$ is continuous by \ref{gaugeContinuousAlgebraicConvergence}. By \ref{adherenceInherenceContinuity} and \ref{gaugeClassificationLemma} we have
+\[ p_A^{\preimf}[\ball(0,1)] = p_A^{\preimf}\Big[\interior_\F\big(\ball(0,1)\big)] \subseteq \inh_\mathfrak{a}\big(p_A^{\preimf}[\ball(0,1)]\big) \subseteq \inh_\mathfrak{a}(A). \]
+
+(2) Take $x\in p^\preimf_A\big(\cball(0,1)\big)$, which means that $p_A(x) \leq 1$, so $p_A(x) < 1+\epsilon$ for all $\epsilon > 0$. By \ref{gaugeLemma}, $(1+\epsilon)^{-1}x = x - \epsilon(1+\epsilon)^{-1}x \in A$. Because $\frac{\epsilon}{1+\epsilon} < \epsilon$, we have $x - \epsilon(1+\epsilon)^{-1}x \in x + \ball(0,\epsilon)\cdot x$ and so $x + \ball(0,\epsilon)\cdot x \mesh A$.
+
+Now for all $\Gamma\in\neighbourhood_\F(0)$, we have $\ball(0,\epsilon) \subseteq \Gamma$ for some $\epsilon >0$. Thus $x+ \Gamma\cdot x \mesh A$ and $x\in\adh_\mathfrak{a}(A)$ by \ref{constructionsInAlgebraicConvergence}.
+
+(Convex) For the other inclusion we again use that $p_A$ is continuous by \ref{gaugeContinuousAlgebraicConvergence}. From \ref{gaugeClassificationLemma} we have $A \subseteq p^\preimf_A\big(\cball(0,1)\big)$. Thus, by \ref{adherenceInherenceContinuity},
+\[ \adh_\mathfrak{a}(A) \subseteq \adh_\mathfrak{a}\Big(p^\preimf_A\big(\cball(0,1)\big)\Big) \subseteq p_A^\preimf\big(\overline{\cball(0,1)}\big) = p^\preimf_A\big(\cball(0,1)\big). \]
+\end{proof}
+
+\begin{example}
+TODO square with corner missing.
+\end{example}
+
+
+
 \begin{proposition} \label{gaugeConstructions}
 Let $V$ be a vector space and $A,B\subseteq V$ semibalanced subsets. Then
 \begin{enumerate}
 \item the gauge of $A\cap B$ is $\max\{p_A, p_B\}$;
 \item if $A\subseteq B$, then $p_B \leq p_A$;
-\item if $p_B \leq p_A$, then $\adh_\mathfrak{a}(A) \subseteq \adh_\mathfrak{a}(B)$.
+\item if $p_B \leq p_A$ and $A$ is convex, then $\adh_\mathfrak{a}(A) \subseteq \adh_\mathfrak{a}(B)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -1132,6 +1191,17 @@ For the other inequality we use \ref{gaugeLemma}: take $v\in V$ and arbitrary $\
 (2) First assume $A\subseteq B$. Then $\frac{v}{p_A(v)+\epsilon}\in A$ by \ref{gaugeLemma}, for all $\epsilon >0$. Then $\frac{v}{p_A(v)+\epsilon}\in B$, so $p_B(v) \leq p_A(v)+\epsilon$ (again by \ref{gaugeLemma}). Taking the limit $\epsilon\to 0$ yields the result.
 
 (3) Assume $p_B \leq p_A$ and take $v\in \adh_\mathfrak{a}(A)$. Then $p_B(v) \leq p_A(v) \leq 1$ by \ref{gaugeInherenceAdherence}, which also gives $v\in\adh_\mathfrak{a}(B)$.
+\end{proof}
+
+\subsubsection{Seminorms}
+\begin{lemma}
+The kernel of a seminorm is a vector space.
+\end{lemma}
+Note this does not follow from \ref{kernelSubspace} because seminorms are not linear.
+\begin{proof}
+Let $p:V\to \R$ be a seminorm. We verify the subspace criterion \ref{subspaceCriterion}. First $0\in\ker(p)$ because $p(0) = p(0\cdot 0) = |0|p(0) = 0$.
+
+Now take $v,w\in \ker(p)$ and $\lambda\in \F$. Then $0\leq p(v+\lambda w) \leq p(v)+|\lambda|p(w) = 0$, so $v+\lambda w\in\ker(p)$.
 \end{proof}
 
 \subsection{Initial convergence w.r.t. seminorms}
@@ -1188,7 +1258,7 @@ Let $V$ be a vector space. A topological convergence on $V$ is locally convex \t
 \begin{proof}
 If $V$ has the initial convergence w.r.t. $S$, then $V$ is locally convex by \ref{initialSeminormConvergence} because $p^\preimf[\ball(0,\epsilon)]$ is convex for all $p\in S$.
 
-Now let $V$ be a locally convex TVS, meaning there exists a convex base $\mathcal{B}$ of $\neighbourhood(0)$. Each $B\in\mathcal{B}$ is absorbent by \ref{TVSconstruction} and thus also semibalanced by \ref{convexAbsorbentImpliesSemibalanced}. Then $S = \setbuilder{p_B}{B\in \mathcal{B}}$ is a set of continuous seminorms, by \ref{gaugeContinuity}. 
+Now let $V$ be a locally convex TVS, then there exists an absolutely convex base $\mathcal{B}$ of $\neighbourhood(0)$ by \ref{vicinityFilterAtOrigin}. Then $S = \setbuilder{p_B}{B\in \mathcal{B}}$ is a set of continuous seminorms, by \ref{gaugeProperties} and \ref{continuityConvexGauge}.
 
 In order to show that the convergence on $V$ is initial w.r.t. $S$, we verify the form of $\neighbourhood(0)$ given in \ref{initialSeminormConvergence}.
 
@@ -1277,7 +1347,7 @@ We just need to show that $f$ is bounded by $p$. Take arbitrary $v\in V$ and wri
 Let $V$ be a locally convex convergence vector space, $U\subseteq V$ a subspace and $f:U\to \F$ a continuous functional. Then $f$ has a continuous extension to $V$.
 \end{corollary}
 \begin{proof}
-We have that $|f| = p_K$ for some $K\in \vicinity_U(0)$ by \ref{absoluteFunctionalGauge}. By continuity of the inclusion map, we can find an $M \in \vicinity_V(0)$ such that $M\cap U = K$. Then $|f|\leq p_M$ and $f$ can be extended by the Hahn-Banach extension theorem. By \ref{majorisedContinuity} this extension is continuous.
+We have that $|f| = p_K$ for some $K\in \vicinity_U(0)$ by \ref{absoluteFunctionalGauge}. By continuity of the inclusion map, we can find an $M \in \vicinity_V(0)$ such that $M\cap U = K$. Then $|f|\leq p_M$ and $f$ can be extended by the Hahn-Banach extension theorem to a functional $f'$ defined in the whole of $V$. Then $f$ is bounded on $M$ and thus continuous by \ref{continuityToNormedSpace}.
 \end{proof}
 \begin{corollary}
 Let $X$ be a normed space and $Z\subset X$ a subspace. Any bounded linear functional in $\tdual{Z}$ can be extended to a bounded linear functional in $\tdual{X}$ with the same norm.
@@ -1327,7 +1397,7 @@ Consider the functional $f_{a}$ of \ref{gaugeSeparationLemma}, which is majorise
 We note that $U\subseteq \ker(f_a)$, because $p_{a-A+U}(u) = 0$ by \ref{gaugeZeroLemma}.
 
 In order to conclude with \ref{functionalBoundedNeighbourhood}, we need to show that $A-a \subseteq f_a^{\preimf}(\ball(0,|f_a(a)|)) = f_a^{\preimf}(\ball(0,1))$.
-Indeed $A-a \subseteq U+A-a = \inh_\mathfrak{a}(U+A-a) = p_{U+A-a}^\preimf[\ball(0,1)] \subseteq f_{a}^\preimf[\ball(0,1)]$ by \ref{algebraicallyOpen} and \ref{gaugeInherenceAdherence} ($U+A-a$ is semibalanced because $A-a$ is).
+Indeed $A-a \subseteq U+A-a = \inh_\mathfrak{a}(U+A-a) \subseteq p_{U+A-a}^\preimf[\ball(0,1)] \subseteq f_{a}^\preimf[\ball(0,1)]$ by \ref{algebraicallyOpen} and \ref{gaugeInherenceAdherence} ($U+A-a$ is semibalanced because $A-a$ is).
 
 Note that $\ker(f_a)^c$ contains the open set $A$ and thus $\ker(f_a)$ is not dense by \ref{openDensityLemma}. By \ref{hyperplaneClosedDense} this means that $\ker(f_a)$ is closed.
 
@@ -1365,6 +1435,14 @@ Apply the proposition to the realification $V_\R$. This gives us an $\R$-linear 
 Because $g^\imf[A]$ and $g^\imf[B]$ are convex, we either have $g^\imf[A]\leq g^\imf[B]$ or $g^\imf[A]\geq g^\imf[B]$. In the second case we simply replace $g$ by $-g$ to obtain the first case. We may take $t= \sup g^\imf[A]$. This is not in $g^\imf[A]$ because it is open.
 
 If $V$ is a real vector space we take $f=g$ are done. If $V$ is complex, we can find a suitable $f$ by \ref{complexRangeExtensionRealFunctional}.
+\end{proof}
+\begin{corollary} \label{locallyConvexHahnBanachSeparationClosedSet}
+Let $\sSet{V, \xi}$ be a locally convex vector convergence space. Let $B$ be a closed convex set and $v\notin B$, then there exists a continuous linear functional $f:V\to \F$ such that $f(v) \notin \overline{f^\imf[B]}$.
+\end{corollary}
+\begin{proof}
+As $B^c$ is open, it is a neighbourhood of $v$ and we can find an convex neighbourhood $U$ of $v$ in $B^c$. Now replace $U$ by its interior. This is open and still convex by \ref{inherenceAdherenceConvex}, so we can apply the theorem.
+
+Then $f^\imf[U]$ is open by \ref{linearFunctionalOpen} and thus in $\neighbourhood_\F\big(f(v)\big)$. It is however disjoint from $f^\imf[B]$, which means that $f(v) \notin \overline{f^\imf[B]}$.
 \end{proof}
 \begin{corollary}
 Let $V$ be a locally convex TVS. Suppose $A,B$ are disjoint, non-empty, convex sets and that $A$ is compact, $B$ is closed. Then there exists a continuous linear functional $f:V\to \F$ and $s,t\in \R$ such that
@@ -1483,15 +1561,19 @@ Now take $f\in \dual{(Y,\sigma(X,Y))}$. By point (3) of \ref{initialSeminormConv
 \begin{corollary}
 Let $V$ be a convergence vector space. Then $V^* = \sSet{V, \sigma(V^*, V)}^*$.
 
-The weak topology is the weakest topology $\tau$ (TODO convergence?) such that $V^* = \sSet{V, \tau}^*$.
+The weak topology is the weakest locally convex convergence $\tau$ such that $V^* = \sSet{V, \tau}^*$.
 \end{corollary}
 Thus for any convergence vector space $\sSet{V,\xi}$, the space $\sSet{V, \sigma(V^*, V)}$ is a locally convex TVS with the same continuous functionals.
 
 \begin{proposition}
-Let $V$ be a locally convex convergence vector space and $B\subseteq V$ a convex subset. Then $\overline{B} = \overline{B}^{\sigma(\dual{V}, V)}$.
+Let $\sSet{V, \xi}$ be a locally convex convergence vector space and $B\subseteq V$ a convex subset. Then $\overline{B}^\xi = \overline{B}^{\sigma(\dual{V}, V)}$.
 \end{proposition}
 \begin{proof}
-The weak topology is the weakest topology with dual $\dual{V}$. Thus 
+The weak topology is the weakest locally convex convergence space with dual $\dual{V}$ and it is topological. Let $\tau$ be the topological modification of $\xi$. Then $\xi \subseteq \tau \subseteq \sigma(\dual{V}, V)$, so
+\[ \overline{B}^\xi = \overline{B}^\tau \subseteq \overline{B}^\sigma(\dual{V}, V) \]
+by \ref{inherenceAdherenceInclusion}.
+
+For the opposite inclusion, take $v\in \overline{B}^{\sigma(\dual{V}, V)} \setminus \overline{B}^\xi$. We can apply Hahn-Banach separation \ref{locallyConvexHahnBanachSeparationClosedSet} to obtain a continuous functional $f$ such that $f(v) \notin \overline{f^\imf\left[\overline{B}^\xi\right]}$, which means that $v \notin f^\preimf\left(\overline{f^\imf\left[\overline{B}^\xi\right]}\right)$. Now $f^\preimf\left(\overline{f^\imf\left[\overline{B}^\xi\right]}\right)$ is a superset of $B$ and is closed in $\sigma(\dual{V}, V)$ by TODO (preimage of closed is closed). As the $\sigma(\dual{V}, V)$-closure of $B$ must be contained in this set, $v\notin \overline{B}^{\sigma(\dual{V}, V)}$. This is a contradiction.
 \end{proof}
 
 \subsubsection{Weak-$*$ topology}
@@ -1566,7 +1648,9 @@ Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Th
 \begin{proof}
 We have $B\subseteq B^{\pol\pol}$ by \ref{reflexiveGaloisCorollary}. Then $\disked(B) \subseteq B^{\pol\pol}$ because $B^{\pol\pol}$ is absolutely convex by \ref{polarPropertiesLemma}. Similarly $\overline{\disked(B)}^{\sigma(X,Y)} \subseteq B^{\pol\pol}$, because $B^{\pol\pol}$ is $\sigma(X,Y)$-closed.
 
-The other inclusion is proved by contradiction. Assume, to this end, that $y_0\in B^{\pol\pol} \setminus \overline{\disked(B)}^{\sigma(X,Y)}$. Then $y_0$ is an element of the open set $\overline{\disked(B)}^c$, so we can find a convex open neighbourhood $U$ of $y_0$ in $\overline{\disked(B)}^c$. Next apply Hahn-Banach separation \ref{HahnBanachSeparation} to obtain a continuous functional $f$ such that $f(y_0) \not\in f^\imf\left[\overline{\disked(B)}\right]$. Now $\overline{\disked(B)}$ is absolutely convex by \ref{inherenceAdherenceBalanced} and \ref{inherenceAdherenceConvex}, so $f^\imf\left[\overline{\disked(B)}\right]$ is also absolutely convex by linearity. Then $|f^\imf\left[\overline{\disked(B)}\right]|$ and $|f^\imf[U]|$ are disjoint and $|f^\imf[U]|$ is open, as $0\in |f^\imf\left[\overline{\disked(B)}\right]|$. This also means that there exists $t\in |f^\imf[U]|$ such that $|f(b)| < t < |f(y_0)|$ for all $b\in \overline{\disked(B)}$. Thus $\sup_{b\in \overline{\disked(B)}}|f(b)| < |f(y_0)|$. By rescaling $f$ we can take $\sup_{b\in \overline{\disked(B)}}|f(b)| \leq 1 < |f(y_0)|$.
+The other inclusion is proved by contradiction. Assume, to this end, that $y_0\in B^{\pol\pol} \setminus \overline{\disked(B)}^{\sigma(X,Y)}$. Then we can apply Hahn-Banach separation \ref{locallyConvexHahnBanachSeparationClosedSet} to obtain a continuous functional $f$ such that $f^\imf\left[\overline{\disked(B)}\right]$ is disjoint from some open neighbourhood $U$ of $f(y_0)$.
+
+Now $\overline{\disked(B)}$ is absolutely convex by \ref{inherenceAdherenceBalanced} and \ref{inherenceAdherenceConvex}, so $f^\imf\left[\overline{\disked(B)}\right]$ is also absolutely convex by linearity. Then, because $|U|$ is open, there exists $t\in |U|$ such that $|f(b)| < t < |f(y_0)|$ for all $b\in \overline{\disked(B)}$. Thus $\sup_{b\in \overline{\disked(B)}}|f(b)| < |f(y_0)|$. By rescaling $f$ we can take $\sup_{b\in \overline{\disked(B)}}|f(b)| \leq 1 < |f(y_0)|$.
 
 By \ref{functionalContinuityWeakTopology}, we can find some $x\in X$ such that $f = \pair{x,\cdot}$. Then $\sup_{b\in \overline{\disked(B)}}\abspair{x, b} \leq 1$ implies $x\in \overline{\disked(B)}^\pol \subseteq B^\pol$. Finally $1 < \abspair{x, y_0}$ implies $y_0\notin B^{\pol\pol}$. This is a contradiction.
 \end{proof}
@@ -3258,7 +3342,7 @@ Thus $F \overset{w}{\longrightarrow} v$ \textup{if and only if} $\inner{x, F} \l
 
 We denote the weak convergence $\overset{w}{\longrightarrow}$ or $\lim^w$ and write $\mathcal{H}^w$ to denote the convergence space $\sSet{\mathcal{H},\lim^w}$.
 \end{definition}
-By \ref{initialVectorConvergenceLinearFunctions} we have that the weak convergence is a vector space convergence.
+By \ref{initialVectorSpaceConvergence} we have that the weak convergence is a vector space convergence.
 
 \begin{lemma} \label{normConvergenceFinerThenWeakConvergence}
 Norm convergence is finer than weak convergence.
