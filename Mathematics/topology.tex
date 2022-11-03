@@ -424,7 +424,7 @@ Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
 \item $x\in \adh_\xi(A) \iff \exists U\in \vicinity_\xi(x): \; U\setminus A \notin \vicinity_\xi(x)$;
 \item $\displaystyle \adh_\xi(A) = \bigcup_{A \in F^{\mesh}}\lim_\xi F = \bigcup_{\substack{\text{$G$ proper filter} \\ A\in G}} \lim_\xi G$;
 \item $\displaystyle x\in \inh_\xi(A) \iff A \in \bigcap_{F\in {\lim_\xi}^{-1}(x)} F$;
-\item $\displaystyle \inh_\xi(A) = \bigcap_{A \in F}\lim_\xi F$.
+\item WRONG: $\displaystyle \inh_\xi(A) = \bigcap_{A \in F}\lim_\xi F$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -450,7 +450,7 @@ and
 \item $\inh_\xi(A\cap B) = \inh_\xi A \cap \inh_\xi B$.
 \end{enumerate}
 \end{corollary}
-Compare with \ref{discreteIntersectionAdherence}.
+Compare with \ref{discreteTopologyCharacterisation}.
 
 \begin{lemma}
 Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
@@ -626,25 +626,28 @@ Let $X$ be a set, $\zeta, \xi$ convergences on $X$ such that $\zeta\leq\xi$ and 
 Assume $A$ is open in $\xi$. Then $\inh_\xi(A) = A$. But $\inh_\xi(A) \subseteq \inh_\zeta(A) \subseteq A$ by \ref{inherenceAdherenceInclusion}, so $\inh_\xi(A) = \inh_\zeta(A) = A$. The argument for closedness is similar.
 \end{proof}
 
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space. All subsets of $X$ are closed \textup{if and only if} $\xi$ is discrete.
-\end{lemma}
-\begin{proof}
-First assume not all subsets are closed. Take $A\subseteq X$ such that $A \subsetneq \adh_\xi(A)$ and take $x\in \adh_\xi(A)\setminus A$. Then there exists $F\to x$ such that $A\in F^\mesh$ by \ref{adherenceInherenceCharacterisation}. Now $A$ does not mesh with $\{x\}$, so $\{x\} \notin F$, which means that $F \neq \pfilter{x}$ and thus that $\xi$ is not discrete.
-
-Now assume $\xi$ is not discrete. Then there exists $F\to x$ such that $F \neq \pfilter{x}$. Take $A\in F$ and set $B = A\setminus\{x\}$. Now $A\in F^\mesh$, so for all $C\in F$, either $B\mesh C$ or $A\cap C = \{x\}$. In the second case, $\{x\}\in F$, so $F = \pfilter{x}$, which was excluded. Thus $B\in F^\mesh$. This means that $x\in \adh_\xi(B)$, but $x\notin B$, so $B$ is not closed. 
-\end{proof}
-\begin{corollary} \label{discreteIntersectionAdherence}
+\begin{proposition} \label{discreteTopologyCharacterisation}
 Let $\sSet{X,\xi}$ be a convergence space. The following are equivalent:
-\begin{itemize}
+\begin{enumerate}
 \item $\xi$ is discrete;
+\item all subsets of $X$ are open;
+\item all singletons are open;
+\item all subsets of $X$ are closed;
 \item $\adh_\xi(A\cap B) = \adh_\xi A \cap \adh_\xi B$ for all $A,B\subseteq X$.
-\end{itemize}
-\end{corollary}
+\end{enumerate}
+\end{proposition}
 \begin{proof}
-If $\xi$ is discrete, then all sets are closed, so
+$(1) \Rightarrow (2)$ By \ref{principalAdherenceInherence}, we have, for arbitrary $A\subseteq X$
+\[ x\in \inh(A) \iff A\in \vicinity(x) = \pfilter{x} \iff x\in A, \]
+so $A$ is open.
+$(2) \Rightarrow (3)$ Immediate.
+$(3) \Rightarrow (4)$ Take arbitrary $A\subseteq X$. Then $A = \cap_{x\in A^c}\{x\}^c$, which is an intersection of closed sets and thus closed, by \ref{completeClosureTopology}.
+$(4) \Rightarrow (1)$ Assume, towards a contradiction, that $\xi$ is not discrete. Then there exists $F\to x$ such that $F \neq \pfilter{x}$. Take $A\in F$ and set $B = A\setminus\{x\}$. Now $A\in F^\mesh$, so for all $C\in F$, either $B\mesh C$ or $A\cap C = \{x\}$. In the second case, $\{x\}\in F$, so $F = \pfilter{x}$, which was excluded. Thus $B\in F^\mesh$. This means that $x\in \adh_\xi(B)$, but $x\notin B$, so $B$ is not closed. 
+
+$(4) \Leftrightarrow (5)$ If all sets are closed, then
 \[ \adh_\xi(A\cap B) = A\cap B = \adh_\xi A \cap \adh_\xi B. \]
-Now assume (2). If all subsets are closed, then $\xi$ is discrete and we are done. If not, we can take a non-closed $A\subseteq X$, so that $x\in \adh_\xi(A)\setminus A$. Then
+
+Now assume (5) and, towards a contradiction, that not all subsets are closed. We can then take a non-closed $A\subseteq X$, so that $x\in \adh_\xi(A)\setminus A$. Then
 \[ x\in \adh_\xi A \cap \adh_\xi \{x\} = \adh_\xi(A\cap\{x\}) = \adh_\xi(\emptyset) = \emptyset, \]
 which is a contradiction.
 \end{proof}
@@ -1326,14 +1329,13 @@ TODO: final convergence does not preserve finite depth! (what about Kent space??
 
 TODO: initial/final not universal property, but product is.
 
-\subsection{(Pre)topological initial and final convergence}
-\begin{proposition} \label{pretopologicalInitialFinalConvergence}
+\subsection{Vicinities in initial and final convergence}
+\begin{proposition} \label{pretopologicalInitialConvergence}
 Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
 \begin{enumerate}
 \item Let $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ be set of functions to \emph{pretopological} preconvergence spaces and $\mu$ the initial preconvergence on $Y$ w.r.t. this set. Then $\mu$ is pretopological and
 \[ \vicinity_\mu(y) = \mathfrak{F}\bigcup_{i\in I} f_i^{\preimf\imf}\Big[\vicinity_{\zeta_i}\!\big(f_i(x)\big)\Big] = \mathfrak{F}\setbuilder{f_i^\preimf(U)}{i\in I, U\in \vicinity_{\zeta_i}(f_i(y))}. \]
-\item Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from \emph{pretopological} preconvergence spaces and $\nu$ the final preconvergence on $Y$ w.r.t. this set. Then $\nu$ is pretopological and
-\[ \vicinity_\nu(y) = \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}g_i^{\imf\imf}\big[\vicinity_{\xi_i}(x)\big]. \]
+\item If $\{\sSet{Z_i, \zeta_i}\}_{i\in I}$ is a set of \emph{topological} convergence spaces. Then $\mu$ is topological and $\topology_\mu$ is generated by $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -1351,6 +1353,36 @@ Thus the initial convergence is pretopological and
 &= \mathfrak{F}\setbuilder{f_i^\preimf(U)}{i\in I, U\in \vicinity_{\zeta_i}(f(y))}.
 \end{align*}
 
+(2) By (1), $\mu$ is pretopological. Each $U\in \vicinity_{\zeta_i}(f(x)) = \neighbourhood_{\zeta_i}(f(x))$ contains an open set, so $f_i^\preimf(U)$ also contains an open set by \ref{preimageOpenClosed}. Thus $\vicinity_\mu(x)$ is based in open sets. This means that the initial convergence is topological.
+
+Finally $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$ is a set of open sets. TODO: a set of open sets that generates the convergence also generates the topology.
+\end{proof}
+
+
+\begin{proposition} \label{pretopologicalFinalConvergence}
+Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
+\begin{enumerate}
+\item Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from preconvergence spaces and $\nu$ the final preconvergence on $Y$ w.r.t. this set. Then 
+\[ \vicinity_\nu(y) = \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}g_i^{\imf\imf}\big[\vicinity_{\xi_i}(x)\big]. \]
+\item If $\{\sSet{X_i, \xi_i}\}_{i\in I}$ is a set of \emph{pretopological} convergence spaces, then $\nu$ is pretopological.
+\item If $\{\sSet{X_i, \xi_i}\}_{i\in I}$ is a set of \emph{topological} convergence spaces, then
+\[ \topology_\nu = \setbuilder{U\in\powerset(Y)}{\forall i\in I: g_i^{\preimf}(U)\in\topology_{\xi_i}}. \]
+In general, $\nu$ is \emph{not} topological in this case.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have, by \ref{initialFinalConvergence}, for $y\in Y$
+\[ \lim^{-1}(y) = \setbuilder{G\in\powerfilters(Y)}{\exists i\in I: \exists x\in g_i^\preimf\{y\}: \exists F\overset{\xi_i}{\longrightarrow}x:\; g_i^{\imf\imf}(F)\subseteq G}. \]
+Then
+\begin{align*}
+\vicinity_\nu(y) &= \bigcap {\lim}^{-1}(y) \\
+&= \bigcap \setbuilder{G\in\powerfilters(Y)}{\exists i\in I: \exists x\in g_i^\preimf\{y\}: \exists F\overset{\xi_i}{\longrightarrow}x:\; g_i^{\imf\imf}(F)\subseteq G} \\
+&= \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}} \left\{ \bigcap\setbuilder{G\in\powerfilters(Y)}{\exists F\overset{\xi_i}{\longrightarrow}x:\; g_i^{\imf\imf}(F)\subseteq G} \right\} \\
+&= \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}} \left\{ \bigcap\setbuilder{g_i^{\imf\imf}(F)}{F\overset{\xi_i}{\longrightarrow}x} \right\} \\
+&= \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}} \left\{ g_i^{\imf\imf}\left[\bigcap\setbuilder{F}{F\overset{\xi_i}{\longrightarrow}x}\right] \right\} \\
+&= \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}} \left\{ g_i^{\imf\imf}\left[\vicinity_{\xi_i}(x)\right] \right\}.
+\end{align*}
+
 (2) We have, by \ref{initialFinalConvergence},
 \begin{align*}
 F \overset{\nu}{\longrightarrow} y &\iff \exists i\in I: \exists x\in g_i^\preimf(\{y\}):  \exists G \overset{\xi_i}{\longrightarrow} x: \; g_i^{\imf\imf}[G] \subseteq F \\
@@ -1358,25 +1390,18 @@ F \overset{\nu}{\longrightarrow} y &\iff \exists i\in I: \exists x\in g_i^\preim
 &\iff \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}g_i^{\imf\imf}\big[\vicinity_{\xi_i}(x)\big] \subseteq F.
 \end{align*}
 Thus the initial convergence is pretopological.
+
+(3) TODO
+
+(Convergence not topological) See \ref{convergenceSpaceQuotientOfTopologicalSpace}, for example.
 \end{proof}
 
-\begin{proposition} \label{topologicalInitialFinalConvergence}
-Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
-Let $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ be set of functions to \emph{topological} preconvergence spaces and $\mu$ the initial preconvergence on $Y$ w.r.t. this set. Then $\mu$ is topological and $\topology_\mu$ is generated by $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$.
-\end{proposition}
-\begin{proof}
-By \ref{pretopologicalInitialFinalConvergence}, $\mu$ is pretopological. Each $U\in \vicinity_{\zeta_i}(f(x)) = \neighbourhood_{\zeta_i}(f(x))$ contains an open set, so $f_i^\preimf(U)$ also contains an open set by \ref{preimageOpenClosed}. Thus $\vicinity_\mu(x)$ is based in open sets. This means that the initial convergence is topological.
+TODO:
+\begin{itemize}
+\item Vicinity filter for non-pretopological initial convergence.
+\item Topology for non-topological initial convergence.
+\end{itemize}
 
-Finally $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$ is a set of open sets. TODO: a set of open sets that generates the convergence also generates the topology.
-\end{proof}
-
-The final convergence w.r.t. a set of functions from topological spaces is not necessarily topological (see \ref{convergenceSpaceQuotientOfTopologicalSpace}).
-
-\begin{proposition}
-Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
-Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from topological convergence spaces and $\nu$ the final \emph{topological} convergence on $Y$ w.r.t. this set. Then
-\[ \topology_\nu = \setbuilder{U\in\powerset(Y)}{\forall i\in I: g_i^{\preimf}(U)\in\topology_{\xi_i}}. \]
-\end{proposition}
 
 \subsection{Constructions}
 \subsubsection{Product convergence}
@@ -1506,7 +1531,7 @@ Point (1) is a restatement of \ref{initialFinalConvergence}. Point (2) follows f
 \end{proof}
 
 
-\begin{lemma}
+\begin{lemma} \label{continuityFunctionTuple}
 Let $\sSet{X,\xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergence spaces and $f: X\to Y\times Z$ be a function of the form
 \[ f: X\to Y\times Z: x\mapsto f(x) = (f_Y(x), f_Z(x)). \]
 The $f$ is continuous \textup{if and only if} $f_Y$ and $f_Z$ are continuous.
@@ -2262,6 +2287,23 @@ It is enough to show that for any ultrafilter $G$ on $\im(f)$, there exists an u
 \begin{theorem}[Tychonoff]
 Let $\{\sSet{X_i, \xi_i}\}_{i\in I}$ be a family of compact convergence spaces. Then $\prod_{i\in I}X_i$ is compact.
 \end{theorem}
+
+\begin{proposition} \label{maximalHausdroffMinimalCompactChoquet}
+Let $\sSet{X,\xi}$ be a compact, Hausdorff, Choquet convergence space, then
+\begin{enumerate}
+\item $\xi$ is maximal Hausdorff;
+\item $\xi$ is minimal compact Choquet.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume there exists a convergence $\zeta$ on $X$ such that $\xi \subseteq \zeta$ and $\zeta$ is Hausdorff. We then need to show that $\zeta \subseteq \xi$.
+
+Take arbitrary $F \overset{\zeta}{\longrightarrow} x$. Then all ultrafilters larger than $F$ converge in $\zeta$ to $x$. These ultrafilters must also converge in $\xi$, with limit $x$, by compactness of $\xi$ and Hausdorffness of $\zeta$. Then $F \overset{\xi}{\longrightarrow} x$ because $\xi$ is Choquet.
+
+(2) Assume there exists a convergence $\zeta$ on $X$ such that $\zeta \subseteq \xi$ and $\zeta$ is compact Choquet. We then need to show that $\xi \subseteq \zeta$.
+
+Take arbitrary $F \overset{\xi}{\longrightarrow} x$. Then all ultrafilters larger than $F$ converge in $\xi$ to $x$. These ultrafilters must also converge in $\zeta$, with limit $x$, by compactness of $\zeta$ and Hausdorffness of $\xi$. Then $F \overset{\zeta}{\longrightarrow} x$ because $\zeta$ is Choquet.
+\end{proof}
 
 \section{Covers}
 \begin{definition}
@@ -5657,7 +5699,7 @@ Subgroups, products and projective limits of convergence groups are convergence 
 \end{corollary}
 
 \subsubsection{Quotient groups}
-\begin{proposition}
+\begin{proposition} \label{quotientConvergenceGroup}
 Let $\sSet{G, \xi}$ be a convergence group, $H$ a group and $q: \sSet{G, \xi} \to H$ a surjective group homomorphism. Then the quotient convergence on $H$ w.r.t. $q$ is a group convergence.
 \end{proposition}
 \begin{proof}
@@ -5672,11 +5714,14 @@ Let $G$ be a convergence group and $N\lhd G$ a normal subgroup. Then $G/N$ is a 
 The function $[\cdot]_N: G\to G/N$ is a group homomorphism by \ref{congruenceNormalSubgroup} and \ref{quotientAlgebra}. It is clearly surjective.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{groupHomomorphismQuotient}
 Let $\sSet{G, \xi}$ be a convergence group, $H$ a group and $q: \sSet{G, \xi} \to H$ a surjective group homomorphism. Equip $H$ with the quotient convergence w.r.t. $q$.
 \begin{enumerate}
 \item If $G$ is of finite depth, then $H$ is of finite depth.
 \item If $G$ is topological, then $H$ is topological.
+\item For all $x\in G$:
+\[ \vicinity_H\big(q(x)\big) = q^{\imf\imf}\big(\vicinity_\xi(x)\big). \]
+\item The map $q$ is open.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -5684,14 +5729,23 @@ Let $\sSet{G, \xi}$ be a convergence group, $H$ a group and $q: \sSet{G, \xi} \t
 \[ q^{\imf\imf}\big(F_1'\cap (F_2'\cdot x_2^{-1}\cdot x_1)\big) = q^{\imf\imf}(F_1')\cap q^{\imf\imf}(F_2'\cdot x_2^{-1}\cdot x_1) = q^{\imf\imf}(F_1')\cap q^{\imf\imf}(F_2') \to x, \]
 so $F_1\cap F_2 \to x$.
 
-(2) The convergence group $H$ is pretopological by \ref{pretopologicalInitialFinalConvergence} and thus topological by \ref{pretopologicalGroupConvergence}.
+(2) The convergence group $H$ is pretopological by \ref{pretopologicalFinalConvergence} and thus topological by \ref{pretopologicalGroupConvergence}.
+
+(3) We have, by \ref{pretopologicalFinalConvergence},
+\[ \vicinity_H\big(q(x)\big) = \bigcap_{y\in q^{\preimf}\{q(x)\}}q^{\imf\imf}\big(\vicinity_\xi(y)\big). \]
+It is then enough to show that $q^{\imf\imf}\big(\vicinity_\xi(y)\big) = q^{\imf\imf}\big(\vicinity_\xi(x)\big)$, for all $y\in q^{\preimf}\{q(x)\}$. We have $q(x^{-1}y) = 1$, so we can use \ref{shiftHomeomorphism} to calculate
+\[ q^{\imf\imf}\big(\vicinity_\xi(y)\big) = q^{\imf\imf}\big(\vicinity_\xi(x)\cdot x^{-1}y\big) = q^{\imf\imf}\big(\vicinity_\xi(x)\big)\cdot q(x^{-1}y) = q^{\imf\imf}\big(\vicinity_\xi(x)\big) \]
+
+(4) Let $O\subseteq G$ be open. To show $q^\imf(O)$ is open, we use point (6) of \ref{openClosedCriteria}. Take $y\in q^{\imf}(O)$, so there exists $x\in O$ such that $q(x) = y$.
+
+Because $O$ is open, we can use point (6) of \ref{openClosedCriteria} to find a $U_x\in \vicinity_\xi(x)$ such that $U_x \subseteq O$. Then $q^{\imf}(U_x) \subseteq q^\imf(O)$ and $q^{\imf}(U_x)\in \vicinity\big(q(x)\big)$ by point (3). We conclude that $q^{\imf}(O)$ is open.
 \end{proof}
 
 \begin{lemma}
-Let $\sSet{G, \xi}$ and $\sSet{H, \zeta}$ be convergence groups. Let $f: A\to B$ be a continuous group homomorphism and $N\lhd G$ a normal subgroup such that $N\subseteq \ker f$. Then there exists a unique continuous homomorphism $f': A/N \to B$ such that
+Let $\sSet{G, \xi}$ and $\sSet{H, \zeta}$ be convergence groups. Let $f: A\to B$ be a continuous group homomorphism and $N\lhd G$ a normal subgroup such that $N\subseteq \ker f$. Then there exists a unique continuous homomorphism $f': G/N \to H$ such that
 \[ \begin{tikzcd}
-A \arrow[r, "{[\cdot]_N}"] \arrow[dr, swap, "f"] & A/N \arrow[d, dashed, "{f'}"] \\
-& B
+G \arrow[r, "{[\cdot]_N}"] \arrow[dr, swap, "f"] & G/N \arrow[d, dashed, "{f'}"] \\
+& H
 \end{tikzcd} \qquad\text{commutes.} \]
 Further, $f'$ is injective \textup{if and only if} $N = \ker f$.
 \end{lemma}
@@ -5707,17 +5761,11 @@ Let $\sSet{G, \xi}$ be a convergence group and $N \lhd G$ a normal subgroup. The
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO
-\end{proof}
+(1) Assume $G/N$ Hausdorff. Then $\{[1]_N\}$ is closed in $G/N$ by \ref{HausdorffCriterionConvergenceGroup}, so $[\cdot]_N^{-1}\{[1]_N\} = N$ is closed by continuity (\ref{preimageOpenClosed}).
 
-\subsection{Locally compact groups}
-\begin{lemma}
-A topological convergence group is locally compact \textup{if and only if} $\vicinity(1)$ has a base of compact sets.
-\end{lemma}
-\begin{proof}
-TODO 
+Now assume $N$ closed. Then $[\cdot]^{\imf}_N(G\setminus N)$ is open because $[\cdot]_N$ is open by \ref{groupHomomorphismQuotient}. As $[\cdot]^{\imf}_N(G\setminus N) = \{[1]_N\}^c$, we have that $[1]_N$ is closed.
 
-It is regular, so is based in closed sets. There is a compact vicinity of $1$. All closed subsets of this vicinity are compact.
+(2) We have that $N$ is open iff $\{[1]_N\}$ is open by \ref{groupHomomorphismQuotient}. This is equivalent to all singletons being open, by \ref{shiftHomeomorphism}, which is equivalent to the $G/N$ being discrete by \ref{discreteTopologyCharacterisation}.
 \end{proof}
 
 \section{Cauchy structure}
@@ -5759,6 +5807,20 @@ Let $\sSet{G, \cdot, 1, \xi}$ be a locally compact convergence group and let $F$
 
 Then $G \cap \pfilter{y}$ is a Cauchy filter. By finite depth, $F\cap G \cap \pfilter{y} = F\cap \pfilter{y}$ is also a Cauchy filter, so $F$ Cauchy converges to $y$.
 \end{proof}
+
+\section{Locally compact groups}
+\begin{lemma}
+A topological convergence group is locally compact \textup{if and only if} $\vicinity(1)$ has a base of compact sets.
+\end{lemma}
+\begin{proof}
+TODO 
+
+It is regular, so is based in closed sets. There is a compact vicinity of $1$. All closed subsets of this vicinity are compact.
+\end{proof}
+
+\begin{proposition}
+Every locally compact convergence group is complete.
+\end{proposition}
 
 \section{Metrisability and norm}
 
