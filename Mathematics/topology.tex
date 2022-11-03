@@ -722,10 +722,9 @@ Let $\sSet{X,\xi}$ be a pretopological convergence space. The following are equi
 \begin{proof}
 TODO
 \end{proof}
-
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a topological convergence space. Then $\xi$ is topological \textup{if and only if} $\neighbourhood_\xi(x) \overset{\xi}{\longrightarrow} x$ for all $x\in X$.
-\end{proposition}
+\begin{corollary}
+Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is topological \textup{if and only if} $\neighbourhood_\xi(x) \overset{\xi}{\longrightarrow} x$ for all $x\in X$.
+\end{corollary}
 
 \subsection{Dense sets}
 \begin{definition}
@@ -1135,12 +1134,19 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces and $f: X\to Y$ a 
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-(1) We use \ref{openClosedCriteria}, so take $x\in f^\preimf(O)$. Then $f(x)\in O$ and by \ref{openClosedCriteria} there exists a $U_{f(x)}\in \vicinity_\zeta\big(f(x)\big)$ such that $U_{f(x)} \subseteq O$. Then $f^\preimf(U_{f(x)}) \subseteq f^\preimf(O)$ and $f^\preimf(U_{f(x)})\in \vicinity_\xi(x)$.
+(1) We have
+\[ f^\preimf(O) = f^\preimf\big(\inh(O)\big) \subseteq \inh\big(f^\preimf(O)\big) \subseteq f^\preimf(O), \]
+which implies $f^\preimf(O) = \inh\big(f^\preimf(O)\big)$ and thus that $f^\preimf(O)$ is open.
 
-(2) We use the fact that $C^c$ is open and \ref{imagePreimageUniqueness} to calculate
+(2) We have
+\[ f^\preimf(C) \subseteq \adh\big(f^\preimf(C)\big) \subseteq f^\preimf\big(\adh(C)\big) = f^\preimf(C), \]
+which implies $f^\preimf(C) = \adh\big(f^\preimf(C)\big)$ and thus that $f^\preimf(C)$ is closed.
+
+(2 bis) Alternatively, we can prove (2) from (1) by using the fact that $C^c$ is open and \ref{imagePreimageUniqueness} to calculate
 \[ f^\preimf(C) = f^\preimf(Y\setminus C^c) = f^\preimf(Y)\setminus f^\preimf(C^c) = X\setminus f^\preimf(C^c) = f^\preimf(C^c)^c. \]
 This is closed because $f^\preimf(C^c)$ is open by (1).
 \end{proof}
+
 
 \begin{lemma} \label{identityContinuity}
 Let $\xi$ and $\zeta$ be two convergences on the same set $X$. Then $\id_X: \sSet{X,\xi} \to \sSet{X,\zeta}$ is continuous \textup{if and only if} $\xi \leq \zeta$. I.e.\ $\xi$ is finer than $\zeta$.
@@ -1167,15 +1173,6 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be a convergence space.
 (2) Let $F\to x \in X$. Then $\underline{y}[F] = \pfilter{y} \to y = \underline{y}(x)$.
 \end{proof}
 
-\begin{lemma} \label{inverseImageContinuity}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be preconvergence spaces and $f: X\to Y$ a function. Then $f$ is continuous \textup{if and only if} $\forall F\in \powerfilters(Y)$ and $y\in Y$
-\[ \exists x\in f^{\preimf}[y]: \; f^{\preimf\imf}[F] \overset{\xi}{\longrightarrow} x \quad\implies\quad F \overset{\zeta}{\longrightarrow} y. \]
-\end{lemma}
-\begin{proof}
-For $\Rightarrow$, assume $f$ continuous and that there exists $x\in f^{\preimf}[y]$ such that $f^{\preimf\imf}[F] \to x$. By continuity we have $f^{\imf\imf}[f^{\preimf\imf}[F]] \to y$. Now $f^{\imf\imf}[f^{\preimf\imf}[F]] \leq F$ by \ref{relationTimesTransposeSubsetIdentity}, so $F \overset{\zeta}{\longrightarrow} y$.
-
-For $\Leftarrow$, take arbitrary $G \overset{\xi}{\longrightarrow} x \in X$. Then $f^{\preimf\imf}[f^{\imf\imf}[G]] \geq G$ by \ref{totalityEquivalences}, so $f^{\preimf\imf}[f^{\imf\imf}[G]] \overset{\xi}{\longrightarrow} x$ and $x \in f^{\preimf}[\{f(x)\}]$. This means $f^{\imf\imf}[G] \overset{\zeta}{\longrightarrow} f(x)$ and thus $f$ is continuous.
-\end{proof}
 
 \begin{proposition} \label{continuityUnderConvergenceLatticeOperations}
 Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. Let $\Xi$ be a set of convergences on $X$ and $Z$ a set of convergences on $Y$. Then
@@ -1278,90 +1275,108 @@ TODO convergence modification
 Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
 \begin{enumerate}
 \item Let $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ be set of functions to \emph{pre}convergence spaces and $\mu$ the initial \emph{pre}convergence on $Y$ w.r.t. this set. Then
-\[ F \overset{\mu}{\longrightarrow} y \quad\iff\quad \forall i\in I: \; f_i[F] \overset{\zeta_i}{\longrightarrow} f_i(y). \]
+\[ F \overset{\mu}{\longrightarrow} y \quad\iff\quad \forall i\in I: \; f_i^{\imf\imf}[F] \overset{\zeta_i}{\longrightarrow} f_i(y). \]
 \item Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from \emph{pre}convergence spaces and $\nu$ the final \emph{pre}convergence on $Y$ w.r.t. this set. Then
-\[ F \overset{\nu}{\longrightarrow} y \quad\iff\quad \exists i\in I: \exists x\in g_i^{\preimf}\{y\}: \; g_i^{\preimf\imf}[F] \overset{\xi_i}{\longrightarrow} x. \]
+\[ F \overset{\nu}{\longrightarrow} y \quad\iff\quad \exists i\in I: \exists x\in g_i^\preimf(\{y\}):  \exists G \overset{\xi_i}{\longrightarrow} x: \; g_i^{\imf\imf}[G] \subseteq F. \]
 \end{enumerate}
 \end{proposition}
 Note that point (1) still holds true for convergences, by \ref{initialFinalConvergenceModification}. In the convergence case, point (2) needs to be modified to 
-\[ F \overset{\nu}{\longrightarrow} y \quad\iff\quad \exists i\in I: \exists x\in g_i^{\preimf}\{y\}: \; g_i^{\preimf\imf}[F] \overset{\xi_i}{\longrightarrow} x \;\;\lor\;\; F = \pfilter{y}. \]
+\[ F \overset{\nu}{\longrightarrow} y \quad\iff\quad F = \pfilter{y} \;\;\lor\;\; \exists i\in I: \exists x\in g_i^\preimf(\{y\}):  \exists G \overset{\xi_i}{\longrightarrow} x: \; g_i^{\imf\imf}[G] \subseteq F. \]
 \begin{proof}
 (1) The direction $\Rightarrow$ is clear: $\mu$ makes all $f_i$ continuous by \ref{finerCoarserContinuity}.
 
-For $\Leftarrow$, assume $F$ such that $\forall i\in I: \; f_i[F] \overset{\zeta_i}{\longrightarrow} f_i(y)$, but $F \overset{\mu}{\not\to} y$. Then define the preconvergence $\mu'$ with the same limits as $\mu$, but with the addition of $G\overset{\mu'}{\longrightarrow} y$ for all $G\geq F$. Now $\mu'$ makes all $f_i$ continuous (because $G\geq F$ implies $f_i[G] \geq f_i[F]$), so $\mu'\leq \mu$. Thus $F \overset{\mu}{\longrightarrow} y$, which is a contradiction.
+For $\Leftarrow$, assume $F$ such that $\forall i\in I: \; f_i^{\imf\imf}[F] \overset{\zeta_i}{\longrightarrow} f_i(y)$, but $F \overset{\mu}{\not\to} y$. Then define the preconvergence $\mu'$ with the same limits as $\mu$, but with the addition of $G\overset{\mu'}{\longrightarrow} y$ for all $G\supseteq F$. Now $\mu'$ makes all $f_i$ continuous (because $G\supseteq F$ implies $f_i^{\imf\imf}[G] \supseteq f_i^{\imf\imf}[F]$), so $\mu'\leq \mu$. Thus $F \overset{\mu}{\longrightarrow} y$, which is a contradiction.
 
-(2) By \ref{finerCoarserContinuity}, $g_i$ is continuous for all $i\in I$. Then the direction $\Leftarrow$ follows from \ref{inverseImageContinuity}.
+(2) For the direction $\Leftarrow$, assume the objects on the right-hand side exist such that $g_i^{\imf\imf}[G] \subseteq F$. Then $g_i^{\imf\imf}[G]$ converges to $y$ by continuity of $g_i$ and thus $F$ converges to $y$ by monotonicity of the convergence.
 
-For $\Rightarrow$, assume $F \overset{\nu}{\longrightarrow} y$ and $\forall i\in I: \forall x\in g_i^{-1}[y]: \; g_i^{-1}[F] \not\to x$. Define the $\nu'$ from $\nu$ by removing all limits of the form $G \to y$ for $G \leq F$. Now we have $g_i^{-1}[G] \leq g_i^{-1}[F]$, so $\forall x\in g_i^{-1}[y]: \; g_i^{-1}[G] \not\to x$. By \ref{inverseImageContinuity}, $\nu'$ still makes all $g_i$ continuous, meaning $\nu'\geq \nu$. Thus $F \overset{\nu'}{\longrightarrow} y$, which is a contradiction.
+For $\Rightarrow$, assume, towards a contradiction, that $F \overset{\nu}{\longrightarrow} y$ and $\forall i\in I: \forall x\in g_i^{\preimf}\{y\}: \forall G\overset{\xi_i}{\longrightarrow} x: \; g_i^{\imf\imf}[G] \nsubseteq F$. Define the $\nu'$ from $\nu$ by removing all limits of the form $F' \to y$, where $F' \subseteq F$.
+
+Now $\nu'$ is a preconvergence in which $F$ does not converge. In order to obtain a contradiction, it is enough to show that each $g_i$ is still continuous. To that end, take arbitrary $i\in I$ and $G \overset{\xi_i}{\longrightarrow} x$. Then we need to show that $g_i^{\imf\imf}[G] \in \lim^{-1}_{\nu'}(y)$. Clearly $g_i^{\imf\imf}[G] \in \lim^{-1}_{\nu}(y)$ and it was also not removed in the construction of $\nu'$ as that would have meant that $g_i^{\imf\imf}[G] \subseteq F$, which was excluded by assumption.
+
+Thus $\nu'$ is a strictly stronger convergence than $\nu$ that makes all $g_i$ continuous. This is a contradiction.
 \end{proof}
+\begin{corollary} \label{finalConvergenceConvergence}
+Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from convergence spaces such that $Y = \bigcup_{i\in I}\im(g_i)$. Then the final \emph{pre}convergence on $Y$ w.r.t. this set of functions is also the final convergence w.r.t. this set.
+\end{corollary}
 \begin{corollary}[Characteristic property of initial and final convergence] \label{characteristicPropertyInitialFinalConvergence}
-Let $Y$ be a set, $\sSet{X,\xi}$ and $\sSet{Z, \zeta}$ (pre)convergence spaces.
+Let $Y$ be a set, $\sSet{X,\xi}$ and $\sSet{Z, \zeta}$ preconvergence spaces.
 \begin{enumerate}
-\item Let $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ be set of functions to (pre)convergence spaces and $\mu$ the initial (pre)convergence on $Y$ w.r.t. this set. A function $g: \sSet{X, \xi}\to Y$ is continuous \textup{if and only if} $f_i \circ g$ is continuous for all $i\in I$.
+\item Let $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ be set of functions to preconvergence spaces and $\mu$ the initial preconvergence on $Y$ w.r.t. this set. A function $g: \sSet{X, \xi}\to Y$ is continuous \textup{if and only if} $f_i \circ g$ is continuous for all $i\in I$.
 \[ \begin{tikzcd}
 Y \ar[r, "f_i"] & Z_i \\ X \ar[u, "g"] \ar[ur, swap, "f_i\circ g"]
 \end{tikzcd} \]
-\item Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from (pre)convergence spaces and $\nu$ the final (pre)convergence on $Y$ w.r.t. this set. A function $f: Y\to \sSet{Z,\zeta}$ is continuous \textup{if and only if} $f\circ g_i$ is continuous for all $i\in I$.
+\item Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from preconvergence spaces and $\nu$ the final preconvergence on $Y$ w.r.t. this set. A function $f: Y\to \sSet{Z,\zeta}$ is continuous \textup{if and only if} $f\circ g_i$ is continuous for all $i\in I$.
 \[ \begin{tikzcd}
 X_i \ar[r, "g_i"] \ar[dr, swap, "f\circ g_i"] & Y \ar[d, "f"] \\ & Z
 \end{tikzcd} \]
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-(1) Take arbitrary $F\overset{\xi}{\longrightarrow} x\in X$. Then the continuity of $g$ is equivalent to the convergence $g[F] \overset{\mu}{\longrightarrow} g(x)$. By the proposition this is equivalent to
-\[ \forall i \in I: \; f_i[g[F]] \overset{\zeta_i}{\longrightarrow} f_i(g(x)),  \]
+(1) Take arbitrary $F\overset{\xi}{\longrightarrow} x\in X$. Then the continuity of $g$ is equivalent to the convergence $g^{\imf\imf}[F] \overset{\mu}{\longrightarrow} g(x)$. By the proposition this is equivalent to
+\[ \forall i \in I: \; f_i^{\imf\imf}\big[g^{\imf\imf}[F]\big] = (f_i\circ g)^{\imf\imf}[F] \overset{\zeta_i}{\longrightarrow} f_i(g(x)) = (f_i\circ g)(x),  \]
 which is equivalent to the continuity of $f_i\circ g$ for all $i\in I$.
 
-(2) Take arbitrary $F \in \powerfilters(Z)$ and $z\in Z$ such that $F \overset{\zeta}{\not\to} z$. Then, by \ref{inverseImageContinuity}, the continuity of $f$ is equivalent to
-\[ \forall y\in f^{-1}[z]: \; f^{-1}[F] \overset{\nu}{\not\to} y \]
-By the proposition this is equivalent to
-\[ \forall y\in f^{-1}[z]: \forall i\in I: \forall x\in g_{i}^{-1}[y]: \; g_i^{-1}[f^{-1}[F]] \overset{\xi_i}{\not\to} x. \]
-Using the equality $g^{-1}_i[f^{-1}[F]] = (f\circ g_i)^{-1}[F]$, we can rewrite this as
-\[ \forall i\in I: \forall x\in (f\circ g_{i})^{-1}[z]: \; (f\circ g_i)^{-1}[F] \overset{\xi_i}{\not\to} x. \]
-By \ref{inverseImageContinuity}, this is equivalent to the  continuity of all $f\circ g_i$.
+(2) If $f$ is continuous, then $f\circ g_i$ is continuous by continuity of composition. Now assume $f$ is not continuous, i.e.\ there exists some $G\overset{\nu}{\longrightarrow} y\in Y$ such that $f^{\imf\imf}[G] \not\to f(y)$. By the proposition, there exists some $F\overset{\xi_i}{\longrightarrow} x\in X_i$ such that $g_i^{\imf\imf}[F] \subseteq G$. Now
+\[ f^{\imf\imf}\big[g_i^{\imf\imf}[F]\big] = (f\circ g_i)^{\imf\imf}[F] \subseteq f^{\imf\imf}[G] \not\to f(y) = (f\circ g_i)(x). \]
+This means that $f\circ g_i$ is not continuous.
 \end{proof}
+
 
 TODO: final convergence does not preserve finite depth! (what about Kent space??)
 
 TODO: initial/final not universal property, but product is.
 
-TODO $\prod, \coprod$
-
-\subsection{Initial pretopological convergence}
-TODO
-
+\subsection{(Pre)topological initial and final convergence}
 \begin{proposition} \label{pretopologicalInitialFinalConvergence}
-Let $X$ be a set and $\xi$ the initial convergence on $X$ w.r.t. a set of functions $\{f_i: X\to \sSet{Y_i, \zeta_i}\}_{i\in I}$ from $X$ to pretopological spaces $Y_i$. Then $\xi$ is pretopological and
-\[ \vicinity_\xi(x) = \mathfrak{F}\setbuilder{f_i^\preimf(U)}{i\in I, U\in \vicinity_{\zeta_i}(f(x))}. \]
+Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
+\begin{enumerate}
+\item Let $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ be set of functions to \emph{pretopological} preconvergence spaces and $\mu$ the initial preconvergence on $Y$ w.r.t. this set. Then $\mu$ is pretopological and
+\[ \vicinity_\mu(y) = \mathfrak{F}\bigcup_{i\in I} f_i^{\preimf\imf}\Big[\vicinity_{\zeta_i}\!\big(f_i(x)\big)\Big] = \mathfrak{F}\setbuilder{f_i^\preimf(U)}{i\in I, U\in \vicinity_{\zeta_i}(f_i(y))}. \]
+\item Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from \emph{pretopological} preconvergence spaces and $\nu$ the final preconvergence on $Y$ w.r.t. this set. Then $\nu$ is pretopological and
+\[ \vicinity_\nu(y) = \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}g_i^{\imf\imf}\big[\vicinity_{\xi_i}(x)\big]. \]
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-We have, by \ref{initialFinalConvergence}
+(1) We have, by \ref{initialFinalConvergence} and \ref{filterPreimageImageGaloisConnection},
 \begin{align*}
-F \overset{\xi}{\longrightarrow} x &\iff \forall i\in I: f_i^{\imf\imf}[F] \overset{\zeta_i}{\longrightarrow} f_i(x) \\
-&\iff \forall i\in I: \vicinity_{\zeta_i}\!\big(f_i(x)\big) \subseteq \upset f_i^{\imf\imf}[F] \\
-&\iff \forall i\in I: \forall U\in \vicinity_{\zeta_i}\!\big(f_i(x)\big): \exists M\in f_i^{\imf\imf}[F]: \; M \subseteq U \\
-&\iff \forall i\in I: \forall U\in \vicinity_{\zeta_i}\!\big(f_i(x)\big): \exists N\in F: \; f_i^{\imf}[N] \subseteq U \\
-&\iff \forall i\in I: \forall U\in \vicinity_{\zeta_i}\!\big(f_i(x)\big): \exists N\in F: \; N \subseteq f_i^{\preimf}[U] \\
-&\iff \forall i\in I: \forall U\in \vicinity_{\zeta_i}\!\big(f_i(x)\big): f_i^{\preimf}[U] \in F \\
-&\iff \forall i\in I: f^{\preimf\imf}\Big[\vicinity_{\zeta_i}\!\big(f_i(x)\big)\Big] \subseteq F \\
-&\iff \bigcup_{i\in I} f^{\preimf\imf}\Big[\vicinity_{\zeta_i}\!\big(f_i(x)\big)\Big] \subseteq F
+F \overset{\mu}{\longrightarrow} y &\iff \forall i\in I: f_i^{\imf\imf}[F] \overset{\zeta_i}{\longrightarrow} f_i(y) \\
+&\iff \forall i\in I: \vicinity_{\zeta_i}\!\big(f_i(y)\big) \subseteq \upset f_i^{\imf\imf}[F] \\
+&\iff \forall i\in I: f^{\preimf\imf}\Big[\vicinity_{\zeta_i}\!\big(f_i(y)\big)\Big] \subseteq F \\
+&\iff \bigcup_{i\in I} f^{\preimf\imf}\Big[\vicinity_{\zeta_i}\!\big(f_i(y)\big)\Big] \subseteq F.
 \end{align*}
 Thus the initial convergence is pretopological and
 \begin{align*}
-\vicinity_\xi(x) &= \mathfrak{F}\bigcup_{i\in I} f_i^{\preimf\imf}\Big[\vicinity_{\zeta_i}\!\big(f_i(x)\big)\Big] \\
-&= \mathfrak{F}\bigcup_{i\in I}\setbuilder{f_i^\preimf(U)}{U\in \vicinity_{\zeta_i}(f(x))} \\
-&= \mathfrak{F}\setbuilder{f_i^\preimf(U)}{i\in I, U\in \vicinity_{\zeta_i}(f(x))}.
+\vicinity_\mu(y) &= \mathfrak{F}\bigcup_{i\in I} f_i^{\preimf\imf}\Big[\vicinity_{\zeta_i}\!\big(f_i(y)\big)\Big] \\
+&= \mathfrak{F}\bigcup_{i\in I}\setbuilder{f_i^\preimf(U)}{U\in \vicinity_{\zeta_i}(f(y))} \\
+&= \mathfrak{F}\setbuilder{f_i^\preimf(U)}{i\in I, U\in \vicinity_{\zeta_i}(f(y))}.
 \end{align*}
+
+(2) We have, by \ref{initialFinalConvergence},
+\begin{align*}
+F \overset{\nu}{\longrightarrow} y &\iff \exists i\in I: \exists x\in g_i^\preimf(\{y\}):  \exists G \overset{\xi_i}{\longrightarrow} x: \; g_i^{\imf\imf}[G] \subseteq F \\
+&\iff \exists i\in I: \exists x\in g_i^\preimf(\{y\}): \; g_i^{\imf\imf}\big[\vicinity_{\xi_i}(x)\big] \subseteq F \\
+&\iff \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}g_i^{\imf\imf}\big[\vicinity_{\xi_i}(x)\big] \subseteq F.
+\end{align*}
+Thus the initial convergence is pretopological.
 \end{proof}
 
 \begin{proposition} \label{topologicalInitialFinalConvergence}
-Let $X$ be a set and $\xi$ the initial convergence on $X$ w.r.t. a set of functions $\{f_i: X\to \sSet{Y_i, \zeta_i}\}_{i\in I}$ from $X$ to topological spaces $Y_i$. Then $\xi$ is topological and $\topology_\xi$ is generated by $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$.
+Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
+Let $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ be set of functions to \emph{topological} preconvergence spaces and $\mu$ the initial preconvergence on $Y$ w.r.t. this set. Then $\mu$ is topological and $\topology_\mu$ is generated by $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$.
 \end{proposition}
 \begin{proof}
-By \ref{pretopologicalInitialFinalConvergence}, $\xi$ is pretopological. Each $U\in \vicinity_{\zeta_i}(f(x)) = \neighbourhood_{\zeta_i}(f(x))$ contains an open set, so $f_i^\preimf(U)$ also contains an open set by \ref{preimageOpenClosed}. Thus $\vicinity_\xi(x)$ is based in open sets. This means that the initial convergence is topological.
+By \ref{pretopologicalInitialFinalConvergence}, $\mu$ is pretopological. Each $U\in \vicinity_{\zeta_i}(f(x)) = \neighbourhood_{\zeta_i}(f(x))$ contains an open set, so $f_i^\preimf(U)$ also contains an open set by \ref{preimageOpenClosed}. Thus $\vicinity_\mu(x)$ is based in open sets. This means that the initial convergence is topological.
 
-Finally $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$ is a set of open sets. TODO: a set of open sets that generates the convergence also generates the topology. 
+Finally $\setbuilder{f_i^\preimf(U)}{i\in I, U\in \topology_{\zeta_i}}$ is a set of open sets. TODO: a set of open sets that generates the convergence also generates the topology.
 \end{proof}
+
+The final convergence w.r.t. a set of functions from topological spaces is not necessarily topological (see \ref{convergenceSpaceQuotientOfTopologicalSpace}).
+
+\begin{proposition}
+Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
+Let $\{g_i: \sSet{X_i, \xi_i} \to Y\}_{i\in I}$ be set of functions from topological convergence spaces and $\nu$ the final \emph{topological} convergence on $Y$ w.r.t. this set. Then
+\[ \topology_\nu = \setbuilder{U\in\powerset(Y)}{\forall i\in I: g_i^{\preimf}(U)\in\topology_{\xi_i}}. \]
+\end{proposition}
 
 \subsection{Constructions}
 \subsubsection{Product convergence}
@@ -1515,6 +1530,22 @@ is continuous.
 The functions $p_1\circ f_X: (x,y) \mapsto f_X(x)$ and $p_2\circ f_Y: (x,y) \mapsto f_Y(y)$ are continuous.
 \end{proof}
 
+\subsubsection{Disjoint union or coproduct convergence}
+\begin{definition}
+Let $\sSet{X_i, \xi_i}$ be a convergence space for all $i\in I$. The \udef{disjoint union convergence space} or \udef{coproduct convergence space} $\coprod_{i\in I}X_i$ is the final convergence on the disjoint union $\bigsqcup_{i\in I}X_i$ w.r.t. the set of canonical injections
+\[ \varphi_i: X_i \to \bigsqcup_{i\in I}X_i: x\mapsto (i, x). \]
+\end{definition}
+This convergence on the disjoint union is equal to the final preconvergence w.r.t. to the canonical injections by \ref{finalConvergenceConvergence}.
+
+\begin{proposition}
+Let $\sSet{X_i, \xi_i}$ be a convergence space for all $i\in I$ and $F\in\powerfilters\left(\bigsqcup_{i\in I}X_i\right)$. Then $F\overset{\coprod_{i\in I}X_i}{\longrightarrow} x$ \textup{if and only if} $F|_{\{i\}\times X_i} \overset{U_{\{i\}}\otimes \xi_i}{\longrightarrow} x$ for some $i$.
+\end{proposition}
+Note that the ``for some $i$'' can hold for at most one $i$, namely the $i$ for which we have $x = (i, x')$.
+\begin{proof}
+This is an application of \ref{initialFinalConvergence}.
+\end{proof}
+
+
 \subsubsection{Subspace convergence}
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. The \udef{subspace convergence} $\xi|_A$ on $A$ is the initial convergence w.r.t. $\{\iota: A \hookrightarrow X: a\mapsto a\}$. The convergence space $\sSet{A,\xi|_A}$ is called a \udef{convergence subspace} of $X$.
@@ -1553,18 +1584,38 @@ Let $\sSet{X,\xi}$, $\sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergence spaces
 (3) Characteristic property \ref{characteristicPropertyInitialFinalConvergence}: if $f:X\to Y = \iota \circ (f:X\to Z)$ is continuous, then $f:X\to Z$ is too.
 \end{proof}
 
-
-
 \subsubsection{Quotient convergence}
-\begin{proposition}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space, $Y$ a set and $q: \sSet{X,\xi}\to Y$ a surjective function. The final convergence on $Y$ w.r.t. $q$ is called the \udef{quotient convergence structure} on 
+\end{definition}
+
+In this case the final convergence is also the final preconvergence by \ref{finalConvergenceConvergence}.
+
+\begin{example}
+Let $\sSet{X,\xi}$ be a convergence space and $\sim$ an equivalence relation. Then the function
+\[ [\cdot]_\sim: X\to X/{\sim}: x\mapsto [x]_\sim \]
+is surjective. The quotient convergence on $X/{\sim}$ w.r.t. $[\cdot]_\sim$ is the canonical convergence on $X/{\sim}$ and the \udef{quotient space} of $X$ w.r.t. $\sim$ is $X/{\sim}$ with its canonical convergence.
+\end{example}
+
+\begin{proposition} \label{convergenceSpaceQuotientOfTopologicalSpace}
 Each convergence space is the quotient convergence space of a topological space.
 \end{proposition}
+\begin{proof}
+Let $\sSet{X,\xi}$ be a convergence space. For each $F\overset{\xi}{\longrightarrow} x$, let $\xi_F$ be the pretopological convergence defined by
+\[ \begin{cases}
+\vicinity_{\xi_F}(x) = \upset\{F\} \\
+\vicinity_{\xi_F}(y) = \{\pfilter{y}, \powerset{X}\} & (y \neq x).
+\end{cases} \]
+This pretopological convergence is in fact topological: consider point (6) of \ref{pretopologicalSpaceTopological}, in which we may take $V = U$.
+
+Now consider the convergence space $\coprod_{\text{$F$ converges in $\xi$}}\sSet{X, \xi_F}$, which is topological by \ref{topologicalInitialFinalConvergence}. Then the convergence $\xi$ is equal to the final convergence on $X$ w.r.t. to the projection $p_2: \coprod_{\text{$F$ converges in $\xi$}}\sSet{X, \xi_F} \to X$.
+\end{proof}
 
 \subsection{Projective and injective limits}
 \begin{definition}
 Let $\sSet{I, \prec}$ be an upwards directed set.
 \begin{itemize}
-\item Let $\{sSet{X_i, \xi_i}\}_{i\in I}$ be a set of convergence spaces and for each $j \succ i$, let $p_{j,i}: X_j \to X_i$ be a continuous mapping. Then the structure $\sSet{I, \{\sSet{X_i, \xi_i}\}_{i\in I}, \{p_{j,i}\}_{j\succ i}}$ is called a \udef{projective system} (or \udef{inverse system}) if for all $k \succ j \succ i \in I$ the diagram
+\item Let $\{\sSet{X_i, \xi_i}\}_{i\in I}$ be a set of convergence spaces and for each $j \succ i$, let $p_{j,i}: X_j \to X_i$ be a continuous mapping. Then the structure $\sSet{I, \{\sSet{X_i, \xi_i}\}_{i\in I}, \{p_{j,i}\}_{j\succ i}}$ is called a \udef{projective system} (or \udef{inverse system}) if for all $k \succ j \succ i \in I$ the diagram
 \[ \begin{tikzcd}
 X_k \ar[rr, "p_{k,i}"] \ar[rd, "p_{k,j}"] & & X_i \\
 & X_j \ar[ur, "p_{j,i}"]
@@ -5446,7 +5497,7 @@ Then we call $\sSet{G, \boldsymbol{\cdot}, \xi}$ a \udef{convergence group}.
 
 \begin{lemma} \label{convergenceGroupCriterion}
 A group $G$ with a convergence structure is a convergence group \textup{if and only if}
-\[ G\times G \to G: (x,y) \mapsto xy^{-1} \]
+\[ \Delta: G\times G \to G: (x,y) \mapsto xy^{-1} \]
 is continuous.
 \end{lemma}
 \begin{proof}
@@ -5457,10 +5508,10 @@ Conversely, assume $(x,y) \mapsto xy^{-1}$ continuous. Then $y \mapsto 1y^{-1} =
 
 \begin{lemma} \label{closureGroupOperation}
 Let $\sSet{G, \boldsymbol{\cdot}, \xi}$ be a convergence group and $A,B$ subsets of $G$. Then
-\[ \adh_\xi(A)\cdot \adh_\xi(B) \subseteq \adh_\xi{A\cdot B}. \]
+\[ \adh_\xi(A)\cdot \adh_\xi(B) \subseteq \adh_\xi(A\cdot B). \]
 \end{lemma}
 \begin{proof}
-From the continuity of $\cdot$ and \ref{adherenceInherenceContinuity} together with $\adh_{\xi\otimes\xi}(A\times B) = \adh_\xi(A)\times \adh_\xi(B)$ (TODO ref).
+From the continuity of $\cdot$ and \ref{adherenceInherenceContinuity} together with $\adh_{\xi\otimes\xi}(A\times B) = \adh_\xi(A)\times \adh_\xi(B)$ (\ref{productAdherence}).
 \end{proof}
 
 \begin{lemma} \label{shiftHomeomorphism}
@@ -5475,18 +5526,13 @@ are homeomorphisms.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) The functions are clearly bijective. They are also continuous because the constant function $\underline{a}$ is continuous as well as the multiplication $(x,y)\mapsto xy$. Thus the composition is continuous.
+(1) The functions are clearly bijective. For continuity, take arbitrary $F\to x$. Then $\lambda_a^{\imf\imf}(F) = \cdot^{\imf\imf}(\pfilter{a}\otimes F)$ converges to $ax$ by continuity of the multiplication. The proof for $\rho_a$ is similar.
 
-(2) Assume $F\to x$, then by continuity of $\rho_{x^{-1}}$, we get $F\cdot x^{-1} \to 1$. The converse follows from continuity of $\rho_x$. The second equivalence follows from the continuity of $\lambda^{x}$ and $\lambda_{x^{-1}}$.
+(2) Assume $F\to x$, then by continuity of $\rho_{x^{-1}}$, we get $F\cdot x^{-1} \to 1$. The converse follows from continuity of $\rho_x$. The second equivalence follows from the continuity of $\lambda_{x}$ and $\lambda_{x^{-1}}$.
 
 (3) We calculate
-\begin{align*}
-\vicinity_\xi(x) &= \bigcap \setbuilder{F\in \powerfilters(X)}{x\in \lim_\xi F} \\
-&= \bigcap \setbuilder{F\in \powerfilters(X)}{1\in \lim_\xi F\cdot x^{-1}} \\
-&= \bigcap \setbuilder{G\cdot x\in \powerfilters(X)}{1\in \lim_\xi G} \\
-&= \bigcap \setbuilder{G\in \powerfilters(X)}{1\in \lim_\xi G}\cdot x = \vicinity_\xi(1)\cdot x.
-\end{align*}
-TODO $\rho_x$ homeomorphism.
+\[ \vicinity_\xi(x) = \vicinity_\xi(\rho_x(1)) = \rho_x^{\imf\imf}\big(\vicinity_\xi(1)\big) = \vicinity_\xi(1) \cdot x, \]
+using \ref{homeomorphismPreservation} and the fact $\rho_x$ is a homeomorphism. The proof of the other equality is similar, using $\lambda_x$.
 
 (4) If $f$ is continuous, it is automatically continuous at $1$. Now assume $f$ continuous at $1$ and let $x\in G$. Then
 \[ F\to x \iff F\cdot x^{-1} \to 1 \implies f[F\cdot x^{-1}] = f[F]\cdot f(x)^{-1} \to f(1) = 1 \iff f[F] \to f(x). \]
@@ -5518,6 +5564,14 @@ The direction $\Rightarrow$ is clear, since every Hausdorff convergence is $T_1$
 Conversely, assume $F\to x,y$ in $G$. Then $FF^{-1} \to xy^{-1}$. Now $FF^{-1} \subseteq \pfilter{1}$, so $\pfilter{1} \to xy^{-1}$ and thus $xy^{-1}\in \adh_\xi(\pfilter{1}) = \adh_\xi(\{1\}) = \{1\}$, meaning $x = y$.
 \end{proof}
 
+\begin{lemma} \label{symmetricBase}
+Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group, then $\vicinity_\xi(1)$ is based in the symmetric subsets.
+\end{lemma}
+Symmetric subsets are subsets $U$ such that $U^{-1} = U$.
+\begin{proof}
+Because $^{-1}$ is a group homeomorphism, we have $\vicinity_\xi(1) = \vicinity_\xi(1^{-1}) = (\vicinity_\xi(1))^{-1}$. So $U$ is a vicinity of $1$ iff $U^{-1}$ is a vicinity of $1$. Thus $U\cap U^{-1}\subseteq U$ is a vicinity of $1$ which is a symmetric set.
+\end{proof}
+
 \begin{lemma} \label{vicinityFactorisation}
 Let $\sSet{G,\cdot, 1, \xi}$ be a pretopological convergence group and $x,y\in G$. If $U\in \vicinity_\xi(xy)$, then there exist $V\in \vicinity_\xi(x)$ and $W\in \vicinity_\xi(y)$ such that $V\cdot W\subseteq U$.
 
@@ -5529,14 +5583,6 @@ Consider the function $f: G\times G \to G: (x,y)\mapsto xy$. Then by \ref{pretop
 This implies the first result.
 
 If $x=1=y$, then consider $V\cap W$. This is still a neighbourhood of $x=y$ and $(V\cap W)\cdot(V\cap W) \subseteq V\cdot W \subseteq U$.
-\end{proof}
-
-\begin{lemma} \label{symmetricBase}
-Let $\sSet{G,\cdot, 1, \xi}$ be a pretopological convergence group, then $\vicinity_\xi(1)$ is based in the symmetric subsets.
-\end{lemma}
-Symmetric subsets are subsets $V$ such that $V^{-1} = V$.
-\begin{proof}
-Because $^{-1}$ is a group homeomorphism, we have $\vicinity_\xi(1) = \vicinity_\xi(1^{-1}) = (\vicinity_\xi(1))^{-1}$. So $V$ is a vicinity of $1$ iff $V^{-1}$ is a vicinity of $1$. Thus $V\cap V^{-1}\subseteq V$ is a vicinity of $1$ and $V\cap V^{-1}$ is also a symmetric set.
 \end{proof}
 
 \begin{proposition} \label{pretopologicalGroupConvergence}
@@ -5566,15 +5612,8 @@ Let $G$ be a convergence group. Then the pseudotopological modification $\chi(G)
 group.
 \end{proposition}
 (This is in general not true for the pretopological modification).
-\begin{proposition} \label{initialConvergenceGroup}
-Let $G$ be a group, $\{G_i\}_{i\in I}$ a set of convergence groups and $\{f_i: G \to G_i\}_{i\in I}$ a set of group homomorphisms. Then the initial convergence on $G$ w.r.t. $\{f_i: G \to G_i\}_{i\in I}$ makes $G$ a convergence group.
-\end{proposition}
 \begin{proof}
-By \ref{convergenceGroupCriterion} we just need to verify that $u: G\times G \to G: (x,y)\mapsto x\cdot y^{-1}$ is continuous. Using \ref{characteristicPropertyInitialFinalConvergence}, we need to verify that $f_i\circ u$ is continuous for all $i\in I$. Because the $f_i$ are group homomorphisms, we have
-\[ f_i(x\cdot y^{-1}) = f_i(x)\cdot f_i(y)^{-1} \]
-for all $x, y \in G$. This means that $f_i\circ u = u_i \circ (f_i\times f_i)$, where $u_i: G_i\times G_i \to G_i: (x,y)\mapsto x\cdot y^{-1}$.
-
-By \ref{productContinuousFunctions} this is a composition of continuous functions and thus continuous.
+TODO
 \end{proof}
 
 \begin{proposition}
@@ -5600,6 +5639,75 @@ TODO
 (2) $A\cdot B = \bigcup_{b\in B} A\cdot b$ is a union of open sets and thus open.
 
 (3)
+\end{proof}
+
+\subsection{Initial and final convergence groups}
+\begin{proposition} \label{initialConvergenceGroup}
+Let $G$ be a group, $\{G_i\}_{i\in I}$ a set of convergence groups and $\{f_i: G \to G_i\}_{i\in I}$ a set of group homomorphisms. Then the initial convergence on $G$ w.r.t. $\{f_i: G \to G_i\}_{i\in I}$ makes $G$ a convergence group.
+\end{proposition}
+\begin{proof}
+By \ref{convergenceGroupCriterion} we just need to verify that $\Delta: G\times G \to G: (x,y)\mapsto x\cdot y^{-1}$ is continuous. Using \ref{characteristicPropertyInitialFinalConvergence}, we need to verify that $f_i\circ \Delta$ is continuous for all $i\in I$. Because the $f_i$ are group homomorphisms, we have
+\[ f_i(x\cdot y^{-1}) = f_i(x)\cdot f_i(y)^{-1} \]
+for all $x, y \in G$. This means that $f_i\circ \Delta = \Delta_i \circ (f_i, f_i)$, where $\Delta_i: G_i\times G_i \to G_i: (x,y)\mapsto x\cdot y^{-1}$.
+
+By \ref{productContinuousFunctions} this is a composition of continuous functions and thus continuous.
+\end{proof}
+\begin{corollary}
+Subgroups, products and projective limits of convergence groups are convergence groups.
+\end{corollary}
+
+\subsubsection{Quotient groups}
+\begin{proposition}
+Let $\sSet{G, \xi}$ be a convergence group, $H$ a group and $q: \sSet{G, \xi} \to H$ a surjective group homomorphism. Then the quotient convergence on $H$ w.r.t. $q$ is a group convergence.
+\end{proposition}
+\begin{proof}
+By \ref{convergenceGroupCriterion}, it is enough to show that $\Delta: H\times H \to H: (x,y) \mapsto xy^{-1}$ is continuous. Let $G_1 \to x$ and $G_2 \to y$ in $H$. By \ref{initialFinalConvergence} there exist $x'\in q^{\preimf}\{x\}$, $y'\in q^{\preimf}\{y\}$, $F_1 \overset{\xi}{\longrightarrow} x'$ and $F_2 \overset{\xi}{\longrightarrow} y'$ such that $q^{\imf\imf}[F_1] \subseteq G_1$ and $q^{\imf\imf}[F_2] \subseteq G_2$. Then
+\[ G_1\cdot G_2^{-1} \supseteq q^{\imf\imf}[F_1]\cdot q^{\imf\imf}[F_2]^{-1} = q^{\imf\imf}[F_1\cdot F_2^{-1}] \to q(x'\cdot {y'}^{-1}) = x\cdot y^{-1}, \]
+which shows that $\Delta$ is continuous.
+\end{proof}
+\begin{corollary}
+Let $G$ be a convergence group and $N\lhd G$ a normal subgroup. Then $G/N$ is a convergence group.
+\end{corollary}
+\begin{proof}
+The function $[\cdot]_N: G\to G/N$ is a group homomorphism by \ref{congruenceNormalSubgroup} and \ref{quotientAlgebra}. It is clearly surjective.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{G, \xi}$ be a convergence group, $H$ a group and $q: \sSet{G, \xi} \to H$ a surjective group homomorphism. Equip $H$ with the quotient convergence w.r.t. $q$.
+\begin{enumerate}
+\item If $G$ is of finite depth, then $H$ is of finite depth.
+\item If $G$ is topological, then $H$ is topological.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Let $F_1, F_2 \to x \in H$. By \ref{initialFinalConvergence} there exist $x_1, x_2\in q^{\preimf}\{x\}$, $F_1' \overset{\xi}{\longrightarrow} x_1$ and $F_2' \overset{\xi}{\longrightarrow} x_2$ such that $q^{\imf\imf}[F'_1] \subseteq F_1$ and $q^{\imf\imf}[F'_2] \subseteq F_2$. By \ref{shiftHomeomorphism}, $F_2'\cdot x_2^{-1}\cdot x_1 \overset{\xi}{\longrightarrow} x_1$. By finite depth of $G$, $F_1'\cap (F_2'\cdot x_2^{-1}\cdot x_1) \overset{\xi}{\longrightarrow} x_1$. Now, using \ref{imageFiltersPreservesIntersection} and the fact that $q(x_2^{-1}\cdot x_1) = q(x_2)^{-1}\cdot q(x_1) = x^{-1}\cdot x = 1$,
+\[ q^{\imf\imf}\big(F_1'\cap (F_2'\cdot x_2^{-1}\cdot x_1)\big) = q^{\imf\imf}(F_1')\cap q^{\imf\imf}(F_2'\cdot x_2^{-1}\cdot x_1) = q^{\imf\imf}(F_1')\cap q^{\imf\imf}(F_2') \to x, \]
+so $F_1\cap F_2 \to x$.
+
+(2) The convergence group $H$ is pretopological by \ref{pretopologicalInitialFinalConvergence} and thus topological by \ref{pretopologicalGroupConvergence}.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{G, \xi}$ and $\sSet{H, \zeta}$ be convergence groups. Let $f: A\to B$ be a continuous group homomorphism and $N\lhd G$ a normal subgroup such that $N\subseteq \ker f$. Then there exists a unique continuous homomorphism $f': A/N \to B$ such that
+\[ \begin{tikzcd}
+A \arrow[r, "{[\cdot]_N}"] \arrow[dr, swap, "f"] & A/N \arrow[d, dashed, "{f'}"] \\
+& B
+\end{tikzcd} \qquad\text{commutes.} \]
+Further, $f'$ is injective \textup{if and only if} $N = \ker f$.
+\end{lemma}
+\begin{proof}
+The group homomorphism $f'$ is the one from \ref{factorTheorem}. It is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{G, \xi}$ be a convergence group and $N \lhd G$ a normal subgroup. Then 
+\begin{enumerate}
+\item $G/N$ is Hausdorff \textup{if and only if} $N$ is closed;
+\item $G/N$ is discrete \textup{if and only if} $N$ is open.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
 \end{proof}
 
 \subsection{Locally compact groups}

@@ -159,13 +159,16 @@ The $\Omega$-algebra $A/\mathfrak{q}$ is called the \udef{quotient algebra} of $
 \end{definition}
 
 \begin{proposition}[Factor theorem] \label{factorTheorem}
-Let $f:A\to B$ be a homomorphism of $\Omega$-algebras and $\mathfrak{q}$ a congruence on $A$ such that $\mathfrak{q}\subseteq \ker f$. Then
-\[ f': A/\mathfrak{q} \to B: [a]_\mathfrak{q} \mapsto f'([a]_\mathfrak{q}) = f(a) \]
-is a well-defined homomorphism with $\im f' = \im f$. Further, $f'$ is injective \textup{if and only if} $\mathfrak{q} = \ker f$.
+Let $f:A\to B$ be a homomorphism of $\Omega$-algebras and $\mathfrak{q}$ a congruence on $A$ such that $\mathfrak{q}\subseteq \ker f$. Then there exists a unique homomorphism $f': A/\mathfrak{q} \to B$ such that
+\[ \begin{tikzcd}
+A \arrow[r, "{[\cdot]_{\mathfrak{q}}}"] \arrow[dr, swap, "f"] & A/\mathfrak{q} \arrow[d, dashed, "{f'}"] \\
+& B
+\end{tikzcd} \qquad\text{commutes.} \]
+Further, $f'$ is injective \textup{if and only if} $\mathfrak{q} = \ker f$.
 \end{proposition}
 Note that $\ker f$ is a congruence by \ref{kernelCongruence}. TODO: universal property.
 \begin{proof}
-To show the function is well defined, take $a,a'\in A$ such that $[a]_\mathfrak{q} = [a']_\mathfrak{q}$, i.e.\ $(a,a')\in \mathfrak{q}$. This implies $(a,a')\in\ker f$, so $f(a) = f(a')$ and $f'$ is well-defined.
+We are forced to define $f'$ by $f'([a]_\mathfrak{q}) = f(a)$. To show the function is well-defined, take $a,a'\in A$ such that $[a]_\mathfrak{q} = [a']_\mathfrak{q}$, i.e.\ $(a,a')\in \mathfrak{q}$. This implies $(a,a')\in\ker f$, so $f(a) = f(a')$ and $f'$ is well-defined.
 
 We see that $f'$ is a homomorphism by the calculation
 \begin{align*}
@@ -1256,39 +1259,36 @@ We can give the same calculation using the language of \ref{polarsCartesianProdu
 
 TODO semilattice morphism
 \end{proof}
-\begin{corollary}
-Let $R$ be a transitive homogeneous relation on $A$. Then the principal image and preimage functions
-\[ A \to\powerset(B): X\mapsto X^R \qquad\text{and}\qquad \powerset(A)^o\to\powerset(B): X\mapsto {^RX} \]
-\end{corollary}
-
 \begin{proposition} \label{imagePreimageGaloisConnection}
-Let $R$ be a homogeneous relation on $A$. Then
+Let $R$ be a relation on $(A, B)$. Then
 \begin{enumerate}
 \item the image function is part of a Galois connection
-\[ \powerset(A)\to\powerset(A): X\mapsto X_R \qquad\text{and}\qquad \powerset(A)\to\powerset(A): X\mapsto {^{\overline{R}}(X^c)}; \]
+\[ \powerset(A)\to\powerset(B): X\mapsto X_R \qquad\text{and}\qquad \powerset(B)\to\powerset(A): X\mapsto {^{\overline{R}}(X^c)}; \]
 \item the preimage function is part of a Galois connection
-\[ \powerset(A)\to\powerset(A): X\mapsto {_RX} \qquad\text{and}\qquad \powerset(A)\to\powerset(A): X\mapsto (X^c)^{\overline{R}}. \]
+\[ \powerset(B)\to\powerset(A): X\mapsto {_RX} \qquad\text{and}\qquad \powerset(A)\to\powerset(B): X\mapsto (X^c)^{\overline{R}}. \]
 \end{enumerate}
 These Galois connections are equivalent by replacing $R \leftrightarrow R^\transp$. Every isotone Galois connection between powersets is of this form, for some relation.
 \end{proposition}
 \begin{proof}
 We compose the polar Galois connection of $\overline{R}$ with the Galois connection of complementation to get
-\[ X_R = (X^{\overline{R}})^c \subseteq Y \iff X^{\overline{R}} \supseteq Y^c \iff X \subseteq {^{\overline{R}}(Y^c)}. \]
+\[ X_R = (X^{\overline{R}})^c \subseteq Y \iff X^{\overline{R}} \supseteq Y^c \iff X \subseteq {^{\overline{R}}(Y^c)}, \]
+by \ref{imageComplementaryRelation}.
+
 Similarly we have
 \[ {_RX} = ({^{\overline{R}}X})^c \subseteq Y \iff {^{\overline{R}}}X \supseteq Y^c \iff X \subseteq (Y^c)^{\overline{R}}. \]
-
-TODO semilattice morphism
 \end{proof}
-
-\begin{proposition}
-Let $f: A\to B$ be a function. Then the preimage and image functions
-\[ \powerset(B)\to\powerset(A): X\mapsto f^{-1}[X] \qquad\text{and}\qquad \powerset(A)\to\powerset(B): X\mapsto f[X] \]
-form a Galois connection.
-\end{proposition}
+\begin{corollary} \label{functionImagePreimageGaloisConnection}
+Let $A,B$ be sets and $f:A\to B$ a function. Then the functions
+\[ f^\imf: \powerset(A)\to\powerset(B) \qquad\text{and}\qquad f^\preimf: \powerset(B)\to\powerset(A) \]
+form a Galois connection $(f^\imf, f^\preimf)$.
+\end{corollary}
 \begin{proof}
-We verify the Galois identity for \ref{preorderGaloisIdentity} by writing $f^{-1}[X] = {_fX}$ and $f[X] = X_f$:
-\[ {_fX} \subseteq Y \implies X \subseteq {_{f^\transp;f}X} \subseteq {_{f^\transp}Y} \implies {_fX} \subseteq {_{f;f^\transp}Y} \subseteq Y. \]
+We just need to prove that, for arbitrary $Y\in \powerset(B)$, ${^{\overline{f}}(Y^c)} = {_fY} = f^\preimf[Y]$. Indeed, using \ref{imageComplementaryRelation} and \ref{imagePreimageUniqueness}, we have
+\[ {^{\overline{f}}(Y^c)} = \big(^{\overline{f}}(Y^c)\big)^{cc} = \big(_f(Y^c)\big)^c = {_f(Y^{cc})} = {_fY} = f^\preimf[Y]. \]
 \end{proof}
+We can also directly verify the Galois identity \ref{preorderGaloisIdentity}:
+\[ X_f \subseteq Y \implies X \subseteq X_{f;f^\transp} \subseteq Y_{f^{\transp}} \implies X_f \subseteq Y_{f^{\transp};f} \subseteq Y, \]
+using \ref{totalityEquivalences} and \ref{relationTimesTransposeSubsetIdentity}.
 
 \subsubsection{Closure and dual closure}
 
@@ -1379,7 +1379,7 @@ g[X^{R^\transp}]^{S} &\subseteq f[X^{gg^-R^\transp}]^{S} \\
 \end{align*}
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{GaloisConnectionLatticePreservation}
 Let $P, Q$ be partial orders.
 \begin{enumerate}
 \item If $P$ is a complete $\vee$-semilattice, then an order-preserving function $f: P\to Q$ is residuated \textup{if and only if} $f$ preserves joins. The residual is given by
