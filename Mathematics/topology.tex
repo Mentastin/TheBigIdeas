@@ -1049,7 +1049,7 @@ Let $X,Y$ be sets, $F\in\powerfilters(X)$, $G\in\powerfilters(Y)$ and $f: X\to Y
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO \ref{baseTraceFilter}
+TODO
 \end{proof}
 
 \section{Continuous functions}
@@ -1646,18 +1646,40 @@ This is an application of \ref{initialFinalConvergence}.
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. The \udef{subspace convergence} $\xi|_A$ on $A$ is the initial convergence w.r.t. $\{\iota: A \hookrightarrow X: a\mapsto a\}$. The convergence space $\sSet{A,\xi|_A}$ is called a \udef{convergence subspace} of $X$.
 \end{definition}
 
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space and $\sSet{A,\xi|_A}$ a subspace.
+\begin{lemma} \label{subspaceConvergence}
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \powerfilters(A)$ and $G\in \powerfilters(X)$. Then
 \begin{enumerate}
-\item If $F\in \powerfilters(A)$ and $F\overset{\xi|_A}{\longrightarrow} a$, then $F\overset{\xi}{\longrightarrow} a$.
-\item If $F\in \powerfilters(X)$, $a\in A$ and $F\overset{\xi}{\longrightarrow} a$, then $F|_A\overset{\xi|_A}{\longrightarrow} a$.
+\item $F \overset{\xi|_A}{\longrightarrow} a$ if and only if $\upset \iota^{\imf\imf}[F] \overset{\xi}{\longrightarrow} a$;
+\item if $G\overset{\xi}{\longrightarrow} a \in A$, then $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$;
+\item if $A\in G$ and $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$, then $G\overset{\xi}{\longrightarrow} a$.
+\end{enumerate}
+\end{lemma}
+We may write $\upset F$ for $\upset \iota^{\imf\imf}[F]$.
+\begin{proof}
+(1) By \ref{initialFinalConvergence}.
+
+(2) Assume $G\overset{\xi}{\longrightarrow} a \in A$. Then $G \subseteq \upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \to a$ by \ref{filterPreimageImageGaloisConnection} and so $\iota^{\preimf\imf}[G] \to a$ by \ref{initialFinalConvergence}.
+
+(3) We have $\upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \to a$. If $A\in G$, then, by \ref{traceFilterLemma},
+\[ \upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] = \upset( \iota^{\imf}\circ \iota^{\preimf})^\imf[G] = \upset \setbuilder{B\cap A}{B\in G} = G|_A = G, \]
+so $G\to a$.
+\end{proof}
+
+\begin{lemma} \label{subspaceUltrafilters}
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \powerfilters(A)$ and $G\in \powerfilters(X)$. Then
+\begin{enumerate}
+\item $F$ is an ultrafilter \textup{if and only if} $\upset \iota^{\imf\imf}[F]$ is an ultrafilter;
+\item if $A\in G$, then $G$ is an ultrafilter \textup{if and only if} $\iota^{\preimf\imf}[G]$ is an ultrafilter.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) Assume $F\overset{\xi|_A}{\longrightarrow} a$, then $\iota^{\imf\imf}[F] = F$ and $\iota(a) = a$. Then $F\overset{\xi}{\longrightarrow} a$ by continuity.
+(1) By \ref{imageUltrafilter}, using that $\iota$ is injective.
 
-(2) Assume $F\overset{\xi}{\longrightarrow} a\in A$. Then $\iota^{\preimf\imf}[F] = F|_A$ and $\iota^\preimf\{a\} = \{a\}$, so $F|_A\overset{\xi|_A}{\longrightarrow} a$ by \ref{initialFinalConvergence}.
+(2) If $A\in G$, then, by \ref{traceFilterLemma},
+\[ \upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] = \upset( \iota^{\imf}\circ \iota^{\preimf})^\imf[G] = \upset \setbuilder{B\cap A}{B\in G} = G|_A = G, \]
+so the result follows from (1).
 \end{proof}
+
 
 \begin{lemma}
 Restrictions on continuous functions are continuous (domain + codomain).
@@ -2431,6 +2453,17 @@ Let $\sSet{X,\xi}$ be a convergence space.
 \end{itemize}
 \end{definition}
 
+\begin{lemma} \label{ultrafilterConvergenceInCompactSubset}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. If $A$ is compact, then every ultrafilter $F\in \powerfilters(X)$ such that $A\in F$ converges to some $a\in A$.
+\end{lemma}
+\begin{proof}
+Let $F$ be such an ultrafilter. Then $\iota^{\imf\imf}[F]$ is an ultrafilter (by \ref{subspaceUltrafilters}) that converges to some $a\in A$ by compactness. Then $F\to a$ by \ref{subspaceConvergence}.
+\end{proof}
+
+\begin{example}
+Any convergence on a finite set $X$ makes it compact as the only ultrafilters are the principal ultrafilters, \ref{finiteFiltersPrincipal}.
+\end{example}
+
 \begin{proposition}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset.
 \begin{enumerate}
@@ -2439,28 +2472,41 @@ Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Take some ultrafilter $F$ in $A$. Then $\upset F$ is an ultrafilter in $X$ by \ref{traceUltrafilters}, so it converges to some $x\in X$ by compactness. Now $A \in (\upset F)^{\mesh} \subseteq \vicinity(x)^{\mesh}$, so $x\in \adh(A) = A$. Thus $F \to x$ in $A$.
+(1) Take some ultrafilter $F$ in $A$. Then $\upset \iota^{\imf\imf}[F]$ is an ultrafilter in $X$ by \ref{imageUltrafilter}, so it converges to some $x\in X$ by compactness. Now, by \ref{properFilterLemma},
+\[ A \in \upset F \subseteq (\upset F)^{\mesh} \subseteq \vicinity(x)^{\mesh}, \]
+so $x\in \adh(A) = A$. Thus $F \to x$ in $A$ by \ref{subspaceConvergence}.
 
-(2) We need to show that $\adh(A)\subseteq A$. Take $x\in \adh(A)$, meaning there exists a filter $F\to x$ such that $A\in F$ by \ref{adherenceInherenceCharacterisation}. By the ultrafilter lemma, \ref{ultrafilterLemma}, $F$ is contained in an ultrafilter $G$ and $G\to x$. Now $G\vee \upset\{A\}$ is proper (and thus an ultrafilter), so $G|_A$ is an ultrafilter in $A$ by \ref{traceUltrafilters}. Then $G|_A$ converges to a point in $A$, and $G$ converges to the same point in $X$. By Hausdorff this point must be $x$, so $x\in A$.
+(2) We need to show that $\adh(A)\subseteq A$. Take $x\in \adh(A)$, meaning there exists a filter $F\to x$ such that $A\in F$ by \ref{adherenceInherenceCharacterisation}. By the ultrafilter lemma, \ref{ultrafilterLemma}, $F$ is contained in an ultrafilter $G$ and $G\to x$. Now $A\in G$, so $G$ converges to some $a\in A$ by \ref{ultrafilterConvergenceInCompactSubset}.
+
+By Hausdorff $x = a$, so $x\in A$.
 \end{proof}
 \begin{corollary}
 If $A$ is compact and $B\subseteq X$ is closed, then $A\cap B$ is compact.
 \end{corollary}
 
 \begin{proposition} \label{compactConstructions}
-Let $f: \sSet{X,\xi}\to \sSet{Y,\zeta}$ be a continuous function.
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces. Let $A,B\subseteq X$ be subsets and $f: \sSet{X,\xi}\to \sSet{Y,\zeta}$ a continuous function.
 \begin{enumerate}
 \item If $X$ is compact, then $\im(f)$ is compact.
-\item 
+\item If $A$ and $B$ are compact, then $A\cup B$ is compact.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-It is enough to show that for any ultrafilter $G$ on $\im(f)$, there exists an ultrafilter $F$ on $X$ such that $f^{\imf\imf}[F] = G$.
+(1) Take an ultrafilter $G$ in $\im(f)$. Then $f^{\preimf\imf}(G)$ is proper and we can extend it to an ultrafilter $F$ by the ultrafilter lemma \ref{ultrafilterLemma}. Then $F\to x\in X$ by compactness. By continuity and \ref{imageUltrafilter}, we have that $\upset f^{\imf\imf}[F]$ is an ultrafilter and $\upset f^{\imf\imf}[F] \to f(x)$. Now, by \ref{filterPreimageImageGaloisConnection}, we have
+\[ G \subseteq \upset f^{\imf\imf}\big(f^{\preimf\imf}(G)\big) \subseteq \upset f^{\imf\imf}[F]. \]
+As both $G$ and $\upset f^{\imf\imf}[F]$ are ultrafilters, we must have $G = \upset f^{\imf\imf}[F]$ and so $G$ converges.
+
+(2) Take any ultrafilter $F$ in $A\cup B$. Then either $A\in F$ or $B$ in $F$: if not, then $A^c\in F$ and $B^c \in F$ by \ref{BooleanUltrafilterDisjunction}, so $A^c\cap B^c\cap (A\cup B) = \emptyset \in F$, which is disallowed.
+
+In both cases $F$ must converge: either by compactness of $A$ or by compactness of $B$.
 \end{proof}
 
 \begin{theorem}[Tychonoff]
 Let $\{\sSet{X_i, \xi_i}\}_{i\in I}$ be a family of compact convergence spaces. Then $\prod_{i\in I}X_i$ is compact.
 \end{theorem}
+\begin{proof}
+TODO! From Cech-Stone??
+\end{proof}
 
 \begin{proposition} \label{maximalHausdroffMinimalCompactChoquet}
 Let $\sSet{X,\xi}$ be a compact, Hausdorff, Choquet convergence space, then
