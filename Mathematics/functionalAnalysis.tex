@@ -23,6 +23,7 @@ If $\sSet{\F,V,+, \xi}$ is a convergence vector space, then
 \item the function $\F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is continuous and invertible for all $v\in V\setminus\{0\}$. It is a homeomorphism \textup{if and only if} $\Span\{v\}$ is Hausdorff.
 \end{enumerate}
 \end{lemma}
+TODO picture!
 \begin{proof}
 The functions $\lambda \mapsto (\lambda, v)$ and $v \mapsto (\lambda, v)$ are continuous by \ref{continuousEmbeddingProduct}. Composition with the continuous scalar product gives the result by continuity of composition (\ref{continuityComposition}).
 
@@ -32,12 +33,16 @@ If $u: \F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is a homeomorphism, th
 
 Now assume $\Span\{v\}$ Hausdorff. We need to show that $u^{-1}$ is continuous. It is enough to show continuity at $0$. We use \ref{pretopologicalContinuityVicinities}, so take $\Gamma \in \vicinity_\F(0)$ and we need to show that $\Gamma \in (u^{-1})^{\imf\imf}\big[\vicinity_{\Span\{v\}}(0)\big]$. WLOG we may take $\Gamma = \ball(0, \epsilon)$.
 
-Now consider $\cball(0, \epsilon)\setminus \ball(0, \epsilon)$, which is compact. Then $u^{\imf}\big(\cball(0, \epsilon)\setminus \ball(0, \epsilon)\big) = \big(\cball(0, \epsilon)\setminus \ball(0, \epsilon)\big)\cdot v$ is compact by \ref{compactConstructions} and thus closed by \ref{compactClosedSets} (as $\Span\{v\}$ we assumed Hausdorff). Now $0 \in \Big(\big(\cball(0, \epsilon)\setminus \ball(0, \epsilon)\big)\cdot v\Big)^c$, so there exists a vicinity $U$ of $0$ disjoint from $\big(\cball(0, \epsilon)\setminus \ball(0, \epsilon)\big)\cdot v$.
+Now consider $\sphere(0,\epsilon)$, which is compact. Then $u^{\imf}\big(\sphere(0,\epsilon)\big) = \sphere(0,\epsilon)\cdot v$ is compact by \ref{compactConstructions} and thus closed by \ref{compactClosedSets} (as $\Span\{v\}$ we assumed Hausdorff). Now $0 \in \big(\sphere(0,\epsilon)\cdot v\big)^c$, so there exists a vicinity $U$ of $0$ disjoint from $\sphere(0,\epsilon)\cdot v$.
 
-For each $F$ that converges to $0$ in $\Span\{v\}$, $\neighbourhood_\F(0)\cdot F$ also converges to $0$, so there exists $\delta_F>0$ and $C_F\in F$ such that $\ball(0, \delta_F)\cdot C_F \subseteq U$. Now 
+For each $F$ that converges to $0$ in $\Span\{v\}$, $\neighbourhood_\F(0)\cdot F$ also converges to $0$, so there exists $\delta_F>0$ and $C_F\in F$ such that $\ball(0, \delta_F)\cdot C_F \subseteq U$. If $\delta_F > 1$, then $C_F \subseteq \ball(0, \delta_F)\cdot C_F \subseteq \ball(0,\epsilon)\cdot v$, so $\ball(0,\epsilon)\cdot v\in F$.
 
-$\bigcup_F C_F \subseteq \ball(0, \epsilon)\cdot v$, so $\ball(0, \epsilon)\cdot v  = u^\imf(\Gamma) \vicinity_{\Span\{v\}}(0)$ and thus $\Gamma \in (u^{-1})^{\imf\imf}\big[\vicinity_{\Span\{v\}}(0)\big]$.
+Now assume $\delta_F \leq 1$. Then $\cball(0, \epsilon\cdot\delta_F^{-1})\setminus \ball(0,\epsilon)$ is compact, which, as before, means $\big(\cball(0, \epsilon\cdot\delta_F^{-1})\setminus \ball(0,\epsilon)\big)\cdot v$ is closed and we take a vicinity $U_F$ of $0$ disjoint from it. Now $C_F\cap U_F\in F$. We also claim that $C_F\cap U_F\subseteq \ball(0,\epsilon)\cdot v$: take $x\in C_F\cap U_F$. Then $x = \lambda v$ and $\delta_F |\lambda| \leq \epsilon$ (as $\ball(0, \delta_F)\cdot C_F \subseteq U$), which is equivalent to $|\lambda| \leq \epsilon\cdot\delta_F^{-1}$. Now because $x\in U_F$, this means $|\lambda| < \epsilon$ and thus $x\in \ball(0,\epsilon)\cdot v$.
+
+As $\ball(0,\epsilon)\cdot v \in F$ for all $F$ that converge to $0$, we have $\ball(0,\epsilon)\cdot v\in \vicinity_{\Span\{v\}}$, so $\ball(0,\epsilon) = \Gamma \in (u^{-1})^{\imf\imf}\big[\vicinity_{\Span\{v\}}(0)\big]$, which is what we had to prove.
 \end{proof}
+
+Alternate proof in Beattie / Butzmann.
 
 \begin{proposition} \label{vectorSpaceConvergenceConstruction}
 Let $V$ be a vector space over a field $\F$. And $\mathcal{F} \subseteq \powerfilters(V)$ a family of filters. There exists a vector space convergence $\xi$ on $V$ such that $\mathcal{F} = \lim^{-1}_\xi(0)$ \textup{if and only if}
@@ -122,7 +127,108 @@ Let $V$ be a convergence vector space over a field $K$ and $F\subseteq K$ a subf
 It is enough that the restriction of the scalar multiplication to $F$ remains continuous. Alternatively, we can use \ref{vectorSpaceConvergenceConstruction} and note that passing to the field $F$ simply represents a weakening of condition $(5)$.
 \end{proof}
 
-\subsection{Functions to normed spaces}
+\subsection{Initial and final vector space convergences}
+\subsubsection{Initial vector space convergence}
+\begin{proposition} \label{initialVectorSpaceConvergence}
+Let $V$ be a vector space, $\{V_i\}_{i\in I}$ a set of convergence vector spaces and $\{L_i: V \to V_i\}_{i\in I}$ a set of linear maps. Then the initial convergence on $V$ w.r.t. $\{L_i: V \to V_i\}_{i\in I}$ makes $V$ a convergence vector space.
+\end{proposition}
+\begin{proof}
+Continuity of vector addition follows from \ref{initialConvergenceGroup}.
+
+We verify continuity of scalar multiplication $m: \F\times V \to V: (\lambda, v) \mapsto \lambda v$. Using \ref{characteristicPropertyInitialFinalConvergence}, we need to verify that $L_i\circ m$ is continuous for all $i\in I$. Because the $L_i$ are linear, we have
+\[ L_i(\lambda v) = \lambda L_i(v) \]
+for all $\lambda \in \F, v \in V$. This means that $L_i\circ m = m_i \circ (\id_{V_i}, L_i)$, where $m_i$ is scalar multiplication in $V_i$. Now $(\id_{\F}, L_i)$ is continuous by \ref{continuityFunctionTuple}, so $L_i \circ m$ is continuous.
+\end{proof}
+\begin{corollary}
+Let $\{V_i\}_{i\in I}$ be a set of convergence vector spaces. Then the direct product $\prod_{i\in I} V_i$ with the product convergence is a convergence vector space.
+\end{corollary}
+
+
+\subsubsection{Quotient spaces}
+\begin{proposition}
+Let $\sSet{V, \xi}$ be a convergence vector space, $W$ a vector space and $q: \sSet{V, \xi} \to W$ a surjective linear function. Then the quotient convergence on $W$ w.r.t. $q$ is a vector space convergence.
+\end{proposition}
+\begin{proof}
+Continuity of vector addition follows from
+\ref{quotientConvergenceGroup}.
+
+We verify continuity of scalar multiplication $m: \F\times W \to W: (\lambda, w) \mapsto \lambda w$. Take $F\overset{\F}{\longrightarrow}\lambda$ and $G \overset{W}{\longrightarrow} w$. Then, by \ref{initialFinalConvergence}, there exist $w'\in q^{\preimf}\{w\}$ and $G' \overset{\xi}{\longrightarrow} w'$ such that $q^{\imf\imf}[G'] \subseteq G$. Then
+\[ F\cdot G \supseteq F\cdot q^{\imf\imf}[G'] = q^{\imf\imf}[F\cdot G'] \to q(\lambda \cdot w') = \lambda q(w') = \lambda w, \]
+which shows that $m$ is continuous.
+\end{proof}
+\begin{corollary}
+Let $\sSet{V,\xi}$ be a convergence vector space and $U\subseteq V$ a subspace. Then $G/U$ is a convergence vector space.
+\end{corollary}
+\begin{proof}
+The function $[\cdot]_U: V\to V/U$ is linear by (TODO ref universal algebra aspects of vector spaces) and \ref{quotientAlgebra}. It is clearly surjective.
+\end{proof}
+\begin{corollary}
+Let $\sSet{V, \xi}$ and $\sSet{W, \zeta}$ be CVSs. Let $f: V\to W$ be a continuous linear function and $U\subseteq G$ a subspace such that $N\subseteq \ker f$. Then there exists a unique continuous linear function $f': A/N \to B$ such that
+\[ \begin{tikzcd}
+A \arrow[r, "{[\cdot]_N}"] \arrow[dr, swap, "f"] & A/N \arrow[d, dashed, "{f'}"] \\
+& B
+\end{tikzcd} \qquad\text{commutes.} \]
+Further, $f'$ is injective \textup{if and only if} $N = \ker f$.
+\end{corollary}
+\begin{proof}
+The linear function $f'$ is the one from \ref{factorTheorem}. It is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+\end{proof}
+
+\subsubsection{Direct sum}
+\begin{definition}
+Let $\{\sSet{V_i, \xi_i}\}_{i\in I}$ be a set of convergence vector spaces. Then the \udef{direct sum convergence} is the final \emph{vector space} convergence on $\bigoplus_{i\in I}V_i$ w.r.t. the set $\{e_j: V_j \to \bigoplus_{i\in I}V_i\}$ of natural injections.
+\end{definition}
+The direct sum convergence is the final vector space convergence. It is equal to the final convergence if and only if the direct sum is trivial (see \ref{algebraicConvergenceStrength}).
+
+\begin{proposition}
+Let $\{\sSet{V_i, \xi_i}\}_{i\in I}$ be a set of convergence vector spaces. Then the direct sum convergence is the final convergence on $\bigoplus_{i\in I}V_i$ w.r.t. the set of natural injections $\setbuilder{e_J: \prod_{j\in J} V_j \to \bigoplus_{i\in I}V_i}{\text{$J\subseteq I$ finite}}$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+\begin{corollary}
+If $I$ is finite, then $\bigoplus_{i\in I}V_i = \prod_{i\in I}V_i$.
+\end{corollary}
+
+\begin{proposition}
+Let $\{\sSet{V_i, \xi_i}\}_{i\in I}$ be a set of convergence vector spaces. The inclusion map
+\[ \bigoplus_{i\in I}V_i \hookrightarrow \prod_{i\in I}V_i \]
+is a continuous map into a dense subspace.
+\end{proposition}
+
+\subsubsection{Inductive systems}
+TODO
+
+
+\subsection{Continuity}
+\subsubsection{Finite dimensional spaces}
+\begin{proposition}
+Let $\sSet{V,\xi}$ and $\sSet{W,\zeta}$ be convergence vector spaces and $f: V\to W$ a linear map. If $V$ is finite-dimensional and Hausdroff, then $f$ is continuous.
+\end{proposition}
+\begin{proof}
+We prove this by induction on the dimension $n$ of $V$. For the base step $n=1$, we take some non-zero vector $v\in V$ such that $V = \Span\{v\}$. The for all $x\in V$, we have $x= \lambda v$ and thus
+\[ f(x) = f(\lambda v) = \lambda f(v). \]
+So we have that $f$ is given by
+\[ \begin{tikzcd}
+V = \Span\{v\} \arrow[rr, "\lambda\cdot v\mapsto \lambda"] && \F \arrow[rr, "\lambda\mapsto \lambda \cdot f(v)"] && \Span\{f(v)\} \arrow[r, hook] & W
+\end{tikzcd} \]
+which are all continuous functions (in particular by \ref{continuityLemmaVectorConvergence}, using Hausdroffness of $V$).
+
+For the induction step, assume all linear functions $f: V\to W$, where $V$ is Hausdorff and has dimension $\dim(V)< n$ are continuous.
+
+Pick some basis $\{v_1, \ldots, v_n\}$ of $V$.
+\end{proof}
+\begin{corollary}
+Every bijective linear map between finite-dimensional Hausdorff convergence vector spaces is a homeomorphism.
+\end{corollary}
+\begin{corollary}
+Every finite-dimensional vector space has a unique convergence that makes it a Hausdorff CVS.
+\end{corollary}
+\begin{proof}
+Unicity is immediate. For existence, every $n$-dimensional vector space is linearly isomorphic to $\F^n$ by \ref{isomorphicDimension} and the Euclidean norm on $\F^n$ gives it a Hausdroff vector convergence. 
+\end{proof}
+
+\subsubsection{Functions to normed spaces}
 
 \begin{proposition} \label{continuityToNormedSpace}
 Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a positively homogeneous function. Then $f$ is continuous at $0$ \textup{if and only if} $f$ is bounded on some $U\in \vicinity_\xi(0)$.
@@ -152,104 +258,6 @@ Then continuity of $f$ at $0$ implies continuity everywhere.
 Take arbitrary $F\overset{\xi}{\longrightarrow} u$. Then $F-u \to 0$, so $\norm{f(F-u)}\to 0$ by continuity at $0$. Similarly $\norm{f(u-F)}\to 0$. Then, by assymption, $\norm{f(F) - f(u)} \leq \max\{\norm{f(F-u)}, \norm{f(u-F)}\} \to 0$, so $\norm{f(F) - f(u)} \to 0$, by TODO ref squeeze theorem. We conclude that $f(F)\to f(u)$.
 \end{proof}
 
-\subsection{Algebraic convergence}
-\begin{definition}
-Let $V$ be a vector space over a field $\F$. The \udef{algebraic convergence} on $V$ is the strongest vector space convergence on $V$. We denote this convergence $\mathfrak{a}$ and thus write $F \overset{\mathfrak{a}}{\longrightarrow} x$ and $x\in \lim_\mathfrak{a} F$.
-\end{definition}
-Note that the algebraic convergence is not just the discrete convergence because, for example, $\seq{n^{-1}v} \to 0$ for all $v\in V$ by continuity of the scalar product and the fact that $\pfilter{v} \to v$.
-
-
-We need to show that the definition makes sense.
-\begin{proposition} \label{algebraicConvergence}
-Let $V$ be a vector space over a field $\F$. There exists a strongest vector space convergence on $V$ and this convergence is defined by
-\[ \forall F\in \powerfilters(V): \qquad F\in {\lim}^{-1}(0) \iff \exists v\in V: \;F \supseteq \neighbourhood_\F(0)\cdot v.  \]
-\end{proposition}
-\begin{proof}
-Using \ref{vectorSpaceConvergenceConstruction} it is easy to see that this convergence is a vector space convergence. Conversely, this is the strongest possible convergence by point (4) of \ref{vectorSpaceConvergenceConstruction}.
-\end{proof}
-Note that the algebraic convergence of a non-trivial vector space is not topological!
-
-\begin{lemma} \label{constructionsInAlgebraicConvergence}
-Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subset. Then
-\begin{enumerate}
-\item $\begin{aligned}[t]
-\vicinity_\mathfrak{a}(0) &= \bigcap_{v\in V} \upset \neighbourhood_\F(0)\cdot v \\
-&= \setbuilder{B\in \powerset(V)}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0):\; \Gamma_v\cdot v\subseteq B} \\
-&= \setbuilder{\bigcup_{v\in V} \Gamma_v\cdot v}{\forall v\in V:\; \Gamma_v \in \neighbourhood_\F(0)};
-\end{aligned}$
-\item $\inh_\mathfrak{a}(A) = \setbuilder{x\in V}{\forall v\in V:\exists \Gamma_v \in \neighbourhood_\F(0):\; x + \Gamma_v\cdot v \subseteq A}$;
-\item $\adh_\mathfrak{a}(A) = \setbuilder{x\in V}{\exists v\in V: \forall \Gamma\in\neighbourhood_\F(0):\; (x+\Gamma\cdot v)\mesh A}$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) The first equality follows straight from \ref{algebraicConvergence}.
-
-(2) We have $\inh_\mathfrak{a}(A) = \setbuilder{x}{A\in \vicinity_\mathfrak{a}(x)} = \setbuilder{x}{A-x\in \vicinity_\mathfrak{a}(0)}$. From (1) we get 
-\begin{align*}
-\inh_\mathfrak{a}(A) &= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0): \Gamma_v\cdot v \subseteq A-x} \\
-&= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0): x + \Gamma_v\cdot v \subseteq A}.
-\end{align*}
-
-(3) We calculate
-\begin{align*}
-\adh_\mathfrak{a}(A) &= \big(\inh_\mathfrak{a}(A^c)\big)^c \\
-&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \neighbourhood_\F(0):\; \neg(x + \Gamma\cdot v \subseteq A^c)} \\
-&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \neighbourhood_\F(0):\; (x + \Gamma\cdot v) \mesh A}.
-\end{align*}
-\end{proof}
-
-\begin{lemma}
-Let $V$ be a vector space. Then every subspace $U\subseteq V$ is algebraically closed.
-\end{lemma}
-\begin{proof}
-We need to show that $\adh_\mathfrak{a}(U)\subseteq U$. Take $x\in \adh_\mathfrak{a}(U)$. Then take a $v\in V$ such that $\forall \Gamma\in\neighbourhood_\F(0):\; (x+\Gamma\cdot v)\mesh U$.
-
-Pick some $\Gamma\in\neighbourhood_\F(0)$. Then $x+\lambda v\in U$ for some $\lambda\in \Gamma$. Then take $\ball(0,|\lambda|/2)\in \neighbourhood_\F(0)$, so $x+\mu v\in U$ for some $\mu\in \ball(0,|\lambda|/2)$. In particular $\lambda \neq \mu$. If either $\lambda =0$ or $\mu = 0$, then $x\in U$ and we are done. Suppose $\lambda\neq 0 \neq \mu$. Then
-\[ \lambda^{-1}(x+\lambda v) - \mu^{-1}(x+\mu v) = (\lambda^{-1} - \mu^{-1})x \in U. \]
-So $x\in U$.
-\end{proof}
-
-\subsubsection{The algebraic interior or core}
-\begin{definition}
-Let $V$ be a vector space and $A\subseteq V$ a subset. Then algebraic inherence $\inh_\mathfrak{a}(A)$ is also called the \udef{algebraic interior} or \udef{core} of $A$.
-\end{definition}
-
-\begin{proposition} \label{coreProperties}
-Let $V$ be a vector space and $A \subseteq V$ a subset. Then
-\begin{enumerate}
-\item $A$ is absorbing \textup{if and only if} $0\in \inh_\mathfrak{a}(A)$;
-\item if $A$ is convex, then $\inh_\mathfrak{a}(A)$ is convex and open.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) We have that
-\begin{align*}
-\text{$A$ is absorbing} &\iff \forall v\in V: \exists \epsilon >0: \; \ball(0,\epsilon)\cdot v\subseteq A \\
-&\iff \forall v\in V: \exists \Gamma \in \neighbourhood_\F(0): \; \Gamma\cdot v\subseteq A \\
-&\iff 0\in \inh_\mathfrak{a}(A).
-\end{align*}
-
-(2) We first show convexity: take $x,y \in \inh_\mathfrak{a}(A)$. Then there exist relevant $v,w,\Gamma_v,\Gamma_w$ such that $x+ \Gamma_v\cdot v \subseteq A$ and $y+ \Gamma_w\cdot w \subseteq A$. By \ref{convexCriteria} we have $\lambda \big(x+ \Gamma_v\cdot v\big) + (1-\lambda)\big(y+ \Gamma_w\cdot w\big)\subseteq A$ for all $0\leq \lambda \leq 1$, so
-\[ \lambda x+(1-\lambda)y + (\Gamma_v\cap\Gamma_w)\big(\lambda v+(1-\lambda)w\big) \subseteq \lambda x+(1-\lambda)y + \Gamma_v\cdot \lambda v+\Gamma_w\cdot (1-\lambda)w \subseteq A. \]
-
-To show $\inh_\mathfrak{a}(A)$ is open, we use \ref{openClosedCriteria}. Take $x\in \inh_\mathfrak{a}(A)$. Then for all $v\in V$ we can find a $\Gamma_v\in\neighbourhood_\F(0)$ such that $x+\Gamma_v\cdot v \subseteq A$. This means $x+\bigcup_{v\in V}\Gamma_v\cdot v \subseteq A$. Because the convergence on $\F$ is topological, we may take the $\Gamma_v$ open. To conclude with \ref{openClosedCriteria} it is enough to show that $x+\bigcup_{v\in V}\Gamma_v\cdot v \subseteq \inh_\mathfrak{a}(A)$.
-
-Pick some $y = x+ c_w w \in x+ \bigcup_{v\in V}\Gamma_v\cdot v \subseteq A$, meaning $c_w\in\Gamma_w$. We can find an $0<\epsilon_w<|c_w|$ such that $c_w + \ball(0,\epsilon_w) \subseteq \Gamma_w$ by \ref{openClosedCriteria}. Then for all $1-\frac{\epsilon_w}{|c_w|}<\delta<1$ we have $|c_w - \delta c_w| = (1-\delta)|c_w| < \frac{\epsilon_w}{|c_w|}|c_w| = \epsilon_w$ and so $x+ \delta c_w w \in A$.
-
-Now pick an arbitrary $u\in V$. We have $x+\Gamma_u\cdot u \subseteq A$. By convexity we have
-\[ \delta^{-1}(x+ \delta c_w w) + (1-\delta^{-1})\big(x+\Gamma_u\cdot u\big) = x + c_w w + (1-\delta^{-1})\Gamma_u\cdot u \subseteq A. \]
-This means that for all $v\in V$ we have $y + (1-\delta^{-1})\Gamma_v\cdot v \subseteq A$ and thus $y\in \inh_\mathfrak{a}(A)$.
-\end{proof}
-
-\begin{proposition} \label{algebraicallyOpen}
-Let $V$ be a vector space and $A \subseteq V$ an algebraically open subset. Then
-\begin{enumerate}
-\item $A+U$ is algebraically open for any subspace $U\subseteq V$;
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
 
 \subsection{Topological vector spaces}
 \begin{definition}
@@ -389,53 +397,130 @@ Now assume $\adh(U)$ has a strictly larger dimension than $U$. Then pick a basis
 As $w\in\adh(U)$, there exists $F\to w$ such that $U\in F$
 \end{proof}
 
-\subsection{Initial and final vector space convergences}
-\subsubsection{Initial vector space convergence}
-\begin{proposition} \label{initialVectorSpaceConvergence}
-Let $V$ be a vector space, $\{V_i\}_{i\in I}$ a set of convergence vector spaces and $\{L_i: V \to V_i\}_{i\in I}$ a set of linear maps. Then the initial convergence on $V$ w.r.t. $\{L_i: V \to V_i\}_{i\in I}$ makes $V$ a convergence vector space.
+\section{Algebraic convergence}
+\begin{definition}
+Let $V$ be a vector space over a field $\F$. The \udef{algebraic convergence} on $V$ is the final convergence on $V$ w.r.t $\setbuilder{\F \to V: \lambda\mapsto \lambda \cdot v}{v\in V}$.
+
+We denote this convergence $\mathfrak{a}$ and thus write $F \overset{\mathfrak{a}}{\longrightarrow} x$ and $x\in \lim_\mathfrak{a} F$.
+\end{definition}
+
+\begin{lemma} \label{algebraicConvergence}
+Let $V$ be a vector space over a field $\F$ and $F\in \powerfilters(V)$. Then the algebraic convergence is defined by
+\[ F \overset{\mathfrak{a}}{\longrightarrow} x \iff \begin{cases}
+\exists v\in V: \;F \supseteq \neighbourhood_\F(0)\cdot v & (x = 0) \\
+F \supseteq \neighbourhood_\F(1)\cdot x & (x \neq 0).
+\end{cases}  \]
+\end{lemma}
+\begin{proof}
+This is an application of \ref{initialFinalConvergence}, which states that $F \overset{\mathfrak{a}}{\longrightarrow} x$ iff there exists some $v\in V$ and $\lambda\in \F$ such that $x = \lambda v$ and $\neighbourhood_\F(\lambda)\cdot v \subseteq F$.
+
+If $x\neq 0$, then $\lambda \neq 0$, so
+\[ \neighbourhood_\F(\lambda)\cdot v = \neighbourhood_\F(\lambda)\cdot \lambda^{-1}x = \neighbourhood_\F(\lambda\lambda^{-1})\cdot x = \neighbourhood_\F(1)\cdot x. \]
+If $x = 0$, then either $\lambda = 0$ or $v = 0$. In the latter case, we have
+\[ \neighbourhood_\F(\lambda)\cdot v = \neighbourhood_\F(\lambda)\cdot 0 = \pfilter{0} = \neighbourhood_\F(0)\cdot 0 = \neighbourhood_\F(0)\cdot v. \]
+\end{proof}
+
+\begin{lemma} \label{algebraicConvergenceStrength}
+Let $\sSet{V,\xi}$ be a convergence vector space. Then
+\begin{enumerate}
+\item $\mathfrak{a} \subseteq \xi$;
+\item $\mathfrak{a}$ is a vector convergence \textup{if and only if} $V$ is 1D.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Immediate as $\xi$ must make all functions in $\setbuilder{\F \to V: \lambda\mapsto \lambda \cdot v}{v\in V}$ continuous.
+
+(2) First assume $V$ is 1D, so $V = \Span\{v\}$. Then any filter in $\powerfilters(V)$ is of the form $F\cdot v$ for some $F\in \powerfilters(\F)$. Now take two convergent filters, $F\cdot v\to \lambda v$ and $G\cdot \mu v$. Then by \ref{algebraicConvergence}, we have that $F \overset{\F}{\longrightarrow} \lambda$ and $G \overset{\F}{\longrightarrow} \mu$, so
+\[ F\cdot v + G\cdot v = (F+G)\cdot v \to (\lambda +\mu)v = \lambda v + \mu v. \]
+by continuity of $(\lambda\mapsto \lambda \cdot v)$. This means that the vector addition is continuous and $\mathfrak{a}$ is a vector space convergence.
+
+Now assume $V$ is not 1D. So we can find linearly independent $v,w$. Consider the sequence $\seq{v + \frac{1}{n}w}_{n\in\N}$, which converges to $v$ in any convergence vector space. But $\ball_\F(1,1)\cdot v$ is not an element of the tail filter (as no element of the sequence is of the form $\lambda v$), so $\neighbourhood_\F(1)\cdot v \nsubseteq \TailsFilter\seq{v + \frac{1}{n}w}$ and the sequence does not converge in the algebraic convergence by \ref{algebraicConvergence}.
+\end{proof}
+
+\begin{lemma} \label{constructionsInAlgebraicConvergence}
+Let $V$ be a vector space over a field $\F$, $v\in V$ and $A\subseteq V$ a subset. Then
+\begin{enumerate}
+\item $\begin{aligned}[t]
+\vicinity_\mathfrak{a}(0) &= \bigcap_{v\in V} \upset \neighbourhood_\F(0)\cdot v \\
+&= \setbuilder{B\in \powerset(V)}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0):\; \Gamma_v\cdot v\subseteq B} \\
+&= \setbuilder{\bigcup_{v\in V} \Gamma_v\cdot v}{\forall v\in V:\; \Gamma_v \in \neighbourhood_\F(0)};
+\end{aligned}$
+\item $\inh_\mathfrak{a}(A) = \setbuilder{x\in V}{\forall v\in V:\exists \Gamma_v \in \neighbourhood_\F(0):\; x + \Gamma_v\cdot v \subseteq A}$;
+\item $\adh_\mathfrak{a}(A) = \setbuilder{x\in V}{\exists v\in V: \forall \Gamma\in\neighbourhood_\F(0):\; (x+\Gamma\cdot v)\mesh A}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) The first equality follows straight from \ref{algebraicConvergence}.
+
+(2) We have $\inh_\mathfrak{a}(A) = \setbuilder{x}{A\in \vicinity_\mathfrak{a}(x)} = \setbuilder{x}{A-x\in \vicinity_\mathfrak{a}(0)}$. From (1) we get 
+\begin{align*}
+\inh_\mathfrak{a}(A) &= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0): \Gamma_v\cdot v \subseteq A-x} \\
+&= \setbuilder{x}{\forall v\in V: \exists \Gamma_v\in \neighbourhood_\F(0): x + \Gamma_v\cdot v \subseteq A}.
+\end{align*}
+
+(3) We calculate
+\begin{align*}
+\adh_\mathfrak{a}(A) &= \big(\inh_\mathfrak{a}(A^c)\big)^c \\
+&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \neighbourhood_\F(0):\; \neg(x + \Gamma\cdot v \subseteq A^c)} \\
+&= \setbuilder{x\in V}{\exists v\in V:\forall \Gamma \in \neighbourhood_\F(0):\; (x + \Gamma\cdot v) \mesh A}.
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a vector space. Then every subspace $U\subseteq V$ is algebraically closed.
+\end{lemma}
+\begin{proof}
+We need to show that $\adh_\mathfrak{a}(U)\subseteq U$. Take $x\in \adh_\mathfrak{a}(U)$. Then take a $v\in V$ such that $\forall \Gamma\in\neighbourhood_\F(0):\; (x+\Gamma\cdot v)\mesh U$.
+
+Pick some $\Gamma\in\neighbourhood_\F(0)$. Then $x+\lambda v\in U$ for some $\lambda\in \Gamma$. Then take $\ball(0,|\lambda|/2)\in \neighbourhood_\F(0)$, so $x+\mu v\in U$ for some $\mu\in \ball(0,|\lambda|/2)$. In particular $\lambda \neq \mu$. If either $\lambda =0$ or $\mu = 0$, then $x\in U$ and we are done. Suppose $\lambda\neq 0 \neq \mu$. Then
+\[ \lambda^{-1}(x+\lambda v) - \mu^{-1}(x+\mu v) = (\lambda^{-1} - \mu^{-1})x \in U. \]
+So $x\in U$.
+\end{proof}
+
+\subsection{The algebraic interior or core}
+\begin{definition}
+Let $V$ be a vector space and $A\subseteq V$ a subset. Then algebraic inherence $\inh_\mathfrak{a}(A)$ is also called the \udef{algebraic interior} or \udef{core} of $A$.
+\end{definition}
+
+\begin{proposition} \label{coreProperties}
+Let $V$ be a vector space and $A \subseteq V$ a subset. Then
+\begin{enumerate}
+\item $A$ is absorbing \textup{if and only if} $0\in \inh_\mathfrak{a}(A)$;
+\item if $A$ is convex, then $\inh_\mathfrak{a}(A)$ is convex and open.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-Continuity of vector addition follows from \ref{initialConvergenceGroup}.
+(1) We have that
+\begin{align*}
+\text{$A$ is absorbing} &\iff \forall v\in V: \exists \epsilon >0: \; \ball(0,\epsilon)\cdot v\subseteq A \\
+&\iff \forall v\in V: \exists \Gamma \in \neighbourhood_\F(0): \; \Gamma\cdot v\subseteq A \\
+&\iff 0\in \inh_\mathfrak{a}(A).
+\end{align*}
 
-We verify continuity of scalar multiplication $m: \F\times V \to V: (\lambda, v) \mapsto \lambda v$. Using \ref{characteristicPropertyInitialFinalConvergence}, we need to verify that $L_i\circ m$ is continuous for all $i\in I$. Because the $L_i$ are linear, we have
-\[ L_i(\lambda v) = \lambda L_i(v) \]
-for all $\lambda \in \F, v \in V$. This means that $L_i\circ m = m_i \circ (\id_{V_i}, L_i)$, where $m_i$ is scalar multiplication in $V_i$. Now $(\id_{\F}, L_i)$ is continuous by \ref{continuityFunctionTuple}, so $L_i \circ m$ is continuous.
+(2) We first show convexity: take $x,y \in \inh_\mathfrak{a}(A)$. Then there exist relevant $v,w,\Gamma_v,\Gamma_w$ such that $x+ \Gamma_v\cdot v \subseteq A$ and $y+ \Gamma_w\cdot w \subseteq A$. By \ref{convexCriteria} we have $\lambda \big(x+ \Gamma_v\cdot v\big) + (1-\lambda)\big(y+ \Gamma_w\cdot w\big)\subseteq A$ for all $0\leq \lambda \leq 1$, so
+\[ \lambda x+(1-\lambda)y + (\Gamma_v\cap\Gamma_w)\big(\lambda v+(1-\lambda)w\big) \subseteq \lambda x+(1-\lambda)y + \Gamma_v\cdot \lambda v+\Gamma_w\cdot (1-\lambda)w \subseteq A. \]
+
+To show $\inh_\mathfrak{a}(A)$ is open, we use \ref{openClosedCriteria}. Take $x\in \inh_\mathfrak{a}(A)$. Then for all $v\in V$ we can find a $\Gamma_v\in\neighbourhood_\F(0)$ such that $x+\Gamma_v\cdot v \subseteq A$. This means $x+\bigcup_{v\in V}\Gamma_v\cdot v \subseteq A$. Because the convergence on $\F$ is topological, we may take the $\Gamma_v$ open. To conclude with \ref{openClosedCriteria} it is enough to show that $x+\bigcup_{v\in V}\Gamma_v\cdot v \subseteq \inh_\mathfrak{a}(A)$.
+
+Pick some $y = x+ c_w w \in x+ \bigcup_{v\in V}\Gamma_v\cdot v \subseteq A$, meaning $c_w\in\Gamma_w$. We can find an $0<\epsilon_w<|c_w|$ such that $c_w + \ball(0,\epsilon_w) \subseteq \Gamma_w$ by \ref{openClosedCriteria}. Then for all $1-\frac{\epsilon_w}{|c_w|}<\delta<1$ we have $|c_w - \delta c_w| = (1-\delta)|c_w| < \frac{\epsilon_w}{|c_w|}|c_w| = \epsilon_w$ and so $x+ \delta c_w w \in A$.
+
+Now pick an arbitrary $u\in V$. We have $x+\Gamma_u\cdot u \subseteq A$. By convexity we have
+\[ \delta^{-1}(x+ \delta c_w w) + (1-\delta^{-1})\big(x+\Gamma_u\cdot u\big) = x + c_w w + (1-\delta^{-1})\Gamma_u\cdot u \subseteq A. \]
+This means that for all $v\in V$ we have $y + (1-\delta^{-1})\Gamma_v\cdot v \subseteq A$ and thus $y\in \inh_\mathfrak{a}(A)$.
 \end{proof}
 
-
-\subsubsection{Quotient spaces}
-\begin{proposition}
-Let $\sSet{V, \xi}$ be a convergence vector space, $W$ a vector space and $q: \sSet{V, \xi} \to W$ a surjective linear function. Then the quotient convergence on $W$ w.r.t. $q$ is a vector space convergence.
+\begin{proposition} \label{algebraicallyOpen}
+Let $V$ be a vector space and $A \subseteq V$ an algebraically open subset. Then
+\begin{enumerate}
+\item $A+U$ is algebraically open for any subspace $U\subseteq V$;
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-Continuity of vector addition follows from
-\ref{quotientConvergenceGroup}.
-
-We verify continuity of scalar multiplication $m: \F\times W \to W: (\lambda, w) \mapsto \lambda w$. Take $F\overset{\F}{\longrightarrow}\lambda$ and $G \overset{W}{\longrightarrow} w$. Then, by \ref{initialFinalConvergence}, there exist $w'\in q^{\preimf}\{w\}$ and $G' \overset{\xi}{\longrightarrow} w'$ such that $q^{\imf\imf}[G'] \subseteq G$. Then
-\[ F\cdot G \supseteq F\cdot q^{\imf\imf}[G'] = q^{\imf\imf}[F\cdot G'] \to q(\lambda \cdot w') = \lambda q(w') = \lambda w, \]
-which shows that $m$ is continuous.
-\end{proof}
-\begin{corollary}
-Let $\sSet{V,\xi}$ be a convergence vector space and $U\subseteq V$ a subspace. Then $G/U$ is a convergence vector space.
-\end{corollary}
-\begin{proof}
-The function $[\cdot]_U: V\to V/U$ is linear by (TODO ref universal algebra aspects of vector spaces) and \ref{quotientAlgebra}. It is clearly surjective.
-\end{proof}
-\begin{corollary}
-Let $\sSet{V, \xi}$ and $\sSet{W, \zeta}$ be convergence groups. Let $f: V\to W$ be a linear function and $U\subseteq G$ a subspace such that $N\subseteq \ker f$. Then there exists a unique continuous linear function $f': A/N \to B$ such that
-\[ \begin{tikzcd}
-A \arrow[r, "{[\cdot]_N}"] \arrow[dr, swap, "f"] & A/N \arrow[d, dashed, "{f'}"] \\
-& B
-\end{tikzcd} \qquad\text{commutes.} \]
-Further, $f'$ is injective \textup{if and only if} $N = \ker f$.
-\end{corollary}
-\begin{proof}
-The linear function $f'$ is the one from \ref{factorTheorem}. It is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+TODO
 \end{proof}
 
 
-\subsubsection{Inductive systems}
-TODO + direct sum.
+
 
 \section{Functionals}
 \begin{definition}
@@ -541,23 +626,25 @@ The dual is denoted $\sSet{V,\xi}^{*}$ (or just $V^*$ is the convergence is clea
 \end{definition}
 
 \begin{proposition} \label{continuityLinearFunctionals}
-Let $V$ be a TVS and $f:V\to \F$ a linear functional on $V$. Then the following are equivalent:
+Let $\sSet{V, \xi}$ be a CVS and $f:V\to \F$ a linear functional on $V$. Then the following are equivalent:
 \begin{enumerate}
 \item $f\in V^{*}$, i.e.\ $f$ is continuous;
+\item there exists a vicinity $U\in \vicinity_\xi(0)$ such that $f$ is bounded on $U$;
 \item $\ker(f)$ is closed;
-\item there exists a neighbourhood $U\in \neighbourhood_V(0)$ such that $f$ is bounded on $U$;
 \item $\ker(f)$ is not dense.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ Because $\ker(f) = f^{\preimf}(\{0\})$ and $\{0\}$ is closed in $\F$, $\ker(f)$ is closed by \ref{continuity}.
+$(1) \Leftrightarrow (2)$ By \ref{linearContinuityToNormedSpace}.
 
-$(2) \Rightarrow (3)$ Now assume $\ker(f)$ closed. If $\ker(f) = V$, then $f$ is constant and thus continuous by \ref{continuityConstructions}. If $\ker(f) \neq V$, we can find some some $x\in \ker(f)^c$, which is open. Thus $\ker(f)^c - x$ is a neighbourhood of the origin, meaning we can take a balanced subset $A$ by \ref{vicinityFilterAtOrigin}. Now $(x+A)\perp \ker(f)$ by construction, so $f$ is bounded on $A$ by \ref{functionalBoundedNeighbourhood}.
+$(1) \Rightarrow (3)$ Because $\ker(f) = f^{\preimf}(\{0\})$ and $\{0\}$ is closed in $\F$, $\ker(f)$ is closed by \ref{preimageOpenClosed}.
 
-$(3) \Rightarrow (1)$ By \ref{linearContinuityToNormedSpace}.
+$(3) \Rightarrow (1)$ TODO
 
 $(3) \Leftrightarrow (4)$ By \ref{kernelHyperplane} $\ker(f)$ is a hyperplane and by \ref{hyperplaneClosedDense} this hyperplane is either closed or dense.
 \end{proof}
+
+Now assume $\ker(f)$ closed. If $\ker(f) = V$, then $f$ is constant and thus continuous by \ref{continuityConstructions}. If $\ker(f) \neq V$, we can find some some $x\in \ker(f)^c$, which is open. Thus $\ker(f)^c - x$ is a neighbourhood of the origin, meaning we can take a balanced subset $A$ by \ref{vicinityFilterAtOrigin}. Now $(x+A)\perp \ker(f)$ by construction, so $f$ is bounded on $A$ by \ref{functionalBoundedNeighbourhood}.
 
 
 \begin{lemma} Let $X$ be a normed space and
