@@ -145,6 +145,15 @@ Let $\cat{C}$ be a category with zero object $0$.
 \end{enumerate}
 \end{proposition}
 
+\subsubsection{Constants}
+\begin{definition}
+Let $\cat{C}$ be a category with terminal object $1$. Then a morphism is called a \udef{constant} in an object $A$ if it is of type $1 \to A$.
+
+We write constants underligned, e.g.\ $\underline{c}: 1\to A$.
+
+Let $A,B\in\ob(\cat{C})$ be objects. A morphism $f: A\to B$ is called \udef{constant} if $f$ factors through the terminal object: $f: A \to 1 \to B$. We underline $f$ to show it is constant: $\underline{f}: A\to B$.
+\end{definition}
+
 \subsection{(Commuting) diagrams}
 Informally a diagram in a category is a drawing with points and arrows.
 
@@ -266,8 +275,22 @@ Let $\cat{C}$ be a category. Then a morphism $f \in \mor(\cat{C})$ is called
 \end{itemize}
 \end{definition}
 
+\begin{lemma}
+Let $\cat{C}$ be a category.
+\begin{enumerate}
+\item If $0$ is an initial object, then any morphism $f: A\to 0$ is epic.
+\item If $1$ is a terminal object, then any morphism $f: 1\to A$ is monic.
+\end{enumerate}
+\end{lemma}
 
+??? TODO ???:
 
+$f: A\to B$ monic iff for all $X, g_1, g_2$
+\[ \begin{tikzcd}[row sep=small]
+& A & \\
+X \arrow[ur, "g_1"] \arrow[dr, "g_2"] & \arrow[r, "f"] & B \\
+& A  &
+\end{tikzcd} \qquad \text{commutes.} \]
 
 \subsection{Left and right inverses}
 \begin{definition}
@@ -381,6 +404,104 @@ Let $\cat{C}$ be a category. We call $\cat{D}$ a \udef{subcategory} of $\cat{C}$
 \end{itemize}
 We call the subcategory \udef{full} if for all $X,Y\in \ob(\cat{D}): \; \cat{C}(X,Y) = \cat{D}(X,Y)$.
 \end{definition}
+
+\section{The category of sets}
+\subsection{Elements}
+\begin{definition}
+Let $\cat{C}$ be a category with a terminal element $1$. A morphism $x: 1\to X$ is called an \udef{element}.
+\end{definition}
+
+\subsection{Parts}
+\begin{definition}
+Let $\cat{C}$ be a category and $A\in\ob(\cat{C})$.
+\begin{itemize}
+\item A \udef{part} of $A$ is a monomorphism $i: B \hookrightarrow A$.
+\item Let $i,j$ be two parts of $A$. We say $i$ is \udef{included} in $j$ if $i = k;j$ for some morphism $k$. We write $i\subseteq_A j$ (or $i\subseteq j$ if $A$ is clear from context).
+\end{itemize}
+An element $a$ is a \udef{member} of $j$, written $a\in_A j$ if $a\subseteq j$.
+\end{definition}
+Note that $k$ need not be mono.
+
+In general $f \subseteq g \iff f\mathrel{L}g$. Thus inclusion is transitive.
+
+\subsubsection{Characteristic functions}
+\begin{definition}
+Let $i$ be a part of $A$. Fix some object $X$ with a constant $\underline{x}: 1\to V$ Then $\chi: A \to X$ is an \udef{indicator} or \udef{characteristic function} if for all $f: B\to A$
+\[ f\subseteq i \;\iff\; f;\chi = \underline{1};\underline{x}: B\to X.  \]
+where $\underline{1}: B\to 1$ is the unique morphism to the terminal object.
+\end{definition}
+
+Assume the morphisms separated by elements.
+\begin{proposition}
+Let $\cat{C}$ be a category, $A\in\ob(\cat{C})$ and $f: X\to A,g: Y\to A$ morphisms with characteristic functions $\chi_f, \chi_g: A\to 2$. Then the following are equivalent:
+\begin{enumerate}
+\item $f \subseteq g$ and $g \subseteq f$;
+\item $\chi_f = \chi_g$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ For any element $a \in A$, we have $a \in f \iff a\in g$. Now $a\in f$ is equivalent to $a; \chi_f = \underline{T}:1\to A$. Similarly $a\in g$ is equivalent to $a; \chi_g = \underline{T}:1\to A$. So for all elements $a\in A$, we have $al \chi_f = a; \chi_g$. Thus $\chi_f = \chi_g$.
+
+$(2) \Rightarrow (1)$ We have
+\[ f \subseteq f \iff f;\chi_f = \underline{T} \iff f;\chi_g = \underline{T} \iff f \subseteq g. \]
+Similarly, we have $g \subseteq f$.
+\end{proof}
+
+\begin{lemma}
+Let $\cat{C}$ be a category, $1$ the terminal object and $2 = \{T,F\}$ an object. Then $\chi: A\to 2$ is the characteristic function of a part $j: U\hookrightarrow A$ \textup{if and only if} $j$ is the pullback of $\underline{T}: 1\to 2$ along $\chi$:
+\[ \begin{tikzcd}
+U \arrow[r] \arrow[d, hook, "j"] \arrow[dr, phantom, "\ulcorner", very near start] & 1 \arrow[d, "\underline{T}"] \\
+A \arrow[r, "\chi"] & \{T,F\}
+\end{tikzcd} \]
+\end{lemma}
+TODO: pullback preserves monomorphisms. Restatement of definition -> only monomorphisms have characteristic functions??
+
+\begin{proposition}
+Let $\cat{C}$ be a category, $1$ the terminal object and $2 = \{T,F\}$ an object. If $\chi: A\to 2$ is the characteristic function of a part $j: U\hookrightarrow A$ and $f: B\to A$ is a morphism, then $f;\chi$ is the characteristic function of the pullback of $j$ along $f$.
+\end{proposition}
+\begin{proof}
+\[ \begin{tikzcd}
+V \arrow[dr, phantom, "\ulcorner", very near start] \rar \arrow[d, hook] & U \arrow[r] \arrow[d, hook, "j"] \arrow[dr, phantom, "\ulcorner", very near start] & 1 \arrow[d, "\underline{T}"] \\
+B \arrow[r, "f"] & A \arrow[r, "\chi"] & \{T,F\}
+\end{tikzcd} \]
+\end{proof}
+
+\subsubsection{Intersection}
+\begin{definition}
+Let $i: X\to A$ and $j: Y\to A$ be monomorphisms. The \udef{intersection} of $i$ and $j$ is the pullback
+\[ \begin{tikzcd}
+X\cap Y \arrow[r] \arrow[d] \arrow[dr, "i\cap j"] & X \arrow[d, hook, "i"] \\
+Y \arrow[r, hook, swap, "j"] & A
+\end{tikzcd} \]
+\end{definition}
+
+\begin{lemma}
+Let $\cat{C}$ be a category, $A$ an object and $i,j$ parts of $A$. Then $k = i\cap j$ \textup{if and only if} $a\in k \iff (a\in i)\land(a\in j)$ for all elements $a\in A$.
+\end{lemma}
+\begin{proof}
+Universal property of pullbacks.
+\end{proof}
+
+\begin{proposition}
+Let $\cat{C}$ be a category and  $i: X\to A$ and $j: Y\to A$ be monomorphisms, with characteristic functions $\chi_i: A\to 2$ and $\chi_j: A\to 2$. Then $\chi_i \land \chi_j$ is the characteristic function of $i\cap j$.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsection{Functions}
+\subsubsection{Graphs}
+\begin{definition}
+Let $f: A\to B$ be a morphism in a category $\cat{C}$. Then the \udef{graph} of $f$ is the morphism $(\id_A, f): A\to A\times B$.
+\end{definition}
+
+\begin{proposition}
+Let $f: A\to B$ be a morphism in a category $\cat{C}$. Then
+\begin{enumerate}
+\item the graph $(\id_A, f)$ is a part of $A\times B$;
+\item 
+\end{enumerate}
+\end{proposition}
 
 \section{Functors}
 \begin{definition}
@@ -984,6 +1105,31 @@ A \udef{univeral property} of an object $c\in \cat{C}$ is expressed by a represe
 \end{definition}
 \section{The category of elements}
 \chapter{Limits and colimits}
+
+\section{Finite inverse limits}
+\subsection{Product}
+\[ \begin{tikzcd}
+& X \arrow[d, dashed, near end, "{(f,g)}"] \arrow[dl, swap, "f"] \arrow[dr, "g"] & \\
+A & A\times B \arrow[l, "{p_A}"] \arrow[r, swap, "{p_B}"] & B
+\end{tikzcd} \]
+
+We denote the unique morphism $(f,g)$.
+
+\begin{lemma}
+Let $A,B$ be objects in a category $\cat{C}$. Then there exists an isomorphism $A\times B \to B\times A$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}
+Let $A$ be an object in a category $\cat{C}$ with terminal object $1$. Then $A \cong A\times 1$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+
 \chapter{Adjunctions}
 \chapter{Monads}
 
