@@ -2450,8 +2450,11 @@ TODO: similar for totality and polars?
 \subsubsection{Kernels}
 
 \begin{definition}
-Let $R$ be a relation on $(A, B)$. The \udef{kernel} of $R$ is
-\[ \ker R \defeq \setbuilder{(x,y)\in A\times A}{xR \mesh yR}. \]
+Let $R$ be a relation on $(A, B)$.
+\begin{itemize}
+\item The \udef{kernel} of $R$ is $\ker R \defeq \setbuilder{(x,y)\in A\times A}{xR \mesh yR}$.
+\item The \udef{cokernel} of $R$ is $\coker R \defeq \setbuilder{(x,y)\in B\times B}{Rx \mesh Ry}$.
+\end{itemize}
 \end{definition}
 
 \begin{lemma}
@@ -2909,7 +2912,8 @@ If we restrict ourselves to the class of binary functions between sets, then $\s
 Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. Then $(f^d)^d = f$.
 \end{lemma}
 
-\subsection{Currying}
+\subsection{Currying and evaluation}
+\subsubsection{Currying}
 TODO cfr residuation
 
 \begin{definition}
@@ -2927,6 +2931,83 @@ For given sets $A,B,C$ the act of currying defines two bijective functions
 &\curry_2: (A\times B \to C) \twoheadrightarrowtail (B \to (A\to C))
 \end{align*}
 \end{lemma}
+
+\subsubsection{The evaluation map}
+\begin{definition}
+Let $A,B$ be sets. We define the \udef{evaluation map}
+\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
+Often we will consider partial applications of the evaluation map in the second argument, i.e.\ for $x\in A$
+\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
+which is also called an evaluation map.
+\end{definition}
+We have $\evalMap_x = \curry_2(\evalMap)(x)$.
+
+\begin{lemma}
+Let $A,B,C$ be sets and $f: A\to (B\to C)$. Then
+\begin{enumerate}
+\item $\curry_1^{-1}(f) = \evalMap\circ (f, \id_B)$;
+\item $\curry_2^{-1}(f) = \evalMap\circ (f, \id_B)\circ \transp$.
+\end{enumerate}
+\end{lemma}
+
+\subsubsection{Functoriality}
+\begin{proposition}
+Let $f: A\to B$ be a function between sets and $X$ a set. Then there exists a unique $f^X: (X\to A)\to (X\to B)$ such that
+\[ \curry_1(f\circ g) = f^X\circ \curry_1(g) \qquad \forall g\in \big(Y\times X \to A\big). \]
+This is given by $f^X = f\circ -$.
+\end{proposition}
+\begin{proof}
+Let $\evalMap_1$ be the evaluation map $\evalMap_1: (X\to A)\times X \to A$ and $\evalMap_2$ the evaluation map $\evalMap_2: (A\to B) \times A \to B$.
+then we can calculate
+\begin{align*}
+f \circ g &= f \circ \curry_1^{-1}\big(\curry_1(g)\big) \\
+&= f \circ \evalMap_1 \circ \big(\curry_1(g), \id_X\big) \\
+&= \curry_1^{-1}\big(\curry_1(f \circ \evalMap_1)\big) \circ \big(\curry_1(g), \id_X\big) \\
+&= \evalMap_2\circ \big(\curry_1(f \circ \evalMap_1), \id_X\big) \circ \big(\curry_1(g), \id_X\big) \\
+&= \evalMap_2\circ \big(\curry_1(f \circ \evalMap_1) \circ \curry_1(g), \id_X\big) \\
+&= \curry_1^{-1}\big(\curry_1(f \circ \evalMap_1) \circ \curry_1(g)\big).
+\end{align*}
+Setting $f^X \defeq \curry_1(f \circ \evalMap_1) = f\circ -$, we clearly have existence. For uniqueness, note that $f\circ h = g \circ h$ for arbitrary $h$ implies $f=g$. And we can choose $\curry_1(g)$ arbitrarily.
+\end{proof}
+\begin{corollary}
+Let $f: A\to B$ and $g: B\to C$ be functions between sets and $X$ some other set. Then $(g\circ f)^X = g^X\circ f^X$.
+\end{corollary}
+\begin{proof}
+Take arbitrary $h: Y\times X \to A$. Then
+\[ (g\circ f)^X\circ \curry_1(h) = \curry_1(g\circ f\circ h) = g^X\circ \curry_1(f\circ h) = g^X \circ f^X \circ \curry_1(h). \]
+\end{proof}
+
+\begin{proposition}
+Let $f: A\to B$ be a function between sets and $X$ a set. Then there exists a unique $X^f: (B\to X) \to (A\to X)$ such that
+\[ \curry_1\big(g\circ (\id_Y, f)\big) = X^f\circ \curry_1(g) \qquad \forall g\in \big(Y\times B \to X\big). \]
+This is given by $X^f = -\circ f$.
+\end{proposition}
+\begin{proof}
+Let $\evalMap_1$ be the evaluation map $\evalMap_1: (B\to X)\times B \to X$ and $\evalMap_2$ the evaluation map $\evalMap_2: (A\to X) \times A \to X$.
+then we can calculate
+\begin{align*}
+g\circ (\id_Y, f) &= \curry_1^{-1}\big(\curry_1(g)\big)\circ (\id_Y, f) \\
+&= \evalMap_1 \circ \big(\curry_1(g), \id_B\big)\circ (\id_Y, f) \\
+&= \evalMap_1 \circ (\id_{B\to X}, f) \circ \big(\curry_1(g), \id_A\big) \\
+&= \curry_1^{-1}\Big(\curry_1\big(\evalMap_1 \circ (\id_{B\to X}, f)\big)\Big) \circ \big(\curry_1(g), \id_A\big) \\
+&= \evalMap_2\circ\Big(\curry_1\big(\evalMap_1 \circ (\id_{B\to X}, f)\big), \id_A\Big) \circ \big(\curry_1(g), \id_A\big) \\
+&= \evalMap_2\circ\Big(\curry_1\big(\evalMap_1 \circ (\id_{B\to X}, f)\big)\circ \curry_1(g), \id_A\Big) \\
+&= \curry_1^{-1}\Big(\curry_1\big(\evalMap_1 \circ (\id_{B\to X}, f)\big)\circ \curry_1(g) \Big).
+\end{align*}
+Setting $X^f \defeq \curry_1(\evalMap_1\circ (\id_{B\to X}, f)) = -\circ f$, we clearly have existence. For uniqueness, note that $f\circ h = g \circ h$ for arbitrary $h$ implies $f=g$. And we can choose $\curry_1(g)$ arbitrarily.
+\end{proof}
+\begin{corollary}
+Let $f: A\to B$ and $g: B\to C$ be functions between sets and $X$ some other set. Then $X^{g\circ f} = X^f\circ X^g$.
+\end{corollary}
+\begin{proof}
+Take arbitrary $h: Y\times B \to X$. Then
+\begin{align*}
+X^{g\circ f}\circ \curry_1(h) &= \curry_1\big(h \circ (\id_Y, g\circ f)\big) \\
+&= \curry_1\big(h \circ (\id_Y, g)\circ (\id_Y, f)\big) \\
+&= X^f\circ \curry_1\big(h \circ (\id_Y, g)\big) \\
+&= X^f\circ X^g \circ \curry_1(h).
+\end{align*}
+\end{proof}
 
 \subsubsection{Partial application}
 \begin{definition}
@@ -3086,15 +3167,6 @@ Let $A$ be a class and $f,g: A\times A\to A$ binary functions. If $f$ and $g$ ar
 For all $x\in A$ we have $f(x,x) = f(x,g(x,f(x,x))) = x$, where the last equality follows from the absorption law with $y = f(x,x)$.
 \end{proof}
 
-\subsection{The evaluation map}
-\begin{definition}
-Let $A,B$ be sets. We define the \udef{evaluation map}
-\[ \evalMap: (A\to B)\times A \to B: (f,x) \mapsto f(x). \]
-Often we will consider partial applications of the evaluation map in the second argument, i.e.\ for $x\in A$
-\[ \evalMap_x: (A\to B) \to B: f\mapsto f(x), \]
-which is also called an evaluation map.
-\end{definition}
-We have $\evalMap_x = \curry_2(\evalMap)(x)$.
 
 \section{Associative classes}
 \begin{definition}
@@ -3652,7 +3724,21 @@ which means that $f(x,y)\in N_A(B)$.
 (3) $f(x,\{a\}) = f(x,a)$ and $f(\{a\}, x) = f(a,x)$.
 \end{proof}
 
+\subsection{Composition of relations}
+\begin{definition}
+Let $\mathfrak{R}$ be the class of all relations, with absorbing element $\mathrm{NULL}$ adjoined.
+\end{definition}
 
+\begin{proposition}
+Let $R,S \in \mathfrak{R}$ be relations. Then
+\begin{enumerate}
+\item $R \greensL S$ \textup{if and only if} $R$ and $S$ have the same image and cokernel;
+\item $R \greensR S$ \textup{if and only if} $R$ and $S$ have the same preimage and kernel.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
 \chapter{The natural numbers}
 TODO = 1:n!
