@@ -1,0 +1,151 @@
+\chapter{Languages and grammar}
+\section{Languages}
+\subsection{Finite sequences}
+\begin{definition}
+A \udef{string} in an \udef{alphabet} $A$ is a sequence whose domain is a set of the form $\interval[co]{0,n}$ and whose codomain is the set $A$. The elements of $A$ are called \udef{symbols}.
+
+The size $n$ of the domain is the \udef{length} of the sequence, denoted $\len(x)$. We identify $n$ with the corresponding von Neumann ordinal to get
+\begin{align*}
+A^{n} &\defeq A^{\interval[co]{0,n}} \\
+A^* &\defeq \bigcup\setbuilder{ A^{n}}{n\in \N}.
+\end{align*}
+We call $A^*$ the \udef{Kleene closure} of $A$. In particular $\seq{}\in A^*$.
+
+Let $a_0,\ldots, a_{n-1}\in A$. Then we have the string
+\[ \seq{a_0,\ldots, a_{n-1}} \defeq \{(0,a_0),\ldots, (n-1,a_{n-1})\} \in A^{n}. \]
+
+Let $u\in A^*$ be a string. We take all indices modulo $\len(x)$. In particular negative indices can be used to count back from the end of the string.
+
+\begin{itemize}
+\item Let $u\in A^{n}, v\in A^{m}$ be strings. The \udef{concatenation} of $u$ and $v$ is the string
+\[ u\star v \defeq \seq{u_0,\ldots, u_{n-1},v_0,\ldots, v_{m-1}} \in A^{n+m}. \]
+\item Let $u\in A^{n}$ be a string. The \udef{reverse} string $\reverse{u}$ is defined by
+\[ \reverse{u} \defeq \seq{u_{n-1}, \ldots, u_0}. \]
+\end{itemize}
+We call a subsequence a \udef{substring} if its domain is an interval subset.
+\end{definition}
+Notice that we can view tuples as strings of length two (i.e.\ there is a bijection $A\times A \leftrightarrow A^{2}$ for all sets $A$). Similarly an $n$-tuple can be seen as a string of length $n$. So sometimes we write
+\[ A^* = \bigcup^\infty_{n=0}A^n = A^{<\omega}\]
+where $A^{<\omega}$ is just a notational equivalent.
+
+We can think of $A^*$ as a generalisation of $\N$, with $\seq{}$ instead of $0$ and appending operators
+\[ S_a(u) = u\concat \seq{a} \]
+for all $a\in A$. In this way $\N \cong \{1\}^*$.
+
+\subsubsection{Ordering}
+\begin{definition}
+Let $\sSet{A,\leq}$ be a linearly ordered alphabet. Then
+\begin{itemize}
+\item the \udef{lexicographic order} $<_l$ on $A^*$ is defined by
+\[ u <_l v \qquad\iff\qquad u_k < v_k \;\text{where $k = \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}$}. \]
+\item the \udef{shortlex order} or \udef{strong order} $<_{s}$ on $A^*$ is defined by
+\[ u <_l v \qquad\iff\qquad \begin{cases}
+\len(u) < \len(v) & \text{or} \\
+\big(\len(u) = \len(v)\big) \land (u <_l v).
+\end{cases}\]
+\end{itemize}
+\end{definition}
+
+\subsubsection{String recursion}
+\begin{theorem}[String recursion theorem]
+Let $A,E$ be sets, $a\in E$, and $h:E\times A\to E$ some function.
+
+There is exactly one function $f: A^*\to E$ which satisfies
+\[ \begin{cases}
+f(\seq{}) = a, \\
+f(u\concat \seq{x}) = h(f(u), x) & (u\in A^*, x\in A).
+\end{cases} \]
+\end{theorem}
+\begin{proof}
+Define a function $\phi: \N \times A^*\to E$ recursively such that it satisfies
+\begin{align*}
+\phi(0,u) &= a \\
+\phi(n+1,u) &= h(\phi(n,u), u(n))
+\end{align*}
+and set $f(u) = \phi(\len(u), u)$. Proving that $f$ satisfies the second equality and the uniqueness of $f$ goes by induction on $\len(u)$.
+\end{proof}
+Like before, a version of the theorem can also be stated for recursion with parameters.
+
+\subsubsection{Languages}
+\begin{definition}
+A \udef{language} is a set of strings.
+\end{definition}
+
+\begin{definition}
+Let $L$ be a language in an alphabet $A$. Then we define the \udef{Kleene closure} of the language $L$ as
+\[ L^* \defeq \Closure_\concat(L) \cup \{\seq{}\}. \]
+\end{definition}
+Note that $A^* = \setbuilder{\seq{a}}{a\in A}^*$.
+
+
+
+\section{Grammars}
+
+\section{Automata}
+\begin{definition}
+An \udef{automaton} is a $5$-tuple $M = \sSet{\Sigma, Q, \delta, q_0, F}$, where
+\begin{itemize}
+\item $\Sigma$ is a finite set of symbols, called the \udef{input alphabet} of the automaton,
+\item $Q$ is a set of \udef{states},
+\item $\delta: Q\times \Sigma\to Q$ is a function, called the \udef{transition function},
+\item $q\in Q$ is the \udef{start state}, and
+\item $F\subseteq Q$ is the set of \udef{accept states} or \udef{final states}.
+\end{itemize}
+We call the automaton \udef{finite} if $Q$ is finite.
+
+The automaton $M$ defines a function $e_M: \Sigma^* \to Q^*$ recursively by
+\[ \begin{cases}
+e(\seq{}) = \seq{q_0}, \\
+e(u\concat \seq{x}) = e(u)\concat \delta(e(u)_{-1}, x) & (u\in \Sigma^*, x\in \Sigma).
+\end{cases} \]
+
+We say $M$ \udef{accepts} a string $u\in \Sigma^*$ if $e_M(u)_{-1} \in F$.
+
+The set of all strings in $\Sigma^*$ that are accepted by the automaton is the language \udef{accepted} by $M$, or just the \udef{language of $M$}:
+\[ L_M \defeq \setbuilder{u\in\Sigma^*}{e_M(u)_{-1} \in F}. \]
+\end{definition}
+
+\begin{proposition}
+Let $M_1 = \sSet{\Sigma, Q_1, \delta_1, q_{0,1}, F_1}$ and $M_2 = \sSet{\Sigma, Q_2, \delta_2, q_{0,2}, F_2}$ be automata that accept the languages $L_{M_1}$ and $L_{M_2}$ in the same alphabet $\Sigma$. Define
+\[ \delta = \curry_2^{-1}\Big(a\mapsto (\delta_1(-, a), \delta_2(-, a))\Big). \]
+Then
+\begin{enumerate}
+\item $M_{\cup} = \sSet{\Sigma, Q_1\times Q_2, \delta, (q_{0,1}, q_{0,2}), (F_1\times Q_1) \cup (F_2\times Q_2)}$ is an automaton that recognises $L_{M_1}\cup L_{M_2}$;
+\item $M_{\cap} = \sSet{\Sigma, Q_1\times Q_2, \delta, (q_{0,1}, q_{0,2}), F_1 \times F_2}$ is an automaton that recognises $L_{M_1}\cap L_{M_2}$.
+\end{enumerate}
+\end{proposition}
+
+\subsection{State diagrams}
+TODO
+
+\subsection{Non-deterministic automata}
+\begin{definition}
+A \udef{non-deterministic automaton} is a $5$-tuple $M = \sSet{\Sigma, Q, \delta, Q_0, F}$, where
+\begin{itemize}
+\item $\Sigma$ is a finite set of symbols, called the \udef{input alphabet} of the automaton,
+\item $Q$ is a set of \udef{states},
+\item $\delta: Q\times \Sigma \to \powerset(Q)$ is a function, called the \udef{transition function},
+\item $Q_0\subseteq Q$ is the \udef{start state}, and
+\item $F\subseteq Q$ is the set of \udef{accept states} or \udef{final states}.
+\end{itemize}
+We call the non-deterministic automaton \udef{finite} if $Q$ is finite.
+
+The automaton $M$ defines a function $e_M: \Sigma^* \to \powerset(Q^*)$ recursively by
+\[ \begin{cases}
+e(\seq{}) = \setbuilder{\seq{q_0}}{q_0\in Q_0}, \\
+e(u\concat \seq{x}) = \setbuilder{q\concat\delta(q_{-1}, x)}{q\in e(u)} & (u\in \Sigma^*, x\in \Sigma).
+\end{cases} \]
+
+We say $M$ \udef{accepts} a string $u\in \Sigma^*$ if $\exists r\in e_M(u): r_{-1} \in F$.
+
+The set of all strings in $\Sigma^*$ that are accepted by the automaton is the language \udef{accepted} by $M$, or just the \udef{language of $M$}:
+\[ L_M \defeq \setbuilder{u\in\Sigma^*}{\exists r\in e_M(u): r_{-1} \in F}. \]
+\end{definition}
+
+\subsection{Finite automata}
+\begin{definition}
+A language is called a \udef{regular language} if it is recognised by a finite automaton.
+\end{definition}
+
+
+\chapter{Term rewriting}
