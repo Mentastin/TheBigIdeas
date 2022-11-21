@@ -101,7 +101,7 @@ e(u\concat \seq{x}) = e(u)\concat \delta(e(u)_{-1}, x) & (u\in \Sigma^*, x\in \S
 
 We say $M$ \udef{accepts} a string $u\in \Sigma^*$ if $e_M(u)_{-1} \in F$.
 
-The set of all strings in $\Sigma^*$ that are accepted by the automaton is the language \udef{accepted} by $M$, or just the \udef{language of $M$}:
+The set of all strings in $\Sigma^*$ that are accepted by the automaton is the language \udef{recognised} by $M$, or just the \udef{language of $M$}:
 \[ L_M \defeq \setbuilder{u\in\Sigma^*}{e_M(u)_{-1} \in F}. \]
 \end{definition}
 
@@ -116,7 +116,7 @@ Then
 \end{proposition}
 
 \subsection{State diagrams}
-TODO
+TODO. Double ring for accept states.
 
 \subsection{Non-deterministic automata}
 \begin{definition}
@@ -133,19 +133,98 @@ We call the non-deterministic automaton \udef{finite} if $Q$ is finite.
 The automaton $M$ defines a function $e_M: \Sigma^* \to \powerset(Q^*)$ recursively by
 \[ \begin{cases}
 e(\seq{}) = \setbuilder{\seq{q_0}}{q_0\in Q_0}, \\
-e(u\concat \seq{x}) = \setbuilder{q\concat\delta(q_{-1}, x)}{q\in e(u)} & (u\in \Sigma^*, x\in \Sigma).
+e(u\concat \seq{x}) = \setbuilder{v\concat q}{v\in e(u), q\in \delta(v_{-1}, x)} & (u\in \Sigma^*, x\in \Sigma).
 \end{cases} \]
 
 We say $M$ \udef{accepts} a string $u\in \Sigma^*$ if $\exists r\in e_M(u): r_{-1} \in F$.
 
-The set of all strings in $\Sigma^*$ that are accepted by the automaton is the language \udef{accepted} by $M$, or just the \udef{language of $M$}:
+The set of all strings in $\Sigma^*$ that are accepted by the automaton is the language \udef{recognised} by $M$, or just the \udef{language of $M$}:
 \[ L_M \defeq \setbuilder{u\in\Sigma^*}{\exists r\in e_M(u): r_{-1} \in F}. \]
 \end{definition}
+
+\begin{lemma} \label{automatonAsNDAutomaton}
+Let $M = \sSet{\Sigma, Q, \delta, q_0, F}$ be an automaton. Consider the non-deterministic automaton $M' = \sSet{\Sigma, Q, \delta', Q_0', F}$, where
+\begin{itemize}
+\item $Q_0' = \{q_0\}$; and
+\item $\delta' = \{\delta(-)\}$.
+\end{itemize}
+Then
+\begin{enumerate}
+\item $e_{M} = \{e_{M'}(-)\}$;
+\item $M$ and $M'$ accept the same language.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Point (2) follows straight from point (1) and point (1) is easy to prove by induction on input string length.
+\end{proof}
+
+\begin{proposition}
+Let $M_1 = \sSet{\Sigma, Q_1, \delta_1, Q_{0,1}, F_1}$ and $M_2 = \sSet{\Sigma, Q_2, \delta_2, Q_{0,2}, F_2}$ be non-deterministic automata that accept the languages $L_{M_1}$ and $L_{M_2}$ in the same alphabet $\Sigma$.
+Then
+\begin{enumerate}
+\item $M_{\cup} = \sSet{\Sigma, Q_1\sqcup Q_2, (\delta_1 \bbslash \delta_2), Q_{0,1}\sqcup Q_{0,2}, F_1 \sqcup F_2}$ is a non-deterministic automaton that recognises $L_{M_1}\cup L_{M_2}$;
+\item $M_\star = \sSet{\Sigma, (Q_1\setminus F_1) \sqcup (F_1\times Q_{0,2}) \sqcup (Q_2\setminus Q_{0,2}), \delta', Q_{0,1}, F_2}$, where
+\[ \delta': (q,s)\mapsto \begin{cases}
+\big(\delta_1(q,s)\setminus F_1\big) \sqcup \Big(\big(\delta_1(q,s)\cap F_1\big)\times Q_{0,2}\Big) & (q\in Q_1\setminus F_1) \\
+\big(\delta_1(\proj_1(q),s)\setminus F_1\big) \sqcup \Big(\big(\delta_1(\proj_1(q),s)\cap F_1\big)\times Q_{0,2}\Big) \sqcup \delta_2\big(\proj_2(q), s\big) & (q\in F_1\times Q_{0,2}) \\
+\delta_2(q,s) & (q\in Q_2\setminus Q_{0,2})
+\end{cases} \]
+is a non-deterministic automaton that recognises $L_{M_1}\concat L_{M_2}$.
+\end{enumerate}
+\end{proposition}
+
+TODO: define (better syntax!!!!!!) + picture gluing of automata.
+
+\begin{proposition}
+Let $M = \sSet{\Sigma, Q, \delta, Q_{0}, F}$ be a non-deterministic automata that accept the languages $L_{M}$.
+Then consider the non-deterministic automaton $M' = \sSet{\Sigma, Q', \delta', Q_{0}, F'}$, where
+\begin{itemize}
+\item $Q' = Q_0 \sqcup (Q\setminus F) \sqcup (F\times Q_0)$;
+\item $\delta': (q,s) \mapsto \begin{cases}
+\big(\delta(q,s)\setminus F\big) \sqcup \Big(\big(\delta(q,s)\cap F\big) \times Q_0\Big) & (\text{$q\in Q_0$ or $q\in Q\setminus F$}) \\
+\begin{multlined}\big(\delta(\proj_1(q),s)\setminus F\big) \sqcup \Big(\big(\delta(\proj_1(q),s)\cap F\big) \times Q_0\Big) \vspace{-1em} \\ \cup \big(\delta(\proj_2(q),s)\setminus F\big) \sqcup \Big(\big(\delta(\proj_2(q),s)\cap F\big) \times Q_0\Big) \end{multlined}& (q\in F\times Q_0);
+\end{cases}$
+\item $F' = Q_0 \sqcup (F\times Q_0)$.
+\end{itemize}
+Then $M'$ recognises $L_{M}^*$.
+\end{proposition}
+Note the use of $\cup$ vs $\sqcup$.
+
+
 
 \subsection{Finite automata}
 \begin{definition}
 A language is called a \udef{regular language} if it is recognised by a finite automaton.
 \end{definition}
 
+\begin{proposition}
+Let $L$ be a language in an alphabet $\Sigma$. Then $L$ is recognised by a finite automaton \textup{if and only if} it is recognised by a finite non-deterministic automaton.
+\end{proposition}
+\begin{proof}
+The direction $\Rightarrow$ is immediate from \ref{automatonAsNDAutomaton}.
+
+For the converse, take a finite non-deterministic automaton $M = \sSet{\Sigma, Q, \delta, Q_0, F}$. Consider the automaton $M' = \sSet{\Sigma, \powerset{Q}, \delta', Q_0, F'}$, where
+\begin{itemize}
+\item $\delta': \powerset{Q} \times \Sigma \to \powerset{Q}: (A,s) \mapsto \bigcup_{q\in A}\delta(q, s)$;
+\item $F' = \setbuilder{A\in \powerset(Q)}{A\mesh F}$.
+\end{itemize}
+Then we need to prove $L_{M} = L_{M'}$. Indeed we can prove by induction that, for all $u\in \Sigma^*$,
+\[ \setbuilder{q_{-1}}{q\in e_M(u)} = e_{M'}(u)_{-1}. \]
+Call this set $A$. We have that $M$ accepts $u$ iff $F\mesh A$ and $M'$ accpets $u$ iff $A\in F'$. By definition of $F'$, these cases are the same.
+\end{proof}
+
+
+\subsubsection{The pumping lemma}
+\begin{theorem}[Pumping lemma]
+Let $L$ be a regular language. Then there exists $p\in \N$ such that for all $s \in L$, we can write $s = x\concat y \concat z$ with
+\begin{enumerate}
+\item $x\concat y^k \concat z \in L$ for all $k\in\N$;
+\item $\len(y) \geq 1$;
+\item $\len{x\concat y} \leq p$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
 
 \chapter{Term rewriting}
