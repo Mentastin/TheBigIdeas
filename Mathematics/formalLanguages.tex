@@ -1,15 +1,32 @@
-\chapter{Languages and grammar}
-\section{Languages}
-\subsection{Finite sequences}
+\chapter{Abstract rewriting systems}
+\section{Definition}
+\begin{definition}
+An \udef{(abstract) rewriting system} is a pair $\sSet{X, R}$ where
+\begin{itemize}
+\item $X$ is a set;
+\item $R$ is a binary relation on $X$. The elements of $R$ are called \udef{(rewriting) rules}.
+\end{itemize}
+Let $x,y\in X$. Then we say
+\begin{itemize}
+\item $x$ is \udef{reducible} if there exists $y$ such that $x\mathrel{R}y$;
+\item $x$ is \udef{irreducible} or \udef{in normal form} if $x$ is not reducible.
+\end{itemize}
+\end{definition}
+
+\chapter{Strings and term rewriting}
+\section{Strings}
 \begin{definition}
 A \udef{string} in an \udef{alphabet} $A$ is a sequence whose domain is a set of the form $\interval[co]{0,n}$ and whose codomain is the set $A$. The elements of $A$ are called \udef{symbols}.
 
-The size $n$ of the domain is the \udef{length} of the sequence, denoted $\len(x)$. We identify $n$ with the corresponding von Neumann ordinal to get
+The size $n$ of the domain is the \udef{length} of the sequence, denoted $\len(x)$. Thus $x: \interval[co]{0,\len(x)}\to A$.
+
+
+We identify $n$ with the corresponding von Neumann ordinal to get
 \begin{align*}
 A^{n} &\defeq A^{\interval[co]{0,n}} \\
 A^* &\defeq \bigcup\setbuilder{ A^{n}}{n\in \N}.
 \end{align*}
-We call $A^*$ the \udef{Kleene closure} of $A$. In particular $\seq{}\in A^*$.
+We call $A^*$ the \udef{Kleene closure} of $A$.
 
 Let $a_0,\ldots, a_{n-1}\in A$. Then we have the string
 \[ \seq{a_0,\ldots, a_{n-1}} \defeq \{(0,a_0),\ldots, (n-1,a_{n-1})\} \in A^{n}. \]
@@ -17,6 +34,7 @@ Let $a_0,\ldots, a_{n-1}\in A$. Then we have the string
 Let $u\in A^*$ be a string. We take all indices modulo $\len(x)$. In particular negative indices can be used to count back from the end of the string.
 
 \begin{itemize}
+\item We allow the domain of a string to be $\emptyset = \interval[co]{0,0}$. There is a unique string with this domain, the \udef{empty string} $\seq{}$. We have $\seq{}\in A^*$.
 \item Let $u\in A^{n}, v\in A^{m}$ be strings. The \udef{concatenation} of $u$ and $v$ is the string
 \[ u\star v \defeq \seq{u_0,\ldots, u_{n-1},v_0,\ldots, v_{m-1}} \in A^{n+m}. \]
 \item Let $u\in A^{n}$ be a string. The \udef{reverse} string $\reverse{u}$ is defined by
@@ -32,22 +50,22 @@ We can think of $A^*$ as a generalisation of $\N$, with $\seq{}$ instead of $0$ 
 \[ S_a(u) = u\concat \seq{a} \]
 for all $a\in A$. In this way $\N \cong \{1\}^*$.
 
-\subsubsection{Ordering}
-\begin{definition}
-Let $\sSet{A,\leq}$ be a linearly ordered alphabet. Then
-\begin{itemize}
-\item the \udef{lexicographic order} $<_l$ on $A^*$ is defined by
-\[ u <_l v \qquad\iff\qquad u_k < v_k \;\text{where $k = \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}$}. \]
-\item the \udef{shortlex order} or \udef{strong order} $<_{s}$ on $A^*$ is defined by
-\[ u <_l v \qquad\iff\qquad \begin{cases}
-\len(u) < \len(v) & \text{or} \\
-\big(\len(u) = \len(v)\big) \land (u <_l v).
-\end{cases}\]
-\end{itemize}
-\end{definition}
 
-\subsubsection{String recursion}
-\begin{theorem}[String recursion theorem]
+\begin{lemma} \label{stringPigeonholePrinciple}
+Let $A$ be a finite alphabet and $u\in A^*$. If $\#A < \len(u)$, then $u$ has a repeating character.
+\end{lemma}
+\begin{proof}
+Assume $\#A < \len(u)$. Then we have the inclusion $\interval[co]{0,\#A} \hookrightarrow \interval[co]{0,\len(u)}$ by \ref{naturalNumbersInequalityInclusion}. Also $A =_c \interval[co]{0,\#A}$ by definition.
+
+
+We need to show that $u$ is not an injection. Assume, towards a contradiction, that it is injective. 
+Then $\begin{tikzcd}
+A \ar[r, "{=_c}"] &\interval[co]{0,\#A} \ar[r,hook] & \interval[co]{0,\len(u)} \ar[r, "u"] & A
+\end{tikzcd}$
+is injective. By the pigeonhole principle \ref{pigeonholePrinciple}, this map is bijective. Thus $u$ is surjective, so $\interval[co]{0,\len(u)} =_c A$, which means that $\len(u) = \#A$ by the unicity in \ref{finiteSetNumberOfElements}. This is a contradiction.
+\end{proof}
+
+\begin{theorem}[String recursion theorem] \label{stringRecursion}
 Let $A,E$ be sets, $a\in E$, and $h:E\times A\to E$ some function.
 
 There is exactly one function $f: A^*\to E$ which satisfies
@@ -66,7 +84,41 @@ and set $f(u) = \phi(\len(u), u)$. Proving that $f$ satisfies the second equalit
 \end{proof}
 Like before, a version of the theorem can also be stated for recursion with parameters.
 
-\subsubsection{Languages}
+\subsection{Ordering string}
+\begin{definition}
+Let $\sSet{A,\leq}$ be a linearly ordered alphabet. Then
+\begin{itemize}
+\item the \udef{lexicographic order} $<_l$ on $A^*$ is defined by
+\[ u <_l v \qquad\iff\qquad u_k < v_k \;\text{where $k = \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}$}. \]
+\item the \udef{shortlex order} or \udef{strong order} $<_{s}$ on $A^*$ is defined by
+\[ u <_l v \qquad\iff\qquad \begin{cases}
+\len(u) < \len(v) & \text{or} \\
+\big(\len(u) = \len(v)\big) \land (u <_l v).
+\end{cases}\]
+\end{itemize}
+\end{definition}
+
+\subsection{Slices and substrings}
+\begin{definition}
+Let $A$ be an alphabet, $u$ a string in $A$ and $S\subseteq \dom(u)$. Then the $S$-\udef{slice} of $u$ is the string
+\[ u[S] \defeq \begin{tikzcd}
+\interval[co]{0,\len(S)} \ar[r, "\cong"] & S \ar[r, "u|_S"] & A,
+\end{tikzcd} \]
+where $\interval[co]{0,\len(S)} \cong S$ is the unique order similarity of \ref{WOSetsUniqueSimilarity} (where $S$ has the subspace order).
+
+We also allow $S$ to not be a subset of $\dom(u)$. In this case it is first replaced by $S\cap \dom(u)$.
+\end{definition}
+
+\section{Term rewriting}
+\begin{definition}
+A \udef{string rewriting system} or \udef{semi-Thue system} is a pair $\sSet{\Sigma, R}$ where
+\begin{itemize}
+\item $\Sigma$ is a set (the \udef{alphabet});
+\item $R$ is a binary relation on $\Sigma^*$. The elements of $R$ are called \udef{(rewriting) rules}.
+\end{itemize}
+\end{definition}
+
+\chapter{Languages}
 \begin{definition}
 A \udef{language} is a set of strings.
 \end{definition}
@@ -77,15 +129,29 @@ Let $L$ be a language in an alphabet $A$. Then we define the \udef{Kleene closur
 \end{definition}
 Note that $A^* = \setbuilder{\seq{a}}{a\in A}^*$.
 
-
-
 \section{Grammars}
+\begin{definition}
+A \udef{(formal) grammar} is a tuple $G = \sSet{\Sigma, N, R, S}$ where
+\begin{itemize}
+\item $\Sigma$ is a finite set, called the \udef{alphabet} or set of \udef{terminal symbols};
+\item $N$ a finite set, disjoint from $\Sigma$, of \udef{nonterminal symbols};
+\item $R$ is relation on $(\Sigma \uplus V)^*$ that is a finite set; it is also called the set of \udef{production rules};
+\item $S\in N$.
+\end{itemize}
+\end{definition}
+
+\subsection{Chomsky hierarchy}
+\subsubsection{Regular}
+\subsubsection{Context-free}
+\subsubsection{Context-sensitive}
+\subsubsection{Recursively enumerable}
+
 
 \section{Automata}
 \begin{definition}
 An \udef{automaton} is a $5$-tuple $M = \sSet{\Sigma, Q, \delta, q_0, F}$, where
 \begin{itemize}
-\item $\Sigma$ is a finite set of symbols, called the \udef{input alphabet} of the automaton,
+\item $\Sigma$ is a finite set, called the \udef{input alphabet} of the automaton,
 \item $Q$ is a set of \udef{states},
 \item $\delta: Q\times \Sigma\to Q$ is a function, called the \udef{transition function},
 \item $q\in Q$ is the \udef{start state}, and
@@ -95,8 +161,8 @@ We call the automaton \udef{finite} if $Q$ is finite.
 
 The automaton $M$ defines a function $e_M: \Sigma^* \to Q^*$ recursively by
 \[ \begin{cases}
-e(\seq{}) = \seq{q_0}, \\
-e(u\concat \seq{x}) = e(u)\concat \delta(e(u)_{-1}, x) & (u\in \Sigma^*, x\in \Sigma).
+e_M(\seq{}) = \seq{q_0}, \\
+e_M(u\concat \seq{x}) = e_M(u)\concat \delta(e(u)_{-1}, x) & (u\in \Sigma^*, x\in \Sigma).
 \end{cases} \]
 
 We say $M$ \udef{accepts} a string $u\in \Sigma^*$ if $e_M(u)_{-1} \in F$.
@@ -104,6 +170,10 @@ We say $M$ \udef{accepts} a string $u\in \Sigma^*$ if $e_M(u)_{-1} \in F$.
 The set of all strings in $\Sigma^*$ that are accepted by the automaton is the language \udef{recognised} by $M$, or just the \udef{language of $M$}:
 \[ L_M \defeq \setbuilder{u\in\Sigma^*}{e_M(u)_{-1} \in F}. \]
 \end{definition}
+
+\begin{lemma} \label{automatonExecutionLength}
+Let $M = \sSet{\Sigma, Q, \delta, q_0, F}$ be an automaton and $u\in \Sigma^*$. Then $\len(e_M(u)) = \len(u)+1$.
+\end{lemma}
 
 \begin{proposition}
 Let $M_1 = \sSet{\Sigma, Q_1, \delta_1, q_{0,1}, F_1}$ and $M_2 = \sSet{\Sigma, Q_2, \delta_2, q_{0,2}, F_2}$ be automata that accept the languages $L_{M_1}$ and $L_{M_2}$ in the same alphabet $\Sigma$. Define
@@ -116,7 +186,22 @@ Then
 \end{proposition}
 
 \subsection{State diagrams}
-TODO. Double ring for accept states.
+TODO. Double circle for accept states.
+
+\subsection{Constructions}
+\subsubsection{Changing initial state}
+\begin{definition}
+Let $M = \sSet{\Sigma, Q, \delta, q_{0}, F}$ be an automaton and $q\in Q$. Then $M|_{q}$ is the automaton $\sSet{\Sigma, Q, \delta, q, F}$, i.e.\ the same automaton except the initial state has been replaced by $q$.
+\end{definition}
+
+\begin{lemma} \label{automatonRunFactorisation}
+Let $M = \sSet{\Sigma, Q, \delta, q_{0}, F}$ be an automaton and $x,y\in \Sigma^*$. Then
+\[ e_M(x \concat y) = e_M(x)\concat \big(e_{M|_{q_x}}(y)[1:]\big), \]
+where $q_x = e_M(x)_{-1}$.
+\end{lemma}
+\begin{proof}
+Consider the functions $y\mapsto e_M(x \concat y)$ and $y\mapsto e_M(x)\concat e_{M|_{q_x}}(y)$. They satisfy the same recursion relation and thus are the same by \ref{stringRecursion}.
+\end{proof}
 
 \subsection{Non-deterministic automata}
 \begin{definition}
@@ -210,7 +295,7 @@ For the converse, take a finite non-deterministic automaton $M = \sSet{\Sigma, Q
 \end{itemize}
 Then we need to prove $L_{M} = L_{M'}$. Indeed we can prove by induction that, for all $u\in \Sigma^*$,
 \[ \setbuilder{q_{-1}}{q\in e_M(u)} = e_{M'}(u)_{-1}. \]
-Call this set $A$. We have that $M$ accepts $u$ iff $F\mesh A$ and $M'$ accpets $u$ iff $A\in F'$. By definition of $F'$, these cases are the same.
+Call this set $A$. We have that $M$ accepts $u$ iff $F\mesh A$ and $M'$ accepts $u$ iff $A\in F'$. By definition of $F'$, these cases are the same.
 \end{proof}
 
 
@@ -220,11 +305,36 @@ Let $L$ be a regular language. Then there exists $p\in \N$ such that for all $s 
 \begin{enumerate}
 \item $x\concat y^k \concat z \in L$ for all $k\in\N$;
 \item $\len(y) \geq 1$;
-\item $\len{x\concat y} \leq p$.
+\item $\len(x\concat y) \leq p$.
 \end{enumerate}
 \end{theorem}
+We also allow $k=0$, so $x\concat z$ must be an element of $L$.
 \begin{proof}
-TODO
+Let $M = \sSet{\Sigma, Q, \delta, q_0, F}$ be a finite automaton that recognises $L$. Set $p = \#Q$. If $\len(s) \leq p$, then we can set $x=\seq{}, y= s$ and $z=\seq{}$.
+
+Now assume $\len(s) > p$ and consider $e_M(s)$, which is a string in $Q$. By \ref{automatonExecutionLength}, we have
+\[ \len(e_M(s)) = \len(s)+1 > p +1 = \#Q+1. \]
+By \ref{stringPigeonholePrinciple} there must be a state in $e_M(s)[0:\#Q+1]$ that repeates. Let $k_1, k_2$ be the two different indices of this state in $e_M(s)$.
+
+Then we may set $x = s[0:k_1]$, $y = s[k_1:k_2]$ and $z = s[k_2:]$.
+
+Point (3) is satisfied as $\len(x\concat y) = k_2 \leq \#Q = p$.
+
+Point (2) is satisfied as $k_1\neq k_2$.
+
+For point (1), define the automaton $M' = \sSet{\Sigma, Q, \delta, e_M(x)_{-1}, F}$ and $M^{\prime\prime} = \sSet{\Sigma, Q, \delta, e_M(x\concat y)_{-1}, F}$.
+It is enough to prove that
+\[ e_M(x\concat y^k \concat z) = e_M(x)\concat \big(e_{M'}(y)[1:]\big)^k \concat \big(e_{M^{\prime\prime}}(z)[1:]\big). \]
+We use \ref{automatonRunFactorisation}. We then only need to prove that $\big(e_{M'}(y^k)[1:]\big) = \big(e_{M'}(y)[1:]\big)^k$. This is evident by induction on $k$, using \ref{automatonRunFactorisation}.
 \end{proof}
 
-\chapter{Term rewriting}
+\begin{example}
+The following languages are not regular:
+\begin{itemize}
+\item $\setbuilder{\seq{0}^n\seq{1}^n}{n\geq 0}$;
+\item $\setbuilder{u\in \{0, 1\}^*}{\text{$u$ contains an equal number of $1$s and $0$s}}$;
+\item $\setbuilder{u\concat u}{u\in \{0,1\}^*}$;
+\item $\setbuilder{\seq{1}^{n^2}}{n\in \N}$;
+\item $\setbuilder{\seq{0}^i\seq{1}^j}{i>j \in \N}$. We prove this by contradiction. Assume $p$ is the pumping length and consider $\seq{0}^{p+1}\seq{1}^p$, which is a string in the language. Then $y$ must consist of a non-empty string of zeros. Now the string $xy^0z = xz$ must be in the language by the pumping lemma. However in this case $xz = \seq{0}^l\seq{1}^j$ where $l\leq j$, which means that $xz$ is not an element of the language. This is a contradiction.
+\end{itemize}
+\end{example}
