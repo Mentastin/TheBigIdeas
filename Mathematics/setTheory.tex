@@ -777,6 +777,19 @@ Let $A,B\subseteq \Omega$ be sets. Then following are equivalent:
 \end{enumerate}
 \end{corollary}
 
+\begin{lemma} \label{disjointSetDifference}
+Let $A,B,C$ be sets. Then
+\[ A\setminus B \perp C \qquad\iff\qquad A\cap C \subseteq B. \]
+\end{lemma}
+\begin{proof}
+We have
+\begin{align*}
+A\setminus B \perp C &\iff (A\setminus B) \cap C = \emptyset \\
+&\iff (A\cap C)\setminus B = \emptyset \\
+&\iff A\cap C \subseteq B.
+\end{align*}
+\end{proof}
+
 \subsubsection{Distributivity}
 TODO: tables complete / correct?? TODO: only works for relativised intersection.
 \begin{lemma}
@@ -1338,17 +1351,32 @@ Let $\sSet{A, R}$ be a relational structure and $X\subseteq A$ a subclass.
 \begin{itemize}
 \item A \udef{right edge} (or \udef{maximal element}) of $X$ under $R$ is an element $e_1\in X$ such that
 \[ e_1R \cap X \subseteq Re_1. \]
+We denote the set of right edges of $X$ as $\lmax(X)$.
 \item A \udef{left edge} (or \udef{minimal element}) of $X$ under $R$ is an element $e_2\in X$ such that
 \[ Re_2 \cap X \subseteq e_2R. \]
+We denote the set of left edges of $X$ as $\lmin(X)$.
 \end{itemize}
 \end{definition}
 
+\begin{lemma} \label{maximalMinimalEquivalents}
+Let $\sSet{A, R}$ be a relational structure and $X\subseteq A$ a subclass. Then
+\begin{enumerate}
+\item $x\in X$ is a right edge \textup{if and only if} $xR\setminus Rx \perp X$;
+\item $x\in X$ is a left edge \textup{if and only if} $Rx\setminus xR \perp X$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Immediate from \ref{disjointSetDifference}.
+\end{proof}
+
+
 \begin{lemma} \label{maximumIsMaximal}
-Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$. Then
+Let $R$ be a relation on $A$ and $X\subseteq A$. Then
 \begin{enumerate}
 \item every maximum of $X$ is a maximal element of $X$;
 \item every minimum of $X$ is a minimal element of $X$.
 \end{enumerate}
+If $X$ is a chain, then the converses also hold.
 \end{lemma}
 \begin{proof}
 (1) Let $x\in X$ be a maximum. Then $x\in X^R$, so
@@ -1356,6 +1384,10 @@ Let $R$ be a relation on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$. Then
 which means that $x$ is maximal.
 
 (2) Dual to (1).
+
+(Converses) Let $x\in X$ be maximal. For all $y\in X$ we have either $x\mathrel{R}y$ or $y\mathrel{R}x$. In the first case, $y\in xR\cap X$, so $y\in Rx$ by definition of maximality. Thus $y\mathrel{R}x$ in both cases, so $x\in X^R\cap X = \max(X)$.
+
+The other converse is dual.
 \end{proof}
 
 \subsection{Converse relation}
@@ -2264,11 +2296,9 @@ If $xR$ is not empty, then there exists an $a\in xR$, i.e.\ $xRa$. By symmetry a
 \end{proof}
 
 \begin{definition}
-Let $X$ be a set. We call $P\in\powerset^2(X)$ a \udef{quasi-partition} if any two elements are either disjoint or the same:
+Let $X$ be a set. We call $P\in\powerset^2(X)$ a \udef{quasi-partition} if $\emptyset\notin P$ and any two elements are either disjoint or the same:
 \[ \forall A,B\in P: \quad A\perp B \quad\lor\quad A=B. \]
 \end{definition}
-
-TODO: what about empty set?
 
 \begin{proposition}
 Let $X$ be a set. The function
@@ -2285,7 +2315,7 @@ Next we show that $\operatorname{QP}^{-1}$ is a left-inverse.
 Let $R$ be a quasi-equivalence relation on $X$ and take $(a,b)\in R$. Then $\{a,b\}\in aR$ by \ref{quasiEquivalenceLemma} and thus $(a,b)\in \operatorname{QP}^{-1}(\operatorname{QP}(R))$.
 Now take $(a,b)\in \operatorname{QP}^{-1}(\operatorname{QP}(R))$. Then there exists $z\in X$ such that $\{a,b\}\subseteq zR$. Thus $aRzRb$ and so $(a,b)\in R$.
 
-Finally we show that $\operatorname{QP}^{-1}$ is a right-inverse. Take a quasi-partition $P$ on $X$, $A\in P$ and $a\in A$ (TODO: what about empty set??). Then
+Finally we show that $\operatorname{QP}^{-1}$ is a right-inverse. Take a quasi-partition $P$ on $X$, $A\in P$ and $a\in A$ (by definition $A\neq \emptyset$). Then
 \begin{align*}
 P \ni A &= a\setbuilder{(a,b)}{b\in A} \\
 &= a\setbuilder{(a,b)}{\exists A\in P: b\in A} \\
@@ -4067,7 +4097,7 @@ Let $m,n\in \N$. Then the following are equivalent:
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-TODO
+By \ref{orderingInitialSegments}. TODO superfluous?
 \end{proof}
 TODO: this is Dedekind / Yoneda principle??
 
