@@ -541,7 +541,7 @@ Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$, then
 \end{lemma}
 In particular $S^u$ is an up set and $S^l$ a down set.
 \begin{corollary} \label{minMaxUpsetDownset}
-Let $(P,\Yleft)$ be a preordered set, $x\in P$ and $S$ a non-empty subset of $P$, then
+Let $(P,\Yleft)$ be an ordered set, $x\in P$ and $S$ a non-empty subset of $P$, then
 \begin{enumerate}
 \item $x \in \max(\downset x)$;
 \item $x \in \min(\upset x)$;
@@ -3592,16 +3592,18 @@ induction} and definition by \textit{complete recursion} that generalise to well
 \begin{definition}
 Let $\sSet{U, \Yleft}$ be an ordered set. We say $U$ satisfies the principle of induction if for all functions $P: U\to \{0,1\}$, we have the implication
 \[ \text{if}\quad  \forall x\in U: \Big(\big(\forall y \in \downset\{x\}\setminus\upset\{x\}: P(y)=1\big)\implies P(x)=1\Big) \quad \text{then}\quad \forall x\in U: P(x)=1. \]
-The antecedent of the implication is called the \udef{induction hypothesis}.
+The antecedent of the implication is called the \udef{induction step}. The antecedent of the induction step is called the \udef{induction hypothesis}.
 \end{definition}
 
-\begin{theorem}[Transfinite induction]
+If $\sSet{U,\Yleft}$ is a poset, then $\forall y \in \downset\{x\}\setminus\upset\{x\}$ just means $\forall y < x$.
+
+\begin{theorem}[Transfinite induction] \label{transfiniteInduction}
 Let $\sSet{U, \Yleft}$ be an ordered set. Then $U$ satisfies the principle of induction \textup{if and only if} $U$ is well-founded.
 \end{theorem}
 \begin{proof}
 $\boxed{\Rightarrow}$ assume $U$ satisfies the principle of induction. Let $S$ be some subset of $U$. Now consider the function $P = \chi_{S^c}$.
 
-Then the induction hypothesis is
+Then the induction step is
 \[ \forall x\in U: \Big(\big(\forall y \in \downset\{x\}\setminus\upset\{x\}: \chi_{S^c}(y)=1\big)\implies \chi_{S^c}(x)=1\Big). \]
 This is equivalent to
 \[ \forall x\in U: \Big(\big(\downset\{x\}\setminus\upset\{x\}\perp S\big)\implies x\notin S\Big), \]
@@ -3621,75 +3623,67 @@ so $\forall y\in \downset\{x^*\}\setminus\upset\{x^*\}: P(y) = 1$. By the induct
 Notice that there is no need for a ``base step'' as it is immediately implied by the induction hypothesis: if $x$ is minimal in $U$, then there is no smaller $y$, so the induction hypothesis becomes $\text{\textbf{TRUE}} \implies \big(P(x)=1\big)$ and thus $P(x) = 1$.
 
 
-TODO: from here
 \begin{corollary} \label{WOSetsUniqueSimilarity}
-If $U$, $V$ are well-ordered sets and $U =_o V$, then the order similarity is unique.
+If $U$, $V$ are well-ordered posets and $U =_o V$, then the order similarity is unique.
 \end{corollary}
 \begin{proof}
-Assume $f,g: U\to V$ are order similarities. Let the proposition $P(y)$ be $f(y) = g(y)$. Take arbitrary $x\in U$ and assume $\forall y<x: f(y) = g(y)$. Then
+Assume $f,g: U\to V$ are order similarities. By antisymmetry, we may consider $\min$ as a function in $\powerset(U)\to U$. Let $P(y)$ be $1$ iff $f(y) = g(y)$. Take arbitrary $x\in U$ and assume $\forall y<x: f(y) = g(y)$. Then
 \begin{align*}
-f(x) &= f^\imf\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) \\
-&= f^\imf\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
+f(x) &= f\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) \\
+&= f\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
 &= \min\big(\setbuilder{f(y)}{y< x}^c\big) \\
 &= \min\big(\setbuilder{g(y)}{y< x}^c\big) \\
-&= g^\imf\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
-&= g^\imf\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) = g(x).
+&= g\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
+&= g\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) = g(x).
 \end{align*}
 \end{proof}
 
+Note that the hypotheses of connexity and antisymmetry are necessary: without either there may be multiple minimal elements of subsets and different order similarities have the freedom to choose between them.
+
 \begin{theorem}[Transfinite recursion]
-Let $U$ be a well-ordered set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
+Let $\sSet{U, \Yleft}$ be a well-founded set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
 
 There is exactly one function $f:U\to E$ which satisfies
-\[ f(x) = h(f|_{\downset\{x\}}) \qquad \forall x\in U. \]
+\[ f(x) = h(f|_{\downset\{x\}\setminus\upset\{x\}}) \qquad \forall x\in U. \]
 \end{theorem}
 \begin{proof}
-Like when proving recursion on $\N$, we will consider ``approximations'' of the function $f$, i.e.\ functions $\downset\{t\} \to E$ which satisfy the requirement for all $x<t$.
+Consider the sum $U' \defeq U\oplus \{t_U\}$, which is well-founded and $\downset\{t_U\}\setminus \upset\{t_U\} = U$.
 
-This is the subject of the following lemma:
-\begin{lemma*}
-Let $U$ be a well-ordered set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
+Consider the function $P:U'\to \{0,1\}$ that maps $u$ to $1$ when there is exactly one function $f_u:\downset\{u\}\to E$ which satisfies
+\[ f_u(x) = h(f_u|_{\downset\{x\}\setminus\upset\{x\}}) \qquad \forall x\in\downset\{u\}. \]
+If we can prove the corresponding induction step, then in particular $P(t_U) = 1$ by \ref{transfiniteInduction}. This implies the existence and uniqueness of $f:U\to E = f_{t_U}|_U$.
 
-For all $t\in U$, there is exactly one function $\sigma_t:\downset\{t\}\to E$ which satisfies
-\[ \sigma_t(x) = h(\sigma_t|_{\downset\{x\}}) \qquad \forall x < t. \]
-\end{lemma*}
-\begin{proof}[Proof of lemma] \renewcommand{\qedsymbol}{$\dashv$ (Lemma)}
-The proof goes by transfinite induction. Fix an arbitrary $t\in U$. Assume the induction hypothesis:
-\[ \forall u<t: \exists! \sigma_u\in (\downset\{u\}\to E): \forall x<u: \sigma_u(x) = h(\sigma_u|_{\downset\{x\}}). \]
-We need to prove that this implies there exists exactly one $\sigma_t$ satisfying the condition. We consider three cases: $t$ is the least point $0_U$, a successor point or a limit point.
-\begin{itemize}[leftmargin=2.5cm]
-\item[\boxed{t = 0_U}] Then $\downset\{t\} = \emptyset$ and we must have $\sigma_t = \emptyset$.
-\item[\boxed{t = S_U(v)}] If $t$ is the successor of $v$, we can set
-\[ \sigma_t = \sigma_v\cup\{ (v,h(\sigma_v)) \}. \]
-\item[\boxed{t\in \operatorname{Limit}(U)}] The set of functions $\{\sigma_u\;|\; u<t\}$ is a chain in the poset $((U\not\to E),\subseteq)$ which is inductive, see \ref{inductive}. Let $\sigma_t$ be the least upper bound.
+Fix an arbitrary $u\in U'$ and assume the induction hypothesis, which posits that such a unique function $f_v: \downset\{v\}\to E$ exists for all $v\in \downset\{u\}\setminus\upset\{u\}$. We show the existence and uniqueness of $f_u:\downset\{u\}\to E$.
 
-To prove $\{\sigma_u\;|\; u<t\}$ is a chain, assume not i.e.\
-\[ x<u<v<t \implies \sigma_u(x) = \sigma_v(x) \]
-fails for some $x<u<v$. Take the least such $x$ (we are effectively doing transfinite induction) so then
-\[ \sigma_u|_{\downset\{x\}} = \sigma_v|_{\downset\{x\}}, \]
-and by the induction hypothesis
-\[ \sigma_u(x) = h(\sigma_u|_{\downset\{x\}}) = h(\sigma_v|_{\downset\{x\}}) = \sigma_v(x). \]
-This is a contradiction, proving we do indeed have a chain.
+Note first that for $w\Yleft v\in \downset\{u\}\setminus\upset\{u\}$ we have $f_w = f_v|_{\downset\{w\}}$, as both functions satisfy the conditions that give the unique definition.
 
-Finally we verify
-\begin{itemize}
-\item the domain of $\sigma_t$ is $\downset\{t\}$; indeed
-\[ \dom(\sigma_t) = \bigcup\{\dom(\sigma_u)\;|\; u< t \} = \bigcup\{ \downset\{u\}\;|\; u<t \} \]
-which is an initial segment and thus equal to $\downset\{v\}$ for some $v$. By lemma (TODO ref)
-\[ v\leq t \leq S_U(v). \]
-Then either $t=v$ or $t=S_U(v)$. The latter is excluded because $t$ was a limit point.
-\item $\sigma_t$ satisfies the condition (easily by transfinite induction);
-\item $\sigma_t$ is unique (also easily by transfinite induction).
-\end{itemize}
-\end{itemize}
-\end{proof}
+For existence: first define $f_u' \defeq \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} f_v$. 
+This is a relation; we show that it is functional and has domain $\downset\{u\}\setminus\upset\{u\}$.
+Indeed
+\begin{align*}
+\dom(f'_u) &= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \dom(f_v) \\
+&= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \downset\{v\} \\
+&= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \{v\} \\
+&= \downset\{u\}\setminus\upset\{u\}.
+\end{align*}
+To show that $f'_u$ is functional, take $v\in \downset\{u\}\setminus\upset\{u\}$ and let $v\mathrel{(f'_u)}w_1$ and $v\mathrel{(f'_u)}w_2$.
 
-Now consider the well-ordered set $\operatorname{Succ}(U)$ and extend $h$ to $h': (\operatorname{Succ}(U)\not\to E) \to E$ by
-\[ h'(\sigma) = \begin{cases}
-h(\sigma) & \sigma\in (U\not\to E) \\
-\text{an arbitrary element of $E$} & \sigma \notin (U\not\to E).
-\end{cases} \]
-We can then apply the lemma to $\operatorname{Succ}(U)$ and $h'$. Because $\downset\{t_U\} = U$, this gives a unique function $\sigma_{t_U}: U\to E$. We take this as our $f$.
+Then there exist $v_1, v_2 \geq v$ such that $f_{v_1}(v) = w_1$ and $f_{v_2}(v) = w_2$. Now
+\[ w_1 = f_{v_1}(v) = f_{v_1}|_{\downset\{v\}}(v) = f_v(v) = f_{v_2}|_{\downset\{v\}}(v) = f_{v_1}(v) = w_2. \]
+We conclude that $f'_u$ is functional.
+
+Then we can set
+\[ f_u \defeq f_u' \cup \setbuilder{\big(w, h(f'_u)\big)}{w\in \downset\{u\}\cap \upset\{u\}}. \]
+
+To show $f_u$ satisfies the defining property, take $v\in \downset\{u\}$. If $v\in \downset\{u\}\setminus\upset\{u\}$, then
+\[ f_u(v) = f_v(v) = h(f_v|_{\downset\{v\}\setminus\upset\{v\}}) = h(f_u|_{\downset\{v\}\setminus\upset\{v\}}). \]
+Otherwise $v\in \downset\{u\}\cap\upset\{u\}$, in which case $\downset\{u\}\cap\upset\{u\} = \downset\{v\}\cap\upset\{v\}$ and then
+\[ f_u(v) = h(f'_u) = h(f_u|_{\downset\{u\}\cap\upset\{u\}}) = h(f_u|_{\downset\{v\}\cap\upset\{v\}}). \]
+This concludes the existence part of the proof.
+
+For uniqueness, assume that another function $g: \downset\{u\}\to E$ satisfies the property. We have $g|_{\downset\{u\}\setminus\upset\{u\}} = f'_u = f_u|_{\downset\{u\}\setminus\upset\{u\}}$. For $v\in \downset\{u\}\cap\upset\{u\}$, we have
+\[ g(v) = h(g|_{\downset\{v\}\setminus\upset\{v\}}) = h(g|_{\downset\{u\}\setminus\upset\{u\}}) = h(f'_u) = f_u(v). \]
+This proves uniqueness.
 \end{proof}
 
 \subsection{Recursion invariants}
