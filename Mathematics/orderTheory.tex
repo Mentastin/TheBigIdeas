@@ -541,7 +541,7 @@ Let $(P,\Yleft)$ be an ordered set and $S$ a non-empty subset of $P$, then
 \end{lemma}
 In particular $S^u$ is an up set and $S^l$ a down set.
 \begin{corollary} \label{minMaxUpsetDownset}
-Let $(P,\Yleft)$ be a preordered set, $x\in P$ and $S$ a non-empty subset of $P$, then
+Let $(P,\Yleft)$ be an ordered set, $x\in P$ and $S$ a non-empty subset of $P$, then
 \begin{enumerate}
 \item $x \in \max(\downset x)$;
 \item $x \in \min(\upset x)$;
@@ -3528,6 +3528,8 @@ An ordered set $\sSet{X, \Yleft}$
 \end{itemize}
 \end{definition}
 
+
+
 \begin{proposition}
 Let $\sSet{X,\Yleft}$ be an ordered set.
 \begin{enumerate}
@@ -3543,6 +3545,8 @@ Assume $X$ well-founded and take some antitone sequence $\seq{x_n}_{n\in \N}$. T
 
 Now $m = x_k$ for some $k\in \N$. For all $y,z$ in the tail $\setbuilder{x_n}{n\geq k}$, we have $y\sim_\Yleft m$ and $z\sim_\Yleft m$. By transitivity, $y\sim_\Yleft z$.
 \end{proof}
+
+
 
 \subsection{Succession in well-ordered sets}
 Let $U$ be a well-ordered set with antisymmetric ordering $\leq$. Then the low end of $U$ it looks like $\N$:
@@ -3592,16 +3596,18 @@ induction} and definition by \textit{complete recursion} that generalise to well
 \begin{definition}
 Let $\sSet{U, \Yleft}$ be an ordered set. We say $U$ satisfies the principle of induction if for all functions $P: U\to \{0,1\}$, we have the implication
 \[ \text{if}\quad  \forall x\in U: \Big(\big(\forall y \in \downset\{x\}\setminus\upset\{x\}: P(y)=1\big)\implies P(x)=1\Big) \quad \text{then}\quad \forall x\in U: P(x)=1. \]
-The antecedent of the implication is called the \udef{induction hypothesis}.
+The antecedent of the implication is called the \udef{induction step}. The antecedent of the induction step is called the \udef{induction hypothesis}.
 \end{definition}
 
-\begin{theorem}[Transfinite induction]
+If $\sSet{U,\Yleft}$ is a poset, then $\forall y \in \downset\{x\}\setminus\upset\{x\}$ just means $\forall y < x$.
+
+\begin{theorem}[Transfinite induction] \label{transfiniteInduction}
 Let $\sSet{U, \Yleft}$ be an ordered set. Then $U$ satisfies the principle of induction \textup{if and only if} $U$ is well-founded.
 \end{theorem}
 \begin{proof}
 $\boxed{\Rightarrow}$ assume $U$ satisfies the principle of induction. Let $S$ be some subset of $U$. Now consider the function $P = \chi_{S^c}$.
 
-Then the induction hypothesis is
+Then the induction step is
 \[ \forall x\in U: \Big(\big(\forall y \in \downset\{x\}\setminus\upset\{x\}: \chi_{S^c}(y)=1\big)\implies \chi_{S^c}(x)=1\Big). \]
 This is equivalent to
 \[ \forall x\in U: \Big(\big(\downset\{x\}\setminus\upset\{x\}\perp S\big)\implies x\notin S\Big), \]
@@ -3621,79 +3627,247 @@ so $\forall y\in \downset\{x^*\}\setminus\upset\{x^*\}: P(y) = 1$. By the induct
 Notice that there is no need for a ``base step'' as it is immediately implied by the induction hypothesis: if $x$ is minimal in $U$, then there is no smaller $y$, so the induction hypothesis becomes $\text{\textbf{TRUE}} \implies \big(P(x)=1\big)$ and thus $P(x) = 1$.
 
 
-TODO: from here
 \begin{corollary} \label{WOSetsUniqueSimilarity}
-If $U$, $V$ are well-ordered sets and $U =_o V$, then the order similarity is unique.
+If $U$, $V$ are well-ordered posets and $U =_o V$, then the order similarity is unique.
 \end{corollary}
 \begin{proof}
-Assume $f,g: U\to V$ are order similarities. Let the proposition $P(y)$ be $f(y) = g(y)$. Take arbitrary $x\in U$ and assume $\forall y<x: f(y) = g(y)$. Then
+Assume $f,g: U\to V$ are order similarities. By antisymmetry, we may consider $\min$ as a function in $\powerset(U)\to U$. Let $P(y)$ be $1$ iff $f(y) = g(y)$. Take arbitrary $x\in U$ and assume $\forall y<x: f(y) = g(y)$. Then
 \begin{align*}
-f(x) &= f^\imf\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) \\
-&= f^\imf\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
+f(x) &= f\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) \\
+&= f\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
 &= \min\big(\setbuilder{f(y)}{y< x}^c\big) \\
 &= \min\big(\setbuilder{g(y)}{y< x}^c\big) \\
-&= g^\imf\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
-&= g^\imf\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) = g(x).
+&= g\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
+&= g\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) = g(x).
 \end{align*}
 \end{proof}
 
-\begin{theorem}[Transfinite recursion]
-Let $U$ be a well-ordered set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
+Note that the hypotheses of connexity and antisymmetry are necessary: without either there may be multiple minimal elements of subsets and different order similarities have the freedom to choose between them.
+
+\begin{theorem}[Transfinite recursion] \label{transfiniteRecursion}
+Let $\sSet{U, \Yleft}$ be a well-founded set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
 
 There is exactly one function $f:U\to E$ which satisfies
-\[ f(x) = h(f|_{\downset\{x\}}) \qquad \forall x\in U. \]
+\[ f(x) = h(f|_{\downset\{x\}\setminus\upset\{x\}}) \qquad \forall x\in U. \]
 \end{theorem}
 \begin{proof}
-Like when proving recursion on $\N$, we will consider ``approximations'' of the function $f$, i.e.\ functions $\downset\{t\} \to E$ which satisfy the requirement for all $x<t$.
+Consider the sum $U' \defeq U\oplus \{t_U\}$, which is well-founded and $\downset\{t_U\}\setminus \upset\{t_U\} = U$.
 
-This is the subject of the following lemma:
-\begin{lemma*}
-Let $U$ be a well-ordered set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
+Consider the function $P:U'\to \{0,1\}$ that maps $u$ to $1$ when there is exactly one function $f_u:\downset\{u\}\to E$ which satisfies
+\[ f_u(x) = h(f_u|_{\downset\{x\}\setminus\upset\{x\}}) \qquad \forall x\in\downset\{u\}. \]
+If we can prove the corresponding induction step, then in particular $P(t_U) = 1$ by \ref{transfiniteInduction}. This implies the existence and uniqueness of $f:U\to E = f_{t_U}|_U$.
 
-For all $t\in U$, there is exactly one function $\sigma_t:\downset\{t\}\to E$ which satisfies
-\[ \sigma_t(x) = h(\sigma_t|_{\downset\{x\}}) \qquad \forall x < t. \]
-\end{lemma*}
-\begin{proof}[Proof of lemma] \renewcommand{\qedsymbol}{$\dashv$ (Lemma)}
-The proof goes by transfinite induction. Fix an arbitrary $t\in U$. Assume the induction hypothesis:
-\[ \forall u<t: \exists! \sigma_u\in (\downset\{u\}\to E): \forall x<u: \sigma_u(x) = h(\sigma_u|_{\downset\{x\}}). \]
-We need to prove that this implies there exists exactly one $\sigma_t$ satisfying the condition. We consider three cases: $t$ is the least point $0_U$, a successor point or a limit point.
-\begin{itemize}[leftmargin=2.5cm]
-\item[\boxed{t = 0_U}] Then $\downset\{t\} = \emptyset$ and we must have $\sigma_t = \emptyset$.
-\item[\boxed{t = S_U(v)}] If $t$ is the successor of $v$, we can set
-\[ \sigma_t = \sigma_v\cup\{ (v,h(\sigma_v)) \}. \]
-\item[\boxed{t\in \operatorname{Limit}(U)}] The set of functions $\{\sigma_u\;|\; u<t\}$ is a chain in the poset $((U\not\to E),\subseteq)$ which is inductive, see \ref{inductive}. Let $\sigma_t$ be the least upper bound.
+Fix an arbitrary $u\in U'$ and assume the induction hypothesis, which posits that such a unique function $f_v: \downset\{v\}\to E$ exists for all $v\in \downset\{u\}\setminus\upset\{u\}$. We show the existence and uniqueness of $f_u:\downset\{u\}\to E$.
 
-To prove $\{\sigma_u\;|\; u<t\}$ is a chain, assume not i.e.\
-\[ x<u<v<t \implies \sigma_u(x) = \sigma_v(x) \]
-fails for some $x<u<v$. Take the least such $x$ (we are effectively doing transfinite induction) so then
-\[ \sigma_u|_{\downset\{x\}} = \sigma_v|_{\downset\{x\}}, \]
-and by the induction hypothesis
-\[ \sigma_u(x) = h(\sigma_u|_{\downset\{x\}}) = h(\sigma_v|_{\downset\{x\}}) = \sigma_v(x). \]
-This is a contradiction, proving we do indeed have a chain.
+Note first that for $w\Yleft v\in \downset\{u\}\setminus\upset\{u\}$ we have $f_w = f_v|_{\downset\{w\}}$, as both functions satisfy the conditions that give the unique definition.
 
-Finally we verify
-\begin{itemize}
-\item the domain of $\sigma_t$ is $\downset\{t\}$; indeed
-\[ \dom(\sigma_t) = \bigcup\{\dom(\sigma_u)\;|\; u< t \} = \bigcup\{ \downset\{u\}\;|\; u<t \} \]
-which is an initial segment and thus equal to $\downset\{v\}$ for some $v$. By lemma (TODO ref)
-\[ v\leq t \leq S_U(v). \]
-Then either $t=v$ or $t=S_U(v)$. The latter is excluded because $t$ was a limit point.
-\item $\sigma_t$ satisfies the condition (easily by transfinite induction);
-\item $\sigma_t$ is unique (also easily by transfinite induction).
-\end{itemize}
-\end{itemize}
+For existence: first define $f_u' \defeq \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} f_v$. 
+This is a relation; we show that it is functional and has domain $\downset\{u\}\setminus\upset\{u\}$.
+Indeed
+\begin{align*}
+\dom(f'_u) &= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \dom(f_v) \\
+&= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \downset\{v\} \\
+&= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \{v\} \\
+&= \downset\{u\}\setminus\upset\{u\}.
+\end{align*}
+To show that $f'_u$ is functional, take $v\in \downset\{u\}\setminus\upset\{u\}$ and let $v\mathrel{(f'_u)}w_1$ and $v\mathrel{(f'_u)}w_2$.
+
+Then there exist $v_1, v_2 \geq v$ such that $f_{v_1}(v) = w_1$ and $f_{v_2}(v) = w_2$. Now
+\[ w_1 = f_{v_1}(v) = f_{v_1}|_{\downset\{v\}}(v) = f_v(v) = f_{v_2}|_{\downset\{v\}}(v) = f_{v_1}(v) = w_2. \]
+We conclude that $f'_u$ is functional.
+
+Then we can set
+\[ f_u \defeq f_u' \cup \setbuilder{\big(w, h(f'_u)\big)}{w\in \downset\{u\}\cap \upset\{u\}}. \]
+
+To show $f_u$ satisfies the defining property, take $v\in \downset\{u\}$. If $v\in \downset\{u\}\setminus\upset\{u\}$, then
+\[ f_u(v) = f_v(v) = h(f_v|_{\downset\{v\}\setminus\upset\{v\}}) = h(f_u|_{\downset\{v\}\setminus\upset\{v\}}). \]
+Otherwise $v\in \downset\{u\}\cap\upset\{u\}$, in which case $\downset\{u\}\cap\upset\{u\} = \downset\{v\}\cap\upset\{v\}$ and then
+\[ f_u(v) = h(f'_u) = h(f_u|_{\downset\{u\}\cap\upset\{u\}}) = h(f_u|_{\downset\{v\}\cap\upset\{v\}}). \]
+This concludes the existence part of the proof.
+
+For uniqueness, assume that another function $g: \downset\{u\}\to E$ satisfies the property. We have $g|_{\downset\{u\}\setminus\upset\{u\}} = f'_u = f_u|_{\downset\{u\}\setminus\upset\{u\}}$. For $v\in \downset\{u\}\cap\upset\{u\}$, we have
+\[ g(v) = h(g|_{\downset\{v\}\setminus\upset\{v\}}) = h(g|_{\downset\{u\}\setminus\upset\{u\}}) = h(f'_u) = f_u(v). \]
+This proves uniqueness.
 \end{proof}
+\begin{corollary}
+The principle of recursion is equivalent to the principle of induction and thus to well-foundedness.
+\end{corollary}
+\begin{proof}
+In light of \ref{transfiniteInduction} and \ref{transfiniteRecursion}, it is enough to prove that recursion implies induction.
 
-Now consider the well-ordered set $\operatorname{Succ}(U)$ and extend $h$ to $h': (\operatorname{Succ}(U)\not\to E) \to E$ by
-\[ h'(\sigma) = \begin{cases}
-h(\sigma) & \sigma\in (U\not\to E) \\
-\text{an arbitrary element of $E$} & \sigma \notin (U\not\to E).
-\end{cases} \]
-We can then apply the lemma to $\operatorname{Succ}(U)$ and $h'$. Because $\downset\{t_U\} = U$, this gives a unique function $\sigma_{t_U}: U\to E$. We take this as our $f$.
+We may take $E = \{0,1\}$ and $h$ maps partial functions $p$ to zero iff $0\in\im(p)$. The function $P = \underline{1}$ satisfies the recursion relation. By the principle of recursion, this is the unique function, so $P(x)= \underline{1}(x) = 1$ for all $x\in U$.
 \end{proof}
 
 \subsection{Recursion invariants}
 TODO recursively defining some function with certain property (+usng this property in recursive definition)
+
+
+
+
+\section{Choice}
+TODO: Ultrafilter lemma, Szpilrajn extension theorem
+
+\subsection{The axiom and equivalent formulations}
+The axiom of choice deals with the following situation: given a family of (non-empty) sets, we want to be able to pick one element from each set. The axiom of choice posits that this is possible.
+
+The function that takes a set in the family and returns our pick is called a choice function:
+\begin{definition}
+Let $\mathcal{E}$ be a collection of non-empty sets. A \udef{choice function} is any function
+\[ f: \mathcal{E} \to \bigcup \mathcal{E} \]
+such that $\forall X\in\mathcal{E}: f(X) \in X$.
+\end{definition}
+
+If there is a criterion by which to choose the object, then clearly we can find a choice function, without needing to appeal to the axiom of choice.
+
+For example, if all sets in $\mathcal{E}$ are well-ordered, we can choose the least element from each set. The choice function is then
+\[ f = \setbuilder{ (X,x)\in \mathcal{E}\times \bigcup \mathcal{E}}{x\in X \land \forall y \in X: x\leq X }. \]
+This is a well defined choice function and we did not need the axiom of choice.
+
+For some collections of sets $\mathcal{E}$ we do need the axiom of choice to find a choice function.
+
+There is a well-known analogy due to Russell: if we have a collection $\mathcal{E}$ of pairs of shoes, it is easy to give a choice function, just always take the left shoe for example. If we have a collection $\mathcal{E}'$ of pairs of socks this choice function does not work. We cannot construct a choice function because the socks are indistinguishable. In order to pick one sock from each pair we need to axiom of choice.
+
+We now properly state the axiom:
+\begin{enumerate}[(I)]
+\setcounter{enumi}{6}
+\item \textbf{Axiom of choice (AC)}: for any non-empty set of sets $\mathcal{E}$ there is a choice function:
+\[ \emptyset \notin \mathcal{E} \implies \exists f \in \left(\mathcal{E} \to \bigcup \mathcal{E}\right): \forall X \in \mathcal{E}: f(X)\in X. \]
+\end{enumerate}
+
+\begin{definition}
+A set $S$ is a \udef{choice set} for a family of sets $\mathcal{E}$ if
+\begin{itemize}
+\item $S\subseteq \bigcup \mathcal{E}$;
+\item $\forall X \in \mathcal{E}: S\cap X$ is a singleton.
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{proposition:choiceEquivalents}
+The following statements are equivalent to the axiom of choice:
+\begin{enumerate}
+\item The Cartesian product of any family of non-empty sets is non-empty.
+\item \textup{Zermelo Postulate} Every family $\mathcal{E}$ of non-empty and pairwise disjoint sets admits a choice set.
+\item For every set $A$ the family $\powerset(A)\setminus \emptyset$ admits a choice function.
+\item For any sets $A,B$ and binary relation $P\subseteq A\times B$,
+\[ \left [\forall x\in A: \exists y \in B: P(x,y)\right] \implies \left[ \exists f\in(A\to B): \forall x\in A: P(x,f(x)) \right].  \]
+\end{enumerate}
+\end{proposition}
+
+\subsection{Some equivalent theorems}
+
+\begin{theorem}
+The following results are equivalent to the axiom of choice:
+\begin{enumerate}
+\item \undline{Zorn's lemma}: If every chain in a poset $P$ has an upper bound, then $P$ has a maximal element.
+\item \undline{Zorn's lemma (dual)}: If every chain in a poset $P$ has an lower bound, then $P$ has a minimal element.
+\item \undline{Hypothesis of cardinal comparability}: for all sets $A,B$: $A\leq_c B$ or $B\leq_c A$.
+\item \undline{Well-ordering theorem}: every set is well-orderable.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We proceed round-robin-style:
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{(\text{AC}) \Rightarrow (1)}$] Assume every chain in a poset $P$ has an upper bound. Let $f$ be a choice function on $\powerset(P)\setminus \emptyset$. We define a function $g: \aleph(P) \to P$ by transfinite recursion as follows:
+\[ g(x) = \begin{cases}
+f\left( \{\text{upper bounds of $g[\downset\{x\}]$}  \} \setminus g[\downset\{x\}] \right) & \text{(if defined, i.e.\ we are not choosing from $\emptyset$)} \\
+f\left( \{\text{upper bounds of $g[\downset\{x\}]$}  \} \right) & (\text{else}).
+\end{cases} \]
+This is well defined because $g[\downset\{x\}]$ is a chain in $P$ and thus $\{\text{upper bounds of $g[\downset\{x\}]$}  \}$ cannot be empty by assumption, so the second case always works.
+
+By Hartogs' lemma, theorem \ref{HartogsLemma}, the function $g$ cannot be injective, so there exists an $m\in P$ that is the image of multiple elements $x_1,x_2\in\aleph(P)$. Assume $x_1 < x_2$, then $g(x_2)$ must have been defined by the second case in the recursion, meaning $m$ is a maximal element of $P$.
+\item[$\boxed{(1) \Leftrightarrow (2)}$] By duality.
+\item[$\boxed{(1) \Rightarrow (3)}$] Every chain in the set $(A \not\rightarrowtail B)$ of injective partial functions from $A$ to $B$, ordered by inclusion, is inductive by proposition \ref{inductive}, and thus has a maximal element. If this maximal element is a total function, then $A\leq_c B$. If it is not a total function, it is surjective and we have a bijection from a subset of $A$ to be, i.e.\ $B\leq_c A$.
+\item[$\boxed{(3) \Rightarrow (4)}$] Let $A$ be a set. By Hartogs' lemma, theorem \ref{HartogsLemma}, $\aleph(A) \nleq_c A$. By cardinal comparability this implies $A \leq_c \aleph(A)$. The bijection between $A$ and a subset of $\aleph(A)$ determines a well-ordering on $A$.
+\item[$\boxed{(4) \Rightarrow (\text{AC})}$] Let $A$ be a set. Then we can define a well-ordering $\leq$ on $A$. We can then define a choice function on $\powerset(A)\setminus \emptyset$ by returning the $\leq$-least member of each subset.
+\end{itemize}
+\end{proof}
+
+\begin{lemma} \label{surjectiveInverse}
+Every surjective function has a right inverse \textup{if and only if} the axiom of choice holds.
+\end{lemma}
+
+\begin{definition}
+A family of sets $\mathcal{E}$ is of \udef{finite character} if
+\[ X\in \mathcal{E} \qquad \iff \qquad \text{every finite subset of $X$ belongs to $\mathcal{E}$.} \]
+\end{definition}
+An immediate property of families of finite character: for each $X\in \mathcal{E}$, every (finite or infinite) subset of $X$ belongs to $\mathcal{E}$.
+
+\begin{lemma} \label{finiteCharacterInductive}
+Any family of sets $\mathcal{E}$ of finite character ordered by inclusion is inductive.
+\end{lemma}
+\begin{proof}
+Let $S$ be a chain in $\mathcal{E}$, then we claim $\bigcup S \in \mathcal{E}$. Indeed every (finite) subset of $\bigcup S$ is a subset of an element of $S$ and so $\bigcup S\in \mathcal{E}$.
+\end{proof}
+
+Some more principles reminiscent of (and equivalent to) Zorn's lemma:
+\begin{theorem} \label{ZornEquivalents}
+The following results are equivalent to the axiom of choice:
+\begin{enumerate}
+\item \undline{Teichmüller-Tukey lemma}: Every non-empty collection of finite character has a maximal element with respect to inclusion.
+\item \undline{Hausdorff maximal principle}: Let $P$ be a poset. Every chain in $P$ is contained in a maximal chain in $P$.
+\item \undline{Maximal chain principle}: Every non-empty poset has a maximal chain.
+\end{enumerate}
+\end{theorem}
+The Hausdorff maximal principle is also known as the ``Kuratowski lemma''. The name ``Hausdorff maximal principle'' may be reserved for the specific case where $P$ is a family of sets ordered by inclusion. These formulations are equivalent, by \ref{posetPowerset}.
+\begin{proof}
+We prove equivalence with Zorn's lemma round-robin-style:
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{(\text{Zorn}) \Rightarrow (1)}$] Assume Zorn's lemma. Let $\mathcal{E}$ be a non-empty collection of finite character, which is partially ordered by inclusion. Because $\mathcal{E}$ is inductive, by lemma \ref{finiteCharacterInductive}, each chain has an upper bound and thus $\mathcal{E}$ has a maximal element.
+\item[$\boxed{(1) \Rightarrow (2)}$] Being a chain is a property of finite character. Let $C$ be a chain in $P$. Then the family of all chains in $P$ containing $C$ is a family of finite character and $P$ is contained in the maximal element.
+\item[$\boxed{(2) \Rightarrow (3)}$] Take one element in the poset. The set of this element is a chain.
+\item[$\boxed{(3) \Rightarrow (\text{Zorn})}$] Assume there is a maximal chain and every chain has an upper bound. Any upper bound of a maximal chain is a maximal element.
+\end{itemize}
+\end{proof}
+
+\subsection{Weaker axioms}
+\subsubsection{Countable choice}
+It is in general clear we can make a finite number of choices, by the definition of the existence quantifier (TODO). The axiom of choice says we can make an arbitrary number of choices. The axiom of countable choice is weaker, it says we can make a countable number of choices. Compare also to point 4. of \ref{proposition:choiceEquivalents}.
+\begin{enumerate}[(I)]
+\setcounter{enumi}{6}
+\item[(VII')] \textbf{Axiom of countable choice ($\text{AC}_{\N}$)}: for any set $B$ and binary relation $P\subseteq \N\times B$,
+\[ [\forall n\in \N: \exists y\in B: P(n,y)] \implies [\exists f\in (\N\to B): \forall n \in \N: P(n,f(n))]. \]
+\end{enumerate}
+
+\subsubsection{Dependent choice}
+\begin{definition}
+
+\end{definition}
+
+\begin{proposition}
+Over ZF, the following are equivalent:
+\begin{enumerate}
+\item dependent choice;
+\item the Löwenheim-Skolem theorem;
+\item every pruned tree with $\omega$ levels has a branch;
+\item the Baire category theorem for complete metric spaces;
+\item any partial order such that every well-ordered chain is finite and bounded, must have a maximal element.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO! \url{https://en.wikipedia.org/wiki/Axiom_of_dependent_choice}
+
+\url{https://math.stackexchange.com/questions/1746921/is-the-equivalence-of-the-ascending-chain-condition-and-the-maximum-condition-eq}
+\end{proof}
+
+\begin{proposition} \label{welfoundedACC}
+Assume the axiom of dependent choice and let $P$ be a poset. Then
+\begin{enumerate}
+\item $P$ satisfies the descending chain condition \textup{if and only if} $P$ is well-founded;
+\item $P$ satisfies the ascending chain condition \textup{if and only if} $P$ is converse well-founded.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+A poset $P$ has no infinite chains \textup{if and only if} it satisfies both the ascending and the descending chain condition.
+\end{corollary}
+\begin{proof}
+Clearly if $P$ has no infinite chains, then it satisfies both the ascending and the descending chain condition.
+
+Suppose, towards a contradiction, that $P$ satisfies both the ascending and the descending chain condition and contains an infinite chain $C$. Then $C$ has both a maximal en and a minimal element by the proposition. Because $C$ is totally ordered, these maximal and minimal elements are greatest and least elements. Then $C$ is finite by the ascending and the descending chain conditions.
+\end{proof}
+
 
 
 \chapter{Fixed points}
