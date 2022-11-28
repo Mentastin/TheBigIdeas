@@ -3173,12 +3173,13 @@ This series converges in norm for all $\lambda\in \C$ such that $|\lambda-\lambd
 
 The norm estimate is also given by \ref{operatorNeumannSeries}.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{derivativePseudoresolvent}
 Let $\mathcal{R}:\Lambda \subseteq \C \to \Bounded(X)$ be a pseudoresolvent. Then
 \begin{enumerate}
 \item $\mathcal{R}'(\lambda) = -\mathcal{R}(\lambda)^2$ for all $\lambda\in\Lambda$;
 \item $\mathcal{R}^{(n)}(\lambda) = n!(-1)^n \mathcal{R}(\lambda)^{n+1}$ for all $n\in \N$.
 \end{enumerate}
+In particular the map $\mathcal{R}$ is holomorphic on its domain of definition.
 \end{corollary}
 \begin{proof}
 We calculate
@@ -3266,7 +3267,7 @@ For all $\mu\in \ball(\lambda, \norm{R_T(\lambda)}^{-1})$ we can define $R_T(\mu
 \end{align*}
 \end{proof}
 \begin{corollary}
-The resolvent set $\res(T)$ is open.
+The resolvent set $\res(T)$ is open. The spectrum $\spec(T)$ is closed.
 \end{corollary}
 \begin{corollary}
 Let $T$ be a bounded linear operator on a Banach space. Then
@@ -3284,6 +3285,21 @@ In particular, $\spr(T)\leq \norm{T}$.
 
 For the point spectrum a simpler argument also leads to $\pspec(T)\subset \cball(0, \norm{T})$: let $\lambda$ be an eigenvalue with eigenvector $x$. Then
 \[ |\lambda|\;\norm{x} = \norm{\lambda x} = \norm{Tx} \leq \norm{T}\;\norm{x}. \]
+
+\begin{proposition}
+Let $T$ be a bounded operator on a Banach space. Then $\spec(T)\neq \emptyset$.
+\end{proposition}
+\begin{proof}
+Assume, towards a contradiction, that $\res(T) = \C$. Then the resolvent norm $\lambda\mapsto \norm{R_T(\lambda)}$ is an entire function by \ref{derivativePseudoresolvent}. By \ref{secondNeumannSeries} we have $\lim_{|\lambda|\to\infty}\norm{R_T(\lambda)} = 0$. By Liouville's theorem \ref{liouvilleTheoremAnalysis}, we have that $\norm{R_T(\lambda)}$ is identically zero.
+
+Now take some unit vector $u\in \dom(T)$. Then
+\[ 1 = \norm{u} = \norm{R_T(\lambda)(\lambda\id-T)u} \leq \norm{R_T(\lambda)}\;\norm{(\lambda\id-T)u} = 0. \]
+This is a contradiction.
+\end{proof}
+
+\begin{example}
+Operator with empty spectrum. TODO \url{https://math.stackexchange.com/questions/1344287/example-operator-with-empty-spectrum}.
+\end{example}
 
 \begin{proposition}
 Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
@@ -3305,10 +3321,6 @@ Let $T$ be an injective operator with dense range. Then for all $\lambda\neq 0$
 
 \subsection{Parts of the spectrum}
 
-\begin{example}
-Operator with empty spectrum. TODO \url{https://math.stackexchange.com/questions/1344287/example-operator-with-empty-spectrum}.
-\end{example}
-
 \subsubsection{The point spectrum: eigenvalue and eigenvectors}
 In this section we study invariant subspaces with dimension $1$, i.e.\ subspaces $U= \Span\{v\}$ such that
 \[ Lv = \lambda v. \]
@@ -3324,6 +3336,8 @@ it is indeed a vector space.
 The dimension of $E_\lambda(L)$ is the \udef{geometric multiplicity} of $\lambda$.
 \end{itemize}
 \end{definition}
+If $L$ is a closed operator, then its eigenspaces are closed by \ref{closedOperatorKernelClosed}.
+
 \begin{proposition}
 Let $L\in \Hom_\mathbb{F}(V)$ and $\lambda\in \mathbb{F}$, then
 \[ \text{$\lambda$ is an eigenvalue of $L$} \qquad \iff \qquad \text{$\lambda$ is in the point spectrum $\pspec(L)$.} \]
@@ -5052,6 +5066,22 @@ For normal elements the spectral radius equals the norm.
 A normal operator on a Hilbert space is invertible \textup{if and only if} it is bounded below.
 \end{lemma}
 
+\begin{proposition}
+Let $T$ be a normal operator on a Hilbert space. If $\lambda$ is an isolated point of the spectrum, then $\lambda$ is an eigenvalue.
+\end{proposition}
+\begin{proof}
+Because $\lambda$ is isolated, the function
+\[ f: \spec(T)\to \C: x\mapsto \begin{cases}
+1 & (x=\lambda) \\
+0 & (x\neq \lambda)
+\end{cases} \]
+is continuous.
+
+Set $P = f(T)$ by continuous functional calculus (TODo ref!!). This is a projector by (TODO ref).
+
+For all $t\in \spec(T)$, we have $tf(t) = \lambda f(t)$. By functional calculus, this gives $TP = \lambda P$.
+\end{proof}
+
 \subsection{Symmetric and self-adjoint operators}
 \begin{definition}
 Let $A$ be an operator on a Hilbert space.
@@ -5698,6 +5728,13 @@ In particular this means $\Projections(\mathcal{H})$ is a complete lattice as it
 (1) By \ref{subspaceProjections} $P_M$ is a lower bound of $\{P_i\}_{i\in I}$ in $[0,\id]$. Let $T$ be a lower bound of $\{P_i\}_{i\in I}$ in $[0,\id]$. By \ref{comparisonSelfAdjointProjection} $\im(T)\subseteq K_i$ for all $i\in I$, so $\im(T)\subseteq M$ and thus $T\leq P$ again by \ref{comparisonSelfAdjointProjection}. This means $P$ is the greatest lower bound.
 
 (2) The mapping $T\mapsto \id-T$ keeps $[0,\id]$ invariant and inverts the order. Then $\inf \{\id - P_i\}_{i\in I}$ is a projection due to the previous point and so $\sup \{P_i\}_{i\in I}$ is also a projection. The expression for $N$ is clear from \ref{subspaceProjections}.
+\end{proof}
+
+\begin{proposition}
+Let $P,Q$ be idempotents such that $\norm{P-Q}<1$. Then $\im(P) \cong \im(Q)$.
+\end{proposition}
+\begin{proof}
+Kato p.34 TODO
 \end{proof}
 
 \subsubsection{Sets of pairwise disjoint projections}
