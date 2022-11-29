@@ -48,6 +48,56 @@ $\{e_i\}$ gives Schrödinger and $\{Ue_i\}$ gives Heisenberg.
 
 \subsection{Adiabatic theorem}
 
+\begin{theorem}
+Let $\mathcal{H}$ be a Hilbert space and consider a path $H: \interval{0,1}\to \SelfAdjoints(\mathcal{H}): s\mapsto H(s)$ of self-adjoint operators on the Hilbert space.
+
+Take $\epsilon >0$. If the Hamiltonian of a system is given by $H(\epsilon t)$ for times $t\in \interval{0,\epsilon^{-1}}$. Then the state $\rho$ of the system satisfies
+\[ i\epsilon \od{\rho(s)}{s} = \big[H(s), \rho(s)\big], \]
+where $s = \epsilon t \in \interval{0,1}$.
+
+Assume $\lambda(s)\in \spec\big(H(s)\big)$ is an isolated point of the spectrum for all $s\in \interval{0,1}$. It is an eigenvalue and let $P(s)$ be the orthogonal projector onto the eigenspace. Set $\Delta(s) \defeq \inf d\big(\lambda, \spec(H(s))\setminus\{\lambda(s)\}\big)$.
+
+Assume $\rho(0) \leq P(0)$. Consider the fidelity $F(s) \defeq \Tr\big(P(s)\rho(s)\big)$. Then
+\[ F(1) \geq 1 - \epsilon O\left(\frac{\norm{H'}^2}{\Delta^3} + \frac{\norm{H^{\prime\prime}}}{\Delta^2}\right). \]
+\end{theorem}
+\begin{proof}
+We first write down a differential equation for the fidelity (where $\prime = \od{}{s}$)
+\[ \od{F(s)}{s} = \Tr(P'\rho) + \Tr(P\rho'). \]
+The second term is zero because $P$ commutes with $H$:
+\begin{align*}
+\Tr(P\rho') &= -\epsilon^{-1}i\Tr\Big(P\big[H, \rho\big]\Big) \\
+&= -\epsilon^{-1}i\Tr\Big(P(H\rho - \rho H)\Big) \\
+&= -\epsilon^{-1}i\Tr\Big(PH\rho\Big) +\epsilon^{-1}i\Tr\Big(\rho HP\Big) \\
+&= -\epsilon^{-1}i\Tr\Big(PH\rho\Big) +\epsilon^{-1}i\Tr\Big(\rho PH\Big) \\
+&= -\epsilon^{-1}i\Tr\Big(\big[PH, \rho\big]\Big) = 0,
+\end{align*}
+by \zref{m-traceCommutatorCompactSA}.
+
+Now set $Q(s) = \id - P(s)$ and consider the pseudoinverse $(H-\lambda\id)^+$ (TODO by continuous functional calculus?). Then $(H-\lambda\id)(H-\lambda\id)^+ = Q = (H-\lambda\id)^+(H-\lambda\id)$ by continuous functional calculus (TODO ref). Now we can expand $P' = PP'Q + QP'P$ (by \zref{m-derivativeIdempotentOffDiagonal}), so
+\begin{align*}
+\od{F(s)}{s} &= \Tr(P'\rho) \\
+&= \Tr(PP'Q\rho + QP'P\rho) \\
+&= \Tr\Big(PP'(H-\lambda\id)^+(H-\lambda\id)\rho + (H-\lambda\id)(H-\lambda\id)^+P'P\rho\Big) \\
+&= \Tr\Big(P'(H-\lambda\id)^+(H-\lambda\id)\rho P + (H-\lambda\id)^+P'P\rho (H-\lambda\id)\Big) \\
+&= \Tr\Big(P'(H-\lambda\id)^+\big(H\rho P - \rho \lambda P\big) + (H-\lambda\id)^+P' \big(P\rho H - \lambda P\rho \big)\Big) \\
+&= \Tr\Big(P'(H-\lambda\id)^+\big(H\rho - \rho H\big)P + (H-\lambda\id)^+P'P\big(\rho H - H\rho \big)\Big) \\
+&= \Tr\Big(P'(H-\lambda\id)^+\big[H,\rho\big]P - (H-\lambda\id)^+P'P\big[H, \rho\big]\Big) \\
+&= \Tr\Big(PP'(H-\lambda\id)^+\big[H,\rho\big] - (H-\lambda\id)^+P'P\big[H, \rho\big]\Big) \\
+&= \Tr\Big(P'Q(H-\lambda\id)^+\big[H,\rho\big] - (H-\lambda\id)^+QP'\big[H, \rho\big]\Big) \\
+&= \Tr\Big(P'(H-\lambda\id)^+\big[H,\rho\big] - (H-\lambda\id)^+P'\big[H, \rho\big]\Big) \\
+&= \Tr\Big(\big[P', (H-\lambda\id)^+\big]\cdot\big[H,\rho\big]\Big) \\
+&= i\epsilon\Tr\Big(\big[P', (H-\lambda\id)^+\big]\rho'\Big) 
+\end{align*}
+Integrating this w.r.t. $s$ gives
+\[ F(1) - F(0) = i\epsilon\int_0^1 \Tr\Big(\big[P', (H-\lambda\id)^+\big]\rho'\Big)  \diff{s}. \]
+We fill in that $F(0) = 1$ and perform integration by parts to obtain
+\begin{align*}
+F(1) &= 1 + i\epsilon\int_0^1 \Tr\Big(\big[P', (H-\lambda\id)^+\big]\rho'\Big)  \diff{s} \\
+&= 1 + i\epsilon\Tr\Big(\big[(H-\lambda\id)^+, P'\big]\rho\Big)_0^1 - i\epsilon\int_0^1 \Tr\Big(\big[(H-\lambda\id)^+, P'\big]'\rho\Big)  \diff{s}
+\end{align*}
+\end{proof}
+
+
 \chapter{Approximations}
 \section{Approximating eigenvectors}
 \subsection{Power series expansion of a non-degenerate level}
