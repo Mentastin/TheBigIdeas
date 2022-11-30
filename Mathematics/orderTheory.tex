@@ -3716,8 +3716,166 @@ We may take $E = \{0,1\}$ and $h$ maps partial functions $p$ to zero iff $0\in\i
 \subsection{Recursion invariants}
 TODO recursively defining some function with certain property (+usng this property in recursive definition)
 
+\section{Strings and trees}
+ATM we do not define strings using tuples. We could do $\seq{a,b,c,d} = (a, (b,(c,d)))$. But
+\begin{itemize}
+\item we do not have empty pair or singleton pair, while we should have such sequences;
+\item type / ontological status of $(a, (b,(c,d)))$ not as clear;
+\item should it be $(a, (b,(c,(d))))$?
+\end{itemize}
+
+\subsection{Strings}
+\begin{definition}
+A \udef{string} in an \udef{alphabet} $A$ is a sequence whose domain is a set of the form $\interval[co]{0,n}$ and whose codomain is the set $A$. The elements of $A$ are called \udef{symbols}.
+
+The size $n$ of the domain is the \udef{length} of the sequence, denoted $\len(x)$. Thus $x: \interval[co]{0,\len(x)}\to A$.
 
 
+We identify $n$ with the corresponding von Neumann ordinal to get
+\begin{align*}
+A^{n} &\defeq A^{\interval[co]{0,n}} \\
+A^* &\defeq \bigcup\setbuilder{ A^{n}}{n\in \N}.
+\end{align*}
+We call $A^*$ the \udef{Kleene closure} of $A$.
+
+Let $a_0,\ldots, a_{n-1}\in A$. Then we have the string
+\[ \seq{a_0,\ldots, a_{n-1}} \defeq \{(0,a_0),\ldots, (n-1,a_{n-1})\} \in A^{n}. \]
+
+Let $u\in A^*$ be a string. We take all indices modulo $\len(x)$. In particular negative indices can be used to count back from the end of the string.
+
+\begin{itemize}
+\item We allow the domain of a string to be $\emptyset = \interval[co]{0,0}$. There is a unique string with this domain, the \udef{empty string} $\seq{}$. We have $\seq{}\in A^*$.
+\item Let $u\in A^{n}, v\in A^{m}$ be strings. The \udef{concatenation} of $u$ and $v$ is the string
+\[ u\star v \defeq \seq{u_0,\ldots, u_{n-1},v_0,\ldots, v_{m-1}} \in A^{n+m}. \]
+\item Let $u\in A^{n}$ be a string. The \udef{reverse} string $\reverse{u}$ is defined by
+\[ \reverse{u} \defeq \seq{u_{n-1}, \ldots, u_0}. \]
+\end{itemize}
+We call a subsequence a \udef{substring} if its domain is an interval subset.
+\end{definition}
+Notice that we can view tuples as strings of length two (i.e.\ there is a bijection $A\times A \leftrightarrow A^{2}$ for all sets $A$). Similarly an $n$-tuple can be seen as a string of length $n$. So sometimes we write
+\[ A^* = \bigcup^\infty_{n=0}A^n = A^{<\omega}\]
+where $A^{<\omega}$ is just a notational equivalent.
+
+We can think of $A^*$ as a generalisation of $\N$, with $\seq{}$ instead of $0$ and appending operators
+\[ S_a(u) = u\concat \seq{a} \]
+for all $a\in A$. In this way $\N \cong \{1\}^*$.
+
+
+\begin{lemma} \label{stringPigeonholePrinciple}
+Let $A$ be a finite alphabet and $u\in A^*$. If $\#A < \len(u)$, then $u$ has a repeating character.
+\end{lemma}
+\begin{proof}
+Assume $\#A < \len(u)$. Then we have the inclusion $\interval[co]{0,\#A} \hookrightarrow \interval[co]{0,\len(u)}$ by \ref{naturalNumbersInequalityInclusion}. Also $A =_c \interval[co]{0,\#A}$ by definition.
+
+
+We need to show that $u$ is not an injection. Assume, towards a contradiction, that it is injective. 
+Then $\begin{tikzcd}
+A \ar[r, "{=_c}"] &\interval[co]{0,\#A} \ar[r,hook] & \interval[co]{0,\len(u)} \ar[r, "u"] & A
+\end{tikzcd}$
+is injective. By the pigeonhole principle \ref{pigeonholePrinciple}, this map is bijective. Thus $u$ is surjective, so $\interval[co]{0,\len(u)} =_c A$, which means that $\len(u) = \#A$ by the unicity in \ref{finiteSetNumberOfElements}. This is a contradiction.
+\end{proof}
+
+\begin{theorem}[String recursion theorem] \label{stringRecursion}
+Let $A,E$ be sets, $a\in E$, and $h:E\times A\to E$ some function.
+
+There is exactly one function $f: A^*\to E$ which satisfies
+\[ \begin{cases}
+f(\seq{}) = a, \\
+f(u\concat \seq{x}) = h(f(u), x) & (u\in A^*, x\in A).
+\end{cases} \]
+\end{theorem}
+\begin{proof}
+Define a function $\phi: \N \times A^*\to E$ recursively such that it satisfies
+\begin{align*}
+\phi(0,u) &= a \\
+\phi(n+1,u) &= h(\phi(n,u), u(n))
+\end{align*}
+and set $f(u) = \phi(\len(u), u)$. Proving that $f$ satisfies the second equality and the uniqueness of $f$ goes by induction on $\len(u)$.
+\end{proof}
+Like before, a version of the theorem can also be stated for recursion with parameters.
+
+\subsubsection{Ordering string}
+\begin{definition}
+Let $\sSet{A,\leq}$ be a linearly ordered alphabet. Then
+\begin{itemize}
+\item the \udef{lexicographic order} $<_l$ on $A^*$ is defined by
+\[ u <_l v \qquad\iff\qquad u_k < v_k \;\text{where $k = \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}$}. \]
+\item the \udef{shortlex order} or \udef{strong order} $<_{s}$ on $A^*$ is defined by
+\[ u <_l v \qquad\iff\qquad \begin{cases}
+\len(u) < \len(v) & \text{or} \\
+\big(\len(u) = \len(v)\big) \land (u <_l v).
+\end{cases}\]
+\end{itemize}
+\end{definition}
+
+\subsubsection{Slices and substrings}
+\begin{definition}
+Let $A$ be an alphabet, $u$ a string in $A$ and $S$ some set. Then the $S$-\udef{slice} of $u$ is the string
+\[ u[S] \defeq \begin{tikzcd}
+\interval[co]{0,\#\big(S\cap\dom(u)\big)} \ar[r, "\cong"] & S\cap\dom(u) \ar[r, "u|_S"] & A,
+\end{tikzcd} \]
+where $\interval[co]{0,\#\big(S\cap\dom(u)\big)} \cong S\cap\dom(u)$ is the unique order similarity of \ref{WOSetsUniqueSimilarity} (where $S\cap\dom(u)$ has the subspace order).
+\end{definition}
+
+\begin{lemma} \label{initialSliceRestriction}
+Let $A$ be an alphabet, $u\in A^*$ and $n\in \N$. Then
+\[ u[0:n] = u|_{(0:n)}. \]
+\end{lemma}
+\begin{proof}
+It is enough to note that
+\begin{align*}
+\dom(u[0:n]) &= \interval[co]{0,\#\big((0:n)\cap \interval[co]{0:\len(u)}\big)} \\
+&= \interval[co]{0,\min(n,\len(u))} \\
+&= \interval[co]{0,n}\cap \interval[co]{0,\len(u)} = (0:n)\cap \dom(u).
+\end{align*}
+\end{proof}
+
+\subsection{Trees}
+\begin{definition}
+Let $A$ be an alphabet.
+
+An \udef{initial slice} operation is a function $(-)[0:n]: A^*\to A^*$ for some $n\in\N$.
+
+A \udef{tree} $T$ on $A$ is a set of strings in $A$ (i.e.\ $T\subseteq A^*$) that is closed under all initial slice operations.
+\end{definition}
+In other words, for any string in a tree $T$, all initial segments are also in $T$.
+
+\begin{lemma}
+Let $T$ be a non-empty tree on a set $A$. Then $\seq{}\in T$.
+\end{lemma}
+\begin{proof}
+As $T$ is non-empty, we can find $u\in T$. Now $u[0:0] = \seq{}\in T$ by closure under initial slice operations.
+\end{proof}
+
+\begin{definition}
+Let $T$ be a tree on an alphabet $A$. We define the \udef{tree order} $\sqsubseteq$ on $T$ by
+\[ u \sqsubseteq v \qquad\defequiv\qquad \exists n\in \N: \; u = v[0:n]. \]
+We call
+\begin{itemize}
+\item an infinite chain in $\sSet{T,\sqsubseteq}$ a \udef{branch} of $T$;
+\item the set of all branches of $T$ the \udef{body} of $T$, denoted $[T]$;
+\item elements of $T$ \udef{nodes} of the tree;
+\item a maximal element of $T$ a \udef{terminal node};
+\item a tree without terminal nodes \udef{pruned}. 
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $T$ be a tree on an alphabet $A$. Then
+\begin{enumerate}
+\item $\sqsubseteq$ is a partial order on $T$;
+\item $\sSet{T,\sqsubseteq}$ is well-founded;
+\item $\sSet{T,\sqsubseteq}$ is converse well-founded \textup{if and only if} $[T] = \emptyset$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We show that $\sqsubseteq$ is
+\begin{itemize}
+\item \emph{transitive}: let $u \sqsubseteq v \sqsubseteq w$. Then $u = v[0:m]$ and $v = w[0:n]$. TODO \ref{initialSliceRestriction}.
+\end{itemize}
+\end{proof}
+
+\subsubsection{Tree topologies}
 
 \section{Choice}
 TODO: Ultrafilter lemma, Szpilrajn extension theorem
@@ -3850,20 +4008,28 @@ It is in general clear we can make a finite number of choices, by the definition
 \[ \forall n\in \N: \quad a_n\mathrel{R}a_{n+1}. \]
 \end{enumerate}
 
+\begin{definition}
+We call such a sequence $\seq{a_n}_{n\in \N}$ a \udef{choice sequence}.
+\end{definition}
+
 \begin{lemma}
 Over NBG, the following are equivalent:
 \begin{enumerate}
 \item the axiom of dependent choice;
-\item for any left-total binary relation $R$ on a set $A$ and $a\in A$, there exists a sequence $\seq{a_n}_{n\in \N}$ in $A$ such that $a_0 = a$ and
-\[ \forall n\in \N: \quad a_n\mathrel{R}a_{n+1}. \]
+\item for any left-total binary relation $R$ on a set $A$ and $a\in A$, there exists a choice sequence starting at $a$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-$\boxed{(1)\Rightarrow (2)}$ Recursively define $f: \N\to \powerset(A)$ by $f(0) = aR$ and
-\[ f(n+1) = \bigcup_{x\in f(n)}xR. \]
-Then set $B = \bigcup_{n\in\N}f(n)$. We have that $R|^B_B$ is left-total on $B$. By the axiom of dependent choice we can find some sequence $\seq{b_n}_{n\in \N}$ in $B$.
+$\boxed{(1)\Rightarrow (2)}$ Take $a\in A$. Define $B = aR^+$, i.e.\ the image under the transitive closure.
 
-$\boxed{(2)\Rightarrow (1)}$
+We have that $R|^B_B$ is left-total on $B$. By the axiom of dependent choice we can find some sequence $\seq{b_n}_{n\in \N}$ in $B$.
+
+
+Recursively define $f: \N\to \powerset(A)$ by $f(0) = aR$ and
+\[ f(n+1) = \bigcup_{x\in f(n)}xR. \]
+Then set $B = \bigcup_{n\in\N}f(n)$. We have that $R|^B_B$ is left-total on $B$. By the axiom of dependent choice we can find some sequence $\seq{b_n}_{n\in \N}$ in $B$. Then there exists $n\in \N$ such that $b_0\in f(n)$.
+
+$\boxed{(2)\Rightarrow (1)}$ Let $A$ be a non-empty set. Then there exists $a\in A$. By assumption there exists a choice sequence in $A$ starting at $a$, so there exists a choice sequence in $A$.
 \end{proof}
 
 \begin{proposition}
