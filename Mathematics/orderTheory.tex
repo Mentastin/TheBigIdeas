@@ -3860,19 +3860,54 @@ We call
 \end{itemize}
 \end{definition}
 
+\begin{lemma} \label{treeNodeInequalities}
+Let $A$ be an alphabet and $u,v\in A^*$. Then
+\begin{enumerate}
+\item $u \sqsubseteq v \iff u = v[0:\len(u)]$;
+\item $u \sqsubseteq v \implies \len(u) \leq \len(v)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have that $u \sqsubseteq v$ is equivalent to $\exists n\in \N: u = v[0:n]$. By \ref{initialSliceRestriction}, we have
+\[ v[0:n] = v|_{(0:n)} = v|_{(0: \min\{n, \len(v)\})} = v[0: \min\{n, \len(v)\}]. \]
+
+Then $\dom(u) = \dom(v)\cap (0:n) = \interval[co]{0, \min\{n, \len(v)\}}$, so $\len(u) = \min\{n, \len(v)\}$ and $v[0:n] = v[0:\len(u)]$.
+
+(2) We have $u = v[0:\len(u)]$. Then
+\begin{align*}
+\dom(u) &= \dom\big(v|_{(0:\len(u))}\big) = \dom(v)\cap \big(0:\len(u)\big) \\
+&= \interval[co]{0,\len(v)} \cap \interval[co]{0, \len(u)} = \interval[co]{0, \min\{\len(v), \len(u)\}},
+\end{align*}
+so $\len(u) = \min\{\len(v), \len(u)\}$. This implies $\len(u) \leq \len(v)$.
+\end{proof}
+
 \begin{lemma}
 Let $T$ be a tree on an alphabet $A$. Then
 \begin{enumerate}
 \item $\sqsubseteq$ is a partial order on $T$;
 \item $\sSet{T,\sqsubseteq}$ is well-founded;
-\item $\sSet{T,\sqsubseteq}$ is converse well-founded \textup{if and only if} $[T] = \emptyset$.
+\item if $\sSet{T,\sqsubseteq}$ is converse well-founded, then $[T] = \emptyset$.
 \end{enumerate}
 \end{lemma}
+The converse of (3) requires dependent choice.
 \begin{proof}
 (1) We show that $\sqsubseteq$ is
 \begin{itemize}
-\item \emph{transitive}: let $u \sqsubseteq v \sqsubseteq w$. Then $u = v[0:m]$ and $v = w[0:n]$. TODO \ref{initialSliceRestriction}.
+\item \emph{transitive}: let $u \sqsubseteq v \sqsubseteq w$. Then $u = v[0:m]$ and $v = w[0:n]$, so, by \ref{initialSliceRestriction},
+\begin{align*}
+u &= w[0:n][0:m] = \big(w[0:n]\big)|_{(0:m)} = \big(w|_{(0:n)}\big)|_{(0:m)} \\
+&= w|_{(0:n)\cap(0:m)} = w|_{(0:\min\{m,n\})} = w[0:\min\{m,n\}].
+\end{align*}
+Thus $u \sqsubseteq w$.
+\item \emph{reflexive}: $u = u[(0:\len(u))]$, so $u \sqsubseteq u$.
+\item \emph{antisymmetric}: assume $u\sqsubseteq v$ and $v\sqsubseteq u$. Then $\len(u) = \len(v)$ by \ref{treeNodeInequalities}. This also gives $u = v[0: \len(u)] = v[0:\len(v)] = v|_{\dom(v)} = v$.
 \end{itemize}
+
+(2) Take a non-empty set $S\subseteq T$. We need to show that $S$ has a minimal element. Pick some $u\in S$ and consider the finite set $S' \defeq \setbuilder{u[0:n]}{n\leq \len(u)} \cap S$. Now $S'$ is non-empty and thus contains a minimal element $v$ by \ref{minimalMaximalFiniteSet}. We just need to show that any minimal element of $S'$ is also a minimal element of $S$. 
+
+Assume towards a contradiction, that there exists $w\in S$ such that $w\sqsubsetneq v$. Then $w\in \setbuilder{u[0:n]}{n\leq \len(u)}$, so $w\in S'$. But this would contradict the minimality of $v$ in $S'$.
+
+(3) Assume there exists a branch $B\in [T]$. Then clearly $B$ does not have a maximal element, so $\sSet{T,\sqsubseteq}$ is not converse well-founded.
 \end{proof}
 
 \subsubsection{Tree topologies}
