@@ -3832,28 +3832,14 @@ It is enough to note that
 
 \subsection{Trees}
 \begin{definition}
-Let $A$ be an alphabet.
-
-An \udef{initial slice} operation is a function $(-)[0:n]: A^*\to A^*$ for some $n\in\N$.
-
-A \udef{tree} $T$ on $A$ is a set of strings in $A$ (i.e.\ $T\subseteq A^*$) that is closed under all initial slice operations.
-\end{definition}
-In other words, for any string in a tree $T$, all initial segments are also in $T$.
-
-\begin{lemma}
-Let $T$ be a non-empty tree on a set $A$. Then $\seq{}\in T$.
-\end{lemma}
-\begin{proof}
-As $T$ is non-empty, we can find $u\in T$. Now $u[0:0] = \seq{}\in T$ by closure under initial slice operations.
-\end{proof}
-
-\begin{definition}
-Let $T$ be a tree on an alphabet $A$. We define the \udef{tree order} $\sqsubseteq$ on $T$ by
+Let $A$ be an alphabet. We define the \udef{tree order} $\sqsubseteq$ on $A^*$ by
 \[ u \sqsubseteq v \qquad\defequiv\qquad \exists n\in \N: \; u = v[0:n]. \]
+A \udef{tree} is a downwards closed subset of $\sSet{A^*, \sqsubseteq}$.
+
 We call
 \begin{itemize}
-\item an infinite chain in $\sSet{T,\sqsubseteq}$ a \udef{branch} of $T$;
-\item the set of all branches of $T$ the \udef{body} of $T$, denoted $[T]$;
+\item a connex subtree of $T$ a \udef{branch} of $T$;
+\item the set of all infinite branches of $T$ the \udef{body} of $T$, denoted $[T]$;
 \item elements of $T$ \udef{nodes} of the tree;
 \item a maximal element of $T$ a \udef{terminal node};
 \item a tree without terminal nodes \udef{pruned}. 
@@ -3882,11 +3868,19 @@ so $\len(u) = \min\{\len(v), \len(u)\}$. This implies $\len(u) \leq \len(v)$.
 \end{proof}
 
 \begin{lemma}
+Let $T$ be a non-empty tree on a set $A$. Then $\seq{}\in T$.
+\end{lemma}
+\begin{proof}
+As $T$ is non-empty, we can find $u\in T$. Now $\seq{} = u[0:0] = u[0:\len(\seq{})]$, so $\seq{}\sqsubseteq u$ by \ref{treeNodeInequalities}. Thus $\seq{}\in T$ by downwards closure.
+\end{proof}
+
+\begin{lemma} \label{treeOrderingLemma}
 Let $T$ be a tree on an alphabet $A$. Then
 \begin{enumerate}
 \item $\sqsubseteq$ is a partial order on $T$;
 \item $\sSet{T,\sqsubseteq}$ is well-founded;
-\item if $\sSet{T,\sqsubseteq}$ is converse well-founded, then $[T] = \emptyset$.
+\item if $\sSet{T,\sqsubseteq}$ is converse well-founded, then $[T] = \emptyset$;
+\item $\downset\{u\}$ is a (finite) branch for all $u\in T$.
 \end{enumerate}
 \end{lemma}
 The converse of (3) requires dependent choice.
@@ -3907,7 +3901,28 @@ Thus $u \sqsubseteq w$.
 
 Assume towards a contradiction, that there exists $w\in S$ such that $w\sqsubsetneq v$. Then $w\in \setbuilder{u[0:n]}{n\leq \len(u)}$, so $w\in S'$. But this would contradict the minimality of $v$ in $S'$.
 
-(3) Assume there exists a branch $B\in [T]$. Then clearly $B$ does not have a maximal element, so $\sSet{T,\sqsubseteq}$ is not converse well-founded.
+(3) Assume there exists an infinite branch $B\in [T]$. Then clearly $B$ does not have a maximal element, so $\sSet{T,\sqsubseteq}$ is not converse well-founded.
+
+(4) As $\downset\{u\}$ is downwards closed by definition, we just need to show connexity. Take $v,w\in \downset\{u\}$. Then $v = u[0:n]$ and $w = u[0:m]$. We have either $\interval[co]{0,n} \subseteq \interval[co]{0,m}$ or $\interval[co]{0,n} \supseteq \interval[co]{0,m}$. In the first case $v \sqsubseteq w$ and in the second $w\sqsubseteq v$.
+\end{proof}
+
+\subsubsection{The tree of a homogeneous binary relation}
+\begin{definition}
+Let $\sSet{A,R}$ be a relational structure. The tree
+\[ T_R \defeq \setbuilder{u\in A^*}{\forall n\in (0:\len(u)): \; u_nRu_{n+1}} \]
+is the \udef{associated tree} of $\sSet{A,R}$.
+\end{definition}
+
+\begin{lemma} \label{relationalTreeLemma}
+Let $\sSet{A,R}$ be a relational structure with associated tree $T_R$. Then
+\begin{enumerate}
+\item $R$ is left-total \textup{if and only if} $T_R$ is pruned.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) First let $R$ be left-total. For any node $u\in T_R$, we can find some $x\in A$ such that $u_{-1}Rx$, so $u\concat\seq{x}\in T-R$. Then $u\sqsubsetneq u\concat\seq{x}$, which means that $u$ is not terminal.
+
+Now assume $T_R$ is pruned. Then for all $x\in A$ there exists $u \sqsupseteq \seq{x}$, so $\seq{x}$ is not terminal. We have $xRu_1$.
 \end{proof}
 
 \subsubsection{Tree topologies}
@@ -4047,7 +4062,7 @@ It is in general clear we can make a finite number of choices, by the definition
 We call such a sequence $\seq{a_n}_{n\in \N}$ a \udef{choice sequence}.
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{freedomFirstElementChoiceSequence}
 Over NBG, the following are equivalent:
 \begin{enumerate}
 \item the axiom of dependent choice;
@@ -4057,12 +4072,9 @@ Over NBG, the following are equivalent:
 \begin{proof}
 $\boxed{(1)\Rightarrow (2)}$ Take $a\in A$. Define $B = aR^+$, i.e.\ the image under the transitive closure.
 
-We have that $R|^B_B$ is left-total on $B$. By the axiom of dependent choice we can find some sequence $\seq{b_n}_{n\in \N}$ in $B$.
+We have that $R|^B_B$ is left-total on $B$. By the axiom of dependent choice we can find some sequence $\seq{b_n}_{n\in \N}$ in $B$. Now $b_0\in aR^+$, so there exists some finite sequence $u\seq{a, a_1, \ldots, a_n, b_0}$ such that $aRa_1$,  $a_{j}Ra_{j+1}$ for all $j\in 1:n$ and $a_nRb_0$.
 
-
-Recursively define $f: \N\to \powerset(A)$ by $f(0) = aR$ and
-\[ f(n+1) = \bigcup_{x\in f(n)}xR. \]
-Then set $B = \bigcup_{n\in\N}f(n)$. We have that $R|^B_B$ is left-total on $B$. By the axiom of dependent choice we can find some sequence $\seq{b_n}_{n\in \N}$ in $B$. Then there exists $n\in \N$ such that $b_0\in f(n)$.
+Now $u\concat \seq{b_n}_{n\in \N}$ is a choice sequence starting at $a$.
 
 $\boxed{(2)\Rightarrow (1)}$ Let $A$ be a non-empty set. Then there exists $a\in A$. By assumption there exists a choice sequence in $A$ starting at $a$, so there exists a choice sequence in $A$.
 \end{proof}
@@ -4071,17 +4083,26 @@ $\boxed{(2)\Rightarrow (1)}$ Let $A$ be a non-empty set. Then there exists $a\in
 Over NBG, the following are equivalent:
 \begin{enumerate}
 \item dependent choice;
+\item every non-empty pruned tree has an infinite branch;
+\item any partial order such that every well-ordered chain is finite and bounded, must have a maximal element;
 \item the Löwenheim-Skolem theorem;
-\item every pruned tree with $\omega$ levels has a branch;
-\item the Baire category theorem for complete metric spaces;
-\item any partial order such that every well-ordered chain is finite and bounded, must have a maximal element.
+\item the Baire category theorem for complete metric spaces.
 \end{enumerate}
 \end{proposition}
 TODO! \url{https://en.wikipedia.org/wiki/Axiom_of_dependent_choice}
 
 \url{https://math.stackexchange.com/questions/1746921/is-the-equivalence-of-the-ascending-chain-condition-and-the-maximum-condition-eq}
 \begin{proof}
-$(1) \Rightarrow (3)$
+$(1) \Rightarrow (2)$ Let $T$ be some non-empty pruned tree and consider the following relation on $T$:
+\[ u \prec v \qquad\iff\qquad u = v[0:\len(v)-1]. \]
+As $T$ has no terminal nodes, the relation $\prec$ is left-total by \ref{relationalTreeLemma}.
+By DC, there exists a choice sequence $\seq{x_n}_{n\in \N}$ in $\sSet{T,\prec}$. We can take it to start at $\seq{}$ by \ref{freedomFirstElementChoiceSequence}. The choice sequence is injective by irreflexivity, which implies that $S \defeq \im\seq{x_n}$ is infinite.
+
+By transitivity we have that $m\leq n$ implies $x_m \sqsubseteq x_n$. This shows connexity.
+
+We also have that $x_n[0:m] = x_m$ for $m\leq n$. This shows that $S$ is a subtree.
+
+$(2) \Rightarrow (1)$ Let $R$ be a left-total binary relation on a non-empty set $A$. Construct the tree $T_R$ associated to the binary relation. It is pruned by \ref{relationalTreeLemma} and thus $T_R$ has an infinite branch. The infinite branch is well-founded (because $T_R$ is well-founded, \ref{treeOrderingLemma}) and thus a well-ordering, as it is connex \ref{wellOrderedCondition}. As the branch is infinite, we can find an initial segment which is similar to $\N$. Call this similarity $f: \N \to T_R$. Consider the function $n\mapsto f(n+1)_{n}$. This is a choice sequence.
 \end{proof}
 
 \begin{proposition} \label{welfoundedACC}
