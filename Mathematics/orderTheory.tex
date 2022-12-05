@@ -156,17 +156,17 @@ The adjectives ``strict'' and ``weak'' can be added to any of these cases to ide
 \end{definition}
 The concept of order isomorphism (or \udef{similarity}) is similarly inherited. Let $U,V$ be ordered sets. We write $U =_o V$ if $U$ and $V$ are order isomorphic and $U \neq_o V$ if not.
 
-\begin{lemma} \label{orderReflectionIsInjective} \label{strictOrderPreservationIsInjective}
-Let $P,Q$ be posets and $f: P\to Q$. The following are sufficient conditions for $f$ to be injective:
+\begin{lemma} \label{antisymmetricOrderPreservationInjective}
+Let $P,Q$ be antisymmetric ordered sets and $f: P\to Q$. The following are sufficient conditions for $f$ to be injective:
 \begin{enumerate}
 \item $f$ is order-reflecting;
-\item $f$ is strictly order-preserving and $P$ is totally ordered.
+\item $f$ is order-preserving, $P$ is semi-connex and $Q$ irreflexive.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 (1) If $f(x) = f(y)$, then $x\preceq y$ and $y\preceq x$, so $x=y$ by anti-symmetry.
 
-(2) Let $f$ be the strict order-preserving function and $x,y\in P$. Assume $f(x)=f(y)$. Assume, towards a contradiction, that $x\neq y$, then either (by totality) $x< y$ and $f(x) < f(y)$ or $y < x$ and $f(y)<f(x)$. Both cases contradict $f(x)=f(y)$.
+(2) Let $f$ be the strict order-preserving function and $x,y\in P$. Assume $f(x)=f(y)$. Assume, towards a contradiction, that $x\neq y$, then either (by semi-connexity) $x<y$ and $f(x) < f(y)$ or $y < x$ and $f(y)<f(x)$. Both cases contradict $f(x)=f(y)$ by irreflexivity.
 \end{proof}
 
 \begin{lemma}
@@ -185,7 +185,7 @@ Let $f: P\to Q$ be a function between posets.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-Use \ref{orderReflectionIsInjective}.
+Use \ref{antisymmetricOrderPreservationInjective}.
 \end{proof}
 
 The converse does not hold in general if $P$ is a poset because a strict order embedding between posets is not necessarily injective. A counterexample is
@@ -3534,33 +3534,6 @@ In particular, if $W\subseteq U$ is a subset, then $\leq_W$ is the left- and rig
 \end{lemma}
 TODO: initial ordering??
 
-\subsection{Chain conditions}
-\begin{definition}
-An ordered set $\sSet{X, \Yleft}$
-\begin{itemize}
-\item satisfies the \udef{ascending chain condition} (ACC) if each monotone sequence in $X$ has a tail $T$ such that $\forall x,y\in T: x\sim_\Yleft y$;
-\item satisfies the \udef{descending chain condition} (DCC) if each antitone sequence in $X$ has a tail $T$ such that $\forall x,y\in T: x\sim_\Yleft y$.
-\end{itemize}
-\end{definition}
-
-
-
-\begin{proposition}
-Let $\sSet{X,\Yleft}$ be an ordered set.
-\begin{enumerate}
-\item If $\Yleft^\transp$ is well-founded, then $X$ satisfies the ascending chain condition.
-\item If $\Yleft$ is well-founded, then $X$ satisfies the descending chain condition.
-\end{enumerate}
-\end{proposition}
-The converse of these statements is equivalent to the axiom of dependent choice. TODO ref.
-\begin{proof}
-We prove (2). Point (1) follows by duality.
-
-Assume $X$ well-founded and take some antitone sequence $\seq{x_n}_{n\in \N}$. Then $\im(\seq{x_n})$ is a chain by \ref{connexityImage} and thus well-ordered by \ref{wellOrderingSubsets} and \ref{wellOrderedCondition}. We can take $m\in \min\big(\im(\seq{x_n})\big)$, which is not empty by well-foundedness.
-
-Now $m = x_k$ for some $k\in \N$. For all $y,z$ in the tail $\setbuilder{x_n}{n\geq k}$, we have $y\sim_\Yleft m$ and $z\sim_\Yleft m$. By transitivity, $y\sim_\Yleft z$.
-\end{proof}
-
 
 
 \subsection{Succession in well-ordered sets}
@@ -3880,10 +3853,12 @@ Let $T$ be a tree on an alphabet $A$. Then
 \item $\sqsubseteq$ is a partial order on $T$;
 \item $\sSet{T,\sqsubseteq}$ is well-founded;
 \item if $\sSet{T,\sqsubseteq}$ is converse well-founded, then $[T] = \emptyset$;
-\item $\downset\{u\}$ is a (finite) branch for all $u\in T$.
+\item if $C\subseteq T$ is a chain, then $\downset C$ is a branch.
 \end{enumerate}
 \end{lemma}
-The converse of (3) requires dependent choice.
+The converse of (3) requires dependent choice, see \ref{ZornEquivalentsDC}.
+
+Note that (4) implies that if $v\sqsubseteq u$ and $w\sqsubseteq u$, then $v$ and $w$ are comparable.
 \begin{proof}
 (1) We show that $\sqsubseteq$ is
 \begin{itemize}
@@ -3904,6 +3879,10 @@ Assume towards a contradiction, that there exists $w\in S$ such that $w\sqsubset
 (3) Assume there exists an infinite branch $B\in [T]$. Then clearly $B$ does not have a maximal element, so $\sSet{T,\sqsubseteq}$ is not converse well-founded.
 
 (4) As $\downset\{u\}$ is downwards closed by definition, we just need to show connexity. Take $v,w\in \downset\{u\}$. Then $v = u[0:n]$ and $w = u[0:m]$. We have either $\interval[co]{0,n} \subseteq \interval[co]{0,m}$ or $\interval[co]{0,n} \supseteq \interval[co]{0,m}$. In the first case $v \sqsubseteq w$ and in the second $w\sqsubseteq v$.
+
+(4) As $\downset C$ is downwards closed by definition, we just need to show connexity. By transitivity and reflexivity, we have $\downset C = {\sqsubseteq}C$. Take $v,w\in \downset C$. Then there exist $u_v, u_w\in C$ such that $v \sqsubseteq u_v$ and $w \sqsubseteq u_w$. By connexity of $C$, we have either $u_v \sqsubseteq u_w$ or $u_w\sqsubseteq u_v$. Set $u = u_w$ in the first case and $u=u_v$ in the second. Thus we have $v\sqsubseteq u$ and $w\sqsubseteq u$ by transitivity.
+
+Now $v = u[0:n]$ and $w = u[0:m]$ for some $m,n\in\N$. We have either $\interval[co]{0,n} \subseteq \interval[co]{0,m}$ or $\interval[co]{0,n} \supseteq \interval[co]{0,m}$. In the first case $v \sqsubseteq w$ and in the second $w\sqsubseteq v$.
 \end{proof}
 
 \subsubsection{The tree of a homogeneous binary relation}
@@ -3914,15 +3893,74 @@ is the \udef{associated tree} of $\sSet{A,R}$.
 \end{definition}
 
 \begin{lemma} \label{relationalTreeLemma}
-Let $\sSet{A,R}$ be a relational structure with associated tree $T_R$. Then
+Let $\sSet{A,R}$ be a relational structure with associated tree $T_R$. Take $u\in T_R$. Then
 \begin{enumerate}
+\item $u$ is terminal \textup{if and only if} $u_{-1}R = \emptyset$;
 \item $R$ is left-total \textup{if and only if} $T_R$ is pruned.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) First let $R$ be left-total. For any node $u\in T_R$, we can find some $x\in A$ such that $u_{-1}Rx$, so $u\concat\seq{x}\in T-R$. Then $u\sqsubsetneq u\concat\seq{x}$, which means that $u$ is not terminal.
+(1) If $u_{-1}R = \emptyset$, then there does not exist a string of length $\len(u)+1$ with $u$ as initial segment.
 
-Now assume $T_R$ is pruned. Then for all $x\in A$ there exists $u \sqsupseteq \seq{x}$, so $\seq{x}$ is not terminal. We have $xRu_1$.
+If $u_{-1}R \neq \emptyset$, then we can take $x\in u_{-1}R$, so that $u \sqsubseteq u\concat\seq{x} \in T_R$. This means that $u$ is not terminal.
+
+(2) Follows from (1).
+\end{proof}
+
+\begin{lemma} \label{maximalElementNotLeftTotal}
+Let $\sSet{A,R}$ be an irreflexive and antisymmetric relational structure. Then $A$ contains a maximal element \textup{if and only if} $R$ is not left total.
+\end{lemma}
+\begin{proof}
+Irreflexivity and antisymmetry imply $xR\cap Rx = \emptyset$ for all $x\in A$. 
+\begin{align*}
+\exists x\in A: \; \text{$x$ is maximal} \quad&\iff\quad \exists x \in A: \; xR\subseteq Rx \\
+&\iff\quad \exists x\in A: \; xR = xR\cap Rx = \emptyset \\
+&\iff\quad \text{$R$ is not left total}.
+\end{align*}
+\end{proof}
+
+\begin{lemma} \label{transitiveClosureSequenceLemma}
+Let $\sSet{A,R}$ be a relational structure with associated tree $T_R$. Let $a,b\in A$. Then $aR^+b$ \textup{if and only if} exists $u\in T_R$ such that $u_0 = a$ and $u_{-1} = b$.
+\end{lemma}
+\begin{proof}
+TODO!
+\end{proof}
+
+\subsubsection{Chain conditions}
+\begin{definition}
+Let $\sSet{A, R}$ be a relational structure. Then
+\begin{itemize}
+\item satisfies the \udef{ascending chain condition} (ACC) if $[T_R] = \emptyset$.
+\item satisfies the \udef{descending chain condition} (DCC) if $[T_{R^\transp}] = \emptyset$.
+\end{itemize}
+\end{definition}
+
+
+
+\begin{proposition}
+Let $\sSet{A, R}$ be a relational structure. Then
+\begin{enumerate}
+\item if $T_R$ is converse well-founded, then $R$ is converse well-founded;
+\item if $R$ is irreflexive and antisymmetric, then the converse also holds.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume that $T_R$ is converse well-founded. Consider a subset $X\subseteq A$ and the restricted associated tree $T' = T_R|_{X^*}$. Now $T'$ has a maximal element $u$ by converse-well-foundedness of $T_R$. Then $u_{-1}R\cap X \neq \emptyset$ and thus $u_{-1}$ must be maximal in $X$ by \ref{maximalMinimalConditions}.
+
+(2) Assume $R$ is irreflexive, antisymmetric and converse well-founded. Then for any $X\subseteq A$, $R|_X^{X}$ is not left-total by \ref{maximalElementNotLeftTotal}. Take some subset $S\subseteq T_R$ and consider the set
+\[ E \defeq \setbuilder{u_{-1}}{u\in S}. \]
+Now $R|_E^E$ is not left total. So we can find $x\in E$ such that $xR|_E = \emptyset$. Thus we can find $u\in S$ such that $u_{-1}R|_E = \emptyset$, which means that $u$ is maximal in $S$.
+\end{proof}
+\begin{corollary} \label{welfoundedACC}
+Let $\sSet{A, R}$ be a antisymmetric and irreflexive relational structure. Then
+\begin{enumerate}
+\item if $R$ is converse well-founded, then $R$ satisfies ACC;
+\item if $R$ is well-founded, then $R$ satisfies DCC.
+\end{enumerate}
+The converses hold under DC. See \ref{ZornEquivalentsDC}.
+\end{corollary}
+\begin{proof}
+By \ref{treeOrderingLemma}.
 \end{proof}
 
 \subsubsection{Tree topologies}
@@ -4062,6 +4100,13 @@ It is in general clear we can make a finite number of choices, by the definition
 We call such a sequence $\seq{a_n}_{n\in \N}$ a \udef{choice sequence}.
 \end{definition}
 
+\begin{lemma} \label{choiceSequenceMonotone}
+Let $\sSet{A, R}$ be a relational structure. Every choice sequence in $R$ is a monotone function in $\sSet{\N, <} \to \sSet{A, R^+}$.
+\end{lemma}
+\begin{proof}
+TODO \ref{transitiveClosureSequenceLemma}.
+\end{proof}
+
 \begin{lemma} \label{freedomFirstElementChoiceSequence}
 Over NBG, the following are equivalent:
 \begin{enumerate}
@@ -4079,50 +4124,43 @@ Now $u\concat \seq{b_n}_{n\in \N}$ is a choice sequence starting at $a$.
 $\boxed{(2)\Rightarrow (1)}$ Let $A$ be a non-empty set. Then there exists $a\in A$. By assumption there exists a choice sequence in $A$ starting at $a$, so there exists a choice sequence in $A$.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{ZornEquivalentsDC}
 Over NBG, the following are equivalent:
 \begin{enumerate}
 \item dependent choice;
+\item if every chain in a non-empty poset $P$ is finite, then $P$ contains a maximal element;
 \item every non-empty pruned tree has an infinite branch;
-\item any partial order such that every well-ordered chain is finite and bounded, must have a maximal element;
+\item for every tree $T$: if $[T] = \emptyset$, then $\sSet{T,\sqsubseteq}$ is converse well-founded.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ We prove the contrapositive: if $\sSet{P, \leq}$ is a poset without a maximal element, then $P$ contains an infinite chain.
+
+Assume DC and that $P$ has no maximal element. Define ${<} \defeq {\leq} \setminus\id_P$, which is antisymmetric and irreflexive. Then $<$ is left total by \ref{maximalElementNotLeftTotal}, and we can find a choice sequence by DC. The choice sequence is injective by \ref{choiceSequenceMonotone} and \ref{antisymmetricOrderPreservationInjective}. Thus the image of the choice sequence is an infinite chain.
+
+$(2) \Rightarrow (3)$ Let $T$ be a non-empty pruned tree. Then (2) gives that $T$ contains an infinite chain $C$ by modus tollens. Then closure of $C$ under $\sqsubseteq$ is an infinite branch by \ref{treeOrderingLemma}.
+
+$(3) \Rightarrow (1)$ Let $R$ be a left-total binary relation on a non-empty set $A$. Construct the tree $T_R$ associated to the binary relation. It is pruned by \ref{relationalTreeLemma} and thus $T_R$ has an infinite branch. The infinite branch is well-founded (because $T_R$ is well-founded, \ref{treeOrderingLemma}) and thus a well-ordering, as it is connex \ref{wellOrderedCondition}. As the branch is infinite, we can find an initial segment which is similar to $\N$. Call this similarity $f: \N \to T_R$. Consider the function $n\mapsto f(n+1)_{n}$. This is a choice sequence.
+
+$(3) \Rightarrow (4)$ We prove the contrapositive of (4). Assume $\sSet{T,\sqsubseteq}$ is not converse well-founded. Then $T$ has a subset $S$ without maximal elements. Then $\downset S$ is a pruned subtree. It contains an infinite branch by (3) and thus so does $T$.
+
+$(4) \Rightarrow (3)$ A non-empty pruned tree is not converse well-founded.
+\end{proof}
+In light of \ref{treeOrderingLemma}, for any tree $T$ we have that
+\[ [T] = \emptyset \qquad\iff\qquad \text{$\sSet{T,\sqsubseteq}$ is converse well-founded.} \]
+
+\url{https://www.cambridge.org/core/journals/canadian-mathematical-bulletin/article/on-the-principle-of-dependent-choices-and-some-forms-of-zorns-lemma/074006AB7FF8461CD119DE504D7AB1A7}
+\url{https://math.stackexchange.com/questions/373854/dependent-choice-and-zorns-lemma}
+
+\begin{proposition}
+Over NBG, the following are equivalent:
+\begin{enumerate}
+\item if every well-ordered chain in a poset $P$ is finite and upper bounded, then $P$ has a maximal element;
 \item the Löwenheim-Skolem theorem;
 \item the Baire category theorem for complete metric spaces.
 \end{enumerate}
 \end{proposition}
-TODO! \url{https://en.wikipedia.org/wiki/Axiom_of_dependent_choice}
 
-\url{https://math.stackexchange.com/questions/1746921/is-the-equivalence-of-the-ascending-chain-condition-and-the-maximum-condition-eq}
-\begin{proof}
-$(1) \Rightarrow (2)$ Let $T$ be some non-empty pruned tree and consider the following relation on $T$:
-\[ u \prec v \qquad\iff\qquad u = v[0:\len(v)-1]. \]
-As $T$ has no terminal nodes, the relation $\prec$ is left-total by \ref{relationalTreeLemma}.
-By DC, there exists a choice sequence $\seq{x_n}_{n\in \N}$ in $\sSet{T,\prec}$. We can take it to start at $\seq{}$ by \ref{freedomFirstElementChoiceSequence}. The choice sequence is injective by irreflexivity, which implies that $S \defeq \im\seq{x_n}$ is infinite.
-
-By transitivity we have that $m\leq n$ implies $x_m \sqsubseteq x_n$. This shows connexity.
-
-We also have that $x_n[0:m] = x_m$ for $m\leq n$. This shows that $S$ is a subtree.
-
-$(2) \Rightarrow (1)$ Let $R$ be a left-total binary relation on a non-empty set $A$. Construct the tree $T_R$ associated to the binary relation. It is pruned by \ref{relationalTreeLemma} and thus $T_R$ has an infinite branch. The infinite branch is well-founded (because $T_R$ is well-founded, \ref{treeOrderingLemma}) and thus a well-ordering, as it is connex \ref{wellOrderedCondition}. As the branch is infinite, we can find an initial segment which is similar to $\N$. Call this similarity $f: \N \to T_R$. Consider the function $n\mapsto f(n+1)_{n}$. This is a choice sequence.
-\end{proof}
-
-\begin{proposition} \label{welfoundedACC}
-Assume the axiom of dependent choice and let $P$ be a poset. Then
-\begin{enumerate}
-\item $P$ satisfies the descending chain condition \textup{if and only if} $P$ is well-founded;
-\item $P$ satisfies the ascending chain condition \textup{if and only if} $P$ is converse well-founded.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-A poset $P$ has no infinite chains \textup{if and only if} it satisfies both the ascending and the descending chain condition.
-\end{corollary}
-\begin{proof}
-Clearly if $P$ has no infinite chains, then it satisfies both the ascending and the descending chain condition.
-
-Suppose, towards a contradiction, that $P$ satisfies both the ascending and the descending chain condition and contains an infinite chain $C$. Then $C$ has both a maximal en and a minimal element by the proposition. Because $C$ is totally ordered, these maximal and minimal elements are greatest and least elements. Then $C$ is finite by the ascending and the descending chain conditions.
-\end{proof}
 
 
 
