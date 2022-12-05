@@ -27,7 +27,7 @@ We say
 \begin{definition}
 Let $\sSet{X, R}$ be a rewriting system. This system is called
 \begin{itemize}
-\item \udef{terminating} if $R^+$ is antisymmetric and satisfies the ascending chain condition;
+\item \udef{terminating} if $R^+$ is satisfies the ascending chain condition;
 \item \udef{normalising} if every element has a normal form;
 \end{itemize}
 it is said to
@@ -44,18 +44,194 @@ The system is called
 Note that the Church-Rosser property is equivalent to
 \[ \forall x,y\in X: \; x\mathrel{\equiv_R}y \iff x \joins y. \]
 
-\begin{lemma}
+A rewriting system $\sSet{X, R}$ is normalising if and only if the associated tree $\sSet{T_R, \sqsubseteq}$ is coatomic. The normal forms are the coatoms.
+
+
+
+\begin{proposition}
 Any terminating relation is normalising, but the converse is not true.
+\end{proposition}
+This result assumes DC.
+\begin{proof}
+Let $\sSet{X, R}$ be a non-normalising rewriting system. Then we can find $u\in T_R$ such that $u{\sqsubseteq}$ does not contains a terminal node. Thus ${\sqsubseteq}u \cup u{\sqsubseteq}$ is a pruned tree. By \ref{ZornEquivalentsDC} it contains an infinite branch. Thus $T_R$ contains an infinite branch and $R$ is not terminating.
+
+The following example shows that the converse is not true.
+\end{proof}
+
+\begin{example}
+Confluent, normalising and asymmetric, but not terminating.
+\[ \begin{tikzcd}
+\bullet \rar \dar & \bullet \rar \ar[dl] & \bullet \rar \ar[dll] & \hdots \\
+\bullet
+\end{tikzcd} \]
+\end{example}
+
+
+\subsubsection{Diagrams for rewriting systems}
+\begin{definition}
+Let $\sSet{X,R}$ be a rewriting system. An \udef{RS-diagram} is a diagram with nodes and arrows between the nodes.
+\begin{itemize}
+\item Each node is labeled either by a variable (in which case we call it a variable node) or a constant (in which case we call it a constant node).
+\item A constant node is drawn in a box.
+\item An unlabeled node is implicitly a variable node.
+\end{itemize}
+Each arrow represents a proposition (with two unbounded variables):
+\begin{itemize}
+\item $x\to y$ represents $xRy$;
+\item $x\leftrightarrow y$ represents $x(R\cup R^\transp)y$;
+\item $x\overset{?}{\to}y$ represents $x(R\cup \id_X)y$;
+\item $x\overset{+}{\to}y$ represents $xR^+y$;
+\item $x\overset{*}{\to}y$ represents $xR^*y$;
+\item $x\overset{n}{\to}y$ for some $n\in \N$ represents $xR^ny$;
+\item $x\overset{-1}{\to}y$ represents $xR^\transp y$;
+\item $x\overset{?}{\leftrightarrow}y$ represents $x(R\cup R^\transp \cup \id_X)y$;
+\item $x\overset{+}{\leftrightarrow}y$ represents $x(R\cup R^\transp)^+y$;
+\item $x\overset{*}{\leftrightarrow}y$ represents $x(R\cup R^\transp)^*y$;
+\item $x\overset{n}{\leftrightarrow}y$ for some $n\in \N$ represents $x(R\cup R^\transp)^ny$.
+\end{itemize}
+Each arrow may be solid or dashed. Let
+\begin{itemize}
+\item $x_0, \ldots x_n$ be the variables that label variable nodes connected by at least one solid arrow;
+\item $y_0,\ldots y_n$ the other variables in the diagram;
+\item $A_0, \ldots, A_k$ the propositions represented by the solid arrows;
+\item $B_0, \ldots, B_l$ the propositions represented by the dashed arrows.
+\end{itemize}
+Then the diagram represents the proposition
+\[ \forall x_0, \ldots x_n \in X: \Big(A_0\land \ldots\land A_k \land\textbf{TRUE} \; \implies\; \exists y_0,\ldots y_n: (B_0\land \ldots \land B_l) \lor\textbf{FALSE} \Big). \]
+\end{definition}
+
+The addition of the constants TRUE and FALSE is for when a diagram contains either no solid or no dashed arrows.
+
+\begin{itemize}
+\item If the diagram contains no dashed arrows, then it is trivially true.
+\item If the diagram contains no solid arrows, then its proposition is equivalent to
+\[ \exists y_0,\ldots y_n: \; B_0\land \ldots \land B_l. \]
+\end{itemize}
+
+We note the following rules for manipulating \emph{true} diagrams:
+\begin{itemize}
+\item If we have two diagrams such that we can match the dashed arrows of one to the solid arrows of the other (such that the dashed arrow types imply the solid arrow types), then we can simply add the dashed lines of the second diagram to the first.
+\item We can always remove dashed arrows and add solid arrows.
+\end{itemize}
+
+\begin{example}
+Let $\sSet{X,R}$ be a rewriting system and $a,b\in X$.
+\begin{itemize}
+\item The joinability of $a$ and $b$ (i.e.\ $a\joins b$) is expressed by
+\[ \begin{tikzcd}
+a \arrow[r, dashed, "{*}"] & {} & b \arrow[l, dashed, swap, "{*}"]
+\end{tikzcd}. \]
+\item The Church-Rosser property is expressed by the diagram
+\[ \begin{tikzcd}
+x \arrow[rr, leftrightarrow, "{*}"] \arrow[dr, swap, dashed, "{*}"] & {} & y \arrow[dl, dashed, "{*}"] \\
+{} & {} & {}
+\end{tikzcd} \]
+\item Confluence is expressed by the diagram
+\[ \begin{tikzcd}
+x \arrow[r, "{*}"] \arrow[d, swap, "{*}"] & y_1 \arrow[d, dashed, "{*}"] \\
+y_2 \arrow[r, dashed, swap, "{*}"] & {}
+\end{tikzcd} \]
+\item Semi-confluence is expressed by the diagram
+\[ \begin{tikzcd}
+x \arrow[r] \arrow[d, swap, "{*}"] & y_1 \arrow[d, dashed, "{*}"] \\
+y_2 \arrow[r, dashed, swap, "{*}"] & {}
+\end{tikzcd} \]
+\end{itemize}
+\end{example}
+
+\begin{proposition}[Induction on RS-diagrams] \label{inductionRSdiagrams}
+Let $\sSet{X,R}$ be a rewriting system and $D_1, D_2$ two RS-diagrams such that $D_1$ implies $D_2$ and $D_1$ is a subdiagram of $D_1$.
+
+If $D_1$ holds, then any diagram that we can obtain from $D_1$ by substituting in $D_2$ also holds.
+\end{proposition}
+
+\begin{lemma}
+Let $\sSet{X,R}$ be a rewriting system. Then the diagram
+\[ \begin{tikzcd}
+{} & \arrow[dl, dashed, swap, "{?}"] z \arrow[dr, dashed, "{?}"] & {} \\
+x \arrow[rr, leftrightarrow] & {} & y
+\end{tikzcd} \qquad\text{holds.} \]
 \end{lemma}
 \begin{proof}
-
+If $xRy$, then we may set $z = x$. If $yRx$, then we may set $z = y$.
 \end{proof}
 
 \begin{lemma}
-
+Let $\sSet{X,R}$ be a rewriting system. Then the diagram
+\[ \begin{tikzcd}
+{} & z \arrow[dr] & {} \\
+x \arrow[ur, "{*}"] \arrow[rr, dashed, "{*}"] & {} & z
+\end{tikzcd} \qquad\text{holds.} \]
 \end{lemma}
-By \ref{welfoundedACC}, we have that 
+\begin{proof}
+We have $R^*;R \subseteq R^*$.
+\end{proof}
 
+\begin{lemma}
+Let $\sSet{X,R}$ be a semi-confluent rewriting system. Then any diagram of the form
+\[ \begin{tikzcd}[column sep=1.8em]
+{} & x_1 \arrow[dl] \arrow[dr] & {} & \arrow[dl]\arrow[dr] \hdots & {} & x_n \arrow[dl] \arrow[dr] & {} \\
+y_0 \arrow[dr, dashed, "{*}"] & {} & \arrow[dl, swap, dashed, "{*}"] y_1 & \hdots & \arrow[ddll, swap, dashed, "{*}"] y_n  & {} & \arrow[dddlll, swap, dashed, "{*}"] y_{n+1} \\
+{} & {} \arrow[dr, dashed, "{*}"] & {} &  {}  & {} &  {} & {} \\
+{} & {} & {} \arrow[dr, dashed, "{*}"] & {} & {} & {} & {} \\
+{} & {} & {} & {} & {} & {} & {} \\
+\end{tikzcd} \qquad \text{holds.} \]
+\end{lemma}
+\begin{proof}
+We prove this by induction \ref{inductionRSdiagrams} because we have the implications
+
+\begin{align*}
+\begin{tikzcd}[column sep=1.5em, row sep=1.5em, ampersand replacement=\&]
+{} \& \arrow[dl] x_1 \arrow[dr] \& {} \\
+y_0 \arrow[dr, dashed, "{*}"] \& {} \& \arrow[dl, dashed, swap, "{*}"] y_1 \\
+{} \& {} \& {}
+\end{tikzcd} \qquad&\implies\qquad \begin{tikzcd}[column sep=1.5em, row sep=1.5em, ampersand replacement=\&]
+{} \& \arrow[dl] x_1 \arrow[dr] \& {} \& \arrow[dl] x_2 \arrow[dr] \& {} \\
+y_0 \arrow[dr, dashed, "{*}"] \& {} \& \arrow[dl, dashed, swap, "{*}"] y_1 \& {} \& y_2 \\
+{} \& {} \& {}
+\end{tikzcd} \\
+&\implies\qquad \begin{tikzcd}[column sep=1.5em, row sep=1.5em, ampersand replacement=\&]
+{} \& \arrow[dl] x_1 \arrow[dr] \& {} \& \arrow[dl] x_2 \arrow[dr] \arrow[ddll, dashed, bend left, "{*}"] \& {} \\
+y_0 \arrow[dr, dashed, "{*}"] \& {} \& \arrow[dl, dashed, swap, "{*}"] y_1 \& {} \& y_2 \\
+{} \& {} \& {}
+\end{tikzcd} \\
+&\implies\qquad \begin{tikzcd}[column sep=1.5em, row sep=1.5em, ampersand replacement=\&]
+{} \& \arrow[dl] x_1 \arrow[dr] \& {} \& \arrow[dl] x_2 \arrow[dr] \& {} \\
+y_0 \arrow[dr, dashed, "{*}"] \& {} \& \arrow[dl, dashed, swap, "{*}"] y_1 \& {} \& y_2 \arrow[ddll, dashed, swap, "{*}"] \\
+{} \& {} \arrow[dr, dashed, "{*}"] \& {} \\
+{} \& {} \& {}
+\end{tikzcd}
+\end{align*}
+
+. The base case
+\[ \begin{tikzcd}[column sep=1.5em, row sep=1.5em]
+{} & \arrow[dl] x_1 \arrow[dr] & {} \\
+y_0 \arrow[dr, dashed, "{*}"] & {} & \arrow[dl, dashed, swap, "{*}"] y_1 \\
+{} & {} & {}
+\end{tikzcd} \qquad\text{is just confluence.} \]
+For the induction step, we can fill in the extra nodes top to bottom such that the dashed lines hold, by confluence.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,R}$ be a confluent rewriting system and $\seq{x_0,\ldots, x_n}$ a finite sequence on $X$.
+\end{lemma}
+
+\begin{proposition}
+Let $\sSet{X, R}$ be a rewriting system. The following are equivalent:
+\begin{enumerate}
+\item $R$ has the Church-Rosser property;
+\item $R$ is confluent;
+\item $R$ is semi-confluent.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Take $x,y_1, y_2\in X$ and assume $\big(x\mathrel{R^*}y_1\big) \land \big(x\mathrel{R^*}y_2\big)$. Then $y_1 \equiv_R y_2$ and so $y_1\joins y_2$ by the Church-Rosser property.
+
+
+$(2) \Rightarrow (3)$ Immediate.
+
+$(3) \Rightarrow (1)$
+\end{proof}
 
 \section{Term rewriting}
 \begin{definition}
