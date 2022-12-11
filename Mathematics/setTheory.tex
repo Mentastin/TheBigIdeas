@@ -25,7 +25,7 @@ Then $R\in R$ if and only if $R\notin R$.
 There have been several proposed solutions:
 \begin{enumerate}
 \item We can restrict the general comprehension principle to only separation, which means that we can only apply comprehension to elements that are already in a set. In other words, we do not write
-\[ \{ x\;|\; P(x) \} \qquad \text{but instead}\qquad \{ x\in B\;|\; P(x) \}\qquad \text{for some set $B$}. \]
+\[ \setbuilder{x}{P(x)} \qquad \text{but instead}\qquad \setbuilder{x\in B}{P(x)}\qquad \text{for some set $B$}. \]
 For this to work clearly there must not be a set containing all objects in the universe. We could say the universe is too big to fit into a set.
 \item We can restrict the type of objects that are put into the same set: We can put two objects that are not sets in the same set, but not a set and an object that is not a set. Such objects have type $0$. Sets of these objects have type $1$. Sets of these sets have type $2$ etc. We then say we can only form sets containing only objects of the same type. Such a set is of a type one higher. This is the essential idea behind type theory.
 \end{enumerate}
@@ -3299,20 +3299,41 @@ If an element has a two-sided inverse, it is unique.
 \end{corollary}
 If $x$ is invertible, we denote the unique inverse by $x^{-1}$.
 
-\begin{proposition}
-Let $\sSet{A, f}$ be an associative class with identity $e$ and $x,y$ in $A$. If $x$ and $y$ have inverses, then $xy$ is invertible with $(xy)^{-1} = y^{-1}x^{-1}$.
-\end{proposition}
+
+\begin{lemma}
+Let $\sSet{A, f}$ be an associative class with identity $e$ and $x,y$ in $A$.
+\begin{enumerate}
+\item If $x$ has left-inverse $x^{-L}$ and $y$ has a left-inverse $y^{-L}$, then $f(x,y)$ has a left-inverse $f(y^{-L}, x^{-L})$.
+\item If $x$ has right-inverse $x^{-R}$ and $y$ has a right-inverse $y^{-R}$, then $f(x,y)$ has a right-inverse $f(y^{-R}, x^{-R})$.
+\item If $x$ has inverse $x^{-1}$ and $y$ has inverse $y^{-1}$, then $f(x,y)$ has inverse $f(y^{-1}, x^{-1})$.
+\item If $f(x,y)$ has a left-inverse $f(x,y)^{-L}$, then $y$ has a left-inverse $f\big(f(x,y)^{-L}, x\big)$.
+\item If $f(x,y)$ has a right-inverse $f(x,y)^{-R}$, then $x$ has a right-inverse $f\big(y, f(x,y)^{-R}\big)$.
+\end{enumerate}
+\end{lemma}
 \begin{proof}
-We calculate
-\[ (xy)(y^{-1}x^{-1}) = x(yy^{-1})x^{-1} = xx^{-1} = e \quad\text{and}\quad (y^{-1}x^{-1})(xy) = y^{-1}(x^{-1}x)y = y^{-1}y = e. \]
+Let $z_1, z_2\in A$.
+
+(1) We calculate
+\[ f\big(f(y^{-L}, x^{-L}),f(x,y)\big) = f\Big(f\big(y^{-L}, f(x^{-L},x)\big), y\Big) = f\big(f(y^{-L}, e), y\big) = f(y^{-L}, y) = e. \]
+
+(2) We calculate
+\[ f\big(f(x, y),f(y^{-R},x^{-R})\big) = f\Big(f\big(x, f(y,y^{-R})\big), x^{-R}\Big) = f\big(f(x, e), x^{-R}\big) = f(x, x^{-R}) = e. \]
+
+(3) Follows from (1) and (2).
+
+(4) We calculate
+\[ f\Big(f\big(f(x,y)^{-L}, x\big), y\Big) = f\big(f(x,y)^{-L}, f(x,y)\big) = e. \]
+
+(5) We calculate
+\[ f\Big(x, f\big(y, f(x,y)^{-R}\big)\Big) = f\big(f(x,y), f(x,y)^{-R}\big) = e. \]
 \end{proof}
 
 \begin{lemma}
 Let $\sSet{A, f}$ be an associative class and $x,y$ in $A$.
 \begin{enumerate}
-\item If $x$ and $y$ are left-, resp. right-,cancellative, then $f(x,y)$ is left-, resp. right-,cancellative.
+\item If $x$ and $y$ are left-(resp. right-)cancellative, then $f(x,y)$ is left-(resp. right-)cancellative.
 \item If $f(x,y)$ is left-cancellative, then $y$ is left-cancellative.
-\item If $f(x,y)$ is right-cancellative, then $x$ is left-cancellative.
+\item If $f(x,y)$ is right-cancellative, then $x$ is right-cancellative.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -3327,8 +3348,9 @@ Right-cancellation is similar.
 (3) Assume $f(z_1, x) = f(z_2, x)$. Then $f(f(z_1, x), y) = f(f(z_2, x), y)$. By associativity, we get $f(z_1, f(x,y)) = f(z_2, f(x,y))$ thus $z_1 = z_2$ because $f(x,y)$ is right-cancellative.
 \end{proof}
 
+
 \begin{lemma}
-Let $\sSet{A, f}$ be an associative class and $x,y$ in $A$. Then
+Let $\sSet{A, f}$ be an associative class and $x,y$ in $A$ with identity $e$. Then
 \begin{enumerate}
 \item if $x$ has a left inverse, it is left-cancellative;
 \item if $x$ has a right inverse, it is right-cancellative;
