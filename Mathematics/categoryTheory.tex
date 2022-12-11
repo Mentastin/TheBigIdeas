@@ -980,6 +980,80 @@ Let $(\cat{V}, \otimes, 1, \alpha, \lambda, \rho)$ be a monoidal category. A \ud
 such that
 \end{definition}
 
+\chapter{Object-free category theory}
+\begin{definition}
+A \udef{functor} is a homomorphism between associative classes.
+\end{definition}
+
+\section{Natural transformations}
+\begin{definition}
+Let $\sSet{A,\cdot}$ and $\sSet{B,\cdot}$ be associative classes. Let $F,G: A\to B$ be functors. A \udef{natural transformation} $\alpha$ from $F$ to $G$ is a function $\alpha: A\to B$ such that
+\[ \forall f,g\in A: \qquad G(f)\alpha_g  = \alpha_f F(g), \]
+where we have written the arguments of $\alpha$ as subscripts: $\alpha_f$ means $\alpha(f)$.
+
+We write $\alpha: F \Rightarrow G$.
+\end{definition}
+
+\subsection{Operations with natural transformations}
+\subsubsection{Vertical composition}
+\begin{definition}
+Let $F,G,H: A\to B$ be functors and $\alpha: F\Rightarrow G$, $\beta: G\Rightarrow H$ natural transformations. The \udef{vertical composition} of $\alpha$ and $\beta$ is the natural transformation $\beta\circ\alpha: F\Rightarrow H$ defined by $(\beta\circ\alpha)_f = \beta_f\alpha_f$ for all $f\in A$.
+\end{definition}
+Note that $\beta\circ\alpha: F\Rightarrow H$ is (TODO: NOT!!) a natural transformation from $F$ to $H$: $\forall f,g\in A$ we have
+\[ H(f)(\beta\circ\alpha)_g = H(f)\beta_g\alpha_g = \beta_fG(g)\alpha_g \] 
+
+\subsubsection{Whiskering}
+\begin{definition}
+Let $F,G: B\to C$ be functors and $\alpha: F\Rightarrow G$ a natural transformation.
+\begin{itemize}
+\item If $H: A\to B$ is a functor. Then the \udef{pre-whisker} of $H$ and $\alpha$ is the natural transformation $\alpha H: F\circ H\Rightarrow G\circ H$ defined by $(\alpha H)_f = \alpha_{H(f)}$.
+\item If $H': C\to D$ is a functor. Then the \udef{post-whisker} of $H'$ and $\alpha$ is the natural transformation $H'\alpha: H'\circ F\Rightarrow H'\circ G$ defined by $(H'\alpha)_f = H'(\alpha_f)$.
+\end{itemize}
+\end{definition}
+The pre-whisker of $H$ and $\alpha$ is a natural transformation $\alpha H: F\circ H\Rightarrow G\circ H$. Indeed, for all $f,g\in D$
+\begin{align*}
+(G\circ H)(f)(\alpha H)_g &= G\big(H(f)\big)\alpha_{H(g)} \\
+&= \alpha_{H(f)}F\big(H(g)\big) \\
+&= (\alpha H)_f(F\circ H)(g) .
+\end{align*}
+The post-whisker of $H'$ and $\alpha$ is also a natural transformation $H'\alpha: H'\circ F\Rightarrow H'\circ G$. Indeed, for all $f,g\in A$
+\begin{align*}
+(H'\circ G)(f)(H'\alpha)_g &= H'\big(G(f)\big)H'(\alpha_g) \\
+&= H'\big(G(f)\alpha_g\big) \\
+&= H'\big(\alpha_f F(g)\big) \\
+&= H'(\alpha_f)H'\big(F(g)\big) \\
+&= (H'\alpha)_f(H'\circ F)(g).
+\end{align*}
+
+Pictorially we can represent pre-whiskering as
+\[ \begin{tikzcd}
+A \arrow[r, "H"] & B \arrow[r, bend left=50, "F"{name=U}]
+  \arrow[r, bend right=50, "G"{name=D, below}] & C \arrow[Rightarrow, from=U, to=D, shorten <=0.3em,shorten >=0.3em, "{\alpha}"]
+\end{tikzcd} \qquad\text{becomes}\qquad \begin{tikzcd}[column sep=huge]
+A \arrow[r, bend left=50, "F\circ H"{name=U}]
+  \arrow[r, bend right=50, "G\circ H"{name=D, below}] & C \arrow[Rightarrow, from=U, to=D, shorten <=0.3em,shorten >=0.3em, "{\alpha H}"]
+\end{tikzcd} \]
+and post-whiskering as
+\[ \begin{tikzcd}
+B \arrow[r, bend left=50, "F"{name=U}]
+  \arrow[r, bend right=50, "G"{name=D, below}] & C \arrow[Rightarrow, from=U, to=D, shorten <=0.3em,shorten >=0.3em, "{\alpha}"] \arrow[r, "{H'}"] & D
+\end{tikzcd} \qquad\text{becomes}\qquad \begin{tikzcd}[column sep=huge]
+B \arrow[r, bend left=50, "{H'\circ F}"{name=U}]
+  \arrow[r, bend right=50, "{H'\circ G}"{name=D, below}] & D \arrow[Rightarrow, from=U, to=D, shorten <=0.3em,shorten >=0.3em, "{H'\alpha}"].
+\end{tikzcd} \]
+
+\subsubsection{Horizontal composition}
+TODO
+
+\subsection{Cones and limits}
+\begin{definition}
+Let $\sSet{J,\cdot}$ be an associative set and $\sSet{A,\cdot}$ an associative class. Let $F: J\to A$ be a functor. Then
+\begin{itemize}
+\item a \udef{cone} over $F$ is a natural transformation from a constant functor to $F$;
+\item a \udef{cocone} under $F$ is a natural transformation from $F$ to a constant functor.
+\end{itemize}
+TODO: limit = unique whiskering!
+\end{definition}
 
 \chapter{Higher category theory}
 \section{2-categories}
@@ -1415,7 +1489,21 @@ Five lemma. Short exact sequences. Split exact. Exact functors.
 A category $\cat{C}$ is called \udef{abelian} if
 \begin{itemize}
 \item $\cat{C}$ contains a zero object $0$;
-\item $\cat{C}$ contains finite limits;
-\item 
+\item $\cat{C}$ contains all binary products and sums;
+\item every morphism in $\cat{C}$ has a kernel and cokernel;
+\item every monomorphism is a kernel and every epimorphism is a cokernel.
 \end{itemize}
+Let $\ker: \mor(\cat{C}) \to \mor(\cat{C})$ be the function that maps morphisms to their kernels. Similarly, let $\coker: \mor(\cat{C}) \to \mor(\cat{C})$ be the function that maps morphisms to their cokernels.
 \end{definition}
+
+\begin{proposition}
+Let $\cat{C}$ be an abelian category. The functions $\ker: \mor(\cat{C}) \to \mor(\cat{C})$ and $\coker: \mor(\cat{C}) \to \mor(\cat{C})$ are bijective. Also $\ker^{-1} = \coker$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+
+\begin{proposition}
+Let $\cat{C}$ be an abelian category. A morphism that is both monic and epic is an isomorphism.
+\end{proposition}
