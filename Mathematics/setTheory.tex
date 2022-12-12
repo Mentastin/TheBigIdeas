@@ -2966,6 +2966,21 @@ x & \text{if $X = \{x\}$} \\
 We may also write simply $\sunp$ if the class is clear from context.
 \end{definition}
 
+\subsection{Functional dependence}
+\begin{definition}
+Let $A,B$ be classes and $\mathcal{F} \subseteq (A\to B)$ a subclass.
+\begin{itemize}
+\item The relation $[\mathcal{F}]$ on $(A,B)$ is defined by
+\[ \forall a\in A, b\in B: \qquad a[\mathcal{F}]b \iff \exists f\in \mathcal{F}: \; a = f(b). \]
+We say $a$ \udef{depends on} $b$ under $\mathcal{F}$.
+\item The relation $[\mathcal{F}]^!$ on $(A,B)$ is defined by
+\[ \forall a\in A, b\in B: \qquad a[\mathcal{F}]b \iff \exists! f\in \mathcal{F}: \; a = f(b). \]
+We say $a$ \udef{uniquely depends on} $b$ under $\mathcal{F}$.
+\end{itemize}
+\end{definition}
+
+Note that $[\mathcal{F}] = \bigcup\mathcal{F}$.
+
 \section{Binary functions}
 We can easily give a function multiple inputs from multiple domains by first joining them into an $n$-tuple, i.e.\ considering the Cartesian product of the domains as the domain of the function.
 
@@ -3377,19 +3392,45 @@ Beacuse $x$ is right-cancellative, this means $f(x,l) = e$ and thus that $l$ is 
 Let $\sSet{A, f}$ be an associative class and $x, y\in A$. Then
 \begin{itemize}
 \item let $L$ be the relation defined by $xLy \defequiv \exists a: f(a, x) = y$;
-\item let $R$ be the relation defined by $xRy \defequiv \exists a: f(x, a) = y$.
+\item let $R$ be the relation defined by $xRy \defequiv \exists a: f(x, a) = y$;
+\item let $L'$ be the relation defined by $xL^!y \defequiv  \exists! a: f(a, x) = y$;
+\item let $R'$ be the relation defined by $xR^!y \defequiv \exists! a: f(x, a) = y$.
 \end{itemize}
 \end{definition}
 
-The relations $L$ and $R$ are dual.
+The relations $L$ and $R$ are dual. The relations $L^!$ and $R^!$ are dual.
 
 \begin{lemma}
 The relations $L$ and $R$ are transitive.
 \end{lemma}
 \begin{proof}
 Let $\sSet{A, f}$ be an associative class and $x, y, z\in A$ such that $xLy$ and $yLz$. Then there exist $a,b\in A$ such that $f(a,x) = y$ and $f(b,y) = z$. Then
-\[ z = f(b,y) = f(b,f(a,x)) = f(f(b,a), x), \]
+\[ z = f(b,y) = f\big(b,f(a,x)\big) = f\big(f(b,a), x\big), \]
 so $xLz$. The statement for $R$ is dual.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{A, f}$ be an associative class and $x\in A$. Then the following are equivalent:
+\begin{enumerate}
+\item $x$ is right-cancellative
+\item $xL \subseteq xL^!$;
+\item $xL = xL^!$.
+\end{enumerate}
+As are the following:
+\begin{enumerate}
+\item $x$ is left-cancellative
+\item $xR \subseteq xR^!$;
+\item $xR = xR^!$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Take $y\in xL$. Then there exists $a\in A$ such that $f(a,x) = y$. Assume there exists another $b\in A$ such that $f(b,x) = y$. Then $f(a,x) = f(b,x)$, so $a=b$. Thus the $a\in A$ is unique and $y\in xL^!$.
+
+$(2) \Rightarrow (3)$ The inclusion $xL \supseteq xL^!$ is immediate.
+
+$(3) \Rightarrow (1)$ Take $a,b\in A$ and assume $f(a,x) = f(b,x) = y$. Then $xLy$, so $xL^!y$, so $a=b$.
+
+The proof of the second part is dual.
 \end{proof}
 
 \begin{lemma}
@@ -3411,7 +3452,7 @@ For all $a,b\in A$, we have $\lambda_a\circ \rho_b = \rho_b \circ \lambda_a$.
 \end{lemma}
 \begin{proof}
 We calculate, for arbitrary $x\in A$,
-\[ \lambda_a(\rho_b(x)) = f(a, f(x,b)) = f(f(a,x), b)  = \rho_b(\lambda_a(x)). \]
+\[ \lambda_a\big(\rho_b(x)\big) = f\big(a, f(x,b)\big) = f\big(f(a,x), b\big)  = \rho_b\big(\lambda_a(x)\big). \]
 \end{proof}
 \begin{corollary} \label{LRcommute}
 Let $A$ be a class and $f: A\times A \to A$ an associative binary function. Then $L;R = R;L$.
@@ -3433,7 +3474,7 @@ Let $g,h$ be functions in the assocative class of functions with composition $\c
 \end{enumerate}
 \end{proposition}
 
-\subsection{Principal ideals}
+\subsubsection{Principal ideals}
 \begin{definition}
 Let $\sSet{A, f}$ be an associative class and $x, y\in A$. Then
 \begin{itemize}

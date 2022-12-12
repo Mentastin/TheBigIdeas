@@ -308,6 +308,23 @@ X \arrow[ur, "g_1"] \arrow[dr, "g_2"] & \arrow[r, "f"] & B \\
 & A  &
 \end{tikzcd} \qquad \text{commutes.} \]
 
+\begin{proposition}
+Let $\cat{C}$ be a category and $e\in\mor(\cat{C})$ a morphism. Then the following are equivalent:
+\begin{enumerate}
+\item $e$ is an identity;
+\item $e$ is a monic idempotent;
+\item $e$ is an epic idempotent. 
+\end{enumerate}
+\end{proposition}
+TODO: make definition??
+\begin{proof}
+The directions $(1) \Rightarrow (2)$ and $(1) \Rightarrow (3)$ are clear.
+
+For $(2)\Rightarrow (1)$, let $e$ be a monic idempotent. From idempotency, we have $\dom(e) = \codom(e)$. Call this object $A$. We have $e^2 = e = e1_A$. As $e$ is monic, this implies $e = 1_A$.
+
+The direction $(3)\Rightarrow (1)$ is dual.
+\end{proof}
+
 \subsection{Left and right inverses}
 \begin{definition}
 Let $\cat{C}$ be a category and $f:X\to Y$ a morphism.
@@ -708,6 +725,13 @@ Let $F:\cat{C}\to\cat{D}$ be a functor.
 \end{enumerate}
 \end{proposition}
 
+\begin{lemma}
+Functors map idempotents to idempotents.
+\end{lemma}
+\begin{proof}
+We calculate $F(e) = F(e^2) = F(e)F(e) = F(e)^2$.
+\end{proof}
+
 \subsubsection{Abstract and concrete categories}
 \begin{definition}
 A category $\cat{C}$ is called \udef{concrete} if there exists a faithful functor $F: \cat{C} \to \cat{Set}$.
@@ -988,7 +1012,7 @@ A \udef{functor} is a homomorphism between associative classes.
 \section{Natural transformations}
 \begin{definition}
 Let $\sSet{A,\cdot}$ and $\sSet{B,\cdot}$ be associative classes. Let $F,G: A\to B$ be functors. A \udef{natural transformation} $\alpha$ from $F$ to $G$ is a function $\alpha: A\to B$ such that
-\[ \forall f,g\in A: \qquad G(f)\alpha_g  = \alpha_f F(g), \]
+\[ \forall f,g\in A: \qquad G(f)\alpha_g = \alpha_{fg} = \alpha_f F(g), \]
 where we have written the arguments of $\alpha$ as subscripts: $\alpha_f$ means $\alpha(f)$.
 
 We write $\alpha: F \Rightarrow G$.
@@ -1047,13 +1071,43 @@ TODO
 
 \subsection{Cones and limits}
 \begin{definition}
-Let $\sSet{J,\cdot}$ be an associative set and $\sSet{A,\cdot}$ an associative class. Let $F: J\to A$ be a functor. Then
+Let $\sSet{J,\cdot}$ be an associative set and $\sSet{A,\cdot}$ an associative class. Let $F: J\to A$ be a diagram. Then
 \begin{itemize}
-\item a \udef{cone} over $F$ is a natural transformation from a constant functor to $F$;
-\item a \udef{cocone} under $F$ is a natural transformation from $F$ to a constant functor.
+\item a \udef{cone} over $F$ is a natural transformation $\alpha: C \Rightarrow F$ from a constant functor $C$ to $F$;
+\item a \udef{cocone} under $F$ is a natural transformation $\beta: F\Rightarrow D$ from $F$ to a constant functor $D$.
 \end{itemize}
-TODO: limit = unique whiskering!
+We also define
+\begin{itemize}
+\item a \udef{limit} of the diagram $F: J\to A$ is a $[\setbuilder{\rho_a\circ -}{a\in A}]^!$-maximum in the set of cones over $F$.
+\item a \udef{colimit} of the diagram $F: J\to A$ is a $[\setbuilder{\lambda_a\circ -}{a\in A}]^!$-maximum in the set of cocones over $F$.
+\end{itemize}
 \end{definition}
+
+\begin{proposition}
+Let $\cat{J}$ be a small category, $\cat{C}$ a category and $F: \cat{J}\to \cat{C}$ a (unital) diagram. Then the limits and colimits are categorical limits and colimits. In particular the image of the constant functor is an identity.
+\end{proposition}
+\begin{proof}
+Universal property.
+\end{proof}
+
+\begin{proposition}
+Let $\cat{J}$ be a small category and $\sSet{A,\cdot}$ an associative class. Let $F: \cat{J}\to A$ be a diagram and $\alpha: C\Rightarrow F$ a limit of $F$. Then
+\begin{enumerate}
+\item the single element $c$ of $\im(C)$ is idempotent and the unique element of $a$ such that $\alpha_- = \alpha_-c$;
+\item if $f,g\in A$ are such that $fg$ exists, then $\alpha_f = F(f)\alpha_g$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) As $\cat{J}$ is a category, it contains an idempotent $e$. Then $c = C(e) = C(e^2) = C(e)C(e) = c^2$, so $c$ is also idempotent.
+
+For all $f:A\to B\in \cat{J}$, we have $\alpha_f = \alpha_{f\id_A} = \alpha_f C(\id_A) = \alpha_f c$.
+
+The uniqueness follows by definition.
+
+(2) We have $\alpha_f = \alpha_fc = \alpha_f C(g) = F(f)\alpha_g$.
+\end{proof}
+
+The limit is uniquely determined by its components at sources!
 
 \chapter{Higher category theory}
 \section{2-categories}
@@ -1366,7 +1420,7 @@ Clearly $e'$ is uniquely determined by $e$: because the diagram commutes, we hav
 If $e: E\to A$ has the property, then defining $e' = f\circ e = g\circ e$, makes $(e,e')$ a limit. TODO redundant legs.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{equaliserMonic}
 Let $\cat{C}$ be a category and $f,g: A\to B$ morphisms. If the equaliser $e: E\to A$ exists, it is monic.
 \end{lemma}
 \begin{proof}
@@ -1377,6 +1431,15 @@ E \ar[r, "e"] & A \ar[r, shift left, "f"] \ar[r, shift right, swap, "g"] & B
 \end{tikzcd} \]
 which commutes if $h = h_1$ or $h = h_2$. But, because $e$ is the equaliser, there may exist only one $h$ that makes the diagram commute, so $h_1 = h_2 = h$.
 \end{proof}
+
+\subsubsection{Kernels and cokernels}
+\begin{definition}
+Let $\cat{C}$ be a category with zero morphisms and $f:A\to B$ a morphism.
+\begin{itemize}
+\item The \udef{kernel} of $f$ is the equaliser of $f$ and the zero morphism $0:A\to B$.
+\item The \udef{cokernel} of $f$ is the coequaliser of $f$ and the zero morphism $0:A\to B$.
+\end{itemize}
+\end{definition}
 
 \subsection{Pullbacks}
 \begin{definition}
@@ -1497,10 +1560,56 @@ Let $\ker: \mor(\cat{C}) \to \mor(\cat{C})$ be the function that maps morphisms 
 \end{definition}
 
 \begin{proposition}
-Let $\cat{C}$ be an abelian category. The functions $\ker: \mor(\cat{C}) \to \mor(\cat{C})$ and $\coker: \mor(\cat{C}) \to \mor(\cat{C})$ are bijective. Also $\ker^{-1} = \coker$.
+Let $\cat{C}$ be an abelian category. The functions
+\[ \ker: \{\text{epimorphisms in $\cat{C}$}\} \to \{\text{monomorphisms in $\cat{C}$}\} \]
+and
+\[ \coker: \{\text{monomorphisms in $\cat{C}$}\} \to \{\text{epimorphisms in $\cat{C}$}\} \]
+are inverses of each other.
 \end{proposition}
 \begin{proof}
+Let $f:B\to C$ be an epimorphism in $\cat{C}$. Then $\ker(f): A\to B$ is a monomorphism by \ref{equaliserMonic}.
 
+We construct $\coker(\ker f): B \to C'$ and $\ker\big(\coker(\ker f)\big): A'\to B$. Diagrammatically, this gives
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{\ker f}"] & {} & C \\
+{} & B \arrow[ur, "{f}"] \arrow[dr, "{\coker(\ker f)}"] & {} \\
+A' \arrow[ur, "{\ker(\coker(\ker f))}"] & {} & C'
+\end{tikzcd} \]
+Now $f\ker(f) = 0_{B,C}\ker(f) = 0_{A,C} = f0_{A,B}$, so $f$ is a leg compatible with $\begin{tikzcd}
+A \arrow[r, shift left, "{\ker(f)}"] \arrow[r, swap, shift right, "0"] & B
+\end{tikzcd}$. It can be extended to a cocone. An thus there exists a unique $g: C\to C'$. That makes the diagram
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{\ker f}"] & {} & C \arrow[dd, "g"] \\
+{} & B \arrow[ur, "{f}"] \arrow[dr, swap, "{\coker(\ker f)}"] & {} \\
+A' \arrow[ur, "{\ker(\coker(\ker f))}"] & {} & C'
+\end{tikzcd} \qquad\text{commute.} \]
+
+
+We have the diagram
+\[ \begin{tikzcd}
+A \arrow[r, "{\ker(f)}"] & B \arrow[r, shift left, "{f}"] \arrow[r, swap, shift right, "{0}"] & C
+\end{tikzcd}. \]
+We can extend the diagram to
+\[ \begin{tikzcd}
+A \arrow[r, shift left, "{\ker(f)}"] \arrow[r, swap, shift right, "0"] & B \arrow[r, shift left, "f"] \arrow[r, swap, shift right, "0"] & C
+\end{tikzcd} \]
+and then reduce it to
+\[ \begin{tikzcd}
+A \arrow[r, shift left, "{\ker(f)}"] \arrow[r, swap, shift right, "0"] & B \arrow[r, "f"] & C
+\end{tikzcd}. \]
+These manipulations preserve limits.
+
+By definition of abelian category, it is the kernel of some morphism $g: A \to B$.
+
+Let $f: B\to C$ be an epimorphism in $\cat{C}$. By definition of abelian category, it is the cokernel of some morphism $g: A \to B$. We need to show that $g$ is the kernel of $f$. This follows because every cone of
+\[ \begin{tikzcd}
+A \arrow[r, shift left, "g"] \arrow[r, swap, shift right, "0"] & B \arrow[r, "f"] & C
+\end{tikzcd} \]
+can be uniquely extended to a cone of
+\[ \begin{tikzcd}
+A \arrow[r, shift left, "g"] \arrow[r, swap, shift right, "0"] & B \arrow[r, shift left, "f"] \arrow[r, swap, shift right, "0"] & C
+\end{tikzcd}. \]
+Thus 
 \end{proof}
 
 
