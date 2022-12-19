@@ -61,6 +61,16 @@ Let $n,m\in\N_0$.
 \vdots & \ddots & \\
 1 & \hdots & 1
 \end{pmatrix}. \]
+\item The \udef{identity matrix} of dimension $n$ is the $(n\times n)$-matrix
+\[ \mathbb{1}_n = \begin{pmatrix}
+1 & 0 & 0 & \hdots & 0\\
+0 & 1 & 0 & \hdots & 0\\
+0 & 0 & 1 & \hdots & 0\\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \hdots & 1
+\end{pmatrix} \]
+The components of $\mathbb{1}_n$ are given by
+\[ [\mathbb{1}_n]_{ij} = \delta_{ij}. \]
 \end{itemize}
 If $m=n$, we abbreviate these matrices as $\mathbb{0}_n$ and $\mathbb{J}_n$.
 \end{definition}
@@ -118,7 +128,15 @@ Let $A\in\F^{m\times n}$ be a matrix. A component $[A]_{i,j}$ is
 \end{definition}
 
 \subsubsection{Submatrices}
-Let $A\in\F^{m\times n}$ be a matrix and $I\subseteq 1:m$ and $J\subseteq 1:n$ sets, then $[A]_{I,J}$ is the matrix consisting only of those entries whose row number is in $I$ and whose column number is in $J$. A matrix of this form is called a \udef{submatrix}.
+\begin{definition}
+Let $A\in\F^{m\times n}$ be a matrix and $I\subseteq 0:m$ and $J\subseteq 0:n$ sets, then $[A]_{I,J}$ is the matrix consisting only of those entries whose row number is in $I$ and whose column number is in $J$. A matrix of this form is called a \udef{submatrix}.
+
+In this context, we abbreviate
+\begin{itemize}
+\item $I = 0:m$ and $J = 0:n$ by $-$;
+\item $I=\{i\}$ by $i$.
+\end{itemize}
+\end{definition}
 
 \begin{example}
 Let
@@ -126,10 +144,30 @@ Let
 1 & 2 & 3 & 4 \\ 5 & 6 & 7 & 8 \\ 9 & 10 & 11 & 12
 \end{pmatrix}, \]
 then
-\[ [A]_{1:2,1:3} = \begin{pmatrix}
+\[ [A]_{0:2,0:3} = \begin{pmatrix}
 1 & 2 & 3 \\ 5 & 6 & 7
+\end{pmatrix}, \qquad [A]_{1,-} = \begin{pmatrix}
+5 & 6 & 7 & 8
+\end{pmatrix} \qquad\text{and}\qquad [A]_{-, 2} =  \begin{pmatrix}
+3 \\ 7 \\ 11
 \end{pmatrix}. \]
 \end{example}
+
+\begin{lemma} \label{standardBasisFromIdentityMatrix}
+Let $\{\vec{e}_i\}_{i=0}^n$ be the standard basis of $\F^n$. Then
+\[ \vec{e}_i = [\mathbb{1}_n]_{-, i}. \]
+\end{lemma}
+
+\begin{lemma}
+Let $A\in \F^{m\times n}$. Then $A = [A]_{-,-}$.
+\end{lemma}
+
+\begin{lemma} \label{componentsSubmatrixFromEnumeration}
+Let $A\in\F^{m\times n}$ be a matrix and $I\subseteq 0:m$ and $J\subseteq 0:n$ sets.
+Then $\big[[A]_{I,J}\big]_{r,s} = [A]_{\pi_I(r), \pi_J(s)}$.
+\end{lemma}
+
+TODO $\pi_I$ is the unique monotonic enumeration of $I$.
 
 \subsubsection{Types of matrices}
 \begin{definition}
@@ -251,18 +289,25 @@ For linearity in the first argument, assume $A_1,A_2\in\F^{k\times m}$ and $\lam
 The proof of linearity in second argument is similar.
 \end{proof}
 
-\begin{definition}
-The \udef{identity matrix} of dimension $n$ is the $(n\times n)$-matrix
-\[ \mathbb{1}_n = \begin{pmatrix}
-1 & 0 & 0 & \hdots & 0\\
-0 & 1 & 0 & \hdots & 0\\
-0 & 0 & 1 & \hdots & 0\\
-\vdots & \vdots & \vdots & \ddots & \vdots \\
-0 & 0 & 0 & \hdots & 1
-\end{pmatrix} \]
-The components of $\mathbb{1}_n$ are given by
-\[ [\mathbb{1}_n]_{ij} = \delta_{ij}. \]
-\end{definition}
+TODO: associative class! (In fact category!)
+
+\begin{lemma} \label{submatrixMultiplication}
+Let $A\in \F^{k\times m}$, $B\in \F^{m\times n}$, $I\subseteq 0:k$ and $J\subseteq 0:n$. Then
+\[ [A]_{I,-}\cdot [B]_{-,J} = [AB]_{I,J}. \]
+\end{lemma}
+\begin{proof}
+Using \ref{componentsSubmatrixFromEnumeration}, we have
+\begin{align*}
+\big[[A]_{I,-}\cdot [B]_{-,J}\big]_{r,s} &= \sum_{p\in 0:m}\big[[A]_{I,-}\big]_{r, p} \big[[B]_{-,J}\big]_{p,s} \\
+&= \sum_{p\in 0:m}[A]_{\pi_I(r), p}[B]_{p, \pi_J(s)} \\
+&= [A\cdot B]_{\pi_I(r), \pi_J(s)} \\
+&= \big[[A\cdot B]_{I,J}\big]_{r,s}.
+\end{align*}
+\end{proof}
+
+\subsubsection{Identity}
+TODO: the identity matrix is an identity for matrix multiplication!
+
 
 \begin{lemma}
 Let $A\in\F^{m\times n}$. Then
@@ -508,6 +553,7 @@ Any similar matrices may be seen as matrices of the same linear transformation w
 
 
 
+\section{The transpose and standard inner product}
 \subsection{The transpose}
 \begin{definition}
 Let $A\in \mathbb{F}^{m\times n}$. The \udef{transpose} of $A$, denoted $A^\transp$, is defined by
@@ -533,7 +579,7 @@ We simply calculate
 \end{itemize}
 \end{definition}
 
-\subsubsection{The standard inner product}
+\subsection{The standard inner product}
 Let $\vec{v},\vec{w}\in\F^n$. Then the standard inner product is given by
 \[ \inner{\vec{v},\vec{w}} \defeq \overline{\vec{v}}^\transp \vec{w}. \]
 This reduces to $\vec{v}^\transp\vec{w}$ if $\F = \R$.
@@ -543,46 +589,58 @@ In the sequel we will always assume $\F^n$ is equipped with the standard inner p
 The inner product also induces a norm. There are multiple norms that may be of interest. To avoid confusion we may denote the norm that arises from the inner product with a subscript 2:
 \[ \norm{\vec{v}} = \norm{\vec{v}}_2 = \sqrt{\inner{\vec{v},\vec{v}}}. \]
 
-\subsubsection{Adjoint}
-From the definition of the standard inner product, it is clear that $\overline{\vec{v}}^\transp$ is an important operation. We give this operation its own symbol:
-\[ \vec{v}^* \defeq  \overline{\vec{v}}^\transp \qquad\text{so}\qquad \inner{\vec{v},\vec{w}} = \vec{v}^*\vec{w}. \]
-In fact this definition makes sense for all matrices:
-\begin{definition}
-Let $A\in\F^{m\times n}$. The conjugate transpose $A^*$ of $A$ is the matrix
-\[ A^* \defeq \overline{A}^\transp = \overline{(A^\transp)}. \]
-It is also called the \udef{adjoint} of $A$.
-\end{definition}
-\begin{lemma}
-Let $A,B$ be conformal matrices. Then
-\begin{enumerate}
-\item $(A^*)^*$;
-\item the conjugate transpose is antilinear:
-\[ (cA+B)^* = \overline{c}A^* + B^* \qquad \forall c\in\F; \]
-\item if $A$ is invertible, then $(A^*)^{-1} = (A^{-1})^*$.
-\item if $\F=\R$, then $A^* = A^\transp$.
-\end{enumerate}
+\begin{lemma} \label{componentsFromStandardInnerProduct}
+Let $\{\vec{e}_i\}_{i=1}^n$ be the standard basis of $\F^n$ and $\{\vec{f}_i\}_{i=1}^m$ the standard basis of $\F^m$. Let $A\in\F^{n\times m}$. Then
+\[ [A]_{i,j} = \vec{e}^\transp_i A \vec{f}_j = \inner{\vec{e}_i, A\vec{f}_j}. \]
 \end{lemma}
-
-\begin{proposition}
-Let $A\in\F^{n\times n}$. Then for all $\vec{v},\vec{w}\in\F^n$,
-\[ \inner{A\vec{v},\vec{w}} = \inner{\vec{v},A^*\vec{w}}. \]
-\end{proposition}
 \begin{proof}
-$\inner{A\vec{v},\vec{w}} = (A\vec{v})^*\vec{w} = \vec{v}^*A^*\vec{w} = \inner{\vec{v},A^*\vec{w}}$.
+Using \ref{standardBasisFromIdentityMatrix} and \ref{submatrixMultiplication}, we calculate
+\begin{align*}
+\vec{e}^\transp_i A \vec{f}_j &= [\mathbb{1}_n]_{-,i}^\transp \cdot A \cdot [\mathbb{1}_m]_{-,j} \\
+&= [\mathbb{1}_n]_{i, -} \cdot [A]_{-,-} \cdot [\mathbb{1}_m]_{-,j} \\
+&= [\mathbb{1}_n\cdot A]_{i,-}\cdot [\mathbb{1}_m]_{-,j} \\
+&= [\mathbb{1}_n\cdot A\cdot\mathbb{1}_m]_{i,j} = [A]_{i,j}.
+\end{align*}
+\end{proof}
+
+\subsubsection{The adjoint}
+\begin{definition}
+Let $A\in \F^{m\times n}$. We call $A^* \defeq \ell^{-1}\big(\ell(A)^*\big)$ the \udef{adjoint} of $A$, where we have equiped $\F^m$ and $\F^n$ with their standard inner products.
+\end{definition}
+
+\begin{lemma}
+Let $A\in \F^{m\times n}$. Then $A^* = \overline{A}^\transp$.
+\end{lemma}
+In other words, the adjoint is the conjugate transpose.
+\begin{proof}
+Take arbitrary $\vec{v}\in\F^m$ and $\vec{w}\in\F^n$. Then
+\[ \inner{\vec{v}, A\vec{w}} = \overline{\vec{v}}^\transp A\vec{w} = \overline{\overline{A}^\transp\vec{v}}^\transp\vec{w} = \inner{\overline{A}^\transp\vec{v}, \vec{w}}. \]
+TODO!
 \end{proof}
 
 \begin{definition}
-Let $A\in\F^{n\times n}$ be a square matrix
+Let $A\in\F^{m\times n}$ be a matrix. For properties related to the adjoint, we say $A$ has the property if $\ell_A$ has the property.
+
+In addition, we say
 \begin{itemize}
-\item if $A=A^*$, then $A$ is called \udef{Hermitian};
-\item if $A=-A^*$, then $A$ is called \udef{skew Hermitian};
-\item if $A^*A=\mathbb{1}_n$, then $A$ is called \udef{unitary}; a real unitary matrix is called \udef{orthogonal};
-\item if $A^*A = AA^*$, then $A$ is called \udef{normal};
-\item if $A^2 = A = A^*$, then $A$ is called an \udef{orthogonal projection}.
+\item $A$ is \udef{Hermitian} if $A$ is self-adjoint;
+\item $A$ is \udef{skew Hermitian} if $A$ is swew-adjoint.
 \end{itemize}
 \end{definition}
-The name orthogonal projection is due to the following: it is a projection because applying it multiple times is the same as applying it once; it is orthogonal because for all $\vec{v}\in\F^n$, $P\vec{v}$ and $\vec{v} - P\vec{v} = (\mathbb{1}-P)\vec{v}$ are orthogonal:
-\[ \inner{P\vec{v},\vec{v} - P\vec{v}} = \inner{P\vec{v},\vec{v}} - \inner{P\vec{v},P\vec{v}} = \inner{P\vec{v},\vec{v}} - \inner{P^*P\vec{v},\vec{v}} = \inner{P\vec{v},\vec{v}} - \inner{P^2\vec{v},\vec{v}} = \inner{P\vec{v},\vec{v}} - \inner{P\vec{v},\vec{v}} = 0. \]
+Thus, e.g.\
+\begin{itemize}
+\item if $A^*A = AA^*$, then $A$ is called normal;
+\item if $A^2 = A = A^*$, then $A$ is called an orthogonal projection;
+\item if $A^*A = \mathbb{1}_n$, then $A$ is called isometric;
+\item if $A^*A = \mathbb{1}_n$ and $AA^* = \mathbb{1}_m$, then $A$ is called unitary.
+\end{itemize}
+
+\begin{lemma}
+If $A\in \F^{m\times n}$ is unitary, then $m=n$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
 
 \begin{lemma}
 Let $U\in\F^{n\times n}$ be a matrix. Then the following are equivalent
@@ -595,13 +653,51 @@ Let $U\in\F^{n\times n}$ be a matrix. Then the following are equivalent
 \item $U$ is invertible and $U^{-1} = U^*$.
 \end{enumerate}
 \end{lemma}
-Notice that $U^*U=\mathbb{1} \iff UU^*=\mathbb{1}$ only holds for square matrices.
+Thus every square isometric matrix is unitary.
+\begin{proof}
+TODO
+\end{proof}
 
 \begin{corollary}
 If $\alpha,\beta$ are orthonormal bases of $\F^{n}$, then the transition matrix $(\id)_\alpha^\beta$ is unitary.
 \end{corollary}
 
-\subsection{Block matrices}
+
+\subsection{Orthogonal matrices}
+\begin{proposition}
+Let $A\in\R^{n\times n}$ and $\R^n$ have the standard inner product. The following are equivalent:
+\begin{enumerate}
+\item The columns of $A$ form an orthonormal basis of $\R^n$;
+\item The rows of $A$ form an orthonormal basis of $\R^n$;
+\item $A^\transp A = \mathbb{1}_n$;
+\item $A^{-1} = A^\transp$;
+\end{enumerate}
+\end{proposition}
+\begin{definition}
+A matrix $A\in\R^{n\times n}$ satisfying any of the above is called an \udef{orthogonal matrix}.
+\end{definition}
+We can formulate the spectral theorem as follows:
+\begin{proposition}
+Let $A\in\R^{n\times n}$ be a symmetric matrix. The there exists an orthogonal matrix $P\in \R^{n\times n}$ such that $P^{-1}AP = P^\transp A P$ is a diagonal matrix.
+\end{proposition}
+
+$\det(A) = \pm 1$. Orthogonal matrix means orthogonal transformation.
+For orthogonal matrix $P$: $\norm{A}_F = \norm{PA}_F$
+s
+
+\subsection{Inequalities}
+\subsubsection{Cauchy-Schwarz corollaries}
+\begin{lemma}
+Let $A\in \C^{n\times n}$ be positive ($A\geq 0$). Then
+\[ |[A]_{i,j}| \leq \sqrt{[A]_{i,i}[A]_{j,j}}. \]
+\end{lemma}
+\begin{proof}
+Consider the energy form $\inner{-, -}_A = \inner{-, A-} = \overline{(-)}^\transp A(-)$. This is a pre-inner product. Let $\{\vec{e}_i\}_{i=0}^n$ be the standard basis of $\F^n$. Then $[A]_{i,j} = \inner{\vec{e}_i, \vec{e}_j}_A$ by \ref{componentsFromStandardInnerProduct}. Thus, in particular, $\sqrt{[A]_{i,i}} = \sqrt{\inner{\vec{e}_i, \vec{e}_i}_A} = \norm{\vec{e}_i}_A$.
+
+The Cauchy-Schwarz inequality \ref{CauchySchwarz} then yields the result.
+\end{proof}
+
+\section{Block matrices}
 Any given matrix can be \textit{interpreted} as consisting of submatrices. Eg,
 \[ \begin{bmatrix}
 1&2&3\\4&5&6\\7&8&9
@@ -704,7 +800,7 @@ A
 A[B]_{-,1} & \hdots & A[B]_{-,m}
 \end{pmatrix}. \]
 
-\subsubsection{Identities and inverses}
+\subsection{Identities and inverses}
 \begin{lemma}
 Let $X,Y,Z$ be conformal matrices and $Y,Z$ invertible, then
 \[ \begin{bmatrix}
@@ -848,7 +944,7 @@ Let $A,B,C,U,V$ be conformal matrices. Then
 &= B^{-1}-B^{-1}U(C^{-1} + VB^{-1}U)^{-1}VB^{-1}.
 \end{aligned}$
 \end{proof}
-\begin{corollary}[Sherman–Morrison formula]
+\begin{corollary}[Sherman-Morrison formula]
 Let $A\in\F^{n\times n}$ and $\vec{u},\vec{v}\in\F^n$. 
 Then $A+\vec{u}\vec{v}^\transp$ is invertible iff $1 + \vec{v}^\transp A^{-1}\vec{u} \neq 0$. In this case
 \[ (A+\vec{u}\vec{v}^\transp)^{-1} = A^{-1} - \frac{A^{-1}\vec{u}\vec{v}^\transp A^{-1}}{1 + \vec{v}^\transp A^{-1}\vec{u}}. \]
@@ -863,8 +959,8 @@ Let $A,B$ be conformal matrices. Then
 \end{align*}
 \end{corollary}
 
-\subsection{Vector spaces associated with a matrix}
-\subsubsection{Row and column space}
+\section{Vector spaces associated with a matrix}
+\subsection{Row and column space}
 \begin{definition}
 Let $A$ be an $(n\times m)$-matrix. It can be partitioned into both rows and columns. Let $R_1,\ldots, R_n$ be the rows of $A$ and $C_1,\ldots, C_m$ the columns of $A$:
 \[ A = \begin{pmatrix}
@@ -1019,7 +1115,7 @@ C & \mathbb{0}
 \end{bmatrix}X_1 = CS = A. \]
 \end{proof}
 
-\subsubsection{Null space}
+\subsection{Null space}
 \begin{definition}
 Let $A\in \F^{m\times n}$ be a matrix. The \udef{null space} $\Null(A)$ of $A$ is the kernel of $\ell_A$. The dimension of $\Null(A)$ is called the \udef{nullity} of $A$.
 \end{definition}
@@ -1056,8 +1152,8 @@ Let $A,B$ be square matrices. Then
 \[ \max\{\dim\Null(A),\dim\Null(B)\} \leq \dim\Null(AB) \leq \dim\Null(A) + \dim\Null(B). \]
 \end{corollary}
 
-
-\subsubsection{Rank equalities and inequalities}
+\subsection{The rank of a matrix}
+\subsection{Rank equalities and inequalities}
 \begin{proposition} \label{rankMultiplication}
 Let $A,B,C,D$ be conformal matrices, then
 \begin{enumerate}
@@ -1226,33 +1322,6 @@ These assertions remain true for exponent zero so long as we define $A^0 = \math
 The \udef{index} of a square matrix is the least positive integer $q$ such that $\Rank(A^q) = \Rank(A^{q+1})$.
 \end{definition}
 In particular, invertible matrices have index zero.
-
-\section{Inner products and matrices}
-TODO: adjoint $A^*$!
-\subsection{Orthogonal matrices}
-\begin{proposition}
-Let $A\in\R^{n\times n}$ and $\R^n$ have the standard inner product. The following are equivalent:
-\begin{enumerate}
-\item The columns of $A$ form an orthonormal basis of $\R^n$;
-\item The rows of $A$ form an orthonormal basis of $\R^n$;
-\item $A^\transp A = \mathbb{1}_n$;
-\item $A^{-1} = A^\transp$;
-\end{enumerate}
-\end{proposition}
-\begin{definition}
-A matrix $A\in\R^{n\times n}$ satisfying any of the above is called an \udef{orthogonal matrix}.
-\end{definition}
-We can formulate the spectral theorem as follows:
-\begin{proposition}
-Let $A\in\R^{n\times n}$ be a symmetric matrix. The there exists an orthogonal matrix $P\in \R^{n\times n}$ such that $P^{-1}AP = P^\transp A P$ is a diagonal matrix.
-\end{proposition}
-
-$\det(A) = \pm 1$. Orthogonal matrix means orthogonal transformation.
-For orthogonal matrix $P$: $\norm{A}_F = \norm{PA}_F$
-s
-
-
-
 
 \section{Matrix operations}
 All functions on $\F$ can of course be extended component-wise to functions on $\F^{m\times n}$. In particular, let $\overline{A}$ be the component-wise complex conjugate of $A\in\F^{m\times n}$.
