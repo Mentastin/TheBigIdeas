@@ -1005,6 +1005,106 @@ such that
 \end{definition}
 
 \chapter{Object-free category theory}
+
+\section{Categories as associative classes}
+\subsection{Definition and identities}
+\begin{definition}
+Let $\cat{C}$ be an associative class. We call $\cat{C}$
+\begin{itemize}
+\item a \udef{left semi-category} if for all $x\in \cat{C}$, there exist a left-identities $e, e'\in \cat{C}$ such that $ex$ and $xe'$ are defined.
+\item a \udef{category} if for all $x\in \cat{C}$, there exist identities $e,e'\in \cat{C}$ such that both $ex$ and $xe'$ are defined.
+\end{itemize}
+\end{definition}
+
+An associative class that is both a left and right semi-category is a category (TODO make precise).
+
+\begin{example}
+The associative class of functions on sets is a left semi-category.
+\end{example}
+
+\begin{lemma} \label{categoryIdentities}
+Let $\cat{C}$ be a category. Then
+\begin{enumerate}
+\item there exists a function $\dom: \cat{C}\to \cat{C}: x\mapsto 1_{\dom(x)}$, where $1_{\dom(x)}$ is the unique identity such that $x1_{\dom(x)}$ exists;
+\item there exists a function $\codom: \cat{C}\to \cat{C}: x\mapsto 1_{\codom(x)}$, where $1_{\codom(x)}$ is the unique identity such that $\codom(x)x$ exists;
+\item for all $x,y\in \cat{C}$: $xy$ is defined \textup{if and only if} $1_{\dom(x)} = 1_{\codom(y)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) and (2) are immediate. (We do not need choice due to the uniqueness, \ref{uniquenessIdentity})
+
+(3) $\Rightarrow$ We have $xy = x1_{\dom(x)}1_{\codom(y)}y$,
+so $1_{\dom(x)}1_{\codom(y)}$ is defined. Thus $1_{\dom(x)} = 1_{\codom(y)}$ by \ref{uniquenessIdentity}.
+
+$\Leftarrow$ If $1_{\dom(x)} = e = 1_{\codom(y)}$, then $xe$ and $ey$ are defined, so $xey = xy$ is defined.
+\end{proof}
+
+
+\begin{lemma}
+Let $\cat{C}$ be a category and $x,y\in \cat{C}$. Then
+\begin{enumerate}
+\item $1_{\dom(1_{\dom(x)})} = 1_{\dom(x)}$;
+\item $1_{\codom(\codom(x))} = 1_{\codom(x)}$;
+\item $1_{\dom(xy)} = 1_{\dom(y)}$;
+\item $1_{\codom(xy)} = 1_{\codom(x)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have that $1_{\dom(1_{\dom(x)})}1_{\dom(x)}$ is defined by definition. As $1_{\dom(1_{\dom(x)})}$ and $1_{\dom(x)}$ are both identities, we have $1_{\dom(1_{\dom(x)})} = 1_{\dom(x)}$ from \ref{uniquenessIdentity}.
+
+(2) Dual to (1).
+
+(3) By definition, we have that
+\[ (xy)1_{\dom(xy)} = x\big(y1_{\dom(xy)}\big) \]
+is defined, so $y1_{\dom(xy)}$ is defined. As $1_{\dom(xy)}$ is an identity, it is equal to $1_{\dom(y)}$ by \ref{categoryIdentities}.
+\end{proof}
+
+\subsection{Left and right relations}
+Diagrammatically,
+\[ f \greensL g \quad\text{is equivalent to the commutativity of}\quad \begin{tikzcd}[row sep=small]
+{} & B \arrow[dd, dashed, "a"] \\
+A \arrow[ur, "f"] \arrow[dr, swap, "g"] & {} \\
+{} & B' 
+\end{tikzcd} \qquad \text{and}\qquad \begin{tikzcd}[row sep=small]
+{} & B  \\
+A \arrow[ur, "f"] \arrow[dr, swap, "g"] & {} \\
+{} & B' \arrow[uu, dashed, "b"]
+\end{tikzcd} \]
+and
+\[  f \greensR g \quad\text{is equivalent to the commutativity of}\quad \begin{tikzcd}[row sep=small]
+A \arrow[dr, "f"] & {} \\
+{} & B \\
+A' \arrow[uu, dashed, "a"] \arrow[ur, swap, "g"] & {}
+\end{tikzcd} \qquad \text{and}\qquad \begin{tikzcd}[row sep=small]
+A \arrow[dd, dashed, "b"] \arrow[dr, "f"] & {} \\
+{} & B \\
+A' \arrow[ur, swap, "g"] & {}
+\end{tikzcd}. \]
+
+
+
+\begin{lemma}
+Let $\cat{C}$ be a category and $f,g\in \cat{C}$.
+\begin{enumerate}
+\item If $f \greensL g$ and $f,g$ are epic, then $\codom(f) \cong \codom(g)$.
+\item If $f \greensR g$ and $f,g$ are monic, then $\dom(f) \cong \dom(g)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $f \greensL g$ and $f,g$ are epic. Set $A = \dom(f) = \dom(g)$, $B=\codom(f)$ and $B'=\codom(g)$. Then there exist $a,b\in \cat{C}$ such that
+\[ \begin{tikzcd}[row sep=small]
+{} & B \arrow[dd, shift left, "a"] \\
+A \arrow[ur, "f"] \arrow[dr, swap, "g"] & {} \\
+{} & B' \arrow[uu, shift left, "b"]
+\end{tikzcd} \qquad \text{commutes with either only $a$ or only $b$ present.} \]
+We need to show that the whole diagram commutes, for which we need to verify that $ba = 1_B$ and $ab = 1_{B'}$.
+
+Indeed, $1_{B}f = f = bg = baf$, so $ba = 1_B$, and $1_{B'}g = af = abg$, so $ab = 1_{B'}$.
+
+(2) Dual.
+\end{proof}
+
+\section{Functors}
 \begin{definition}
 A \udef{functor} is a homomorphism between associative classes.
 \end{definition}
@@ -1409,8 +1509,8 @@ A \ar[rr, shift left, "f"] \ar[rr, shift right, swap, "g"] && B
 \end{tikzcd} \]
 Then the leg $E\to B$ is redundant.
 \end{lemma}
-In other words, the morphism $e: E\to A$ determines the equaliser \textup{if and only if} $\forall X\in\ob(\cat{C}):\exists! \theta :$
-\[ \begin{tikzcd}
+In other words, the morphism $e: E\to A$ determines the equaliser \textup{if and only if} $\forall h: X\to A$ such that $fh = gh$:
+\[ \exists! \theta : \qquad \begin{tikzcd}
 X \ar[d, dashed, swap, "{\exists! \theta}"] \ar[dr, "h"] && \\
 E \ar[r, "e"] & A \ar[r, shift left, "f"] \ar[r, shift right, swap, "g"] & B
 \end{tikzcd} \qquad \text{commutes.} \]
@@ -1538,9 +1638,6 @@ A_1 \ar[r, "f"] & B & \ar[l, swap, "g"] A_2
 We denote the unique morphism $(f \bbslash g)$.
 
 
-\chapter{Adjunctions}
-\chapter{Monads}
-
 \chapter{Types of categories}
 \section{Abelian categories}
 Five lemma. Short exact sequences. Split exact. Exact functors.
@@ -1559,14 +1656,96 @@ A category $\cat{C}$ is called \udef{abelian} if
 Let $\ker: \mor(\cat{C}) \to \mor(\cat{C})$ be the function that maps morphisms to their kernels. Similarly, let $\coker: \mor(\cat{C}) \to \mor(\cat{C})$ be the function that maps morphisms to their cokernels.
 \end{definition}
 
+
 \begin{proposition}
-Let $\cat{C}$ be an abelian category. The functions
-\[ \ker: \{\text{epimorphisms in $\cat{C}$}\} \to \{\text{monomorphisms in $\cat{C}$}\} \]
-and
-\[ \coker: \{\text{monomorphisms in $\cat{C}$}\} \to \{\text{epimorphisms in $\cat{C}$}\} \]
-are inverses of each other.
+Let $\cat{C}$ be an abelian category, $f: A\to B$ a monomorphism and $g: B\to C$ an epimorphism. Then
+\[ f\in\ker(g) \qquad\iff\qquad g\in\coker(f). \]
 \end{proposition}
-TODO: make more precise!!
+\begin{proof}
+First assume $f\in\ker(g)$. Then
+\[ \begin{tikzcd}
+A \arrow[r, "f"] & B \arrow[r, shift left, "g"] \arrow[r, shift right, swap, "{0_{B,C}}"] & C
+\end{tikzcd} \qquad \text{commutes.} \]
+This implies that
+\[ \begin{tikzcd}
+A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B \arrow[r, shift left, "g"] \arrow[r, shift right, swap, "{0_{B,C}}"] & C
+\end{tikzcd} \qquad \text{commutes,} \]
+as all paths from $A$ to $C$ are equal to $0_{A,C}$. Thus
+\[ \begin{tikzcd}
+A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B \arrow[r, "g"]  & C
+\end{tikzcd} \qquad \text{also commutes.} \]
+Thus $g$ determines a coleg of $\begin{tikzcd}
+A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B
+\end{tikzcd}$. We need to show that it is a terminal coleg. Assume there exists some other coleg $g': B\to C'$:
+\[ \begin{tikzcd}
+A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B \arrow[r, "g"] \arrow[dr, swap, "{g'}"]  & C \\
+&& C'
+\end{tikzcd} \]
+\end{proof}
+
+\begin{proposition}
+A monic an epic morphism has a zero kernel and cokernel.
+
+An identity morphism is the kernel and cokernel of a zero morphism.
+\end{proposition}
+
+\begin{proposition}
+Let $\cat{C}$ be an abelian category. Consider the relations $\ker$ and $\coker$. Then
+\begin{enumerate}
+\item $\ker = \ker\circ\coker\circ\ker$;
+\item $\coker = \coker\circ\ker\circ\coker$.
+\end{enumerate}
+\end{proposition}
+TODO: make more precise!! Plus direction relational notation.
+\begin{proof}
+Let $f:B\to C$ be a morphism in $\cat{C}$. 
+
+First take $g\in \ker(f): A\to B$. It is enough to show that for any morphisms $h,h'$ such $h\in \ker(f)$ and $h'\in\coker(h)$, we have $g\in \ker(h')$. Diagrammatically, we have
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{g}"] & {} & C \\
+{} & B \arrow[ur, "{f}"] \arrow[dr, swap, "{h'}"] & {} \\
+A' \arrow[ur, swap, "{h}"] & {} & C'
+\end{tikzcd} \]
+
+We construct $\coker(\ker f): B \to C'$ and $\ker\big(\coker(\ker f)\big): A'\to B$. Diagrammatically, this gives us
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{\ker f}"] & {} & C \\
+{} & B \arrow[ur, "{f}"] \arrow[dr, "{\coker(\ker f)}"] & {} \\
+A' \arrow[ur, "{\ker(\coker(\ker f))}"] & {} & C'
+\end{tikzcd} \]
+Now $f\ker(f) = 0_{B,C}\ker(f) = 0_{A,C} = f0_{A,B}$, so $f$ is a leg compatible with $\begin{tikzcd}
+A \arrow[r, shift left, "{\ker(f)}"] \arrow[r, swap, shift right, "0"] & B
+\end{tikzcd}$. It can be extended to a cocone. An thus there exists a unique $g: C'\to C$. That makes the diagram
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{\ker f}"] & {} & C  \\
+{} & B \arrow[ur, "{f}"] \arrow[dr, swap, "{\coker(\ker f)}"] & {} \\
+A' \arrow[ur, "{\ker(\coker(\ker f))}"] & {} & C' \arrow[uu, "g"]
+\end{tikzcd} \qquad\text{commute.} \]
+We also have that
+\[ \coker(\ker f)\ker(f) = \coker(\ker f)0_{A,B} = 0_{A, C'} = 0_{B,C'}\ker(f), \]
+so $\ker(f)$ is a leg compatible with $\begin{tikzcd}
+B \arrow[r, shift left, "{\coker(\ker f)}"] \arrow[r, swap, shift right, "0"] & C'
+\end{tikzcd}$, and
+\begin{align*}
+f\ker\big(\coker(\ker f)\big) &= g\coker(\ker f)\ker\big(\coker(\ker f)\big) \\
+&= g0_{B,C'}\ker\big(\coker(\ker f)\big) \\
+&= 0_{B,C}\ker\big(\coker(\ker f)\big),
+\end{align*}
+so $\ker\big(\coker(\ker f)\big)$ is a leg compatible with $\begin{tikzcd}
+B \arrow[r, shift left, "f"] \arrow[r, swap, shift right, "0"] & C
+\end{tikzcd}$.
+
+Thus there exist unique $h,h'$ such that the diagram
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{\ker f}"] \arrow[dd, shift left, "h"] & {} \\
+{} & B \\
+A' \arrow[ur, swap, "{\ker(\coker(\ker f))}"] \arrow[uu, shift left, "{h'}"] & {}
+\end{tikzcd} \qquad\text{commutes.} \]
+Thus we have $ker(f)hh' = \ker(f)\id_A$. As $\ker(f)$ is monic, we have $hh'=\id_A$. Similarly $h'h=\id_{A'}$, so $A$ and $A'$ are isomorphic.
+
+Thus $\ker$ and $\coker$ are generalised inverses up to isomorphism. By the definition of an abelian category, we have that $\im\ker$ is exactly the class of monomorphisms. Similarly, $\im\coker$ is the class of epimorphisms. 
+\end{proof}
+
 \begin{proof}
 Let $f:B\to C$ be an epimorphism in $\cat{C}$. Then $\ker(f): A\to B$ is a monomorphism by \ref{equaliserMonic}.
 
