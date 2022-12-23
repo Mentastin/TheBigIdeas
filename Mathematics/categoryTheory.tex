@@ -124,13 +124,25 @@ Let $\cat{C}$ be a category.
 \end{definition}
 Initial and terminal objects are dual notions.
 
-\begin{proposition}
-Let $\cat{C}$ be a category. Any two initial objects are isomorphic. Any two terminal objects are isomorphic.
+\begin{proposition} \label{initialTerminalIsomorphisms}
+Let $\cat{C}$ be a category.
+\begin{enumerate}
+\item Any two initial objects are isomorphic.
+\item Any two terminal objects are isomorphic.
+\item Any object isomorphic with an initial object is also initial.
+\item Any object isomorphic with a terminal object is also terminal.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-Let $X_1,X_2$ be initial objects let $f:X_1\to X_2$ and $g:X_2\to X_1$ be the unique morphisms with these domains / codomains. Then $g\circ f: X_1 \to X_1 \in \cat{C}(X_1, X_1) = \{\id_{X_1}\}$. Similarly $f$ is also a left inverse of $g$. Thus $X_1$ and $X_2$ are isomorphic.
+(1) Let $X_1,X_2$ be initial objects let $f:X_1\to X_2$ and $g:X_2\to X_1$ be the unique morphisms with these domains / codomains. Then $g\circ f: X_1 \to X_1 \in \cat{C}(X_1, X_1) = \{\id_{X_1}\}$. Similarly $f$ is also a left inverse of $g$. Thus $X_1$ and $X_2$ are isomorphic.
 
-The case for terminal objects is dual.
+(2) The case for terminal objects is dual.
+
+(3) Let $A$ be an initial object and $\begin{tikzcd}
+X \arrow[r, shift left, "f"] & \arrow[l, shift left, "f^{-1}"] A
+\end{tikzcd}$ isomorphisms. For any object $B\in \cat{C}$, there exists a morphism $g: A\to B$ and thus also a morphism $gf: X\to B$. This morphism is unique in $\cat{C}(X, B)$: take $g': X\to B$. Then $g'f^{-1}: A\to B$, so $g'f^{-1} = g$ and thus $g' = g'f^{-1}f = gf$. So $X$ is an initial object.
+
+(4) The case for terminal objects is dual.
 \end{proof}
 
 \subsubsection{Constant and coconstant morphisms}
@@ -1011,7 +1023,11 @@ such that
 \begin{definition}
 Let $\cat{C}$ be an associative class. We call $\cat{C}$
 \begin{itemize}
-\item a \udef{left semi-category} if for all $x\in \cat{C}$, there exist a left-identities $e, e'\in \cat{C}$ such that $ex$ and $xe'$ are defined.
+\item a \udef{left semi-category} if for all $x\in \cat{C}$, there exists
+\begin{itemize}
+\item a function $\dom: \cat{C}\to \cat{C}: x\mapsto 1_{\dom(x)}$, where $1_{\dom(x)}$ is a left identity such that $x1_{\dom(x)}$ exists; and
+\item a function $\codom: \cat{C}\to \cat{C}: x\mapsto 1_{\codom(x)}$, where $1_{\codom(x)}$ is a left identity such that $1_{\codom(x)}x$ exists;
+\end{itemize}
 \item a \udef{category} if for all $x\in \cat{C}$, there exist identities $e,e'\in \cat{C}$ such that both $ex$ and $xe'$ are defined.
 \end{itemize}
 \end{definition}
@@ -1083,7 +1099,7 @@ A' \arrow[ur, swap, "g"] & {}
 
 
 
-\begin{lemma}
+\begin{lemma} \label{leftRightRelatedIsomorphic}
 Let $\cat{C}$ be a category and $f,g\in \cat{C}$.
 \begin{enumerate}
 \item If $f \greensL g$ and $f,g$ are epic, then $\codom(f) \cong \codom(g)$.
@@ -1120,11 +1136,19 @@ We write $\alpha: F \Rightarrow G$.
 
 \subsection{Operations with natural transformations}
 \subsubsection{Vertical composition}
+TODO: need define decomposable.
 \begin{definition}
-Let $F,G,H: A\to B$ be functors and $\alpha: F\Rightarrow G$, $\beta: G\Rightarrow H$ natural transformations. The \udef{vertical composition} of $\alpha$ and $\beta$ is the natural transformation $\beta\circ\alpha: F\Rightarrow H$ defined by $(\beta\circ\alpha)_f = \beta_f\alpha_f$ for all $f\in A$.
+Let $A$ be an associative class that is decomposable. Let $B$ be anothor associative class.
+
+Let $F,G,H: A\to B$ be functors and $\alpha: F\Rightarrow G$, $\beta: G\Rightarrow H$ natural transformations. The \udef{vertical composition} of $\alpha$ and $\beta$ is the natural transformation $\beta\circ\alpha: F\Rightarrow H$ defined by
+$(\beta\circ\alpha)_{f} \defeq \beta_{f_2}\alpha_{f_1}$ if $f = f_2f_1$.
 \end{definition}
-Note that $\beta\circ\alpha: F\Rightarrow H$ is (TODO: NOT!!) a natural transformation from $F$ to $H$: $\forall f,g\in A$ we have
-\[ H(f)(\beta\circ\alpha)_g = H(f)\beta_g\alpha_g = \beta_fG(g)\alpha_g \] 
+Note that
+\begin{itemize}
+\item TODO: under what conditions is this well-defined???
+\item $\beta\circ\alpha: F\Rightarrow H$ is a natural transformation from $F$ to $H$: $\forall f,g\in A$ we take $f = f_2f_1$, $g = g_2g_1$ and have
+\[ H(f)(\beta\circ\alpha)_g = H(f_2)H(f_1)\beta_{g_2}\alpha_{g_1} =  \beta_{f_2}\alpha_{f_1}F(g_2)F(g_1) = (\beta\circ\alpha)_{f}F(g). \]
+\end{itemize} 
 
 \subsubsection{Whiskering}
 \begin{definition}
@@ -1178,8 +1202,8 @@ Let $\sSet{J,\cdot}$ be an associative set and $\sSet{A,\cdot}$ an associative c
 \end{itemize}
 We also define
 \begin{itemize}
-\item a \udef{limit} of the diagram $F: J\to A$ is a $[\setbuilder{\rho_a\circ -}{a\in A}]^!$-maximum in the set of cones over $F$.
-\item a \udef{colimit} of the diagram $F: J\to A$ is a $[\setbuilder{\lambda_a\circ -}{a\in A}]^!$-maximum in the set of cocones over $F$.
+\item a \udef{limit} of the diagram $F: J\to A$ is a $[\setbuilder{\rho_a\circ -}{a\in A}]^!$-maximum in the class of cones over $F$.
+\item a \udef{colimit} of the diagram $F: J\to A$ is a $[\setbuilder{\lambda_a\circ -}{a\in A}]^!$-maximum in the class of cocones over $F$.
 \end{itemize}
 \end{definition}
 
@@ -1676,11 +1700,33 @@ A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B \arro
 \end{tikzcd} \qquad \text{also commutes.} \]
 Thus $g$ determines a coleg of $\begin{tikzcd}
 A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B
-\end{tikzcd}$. We need to show that it is a terminal coleg. Assume there exists some other coleg $g': B\to C'$:
-\[ \begin{tikzcd}
-A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B \arrow[r, "g"] \arrow[dr, swap, "{g'}"]  & C \\
-&& C'
+\end{tikzcd}$. We need to show that it is a terminal coleg.
+
+Now $g$ is epic, so there exists $f'$ such that $g\in\coker(f')$. Also there exists $g'\in\coker(f)$. The situation is then depicted as
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{f}"] & {} & C \\
+{} & B \arrow[ur, "{g}"] \arrow[dr, swap, "{g'}"] & {} \\
+A' \arrow[ur, swap, "{f'}"] & {} & C'
 \end{tikzcd} \]
+Because $g$ is a a coleg of $\begin{tikzcd}
+A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B
+\end{tikzcd}$, we can add the following morphism and the diagram still commutes:
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{f}"] & {} & C \arrow[dd, "h"] \\
+{} & B \arrow[ur, "{g}"] \arrow[dr, swap, "{g'}"] & {} \\
+A' \arrow[ur, swap, "{f'}"] & {} & C'
+\end{tikzcd} \]
+This allows us to note that $g'$ is a coleg of $\begin{tikzcd}
+A' \arrow[r, shift left, "f'"] \arrow[r, shift right, swap, "{0_{A',B}}"] & B
+\end{tikzcd}$, indeed $g'f' = hgf' = h0_{A',C} = 0_{A',C'} = g'0_{A',B}$. Thus we can add the morphism $h': C'\to C$ and the diagram
+\[ \begin{tikzcd}[row sep=small, column sep=huge]
+A \arrow[dr, "{f}"] & {} & C \arrow[dd, shift left, "h"] \\
+{} & B \arrow[ur, "{g}"] \arrow[dr, swap, "{g'}"] & {} \\
+A' \arrow[ur, swap, "{f'}"] & {} & C' \arrow[uu, shift left, "{h'}"]
+\end{tikzcd} \]
+commutes if we remove $h$. By \ref{leftRightRelatedIsomorphic} the entire diagram commutes and $h,h'$ are inverses of each other. As they determine isomorphisms in the coleg categories, we have that $g$ also determines a terminal coleg (by \ref{initialTerminalIsomorphisms}). So $g\in \coker(f)$.
+
+The opposite implication is dual.
 \end{proof}
 
 \begin{proposition}
@@ -1795,3 +1841,12 @@ Let $\cat{C}$ be an abelian category. A morphism that is both monic and epic is 
 \begin{proof}
 
 \end{proof}
+
+\begin{proposition}
+Abelian categories are complete.
+\end{proposition}
+
+\subsection{Additive structure}
+
+\subsection{Exact sequences}
+\subsubsection{Short exact sequences}
