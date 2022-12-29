@@ -1565,6 +1565,37 @@ Let $\cat{C}$ be a category with zero morphisms and $f:A\to B$ a morphism.
 \end{itemize}
 \end{definition}
 
+\begin{proposition} \label{epicMonicZeroKernelCokernel}
+Let $\cat{C}$ be a category with a zero object $0$ and $f:A\to B$ a morphism. Then
+\begin{enumerate}
+\item if $f$ is monic, then $0_{0,A}\in \ker(f)$;
+\item if $f$ is epic, then $0_{0,A}\in \coker(f)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have $f0_{0,A} = 0_{0,B} = 0_{A,B}0_{0,A}$, so $0_{0,A}$ determines a cone over the diagram $\begin{tikzcd}
+A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B
+\end{tikzcd}$. For any other cone $h: A'\to A$, we have a unique morphism from $A'$ to $0$. In order to prove that $0_{0,A}\in\ker(f)$, we need to show that the diagram
+\[ \begin{tikzcd}
+A' \ar[d, swap, "{0_{A', 0}}"] \ar[dr, "h"] && \\
+0 \ar[r, "0_{0,A}"] & A \ar[r, shift left, "f"] \ar[r, shift right, swap, "{0_{A,B}}"] & B
+\end{tikzcd}\qquad\text{commutes.} \]
+The only part that remains to be proven is that $h = 0_{0,A}0_{A',0}$. We have
+\[ fh = 0_{A,B}h = 0_{A',B} = 0_{A,B}0_{0,A}0_{A',0} = f0_{0,A}0_{A',0}. \]
+As $f$ is monic, the equality $fh = f0_{0,A}0_{A',0}$ implies $h = 0_{0,A}0_{A',0}$.
+
+(2) Dual.
+\end{proof}
+TODO: opposite implication for additive categories (??)
+
+\begin{lemma} \label{identityAsKernelCokernel}
+Let $\cat{C}$ be a category with zero element and $A\in\ob(\cat{C})$. Then
+\begin{enumerate}
+\item $1_A \in \ker(A\to 0)$;
+\item $1_A \in \coker(0\to A)$.
+\end{enumerate} 
+\end{lemma}
+
 \subsection{Pullbacks}
 \begin{definition}
 
@@ -1634,6 +1665,10 @@ A \ar[ur, leftrightarrow, "{\id_A}"] \ar[dr, leftrightarrow, swap, "{\id_A}"] & 
 (3) From point (2) and \ref{productAsPullback}.
 \end{proof}
 
+\begin{lemma}
+
+\end{lemma}
+
 \begin{proposition}
 Let $\cat{C}$ be a category. If products and equalisers exist, then all finite limits exist.
 \end{proposition}
@@ -1641,6 +1676,9 @@ Note that we assume all products exist, including products of zero factors (i.e.
 \begin{proof}
 Take product over all objects in diagram and the equalise over all paths that need to be the same in order for the cone to commute properly.
 \end{proof}
+\begin{corollary} \label{productsMonicPullbacksComplete}
+Let $\cat{C}$ be a category. If products and pullbacks of monomorphisms exist, then all finite limits exist.
+\end{corollary}
 
 \begin{example}
 For the existence of pullbacks:
@@ -1675,13 +1713,13 @@ A category $\cat{C}$ is called \udef{abelian} if
 \item $\cat{C}$ contains a zero object $0$;
 \item $\cat{C}$ contains all binary products and sums;
 \item every morphism in $\cat{C}$ has a kernel and cokernel;
-\item every monomorphism is a kernel and every epimorphism is a cokernel.
+\item every monomorphism is a kernel and every epimorphism is a cokernel. (Binormal category)
 \end{itemize}
 Let $\ker: \mor(\cat{C}) \to \mor(\cat{C})$ be the function that maps morphisms to their kernels. Similarly, let $\coker: \mor(\cat{C}) \to \mor(\cat{C})$ be the function that maps morphisms to their cokernels.
 \end{definition}
 
 
-\begin{proposition}
+\begin{proposition} \label{kernelCokernelAdjunction}
 Let $\cat{C}$ be an abelian category, $f: A\to B$ a monomorphism and $g: B\to C$ an epimorphism. Then
 \[ f\in\ker(g) \qquad\iff\qquad g\in\coker(f). \]
 \end{proposition}
@@ -1698,9 +1736,9 @@ as all paths from $A$ to $C$ are equal to $0_{A,C}$. Thus
 \[ \begin{tikzcd}
 A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B \arrow[r, "g"]  & C
 \end{tikzcd} \qquad \text{also commutes.} \]
-Thus $g$ determines a coleg of $\begin{tikzcd}
+Thus $g$ determines a cocone under $\begin{tikzcd}
 A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B
-\end{tikzcd}$. We need to show that it is a terminal coleg.
+\end{tikzcd}$. We need to show that it is a terminal cocone.
 
 Now $g$ is epic, so there exists $f'$ such that $g\in\coker(f')$. Also there exists $g'\in\coker(f)$. The situation is then depicted as
 \[ \begin{tikzcd}[row sep=small, column sep=huge]
@@ -1708,7 +1746,7 @@ A \arrow[dr, "{f}"] & {} & C \\
 {} & B \arrow[ur, "{g}"] \arrow[dr, swap, "{g'}"] & {} \\
 A' \arrow[ur, swap, "{f'}"] & {} & C'
 \end{tikzcd} \]
-Because $g$ is a a coleg of $\begin{tikzcd}
+Because $g$ detemines a cocone of $\begin{tikzcd}
 A \arrow[r, shift left, "f"] \arrow[r, shift right, swap, "{0_{A,B}}"] & B
 \end{tikzcd}$, we can add the following morphism and the diagram still commutes:
 \[ \begin{tikzcd}[row sep=small, column sep=huge]
@@ -1716,7 +1754,7 @@ A \arrow[dr, "{f}"] & {} & C \arrow[dd, "h"] \\
 {} & B \arrow[ur, "{g}"] \arrow[dr, swap, "{g'}"] & {} \\
 A' \arrow[ur, swap, "{f'}"] & {} & C'
 \end{tikzcd} \]
-This allows us to note that $g'$ is a coleg of $\begin{tikzcd}
+This allows us to note that $g'$ determines a cocone of $\begin{tikzcd}
 A' \arrow[r, shift left, "f'"] \arrow[r, shift right, swap, "{0_{A',B}}"] & B
 \end{tikzcd}$, indeed $g'f' = hgf' = h0_{A',C} = 0_{A',C'} = g'0_{A',B}$. Thus we can add the morphism $h': C'\to C$ and the diagram
 \[ \begin{tikzcd}[row sep=small, column sep=huge]
@@ -1724,129 +1762,70 @@ A \arrow[dr, "{f}"] & {} & C \arrow[dd, shift left, "h"] \\
 {} & B \arrow[ur, "{g}"] \arrow[dr, swap, "{g'}"] & {} \\
 A' \arrow[ur, swap, "{f'}"] & {} & C' \arrow[uu, shift left, "{h'}"]
 \end{tikzcd} \]
-commutes if we remove $h$. By \ref{leftRightRelatedIsomorphic} the entire diagram commutes and $h,h'$ are inverses of each other. As they determine isomorphisms in the coleg categories, we have that $g$ also determines a terminal coleg (by \ref{initialTerminalIsomorphisms}). So $g\in \coker(f)$.
+commutes if we remove $h$. By \ref{leftRightRelatedIsomorphic} the entire diagram commutes and $h,h'$ are inverses of each other. As they determine isomorphisms in the cocone categories, we have that $g$ also determines a terminal cocone (by \ref{initialTerminalIsomorphisms}). So $g\in \coker(f)$.
 
 The opposite implication is dual.
 \end{proof}
 
 \begin{proposition}
-A monic an epic morphism has a zero kernel and cokernel.
-
-An identity morphism is the kernel and cokernel of a zero morphism.
-\end{proposition}
-
-\begin{proposition}
-Let $\cat{C}$ be an abelian category. Consider the relations $\ker$ and $\coker$. Then
+Let $\cat{C}$ be an abelian category. Then
 \begin{enumerate}
-\item $\ker = \ker\circ\coker\circ\ker$;
-\item $\coker = \coker\circ\ker\circ\coker$.
+\item every monomorphism is split monic;
+\item every epimorphism is split epic.
 \end{enumerate}
 \end{proposition}
-TODO: make more precise!! Plus direction relational notation.
 \begin{proof}
-Let $f:B\to C$ be a morphism in $\cat{C}$. 
+(1) Let $f: A\to B$ be a monomorphism. Then $0_{0,A}\in\ker(f)$ by \ref{epicMonicZeroKernelCokernel} and thus $f\in \coker(0_{0,A})$ by \ref{kernelCokernelAdjunction} in particular $f$ is a coleg of $\begin{tikzcd}
+0 \arrow[r] & A
+\end{tikzcd}$. Now $1_A\in\coker(0,A)$ by \ref{identityAsKernelCokernel}.
 
-First take $g\in \ker(f): A\to B$. It is enough to show that for any morphisms $h,h'$ such $h\in \ker(f)$ and $h'\in\coker(h)$, we have $g\in \ker(h')$. Diagrammatically, we have
-\[ \begin{tikzcd}[row sep=small, column sep=huge]
-A \arrow[dr, "{g}"] & {} & C \\
-{} & B \arrow[ur, "{f}"] \arrow[dr, swap, "{h'}"] & {} \\
-A' \arrow[ur, swap, "{h}"] & {} & C'
-\end{tikzcd} \]
+By definition of cokernel there exists $g: B\to A$ such that the diagram
+\[ \begin{tikzcd}
+&& B \arrow[d, "g"] \\
+0 \arrow[r] & A \arrow[r, "{1_A}"] \arrow[ur, "f"] & A
+\end{tikzcd}\qquad\text{commutes.} \]
+In particular $gf = 1_A$.
 
-We construct $\coker(\ker f): B \to C'$ and $\ker\big(\coker(\ker f)\big): A'\to B$. Diagrammatically, this gives us
-\[ \begin{tikzcd}[row sep=small, column sep=huge]
-A \arrow[dr, "{\ker f}"] & {} & C \\
-{} & B \arrow[ur, "{f}"] \arrow[dr, "{\coker(\ker f)}"] & {} \\
-A' \arrow[ur, "{\ker(\coker(\ker f))}"] & {} & C'
-\end{tikzcd} \]
-Now $f\ker(f) = 0_{B,C}\ker(f) = 0_{A,C} = f0_{A,B}$, so $f$ is a leg compatible with $\begin{tikzcd}
-A \arrow[r, shift left, "{\ker(f)}"] \arrow[r, swap, shift right, "0"] & B
-\end{tikzcd}$. It can be extended to a cocone. An thus there exists a unique $g: C'\to C$. That makes the diagram
-\[ \begin{tikzcd}[row sep=small, column sep=huge]
-A \arrow[dr, "{\ker f}"] & {} & C  \\
-{} & B \arrow[ur, "{f}"] \arrow[dr, swap, "{\coker(\ker f)}"] & {} \\
-A' \arrow[ur, "{\ker(\coker(\ker f))}"] & {} & C' \arrow[uu, "g"]
-\end{tikzcd} \qquad\text{commute.} \]
-We also have that
-\[ \coker(\ker f)\ker(f) = \coker(\ker f)0_{A,B} = 0_{A, C'} = 0_{B,C'}\ker(f), \]
-so $\ker(f)$ is a leg compatible with $\begin{tikzcd}
-B \arrow[r, shift left, "{\coker(\ker f)}"] \arrow[r, swap, shift right, "0"] & C'
-\end{tikzcd}$, and
-\begin{align*}
-f\ker\big(\coker(\ker f)\big) &= g\coker(\ker f)\ker\big(\coker(\ker f)\big) \\
-&= g0_{B,C'}\ker\big(\coker(\ker f)\big) \\
-&= 0_{B,C}\ker\big(\coker(\ker f)\big),
-\end{align*}
-so $\ker\big(\coker(\ker f)\big)$ is a leg compatible with $\begin{tikzcd}
-B \arrow[r, shift left, "f"] \arrow[r, swap, shift right, "0"] & C
-\end{tikzcd}$.
-
-Thus there exist unique $h,h'$ such that the diagram
-\[ \begin{tikzcd}[row sep=small, column sep=huge]
-A \arrow[dr, "{\ker f}"] \arrow[dd, shift left, "h"] & {} \\
-{} & B \\
-A' \arrow[ur, swap, "{\ker(\coker(\ker f))}"] \arrow[uu, shift left, "{h'}"] & {}
-\end{tikzcd} \qquad\text{commutes.} \]
-Thus we have $ker(f)hh' = \ker(f)\id_A$. As $\ker(f)$ is monic, we have $hh'=\id_A$. Similarly $h'h=\id_{A'}$, so $A$ and $A'$ are isomorphic.
-
-Thus $\ker$ and $\coker$ are generalised inverses up to isomorphism. By the definition of an abelian category, we have that $\im\ker$ is exactly the class of monomorphisms. Similarly, $\im\coker$ is the class of epimorphisms. 
+(2) Dual.
 \end{proof}
-
-\begin{proof}
-Let $f:B\to C$ be an epimorphism in $\cat{C}$. Then $\ker(f): A\to B$ is a monomorphism by \ref{equaliserMonic}.
-
-We construct $\coker(\ker f): B \to C'$ and $\ker\big(\coker(\ker f)\big): A'\to B$. Diagrammatically, this gives us
-\[ \begin{tikzcd}[row sep=small, column sep=huge]
-A \arrow[dr, "{\ker f}"] & {} & C \\
-{} & B \arrow[ur, "{f}"] \arrow[dr, "{\coker(\ker f)}"] & {} \\
-A' \arrow[ur, "{\ker(\coker(\ker f))}"] & {} & C'
-\end{tikzcd} \]
-Now $f\ker(f) = 0_{B,C}\ker(f) = 0_{A,C} = f0_{A,B}$, so $f$ is a leg compatible with $\begin{tikzcd}
-A \arrow[r, shift left, "{\ker(f)}"] \arrow[r, swap, shift right, "0"] & B
-\end{tikzcd}$. It can be extended to a cocone. An thus there exists a unique $g: C'\to C$. That makes the diagram
-\[ \begin{tikzcd}[row sep=small, column sep=huge]
-A \arrow[dr, "{\ker f}"] & {} & C  \\
-{} & B \arrow[ur, "{f}"] \arrow[dr, swap, "{\coker(\ker f)}"] & {} \\
-A' \arrow[ur, "{\ker(\coker(\ker f))}"] & {} & C' \arrow[uu, "g"]
-\end{tikzcd} \qquad\text{commute.} \]
-We also have that
-\[ \coker(\ker f)\ker(f) = \coker(\ker f)0_{A,B} = 0_{A, C'} = 0_{B,C'}\ker(f), \]
-so $\ker(f)$ is a leg compatible with $\begin{tikzcd}
-B \arrow[r, shift left, "{\coker(\ker f)}"] \arrow[r, swap, shift right, "0"] & C'
-\end{tikzcd}$, and
-\begin{align*}
-f\ker\big(\coker(\ker f)\big) &= g\coker(\ker f)\ker\big(\coker(\ker f)\big) \\
-&= g0_{B,C'}\ker\big(\coker(\ker f)\big) \\
-&= 0_{B,C}\ker\big(\coker(\ker f)\big),
-\end{align*}
-so $\ker\big(\coker(\ker f)\big)$ is a leg compatible with $\begin{tikzcd}
-B \arrow[r, shift left, "f"] \arrow[r, swap, shift right, "0"] & C
-\end{tikzcd}$.
-
-Thus there exist unique $h,h'$ such that the diagram
-\[ \begin{tikzcd}[row sep=small, column sep=huge]
-A \arrow[dr, "{\ker f}"] \arrow[dd, shift left, "h"] & {} \\
-{} & B \\
-A' \arrow[ur, swap, "{\ker(\coker(\ker f))}"] \arrow[uu, shift left, "{h'}"] & {}
-\end{tikzcd} \qquad\text{commutes.} \]
-Thus we have $ker(f)hh' = \ker(f)\id_A$. As $\ker(f)$ is monic, we have $hh'=\id_A$. Similarly $h'h=\id_{A'}$, so $A$ and $A'$ are isomorphic.
-
-Thus $\ker$ and $\coker$ are generalised inverses up to isomorphism. By the definition of an abelian category, we have that $\im\ker$ is exactly the class of monomorphisms. Similarly, $\im\coker$ is the class of epimorphisms. 
-\end{proof}
-
-
-\begin{proposition}
+\begin{corollary}
 Let $\cat{C}$ be an abelian category. A morphism that is both monic and epic is an isomorphism.
-\end{proposition}
-\begin{proof}
+\end{corollary}
 
-\end{proof}
+
 
 \begin{proposition}
-Abelian categories are complete.
+Abelian categories are bicomplete.
 \end{proposition}
+\begin{proof}
+We first show that abelian categories are complete using \ref{productsMonicPullbacksComplete}. We just need to verify that monic pullbacks exist. Let $f: A_1\to B$ and $g: A_2\to B$ be monomorphisms.
+
+First take $h: B\to Y\in \coker(g)$ and then take $p_1: X\to A_1 \in \ker(hf)$. Finally we see that $hfp_1 = 0_{A_1, Y}p_1 = h0_{X,B}$, so there exists a unique $p_2$ such that
+\[ \begin{tikzcd}
+X \arrow[r, "{p_1}"] \arrow[d, swap, "{p_2}"] & A_1 \arrow[d, "f"] & \\
+A_2 \arrow[r, "g"] & B \arrow[r, "h"] & Y
+\end{tikzcd} \qquad\text{commutes.} \]
+We have thus constructed a cone over $\begin{tikzcd}
+A_1 \arrow[r, "f"] & B & \arrow[l, swap, "g"] A_2
+\end{tikzcd}$. To show this cone is terminal, take morphisms $p_1': X'\to A_1$ and $p_2': X'\to A_2$ such that
+\[ \begin{tikzcd}
+X' \arrow[r, "{p_1'}"] \arrow[d, swap, "{p_2'}"] & A_1 \arrow[d, "f"] \\
+A_2 \arrow[r, "g"] & B
+\end{tikzcd}\qquad \text{commutes.} \]
+We have
+\[ hfp_1' = hgp_2' = h0_{A_2, B}p_2' = 0_{X',Y} = 0_{A_1, Y}p_1', \]
+so there exists a unique morphism $m:X'\to X$ such that $p_1' = p_1m$. We now just need to show that $p_2' = p_2m$. Indeed,
+\[ gp_2' = fp_1' = fp_1m = gp_2m \]
+and $g$ is monic, so $p_2' = p_2m$.
+\end{proof}
+
+\subsection{Images and coimages}
+\subsubsection{Factorisation}
+\begin{proposition}
+Let $\cat{C}$ be an abelian category.
+\end{proposition}
+
+\subsubsection{Exact sequences}
+\subsubsection{Short exact sequences}
 
 \subsection{Additive structure}
-
-\subsection{Exact sequences}
-\subsubsection{Short exact sequences}
