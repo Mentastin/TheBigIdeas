@@ -3465,6 +3465,9 @@ TODO
 
 \chapter{Successors and induction}
 \section{The successor and predecessor functions}
+
+TODO review definition for (loose) mini/maximality.
+
 \begin{definition}
 Let $\sSet{X,\Yleft}$ be an ordered set. We define the \udef{successor function}
 \[ S_X: X \to \powerset(X): x\mapsto \lmin\big(\upset\{x\}\setminus \downset\{x\}\big). \]
@@ -3488,29 +3491,36 @@ The poset $X\cup t_X$ is called the \udef{successor} $\operatorname{Succ}(X)$ of
 
 \section{Well-founded and well-ordered sets}
 \begin{definition}
-Let $\sSet{P, \Yleft}$ be an ordered set.
-Then $\Yleft$ is called
+Let $\sSet{P, \Yleft}$ be an ordered \emph{set}.
+Then $P$ is called
 \begin{itemize}
+\item \udef{strictly well-founded} if every non-empty subset has a strictly minimal element;
 \item \udef{well-founded} if every non-empty subset has a minimal element;
-\item a \udef{well-ordering} set if every non-empty subset has a minimum. In this case $P$ is said to be \udef{well-ordered}.
+\item \udef{loosely well-founded} if every non-empty subset has a loosely minimal element.
 \end{itemize}
-A set $A$ is \udef{well-orderable} if it admits a well-ordering.
+Additionally, $P$ is called
+\begin{itemize}
+\item \udef{well-ordered} if every non-empty subset has a minimum. In this case $\Yleft$ is said to be a \udef{well-ordering}.
+\end{itemize}
+A set is called \udef{well-orderable} if it admits a well-ordering.
 \end{definition}
+The requirement that $P$ be a set makes it easier to quantify over all subsets.
+
 It turns out well-foundedness is what is needed to do recursion and induction. TODO: equivalence induction principle and well-foundedness!!
 
-Note we do not impose anti-symmetry.
+Note we do not impose antisymmetry.
 
 \begin{proposition} \label{wellOrderedCondition}
 Let $\sSet{P, \Yleft}$ be an ordered set. Then the following are equivalent:
 \item $P$ is well-ordered;
-\item $P$ is well-founded and connex.
+\item $P$ is loosely well-founded and connex.
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ Assume $P$ well-ordered. Then every non-empty subset has a minimum, which is also minimal by \ref{maximumIsMaximal}. So $P$ is well-founded.
+$(1) \Rightarrow (2)$ Assume $P$ well-ordered. Then every non-empty subset has a minimum, which is also loosely minimal by \ref{maximumIsMaximal}. So $P$ is well-founded.
 
 Now take any $x,y\in P$. We need to show $x\mathrel{\Yleft}y$ or $y\mathrel{\Yleft}x$. We have that $\{x,y\}$ has a minimum. If $x$ is a minimum, then $x\mathrel{\Yleft}y$. If $y$ is a minimum, then $y\mathrel{\Yleft}x$.
 
-$(2) \Rightarrow (1)$ Now assume $P$ is well-founded and connex and take some non-empty subset $S$ of $P$. Now $S$ is a chain, so each minimal element of $S$ is a minimum by \ref{maximumIsMaximal}.
+$(2) \Rightarrow (1)$ Now assume $P$ is well-founded and connex and take some non-empty subset $S$ of $P$. Now $S$ is also connex, so each minimal element of $S$ is a minimum by \ref{maximumIsMaximal}.
 \end{proof}
 
 \begin{lemma}
@@ -3584,44 +3594,114 @@ Standard induction and recursion use the predecessor to define / prove a propert
 induction} and definition by \textit{complete recursion} that generalise to well-founded sets.
 
 \begin{definition}
-Let $\sSet{U, \Yleft}$ be an ordered set. We say $U$ satisfies the principle of induction if for all functions $P: U\to \{0,1\}$, we have the implication
-\[ \text{if}\quad  \forall x\in U: \Big(\big(\forall y \in \downset\{x\}\setminus\upset\{x\}: P(y)=1\big)\implies P(x)=1\Big) \quad \text{then}\quad \forall x\in U: P(x)=1. \]
-The antecedent of the implication is called the \udef{induction step}. The antecedent of the induction step is called the \udef{induction hypothesis}.
+Let $\sSet{U, \Yleft}$ be an ordered set. We say $U$ satisfies
+\begin{itemize}
+\item the principle of \udef{well-founded induction} if for all subsets $P\subseteq U$, we have the implication
+\[ \text{if}\quad  \forall x\in U: \Big(\big(\downset\{x\}\setminus\{x\}\subseteq P\big)\implies x\in P\Big), \quad \text{then}\quad P=U; \]
+\item the principle of \udef{loosely well-founded induction} if for all subsets $P\subseteq U$, we have the implication
+\[ \text{if}\quad  \forall x\in U: \Big(\big(\downset\{x\}\setminus\upset\{x\}\subseteq P\big)\implies x\in P\Big), \quad \text{then}\quad P=U. \]
+\end{itemize}
+In both cases the antecedent of the implication is called the \udef{induction step}. The antecedent of the induction step is called the \udef{induction hypothesis}.
+
+We say $U$ satisfies
+\begin{itemize}
+\item the principle of \udef{well-founded recursion} if for all non-empty sets $E$ and functions $h: (U\not\to E)\to E$, there exists exactly one function $f: U\to E$ that satisfies
+\[ \forall x\in U: \quad f(x) = h(f|_{\downset\{x\}\setminus\{x\}}); \]
+\item the principle of \udef{loosely well-founded recursion} if for all non-empty sets $E$ and functions $h: (U\not\to E)\to E$, there exists exactly one function $f: U\to E$ that satisfies
+\[ \forall x\in U: \quad f(x) = h(f|_{\downset\{x\}\setminus\upset\{x\}}). \]
+\end{itemize}
 \end{definition}
 
-If $\sSet{U,\Yleft}$ is a poset, then $\forall y \in \downset\{x\}\setminus\upset\{x\}$ just means $\forall y < x$.
-
-\begin{theorem}[Transfinite induction] \label{transfiniteInduction}
-Let $\sSet{U, \Yleft}$ be an ordered set. Then $U$ satisfies the principle of induction \textup{if and only if} $U$ is well-founded.
+\begin{theorem}[Well-founded induction and recursion]
+Let $\sSet{U, \Yleft}$ be an ordered set. Then the following are equivalent:
+\begin{enumerate}
+\item $U$ is well-founded;
+\item $U$ satisfies the principle of well-founded induction;
+\item $U$ satisfies the principle of well-founded recursion.
+\end{enumerate}
+The following are also equivalent:
+\begin{enumerate}
+\item $U$ is loosely well-founded;
+\item $U$ satisfies the principle of loosely well-founded induction;
+\item $U$ satisfies the principle of loosely well-founded recursion.
+\end{enumerate}
 \end{theorem}
+Notice that there is no need for a ``base step'' in the induction principles, as it is 
+contained in the induction step: if $x$ is minimal in $U$, then there is no smaller $y$, so the induction hypothesis is trivially true and the induction step gives $x\in P$.
 \begin{proof}
-$\boxed{\Rightarrow}$ assume $U$ satisfies the principle of induction. Let $S$ be some subset of $U$. Now consider the function $P = \chi_{S^c}$.
+We show the first set of equivalences. The proof of the second set is identical, except with $\downset\{x\}\setminus\upset\{x\} = \Yleft\{x\}\setminus\{x\}\Yleft$ instead of $\downset\{x\}\setminus\{x\}$.
 
-Then the induction step is
-\[ \forall x\in U: \Big(\big(\forall y \in \downset\{x\}\setminus\upset\{x\}: \chi_{S^c}(y)=1\big)\implies \chi_{S^c}(x)=1\Big). \]
-This is equivalent to
-\[ \forall x\in U: \Big(\big(\downset\{x\}\setminus\upset\{x\}\perp S\big)\implies x\notin S\Big), \]
-which by \ref{maximalMinimalEquivalents} implies that $S$ has no minimal elements (as $\downset\{x\}\setminus\upset\{x\} = \Yleft\{x\}\setminus\{x\}\Yleft$).
+$\boxed{(1) \Rightarrow (2)}$ Assume $U$ satisfies the principle of induction and let $P$ be some subset of $U$. We apply the principle of induction to $P^c$. The induction step is then
+\[ \forall x\in U: \Big(\big(\downset\{x\}\setminus\{x\}\perp P\big)\implies x\notin P\Big), \]
+which by \ref{maximalMinimalEquivalents} implies that $P$ has no minimal elements (as $\downset\{x\}\setminus\{x\} = \Yleft\{x\}\setminus\{x\}$).
 
-The consequent is equivalent to $S=\emptyset$.
+The consequent $P^c = U$ is equivalent to $P=\emptyset$.
 
 Thus the principle of induction gives that any subset without minimal elements is empty, which is exactly well-foundedness.
 
-$\boxed{\Leftarrow}$ Assume, towards a contradiction, the induction hypothesis and $\exists x\in U: P(x)=0$. Then the set
-\[ \setbuilder{x\in U}{P(x) = 0} \]
-is not empty and by well-foundedness we can find a minimal element $x^*$ such that $P(x^*) = 0$. By minimality
-\[ \downset\{x^*\}\setminus\upset\{x^*\}\perp\setbuilder{x\in U}{P(x) = 0}, \]
-so $\forall y\in \downset\{x^*\}\setminus\upset\{x^*\}: P(y) = 1$. By the induction hypothesis $P(x^*) = 1$, which is a contradiction.
+$\boxed{(2) \Rightarrow (1)}$ Assume, towards a contradiction, the induction step for some $P\subseteq U$ and $\exists x\in U\setminus P$. Then the set $P^c$ is not empty and by well-foundedness we can find a minimal element $x^*\in P^c$. By minimality $\downset\{x^*\}\setminus\{x^*\}\perp P^c$, so $\downset\{x^*\}\setminus\{x^*\}\subseteq P$. By the induction hypothesis $x^*\in P$, which is a contradiction.
+
+$\boxed{(2) \Rightarrow (3)}$ Let $\sSet{U, \Yleft}$ be an ordered set and $P\subseteq U$. Consider the characteristic function $\chi_P: U\to \{0,1\}$ of $P$.
+
+We may take $E = \{0,1\}$ and the $h$ that maps partial functions $p$ to zero iff $0\in\im(p)$. Then the statement
+\[ \forall x\in U: \quad\chi_P(x) = h(\chi_P|_{\downset\{x\}\setminus\{x\}}) \]
+is equivalent to the induction hypothesis.
+
+The function $\underline{1}$ satisfies the recursion relation. By the principle of recursion, this is the unique function, so $\chi_P = \underline{1}$ and thus $P = U$.
+
+$\boxed{(3) \Rightarrow (2)}$ Consider $U' \defeq U\cup \{t_U\}$, where $t_U$ is greater than any element in $U$. Then $U'$ is well-founded and $\downset\{t_U\}\setminus \{t_U\} = U$.
+
+Consider the set $P\subseteq U'$ that contains $u\in U'$ if and only if there exists exactly one function $f_u:\downset\{u\}\to E$ which satisfies
+\[ f_u(x) = h(f_u|_{\downset\{x\}\setminus\{x\}}) \qquad \forall x\in\downset\{u\}. \]
+If we can prove the corresponding induction step, then in particular $t_U\in P$. This implies the existence and uniqueness of $f:U\to E = f_{t_U}|_U$.
+
+Fix an arbitrary $u\in U'$ and assume the induction hypothesis, which posits that such a unique function $f_v: \downset\{v\}\to E$ exists for all $v\in \downset\{u\}\setminus\{u\}$. We show the existence and uniqueness of $f_u:\downset\{u\}\to E$.
+
+Note first that for $w\Yleft v\in \downset\{u\}\setminus\{u\}$ we have $f_w = f_v|_{\downset\{w\}}$, as both functions satisfy the conditions that give the unique definition.
+
+For existence: first define $f_u' \defeq \bigcup_{v\in \downset\{u\}\setminus\{u\}} f_v$. 
+This is a relation; we show that it is functional and has domain $\downset\{u\}\setminus\{u\}$.
+Indeed
+\begin{align*}
+\dom(f'_u) &= \bigcup_{v\in \downset\{u\}\setminus\{u\}} \dom(f_v) \\
+&= \bigcup_{v\in \downset\{u\}\setminus\{u\}} \downset\{v\} \\
+&= \bigcup_{v\in \downset\{u\}\setminus\{u\}} \{v\} \\
+&= \downset\{u\}\setminus\{u\}.
+\end{align*}
+To show that $f'_u$ is functional, take $v\in \downset\{u\}\setminus\{u\}$ and let $v\mathrel{(f'_u)}w_1$ and $v\mathrel{(f'_u)}w_2$.
+
+Then there exist $v_1, v_2 \Yright v$ such that $f_{v_1}(v) = w_1$ and $f_{v_2}(v) = w_2$. Now
+\[ w_1 = f_{v_1}(v) = f_{v_1}|_{\downset\{v\}}(v) = f_v(v) = f_{v_2}|_{\downset\{v\}}(v) = f_{v_1}(v) = w_2. \]
+We conclude that $f'_u$ is functional.
+
+Now let $f_u$ be the function $f'_u$ with the domain extended to $\downset\{u\}$ by adding $f_u(u) = h(f'_u)$.
+
+(In the case of loosely well-founded recursion, we need to add $f_u(w) = h(f'_u)$ for all $w\in\downset\{u\}\cap\upset\{u\}$)
+
+To show $f_u$ satisfies the defining property, take $v\in \downset\{u\}$. If $v\neq u$, then
+\[ f_u(v) = f_v(v) = h(f_v|_{\downset\{v\}\setminus\{v\}}) = h(f_u|_{\downset\{v\}\setminus\{v\}}). \]
+Otherwise $v=u$, in which case $\downset\{u\}\cap\upset\{u\} = \downset\{v\}\cap\upset\{v\}$ and then
+\[ f_u(v) = h(f'_u) = h(f_u|_{\downset\{u\}\setminus\{u\}}) = h(f_u|_{\downset\{v\}\setminus\{v\}}). \]
+This concludes the existence part of the proof.
+
+For uniqueness, assume that another function $g: \downset\{u\}\to E$ satisfies the property. For $v\neq u$, we have $g|_{\downset\{u\}\setminus\{u\}} = f'_u = f_u|_{\downset\{u\}\setminus\{u\}}$. For $v=u$, we have
+\[ g(u) = h(g|_{\downset\{u\}\setminus\{u\}}) = h(f'_u) = f_u(u). \]
+This proves uniqueness.
 \end{proof}
-
-Notice that there is no need for a ``base step'' as it is immediately implied by the induction hypothesis: if $x$ is minimal in $U$, then there is no smaller $y$, so the induction hypothesis becomes $\text{\textbf{TRUE}} \implies \big(P(x)=1\big)$ and thus $P(x) = 1$.
-
+\begin{corollary}
+Let $\sSet{U,\Yleft}$ be an ordered set.
+\begin{enumerate}
+\item The well-founded principles imply the loosely well-founded principles.
+\item If $U$ is antisymmetric, then these principles are equivalent.
+\end{enumerate}
+\end{corollary}
+If $\sSet{U,\Yleft}$ is a poset, then $\downset\{x\}\setminus\upset\{x\} = \downset\{x\}\setminus\{x\} = \setbuilder{y\in U}{y<x}$.
 
 \begin{corollary} \label{WOSetsUniqueSimilarity}
 If $U$, $V$ are well-ordered posets and $U =_o V$, then the order similarity is unique.
 \end{corollary}
 \begin{proof}
-Assume $f,g: U\to V$ are order similarities. By antisymmetry, we may consider $\min$ as a function in $\powerset(U)\to U$. Let $P(y)$ be $1$ iff $f(y) = g(y)$. Take arbitrary $x\in U$ and assume $\forall y<x: f(y) = g(y)$. Then
+Assume $f,g: U\to V$ are order similarities. By antisymmetry, we may consider $\min$ as a function in $\powerset(U)\to U$. Set $P = \setbuilder{y\in U}{f(y) = g(y)}$. To prove the induction step, take arbitrary $x\in U$ and assume the induction hypothesis ($\setbuilder{y\in U}{y<x} \subseteq P$). Then $\setbuilder{f(y)}{y< x} = \setbuilder{g(y)}{y< x}$ and so
 \begin{align*}
 f(x) &= f\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) \\
 &= f\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
@@ -3630,63 +3710,13 @@ f(x) &= f\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) \\
 &= g\Big(\min\big(\setbuilder{y}{y < x}^c\big)\Big) \\
 &= g\Big(\min\big(\setbuilder{y}{y\geq x}\big)\Big) = g(x).
 \end{align*}
+By induction we conclude that $P=U$ and thus $f(x) = g(x)$ for all $x\in U$.
 \end{proof}
 
 Note that the hypotheses of connexity and antisymmetry are necessary: without either there may be multiple minimal elements of subsets and different order similarities have the freedom to choose between them.
 
-\begin{theorem}[Transfinite recursion] \label{transfiniteRecursion}
-Let $\sSet{U, \Yleft}$ be a well-founded set, $E$ some non-empty set and $h: (U\not\to E) \to E$ some function.
 
-There is exactly one function $f:U\to E$ which satisfies
-\[ f(x) = h(f|_{\downset\{x\}\setminus\upset\{x\}}) \qquad \forall x\in U. \]
-\end{theorem}
-\begin{proof}
-Consider the sum $U' \defeq U\oplus \{t_U\}$, which is well-founded and $\downset\{t_U\}\setminus \upset\{t_U\} = U$.
 
-Consider the function $P:U'\to \{0,1\}$ that maps $u$ to $1$ when there is exactly one function $f_u:\downset\{u\}\to E$ which satisfies
-\[ f_u(x) = h(f_u|_{\downset\{x\}\setminus\upset\{x\}}) \qquad \forall x\in\downset\{u\}. \]
-If we can prove the corresponding induction step, then in particular $P(t_U) = 1$ by \ref{transfiniteInduction}. This implies the existence and uniqueness of $f:U\to E = f_{t_U}|_U$.
-
-Fix an arbitrary $u\in U'$ and assume the induction hypothesis, which posits that such a unique function $f_v: \downset\{v\}\to E$ exists for all $v\in \downset\{u\}\setminus\upset\{u\}$. We show the existence and uniqueness of $f_u:\downset\{u\}\to E$.
-
-Note first that for $w\Yleft v\in \downset\{u\}\setminus\upset\{u\}$ we have $f_w = f_v|_{\downset\{w\}}$, as both functions satisfy the conditions that give the unique definition.
-
-For existence: first define $f_u' \defeq \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} f_v$. 
-This is a relation; we show that it is functional and has domain $\downset\{u\}\setminus\upset\{u\}$.
-Indeed
-\begin{align*}
-\dom(f'_u) &= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \dom(f_v) \\
-&= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \downset\{v\} \\
-&= \bigcup_{v\in \downset\{u\}\setminus\upset\{u\}} \{v\} \\
-&= \downset\{u\}\setminus\upset\{u\}.
-\end{align*}
-To show that $f'_u$ is functional, take $v\in \downset\{u\}\setminus\upset\{u\}$ and let $v\mathrel{(f'_u)}w_1$ and $v\mathrel{(f'_u)}w_2$.
-
-Then there exist $v_1, v_2 \geq v$ such that $f_{v_1}(v) = w_1$ and $f_{v_2}(v) = w_2$. Now
-\[ w_1 = f_{v_1}(v) = f_{v_1}|_{\downset\{v\}}(v) = f_v(v) = f_{v_2}|_{\downset\{v\}}(v) = f_{v_1}(v) = w_2. \]
-We conclude that $f'_u$ is functional.
-
-Then we can set
-\[ f_u \defeq f_u' \cup \setbuilder{\big(w, h(f'_u)\big)}{w\in \downset\{u\}\cap \upset\{u\}}. \]
-
-To show $f_u$ satisfies the defining property, take $v\in \downset\{u\}$. If $v\in \downset\{u\}\setminus\upset\{u\}$, then
-\[ f_u(v) = f_v(v) = h(f_v|_{\downset\{v\}\setminus\upset\{v\}}) = h(f_u|_{\downset\{v\}\setminus\upset\{v\}}). \]
-Otherwise $v\in \downset\{u\}\cap\upset\{u\}$, in which case $\downset\{u\}\cap\upset\{u\} = \downset\{v\}\cap\upset\{v\}$ and then
-\[ f_u(v) = h(f'_u) = h(f_u|_{\downset\{u\}\cap\upset\{u\}}) = h(f_u|_{\downset\{v\}\cap\upset\{v\}}). \]
-This concludes the existence part of the proof.
-
-For uniqueness, assume that another function $g: \downset\{u\}\to E$ satisfies the property. We have $g|_{\downset\{u\}\setminus\upset\{u\}} = f'_u = f_u|_{\downset\{u\}\setminus\upset\{u\}}$. For $v\in \downset\{u\}\cap\upset\{u\}$, we have
-\[ g(v) = h(g|_{\downset\{v\}\setminus\upset\{v\}}) = h(g|_{\downset\{u\}\setminus\upset\{u\}}) = h(f'_u) = f_u(v). \]
-This proves uniqueness.
-\end{proof}
-\begin{corollary}
-The principle of recursion is equivalent to the principle of induction and thus to well-foundedness.
-\end{corollary}
-\begin{proof}
-In light of \ref{transfiniteInduction} and \ref{transfiniteRecursion}, it is enough to prove that recursion implies induction.
-
-We may take $E = \{0,1\}$ and $h$ maps partial functions $p$ to zero iff $0\in\im(p)$. The function $P = \underline{1}$ satisfies the recursion relation. By the principle of recursion, this is the unique function, so $P(x)= \underline{1}(x) = 1$ for all $x\in U$.
-\end{proof}
 
 \subsection{Recursion invariants}
 TODO recursively defining some function with certain property (+usng this property in recursive definition)
@@ -3726,6 +3756,9 @@ Let $u\in A^*$ be a string. We take all indices modulo $\len(x)$. In particular 
 \[ \reverse{u} \defeq \seq{u_{n-1}, \ldots, u_0}. \]
 \end{itemize}
 We call a subsequence a \udef{substring} if its domain is an interval subset.
+\begin{itemize}
+\item A string is called \udef{simple} if it is injective.
+\end{itemize}
 \end{definition}
 Notice that we can view tuples as strings of length two (i.e.\ there is a bijection $A\times A \leftrightarrow A^{2}$ for all sets $A$). Similarly an $n$-tuple can be seen as a string of length $n$. So sometimes we write
 \[ A^* = \bigcup^\infty_{n=0}A^n = A^{<\omega}\]
@@ -3736,9 +3769,10 @@ We can think of $A^*$ as a generalisation of $\N$, with $\seq{}$ instead of $0$ 
 for all $a\in A$. In this way $\N \cong \{1\}^*$.
 
 
-\begin{lemma} \label{stringPigeonholePrinciple}
-Let $A$ be a finite alphabet and $u\in A^*$. If $\#A < \len(u)$, then $u$ has a repeating character.
-\end{lemma}
+\begin{proposition}[String pigeonhole principle] \label{stringPigeonholePrinciple}
+Let $A$ be a finite alphabet and $u\in A^*$. If $\#A < \len(u)$, then $u$ is not simple.
+\end{proposition}
+In other words: if $\#A < \len(u)$, then $u$ has a repeating character.
 \begin{proof}
 Assume $\#A < \len(u)$. Then we have the inclusion $\interval[co]{0,\#A} \hookrightarrow \interval[co]{0,\len(u)}$ by \ref{naturalNumbersInequalityInclusion}. Also $A =_c \interval[co]{0,\#A}$ by definition.
 
@@ -3774,7 +3808,7 @@ Like before, a version of the theorem can also be stated for recursion with para
 Let $\sSet{A,\leq}$ be a linearly ordered alphabet. Then
 \begin{itemize}
 \item the \udef{lexicographic order} $<_l$ on $A^*$ is defined by
-\[ u <_l v \qquad\iff\qquad u_k < v_k \;\text{where $k = \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}$}. \]
+\[ u <_l v \quad\iff\quad u_k < v_k \;\text{where $k = \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}$}. \]
 \item the \udef{shortlex order} or \udef{strong order} $<_{s}$ on $A^*$ is defined by
 \[ u <_l v \qquad\iff\qquad \begin{cases}
 \len(u) < \len(v) & \text{or} \\
@@ -3813,11 +3847,13 @@ A \udef{tree} is a downwards closed subset of $\sSet{A^*, \sqsubseteq}$.
 
 We call
 \begin{itemize}
-\item a connex subtree of $T$ a \udef{branch} of $T$;
-\item the set of all infinite branches of $T$ the \udef{body} of $T$, denoted $[T]$;
 \item elements of $T$ \udef{nodes} of the tree;
 \item a maximal element of $T$ a \udef{terminal node};
-\item a tree without terminal nodes \udef{pruned}. 
+\item a tree without terminal nodes \udef{pruned};
+\item a connex subtree of $T$ a \udef{branch} of $T$;
+\item the set of all infinite branches of $T$ the \udef{body} of $T$, denoted $[T]$;
+\item the tree $T$ is called \udef{terminating} if $[T] = \emptyset$;
+\item the tree $T$ is called \udef{simple} if every string in $T$ is simple.
 \end{itemize}
 \end{definition}
 
@@ -3887,6 +3923,16 @@ Assume towards a contradiction, that there exists $w\in S$ such that $w\sqsubset
 Now $v = u[0:n]$ and $w = u[0:m]$ for some $m,n\in\N$. We have either $\interval[co]{0,n} \subseteq \interval[co]{0,m}$ or $\interval[co]{0,n} \supseteq \interval[co]{0,m}$. In the first case $v \sqsubseteq w$ and in the second $w\sqsubseteq v$.
 \end{proof}
 
+\subsubsection{Branching}
+\begin{definition}
+Let $T$ be a tree on an alphabet $A$. We say $T$ is
+\begin{itemize}
+\item \udef{finitely branching} if for all $u\in T\setminus\{\seq{}\}$ the set $\setbuilder{u\concat\seq{a}}{a\in A}$ is finite;
+\item \udef{locally finite} if $\setbuilder{u\in T}{\seq{a}\sqsubseteq u}$ is finite for all $a\in A$.
+\end{itemize}
+\end{definition}
+
+
 \subsubsection{The tree of a homogeneous binary relation}
 \begin{definition}
 Let $\sSet{A,R}$ be a relational structure. The tree
@@ -3928,6 +3974,15 @@ Let $\sSet{A,R}$ be a relational structure with associated tree $T_R$. Let $a,b\
 TODO!
 \end{proof}
 
+\begin{proposition}
+Let $\sSet{A,R}$ and $\sSet{B,S}$ be relational structures and $f: A\to B$ a function. Then $f$ is monotone \textup{if and only if} $(\lambda_f)^{\imf}(T_{R})$ is a subtree of $T_S$.
+\end{proposition}
+\begin{proof}
+The set $(\lambda_f)^{\imf}(T_{R})$ is automatically a tree.
+
+$\boxed{\Rightarrow}$ We need to show that $(\lambda_f)^{\imf}(T_{R})$ is a subset of $T_S$
+\end{proof}
+
 \subsubsection{Chain conditions}
 \begin{definition}
 Let $\sSet{A, R}$ be a relational structure. Then $\sSet{A, R}$
@@ -3955,7 +4010,7 @@ Let $\sSet{A, R}$ be a relational structure. Then
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Assume that $T_R$ is converse well-founded. Consider a subset $X\subseteq A$ and the restricted associated tree $T' = T_R|_{X^*}$. Now $T'$ has a maximal element $u$ by converse-well-foundedness of $T_R$. Then $u_{-1}R\cap X \neq \emptyset$ and thus $u_{-1}$ must be maximal in $X$ by \ref{maximalMinimalConditions}.
+(1) Assume that $T_R$ is converse well-founded. Consider a subset $X\subseteq A$ and the restricted associated tree $T' = T_R|_{X^*}$. Now $T'$ has a maximal element $u$ by converse-well-foundedness of $T_R$. Then $u_{-1}R\cap X \neq \emptyset$ and thus $u_{-1}$ must be maximal in $X$ by TODO ref.
 
 (2) Assume $R$ is asymmetric and converse well-founded. Then for any $X\subseteq A$, $R|_X^{X}$ is asymmetric and thus not left-total by \ref{maximalElementNotLeftTotal}. Take some subset $S\subseteq T_R$ and consider the set
 \[ E \defeq \setbuilder{u_{-1}}{u\in S}. \]
@@ -4098,6 +4153,10 @@ It is in general clear we can make a finite number of choices, by the definition
 \item[(VII')] \textbf{Axiom of countable choice ($\text{AC}_{\N}$)}: for any set $B$ and binary relation $P\subseteq \N\times B$,
 \[ [\forall n\in \N: \exists y\in B: P(n,y)] \implies [\exists f\in (\N\to B): \forall n \in \N: P(n,f(n))]. \]
 \end{enumerate}
+
+\begin{theorem}[Kőnig's lemma]
+Let $T$ be a finitely branching tree. Then $T$ is locally finite \textup{if and only if} $T$ is terminating.
+\end{theorem}
 
 \subsubsection{Dependent choice}
 \begin{enumerate}[(I)]

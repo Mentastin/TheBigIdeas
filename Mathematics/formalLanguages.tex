@@ -43,10 +43,13 @@ The system is called
 \end{definition}
 Note that the Church-Rosser property is equivalent to
 \[ \forall x,y\in X: \; x\mathrel{\equiv_R}y \iff x \joins y. \]
+In other words, two elements are equivalent if and only if they are joinable.
 
 A rewriting system $\sSet{X, R}$ is normalising if and only if the associated tree $\sSet{T_R, \sqsubseteq}$ is coatomic. The normal forms are the coatoms.
 
-
+\begin{lemma} \label{successionNormalForm}
+Let $\sSet{X,R}$ be a rewriting system and $x\in X$ in normal form. If $y\in X$ is such that $xR^*y$, then $y=x$. 
+\end{lemma}
 
 \begin{proposition}
 Any terminating relation is normalising, but the converse is not true.
@@ -121,6 +124,11 @@ Let $\sSet{X,R}$ be a rewriting system and $a,b\in X$.
 \[ \begin{tikzcd}
 a \arrow[r, dashed, "{*}"] & {} & b \arrow[l, dashed, swap, "{*}"]
 \end{tikzcd}. \]
+\item In any rewriting system, we have the diagram
+\[ \begin{tikzcd}
+x \arrow[rr, dashed, leftrightarrow, "{*}"] \arrow[dr, swap, "{*}"] & {} & y \arrow[dl, "{*}"] \\
+{} & {} & {}
+\end{tikzcd} \]
 \item The Church-Rosser property is expressed by the diagram
 \[ \begin{tikzcd}
 x \arrow[rr, leftrightarrow, "{*}"] \arrow[dr, swap, dashed, "{*}"] & {} & y \arrow[dl, dashed, "{*}"] \\
@@ -140,10 +148,12 @@ y_2 \arrow[r, dashed, swap, "{*}"] & {}
 \end{example}
 
 \begin{proposition}[Induction on RS-diagrams] \label{inductionRSdiagrams}
-Let $\sSet{X,R}$ be a rewriting system and $D_1, D_2$ two RS-diagrams such that $D_1$ implies $D_2$ and $D_1$ is a subdiagram of $D_1$.
+Let $\sSet{X,R}$ be a rewriting system and $D_1, D_2$ two RS-diagrams such that $D_1$ implies $D_2$ and $D_1$ is a subdiagram of $D_2$.
 
 If $D_1$ holds, then any diagram that we can obtain from $D_1$ by substituting in $D_2$ also holds.
 \end{proposition}
+
+TODO: general form of repeated application of a rule.
 
 \begin{lemma} \label{triangelRSdiagrams}
 Let $\sSet{X,R}$ be a rewriting system. Then the diagram
@@ -160,7 +170,7 @@ If $xRy$, then we may set $z = x$. If $yRx$, then we may set $z = y$.
 Let $\sSet{X,R}$ be a rewriting system. Then the diagram
 \[ \begin{tikzcd}
 {} & z \arrow[dr] & {} \\
-x \arrow[ur, "{*}"] \arrow[rr, dashed, "{*}"] & {} & z
+x \arrow[ur, "{*}"] \arrow[rr, dashed, "{*}"] & {} & y
 \end{tikzcd} \qquad\text{holds.} \]
 \end{lemma}
 \begin{proof}
@@ -234,7 +244,7 @@ By \ref{triangelRSdiagrams}, this implies
 {}& \arrow[dl, dashed, swap, "{?}"]{}\arrow[dr, dashed, "{?}"] & &\arrow[dl, dashed, swap, "{?}"]{}\arrow[dr, dashed, "{?}"]&{}&\arrow[dl, dashed, swap, "{?}"]{}\arrow[dr, dashed, "{?}"]&{}&\arrow[dl, dashed, swap, "{?}"]{}\arrow[dr, dashed, "{?}"]&{} \\
 x \ar[rr, leftrightarrow] &{}& x_0 \ar[rr, leftrightarrow] &{}& \hdots \ar[rr, leftrightarrow] &{}& x_n \ar[rr, leftrightarrow] &{}& y
 \end{tikzcd} \]
-By \ref{confluenceInduction}, this implies
+By \ref{confluenceInduction}, this implies (as $\overset{?}{\to}$ implies $\overset{*}{\to}$)
 \[ \begin{tikzcd}[column sep=1.5em, row sep=1.5em]
 {}& \arrow[dl, dashed, swap, "{?}"]{}\arrow[dr, dashed, "{?}"] & &\arrow[dl, dashed, swap, "{?}"]{}\arrow[dr, dashed, "{?}"]&{}&\arrow[dl, dashed, swap, "{?}"]{}\arrow[dr, dashed, "{?}"]&{}&\arrow[dl, dashed, swap, "{?}"]{}\arrow[dr, dashed, "{?}"]&{} \\
 x \ar[rr, leftrightarrow]\arrow[dr, dashed, "{*}"] \arrow[ddddrrrr, dashed, bend right, "{*}"] &{}& x_0 \ar[rr, leftrightarrow]\arrow[dl, swap, dashed, "{*}"] &{}& \arrow[ddll, swap, dashed, "{*}"] \hdots \ar[rr, leftrightarrow] &{}& x_n \arrow[dddlll, swap, dashed, "{*}"] \ar[rr, leftrightarrow] &{}& y \arrow[ddddllll, swap, dashed, "{*}"] \\
@@ -280,13 +290,72 @@ Because of semi-confluence, we have the implication
 \end{tikzcd}
 \end{align*}
 \end{proof}
-\begin{corollary}
-Let $\sSet{X,R}$ be a confluent rewriting system and $x\equiv_R y$. Then
+\begin{corollary} \label{confluenceUniquenessNormalForm}
+Let $\sSet{X,R}$ be a confluent rewriting system. Then
 \begin{enumerate}
-\item $xR^*y$ if $y$ is in normal form;
-\item $x=y$ if both $x$ and $y$ are in normal form.
+\item if $x\equiv_R y$ and $y$ is in normal form, then $xR^*y$;
+\item if $x\equiv_R y$ and $x, y$ are both in normal form, then $x = y$;
+\item every element has at most one normal form.
 \end{enumerate}
 \end{corollary}
+\begin{proof}
+(1) As $\sSet{X,R}$ is Church-Rosser, we have $\begin{tikzcd}[column sep=small, row sep=small]
+\boxed{x} \arrow[rr, leftrightarrow, "{*}"] \arrow[dr, dashed, "{*}"] &{}& \boxed{y} \arrow[dl, dashed, swap, "{*}"] \\
+{} & {z} & {}
+\end{tikzcd}$. As $y$ is in normal form, we have $z = y$ (by \ref{successionNormalForm}). Thus $xR^*y$.
+
+(2) By \ref{successionNormalForm}.
+
+(3) Let $y_1, y_2$ both be normal forms of $x$. Then $y_1 (R^\transp)^* x R^* y_2$, so $y_1 \equiv_R y_2$ and $y_1 = y_2$ by (2).
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,R}$ be a rewriting system. Then the rewriting system is confluent and normalising \textup{if and only if} every element has a unique normal form.
+\end{proposition}
+\begin{proof}
+$\boxed{\Rightarrow}$ Normalising implies existence (by definition) and confluence implies unicity by \ref{confluenceUniquenessNormalForm}.
+
+$\boxed{\Leftarrow}$ The rewriting system is normalising by definition. For confluence, assume $x R^* y_1$ and $xR^*y_2$. Let $y_1',y_2'$ be the normal forms of $y_1$ and $y_2$, respectively.
+
+Then $xR^*y_1 R^*y_1'$, so $xR^*y_1'$. Also $xR^*y_2'$. Thus both $y_1'$ and $y_2'$ are normal forms of $x$. By unicity $y_1' = y_2' = y'$, so $y_1 R^* y' (R^\transp)^* y_2$, which means that $y_1 \joins y_2$ and thus that the rewriting system is confluent.
+\end{proof}
+
+\begin{definition}
+Let $\sSet{X,R}$ be a confluent and normalising rewriting system. The unique normal form of $x\in X$ is denoted $\normalform{x}$.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,R}$ be a confluent and normalising rewriting system and $x,y\in X$. Then $x \equiv_R y$ \textup{if and only if} $\normalform{x} = \normalform{y}$.
+\end{proposition}
+\begin{proof}
+$\boxed{\Rightarrow}$ From $x \equiv_R y$, we have $\normalform{x} \equiv_R \normalform{y}$ and thus $\normalform{x} = \normalform{y}$ by \ref{confluenceUniquenessNormalForm}.
+
+$\boxed{\Leftarrow}$ Set $z = \normalform{x} = \normalform{y}$. Then $x R^* z (R^\transp)^* y$, so $x \equiv_R y$.
+\end{proof}
+
+\section{Termination}
+\subsection{Progress functions}
+\begin{proposition} \label{rewritingSystemProgressFunction}
+Let $\sSet{X, R}$ be a rewriting system and $\sSet{Y,S}$ a terminating rewriting system.
+
+If there exists a monotone function $f: X \to Y$, then $X$ is also terminating.
+\end{proposition}
+\begin{proof}
+We have that $T_{\im(f)}$ is a subtree of $T_S$ by.
+
+Assume $X$ is not terminating. Then $g$
+\end{proof}
+
+\begin{lemma}
+A finitely branching rewriting system terminiates \textup{if and only if} there exists a monotone embedding in $\sSet{\N,>}$.
+\end{lemma}
+\begin{proof}
+$\boxed{\Rightarrow}$
+
+$\boxed{\Leftarrow}$ Follows from \ref{rewritingSystemProgressFunction}.
+\end{proof}
+
+\section{Confluence}
 
 \section{Term rewriting}
 \begin{definition}
