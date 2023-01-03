@@ -2863,16 +2863,52 @@ We call $\upset f[F]$ the \udef{image filter} of $F$ under $f$.
 TODO principal filter $\upset\{x\}$.
 \end{definition}
 
+\section{Multisets}
+\begin{definition}
+Let $U$ be a set. A \udef{multiset} over $U$ is a function $M: U\to \N$.
+\end{definition}
 
-\section{Indicator functions}
-The family $\powerset(U)$ can be bijectively mapped to the family of functions $(U\to \{0,1\})$, by mapping each set $A$ to its indicator function $\chi_A$.
+\subsection{Relations and operations with multisets}
+\subsubsection{Relations with multisets}
+\begin{definition}
+Let $U$ be a set, $M,N: U\to \N$ multisets and $x\in U$. We define
+\begin{itemize}
+\item $x\in M \defequiv m(x) \neq 0$;
+\item $M\subseteq N \defequiv M \leq N$.
+\end{itemize}
+\end{definition}
 
+\subsubsection{Operations on multisets}
+\begin{definition}
+Let $U$ be a set, $M,N: U\to \N$ multisets and $x\in U$. We define
+\begin{itemize}
+\item $M\cup N \defeq \max(M,N)$;
+\item $M\cap N \defeq \min(M,N)$;
+\item $M\uplus N \defeq M+N$;
+\item $M\setminus N \defeq x\mapsto\begin{cases}
+M(x) - N(x) & \big(M(x) \geq N(x)\big) \\
+0 & (\text{otherwise}).
+\end{cases}$
+\end{itemize}
+\end{definition}
+
+\subsection{Dershowitz-Manna ordering}
+\begin{definition}
+Let $\sSet{U,\Yleft}$ be an ordered set. The TODO
+\end{definition}
+
+\subsection{Indicator functions}
 \begin{definition}
 Let $U$ be a set and $A\subseteq U$. The \udef{indicator function} or \udef{characteristic function} of $A$ as an element of $\powerset(U)$ is defined as
 \[ \chi_A: U\to \{0,1\}: x\mapsto \begin{cases}
 1 & x\in A \\ 0 & x\notin A.
 \end{cases} \]
 \end{definition}
+
+\begin{lemma}
+Let $U$ be a set. The characteristic function $\chi$ determines a bijection between the subsets of $U$ and the multisets $M$ with $\im(M)\subseteq \{0,1\}$.
+\end{lemma}
+
 \begin{lemma}
 Let $A,B$ be elements of $\powerset(U)$. Then
 \begin{enumerate}
@@ -3805,17 +3841,43 @@ Like before, a version of the theorem can also be stated for recursion with para
 
 \subsubsection{Ordering string}
 \begin{definition}
-Let $\sSet{A,\leq}$ be a linearly ordered alphabet. Then
+Let $\sSet{A,R}$ be a relational structure. Then
 \begin{itemize}
-\item the \udef{lexicographic order} $<_l$ on $A^*$ is defined by
-\[ u <_l v \quad\iff\quad u_k < v_k \;\text{where $k = \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}$}. \]
-\item the \udef{shortlex order} or \udef{strong order} $<_{s}$ on $A^*$ is defined by
-\[ u <_l v \qquad\iff\qquad \begin{cases}
+\item the \udef{lexicographic order} $R_l$ on $A^*$ is defined by
+\[ u R_l v \quad\defequiv\quad \text{$\exists k \in \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}: \; u_k R v_k$}. \]
+\item the \udef{shortlex order} or \udef{strong order} $R_{s}$ on $A^*$ is defined by
+\[ u R_l v \qquad\defequiv\qquad \begin{cases}
 \len(u) < \len(v) & \text{or} \\
-\big(\len(u) = \len(v)\big) \land (u <_l v).
+\big(\len(u) = \len(v)\big) \land (u R_l v).
+\end{cases}\]
+\item the \udef{longlex order} or $R_{ll}$ on $A^*$ is defined by
+\[ u R_{ll} v \qquad\defequiv\qquad \begin{cases}
+\len(u) > \len(v) & \text{or} \\
+\big(\len(u) = \len(v)\big) \land (u R_l v).
 \end{cases}\]
 \end{itemize}
 \end{definition}
+
+\begin{lemma}
+All lexicographic, shortlex and longlex orders are asymmetric.
+\end{lemma}
+
+\begin{proposition}
+If $\sSet{A,R}$ is an terminating relational structure. Then $R_{ll}$ is terminating.
+\end{proposition}
+\begin{proof}
+We prove the contraposition. Assume $R_s$ is not terminating. Then we can find an infinite branch $S\subseteq [T_{R_s}]$. Take the first string $u$ in the branch and set $n = \len(u)$. Then all lengths of strings in $S$ are less than or equal to $n$. If we partition the strings by length, we must have at least one infinite partition (by the contraposition of: finite unions of finite sets are finite).
+
+TODO rest!!
+\end{proof}
+
+\begin{example}
+A terminating relational structure $\sSet{A,R}$ may induce a non-terminating lexicographical order $R_s$ and a non-terminating shortlex order.
+
+For example, consider the set $\{a,b\}$ and the order defined by $a<b$. Then
+\[ a,\; ba,\; bba\,; bbba,\; \ldots \]
+determines an infinite chain that is monotone in both $R_l$ and $R_s$.
+\end{example}
 
 \subsubsection{Slices and substrings}
 \begin{definition}
@@ -3958,11 +4020,12 @@ If $u_{-1}R \neq \emptyset$, then we can take $x\in u_{-1}R$, so that $u \sqsubs
 \begin{lemma} \label{maximalElementNotLeftTotal}
 Let $\sSet{A,R}$ be an asymmetric relational structure. Then $A$ contains a maximal element \textup{if and only if} $R$ is not left total.
 \end{lemma}
+Note that in this case maximality is equivalent to both loose and strict maximality by \ref{symmetricMaximalityMinimality}.
 \begin{proof}
-Asymmetry implies $xR\cap Rx = \emptyset$ for all $x\in A$ by \ref{relationalSymmetryEquivalents}. 
+We show that the existence of a strictly maximal element in $A$ is equivalent to $R$ not being left total:
 \begin{align*}
-\exists x\in A: \; \text{$x$ is maximal} \quad&\iff\quad \exists x \in A: \; xR\subseteq Rx \\
-&\iff\quad \exists x\in A: \; xR = xR\cap Rx = \emptyset \\
+\exists x\in A: \; \text{$x$ is strictly maximal} \quad&\iff\quad \exists x \in A: \; xR\perp A \\
+&\iff\quad \exists x \in A: \; xR = \emptyset \\
 &\iff\quad \text{$R$ is not left total}.
 \end{align*}
 \end{proof}
@@ -3974,13 +4037,23 @@ Let $\sSet{A,R}$ be a relational structure with associated tree $T_R$. Let $a,b\
 TODO!
 \end{proof}
 
-\begin{proposition}
+\begin{lemma} \label{monotoneFunctionSubAssociatedTree}
 Let $\sSet{A,R}$ and $\sSet{B,S}$ be relational structures and $f: A\to B$ a function. Then $f$ is monotone \textup{if and only if} $(\lambda_f)^{\imf}(T_{R})$ is a subtree of $T_S$.
-\end{proposition}
+\end{lemma}
 \begin{proof}
 The set $(\lambda_f)^{\imf}(T_{R})$ is automatically a tree.
 
-$\boxed{\Rightarrow}$ We need to show that $(\lambda_f)^{\imf}(T_{R})$ is a subset of $T_S$
+$\boxed{\Rightarrow}$ 
+Assume $f$ is monotone. We expand
+\begin{align*}
+(\lambda_f)^{\imf}(T_{R}) \subseteq T_S &\iff T_R \subseteq (\lambda_f)^{\preimf}(T_{R})(T_S) \\
+&\iff T_R \subseteq \setbuilder{v \in A^*}{\lambda_f(v) = f\circ v \in T_S} \\ 
+&\iff \forall v\in T_R: \forall n\in (0:\len(v)): f(v_n)Sf(v_{n+1}).
+\end{align*}
+To prove the last statement, take $v\in T_R$ and $n\in (0:\len(v))$. Then $v_nRv_{n+1}$ by definition of $T_R$ and thus $f(v_n)Sf(v_{n+1})$ by monotonicity.
+
+$\boxed{\Leftarrow}$ 
+Now assume $(\lambda_f)^{\imf}(T_{R}) \subseteq T_S$ and take $aRb\in A$. Then $\seq{a,b}\in T_R$ and thus $\seq{f(a), f(b)}\in T_S$, which means that $f(a)Sf(b)$ and thus that $f$ is monotone.
 \end{proof}
 
 \subsubsection{Chain conditions}
