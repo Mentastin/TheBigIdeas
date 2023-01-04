@@ -89,7 +89,7 @@ and $T = \bigcap \mathcal{J}$. We can show that $T = Q\cup (g\circ f)[T]$. Then
 \[ f[A] = Q\cup (g\circ f)[A] = Q\cup (g\circ f)[T]\cup [(g\circ f)[A]\setminus (g\circ f)[T]] = T\cup [(g\circ f)[A]\setminus (g\circ f)[T]] \]
 \end{proof}
 \begin{corollary}
-If $A\leq_c  B$ and $B\leq_c A$, then $A=_c B$.
+Let $A,B$ be sets. Then $A =_c B$ \textup{if and only if} $A\leq_c B$ and $B\leq_c A$.
 \end{corollary}
 
 \begin{theorem}[Cantor's theorem] \label{Cantor}
@@ -117,17 +117,18 @@ Assume there was a set $V$ of all sets. Consider the power set $\powerset(V)$. S
 Looking at the proof of Cantor's theorem, we see a strong analogy with Russell's paradox.
 
 \subsection{Countability}
-TODO: this definition excludes $\emptyset$ (i.e $0$) from being countable. Is this ok?
 \begin{definition}
 Let $A$ be a set. We say
 \begin{itemize}
 \item $A$ is \udef{finite} if there exists some $n\in \N$ such that
-\[ A =_c [0, n[ = \{i\in \N\;|\; i<n\}, \]
+\[ A =_c \interval[co]{0, n} = \setbuilder{i\in \N}{i<n}, \]
 otherwise $A$ is \udef{infinite}.
-\item $A$ is \udef{countable} if it is equinumerous to a subset of $\N$, otherwise it is \udef{uncountable}.
+\item $A$ is \udef{countable} if $A\leq_c\N$, otherwise it is \udef{uncountable}.
 \end{itemize}
 \end{definition}
 Notice the link between $\interval[co]{0,n}$ and the Von Neumann ordinals.
+
+Also $\interval[co]{0,n} \leq_c \N$ for all $n\in \N$.
 
 If we have a hundred pigeons, a hundred pigeonholes and are not allowed to put two pigeons in the same hole, all pigeonholes must be filled. This principle is formalised in the pigeonhole principle.
 \begin{theorem}[Pigeonhole principle] \label{pigeonholePrinciple}
@@ -158,6 +159,16 @@ The set $\N$ of natural numbers is infinite.
 \begin{proof}
 The function $\N\to \N\setminus\{0\}: n\mapsto Sn$ is injective.
 \end{proof}
+\begin{corollary} \label{infiniteComparisonWithN}
+Let $A$ be a set. If $\N\leq_c A$, then $A$ is infinite.
+
+The converse holds assuming countable choice (TODO only weaker assumption necessary).
+\end{corollary}
+\begin{proof}
+We prove the contraposition. Assume $A$ is finite, i.e.\ $A =_c\interval[co]{0,n}$. Assume, towards a contradiction, that $\N\leq_c A$, then $\N \leq_c \interval[co]{0,n}$. As $\interval[co]{0,n} \leq_c \N$, we have $\N =_c \interval[co]{0,n}$, which is the contradiction.
+
+TODO prove converse using countable choice.
+\end{proof}
 \begin{corollary}
 Let $m,n\in \N$. Then $\interval[co]{0,m} =_c \interval[co]{0,n}$ \textup{if and only if} $m=n$.
 \end{corollary}
@@ -183,7 +194,7 @@ Assume $f$ not injective, in which case $X$ is not empty and let $\#(X) = m \neq
 Now because $X,Y$ disjunct, $\#(X\cup Y) = \#(X)+\#(Y) = m+n >n$, by the uniqueness of $\#$. This is a contradiction.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{countableEquivalents}
 The following are equivalent for every set $A$:
 \begin{enumerate}
 \item $A$ is countable;
@@ -191,7 +202,7 @@ The following are equivalent for every set $A$:
 \item $A$ is finite or equinumerous with $\N$.
 \end{enumerate}
 We call such a $\pi$ an \udef{enumeration}. Then
-\[ A = \pi[\N] = \{\pi(0),\pi(1),\pi(2),\ldots \}. \]
+\[ A = \pi^\imf(\N) = \{\pi(0),\pi(1),\pi(2) \ldots \}. \]
 \end{proposition}
 \begin{proof}
 The proof is cyclic:
@@ -205,16 +216,24 @@ a_0 & (i\notin f[A]) \\ f^{-1}(i) & (i\in f[A]).
 f(0) = \pi(0) \\
 f(n+1) = \pi\left(\;\text{the least $m$ such that}\; \pi(m)\neq \{f(0),\ldots,f(n)\}\right).
 \end{cases} \]
-Note that because $A$ is infinite, the set $\{ m\in\N\;|\; \pi(m)\notin \{ f(0),\ldots,f(n) \}$ is not empty. Due to the well-ordering on $\N$, every such set has a least element.
+Note that because $A$ is infinite, the set $\setbuilder{m\in\N}{\pi(m)\notin \{ f(0),\ldots,f(n) \}}$ is not empty. Due to the well-ordering on $\N$, every such set has a least element.
 
 Then $f$ is a bijection. Injectivity is obvious. Surjectivity follows from the fact that $\forall n\in \N: \pi(n)\in f[\N]$.
 \item[$\boxed{(3)\rightarrow (1)}$] All intervals $[0, n[$ are subsets of $\N$ and $\N$ is a subset of $\N$.
 \end{enumerate}
 \end{proof}
-By Cantor's theorem:
+\begin{corollary} \label{finiteComparisonWithInterval}
+Let $A$ be a set and $n\in \N$. If $A\leq_c (0:n)$, then $A$ is finite.
+\end{corollary}
+\begin{proof}
+We have $A \leq_c (0:n) \leq_c \N$, so $A$ is countable. Then either $A$ is finite or $A =_c \N$. We show that the second option is impossible: then we would have $\N \leq_c A \leq_c \N$, so $(0:n) =_c \N$, i.e.\ $\N$ is finite. But $\N$ is infinite.
+\end{proof}
 \begin{corollary}
 There exists no set $A$ such that $\powerset(A) =_c \N$.
 \end{corollary}
+\begin{proof}
+By Cantor's theorem.
+\end{proof}
 
 \begin{lemma}
 We have the following characterisation of countable infinity:
@@ -230,7 +249,7 @@ This is directly in terms of the membership relation with no appeal to the defin
 \begin{proposition}[Cantor]
 A countable union of countable sets is countable:
 
-For each sequence $A_0, A_1, \ldots$ of countable sets, the union
+For each sequence $A_0, A_1 \ldots$ of countable sets, the union
 \[ A = \bigcup_{n=0}^\infty A_n \]
 is countable.
 \end{proposition}

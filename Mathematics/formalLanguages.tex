@@ -27,7 +27,7 @@ We say
 \begin{definition}
 Let $\sSet{X, R}$ be a rewriting system. This system is called
 \begin{itemize}
-\item \udef{terminating} if $R^+$ is satisfies the ascending chain condition;
+\item \udef{terminating} if $T_R$ is terminating;
 \item \udef{normalising} if every element has a normal form;
 \end{itemize}
 it is said to
@@ -334,6 +334,57 @@ $\boxed{\Leftarrow}$ Set $z = \normalform{x} = \normalform{y}$. Then $x R^* z (R
 \end{proof}
 
 \section{Termination}
+
+\begin{lemma}
+Let $\sSet{X,R}$ be a rewriting system. Then $R$ is terminating \textup{if and only if} $R^+$ is terminating.
+\end{lemma}
+
+\subsubsection{Chain conditions and termination}
+\begin{definition}
+Let $\sSet{A, R}$ be a relational structure. Then $\sSet{A, R}$
+\begin{itemize}
+\item satisfies the \udef{ascending chain condition} (ACC) if $[T_R] = \emptyset$.
+\item satisfies the \udef{descending chain condition} (DCC) if $[T_{R^\transp}] = \emptyset$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+If $\sSet{A, R}$ is a relational structure that satisfies either the ascending or descending chain condition, then $R$ is asymmetric.
+\end{lemma}
+\begin{proof}
+Assume $R$ not asymmetric. Then there exists $(x,y)\in R\cap R^\transp$. The initial segments of the sequence $n\mapsto \begin{cases}
+x & (\text{$n$ is even}) \\
+y & (\text{$n$ is odd})
+\end{cases}$ form an infinite branch.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{A, R}$ be a relational structure. Then
+\begin{enumerate}
+\item if $T_R$ is converse well-founded, then $R$ is converse well-founded;
+\item if $R$ is asymmetric, then the converse also holds.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume that $T_R$ is converse well-founded. Consider a subset $X\subseteq A$ and the restricted associated tree $T' = T_R|_{X^*}$. Now $T'$ has a maximal element $u$ by converse-well-foundedness of $T_R$. Then $u_{-1}R\cap X \neq \emptyset$ and thus $u_{-1}$ must be maximal in $X$ by TODO ref.
+
+(2) Assume $R$ is asymmetric and converse well-founded. Then for any $X\subseteq A$, $R|_X^{X}$ is asymmetric and thus not left-total by \ref{maximalElementNotLeftTotal}. Take some subset $S\subseteq T_R$ and consider the set
+\[ E \defeq \setbuilder{u_{-1}}{u\in S}. \]
+Now $R|_E^E$ is not left total. So we can find $x\in E$ such that $xR|_E = \emptyset$. Thus we can find $u\in S$ such that $u_{-1}R|_E = \emptyset$, which means that $u$ is maximal in $S$.
+\end{proof}
+\begin{corollary} \label{welfoundedACC}
+Let $\sSet{A, R}$ be a asymmetric relational structure. Then
+\begin{enumerate}
+\item if $R$ is converse well-founded, then $R$ satisfies ACC;
+\item if $R$ is well-founded, then $R$ satisfies DCC.
+\end{enumerate}
+The converses hold under DC. See \ref{ZornEquivalentsDC}.
+\end{corollary}
+\begin{proof}
+By \ref{treeOrderingLemma}.
+\end{proof}
+
+
 \subsection{Progress functions}
 \begin{proposition} \label{rewritingSystemProgressFunction}
 Let $\sSet{X, R}$ be a rewriting system and $\sSet{Y,S}$ a terminating rewriting system.
@@ -389,7 +440,7 @@ y_2 \arrow[r, dashed, swap, "{}"] & {}
 \end{itemize}
 \end{example}
 
-\begin{lemma}
+\begin{lemma} \label{confluenceImplications}
 Let $\sSet{X,R}$ be a rewriting system. Then each of the following properties implies the next:
 \begin{enumerate}
 \item diamond property;
@@ -404,7 +455,7 @@ $(1) \Rightarrow (2)$ Immediate as $R \subseteq R^?$ and $R\subseteq R^*$.
 $(2) \Rightarrow (3)$ By \ref{confluenceEquivalents} it is enough to prove semi-confluence. First we observe the lemma
 \begin{lemma*} The following diagrams are equivalent:
 \[ \begin{tikzcd}
-x \arrow[r] \arrow[d, "{}"] & y_1 \arrow[d, dashed, "{?}"] \\
+x \arrow[r] \arrow[d, "{}"] & y_1 \arrow[d, dashed, swap, "{?}"] \\
 y_2 \arrow[r, dashed, swap, "{*}"] & {z}
 \end{tikzcd} \qquad\iff\qquad \begin{tikzcd}
 x \arrow[r] \arrow[d, "{?}"] & y_1 \arrow[d, dashed, "{?}"] \\
@@ -416,24 +467,24 @@ The direction $\Leftarrow$ is immediate because $R\subseteq R^?$. For the other 
 \end{proof}
 By induction on RS-diagrams, we conclude from
 \[ \begin{tikzcd}[ampersand replacement=\&]
-{} \arrow[r] \arrow[d, "{?}"] \& {} \arrow[d, dashed, "{?}"] \\
-{} \arrow[r,  dashed, "{*}"] \& {}
+{} \arrow[r] \arrow[d, swap, "{?}"] \& {} \arrow[d, dashed, "{?}"] \\
+{} \arrow[r, swap, dashed, "{*}"] \& {}
 \end{tikzcd} \quad\iff\quad \begin{tikzcd}[ampersand replacement=\&]
 {} \arrow[r] \arrow[d] \& {} \arrow[d, dashed, "{?}"] \\
-{} \arrow[r,  dashed, "{*}"] \& {}
+{} \arrow[r, swap, dashed, "{*}"] \& {}
 \end{tikzcd} \quad\implies\quad \begin{tikzcd}[ampersand replacement=\&]
 {} \arrow[r] \arrow[d] \& {} \arrow[d, dashed, "{?}"] \arrow[r] \& {}  \\
-{} \arrow[r,  dashed, "{*}"] \& {} \& {}
+{} \arrow[r, swap, dashed, "{*}"] \& {} \& {}
 \end{tikzcd} \quad\implies\quad \begin{tikzcd}[ampersand replacement=\&]
 {} \arrow[r] \arrow[d] \& {} \arrow[d, dashed, "{?}"] \arrow[r] \& {} \arrow[d, dashed, "{?}"] \\
-{} \arrow[r,  dashed, "{*}"] \& {} \arrow[r,  dashed, "{*}"] \& {}
+{} \arrow[r, swap, dashed, "{*}"] \& {} \arrow[r, swap, dashed, "{*}"] \& {}
 \end{tikzcd} \]
 that $\begin{tikzcd}
 {} \arrow[r, "{*}"] \arrow[d] & {} \arrow[d, dashed, "{?}"] \\
-{} \arrow[r, dashed, "{*}"] & {}
+{} \arrow[r, swap, dashed, "{*}"] & {}
 \end{tikzcd}$. This implies $\begin{tikzcd}
 {} \arrow[r, "{*}"] \arrow[d] & {} \arrow[d, dashed, "{*}"] \\
-{} \arrow[r, dashed, "{*}"] & {}
+{} \arrow[r, swap, dashed, "{*}"] & {}
 \end{tikzcd}$, i.e.\ semi-confluence.
 
 $(3) \Rightarrow (4)$ Immediate because $R\subseteq R^*$.
@@ -442,8 +493,49 @@ $(3) \Rightarrow (4)$ Immediate because $R\subseteq R^*$.
 \begin{proposition}[Newman's lemma]
 Let $\sSet{X,R}$ be a terminating rewriting system. Then $X$ is confluent \textup{if and only if} $X$ is locally confluent.
 \end{proposition}
+This assumes DC.
 \begin{proof}
-TODO
+One direction is given by \ref{confluenceImplications}.
+
+For the other direction, consider the set
+\[ P  = \setbuilder{x\in X}{\forall y_1,y_2 \big(xR^*y_1\big)\land\big(xR^*y_2\big) \implies y_1\joins y_2}. \]
+We need to show that $P = X$, which we do with well-founded induction on $\sSet{X,(R^\transp)^*}$ . Take $x\in X$ and assume the induction hypothesis.
+
+We need to prove
+\[ \begin{tikzcd}
+\boxed{x} \arrow[r, "{*}"] \arrow[d, swap, "{*}"] & y_1 \arrow[d, dashed, "{*}"] \\
+y_2 \arrow[r, swap, dashed, "{*}"] & {z}
+\end{tikzcd}, \]
+which we split into four cases:
+\[ \begin{tikzcd}
+\boxed{x} \arrow[r, equal] \arrow[d, swap, equal] & y_1 \arrow[d, dashed, "{*}"] \\
+y_2 \arrow[r, swap, dashed, "{*}"] & {z}
+\end{tikzcd}, \qquad \begin{tikzcd}
+\boxed{x} \arrow[r, equal] \arrow[d, swap, "{+}"] & y_1 \arrow[d, dashed, "{*}"] \\
+y_2 \arrow[r, swap, dashed, "{*}"] & {z}
+\end{tikzcd}, \qquad \begin{tikzcd}
+\boxed{x} \arrow[r, "{+}"] \arrow[d, equal] & y_1 \arrow[d, dashed, "{*}"] \\
+y_2 \arrow[r, swap, dashed, "{*}"] & {z}
+\end{tikzcd}, \quad\text{and}\quad \begin{tikzcd}
+\boxed{x} \arrow[r, "{+}"] \arrow[d, swap, "{+}"] & y_1 \arrow[d, dashed, "{*}"] \\
+y_2 \arrow[r, swap, dashed, "{*}"] & {z}
+\end{tikzcd}. \]
+The first three cases are immediate (by taking $z$ equal to $x, y_2$ and $y_1$, respectively). For the third case, we have
+\[ \begin{tikzcd}
+\boxed{x} \rar \dar & u_1 \arrow[d, dashed, "{*}"] \\
+u_2 \arrow[r, dashed, "{*}"] & v
+\end{tikzcd} \quad\implies\quad \begin{tikzcd}
+\boxed{x} \rar \dar & u_1 \arrow[d, dashed, "{*}"] \\
+u_2 \arrow[d, swap, "{*}"] \arrow[r, dashed, "{*}"] & v \arrow[d, dashed, "{*}"] \\
+y_2 \arrow[r, swap, dashed, "{*}"] & w
+\end{tikzcd} \quad\implies\quad \begin{tikzcd}
+\boxed{x} \rar \dar & u_1 \arrow[r, "{*}"] \arrow[d, dashed, "{*}"] & y_1 \arrow[dd, dashed, "{*}"] \\
+u_2 \arrow[d, swap, "{*}"] \arrow[r, dashed, "{*}"] & v \arrow[d, dashed, "{*}"] & {} \\
+y_2 \arrow[r, swap, dashed, "{*}"] & w \arrow[r, swap, dashed, "{*}"] & z
+\end{tikzcd}. \]
+These implications follow because $u_2$ and $u_1$ are elements of $P$ by the induction hypothesis. The antecedent of the implication is local confluence, which holds. We conclude the consequent and thus that $x\in P$.
+
+By induction $P=X$.
 \end{proof}
 
 \section{Term rewriting}

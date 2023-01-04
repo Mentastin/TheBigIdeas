@@ -1420,6 +1420,23 @@ Because $\sup(S)\in S^u$, we have $\sup(S)\wedge x \in S^u\wedge x$, so $\sup(S)
 \end{proof}
 In particular if $S$ has two elements, we recover the distributive inequalities.
 
+\begin{proposition} \label{latticeIntervalIntersection}
+Let $L$ be a lattice and $a,b,c,d\in L$. Then
+\[ \interval{a,b} \cap \interval{c,d} = \interval{a\vee c, b\wedge d}. \]
+\end{proposition}
+\begin{proof}
+First take $x\in \interval{a,b} \cap \interval{c,d}$. Then $a\leq x$ and $c\leq x$, so $a\vee c \leq x$ by \ref{orderLatticeCorollary}. Similarly $x\leq b\wedge d$, so $x\in\interval{a\vee c, b\wedge d}$.
+
+Now take $x\in\interval{a\vee c, b\wedge d}$. We have
+\begin{align*}
+a\leq a\vee c &\leq x &  x&\leq b\wedge d \leq b \\
+c\leq a\vee c &\leq x &  x&\leq b\wedge d \leq d,
+\end{align*}
+so $x\in \interval{a,b} \cap \interval{c,d}$.
+\end{proof}
+\begin{corollary}
+Let $L$ be a lattice. Then the set of intervals in $L$ is a $\cap$-subsemilattice of $\sSet{\powerset(L), \subseteq}$.
+\end{corollary}
 
 \subsection{Complete lattices}
 \begin{lemma}
@@ -1488,11 +1505,11 @@ Let $P$ be the set of fixed points. To show $P$ is a complete lattice, take any 
 Set $w = \bigvee S$, where $S$ is considered as a subset of $L$. For all $x\in W$: $x\leq w$, which implies $x=f(x)\leq f(w)$. As $w$ is the least upper bound, we have $w\leq f(w)$. This implies $f[\upset w]\subseteq \upset w$, meaning we can view $f$ as a function on the complete lattice $\upset w$. In particular $f|_{\upset w}$ has a least fixed point by the theorem, so $S$ has a supremum in $P$. The existence of the infimum is dual.
 \end{proof}
 \begin{corollary}[Banach decomposition theorem]
-Let $X,Y$ be sets and $f:X\to Y$ and $g:Y\to X$ functions. There exist partitions $X_1,X2$ and $Y_1,Y_2$ of $X$ and $Y$ such that
-\[ f[X_1] = Y_1 \qquad\text{and}\qquad g[Y_2] = X_2. \]
+Let $X,Y$ be sets and $f:X\to Y$ and $g:Y\to X$ functions. There exist partitions $X_1,X_2$ and $Y_1,Y_2$ of $X$ and $Y$ such that
+\[ f^\imf(X_1) = Y_1 \qquad\text{and}\qquad g^\imf(Y_2) = X_2. \]
 \end{corollary}
 \begin{proof}
-Consider the map $F: \powerset(X)\to\powerset(X): S\mapsto X\setminus g[Y\setminus f[S]]$. By the theorem this map has a fixed point, which we call $X_1$. We then need to set $Y_1 = f[X_1], X_2 = X\setminus X_1$ and $Y_2 = Y\setminus Y_1$. The fact $X_1$ is a fixed point means that $X_1 = X\setminus g[Y\setminus f[X_1]] = g[Y\setminus Y_1] = g[Y_2]$.
+Consider the map $F: \powerset(X)\to\powerset(X): S\mapsto X\setminus g^\imf\big(Y\setminus f^\imf(S)\big)$. By the theorem this map has a fixed point, which we call $X_1$. We then need to set $Y_1 = f^\imf(X_1), X_2 = X\setminus X_1$ and $Y_2 = Y\setminus Y_1$. The fact $X_1$ is a fixed point means that $X_1 = X\setminus g^\imf\big(Y\setminus f^\imf(X_1)\big) = g^\imf(Y\setminus Y_1) = g^\imf(Y_2)$.
 \end{proof}
 \begin{corollary}[Schröder-Bernstein]
 Let $X,Y$ be sets and $f:X\rightarrowtail Y$ and $g:Y\rightarrowtail X$ injective functions. Then there exists a bijective function $h: X\twoheadrightarrowtail Y$.
@@ -3868,7 +3885,7 @@ If $\sSet{A,R}$ is an terminating relational structure. Then $R_{ll}$ is termina
 \begin{proof}
 We prove the contraposition. Assume $R_s$ is not terminating. Then we can find an infinite branch $S\subseteq [T_{R_s}]$. Take the first string $u$ in the branch and set $n = \len(u)$. Then all lengths of strings in $S$ are less than or equal to $n$. If we partition the strings by length, we must have at least one infinite partition (by the contraposition of: finite unions of finite sets are finite).
 
-TODO rest!!
+TODO rest!! ALSO TODO: move after definition termination.
 \end{proof}
 
 \begin{example}
@@ -3888,18 +3905,36 @@ Let $A$ be an alphabet, $u$ a string in $A$ and $S$ some set. Then the $S$-\udef
 where $\interval[co]{0,\#\big(S\cap\dom(u)\big)} \cong S\cap\dom(u)$ is the unique order similarity of \ref{WOSetsUniqueSimilarity} (where $S\cap\dom(u)$ has the subspace order).
 \end{definition}
 
-\begin{lemma} \label{initialSliceRestriction}
-Let $A$ be an alphabet, $u\in A^*$ and $n\in \N$. Then
-\[ u[0:n] = u|_{(0:n)}. \]
+In particular note that $\len(u[S]) = \#\big(S\cap\dom(u)\big)$.
+
+\begin{lemma} \label{initialSliceLemma}
+Let $A$ be an alphabet, $u\in A^*$ and $m,n\in \N$. Then
+\begin{enumerate}
+\item $u[0:n] = u|_{(0:n)}$;
+\item $u = u[0:\len(u)]$;
+\item $\len(u[0:n]) = \min(n,\len(u))$;
+\item $u[0:n][0:m] = u[0:\min(m,n)] = u[0:m][0:n]$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-It is enough to note that
+(1) We note that, using \ref{latticeIntervalIntersection},
 \begin{align*}
-\dom(u[0:n]) &= \interval[co]{0,\#\big((0:n)\cap \interval[co]{0:\len(u)}\big)} \\
+\interval[co]{0,\#\big((0:n)\cap (0:\len(u))\big)} &= \interval[co]{0,\#\big(0:\min(n, \len(u))\big)} \\
 &= \interval[co]{0,\min(n,\len(u))} \\
 &= \interval[co]{0,n}\cap \interval[co]{0,\len(u)} = (0:n)\cap \dom(u).
 \end{align*}
+So the order similarity in the definition of $u[0:n]$ is the identity and the result follows.
+
+(2) We have, using point (1), $u = u|_{\dom(u)} = u|_{0:\len(u)} = u[0:\len(u)]$.
+
+(3) We have, using \ref{latticeIntervalIntersection}, that
+\[ \len(u[0:n]) = \#\big((0:n)\cap (0:\len(u))\big) = \#\big(0:\min(n,\len(u))\big) = \min(n,\len(u)). \]
+
+(4) We have, using point (1),
+\[ u[0:n][0:m] = u|_{0:n}|_{0:m} = u|_{(0:n)\cap(0:m)} = u_{(0:\min(m,n))} = u[0:\min(m,n)]. \]
 \end{proof}
+
+TODO: generalise to sequences?? In this case $\len(u[0:n]) = n$.
 
 \subsection{Trees}
 \begin{definition}
@@ -3927,17 +3962,11 @@ Let $A$ be an alphabet and $u,v\in A^*$. Then
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) We have that $u \sqsubseteq v$ is equivalent to $\exists n\in \N: u = v[0:n]$. By \ref{initialSliceRestriction}, we have
-\[ v[0:n] = v|_{(0:n)} = v|_{(0: \min\{n, \len(v)\})} = v[0: \min\{n, \len(v)\}]. \]
+(1) The direction $\Leftarrow$ is immediate. For the direction $\Rightarrow$, assume $u \sqsubseteq v$. Then there exists $n\in \N$ such that $u = v[0:n]$. By \ref{initialSliceLemma}, we have
+\[ u = u[0:\len(u)] = v[0:n][0:\len(u)] = v[0:\min(n,\len(u))], \]
+and so $\len(u) = \len\big(v[0:\min\big(n,\len(u)\big)]\big) = \min\big(n,\len(u), \len(v)\big)$. In particular, this means that $\len(u) = \min\big(n,\len(u)\big)$ and so $u = v[0:\min\big(n,\len(u)\big)] = v[0:\len(u)]$.
 
-Then $\dom(u) = \dom(v)\cap (0:n) = \interval[co]{0, \min\{n, \len(v)\}}$, so $\len(u) = \min\{n, \len(v)\}$ and $v[0:n] = v[0:\len(u)]$.
-
-(2) We have $u = v[0:\len(u)]$. Then
-\begin{align*}
-\dom(u) &= \dom\big(v|_{(0:\len(u))}\big) = \dom(v)\cap \big(0:\len(u)\big) \\
-&= \interval[co]{0,\len(v)} \cap \interval[co]{0, \len(u)} = \interval[co]{0, \min\{\len(v), \len(u)\}},
-\end{align*}
-so $\len(u) = \min\{\len(v), \len(u)\}$. This implies $\len(u) \leq \len(v)$.
+(2) We have $u = v[0:\len(u)]$. By \ref{initialSliceLemma}, we have $\len(u) = \len\big(v[0:\len(u)]\big) = \min\big(\len(v), \len(u)\big)$. This implies $\len(u) \leq \len(v)$.
 \end{proof}
 
 \begin{lemma}
@@ -3962,7 +3991,7 @@ Note that (4) implies that if $v\sqsubseteq u$ and $w\sqsubseteq u$, then $v$ an
 \begin{proof}
 (1) We show that $\sqsubseteq$ is
 \begin{itemize}
-\item \emph{transitive}: let $u \sqsubseteq v \sqsubseteq w$. Then $u = v[0:m]$ and $v = w[0:n]$, so, by \ref{initialSliceRestriction},
+\item \emph{transitive}: let $u \sqsubseteq v \sqsubseteq w$. Then $u = v[0:m]$ and $v = w[0:n]$, so, by \ref{initialSliceLemma},
 \begin{align*}
 u &= w[0:n][0:m] = \big(w[0:n]\big)|_{(0:m)} = \big(w|_{(0:n)}\big)|_{(0:m)} \\
 &= w|_{(0:n)\cap(0:m)} = w|_{(0:\min\{m,n\})} = w[0:\min\{m,n\}].
@@ -3993,7 +4022,6 @@ Let $T$ be a tree on an alphabet $A$. We say $T$ is
 \item \udef{locally finite} if $\setbuilder{u\in T}{\seq{a}\sqsubseteq u}$ is finite for all $a\in A$.
 \end{itemize}
 \end{definition}
-
 
 \subsubsection{The tree of a homogeneous binary relation}
 \begin{definition}
@@ -4056,50 +4084,58 @@ $\boxed{\Leftarrow}$
 Now assume $(\lambda_f)^{\imf}(T_{R}) \subseteq T_S$ and take $aRb\in A$. Then $\seq{a,b}\in T_R$ and thus $\seq{f(a), f(b)}\in T_S$, which means that $f(a)Sf(b)$ and thus that $f$ is monotone.
 \end{proof}
 
-\subsubsection{Chain conditions}
-\begin{definition}
-Let $\sSet{A, R}$ be a relational structure. Then $\sSet{A, R}$
-\begin{itemize}
-\item satisfies the \udef{ascending chain condition} (ACC) if $[T_R] = \emptyset$.
-\item satisfies the \udef{descending chain condition} (DCC) if $[T_{R^\transp}] = \emptyset$.
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-If $\sSet{A, R}$ is a relational structure that satisfies either the ascending or descending chain condition, then $R$ is asymmetric.
-\end{lemma}
-\begin{proof}
-Assume $R$ not asymmetric. Then there exists $(x,y)\in R\cap R^\transp$. The initial segments of the sequence $n\mapsto \begin{cases}
-x & (\text{$n$ is even}) \\
-y & (\text{$n$ is odd})
-\end{cases}$ form an infinite branch.
-\end{proof}
-
+\subsubsection{Branches and sequences}
 \begin{proposition}
-Let $\sSet{A, R}$ be a relational structure. Then
-\begin{enumerate}
-\item if $T_R$ is converse well-founded, then $R$ is converse well-founded;
-\item if $R$ is asymmetric, then the converse also holds.
-\end{enumerate}
+Let $A$ be an alphabet. Then the following function
+\[ \branch: A^\N \to [A^*]: u \mapsto \setbuilder{u[0:n]}{n\in \N}, \]
+which maps sequences in $A$ to their initial segments, is a bijection with inverse
+\[ \branch^{-1}: [A^*] \to A^\N: S\mapsto \bigcup S. \]
 \end{proposition}
 \begin{proof}
-(1) Assume that $T_R$ is converse well-founded. Consider a subset $X\subseteq A$ and the restricted associated tree $T' = T_R|_{X^*}$. Now $T'$ has a maximal element $u$ by converse-well-foundedness of $T_R$. Then $u_{-1}R\cap X \neq \emptyset$ and thus $u_{-1}$ must be maximal in $X$ by TODO ref.
+First we show that both $\branch$ and $\branch^{-1}$ are well-defined.
 
-(2) Assume $R$ is asymmetric and converse well-founded. Then for any $X\subseteq A$, $R|_X^{X}$ is asymmetric and thus not left-total by \ref{maximalElementNotLeftTotal}. Take some subset $S\subseteq T_R$ and consider the set
-\[ E \defeq \setbuilder{u_{-1}}{u\in S}. \]
-Now $R|_E^E$ is not left total. So we can find $x\in E$ such that $xR|_E = \emptyset$. Thus we can find $u\in S$ such that $u_{-1}R|_E = \emptyset$, which means that $u$ is maximal in $S$.
+Take $u\in A^\N$. We need to show that $\branch(u)\in[A^*]$:
+\begin{itemize}
+\item $\branch(u)$ is a subtree, i.e.\ downwards closed under $\sqsubseteq$: take $s\in \branch(u)$ and $t\sqsubseteq s$. Then 
+\[ t = s[0:\len(t)] = u[0:n][0:\len(t)] = u[0:\min(n, \len(t))] \in \branch(u) \]
+by (TODO generalisation of \ref{initialSliceLemma}).
+\item $\branch(u)$ is connex: take $s,t\in \branch(u)$. Then $s = u[0:m]$ and $t = u[0:n]$ for some $m,n\in \N$. Now either $m\leq n$ or $n\leq m$ by connexity of $\N$. In the first case $m = \min(m,n)$, so
+\[ s = u[0:m] = u[0:\min(m,n)] = u[0:n][0:m] = t[0:m], \]
+which means that $s\sqsubseteq t$. In the other case $t\sqsubseteq s$.
+\item $\branch(u)$ is infinite: the function $\N\to \branch(u): n\mapsto u[0:n]$ is injective, indeed assume $u[0:n] = u[0:m]$, then
+\[ n = \len(u[0:n]) = \len(u[0:m]) = m, \]
+by TODO ref. Thus $\N\leq_c \branch(u)$ by \ref{injectivityCardinality} and $\branch(u)$ is infinite by \ref{infiniteComparisonWithN}.
+\end{itemize}
+
+Take $S\in [A^*]$. We need to show that $\branch^{-1}(S)\in A^\N$:
+\begin{itemize}
+\item $\branch^{-1}(S)$ is functional: assume $n\in \N$ such that $n\mathrel{\branch^{-1}(S)}a$ and $n\mathrel{\branch^{-1}(S)}b$. Then there exist $v,w\in S$ such that $v_n = a$ and $w_n = b$. Now either $v \sqsubseteq w$ or $w\sqsubseteq v$ by connexity. In the first case we have
+\[ a = v(n) = w[0:m](n) = w|_{0:m}(n) = w(n) = b. \]
+In the other case we also get $a=b$, by swapping $v$ and $w$.
+\item $\branch^{-1}(S)$ is left total. We have that $\len|_S: S\to \N$ is injective: assume there exist $v,w\in S$ such that $\len(v) = \len(w)$. Then either $v\sqsubseteq w$ or $w\sqsubseteq v$. In the first case $v = w[0:\len(v)] = w[0:\len(w)] = w$, using \ref{treeNodeInequalities} and \ref{initialSliceLemma}. In the other case, we also have $v=w$. 
+
+Now take some $n\in \N$. If $\im(\len|_S) \subseteq (0:n)$, then $S \leq_c (0:n)$ and thus $S$ is finite by \ref{finiteComparisonWithInterval}, which is a contradiction. So $\exists m\in \im(\len|_S) \cap \interval[co]{n, \infty}$ and we can find $t \in S$ such that $\len(t) = m$. Then $t_n$ is defined and $\branch^{-1}(S)(n) = t_n$.
+\end{itemize}
+Finally we show that $\branch$ and $\branch^{-1}$ are mutual inverses.
+\begin{itemize}
+\item Take $u\in A^\N$ and $n\in \N$. Then
+\[ (\branch^{-1}\circ\branch)(u)(n) = u[0:n](n) = u|_{0:n}(n) = u(n). \]
+Because $n$ was chosen arbitrarily, we have $(\branch^{-1}\circ\branch)(u) = u$.
+\item Take $S\in [A^*]$ and $v\in S$. Then $v = \left(\bigcup S\right)[0:\len(v)]$. Indeed their domains match and for all $n\in (0:\len(v))$, we have $\left(\bigcup S\right)(n) = v(n)$. As
+\[ (\branch\circ\branch^{-1})(S) = \setbuilder{\left(\bigcup S\right)[0:n]}{n\in \N}, \]
+we have that $v\in (\branch\circ\branch^{-1})(S)$. Conversely, take $w\in (\branch\circ\branch^{-1})(S)$. Then $w = \left(\bigcup S\right)[0:\len(w)]$. 
+\end{itemize}
 \end{proof}
-\begin{corollary} \label{welfoundedACC}
-Let $\sSet{A, R}$ be a asymmetric relational structure. Then
-\begin{enumerate}
-\item if $R$ is converse well-founded, then $R$ satisfies ACC;
-\item if $R$ is well-founded, then $R$ satisfies DCC.
-\end{enumerate}
-The converses hold under DC. See \ref{ZornEquivalentsDC}.
+\begin{corollary}
+Let $\sSet{A, R}$ be relational structure and let $M$ be the set of monotone sequences in $A$. Then the following function
+\[ \branch: M \to [T_R]: u \mapsto \setbuilder{u[0:n]}{n\in \N}, \]
+which maps sequences in $A$ to their initial segments, is a bijection with inverse
+\[ \branch^{-1}: [T_R] \to M: S\mapsto \bigcup S. \]
 \end{corollary}
-\begin{proof}
-By \ref{treeOrderingLemma}.
-\end{proof}
+
+
+
+We conclude that $S \leq_c \N$ by \ref{injectivityCardinality}, i.e.\ $S$ is countable. By \ref{countableEquivalents}, we conclude that $S =_c \N$, as $S$ was assumed infinite.
 
 \subsubsection{Tree topologies}
 
