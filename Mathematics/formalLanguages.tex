@@ -223,7 +223,7 @@ y \arrow[dr, dashed, "{*}"] \& {} \& \arrow[dl, dashed, swap, "{*}"] y' \& {} \&
 The second implication uses \ref{transitiveClosureRSdiagram} and the third uses confluence. The base case is just confluence.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{confluenceEquivalents}
 Let $\sSet{X, R}$ be a rewriting system. The following are equivalent:
 \begin{enumerate}
 \item $R$ has the Church-Rosser property;
@@ -378,8 +378,8 @@ y_2 \arrow[r, dashed, swap, "{*}"] & {}
 \end{tikzcd} \]
 \item Strong confluence is expressed by the diagram
 \[ \begin{tikzcd}
-x \arrow[r] \arrow[d, swap, "{}"] & y_1 \arrow[d, dashed, "{*}"] \\
-y_2 \arrow[r, dashed, swap, "{?}"] & {}
+x \arrow[r] \arrow[d, swap, "{}"] & y_1 \arrow[d, dashed, "{?}"] \\
+y_2 \arrow[r, dashed, swap, "{*}"] & {}
 \end{tikzcd} \]
 \item The diamond property is expressed by the diagram
 \[ \begin{tikzcd}
@@ -390,11 +390,53 @@ y_2 \arrow[r, dashed, swap, "{}"] & {}
 \end{example}
 
 \begin{lemma}
-Let $\sSet{X,R}$ be a rewriting system. Then
-\[ \text{diamond property}; \implies \;\text{strong confluence} \;\implies\; \text{confluence}. \]
+Let $\sSet{X,R}$ be a rewriting system. Then each of the following properties implies the next:
+\begin{enumerate}
+\item diamond property;
+\item strong confluence;
+\item confluence;
+\item local confluence.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-TODO
+$(1) \Rightarrow (2)$ Immediate as $R \subseteq R^?$ and $R\subseteq R^*$.
+
+$(2) \Rightarrow (3)$ By \ref{confluenceEquivalents} it is enough to prove semi-confluence. First we observe the lemma
+\begin{lemma*} The following diagrams are equivalent:
+\[ \begin{tikzcd}
+x \arrow[r] \arrow[d, "{}"] & y_1 \arrow[d, dashed, "{?}"] \\
+y_2 \arrow[r, dashed, swap, "{*}"] & {z}
+\end{tikzcd} \qquad\iff\qquad \begin{tikzcd}
+x \arrow[r] \arrow[d, "{?}"] & y_1 \arrow[d, dashed, "{?}"] \\
+y_2 \arrow[r, dashed, swap, "{*}"] & {z}
+\end{tikzcd}. \]
+\end{lemma*}
+\begin{proof}[Proof of sublemma] \renewcommand{\qedsymbol}{$\dashv$}
+The direction $\Leftarrow$ is immediate because $R\subseteq R^?$. For the other direction, take $x,y_1,y_2 \in X$ such that $xRy_1$ and $xR^?y_2$. If $xRy_2$, then the implication is immediate. If not, then $x=y_2$ and we can take $z = y_1$ and we have $y_2Rz$.
+\end{proof}
+By induction on RS-diagrams, we conclude from
+\[ \begin{tikzcd}[ampersand replacement=\&]
+{} \arrow[r] \arrow[d, "{?}"] \& {} \arrow[d, dashed, "{?}"] \\
+{} \arrow[r,  dashed, "{*}"] \& {}
+\end{tikzcd} \quad\iff\quad \begin{tikzcd}[ampersand replacement=\&]
+{} \arrow[r] \arrow[d] \& {} \arrow[d, dashed, "{?}"] \\
+{} \arrow[r,  dashed, "{*}"] \& {}
+\end{tikzcd} \quad\implies\quad \begin{tikzcd}[ampersand replacement=\&]
+{} \arrow[r] \arrow[d] \& {} \arrow[d, dashed, "{?}"] \arrow[r] \& {}  \\
+{} \arrow[r,  dashed, "{*}"] \& {} \& {}
+\end{tikzcd} \quad\implies\quad \begin{tikzcd}[ampersand replacement=\&]
+{} \arrow[r] \arrow[d] \& {} \arrow[d, dashed, "{?}"] \arrow[r] \& {} \arrow[d, dashed, "{?}"] \\
+{} \arrow[r,  dashed, "{*}"] \& {} \arrow[r,  dashed, "{*}"] \& {}
+\end{tikzcd} \]
+that $\begin{tikzcd}
+{} \arrow[r, "{*}"] \arrow[d] & {} \arrow[d, dashed, "{?}"] \\
+{} \arrow[r, dashed, "{*}"] & {}
+\end{tikzcd}$. This implies $\begin{tikzcd}
+{} \arrow[r, "{*}"] \arrow[d] & {} \arrow[d, dashed, "{*}"] \\
+{} \arrow[r, dashed, "{*}"] & {}
+\end{tikzcd}$, i.e.\ semi-confluence.
+
+$(3) \Rightarrow (4)$ Immediate because $R\subseteq R^*$.
 \end{proof}
 
 \begin{proposition}[Newman's lemma]
