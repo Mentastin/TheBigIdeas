@@ -339,50 +339,35 @@ $\boxed{\Leftarrow}$ Set $z = \normalform{x} = \normalform{y}$. Then $x R^* z (R
 Let $\sSet{X,R}$ be a rewriting system. Then $R$ is terminating \textup{if and only if} $R^+$ is terminating.
 \end{lemma}
 
-\subsubsection{Chain conditions and termination}
-\begin{definition}
-Let $\sSet{A, R}$ be a relational structure. Then $\sSet{A, R}$
-\begin{itemize}
-\item satisfies the \udef{ascending chain condition} (ACC) if $[T_R] = \emptyset$.
-\item satisfies the \udef{descending chain condition} (DCC) if $[T_{R^\transp}] = \emptyset$.
-\end{itemize}
-\end{definition}
-
 \begin{lemma}
-If $\sSet{A, R}$ is a relational structure that satisfies either the ascending or descending chain condition, then $R$ is asymmetric.
+If $\sSet{X, R}$ is a terminating rewriting system. Then $R$ is asymmetric.
 \end{lemma}
 \begin{proof}
 Assume $R$ not asymmetric. Then there exists $(x,y)\in R\cap R^\transp$. The initial segments of the sequence $n\mapsto \begin{cases}
 x & (\text{$n$ is even}) \\
 y & (\text{$n$ is odd})
-\end{cases}$ form an infinite branch.
+\end{cases}$ form a monotonic sequence and thus determine an infinite branch of $T_R$ by \ref{monotoneSequenceBranch}.
 \end{proof}
 
 \begin{proposition}
-Let $\sSet{A, R}$ be a relational structure. Then
-\begin{enumerate}
-\item if $T_R$ is converse well-founded, then $R$ is converse well-founded;
-\item if $R$ is asymmetric, then the converse also holds.
-\end{enumerate}
+A $\sSet{X,R}$ rewriting system is terminating \textup{if and only if} $\sSet{A,R^+}$ is terminating.
 \end{proposition}
 \begin{proof}
-(1) Assume that $T_R$ is converse well-founded. Consider a subset $X\subseteq A$ and the restricted associated tree $T' = T_R|_{X^*}$. Now $T'$ has a maximal element $u$ by converse-well-foundedness of $T_R$. Then $u_{-1}R\cap X \neq \emptyset$ and thus $u_{-1}$ must be maximal in $X$ by TODO ref.
+TODO
+\end{proof}
 
-(2) Assume $R$ is asymmetric and converse well-founded. Then for any $X\subseteq A$, $R|_X^{X}$ is asymmetric and thus not left-total by \ref{maximalElementNotLeftTotal}. Take some subset $S\subseteq T_R$ and consider the set
-\[ E \defeq \setbuilder{u_{-1}}{u\in S}. \]
-Now $R|_E^E$ is not left total. So we can find $x\in E$ such that $xR|_E = \emptyset$. Thus we can find $u\in S$ such that $u_{-1}R|_E = \emptyset$, which means that $u$ is maximal in $S$.
-\end{proof}
-\begin{corollary} \label{welfoundedACC}
-Let $\sSet{A, R}$ be a asymmetric relational structure. Then
-\begin{enumerate}
-\item if $R$ is converse well-founded, then $R$ satisfies ACC;
-\item if $R$ is well-founded, then $R$ satisfies DCC.
-\end{enumerate}
-The converses hold under DC. See \ref{ZornEquivalentsDC}.
-\end{corollary}
-\begin{proof}
-By \ref{treeOrderingLemma}.
-\end{proof}
+\subsection{Chain conditions}
+\begin{definition}
+Let $\sSet{X, R}$ be a relational structure. Then $\sSet{X, R}$ is said to
+\begin{itemize}
+\item satisfy the \udef{ascending chain condition} (ACC) if $\sSet{X, R}$ terminates.
+\item satisfies the \udef{descending chain condition} (DCC) if $\sSet{X, R^\transp}$.
+\end{itemize}
+\end{definition}
+
+\subsection{Induction on terminating rewriting systems}
+Assuming the axiom of dependent choice, a terminating rewriting system $\sSet{X,R}$ is strictly converse well-founded by \ref{welfoundedACC}. This implies the following version of induction: let $P\subseteq X$
+\[ \text{if}\quad  \forall x\in X: \Big(\big(xR\subseteq P\big)\implies x\in P\Big), \quad \text{then}\quad P=U. \]
 
 
 \subsection{Progress functions}
@@ -536,6 +521,69 @@ y_2 \arrow[r, swap, dashed, "{*}"] & w \arrow[r, swap, dashed, "{*}"] & z
 These implications follow because $u_2$ and $u_1$ are elements of $P$ by the induction hypothesis. The antecedent of the implication is local confluence, which holds. We conclude the consequent and thus that $x\in P$.
 
 By induction $P=X$.
+\end{proof}
+
+\subsection{Commutation}
+\begin{definition}
+Let $R,S$ be two relations on a class $X$. We say $R$ and $S$
+\begin{itemize}
+\item \udef{commute} if $\forall x,y_1,y_2\in X:\; \big(xR^*y_1\big)\land\big(xS^*y_2\big)\implies \exists z\in X: \big(y_1S^*z\big)\land\big(y_2R^*z\big)$;
+\item \udef{strongly commute} if $\forall x,y_1,y_2\in X:\; \big(xRy_1\big)\land\big(xSy_2\big)\implies \exists z\in X: \big(y_1S^?z\big)\land\big(y_2R^*z\big)$;
+\item have the \udef{commuting diamond property} if $\forall x,y_1,y_2\in X:\; \big(xRy_1\big)\land\big(xSy_2\big)\implies \exists z\in X: \big(y_1Sz\big)\land\big(y_2Rz\big)$.
+\end{itemize}
+\end{definition}
+
+\begin{example}
+Let $R,S$ be two relations on a class $X$.
+\begin{itemize}
+\item Commutation of $R$ and $S$ is expressed by the diagram
+\[ \begin{tikzcd}
+x \arrow[r, "{R^*}"] \arrow[d, swap, "{S^*}"] & y_1 \arrow[d, dashed, "{S^*}"] \\
+y_2 \arrow[r, dashed, swap, "{R^*}"] & {}
+\end{tikzcd} \]
+\item Strong commutation of $R$ and $S$ is expressed by the diagram
+\[ \begin{tikzcd}
+x \arrow[r, "{R}"] \arrow[d, swap, "{S}"] & y_1 \arrow[d, dashed, "{S^?}"] \\
+y_2 \arrow[r, dashed, swap, "{R^*}"] & {}
+\end{tikzcd} \]
+\item The commuting diamond property of $R$ and $S$ is expressed by the diagram
+\[ \begin{tikzcd}
+x \arrow[r, "{R}"] \arrow[d, swap, "{S}"] & y_1 \arrow[d, dashed, "{S}"] \\
+y_2 \arrow[r, dashed, swap, "{R}"] & {}
+\end{tikzcd} \]
+\end{itemize}
+\end{example}
+
+\begin{lemma}
+Let $\sSet{X,R}$ be a rewriting system. Then $R$ is confluent if $R$ commutes with itself.
+\end{lemma}
+
+\begin{lemma}
+The property of strong confluence is symmetric in $R$ and $S$.
+\end{lemma}
+The property of confluence and the commuting diamond property are also symmetric in $R$ and $S$, but this is immediate from the definition.
+\begin{proof}
+TODO ???
+\end{proof}
+
+\begin{lemma}
+Let $R,S$ be two relations on a class $X$. Then each of the following properties implies
+the next:
+\begin{enumerate}
+\item the commuting diamond property of $R$ and $S$;
+\item strong commutation of $R$ and $S$;
+\item commutation of $R$ and $S$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO ???
+\end{proof}
+
+\begin{proposition}
+Let $R,S$ be two relations on a class $X$. If $R$ and $S$ are both confluent and commute, then $R\cup S$ is confluent.
+\end{proposition}
+\begin{proof}
+TODO
 \end{proof}
 
 \section{Term rewriting}

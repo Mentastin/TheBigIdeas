@@ -3519,7 +3519,7 @@ TODO
 \chapter{Successors and induction}
 \section{The successor and predecessor functions}
 
-TODO review definition for (loose) mini/maximality.
+TODO review definition for (loose) mini/maximality. + no longer require transitivity??
 
 \begin{definition}
 Let $\sSet{X,\Yleft}$ be an ordered set. We define the \udef{successor function}
@@ -3544,36 +3544,54 @@ The poset $X\cup t_X$ is called the \udef{successor} $\operatorname{Succ}(X)$ of
 
 \section{Well-founded and well-ordered sets}
 \begin{definition}
-Let $\sSet{P, \Yleft}$ be an ordered \emph{set}.
-Then $P$ is called
+Let $\sSet{A,R}$ be a relational structure.
+Then $A$ is called
 \begin{itemize}
 \item \udef{strictly well-founded} if every non-empty subset has a strictly minimal element;
 \item \udef{well-founded} if every non-empty subset has a minimal element;
 \item \udef{loosely well-founded} if every non-empty subset has a loosely minimal element.
 \end{itemize}
-Additionally, $P$ is called
+Additionally, $A$ is called
 \begin{itemize}
-\item \udef{well-ordered} if every non-empty subset has a minimum. In this case $\Yleft$ is said to be a \udef{well-ordering}.
+\item \udef{well-ordered} if every non-empty subset has a minimum. In this case $R$ is said to be a \udef{well-ordering}.
 \end{itemize}
 A set is called \udef{well-orderable} if it admits a well-ordering.
 \end{definition}
-The requirement that $P$ be a set makes it easier to quantify over all subsets.
+TODO $A$ set? The requirement that $A$ be a set makes it easier to quantify over all subsets.
 
 It turns out well-foundedness is what is needed to do recursion and induction. TODO: equivalence induction principle and well-foundedness!!
 
 Note we do not impose antisymmetry.
 
-\begin{proposition} \label{wellOrderedCondition}
-Let $\sSet{P, \Yleft}$ be an ordered set. Then the following are equivalent:
-\item $P$ is well-ordered;
-\item $P$ is loosely well-founded and connex.
+\begin{proposition}
+A relational structure $\sSet{A,R}$ is (strictly) well-founded \textup{if and only if} $\sSet{A,R^+}$ is (strictly) well-founded.
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ Assume $P$ well-ordered. Then every non-empty subset has a minimum, which is also loosely minimal by \ref{maximumIsMaximal}. So $P$ is well-founded.
+Let $S \subseteq A$ be some subset. If $x\in S$ is (strictly) $R^+$-minimal, then $x$ is (strictly) $R$-minimal. Thus (strictly) well-foundedness of $\sSet{A,R^+}$ implies (strictly) well-foundedness of $\sSet{A,R}$.
 
-Now take any $x,y\in P$. We need to show $x\mathrel{\Yleft}y$ or $y\mathrel{\Yleft}x$. We have that $\{x,y\}$ has a minimum. If $x$ is a minimum, then $x\mathrel{\Yleft}y$. If $y$ is a minimum, then $y\mathrel{\Yleft}x$.
+Now suppose $\sSet{A,R}$ is (strictly) well-founded. Then $\relconvex_R(S)$ has a (strictly) $R$-minimal $x$ and $x\in X$ by \ref{addedElementsRConvexHull}. We have that $x$ is (strictly) $R^+$-minimal in $\relconvex_R(S)$ by \ref{maximalityMinimalityRConvexSets}. It is then also a (strictly) $R^+$-minimal in $X$ by \ref{minimalMaximalSubset}.
+\end{proof}
 
-$(2) \Rightarrow (1)$ Now assume $P$ is well-founded and connex and take some non-empty subset $S$ of $P$. Now $S$ is also connex, so each minimal element of $S$ is a minimum by \ref{maximumIsMaximal}.
+\begin{proposition} \label{wellOrderedCondition}
+Let $\sSet{A,R}$ be a relational structure. Then the following are equivalent:
+\item $A$ is well-ordered;
+\item $A$ is loosely well-founded and connex.
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Assume $A$ well-ordered. Then every non-empty subset has a minimum, which is also loosely minimal by \ref{maximumIsMaximal}. So $A$ is well-founded.
+
+Now take any $x,y\in A$. We need to show $xRy$ or $yRx$. We have that $\{x,y\}$ has a minimum. If $x$ is a minimum, then $xRy$. If $y$ is a minimum, then $yRx$.
+
+$(2) \Rightarrow (1)$ Now assume $A$ is well-founded and connex and take some non-empty subset $S$ of $A$. Now $S$ is also connex, so each minimal element of $S$ is a minimum by \ref{maximumIsMaximal}.
+\end{proof}
+
+\begin{proposition}
+Every antisymmetric well-ordering is transitive.
+\end{proposition}
+\begin{proof}
+Let $\sSet{A,R}$ be a well-ordered relational structure and take $x,y,z\in A$ such that $xRy$ and $yRz$. We need to prove that $xRz$.
+
+Consider the set $\{x,y,z\}$. It must have a least element. If the least element is $x$, then $xRz$ and we are done. If the least element is $y$, then $yRx$, so $x=y$ by antisymmetry and $yRz$ is the same as $xRz$. Finally if $z$ is the least element, then by a similar argument, $y=z$ and $xRz$.
 \end{proof}
 
 \begin{lemma}
@@ -3647,26 +3665,28 @@ Standard induction and recursion use the predecessor to define / prove a propert
 induction} and definition by \textit{complete recursion} that generalise to well-founded sets.
 
 \begin{definition}
-Let $\sSet{U, \Yleft}$ be an ordered set. We say $U$ satisfies
+Let $\sSet{U, R}$ be a relational structure. We say $U$ satisfies
 \begin{itemize}
 \item the principle of \udef{well-founded induction} if for all subsets $P\subseteq U$, we have the implication
-\[ \text{if}\quad  \forall x\in U: \Big(\big(\downset\{x\}\setminus\{x\}\subseteq P\big)\implies x\in P\Big), \quad \text{then}\quad P=U; \]
+\[ \text{if}\quad  \forall x\in U: \Big(\big(Rx\setminus\{x\}\subseteq P\big)\implies x\in P\Big), \quad \text{then}\quad P=U; \]
 \item the principle of \udef{loosely well-founded induction} if for all subsets $P\subseteq U$, we have the implication
-\[ \text{if}\quad  \forall x\in U: \Big(\big(\downset\{x\}\setminus\upset\{x\}\subseteq P\big)\implies x\in P\Big), \quad \text{then}\quad P=U. \]
+\[ \text{if}\quad  \forall x\in U: \Big(\big(Rx\setminus xR\subseteq P\big)\implies x\in P\Big), \quad \text{then}\quad P=U. \]
 \end{itemize}
 In both cases the antecedent of the implication is called the \udef{induction step}. The antecedent of the induction step is called the \udef{induction hypothesis}.
 
 We say $U$ satisfies
 \begin{itemize}
 \item the principle of \udef{well-founded recursion} if for all non-empty sets $E$ and functions $h: (U\not\to E)\to E$, there exists exactly one function $f: U\to E$ that satisfies
-\[ \forall x\in U: \quad f(x) = h(f|_{\downset\{x\}\setminus\{x\}}); \]
+\[ \forall x\in U: \quad f(x) = h(f|_{Rx\setminus\{x\}}); \]
 \item the principle of \udef{loosely well-founded recursion} if for all non-empty sets $E$ and functions $h: (U\not\to E)\to E$, there exists exactly one function $f: U\to E$ that satisfies
-\[ \forall x\in U: \quad f(x) = h(f|_{\downset\{x\}\setminus\upset\{x\}}). \]
+\[ \forall x\in U: \quad f(x) = h(f|_{Rx\setminus xR}). \]
 \end{itemize}
 \end{definition}
 
+If $U$ is transitive, we write $\downset\{x\}$ instead of $Rx$.
+
 \begin{theorem}[Well-founded induction and recursion]
-Let $\sSet{U, \Yleft}$ be an ordered set. Then the following are equivalent:
+Let $\sSet{U, R}$ be an ordered set. Then the following are equivalent:
 \begin{enumerate}
 \item $U$ is well-founded;
 \item $U$ satisfies the principle of well-founded induction;
@@ -3682,67 +3702,67 @@ The following are also equivalent:
 Notice that there is no need for a ``base step'' in the induction principles, as it is 
 contained in the induction step: if $x$ is minimal in $U$, then there is no smaller $y$, so the induction hypothesis is trivially true and the induction step gives $x\in P$.
 \begin{proof}
-We show the first set of equivalences. The proof of the second set is identical, except with $\downset\{x\}\setminus\upset\{x\} = \Yleft\{x\}\setminus\{x\}\Yleft$ instead of $\downset\{x\}\setminus\{x\}$.
+We show the first set of equivalences. The proof of the second set is identical, except with $Rx\setminus xR$ instead of $Rx\setminus\{x\}$.
 
 $\boxed{(1) \Rightarrow (2)}$ Assume $U$ satisfies the principle of induction and let $P$ be some subset of $U$. We apply the principle of induction to $P^c$. The induction step is then
-\[ \forall x\in U: \Big(\big(\downset\{x\}\setminus\{x\}\perp P\big)\implies x\notin P\Big), \]
-which by \ref{maximalMinimalEquivalents} implies that $P$ has no minimal elements (as $\downset\{x\}\setminus\{x\} = \Yleft\{x\}\setminus\{x\}$).
+\[ \forall x\in U: \Big(\big(Rx\setminus\{x\}\perp P\big)\implies x\notin P\Big), \]
+which by \ref{maximalMinimalEquivalents} implies that $P$ has no minimal elements (as any potentially minimal element is not in $P$).
 
 The consequent $P^c = U$ is equivalent to $P=\emptyset$.
 
 Thus the principle of induction gives that any subset without minimal elements is empty, which is exactly well-foundedness.
 
-$\boxed{(2) \Rightarrow (1)}$ Assume, towards a contradiction, the induction step for some $P\subseteq U$ and $\exists x\in U\setminus P$. Then the set $P^c$ is not empty and by well-foundedness we can find a minimal element $x^*\in P^c$. By minimality $\downset\{x^*\}\setminus\{x^*\}\perp P^c$, so $\downset\{x^*\}\setminus\{x^*\}\subseteq P$. By the induction hypothesis $x^*\in P$, which is a contradiction.
+$\boxed{(2) \Rightarrow (1)}$ Assume, towards a contradiction, the induction step for some $P\subseteq U$ and $\exists x\in U\setminus P$. Then the set $P^c$ is not empty and by well-foundedness we can find a minimal element $x^*\in P^c$. By minimality $\downset\{x^*\}\setminus\{x^*\}\perp P^c$, so $R{x^*}\setminus\{x^*\}\subseteq P$. By the induction hypothesis $x^*\in P$, which is a contradiction.
 
-$\boxed{(2) \Rightarrow (3)}$ Let $\sSet{U, \Yleft}$ be an ordered set and $P\subseteq U$. Consider the characteristic function $\chi_P: U\to \{0,1\}$ of $P$.
+$\boxed{(2) \Rightarrow (3)}$ Consider $U' \defeq U\cup \{t_U\}$, where $t_U$ is greater than any element in $U$. Then $U'$ is well-founded and $Rt_U\setminus \{t_U\} = U$.
+
+Consider the set $P\subseteq U'$ that contains $u\in U'$ if and only if there exists exactly one function $f_u:Ru\to E$ which satisfies
+\[ f_u(x) = h(f_u|_{Rx\setminus\{x\}}) \qquad \forall x\in Ru. \]
+If we can prove the corresponding induction step, then in particular $t_U\in P$. This implies the existence and uniqueness of $f:U\to E = f_{t_U}|_U$.
+
+Fix an arbitrary $u\in U'$ and assume the induction hypothesis, which posits that such a unique function $f_v: Rv\cup\{v\}\to E$ exists for all $v\in Ru\setminus\{u\}$. We show the existence and uniqueness of $f_u:Ru\cup \{u\}\to E$.
+
+Note first that for $w\Yleft v\in Ru\setminus\{u\}$ we have $f_w = f_v|_{Rw\cup\{w\}}$, as both functions satisfy the conditions that give the unique definition.
+
+For existence: first define $f_u' \defeq \bigcup_{v\in Ru\setminus\{u\}} f_v$. 
+This is a relation; we show that it is functional and has domain $Ru\setminus\{u\}$.
+Indeed
+\begin{align*}
+\dom(f'_u) &= \bigcup_{v\in Ru\setminus\{u\}} \dom(f_v) \\
+&= \bigcup_{v\in Ru\setminus\{u\}} Rv\cup\{v\} \\
+&= \bigcup_{v\in Ru\setminus\{u\}} \{v\} \\
+&= Ru\setminus\{u\}.
+\end{align*}
+To show that $f'_u$ is functional, take $v\in Ru\setminus\{u\}$ and let $v\mathrel{(f'_u)}w_1$ and $v\mathrel{(f'_u)}w_2$.
+
+Then there exist $v_1, v_2 \Yright v$ such that $f_{v_1}(v) = w_1$ and $f_{v_2}(v) = w_2$. Now
+\[ w_1 = f_{v_1}(v) = f_{v_1}|_{Rv\cup \{v\}}(v) = f_v(v) = f_{v_2}|_{Rv\cup\{v\}}(v) = f_{v_1}(v) = w_2. \]
+We conclude that $f'_u$ is functional.
+
+Now let $f_u$ be the function $f'_u$ with the domain extended to $Ru$ by adding $f_u(u) = h(f'_u)$.
+
+(In the case of loosely well-founded recursion, we need to add $f_u(w) = h(f'_u)$ for all $w\in (Ru\cap uR)\cup\{u\}$)
+
+To show $f_u$ satisfies the defining property, take $v\in Ru\cup\{u\}$. If $v\neq u$, then
+\[ f_u(v) = f_v(v) = h(f_v|_{Rv\setminus\{v\}}) = h(f_u|_{Rv\setminus\{v\}}). \]
+Otherwise $v=u$, in which case $(Ru\cap uR)\cup\{u\} = (Rv\cap vR)\cup\{v\}$ and then
+\[ f_u(v) = h(f'_u) = h(f_u|_{Ru\setminus\{u\}}) = h(f_u|_{Rv\setminus\{v\}}). \]
+This concludes the existence part of the proof.
+
+For uniqueness, assume that another function $g: Ru\cup \{u\}\to E$ satisfies the property. For $v\neq u$, we have $g|_{Ru\setminus\{u\}} = f'_u = f_u|_{Ru\setminus\{u\}}$. For $v=u$, we have
+\[ g(u) = h(g|_{Ru\setminus\{u\}}) = h(f'_u) = f_u(u). \]
+This proves uniqueness.
+
+$\boxed{(3) \Rightarrow (2)}$ Take an arbitrary subset $P\subseteq U$. Consider the characteristic function $\chi_P: U\to \{0,1\}$ of $P$.
 
 We may take $E = \{0,1\}$ and the $h$ that maps partial functions $p$ to zero iff $0\in\im(p)$. Then the statement
-\[ \forall x\in U: \quad\chi_P(x) = h(\chi_P|_{\downset\{x\}\setminus\{x\}}) \]
+\[ \forall x\in U: \quad\chi_P(x) = h(\chi_P|_{Rx\setminus\{x\}}) \]
 is equivalent to the induction hypothesis.
 
 The function $\underline{1}$ satisfies the recursion relation. By the principle of recursion, this is the unique function, so $\chi_P = \underline{1}$ and thus $P = U$.
-
-$\boxed{(3) \Rightarrow (2)}$ Consider $U' \defeq U\cup \{t_U\}$, where $t_U$ is greater than any element in $U$. Then $U'$ is well-founded and $\downset\{t_U\}\setminus \{t_U\} = U$.
-
-Consider the set $P\subseteq U'$ that contains $u\in U'$ if and only if there exists exactly one function $f_u:\downset\{u\}\to E$ which satisfies
-\[ f_u(x) = h(f_u|_{\downset\{x\}\setminus\{x\}}) \qquad \forall x\in\downset\{u\}. \]
-If we can prove the corresponding induction step, then in particular $t_U\in P$. This implies the existence and uniqueness of $f:U\to E = f_{t_U}|_U$.
-
-Fix an arbitrary $u\in U'$ and assume the induction hypothesis, which posits that such a unique function $f_v: \downset\{v\}\to E$ exists for all $v\in \downset\{u\}\setminus\{u\}$. We show the existence and uniqueness of $f_u:\downset\{u\}\to E$.
-
-Note first that for $w\Yleft v\in \downset\{u\}\setminus\{u\}$ we have $f_w = f_v|_{\downset\{w\}}$, as both functions satisfy the conditions that give the unique definition.
-
-For existence: first define $f_u' \defeq \bigcup_{v\in \downset\{u\}\setminus\{u\}} f_v$. 
-This is a relation; we show that it is functional and has domain $\downset\{u\}\setminus\{u\}$.
-Indeed
-\begin{align*}
-\dom(f'_u) &= \bigcup_{v\in \downset\{u\}\setminus\{u\}} \dom(f_v) \\
-&= \bigcup_{v\in \downset\{u\}\setminus\{u\}} \downset\{v\} \\
-&= \bigcup_{v\in \downset\{u\}\setminus\{u\}} \{v\} \\
-&= \downset\{u\}\setminus\{u\}.
-\end{align*}
-To show that $f'_u$ is functional, take $v\in \downset\{u\}\setminus\{u\}$ and let $v\mathrel{(f'_u)}w_1$ and $v\mathrel{(f'_u)}w_2$.
-
-Then there exist $v_1, v_2 \Yright v$ such that $f_{v_1}(v) = w_1$ and $f_{v_2}(v) = w_2$. Now
-\[ w_1 = f_{v_1}(v) = f_{v_1}|_{\downset\{v\}}(v) = f_v(v) = f_{v_2}|_{\downset\{v\}}(v) = f_{v_1}(v) = w_2. \]
-We conclude that $f'_u$ is functional.
-
-Now let $f_u$ be the function $f'_u$ with the domain extended to $\downset\{u\}$ by adding $f_u(u) = h(f'_u)$.
-
-(In the case of loosely well-founded recursion, we need to add $f_u(w) = h(f'_u)$ for all $w\in\downset\{u\}\cap\upset\{u\}$)
-
-To show $f_u$ satisfies the defining property, take $v\in \downset\{u\}$. If $v\neq u$, then
-\[ f_u(v) = f_v(v) = h(f_v|_{\downset\{v\}\setminus\{v\}}) = h(f_u|_{\downset\{v\}\setminus\{v\}}). \]
-Otherwise $v=u$, in which case $\downset\{u\}\cap\upset\{u\} = \downset\{v\}\cap\upset\{v\}$ and then
-\[ f_u(v) = h(f'_u) = h(f_u|_{\downset\{u\}\setminus\{u\}}) = h(f_u|_{\downset\{v\}\setminus\{v\}}). \]
-This concludes the existence part of the proof.
-
-For uniqueness, assume that another function $g: \downset\{u\}\to E$ satisfies the property. For $v\neq u$, we have $g|_{\downset\{u\}\setminus\{u\}} = f'_u = f_u|_{\downset\{u\}\setminus\{u\}}$. For $v=u$, we have
-\[ g(u) = h(g|_{\downset\{u\}\setminus\{u\}}) = h(f'_u) = f_u(u). \]
-This proves uniqueness.
 \end{proof}
 \begin{corollary}
-Let $\sSet{U,\Yleft}$ be an ordered set.
+Let $\sSet{U,R}$ be a relational structure.
 \begin{enumerate}
 \item The well-founded principles imply the loosely well-founded principles.
 \item If $U$ is antisymmetric, then these principles are equivalent.
@@ -4119,23 +4139,47 @@ Now take some $n\in \N$. If $\im(\len|_S) \subseteq (0:n)$, then $S \leq_c (0:n)
 Finally we show that $\branch$ and $\branch^{-1}$ are mutual inverses.
 \begin{itemize}
 \item Take $u\in A^\N$ and $n\in \N$. Then
-\[ (\branch^{-1}\circ\branch)(u)(n) = u[0:n](n) = u|_{0:n}(n) = u(n). \]
+\begin{align*}
+\big(n, u(n)\big) &= \big(n, u|_{0:n}(n)\big) = \big(n, u[0:n](n)\big) \\
+&\in u[0:n] \subseteq \bigcup_{k\in \N}u[0:k] = (\branch^{-1}\circ\branch)(u).
+\end{align*}
+Because $(\branch^{-1}\circ\branch)(u)$ is functional, we have $(\branch^{-1}\circ\branch)(u)(n) = u(n)$. 
 Because $n$ was chosen arbitrarily, we have $(\branch^{-1}\circ\branch)(u) = u$.
-\item Take $S\in [A^*]$ and $v\in S$. Then $v = \left(\bigcup S\right)[0:\len(v)]$. Indeed their domains match and for all $n\in (0:\len(v))$, we have $\left(\bigcup S\right)(n) = v(n)$. As
+\item Take $S\in [A^*]$ and $v\in S$. Then $v = \left(\bigcup S\right)[0:\len(v)]$. Indeed their domains match (TODO ref) and for all $n\in (0:\len(v))$, we have $\big(n, v(n)\big) \subseteq \bigcup S$. By functionality of $\bigcup S$, we have
+\[ v(n) = \left(\bigcup S\right)(n) = \left(\bigcup S\right)|_{(0:\len(v))}(n) = \left(\bigcup S\right)[0:\len(v)](n), \]
+for all $n\in (0:\len(v))$, so $v = \left(\bigcup S\right)[0:\len(v)]$. As
 \[ (\branch\circ\branch^{-1})(S) = \setbuilder{\left(\bigcup S\right)[0:n]}{n\in \N}, \]
-we have that $v\in (\branch\circ\branch^{-1})(S)$. Conversely, take $w\in (\branch\circ\branch^{-1})(S)$. Then $w = \left(\bigcup S\right)[0:\len(w)]$. 
+we have that $v\in (\branch\circ\branch^{-1})(S)$. Conversely, take $w\in (\branch\circ\branch^{-1})(S)$. Then $w = \left(\bigcup S\right)[0:k] = \left(\bigcup S\right)[0:\len(w)]$ (TODO ref). 
 \end{itemize}
 \end{proof}
-\begin{corollary}
+TODO review with tools for (and generalise to) partial functions.
+
+\begin{corollary} \label{monotoneSequenceBranch}
 Let $\sSet{A, R}$ be relational structure and let $M$ be the set of monotone sequences in $A$. Then the following function
 \[ \branch: M \to [T_R]: u \mapsto \setbuilder{u[0:n]}{n\in \N}, \]
 which maps sequences in $A$ to their initial segments, is a bijection with inverse
 \[ \branch^{-1}: [T_R] \to M: S\mapsto \bigcup S. \]
 \end{corollary}
 
+\subsubsection{Well-foundedness of $T_R$}
+\begin{proposition}
+Let $\sSet{A, R}$ be a relational structure. Then $T_R$ is converse well-founded \textup{if and only if} $R$ is strictly converse well-founded.
+\end{proposition}
+\begin{proof}
+$\boxed{\Rightarrow}$ Consider a subset $X\subseteq A$ and the restricted associated tree $T' = T_R\cap{X^*}$. Now $T'$ has a maximal element $u$ by converse-well-foundedness of $T_R$. Then $u\concat\seq{x} \notin T'$ for all $x\in X$. As $u\concat\seq{x} \in X^*$, this must mean $u\concat\seq{x}\notin T_R$ and thus $\neg\big(u_{-1}Rx\big)$. We conclude that $u_{-1}R\cap X = \emptyset$, which means that $u_{-1}$ is strictly maximal in $X$.
 
+$\boxed{\Leftarrow}$ Consider a subset $S\subseteq T_R$ and construct the set $E \defeq \setbuilder{u_n}{u\in S, n<\len(u)}$. This set has a strictly maximal element by assumption and we can thus find a $u\in S$ and $n<\len(u)$ such that $u_{n}$ is maximal in $E$. We claim that $u$ is maximal in $S$. Indeed, take $v\in S$ such that $u\sqsubseteq v$. Then $\len(u) = n = \len(v)$, for if $\len(u) \neq n$, then there exists $u_{n+1}\in E$ such that $u_nRu_{n+1}$, so $u_{n+1}\in u_nR\cap E$, which means that $u_nR\cap E\neq \emptyset$ and $u_n$ is not strictly maximal. The argument for $\len(v) = n$ is similar.
 
-We conclude that $S \leq_c \N$ by \ref{injectivityCardinality}, i.e.\ $S$ is countable. By \ref{countableEquivalents}, we conclude that $S =_c \N$, as $S$ was assumed infinite.
+We then have $u = v[0:\len(u)] = v[0:\len(v)] = v$ by \ref{treeNodeInequalities} and \ref{initialSliceLemma}. So $\big(S\cap u{\sqsubseteq}\big) \subseteq \{u\}$, which means that $u$ is maximal in $S$.
+\end{proof}
+\begin{corollary} \label{welfoundedACC}
+Let $\sSet{A, R}$ be a relational structure. Then $T_R$ terminates if $R$ is strictly converse well-founded.
+
+The converse holds under DC.
+\end{corollary}
+\begin{proof}
+By \ref{treeOrderingLemma}. For the converse, see \ref{ZornEquivalentsDC}.
+\end{proof}
 
 \subsubsection{Tree topologies}
 
