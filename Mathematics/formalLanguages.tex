@@ -393,6 +393,11 @@ $\boxed{\Leftarrow}$ Follows from \ref{rewritingSystemProgressFunction}.
 
 \section{Confluence}
 TODO put Church-Rosser equivalence here? And combine definition of local confluence above?
+
+\begin{lemma} \label{confluenceTransitiveReflexiveClosure}
+Let $\sSet{X,R}$ be a rewriting system. Then $R$ is confluent \textup{if and only if} $R^*$ is confluent.
+\end{lemma}
+
 \subsection{Confluence-related properties}
 \begin{definition}
 Let $\sSet{X,R}$ be a rewriting system. The system is said
@@ -525,11 +530,11 @@ By induction $P=X$.
 
 \subsection{Commutation}
 \begin{definition}
-Let $R,S$ be two relations on a class $X$. We say $R$ and $S$
+Let $R,S$ be two relations on a class $X$. We say
 \begin{itemize}
-\item \udef{commute} if $\forall x,y_1,y_2\in X:\; \big(xR^*y_1\big)\land\big(xS^*y_2\big)\implies \exists z\in X: \big(y_1S^*z\big)\land\big(y_2R^*z\big)$;
-\item \udef{strongly commute} if $\forall x,y_1,y_2\in X:\; \big(xRy_1\big)\land\big(xSy_2\big)\implies \exists z\in X: \big(y_1S^?z\big)\land\big(y_2R^*z\big)$;
-\item have the \udef{commuting diamond property} if $\forall x,y_1,y_2\in X:\; \big(xRy_1\big)\land\big(xSy_2\big)\implies \exists z\in X: \big(y_1Sz\big)\land\big(y_2Rz\big)$.
+\item $R$ and $S$ \udef{commute} if $\forall x,y_1,y_2\in X:\; \big(xR^*y_1\big)\land\big(xS^*y_2\big)\implies \exists z\in X: \big(y_1S^*z\big)\land\big(y_2R^*z\big)$;
+\item $R$ \udef{strongly commutes} with $S$ if $\forall x,y_1,y_2\in X:\; \big(xRy_1\big)\land\big(xSy_2\big)\implies \exists z\in X: \big(y_1S^?z\big)\land\big(y_2R^*z\big)$;
+\item $R$ and $S$ have the \udef{commuting diamond property} if $\forall x,y_1,y_2\in X:\; \big(xRy_1\big)\land\big(xSy_2\big)\implies \exists z\in X: \big(y_1Sz\big)\land\big(y_2Rz\big)$.
 \end{itemize}
 \end{definition}
 
@@ -554,17 +559,23 @@ y_2 \arrow[r, dashed, swap, "{R}"] & {}
 \end{itemize}
 \end{example}
 
+The property of confluence and the commuting diamond property are symmetric in $R$ and $S$.
+\begin{example}
+The property of strong confluence is asymmetric in $R$ and $S$.
+
+Consider the set $\N$ and
+\begin{itemize}
+\item $mRn$ if $m + 1 = n$; so $mR^*n$ iff $m\leq n$;
+\item $mSn$ if $2\cdot m = n$; so $mS^*n$ iff $n/m = 2^k$ for some $k\geq 0$.
+\end{itemize}
+Then $R$ strongly commutes with $S$. Indeed if $xRy_1$, then $y_1 = x+1$ and if $xSy_2$, then $y_2 = 2x$. Now we can take $z=x+1$ because $(x+1)S^?\big(2(x+1)\big)$ and $2x \leq 2x+2 = 2(x+1)$ so $2xR^*(2x+2)$.
+
+But $S$ does not strongly commute with $R$. For a counterexample, take $x= 2$ Indeed in this case $y_1 = 2x = 4$ and $y_2 = x+1 = 3$. Then $y_1R^?z$ iff $z=2x= 4$ or $z=2x+1 = 5$. In the first case $z/y_2 = 4/3$, in the second case $z/y_2 = 5/3$. In neither case is $z/y_2 = 2^k$, so we cannot have $y_2S^*z$.
+\end{example}
+
 \begin{lemma}
 Let $\sSet{X,R}$ be a rewriting system. Then $R$ is confluent if $R$ commutes with itself.
 \end{lemma}
-
-\begin{lemma}
-The property of strong confluence is symmetric in $R$ and $S$.
-\end{lemma}
-The property of confluence and the commuting diamond property are also symmetric in $R$ and $S$, but this is immediate from the definition.
-\begin{proof}
-TODO ???
-\end{proof}
 
 \begin{lemma}
 Let $R,S$ be two relations on a class $X$. Then each of the following properties implies
@@ -576,14 +587,24 @@ the next:
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-TODO ???
+$(1) \Rightarrow (2)$ Immediate because $R\subseteq R^*$ and $S\subseteq S^?$.
+
+$(2) \Rightarrow (3)$ See \ref{confluenceImplications} TODO.
 \end{proof}
 
 \begin{proposition}
 Let $R,S$ be two relations on a class $X$. If $R$ and $S$ are both confluent and commute, then $R\cup S$ is confluent.
 \end{proposition}
 \begin{proof}
-TODO
+Using confluence of $R, S$ and commutation, we have the diagram
+\[ \begin{tikzcd}[]
+{\hspace{1pt}} \arrow[r, "{R^*}"] \arrow[d, "{R^*}"] & {} \arrow[r, "{S^*}"] \arrow[d,  dashed, "{R^*}"] & {} \arrow[d, dashed, "{R^*}"] \\
+{\hspace{1pt}} \arrow[r, dashed, "{R^*}"] \arrow[d, "{S^*}"] & {} \arrow[r, dashed, "{S^*}"] \arrow[d, dashed, "{S^*}"] & {} \arrow[d, dashed, "{S^*}"] \\
+{\hspace{1pt}} \arrow[r, dashed, "{R^*}"]  & {} \arrow[r, dashed, "{S^*}"] & {} 
+\end{tikzcd}. \]
+This shows that $R^*;S^*$ satisfies the diamond property and thus $R^*;S^*$ is confluent. Also
+\[ R\cup S \subseteq R^*;S^* \subseteq (R\cup S)^*, \]
+so $(R^*;S^*)^* = (R\cup S)^*$. Thus $(R\cup S)^*$ is confluent and so $R\cup S$ is confluent by \ref{confluenceTransitiveReflexiveClosure}. 
 \end{proof}
 
 \section{Term rewriting}

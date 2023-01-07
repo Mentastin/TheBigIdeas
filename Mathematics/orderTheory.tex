@@ -3789,7 +3789,7 @@ By induction we conclude that $P=U$ and thus $f(x) = g(x)$ for all $x\in U$.
 Note that the hypotheses of connexity and antisymmetry are necessary: without either there may be multiple minimal elements of subsets and different order similarities have the freedom to choose between them.
 
 
-
+TODO recursively define subsets by characteristic function.
 
 \subsection{Recursion invariants}
 TODO recursively defining some function with certain property (+usng this property in recursive definition)
@@ -3827,6 +3827,11 @@ Let $u\in A^*$ be a string. We take all indices modulo $\len(x)$. In particular 
 \[ u\star v \defeq \seq{u_0,\ldots, u_{n-1},v_0,\ldots, v_{m-1}} \in A^{n+m}. \]
 \item Let $u\in A^{n}$ be a string. The \udef{reverse} string $\reverse{u}$ is defined by
 \[ \reverse{u} \defeq \seq{u_{n-1}, \ldots, u_0}. \]
+\item Let $u\in A^*$ be a string. The string $u^k$ is defined recursively by
+\[ u^{k} = \begin{cases}
+\seq{} & (k=0) \\
+u^{k-1}\concat u & (k\geq 1)
+\end{cases}. \]
 \end{itemize}
 We call a subsequence a \udef{substring} if its domain is an interval subset.
 \begin{itemize}
@@ -3874,7 +3879,18 @@ Define a function $\phi: \N \times A^*\to E$ recursively such that it satisfies
 \end{align*}
 and set $f(u) = \phi(\len(u), u)$. Proving that $f$ satisfies the second equality and the uniqueness of $f$ goes by induction on $\len(u)$.
 \end{proof}
-Like before, a version of the theorem can also be stated for recursion with parameters.
+Like before, a version of the theorem can also be stated for recursion with parameters. Also recursion with multiple strings.
+
+\begin{definition}
+Let $A$ be an alphabet. We define the interleave function recursively by
+\[ \strInterleave(u,v) = \begin{cases}
+\seq{} & (\len(u) = 0 = \len(v)) \\
+\strInterleave(u[0:\len(u)-1], v[0:\len(v)-1])\concat\seq{u_{-1}}\concat\seq{v_{-1}} & (\len(u) = \len(v) \geq 1) \\
+\strInterleave(u, v)\concat v[\len(u)+1:\len(v)] & (\len(u) < \len(v)) \\
+\strInterleave(u,v)\concat u[\len(v)+1:\len(u)] & (\len(u) > \len(v))
+\end{cases} \]
+\end{definition}
+TODO works because $\sqsubseteq$ is well-founded on $A^*\times A^*$.
 
 \subsubsection{Ordering string}
 \begin{definition}
