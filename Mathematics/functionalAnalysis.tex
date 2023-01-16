@@ -978,16 +978,19 @@ Thus $\varphi\in(\im T)^0$. The other inclusion uses the same equality.
 Let $V$ be a real or complex vector space. Let $f: V\to \R$ be a real functional. We say
 \begin{itemize}
 \item $f$ is \udef{subadditive} or satisfies the \udef{triangle inequality} if $\forall x,y\in V: f(x+y) \leq f(x) + f(y)$;
+\item $f$ is \udef{quasi-subadditive} if $\exists K>0: \forall x,y\in V: f(x+y) \leq K\big(f(x) + f(y)\big)$;
+\item $f$ is \udef{point-separating} if $\forall x\in V: f(x) = 0 \implies x = 0$;
 \item $f$ is \udef{convex} if $\forall x,y\in V, \lambda\in[0,1]: f(\lambda x + (1-\lambda)y) \leq \lambda f(x) + (1-\lambda)f(y)$.
 \end{itemize}
 We call $f$
 \begin{itemize}
 \item \udef{sublinear} if it is subadditive and positively homogeneous;
 \item a \udef{seminorm} if it is subadditive and absolutely homogeneous;
-\item a \udef{norm} is a seminorm $f$ such that $\forall v\in V: f(v) = 0 \implies v = 0$.
+\item a \udef{quasi-seminorm} if it is quasi-subadditive and absolutely homogeneous;
+\item a \udef{norm} is a point-separating seminorm;
+\item a \udef{quasi-norm} is a point-separating quasi-seminorm.
 \end{itemize}
 \end{definition}
-We also say a norm is a point-separating seminorm.
 
 TODO general valued fields.
 
@@ -995,18 +998,18 @@ TODO general valued fields.
 Let $V$ be a real or complex vector space and $f: V\to \R$ be a real functional. Then
 \begin{enumerate}
 \item absolute homogeneity $\implies$ positive homogeneity;
+\item subadditivity $\implies$ quasi-subadditivity;
 \item subadditivity+positive homogeneity $\implies$ convexity $\implies$ subadditivity.
 \end{enumerate}
 \end{lemma}
 Thus norms and seminorms are sublinear.
 
 \begin{lemma} \label{seminormPositivity}
-A subadditive, absolutely homogenous function $f:V\to \R$ is non-negative:
-\[ f: V\to \R_{\geq 0}. \]
-Thus norms and seminorms are functions $V\to \R_{\geq 0}$.
+Let $f:V\to \R$ be a quasi-seminorm. Then $\im(f)\subseteq \R^+$.
 \end{lemma}
+Thus (quasi)-seminorms are often considered as function in $V\to \R^+$.
 \begin{proof}
-For all $v\in V$ we have $0 = f(v-v) \leq f(v)+f(-v) = 2f(v)$, so $f(v) \geq 0$.
+For all $v\in V$ we have $0 = f(v-v) \leq K\big(f(v)+f(-v)\big) = 2Kf(v)$, so $f(v) \geq 0$.
 \end{proof}
 
 \begin{proposition}[Reverse triangle inequality] \label{reverseTriangleInequality}
@@ -1021,6 +1024,24 @@ In particular this holds if $\norm{\cdot}$ is a norm or seminorm.
 We calculate $\norm{v} = \norm{v-w+w} \leq \norm{v-w} + \norm{w}$, so $\norm{v}-\norm{w}\leq \norm{v-w}$. By swapping $v\leftrightarrow w$ we also get $-\norm{v}+\norm{w}\leq \norm{w-v} = \norm{v-w}$ and thus the first inequality is established.
 
 For the second inequality, set $w\to -w$ and use $\norm{-w} = \norm{w}$.
+\end{proof}
+
+\subsubsection{Extended real functionals}
+\begin{definition}
+Let $V$ be a real or complex vector space. An \udef{extended real functional} is a function $V \to \overline{\R}$.
+\end{definition}
+
+\begin{lemma} \label{realPartExtendedRealFunctional}
+Let $V$ be a real or complex vector space and $f: V\to \overline{\R}$ an extended real functional. If $f$ is a quasi-seminorm and there exists $v\in V$ such that $f(v)\in\R$, then $f^{\preimf}(\R)$ is a subspace of $V$. 
+\end{lemma}
+\begin{proof}
+We verify the subspace criteria (\ref{subspaceCriterion}). 
+
+By assumption, $f^{\preimf}(\R)$ is not empty.
+
+Take $v,w\in f^{\preimf}(\R)$. As $\im(f) \subseteq \overline{\R}^+$ by \ref{seminormPositivity}, we have $0\leq f(v+w)$. Also $f(v+w)\leq K\big(f(v)+f(w)\big)\in \R$. Thus $f(v+w)\in\R$.
+
+Take $\lambda\in\F$. Then $f(\lambda v) = |\lambda|f(v)\in \R$.
 \end{proof}
 
 \subsubsection{Epigraphs}
@@ -2518,10 +2539,8 @@ TODO: quotient of Banach spaces.
 
 Complemented subspace problem: \url{https://arxiv.org/pdf/math/0501048v1.pdf}
 
-\section{Function spaces}
-\subsection{The spaces $L^p(X,\diff{\mu})$}
-
-\subsubsection{The spaces $\mathcal{L}^p(X,\diff{\mu})$}
+\section{The $L^p(X,\diff{\mu})$ spaces}
+\subsection{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
 \begin{definition}
 Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $0<p<\infty \in \R$. The we define
 \begin{itemize}
@@ -2649,6 +2668,8 @@ We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. 
 
 \subsubsection{Indentifying functions that are equal a.e.}
 
+\ref{equalAECongruence}.
+
 \begin{proposition}
 TODO every equivalence class contains exactly one continuous functions (for Borel measures?)
 \end{proposition}
@@ -2676,7 +2697,7 @@ Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. T
 \end{proof}
 
 \subsubsection{Distributions}
-TODO rename!
+TODO rename and/or move!
 \begin{definition}
 Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \R$ a measurable function. The \udef{distribution function} of $f$ is the function
 \[ d_f: \R\to \R^+: \alpha \mapsto \mu\setbuilder{\omega}{|f(\omega)|>\alpha}.  \]
@@ -2710,8 +2731,8 @@ where the inequality given by \ref{measureProperties}.
 Because the order on $\R$ is linear, \ref{additionVectorInequalities} gives
 \[ \alpha + \beta < |f(\omega)| + |g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta < |g(\omega)|\big). \]
 These implications show
-\[ \setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \subseteq \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
-Thus we have
+\[ \setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
+Thus we calculate
 \begin{align*}
 d_{f+g}(\alpha+\beta) &= \mu\setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \\
 &\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
@@ -2719,14 +2740,79 @@ d_{f+g}(\alpha+\beta) &= \mu\setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\om
 &= d_f(\alpha) + d_g(\beta)
 \end{align*}
 by \ref{measureProperties}.
+
+(4) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. Then we have the implication
+\[ \alpha\beta < |f(\omega)g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta< |g(\omega)|\big), \]
+which means that
+\[ \setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
+Thus we calculate
+\begin{align*}
+d_{fg} &= \mu\setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \\
+&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
+&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu\setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
+&= d_f(\alpha) + d_g(\beta).
+\end{align*}
 \end{proof}
 
 \begin{proposition}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
-\[ \norm{f}_p^p = p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}. \]
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $\varphi: \R^+\to \R^+$ a monotone differentiable function with $\phi(0) = 0$ and $f: X\to \C$ a measurable function such that $\varphi\circ |f|$ is integrable. Then
+\[ \int_\Omega\varphi\circ |f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha}. \]
 \end{proposition}
+\begin{proof}
+We have
+\begin{align*}
+\int_\Omega\varphi\big(|f(\omega)|\big) \diff{\mu(\omega)} &= \int_\Omega\int_{0}^{|f(\omega)|}\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_\Omega\int_{0}^{\infty}[\alpha < |f(\omega)|]\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)\int_\Omega[\alpha < |f(\omega)|]\diff{\mu(\omega)}\diff{\alpha} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)d_f(\alpha)\diff{\alpha}.
+\end{align*}
+TODO by Fubini (for which we need $\sigma$-finite)!! (Why? Tonelli?)
+\end{proof}
+\begin{corollary}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
+\[ \norm{f}_p = \left(p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}\right)^{1/p}. \]
+\end{corollary}
+\begin{proof}
+Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ and so
+\[ \norm{f}_p^p = \int_\Omega |f|^p \diff{\mu} = \int_\Omega \varphi\circ|f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha} = p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}. \]
+\end{proof}
 
-\subsubsection{Locally integrable spaces}
+\subsection{Weak $L^p(X,\diff{\mu})$ spaces}
+\begin{definition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then we define the extended real functional
+\[ \norm{\cdot}_{p,\infty}: \meas(X, \C)\to \overline{\R}^+: f\mapsto \sup\setbuilder{\alpha d_f(\alpha)^{1/p}}{\alpha > 0}. \]
+The \udef{weak $L^p(X,\diff{\mu})$ space}, denoted $L^{p,\infty}(X,\diff{\mu})$, is the subset of functions $f$ in $\meas(X, \C)$ for which $\norm{f}_{p,\infty}$ is finite.
+\end{definition}
+
+\begin{lemma}
+Let $0<p<\infty$, let $\sSet{X,\mathcal{A}, \mu}$ be a measure space and $f\in \meas(X, \C)$. Then
+\[ \norm{f}_{p,\infty} = \inf\setbuilder{C\in \R^+}{\forall \alpha>0: \; d_f(\alpha) \leq \frac{C^p}{\alpha^p}}. \]
+\end{lemma}
+
+
+\begin{proposition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
+\begin{enumerate}
+\item the functional $\norm{\cdot}_{p,\infty}$ is constant on the equivalence classes of a.e.\ equality;
+\item $\norm{\cdot}_{p,\infty}: \meas(X, \C)/\overset{a.e.}{=} \to \overline{\R}^+$ is a quasi-norm;
+\item $\norm{\cdot}_{p,\infty} \leq \norm{\cdot}_{p}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\diff{\mu})$ is a subspace of $L^{p}(X,\diff{\mu})$.
+\end{corollary}
+\begin{proof}
+TODO \ref{realPartExtendedRealFunctional}
+\end{proof}
+
+\begin{example}
+The inclusion $L^{p,\infty}(X,\diff{\mu}) \subseteq L^{p}(X,\diff{\mu})$ is strict in general. TODO
+\end{example}
+
+\subsection{Locally integrable spaces}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The \udef{locally $L^p$} space is the space
 \[ L^p_\text{loc}(\Omega) \defeq \setbuilder{f \in (\Omega\to\C)}{\text{$f\in L^p(K)$ for all compact $K\subset \Omega$}}. \]

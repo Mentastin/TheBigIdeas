@@ -758,7 +758,7 @@ A function $f:\Omega_1 \to \Omega_2$ is called \udef{measurable} if
 \[ \forall E\in\mathcal{A}_2: f^{-1}[E] \in\mathcal{A}_1. \]
 We may also say $f$ is \udef{$\mathcal{A}_1/\mathcal{A}_2$-measurable} to emphasise which $\sigma$-algebras are being used.
 
-We denote the set of $\mathcal{A}_1/\mathcal{A}_2$-measurable functions by $\meas(\mathcal{A}_1, \mathcal{A}_2)$.
+We denote the set of $\mathcal{A}_1/\mathcal{A}_2$-measurable functions by $\meas(\mathcal{A}_1, \mathcal{A}_2)$, or by $\meas(\Omega_1, \Omega_2)$ if the $\sigma$-algebras are clear from context.
 \end{definition}
 Suppose we are moving around in $\Omega_1$ and tracking the output of the function in $\Omega_2$. We would like to be able to explore the contents of an event in $\Omega_2$ from within an event in $\Omega_1$.
 
@@ -913,6 +913,14 @@ and $g-f$ is measurable by \ref{operationsOnRealMeasurableFunctions}.
 (2) Similar to (1), except the set is equal to $(g-f)^{\preimf}(\interval[o]{0,\infty})$.
 \end{proof}
 
+\subsubsection{Measurable complex-valued functions}
+\begin{proposition}
+Let $\sSet{\Omega,\mathcal{A}}$ be a measurable space. Then $\meas(\Omega, \R)$ is a complex vector space.
+\end{proposition}
+\begin{proof}
+TODO. Cfr. \ref{operationsOnRealMeasurableFunctions}.
+\end{proof}
+
 \section{Measure spaces}
 \subsection{Measures}
 \begin{definition}
@@ -948,10 +956,15 @@ Let $E_1,E_2\in\mathcal{A}$ be disjoint sets. Then
 As with pre-measures, if there exists an event $E$ such that $\mu(E)< \infty$, then $\mu(\emptyset) = 0$ is redundant. See \ref{emptysetNullset}.
 
 \begin{lemma} \label{submeasurespace}
-Let $(\Omega,\mathcal{A},\mu)$ be a measure space and let $E\in\mathcal{E}$. Then $\mathcal{A}' = \powerset(E)\cap\mathcal{A}$ is a $\sigma$-algebra on $E$ and $(E,\mathcal{A}',\mu|_{\mathcal{A}'})$is a measure space.
+Let $(\Omega,\mathcal{A},\mu)$ be a measure space and let $E\in\mathcal{A}$ be an event. Then $\mathcal{A}' = \powerset(E)\cap\mathcal{A}$ is a $\sigma$-algebra on $E$ and $(E,\mathcal{A}',\mu|_{\mathcal{A}'})$is a measure space.
 \end{lemma}
 \begin{proof}
-We need to show that $\mathcal{A}'$ is a $\sigma$-algebra. Now complements are w.r.t. $E$. These are still in the $\sigma$-algebra because $E\setminus A = \Omega\setminus((\Omega\setminus E)\cup A)$.
+First we show that $\mathcal{A}'$ is a $\sigma$-algebra on $E$, using \ref{setAlgebraCriteria}.
+\begin{itemize}
+\item Clearly $E\in \mathcal{A}$ and $E\in\powerset(E)$, so $E\in\mathcal{A}\cap \powerset(E) = \mathcal{A}'$.
+\item Complements are taken w.r.t. $E$. Take $A\in \mathcal{A}'$. Then $E\setminus A$ is a subset of $E$ and thus in $\powerset(E)$. Also $E\setminus A\in \mathcal{A}$, because it is a measure-theoretic ring (see \ref{setAlgebraCoincidence}). Thus $A^c = E\setminus A \in \mathcal{A}\cap \powerset(E) = \mathcal{A}'$.
+\item Let $\seq{A_n}_{n\in \N}$ be a sequence of sets in $\mathcal{A}'$. Then $\bigcup_{n\in \N}A_n$ is a subset of $E$ and thus in $\powerset(E)$. Also $\bigcup_{n\in \N}A_n\in\mathcal{A}$ because $\mathcal{A}$ is a $\sigma$-algebra. Thus $\bigcup_{n\in \N}A_n\in\mathcal{A}'$.
+\end{itemize}
 \end{proof}
 
 \begin{proposition} \label{measureProperties}
@@ -1082,7 +1095,7 @@ Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space. If $A$ is a measurable
 Let $B\supseteq A$ be a measurable set with $\mu(B) = 0$. Then $\mu(A) \leq \mu(B) = 0$.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{countableUnionNullSets}
 Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $\seq{A_i}$ a sequence of measurable null sets. Then
 \[ \mu\left(\bigcup_{i\in\N}A_i\right) = 0. \]
 \end{lemma}
@@ -1306,6 +1319,18 @@ The Lebesgue measure is regular.
 TODO
 \end{proof}
 
+\subsection{Pointwise algebras}
+\begin{lemma} \label{equalAECongruence}
+Let $\sSet{X, \mathcal{X}, \mu}$ be a measure space and $Y$ an $\Omega$-structure. Then the relation $\overset{\text{a.e.}}{=}$ on $(X\to Y)$ is a congruence on the pointwise algebra $(X\to Y)$.
+\end{lemma}
+\begin{proof}
+Take $\omega\in\Omega$ and $x = \seq{(f_i,g_i)}_{i\in(0:\alpha(\omega))}$ a sequence in $(X\to Y)^2$ such that $f_i\mathrel{\overset{\text{a.e.}}{=}} g_i$ for all $i\in \big(0:\alpha(\omega)\big)$. Set $N_i \defeq \setbuilder{x\in X}{f_i(x)\neq g_i(x)}$. This is a null set for all $i\in\big(0:\alpha(\omega)\big)$.
+
+We need to show that $\omega_{X\to Y}(\seq{f_i}_{i\in(0:\alpha(\omega))})\mathrel{\overset{\text{a.e.}}{=}}\omega_{X\to Y}(\seq{f_i}_{i\in(0:\alpha(\omega))})$. Let $N$ be the set $\setbuilder{x\in X}{\omega_{X\to Y}(\seq{f_i(x)}_{i\in(0:\alpha(\omega))}) \neq \omega_{X\to Y}(\seq{g_i(x)}_{i\in(0:\alpha(\omega))})}$.
+
+Clearly $N\subseteq \bigcup_{i\in(0:\alpha(\omega))}N_i$. So $N$ is a null set by \ref{countableUnionNullSets}.
+\end{proof}
+
 \chapter{Integration theory}
 
 \section{Lebesgue integration}
@@ -1327,6 +1352,8 @@ Let $\Omega$ be a set. A \udef{simple function} (or \udef{step function}) on $\O
 
 Let $B$ be a set. We denote the subset of simple functions in $(\Omega\to B)$ by $\SF(\Omega,B)$
 \end{definition}
+
+TODO: should $\SF(\Omega, B)$ mean measurable simple function??
 
 \begin{lemma}
 Let $s:\Omega\to Y$ be a simple function into a vector space. Then $s$ can be written as
@@ -1369,19 +1396,43 @@ TODO: generalise??
 \subsubsection{Integration of simple functions}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $Y$ a vector space. Let
-\[ s:\Omega \to Y: x\mapsto \sum_{\lambda \in s[\omega]}\lambda\cdot \chi_{s^{-1}[\lambda]}(x) = \sum_{i=1}^k\lambda_i\cdot\chi_{A_i}(x)  \]
+\[ s:\Omega \to Y: x\mapsto \sum_{\lambda \in \im(s)}\lambda\cdot \chi_{s^{-1}[\lambda]}(x) = \sum_{i=1}^k\lambda_i\cdot\chi_{A_i}(x)  \]
 be a measurable simple function. We define the \udef{integral} of $s$ over $\Omega$ w.r.t. $\mu$ as
-\[ \int_\Omega s\diff{\mu} \defeq \sum_{\lambda \in s[\omega]}\lambda\cdot \mu(s^{-1}[\lambda]) = \sum_{i=1}^k\mu(A_i)\cdot\lambda_j. \]
+\[ \int_\Omega s\diff{\mu} \defeq \sum_{\lambda \in \im(s)}\lambda\cdot \mu(s^{-1}[\lambda]) = \sum_{i=1}^k\mu(A_i)\cdot\lambda_j. \]
 Using the convention that $0\times \infty = 0$. (TODO: clarify)
 
 We call $s$ \udef{integrable} if the integral is finite (TODO clarify + below).
+
+For any $E\in\mathcal{A}$ we also define the integral some measurable simple function $s:\Omega\to Y$ over $E$ by
+\[ \int_E s \diff{\mu} \defeq \int_E s|_E \diff{\mu|_E}, \]
+where the last integral is taken over the measure space $(E,\mathcal{A}',\mu|_{\mathcal{A}'})$ as defined in \ref{submeasurespace}.
 \end{definition}
 
 The integral can be seen as a map $\SF(\Omega,Y)\to \overline{Y}$, where $\overline{Y}$ is the Dedekind-MacNeille completion (TODO!).
 
-For any $E\in\mathcal{A}$ we also define the integral over $E$ as the map
-\[ \int_E\diff{\mu}: \SF(\Omega,Y) \to \overline{Y}: s\mapsto \int_E s|_E \diff{\mu|_E}. \]
-Where the last integral is taken over the measure space $(E,\mathcal{A}',\mu|_{\mathcal{A}'})$ as defined in \ref{submeasurespace}.
+\begin{lemma} \label{measureFromIntegralCharacteristicFunctions}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $E\in\mathcal{A}$. Then
+\[ \mu(E) = \int_\Omega \chi_E \diff{\mu}. \]
+\end{lemma}
+
+\begin{lemma} \label{simpleIntegralOverSubset}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $Y$ a vector space over $\F$, $E\in\mathcal{A}$ and $s:\Omega\to Y$ a measurable simple function. Then
+\[ \int_E s \diff{\mu} = \int_\Omega s\cdot\chi_{E} \diff{\mu}. \]
+\end{lemma}
+\begin{proof}
+We have
+\begin{align*}
+\int_E s \diff{\mu} &= \int_E s|_E \diff{\mu|_E}\\
+&= \sum_{\lambda \in \im(s|_E)}\lambda\cdot \mu|_E\big(s|_E^{\preimf}(\lambda)\big) \\
+&= \sum_{\lambda \in \im(s|_E)}\lambda\cdot \mu\big(s^{\preimf}(\lambda)\cap E\big) \\
+&= 0 + \sum_{\lambda \in \im(s|_E)\setminus\{0\}}\lambda\cdot \mu\big(s^{\preimf}(\lambda)\cap E\big) \\
+&= 0 + \sum_{\lambda \in \im(s\cdot \chi_E)\setminus\{0\}}\lambda\cdot \mu\big((s\cdot \chi_E)^{\preimf}(\lambda)\big) \\
+&= 0\cdot \mu\big((s\cdot \chi_E)^{\preimf}(0)\big) + \sum_{\lambda \in \im(s\cdot \chi_E)\setminus\{0\}}\lambda\cdot \mu\big((s\cdot \chi_E)^{\preimf}(\lambda)\big) \\
+&= \sum_{\lambda \in \im(s\cdot \chi_E)}\lambda\cdot \mu\big((s\cdot \chi_E)^{\preimf}(\lambda)\big) \\
+&= \int_\Omega s\cdot\chi_E \diff{\mu}.
+\end{align*}
+\end{proof}
+
 
 \begin{proposition} \label{integrationLinear} \label{integrationOrderPreserving}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $Y$ a vector space over $\F$. Then
@@ -1454,9 +1505,18 @@ If $\delta_x$ is the Dirac measure associated to a point $x\in\Omega$ in a measu
 \end{example}
 
 \begin{lemma} \label{integralOverSubset}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $E\in\mathcal{A}$ and $f:\Omega\to[0,+\infty]$ be a measurable function. Then
-\[ \int_E f \diff{\mu} = \int_\Omega f\cdot\chi_{E} \diff{\mu} \qquad\text{and}\qquad \int_\Omega f\diff{\mu} = \int_{\Omega\setminus E} f\diff{\mu}+\int_E f\diff{\mu}. \]
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $E\in\mathcal{A}$ and $f:\Omega\to \R^+$ a measurable function. Then
+\[ \int_E f \diff{\mu} = \int_\Omega f\cdot\chi_{E} \diff{\mu}. \]
 \end{lemma}
+\begin{proof}
+TODO follows from \ref{simpleIntegralOverSubset}
+\end{proof}
+\begin{corollary}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $E\in\mathcal{A}$ and $f:\Omega\to \R^+$ a measurable function. Then
+\begin{enumerate}
+\item $\int_\Omega f\diff{\mu} = \int_{\Omega\setminus E} f\diff{\mu}+\int_E f\diff{\mu}$.
+\end{enumerate}
+\end{corollary}
 
 \begin{proposition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and let $f:\Omega\to[0,+\infty]$ be a positive function.
@@ -1483,9 +1543,9 @@ Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and let $f,g:\Omega\to[0,+\i
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) For all $s\in \SF(\Omega, [0,+\infty[)$ we have that $s\leq f$ implies $s\leq g$.
+(1) For all $s\in \SF(\Omega, \interval[co]{0,+\infty})$ we have that $s\leq f$ implies $s\leq g$.
 
-(2) This follows from $f\cdot\chi_{E_1}\leq f\cdot\chi_{E_2}$ and \ref{integralOverSubset}.
+(2) This follows from $f\cdot\chi_{E_1}\leq f\cdot\chi_{E_2}$ and \ref{simpleIntegralOverSubset}.
 
 (3) That the sequence $(\int_\Omega f_n\diff{\mu})_n$ is increasing follows from point 1. For increasing sequences the limits are suprema, by monotone convergence \ref{sequenceMonotoneConvergence}. Also, for all $m\in\N$, we have $f_m\leq\sup_{n\in\N}f_n$, which implies, by point 1., that $\int_\Omega f_m\diff{\mu}\leq \int_\Omega \sup_{n\in\N}f_n\diff{\mu}$. So
 \[ \lim_{n\to\infty}\int_\Omega f_n\diff{\mu} = \sup_{n\in\N}\int_\Omega f_n\diff{\mu} \leq \int_\Omega \sup_{n\in\N}f_n\diff{\mu} = \int_\Omega \lim_{n\to\infty}f_n\diff{\mu}. \]
@@ -1545,6 +1605,34 @@ so $f$ is not integrable.
 
 \subsubsection{Product measures}
 Fubini!
+
+
+\subsubsection{Integral inequalities}
+\begin{proposition}[Markov's inequality]
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function and $\alpha>0$. Then
+\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\alpha}\int_\Omega f\diff{\mu}. \]
+\end{proposition}
+Also called Chebyshev's inequality or Chebyshev's first inequality. The next inequality would then be Chebyshev's second inequality. 
+\begin{proof}
+We have $\alpha\cdot [f(\omega)\leq \alpha]\leq f(\omega)$, so
+\[ \alpha\cdot \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} = \alpha \int_{\Omega}[f(\omega)\leq \alpha]\diff{\mu(\omega)} = \int_{\Omega}\alpha[f(\omega)\leq \alpha]\diff{\mu(\omega)} \leq \int_\Omega f\diff{\mu}, \]
+using \ref{measureFromIntegralCharacteristicFunctions} and \ref{propertiesIntegralPositiveFunctions}. This implies Markov's inequality.
+\end{proof}
+\begin{corollary}[Chebyshev's inequality]
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R$ a measurable function, $\varphi:\im(f) \to \R^+$ a monotone measurable function and $\alpha>0$. Then
+\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
+\end{corollary}
+\begin{proof}
+Since $\varphi$ is monotone, we have $\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \subseteq \setbuilder{\omega\in\Omega}{\varphi\big(f(\omega)\big)\geq \varphi(\alpha)}$, so
+\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \mu\setbuilder{\omega\in\Omega}{\varphi\big(f(\omega)\big)\geq \varphi(\alpha)} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
+\end{proof}
+By choosing specific functions $\varphi$, we obtain the following forms of Chebyshev's inequality:
+\begin{corollary}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function, $\alpha>0$ and $0<p$. Then
+\begin{enumerate}
+\item $\mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\alpha^p}\int_\Omega f(\omega)^p\diff{\mu(\omega)}$;
+\end{enumerate}
+\end{corollary}
 
 \subsection{Real functions}
 Let $\Omega$ be a set and $f:\Omega \to \C$ a function.  Then we can uniquely decompose $f$ into $f= u+iv$ where $u,v: \Omega\to \R$. We can further decompose
