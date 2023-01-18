@@ -433,6 +433,7 @@ Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)
 \item If $F = \mathfrak{F}(\mathcal{A}), then \adh_\xi(F) = \adh_xi(\mathcal{A})$.
 \end{enumerate}
 \end{lemma}
+TODO cfr \ref{adherenceElementConvergentFilter}
 
 \begin{lemma} \label{singletonAdherence}
 Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then $\adh_\xi(\{x\}) = \lim_\xi \pfilter{x}$.
@@ -479,6 +480,13 @@ We have
 &\iff \exists b\in B: A\in \vicinity_\xi(b)^{\mesh} \\
 &\iff A \in \bigcup_{b\in B}\vicinity_\xi(b)^{\mesh} = \left(\bigcap_{b\in B}\vicinity_\xi(b)\right)^{\mesh} = \vicinity_\xi(B)^{\mesh}.
 \end{align*}
+\end{proof}
+
+\begin{lemma} \label{adherenceElementConvergentFilter}
+Let $\sSet{X,\xi}$ be a convergence space, $F\overset{\xi}{\longrightarrow} x$ a proper filter and $A\in F$. Then $x\in\adh_\xi(A)$.
+\end{lemma}
+\begin{proof}
+We have $\vicinity(x)\subseteq F$ and $F \amesh F$ by \ref{properFilterLemma}. This implies $\vicinity(x)\amesh F$, so $A\in \vicinity(x)^\mesh$. This implies $x\in \adh_\xi(A)$.
 \end{proof}
 
 \begin{proposition} \label{adherenceInherenceCharacterisation}
@@ -2624,8 +2632,20 @@ Let $\sSet{X,\xi}$ be a topological convergence space. Then $X$ is compact \text
 
 \subsection{Relative compactness}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. We call $A$ \udef{relatively compact} if $\adh_\xi$ is compact.
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. We call $A$ \udef{relatively compact} if $\adh_\xi(A)$ is compact.
 \end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$. Then $A$ is relatively compact \textup{if and only if} every ultrafilter in $A$ converges in $X$.
+\end{lemma}
+The difference with compactness is that we do not require every ultrafilter in $A$ to converge in $A$.
+\begin{proof}
+$\boxed{\Rightarrow}$ Assume $A$ is relatively compact. As every ultrafilter in $A$ is also an ultrafilter in $\adh_\xi(A)$, we have that every ultrafilter in $A$ converges in $\adh_\xi(A)$.
+
+$\boxed{\Leftarrow}$ Assume every ultrafilter in $A$ converges in $X$. Then every ultrafilter in $A$ converges in $\adh_\xi(A)$ by \ref{adherenceElementConvergentFilter}.
+
+Now let $U$ be an ultrafilter in $\adh_\xi(A)$ that is not in $A$. By TODO ref it is an utlrafilter in
+\end{proof}
 
 \subsection{Local compactness}
 \begin{definition}
@@ -2853,7 +2873,7 @@ Let $\sSet{X, \mathcal{U}}$ be a uniform space. Then $\entourage_\mathcal{U} \de
 We call the uniform space \udef{topological} if $\mathcal{U} = \upset\{\entourage_\mathcal{U}\}$.
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{entourageLemma}
 Let $\sSet{X,\mathcal{U}}$ be a uniform space with entourage filter $\entourage$. Then
 \begin{enumerate}
 \item $\entourage\subseteq \upset\{\Delta\}$, where $\Delta = \setbuilder{(x,x)}{x\in X}$;
@@ -2864,7 +2884,7 @@ If $\sSet{X,\mathcal{U}}$ is a topological uniform space, then
 \begin{enumerate}[1'.] \setcounter{enumi}{2}
 \item $\entourage;\entourage = \entourage$.
 \end{enumerate}
-Any filter in $\powerfilters(X\times X)$ satisfying properties 1., 2. and 3'. is the entourage filter of a topological uniformity.
+Any filter in $\powerfilters(X\times X)$ satisfying properties 1., 2. and $\entourage \subseteq \entourage;\entourage$ is the entourage filter of a topological uniformity.
 \end{lemma}
 TODO: can we improve 3??
 \begin{proof}
@@ -2885,7 +2905,7 @@ To show any such filter is an entourage filter, we check the four requirements
 \[ \entourage \subseteq \upset\{\Delta\} \subseteq \upset\{(x,x)\} = \pfilter{x}\otimes\pfilter{x}. \]
 \item Upwards closure is by construction.
 \item If $\entourage \subseteq H$, then $\entourage = \entourage^\transp \subseteq H^\transp$.
-\item If $\entourage\subseteq G,H$, then $\entourage = \entourage;\entourage \subseteq G;H$.
+\item If $\entourage\subseteq G,H$, then $\entourage \subseteq \entourage;\entourage \subseteq G;H$.
 \end{itemize}
 \end{proof}
 \begin{corollary}
@@ -3289,6 +3309,8 @@ By \ref{compactUltrafilterFactorisation}, there exists $x\in X$ such that $p_1^{
 As this is true for arbitrary ultrafilter $I$, we have $(f,f)^{\imf\imf}[H]\in\mathcal{V}$ because $\mathcal{V}$ is uniformly Choquet.
 \end{proof}
 
+\subsection{Initial and final uniform spaces}
+
 \section{Star refinement}
 \begin{definition}
 Let $X$ be a set and $U,V\subseteq \powerset(X)$ covers of $X$.
@@ -3607,22 +3629,34 @@ Let $G, H\overset{(X\to Y)_c}{\longrightarrow} f$. Then for all $F\to x\in X$, w
 \end{align*}
 using \ref{intersectionProductFilters}, \ref{imageFiltersPreservesIntersection} and the finite depth of $Y$.
 \end{proof}
-Note that this does not imply the Kent property, because $(X\to Y)_c$ is only a preconvergence space. The space $\cont_C(X,Y)$ does have the Kent property if $Y$ is of finite depth.
+Note that this does not imply the Kent property, because $(X\to Y)_c$ is only a preconvergence space. The space $\cont_c(X,Y)$ does have the Kent property if $Y$ is of finite depth.
 
-\begin{lemma}
-Let $\sSet{X,\xi}$, $\sSet{Y,\zeta}$ be convergence spaces such that $(X\to Y)_c$ is a Kent space. Then all limit functions are continuous.
-\end{lemma}
+\begin{proposition}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. Either of the following is sufficient to make all limit functions in $(X\to Y)_c$ continuous:
+\begin{enumerate}
+\item $(X\to Y)_c$ is a Kent space;
+\item $\sSet{Y,\zeta}$ is regular. 
+\end{enumerate}
+\end{proposition}
 \begin{proof}
-Take $H\in\powerfilters\big((X\to Y)\big)$ such that $H\overset{(X\to Y)_c}{\longrightarrow} f$. We have, for all $F\to x\in X$,
+(1) Take $H\in\powerfilters\big((X\to Y)\big)$ such that $\begin{tikzcd}H \arrow[r, "{(X\to Y)_c}"] & f\end{tikzcd}$. We have, for all $F\to x\in X$,
 \begin{align*}
 \evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big) &= \evalMap^{\imf\imf}\big((H \otimes F) \cap (\pfilter{f} \otimes F)\big) \\
 &= \evalMap^{\imf\imf}(H \otimes F) \cap \evalMap^{\imf\imf}(\pfilter{f} \otimes F),
 \end{align*} 
-using \ref{intersectionProductFilters} and \ref{imageFiltersPreservesIntersection}. By the Kent property this converges to $f(x)$. And thus by monotonicity of the convergence,
+using \ref{intersectionProductFilters} and \ref{imageFiltersPreservesIntersection}. By the Kent property, $\evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big)$ converges to $f(x)$. And thus by monotonicity of the convergence,
 \[ \evalMap^{\imf\imf}(\pfilter{f} \otimes F) = f^{\imf\imf}[F] \overset{\zeta}{\longrightarrow} f(x). \]
 Thus $f$ is continuous.
+
+(2) Take $H\in\powerfilters\big((X\to Y)\big)$ such that $\begin{tikzcd}H \arrow[r, "{(X\to Y)_c}"] & f\end{tikzcd}$ and $F\in\powerfilters(X)$ such that $F\overset{\xi}{\longrightarrow} x$. Take $A\in F$ and $B\in H$.
+
+Now take $a\in A$. By continuous convergence, we have $\evalMap^{\imf\imf}(H\otimes\dot{a}) \overset{\zeta}{\longrightarrow} f(a)$. We have $f(a)\in\adh_\zeta\big(\evalMap^\imf(B\times\{a\})\big) \subseteq \adh_\zeta\big(\evalMap^\imf(B\times A)\big)$ by \ref{adherenceElementConvergentFilter}. As this is true for all $a\in A$, we have $f^\imf(A) \subseteq \adh_\zeta\big(\evalMap^\imf(B\times A)\big)$.
+
+From this last inclusion we can conclude that $\adh_\zeta^\imf\big(\evalMap^{\imf\imf}(H\otimes F)\big) \subseteq f^{\imf\imf}(F)$. Now $\evalMap^{\imf\imf}(H\otimes F)\overset{\zeta}{\longrightarrow} f(x)$ by continuous convergence, so $\adh_\zeta^\imf\big(\evalMap^{\imf\imf}(H\otimes F)\big)\overset{\zeta}{\longrightarrow} f(x)$ by regularity and thus $f^{\imf\imf}(F)\overset{\zeta}{\longrightarrow} f(x)$ by monotonicity.
+
+We conclude that $f$ is continuous.
 \end{proof}
-The hypothesis of $(X\to Y)_c$ being a Kent space is necessary.
+
 \begin{example}
 There exist non-continuous limit points in spaces of continuous convergence.
 
@@ -3690,6 +3724,44 @@ By \ref{universalPropertyContinuousConvergence}, this is equivalent to the conti
 \end{tikzcd} \]
 \end{proof}
 
+\begin{proposition}
+The map $X\to \cont_c\big(\cont_c(X,Y),Y\big): x\mapsto \evalMap_x$ is continuous.
+\end{proposition}
+
+\begin{proposition}
+If $Y$ is pseudotopological/regular/Hausdorff, then so is $\cont_c(X,Y)$.
+\end{proposition}
+
+\subsubsection{Compact-open topology}
+\begin{definition}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. The set
+\[ \setbuilder{\setbuilder{f\in \cont(X,Y)}{f^\imf(K)\subseteq U}}{\text{$K\subseteq X$ compact, $U\subseteq Y$ open}} \]
+is a subbasis for the \udef{compact-open topology} on $\cont(X,Y)$. The associated convergence is the \udef{compact-open convergence}.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. The continuous convergence on $\cont(X,Y)$ is stronger than the compact-open convergence.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta}$ a regular convergence space. Then the following are equivalent:
+\begin{enumerate}
+\item $\cont_c(X,Y)$ is topological;
+\item $\sSet{X,\xi}$ is locally compact;
+\item the continuous convergence on $\cont(X,Y)$ is equal to the compact-open convergence.
+\end{enumerate}
+\end{proposition}
+TODO: need completely regular? TODO: need $Y$ topological?
+\begin{proof}
+$(1) \Rightarrow (2)$ TODO
+
+$(2) \Rightarrow (3)$ TODO
+
+$(3) \Rightarrow (1)$ Immediate.
+\end{proof}
 
 \subsubsection{Continuous uniform convergence}
 \begin{definition}
@@ -3758,20 +3830,6 @@ The structured set $\sSet{X,d}$ is called a \udef{metric space}.
 \end{definition}
 
 \subsection{Uniform structures on a metric space}
-\begin{proposition} \label{metricUniformities}
-Let $\sSet{X,d}$ be a metric space and $\sigma$ an order-regular convergence on $\R^{\geq 0}$ such that addition is continuous. Then the relation $\mathcal{U}^\sigma$ on $\powerfilters(X)$ defined by
-\[ F\mathrel{\mathcal{U}^\sigma}G \qquad\defequiv\qquad d^{\imf\imf}\big[F\otimes G\big] \overset{\sigma}{\longrightarrow} 0 \]
-is a uniformity on $X$.
-\end{proposition}
-\begin{proof}
-We have that $F\mathrel{\mathcal{U}^N}G$ iff $F\otimes G$ converges to a point in $d^\preimf\{0\}$ in the initial convergence $\psi$ of $d$. Now $d^\preimf\{0\} = \setbuilder{(x,x)}{x\in X}$. In order to apply \ref{uniformityFromConvergenceOnSquare} TODO, we just need to verify the two points. 
-\begin{itemize}
-\item Let $H\in \powerfilters{X\times X}$. Then, by symmetry of the metric,
-\[ H\overset{\psi}{\longrightarrow} (x,x) \iff d^{\imf\imf}[H] \to 0 \iff d^{\imf\imf}[H^\transp] \to 0 \iff H^\transp\overset{\psi}{\longrightarrow} (x,x). \]
-\item Assume $H_1\overset{\psi}{\longrightarrow} (x,x)$ and $H_2\overset{\psi}{\longrightarrow} (x,x)$. Then $d^{\imf\imf}[H_1] \overset{\sigma}{\longrightarrow} 0$ and $d^{\imf\imf}[H_2] \overset{\sigma}{\longrightarrow} 0$. By continuity of addition, $d^{\imf\imf}[H_1]+d^{\imf\imf}[H_2] \overset{\sigma}{\longrightarrow} 0$. Now $\pfilter{0} \leq d^{\imf\imf}[H_1;H_2] \leq d^{\imf\imf}[H_1]+d^{\imf\imf}[H_2]$, then $H_1;H_2 \overset{\psi}{\longrightarrow} (x, x)$. TODO squeeze theorem, order closure.
-\end{itemize}
-\end{proof}
-
 \subsubsection{Standard metric uniformity and convergence}
 \begin{definition}
 Let $\sSet{X,d}$ be a metric space. The \udef{metric uniformity} $\mathcal{U}_d$ is the uniformity given by
@@ -3779,7 +3837,7 @@ Let $\sSet{X,d}$ be a metric space. The \udef{metric uniformity} $\mathcal{U}_d$
 We also define, for $\epsilon >0$ and $x\in X$,
 \begin{itemize}
 \item The \udef{$\epsilon$-entourage} as the set
-\[ V_\epsilon \defeq \setbuilder{(y,z)\in X^2}{d(y,z)\leq \epsilon}. \]
+\[ V_\epsilon \defeq \setbuilder{(y,z)\in X^2}{d(y,z)\leq \epsilon} = d^{\preimf}\big(\interval{0,\epsilon}\big). \]
 \item The \udef{$\epsilon$-ball centered at $x$} as the set
 \[ \ball_d(x,\epsilon) \defeq \setbuilder{y\in X}{d(x,y)< \epsilon} \]
 of all points $y$ whose distance to $x$ is less than $\epsilon$.
@@ -3790,6 +3848,7 @@ of all points $y$ whose distance to $x$ is less than or equal to $\epsilon$.
 \[ \sphere_d(x,\epsilon) \defeq \setbuilder{y\in X}{d(x,y) = \epsilon}. \]
 \end{itemize}
 \end{definition}
+TODO the convergence on $\R$ used is the Scott convergence??
 
 \begin{lemma}
 Let $\sSet{X,d}$ be a metric space. Then
@@ -3803,11 +3862,34 @@ Let $\sSet{X,d}$ be a metric space. Then
 Let $\sSet{X,d}$ be a metric space. The metric uniformity is a topological uniformity and $\{V_\epsilon\}_{\epsilon>0}$ is a base of the entourage filter.
 \end{lemma}
 \begin{proof}
-We need to show that $\{V_\epsilon\}_{\epsilon>0}$ is a filter base, that $\upset\{V_\epsilon\}_{\epsilon>0}$ is an element of $\mathcal{U}_d$ and that $\{V_\epsilon\}_{\epsilon>0}\subseteq H$ for all $H\in \mathcal{U}_d$.
-
-That $\{V_\epsilon\}_{\epsilon>0}$ is a filter base is immediate from $V_\epsilon \cap V_\delta = V_{\min(\epsilon, \delta)}$.
-
-
+We need to show that
+\begin{itemize}
+\item $\{V_\epsilon\}_{\epsilon>0}$ is a filter base;
+\item that $\upset\{V_\epsilon\}_{\epsilon>0}$ is an element of $\mathcal{U}_d$;
+\item that $\{V_\epsilon\}_{\epsilon>0}\subseteq H$ for all $H\in \mathcal{U}_d$;
+\item the metric uniformity is indeed a uniformity, which we do using \ref{entourageLemma}. We need to prove
+\begin{itemize}
+\item $\{V_\epsilon\}_{\epsilon>0}\subseteq\upset\{\Delta\}$;
+\item $\{V_\epsilon\}_{\epsilon>0}^\transp = \{V_\epsilon\}_{\epsilon>0}$;
+\item $\{V_\epsilon\}_{\epsilon>0} \subseteq \{V_\epsilon\}_{\epsilon>0}; \{V_\epsilon\}_{\epsilon>0}$.
+\end{itemize}
+\end{itemize}
+Indeed:
+\begin{itemize}
+\item That $\{V_\epsilon\}_{\epsilon>0}$ is a filter base is immediate from $V_\epsilon \cap V_\delta = V_{\min(\epsilon, \delta)}$.
+\item By definition, $d^{\imf}(V_\epsilon) \subseteq \interval{0,\epsilon}$, so $\setbuilder{\interval{0,\epsilon}}{\epsilon>0} \subseteq d^{\imf\imf}\big(\{V_\epsilon\}_{\epsilon>0}\big)$. Because $\setbuilder{\interval{0,\epsilon}}{\epsilon>0} \overset{\R}{\longrightarrow} 0$, we have $d^{\imf\imf}\big(\{V_\epsilon\}_{\epsilon>0}\big) \overset{\R}{\longrightarrow} 0$ and so $\upset\{V_\epsilon\}_{\epsilon>0} \in \mathcal{U}_d$.
+\item Take $H\in \mathcal{U}_d$. 
+Now we need to prove that for all $\epsilon >0$ there exists an $A\in H$ such that $V_\epsilon \subseteq A$. Fix an $\epsilon > 0$. By assumption (and definition of Scott convergence), we have
+\[ \bigwedge \setbuilder{\bigvee d^\imf(A)}{A\in H} = 0. \]
+So there exists $A\in H$ such that $\bigvee d^\imf(A) \leq \epsilon$. This implies $d^\imf(A) \subseteq \interval{0,\epsilon}$ and thus
+\[ A \subseteq d^\preimf\big(d^{\imf}(A)\big) \subseteq d^\preimf\big(\interval{0,\epsilon}\big) = V_\epsilon. \]
+\item Finally,
+\begin{itemize}
+\item $d^{\imf}(\Delta) = 0$, so $\Delta \subseteq V_\epsilon$ for all $\epsilon > 0$;
+\item $\{V_\epsilon\}_{\epsilon>0}^\transp = \{V_\epsilon\}_{\epsilon>0}$ by symmetry of the metric;
+\item take $\epsilon>0$, then $V_{\epsilon/2};V_{\epsilon/2} \subseteq V_\epsilon$ by the triangle inequality, so $V_\epsilon \in \{V_\epsilon\}_{\epsilon>0}; \{V_\epsilon\}_{\epsilon>0}$.
+\end{itemize}
+\end{itemize}
 \end{proof}
 \begin{corollary}
 Let $\sSet{X, d_X}$ and $\sSet{Y, d_Y}$ be metric spaces and $f:X\to Y$ a function. Then $f$ is uniformly continuous \textup{if and only if}
@@ -3853,6 +3935,16 @@ The metric convergence is topological by \ref{topologicalInducedUniformConvergen
 Let $\sSet{X,d}$ be a metric space and $\seq{x_n}$ a sequence in $X$. Then $\seq{x_n}$ converges to $x\in X$ \textup{if and only if}
 \[ \forall \epsilon>0: \exists N\in\N: \forall n\geq N: \quad d(x_n,x)\leq \epsilon. \]
 \end{corollary}
+
+\subsubsection{Metric convergence in $\R$}
+\begin{lemma}
+The function
+\[ \R\times \R\to\R^+: (x,y) \mapsto |x-y| \]
+is a metric on $\R$. The metric topology induced by this metric is equal to the Scott topology on $\R$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
 
 \subsubsection{Uniform convergence}
 \begin{proposition}
