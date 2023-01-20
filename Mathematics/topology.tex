@@ -270,16 +270,6 @@ Let $X$ be a set, $\xi$ a preconvergence on $X$ and $x\in X$. Then
 TODO
 \end{proof}
 
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then
-\begin{enumerate}
-\item if $F\to x$, then $\vicinity_\xi(x)\lhd F$
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Simple application of \ref{containmentInclusionProperFilter}.
-\end{proof}
-
 \begin{lemma} \label{vicinityMapAntitone}
 Let $X$ be a set and $\zeta, \xi$ convergences on $X$. If $\zeta \leq \xi$, then $\vicinity_\zeta(x) \supseteq \vicinity_\xi(x)$ for all $x\in X$.
 \end{lemma}
@@ -421,43 +411,84 @@ The set $\mathcal{Z} \defeq \setbuilder{X_Y}{Y\in \mathcal{Y}'} \subseteq \mathc
 Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a family of subsets. We define
 \begin{itemize}
 \item the \udef{adherence} of $\mathcal{A}$ as
-\[ \adh_\xi(\mathcal{A}) = \bigcup_{\mathcal{A}\lhd F}\lim_\xi F; \]
+\[ \adh_\xi(\mathcal{A}) = \bigcup_{\mathcal{A}\amesh F}\lim_\xi F; \]
 \item the \udef{inherence} of $\mathcal{A}$ as
-\[ \inh_\xi(\mathcal{A}) = \setbuilder{x\in X}{x\in \lim_\xi F \implies F\amesh\mathcal{A}}. \]
+\[ \inh_\xi(\mathcal{A}) = \setbuilder{x\in X}{\forall F\in \powerfilters(X): \; x\in \lim_\xi F \implies F\mesh\mathcal{A}}. \]
+Note that it is $F\mesh\mathcal{A}$ (i.e.\ $F$ and $\mathcal{A}$ have a set in common), not $F\amesh\mathcal{A}$.
 \end{itemize}
+Let $A\subseteq X$ be a subset. Then we define $\adh_\xi(A) \defeq \adh_\xi(\{A\})$ and $\inh_\xi(A) \defeq \inh_\xi(\{A\})$.
 \end{definition}
 
-\begin{lemma}
-\begin{enumerate}
-\item If $F\to x$, then $x\in \adh_\xi(F)$;
-\item If $F = \mathfrak{F}(\mathcal{A}), then \adh_\xi(F) = \adh_xi(\mathcal{A})$.
-\end{enumerate}
-\end{lemma}
-TODO cfr \ref{adherenceElementConvergentFilter}
 
-\begin{lemma} \label{singletonAdherence}
-Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then $\adh_\xi(\{x\}) = \lim_\xi \pfilter{x}$.
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $F\subseteq \powerfilters(X)$ a filter. Then $\ker(F) \subseteq \adh_\xi(F)$.
 \end{lemma}
 \begin{proof}
-If $F$ is a filter such that $\{x\} \lhd F$, then $F = \pfilter{x}$ by \ref{ultrafilterContainment}. So $\adh_\xi \{x\} = \lim_\xi \pfilter{x}$.
+Take $x\in \ker(F)$. Then $\pfilter{x}\amesh F$, so $x\in \lim_\xi \pfilter{x} \subseteq \adh_\xi(F)$.
+\end{proof}
+
+\begin{proposition} \label{differentUnionsForAdherence}
+Let $\sSet{X,\xi}$ be a convergence space and $G\in\powerfilters(X)$ a filter. Then
+\[ \adh_\xi(G) = \displaystyle\bigcup_{\substack{F\in\powerfilters(X) \\ G\lhd F}}\lim_\xi F = \displaystyle\bigcup_{\substack{U\in\powerultrafilters(X) \\ G\lhd U}}\lim_\xi U. \]
+\end{proposition}
+\begin{proof}
+For the first equality, take $x\in \adh_\xi(G)$. Then there exists a filter $F$ such that $G\amesh F$ and $F\to x$.
+Now $F\vee G$ is a proper filter by \ref{joinProperFilter} and $G\subseteq F\vee G$, so $G\lhd F\vee G$. Also $F\vee G\to x$ by monotonicity of the limit. So $x\in \bigcup_{\substack{F\in\powerfilters(X) \\ G\lhd F}}\lim_\xi F$.
+
+The other inclusion is immediate, because $G\lhd F$ implies $F^\mesh \subseteq G^\mesh$. Also $F\subseteq F^\mesh$ by \ref{properSubsemilatticeLemma}, so $F\subseteq G^\mesh$. This is equivalent to $G\amesh F$ by \ref{polarsSetRelation}.
+
+For the second equality, the inclusion $\supseteq$ is immediate. For the other inclusion, take $x\in \bigcup_{\substack{F\in\powerfilters(X) \\ G\lhd F}}\lim_\xi F$. Then there exists $F\in\powerfilters(X)$ such that $G\lhd F$ and $F\to x$. Now $F$ is contained in an ultrafilter $U$ by the ultrafilter lemma \ref{ultrafilterLemma}. By monotonicity of the limit, $U\to x$. Thus $x\in \bigcup_{\substack{U\in\powerultrafilters(X) \\ G \lhd U}}\lim_\xi U$.
+\end{proof}
+
+\begin{example}
+For a counterexample of \ref{differentUnionsForAdherence} if $G$ is not a filter, take the convergence space $\R$ and $G = \{\interval[o]{-\infty, 0}, \interval[co]{0,+\infty}\}$. Then the tailfilter $F$ of $\seq{\frac{(-1)^n}{n+1}}_{n\in\N}$ meshes with $G$. Also $F\to 0$, so $0\in \adh_\R(G)$.
+
+But there exist no proper filters that contain $G$, so
+\[ \bigcup_{\substack{F\in\powerfilters(X) \\ G\lhd F}}\lim_\xi F = \emptyset \neq \adh_\R(G). \]
+\end{example}
+
+\begin{lemma} \label{adherenceLimitFilter}
+Let $\sSet{X,\xi}$ be a convergence space and $F\subseteq \powerfilters(X)$ a proper filter. Then
+\begin{enumerate}
+\item $\lim_\xi(F) \subseteq \adh_\xi(F)$;
+\item if $A\in F$, then $\lim_\xi(F)\subseteq \adh_\xi(A)$;
+\item if $F$ is an ultrafilter, then $\lim_\xi(F) = \adh_\xi(F)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) If $F$ is proper, then $F\lhd F$.
+
+(2) If $A\in F$, then $\{A\}\lhd F$.
+
+(3) If $F$ is an ultrafilter, then the only filter $G$ such that $F\lhd G$ is $F$.
+\end{proof}
+\begin{corollary} \label{singletonAdherence}
+Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then $\adh_\xi(\{x\}) = \lim_\xi \pfilter{x}$.
+\end{corollary}
+\begin{proof}
+We have $\adh_\xi(\{x\}) = \adh_\xi(\pfilter{x})$ by definition and $\pfilter{x}$ is an ultrafilter.
 \end{proof}
 
 \begin{proposition}
-Let $\sSet{X,\xi}$ be a convergence space and $F\subseteq \powerfilters(X)$ a filter. Then $\ker(F) \subseteq \adh_\xi(F)$
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a family of subsets. Then
+\[ \inh_\xi(\mathcal{A})^c = \adh_\xi\Big((-^c)^{\imf}(\mathcal{A})\Big). \]
 \end{proposition}
 \begin{proof}
-Take $x\in \ker(F)$. Then $\pfilter{x}\amesh F$, so $F\vee \pfilter{x}$ is a proper filter that converges to $x$. Now $F\lhd F\vee \pfilter{x}$ by \ref{containmentInclusionProperFilter}, so $x\in \lim_\xi F\vee \pfilter{x} \subseteq \adh_\xi(F)$.
+We have
+\begin{align*}
+\inh_\xi(\mathcal{A})^c &= \setbuilder{x\in X}{\exists F\in\powerfilters(X): \; \big(x\in \lim_\xi F\big)\land\big(F\perp\mathcal{A}\big)} \\
+&= \setbuilder{x\in X}{\exists F\in\powerfilters(X): \; \big(x\in \lim_\xi F\big)\land\big(\forall A\in\mathcal{A}: A\notin F\big)} \\
+&= \setbuilder{x\in X}{\exists F\in\powerfilters(X): \; \big(x\in \lim_\xi F\big)\land\big(\forall A\in\mathcal{A}: A^c\subseteq F^\mesh\big)} \\
+&= \setbuilder{x\in X}{\exists F\in\powerfilters(X): \; \big(x\in \lim_\xi F\big)\land\big((-^c)^{\imf}(\mathcal{A}) \amesh F\big)} \\
+&= \adh_\xi\big((-^c)^{\imf}(\mathcal{A})\big),
+\end{align*}
+where we have used \ref{complementInIsotoneGrill}.
 \end{proof}
-
-\begin{definition}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A\subseteq X$ a subset. We define
-\begin{itemize}
-\item the \udef{adherence} $\adh_\xi(A)$ of $A$ by
-\[ x\in \adh_\xi(A) \defequiv A\in \vicinity_\xi(x)^{\mesh}; \]
-\item the \udef{inherence} $\inh_\xi(A)$ of $A$ by
-\[ x\in \inh_\xi(A) \defequiv A\in \vicinity_\xi(x). \]
-\end{itemize}
-\end{definition}
+\begin{corollary} \label{inherenceComplementAdherence}
+Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. Then
+\[ (\inh_\xi A)^c = (\adh_\xi A^c). \]
+\end{corollary}
 
 \begin{proposition} \label{principalAdherenceInherence}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then
@@ -467,8 +498,16 @@ Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO
+(1) First take $x\in \adh_\xi(A)$. Then, by \ref{differentUnionsForAdherence}, there exist a proper filter $F$ such that $\upset\{A\}\subseteq F$ and $F\to x$. We have $\vicinity_\xi(x)\subseteq F$, so $F^\mesh \subseteq \vicinity_\xi(x)^\mesh$ and $F\subseteq F^\mesh$ by \ref{properSubsemilatticeLemma}. Then
+\[ \{A\} \subseteq F\subseteq F^\mesh\subseteq \vicinity_\xi(x)^\mesh, \]
+so $A\in \vicinity_\xi(x)^\mesh$.
+
+For the converse, we have
+\[ A\in \vicinity_\xi(x)^\mesh = \left(\bigcap_{F\to x} F\right)^\mesh = \bigcup_{F\to x}F^\mesh, \]
+by TODO ref
+Thus there
 \end{proof}
+Thus principal adherence and inherence is a pretopological notion, while filter adherence and inherence is a pseudotopological notion (see \ref{differentUnionsForAdherence}).
 \begin{corollary} \label{setAdherenceInherence}
 Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$ subsets. Then
 \[ \adh_\xi(A) \mesh B \qquad\iff\qquad \{A\} \amesh \vicinity_\xi(B). \]
@@ -482,12 +521,7 @@ We have
 \end{align*}
 \end{proof}
 
-\begin{lemma} \label{adherenceElementConvergentFilter}
-Let $\sSet{X,\xi}$ be a convergence space, $F\overset{\xi}{\longrightarrow} x$ a proper filter and $A\in F$. Then $x\in\adh_\xi(A)$.
-\end{lemma}
-\begin{proof}
-We have $\vicinity(x)\subseteq F$ and $F \amesh F$ by \ref{properFilterLemma}. This implies $\vicinity(x)\amesh F$, so $A\in \vicinity(x)^\mesh$. This implies $x\in \adh_\xi(A)$.
-\end{proof}
+
 
 \begin{proposition} \label{adherenceInherenceCharacterisation}
 Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
@@ -502,10 +536,6 @@ Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
 \begin{proof}
 TODO
 \end{proof}
-\begin{corollary} \label{inherenceComplementAdherence}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. Then
-\[ (\inh_\xi A)^c = (\adh_\xi A^c). \]
-\end{corollary}
 \begin{corollary} \label{inherenceAdherenceProperties}
 Let $X$ be a set, $\xi$ a convergence on $X$ and $A,B \subseteq X$. Then
 \begin{enumerate}
@@ -523,16 +553,6 @@ and
 \end{enumerate}
 \end{corollary}
 Compare with \ref{discreteTopologyCharacterisation}.
-
-\begin{lemma}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
-\[ \adh_\xi A = \bigcup_{A \in F^{\mesh}}\lim_\xi F = \bigcup_{\substack{\text{$G$ proper filter} \\ A\in G}}\lim_\xi G. \]
-\end{lemma}
-\begin{proof}
-The first equality is obvious. For the second equality: Let $F$ be a filter such that $A\in F^{\mesh}$ then $F \vee \upset A$ contains $A$ and is a proper filter by \ref{joinProperFilter}, so $\lim_\xi F \subseteq \lim_x F \vee \upset A \subseteq \bigcup_{A\in G}\lim_\xi G$.
-
-For the other inclusion: $A\in G$ iff $\upset\{A\} \subseteq G$, so $G = G \vee \upset A$. But $G$ is a proper filter, so it must mesh with $\upset A$. In particular it must mesh with $A$.
-\end{proof}
 
 
 
@@ -674,6 +694,8 @@ Let $X$ be a set, $\xi$ a convergence on $X$, $A\subseteq X$ and $\mathcal{A}\su
 \[ \mathcal{A} \succ_\xi A \quad\iff\quad \adh_\xi [\mathcal{A}]^c \perp A \]
 \end{proposition}
 
+
+TODO: move to compactness + inherence $\inh(\mathcal{A})$ largest set for which $\mathcal{A}$ is a cover.
 
 \section{Pointwise properties}
 \begin{definition}
@@ -2468,7 +2490,7 @@ Not the same as connectedness: topologist's sine curve.
 \chapter{Ultrafilter convergence}
 \section{Choquet convergence spaces}
 \begin{definition}
-A convergence space $\sSet{X, \xi}$ is called a \udef{Choquet space} if
+A convergence space $\sSet{X, \xi}$ is called a \udef{Choquet space} or a \udef{pseudotopological space} if
 \[ x\in \lim_\xi F \quad\iff\quad \forall U\in \ultrafilters(\powerset(X)): U \geq F \implies x\in\lim_\xi U. \]
 \end{definition}
 
@@ -2482,19 +2504,20 @@ Every pretopological convergence space is a Choquet space.
 
 \section{Compactness}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space.
+Let $\sSet{X,\xi}$ be a convergence space, $F\in\powerfilters(X)$ a filter and $A\subseteq X$ a subset. Then we call $F$
 \begin{itemize}
-\item The space $\sSet{X,\xi}$ is called \udef{compact} if every ultrafilter converges.
-\item A subset $A\subseteq X$ is called \udef{compact} if the subspace $\sSet{A, \xi|_A}$ is compact.
+\item \udef{compactoid} if every ultrafilter that contains $F$ converges;
+\item \udef{$A$-compactoid} if every ultrafilter that contains $F$ converges to a point in $A$.
+\end{itemize}
+We call $B\subseteq X$
+\begin{itemize}
+\item \udef{compactoid} if $\upset\{B\}$ is compactoid;
+\item \udef{$A$-compactoid} if $\upset\{B\}$ is $A$-compactoid;
+\item \udef{compact} if $\upset\{B\}$ is $B$-compactoid.
 \end{itemize}
 \end{definition}
+In particular we call the convergence space $X$ compact if every ultrafilter converges.
 
-\begin{lemma} \label{ultrafilterConvergenceInCompactSubset}
-Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. If $A$ is compact, then every ultrafilter $F\in \powerfilters(X)$ such that $A\in F$ converges to some $a\in A$.
-\end{lemma}
-\begin{proof}
-Let $F$ be such an ultrafilter. Then $\iota^{\imf\imf}[F]$ is an ultrafilter (by \ref{subspaceUltrafilters}) that converges to some $a\in A$ by compactness. Then $F\to a$ by \ref{subspaceConvergence}.
-\end{proof}
 
 \begin{example}
 Any convergence on a finite set $X$ makes it compact as the only ultrafilters are the principal ultrafilters, \ref{finiteFiltersPrincipal}.
@@ -2508,11 +2531,11 @@ Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Take some ultrafilter $F$ in $A$. Then $\upset \iota^{\imf\imf}[F]$ is an ultrafilter in $X$ by \ref{imageUltrafilter}, so it converges to some $x\in X$ by compactness. Now, by \ref{properFilterLemma},
+(1) Take some ultrafilter $F$ in $A$. Then $\upset \iota^{\imf\imf}[F]$ is an ultrafilter in $X$ by \ref{imageUltrafilter}, so it converges to some $x\in X$ by compactness. Now, by \ref{properSubsemilatticeLemma},
 \[ A \in \upset F \subseteq (\upset F)^{\mesh} \subseteq \vicinity(x)^{\mesh}, \]
 so $x\in \adh(A) = A$. Thus $F \to x$ in $A$ by \ref{subspaceConvergence}.
 
-(2) We need to show that $\adh(A)\subseteq A$. Take $x\in \adh(A)$, meaning there exists a filter $F\to x$ such that $A\in F$ by \ref{adherenceInherenceCharacterisation}. By the ultrafilter lemma, \ref{ultrafilterLemma}, $F$ is contained in an ultrafilter $G$ and $G\to x$. Now $A\in G$, so $G$ converges to some $a\in A$ by \ref{ultrafilterConvergenceInCompactSubset}.
+(2) We need to show that $\adh(A)\subseteq A$. Take $x\in \adh(A)$, meaning there exists a filter $F\to x$ such that $A\in F$ by \ref{adherenceInherenceCharacterisation}. By the ultrafilter lemma, \ref{ultrafilterLemma}, $F$ is contained in an ultrafilter $G$ and $G\to x$. Now $A\in G$, so $G$ converges to some $a\in A$ by TODO\ref{ultrafilterConvergenceInCompactSubset}.
 
 By Hausdorff $x = a$, so $x\in A$.
 \end{proof}
@@ -2642,7 +2665,7 @@ The difference with compactness is that we do not require every ultrafilter in $
 \begin{proof}
 $\boxed{\Rightarrow}$ Assume $A$ is relatively compact. As every ultrafilter in $A$ is also an ultrafilter in $\adh_\xi(A)$, we have that every ultrafilter in $A$ converges in $\adh_\xi(A)$.
 
-$\boxed{\Leftarrow}$ Assume every ultrafilter in $A$ converges in $X$. Then every ultrafilter in $A$ converges in $\adh_\xi(A)$ by \ref{adherenceElementConvergentFilter}.
+$\boxed{\Leftarrow}$ Assume every ultrafilter in $A$ converges in $X$. Then every ultrafilter in $A$ converges in $\adh_\xi(A)$ by \ref{adherenceLimitFilter}.
 
 Now let $U$ be an ultrafilter in $\adh_\xi(A)$ that is not in $A$. By TODO ref it is an utlrafilter in
 \end{proof}
@@ -3650,7 +3673,7 @@ Thus $f$ is continuous.
 
 (2) Take $H\in\powerfilters\big((X\to Y)\big)$ such that $\begin{tikzcd}H \arrow[r, "{(X\to Y)_c}"] & f\end{tikzcd}$ and $F\in\powerfilters(X)$ such that $F\overset{\xi}{\longrightarrow} x$. Take $A\in F$ and $B\in H$.
 
-Now take $a\in A$. By continuous convergence, we have $\evalMap^{\imf\imf}(H\otimes\dot{a}) \overset{\zeta}{\longrightarrow} f(a)$. We have $f(a)\in\adh_\zeta\big(\evalMap^\imf(B\times\{a\})\big) \subseteq \adh_\zeta\big(\evalMap^\imf(B\times A)\big)$ by \ref{adherenceElementConvergentFilter}. As this is true for all $a\in A$, we have $f^\imf(A) \subseteq \adh_\zeta\big(\evalMap^\imf(B\times A)\big)$.
+Now take $a\in A$. By continuous convergence, we have $\evalMap^{\imf\imf}(H\otimes\dot{a}) \overset{\zeta}{\longrightarrow} f(a)$. We have $f(a)\in\adh_\zeta\big(\evalMap^\imf(B\times\{a\})\big) \subseteq \adh_\zeta\big(\evalMap^\imf(B\times A)\big)$ by \ref{adherenceLimitFilter}. As this is true for all $a\in A$, we have $f^\imf(A) \subseteq \adh_\zeta\big(\evalMap^\imf(B\times A)\big)$.
 
 From this last inclusion we can conclude that $\adh_\zeta^\imf\big(\evalMap^{\imf\imf}(H\otimes F)\big) \subseteq f^{\imf\imf}(F)$. Now $\evalMap^{\imf\imf}(H\otimes F)\overset{\zeta}{\longrightarrow} f(x)$ by continuous convergence, so $\adh_\zeta^\imf\big(\evalMap^{\imf\imf}(H\otimes F)\big)\overset{\zeta}{\longrightarrow} f(x)$ by regularity and thus $f^{\imf\imf}(F)\overset{\zeta}{\longrightarrow} f(x)$ by monotonicity.
 

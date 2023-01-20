@@ -1035,38 +1035,63 @@ Let $D, E \subset S$. Then
 $D\amesh E$ iff $\upset D \amesh E$.
 \end{lemma}
 
-\subsubsection{Containment}
+\subsection{Subsemilattices}
+\subsubsection{Proper subsemilattices}
 \begin{definition}
-Let $S$ be a bounded $\wedge$-semilattice and let $D,E \subseteq S$ be subsets. We say $D$ is \udef{contained} in $E$ if $D \subseteq E \subseteq D^{\mesh}$. We write $D \lhd E$.
+Let $S$ be a semilattice. A subsemilattice is called \udef{proper} if it does not contain an absorbing element.
 \end{definition}
 
-\begin{lemma}
-Let $S$ be a bounded $\wedge$-semilattice. Then containment $\lhd$ is transitive.
-\end{lemma}
-\begin{proof}
-Assume $D \lhd E \lhd F$. Then $D\subseteq E\subseteq F$, so $D\subseteq F$. Also $D\subseteq E\subseteq F^{\mesh}$, so $D\subseteq F^{\mesh}$.
-\end{proof}
-
-\begin{proposition} \label{containmentInclusionProperFilter}
-Let $S$ be a bounded $\wedge$-semilattice, let $D \subseteq S$ be a subset and $E\subseteq S$ a proper filter. Then $D\subseteq E$ \textup{if and only if} $D\lhd E$.
-\end{proposition}
-\begin{proof}
-By definition $D\lhd E$ implies $D\subseteq E$. For the opposite inclusion we need to show that $E\subseteq D^{\mesh}$. Assume, towards a contradiction, that this is not the case. Then there exists $a\in E$ and $b\in D$ such that $a\wedge b = \bot$. Now because $D\subseteq E$ and $E$ is $\wedge$-closed, this means that $\bot\in E$. Because $E$ is upward directed, this means $E = S$, which contradicts the assumption of proper filter.
-\end{proof}
-
-\begin{lemma} \label{ultrafilterContainment}
-Let $S$ be a bounded $\wedge$-semilattice. Let $F,G\subseteq S$ be subsets.
+\begin{lemma} \label{properSubsemilatticeLemma}
+Let $S$ be a $\wedge$-semilattice with bottom $\bot$ and $D$ a subsemilattice. Then the following are equivalent:
 \begin{enumerate}
-\item If $G$ is a filter, then $F\lhd G$ \textup{if and only if} $\upset F \lhd G$.
-\item If $G$ is a proper filter, then $F\lhd G$ \textup{if and only if} $\mathfrak{F}\{F\} \lhd G$.
-\item If $F$ is an ultafilter, then $F\lhd G$ \textup{if and only if} $F = G$.
-\item If $G$ is an ultrafilter, then $F \lhd G$ \textup{if and only if} $F\subseteq G$.
+\item $D$ is proper;
+\item $D\amesh D$;
+\item $D\subseteq D^\mesh$;
+\item $D^\mesh$ is not empty;
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-TODO
+$(1) \Rightarrow (2)$ Take arbitrary $a,b\in D$. Then $a\wedge b\in D$ because $D$ is a subsemilattive. Thus $a\wedge b \neq \bot$ because $\bot\notin D$, so $a\mesh b$.
+
+$(2) \Rightarrow (3)$ By \ref{polarsSetRelation}.
+
+$(3) \Rightarrow (4)$ If $D$ is empty, then $D^\mesh = S$, which is not empty (because it contains at least $\bot$). 
+
+If $D$ is not empty, then $D\subseteq D^\mesh$ implies that $D^\mesh$ is not empty.
+
+$(4) \Rightarrow (1)$ Assume $\bot\in D$. Then $D^\mesh \subseteq \{\bot\}^\mesh$ by \ref{antitonicityPolars}. Now $\{\bot\}^\mesh = \emptyset$, which implies that $D^\mesh$ is empty. This contradicts our assumption and we conclude that $D$ is proper.
 \end{proof}
-TODO: move to filters??
+
+\subsubsection{Ordering proper subsemilattices}
+\begin{definition}
+Let $S$ be a semilattice and $D,E$ subsemilattices. Then we write $D\lhd E$ if $D\subseteq E$ and $E$ is proper.
+\end{definition}
+
+\begin{lemma} \label{properGrills}
+Let $S$ be a $\wedge$-semilattice and $A\subseteq S$ a subset. Then the following are equivalent:
+\begin{enumerate}
+\item $A = \emptyset$;
+\item $A^\mesh = S$;
+\item $\bot \in A^\mesh$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Immediate by definition.
+
+$(2) \Rightarrow (3)$ Immediate.
+
+$(3) \Rightarrow (1)$ Assume $A$ is not empty and $\bot\in A^\mesh$. Then $a\in A$ and we have $a \mesh \bot$, i.e.\ $a\wedge \bot \neq \bot$. This is impossible, so $A$ is empty.
+\end{proof}
+
+\begin{proposition}
+Let $S$ be a $\wedge$-semilattice and $D,E$ subsemilattices. Assume that $D$ is not empty. Then
+\[ D \lhd E \qquad\iff\qquad D\subseteq E \subseteq D^\mesh. \]
+\end{proposition}
+\begin{proof}
+First assume $D \lhd E$. Then $E\subseteq E^\mesh$ by \ref{properSubsemilatticeLemma}. Also $E^\mesh \subseteq D^\mesh$ by \ref{antitonicityPolars}, so $E\subseteq E^\mesh \subseteq D^\mesh$ by transitivity.
+
+Now assume $D\subseteq E \subseteq D^\mesh$. We need to prove that $\bot\notin E$. It is enough to prove that $\bot \notin D^\mesh$. This is given by \ref{properGrills}.
+\end{proof}
 
 \subsection{Complete semilattices}
 \begin{lemma}
@@ -2273,14 +2298,7 @@ Let $S$ be a $\wedge$-semilattice. If $D\subseteq S$ is a $\wedge$-subsemilattic
 \end{lemma}
 The converse is not true!
 
-\begin{lemma} \label{properFilterLemma}
-Let $S$ be a bounded $\wedge$-semilattice and $F\in \filters(S)$. Then the following are equivalent:
-\begin{enumerate}
-\item $F$ is proper;
-\item $F\subseteq F^\mesh$;
-\item $F\amesh F$.
-\end{enumerate}
-\end{lemma}
+
 
 \begin{lemma}
 Let $L$ be a lattice and $J\subseteq L$ a subset. Then
@@ -2373,7 +2391,7 @@ Let $S$ be a $\wedge$-semilattice and $\{F_i\}_{i\in I} \in \filters(S)^I$ be se
 \begin{proof}
 TODO.
 
-Use \ref{properFilterLemma}????
+Use \ref{properSubsemilatticeLemma}????
 \end{proof}
 In particular, for $F, G\in\filters(L)$, we have that $F\vee G$ is a proper filter if and only if $F\amesh G$.
 
@@ -2411,7 +2429,7 @@ $(1)\Rightarrow (2)$ Assume $F$ is an ultrafilter. Then for all $x\in F$, the fi
 
 $(2)\Rightarrow (1)$ Take some filter $F$ satisfying the condition. Then $F$ is automatically proper ($\bot$ is not in $F$). Assume $G\supseteq F$ is another proper filter. Assume, towards a contradiction, that $G\setminus F \neq \emptyset$. Then take $x\in G\setminus F$. By hypothesis there exists a $y\in F$ (and thus also in $G$) such that $x\wedge y = \bot$, meaning $\bot \in G$ by $\wedge$-closure. Thus $G$ is not proper.
 
-$(3) \Leftrightarrow (4)$ By \ref{properFilterLemma}.
+$(3) \Leftrightarrow (4)$ By \ref{properSubsemilatticeLemma}.
 \end{proof}
 \begin{corollary} \label{BooleanUltrafilterDisjunction}
 Let $B$ be a Boolean lattice and $F\in \filters(B)$. The following are equivalent:
@@ -2767,26 +2785,43 @@ Let $X$ be a set. Let $\mathcal{A} \subseteq \powerset(X)$. The \udef{grill} of 
 \end{definition}
 
 \begin{lemma}
-Let $X$ be a set, $\powerset(X)$ be ordered by inclusion, $A, B\in \powerset(X)$ and $\mathcal{A} \subseteq \powerset(X)$. Then
+Let $X$ be a set, $\powerset(X)$ be ordered by inclusion and $\mathcal{A} \subseteq \powerset(X)$. Then
 \begin{enumerate}
-\item $\upset A\mesh$ = $A\mesh$;
-\item $\upset \mathcal{A}^{\mesh} = \mathcal{A}^{\mesh} = (\upset \mathcal{A})^{\mesh}$;
-\item $((\mathcal{A}^{\mesh})^{\mesh})^{\mesh} = \mathcal{A}^{\mesh}$;
-\item $(\mathcal{A}^{\mesh})^{\mesh} = \upset \mathcal{A}$.
+\item $\mathcal{A}^\mesh$ is upwards closed;
+\item $\mathcal{A}^{\mesh\mesh} = \upset\mathcal{A}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) If $B$ meshes with $A$, then any superset of $B$ also meshes with $A$. The opposite inclusion is given by \ref{TODO}.
-
-(2) We calculate using \ref{upDownsetUnionIntersection}
-\[ \upset \mathcal{A}^{\mesh} = \upset \bigcap_{A\in\mathcal{A}} A\mesh = \upset \bigcap_{A\in\mathcal{A}} \upset A\mesh = \bigcap_{A\in\mathcal{A}} \upset A\mesh = \bigcap_{A\in\mathcal{A}} A\mesh = \mathcal{A}^{\mesh} \]
-
-TODO
-
-(3) TODO (general for polars using $\mesh^\transp = \mesh$ (?)).
-
-(4) By \ref{GreensTheoremCorollary} this is a consequence of (2) and (3).
+(1) Take 
 \end{proof}
+\begin{corollary}
+Let $X$ be a set and let $\powerset(X)$ be ordered by inclusion.
+
+Then $(-)^\mesh$ is an antitone bijection between upwards closed sets of subsets and its inverse is itself.
+\end{corollary}
+\begin{proof}
+
+\end{proof}
+
+\begin{proposition} \label{complementInIsotoneGrill}
+Let $X$ be a set. Let $\mathcal{A} \subseteq \powerset(X)$ be upwards closed. Then
+\[ A \notin \mathcal{A} \quad\iff\quad A^c \in \mathcal{A}^\mesh. \]
+\end{proposition}
+\begin{proof}
+First assume $A^c \in \mathcal{A}^\mesh$. If $A\in\mathcal{A}$, then $A\mesh A^c$, which is a contradiction.
+
+Now assume $A \notin \mathcal{A}$. Take arbitrary $B\in \mathcal{A}$. Now $A\cap B\notin \mathcal{A}$ (if $A\cap B\in \mathcal{A}$, then $A\in \mathcal{A}$ by upwards closure and this was assumed not the case).
+
+Then we have the implications
+\begin{align*}
+A\cap B\notin \mathcal{A} &\implies A\cap B \neq B \\
+&\implies B\nsubseteq A \\
+&\implies A^c \mesh B.
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $X$ be a set. Then $(-)^\mesh$ is an antitone bijection on the set of upwards closed subsets of $\powerset(X)$ 
+\end{corollary}
 
 \begin{proposition} \label{meshConnection}
 Let $f:X \to Y$ be a function between sets, $A\subseteq X$ and $B\subseteq Y$. Then
