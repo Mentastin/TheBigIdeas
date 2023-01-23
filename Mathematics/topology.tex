@@ -11,7 +11,7 @@
 Intuition: directed sets and refinement.
 
 \begin{definition}
-Let $X$ be a set and let $\xi$ be a relation between downward directed sets in $\powerset(X)$ and elements of $X$. Then
+Let $X$ be a set and let $\xi$ be a relation between non-empty downward directed sets in $\powerset(X)$ and elements of $X$. Then
 \begin{itemize}
 \item we denote the image function of $\xi$ as $\lim_\xi: \directed(\powerset(X)) \to \powerset(X): F\mapsto F\xi$; we call $\lim_\xi F$ the \udef{$\xi$-limit} of $F$;
 \item $\xi$ is called a \udef{preconvergence} on $X$ if $\lim_\xi$ is order-preserving when $\directed(\powerset(X))$ is ordered by refinement:
@@ -411,22 +411,40 @@ The set $\mathcal{Z} \defeq \setbuilder{X_Y}{Y\in \mathcal{Y}'} \subseteq \mathc
 Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a family of subsets. We define
 \begin{itemize}
 \item the \udef{adherence} of $\mathcal{A}$ as
-\[ \adh_\xi(\mathcal{A}) = \bigcup_{\mathcal{A}\amesh F}\lim_\xi F; \]
+\begin{align*}
+\adh_\xi(\mathcal{A}) &= \setbuilder{x\in X}{\exists F\to x: \; F\amesh\mathcal{A}} \\
+&= \bigcup_{\mathcal{A}\amesh F}\lim_\xi F;
+\end{align*}
 \item the \udef{inherence} of $\mathcal{A}$ as
-\[ \inh_\xi(\mathcal{A}) = \setbuilder{x\in X}{\forall F\in \powerfilters(X): \; x\in \lim_\xi F \implies F\mesh\mathcal{A}}. \]
+\begin{align*}
+\inh_\xi(\mathcal{A}) &= \setbuilder{x\in X}{\forall F\to x: \; F\mesh\mathcal{A}} \\
+&= \bigcap_{\mathcal{A}\mesh F}\lim_\xi F.
+\end{align*}
 Note that it is $F\mesh\mathcal{A}$ (i.e.\ $F$ and $\mathcal{A}$ have a set in common), not $F\amesh\mathcal{A}$.
 \end{itemize}
 Let $A\subseteq X$ be a subset. Then we define $\adh_\xi(A) \defeq \adh_\xi(\{A\})$ and $\inh_\xi(A) \defeq \inh_\xi(\{A\})$.
 \end{definition}
 
-
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space and $F\subseteq \powerfilters(X)$ a filter. Then $\ker(F) \subseteq \adh_\xi(F)$.
+\begin{lemma} \label{adherenceInherenceOrderClosure}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a family of subsets. Then
+\begin{enumerate}
+\item $\adh_\xi(\mathcal{A}) = \adh_\xi(\upset\mathcal{A})$;
+\item $\inh_\xi(\mathcal{A}) = \inh_\xi(\downset\mathcal{A})$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-Take $x\in \ker(F)$. Then $\pfilter{x}\amesh F$, so $x\in \lim_\xi \pfilter{x} \subseteq \adh_\xi(F)$.
+(1) By \ref{ameshUpwardClosure}, we have $\mathcal{A}\amesh F \iff (\upset\mathcal{A})\amesh F$.
+
+(2) By \ref{GaloisConnectionOrderClosure}, we have $F\mesh\mathcal{A} \iff (\upset F)\mesh\mathcal{A} \iff F\mesh(\downset \mathcal{A})$.
 \end{proof}
+
+\begin{lemma} \label{inherenceAdherenceMonotoneInConvergence}
+Let $X$ be a set, $\zeta, \xi$ convergences on $X$ such that $\zeta \leq \xi$ and $\mathcal{A}\subseteq \powerset(X)$. Then
+\begin{enumerate}
+\item $\adh_\zeta(\mathcal{A}) \subseteq \adh_\xi(\mathcal{A})$;
+\item $\inh_\zeta(\mathcal{A}) \supseteq \inh_\xi(\mathcal{A})$.
+\end{enumerate}
+\end{lemma}
 
 \begin{proposition} \label{differentUnionsForAdherence}
 Let $\sSet{X,\xi}$ be a convergence space and $G\in\powerfilters(X)$ a filter. Then
@@ -449,7 +467,7 @@ But there exist no proper filters that contain $G$, so
 \end{example}
 
 \begin{lemma} \label{adherenceLimitFilter}
-Let $\sSet{X,\xi}$ be a convergence space and $F\subseteq \powerfilters(X)$ a proper filter. Then
+Let $\sSet{X,\xi}$ be a convergence space and $F\in \powerfilters(X)$ a proper filter. Then
 \begin{enumerate}
 \item $\lim_\xi(F) \subseteq \adh_\xi(F)$;
 \item if $A\in F$, then $\lim_\xi(F)\subseteq \adh_\xi(A)$;
@@ -470,22 +488,22 @@ Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then $\adh_\xi(\{x\}) = 
 We have $\adh_\xi(\{x\}) = \adh_\xi(\pfilter{x})$ by definition and $\pfilter{x}$ is an ultrafilter.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{inherenceComplementAdherence}
 Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a family of subsets. Then
 \[ \inh_\xi(\mathcal{A})^c = \adh_\xi\Big((-^c)^{\imf}(\mathcal{A})\Big). \]
 \end{proposition}
 \begin{proof}
 We have
 \begin{align*}
-\inh_\xi(\mathcal{A})^c &= \setbuilder{x\in X}{\exists F\in\powerfilters(X): \; \big(x\in \lim_\xi F\big)\land\big(F\perp\mathcal{A}\big)} \\
-&= \setbuilder{x\in X}{\exists F\in\powerfilters(X): \; \big(x\in \lim_\xi F\big)\land\big(\forall A\in\mathcal{A}: A\notin F\big)} \\
-&= \setbuilder{x\in X}{\exists F\in\powerfilters(X): \; \big(x\in \lim_\xi F\big)\land\big(\forall A\in\mathcal{A}: A^c\subseteq F^\mesh\big)} \\
-&= \setbuilder{x\in X}{\exists F\in\powerfilters(X): \; \big(x\in \lim_\xi F\big)\land\big((-^c)^{\imf}(\mathcal{A}) \amesh F\big)} \\
+\inh_\xi(\mathcal{A})^c &= \setbuilder{x\in X}{\exists F\to x: \; F\perp\mathcal{A}} \\
+&= \setbuilder{x\in X}{\exists F\to x: \;\forall A\in\mathcal{A}: A\notin F} \\
+&= \setbuilder{x\in X}{\exists F\to x: \; \forall A\in\mathcal{A}: A^c\subseteq F^\mesh} \\
+&= \setbuilder{x\in X}{\exists F\to x: \; (-^c)^{\imf}(\mathcal{A}) \amesh F} \\
 &= \adh_\xi\big((-^c)^{\imf}(\mathcal{A})\big),
 \end{align*}
 where we have used \ref{complementInIsotoneGrill}.
 \end{proof}
-\begin{corollary} \label{inherenceComplementAdherence}
+\begin{corollary} \label{principalInherenceComplementAdherence}
 Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. Then
 \[ (\inh_\xi A)^c = (\adh_\xi A^c). \]
 \end{corollary}
@@ -493,19 +511,31 @@ Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. Then
 \begin{proposition} \label{principalAdherenceInherence}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then
 \begin{enumerate}
-\item $x\in \adh_\xi(A)$ \textup{if and only if} $A\in \vicinity_\xi(x)^{\mesh}$;
-\item $x\in \inh_\xi(A)$ \textup{if and only if} $A\in \vicinity_\xi(x)$.
+\item the following are equivalent:
+\begin{enumerate}
+\item $x\in \adh_\xi(A)$;
+\item $\displaystyle A \in \bigcup_{\substack{\text{$F$ proper filter} \\F\to x}} F$;
+\item $A\in \vicinity_\xi(x)^{\mesh}$;
+\item $\displaystyle A \in \bigcup_{F\to x} F^{\mesh}$;
+\end{enumerate}
+\item $x\in \inh_\xi(A)$ \textup{if and only if} $A\in \vicinity_\xi(x) = \displaystyle \bigcap_{F\to x}F$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) First take $x\in \adh_\xi(A)$. Then, by \ref{differentUnionsForAdherence}, there exist a proper filter $F$ such that $\upset\{A\}\subseteq F$ and $F\to x$. We have $\vicinity_\xi(x)\subseteq F$, so $F^\mesh \subseteq \vicinity_\xi(x)^\mesh$ and $F\subseteq F^\mesh$ by \ref{properSubsemilatticeLemma}. Then
+(1) $(a) \Rightarrow (b)$ Assume $x\in \adh_\xi(A)$. Then, by \ref{differentUnionsForAdherence}, there exists a proper filter $F$ such that $\upset\{A\}\subseteq F$ and $F\to x$. This is equivalent to (b).
+
+$(b) \Rightarrow (c)$ We have that there exists a proper filter $F$ such that $\upset\{A\}\subseteq F$ and $F\to x$. Also $\vicinity_\xi(x)\subseteq \bigcup_{F\to x} F$, so $\left(\bigcup_{F\to x} F\right)^\mesh \subseteq \vicinity_\xi(x)^\mesh$ and $F\subseteq F^\mesh$ by \ref{properSubsemilatticeLemma}. Then
 \[ \{A\} \subseteq F\subseteq F^\mesh\subseteq \vicinity_\xi(x)^\mesh, \]
 so $A\in \vicinity_\xi(x)^\mesh$.
 
-For the converse, we have
-\[ A\in \vicinity_\xi(x)^\mesh = \left(\bigcap_{F\to x} F\right)^\mesh = \bigcup_{F\to x}F^\mesh, \]
-by TODO ref
-Thus there
+$(c) \Rightarrow (d)$ We have
+\[ \vicinity_\xi(x)^\mesh = \left(\bigcap_{F\to x} F\right)^\mesh = \bigcup_{F\to x}F^\mesh, \]
+by \ref{grillUpsetOrderSimilarity} (and the fact that joins and meets in the lattice of upwards closed sets are just given by the union and intersection, see \ref{meetJoinRClosedSets}).
+
+$(d) \Rightarrow (a)$ There exists a filter $F\to x$ such that $A\in F^\mesh$. Then $x\in \bigcup_{A\subseteq F^\mesh}\lim_\xi(F) = \adh_\xi(A)$.
+
+(2) We use \ref{principalInherenceComplementAdherence} and \ref{complementInIsotoneGrill} to compute
+\[ x\in \inh_\xi(A) \iff x\in \adh_\xi(A^c)^c \iff x\notin \adh_\xi(A^c) \iff A^c\notin \vicinity_\xi(x)^\mesh \iff A\in \vicinity_\xi(x). \]
 \end{proof}
 Thus principal adherence and inherence is a pretopological notion, while filter adherence and inherence is a pseudotopological notion (see \ref{differentUnionsForAdherence}).
 \begin{corollary} \label{setAdherenceInherence}
@@ -521,127 +551,116 @@ We have
 \end{align*}
 \end{proof}
 
-
-
-\begin{proposition} \label{adherenceInherenceCharacterisation}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$ a set. Then
-\begin{enumerate}
-\item $\displaystyle x\in \adh_\xi(A) \iff A \in \bigcup_{F\in {\lim_\xi}^{-1}(x)} F^{\mesh} \iff A \in \bigcup_{F\in {\lim_\xi}^{-1}(x)} F$;
-\item $x\in \adh_\xi(A) \iff \exists U\in \vicinity_\xi(x): \; U\setminus A \notin \vicinity_\xi(x)$;
-\item $\displaystyle \adh_\xi(A) = \bigcup_{A \in F^{\mesh}}\lim_\xi F = \bigcup_{\substack{\text{$G$ proper filter} \\ A\in G}} \lim_\xi G$;
-\item $\displaystyle x\in \inh_\xi(A) \iff A \in \bigcap_{F\in {\lim_\xi}^{-1}(x)} F$;
-\item WRONG: $\displaystyle \inh_\xi(A) = \bigcap_{A \in F}\lim_\xi F$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary} \label{inherenceAdherenceProperties}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A,B \subseteq X$. Then
-\begin{enumerate}
-\item $\adh_\xi \emptyset = \emptyset$;
-\item if $A \subseteq B$, then $\adh_\xi A \subseteq \adh_\xi B$;
-\item $A\subseteq \adh_\xi A$;
-\item $\adh_\xi(A\cup B) = \adh_\xi A \cup \adh_\xi B$.
-\end{enumerate}
-and
-\begin{enumerate} \setcounter{enumi}{4}
-\item $\inh_\xi X = X$;
-\item if $A \subseteq B$, then $\inh_\xi A \subseteq \inh_\xi B$;
-\item $\inh_\xi A \subseteq A$;
-\item $\inh_\xi(A\cap B) = \inh_\xi A \cap \inh_\xi B$.
-\end{enumerate}
-\end{corollary}
-Compare with \ref{discreteTopologyCharacterisation}.
-
-
+\begin{note}
+Exercise: prove point (2) of \ref{principalAdherenceInherence} straight from definition.
+\end{note}
 
 \begin{proposition}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. Then the following are equivalent:
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$. Then
 \begin{enumerate}
-\item $x\in \adh_\xi A$;
-\item $A\in \bigcup_{F\in {\lim_\xi}^{-1}(x)} F^{\mesh}$;
-\item $A \mesh \vicinity_\xi(x)$.
+\item $\displaystyle \adh_\xi(\mathcal{A}) \subseteq \bigcap_{A\in\mathcal{A}}\adh_\xi(A)$;
+\item $\displaystyle \inh_\xi(\mathcal{A}) \supseteq \bigcup_{A\in\mathcal{A}}\inh_\xi(A)$.
 \end{enumerate}
+If $\xi$ is pretopological, then the two inclusions become equalities.
 \end{proposition}
 \begin{proof}
-$(1) \Leftrightarrow (2)$ We have
-\[ x\in \bigcup_{A\in F^{\mesh}}\lim_\xi F \iff \exists F: A \in F^{\mesh} \land x\in \lim_\xi F \iff A\in  \bigcup_{F\in {\lim_\xi}^{-1}(x)} F^{\mesh}. \]
+(1) We calculate
+\begin{align*}
+x\in\adh_\xi(\mathcal{A}) \iff& \exists F\to x: F\amesh \mathcal{A} \\
+\iff& \exists F\to x: \forall A\in\mathcal{A}: A\in F^\mesh \\
+\implies& \forall A\in\mathcal{A}: \exists F\to x: A\in F^\mesh \subseteq \vicinity_\xi(x)^\mesh \\
+\implies& \forall A\in\mathcal{A}: A\in \vicinity_\xi(x)^\mesh \\
+\iff& \forall A\in\mathcal{A}: x\in \adh_\xi(A) \\
+\iff& x\in \bigcap_{A\in\mathcal{A}}\adh_\xi(A).
+\end{align*}
 
-$(2) \Leftrightarrow (3)$ We have, using \ref{orderReversingSimilarityLatticeOperations},
-\[ A \mesh \vicinity_\xi(x) \iff A\in \left(\vicinity_\xi(x)\right)^{\mesh} = \left(\bigcap_{F\in {\lim_\xi}^{-1}(x)}F\right)^{\mesh} = \bigcup_{F\in {\lim_\xi}^{-1}(x)} F^{\mesh}. \]
+Now assume $\xi$ is pretopological. Then $x\in \bigcap_{A\in\mathcal{A}}\adh_\xi(A)$ implies $\forall A\in\mathcal{A}: A\in \vicinity_\xi(x)^\mesh$ by the previous calculation. As $\xi$ is pretopological, $\vicinity_\xi(x) \to x$ and by setting $F = \vicinity_\xi(x)$, we see that $\exists F\to x: \forall A\in\mathcal{A}: A\in F^\mesh$. Again by the previous calculation, this implies $x\in \adh_\xi(\mathcal{A})$.
+
+(2) We calculate using \ref{inherenceComplementAdherence}:
+\[ \inh_\xi(\mathcal{A}) = \adh_\xi\big(\setbuilder{A^c}{A\in \mathcal{A}}\big)^c \supseteq \left(\bigcap_{A\in\mathcal{A}}\adh_{\xi}(A^c)\right)^c = \bigcup_{A\in\mathcal{A}}\adh_{\xi}(A^c)^c = \bigcup_{A\in\mathcal{A}}\inh_{\xi}(A). \]
 \end{proof}
-
-\begin{lemma} \label{inherenceAdherenceInclusion}
-Let $X$ be a set, $\zeta, \xi$ convergences on $X$ such that $\zeta \leq \xi$ and $A\subseteq X$ a subset. Then
-\[ \inh_\xi(A) \subseteq \inh_\zeta(A) \subseteq A \subseteq \adh_\zeta(A) \subseteq \adh_\xi(A). \]
-\end{lemma}
-\begin{proof}
-We only need to show the first and last inclusion.
-
-From \ref{vicinityMapAntitone} we have $\vicinity_\xi(x) \subseteq \vicinity_\zeta(x)$ and $\vicinity_\zeta(x)^{\mesh} \subseteq \vicinity_\xi(x)^{\mesh}$ for all $x\in X$.
-
-So we have the implications
-\[ x\in \inh_\xi(A) \implies A\in \vicinity_\xi(x) \implies A\in \vicinity_\zeta(x) \implies x\in \inh_\zeta(A) \]
-and
-\[ x\in \adh_\zeta(A) \implies A\in \vicinity_\zeta(x)^{\mesh} \implies A\in \vicinity_\xi(x)^{\mesh} \implies x\in \adh_\xi(A). \]
-\end{proof}
-
-\subsection{General adherence (TODO)}
-\begin{definition}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $\mathcal{A} \subseteq \powerset(X)$. The \udef{adherence} of $\mathcal{A}$ is defined as
-\[ \adh_\xi\mathcal{A} \defeq \bigcup_{\substack{F \in \powerfilters(X) \\ F \mesh \mathcal{A}}} \lim_\xi F. \]
-The \udef{(principal) adherence} of a set $A\subseteq X$ is the adherence of $\{A\}$.
-\end{definition}
-Clearly if $\xi,\zeta$ are convergences on $X$, then $\xi \leq \zeta$ implies $\adh_\xi\mathcal{A} \subseteq \adh_\zeta\mathcal{A}$.
-
-\begin{lemma}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $\{A_i\}_{i\in I} \subseteq \powerset(X)$. Then
-\[ \adh_\xi \{A_i\}_{i\in I} \subseteq \bigcap_{i\in I}\adh_\xi A_i. \]
-\end{lemma}
-\begin{proof}
-We have $x\in \adh_\xi \{A_i\}_{i\in I}$ iff $\exists F: x\in \lim F \land F\amesh \{A_i\}_{i\in I}$ iff $\exists F: \forall i\in I: x\in \lim F \land F\amesh A_i$. This implies $\forall i\in I: \exists F: x\in \lim F \land F\amesh A_i$ iff $\forall i\in I: x\in \adh_\xi A_i$.
-\end{proof}
-
-
 
 \begin{lemma}
 Let $X$ be a set and $F$ be a filter in $\powerfilters(X)$. Then $\ker F = \adh_{\iota_X} F$.
 \end{lemma}
 \begin{proof}
-Let $x\in X$. Then $\pfilter{x} \amesh F$ iff $\Big\{\{x\}\Big\} \amesh F$ iff $x\in \ker F$.
+Let $x\in X$. Then $\pfilter{x} \amesh F$ iff $\big\{\{x\}\big\} \amesh F$ iff $x\in \ker F$.
 \end{proof}
-\begin{corollary}
-Let $\xi$ be a convergence on a set $X$ and $F$ be a filter in $\powerfilters(X)$. Then $\ker F \subseteq \adh_\xi F$.
+\begin{corollary} \label{kernelAdherence}
+Let $\sSet{X,\xi}$ be a convergence space, $F\in \powerfilters(X)$ a filter and $I\in\powerideals(X)$ an ideal. Then
+\begin{enumerate}
+\item $\ker(F) \subseteq \adh_\xi(F)$;
+\item $\bigcup I \supseteq \inh_\xi(I)$.
+\end{enumerate}
 \end{corollary}
 \begin{proof}
-This follows from $\iota_X \leq \xi$.
+(1) This follows from the lemma, $\iota_X \leq \xi$ and \ref{inherenceAdherenceMonotoneInConvergence}.
+
+(2) Set $I' \defeq \setbuilder{A^c}{A\in I}$. Then $I'$ is a filter (TODO ref) and, by \ref{inherenceComplementAdherence}, we have
+\[ \left(\bigcup I\right)^c = \ker(I') \subseteq  \adh_\xi(I') = \inh_\xi(I)^c. \]
+This implies $\bigcup I \supseteq \inh_\xi(I)$.
 \end{proof}
 
-\subsection{Inherence}
-\begin{definition}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. The \udef{(principal) inherence} of $A$, denoted $\inh_\xi A$, is defined by
-\[ x\in \inh_\xi A \defequiv A\in \vicinity_\xi(x). \]
-\end{definition}
-
-\begin{lemma}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A \subseteq X$. Then
-\begin{enumerate}
-\item $\inh_\xi A = (\adh_\xi A^c)^c$;
-\item $\adh_\xi A = (\inh_\xi A^c)^c$;
-\item $x\in \inh_\xi A \iff (x\in \lim_\xi F \implies A\in F)$.
-\end{enumerate}
-\end{lemma}
-
 \begin{proposition}
-Let $X$ be a set, $\xi$ a convergence on $X$ and $A,B \subseteq X$. Then
+Let $X$ be a set, $\xi$ a convergence on $X$ and $\mathcal{A},\mathcal{B} \subseteq \powerset(X)$. Then
 \begin{enumerate}
-\item $\inh_\xi X = X$;
-\item if $A \subseteq B$, then $\inh_\xi A \subseteq \inh_\xi B$;
-\item $\inh_\xi A\subseteq A$;
-\item $\inh_\xi(A\cap B) = \inh_\xi A \cap \inh_\xi B$.
+\item $\adh_\xi \big(\powerset(X)\big) = \emptyset$;
+\item if $\mathcal{A} \subseteq \mathcal{B}$, then $\adh_\xi \mathcal{A} \supseteq \adh_\xi \mathcal{B}$;
+\item if $\mathcal{A},\mathcal{B}$ are upwards closed, then $\adh_\xi(\mathcal{A}\cap \mathcal{B}) = \adh_\xi(\mathcal{A}) \cup \adh_\xi(\mathcal{B})$.
+\end{enumerate}
+Also
+\begin{enumerate} \setcounter{enumi}{3}
+\item $\inh_\xi\big(\powerset(X)\big) = X$;
+\item if $\mathcal{A} \subseteq \mathcal{B}$, then $\inh_\xi \mathcal{A} \subseteq \inh_\xi \mathcal{B}$;
+\item if $\mathcal{A},\mathcal{B}$ are downwards closed, then $\inh_\xi(\mathcal{A}\cap \mathcal{B}) = \inh_\xi(\mathcal{A}) \cap \inh_\xi(\mathcal{B})$.
 \end{enumerate}
 \end{proposition}
+\begin{proof}
+(1) There exist no non-empty filters $F$ such that $F\amesh \powerset(X)$.
+
+(2) If $\mathcal{A} \subseteq \mathcal{B}$ and $F\amesh \mathcal{B}$, then $F\amesh \mathcal{A}$.
+
+(3) From point (2) and \ref{orderPreservingFunctionLatticeOperations}, we get $\adh_\xi(\mathcal{A}\cap \mathcal{B}) \supseteq \adh_\xi(\mathcal{A}) \cup \adh_\xi(\mathcal{B})$.
+
+Now take $x\in\adh_\xi(\mathcal{A}\cup \mathcal{B})$, then there exists $F\to x$ such that $F\subseteq (\mathcal{A}\cup \mathcal{B})^\mesh = \mathcal{A}^\mesh\cap \mathcal{B}^\mesh$, where the last equality is due to \ref{grillUpsetOrderSimilarity} (and the fact that joins and meets in the lattice of upwards closed sets are just given by the union and intersection, see \ref{meetJoinRClosedSets}).
+
+It is enough to prove that either $F\subseteq \mathcal{A}^\mesh$ or $F\subseteq \mathcal{B}^\mesh$. Assume, towards a contradiction, that this is not the case, i.e.\ there exist $A\in\mathcal{A}$, $B\in \mathcal{B}$ and $C,D\in F$ such that $A\perp C$ and $B\perp D$. Then $C\cap D\perp A$ and $C\cap D \perp B$, so $C\cap D \notin \mathcal{A}^\mesh\cap \mathcal{B}^\mesh$. But $C\cap D \in F$ because $F$ is a filter.
+
+(4) For all non-empty filters $F$, we have $F\mesh \powerset(X)$.
+
+(5) If $\mathcal{A} \subseteq \mathcal{B}$ and $F\mesh \mathcal{A}$, then $F\mesh \mathcal{B}$.
+
+(6) We calculate, using \ref{inherenceComplementAdherence} and noting that $\mathcal{A}$ is downwards closed if and only if $\setbuilder{A^c}{A\in\mathcal{A}}$ is upwards closed.
+\begin{align*}
+\inh_\xi(\mathcal{A}\cap \mathcal{B}) &= \adh_\xi\big(\setbuilder{A^c}{A\in\mathcal{A}}\cap \setbuilder{B^c}{B\in\mathcal{B}}\big)^c \\
+&= \Big(\adh_\xi\big(\setbuilder{A^c}{A\in\mathcal{A}}\big)\cup \adh_\xi\big(\setbuilder{B^c}{B\in\mathcal{B}}\big)\Big)^c \\
+&= \adh_\xi\big(\setbuilder{A^c}{A\in\mathcal{A}}\big)^c\cap \adh_\xi\big(\setbuilder{B^c}{B\in\mathcal{B}}\big)^c \\
+&= \inh_\xi(\mathcal{A})\cap \inh_\xi(\mathcal{B}).
+\end{align*}
+\end{proof}
+\begin{corollary} \label{principalInherenceAdherenceProperties}
+Let $X$ be a set, $\xi$ a convergence on $X$ and $A,B \subseteq X$. Then
+\begin{enumerate}
+\item $\adh_\xi \emptyset = \emptyset$;
+\item if $A \subseteq B$, then $\adh_\xi A \subseteq \adh_\xi B$;
+\item $\adh_\xi(A\cup B) = \adh_\xi A \cup \adh_\xi B$;
+\end{enumerate}
+and
+\begin{enumerate} \setcounter{enumi}{4}
+\item $\inh_\xi X = X$;
+\item if $A \subseteq B$, then $\inh_\xi A \subseteq \inh_\xi B$;
+\item $\inh_\xi(A\cap B) = \inh_\xi A \cap \inh_\xi B$.
+\end{enumerate}
+Also
+\[ \inh_\xi(A) \subseteq \inh_\zeta(A) \subseteq A \subseteq \adh_\zeta(A) \subseteq \adh_\xi(A). \]
+\end{corollary}
+Compare with \ref{discreteTopologyCharacterisation}.
+\begin{proof}
+Most results are immediate using \ref{adherenceInherenceOrderClosure}.
+
+The inclusions $A \subseteq \adh_\zeta(A)$ and $\inh_\zeta(A) \subseteq A$ follow from \ref{kernelAdherence}.
+\end{proof}
+
 
 \begin{lemma} \label{subsetWithVicinitiesInInherence}
 Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$ subsets. If for every $a\in A$ there exists a vicinity of $a$ that is a subset of $B$, then $A\subseteq \inh_\xi(B)$.
@@ -917,10 +936,10 @@ Let $X$ be a set and $\xi$ a convergence on $X$. Then
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) Let $\{A_i\}_{i\in I}$ be a set of open sets. From \ref{inherenceAdherenceProperties} and \ref{orderPreservingFunctionLatticeOperations} we get $\inh\left(\bigcup_{i\in I}A_i\right) \subseteq \bigcup_{i\in I}A_i$ and $\bigcup_{i\in I}\inh(A_i) \subseteq \inh\left(\bigcup_{i\in I} A_i\right)$. Thus
+(1) Let $\{A_i\}_{i\in I}$ be a set of open sets. From \ref{principalInherenceAdherenceProperties} and \ref{orderPreservingFunctionLatticeOperations} we get $\inh\left(\bigcup_{i\in I}A_i\right) \subseteq \bigcup_{i\in I}A_i$ and $\bigcup_{i\in I}\inh(A_i) \subseteq \inh\left(\bigcup_{i\in I} A_i\right)$. Thus
 \[ \bigcup_{i\in I}A_i  = \bigcup_{i\in I}\inh_(A_i) \subseteq \inh\left(\bigcup_{i\in I} A_i\right) \subseteq \bigcup_{i\in I}A_i. \]
 
-(2) Let $\{A_i\}_{i\in I}$ be a set of closed sets. From \ref{inherenceAdherenceProperties} and \ref{orderPreservingFunctionLatticeOperations} we get $\bigcap_{i\in I}A_i \subseteq \adh\left(\bigcap_{i\in I}A_i\right)$ and $\adh\left(\bigcap_{i\in I} A_i\right)\subseteq \bigcap_{i\in I}\adh(A_i)$. Thus
+(2) Let $\{A_i\}_{i\in I}$ be a set of closed sets. From \ref{principalInherenceAdherenceProperties} and \ref{orderPreservingFunctionLatticeOperations} we get $\bigcap_{i\in I}A_i \subseteq \adh\left(\bigcap_{i\in I}A_i\right)$ and $\adh\left(\bigcap_{i\in I} A_i\right)\subseteq \bigcap_{i\in I}\adh(A_i)$. Thus
 \[ \bigcap_{i\in I}A_i \subseteq \adh\left(\bigcap_{i\in I}A_i\right) \subseteq \bigcap_{i\in I}\adh(A_i) = \bigcap_{i\in I}A_i. \]
 \end{proof}
 \begin{corollary}
@@ -957,7 +976,7 @@ Let $X$ be a set, $\zeta, \xi$ convergences on $X$ such that $\zeta\leq\xi$ and 
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-Assume $A$ is open in $\xi$. Then $\inh_\xi(A) = A$. But $\inh_\xi(A) \subseteq \inh_\zeta(A) \subseteq A$ by \ref{inherenceAdherenceInclusion}, so $\inh_\xi(A) = \inh_\zeta(A) = A$. The argument for closedness is similar.
+Assume $A$ is open in $\xi$. Then $\inh_\xi(A) = A$. But $\inh_\xi(A) \subseteq \inh_\zeta(A) \subseteq A$ by \ref{principalInherenceAdherenceProperties}, so $\inh_\xi(A) = \inh_\zeta(A) = A$. The argument for closedness is similar.
 \end{proof}
 
 \begin{proposition} \label{discreteTopologyCharacterisation}
@@ -1094,7 +1113,7 @@ If $\xi,\zeta$ are preconvergences we write $\cont_\text{pre}(\xi, \zeta)$ for t
 In other words, a function is continuous if it is relation-preserving as a function
 \[ \sSet{X \cup \powerset^2(X), \overset{\xi}{\longrightarrow}} \to \sSet{Y \cup \powerset^2(Y), \overset{\zeta}{\longrightarrow}}. \]
 
-Note that for filters $F\in\powerfilters(X)$, $f[F]$ is in general a directed set, but not necessarily a filter.
+Note that for filters $F\in\powerfilters(X)$, $f[F]$ is in general a directed set (by \ref{imageDirectedSet}), but not necessarily a filter. Taking the upward closure gives a filter (see \ref{imageFilter}).
 
 \begin{lemma}
 Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be (pre)convergence spaces. A function $f: X\to Y$ is continuous \textup{if and only if} for all $D \in \powerdirected(X)$
@@ -1186,7 +1205,7 @@ y\in f^\imf(\adh(A)) \iff& \exists x\in \adh(A):\;f(x) = y\\
 \implies& y\in \adh\Big(f^\imf(A)\Big).
 \end{align*}
 
-$(5) \Rightarrow (7)$ We calculate, using \ref{inherenceComplementAdherence},
+$(5) \Rightarrow (7)$ We calculate, using \ref{principalInherenceComplementAdherence},
 \begin{align*}
 f^\preimf[\inh_\xi(A)] &= f^\preimf[\adh_\xi(A^c)^c] \\
 &= \im(f)\setminus f^{\preimf}[\adh_\xi(A^c)] \\
@@ -2036,11 +2055,9 @@ By constrast, in $T_2$ spaces the \emph{limit} (not kernel) of a convergent prop
 Let $\sSet{X,\xi}$ be a $T_1$ pretopological convergence space and $A \subseteq X$ a subset. Then $\bigcap\vicinity(A) = A$.
 \end{proposition}
 \begin{proof}
-We have $A\subseteq \bigcap\vicinity(A)$ from \ref{vicinityOfSetCorollary}. For the converse, take $x\notin A$. By $T_1$, we have $\adh\{x\} \perp A$, which implies $\forall y\in A:\; y\notin\adh\{x\}$. By \ref{adherenceInherenceCharacterisation}, this is equivalent to
-\[ \forall y\in A: \forall U\in \vicinity(y):\; U\setminus \{x\} \in \vicinity(y). \]
-This implies
-\[ \forall V\in \vicinity(A): \; V\setminus\{x\} \in \vicinity(A), \]
-which means that $x\notin \bigcap\vicinity(A)$.
+We have $A\subseteq \bigcap\vicinity(A)$ from \ref{vicinityOfSetCorollary}. For the converse, take $x\notin A$. By $T_1$, we have $\adh\{x\} \perp A$, which implies $\forall y\in A:\; y\notin\adh\{x\}$. By \ref{principalInherenceComplementAdherence} and \ref{principalAdherenceInherence}, we have
+\[ y\notin\adh\{x\} \iff y\in \inh\big(\{x\}^c\big) \iff \{x\}^c\in \vicinity(y). \]
+This implies that $\{x\}^c \in \bigcap_{y\in A}\vicinity(y) = \vicinity(A)$ and thus $x\notin \bigcap\vicinity(A)$.
 \end{proof}
 \begin{corollary}
 In a topological $T_1$ convergence space, every set is an intersection of open sets.
@@ -2535,7 +2552,7 @@ Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset.
 \[ A \in \upset F \subseteq (\upset F)^{\mesh} \subseteq \vicinity(x)^{\mesh}, \]
 so $x\in \adh(A) = A$. Thus $F \to x$ in $A$ by \ref{subspaceConvergence}.
 
-(2) We need to show that $\adh(A)\subseteq A$. Take $x\in \adh(A)$, meaning there exists a filter $F\to x$ such that $A\in F$ by \ref{adherenceInherenceCharacterisation}. By the ultrafilter lemma, \ref{ultrafilterLemma}, $F$ is contained in an ultrafilter $G$ and $G\to x$. Now $A\in G$, so $G$ converges to some $a\in A$ by TODO\ref{ultrafilterConvergenceInCompactSubset}.
+(2) We need to show that $\adh(A)\subseteq A$. Take $x\in \adh(A)$, meaning there exists a filter $F\to x$ such that $A\in F$ by \ref{principalAdherenceInherence}. By the ultrafilter lemma, \ref{ultrafilterLemma}, $F$ is contained in an ultrafilter $G$ and $G\to x$. Now $A\in G$, so $G$ converges to some $a\in A$ by TODO\ref{ultrafilterConvergenceInCompactSubset}.
 
 By Hausdorff $x = a$, so $x\in A$.
 \end{proof}

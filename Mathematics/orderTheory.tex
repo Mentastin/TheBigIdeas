@@ -529,6 +529,15 @@ Let $\sSet{P, \precsim}$ be a preordered space and $A,B\subseteq P$. Then $\upse
 Take $x\in \upset(\upset A \cap \upset B)$. Then there exists $a\in \upset A$ and $b\in \upset B$ such that $a\precsim x$ and $b\precsim x$. Then $x\in \upset A$ and $x\in \upset B$, so $x\in \upset A \cap \upset B$.
 \end{proof}
 
+\begin{lemma} \label{GaloisConnectionOrderClosure}
+Let $\sSet{P, \Yleft}$ be an ordered set and $A,B \subset P$. Then
+\[ \upset A \mesh B \quad\iff\quad A\mesh \downset B. \]
+\end{lemma}
+\begin{proof}
+Assume $\upset A \mesh B$, then there exists $x\in \upset A \cap B$, which means there exists $y\in A$ and $x\in B$ such that $y\Yleft x$. So $y\in A\cap \downset B$ and thus $A\mesh \downset B$.
+
+The opposite implication is dual.
+\end{proof}
 
 \subsection{Upper and lower bounds}
 
@@ -731,8 +740,8 @@ Any set of natural numbers has a least element by \ref{proposition:wellOrderingN
 \begin{definition}
 An ordered set $\sSet{D,\Yleft}$ is called
 \begin{itemize}
-\item \udef{(upward) directed} if every finite subset has an upper bound;
-\item \udef{downward directed} if every finite subset has a lower bound.
+\item \udef{(upwards) directed} if every finite subset has an upper bound;
+\item \udef{downwards directed} if every finite subset has a lower bound.
 \end{itemize}
 If $(D,\Yleft)$ is a directed set, we call the relation $\Yleft$ a \udef{direction}.
 
@@ -761,6 +770,17 @@ Let $\sSet{D, \Yleft}$ a directed set. Every maximal element in $D$ is a greates
 \end{proposition}
 \begin{proof}
 Let $a\in D$ be a maximal element. Take an arbitrary $x\in D$. By directedness, $\{a,x\}$ has an upper bound, say $c$. Because $a$ is maximal, $a\leq c$ implies $c\leq a$. So $x\leq c\leq a$, which means $a$ is a greatest element.
+\end{proof}
+
+\begin{proposition} \label{imageDirectedSet}
+Let $\sSet{D,\Yleft_D}, \sSet{P,\Yleft_P}$ be ordered sets and $f: D\to P$ an isotone function. If $D$ is upwards / downwards directed, then $f^{\imf}(D)$ is upwards / downwards directed.
+\end{proposition}
+\begin{proof}
+Assume $D$ upwards directed.
+
+Take some finite subset $S\subseteq f^\imf(D)$. Then there exists a finite subset $S'$ such that $f^\imf(S') = S$. We can find $b\in D$ such that $b$ is an upper bound. By isotonicity, $f(b)$ is an upper bound of $S$.
+
+The proof in the case that $D$ is downwards directed is dual.
 \end{proof}
 
 \section{Ordered sets of subsets}
@@ -976,6 +996,11 @@ Then
 \item $\sSet{S,\leq_2}$ is a poset such that $\forall x,y\in S:\; x\star y = \sup_{\leq_2}\{x,y\}$;
 \item $\sSet{S,\leq_1}$ and $\sSet{S,\leq_2}$ are dual order structures, i.e.\ $\leq_1 = \leq_2^\transp$.
 \end{enumerate}
+Also,
+\begin{enumerate} \setcounter{enumi}{3}
+\item if $S$ has an identity, then it is a greatest element in $S$ w.r.t.\ $\leq_1$ (and a least element in $S$ w.r.t.\ $\leq_2$);
+\item if $S$ has an absorbing element, then it is a least element in $S$ w.r.t.\ $\leq_1$ (and a greatest element in $S$ w.r.t.\ $\leq_2$).
+\end{enumerate}
 \end{proposition}
 \begin{proof}
 (1) First we prove $\sSet{S,\leq_1}$ is a poset:
@@ -992,6 +1017,10 @@ First we note that $x \star y$ is a lower bound of $\{x,y\}$: we have $(x\star y
 (2) Similar to (1).
 
 (3) Immediate.
+
+(4) Let $e\in S$ be an identity. For all $x\in S$, we have $x = x\star e$, so $x\leq_1 e$. This means that $e$ is a $\leq_1$-greatest element.
+
+(5) Let $a$ be an absorbing element. For all $x\in S$, we have $a = a\star x$, so $a\leq_1 x$. This means that $a$ is a $\leq_1$-least element.
 \end{proof}
 
 Often we will want to interpret a semilattice as a partially ordered set. This means we need to choose $\leq_1$ or $\leq_2$.
@@ -1003,7 +1032,7 @@ Let $\sSet{S,\star}$ be a semilattice. We call $S$
 \end{itemize}
 By convention, we represent the semilattice operation $\star$ of a $\wedge$-semilattice by $\wedge$ and of a $\vee$-semilattice by $\vee$.
 
-We usually denote the identity of a $\wedge$-semilattice by $\bot$ and the identity of a $\vee$-semilattice by $\top$.
+We usually denote the identity of a $\wedge$-semilattice by $\top$ and the identity of a $\vee$-semilattice by $\bot$.
 \end{definition}
 
 We call a poset $\sSet{P,\leq}$
@@ -1016,7 +1045,7 @@ We call a poset $\sSet{P,\leq}$
 \subsubsection{Disjoint elements and meshing elements}
 TODO compare with set-theoretical definitions.
 \begin{definition}
-Let $S$ be a $\wedge$-semilattice with identity $\bot$.
+Let $S$ be a $\wedge$-semilattice with absorbing element $\bot$.
 
 We say $x,y\in S$
 \begin{itemize}
@@ -1030,10 +1059,6 @@ Let $D, E \subset S$. Then
 \item the polar $D^{\mesh}$ is called the \udef{grill} of $D$.
 \end{itemize}
 \end{definition}
-
-\begin{lemma}
-$D\amesh E$ iff $\upset D \amesh E$.
-\end{lemma}
 
 \subsection{Subsemilattices}
 \subsubsection{Proper subsemilattices}
@@ -2240,8 +2265,6 @@ Let $\sSet{P,\Yleft}$ be an ordered set. A subset $F\subseteq P$ is called
 \item $F$ is a down set in $P$.
 \end{itemize}
 \end{itemize}
-In addition $F$ is called \udef{proper} if $F \neq P$.
-
 The set of ideals on $P$ is denoted $\ideals(P)$ and the set of filters on $P$ is denoted $\filters(P)$.
 \end{definition}
 Many authors also require filters and ideals to be non-empty.
@@ -2268,8 +2291,8 @@ Let $X$ be a set.
 \begin{lemma}
 Let $P$ be an ordered set.
 \begin{enumerate}
-\item If $P$ has a least element $l$, then a filter $F$ is proper \textup{if and only if} it does not contain $l$.
-\item If $P$ has a greatest element $g$, then an ideal $I$ is proper \textup{if and only if} it does not contain $g$.
+\item If $P$ has a least element $l$, then a filter $F$ is proper \textup{if and only if} $F\neq P$.
+\item If $P$ has a greatest element $g$, then an ideal $I$ is proper \textup{if and only if} $F\neq P$.
 \end{enumerate}
 \end{lemma}
 
@@ -2315,6 +2338,13 @@ Let $L$ be a lattice and $J\subseteq L$ a subset. Then
 \end{enumerate}
 \end{enumerate}
 \end{lemma}
+
+\begin{lemma} \label{imageFilter}
+Let $\sSet{P,\Yleft_P}$, $\sSet{Q, \Yleft_Q}$ be ordered sets, $f: P\to Q$ an order-preserving function and $F\subseteq P$ a filter. Then $\upset f^{\imf}(F)$ is a filter.
+\end{lemma}
+\begin{proof}
+The set $\upset f^{\imf}(F)$ is downwards directed by \ref{imageDirectedSet}. It is upwards closed by construction.
+\end{proof}
 
 \subsection{Filter bases and subbases}
 
@@ -2784,28 +2814,10 @@ TODO for general filters.
 Let $X$ be a set. Let $\mathcal{A} \subseteq \powerset(X)$. The \udef{grill} of $\mathcal{A}$ is defined as the polar $\mathcal{A}^{\mesh}$.
 \end{definition}
 
-\begin{lemma}
-Let $X$ be a set, $\powerset(X)$ be ordered by inclusion and $\mathcal{A} \subseteq \powerset(X)$. Then
-\begin{enumerate}
-\item $\mathcal{A}^\mesh$ is upwards closed;
-\item $\mathcal{A}^{\mesh\mesh} = \upset\mathcal{A}$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Take 
-\end{proof}
-\begin{corollary}
-Let $X$ be a set and let $\powerset(X)$ be ordered by inclusion.
-
-Then $(-)^\mesh$ is an antitone bijection between upwards closed sets of subsets and its inverse is itself.
-\end{corollary}
-\begin{proof}
-
-\end{proof}
-
 \begin{proposition} \label{complementInIsotoneGrill}
 Let $X$ be a set. Let $\mathcal{A} \subseteq \powerset(X)$ be upwards closed. Then
 \[ A \notin \mathcal{A} \quad\iff\quad A^c \in \mathcal{A}^\mesh. \]
+In this case we also have $\mathcal{A} = \mathcal{A}^{\mesh\mesh}$.
 \end{proposition}
 \begin{proof}
 First assume $A^c \in \mathcal{A}^\mesh$. If $A\in\mathcal{A}$, then $A\mesh A^c$, which is a contradiction.
@@ -2818,10 +2830,42 @@ A\cap B\notin \mathcal{A} &\implies A\cap B \neq B \\
 &\implies B\nsubseteq A \\
 &\implies A^c \mesh B.
 \end{align*}
+
+To show $\mathcal{A} = \mathcal{A}^{\mesh\mesh}$, we observe the equivalences
+\[ A\in\mathcal{A} \quad\iff\quad A^c \notin \mathcal{A}^\mesh \quad\iff\quad A = A^{cc} \in \mathcal{A}^{\mesh\mesh}. \]
 \end{proof}
-\begin{corollary}
-Let $X$ be a set. Then $(-)^\mesh$ is an antitone bijection on the set of upwards closed subsets of $\powerset(X)$ 
+
+\begin{lemma} \label{upwardClosureGrill}
+Let $X$ be a set, $\powerset(X)$ be ordered by inclusion and $\mathcal{A} \subseteq \powerset(X)$. Then
+\begin{enumerate}
+\item $\mathcal{A}^\mesh$ is upwards closed;
+\item $\mathcal{A}^{\mesh\mesh} = \upset\mathcal{A}$.
+\end{enumerate}
+In particular, $\mathcal{A}^\mesh = \mathcal{A}^{\mesh\mesh\mesh} = (\upset\mathcal{A})^\mesh$.
+\end{lemma}
+\begin{proof}
+(1) Take $B\in \mathcal{A}^\mesh$ and $C\supseteq B$. Then for all $A\in\mathcal{A}$, $A\cap C \supseteq A\cap B \supsetneq \emptyset$. So $C\in \mathcal{A}^\mesh$, which means that $\mathcal{A}^\mesh$ is upwards closed.
+
+(2) Because $\big((-)^\mesh, (-)^\mesh\big)$ is a Galois connection (\ref{polarsGaloisConnection}), we have $\mathcal(A) \subseteq \mathcal{A}^{\mesh\mesh}$ by \ref{preorderGaloisCondition}. As $\mathcal{A}^{\mesh\mesh}$ is upwards closed (by point 1), we have $\upset \mathcal{A} \subseteq \mathcal{A}^{\mesh\mesh}$.
+
+Now we use the fact that $(-)^{\mesh\mesh}$ is monotone to observe $\mathcal{A}^{\mesh\mesh} \subseteq (\upset\mathcal{A})^{\mesh\mesh}$. Also $(\upset\mathcal{A})^{\mesh\mesh} = \upset \mathcal{A}$ by
+\ref{complementInIsotoneGrill}. So $\mathcal{A}^{\mesh\mesh} \subseteq \upset\mathcal{A}$.
+\end{proof}
+\begin{corollary} \label{grillUpsetOrderSimilarity}
+Let $X$ be a set and let $\powerset(X)$ be ordered by inclusion.
+
+Then $(-)^\mesh$ is an antitone bijection between upwards closed sets of subsets and its inverse is itself.
 \end{corollary}
+\begin{proof}
+We use \ref{relationPreservingGeneralisedInversesEmbeddings}. It is enough to note that $\im\big((-)^\mesh\big)$ is the set of upwards closed sets, which follows straight from the lemma. (The first point shows that $\im\big((-)^\mesh\big)$ consists of upwards closed sets. The second shows that every upwards closed set is in $\im\big((-)^\mesh\big)$.)
+\end{proof}
+\begin{corollary} \label{ameshUpwardClosure}
+Let $X$ be a set, $\powerset(X)$ be ordered by inclusion and $\mathcal{A}, \mathcal{B} \subseteq \powerset(X)$. Then $\mathcal{A} \amesh \mathcal{B}$ \textup{if and only if} $\mathcal{A} \amesh (\upset\mathcal{B})$.
+\end{corollary}
+\begin{proof}
+We have
+\[ \mathcal{A}\amesh \mathcal{B} \iff \mathcal{A}\subseteq \mathcal{B}^\mesh \iff \mathcal{A}\subseteq (\upset\mathcal{B})^\mesh \iff \mathcal{A}\amesh (\upset\mathcal{B}). \]
+\end{proof}
 
 \begin{proposition} \label{meshConnection}
 Let $f:X \to Y$ be a function between sets, $A\subseteq X$ and $B\subseteq Y$. Then
@@ -2855,6 +2899,51 @@ f^{\imf\imf}(F) \amesh G &\iff \forall A\in F, B\in G:\; f^{\imf}(A) \mesh B \\
 
 \subsection{Filters and ideals}
 
+\begin{proposition} \label{imageFilterProperties}
+Let $X, Y$ be sets, $f: X\to Y$ a function, $F\in\powerfilters(X)$ and $G\in\powerfilters(Y)$. Then
+\begin{enumerate}
+\item if $F$ is proper, then $\upset f^{\imf\imf}[F]$ is proper;
+\item if $F$ is an ultrafilter, then $\upset f^{\imf\imf}[F]$ is also an ultrafilter;
+\item if $G$ is an ultrafilter in $\im(G)$ and $f$ is injective, then $f^{\preimf\imf}[G]$ is also an ultrafilter.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have
+\[ \emptyset \in \upset f^{\imf\imf}[F] \iff \emptyset\in f^{\imf\imf}[F] \iff \emptyset\in F. \]
+
+(2) We verify $\upset f^{\imf\imf}[F]$ is an ultrafilter with \ref{ultrafilterCriteria}. Clearly $\upset f^{\imf\imf}[F]$ is proper if $F$ is. Now take $B\subseteq Y$ and assume $B\in \upset f^{\imf\imf}[F]^\mesh$. Then, by \ref{meshConnectionSetsOfSets},
+\[ B\in \upset f^{\imf\imf}[F]^\mesh \iff \upset f^{\imf\imf}[F] \amesh \{B\} \iff f^{\imf\imf}[F] \amesh \{B\} \iff F \amesh f^{\preimf\imf}[\{B\}] = \{f^\preimf(B)\}. \]
+As $F$ is an ultrafilter, we have $f^\preimf(B) \in F$ by \ref{ultrafilterCriteria}. Then $f^{\imf\imf}[F] \ni f^\imf(f^\preimf)(B) \subseteq B$, so $B\in \upset f^{\imf\imf}[F]$.
+
+(3) As before, we verify $f^{\preimf\imf}[G]$ is an ultrafilter with \ref{ultrafilterCriteria}. If $G$ is a proper filter and $\im(f)\in G^\mesh$, then $f^{\preimf\imf}[G]$ is proper. Now take $A\subseteq X$ and assume $A\in f^{\preimf\imf}[G]^\mesh$. Then, by \ref{meshConnectionSetsOfSets},
+\[ f^{\preimf\imf}[G] \amesh \{A\} \iff G \amesh f^{\imf\imf}[\{A\}] = \{f^\imf(A)\}. \]
+As $F$ is an ultrafilter, we have $f^\imf(A) \in G$ by \ref{ultrafilterCriteria}. As $f$ is injective, we have $A = f^{\preimf}\big(f^\imf(A)\big) \in f^{\preimf\imf}[G]$.
+\end{proof}
+\begin{corollary}
+Let $X, Y$ be sets, $f: X\to Y$ an injective function and $F\in\powerfilters(X)$. Then $\upset f^{\imf\imf}[F]$ is an ultrafilter \textup{if and only if} $F$ is an ultrafilter.
+\end{corollary}
+\begin{proof}
+One direction was shown in (2) of the proposition. For the other, assume $\upset f^{\imf\imf}[F]$ is an ultrafilter. Then $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big]$ is ultra by point (3) of the proposition and because $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big] \subseteq F$, $F$ must also be ultra.  
+\end{proof}
+
+\begin{proposition}
+Let $U$ be a set. If $U$ is infinite, then there exists a non-principal ultrafilter in $\powerfilters(U)$.
+\end{proposition}
+This proposition assumes the ultrafilter lemma \ref{ultrafilterLemma}.
+\begin{proof}
+Consider the cofinite filter $F = \setbuilder{A\subseteq U}{U\setminus A\;\text{is finite}}$. By the ultrafilter lemma, \ref{ultrafilterLemma}, we can extend $F$ to an ultrafilter $\mathcal{U}$. Now $\mathcal{U}$ does not contain any sets of the form $\{x\}$ with $x\in U$. If it did, then it would contain both $\{x\}$ and $U\setminus\{x\}$, meaning it would also contain $\emptyset$ and thus would not be proper and in particular not an ultrafilter.
+\end{proof}
+
+\begin{proposition}
+Let $f:X\to Y$ be a function between sets and $F\in \powerfilters(X)$ a filter. Then $\upset f[F]$ is a filter on $\powerset(Y)$. If $F$ is an ultrafilter on $\powerset(X)$, then $\upset f[F]$ is an ultrafilter on $\powerset(Y)$.
+\end{proposition}
+We call $\upset f[F]$ the \udef{image filter} of $F$ under $f$.
+
+\begin{definition}
+TODO principal filter $\upset\{x\}$.
+\end{definition}
+
+
 \begin{proposition} \label{filterPreimageImageGaloisConnection}
 Let $X, Y$ be sets and $f: X\to Y$. Then
 \[ f^{\preimf\imf}: \powerfilters(Y) \to \powerfilters(X) \qquad\text{and}\qquad \upset\circ f^{\imf\imf}: \powerfilters(X) \to \powerfilters(Y) \]
@@ -2883,42 +2972,7 @@ The inequality $\subseteq$ is given by \ref{orderPreservingFunctionLatticeOperat
 For the other inequality, take $A\in \bigcap (\upset\circ f^{\imf\imf})^{\imf}[\mathcal{F}]$. Then, for all $F\in\mathcal{F}$, there exists $B_F\in F$ such that $f^{\imf}[B_F] \subseteq A$. Now $f^{\imf}\left[\bigcup_{F\in\mathcal{F}}B_F\right] = \bigcup_{F\in\mathcal{F}}f^{\imf}[B_F] \subseteq A$. Also $\bigcup_{F\in\mathcal{F}}B_F \in \bigcap \mathcal{F}$ by upwards closure of each filter. Thus $A\in \upset f^{\imf\imf}[\bigcap \mathcal{F}]$.
 \end{proof}
 
-\begin{proposition} \label{imageUltrafilter}
-Let $X, Y$ be sets and $f: X\to Y$ a function.
-\begin{enumerate}
-\item if $F\in\powerfilters(X)$ is an ultrafilter, then $\upset f^{\imf\imf}[F]$ is also an ultrafilter;
-\item if $G\in\powerfilters(Y)$ is an ultrafilter in $\im(G)$ and $f$ is injective, then $f^{\preimf\imf}[G]$ is also an ultrafilter.
-\end{enumerate}
-In particular, if $f$ is injective, then $\upset f^{\imf\imf}[F]$ is an ultrafilter \textup{if and only if} $F$ is an ultrafilter.
-\end{proposition}
-\begin{proof}
-(1) We verify $\upset f^{\imf\imf}[F]$ is an ultrafilter with \ref{ultrafilterCriteria}. Clearly $\upset f^{\imf\imf}[F]$ is proper if $F$ is. Now take $B\subseteq Y$ and assume $B\in \upset f^{\imf\imf}[F]^\mesh$. Then, by \ref{meshConnectionSetsOfSets},
-\[ B\in \upset f^{\imf\imf}[F]^\mesh \iff \upset f^{\imf\imf}[F] \amesh \{B\} \iff f^{\imf\imf}[F] \amesh \{B\} \iff F \amesh f^{\preimf\imf}[\{B\}] = \{f^\preimf(B)\}. \]
-As $F$ is an ultrafilter, we have $f^\preimf(B) \in F$ by \ref{ultrafilterCriteria}. Then $f^{\imf\imf}[F] \ni f^\imf(f^\preimf)(B) \subseteq B$, so $B\in \upset f^{\imf\imf}[F]$.
 
-(2) As before, we verify $f^{\preimf\imf}[G]$ is an ultrafilter with \ref{ultrafilterCriteria}. If $G$ is a proper filter and $\im(f)\in G^\mesh$, then $f^{\preimf\imf}[G]$ is proper. Now take $A\subseteq X$ and assume $A\in f^{\preimf\imf}[G]^\mesh$. Then, by \ref{meshConnectionSetsOfSets},
-\[ f^{\preimf\imf}[G] \amesh \{A\} \iff G \amesh f^{\imf\imf}[\{A\}] = \{f^\imf(A)\}. \]
-As $F$ is an ultrafilter, we have $f^\imf(A) \in G$ by \ref{ultrafilterCriteria}. As $f$ is injective, we have $A = f^{\preimf}\big(f^\imf(A)\big) \in f^{\preimf\imf}[G]$.
-
-(In particular) One direction was shown in (1). For the other, assume $\upset f^{\imf\imf}[F]$ is an ultrafilter. Then $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big]$ is ultra by (2) and because $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big] \subseteq F$, $F$ must also be ultra.  
-\end{proof}
-
-\begin{proposition}
-Let $U$ be a set. If $U$ is infinite, then there exists a non-principal ultrafilter in $\powerfilters(U)$.
-\end{proposition}
-This proposition assumes the ultrafilter lemma \ref{ultrafilterLemma}.
-\begin{proof}
-Consider the cofinite filter $F = \setbuilder{A\subseteq U}{U\setminus A\;\text{is finite}}$. By the ultrafilter lemma, \ref{ultrafilterLemma}, we can extend $F$ to an ultrafilter $\mathcal{U}$. Now $\mathcal{U}$ does not contain any sets of the form $\{x\}$ with $x\in U$. If it did, then it would contain both $\{x\}$ and $U\setminus\{x\}$, meaning it would also contain $\emptyset$ and thus would not be proper and in particular not an ultrafilter.
-\end{proof}
-
-\begin{proposition}
-Let $f:X\to Y$ be a function between sets and $F\in \powerfilters(X)$ a filter. Then $\upset f[F]$ is a filter on $\powerset(Y)$. If $F$ is an ultrafilter on $\powerset(X)$, then $\upset f[F]$ is an ultrafilter on $\powerset(Y)$.
-\end{proposition}
-We call $\upset f[F]$ the \udef{image filter} of $F$ under $f$.
-
-\begin{definition}
-TODO principal filter $\upset\{x\}$.
-\end{definition}
 
 \section{Multisets}
 \begin{definition}
