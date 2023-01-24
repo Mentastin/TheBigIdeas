@@ -622,9 +622,9 @@ Also
 
 (3) From point (2) and \ref{orderPreservingFunctionLatticeOperations}, we get $\adh_\xi(\mathcal{A}\cap \mathcal{B}) \supseteq \adh_\xi(\mathcal{A}) \cup \adh_\xi(\mathcal{B})$.
 
-Now take $x\in\adh_\xi(\mathcal{A}\cup \mathcal{B})$, then there exists $F\to x$ such that $F\subseteq (\mathcal{A}\cup \mathcal{B})^\mesh = \mathcal{A}^\mesh\cap \mathcal{B}^\mesh$, where the last equality is due to \ref{grillUpsetOrderSimilarity} (and the fact that joins and meets in the lattice of upwards closed sets are just given by the union and intersection, see \ref{meetJoinRClosedSets}).
+Now take $x\in\adh_\xi(\mathcal{A}\cap \mathcal{B})$, then there exists $F\to x$ such that $F\subseteq (\mathcal{A}\cap \mathcal{B})^\mesh = \mathcal{A}^\mesh\cup \mathcal{B}^\mesh$, where the last equality is due to \ref{grillUpsetOrderSimilarity} (and the fact that joins and meets in the lattice of upwards closed sets are just given by the union and intersection, see \ref{meetJoinRClosedSets}).
 
-It is enough to prove that either $F\subseteq \mathcal{A}^\mesh$ or $F\subseteq \mathcal{B}^\mesh$. Assume, towards a contradiction, that this is not the case, i.e.\ there exist $A\in\mathcal{A}$, $B\in \mathcal{B}$ and $C,D\in F$ such that $A\perp C$ and $B\perp D$. Then $C\cap D\perp A$ and $C\cap D \perp B$, so $C\cap D \notin \mathcal{A}^\mesh\cap \mathcal{B}^\mesh$. But $C\cap D \in F$ because $F$ is a filter.
+It is enough to prove that either $F\subseteq \mathcal{A}^\mesh$ or $F\subseteq \mathcal{B}^\mesh$. Assume, towards a contradiction, that this is not the case, i.e.\ there exist $A\in\mathcal{A}$, $B\in \mathcal{B}$ and $C,D\in F$ such that $A\perp C$ and $B\perp D$. Then $C\cap D\perp A$ and $C\cap D \perp B$, so $C\cap D \notin \mathcal{A}^\mesh\cup \mathcal{B}^\mesh$. But $C\cap D \in F$ because $F$ is a filter.
 
 (4) For all non-empty filters $F$, we have $F\mesh \powerset(X)$.
 
@@ -2533,12 +2533,22 @@ We call $B\subseteq X$
 \item \udef{compact} if $\upset\{B\}$ is $B$-compactoid.
 \end{itemize}
 \end{definition}
-In particular we call the convergence space $X$ compact if every ultrafilter converges.
-
+In particular the convergence space $X$ is compact if every ultrafilter converges.
 
 \begin{example}
 Any convergence on a finite set $X$ makes it compact as the only ultrafilters are the principal ultrafilters, \ref{finiteFiltersPrincipal}.
 \end{example}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space. Filter $F\in\powerfilters(X)$ is compactoid \textup{if and only if} it is $\adh_\xi(F)$-compactoid.
+\end{lemma}
+\begin{proof}
+The direction $\Leftarrow$ is immediate.
+
+Now assume $F$ is compactoid. We need to show that all ultrafilters larger than $F$ converge to a point in $\adh_\xi(F)$. Indeed take an ultrafilter $U\supseteq F$. Then $U$ converges to some $x\in X$ and
+\[ x\in \lim_\xi U \subseteq \bigcup_{F\lhd G}\lim_\xi G = \adh_\xi(F), \]
+by \ref{differentUnionsForAdherence}.
+\end{proof}
 
 \begin{proposition} \label{compactClosedSets}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset.
@@ -2878,6 +2888,14 @@ Let $\sSet{X,\mathcal{U}}$ be a uniform space. Then $\mathcal{U}$ is factorisabl
 Assume $\mathcal{U} \ni F\otimes G \subseteq H$. Then
 \[ F\otimes G = p_1^{\imf\imf}(F\otimes G)\otimes p_2^{\imf\imf}(F\otimes G) \subseteq p_1^{\imf\imf}(H)\otimes p_2^{\imf\imf}(H) \in \mathcal{U}, \]
 where we have used \ref{projectionsOfProductFilter}.
+\end{proof}
+
+\subsubsection{Ordering uniformities}
+\begin{proposition}
+Let $X$ be a set. Then the set of uniformities on $X$ is a complete sublattice of $\powerset\big(\powerfilters(X^2)\big)$ and the meet corresponds to the set-theoretic intersection.
+\end{proposition}
+\begin{proof}
+TODO
 \end{proof}
 
 \subsubsection{Diagonality}
@@ -3282,6 +3300,7 @@ Let $\sSet{X,\mathcal{U}}$ be a uniform space. If $\mathcal{U}$ is uniformly Cho
 \begin{definition}
 Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if
 \[ H\in \mathcal{U} \quad\implies\quad \upset (f, f)^{\imf\imf}[H]\in \mathcal{V}. \]
+The set of uniform functions from $\sSet{X,\mathcal{U}}$ to $\sSet{Y,\mathcal{V}}$ is denoted $\ucont(\mathcal{U}, \mathcal{V})$ or $\ucont(X,Y)$.
 \end{definition}
 
 
@@ -3350,6 +3369,27 @@ As this is true for arbitrary ultrafilter $I$, we have $(f,f)^{\imf\imf}[H]\in\m
 \end{proof}
 
 \subsection{Initial and final uniform spaces}
+\begin{definition}
+Let $Y$ be a set.
+\begin{itemize}
+\item Given a set of uniform spaces $\{\sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ and a set of functions $\{f_i: Y\to Z_i\}_{i\in I}$, we define the \udef{initial uniformity} $\mathcal{X}$ on $Y$ as
+\[ \mathcal{X} = \bigvee \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}. \]
+\item Given a set of uniform spaces $\{\sSet{X_i, \mathcal{U}_i}\}_{i\in I}$ and a set of functions $\{g_i: X_i\to Y\}_{i\in I}$, we define the \udef{final uniformity} $\mathcal{Y}$ on $Y$ as
+\[ \mathcal{Y} = \bigwedge \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; g_i\in \ucont(\mathcal{U}_i, \mathcal{V})}. \]
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+Let $Y$ be a set.
+\begin{enumerate}
+\item Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be a set of functions to uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t.\ this set. Then
+\[ H\in \mathcal{X} \quad\iff\quad \forall i\in I: \; \upset(f_i,f_i)^{\imf\imf}(H)\in \mathcal{W}_i. \]
+\item TODO for final uniformities.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+
+\end{proof}
 
 \section{Star refinement}
 \begin{definition}
