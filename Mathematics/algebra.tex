@@ -20,7 +20,7 @@ We also say \udef{unary} instead of $1$-ary, \udef{binary} instead of $2$-ary an
 Let $(\Omega, \alpha)$ be a signature and $V$ a set of \udef{variables} such that $\Omega\perp V$. The set $T(\Omega, V)$ of \udef{$\Omega$-terms} over $V$ is a subset of $(\Omega\uplus V)^*$ which is recursively defined by
 \[ t\in T(\Omega, V) \iff \begin{cases}
 \exists v\in V: t = \seq{v} \\
-\exists \omega\in \Omega: (t_0 = \omega) \land \Big(t[1:\len(t)] \in T(\Omega, V)^{\alpha(\omega)} \Big).
+\exists \omega\in \Omega: (t_0 = \omega) \land \Big(t[1:] \in \strConcat^{\imf}\big(T(\Omega, V)^{\alpha(\omega)}\big) \Big).
 \end{cases} \]
 \end{definition}
 
@@ -40,29 +40,37 @@ In particular $\seq{}\notin T(\Omega, V)$.
 TODO recursion invariant.
 \end{proof}
 
+\begin{lemma}
+Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. Then $\strConcat|_{T(\Omega, V)^*}: T(\Omega, V)^* \to (\Omega \uplus V)^*$ has a left inverse
+\[ \splitTerms: \im\big(\strConcat|_{T(\Omega, V)^*}\big) \to T(\Omega, V)^* \]
+defined resursively by
+\[ \splitTerms(u) = \seq{u[:k]} \concat \splitTerms(u[k:]), \]
+where $k = \min\setbuilder{k\in\N}{u[:k]\in T(\Omega,V)}$.
+\end{lemma}
+In particular $\splitTerms$ is defined on $\strConcat^\imf\big(T(\Omega, V)^1\big) = T(\Omega, V)$.
+\begin{proof}
+TODO
+\end{proof}
+
+Note (TODO): ability to make syntax forest implies ability to make syntax tree.
+
 \subsubsection{Subterms and syntax tree}
 TODO define syntax trees in general.
 
 \begin{definition}
-Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. We define the \udef{syntax tree} function $\SyntaxTree: T(\Omega, V) \to \N^*$ recursively by
-\[ \SyntaxTree(t) = \begin{cases}
-\seq{} & (t_0\in V) \\
-\{\seq{}\} \cup \bigcup_{i=0}^{\alpha(t_0)}\setbuilder{\seq{i}\concat p}{p\in \SyntaxTree(t_{i+1})} & (t_0\in \Omega)
-\end{cases} \]
-
-A \udef{syntactic interpretation} of a term $t\in T(\Omega, V)$ is a function
-\[ \SyntaxTree(t) \to \downset\{t\}:  \]
+Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. We define the \udef{$\syntaxTree$} function $\syntaxTree: T(\Omega, V) \to \powerset\big((\Omega \uplus V \uplus \N)^*\big)$ recursively by
+\[ \syntaxTree(t) = \begin{cases}
+\{\seq{}, \seq{t_0}\} & (t_0\in V) \\
+\{\seq{}, \seq{t_0}\} \cup \bigcup_{i=0}^{\alpha(t_0)}\setbuilder{\seq{i}\concat p}{p\in \syntaxTree\big(\splitTerms(t[1:])_i\big)} & (t_0\in \Omega)
+\end{cases}. \]
+Given a syntax tree $\syntaxTree(t)$ of a term $t\in T(\Omega, V)$, we call the elements of $\syntaxTree(t)$ the \udef{positions} of the term $t$.
 \end{definition}
 
-TODO: we can easily add in letters to denote variables and operators, if we want. Depends on grammar details.
-\[ \SyntaxTree(t) = \begin{cases}
-\seq{\text{Var}} & (t_0\in V) \\
-\{\seq{\text{Op}}\} \cup \bigcup_{i=0}^{\alpha(t_0)}\setbuilder{\seq{i}\concat p}{p\in \SyntaxTree(t_{i+1})} & (t_0\in \Omega)
-\end{cases} \]
-\begin{itemize}
-    \item Grammars equivalent if define same language;
-    \item 
-\end{itemize}
+\begin{lemma}
+Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. The $\syntaxTree$ function has a left-inverse $\treeToTerm: \im(\syntaxTree) \to T(\Omega, V)$ defined by 
+\end{lemma}
+
+TODO: function that maps linear order to sequence
 
 \subsubsection{Substitution}
 
