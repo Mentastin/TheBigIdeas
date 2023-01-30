@@ -4078,23 +4078,6 @@ So the order similarity in the definition of $u[0:n]$ is the identity and the re
 
 TODO: generalise to sequences?? In this case $\len(u[0:n]) = n$.
 
-\subsubsection{Functions on strings}
-\begin{definition}
-Let $A$ be an alphabet.
-\begin{itemize}
-\item We define the \udef{interleave} function recursively by
-\[ \strInterleave(u,v) = \begin{cases}
-\seq{} & (\len(u) = 0 = \len(v)) \\
-u & (\len(v) = 0) \\
-v & (\len(u) = 0) \\
-\seq{u_0}\concat \seq{v_0}\concat \strInterleave(u[1:], v[1:]) & (\len(u) \neq 0 \neq \len(v))
-\end{cases} \]
-\item We define the \udef{concat} function recursively by
-\[ \strConcat(u) = u_0 \concat \big(\strConcat(u[1:])\big). \]
-\end{itemize}
-\end{definition}
-TODO interleave definition works because $\sqsubseteq$ is well-founded on $A^*\times A^*$.
-
 \subsection{Trees}
 \begin{definition}
 Let $A$ be an alphabet. We define the \udef{tree order} $\sqsubseteq$ on $A^*$ by
@@ -4117,7 +4100,8 @@ We call
 Let $A$ be an alphabet and $u,v\in A^*$. Then
 \begin{enumerate}
 \item $u \sqsubseteq v \iff u = v[0:\len(u)]$;
-\item $u \sqsubseteq v \implies \len(u) \leq \len(v)$.
+\item $u \sqsubseteq v \implies \len(u) \leq \len(v)$;
+\item $u \sqsubseteq v \iff \exists t\in A^*: t\concat u \sqsubseteq t\concat v \iff \forall t\in A^*: t\concat u \sqsubseteq t\concat v$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -4126,6 +4110,10 @@ Let $A$ be an alphabet and $u,v\in A^*$. Then
 and so $\len(u) = \len\big(v[0:\min\big(n,\len(u)\big)]\big) = \min\big(n,\len(u), \len(v)\big)$. In particular, this means that $\len(u) = \min\big(n,\len(u)\big)$ and so $u = v[0:\min\big(n,\len(u)\big)] = v[0:\len(u)]$.
 
 (2) We have $u = v[0:\len(u)]$. By \ref{initialSliceLemma}, we have $\len(u) = \len\big(v[0:\len(u)]\big) = \min\big(\len(v), \len(u)\big)$. This implies $\len(u) \leq \len(v)$.
+
+(3) The implication $u \sqsubseteq v \implies \exists t\in A^*: t\concat u \sqsubseteq t\concat v$ clearly holds by taking $t=\seq{}$. Similarly, the implication $\forall t\in A^*: t\concat u \sqsubseteq t\concat v \implies u \sqsubseteq v$, also by taking $t=\seq{}$.
+
+For the last implication, assume there exists $t_0\in A^*$ such that $t_0\concat u \sqsubseteq t_0\concat v$ and pick arbitrary $t_1\in A^*$.
 \end{proof}
 
 \begin{lemma}
@@ -4320,7 +4308,41 @@ The converse holds under DC.
 By \ref{treeOrderingLemma}. For the converse, see \ref{ZornEquivalentsDC}.
 \end{proof}
 
-\subsubsection{Tree topologies}
+\subsection{Functions for string manipulation}
+\subsubsection{Functions on strings}
+\begin{definition}
+Let $A$ be an alphabet.
+\begin{itemize}
+\item We define the \udef{$\strInterleave$} function $\strInterleave: A^*\times A^* \to A^*$ recursively by
+\[ \strInterleave(u,v) = \begin{cases}
+\seq{} & (\len(u) = 0 = \len(v)) \\
+u & (\len(v) = 0) \\
+v & (\len(u) = 0) \\
+\seq{u_0}\concat \seq{v_0}\concat \strInterleave(u[1:], v[1:]) & (\len(u) \neq 0 \neq \len(v))
+\end{cases} \]
+\item We define the \udef{$\strConcat$} function $\strConcat: \big(A^*\big)^* \to A^*$ recursively by
+\[ \strConcat(u) = u_0 \concat \big(\strConcat(u[1:])\big). \]
+\end{itemize}
+\end{definition}
+TODO interleave definition works because $\sqsubseteq$ is well-founded on $A^*\times A^*$.
+
+\subsubsection{Functions on sets of strings}
+\begin{definition}
+Let $A$ be an alphabet.
+\begin{itemize}
+\item We define the \udef{$\tailsOf$} function
+\[ \tailsOf: A^* \times \powerset(A^*) \to A^*: (t, S) \mapsto \setbuilder{u\in A^*}{t\concat u \in S}. \]
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $T$ be a tree on an alphabet $A$ and $t\in T$, then $\tailsOf(t, T)$ is a tree.
+\end{lemma}
+\begin{proof}
+Take $v \in \tailsOf(t, T)$ and $u\in A^*$ such that $u\sqsubseteq v$. Then we need to prove that $u\in \tailsOf(t, T)$.
+
+We have $t\concat v \in T$ and $t\concat u \sqsubseteq t\concat v$ by 
+\end{proof}
 
 \section{Choice}
 TODO: Ultrafilter lemma, Szpilrajn extension theorem
