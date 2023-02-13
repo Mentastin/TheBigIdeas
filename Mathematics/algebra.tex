@@ -14,15 +14,15 @@ A \udef{signature} or \udef{operational type} or \udef{operator domain} is a pai
 We also say \udef{unary} instead of $1$-ary, \udef{binary} instead of $2$-ary and \udef{ternary} instead of $3$-ary.
 
 \subsection{Terms}
-
-
 \begin{definition}
 Let $(\Omega, \alpha)$ be a signature and $V$ a set of \udef{variables} such that $\Omega\perp V$. The set $T(\Omega, V)$ of \udef{$\Omega$-terms} over $V$ is a subset of $(\Omega\uplus V)^*$ which is recursively defined by
 \[ t\in T(\Omega, V) \iff \begin{cases}
 \exists v\in V: t = \seq{v} \\
 \exists \omega\in \Omega: (t_0 = \omega) \land \Big(t[1:] \in \strConcat^{\imf}\big(T(\Omega, V)^{\alpha(\omega)}\big) \Big).
 \end{cases} \]
+A term $t$ is called \udef{ground} if $t\in T(\Omega, \emptyset)$. We abbreviate $T(\Omega, \emptyset)$ as $T(\Omega)$.
 \end{definition}
+Thus $T(\Omega)$ is the set of ground terms.
 
 TODO: prefix notation or Polish notation.
 
@@ -63,16 +63,244 @@ Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. We define the 
 \{\seq{}, \seq{t_0}\} & (t_0\in V) \\
 \{\seq{}, \seq{t_0}\} \cup \bigcup_{i=0}^{\alpha(t_0)}\setbuilder{\seq{i}\concat p}{p\in \syntaxTree\big(\splitTerms(t[1:])_i\big)} & (t_0\in \Omega)
 \end{cases}. \]
-Given a syntax tree $\syntaxTree(t)$ of a term $t\in T(\Omega, V)$, we call the elements of $\syntaxTree(t)$ the \udef{positions} of the term $t$.
+Given a syntax tree $\syntaxTree(t)$ of a term $t\in T(\Omega, V)$, we call the non-terminal nodes of $\syntaxTree(t)$ the \udef{positions} in the term $t$, denoted $\positions(t)$.
 \end{definition}
 
 \begin{lemma}
-Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. The $\syntaxTree$ function has a left-inverse $\treeToTerm: \im(\syntaxTree) \to T(\Omega, V)$ defined by 
+Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. The $\syntaxTree$ function has a left-inverse $\treeToTerm: \im(\syntaxTree) \to T(\Omega, V)$ defined by
+\[ \treeToTerm(A) = \seq{t} \concat \strConcat \seq{\treeToTerm\big(\setbuilder{u[1:]\in A}{u_1 = i}\big)}_{i:\seq{i}\in A} \]
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+
+\begin{lemma} \label{positionsSyntaxTreeNumeric}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $t\in T(\Omega, V)$. Then
+\begin{enumerate}
+\item $\positions(t) = \syntaxTree(t) \cap \N^*$;
+\item a node in $\syntaxTree(t)$ is terminal \textup{if and only if} it end with some element of $\Omega \uplus V$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $t\in T(\Omega, V)$.
+\begin{enumerate}
+\item $\#\big(\positions(t)\big) = \len(t)$;
+\item Every terminal node in $\positions(t)$ is a proper substring of exactly one (terminal) node in $\syntaxTree(t)$.
+\item Let $\positions(t)\subseteq \N^*$ be ordered by depth-first ordering. There exists a similarity between $\big(0:\len(t)\big)$ and the terminal nodes of $\positions(t)$.
+\item There exists a unique strictly monotone function
+\[ \leafAt_t: \big(0:\len(t)\big)\to \positions(t) \]
+such that $\leafAt_t(k)\concat\seq{t_k}\in \syntaxTree(t)$.
+\end{enumerate}
 \end{lemma}
 
-TODO: function that maps linear order to sequence
+\begin{lemma}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $t\in T(\Omega, V)$.
+\begin{enumerate}
+\item Every terminal node in $\positions(t)$ is a proper substring of exactly one (terminal) node in $\syntaxTree(t)$.
+\item Let $\positions(t)\subseteq \N^*$ be ordered by depth-first ordering. There exists a similarity between $\big(0:\len(t)\big)$ and the terminal nodes of $\positions(t)$.
+\item There exists a unique strictly monotone function
+\[ \leafAt_t: \big(0:\len(t)\big)\to \positions(t) \]
+such that $\leafAt_t(k)\concat\seq{t_k}\in \syntaxTree(t)$.
+\end{enumerate}
+\end{lemma}
+
+
+\begin{definition}
+Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. Let $t\in T(\Omega, V)$ be a term and $p\in \positions(t)$ a position in $t$. Then we define the \udef{subterm} $t|_p$ by
+\begin{align*}
+\syntaxTree(t|_p) &\defeq \setbuilder{q\in (\Omega \uplus V \uplus \N)^*}{p\concat q \in \syntaxTree(t)} \\
+&= (p \concat -)^\preimf\big(\syntaxTree(t)\big).
+\end{align*}
+\end{definition}
+Thus
+\[ t|_p \defeq \treeToTerm\Big((p \concat -)^\preimf\big(\syntaxTree(t)\big)\Big). \]
+
+\begin{lemma}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables, $t\in T(\Omega, V)$ and $p\in \positions(t)$. Then
+\[ (p \concat -)^\preimf\big(\syntaxTree(t)\big) \]
+is a syntax tree and, in particular, $t|_p$ is well-defined.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables, $t\in T(\Omega, V)$, $p \in \positions(t)$ and $u\in (\Omega\uplus V\uplus \N)^*$. Then
+\begin{enumerate}
+\item $p\concat u \in \syntaxTree(t)$ \textup{if and only if} $u\in \syntaxTree(t|_p)$;
+\item $p\concat q \in \positions(t)$ \textup{if and only if}  $q\in \positions(t|_p)$;
+\item if $p\concat q \in \positions(t)$, then $t|_{p\concat q} = (t|_p)|_q$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Clear from the definition.
+
+(2) From point (1) and the fact that $p\concat q$ is non-terminal if and only if $q$ is non-terminal, by \ref{positionsSyntaxTreeNumeric}.
+
+(3) We calculate
+\begin{align*}
+\syntaxTree\big((t|_p)|_q\big) &= (q\concat -)^\preimf\big(\syntaxTree(t|_p)\big) \\
+&= \big((q\concat -)^\preimf \circ (p\concat -)^\preimf\big) \big(\syntaxTree(t)\big) \\
+&= (p\concat q\concat -)^\preimf\big(\syntaxTree(t)\big) \\
+&= \syntaxTree(t|_{p\concat q}).
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $s\in T(\Omega, V)$.
+We can write $s = u\concat t \concat v$ for some $t\in T(\Omega, V)$ and some $u,v\in (\Omega\uplus V)^*$ \textup{if and only if} there exists $p\in\positions(s)$ such that $s|_p = t$.
+\end{lemma}
+\begin{proof}
+$\boxed{\Rightarrow}$ Consider $\leafAt_t\big(\len(u)\big)$
+\end{proof}
 
 \subsubsection{Substitution}
+\begin{definition}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables, $s,t\in T(\Omega, V)$ and $p\in \positions(s)$. Then the \udef{substitution} of $t$ at $p$ in $s$ is defined by
+\[ \syntaxTree\big(s[t/p]\big) \defeq \big(\syntaxTree(s) \setminus \upset\{p\}\big) \cup (p\concat -)^{\imf}\big(\syntaxTree(t)\big). \]
+\end{definition}
+
+\begin{proposition}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables, $s,t,r\in T(\Omega, V)$, $p\in \positions(s)$, $q\in\positions(t)$ and $n\in\positions(s|_p)$. Then
+\begin{enumerate}
+\item $s[t/p]|_p = t$;
+\item $\big(s[t/p]\big)\big[r/(p\concat q)\big] = s[t[r/q]/p]$;
+\item $s\big[t/(p\concat n)\big]|_p = (s|_p)[t/n]$;
+\item $s\big[t/(p\concat n)\big][r/p] = s[r/p]$.
+\end{enumerate}
+If $p$ and $q$ are parallel positions in $\positions(s)$ (i.e.\ $p\not\sqsubseteq q$ and $p\not\sqsubseteq q$), then
+\begin{enumerate} \setcounter{enumi}{4}
+\item $s[t/p]|_q = s|_q$;
+\item $\big(s[t/p]\big)[r/q] = \big(s[r/q]\big)[t/p]$.
+\end{enumerate}
+\end{proposition}
+These proofs can also be given by induction on the length of the positions.
+
+We can summarise
+\begin{itemize}
+\item point (6) as ``parallel substitutions commute''.
+\end{itemize}
+\begin{proof}
+(1) We calculate, using the fact that $(p\concat -)$ is bijective,
+\begin{align*}
+\syntaxTree(s[t/p]|_p) &= (p\concat -)^\preimf\big(\syntaxTree(s[t/p])\big) \\
+&= (p\concat -)^\preimf\Big(\big(\syntaxTree(s) \setminus \upset\{p\}\big) \cup (p\concat -)^{\imf}\big(\syntaxTree(t)\big)\Big) \\
+&= (p\concat -)^\preimf\Big(\big(\syntaxTree(s) \setminus \upset\{p\}\big)\Big) \cup (p\concat -)^\preimf(p\concat -)^{\imf}\big(\syntaxTree(t)\big) \\
+&= \emptyset \cup \syntaxTree(t) \\
+&= \syntaxTree(t).
+\end{align*}
+
+(2) We calculate
+\begin{align*}
+\syntaxTree\big(s[t[r/q]/p]\big) &= \big(\syntaxTree(s) \setminus \upset\{p\}\big) \cup (p\concat -)^{\imf}\big(\syntaxTree(t[r/q])\big) \\
+&= \big(\syntaxTree(s) \setminus \upset\{p\}\big) \cup (p\concat -)^{\imf}\Big(\big(\syntaxTree(t) \setminus \upset\{q\}\big) \cup (q\concat -)^{\imf}\big(\syntaxTree(r)\big)\Big) \\
+&= \begin{multlined}[t] \big(\syntaxTree(s) \setminus \upset\{p\}\big) \cup \Big((p\concat -)^{\imf}\big(\syntaxTree(t)\big) \setminus \upset\{p\concat q\}\Big) \\ \cup (p \concat q\concat -)^{\imf}\big(\syntaxTree(r)\big) \end{multlined} \\
+&= \begin{multlined}[t]\Big(\big(\syntaxTree(s) \setminus \upset\{p\}\big) \cup (p\concat -)^{\imf}\big(\syntaxTree(t)\big) \Big)\setminus \upset\{p\concat q\} \\ \cup (p \concat q\concat -)^{\imf}\big(\syntaxTree(r)\big) \end{multlined} \\
+&= \big(\syntaxTree(s[t/p])\big)\setminus \upset\{p\concat q\} \cup (p \concat q\concat -)^{\imf}\big(\syntaxTree(r)\big) \\
+&= \syntaxTree\Big(\big(s[t/p]\big)\big[r/(p\concat q)\big]\Big)
+\end{align*}
+
+(3) We calculate, using the fact that $(p\concat -)$ is bijective,
+\begin{align*}
+\syntaxTree\big((s|_p)[t/n]\big) &= \big(\syntaxTree(s|_p) \setminus \upset\{n\}\big) \cup (n\concat -)^{\imf}\big(\syntaxTree(t)\big) \\
+&= (p\concat -)^\preimf\Big(\big(\syntaxTree(s) \setminus (p\concat -)^\imf(\upset\{n\})\big) \cup \big((p\concat -)^{\imf}\circ(n\concat -)^{\imf}\big)\big(\syntaxTree(t)\big)\Big) \\
+&= (p\concat -)^\preimf\Big(\big(\syntaxTree(s) \setminus \upset\{p\concat n\}\big) \cup (p\concat n\concat -)^{\imf}\big(\syntaxTree(t)\big)\Big) \\
+&= \syntaxTree\big(s[t/(p\concat n)]|_p\big).
+\end{align*}
+
+(4) We calculate
+\begin{align*}
+\syntaxTree\big(s\big[t/(p\concat n)\big][r/p]\big) &= \Big(\syntaxTree(s)\setminus\upset\{p\concat n\} \cup (p \concat n \concat -)^\imf\big(\syntaxTree(t)\big)\Big)[r/p] \\
+&= \begin{multlined}[t]\Big(\syntaxTree(s)\setminus\upset\{p\concat n\} \cup (p \concat n \concat -)^\imf\big(\syntaxTree(t)\big)\Big)\setminus \upset\{p\} \\ \cup (p\concat -)^\imf\syntaxTree(r) \end{multlined} \\
+&= \syntaxTree(s)\setminus\upset\{p\} \cup (p\concat -)^\imf\syntaxTree(r) \\
+&= \syntaxTree\big(s[r/p]\big).
+\end{align*}
+
+(5) We calculate
+\begin{align*}
+\syntaxTree\big(s[t/p]|_q\big) &= (q\concat -)^{\preimf}\Big(\syntaxTree\big(s[t/p]\big)\Big) \\
+&= (q\concat -)^{\preimf}\Big(\big(\syntaxTree(s)\setminus\upset\{p\}\big) \cup (p\concat -)^\imf\big(\syntaxTree(t)\big)\Big) \\
+&= (q\concat -)^{\preimf}\big(\syntaxTree(s)\setminus\upset\{p\}\big) \\
+&= (q\concat -)^{\preimf}\syntaxTree(s) \\
+&=\syntaxTree(s|_q).
+\end{align*}
+
+(6) We calculate
+\begin{align*}
+\syntaxTree\Big(\big(s[t/p]\big)[r/q]\Big) &= \Big(\syntaxTree\big(s[t/p]\big) \setminus \upset\{q\}\Big) \cup (q\concat -)^\imf\syntaxTree(r) \\
+&= \Big(\big((\syntaxTree(s)\setminus \upset\{p\}) \cup (p\concat -)^\imf\syntaxTree(t) \big) \setminus \upset\{q\}\Big) \cup (q\concat -)^\imf\syntaxTree(r) \\
+&= \Big(\syntaxTree(s)\setminus \big(\upset\{p\} \cup \upset\{q\} \big)\Big) \cup (p\concat -)^\imf\syntaxTree(t) \cup (q\concat -)^\imf\syntaxTree(r) \\
+&= \Big(\big((\syntaxTree(s)\setminus \upset\{q\}) \cup (q\concat -)^\imf\syntaxTree(r) \big) \setminus \upset\{p\}\Big) \cup (p\concat -)^\imf\syntaxTree(t) \\
+&= \Big(\syntaxTree\big(s[r/q]\big) \setminus \upset\{p\}\Big) \cup (p\concat -)^\imf\syntaxTree(t) \\
+&= \syntaxTree\Big(\big(s[r/q]\big)[t/p]\Big).
+\end{align*}
+\end{proof}
+
+\subsubsection{Variable substitution}
+\begin{definition}
+Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. An \udef{elementary variable substitution} is a partial function $\hat{\sigma}\in(V\not\to T(\Omega, V))$ with finite domain of definition.
+
+We say $\hat{\sigma}$ \udef{instantiates} $x\in V$ if $x\in \preim(\hat{\sigma})$.
+
+Given an elementary variable substitution $\hat{\sigma}$, we also define the \udef{(extended) variable substitution} $\sigma: (\Omega \uplus V)^*\to (\Omega \uplus V)^*$, defined recursively by
+\[ \sigma(u) = \begin{cases}
+\seq{} & (u = \seq{}) \\
+\sigma(u_0)\concat \sigma\big(u[1:]\big) & \big(u_0\in \preim(\hat{\sigma})\big) \\
+u_0\concat \sigma\big(u[1:]\big) & \big(u_0\notin \preim(\hat{\sigma})\big)
+\end{cases} \]
+The set of all variable substitutions is denoted $\varSubs(\Omega, V)$.
+\end{definition}
+TODO rewrite definition with \emph{map}.
+
+\begin{lemma}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables, $\hat{\sigma}: V\not\to T(\Omega, V)$ an elementary variable substitution and $t\in T(\Omega, V)$. Then $\sigma(t) \in T(\Omega, V)$. 
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsection{Syntactic consequence}
+\subsubsection{$\Omega$-identities}
+\begin{definition}
+Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. An \udef{$\Omega$-identity} is an element of $T(\Omega, V)\times T(\Omega, V)$.
+
+We call a set $E\subseteq T(\Omega, V)\times T(\Omega, V)$ \udef{closed under variable substitution} if for all variable substitutions $\sigma$, we have $(\sigma, \sigma)^\imf(E) \subseteq E$.
+
+We call a set $E\subseteq T(\Omega, V)\times T(\Omega, V)$ \udef{closed under $\Omega$-operations} if for all operator symbols $\omega\in\Omega$ and $t,s\in \big(T(\Omega, V)\big)^{\alpha(\omega)}$ such that $(s_i, t_i)\in E$ for all $i\in 0:\alpha(\omega)$, we have
+\[ \big( \seq{\omega}\concat \strConcat(s), \seq{\omega}\concat \strConcat(t)\big) \in E. \]
+\end{definition}
+
+The closure of $E$ under variable substitutions is given by $\bigcup_{\sigma\in\varSubs(\Omega, V)}(\sigma, \sigma)^\imf(E)$.
+
+\subsubsection{Reduction relations}
+\begin{definition}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $E$ a set of $\Omega$-identities. We define the \udef{reduction relation} $\to_E$ on $T(\Omega, V)$ by
+\[ s\to_E t \;\defequiv\; \exists u,v\in (\Omega\uplus V)^*: \exists (r_1, r_2)\in E: \exists \sigma\in \varSubs(\Omega, V):\; \begin{cases}
+s = u \concat \sigma(r_1) \concat v \in T() \\
+t = u \concat \sigma(r_2) \concat v.
+\end{cases}  \]
+\end{definition}
+
+\begin{lemma}
+The symmetric, transitive, reflexive closure of $\to_E$ is the smallest equivalence relation that contains $E$ and is closed under variable substitution and $\Omega$-operations.
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
+\begin{definition}
+We denote the relation $\equiv_E$.
+\end{definition}
+
+\subsubsection{Syntactic consequence}
+\begin{definition}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $E$ a set of $\Omega$-identities. Then an element of $\equiv_E\setminus E$ is a \udef{syntactic consequence} of $E$.
+\end{definition}
 
 \section{Semantics}
 \subsection{Algebras}

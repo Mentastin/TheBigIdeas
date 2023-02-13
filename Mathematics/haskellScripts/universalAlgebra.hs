@@ -77,6 +77,8 @@ lexer str = map charToToken str where
         | elem c "opqrst" = Op [c] 3
         | elem c "uvwxyz" = Var [c]
 
+drawString = putStr . drawForest . setToForest . syntaxTree . lexer
+
 -- Quotient list
 groupAllBy :: (a -> a -> Bool) -> [a] -> [[a]]
 groupAllBy f list = groupAllByHelper f list [] where

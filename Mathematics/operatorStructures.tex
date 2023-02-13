@@ -77,6 +77,11 @@ Let $\sSet{A, (A, e)}$ be a homogeneous operator structure. We call $a\in A$ a \
 Let $\sSet{A, (A, e)}$ be a homogeneous operator structure with (TODO point / operator) identity $f$ and $x\in A$. We call $y\in A$ an \udef{inverse} of $x$ if $e(y,x) = f$. (TODO or $e(x,y)$)
 \end{definition}
 
+\subsection{Idempotents}
+\begin{definition}
+Let $\sSet{A, (A, e)}$ be a homogeneous operator. An element $x\in A$ is called \udef{idempotent} if $e(x,x) = x$.
+\end{definition}
+
 \chapter{Operator bistructures and operator $n$-structures}
 \begin{definition}
 Let $A$ be a class. An \udef{operator bistructure} on $A$ is a structured class $\sSet{A, (L, \lambda), (R,\rho)}$ such that
@@ -91,6 +96,9 @@ An \udef{operator $n$-structure} on $A$ is a structured class $\sSet{A, \seq{(O_
 \end{itemize}
 \end{definition}
 
+TODO notation: $x>y<z$.
+
+Also $a>b>x<c<d$ is parsed as $a>(b>x<c)<d$
 
 \section{Green's relations}
 \begin{definition}
@@ -166,11 +174,151 @@ If $x'\in [x]_\greensH$, then $\lambda_a(x')\greensL \lambda_a(x) = y$ by \ref{o
 Point (2) is dual.
 \end{proof}
 \begin{corollary} \label{greensDisomorphism}
-Let $\sSet{A, (L, \lambda), (R,\rho)}$ be an operator bistructure $x, y\in A$ such that $x\greensD y$. Then there exist $a,c\in L$ and $b,d\in R$ such that
+Let $\sSet{A, (L, \lambda), (R,\rho)}$ be an operator bistructure, $x, y\in A$ such that $x\greensD y$. Then there exist $a,c\in L$ and $b,d\in R$ such that
 \[ \lambda_a\circ\rho_b|_{[x]_\greensH}: [x]_\greensH \to [y]_\greensH \qquad \text{is a bijection with inverse} \qquad \lambda_c\circ \rho_d|_{[y]_\greensH}: [y]_\greensH \to [x]_\greensH. \]
 \end{corollary}
 \begin{proof}
 There exists a $z\in A$ such that $x\greensL z$ and $z\greensR y$. We then just compose the bijections in Green's lemma, keeping in mind that $\lambda$ and $\rho$ commute.
+\end{proof}
+
+\section{The intersection of operations and elements}
+\subsection{Regular elements and generalised inverses}
+\begin{definition}
+Let $\sSet{A, (L, \lambda), (R,\rho)}$ be an operator bistructure and $x,y\in A\cap L\cap R$. We say
+\begin{itemize}
+\item $x$ is \udef{regular} if $\exists a\in A: \; x = (\lambda_x\circ\rho_x) (a) = x>a<x$;
+\item $x$ and $y$ \udef{generalised inverses} if $x = x>y<x$ and $y = y>x<y$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{idempotentsAreRegular}
+Let $\sSet{A, (L, \lambda), (R,\rho)}$ be an operator bistructure. Every idempotent is regular.
+\end{lemma}
+\begin{proof}
+Let $x\in A\cap L\cap R$ be an idempotent. Because $x$ is a left-idempotent, we have $x>x = x$. Because $x$ is a right-idempotent, we have $x<x = x$. Combining the two gives $x = x>x<x$.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{A, (L, \lambda), (R,\rho)}$ be an operator bistructure. If $x\in A$ is regular, then every element in $[x]_{\greensD}$ is regular.
+\end{proposition}
+So it makes sense to call a $\greensD$-class \udef{regular} if it consists of regular elements and \udef{irregular} otherwise.
+\begin{proof}
+Let $x$ be regular with $x = x>x'<x$ and $x\greensD y$. Then we have $a,c \in L$ and $b,d \in R$ such that
+$\lambda_a\circ\rho_b|_{[x]_\greensH}: [x]_\greensH \to [y]_\greensH$ is a bijection with inverse $\lambda_c\circ \rho_d|_{[y]_\greensH}: [y]_\greensH \to [x]_\greensH$, as in \ref{greensDisomorphism}. Then we have
+\begin{align*}
+y &= a>x<b \\
+&= a>(x>x'<x)<b \\
+&= a . x>x'<x . b \\
+&= a>(c>y<d)>x'<(c>y<d)<b \\
+&= (a > c >) y > d > x' > c > y (> d > b) \\
+&= y > d > x' > c > y.
+\end{align*}
+So $y$ is regular.
+\end{proof}
+\begin{corollary}
+If there is an idempotent $x\in [a]_{\greensD}$, then $[a]_{\greensD}$ is regular.
+\end{corollary}
+\begin{proof}
+Every idempotent is regular: \ref{idempotentsAreRegular}.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{A, f}$ be an associative class. Then $x$ is regular \textup{if and only if} it has a generalised inverse.
+\end{proposition}
+\begin{proof}
+Clearly every element with a generalised inverse is regular. Conversely, assume $x$ regular with $x = xax$. Then $y = axa$ is a generalised inverse of $x$: $x(axa)x = xax = x$ and $(axa)x(axa) = a(xax)axa = axaxa = axa$.
+\end{proof}
+Note that we do not have that $x = xyx$ implies $y = yxy$.
+
+\begin{proposition} \label{greensRelationsRegularElements}
+Let $\sSet{A, f}$ be an associative class and $x\in A$ a regular element with $x = f(f(x, y), x)$. Then
+\begin{enumerate}
+\item $f(x,y)$ and $f(y,x)$ are idempotent;
+\item $f(y,x) \greensL x$ and $x \greensR f(x, y)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We calculate
+\[ f(f(x,y), f(x,y)) = f(f(f(x,y), x), y) = f(x, y)\] and \[f(f(y,x), f(y,x)) = f(y, f(x, f(y,x))) = f(y,x). \]
+
+(2) Using \ref{idealAbsorption}, we have
+\[ f(A, x) = f(A, f(x,f(y,x))) \subseteq f(A, f(y,x)) \subseteq f(A,x). \]
+Thus $f(A, x) = f(A, f(y,x))$. The second part is dual.
+\end{proof}
+\begin{corollary}
+In a regular $\mathcal{D}$-class each $\mathcal{L}$-class and each $\mathcal{R}$-class contains at least one idempotent.
+\end{corollary}
+\begin{proof}
+Let $[x]_\mathcal{L}$ be an $\mathcal{L}$-class in a regular $\mathcal{D}$-class. By regularity there exists a $y\in A$ such that $xyx = x$. From the proposition, we have that $[x]_\mathcal{L}$ contains the idempotent $yx$ and $[x]_\mathcal{R}$ the idempotent $xy$.
+\end{proof}
+\begin{corollary} \label{idempotentsHclass}
+If $x,x'\in A$ are generalised inverses, then $[xx']_\mathcal{H} = [x]_\mathcal{R}\cap [x']_\mathcal{L}$ and $[x'x]_\mathcal{H} = [x']_\mathcal{R}\cap [x]_\mathcal{L}$.
+\end{corollary}
+\begin{proof}
+From $x\greensR (xx')$ and $(xx')\greensL x'$, we get the first equality. The second is dual.
+\end{proof}
+We can depict the situation in the corollary as follows:
+\[ \hspace{-8.4em} \exists a,b,c,d \in \widetilde{A}: \qquad \begin{tikzcd}[sep=large]
+x \ar[r, maps to, shift left, "\rho_a"] \ar[d, maps to, shift left, "\lambda_c"] & xx' \ar[l, maps to, shift left, "\rho_b"] \ar[d, maps to, shift left, "\lambda_c"] \\
+x'x \ar[u, maps to, shift left, "\lambda_d"] \ar[r, maps to, shift left, "\rho_a"] & x' \ar[u, maps to, shift left, "\lambda_d"] \ar[l, maps to, shift left, "\rho_b"]
+\end{tikzcd} \]
+
+So generalised inverses along one diagonal imply idempotents along the other. In fact, the other direction also holds:
+\begin{proposition}
+Let $\sSet{A, f}$ be an associative class and $e,f$ idempotents in $A$ such that $e\greensD f$. Then there exist $x\in [e]_\greensR\cap [f]_\greensL$ and $x'\in [e]_\greensL\cap [f]_\greensR$ such that
+\begin{itemize}
+\item $x,x'$ are generalised inverses;
+\item $e = xx'$ and $f = x'x$.
+\end{itemize}
+\end{proposition}
+\begin{proof}
+Because $e\greensD f$, we can find $x,x'\in A$ such that
+\[ \hspace{-8.4em} \exists a,b,c,d \in \widetilde{A}: \qquad \begin{tikzcd}[sep=large]
+e \ar[r, maps to, shift left, "\rho_a"] \ar[d, maps to, shift left, "\lambda_c"] & x \ar[l, maps to, shift left, "\rho_b"] \ar[d, maps to, shift left, "\lambda_c"] \\
+x' \ar[u, maps to, shift left, "\lambda_d"] \ar[r, maps to, shift left, "\rho_a"] & f \ar[u, maps to, shift left, "\lambda_d"] \ar[l, maps to, shift left, "\rho_b"]
+\end{tikzcd} \]
+Then
+\begin{align*}
+xx' &= (df)(fb) = dfb = e \\
+x'x &= (ce)(ea) = cea = f \\
+xx'x &= ex = eea = ea = x \\
+x'xx' &= fx' = ffb = fb = x',
+\end{align*}
+which completes the proof.
+\end{proof}
+\begin{corollary}
+Let $\sSet{A, f}$ be an associative class, $y\in A$ and $e,f$ idempotents in $A$. Then $e\greensD f$ \textup{if and only if} there exist generalised inverses $x,x'$ such that $e = xx'$ and $f = x'x$.
+\end{corollary}
+\begin{proof}
+The direction $\Rightarrow$ follows from the proposition. The converse from \ref{greensRelationsRegularElements}.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{A, f}$ be an associative class, $x\in A$. Then no $\greensH$-class contains more than one generalised inverse of $x$.
+\end{lemma}
+\begin{proof}
+Assume $x$ has two generalised inverses, $x_1'$ and $x_2'$. From \ref{idempotentsHclass} and \ref{GreensTheoremCorollary} we get that $xx_1' = xx_2'$ and $x_1'x = x_2'x$. Thus
+\[ x_1' = x_1'(xx_1') = x_1'xx_2' = (x_1'x)x_2' =  x_2'xx_2' = x_2'. \]
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{A, f}$ be an associative class and $x,y\in A$. Then $xy\in [x]_\greensR \cap [y]_\greensL$ \textup{if and only if} $[x]_\greensL \cap [y]_\greensR$ contains an idempotent.
+\end{proposition}
+\begin{proof}
+First assume $[x]_\greensL \cap [y]_\greensR$ contains an idempotent $e$. We can depict the situation as
+\[ \hspace{-8.4em} \exists a,b,c,d \in \widetilde{A}: \qquad \begin{tikzcd}[sep=large]
+x \ar[r, maps to, shift left, "\rho_a"] \ar[d, maps to, shift left, "\lambda_c"] &  \ar[l, maps to, shift left, "\rho_b"] \ar[d, maps to, shift left, "\lambda_c"] \\
+e \ar[u, maps to, shift left, "\lambda_d"] \ar[r, maps to, shift left, "\rho_a"] & y \ar[u, maps to, shift left, "\lambda_d"] \ar[l, maps to, shift left, "\rho_b"]
+\end{tikzcd} \]
+Then we can calculate
+\[ xy = deea = dea = xa \in [x]_\greensR \cap [y]_\greensL. \]
+Now assume $xy\in [x]_\greensR \cap [y]_\greensL$.
+We can depict the situation as
+\[ \hspace{-8.4em} \exists a,b,c,d \in \widetilde{A}: \qquad \begin{tikzcd}[sep=large]
+x \ar[r, maps to, shift left, "\rho_a"] \ar[d, maps to, shift left, "\lambda_c"] & xy \ar[l, maps to, shift left, "\rho_b"] \ar[d, maps to, shift left, "\lambda_c"] \\
+e \ar[u, maps to, shift left, "\lambda_d"] \ar[r, maps to, shift left, "\rho_a"] & y \ar[u, maps to, shift left, "\lambda_d"] \ar[l, maps to, shift left, "\rho_b"]
+\end{tikzcd} \]
+Now we need to show that $e$ is idempotent. Indeed, starting from the three other corners, we see that $e = cx$ and $e = yb$ and $e = c(xy)b = (cx)(yb) = ee$.
 \end{proof}
 
 
