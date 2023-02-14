@@ -2076,7 +2076,7 @@ The first claim is immediate from $y = x\wedge (\overline{x}\vee z) = x\wedge z$
 
 For the second claim, take an arbitrary $a\in A$. Then $x\wedge a \leq z$ by definition and so $\overline{x}\vee z \geq \overline{x}\vee (x\wedge a) = \overline{x}\vee a \geq a$.
 \end{proof}
-\begin{corollary}[Infinite distributive laws]
+\begin{corollary}[Infinite distributive laws] \label{infiniteDistributiveLawsBooleanLattices}
 Let $L$ be a Boolean lattice. Then for all $x\in L$ and all $A\subseteq L$:
 \begin{enumerate}
 \item if $\bigvee A$ exists, then $x\wedge \bigvee A = \bigvee x\wedge A$;
@@ -2425,6 +2425,14 @@ This is an application of \ref{completeSublattice} (TODO show this is the correc
 \end{proof}
 \url{https://ncatlab.org/nlab/show/filter}
 
+\begin{lemma} \label{baseMeetJoinFilters}
+Let $L$ be a lattice and $F,G$ filters in $\filters(L)$. If $\mathcal{A}$ is a base of $F$ and $\mathcal{B}$ a base of $G$, then
+\begin{enumerate}
+\item $\setbuilder{A\vee B}{A\in \mathcal{A}, B\in \mathcal{B}}$ is a base of $F\wedge G$;
+\item $\setbuilder{A\wedge B}{A\in \mathcal{A}, B\in \mathcal{B}}$ is a base of $F\vee G$.
+\end{enumerate}
+\end{lemma}
+
 \begin{proposition} \label{joinProperFilter}
 Let $S$ be a $\wedge$-semilattice and $\{F_i\}_{i\in I} \in \filters(S)^I$ be set of filters. Then $\bigvee \{F_i\}_{i\in I}$ is a proper filter \textup{if and only if} $\{F_i\}_{i\in I}\amesh \{F_i\}_{i\in I}$.
 \end{proposition}
@@ -2598,6 +2606,10 @@ Let $L$ be a lattice and $F$ a principal filter in $L$. Then
 \end{enumerate}
 \end{lemma}
 
+\begin{lemma} \label{kernelFilterBase}
+Let $L$ be a complete lattice, $F\in\filters(L)$ and $\mathcal{B}$ a base of $F$. Then $\ker(F) = \bigwedge \mathcal{B}$.
+\end{lemma}
+
 \begin{definition}
 Let $L$ be a complete lattice and $a\in L$ an atom. Then $\upset a$ is the \udef{principal ultrafilter} based in $a$.
 \end{definition}
@@ -2619,11 +2631,11 @@ Every filter $F$ in a finite lattice is finite, so $\bigwedge F$ is a finite mee
 \end{proof}
 
 \begin{proposition}
-Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ is finer than the cofinite filter of $A$.
+Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ contains the cofinite filter of $A$.
 \end{proposition}
 TODO extend to any filter with infinite atoms.
 \begin{proof}
-As filters are upwards closed, ``$F$ finer than the cofinite filter of $A$'' means the cofinite filter of $A$ is a subset of $F$. So take some cofinite subset $C$ of $A$, such that $A\setminus C = \{x_1, \ldots, x_n\}$ is finite. Now for each $x_i$ we can find a set $f_i\in F$ such that $x_i\notin f_i$, because if this was not possible, then $x_i \in \bigcap F$, but $\bigcap F = \emptyset$ due to $F$ being free. Also $\bigcap_{i=1}^n f_i \in F$, because $F$ is closed under finite intersections.
+Take some cofinite subset $C$ of $A$, such that $A\setminus C = \{x_1, \ldots, x_n\}$ is finite. Now for each $x_i$ we can find a set $f_i\in F$ such that $x_i\notin f_i$, because if this was not possible, then $x_i \in \bigcap F$, but $\bigcap F = \emptyset$ due to $F$ being free. Also $\bigcap_{i=1}^n f_i \in F$, because $F$ is closed under finite intersections.
 
 So $(A\setminus C)\cap (\bigcap_{i=1}^n f_i) = \emptyset$, or equivalently $\bigcap_{i=1}^n f_i \subseteq X\setminus (A\setminus C)$, meaning $X\setminus (A\setminus C) \in F$ and thus $C = A\cap (X\setminus (A\setminus C)) \in F$.
 \end{proof}
@@ -2632,12 +2644,37 @@ A filter of subsets of $X$ is free \textup{if and only if} it is finer than the 
 \end{corollary}
 
 \begin{proposition}
-Let $\sSet{P,\Yleft}$ be a complete ordered set (TODO: do we need Boolean lattice??) and $F\subseteq P$ a filter. Then there exists a unique pair of filters $F_*$ and $F_0$ such that $F_*$ is principal, $F_0$ is free and
-\[ F = F_* \wedge F_0 \qquad P = F_* \vee F_0. \]
+Let $L$ be a complete Boolean lattice and $F\subseteq L$ a filter. Then there exists a unique pair of filters $F_*$ and $F_0$ such that $F_*$ is principal, $F_0$ is free and
+\[ F = F_* \wedge F_0 \qquad L = F_* \vee F_0. \]
+These filters are given by
+\[ F_* = \upset\left\{\ker(F)\right\} \quad\text{and}\quad F_0 = F\vee \upset\left\{\overline{\ker(F)}\right\}.  \]
 \end{proposition}
 We call $F^*$ the \udef{principal part} and $F^0$ the \udef{free part} of the filter.
 \begin{proof}
-TODO
+We first verify that the given $F_*$ and $F_0$ satisfy the requirements of the decomposition.
+
+We have that $F_0$ is free, because by \ref{kernelFilterBase} and \ref{baseMeetJoinFilters}, we have
+\[ \ker(F_0) = \bigwedge_{a\in F} \overline{\ker(F)}\wedge a = \overline{\ker(F)}\wedge \bigwedge_{a\in F} A = \overline{\ker(F)}\wedge \ker(F) = \bot. \]
+It is clear that $F_*$ and $F_0$ do not mesh, so $L = F_* \vee F_0$.
+
+Now $F_* \wedge F_0$ has a base $\setbuilder{\left(a\wedge \overline{\ker(F)}\right)\vee \ker(F)}{a\in F}$ by \ref{baseMeetJoinFilters}. We have
+\begin{align*}
+\left(a\wedge \overline{\ker(F)}\right)\vee \ker(F) &= \left(a\vee \ker(F)\right)\wedge \left(\ker(F) \vee \overline{\ker(F)}\right) \\
+&= \left(a\vee \ker(F)\right)\wedge \top = a\vee \ker(F) = a,
+\end{align*}
+where the last step follows because $\ker(F)\leq a$. Thus $F_* \wedge F_0 = F$ because they have the same base.
+
+Finaly we need to show that the decomposition is unique. We have
+\begin{align*}
+\ker(F) &= \ker(F_* \wedge F_0) \\
+&= \bigwedge_{a\in F_0} \ker(F_*) \vee a \\
+&= \ker(F^*) \vee \bigwedge_{a\in F_0}a \\
+&= \ker(F_*)\vee \ker(F_0) \\
+&= \ker(F_*)\vee \bot = \ker(F_*),
+\end{align*}
+using \ref{kernelFilterBase}, \ref{baseMeetJoinFilters} and \ref{infiniteDistributiveLawsBooleanLattices}. This uniquely determines the principal filter $F_*$.
+
+In order for $L = F_* \vee F_0$ to hold, we must have some $x\in F_0$ such that $x\wedge \ker(F) = \bot$. This implies $x\leq \overline{\ker(F)}$ by \ref{BooleanComplementLargestDisjoint}.
 \end{proof}
 
 \subsection{Filters in an ideal}
