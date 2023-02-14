@@ -2349,6 +2349,15 @@ Let $L$ be a lattice and $J\subseteq L$ a subset. Then
 \end{enumerate}
 \end{lemma}
 
+\begin{lemma}
+Let $S$ be a bounded $\wedge$-semilattice and $F\in\filters(S)$. Then $F$ is proper \textup{if and only if} $F\amesh F$.
+\end{lemma}
+\begin{proof}
+Assume $F$ is proper and take $a, b\in F$. If $a\wedge b = \bot$, then $\bot\in F$, which is a contradiction, so $a\mesh b$.
+
+Now assume $F \amesh F$. Then $\bot \notin F$ (as $\bot$ does not mesh with any element of $F$), so $F$ is proper.
+\end{proof}
+
 \begin{lemma} \label{imageFilter}
 Let $\sSet{P,\Yleft_P}$, $\sSet{Q, \Yleft_Q}$ be ordered sets, $f: P\to Q$ an order-preserving function and $F\subseteq P$ a filter. Then $\upset f^{\imf}(F)$ is a filter.
 \end{lemma}
@@ -2599,21 +2608,25 @@ The set of principal filters in $P$ is denoted $\filters_*(P)$ and the set of fr
 The only filter that is both principal and free is $L$. A proper filter cannot be both principal and free.
 
 \begin{lemma}
-Let $L$ be a lattice and $F$ a principal filter in $L$. Then
-\begin{enumerate}
-\item $F = \upset \ker F$;
-\item $F$ is an ultrafilter \textup{if and only if} $\ker(F)$ is an atom.
-\end{enumerate}
+Let $L$ be a lattice and $F$ a principal filter in $L$. Then $F = \upset \{\ker F\}$.
 \end{lemma}
 
 \begin{lemma} \label{kernelFilterBase}
 Let $L$ be a complete lattice, $F\in\filters(L)$ and $\mathcal{B}$ a base of $F$. Then $\ker(F) = \bigwedge \mathcal{B}$.
 \end{lemma}
 
-\begin{definition}
-Let $L$ be a complete lattice and $a\in L$ an atom. Then $\upset a$ is the \udef{principal ultrafilter} based in $a$.
-\end{definition}
-There may also exist non-principal ultrafilters.
+\begin{proposition} \label{principalUltrafilters}
+Let $L$ be a complete lattice and $a\in L$ an atom. Then
+\begin{enumerate}
+\item $\upset\{a\}$ is a principal ultrafilter;
+\item every principal ultrafilter is of this form.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) The filter $\upset\{a\}$ is principal by construction. To show it is an ultrafilter, assume, towards a contradiction, that there exists a strictly larger proper filter $F$ and take $x\in F\setminus \upset\{a\}$. Then $x\wedge a\in F$. Because $x\wedge a \in L$ is smaller than $a$, we have $x\wedge a = \bot$ by atomicity. Thus $\bot \in F$, so $F$ is not proper, which is a contradiction.
+
+(2) Let $\upset\{b\}$ be a principal ultrafilter. Assume, towards a contradiction, that there exists $c\in L$ such that $\bot < c < b$. Then $\upset\{c\}$ is a larger proper filter and thus $\upset\{b\}$ is not an ultrafilter. This is a contradiction.
+\end{proof}
 
 \begin{lemma}
 Let $L$ be a lattice and $F$ a free filter in $L$. Then
@@ -2630,20 +2643,7 @@ In particular, every ultrafilter is a principal ultrafilter.
 Every filter $F$ in a finite lattice is finite, so $\bigwedge F$ is a finite meet, and thus must be in $F$.
 \end{proof}
 
-\begin{proposition}
-Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ contains the cofinite filter of $A$.
-\end{proposition}
-TODO extend to any filter with infinite atoms.
-\begin{proof}
-Take some cofinite subset $C$ of $A$, such that $A\setminus C = \{x_1, \ldots, x_n\}$ is finite. Now for each $x_i$ we can find a set $f_i\in F$ such that $x_i\notin f_i$, because if this was not possible, then $x_i \in \bigcap F$, but $\bigcap F = \emptyset$ due to $F$ being free. Also $\bigcap_{i=1}^n f_i \in F$, because $F$ is closed under finite intersections.
-
-So $(A\setminus C)\cap (\bigcap_{i=1}^n f_i) = \emptyset$, or equivalently $\bigcap_{i=1}^n f_i \subseteq X\setminus (A\setminus C)$, meaning $X\setminus (A\setminus C) \in F$ and thus $C = A\cap (X\setminus (A\setminus C)) \in F$.
-\end{proof}
-\begin{corollary} \label{filterFreeIFFfinerThanCofinite}
-A filter of subsets of $X$ is free \textup{if and only if} it is finer than the cofinite filter of $X$.
-\end{corollary}
-
-\begin{proposition}
+\begin{proposition} \label{freePrincipalDecomposition}
 Let $L$ be a complete Boolean lattice and $F\subseteq L$ a filter. Then there exists a unique pair of filters $F_*$ and $F_0$ such that $F_*$ is principal, $F_0$ is free and
 \[ F = F_* \wedge F_0 \qquad L = F_* \vee F_0. \]
 These filters are given by
@@ -2674,7 +2674,21 @@ Finaly we need to show that the decomposition is unique. We have
 \end{align*}
 using \ref{kernelFilterBase}, \ref{baseMeetJoinFilters} and \ref{infiniteDistributiveLawsBooleanLattices}. This uniquely determines the principal filter $F_*$.
 
-In order for $L = F_* \vee F_0$ to hold, we must have some $x\in F_0$ such that $x\wedge \ker(F) = \bot$. This implies $x\leq \overline{\ker(F)}$ by \ref{BooleanComplementLargestDisjoint}.
+In order for $L = F_* \vee F_0$ to hold, we must have some $x\in F_0$ such that $x\wedge \ker(F) = \bot$. This implies $x\leq \overline{\ker(F)}$ by \ref{BooleanComplementLargestDisjoint}, so $F\vee \upset\left\{\overline{\ker(F)}\right\} \subseteq F_0$.
+
+Conversely, take $x\in F_0$. Then $F = F_*\wedge F_0$ implies $x\vee \ker(F) \in F$ and thus
+\begin{align*}
+x \geq x\wedge \overline{\ker(F)} &= \big(x\wedge \overline{\ker(F)}\big) \vee \bot \\
+&= \big(x\wedge \overline{\ker(F)}\big) \vee \big(\ker(F) \wedge \overline{\ker(F)}\big) \\
+&= \big(x\vee \ker(F)\big)\wedge \overline{\ker(F)} \in F\vee \upset\left\{\overline{\ker(F)}\right\}.
+\end{align*}
+This completes the proof of unicity.
+\end{proof}
+\begin{corollary}
+An ultrafilter is either principal or free.
+\end{corollary}
+\begin{proof}
+Suppose the ultrafilter is neither principal nor free, then is is contained in both its principal and free parts, which are necessarily non-trivial.
 \end{proof}
 
 \subsection{Filters in an ideal}
@@ -2974,21 +2988,9 @@ One direction was shown in (2) of the proposition. For the other, assume $\upset
 \end{proof}
 
 \begin{proposition}
-Let $U$ be a set. If $U$ is infinite, then there exists a non-principal ultrafilter in $\powerfilters(U)$.
-\end{proposition}
-This proposition assumes the ultrafilter lemma \ref{ultrafilterLemma}.
-\begin{proof}
-Consider the cofinite filter $F = \setbuilder{A\subseteq U}{U\setminus A\;\text{is finite}}$. By the ultrafilter lemma, \ref{ultrafilterLemma}, we can extend $F$ to an ultrafilter $\mathcal{U}$. Now $\mathcal{U}$ does not contain any sets of the form $\{x\}$ with $x\in U$. If it did, then it would contain both $\{x\}$ and $U\setminus\{x\}$, meaning it would also contain $\emptyset$ and thus would not be proper and in particular not an ultrafilter.
-\end{proof}
-
-\begin{proposition}
 Let $f:X\to Y$ be a function between sets and $F\in \powerfilters(X)$ a filter. Then $\upset f[F]$ is a filter on $\powerset(Y)$. If $F$ is an ultrafilter on $\powerset(X)$, then $\upset f[F]$ is an ultrafilter on $\powerset(Y)$.
 \end{proposition}
 We call $\upset f[F]$ the \udef{image filter} of $F$ under $f$.
-
-\begin{definition}
-TODO principal filter $\upset\{x\}$.
-\end{definition}
 
 
 \begin{proposition} \label{filterPreimageImageGaloisConnection}
@@ -3019,7 +3021,69 @@ The inequality $\subseteq$ is given by \ref{orderPreservingFunctionLatticeOperat
 For the other inequality, take $A\in \bigcap (\upset\circ f^{\imf\imf})^{\imf}[\mathcal{F}]$. Then, for all $F\in\mathcal{F}$, there exists $B_F\in F$ such that $f^{\imf}[B_F] \subseteq A$. Now $f^{\imf}\left[\bigcup_{F\in\mathcal{F}}B_F\right] = \bigcup_{F\in\mathcal{F}}f^{\imf}[B_F] \subseteq A$. Also $\bigcup_{F\in\mathcal{F}}B_F \in \bigcap \mathcal{F}$ by upwards closure of each filter. Thus $A\in \upset f^{\imf\imf}[\bigcap \mathcal{F}]$.
 \end{proof}
 
+\subsubsection{Cofinite filters}
+TODO extend to any filter with infinite atoms.
+\begin{definition}
+Let $X$ be a set and $A\subseteq X$. The \udef{cofinite filter} of $A$ is the filter
+\[ (A)_0 \quad\defeq\quad \setbuilder{B\subseteq X}{\text{$A\setminus B$ if finite}}. \]
+\end{definition}
 
+\begin{proposition} \label{freeFilterContainsCofiniteFilters}
+Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ contains $(A)_0$.
+\end{proposition}
+\begin{proof}
+Take some cofinite subset $C$ of $A$, such that $A\setminus C = \{x_1, \ldots, x_n\}$ is finite. Now for each $x_i$ we can find a set $f_i\in F$ such that $x_i\notin f_i$, because if this was not possible, then $x_i \in \bigcap F$, but $\bigcap F = \emptyset$ due to $F$ being free. Also $\bigcap_{i=1}^n f_i \in F$, because $F$ is closed under finite intersections.
+
+So $(A\setminus C)\cap (\bigcap_{i=1}^n f_i) = \emptyset$, or equivalently $\bigcap_{i=1}^n f_i \subseteq X\setminus (A\setminus C)$, meaning $X\setminus (A\setminus C) \in F$ and thus $C = A\cap (X\setminus (A\setminus C)) \in F$.
+\end{proof}
+\begin{corollary} \label{filterFreeIFFfinerThanCofinite}
+A filter $F\in\powerfilters(X)$ is free \textup{if and only if} it contains $(X)_0$.
+\end{corollary}
+\begin{proof}
+The direction $\Rightarrow$ is immediate from the proposition.
+
+For the other direction, note that for any $x\in X$, we have $X\setminus\{x\} \in (X)_0 \subseteq F$, so $x\notin \ker(F)$. Thus $\ker(F) = \emptyset$.
+\end{proof}
+\begin{corollary} \label{cofiniteFiltersSameIffDifferenceFinite}
+Let $X$ be a set and $A,B\subseteq X$. Then $(A)_0 = (B)_0$ \textup{if and only if} $A\symdiff B$ is finite.
+\end{corollary}
+\begin{proof}
+First assume $(A)_0 = (B)_0$. Then $A$ is an element of the cofinite filter of $B$ and vice versa. Thus there exist finite sets $C, C'\subseteq X$ such that $A\setminus C \subseteq B$ and $B\setminus C' \subseteq A$.
+By \ref{residuationSetBooleanLattice} this implies $A\setminus B \subseteq C$ and $B\setminus A \subseteq C'$, so $A\symdiff B \subseteq C\cup C'$, which is finite.
+
+Now assume $A\symdiff B$ is finite. It is enough to show that $(A)_0\subseteq (B)_0$ (the other inclusion follows by symmetry). By the proposition it is enough to show that $A$ is an element of the cofinite filter of $B$. This is immediate from $B\setminus (A\symdiff B) \subseteq A$ (which follows from $B\setminus A\subseteq A\symdiff B$ by \ref{residuationSetBooleanLattice}).
+\end{proof}
+
+\begin{proposition} \label{cofiniteBaseFreePart}
+Let $X$ be a set, $F\in \powerfilters(X)$ and $\mathcal{B}$ a base of $F$. The free part of $F$, $F_0$, is given by
+\[ F_0 = \bigvee_{B\in\mathcal{B}}\big(B\setminus \ker(F)\big)_0. \]
+\end{proposition}
+\begin{proof}
+By \ref{freePrincipalDecomposition} the free part $F_0$ has base
+\[ \setbuilder{\ker(F)^c\cap B}{B\in \mathcal{B}} = \setbuilder{B\setminus \ker(F)}{B\in \mathcal{B}}. \]
+
+By \ref{freeFilterContainsCofiniteFilters}, we have $\big(B\setminus \ker(F)\big)_0 \subseteq F_0$ for all $B\in\mathcal{B}$, so $\bigvee_{B\in\mathcal{B}}\big(B\setminus \ker(F)\big)_0 \subseteq F_0$.
+
+For the other inclusion, we note that each element $A\in F_0$ contains $B\setminus\ker(F)$ for some $B\in\mathcal{B}$, so
+\[ A\in \big(B\setminus\ker(F)\big)_0 \subseteq \bigvee_{B\in\mathcal{B}}\big(B\setminus \ker(F)\big)_0. \]
+\end{proof}
+
+\subsubsection{Principal ultrafilters}
+Let $X$ be a set. The atoms in $\powerset(X)$ are the singletons $\{x\}$ for $x\in X$. By \ref{principalUltrafilters}, the principal ultrafilters in $\powerfilters(X)$ are of the form $\upset\big\{\{x\}\big\}$ for some $x\in X$.
+
+\begin{definition}
+Let $X$ be a set and $x\in X$. We denote the principal ultrafilter as
+\[ \pfilter{x} \quad \defeq \quad \upset\big\{\{x\}\big\}. \]
+\end{definition}
+
+
+\begin{proposition}
+Let $X$ be a set. If $X$ is infinite, then there exists a non-principal ultrafilter in $\powerfilters(X)$.
+\end{proposition}
+This proposition assumes the ultrafilter lemma \ref{ultrafilterLemma}.
+\begin{proof}
+Consider the cofinite filter $F = \setbuilder{A\subseteq X}{X\setminus A\;\text{is finite}}$. By the ultrafilter lemma, \ref{ultrafilterLemma}, we can extend $F$ to an ultrafilter $\mathcal{U}$. Now $\mathcal{U}$ does not contain any sets of the form $\{x\}$ with $x\in X$. If it did, then it would contain both $\{x\}$ and $X\setminus\{x\}$, meaning it would also contain $\emptyset$ and thus would not be proper and in particular not an ultrafilter.
+\end{proof}
 
 \section{Multisets}
 \begin{definition}
@@ -3228,30 +3292,6 @@ Let $\Omega$ be a set and $\mathcal{F}\subseteq \powerset(\Omega)$ a family of s
 \end{definition}
 
 TODO Borel hierarchy and Descriptive set theory.
-
-\subsection{Filters}
-
-\begin{proposition}
-Let $X$ be a set and $F\in\powerfilters(X)$ a proper filter. Then $F \amesh F$.
-\end{proposition}
-\begin{proof}
-Every set in $F$ meshes with every other set in $F$. If not, i.e.\ $f,g\in F$ such that $f\cap g = \emptyset$, then $\emptyset\in F$ and $F$ would not be proper.
-\end{proof}
-
-\subsubsection{Ultrafilters}
-\begin{definition}
-Let $X$ be a set and $F\in\powerfilters(X)$ a filter. We call $F$ an \udef{ultrafilter} if $F = F^{\mesh}$.
-\end{definition}
-
-TODO characterisations. Ultrafilters are maximally fine (-> ~ Zorns lemma).
-
-\begin{proposition}
-An ultrafilter is either principal or free.
-\end{proposition}
-
-\begin{proposition}
-An ultrafilter is sequential \textup{if and only if} it is principal.
-\end{proposition}
 
 \subsection{Monotone classes}
 \begin{definition}
