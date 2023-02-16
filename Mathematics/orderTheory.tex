@@ -2416,6 +2416,20 @@ Let $S$ be a $\wedge$-semilattice and $B\subseteq S$ a subset. Then
 \end{enumerate}
 \end{proposition}
 
+\begin{lemma} \label{decreasingCountableBaseFilter}
+Let $S$ be a $\wedge$-semilattice and $F\subseteq S$ a countably based filter. Then we can find a decreasing sequence $\seq{b_n}$ in $S$ such that $\setbuilder{b_n}{n\in \N}$ is a base of $F$.
+\end{lemma}
+\begin{proof}
+By assumption, we can find an enumeration $f: \N\to S$ of a base of $F$. Now we define the sequence $\seq{b_n}$ recursively by
+\[ b_n = \begin{cases}
+f(0) & (n = 0) \\
+f(n) \wedge b_{n-1} & (\text{otherwise}).
+\end{cases} \]
+It is clear that $b$ is decreasing (TODO recursion invariant).
+
+To see that $b$ is a base, first note that each $b_n$ is in $F$ (as $F$ is a $\wedge$-subsemilattice and all meets are finite). Also $b_n \leq f(n)$ for all $n\in\N$.
+\end{proof}
+
 \subsection{Ordering filters and ideals}
 
 \begin{proposition}[The lattices of filters and ideals] \label{latticeFiltersIdeals}
@@ -2684,7 +2698,7 @@ x \geq x\wedge \overline{\ker(F)} &= \big(x\wedge \overline{\ker(F)}\big) \vee \
 \end{align*}
 This completes the proof of unicity.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{ultrafilterPrincipalOrFree}
 An ultrafilter is either principal or free.
 \end{corollary}
 \begin{proof}
@@ -2920,6 +2934,13 @@ Then $(-)^\mesh$ is an antitone bijection between upwards closed sets of subsets
 \begin{proof}
 We use \ref{relationPreservingGeneralisedInversesEmbeddings}. It is enough to note that $\im\big((-)^\mesh\big)$ is the set of upwards closed sets, which follows straight from the lemma. (The first point shows that $\im\big((-)^\mesh\big)$ consists of upwards closed sets. The second shows that every upwards closed set is in $\im\big((-)^\mesh\big)$.)
 \end{proof}
+\begin{corollary} \label{grillIntersectionUnion}
+Let $X$ be a set and $\mathcal{E}\in\powerset^2(X)$ such that each element of $\mathcal{E}$ is upwards closed. Then
+\[ \Big(\bigcap\mathcal{E}\Big)^\mesh = \bigcup_{G\in\mathcal{E}}G^\mesh \qquad\text{and}\qquad \Big(\bigcup\mathcal{E}\Big)^\mesh = \bigcap_{G\in\mathcal{E}}G^\mesh. \]
+\end{corollary}
+\begin{proof}
+It is enough to note that the intersection of upwards closed sets is closed and the union of upwards closed sets is closed, so the meet and join in the lattice of upwards closed sets are just the intersection and union.
+\end{proof}
 \begin{corollary} \label{ameshUpwardClosure}
 Let $X$ be a set, $\powerset(X)$ be ordered by inclusion and $\mathcal{A}, \mathcal{B} \subseteq \powerset(X)$. Then $\mathcal{A} \amesh \mathcal{B}$ \textup{if and only if} $\mathcal{A} \amesh (\upset\mathcal{B})$.
 \end{corollary}
@@ -3028,6 +3049,10 @@ Let $X$ be a set and $A\subseteq X$. The \udef{cofinite filter} of $A$ is the fi
 \[ (A)_0 \quad\defeq\quad \setbuilder{B\subseteq X}{\text{$A\setminus B$ if finite}}. \]
 \end{definition}
 
+\begin{lemma} \label{cofiniteFilterInclusion}
+Let $X$ be a set. If $A\subseteq B\subseteq X$, then $(B)_0 \subseteq (A)_0$.
+\end{lemma}
+
 \begin{proposition} \label{freeFilterContainsCofiniteFilters}
 Let $X$ be a set and $F$ a free filter in $\filters_0(\powerset(X))$. If $A\in F$, then $F$ contains $(A)_0$.
 \end{proposition}
@@ -3052,6 +3077,19 @@ First assume $(A)_0 = (B)_0$. Then $A$ is an element of the cofinite filter of $
 By \ref{residuationSetBooleanLattice} this implies $A\setminus B \subseteq C$ and $B\setminus A \subseteq C'$, so $A\symdiff B \subseteq C\cup C'$, which is finite.
 
 Now assume $A\symdiff B$ is finite. It is enough to show that $(A)_0\subseteq (B)_0$ (the other inclusion follows by symmetry). By the proposition it is enough to show that $A$ is an element of the cofinite filter of $B$. This is immediate from $B\setminus (A\symdiff B) \subseteq A$ (which follows from $B\setminus A\subseteq A\symdiff B$ by \ref{residuationSetBooleanLattice}).
+\end{proof}
+
+\begin{lemma} \label{cofiniteFilterNotUltra}
+Cofinite filters are never ultrafilters.
+\end{lemma}
+\begin{proof}
+Assume, towards a contradiction, that $(A)_0$ is an ultrafilter.
+
+If $A$ is finite, then $(A)_0$ is not proper and thus not an ultrafilter.
+
+If $A$ is infinite, then we can partition $A$ into two disjoint infinite sets (TODO ref) $A_1$ and $A_2$.
+
+Then $(A)_0 \subseteq (A_1)_0$ by \ref{cofiniteFilterInclusion}, but $(A)_0 \neq (A_1)_0$ by \ref{cofiniteFiltersSameIffDifferenceFinite}, because $A\setminus A_1$ is infinite.
 \end{proof}
 
 \begin{proposition} \label{cofiniteBaseFreePart}
