@@ -275,6 +275,28 @@ The following are also equivalent:
 \end{enumerate}
 \end{lemma}
 
+\subsection{Preservation of principal joins and meets}
+
+\begin{proposition} \label{monotonicPreservationPrincipalJoinsMeets}
+Let $P, Q$ be ordered sets and $f: P\to Q$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is monotonic;
+\item $f$ preserves principal joins:
+\[ \forall x\in P: \quad f(x) = f\Big(\bigvee \downset x\Big) = \bigvee f^\imf(\downset x); \]
+\item $f$ preserves principal meets:
+\[ \forall x\in P: \quad f(x) = f\Big(\bigwedge \upset x\Big) = \bigwedge f^\imf(\upset x). \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Take arbitrary $x\in P$. We first show that $f(x)$ is an upper bound of $f^\imf(\downset x)$. Indeed, take $y\in \downset x$. Then $y\Yleft x$, so $f(y)\Yleft f(x)$ by monotonicity.
+
+Now it is easy to see that $f(x)$ is a least upper bound: take some other upper bound $z$ of $f^\imf(\downset x)$, then in particular we have $f(x) \Yleft z$.
+
+$(1) \Leftarrow (2)$ Take $x\Yleft y \in P$, so $x\in\downset y$. Then $f(y) = \bigvee f^\imf(\downset y)$, so in particular $f(x) \Yleft f(y)$.
+
+$(1) \Leftrightarrow (3)$ This is dual to $(1) \Leftrightarrow (2)$.
+\end{proof}
+
 \subsection{Closure}
 
 \subsubsection{Moore closure}
@@ -727,6 +749,9 @@ For equivalence with (3) and (4), we just need to remark that $\sup(\emptyset) =
 
 For Dedekind completeness the argument is similar, we just need to remark that if $S$ is non-empty and bounded below, then $S^l$ is non-empty and bounded above.
 \end{proof}
+\begin{corollary}
+Every complete ordered set has a greatest and least element.
+\end{corollary}
 
 
 \begin{lemma}
@@ -736,16 +761,22 @@ The ordered natural numbers $\sSet{\N,\leq}$ are complete.
 Any set of natural numbers has a least element by \ref{proposition:wellOrderingN}. Any non-empty set $S$ of natural numbers that is bounded above, we can take $\max(S) = \min(\N\setminus S)-1$.
 \end{proof}
 
-\subsection{Directed sets}
+\section{Directed sets}
 \begin{definition}
 An ordered set $\sSet{D,\Yleft}$ is called
 \begin{itemize}
 \item \udef{(upwards) directed} if every finite subset has an upper bound;
 \item \udef{downwards directed} if every finite subset has a lower bound.
 \end{itemize}
-If $(D,\Yleft)$ is a directed set, we call the relation $\Yleft$ a \udef{direction}.
+Let $(D,\Yleft)$ be a directed set. We call
+\begin{itemize}
+\item the relation $\Yleft$ a \udef{direction};
+\item $D$ \udef{progressive} if $D$ does not contain a maximum.
+\end{itemize}
 
 Let $\sSet{P,\Yleft}$ be an ordered set. The set of directed subsets of $P$ is denoted $\directed(P)$.
+
+
 \end{definition}
 TODO: use $\Closure_\vee$ and $\Closure_\wedge$.
 
@@ -781,6 +812,42 @@ Assume $D$ upwards directed.
 Take some finite subset $S\subseteq f^\imf(D)$. Then there exists a finite subset $S'$ such that $f^\imf(S') = S$. We can find $b\in D$ such that $b$ is an upper bound. By isotonicity, $f(b)$ is an upper bound of $S$.
 
 The proof in the case that $D$ is downwards directed is dual.
+\end{proof}
+
+\subsection{Directed-completeness}
+\begin{definition}
+An ordered set $P$ is called \udef{directed-complete} if every directed subset has a supremum.
+
+If $P$ is a poset, then it is called a directed-complete partially ordered set, or \udef{DCPO}.
+
+If $A \subseteq P$ is directed, then we may denote $\sup(A)$ as $\dirvee A$.
+\end{definition}
+
+\subsection{Finite elements}
+\begin{definition}
+Let $P$ be a dcpo and $x\in P$. Then $x$ is called \udef{finite} if for all directed subsets $S\subseteq P$, we have
+\[ x = \dirvee S \quad\implies \quad x\in S. \] 
+\end{definition}
+
+\subsection{Preservation of directed joins}
+\begin{definition}
+Let $B,D$ be ordered sets and $f:B\to D$ a function. Then $f$ is \udef{preserves directed joins} or is \udef{Scott-continuous} if for all directed sets $S$ such that $\dirvee S$ exists, we have
+\[ f\big(\dirvee S\big) \;=\; \bigvee f^\imf(S). \]
+\end{definition}
+
+\begin{lemma} \label{monotonicDirectedness}
+Let $B,D$ be ordered sets, $S\subseteq B$ a directed subset and $f:B\to D$ a function. 
+\begin{enumerate}
+\item If $f$ preserves directed joins, then $f$ is monotonic.
+\item If $f$ is monotonic, then $f^\imf(S)$ is directed.
+\end{enumerate}
+\end{lemma}
+This means that $f$ preserves directed joins iff for all directed sets $S$ such that $\dirvee S$ exists, we have
+\[ f\big(\dirvee S\big) \;=\; \dirvee f^\imf(S). \]
+\begin{proof}
+(1) Instance of \ref{monotonicPreservationPrincipalJoinsMeets}.
+
+(2) Take $x,y\in f^\imf(S)$. Then there exist $a,b\in S$ such that $f(a) = x$ and $f(b) = y$. By directedness of $S$, we can find a $c\in S$ such that $a\leq c$ and $b\leq c$. Then $x \leq f(c)$ and $y \leq f(c)$ by monotonicity.
 \end{proof}
 
 \section{Ordered sets of subsets}
@@ -1291,6 +1358,11 @@ Assume these functions form a Galois connection. In order to obtain a contradict
 
 Then $(\upset y)\cap S \supseteq (\upset \bigwedge_S D)\cap S \supseteq D$, but $y\geq \bigwedge_S D$.
 \end{proof}
+
+\begin{proposition}
+TODO
+\[ \bigvee \Big(\bigcup_i A_i\Big) = \bigvee_i \Big(\bigvee A_i\Big). \]
+\end{proposition}
 
 \subsubsection{Projection onto a complete subsemilattice}
 \begin{definition}
@@ -2437,14 +2509,14 @@ Let $P$ be an ordered set and $I$ an index set.
 \begin{enumerate}
 \item If $P$ is a $\wedge$-semilattice, the set $\filters(P)$ of filters on $P$ is a complete bounded sublattice of $\sSet{\powerset(P), \subseteq}$, with top $P$ and bottom $\{\top\}$. Let $\{F_i\}_{i\in I} \in \filters(L)^I$ be a set of filters. Then
 \[ \bigwedge \{F_i\}_{i\in I} = \bigcap_{i\in I}F_i \qquad\text{and}\qquad
-\bigvee \{F_i\}_{i\in I} =  \Closure_\wedge\left(\bigcup_{i\in I}F_i\right). \]
+\bigvee \{F_i\}_{i\in I} = \upset \Closure_\wedge\left(\bigcup_{i\in I}F_i\right). \]
 \item If $P$ is a $\vee$-semilattice, the set $\ideals(P)$ of ideals on $P$ is a complete bounded sublattice of $\sSet{\powerset(P), \subseteq}$, with top $P$ and bottom $\{\bot\}$. Let $\{J_i\}_{i\in I} \in \filters(L)^I$ be a set of ideals. Then
 \[ \bigwedge \{J_i\}_{i\in I} = \bigcap_{i\in I}J_i \qquad\text{and}\qquad
-\bigvee \{J_i\}_{i\in I} =  \Closure_\vee\left(\bigcup_{i\in I}J_i\right). \]
+\bigvee \{J_i\}_{i\in I} = \downset \Closure_\vee\left(\bigcup_{i\in I}J_i\right). \]
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-This is an application of \ref{completeSublattice} (TODO show this is the correct residual). We just need to prove that $\upset\Closure_\wedge \left(\bigcup_{i\in I}F_i\right) = \Closure_\wedge \left(\bigcup_{i\in I}F_i\right)$ TODO is distributive
+This is an application of \ref{completeSublattice} to \ref{filterGenerationSemilattice} (TODO show this is the correct residual). We just need to prove that $\upset\Closure_\wedge \left(\bigcup_{i\in I}F_i\right) = \Closure_\wedge \left(\bigcup_{i\in I}F_i\right)$ TODO is distributive
 \end{proof}
 \url{https://ncatlab.org/nlab/show/filter}
 
@@ -2765,6 +2837,164 @@ Let $S$ be a bounded $\wedge$-semilattice, $a\in S$ and $F\in\filters(S)$. Then
 If $F = F|_a$, then $F$ is a filter on $a$ by point (1).
 \end{proof}
 
+\chapter{Domain theory}
+\section{Domains}
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be a poset, $S\subseteq P$ and $x\in P$. Then
+\begin{itemize}
+\item $S$ is called \udef{consistent} if $S$ has an upper bound;
+\item $x$ is called \udef{total} if it is maximal and \udef{partial} if not.
+\end{itemize}
+\end{definition}
+
+
+\subsection{Finitary bases and domains}
+\begin{definition}
+Let $\sSet{B,\leq}$ be a poset. Then $B$ is called a \udef{finitary basis} if
+\begin{itemize}
+\item $P$ is a countable;
+\item every consistent subset has a least upper bound.
+\end{itemize}
+Elements of $P$ are called \udef{propositions}.
+
+The \udef{domain} $\domain_B$ generated by $B$ is the set of ideals in $B$.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{B,\leq}$ be a non-empty finitary basis. Then $B$ has a least element $\bot$.
+\end{lemma}
+\begin{proof}
+The empty set $\emptyset$ is consistent (because every element of $B$ is an upper bound) and thus has a least upper bound (which is exactly a least element in $B$).
+\end{proof}
+
+\begin{proposition} \label{directedJoinDomain}
+Let $B$ be a finitary basis and $\{A_i\}_{i\in I} \subseteq \domain_B$ be a directed set of ideals of $B$. Then
+\[ \dirvee_{i\in I} A_i = \bigcup_{i\in I}A_i \;\in \domain_B. \]
+In particular this means that $\sSet{\domain_B, \subseteq}$ is a DCPO.
+\end{proposition}
+\begin{proof}
+It is enough to show that $\bigcup_{i\in I}A_i$ is an ideal. It is downwards closed by \ref{meetJoinRClosedSets}.
+
+Now take $x,y\in \bigcup_{i\in I}A_i$. Then there exists $j,k\in I$ such that $x\in A_j$ and $y\in A_k$. By directedness of $\{A_i\}_{i\in I}$, there exists $m\in I$ such that $A_j\subseteq A_m$ and $A_k \subseteq A_m$. Now by directness of $A_m$, there exists $z\in A_m$ such that $x\leq z$ and $y\leq z$. As $z\in \bigcup_{i\in I}A_i$, we have shown that $\bigcup_{i\in I}A_i$ is directed.
+\end{proof}
+
+\begin{proposition}
+Let $B$ be a finitary basis. Then an ideal $I\in\domain_B$ is principal \textup{if and only if} it is finite.
+\end{proposition}
+\begin{proof}
+$\boxed{\Rightarrow}$ Assume $I = \downset\{x\}$ is a principal ideal and suppose $I = \dirvee A$ for some directed $A\subseteq \domain_B$. Then, by \ref{directedJoinDomain}, there exists $a\in A$ such that $x\in a$. Then $a = \downset\{x\}$. Indeed, $a \supseteq \downset\{x\}$ by downward closure of $a$ and  $a\subseteq\dirvee A = \downset\{x\}$.
+
+$\boxed{\Leftarrow}$ Assume $I$ is a finite ideal. Then $\setbuilder{\downset\{x\}}{x\in I}$ is a directed set of ideals in $\domain_B$ and $\dirvee\setbuilder{\downset\{x\}}{x\in I} = I$. By finiteness, $I\in \setbuilder{\downset\{x\}}{x\in I}$. In particular, $I$ is principal.
+\end{proof}
+\begin{corollary} \label{finiteDecompositionIdeal}
+Let $B$ be a finitary basis and $I\in\domain_B$ an ideal. Then
+\[ I = \dirvee \setbuilder{I'\in \domain_B}{\text{$I'$ is finite and $I'\subseteq I$}}. \]
+\end{corollary}
+
+\begin{definition}
+In general we call a poset $D$ a \udef{domain} if it is isomorphic to the domain $\domain_B$ generated by some finitary basis $B$.
+\end{definition}
+
+\begin{lemma}
+Let $D$ be a domain and $\{x_i\}_{i\in I}\subseteq D$. Then
+\begin{enumerate}
+\item $\bigwedge_{i\in I} x_i$ exists in $D$;
+\item if $\{x_i\}_{i\in I}$ is directed, then $\dirvee_{i\in I} x_i$ exists in $D$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Arbitrary intersection of ideals is ideal.
+
+(2) Restatement of \ref{directedJoinDomain}.
+\end{proof}
+
+\subsection{Functions on domains}
+\subsubsection{Extending functions on bases}
+\begin{proposition}
+Let $B$ be a finitary basis, $D$ a DCPO and $f: B \to D$ a monotone function. Then there exists a unique Scott-continuous function $f': \domain_B\to D$ such that $f'(\downset x) = f(x)$ for all $x\in B$.
+\end{proposition}
+\begin{proof}
+To show existence, we take
+\[ f': \domain_B \to D: \; A \mapsto \dirvee_{x\in A} f(x). \]
+Note that directedness is given by \ref{monotonicDirectedness}.
+
+By \ref{monotonicPreservationPrincipalJoinsMeets}, this function satisfies $f'(\downset x) = \dirvee f^\imf(\downset x) = f(x)$ for all $x\in B$.
+
+For Scott-continuity, take a directed set of ideals $\{A_i\}_{i\in I}$ and calculate
+\begin{align*}
+f'\Big(\dirvee_{i\in I} A_i\Big) &= \dirvee f^\imf\Big(\dirvee_{i\in I}A_i \Big) \\
+&= \dirvee f^\imf\Big(\bigcup_{i\in I}A_i \Big) \\
+&= \dirvee \bigcup_{i\in I} f^\imf(A_i) \\
+&= \dirvee_{i\in I} \dirvee f^\imf(A_i) \\
+&= \dirvee_{i\in I} f'(A_i),
+\end{align*}
+by \ref{joinMeetUnion}.
+
+Uniqueness follows straight from \ref{finiteDecompositionIdeal} and Scott-continuity.
+\end{proof}
+
+\subsubsection{Approximable relations}
+\begin{definition}
+Let $B,C$ be finitary bases. An \udef{approximable relation} is a relation $R$ on $(B,C)$ such that
+\begin{itemize}
+\item $bR$ is an ideal in $\domain_C$ for all $b\in B$;
+\item $Rc$ is upwards closed for all $c\in C$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{approximableRelationLemma}
+Let $B,C$ be finitary bases and $R$ an approximable relation on $(B,C)$. Then
+\begin{enumerate}
+\item $x\leq y \implies xR \subseteq yR$ for all $x,y\in B$;
+\item for any ideal $A\in\domain_B$, the set $\{xR\}_{x\in A}$ is directed.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $z\in xR$. Then $x\in Rz$ and so $y\in Rz$ by upwards closure. This means $z\in yR$ and thus $xR \subseteq yR$.
+
+(2) Take $xR, yR \in \{xR\}_{x\in A}$. Then there exists $z\in A$ such that $x\leq z$ and $y\leq z$. Then $xR\subseteq zR$ and $yR \subseteq zR$ by point (1).
+\end{proof}
+
+\begin{proposition}
+Let $B,C$ be finitary bases. Then the set of approximable relations on $(B,C)$, ordered by inclusion, and the set of Scott-continuous functions in $(\domain_B \to \domain_C)$, ordered pointwise, are isomorphic with an isomorphism given by
+\[ R\mapsto \big(A\mapsto AR\big) \]
+and inverse
+\[ f \mapsto \setbuilder{(b,c)\in B\times C}{c \in f(\downset b)}. \]
+\end{proposition}
+\begin{proof}
+We first show that these functions are well-defined. Let $R$ be an approximable relation on $(B,C)$ and $A\in\domain_B$. Then, by \ref{approximableRelationLemma} and \ref{directedJoinDomain}, we have that $AR = \dirvee_{x\in A}xR$ is an ideal in $\domain_C$.
+
+To show Scott continuity, let $\{A_i\}_{i\in I}$ be a directed subset of $\domain_B$. Then Scott continuity follows from
+\[ \Big(\dirvee_{i\in I}A_i\Big)R = \Big(\bigcup_{i\in I}A_i\Big)R = \bigcup_{i\in I}A_iR \]
+and the fact that $\{A_iR\}_{i\in I}$ is directed (by \ref{monotonicDirectedness}).
+
+Let $f: \domain_B\to\domain_C$ be a Scott-continuous function. Then, for all $x\in B$,
+\[ x\setbuilder{(b,c)\in B\times C}{c \in f(\downset b)} = \setbuilder{c\in C}{c\in f(\downset x)} = f(\downset x) \]
+is clearly an ideal in $\domain_C$.
+Now take arbitrary $y\in C$ and $x\in B$ such that
+\[ x \in \setbuilder{(b,c)\in B\times C}{c \in f(\downset b)}y \quad \iff\quad y\in f(\downset x). \]
+Then, for all $x'\geq x$, we have $\downset x \subseteq \downset x'$, so
+\[ y\in f(\downset x) \subseteq f(\downset x') \]
+by monotonicity of $f$. This shows that the preimage of $y$ is upwards closed.
+
+To show that the functions are mutual inverses, we observe
+\[ \setbuilder{(b,c)\in B\times C}{c \in (\downset b)R} = \setbuilder{(b,c)\in B\times C}{c \in bR} = \setbuilder{(b,c)\in B\times C}{bRc} = R \]
+where the first equality is due to \ref{approximableRelationLemma}: if $c\in xR$ for some $x\leq b$, then $c\in bR$ as $xR\subseteq bR$.
+
+Next, we observe that for all $A\in \domain_B$,
+\begin{align*}
+A\setbuilder{(b,c)\in B\times C}{c \in f(\downset b)} &=\dirvee_{x\in A}x\setbuilder{(b,c)\in B\times C}{c \in f(\downset b)} \\
+&= \dirvee_{x\in A}\setbuilder{c\in C}{c \in f(\downset x)} \\
+&= \dirvee_{x\in A}f(\downset x) \\
+&= f\Big(\dirvee_{x\in A}\downset x\Big) = f(A).
+\end{align*}
+
+Finally we need to verify that both functions are monotonic. Take $R\subseteq S$ approximable relations on $(B,C)$. Then $AR \subseteq AS$ for all $A\in \domain_B$.
+
+Now take Scott-continuous $f,g: \domain_B\to \domain_C$ such that $f(A)\subseteq g(A)$ for all $A\in \domain_B$. Then
+\[ \setbuilder{(b,c)\in B\times C}{c\in f(\downset b)} \subseteq \setbuilder{(b,c)\in B\times C}{c\in g(\downset b)} \]
+from $f(\downset b) \subseteq g(\downset b)$.
+\end{proof}
 
 \chapter{The poset of subsets}
 \begin{definition}

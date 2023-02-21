@@ -79,35 +79,32 @@ TODO
 Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $t\in T(\Omega, V)$. Then
 \begin{enumerate}
 \item $\positions(t) = \syntaxTree(t) \cap \N^*$;
-\item a node in $\syntaxTree(t)$ is terminal \textup{if and only if} it end with some element of $\Omega \uplus V$.
+\item a node in $\syntaxTree(t)$ is terminal \textup{if and only if} it ends with some element of $\Omega \uplus V$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 TODO
 \end{proof}
 
-\begin{lemma}
+\begin{proposition} \label{mappingsTermSyntaxTreePositions}
 Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $t\in T(\Omega, V)$.
 \begin{enumerate}
-\item $\#\big(\positions(t)\big) = \len(t)$;
-\item Every terminal node in $\positions(t)$ is a proper substring of exactly one (terminal) node in $\syntaxTree(t)$.
-\item Let $\positions(t)\subseteq \N^*$ be ordered by depth-first ordering. There exists a similarity between $\big(0:\len(t)\big)$ and the terminal nodes of $\positions(t)$.
-\item There exists a unique strictly monotone function
+\item Let $\positions(t)\subseteq \N^*$ be ordered by depth-first ordering. There exists a similarity
 \[ \leafAt_t: \big(0:\len(t)\big)\to \positions(t) \]
 such that $\leafAt_t(k)\concat\seq{t_k}\in \syntaxTree(t)$.
+\item The function 
+\[(-)[0..\len(-)-1]: \big(\syntaxTree \setminus \positions(t)\big) \to \positions(t) \]
+is a bijection.
 \end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $t\in T(\Omega, V)$.
-\begin{enumerate}
-\item Every terminal node in $\positions(t)$ is a proper substring of exactly one (terminal) node in $\syntaxTree(t)$.
-\item Let $\positions(t)\subseteq \N^*$ be ordered by depth-first ordering. There exists a similarity between $\big(0:\len(t)\big)$ and the terminal nodes of $\positions(t)$.
-\item There exists a unique strictly monotone function
-\[ \leafAt_t: \big(0:\len(t)\big)\to \positions(t) \]
-such that $\leafAt_t(k)\concat\seq{t_k}\in \syntaxTree(t)$.
-\end{enumerate}
-\end{lemma}
+\end{proposition}
+The similarity $\leafAt_t$ is unique by \ref{WOSetsUniqueSimilarity}.
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $t\in T(\Omega, V)$. Then
+\[ {\#\big(\positions(t)\big)} = \len(t) = {\#\big(\syntaxTree(t)\big)/2}. \]
+\end{corollary}
 
 
 \begin{definition}
@@ -156,7 +153,7 @@ Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $s\in T(\Omega
 We can write $s = u\concat t \concat v$ for some $t\in T(\Omega, V)$ and some $u,v\in (\Omega\uplus V)^*$ \textup{if and only if} there exists $p\in\positions(s)$ such that $s|_p = t$.
 \end{lemma}
 \begin{proof}
-$\boxed{\Rightarrow}$ Consider $\leafAt_t\big(\len(u)\big)$
+$\boxed{\Rightarrow}$ We claim we can take $p = \leafAt_{u\concat t \concat v}\big(\len(u)\big)$. Indeed $p\concat \seq{t_0} \in \syntaxTree(u\concat t \concat v)$ by \ref{mappingsTermSyntaxTreePositions}. So $s|_p$ 
 \end{proof}
 
 \subsubsection{Substitution}
@@ -250,7 +247,7 @@ We say $\hat{\sigma}$ \udef{instantiates} $x\in V$ if $x\in \preim(\hat{\sigma})
 Given an elementary variable substitution $\hat{\sigma}$, we also define the \udef{(extended) variable substitution} $\sigma: (\Omega \uplus V)^*\to (\Omega \uplus V)^*$, defined recursively by
 \[ \sigma(u) = \begin{cases}
 \seq{} & (u = \seq{}) \\
-\sigma(u_0)\concat \sigma\big(u[1:]\big) & \big(u_0\in \preim(\hat{\sigma})\big) \\
+\hat{\sigma}(u_0)\concat \sigma\big(u[1:]\big) & \big(u_0\in \preim(\hat{\sigma})\big) \\
 u_0\concat \sigma\big(u[1:]\big) & \big(u_0\notin \preim(\hat{\sigma})\big)
 \end{cases} \]
 The set of all variable substitutions is denoted $\varSubs(\Omega, V)$.
@@ -265,13 +262,13 @@ TODO
 \end{proof}
 
 \subsection{Syntactic consequence}
-\subsubsection{$\Omega$-identities}
+\subsubsection[Omega-identities]{$\Omega$-identities}
 \begin{definition}
 Let $(\Omega, \alpha)$ be a signature and $V$ a set of variables. An \udef{$\Omega$-identity} is an element of $T(\Omega, V)\times T(\Omega, V)$.
 
 We call a set $E\subseteq T(\Omega, V)\times T(\Omega, V)$ \udef{closed under variable substitution} if for all variable substitutions $\sigma$, we have $(\sigma, \sigma)^\imf(E) \subseteq E$.
 
-We call a set $E\subseteq T(\Omega, V)\times T(\Omega, V)$ \udef{closed under $\Omega$-operations} if for all operator symbols $\omega\in\Omega$ and $t,s\in \big(T(\Omega, V)\big)^{\alpha(\omega)}$ such that $(s_i, t_i)\in E$ for all $i\in 0:\alpha(\omega)$, we have
+We call a set $E\subseteq T(\Omega, V)\times T(\Omega, V)$ \udef{closed under $\Omega$-operations} if for all operator symbols $\omega\in\Omega$ and $t,s\in \big(T(\Omega, V)\big)^{\alpha(\omega)}$ such that $(s_i, t_i)\in E$ for all $i\in \big(0:\alpha(\omega)\big)$, we have
 \[ \big( \seq{\omega}\concat \strConcat(s), \seq{\omega}\concat \strConcat(t)\big) \in E. \]
 \end{definition}
 
@@ -279,8 +276,8 @@ The closure of $E$ under variable substitutions is given by $\bigcup_{\sigma\in\
 
 \subsubsection{Reduction relations}
 \begin{definition}
-Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $E$ a set of $\Omega$-identities. We define the \udef{reduction relation} $\to_E$ on $T(\Omega, V)$ by
-\[ s\to_E t \;\defequiv\; \exists u,v\in (\Omega\uplus V)^*: \exists (r_1, r_2)\in E: \exists \sigma\in \varSubs(\Omega, V):\; \begin{cases}
+Let $(\Omega, \alpha)$ be a signature, $V$ a set of variables and $E$ a set of $\Omega$-identities. We define the \udef{reduction relation} $\to_E$ on $T(\Omega, V)$ by $s\to_E t \defequiv$
+\[ \exists u,v\in (\Omega\uplus V)^*: \exists (r_1, r_2)\in E: \exists \sigma\in \varSubs(\Omega, V):\; \begin{cases}
 s = u \concat \sigma(r_1) \concat v \in T() \\
 t = u \concat \sigma(r_2) \concat v.
 \end{cases}  \]
@@ -1731,6 +1728,36 @@ Let $P$ be a partial order and $D\subseteq P$ a subset.
 (1) Saying $D$ is closed under arbitrary joins is equivalent to saying the inclusion $D\hookrightarrow P$ preservis joins. By the proposition this means the inclusion is residuated. The rest follows from TODO
 \end{proof}
 TODO: swap monad - comonad??
+
+\begin{proposition}
+Let $P$ be a poset. Then
+\begin{enumerate}
+\item if $\mathcal{J}\subseteq \powerset(P)$ is the set of subsets of $P$ that have a join, then
+\[ \mathcal{J} \to P: A\mapsto \bigvee A \qquad\text{and}\qquad P\to \mathcal{J}: x\to \downset x \]
+form a Galois connection;
+\item if $\mathcal{M}\subseteq \powerset(P)$ is the set of subsets of $P$ that have a meet, then
+\[ P\to \mathcal{M}^o: x\to \upset x \qquad\text{and}\qquad \mathcal{M}^o \to P: A\mapsto \bigwedge A \]
+form a Galois connection. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have, for all $A\in \mathcal{J}$ and $x\in P$,
+\[ \bigvee A \leq x \qquad \iff\qquad A\subseteq \downset x. \]
+(2) We have, for all $A\in \mathcal{M}$ and $x\in P$,
+\[ \upset x \supseteq A \qquad \iff\qquad x\leq \bigwedge A. \]
+\end{proof}
+\begin{corollary} \label{joinMeetUnion}
+Let $P$ be a poset. Then
+\begin{enumerate}
+\item if $\{A_i\}_{i\in I}\subseteq \mathcal{J}$ is a set of subsets such that $\bigcup_{i\in I}A_i \in \mathcal{J}$, then $\big\{\bigvee A_i\big\}_{i\in I} \in \mathcal{J}$ and
+\[ \bigvee \Big(\bigcup_{i\in I}A_i\Big) = \bigvee_{i\in I}\Big(\bigvee A_i\Big); \]
+\item if $\{A_i\}_{i\in I}\subseteq \mathcal{M}$ is a set of subsets such that $\bigcup_{i\in I}A_i \in \mathcal{M}$, then $\big\{\bigwedge A_i\big\}_{i\in I} \in \mathcal{M}$ and
+\[ \bigwedge \Big(\bigcup_{i\in I}A_i\Big) = \bigwedge_{i\in I}\Big(\bigwedge A_i\Big). \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Application of \ref{GaloisConnectionLatticePreservation}.
+\end{proof}
 
 \subsubsection{Sets of functions and relations}
 \begin{proposition} \label{setOfFunctionsToRelationGaloisConnection}
