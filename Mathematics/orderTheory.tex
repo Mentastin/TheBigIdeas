@@ -823,7 +823,27 @@ If $P$ is a poset, then it is called a directed-complete partially ordered set, 
 If $A \subseteq P$ is directed, then we may denote $\sup(A)$ as $\dirvee A$.
 \end{definition}
 
-\subsection{Finite elements}
+\subsubsection{The way-below relation}
+\begin{definition}
+Let $P$ be a directed-complete poset and $x,y\in P$. We say $x$ is \udef{way below} $y$, denoted $x \ll y$, if for all directed subsets $D\subseteq P$ such that $y\leq \dirvee D$, there exists $d\in D$ such that $x\leq d$.
+\end{definition}
+
+\begin{proposition}
+Let $P$ be a directed-complete poset and $x,y,z\in P$. Then
+\begin{enumerate}
+\item $x \ll y$ implies $x\leq y$;
+\item $x\leq y \ll z$ implies $x \ll z$;
+\item $x \ll y \leq z$ implies $x\ll z$;
+\item $x \ll z$ and $y\ll z$ imply $x\vee y \ll z$, if $x\vee y$ exists;
+\item $\bot \ll x$ if $\bot$ exists.
+\end{enumerate}
+In particular, $\ll$ is transitive.
+\end{proposition}
+\begin{proof}
+(1) This follows by taking $D = \{y\}$, which is directed. 
+\end{proof}
+
+\subsubsection{Finite elements}
 \begin{definition}
 Let $P$ be a dcpo and $x\in P$. Then $x$ is called \udef{finite} if for all directed subsets $S\subseteq P$, we have
 \[ x = \dirvee S \quad\implies \quad x\in S. \] 
@@ -2943,16 +2963,21 @@ Let $B,C$ be finitary bases. An \udef{approximable relation} is a relation $R$ o
 \end{definition}
 
 \begin{lemma} \label{approximableRelationLemma}
-Let $B,C$ be finitary bases and $R$ an approximable relation on $(B,C)$. Then
+Let $B,C,D$ be finitary bases, $R$ an approximable relation on $(B,C)$ and $S$ an approximable relation on $(C,D)$. Then
 \begin{enumerate}
 \item $x\leq y \implies xR \subseteq yR$ for all $x,y\in B$;
-\item for any ideal $A\in\domain_B$, the set $\{xR\}_{x\in A}$ is directed.
+\item for any ideal $A\in\domain_B$, the set $\{xR\}_{x\in A}$ is directed;
+\item $R;S$ is an approximable relation on $(B,D)$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 (1) Take $z\in xR$. Then $x\in Rz$ and so $y\in Rz$ by upwards closure. This means $z\in yR$ and thus $xR \subseteq yR$.
 
 (2) Take $xR, yR \in \{xR\}_{x\in A}$. Then there exists $z\in A$ such that $x\leq z$ and $y\leq z$. Then $xR\subseteq zR$ and $yR \subseteq zR$ by point (1).
+
+(3) Take $b\in B$. Then $b(R;S) = \bigcup _{c\in bR}cS$. This join is directed by point (2) and thus an ideal by \ref{directedJoinDomain}.
+
+Take $d\in D$. Then $(R;S)d = \bigcup_{c\in Sd}Rc$ is a union of downwards closed sets and thus downwards closed.
 \end{proof}
 
 \begin{proposition}
@@ -2960,9 +2985,10 @@ Let $B,C$ be finitary bases. Then the set of approximable relations on $(B,C)$, 
 \[ R\mapsto \big(A\mapsto AR\big) \]
 and inverse
 \[ f \mapsto \setbuilder{(b,c)\in B\times C}{c \in f(\downset b)}. \]
+These maps are functorial (i.e.\ preserve composition).
 \end{proposition}
 \begin{proof}
-We first show that these functions are well-defined. Let $R$ be an approximable relation on $(B,C)$ and $A\in\domain_B$. Then, by \ref{approximableRelationLemma} and \ref{directedJoinDomain}, we have that $AR = \dirvee_{x\in A}xR$ is an ideal in $\domain_C$.
+We first show that these maps are well-defined. Let $R$ be an approximable relation on $(B,C)$ and $A\in\domain_B$. Then, by \ref{approximableRelationLemma} and \ref{directedJoinDomain}, we have that $AR = \dirvee_{x\in A}xR$ is an ideal in $\domain_C$.
 
 To show Scott continuity, let $\{A_i\}_{i\in I}$ be a directed subset of $\domain_B$. Then Scott continuity follows from
 \[ \Big(\dirvee_{i\in I}A_i\Big)R = \Big(\bigcup_{i\in I}A_i\Big)R = \bigcup_{i\in I}A_iR \]
@@ -2977,7 +3003,7 @@ Then, for all $x'\geq x$, we have $\downset x \subseteq \downset x'$, so
 \[ y\in f(\downset x) \subseteq f(\downset x') \]
 by monotonicity of $f$. This shows that the preimage of $y$ is upwards closed.
 
-To show that the functions are mutual inverses, we observe
+To show that the maps are mutual inverses, we observe
 \[ \setbuilder{(b,c)\in B\times C}{c \in (\downset b)R} = \setbuilder{(b,c)\in B\times C}{c \in bR} = \setbuilder{(b,c)\in B\times C}{bRc} = R \]
 where the first equality is due to \ref{approximableRelationLemma}: if $c\in xR$ for some $x\leq b$, then $c\in bR$ as $xR\subseteq bR$.
 
@@ -2989,11 +3015,104 @@ A\setbuilder{(b,c)\in B\times C}{c \in f(\downset b)} &=\dirvee_{x\in A}x\setbui
 &= f\Big(\dirvee_{x\in A}\downset x\Big) = f(A).
 \end{align*}
 
-Finally we need to verify that both functions are monotonic. Take $R\subseteq S$ approximable relations on $(B,C)$. Then $AR \subseteq AS$ for all $A\in \domain_B$.
+We need to verify that both maps are monotonic. Take $R\subseteq S$ approximable relations on $(B,C)$. Then $AR \subseteq AS$ for all $A\in \domain_B$.
 
 Now take Scott-continuous $f,g: \domain_B\to \domain_C$ such that $f(A)\subseteq g(A)$ for all $A\in \domain_B$. Then
 \[ \setbuilder{(b,c)\in B\times C}{c\in f(\downset b)} \subseteq \setbuilder{(b,c)\in B\times C}{c\in g(\downset b)} \]
 from $f(\downset b) \subseteq g(\downset b)$.
+
+Finally we prove the maps preserve composition. By \ref{bijectiveHomomorphism} it is enough to show that one of the two maps preserves composition. Indeed $A(R;S) = (AR)S$.
+\end{proof}
+\begin{corollary}
+Let $B$ be a finitary basis. The relation $\geq$ is the approximable relations associated to the identity function.
+\end{corollary}
+\begin{corollary}
+The Scott-continuous functions between domains and approximable relations between finitary bases are isomorphic categories.
+\end{corollary}
+
+\subsubsection{Products}
+\begin{lemma}
+The product of two finitary bases in the category of relational structures (i.e.\ the Cartesian product with pointwise order) is again a finitary basis.
+\end{lemma}
+\begin{proof}
+Let $B,C$ be finitary bases and $S\subseteq B\times C$ a consistent subset bounded by $(b,c)\in B\times C$. Now consider $A_1 = p_1^{\imf}(S)$ and $A_2 = p_1^{\imf}(S)$, which are consistent sets bounded by $b$ and $c$, respectively. Then $x = \bigvee A_1$ and $y = \bigvee A_2$ exist. It is easy to see that $\bigvee S = (x,y)$.
+\end{proof}
+
+\begin{lemma} \label{domainProductLemma}
+Let $B,C$ be finitary bases. Then $\domain_{B\times C} \cong \domain_B\times\domain_C$ and the isomorphism is given by
+\begin{align*}
+F&: \domain_B\times\domain_C \to \domain_{B\times C}: & \hspace{-6em} (A_1,A_2) &\mapsto A_1\times A_2 \\
+F^{-1}&: \domain_{B\times C} \to \domain_B\times\domain_C: & \hspace{-6em} A&\mapsto \big(p_1^\imf(A), p_2^\imf(A)\big).
+\end{align*}
+In particular: the product of two domains is again a domain.
+\end{lemma}
+\begin{proof}
+We first verify these maps are mutual inverses. Clearly we have $(A_1, A_2) = \big(p_1^\imf(A_1\times A_2), p_2^\imf(A_1\times A_2)\big)$. Also it is clear that $A \subseteq p_1^\imf(A)\times p_2^\imf(A)$. To show the other inclusion, take $(x,y) \in p_1^\imf(A)\times p_2^\imf(A)$. Then there exist $(x,y')\in A$ and $(x',y)\in A$. By directedness of $A$, we can find $(x^{\prime\prime}, y^{\prime\prime})\in A$ such that
+\[ x \leq x^{\prime\prime},\; y' \leq y^{\prime\prime},\; x'\leq x^{\prime\prime} \quad\text{and}\quad y \leq y^{\prime\prime}. \]
+Then $(x,y) \leq (x^{\prime\prime}, y^{\prime\prime})$, so $(x,y)\in A$ by downwards closure.
+
+It is easy to see that both maps are monotonic w.r.t. inclusion, so we are done.
+\end{proof}
+
+\begin{proposition} \label{productApproximableRelations}
+Let $B,C,D$ be finitary bases and $f: \domain_B\to \domain_C$, $g: \domain_B\to \domain_C$ two Scott-continuous functions. Then the functions
+\[ p_1: \domain_C\times \domain_D \to \domain_C, \quad p_2: \domain_C\times \domain_D \to \domain_D\,\quad\text{and}\quad (f,g): \domain_B \to \domain_C\times \domain_D \]
+are Scott-continuous and
+\begin{enumerate}
+\item the approximable relation $P_1$ on $(C\times D)\times C$ associated to $p_1: \domain_C\times \domain_D \to \domain_C$ is defined by $(x,y)P_1 z \iff z\leq x$;
+\item the approximable relation $P_2$ on $(C\times D)\times D$ associated to $p_2: \domain_C\times \domain_D \to \domain_D$ is defined by $(x,y)P_2 z \iff z\leq y$;
+\item the approximable relation $(F,G)$ on $B\times (C\times D)$ associated to $(f,g): \domain_B \to \domain_C\times \domain_D$ is defined by $x \big(F,G\big) (y,z) \iff \big(xFy \land xGz\big)$, where $F$ and $G$ are the approximable relations determined by $f$ and $g$, respectively.
+\end{enumerate}
+\end{proposition}
+In particular this means that the category of Scott-continuous functions between domains (or, equivalently, the category of approximable relations between finitary bases) contains binary products.
+\begin{proof}
+It is clear (using \ref{domainProductLemma}) that these functions are Scott-continuous.
+
+(1) We calculate $P_1$ as the approximable relation determined by $p_1 \circ \big(p_1^\imf(-), p_2^\imf(-)\big) = p_1^\imf: \domain_{C\times D}\to \domain_C$:
+\[ P_1 = \setbuilder{\big((x,y),z\big)\in (C\times D)\times C}{z\in p_1^\imf\big(\downset (x,y)\big)} = \setbuilder{\big((x,y),z\big)\in (C\times D)\times C}{z\leq x}. \]
+
+(2) Similar to (1).
+
+(3) We calculate $(F,G)$ as the approximable relation determined by $(\times)\circ (f,g): \domain_B\to \domain_{C\times D}$:
+\begin{align*}
+(F,G) &= \setbuilder{\big(x,(y,z)\big)\in B\times (C\times D)}{(y,z) \in f(\downset x)\times g(\downset x)} \\
+&= \setbuilder{\big(x,(y,z)\big)\in B\times (C\times D)}{\big(y \in f(\downset x)\big)\land\big(z\in g(\downset x)\big)} \\
+&= \setbuilder{\big(x,(y,z)\big)\in B\times (C\times D)}{xFy\land xGy}.
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Let $B,C,D$ be finitary bases and $f: \domain_B\times \domain_C\to \domain_D$ a function and $F$ the relation on $(B\times C)\times D$ defined by
+\[ (x,y)Fz \;\defequiv\; z\in f\big(\downset (x,y)\big). \]
+Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is Scott-continuous;
+\item $f(x,-)$ and $f(-,y)$ are Scott-continuous for all $x\in \domain_B$ and $y\in \domain_C$;
+\item $f(\downset b,-)$ and $f(-,\downset c)$ are Scott-continuous for all $b\in B$ and $c\in C$;
+\item the relations $F_{b,*}$ and $F_{*,c}$ defined by
+\begin{align*}
+xF_{b,*}z \quad &\defequiv \quad (b,x)Fz \\
+xF_{*,c}z \quad &\defequiv \quad (x,c)Fz
+\end{align*}
+are approximable.
+\end{enumerate}
+In this case, $F_{b,*}$ is the approximable relation associated to $f(\downset b,-)$ and $F_{*,c}$ the approximable relation associated to $f(-,\downset c)$.
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ This follows from \ref{productApproximableRelations} and the fact that $\id_{\domain_B}, \id_{\domain_C}, \underline{x}$ and $\underline{y}$ are Scott-continuous:
+\[ f(x, -) = f \circ (\underline{x}, \id_{\domain_C}) \qquad\text{and}\qquad f(-, y) = f \circ (\id_{\domain_B}, \underline{y}). \]
+
+$(2) \Rightarrow (3)$ Immediate.
+
+$(3) \Rightarrow (4)$ If $f(\downset b,-)$ is Scott-continuous, then seeing that $F_{b,*}$ is the associated approximable relation is straightforward:
+\[ xF_{b,*}z \iff (b,x)Fz \iff z \in f\big(\downset (b,x)\big) = f\big(\downset b \times \downset x\big). \]
+The other part is similar.
+
+$(4) \Rightarrow (1)$ It is enough to show that $F$ is approximable, in which case it is the approximable relation associated to the Scott-continuous function $f$.
+
+Take $(x,y)\in B\times C$ and $z\in D$. Clearly $(x,y)F = yF_{x,*}$ is an ideal. Now take $(x',y')\geq (x,y)\in B\times C$, so $x'\geq x$ and $y'\geq y$. Then $y'F_{x,*}z$ by upwards closure of $F_{x,*}$ and we have the implications
+\[ y'F_{x,*}z \implies (x,y')Fz \implies xF_{*,y'}z \implies x'F_{*,y'}z \implies (x',y')Fz. \]
+We conclude that $Fz$ is upwards closed.
 \end{proof}
 
 \chapter{The poset of subsets}
