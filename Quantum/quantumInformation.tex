@@ -1,3 +1,14 @@
+\chapter{Bras and kets}
+\begin{definition}
+Let $A$ be some set. We denote the Hilbert space $\ell^2(A)$ by $\hilbert_A$ and define the \udef{ket function}
+\[ \ket{-}: A\to \ell^2(A): a\mapsto \ket{a} \]
+by
+\[ \ket{a}(x) = \delta_{ax}. \]
+In particular $\hilbert_n \cong \C^n$ for all $n\in\N$.
+\end{definition}
+The set $\{\ket{a}\}_{a\in A}$ forms a Hilbert basis of $\hilbert_A$.
+
+In particular $\{\ket{0}, \ket{1}\}$ is a basis of $\C^2$.
 \chapter{Circuit model}
 \section{Qubits}
 \begin{definition}
@@ -5,9 +16,9 @@ A \udef{qubit} is an element of $\C P^2$.
 \end{definition}
 
 \subsection{$\suAlg(2)$ and the Pauli matrices}
-The qubit Hamiltonians are elements of $\suAlg(2)$. Getting rid of the arbitrary global phase gives us elements of $\suAlg(2)$.
+The qubit Hamiltonians are elements of $\uAlg(2)$. Getting rid of the arbitrary global phase gives us elements of $\suAlg(2)$.
 
-\begin{lemma}
+\begin{lemma} \label{su2Eigenvalues}
 For all $\sigma\in \suAlg(2)$, the eigenvalues $\lambda_1, \lambda_2$ are real and $\lambda_1 = -\lambda_2$.
 \end{lemma}
 \begin{proof}
@@ -59,6 +70,24 @@ The Clifford algebra $\suAlg(2)$ has an orthonormal basis
 \end{pmatrix}. \]
 \end{proposition}
 
+\begin{definition}
+We call
+\begin{itemize}
+\item the eigenbasis of $\sigma_z$ the \udef{$Z$-basis} or \udef{computational basis} and write the elements
+\[ \ket{0} = \begin{pmatrix}
+1 \\ 0
+\end{pmatrix} \qquad \ket{1} = \begin{pmatrix}
+0 \\ 1
+\end{pmatrix}; \]
+\item the eigenbasis of $\sigma_x$ the \udef{$X$-basis} or \udef{coherence basis} and write the elements
+\[ \ket{+} = \frac{1}{\sqrt{2}}\begin{pmatrix}
+1 \\ 1
+\end{pmatrix} = \frac{\ket{0} + \ket{1}}{\sqrt{2}} \qquad \ket{-} = \frac{1}{\sqrt{2}}\begin{pmatrix}
+1 \\ -1
+\end{pmatrix} = \frac{\ket{0} - \ket{1}}{\sqrt{2}}. \]
+\end{itemize}
+\end{definition}
+
 \subsection{The Bloch sphere}
 Because $\suAlg(2)$ is the Clifford algebra $\Cl_{3,0}$, we can use the unit sphere in $\R^3$ to represent the unit vectors in $\suAlg(2)$. By \ref{BlochBijection} we can also use it to represent the rank-1 projections on $\C^2$. The unit sphere with as $x,y,z$ axes the Pauli matrices $\sigma_x,\sigma_y, \sigma_z$ is called the \udef{Bloch sphere}.
 
@@ -70,6 +99,34 @@ TODO spherical coordinates: $\cos\theta / 2\ket{0} + e^{i\phi}\sin\theta/2 \ket{
 \end{lemma}
 
 \section{Gates}
+\subsection{One-qubit gates}
+\subsubsection{Hadamard gate}
+\begin{definition}
+The \udef{Hadamard gate} or \udef{Walsh-Hadamard gate} $W$ is the linear operation determined by the following matrix:
+\[ W = \frac{1}{\sqrt{2}}\begin{pmatrix}
+1 & 1 \\ 1 & -1
+\end{pmatrix}. \]
+\end{definition}
+We have the following mappings
+\begin{align*}
+W\ket{0} &= \ket{+} & W\ket{+} &= \ket{0} \\
+W\ket{1} &= \ket{-} & W\ket{-} &= \ket{1}
+\end{align*}
+
+\begin{lemma}
+The Hadamard gate is its own inverse: $W^2 = \mathbb{1}$.
+\end{lemma}
+
+\subsubsection{Pauli gates}
+\begin{definition}
+Each of the Pauli matrices determines an operation on $\C^2$. In this context we often write $X,Y$ and $Z$ for $\sigma_x, \sigma_y$ and $\sigma_z$.
+\end{definition}
+
+\begin{lemma}
+The Pauli gates are their own inverses: $X^2 = Y^2 = Z^2 = \mathbb{1}$.
+\end{lemma}
+
+
 
 \subsection{Controlled gates}
 \begin{definition}
@@ -102,9 +159,42 @@ Let $\ket{\psi(s)}$ be a nondegenerate eigenstate of $H(s)$ and $\{\omega_j\}$ t
 \chapter{Variational quantum algorithms}
 
 \chapter{Algorithms}
-\section{Deutsch's problem}
+\section{Quantum oracle querying}
+\subsection{Oracle set-up}
+\begin{definition}
+For any finite set $A$, we define a mapping
+\[ O: (A\to \F_2) \to \End(\hilbert_{A}\otimes \hilbert_{\F_2}): f\mapsto O_f \]
+where
+\[ O_f(\ket{k}\otimes \ket{q}) \defeq \ket{k}\otimes \ket{f(k) + q}.  \]
+We call $O_f$ the \udef{quantum oracle} of $f$.
+\end{definition}
 
-\section{Grover's search algorithm}
+\begin{lemma}
+We can convert an oracle $O_f$ to a unitary operator
+\[ U_f = \bra{0}_+(WX\otimes \id)O_f(WX\otimes \id)\ket{0}_+. \]
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
+\subsection{Deutsch's problem}
+\begin{problem}
+Suppose we have a 1-bit to 1-bit function $f: \{0,1\} \to \{0,1\}: x\mapsto f(x)$.
+
+Determine whether $f$ is
+\begin{itemize}
+    \item \emph{constant}, i.e.\ $f(0) = f(1)$; or
+    \item \emph{balanced}, i.e.\ $f(0) \neq f(1)$.
+\end{itemize}
+\end{problem}
+
+\begin{lemma}
+The classical query complexity of Deutch's problem is 2.
+\end{lemma}
+
+
+
+\subsection{Grover's search algorithm}
 Suppose we have a set $\mathcal{N}$ of $N$ items, some of which are marked. WLOG we can take $\mathcal{N}$ to be the set of bit strings of length $\nu$. The marked items form a subset $\mathcal{M}$ of size $M$. Suppose we have an oracle that tells us whether an object is marked or not:
 \[ f:\mathcal{N} \to \{0,1\}: x\mapsto \begin{cases}
 0 & (x\in \mathcal{M}) \\
@@ -141,11 +231,12 @@ We also define the state
 
 We define the operation
 \[ U_0 = W^{\otimes\nu}(\id - 2\ketbra{0}{0})W^{\otimes\nu}= \id - 2\ketbra{\mathcal{N}}{\mathcal{N}}. \]
+\[ U_0 = W^{\otimes\nu}(-Z)^{\otimes \nu}W^{\otimes\nu}= \id - 2\ketbra{\mathcal{N}}{\mathcal{N}}. \]
 
-Now both $U_0$ and $U_f$ leave $\Span\{\}$
+Now $\Span\{\ket{\mathcal{N}}, \ket{\mathcal{M}}\}$ is invariant under both $U_0$ and $U_f$.
 
 \subsection{Analogue Grover}
-Why does analogue Grover work?
+
 
 
 \subsection{Adiabatic Grover}
