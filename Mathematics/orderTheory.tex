@@ -646,6 +646,8 @@ Now assume all chains with one fewer element than $C$ have a maximal element. Pi
 
 \begin{definition}
 An ordered set $X$ is \udef{chain-complete} or \udef{inductive} if every chain in $X$ has a least upper bound.
+
+For any cardinal $\kappa$, we say $X$ is \udef{$\kappa$-chain-complete} or \udef{$\kappa$-inductive} if every chain in $X$ of at most cardinality $\kappa$ has a least upper bound.
 \end{definition}
 
 \begin{lemma}
@@ -798,6 +800,8 @@ Let $\sSet{P,\Yleft}$ be an ordered set. The set of directed subsets of $P$ is d
 
 
 \end{definition}
+Note that directed sets are nonempty: they must contain an upper (or lower) bound of the empty set.
+
 TODO: use $\Closure_\vee$ and $\Closure_\wedge$.
 
 TODO: important note: $\Closure_\vee$ only implies closure under finite $\vee$
@@ -837,11 +841,31 @@ The proof in the case that $D$ is downwards directed is dual.
 \subsection{Directed-completeness}
 \begin{definition}
 An ordered set $P$ is called \udef{directed-complete} if every directed subset has a supremum.
-
-If $P$ is a poset, then it is called a directed-complete partially ordered set, or \udef{DCPO}.
-
-If $A \subseteq P$ is directed, then we may denote $\sup(A)$ as $\dirvee A$.
+\begin{itemize}
+\item If $P$ is a poset, then it is called a directed-complete partially ordered set, or \udef{DCPO}.
+\item If $A \subseteq P$ is directed, then we may denote $\sup(A)$ as $\dirvee A$.
+\item For any cardinal $\kappa$, we say $P$ is \udef{$\kappa$-directed complete} (or a \udef{$\kappa$-DCPO} if $P$ is partially ordered) if every directed subset of at most cardinality $\kappa$ has a supremum.
+\end{itemize}
 \end{definition}
+
+\begin{proposition}
+Let $P$ be a poset and $\kappa$ a cardinal. Then $P$ is a $\kappa$-DCPO \textup{if and only if} $P$ is $\kappa$-inductive.
+\end{proposition}
+This result uses choice.
+\begin{proof}
+The direction $\Rightarrow$ is immediate.
+
+Consider the other direction. Let $D$ be a directed set of cardinality $\gamma \leq \kappa$. 
+If $\gamma$ is finite, then the result is immediate: the only finite directed sets are principal ideals.
+
+Now suppose $\gamma$ is infinite. Then take an ordinal assignement and derive a cardinal assignment using \ref{cardinalsFromOrdinals}. Then $\gamma$ corresponds to a limit ordinal and so
+\[ \gamma = \bigcup_{\alpha < \gamma} \alpha \]
+by \ref{supLesserElementsOfLimitPoint}. Now there exists a bijection $f: \gamma \to D$ by assumption and set $D_\alpha \defeq f^\imf(\alpha)$. The family $\{D_\alpha\}_{\alpha\leq\gamma}$ is a familty of subsets of $D$ such that $|D_\alpha| = \alpha < \gamma$ and $\bigcup_{\alpha < \gamma}D_\alpha = D$.
+
+
+Now by choice we can find an ``upper bound function'' $u$ that maps finite subsets of $D$ to some upper bound of the subset in $D$.
+We define $D_\alpha'$ by closing $D_\alpha$ under $u$.
+\end{proof}
 
 \subsubsection{The way-below relation}
 \begin{definition}
@@ -2364,17 +2388,17 @@ The letters $G$ and $M$ come from the German: Gegenstände and Merkmale. The $I$
 
 \section{Filters and ideals}
 \begin{definition}
-Let $\sSet{P,\Yleft}$ be an ordered set. A subset $F\subseteq P$ is called
+Let $\sSet{P,\Yleft}$ be an ordered set. A subset $A\subseteq P$ is called
 \begin{itemize}
 \item an \udef{order filter} if
 \begin{itemize}
-\item $F$ is downward directed;
-\item $F$ is an up set in $P$;
+\item $A$ is downward directed;
+\item $A$ is an up set in $P$;
 \end{itemize}
 \item an \udef{order ideal} if
 \begin{itemize}
-\item $F$ is upward directed;
-\item $F$ is a down set in $P$.
+\item $A$ is upward directed;
+\item $A$ is a down set in $P$.
 \end{itemize}
 \end{itemize}
 The set of ideals on $P$ is denoted $\ideals(P)$ and the set of filters on $P$ is denoted $\filters(P)$.
@@ -2476,6 +2500,27 @@ Let $\sSet{P,\Yleft_P}$, $\sSet{Q, \Yleft_Q}$ be ordered sets, $f: P\to Q$ an or
 \begin{proof}
 The set $\upset f^{\imf}(F)$ is downwards directed by \ref{imageDirectedSet}. It is upwards closed by construction.
 \end{proof}
+
+\subsection{Frink ideals}
+\begin{definition}
+Let $\sSet{P,\Yleft}$ be an ordered set. A subset $A\subseteq P$ is called\footnote{TODO: Frink, Orrin (1954), "Ideals In Partially Ordered Sets", Am. Math. Mon., 61: 223-234, doi:10.1080/00029890.1954.11988449}
+\begin{itemize}
+\item a \udef{Frink filter} if $F^{\Yright\Yleft} \subseteq A$ for all finite $F\subseteq A$;
+\item a \udef{Frink ideal} if $F^{\Yleft\Yright} \subseteq A$ for all finite $F\subseteq A$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{P,\Yleft}$ be an ordered set. Every order filter is a Frink filter and every order ideal is a Frink ideal.
+\end{proposition}
+\begin{proof}
+First assume $A$ is an order filter and take arbitrary finite $F\subseteq A$. In order to prove $F^{\Yright\Yleft} \subseteq A$, we take an arbitrary $x\in F^{\Yright\Yleft}$. Then
+\[ x\in F^{\Yright\Yleft} \;\iff\; \{x\}\subseteq (F^\Yright)^\Yleft \;\iff\; F^\Yright \subseteq \{x\}^\Yright = x{\Yright}. \]
+As $A$ is an order filter, there exists $y\in F^\Yright \cap A$. By the calculation this means $y\Yleft x$ and so $x\in A$ by upwards closure.
+
+The case for ideals is dual.
+\end{proof}
+
 
 \subsection{Filter bases and subbases}
 
@@ -4191,14 +4236,11 @@ Now suppose $y\notin\big(\downset\{x\}\setminus \upset\{x\}\big)$. Then it is en
 \[ x\in \big(\downset\{x\}\setminus \upset\{x\}\big)^\Yleft \subseteq \sup\big(\downset\{x\}\setminus \upset\{x\}\big)^\Yleft \subseteq \{y\}^\Yleft = y{\Yleft}, \]
 using \ref{supInfPreserveOrder}. This means that $y \Yleft x$, or $y\in \downset\{x\}$.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{supLesserElementsOfLimitPoint}
 If $x\in X$ is a limit point, then
 \[ \sup\big(\downset\{x\}\setminus \upset\{x\}\big) \subseteq [x]_{\sim_\Yleft}. \]
 \end{corollary}
 
-\begin{lemma}
-Let $P$ be a poset, $x\in P$ and suppose $\bigvee_{y<x}y$ exists. Then $\bigvee_{y<x}y$ is either a predecessor of $x$ or $x$ itself.
-\end{lemma}
 
 \section{Well-founded and well-ordered sets}
 \begin{definition}
@@ -4453,6 +4495,20 @@ TODO recursively define subsets by characteristic function.
 TODO recursively defining some function with certain property (+usng this property in recursive definition)
 
 \subsection{Mutual recursion}
+
+\section{Well-orderings}
+
+\begin{proposition}
+Let $W$ be an infinite well-ordered set. Then $W =_o W\times W$.
+\end{proposition}
+\begin{proof}
+Consider the \udef{Gödel pairing} $\preceq$ on $W\times W$ defined by
+\begin{align*}
+(a,b)\preceq (c,d) \defequiv &\big(\max\{a,b\} \leq \max\{c,d\}\big)\;\lor \\ &\Big(\big(\max\{a,b\} \sim \max\{c,d\}\big)\land(a\leq c)\Big) \;\lor \\ &\Big(\big(\max\{a,b\} \sim \max\{c,d\}\big)\land(A \sim C)\land(B\leq D)\Big).
+\end{align*}
+We claim that the Gödel pairing makes $W\times W$ well-ordered.
+\end{proof}
+
 
 \section{Strings and trees}
 ATM we do not define strings using tuples. We could do $\seq{a,b,c,d} = (a, (b,(c,d)))$. But
