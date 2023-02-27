@@ -582,6 +582,26 @@ Let $(P,\Yleft)$ be an ordered set, $x\in P$ and $S$ a non-empty subset of $P$, 
 \end{corollary}
 
 
+\begin{proposition} \label{supInfPreserveOrder}
+Let $(P,\Yleft)$ be an ordered set and $A\subseteq P$. Then
+\begin{enumerate}
+\item $A^\Yleft \subseteq \sup(A)^\Yleft$;
+\item $A^{\Yleft^\transp} \subseteq \inf(A)^{\Yleft^\transp}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We calculate, using the fact that $(-)^\Yleft$ and $(-)^{\Yleft^\transp}$ are generalised inverses and \ref{orderPreservingFunctionLatticeOperations}
+\[ A^\Yleft = ((A^\Yleft)^{\Yleft^\transp})^\Yleft \subseteq (A^{\Yleft})^\Yleft \cup ((A^\Yleft)^{\Yleft^\transp})^\Yleft \subseteq \big(A^{\Yleft} \cap (A^\Yleft)^{\Yleft^\transp}\big)^\Yleft = \sup(A)^\Yleft. \]
+(2) Dual.
+\end{proof}
+The proposition is more familiar in the following form:
+\begin{corollary}
+Let $P$ be a poset and $x\in P$, then
+\begin{enumerate}
+\item if $a \leq x$ for all $a\in A$, then $\sup(A) \leq x$;
+\item if $x \leq a$ for all $a\in A$, then $x\leq \inf(A)$.
+\end{enumerate}
+\end{corollary}
 
 \subsection{Chains}
 \begin{definition}
@@ -4118,19 +4138,18 @@ TODO
 \chapter{Successors and induction}
 \section{The successor and predecessor functions}
 
-TODO review definition for (loose) mini/maximality. + no longer require transitivity??
 
 \begin{definition}
 Let $\sSet{X,\Yleft}$ be an ordered set. We define the \udef{successor function}
-\[ S_X: X \to \powerset(X): x\mapsto \lmin\big(\upset\{x\}\setminus \downset\{x\}\big). \]
+\[ S_X: X \to \powerset(X): x\mapsto \llmin\big(\upset\{x\}\setminus \downset\{x\}\big). \]
 Similarly, we define the \udef{predecessor function}
-\[ P_X: X\to \powerset(X): x\mapsto \lmax\big(\downset\{x\}\setminus \upset\{x\}\big). \]
+\[ P_X: X\to \powerset(X): x\mapsto \llmax\big(\downset\{x\}\setminus \upset\{x\}\big). \]
 Let $x\in X$. We call
 \begin{itemize}
 \item $x$ a \udef{successor point} if there exists an $y\in X$ such that $y\in S_X(y)$;
 \item $x$ a \udef{predecessor point} if there exists an $y\in X$ such that $y\in P_X(y)$;
-\item $x$ a \udef{forwards limit point} if it is not a successor point and not an element of $\min(X)$;
-\item $x$ a \udef{backwards limit point} if it is not a predecessor point and not an element of $\max(X)$.
+\item $x$ a \udef{(forwards) limit point} if it has no predecessor and is not an element of $\min(X)$;
+\item $x$ a \udef{backwards limit point} if it has no successor and is not an element of $\max(X)$.
 \end{itemize}
 \end{definition}
 
@@ -4139,7 +4158,47 @@ If $\sSet{X,\Yleft}$ is an ordered set, we can always add a point on top of all 
 This is guaranteed, by proposition \ref{russelParadox}, not to be in $X$.
 The poset $X\cup t_X$ is called the \udef{successor} $\operatorname{Succ}(X)$ of $X$.
 
+\begin{proposition}
+Let $\sSet{X,\Yleft}$ be an ordered set and $x,y\in X$. Then
+\[ y \in S_X(x) \;\iff\; x\in P_X(y). \]
+\end{proposition}
+\begin{proof}
+We calculate, using \ref{disjointSetDifference} and transitivity (for $\upset\{x\}\setminus \downset\{x\} = xR\setminus Rx$),
+\begin{align*}
+y \in S_X(x) &\iff y\in \llmin\big(\upset\{x\}\setminus \downset\{x\}\big) \\
+&\iff y\in \llmin\big(xR\setminus Rx\big) \\
+&\iff Ry \cap \big(xR\setminus Rx\big) \subseteq yR \\
+&\iff \big(Ry\setminus yR\big) \perp \big(xR\setminus Rx\big) \\
+&\iff xR \cap \big(Ry\setminus yR\big) \subseteq Rx \\
+&\iff x\in \llmax\big(Ry\setminus yR\big) \\
+&\iff x\in \llmax\big(\downset\{y\}\setminus \upset\{y\}\big) \\
+&\iff x \in P_X(y).
+\end{align*}
+\end{proof}
 
+\begin{lemma}
+Let $\sSet{X,\Yleft}$ be an ordered set and $x\in X$. Then for all $y\in \sup\big(\downset\{x\}\setminus \upset\{x\}\big)$ we have either
+\begin{itemize}
+\item $y\in P_X(x)$; or
+\item $y\sim_\Yleft x$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+Take arbitrary $y\in \sup\big(\downset\{x\}\setminus \upset\{x\}\big)$. First suppose $y\in\big(\downset\{x\}\setminus \upset\{x\}\big)$. Then $y\in \max\big(\downset\{x\}\setminus \upset\{x\}\big) \subseteq \llmax\big(\downset\{x\}\setminus \upset\{x\}\big) = P_X(x)$.
+
+
+Now suppose $y\notin\big(\downset\{x\}\setminus \upset\{x\}\big)$. Then it is enough to show $y\in \downset\{x\}$ because this then implies $y\in \upset\{x\}$. To this end we calculate
+\[ x\in \big(\downset\{x\}\setminus \upset\{x\}\big)^\Yleft \subseteq \sup\big(\downset\{x\}\setminus \upset\{x\}\big)^\Yleft \subseteq \{y\}^\Yleft = y{\Yleft}, \]
+using \ref{supInfPreserveOrder}. This means that $y \Yleft x$, or $y\in \downset\{x\}$.
+\end{proof}
+\begin{corollary}
+If $x\in X$ is a limit point, then
+\[ \sup\big(\downset\{x\}\setminus \upset\{x\}\big) \subseteq [x]_{\sim_\Yleft}. \]
+\end{corollary}
+
+\begin{lemma}
+Let $P$ be a poset, $x\in P$ and suppose $\bigvee_{y<x}y$ exists. Then $\bigvee_{y<x}y$ is either a predecessor of $x$ or $x$ itself.
+\end{lemma}
 
 \section{Well-founded and well-ordered sets}
 \begin{definition}
