@@ -4496,18 +4496,171 @@ TODO recursively defining some function with certain property (+usng this proper
 
 \subsection{Mutual recursion}
 
-\section{Well-orderings}
+\section{Well-ordered posets}
+\begin{definition}
+Let $U,V$ be well-ordered posets. We say $U$ is \udef{less than or equal to $V$ in length}, $U\leq_o V$ if $U$ is order isomorphic to an initial segment of $V$.
+\[ U\leq_o V \defequiv \exists I\sqsubseteq V: U =_o I. \]
+We also write
+\[ U <_o V \defequiv U\leq_o V \land U\neq_o V. \]
+\end{definition}
+Every proper initial segment is of the form $\downset\{x\}$, so using corollary \ref{properInitialSegmentNotIsomorphic} gives
+\begin{lemma}
+Let $U,V$ be well-ordered sets.
+\[ U <_o V \quad \iff \quad \exists x\in V: U =_o \downset\{x\}. \]
+\end{lemma}
 
-\begin{proposition}
-Let $W$ be an infinite well-ordered set. Then $W =_o W\times W$.
+Clearly $=_o$ and $\leq_o$ imply $=_c$ and $\leq_c$.
+
+\begin{lemma} \label{preorderingWosets}
+For all well-ordered posets $U,V,W$:
+\begin{enumerate}
+\item $U \leq_o U$;
+\item $[U\leq_o V \land V\leq_o W] \implies U\leq_o W$;
+\item $[U \leq_o V \land V \leq_o U] \implies U =_o V$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+For point 3., if $U \neq_o V$, then composing the order isomorphisms would yield an isomorphism between $U$ and a proper initial segment of $U$. Because such an isomorphism must be expansive we have a contradiction.
+\end{proof}
+
+\begin{theorem}[Comparability of well-ordered sets]\label{comparabilityWosets}
+For any two well-ordered posets $U,V$: either $U\leq_o V$ or $V\leq_o U$.
+\end{theorem}
+TODO revamp using $f = \setbuilder{(x,y)\in U\times V}{\downset\{x\} =_o \downset\{y\}}$. Prove 1-1 and either left- or right-completeness.
+\begin{proof}
+The result is trivial if $V=\emptyset$, so we may assume the minimum $0_V$ exists.
+
+Define, by transfinite recursion the function $f:U\to V$ such that $f(x) = h(f|_{\downset\{x\}})$ where $h$ sends each partial function to the least element of $V$ not in the image:
+\[ h: (U\not\to V) \to V: \sigma \mapsto \begin{cases}
+\min_V\{v\in V\;|\; v\notin \sigma[U]\} & (\{v\in V\;|\; v\notin \sigma[U]\} \neq \emptyset) \\
+0_V  & (\{v\in V\;|\; v\notin \sigma[U]\} = \emptyset).
+\end{cases} \]
+We immediately note two properties of $f$:
+\begin{enumerate}
+\item It is order-preserving. Indeed, assume $x\leq_U y$, which implies
+\begin{align*}
+\downset\{x\} \sqsubseteq \downset\{y\} &\implies f[\downset\{x\}] \subseteq f[\downset\{y\}] \implies f|_{\downset\{x\}}[U] \subseteq f|_{\downset\{y\}}[U] \\
+&\implies \{v\in V\;|\; v\notin f|_{\downset\{x\}}[U]\} \supset \{v\in V\;|\; v\notin f|_{\downset\{y\}}[U]\} \\
+&\implies \min\{v\in V\;|\; v\notin f|_{\downset\{x\}}[U]\} \leq \min\{v\in V\;|\; v\notin f|_{\downset\{y\}}[U]\} \\ &\implies f(x) \leq f(y).
+\end{align*}
+\item Every point in $V$, other than $0_V$, can only be the image of at most one point in $U$.
+\end{enumerate}
+We distinguish three cases for $0_V$: it may be the image of zero, one or multiple points in $U$. If $0_V$ is the image of no points in $U$, there must be no points in $U$ and the result is trivial.
+\begin{itemize}
+\item If $0_V$ is the image of one point in $U$, then $f$ is injective. Then the function $f: U\to f[U]$ is bijective and order-preserving, so an order isomorphism by lemma \ref{equivalenceOrderPreservingReflecting}. We just need to show $f[U]$ is an initial segment of $V$. Take an arbitrary $x\in V$ and $y\in f[U]$ and assume $x\leq y$. There is a $u$ such that $f(u) = y$. If $x$ were not in $f[U]$, then $x\in\{v\in V\;|\; v\notin f|_{\downset\{u\}}[U]\}$, but $x$ is smaller than the minimum yielding a contradiction. In this case $U\leq_o V$.
+\item If $0_V$ is the image of multiple points in $U$, there is an $x\in U$ such that
+\[ \{v\in V\;|\; v\notin f|_{\downset\{x\}}[U]\} = \emptyset. \]
+We take the least such $x$ and then $f|_{\downset\{x\}}$ is bijective. In this case $V \leq_o U$.
+\end{itemize}
+\end{proof}
+\begin{corollary}
+For all well-ordered poset $U,V$,
+\[ U \leq_o V \quad \iff \quad \exists: \text{order-preserving injection} \;U\rightarrowtail V. \]
+\end{corollary}
+\begin{proof}
+If $U \leq_o V$, then $U$ is order isomorphic to an initial segment of $V$; this order isomorphism is an order-preserving injection into $V$.
+
+Conversely, assume there is an order-preserving injection $f:U\rightarrowtail V$. Assume, towards a contradiction that $U \nleq_o V$; by the theorem this means $V <_o U$. Then $V=_o \downset\{x\}$ for some $x\in U$ and composing $f$ with this isomorphism gives an order-preserving injection $U\rightarrowtail \downset\{x\}$. This is obviously not expansive, so by proposition \ref{injectionsExpansive} we have a contradiction.
+\end{proof}
+\begin{corollary}[Wellfoundedness of $\leq_o$]\label{wellfoundednessOfWosetComparison}
+Every non-empty class $\mathcal{E}$ of well-ordered posets has a $\leq_o$-least member.
+\end{corollary}
+i.e.\ for some $U_0\in \mathcal{E}$ and all $U\in \mathcal{E}$: $U_0\leq_o U$.
+\begin{proof}
+Because $\mathcal{E}$ is non-empty, we have a $W\in\mathcal{E}$. If $W$ is $\leq_o$-least in $\mathcal{E}$, we are finished. If $W$ is not $\leq_o$-least, there are sets $U$ in $\mathcal{E}$ such that $U\leq_o W$ and the set
+\[ J \defeq \{x\in W\;|\;\exists U\in\mathcal{E}: U =_o \downset\{x\}\} \]
+is not empty. Take the least element of $J$; it is easy to prove that the corresponding set $U$ is the $\leq_o$-least member of $\mathcal{E}$.
+\end{proof}
+\begin{corollary} \label{ordinalInequalitiesLemma}
+Let $U,V$ be well-ordered posets. Then
+\begin{enumerate}
+\item $U\nleq_o V \iff V <_o U$;
+\item $U <_c V$ implies $U \leq_o V$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proposition} \label{ordinalInequalityFromInitialSegments}
+Let $U,V$ be well-ordered posets. Then
+\[ U \leq_o V \qquad\iff\qquad \forall x\in U:\; \downset\{x\} \leq_o V.   \]
 \end{proposition}
 \begin{proof}
-Consider the \udef{Gödel pairing} $\preceq$ on $W\times W$ defined by
-\begin{align*}
-(a,b)\preceq (c,d) \defequiv &\big(\max\{a,b\} \leq \max\{c,d\}\big)\;\lor \\ &\Big(\big(\max\{a,b\} \sim \max\{c,d\}\big)\land(a\leq c)\Big) \;\lor \\ &\Big(\big(\max\{a,b\} \sim \max\{c,d\}\big)\land(A \sim C)\land(B\leq D)\Big).
-\end{align*}
-We claim that the Gödel pairing makes $W\times W$ well-ordered.
+The direction $\Rightarrow$ is immediate.
+
+For the other direction: we need to find an order-preserving injection $U\to V$. For every $x\in U$ we have an order-preserving injection $\downset\{x\} \to V$. The union of all these injections gives the one we want.
 \end{proof}
+
+\subsection{Hartogs number}
+The Hartogs number of any set $X$ is a bigger well-ordered set.
+
+A set $X$ may not be well-orderable itself, but it definitely has well-orderable subsets. Some subsets may even have inequivalent well-orderings.
+\begin{definition}
+Let $X$ be a set. Let $\operatorname{WO}(X)$ be the set
+\[ \operatorname{WO}(X) = \{ (U,\leq_U) \in \powerset(X)\times\powerset(X\times X) \;|\; \leq_U\; \text{is a well-ordering of $U$}\;  \}. \]
+Then \udef{Hartogs number} of $X$ is the set
+\[ \aleph(X) \defeq \operatorname{WO}(X)/=_o. \]
+Here $=_o$ is restricted to $\powerset(X)$ and thus is an equivalence relation (see lemma \ref{isomorphismEquivalence}).
+\end{definition}
+If the natural numbers are viewed as Von Neumann ordinals, we have the following:
+\[ \aleph(0) = 1, \quad \aleph(1) = 2, \quad \aleph(2) = 3, \quad \ldots \]
+This follows because each finite set can be well-ordered exactly one way, up to order isomorphism and well-ordered finite sets of the same size are order isomorphic.
+
+\begin{lemma} \label{wellorderingHartogsNumber}
+Let $X$ be a set and $\aleph(X)$ its Hartogs number. Then $\leq$ defined by
+\[ \forall \alpha, \beta \in \aleph(X):\quad \alpha \leq \beta \defequiv \alpha = [U] \land \beta = [V] \land U\leq_o V \]
+makes $(\aleph(X), \leq)$ a well-ordered set.
+\end{lemma}
+\begin{proof}
+First we show $\leq$ is well-defined: let $[U] = [U']$ and $[V] = [V']$. Then $U =_o U'$ and thus $U'\leq_o U$; also $U \leq_V$ and $V\leq_o V'$. By point 2 of lemma \ref{preorderingWosets} we have $U' \leq_o V'$, showing the definition is well-defined.
+
+A simple application of lemma \ref{preorderingWosets} shows us $(\aleph(X), \leq)$ is a poset.
+
+The order is total by the comparability of well-ordered sets, theorem \ref{comparabilityWosets}, and well-founded by its corollary, corollary \ref{wellfoundednessOfWosetComparison}.
+\end{proof}
+
+\begin{lemma} \label{HartogsNumberAsOrdinal}
+Let $X$ be a set and $\alpha = [U] \in \aleph(X)$. Then
+\[ \operatorname{seg}_{\aleph(X)}(\alpha) = \{ [\downset\{x\}] \;|\; x\in U \} =_o U. \]
+\end{lemma}
+\begin{proof}
+The identity is clear by the previous lemma \ref{wellorderingHartogsNumber}. The isomorphism follows from proposition \ref{orderedSetPowerset} and the fact that each $[\downset\{x\}]$ contains exactly one initial segment of $U$, by lemma \ref{orderingInitialSegments}.
+\end{proof}
+
+\begin{theorem}[Hartogs' lemma] \label{HartogsLemma}
+Let $X$ be a set. There is no injection $\aleph(X) \rightarrowtail X$, i.e.\ $\aleph(X) \nleq_c X$.
+\end{theorem}
+\begin{proof}
+Suppose, towards a contradiction, that there exists an injection
+\[ f: \aleph(X) \rightarrowtail X \]
+and let $Y = f[\aleph(X)] \subseteq X$ be its image. Then $f: \aleph(X) \to Y$ is a bijection, meaning $Y$ is well-ordered by lemma \ref{wellOrderingSubsets}. So $Y =_o \aleph(X)$.
+But also $[Y]\in \aleph(X)$, because $Y\subseteq X$, and by lemma \ref{HartogsNumberAsOrdinal} $Y$ is similar to a proper initial segment of $\aleph(X)$.
+So $\aleph(X)$ would seem to be similar to a proper initial segment, but this contradicts the expansiveness of order embeddings on well-ordered sets, see corollary \ref{properInitialSegmentNotIsomorphic}.
+\end{proof}
+
+
+\begin{proposition} \label{proposition:HartogsLeast}
+Let $X$ be a set. The Hartogs number $\aleph(X)$ is the $\leq_o$-least well-ordered set not smaller than or equal to $X$ in size. i.e.\
+\[ \forall \;\text{well-ordered sets $U$}:\quad U \nleq_c X \implies \aleph(X)\leq_o U. \]
+\end{proposition}
+\begin{proof}
+We prove the contrapositive:
+\[ W <_o \aleph(X) \implies W \leq_c X. \]
+Assume $W <_o \aleph(X)$. Then $W =_o \operatorname{seg}_{\aleph(X)}(\alpha)$ for some $\alpha = [U]\in \aleph(X)$, so $W=_o U$ and thus $W =_c U \subseteq X$. So $W\leq_c X$.
+\end{proof}
+
+\subsubsection{Burali-Forti's paradox}
+Burali-Forti's paradox is like Cantor's paradox for well-ordered sets. It shows we cannot have a set of well-ordered sets.
+
+One way to put it is as follows: assume we have a set $WO$ of all well ordered sets. Then $\aleph(WO)$, which is a set of well-ordered sets, must be a subset of $WO$, so $\aleph(WO) \leq_c WO$. This contradicts Hartogs' lemma.
+
+A (slightly) more historical\footnote{See \url{https://zenodo.org/record/2362091/files/article.pdf}} approach: let $\Omega \defeq WO/=_o$.
+The elements of $\Omega$ are well-ordered by $\leq_o$ (like in lemma \ref{wellorderingHartogsNumber}).
+Consider $\Omega+1 \defeq \operatorname{Succ}(\Omega)$. Because $\Omega = \downset\{t_\Omega\}$, we have $[\Omega] < [\Omega +1]$.
+On the other hand, by proposition \ref{orderedSetPowerset} we see that $\Omega =_o \downset\{\Omega\}$, so that each element of $\Omega$ is comparable to $\Omega$.
+Thus all well-ordered sets are $\leq_o \Omega$ and in particular $[\Omega + 1] \leq [\Omega]$. By $[\Omega] < [\Omega +1]$ and $[\Omega + 1] \leq [\Omega]$ we see that the elements of $\Omega$ are not well-ordered, which is a contradiction.
+
+The paradox is nowadays more commonly stated for (von Neumann) ordinals (see later).
+
+
 
 
 \section{Strings and trees}
