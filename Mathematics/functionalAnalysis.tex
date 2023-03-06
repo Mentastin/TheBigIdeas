@@ -2668,7 +2668,10 @@ We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. 
 
 \subsubsection{Indentifying functions that are equal a.e.}
 
-\ref{equalAECongruence}.
+TODO: identification of a.e.\ equal functions is compatible with algebraic operations by \ref{equalAECongruence}.
+
+TODO: allow functions that are only defined a.e.
+
 
 \begin{proposition}
 TODO every equivalence class contains exactly one continuous functions (for Borel measures?)
@@ -2699,11 +2702,11 @@ Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. T
 \subsection{Distributions}
 TODO rename and/or move!
 \begin{definition}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \R$ a measurable function. The \udef{distribution function} of $f$ is the function
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{distribution function} of $f$ is the function
 \[ d_f: \R\to \R^+: \alpha \mapsto \mu\setbuilder{\omega}{|f(\omega)|>\alpha}.  \]
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{distributionOfFunctionLemma}
 Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f,g: \Omega\to \C$ measurable functions and $c\in \C\setminus\{0\}$. Then
 \begin{enumerate}
 \item if $|f| \leq |g|$ a.e., then $d_f \leq d_g$;
@@ -2768,7 +2771,7 @@ We have
 \end{align*}
 by Tonelli's theorem \ref{tonellisTheorem} (as $\varphi'$ is positive) and (TODO ref fund theorem calculus).
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{LpNormFromDistribution}
 Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
 \[ \norm{f}_p = \left(p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}\right)^{1/p}. \]
 \end{corollary}
@@ -2777,7 +2780,23 @@ Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ 
 \[ \norm{f}_p^p = \int_\Omega |f|^p \diff{\mu} = \int_\Omega \varphi\circ|f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha} = p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}. \]
 \end{proof}
 
+\begin{lemma} \label{LpNormDistributionInequality}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $f: X\to \C$ a measurable function, $\alpha >0$ and $0<p<\infty$. Then
+\[ \alpha d_f(\alpha)^{1/p} \leq \norm{f}_p. \]
+\end{lemma}
+\begin{proof}
+This is immediate by corollary \ref{ChebyshevInequalityCorollary} of Chebyshev's inequality:
+\[ d_f(\alpha) = \mu\setbuilder{\omega}{|f(\omega)|>\alpha} \leq \frac{1}{\alpha^p}\int_\Omega |f|^p\diff{\mu} = \left(\frac{\norm{f}_p}{\alpha}\right)^p, \]
+so $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+\end{proof}
+
 \subsubsection{Decreasing rearrangements}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{decreasing rearrangement} of $f$ is the function
+\[ f': \R^+\to \R^+: t \mapsto \inf\setbuilder{\alpha > 0}{d_f(s)\leq t}.  \]
+\end{definition}
+
+The function $f'$ is decreasing and supported in $\interval[c]{0,\mu(X)}$.
 
 \subsection{Weak $L^p(X,\diff{\mu})$ spaces}
 \begin{definition}
@@ -2801,7 +2820,11 @@ Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO
+(1) If $f = g$ a.e.\ then $d_f = d_g$ by \ref{distributionOfFunctionLemma}.
+
+(2) TODO
+
+(3) By \ref{LpNormDistributionInequality}, we have $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
 \end{proof}
 \begin{corollary}
 Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\diff{\mu})$ is a subspace of $L^{p}(X,\diff{\mu})$.
@@ -2823,9 +2846,26 @@ Let $0<p<q<\infty$ and $f\in L^{p,\infty(X,\diff{\mu})} \cap L^{q,\infty(X,\diff
 with the interpretation $\infty^{-1} = 0$.
 \end{proposition}
 \begin{proof}
-
+We know that $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_{p,\infty}$, so $\alpha^p d_f(\alpha) \leq \norm{f}_{p,\infty}^p$. Similarly $\alpha^q d_f(\alpha) \leq \norm{f}_{q,\infty}^q$. Thus
+\[ d_f(\alpha) \leq \min\left(\frac{\norm{f}^p_p}{\alpha^p}, \frac{\norm{f}^q_q}{\alpha^q}\right). \]
+Now we have
+\[ \frac{\norm{f}^p_{p,\infty}}{\alpha^p} \leq \frac{\norm{f}^q_{q,\infty}}{\alpha^q} \iff \alpha \leq \left(\frac{\norm{f}_{q,\infty}^q}{\norm{f}_{p,\infty}^p}\right)^{\frac{1}{q-p}} \eqdef B. \]
+We calculate, using \ref{LpNormFromDistribution},
+\begin{align*}
+\norm{f}_r^r &= r \int_0^\infty\alpha^{r-1}d_f(\alpha)\diff{\alpha} \\
+&\leq r \int_0^\infty\alpha^{r-1}\min\left(\frac{\norm{f}^p_{p,\infty}}{\alpha^p}, \frac{\norm{f}^q_{q,\infty}}{\alpha^q}\right)\diff{\alpha} \\
+&= r \int_0^B\alpha^{r-1}\frac{\norm{f}^{p,\infty}}{\alpha^p}\diff{\alpha} + r \int_B^\infty\alpha^{r-1}\frac{\norm{f}^q_{q,\infty}}{\alpha^q}\diff{\alpha} \\
+&= r \norm{f}^p_{p,\infty} \int_0^B\alpha^{r-p-1}\diff{\alpha} + r \norm{f}^q_{q,\infty} \int_B^\infty\alpha^{r-q-1}\diff{\alpha} \\
+&= \frac{r}{r-p} \norm{f}^p_{p,\infty} B^{r-p} + \frac{r}{q-r} \norm{f}^q_{q,\infty} B^{r-q} \\
+&= \left(\frac{r}{r-p} + \frac{r}{q-r}\right)^{1/r}\left(\norm{f}_{p,\infty}^p\right)^{\frac{r^{-1}- q^{-1}}{p^{-1} - q^{-1}}}\norm{f}_{q,\infty}^{\frac{p^{-1}- r^{-1}}{p^{-1} - q^{-1}}}.
+\end{align*}
+Observe that the integrals converge because $p<r<q$, so $r-p>0$ and $r-q<0$.
 \end{proof}
 
+\subsubsection{The Marcinkiewicz interpolation theorem}
+TODO
+\subsubsection{The Riesz-Thorin Interpolation Theorem}
+TODO
 
 \subsection{Locally integrable spaces}
 \begin{definition}
