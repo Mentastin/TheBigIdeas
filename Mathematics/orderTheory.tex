@@ -1005,15 +1005,74 @@ The first part is just \ref{orderingInitialSegments}.
 For the second part, $x\mapsto \downset x$ is surjective by definition. For injectivity: the inverse map is given by $Q\mapsto \max(Q)$. This is a function by \ref{minMaxSingletons} and an inverse by \ref{minMaxUpsetDownset}.
 \end{proof}
 
-\section{Join- and meet-density}
+\section{Atoms, density and irreducibility}
+\subsection{Join- and meet-density}
 \begin{definition}
 Let $P$ be a poset and let $Q\subset P$ be a subset. Then $Q$ is called \udef{join-dense} in $P$ if for every $x\in P$, there exists a subset $S\subset Q$ such that $x= \bigvee_P S$.
 
 The dual of join-dense is \udef{meet-dense}.
 \end{definition}
 
-\section{Atoms}
-\subsection{Atomic elements}
+\begin{lemma}
+Let $P$ be a poset, $Q\subset P$ a subset and $x\in P$. Then
+\begin{enumerate}
+\item if $Q$ is join-dense, then $x = \bigvee Q\cap \downset\{x\}$;
+\item if $Q$ is meet-dense, then $x = \bigwedge Q\cap \upset\{x\}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By join-density, there exists $S\subseteq Q$ such that $x = \bigvee S$. Now $x$ is an upper bound of $Q\cap \downset\{x\}$, because it is a subset of $\downset\{x\}$. Also $S\subseteq Q\cap \downset\{x\}$, so any upper bound of $Q\cap \downset\{x\}$ is an upper bound of $S$ and thus greater than $x$. This means that $x$ is the least upper bound of $Q\cap \downset\{x\}$.
+
+(2) Dual.
+\end{proof}
+
+\subsection{Join- and meet-irreducible elements}
+\begin{definition}
+Let $P$ be a poset. We call $x\in P$ \udef{join-irreducible} if
+\begin{itemize}
+\item $x$ is not a least element of $P$,
+\item for all $a,b\in P$: $x= a\vee b$ implies $x=a$ or $x=b$.
+\end{itemize}
+The definition of \udef{meet-irreducible} is dual.
+
+We denote the set of join-irreducible elements in $P$ as $\joinIr(P)$ and the set of meet-irreducible elements in $P$ as $\meetIr(P)$.
+\end{definition}
+
+\begin{lemma} \label{joinIrreducibleLemma}
+Let $P$ be a poset and $x\in P$ not a least element. Then the following are equivalent:
+\begin{enumerate}
+\item $x$ is join-irreducible;
+\item for all $a,b\in P$: $x= a\vee b$ implies $x \leq a$ or $x \leq b$;
+\item for all $a,b\in P$: $x > a$ and $x > b$ implies $x > a\vee b$;
+\item for all finite $F\subseteq P$: $x = \bigvee F$ implies $x\in F$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+In a finite lattice $L$, an element is join-irreducible if and only if it
+has exactly one lower cover.
+\end{lemma}
+
+\begin{example}
+Consider the lattice $\seq{\N,\lcm, \gcd}$. A non-zero element of $\N$ is join irreducible if and only if it is of the form $p^r$ for some prime $p$ and $r\in\N$.
+\end{example}
+
+\begin{proposition}
+$x$ is join-irreducible iff $\downset x$ is linearly ordered.
+\end{proposition}
+
+TODO: isolated points
+link with boundary
+
+\url{http://www.m-hikari.com/ijcms-password2008/9-12-2008/xuluoshanIJCMS9-12-2008.pdf}
+
+\url{http://imar.ro/journals/Revue_Mathematique/pdfs/2015/2/5.pdf}
+
+\url{https://link.springer.com/content/pdf/10.1007/BF01349957.pdf}
+
+
+\subsection{Atoms}
+\subsubsection{Atomic elements}
 \begin{definition}
 Let $\sSet{P,\leq}$ be a poset.
 \begin{itemize}
@@ -1024,29 +1083,72 @@ We denote the set of atoms of $P$ as $\atoms(P)$. The set of coatoms is denoted 
 \end{definition}
 If $P$ has a least element $\bot$, then $a$ is an atom if and only if it covers $\bot$.
 
+\begin{lemma} \label{atomsJoinIrriducible}
+Let $\sSet{P,\leq}$ be a poset. Then
+\begin{enumerate}
+\item $\atoms(P) \subseteq \joinIr(P)$;
+\item $\coatoms(P) \subseteq \meetIr(P)$;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $a\in \atoms(P)$. Then $a$ is not a least element of $P$. Assume there exist $x,y\in P$ such that $a = x\vee y$. Then $x,y\in \downset a \subseteq \{\bot, a\}$. If $x= \bot = y$, then $a = \bot$, which is not an atom. So either $x = a$ or $y = a$.
+
+(2) Dual.
+\end{proof}
 
 
-\subsection{Atomic posets}
+\subsubsection{Atomic and atomistic posets}
 \begin{definition}
 Let $\sSet{P,\leq}$ be a poset. Then
 \begin{itemize}
-\item $P$ is \udef{atomic} if $\forall x\in L\setminus\min(L): \exists a\in\atoms(L): a\leq x$;
-\item $P$ is \udef{coatomic} if $\forall x\in L\setminus\min(L): \exists a\in\coatoms(L): a\geq x$;
+\item $P$ is \udef{atomic} if $\forall x\in P\setminus\min(P): \atoms(P)\mesh \downset\{x\}$;
+\item $P$ is \udef{coatomic} if $\forall x\in P\setminus\max(P): \coatoms(P)\mesh \upset\{x\}$;
 \end{itemize}
 also
 \begin{itemize}
-\item $P$ is \udef{strongly atomic} if $\forall x,y\in L$ the poset $[x,y]$ is atomic;
-\item $P$ is \udef{strongly coatomic} if $\forall x,y \in L$ the poset $[x,y]$ is coatomic;
+\item $P$ is \udef{strongly atomic} if $\forall x,y\in P$ the poset $\interval{x,y}$ is atomic;
+\item $P$ is \udef{strongly coatomic} if $\forall x,y \in P$ the poset $\interval{x,y}$ is coatomic;
 \end{itemize}
 and
 \begin{itemize}
-\item $P$ is \udef{atomistic} if $\atoms(L)$ is join-dense in $L$;
-\item $P$ is \udef{coatomistic} if $\coatoms(L)$ is meet-dense in $L$.
+\item $P$ is \udef{atomistic} if $\atoms(P)$ is join-dense in $L$;
+\item $P$ is \udef{coatomistic} if $\coatoms(P)$ is meet-dense in $L$.
 \end{itemize}
 \end{definition}
+Thus ``atomic'' means that every element has an atom under it and ``coatomic'' means that every element has a coatom above it.
 
 \url{https://www.emis.de/journals/PM/51f4/pm51f409.pdf}
 
+\begin{lemma}
+Let $\sSet{P,\leq}$ be a poset. Then
+\begin{enumerate}
+\item if $P$ is atomistic, then $P$ is atomic;
+\item if $P$ is strongly atomic and $P$ has a bottom, then $P$ is atomic;
+\item if $P$ is coatomistic, then $P$ is coatomic;
+\item if $P$ is strongly coatomic and $P$ has a top, then $P$ is coatomic.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $P$ is atomistic and take arbitrary $x\in P\setminus\min(P)$. Then $x = \bigvee \atoms(P)\cap \downset\{x\}$. If $\atoms(P)\cap \downset\{x\}$ were empty, then $x = \bigvee \atoms(P)\cap \downset\{x\}$ would be equal to $\min(P)$, which is not the case. So $\atoms(P)\mesh \downset\{x\}$.
+
+(2) Take arbitrary $x\in P\setminus\min(P)$. Then $\interval{\min(P), x} = \downset\{x\}$ is atomic and thus contains atoms, which are also atoms in $P$.
+
+(3) Dual to (1).
+
+(4) Dual to (2).
+\end{proof}
+
+\begin{example}
+An atomistic poset is not necessarily strongly atomic. Consider
+\[ \begin{tikzcd}[column sep=small, row sep=small]
+&&&& {\top} \ar[dddd, dash] \\
+&&& {\bullet} \ar[ur, dash] \ar[ddd, dash] & \\
+&& {\bullet} \ar[ur, dash] \ar[dd, dash] && \\
+& {x} \ar[ur, dotted, no head] \ar[d, dash] &&& \\
+{\bullet} \ar[ur, dash] & {\bullet} \ar[r, dotted, no head] & {\bullet} & {\bullet} & {\bullet}
+\end{tikzcd} \]
+such that there is no element immediately above $x$. Then $\interval{x,\top}$ is not atomic, even though the poset is atomistic.
+\end{example}
 
 \section{Combining ordered sets}
 \begin{definition}
@@ -1351,64 +1453,6 @@ We calculate for all $x,y\in S$:
 TODO complete notation.
 \end{proof}
 TODO link universal algebra.
-
-\subsection{Join- and meet-irreducible elements}
-\begin{definition}
-Let $L$ be a $\vee$-semilattice. We call $x\in L$ \udef{join-irreducible} if
-\begin{itemize}
-\item $x$ is not a least element of $L$,
-\item for all $a,b\in L$: $x= a\vee b$ implies $x=a$ or $x=b$.
-\end{itemize}
-The definition of \udef{meet-irreducible} is dual on a $\wedge$-semilattice.
-
-We denote the set of join-irreducible elements in $L$ as $\joinIr(L)$ and the set of meet-irreducible elements in $L$ as $\meetIr(L)$.
-\end{definition}
-
-\begin{lemma} \label{joinIrreducibleLemma}
-Let $S$ be a $\vee$-semilattice and $x\in S$ not a least element. Then the following are equivalent:
-\begin{enumerate}
-\item $x$ is join-irreducible;
-\item for all $a,b\in S$: $x= a\vee b$ implies $x \leq a$ or $x \leq b$;
-\item for all $a,b\in S$: $x > a$ and $x > b$ implies $x > a\vee b$;
-\item for all finite $F\subseteq S$: $x = \bigvee F$ implies $x\in F$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-In a finite lattice $L$, an element is join-irreducible if and only if it
-has exactly one lower cover.
-\end{lemma}
-
-\begin{example}
-Consider the lattice $\seq{\N,\lcm, \gcd}$. A non-zero element of $\N$ is join irreducible if and only if it is of the form $p^r$ for some prime $p$ and $r\in\N$.
-\end{example}
-
-\begin{proposition}
-$x$ is join-irreducible iff $\downset x$ is linearly ordered.
-\end{proposition}
-
-TODO: isolated points
-link with boundary
-
-\url{http://www.m-hikari.com/ijcms-password2008/9-12-2008/xuluoshanIJCMS9-12-2008.pdf}
-
-\url{http://imar.ro/journals/Revue_Mathematique/pdfs/2015/2/5.pdf}
-
-\url{https://link.springer.com/content/pdf/10.1007/BF01349957.pdf}
-
-\begin{lemma} \label{atomsJoinIrriducible}
-Let $\sSet{P,\leq}$ be a poset. Then
-\begin{enumerate}
-\item $\atoms(P) \subseteq \joinIr(P)$;
-\item $\coatoms(P) \subseteq \meetIr(P)$;
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Assume $a\in \atoms(P)$. Then $a$ is not a least element of $P$. Assume there exist $x,y\in P$ such that $a = x\vee y$. Then $x,y\in \downset a \subseteq \{\bot, a\}$. If $x= \bot = y$, then $a = \bot$, which is not an atom. So either $x = a$ or $y = a$.
-
-(2) Dual.
-\end{proof}
-
 
 \subsection{Generalised inverse of inf}
 \begin{proposition}
@@ -2678,6 +2722,7 @@ It is enough to prove that $\exists y\in F: x\wedge y = \bot$ is equivalent to $
 \begin{proposition}[Ultrafilter lemma] \label{ultrafilterLemma}
 Every proper filter is contained in an ultrafilter.
 \end{proposition}
+In other words, the lattice of ultrafilters on a poset is coatomic. (TODO do we need to assume Boolean? In which case this remark is redundant.)
 \begin{corollary} \label{filtersCoatomistic}
 Let $B$ be a Boolean lattice. Then $\filters(B)$ is a coatomistic lattice.
 \end{corollary}
@@ -5253,7 +5298,7 @@ The following statements are equivalent to the axiom of choice:
 
 \subsection{Some equivalent theorems}
 
-\begin{theorem}
+\begin{theorem} \label{choiceEquivalents}
 The following results are equivalent to the axiom of choice:
 \begin{enumerate}
 \item \undline{Zorn's lemma}: If every chain in a poset $P$ has an upper bound, then $P$ has a maximal element.

@@ -3,13 +3,13 @@
 \section{Basic definitions}
 
 \begin{definition}
-A \udef{group} is a structured set $(G,\boldsymbol{\cdot})$ where $\boldsymbol{\cdot}$ is a binary operation on $G$
+A \udef{group} is a structured set $(G,\boldsymbol{\cdot}, e)$ where $e\in G$ and $\boldsymbol{\cdot}$ is a binary operation on $G$
 \[\boldsymbol{\cdot}: G\times G \to G: (g,h)\mapsto g\cdot h\]
 such that
 \begin{enumerate}
 \item $\boldsymbol{\cdot}$ is associative:
 \[ \forall g_1,g_2,g_3 \in G: \quad g_1\cdot (g_2\cdot g_3) = (g_1\cdot g_2)\cdot g_3 \]
-\item there exists an \udef{identity} $e$:
+\item $e$ is an \udef{identity} for $\boldsymbol{\cdot}$:
 \[ \forall g\in G: \quad g\cdot e = e\cdot g = g \]
 \item every element has an \udef{inverse}:
 \[ \forall g\in G: \exists h \in G: \quad  gh = hg = e \]
@@ -43,6 +43,11 @@ It is also
 Let $S$ be a semigroup. Then $S$ is a group \textup{if and only if}
 \[ \forall x\in S: \; xS = S = Sx. \]
 \end{lemma}
+\begin{proof}
+TODO? Need identity??
+\end{proof}
+
+The inverse of any element of the group is unique by \ref{inverseUniqueness}. Thus $(\cdot)^{-1}$ is a well-defined function.
 
 \begin{proposition}
 A group is a structure of type $(e, (\cdot)^{-1}, \boldsymbol{\cdot})$ with arity defined by
@@ -55,6 +60,24 @@ Conversely, a $(e, (\cdot)^{-1}, \boldsymbol{\cdot})$-algebra is a group if
 \end{itemize}
 \end{proposition}
 In particular the concepts of homomorphism and isomorphism apply.
+
+\subsection{Group homomorphisms}
+\begin{definition}
+Let $G,H$ be groups. A function $f: G\to H$ is called a \udef{group homomorphism} if it is a $\{e, {}^{-1}, \cdot\}$-homomorphism.
+\end{definition}
+
+\begin{lemma} \label{groupHomomorphismPreservesSignature}
+Let $G,H$ be groups. A function $f: G\to H$ is a group homomorphism iff it is a $\{\cdot\}$-homomorphism.
+\end{lemma}
+\begin{proof}
+The direction $\Rightarrow$ is clear.
+
+Now assume $f$ is a $\{\cdot\}$-homomorphism and take arbitrary $x\in G$. We first prove that it also preserves the identity: we have $f(e) = f(e\cdot e) = f(e)\cdot f(e)$. Multiplting both sides by $f(e)^{-1}$ gives $f(e) = e$.
+
+In order to prove that $f(x^{-1}) = f(x)^{-1}$, it is enough, by \ref{inverseUniqueness}, to prove that $f(x^{-1})$ is an inverse of $f(x)$. We calculate
+\[ f(x^{-1})f(x) = f(x^{-1}x) = f(e) = e \qquad\text{and}\qquad f(x)f(x^{-1}) = f(xx^{-1}) = f(e) = e. \]
+\end{proof}
+
 
 \subsection{Notations}
 We can use whatever symbols we want to denote the group operation, but there are two main conventions:
@@ -156,7 +179,7 @@ When dealing with groups, we will redefine $\ker$ to mean $\widetilde{\ker}$.
 Let $(G,\boldsymbol{\cdot})$ be a group. We call $(H,*)$ a \udef{subgroup} if it is a group and $H\subseteq G$ and $* = \boldsymbol{\cdot}|_H$.
 \end{definition}
 
-\begin{lemma}[Subgroup criterion]
+\begin{lemma}[Subgroup criterion] \label{subgroupCriterion}
 Let $(G,\boldsymbol{\cdot})$ be a group and $H$ a non-empty subset of $G$. The following are equivalent:
 \begin{enumerate}
 \item $(H,\boldsymbol{\cdot}|_H)$ is a subgroup;
@@ -165,7 +188,8 @@ Let $(G,\boldsymbol{\cdot})$ be a group and $H$ a non-empty subset of $G$. The f
 \item $a\cdot b \in H$,
 \item $a^{-1}\in H$;
 \end{itemize}
-\item for all $a,b\in H: a\cdot b^{-1} \in H$.
+\item for all $a,b\in H: a\cdot b^{-1} \in H$;
+\item $H$ is a sub-$\{\cdot, {}^{-1}\}$-algebra of $G$.
 \end{enumerate}
 \end{lemma}
 
@@ -209,10 +233,11 @@ We write $N \lhd G$.
 
 \begin{proposition} \label{congruenceNormalSubgroup}
 Let $G$ be a group.
-A translation invariant binary relation $\mathfrak{q}$ on $G$ is a congruence \textup{if and only if} $\widetilde{\mathfrak{q}}$ is a normal subgroup.
+A translation invariant binary relation $\mathfrak{q}$ on $G$ is a $\{\cdot, {}^{-1}\}$-congruence \textup{if and only if} $\widetilde{\mathfrak{q}}$ is a normal subgroup.
 \end{proposition}
+By \ref{subgroupCriterion}, this means $\mathfrak{q}$ is a subgroup of $G^2$ and thus also a $\{\cdot, {}^{-1}, e\}$-congruence.
 \begin{proof}
-First assume $\mathfrak{q}$ is a congruence and take $z\in\widetilde{\mathfrak{q}}$. We can find $(x,y)\in \mathfrak{q}$ such that $z = xy^{-1}$. Take arbitrary $g\in G$. We need to show that $g(xy^{-1})g^{-1} \in \widetilde{\mathfrak{q}}$. Because $\mathfrak{q}$ is reflexive, we have $(g,g)\in\mathfrak{q}$. Because is it is a subalgebra of $G^2$, we have $(gx,gy) = (g,g)\cdot (x,y)\in \mathfrak{q}$. So $g(xy^{-1})g^{-1} = gx(gy)^{-1} \in \widetilde{\mathfrak{q}}$.
+First assume $\mathfrak{q}$ is a congruence and take $z\in\widetilde{\mathfrak{q}}$ and arbitrary $g\in G$. We need to show that $gzg^{-1}\in \widetilde{\mathfrak{q}}$. We can find $(x,y)\in \mathfrak{q}$ such that $z = xy^{-1}$. Because $\mathfrak{q}$ is reflexive, we have $(g,g)\in\mathfrak{q}$. Because is it is a subalgebra of $G^2$, we have $(gx,gy) = (g,g)\cdot (x,y)\in \mathfrak{q}$. So $gzg^{-1} = g(xy^{-1})g^{-1} = gx(gy)^{-1} \in \widetilde{\mathfrak{q}}$.
 
 Now assume $\widetilde{\mathfrak{q}}$ is a normal subgroup. We first check that $\mathfrak{q}$ is an equivalence relation:
 \begin{itemize}
@@ -222,16 +247,15 @@ Now assume $\widetilde{\mathfrak{q}}$ is a normal subgroup. We first check that 
 \end{itemize}
 Now we need to show that $\mathfrak{q}$ is a subalgebra. To show $\mathfrak{q}$ is closed under taking the inverse, take $(x,y) \in \mathfrak{q}$. Then $xy^{-1}\in \widetilde{\mathfrak{q}}$ and $y^{-1}(xy^{-1})^{-1}y = x^{-1}y = x^{-1}(y^{-1})^{-1} \in \widetilde{\mathfrak{q}}$ by normality. So $(x^{-1}, y^{-1}) \in \mathfrak{q}$.
 
-Take $(x,y),(u,v)\in\mathfrak{q}$. Then $uv^{-1}, xy^{-1}$ and $y^{-1}x = y^{-1}(xy^{-1})y$ are elements of $\widetilde{\mathfrak{q}}$. Then
-\[ xu(yv)^{-1} = xuv^{-1}y^{-1} = x(uv^{-1})(y^{-1}x)x^{-1} \in \widetilde{\mathfrak{q}}, \]
-so $\mathfrak{q}$ is closed under the group operation.
+To show $\mathfrak{q}$ is closed under the binary group operation, take $(x,y),(u,v)\in\mathfrak{q}$. Then $uv^{-1}, xy^{-1}$ and $y^{-1}x = y^{-1}(xy^{-1})y$ are elements of $\widetilde{\mathfrak{q}}$. Then
+\[ xu(yv)^{-1} = xuv^{-1}y^{-1} = x(uv^{-1})(y^{-1}x)x^{-1} \in \widetilde{\mathfrak{q}}. \]
 \end{proof}
 Note that the left factorisation $\widetilde{\mathfrak{q}}$ is equal to the right factorisation $\widetilde{\mathfrak{q}}$.
 \begin{corollary} \label{kernelNormalSubgroup}
 Let $f: G\to H$ be a group homomorphism. Then $\ker f$ is a normal subgroup.
 \end{corollary}
 
-If $N\subseteq G$ is a normal subgroup, we define the quotient algebra
+If $N\lhd G$ is a normal subgroup, we define the quotient algebra
 \[ G/N \defeq G/(\setbuilder{(x,y)\in G^2}{xy^{-1}\in N}). \]
 This is a group because homomorphisms preserve associativity, inverses and identity (TODO ref). We call such a group a \udef{quotient group}.
 

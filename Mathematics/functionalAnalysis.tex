@@ -2484,28 +2484,633 @@ Due to $\lim_{n\to\infty}Ke_n = 0$ the operator $K$ cannot be bounded below, so 
 
 
 
+\chapter{Banach algebras}
+In this part we set $\F \in \{\R, \C\}$. Usually operator algebras are assumed to be complex. We will attempt to give results for real algebras where possible.
+\begin{definition}
+A \udef{normed algebra} is an associative algebra $A$ over $\F$ with norm $\norm{\cdot}$ such that $(\F, A,+, \norm{\cdot})$ is a normed space and
+\[ \forall x,y\in A: \quad \norm{xy}\leq\norm{x}\norm{y}. \]
+We say $A$ is \udef{unital} if there exists a unit element $\vec{1}\in A$ such that
+\[ \forall x\in A: \vec{1}\cdot x = x = x\cdot \vec{1} \qquad \text{and} \qquad \norm{\vec{1}} = 1. \]
+\end{definition}
+TODO: which results also hold for normed algebras?
+\begin{definition}
+A \udef{Banach algebra} is a normed algebra that is also a Banach space.
+\end{definition}
+
+\begin{lemma} \label{multiplicationContinuous}
+Let $A$ be a Banach algebra. The multiplication map $\cdot: A\times A \to A: (x,y)\mapsto xy$ is continuous.
+\end{lemma}
+\begin{proof}
+Because $A\times A$ is a metric space, we can combine \ref{sequentialContinuity} and \ref{convergenceFiniteProductTopology} to conclude that the multiplication map is continuous iff $x_ny_n \to xy$ whenever $x_n \to x$ and $y_n \to y$.
+
+Assume $x_n \to x$ and $y_n \to y$. Then
+\begin{align*}
+\norm{x_ny_n - xy} &= \norm{x_ny_n - xy_n + xy_n - xy} \leq \norm{(x_n-x)y_n}+ \norm{x(y_n-y)}\\ 
+&\leq \norm{x_n-x}\cdot\norm{y_n}+ \norm{x}\cdot\norm{y_n-y} = \norm{x_n-x}\cdot\norm{y_n-y+y}+ \norm{x}\cdot\norm{y_n-y}\\
+&\leq \norm{x_n-x}\cdot(\norm{y_n-y} + \norm{y})+ \norm{x}\cdot\norm{y_n-y} \to 0
+\end{align*}
+\end{proof}
+As a consequence multiplication by a fixed factor, $x\mapsto cx$ or $x\mapsto xc$ for some $c$, is also continuous, by \ref{productInclusionsContinuous}. This is also immediate from the boundedness of multiplication $\norm{xy}\leq\norm{x}\norm{y}$ and \ref{boundedLinearMaps}.
+
+\begin{lemma}
+Let $A$ be a Banach algebra and $D\subset A$ a subset. Suppose $a\in A$ commutes with all elements of $D$, then $a$ commutes with the closure $\overline{D}$.
+\end{lemma}
+\begin{proof}
+Take an arbitrary element $d\in \overline{D}$. Take an arbitrary $\epsilon >0$. Then we can find an $x\in D$ such that $\norm{x-d}\leq \epsilon$. Then, using that $a$ and $x$ commute,
+\begin{align*}
+\norm{ad - da} &= \norm{a(d+x-x) - (d+x-x)} \\
+&= \norm{a(d-x) - (d-x)a} \leq 2\epsilon \norm{a}.
+\end{align*}
+Because we can choose $\epsilon$ arbitrarily small, $\norm{ad - da}$ must be zero.
+\end{proof}
+
+\begin{proposition} \label{smallestBanachAlgebra}
+Let $A$ be a Banach algebra and $S\subset A$ a subset. Then
+\[ \mathcal{B}(S) \defeq \overline{\Span}\setbuilder{s_1\cdot s_2 \cdot \ldots \cdot s_k}{k\geq 1, s_1,\ldots, s_k \in S} \]
+is the smallest Banach subalgebra in $A$ that contains $S$.
+\end{proposition}
+
+\begin{proposition}
+Let $A$ be a Banach algebra and $J\subset A$ a (two-sided) ideal. Then $A/J$ is a Banach algebra with the quotient norm
+\[ \norm{x+J}_J = \inf_{j\in J}\norm{x-j}. \]
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\section{$*$-algebras}
+\begin{definition}
+A \udef{$*$-algebra} is a $*$-r(i)ng $(A,+,\cdot, *)$, with involution $*$, that is an associative algebra over a commutative $*$-ring $(R,+,\cdot, ')$, with involution $'$,
+such that
+\[ \forall r\in R, x\in A: \quad (rx)^* = r'x^*. \]
+
+A \udef{complex $*$-algebra} is a $*$-algebra where the $*$-ring $R$ is $\C$ with complex conjugation as the involution $'$.
+
+A \udef{real $*$-algebra} is a $*$-algebra where the $*$-ring $R$ is $\R$ with the identity map as the involution $'$.
+
+If a $*$-algebra is also a Banach algebra and for all elements $\norm{x^*} =\norm{x}$, then it is called a \udef{Banach-$*$-algebra}.
+\end{definition}
+TODO: drop condition $\norm{x^*} =\norm{x}$? Not required for $C^*$ (already implied).
+
+\begin{lemma}
+Let $A$ be a $*$-algebra. The unitisation $A^\dagger = A\oplus \F$ can also be seen as a $*$-algebra with the involution defined by
+\[ (a, \lambda)^* = (a^*, \overline{\lambda}) \qquad \forall a\in A, \lambda\in \F.\]
+\end{lemma}
+\begin{lemma} \label{elementaryStarLemma}
+Let $A$ be a unital $*$-algebra. Then
+\begin{enumerate}
+\item $\vec{1}^* = \vec{1}$;
+\item if $x$ is invertible, then $x^*$ is invertible with $(x^*)^{-1} = (x^{-1})^*$;
+\item $\sigma(x^*) = \setbuilder{\overline{\lambda}}{\lambda \in \sigma(x)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Take some $x\in A$.
+\begin{enumerate}
+\item $\vec{1}^* x = (x^*\cdot \vec{1})^* = x^{**} = x$.
+Similarly $x\vec{1}^* = x$.
+\item $x^*\cdot (x^{-1})^* = (x^{-1}x)^* = \vec{1}^* = \vec{1}$. Similarly $(x^{-1})^*\cdot x^* = \vec{1}$.
+\end{enumerate}
+\end{proof}
+
+\begin{proposition} \label{smallestBanach*Algebra}
+Let $A$ be a Banach-$*$-algebra and $S\subset A$ a subset. Then
+\[ \mathcal{B}^*(S) \defeq \mathcal{B}(S\cup S^*) \]
+is the smallest Banach-$*$-subalgebra in $A$ that contains $S$, where $\mathcal{B}$ is defined as in \ref{smallestBanachAlgebra} and $S^* = \setbuilder{s^*\in A}{s\in S}$.
+\end{proposition}
+
+\begin{definition}
+Let $A$ be a $*$-algebra and $x\in A$. We say that $x$ is
+\begin{enumerate}
+\item \udef{normal}, if $x^*x = xx^*$;
+\item \udef{self-adjoint}, if $x=x^*$;
+\item \udef{unitary}, if $x^*x = xx^* = \vec{1}$ (assuming $A$ unital);
+\item a \udef{projection}, if $x=x^*=x^2$.
+\end{enumerate}
+The set of all
+\begin{enumerate}
+\item normal elements in $A$ is denoted $\Normals(A)$;
+\item self-adjoint elements in $A$ is denoted $\SelfAdjoints(A)$;
+\item unitaries in $A$ is denoted $\Unitaries(A)$;
+\item projections in $A$ is denoted $\Projections(A)$.
+\end{enumerate}
+
+\end{definition}
+\begin{lemma}
+We have the following implications:
+\[ \text{projection} \Rightarrow \text{self-adjoint} \Rightarrow \text{normal} \Leftarrow \text{unitary}. \]
+\end{lemma}
+
+\begin{lemma} \label{orthogonalProjection}
+Let $A$ be a unital $*$-algebra and $p\in\Projections(A)$. Then $\vec{1}-p$ is a projection.
+\end{lemma}
+\begin{proof}
+We simply calculate
+\[ (\vec{1}-p)^2 = (\vec{1}-p)(\vec{1}-p) = \vec{1} - p -p + p = \vec{1}-p = (\vec{1}-p)^*. \]
+\end{proof}
+
+\begin{lemma} \label{realImaginaryParts}
+Let $A$ be a $*$-algebra and $x\in A$. Then there are unique self-adjoint elements $x_1,x_2\in A$ such that $x = x_1+i\cdot x_2$. They are given by
+\[ x_1 = \frac{x+x^*}{2} \qquad \text{and} \qquad x_2 = \frac{x-x^*}{2i}. \]
+\end{lemma}
+We call $x_1$ and $x_2$ the \udef{real part} and \udef{imaginary part} of $x$, respectively.
+
+\subsection{$*$-homomorphisms}
+\begin{definition}
+Let $A,B$ be $*$-algebras. A \udef{$*$-homomorphism} is a linear, multiplicative, $*$-preserving map $\Psi: A \to B$.
+
+If $A,B$ are unital and $\Psi(\vec{1}_A) = \vec{1}_B$, then we say $\Psi$ is \udef{unital}.
+\end{definition}
+\begin{lemma}
+Let $A$ be a $*$-algebra, then $*$-homomorphisms map
+\begin{enumerate}
+\item normal elements to normal elements;
+\item self-adjoints to self-adjoints;
+\item projections to projections;
+\item unitaries to unitaries, if the $*$-homomorphism is unital.
+\end{enumerate}
+\end{lemma}
+
+\subsection{$*$-matrix algebras}
+TODO define matrix algebra.
+\begin{definition}
+Let $A$ be a $*$-algebra. Then the matrix algebra $A^{n\times n}$ is considered a $*$-algebra with the star operation given defined by
+\[ [a^*]_{i,j} \defeq [a]_{j,i}^*. \]
+for all components of $a\in A^{n\times n}$.
+\end{definition}
+Notice that the $*$-operation acts as the element-wise $*$-operation composed with the transpose.
+
+\section{Unitisation}
+\begin{definition}
+Let $A$ be a Banach algebra. Then the \udef{unitisation} of $A$ is the algebra $A^\dagger = A\oplus \F$ with multiplication
+\[ (x,\lambda)\cdot (y,\mu) = (xy+\lambda y + \mu x, \lambda\mu) \]
+and a norm that extends the norm $\norm{\cdot}$ on $A$ to a norm on $A^\dagger$. In other words, there is an isometric embedding
+\[ A \hookrightarrow A^\dagger: x\mapsto (x,0). \]
+\end{definition}
+TODO: is $A^\dagger$ necessarily complete?
+\begin{lemma}
+For any Banach algebra $A$, $A^\dagger$ is a unital Banach algebra with unit $\vec{1} = (0,1)$.
+\end{lemma}
+\begin{proof}
+TODO: is $A^\dagger$ necessarily complete?
+\end{proof}
+It is possible to use multiple norms for the unitisation.
+\begin{proposition} \label{normsOfUnitisation}
+Let $A$ be a Banach algebra. Of the possible norms for $A^\dagger$, the $1$-norm
+\[ \norm{(x,\lambda)}_1 = \norm{x}+|\lambda| \]
+is minimal and the operator norm
+\[ \norm{(x,\lambda)}_{op} = \sup\setbuilder{\norm{xa + \lambda a}}{a\in A \land \norm{a}\leq 1} \]
+is maximal. All possible norms are equivalent.
+\end{proposition}
+\begin{proof}
+TODO: prove the operator norm is actually a norm and isometric.
+\end{proof}
+
+We set
+\[ \tilde{A} = \begin{cases}
+A & \text{if $A$ unital} \\
+A^\dagger & \text{if $A$ non-unital.}
+\end{cases} \]
+If a Banach algebra $A$ is unital, we can identify $\F$ with $\F\cdot \vec{1} \subseteq A$.
+
+Alternatively we could define $\tilde{A}$ as the smallest unital Banach algebra containing $A$.
+
+\begin{lemma}
+Let $A$ be a Banach algebra. Then $A$ is an ideal of $A^\dagger$.
+\end{lemma}
+
+\begin{lemma}
+Let $A$ be a Banach algebra. We have the split exact sequence
+\[ \begin{tikzcd}
+0 \rar & A \rar[hook, "\iota"] & A^\dagger \rar[shift left, "\pi_2"] & \lar[hook, shift left, "\lambda"] \F \rar & 0.
+\end{tikzcd} \]
+\end{lemma}
+
+\begin{lemma}
+Let $A,B$ be Banach algebras. Every algebra homomorphism $\Psi:A\to B$ extends uniquely to a unital homomorphism $\Psi^\dagger: A^\dagger \to B^\dagger$:
+\[ \Psi^\dagger: A^\dagger \to B^\dagger: (a,\lambda) \mapsto (\Psi(a),\lambda). \]
+\end{lemma}
+\begin{proof}
+We want $\Psi^\dagger((a,0)) = (\Psi(a),0)$ for all $a\in A$. Because $\Psi$ is unital, we have $\Psi^\dagger((\vec{0},1)) = (\vec{0},1)$. So
+\[ \Psi^\dagger((a,\lambda)) = \Psi^\dagger((a,0))+\lambda \Psi^\dagger((\vec{0},1)) = (\Psi(a),0) + \lambda(\vec{0},1) = (\Psi(a),\lambda). \]
+\end{proof}
+\begin{corollary} \label{projectionOnACommutes}
+Let $\pi_1: A^\dagger \to A$ be the projection on the first component: $\pi_1(a,\alpha) = a$.
+
+The unital extension $\Psi^\dagger$ commutes with $\pi_2$:
+\[ \pi_2\circ\Psi^\dagger = \Psi^\dagger \circ \pi_2 = \Psi\circ \pi_2. \]
+Restricted to $A$, this is equal to $\Psi$.
+\end{corollary}
+As before we set, for $\Psi: A \to B$ an algebra homomorphism
+\[ \tilde{\Psi} = \begin{cases}
+\Psi & \text{if $A$ unital} \\
+\Psi^\dagger & \text{if $A$ non-unital.}
+\end{cases} \]
+Thus $\tilde{\Psi}$ is a function on $\tilde{A}$.
+
+\begin{lemma} \label{DaggerMorphismProperties}
+Let $A,B$ be Banach algebras and $\Psi:A\to B$ and algebra homomorphism. Then
+\begin{enumerate}
+\item $\im(\Psi^\dagger) = (\im\Psi)^\dagger$;
+\item $\ker(\Psi^\dagger) = \ker(\Psi)\oplus\{0\}$;
+\item $\Psi^\dagger$ is injective \textup{if and only if} $\Psi$ is injective;
+\item $\Psi^\dagger$ is surjective \textup{if and only if} $\Psi$ is surjective;
+\item $\norm{\Psi^\dagger} = \max\{\norm{\Psi},1\}$;
+\item $\Psi^\dagger$ is isometric \textup{if and only if} $\Psi$ is isometric.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The third point follows from the second and \ref{injectivityKernelTriviality}.
+\end{proof}
+
+\begin{definition}
+Let $A$ be a Banach algebra. We define the \udef{scalar mapping} to be
+\[ s = \lambda\circ \pi: A^\dagger \to A^\dagger: (a,\lambda) \mapsto (0,\lambda). \]
+\end{definition}
+Notice that $\pi\circ s = \pi$.
+
+\subsection{Approximate units}
+\begin{definition}
+Let $A$ be a Banach algebra. A net $(e_\lambda)_{\lambda\in\Lambda}$ is an \udef{approximate unit} if
+\begin{enumerate}
+\item $\norm{e_\lambda}\leq 1$ for all $\lambda$;
+\item $a = \lim_{\lambda\to \infty} e_\lambda \cdot a = \lim_{\lambda\to \infty} a \cdot e_\lambda$.
+\end{enumerate}
+We call $(e)_\lambda$ is an \udef{increasing approximate unit} if $\lambda_0 \leq \lambda_1$ implies $0\leq e_{\lambda_0} \leq e_{\lambda_1}$.
+\end{definition}
+\begin{lemma}
+If $A$ is unital, any approximate unit in $A$ converges to $\vec{1}$.
+\end{lemma}
+TODO: usually increasing. When not?
+
+\section{Algebras of real and complex functions}
+
+\section{Complexification}
+
+\section{Complex analysis on Banach algebras}
+There is a theory of holomorphic (analytic) functions from open sets in $\C$ taking values in a Banach space, which is nearly identical to the usual complex-valued theory. In particular, most of the standard theorems of complex analysis, such as the Cauchy Integral Formula, Liouville’s Theorem,and the existence and radius of convergence of Taylor and Laurent expansions,have exact analogs in this setting. 
+
+\begin{lemma}
+TODO: holomorphic?? And check sign.
+\[ \od{}{z} R_x(z) = (x-z)^{-2}. \]
+\end{lemma}
+
+\section{Series in Banach algebras}
+\subsection{Neumann series}
+\begin{proposition}[Neumann series] \label{NeumannSeries}
+Let $A$ be a unital Banach algebra and $x\in A$. 
+If $\norm{x}<1$, then $\vec{1}-x$ is invertible with inverse
+\[ (\vec{1}-x)^{-1} = \sum_{n=0}^\infty x^n. \]
+Equivalently, if $\norm{\vec{1}-x}< 1$, then $x$ is invertible with inverse
+\[ x^{-1} = \sum_{n=0}^\infty(\vec{1}-x)^n. \]
+\end{proposition}
+\begin{proof}
+Since $\norm{x^n}\leq \norm{x}^n$ for all $n\geq 1$ and $\sum \norm{x}^n$ is a convergent geometric series, the series $\sum x^n$ is convergent by \ref{absoluteUnconditionalConvergenceBanach}.
+\end{proof}
+\begin{corollary} \label{openSetInvertibles}
+Let $x\in\GL(A)$, then $B(x,\norm{x^{-1}}^{-1})\subset \GL(A)$. The invertible elements $\GL(A)$ form an open subset of $A$.
+\end{corollary}
+\begin{proof}
+The second assertion follows from the first by \ref{interior}. Let $y\in B(x,\norm{x^{-1}}^{-1})$. Then
+\[ \norm{\vec{1} - x^{-1}y} \leq \norm{x^{-1}}\cdot\norm{x-y} < \norm{x^{-1}}\cdot\norm{x^{-1}}^{-1} = 1  \]
+and, by the proposition, $x^{-1}y$ is invertible. Similarly $yx^{-1}$ is invertible and thus $y$ is invertible by \ref{productInvertibility}.
+\end{proof}
+\begin{corollary} \label{inverseMapContinuous}
+The map $^{-1}: \GL(A)\to\GL(A): x\mapsto x^{-1}$ is continuous.
+\end{corollary}
+\begin{proof}
+Take a convergent sequence $(x_n)\subset\GL(A)$ with limit $x$. We wish to prove $(x_n^{-1})$ converges to $x^{-1}$, because then the map is continuous by \ref{sequentialContinuity}. We can choose an $n_0$ such that $\forall n\geq n_0: x_n \in B(x,\norm{x^{-1}}^{-1})$. From now on we consider only the tails $(x_n)_{n=n_0}^\infty$ and $(x_n^{-1})_{n=n_0}^\infty$, which have the same limits by TODO ref. Then
+\[ \norm{x^{-1}}\cdot\norm{x-x_n} < \norm{x^{-1}}\cdot\norm{x^{-1}}^{-1} = 1. \]
+Also
+\[ \norm{\vec{1} - x^{-1}x_n} = \norm{x^{-1}(x-x_n)} \leq \norm{x^{-1}}\cdot\norm{x-x_n} < 1. \]
+We calculate, using the inequalities to apply the Neumann series formula and geometric series formula:
+\begin{align*}
+\norm{x_n^{-1} - x^{-1}} &= \norm{(x_n^{-1}x - \vec{1})x^{-1}} = \norm{((x^{-1}x_n)^{-1} - \vec{1})x^{-1}} \\
+&= \norm{\left(\sum_{k=0}^\infty[\vec{1} - x^{-1}x_n]^k - \vec{1}\right)x^{-1}} = \norm{\left(\sum_{k=1}^\infty[\vec{1} - x^{-1}x_n]^k\right)x^{-1}} \\
+&\leq \sum_{k=1}^\infty\norm{\vec{1} - x^{-1}x_n}^k\cdot\norm{x^{-1}} = \sum_{k=1}^\infty\norm{x^{-1}(x - x_n)}^k\cdot\norm{x^{-1}} \\
+&\leq \norm{x^{-1}}\sum_{k=1}^\infty\norm{x - x_n}^k\cdot\norm{x^{-1}}^{k} = \norm{x^{-1}}\sum_{k=0}^\infty\norm{x - x_n}^k\cdot\norm{x^{-1}}^{k} - \norm{x^{-1}} \\
+&= \frac{\norm{x^{-1}}}{1-\norm{x - x_n}\cdot\norm{x^{-1}}}-\norm{x^{-1}} = \frac{\norm{x - x_n}\cdot\norm{x^{-1}}^2}{1-\norm{x - x_n}\cdot\norm{x^{-1}}}.
+\end{align*}
+As the right-hand side converges to $0$, so must the left-hand side. Thus $(x_n^{-1})$ converges to $x^{-1}$.
+\end{proof}
 
 
+\subsection{The exponential}
+\begin{proposition}
+Let $A$ be a Banach algebra and $a\in A$. Then the series
+\[ \sum_{i=1}^\infty \frac{a^i}{i!} \]
+converges. We denote its limit $\exp(a)-1$ or $e^a-1$.
+\end{proposition}
+\begin{proof}
+By
+\[ \norm{\sum_{i=1}^N \frac{a^i}{i!}} \leq \sum_{i=1}^N \frac{\norm{a}^i}{i!} \]
+it is absolutely convergent and thus convergent, by \ref{absoluteUnconditionalConvergenceBanach}.
+\end{proof}
+The function $a\mapsto \exp(a) = \vec{1} + \sum_{i=1}^\infty \frac{a^i}{i!}$ is the \udef{exponential mapping}.
 
+\begin{lemma} \label{continuityExp}
+The exponential mapping is continuous.
+\end{lemma}
+\begin{proof}
+TODO - see Coleman
+\end{proof}
 
+\begin{proposition}
+Let $A$ be a unital Banach algebra and $a,b\in A$. If $a$ and $b$ commute, then
+\[ \exp(a+b) = \exp(a)\exp(b). \]
+\end{proposition}
+\begin{proof}
+TODO - Coleman
+\end{proof}
+\begin{corollary}
+The image of the exponential function is contained in $\GL(A)$.
+\end{corollary}
+\begin{proof}
+As $a$ and $-a$ commute, we have $\exp(-a)\exp(a) = \exp(0) = \vec{1}$.
+\end{proof}
 
+\begin{lemma}
+Let $A$ be a Banach algebra and $a\in A$. Then
+\[ \exp(a) = \lim_{n\to\infty} \left(\vec{1} + \frac{a}{n}\right)^n. \]
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
 
+\section{Finite elements}
+elements of the socle. \url{https://link.springer.com/content/pdf/10.1023/A:1009717500980.pdf}
 
+have finite spectrum 
 
+\url{http://matwbn.icm.edu.pl/ksiazki/sm/sm104/sm10431.pdf}
 
+\section{The spectrum}
+TODO: remove unital requirement.
+\begin{definition}
+Let $A$ be a complex Banach algebra. The \udef{spectrum} of an element $x\in A$ is defined as
+\[ \sigma(x) = \sigma_A(x) \defeq \setbuilder{\lambda\in\C}{x-\lambda\cdot \vec{1} \in \tilde{A} \;\text{is not invertible}}. \]
+If $A$ is a real Banach algebra, then the spectrum of $x\in A$ is defined as
+\[ \sigma_A(x) \defeq \sigma_{A_\C}(x) = \setbuilder{\lambda\in\C}{x-\lambda\cdot \vec{1} \in \widetilde{A_\C} \;\text{is not invertible}}.  \]
+The \udef{resolvent set} of an element $x\in A$ is
+\[ \rho(x) = \C\setminus\sigma(x) \]
+and its \udef{resolvent map} is
+\[ R_x: \rho(x) \to A : z\mapsto (z-x)^{-1}. \]
+The \udef{spectral radius} of $x\in A$ is
+\[ \spr(x) = \max\{ |\lambda|\;|\; \lambda\in\sigma(x) \}. \]
+\end{definition}
+TODO redefine $\spr$ with $\sup$. Max is then proposition (spectrum compact).
 
+\begin{lemma}
+Let $A$ be a non-unital Banach algebra. Then $0\in\sigma_A(a)$ for all $a\in A$.
+\end{lemma}
+\begin{proof}
+Because $A\subset A^\dagger$ as an ideal, $(a,0)\in A^\dagger$ is not invertible.
+\end{proof}
 
+\begin{lemma}
+Let $A$ be a real Banach algebra. Then for all $a\in A$ and $\mu_1,\mu_2\in \R$:
+\begin{enumerate}
+\item $\spec(a) = \overline{\spec(a)}$;
+\item $\mu_1 + \mu_2 i \in \sigma(a)$ \textup{if and only if} $(a-\mu_1)^2+\mu_2^2$ is not invertible in $\tilde{A}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $\lambda \notin \spec(a)$, so $(a-\lambda)^{-1}$ exists. Then
+\[ \vec{1} = \overline{\vec{1}} = \overline{(a-\lambda)}\overline{(a-\lambda)^{-1}} = (a-\overline{\lambda})\overline{(a-\lambda)^{-1}}, \]
+so $a-\overline{\lambda}$ is invertible and $\overline{\lambda}\notin \sigma(a)$. The converse is identical, using $\overline{\lambda}$.
 
+(2) By (1), $a - (\mu_1 + \mu_2 i)$ is invertible if and only if $a - (\mu_1 - \mu_2 i)$ is invertible. Because $a - (\mu_1 + \mu_2 i)$ and $a - (\mu_1 - \mu_2 i)$ commute, this is equivalent to saying
+\[ (a - (\mu_1 + \mu_2 i))(a - (\mu_1 - \mu_2 i)) = (a-\mu_1)^2 + \mu_2^2 \]
+is invertible in $\widetilde{A_\C}$, by \ref{productInvertibility} and thus also in $A$, by TODO ref.
+\end{proof}
 
+\begin{proposition}
+Let $B$ be a complex Banach algebra and $A = B_\R$, then for all $a\in A$
+\[ \sigma_A(a) = \sigma_B(a) \cup \overline{\sigma_B(a)}. \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
+\begin{proposition} \label{spectrumCompact}
+For any $x\in A$, the spectrum $\sigma(x)$ is a compact subset of $\setbuilder{\lambda\in\C}{|\lambda|\leq \norm{x}}$.
 
+In particular, $\spr(x) \leq \norm{x}$.
+\end{proposition}
+\begin{proof}
+Let $\lambda\in \C$ be such that $|\lambda|>\norm{x}$, then
+\[ 1 > \frac{\norm{x}}{|\lambda|} = \frac{\lambda - (\lambda - \norm{x})}{|\lambda|} = \norm{\vec{1} - \left(\vec{1} - \frac{x}{\lambda}\right)}. \]
+By \ref{NeumannSeries}, $\vec{1} - x/\lambda$ is invertible and thus so is $x-\lambda$.
 
-\chapter{Functionals on vector spaces}
+It is then enough to show that $\sigma(x)$ is closed. By \ref{openSetInvertibles}, $\GL(A)$ is open and the set of non-invertibles $A\setminus \GL(A)$ is closed. Consider $f: \C \to A: \lambda \mapsto x-\lambda$. Then $\sigma(x) = f^{-1}[A\setminus \GL(A)]$ is the preimage of a closed set under a continuous map, and hence is closed.
+\end{proof}
 
-\begin{theorem}[Riesz-Markov-Kakutani representation theorem]
-Let $X$ be a locally compact Hausdorff space. For any positive linear functional $\psi$ on $C_c(X)$, there is a unique Radon measure $\mu$ on $X$ such that
-\[ \forall f\in C_c(X): \quad \psi(f) = \int_X f(x)\diff{\mu(x)}. \]
+\begin{proposition}[Spectral radius formula] \label{spectralRadiusFormula}
+Let $A$ be a Banach algebra and $x\in A$. Then
+\[ \spr(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = \inf_{n\in\N}\norm{x^n}^{1/n}. \]
+\end{proposition}
+\begin{proof}
+TODO, with complex analysis. Does it imply \ref{spectrumCompact}?
+\end{proof}
+
+\begin{theorem}
+Let $A$ be a unital Banach algebra. For every $x\in A$, the spectrum $\sigma(x)$ is non-empty.
 \end{theorem}
+\begin{proof}
+TODO, uses complex analysis (Liouville's theorem). Also move higher?
+\end{proof}
+\begin{corollary}[Gelfand-Mazur] \label{GelfandMazur}
+Let $A$ be a unital complex Banach algebra. If every non-zero element is invertible, then $A=\C\cdot \vec{1}$.
+\end{corollary}
+\begin{proof}
+Suppose $x\in A\setminus (\C\cdot\vec{1})$. Then $\sigma(x) = \emptyset$, contradicting the theorem.
+\end{proof}
+In other words, $\C$ is the only normed complex division algebra.
+
+\begin{proposition}
+Let $A$ be a unital Banach algebra and $x,y\in A$. Then $\vec{1} - xy$ is invertible \textup{if and only if} $\vec{1} - yx$ is invertible.
+\end{proposition}
+\begin{proof}
+Assume $\vec{1} - xy$ invertible. Then the inverse of $\vec{1} - yx$ is
+\[ y(\vec{1} - xy)^{-1}x + \vec{1}. \]
+\end{proof}
+\begin{corollary}
+Let $A$ be a unital Banach algebra and $x,y\in A$. Then
+\[ \sigma(xy)\cup\{0\} = \sigma(yx)\cup\{0\}. \]
+\end{corollary}
+\begin{proof}
+Assuming $\lambda \neq 0$, we have $\lambda\in\sigma(xy) \iff \frac{xy}{\lambda} - \vec{1}$ is invertible.
+\end{proof}
+It is important to include $0$: there are cases when $0\in \sigma(xy)$, but $0\notin \sigma(yx)$.
+
+\begin{lemma} \label{spectrumOfImage}
+Let $A,B$ be unital Banach algebras and $\Psi: A\to B$ a unital algebra homomorphism. Then for all $x\in A$: $\sigma(\Psi(x)) \subseteq \sigma(x)$ and hence $\spr(\Psi(x)) \leq \spr(x)$.
+\end{lemma}
+\begin{proof}
+By contraposition: Assume $\lambda\notin\sigma(x)$, then $x-\lambda$ has an inverse, call it $a$. Then $(\Psi(x) - \lambda)$ has an inverse by
+\[ (\Psi(x) - \lambda)\Psi(a) = \Psi(x-\lambda)\Psi(a) = \Psi((x-\lambda)a) = \Psi(\vec{1}) = \vec{1},\]
+meaning $\lambda \notin \sigma(\Psi(x))$.
+\end{proof}
+
+In general if $B$ is a subalgebra of a Banach algebra $A$, then for any $x\in B$, $\sigma_B(x) \supseteq \sigma_A(x)$.
+
+\begin{proposition}
+Let $A$ be a unital Banach algebra and suppose that $S\subset A$ is a set of pairwise commuting elements. Then there exists a unital commutative Banach subalgebra $C$ such that $S\subset C\subset A$ and
+\[ \sigma_A(s) = \sigma_C(s) \qquad \text{for all $s\in S$.} \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsection{Quasinilpotent operators}
+\begin{definition}
+Let $A$ be a Banach algebra and $x\in A$. If $\spec(x) = \{0\}$, then $x$ is called \udef{quasinilpotent}
+\end{definition}
+\url{https://www.jstor.org/stable/2042882?seq=1}
+\url{https://www.researchgate.net/profile/Zbigniew-Slodkowski/publication/265547661_A_note_on_quasinilpotent_elements_of_a_Banach_algebra/links/5e7e8f94458515efa0b0fe83/A-note-on-quasinilpotent-elements-of-a-Banach-algebra.pdf?origin=publication_detail}
+
+\url{https://www.cambridge.org/core/services/aop-cambridge-core/content/view/AC3CBD3000D16515D0BD83C07B703186/S0013091500015352a.pdf/finite_dimensionality_nilpotents_and_quasinilpotents_in_banach_algebras.pdf}
+
+\url{https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C8F26DDF45A29D689C726A29D8F0BC2A/S0017089500008429a.pdf/algebraic-ideals-of-semiprime-banach-algebras.pdf}
+
+\begin{proposition} \label{nilpotentQuasinilpotent}
+Every nilpotent element is quasinilpotent. The converse holds for finite elements in semisimple Banach algebras (TODO correct version of finite).
+\end{proposition}
+\begin{proof}
+Let $x$ be a nilpotent element in a (unital) Banach algebra $A$.
+By the spectral radius formula \ref{spectralRadiusFormula}, we have
+\[ \spr(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = 0. \]
+This implies $\spec(x) = \{0\}$.
+
+Now assume $x$ a finite quasimilpotent element. Then $\dim(xAx) = n$ and so $x^2, \ldots x^{n+2}$ a linearly dependent and thus there exists a polynomial $p$ of degree at most $n+2$ such that $p(x) = 0$. We can factorise $p(x) = x^kq(x)$ where $q$ is some polynomial such that $q(0) \neq 0$ and $k\in \N$. Then by spectral mapping, we have that $\spec(q(x)) = q(\spec(x)) = q(\{0\}) \neq \{0\}$. Thus $q(x)$ is invertible and we have
+\[ x^k = x^kq(x)q(x)^{-1} = 0\cdot q(x)^{-1} = 0. \]
+This means $x$ is nilpotent.
+\end{proof}
+
+\section{Characters}
+\begin{definition}
+Let $A$ be a Banach algebra. A \udef{character} on $A$ is a non-zero algebra homomorphism $A\to\C$.
+\end{definition}
+In other words, a character on $A$ is a non-zero multiplicative linear functional $A\to \C$.
+In particular, if $A$ is a real algebra, a character is still complex valued, but now  an $\R$-linear functional on $A$. 
+
+\begin{lemma}
+Let $A$ be a real Banach algebra. Let $\varphi$ be a character on $A$. Then
+\[ \varphi \in \tdual{A} \iff \varphi = \overline{\varphi} \iff \varphi[A] \subset \R. \]
+\end{lemma}
+
+\begin{proposition} \label{charactersUnital} \label{charactersContinuous}
+Let $A$ be a Banach algebra and $\varphi$ a character on $A$, then $\varphi$ is continuous and
+\begin{enumerate}
+\item $\norm{\varphi}\leq 1$;
+\item $\norm{\varphi} = 1$ if $A$ contains an approximate unit;
+\item $\norm{\varphi} = 1 = \varphi(\vec{1})$ if $A$ is unital.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We first prove that $\varphi$ is unital if $A$ is unital: As $\varphi(x) = \varphi(x\cdot\vec{1}) = \varphi(x)\varphi(\vec{1})$ for all $x\in A$ and $\varphi \neq 0$, it follows that $\varphi(\vec{1}) = 1$.
+
+Next $\norm{\varphi}\leq 1$ follows from $\norm{\tilde{\varphi}} \leq 1$ by \ref{DaggerMorphismProperties}. To this end suppose that for some $x\in \tilde{A}$, $|\tilde{\varphi}(x)|>\norm{x}$. Then $x-\tilde{\varphi}(x)$ is invertible by corollary \ref{spectrumCompact}. Thus
+\[ 1 = \tilde{\varphi}(\vec{1}) = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})\tilde{\varphi}(x-\tilde{\varphi}(x)) = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})[\tilde{\varphi}(x)-\tilde{\varphi}(x)] = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})\cdot 0 = 0 \]
+which is a contradiction. Then $\norm{\tilde{\varphi}} \leq 1$ and thus $\norm{\varphi} \leq 1$. By \ref{boundedLinearMaps}, $\varphi$ is continuous.
+
+Then it just remains to be shown that $\norm{\varphi} = 1$ if $A$ contains an approximate unit. TODO
+\end{proof}
+
+
+\section{Commutative Banach algebras}
+\subsection{The (Gelfand) spectrum}
+\begin{definition}
+Let $A$ be a commutative Banach algebra. The \udef{(Gelfand) spectrum} (or \udef{character space}) $\hat{A}$ is the set of characters on $A$.
+\end{definition}
+If we equip $\hat{A}$ with the weak-$*$ topology, the Banach-Alaoglu theorem (TODO ref) implies $\hat{A}$ is a locally compact Hausdorff space.
+
+TODO $\hat{A}$ compact if and only if $A$ unital.
+
+All elements of the Gelfand spectrum are unital and continuous, by \ref{charactersUnital} and \ref{charactersContinuous}.
+
+If $A$ is a real algebra, then
+\[ \hat{A} = \setbuilder{\varphi|_A}{\varphi\in \widehat{A_\C}}. \]
+
+\begin{proposition} \label{commutativeSameSpectrum}
+Let $A$ be  a  unital  Banach  algebra,  and  suppose  that $S\subseteq A$ is a subset  of  pairwise commuting elements.  Then there exists a unital commutative Banach subalgebra $C\subseteq A$ with $S\subseteq C$ such that
+\[ \forall s\in S: \quad \sigma_A(s) = \sigma_C(s). \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{BanachAlgebraIdeals}
+Let $A$ be a unital Banach algebra and $\mathcal{J}$ is a maximal ideal. Then 
+\begin{enumerate}
+\item $\mathcal{J}$ is closed;
+\item if $A$ is complex and commutative, then $A/\mathcal{J} \cong \C$;
+\item if $A$ is real and commutative, then $A/\mathcal{J} \cong \R$ or $A/\mathcal{J} \cong \C$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+If $\mathcal{J}$ is not closed, then $\overline{\mathcal{J}} = A$ by maximality. So by proposition \ref{closure} every open set must intersect $\mathcal{J}$, in particular the set $\GL(A)$, open by \ref{openSetInvertibles}. Because $\mathcal{J}$ is an ideal containing an invertible element, $\mathcal{J}=A$ by TODO ref. A contradiction.
+
+If $A$ is commutative, $A/\mathcal{J}$ is a field by TODO ref. It is also a unital Banach algebra (TODO), so $A/\mathcal{J} \cong \C$ by the Gelfand-Mazur theorem, \ref{GelfandMazur}.
+\end{proof}
+
+\begin{proposition} \label{characterMaximalIdealsComplex}
+Let $A$ be a complex unital commutative Banach algebra. Then we have a bijection
+\[ \ker: \hat{A} \twoheadrightarrowtail \{\text{maximal ideals in $A$}\}: \varphi \mapsto \ker(\varphi).  \]
+\end{proposition}
+\begin{proof}
+First we verify that for each character $\varphi$ the kernel is a maximal ideal. Indeed applying \ref{splittingMap} to $\varphi$ we get an isomorphism $A/\ker\varphi \cong \im\varphi = \C$, meaning $\ker(\varphi)$ has codimension 1 and thus is a maximal proper subspace. By \ref{kernelIsIdeal}, $\ker(\varphi)$ is an ideal.
+
+To prove $\ker$ is injective: let $\ker(\varphi) = \ker(\psi)$. Take some $a\in A$, which we can uniquely write as $\lambda+n$, with $n\in\ker(\varphi) = \ker(\psi)$. TODO ref + extract lemma! Then $\varphi(a) = \lambda = \psi(a)$, so $\varphi = \psi$.
+
+For surjectivity, take a maximal ideal $\mathcal{J}$.
+By \ref{BanachAlgebraIdeals}, $A/\mathcal{J}\cong \C$, so the quotient map $A\to A/\mathcal{J}\cong \C$ can be seen as a character with kernel $\mathcal{J}$.
+\end{proof}
+
+TODO characterMaximalIdealsReal!
+
+
+\begin{proposition} \label{spectrumFromSpectrum}
+Let $A$ be a unital commutative Banach algebra and $x\in A$. Then
+\[ \sigma(x) = \setbuilder{\varphi(x)}{\varphi\in\hat{A}} = \hat{x}[\hat{A}]. \]
+\end{proposition}
+TODO: introduce notation $\hat{x}$ earlier?
+\begin{proof}
+Suppose $\lambda = \varphi(x)$ for some $\varphi\in\hat{A}$. Then $x-\lambda\in\ker\varphi$, which is a proper ideal.
+So $x-\lambda \notin\GL(A)$ and $\lambda \in\sigma(x)$.
+
+Suppose $\lambda \in \sigma(x)$. Because $x-\lambda$ is non-invertible, the ideal generated by it is proper, by \ref{nonInvertibleGeneratedIdeals}, and $x-\lambda$ lies in a maximal ideal, by \ref{idealLatticeCoatomic}. By \ref{characterMaximalIdealsComplex}, this means $x-\lambda \in \ker\varphi$ for some $\varphi\in\hat{A}$ and then $\lambda = \varphi(x)$.
+\end{proof}
+
+\subsection{The Gelfand transform}
+\begin{definition}
+Let $A$ be a unital commutative Banach algebra. The \udef{Gelfand transform} of $A$ is the map
+\[ \wedge : A\to C(\hat{A}): x\mapsto \hat{x} \]
+where $\hat{x}(\varphi) = \varphi(x)$ for all $x\in A, \varphi\in\hat{A}$.
+\end{definition}
+\begin{lemma} \label{GelfandTransformHomomorphism}
+Let $A$ be a unital commutative Banach algebra with Gelfand transform $\wedge : A\to C(\hat{A})$. Then
+\begin{enumerate}
+\item $\wedge$ is well-defined, in the sense that $\hat{x} \in C(\hat{A})$;
+\item $\wedge$ is linear and multiplicative;
+\item $\norm{\hat{x}} = \spr(x) \leq \norm{x}$.
+\end{enumerate}
+Thus the Gelfand transform is a unital, norm-contractive Banach algebra homomorphism.
+\end{lemma}
+\begin{proof}
+We prove in turn:
+\begin{enumerate}
+\item We have equipped $\hat{A}$ with the weak-$*$ topology. Then proposition \ref{weak*continuousFunctional} says each $\hat{x}$ is continuous.
+\item $\hat{x}(\lambda \varphi + \psi) = \lambda \varphi(x) + \psi(x) = \lambda\hat{x}(\varphi) + \hat{x}(\psi)$ and $\hat{x}(\varphi\psi) = \varphi(x)\psi(x) = \hat{x}(\varphi)\hat{x}(\psi)$.
+\item For all $x\in A$:
+\[ \norm{\hat{x}} = \sup_{\varphi\in\hat{A}}\left( \frac{|\varphi(x)|}{\norm{\varphi}} \right) = \sup_{\varphi\in\hat{A}}(|\varphi(x)|) = \spr(x) \leq \norm{x} \]
+where we have used that $\norm{\varphi} = 1$ by \ref{charactersUnital}, $\sigma(x) = \setbuilder{|\varphi(x)|}{\varphi\in\hat{A}}$ by \ref{spectrumFromSpectrum} and the inequality is from \ref{spectrumCompact}.
+\end{enumerate}
+\end{proof}
+
+
+
+
 
 
 
