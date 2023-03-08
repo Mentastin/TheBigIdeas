@@ -1,0 +1,2049 @@
+\chapter{Normed and Banach spaces}
+In this chapter we will always use either $\mathbb{F} = \R$ or $\mathbb{F} = \C$.
+
+\begin{definition}
+\begin{itemize}
+\item A \udef{normed space} is a vector space equipped with a norm.
+\item A \udef{Banach space} is a normed vector space that is complete as a metric space.
+\end{itemize}
+\end{definition}
+
+A finite-dimensional normed space is automatically a Banach by proposition \ref{finiteDimComplete}.
+
+Every proper subspace $U$ of a normed vector space $V$ has empty interior.
+A nice consequence of this is that any closed proper subspace is necessarily nowhere dense. So if V is a Banach space, the Baire category theorem implies that V cannot be a countable union of closed proper subspaces. In particular, an infinite dimensional Banach space cannot be a countable union of finite dimensional subspaces. This means, for example, that a vector space of countable dimension (e.g\ the space of polynomials) cannot be equipped with a complete norm.
+
+The space $\Bounded(V,W)$ is a Banach space.
+
+
+Complemented subspace problem: \url{https://arxiv.org/pdf/math/0501048v1.pdf}
+
+
+TODO: \url{https://math.stackexchange.com/questions/2151779/normed-vector-spaces-over-finite-fields/2568231}
+
+\section{Normed spaces}
+
+\begin{lemma}
+A subspace of a normed vector space is a normed space, with the norm given by the restriction of the norm in the larger space.
+\end{lemma}
+
+\begin{definition}
+A vector with norm 1 is called a \udef{unit vector}. Unit vectors are often written with a hat:
+\[ \norm{\vhat{v}} = 1. \]
+\end{definition}
+
+\subsection{The topology of a normed space}
+\begin{definition}
+Let $\sSet{V,\norm{\cdot}}$ be a normed space. The initial vector space convergence w.r.t. the norm is called the \udef{norm convergence}.
+\end{definition}
+The norm convergence is topological TODO ref(!). Its topology is called the \udef{norm topology}.
+
+\begin{lemma}
+The norm convergence is \emph{not} the initial convergence w.r.t. to the norm.
+\end{lemma}
+\begin{proof}
+In the initial convergence w.r.t. to the norm, all vectors of the same norm are indistinguishable, so this convergence space is not $T_0$.
+
+On the other hand, $\{0\}$ is closed in $\R$ and thus its preimage $\{0\} \subset V$ is closed in the norm topology (TODO ref preimage closed is closed). By \ref{HausdorffCriterionConvergenceGroup}, we have that the norm convergence must be Hausdorff, or $T_2$.
+\end{proof}
+
+\begin{proposition}
+The norm convergence is topological and metric.
+
+Every normed space can be viewed as a metric space with the metric $d:V\times V \to [0,\infty[$ given by
+\[ d(x,y) = \norm{x-y}. \]
+This metric has the properties of
+\begin{itemize}[leftmargin=6cm]
+\item[\textbf{Translation invariance}] $d(x+a, y+a) = d(x,y)$;
+\item[\textbf{Scaling}] $d(\lambda x, \lambda y) = |\lambda|d(x,y)$.
+\end{itemize}
+Conversely, any metric with translation invariance and scaling determines a norm:
+\[ \norm{x} = d(x,\vec{0}). \]
+Passing from norm to metric back to norm, we recover the original norm.
+\end{proposition}
+\begin{lemma}
+A linear map $L:V\to W$ between normed spaces is an isometry for the metric \textup{if and only if} it preserves the norm, i.e.\
+\[ \forall v\in V: \quad \norm{v}_V = \norm{L(v)}_W. \]
+\end{lemma}
+\begin{proof}
+Assume $L$ is an isometry, then
+\[ \norm{v} = d(v,\vec{0}) = d(L(v),L(\vec{0})) = \norm{L(v) - L(\vec{0})} = \norm{L(v) - \vec{0}} = \norm{L(v)}. \]
+Assume $L$ preserves the norm, then
+\[ d(L(v_1), d(v_2)) = \norm{L(v_1)-L(v_2)} = \norm{L(v_1-v_2)} = \norm{v_1-v_2} = d(v_1,v_2). \]
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a normed vector space, then the norm $\norm{\cdot}:V\to \R$ is a continuous map.
+\end{proposition}
+\begin{proof}
+The reverse triangle inequality, $|\norm{v}-\norm{w}| \leq \norm{v-w}$, implies that the norm is Lipschitz continuous with Lipschitz constant $1$, so we can use \ref{LipschitzcontinuousContinuous}.
+\end{proof}
+
+\subsubsection{Continuous operators}
+\begin{theorem} \label{boundedLinearMaps}
+Let $L$ be a linear operator between normed spaces $V,W$. The following are equivalent:
+\begin{enumerate}
+\item $L$ is continuous everywhere in $\dom(L)$;
+\item $L$ is continuous at $x_0 \in \dom(L)$;
+\item $L$ is continuous at $0$;
+\item $L$ is Lipschitz continuous.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We proceed round-robin-style:
+\begin{itemize}[leftmargin=2cm]
+\item[$\boxed{(1) \Rightarrow (2)}$] Trivial.
+\item[$\boxed{(2) \Rightarrow (3)}$] Let $\seq{x_n}$ converge to $0$, then
+\[ \lim_{n\to\infty}L(x_n) = \lim_{n\to\infty}L(x_n+x_0) - L(x_0) = L(\lim_{n\to\infty}x_n+x_0) - L(x_0) = L(x_0) - L(x_0) = 0. \]
+Continuity follows because normed vector spaces are sequential spaces.
+\item[$\boxed{(3) \Rightarrow (4)}$] From continuity at zero, there exists a $\delta>0$ such that $\norm{L(h)} = \norm{L(h)-L(0)} \leq 1$ for all $h\in \dom(L)$ with $\norm{h}\leq \delta$. Thus for all nonzero $v\in \dom(L)$
+\[ \norm{L(v)} = \norm{\frac{\norm{v}}{\delta}L(\delta \frac{v}{\norm{v}})} = \frac{\norm{v}}{\delta}\norm{L(\delta \frac{v}{\norm{v}})}\leq \frac{\norm{v}}{\delta}. \]
+\item[$\boxed{(4) \Rightarrow (1)}$] Lipschitz continuity implies continuity \ref{LipschitzcontinuousContinuous}.
+\end{itemize}
+\end{proof}
+\begin{corollary}
+A linear operator $L:V\to W$ between normed spaces is a homeomorphism \textup{if and only if} there exists $C_1,C_2> 0$ such that
+\[ \forall x\in V:\qquad C_1\norm{x}\leq \norm{L(x)} \leq C_2\norm{x}. \]
+\end{corollary}
+
+\begin{definition}
+An operator $L$ between normed vector spaces is called \udef{bounded} if it is (Lipschitz) continuous.
+
+The set of bounded operators from $V$ to $W$ is denoted $\Bounded(V,W)$. If $V=W$, we write $\Bounded(V)$.
+\end{definition}
+In other words, bounded means there exists an $M>0$ such that $\forall v\in \dom(L)$
+\[ \norm{L(v)} \leq M \norm{v}. \]
+
+\begin{proposition} \label{boundedAntiLinearMaps}
+An anti-linear map between complex vector spaces is continuous \textup{if and only if} it is bounded.
+\end{proposition}
+\begin{proof}
+An anti-linear map $A:V\to W$ is an $\R$-linear map $A:V_\R\to W_\R$. Now $V_\R, W_\R$ have the same norms as $V,W$ and thus the same topology. So $A:V\to W$ is continuous if and only if $A:V_\R\to W_\R$ is continuous.
+\end{proof}
+
+\subsubsection{Functions from convergence vector spaces to normed spaces}
+
+\begin{proposition} \label{continuityToNormedSpace}
+Let $\sSet{V, \xi}$ be a topological vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a positively homogeneous function. Then $f$ is continuous at $0$ \textup{if and only if} $f$ is bounded on some $U\in \vicinity_\xi(0)$.
+\end{proposition}
+\begin{proof}
+$\boxed{\Rightarrow}$ Assume $f$ continuous at $0$, then $\ball\big(0,1\big)\in \neighbourhood_W(0) = \neighbourhood_W\big(f(0)\big) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ by \ref{continuityVicinityFilter}. So there exists $U\in \vicinity_\xi(0)$ such that $f^{\imf}[U] \subseteq \ball(0,1)$, which means that $f$ is bounded by $1$ on $U$.
+
+$\boxed{\Leftarrow}$ We have $f(0) = 0$ by \ref{homogeneousFunctionLemma}. Let $f$ be bounded by $C$ on $U$, i.e.\ $f^{\imf}(U)\subseteq \ball_W(0,C)$. 
+
+By \ref{pretopologicalContinuityVicinities} it is enough to prove that $\neighbourhood_W(f(0)) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$. It is in fact enough to show that a base of $\neighbourhood_W\big(f(0)\big) = \neighbourhood_W(0)$, to wit the set of open balls centered at $0$, is contained in $f^{\imf\imf}[\vicinity_\xi(0)]$. To that end, take some open ball $\ball(0,\epsilon)$. Then $\frac{\epsilon}{C} U\in \frac{\epsilon}{C}\vicinity_\xi(0) = \vicinity_\xi(\frac{\epsilon}{C}0) = \vicinity_\xi(0)$. So
+\[ f^{\imf}\left(\frac{\epsilon}{C}U\right) = \frac{\epsilon}{C}f^{\imf}(U)\subseteq \frac{\epsilon}{C}\ball_W(0,C) = \ball_W(0,\epsilon), \]
+means that $\neighbourhood_W(0) \subseteq f^{\imf\imf}[\vicinity_\xi(0)]$ and thus that $f$ is continuous at $0$.
+\end{proof}
+\begin{corollary} \label{linearContinuityToNormedSpace}
+Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a linear function. Then $f$ is continuous \textup{if and only if} $f$ is bounded on some $U\in \vicinity_\xi(0)$.
+\end{corollary}
+\begin{proof}
+The continuity of $f$ is equivalent to the continuity of $f$ at $0$, by \ref{shiftHomeomorphism}.
+\end{proof}
+
+\begin{lemma} \label{superSubtractiveContinuityEverywhere}
+Let $\sSet{V, \xi}$ be a convergence vector space, $\sSet{W, \norm{\cdot}}$ a normed space and $f: V\to W$ a function such $f(0) = 0$ and $\norm{f(v) - f(w)} \leq \max\{\norm{f(v-w)}, \norm{f(w-v)}\}$ for all $v,w\in V$.
+
+Then continuity of $f$ at $0$ implies continuity everywhere.
+\end{lemma}
+\begin{proof}
+Take arbitrary $F\overset{\xi}{\longrightarrow} u$. Then $F-u \to 0$, so $\norm{f(F-u)}\to 0$ by continuity at $0$. Similarly $\norm{f(u-F)}\to 0$. Then, by assymption, $\norm{f(F) - f(u)} \leq \max\{\norm{f(F-u)}, \norm{f(u-F)}\} \to 0$, so $\norm{f(F) - f(u)} \to 0$, by TODO ref squeeze theorem. We conclude that $f(F)\to f(u)$.
+\end{proof}
+
+
+\subsubsection{Equicontinuity}
+\begin{proposition}
+Let $\mathcal{F}$ be a set of linear operators in $(V\to W)$. Then $\mathcal{F}$ is equicontinuous at $x_0\in V$ \textup{if and only if} there exists $C>0$ such that
+\[ \forall f\in\mathcal{F}:\qquad \norm{f(x_0)} \leq C\norm{x_0}. \]
+\end{proposition}
+
+\subsubsection{Comparison of norm topologies}
+\begin{definition}
+Let $V$ be a vector space and $\norm{\cdot}_1$, $\norm{\cdot}_2$ two norms on $V$. We say
+\begin{itemize}
+\item $\norm{\cdot}_1$ is \udef{bounded} by $\norm{\cdot}_2$ if there exists $C\in \R$ such that $\forall v\in V: \norm{v}_1 \leq C\norm{v}_2$;
+\item $\norm{\cdot}_1$ and $\norm{\cdot}_2$ are \udef{equivalent} if each is bounded by the other.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $V$ be a vector space and $\norm{\cdot}_1$, $\norm{\cdot}_2$ two norms on $V$. These norms are equivalent \textup{if and only if} there exists a $C>0$ such that
+\[ \frac{1}{C}\norm{\cdot}_1 \leq \norm{\cdot}_2 \leq C\norm{\cdot}_1. \]
+\end{lemma}
+
+\begin{proposition} \label{normComparison}
+Let $V$ be a vector space and $\norm{\cdot}_1$, $\norm{\cdot}_2$ two norms on $V$. Then the following are equivalent:
+\begin{enumerate}
+\item $\norm{\cdot}_2$ is bounded by $\norm{\cdot}_1$;
+\item $\id_V: \sSet{V,\norm{\cdot}_1} \to \sSet{V,\norm{\cdot}_2}$ is continuous;
+\item the norm topology of $\norm{\cdot}_1$ is finer than the norm topology of $\norm{\cdot}_2$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Leftrightarrow (2)$ By \ref{boundedLinearMaps} both are equivalent to
+\[ \exists C>0: \forall v\in V: \qquad \norm{v}_2 = \norm{\id_V((v))}_2 \leq C\norm{v}_1. \]
+
+$(2) \Leftrightarrow (3)$ Follows straight from \ref{identityContinuity}.
+\end{proof}
+\begin{corollary}
+Equivalent norms induce the same topology.
+\end{corollary}
+
+\subsubsection{Infinite linear combinations}
+Because normed product spaces are metric spaces, we have a notion of convergence and can define infinite sums:
+\begin{definition}
+In a normed space $V$, we can define a \udef{infinite linear combination} as an infinite sum
+\[ \sum_{i\in I} c_i v_i  \]
+where $\{v_i\}_{i\in I}$ is a set of vectors and $\{c_i\}_{i I}$ a set of scalars, if that sum converges in the norm topology.
+\end{definition}
+\begin{note}
+This finite sum is defined using nets:
+Ordered by inclusion, the set $J = \{I'\subset I \;|\; I' \; \text{is finite}\}$ is a directed set. This means
+\[ \left(\sum_{i\in A}c_iv_i \right)_{A\in J} \]
+is a net. The infinite sum is defined if this net converges.
+\end{note}
+
+\begin{lemma}
+Every proper subspace $U$ of a normed vector space $V$ has empty interior.
+\end{lemma}
+\begin{proof}
+Suppose $U$ has a non-empty interior. Then it contains some ball $B(u,\epsilon)$. Now every vector in $V$ can be translated and rescaled to fit inside the ball $B(u,\epsilon)$. Indeed let $v\in V$ and set $u' = u+ \frac{\epsilon}{2\norm{v}}v \in B(u,\epsilon)$. Then, since $U$ is a subspace $v = \frac{2\norm{v}}{\epsilon}(u'-u)\in U$. So $U=V$.
+\end{proof}
+
+\begin{lemma}[Riesz's lemma] \label{RieszsLemma}
+Let $V$ be a normed vector space. Given a non-dense subspace $X$ and a number $\theta<1$, there exists a unit vector $v\in V$ such that
+\[ \theta \leq d(X,v) = \inf_{x\in X}\norm{x-v}. \]
+\end{lemma}
+\begin{proof}
+Take a vector $v_1$ not in the closure of $X$ and put $a = \inf_{x\in X}\norm{x-v_1}$. Then $a>0$ by lemma \ref{sequencesSupInf}. For $\epsilon > 0$, let $x_1\in X$ be such that $\norm{x_1+v_1}<a+\epsilon$. Then take
+\[ v = \frac{v_1 - x_1}{\norm{v_1-x_1}} \qquad \text{so} \qquad \norm{v}=1. \]
+And
+\[ \inf_{x\in X}\norm{x-v} = \inf_{x\in X}\norm{x-\frac{v_1 - x_1}{\norm{v_1-x_1}}} = \inf_{x\in X}\norm{\frac{x-v_1 + x_1}{\norm{v_1-x_1}}} = \frac{\inf_{x\in X}\norm{x-v_1}}{\norm{v_1-x_1}} \geq \frac{a}{a+\epsilon}. \]
+By choosing $\epsilon >0$ small, $a/(a+\epsilon)$ can be made arbitrarily close to $1$.
+\end{proof}
+For finite-dimensional spaces we can even take $\theta=1$.
+
+\subsection{Linear independence and bases in normed spaces}
+\url{https://math.stackexchange.com/questions/1518029/are-uncountable-schauder-like-bases-studied-used}
+
+\subsection{Finite-dimensional normed (sub)spaces}
+
+\begin{lemma} \label{coordinateContinuity}
+Let $V$ be a normed vector space and $\{x_1, \ldots, x_n\}$ a linearly independent set of vectors. There exists a $c>0$ such that $\forall \alpha_1,\ldots, \alpha_n \in \mathbb{F}$:
+\[ \norm{\alpha_1x_1 + \ldots + \alpha_nx_n} \geq c(|\alpha_1|+\ldots+|\alpha_n|) . \]
+\end{lemma}
+\begin{proof}
+TODO ref locally convex spaces? Local compactness?
+\end{proof}
+TODO This is equivalent with continuity of coordinate functions.
+
+\begin{proposition} \label{finiteDimComplete}
+Every finite-dimensional subspace of a normed vector space is complete.
+\end{proposition}
+\begin{proof}
+Take a basis $\{e_i\}_{i=1}^n$ and let $c$ be as in lemma \ref{coordinateContinuity}. Consider an arbitrary Cauchy sequence $(v_k)_{k\in\N}$. We can write
+\[ v_k = \alpha_{k,1}e_1 + \ldots + \alpha_{k,n}e_n. \]
+We claim that $(\alpha_{k,i})_{k\in\N}$ is Cauchy in $\mathbb{F}$ for all $1\leq i\leq n$. Indeed, take an $\epsilon>0$. By the Cauchy nature of $(v_k)_{k\in\N}$ we can find a $k_0$ such that $\forall k', k''>k_0:$
+\[ c\epsilon > \norm{v_{k'} - v_{k''}} \geq \norm{\sum_{i=1}^n (\alpha_{k',i}-\alpha_{k'',i})e_i}\geq c\sum_{i=1}^n |\alpha_{k',i}-\alpha_{k'',i}| \geq c |\alpha_{k',i}-\alpha_{k'',i}|. \]
+Dividing left and right by $c$ gives exactly the Cauchy condition for each $1\leq i\leq n$. By the completeness of $\R$ or $\C$, each of these sequences has a limit $\alpha_i$.
+Then $v= \sum_{i=1}^n\alpha_ie_i$ is an element of the subspace. The sequence $(v_k)$ converges to $v$ because
+\[ \norm{v_k-v} = \norm{\sum_{i=1}^n (\alpha_{k,i}-\alpha_i)e_i} \leq \sum_{i=1}^n |\alpha_{k,i}-\alpha_i|\norm{e_i} \]
+and the right-hand side goes to zero as $k\to \infty$.
+\end{proof}
+\begin{corollary} \label{finiteDimClosed}
+Every finite-dimensional subspace of a normed vector space is closed.
+\end{corollary}
+TODO ref for proof.
+
+\begin{proposition}
+On a finite-dimensional vector space all norms are equivalent.
+\end{proposition}
+\begin{proof}
+Let $\{e_i\}_{i=1}^n$ be a basis and take an arbitrary vector $v = \sum_{i=1}^nv_ie_i$. Let $\norm{\cdot}_1$ and $\norm{\cdot}_2$ be two norms.
+We calculate
+\[ \norm{v}_1 \leq \sum_{i=1}^n|v_i|\norm{e_i}_1 \leq k\sum_{i=1}^n|v_i| \leq \frac{k}{c_2}\norm{v}_2 \]
+where the first inequality is the triangle inequality, the second comes from $k=\max\norm{e_i}_1$ and the third is lemma \ref{coordinateContinuity}. A similar calculation gives the other necessary inequality.
+\end{proof}
+
+\begin{proposition}
+In a finite-dimensional normed space $V$, any subset $M \subseteq V$ is compact if and only if $M$ is closed and bounded.
+\end{proposition}
+\begin{proof}
+TODO + ref Heine Borel property
+\end{proof}
+
+
+TODO: move up?
+\begin{proposition} \label{compactnessUnitBall}
+The closed unit ball of a vector space is compact \textup{if and only if} the vector space is finite-dimensional.
+\end{proposition}
+\begin{proof}
+One direction is given by the previous proposition. For the other direction, we show the contrapositive: let the vector space be infinite-dimensional.
+We define a sequence of unit vectors $(e_i)_{i\in\N}$ recursively as follows:
+\begin{itemize}
+\item $e_1$ is just a unit vector;
+\item for $e_{n+1}$ apply Riesz's lemma \ref{RieszsLemma} to the subspace $\Span\{e_i\}_{i=1}^n$ and $\theta = 1/2$. This subspace cannot be dense, because it is a closed (by corollary \ref{finiteDimClosed}) finite-dimensional subspace of an infinite-dimensional vector space.
+\end{itemize}
+This yields a sequence such that for all $m,n$
+\[ \norm{e_m - e_n}\geq \frac{1}{2}. \]
+This sequence is not Cauchy and thus not convergent.
+\end{proof}
+
+
+
+
+
+
+
+\subsection{Norms on constructed vector spaces}
+\subsubsection{Direct sum}
+\[ \norm{x\oplus y}_{X\oplus Y} = \norm{x}_X + \norm{y}_Y \]
+TODO + arbitrary direct sums.
+
+
+
+
+
+
+
+\section{Bounded operators}
+Bounded operators are Lipschitz continuous operators.
+
+An operator between normed spaces is bounded iff it is continuous, see \ref{boundedLinearMaps}.
+
+\begin{lemma}
+Let $V,W$ be normed spaces and $T:V\to W$ a linear operator. Then $T$ is bounded \textup{if and only if} $T^{\preimf}[\ball(\vec{0},1)]$ has non-empty interior.
+\end{lemma}
+\begin{proof}
+Assume $T$ is bounded, then $\ball(\vec{0}, \norm{T}^{-1}) \subseteq T^{\preimf}[\ball(\vec{0},1)]$, indeed for all $v\in \ball(\vec{0}, \norm{T}^{-1})$ we have
+\[ \norm{Tv} \leq \norm{T}\;\norm{v} < \norm{T}\;\norm{T}^{-1} = 1.  \]
+As $\ball(\vec{0}, \norm{T}^{-1})$ is open, it is contained in the interior, which is thus non-empty.
+
+Now assume $T^{\preimf}[\ball(\vec{0},1)]$ has non-empty interior, then we can pick some $x$ in the interior and $T^{-\preimf}[\ball(\vec{0},1)]$ is a neighbourhood of $x$. Then we have that
+\[ T^{\preimf}[\ball(\vec{0},1)] - x = T^{\preimf}[\ball(\vec{0},1)- T(x)] \]
+is a neighbourhood of $0$. Now $T$ is bounded on $T^{\preimf}[\ball(\vec{0},1)- T(x)]$, so it is continuous by \ref{continuityToNormedSpace}.
+\end{proof}
+
+\begin{lemma} \label{kerClosed}
+Let $T$ be a bounded linear operator. Then $\ker(T)$ is closed.
+\end{lemma}
+\begin{proof}
+Suppose $T$ bounded and thus continuous. Then $\ker L = L^{-1}[\{0\}]$ and thus closed, by proposition \ref{continuity}.
+\end{proof}
+\begin{proof}
+Let $v\in \overline{\ker(T)}$. Then find a sequence $(v_n)$ in $\ker(T)$ that converges to $v$. Then by continuity $(Tv_n)$ converges to $Tv$, but for all $n\in\N: Tx_n = 0$, so the limit is $Tv=0$. Thus $v\in\ker(T)$, making it closed.
+\end{proof}
+
+\begin{proposition}\label{continuousMapCriterion}
+Let $L:V\to W$ be a linear map between normed spaces.
+\begin{enumerate}
+\item If $V$ is finite-dimensional, then $L$ is continuous.
+\item If $W$ is finite-dimensional, then $L$ is continuous \textup{if and only if} $\ker L$ is closed.
+\end{enumerate}
+\end{proposition}
+TODO: true for general TVS
+\begin{proof}
+\begin{enumerate}
+\item This follows from a consideration of the graph norm $\norm{v}_L = \norm{v}+\norm{Lv}$ and the fact that on a finite-dimensional space any two norms are equivalent: for all $v$ we can choose an $M$ such that
+\[ \norm{Lv}\leq \norm{v}_L \leq M\norm{v}. \]
+\item Assume $W$ finite-dimensional. Consider the map $\bar{L}:V/\ker L\to W: v+\ker{L}\mapsto L(v)$, defined in proposition \ref{splittingMap}. Then $V/\ker L$ is isomorphic to a subspace of $W$ and thus is finite-dimensional. By the first point, $\bar{L}$ must be continuous. Let $\pi: V\to V/\ker L$ denote the quotient map, which is continuous (TODO is this where closure of $\ker L$ is used?). Then $L = \bar{L}\circ \pi$ is a composition of continuous maps and thus continuous.
+
+Conversely, we have the lemma \ref{kerClosed}.
+\end{enumerate}
+\end{proof}
+
+\begin{example}
+Let $\seq{e_n}$ be a basis of unit vectors of an infinite dimensional real vector space. Then consider the map $e_n\mapsto n$ and extend by linearity. This is an unbounded linear operator with finite dimensional codomain.
+\end{example}
+
+
+\subsection{The algebra of bounded operators}
+\begin{lemma} \label{existenceOperatorNorm}
+Let $(V,\norm{\cdot}_V)$ and $(W,\norm{\cdot}_W)$ be normed spaces and $L\in\Lin(V, W)$. Then $L$ is bounded \textup{if and only if}
+\[ \sup\setbuilder{\frac{\norm{Lx}_W}{\norm{x}_V}}{x\in V\setminus\{0\}} \] 
+is finite.
+\end{lemma}
+\begin{definition}
+Let $(V,\norm{\cdot}_V)$ and $(W,\norm{\cdot}_W)$ be normed spaces and $L\in\Lin(V, W)$ bounded. Then
+\[ \norm{L} \defeq \sup\setbuilder{\frac{\norm{Lx}_W}{\norm{x}_V}}{x\in V\setminus\{0\}} \]
+is called the \udef{operator norm} of $L$.
+\end{definition}
+
+\begin{proposition} \label{operatorNorm}
+Let $L\in\Bounded(V,W)$ be a bounded operator and let $B(\vec{0},\epsilon)$ be an open ball centered at $\vec{0}$. Then
+\begin{align*}
+\norm{L} &= \frac{\sup L[B(\vec{0},\epsilon)]}{\epsilon} \\
+&= \frac{\sup L[\overline{B}(\vec{0},\epsilon)]}{\epsilon} \\
+&= \sup\setbuilder{\norm{Lx}}{\norm{x} = 1}.
+\end{align*}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{operatorNormIsNorm}
+Let $S,T$ be compatible bounded operators. Then
+\begin{enumerate}
+\item $\norm{\lambda S} = |\lambda|\;\norm{S}$ for all $\lambda\in \F$;
+\item $\norm{S+T} \leq \norm{S}+\norm{T}$;
+\item $\norm{ST} \leq \norm{S}\norm{T}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We calculate
+\[ \norm{\lambda S} = \sup_{\norm{x}=1}\norm{\lambda Sx} = \sup_{\norm{x}=1}|\lambda|\; \norm{Sx} = |\lambda| \sup_{\norm{x}=1}\norm{Sx} = |\lambda| \norm{S}. \]
+
+(2) We calculate
+\[ \norm{S+T} = \sup_{\norm{x}=1}\norm{Sx+Tx} \leq \sup_{\norm{x}=1}\big(\norm{Sx}+\norm{Tx}\big)\leq \sup_{\norm{x}=1}\big(\norm{S} + \norm{Tx}\big) = \norm{S} + \norm{T}. \]
+
+(3) We calculate
+\[ \norm{ST} = \sup_{\norm{x}=1}\norm{STx} \leq \sup_{\norm{x}=1}\big(\norm{S}\;\norm{Tx}\big) = \norm{S}\;\norm{T}. \]
+\end{proof}
+\begin{corollary} \label{BoundedSpace}
+Let $(V,\norm{\cdot}_V)$ and $(W,\norm{\cdot}_W)$ be normed spaces. Then the set $\Bounded(V,W)$ of bounded linear maps is a normed subspace of $\Lin(V,W)$ when equipped with the operator norm.
+\end{corollary}
+\begin{proof}
+By \ref{linearMapsVectorSpace}, $\Lin(V,W)$ is a vector space. Closure under addition and scalar multiplication follows from the proposition and \ref{operatorNorm}.
+
+The proposition also immediately gives that the operator norm is a seminorm.
+
+To show that it is in fact a norm, we just need to show that it is point-separating. Assume $S\in\Bounded(V,W)$ is such that $\norm{S} = 0$. Then $\sup_{\norm{x}=1}\norm{Sx} = 0$, which implies that $\norm{Sx} = 0$ for all unit vectors. Because the norm on $W$ is point-separating, this means that $Sx = 0$ for all unit vectors. Now for arbitrary $v\in V$, we have $Sv = \norm{v}\cdot S\left(\frac{v}{\norm{v}}\right) =\norm{v} \cdot 0 = 0$. Thus $S = 0$.
+\end{proof}
+
+\begin{proposition} \label{boundedOperatorsFormBanachSpace}
+Let $(V,\norm{\cdot}_V)$ and $(W,\norm{\cdot}_W)$ be normed spaces. Then $\Bounded(V,W)$ is a Banach space \textup{if and only if} $W$ is a Banach space.
+\end{proposition}
+\begin{proof}
+$\boxed{\Leftarrow}$ Assume $W$ is a Banach space and take an arbitrary Cauchy sequence $\seq{T_n}$ in $\Bounded(V,W)$. For all $v\in V$, we have
+\[ \norm{T_mv - T_nv} \leq \norm{T_m-T_n}\;\norm{v} \to 0, \]
+so $\seq{T_nv}$ is a Cauchy sequence in $W$. It has a limit that we denote $Tv$. It is clear that $T$ is linear (by continuity of addition and scalar multiplication).
+
+Fix $\epsilon >0$. Then there exists $N\in\N$ such that $\norm{T_m-T_n}\leq \epsilon$ for all $m,n\geq N$. Take arbitrary $v\in V$ with $\norm{v} = 1$ and $n\geq N$. Then (by continuity of the norm)
+\[ \norm{(T-T_n)(v)} = \lim_{m\to\infty}\norm{(T_m-T_n)(v)} \leq \lim_{m\to\infty}\norm{T_m - T_n} \leq \epsilon. \]
+As $v$ was chosen arbitrarily, we have $\sup_{\norm{v} = 1}\norm{(T-T_n)(v)} \leq \epsilon$, so $\norm{T-T_n} \leq \epsilon$. Thus $\seq{T_n}$ converges to $T$ in norm.
+
+This also immediately shows that $T$ is bounded:
+\[ \sup_{\norm{v}=1}\norm{T(v)}\leq \sup_{\norm{v}=1}\norm{T(v)}\norm{T-T_n} + \sup_{\norm{v}=1}\norm{T(v)}\norm{T_n} = \norm{T-T_n} + \norm{T_n}. \]
+
+$\boxed{\Rightarrow}$ 
+\end{proof}
+\begin{corollary}
+Let $V$ be a normed space. The continuous dual $X'$ is a Banach space.
+\end{corollary}
+\begin{corollary}
+Topologically reflexive spaces are Banach spaces.
+\end{corollary}
+
+\begin{proposition}[Bounded linear extension] \label{BLT}
+Let $T:\dom(T)\subseteq X\to Y$ be a bounded operator between normed spaces. Then $T$ has a unique extension
+\[ \widetilde{T}:\overline{\dom(T)}\to Y \]
+where $\widetilde{T}$ is a bounded operator with $\norm*{\widetilde{T}} = \norm{T}$.
+\end{proposition}
+\begin{proof}
+Normed vector spaces have the unique extension property because they are Hausdorff, \ref{uniqueExtensionHausdorff}. We just need to show the norm stays the same:
+
+Clearly $\norm*{\tilde{T}} \geq \norm{T}$. For the converse take any $x\in X$. As $\overline{\dom(T)} = X$, there exists a sequence $\seq{x_i}\subset \dom(T)$ that converges to $x$. Then
+\[ \norm*{\tilde{T}(x)}_Y = \norm{T\left(\lim_{i\to\infty}x_i\right)}_Y = \lim_{i\to\infty}\norm{T(x_i)}_Y \leq \lim_{i\to\infty}\norm{T}\;\norm{x_i}_X = \norm{T}\;\norm{x}_X. \]
+\end{proof}
+
+
+
+
+\subsection{The uniform boundedness principle}
+TODO: \url{https://arxiv.org/pdf/1005.1585.pdf}
+
+\begin{theorem}[Uniform boundedness principle] \label{uniformBoundednessPrinciple}
+Let $\mathcal{F}\subset \Bounded(X,Y)$ be a family of bounded operators where $X$ is a Banach space and $Y$ a normed space, such that
+\[ \sup\setbuilder{\norm{Tx}}{T\in\mathcal{F}} < \infty \qquad \text{for all $x\in X$}. \]
+Then $\sup\setbuilder{\norm{T}}{T\in\mathcal{F}} < \infty$.
+\end{theorem}
+\begin{proof}
+The proof is an application of the Baire category theorem. Define the closed subsets $K_n$ as
+\[ K_n = \setbuilder{x\in X}{\forall T\in\mathcal{F}: \norm{Tx}\leq n}. \]
+These are closed because the functional $f_T: X\to \R: x\mapsto \norm{Tx}$ is bounded and
+\[ K_n = \bigcap_{T\in\mathcal{F}}f_T^{-1}[\,[0,n]\,]. \]
+By assumption, $X=\bigcup_{n\in\N} K_n$. As $X$ is a Banach space, and thus a complete metric space, we can apply the Baire category theorem, \ref{BaireCategory}, to conclude that there is a $K_n$ with non-empty interior (by contraposition of the Baire condition). Take $x_0\in K_n^\circ$, then $-x_0+K_n^\circ \subset K_{n2}$. So $\vec{0}\in (K_{2n})^\circ$ and we can find a $\rho$ such that $B(\vec{0},\rho)\subset K_{2n}$. By proposition \ref{existenceOperatorNorm} we have $\norm{T}\leq 2n/\rho$ for all $T\in\mathcal{F}$.
+\end{proof}
+\begin{corollary}[Banach-Steinhaus] \label{BanachSteinhaus}
+Let $X$ be a Banach space and $Y$ a normed space. Let $T_n: X\to Y$ be a sequence of bounded operators that converges pointwise to $T$. Then
+\begin{enumerate}
+\item $T$ is bounded;
+\item $\seq{T_n}$ converges in the continuous convergence.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+For all $x\in X$ we have $\norm{T_nx} \to \norm{Tx}$, so $\seq{\norm{T_nx}}$ is a bounded sequence and $\sup_{n}\norm{T_nx} <\infty$. By the uniform boundedness principle, $\sup_{n}\norm{T_n}$ is bounded by some constant $M$.
+
+Now for all $x\in X$ we have $\norm{T_nx} \leq M$ for all $n\in\N$ and thus $\norm{Tx}\leq M$. This means that $T$ is bounded and $\norm{T} \leq M$.
+\end{proof}
+This does not imply that $\seq{T_n}$ converges to $T$ in norm!
+
+\subsection{Open mapping and closed graph theorems}
+
+\begin{proposition} \label{openUnitBall}
+Let $X,Y$ be Banach spaces and $T:X\to Y$ a surjective bounded operator.  Then the image of the open unit ball $B(\vec{0},1)\subset X$ contains an open ball about $\vec{0}\in Y$.
+\end{proposition}
+\begin{proof}
+We first prove $0\in \overline{T[B(\vec{0},r)]}^\circ$ for every $r>0$: (TODO: make computations lemma.)
+\begin{itemize}
+\item Using $X = \bigcup_{n=1}^\infty B(\vec{0},n)$, we see by surjectivity
+\[ Y = T[X] = T\left[\bigcup_{n=1}^\infty B(\vec{0},n)\right] = \bigcup_{n=1}^\infty T[B(\vec{0},n)]. \]
+Because $Y$ has the Baire property (theorem \ref{BaireCategory}) and $Y$ is both open and non-empty, it may not be meagre, by lemma \ref{BaireEquivalents}. So for some $n\in\N$, $T[B(\vec{0},n)]$ is non-rare, meaning that $\overline{T[B(\vec{0},n)]}$ has non-empty interior.
+\item Because
+\[ \overline{T[B(\vec{0},n)]} = \overline{2nT[B(\vec{0},1/2)]} = 2n\overline{T[B(\vec{0},1/2)]}, \]
+$\overline{T[B(\vec{0},1/2)]}$ must have non-empty interior. Let $B(y_0,\epsilon)\subset \overline{T[B(\vec{0},1/2)]}$.
+\item Note $B(0,\epsilon) = y_0 - B(y_0,\epsilon) \subset \overline{T[B(\vec{0},1)]}$ and thus $B(0,r\epsilon) \subset \overline{T[B(\vec{0},r)]}$.
+\end{itemize}
+We then prove $\overline{T[B(\vec{0},1/2)]} \subset T[B(\vec{0}, 1)]$, proving the proposition.
+\begin{itemize}
+\item Choose some $y_0\in \overline{T[B(\vec{0},1/2)]}$. Then every neighbourhood $B(y_0,\epsilon/4)$ intersects $T[B(\vec{0},1/2)]$.
+\item Then
+\[ B(y_0,\epsilon/4) = y_0 - B(\vec{0},\epsilon/4) \subset y_0 - \overline{T[B(\vec{0},1/4)]}, \]
+so $y_0 - \overline{T[B(\vec{0},1/4)]}$ intersects $T[B(\vec{0},1/2)]$. Take a $y_1 \in \overline{T[B(\vec{0},1/4)]}$ such that $y_0-y_1$ is in this intersection. Then we have an $x_0\in B(\vec{0},1/2)$ such that $T(x_0) = y_0-y_1$.
+\item We can continue recursively choosing $y_{n+1}\in \overline{T[B(\vec{0}, 2^{-(n+1)})]}$ and $x_n \in B(\vec{0}, 2^{-n})$ such that $y_n-y_{n+1} = T(x_n)$.
+\item Consider the sequence $\sum_{k=0}^nx_k$. It is a Cauchy sequence in $X$. Call its limit $x$. Then $x\in B(\vec{0},1)$.
+\item Because $\norm{y_n}\leq 2^{-n}\norm{T}$, $(y_n)$ converges to zero. Then
+\[ \left( T\left(\sum^n_{k=1}x_k\right) \right)_{n\in\N} = \left( y_0-y_{n+1} \right)_{n\in\N} \]
+converges to $y_0$. Thus $T(x) = y_0 \in T[B(\vec{0},1)]$.
+\end{itemize}
+\end{proof}
+
+\begin{proposition} \label{zeroInInteriorOfImageImpliesOpen}
+Let $X,Y$ be normed spaces and $T: X\to Y$ a linear map. If $\vec{0}$ lies in the interior of $T[B(\vec{0},r)]$ for some $r>0$, then $T$ is open.
+\end{proposition}
+\begin{proof}
+TODO: make computations lemma.
+Given the assumption, $0$ lies in the interior of $T[B(\vec{0},\epsilon)]$ for all $\epsilon>0$.
+Because $T[B(x,\epsilon)] = T(x) + T[B(\vec{0},\epsilon)]$, $T(x)$ lies in the interior of $T[B(x,\epsilon)]$, for all $x\in X$.
+Thus for all neighbourhoods $U(x)\subset X$, $T(x)\subset T[U]^\circ$ and so $T[U] \subset T[U]^\circ$, so $T[U]$ is open.
+\end{proof}
+
+\begin{theorem}[Open mapping]
+Let $X,Y$ be Banach spaces and $T:X\to Y$ a surjective bounded operator. Then $T$ is an open map.
+\end{theorem}
+\begin{proof}
+This is the consequence of propositions \ref{openUnitBall} and \ref{zeroInInteriorOfImageImpliesOpen}.
+\end{proof}
+\begin{corollary}[Bounded inverse theorem] \label{boundedInverse}
+Let $X,Y$ be Banach spaces. If $T:X\to Y$ is is continuous, linear and bijective, then $T$ is a homeomorphism.
+\end{corollary}
+
+
+\begin{proposition}
+Let $T: \dom(T)\subset X\to Y$ be a bounded linear operator. Then
+\begin{enumerate}
+\item if $\dom(T)$ is a closed subset of $X$, then $T$ has closed graph;
+\item if $T$ has closed graph and $Y$ is complete, then $\dom(T)$ is a closed subset of $X$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We use proposition \ref{closedGraphEquivalence} twice: First assume $(x_n)$ and $(Tx_n)$ converge to $x$ and $y$, respectively. Then $x\in\dom(T)$ by closure and $y = Tx$ by continuity.
+
+Now assume $T$ has closed graph and $Y$ is complete. Take $x\in\overline{\dom(T)}$ and $(x_n)\subset \dom(T)$ converging to $x$. Since $T$ is bounded:
+\[ \norm{Tx_n - Tx_m} = \norm{T(x_n-x_m)} \leq \norm{T}\norm{x_n-x_m}, \]
+so $(Tx_n)$ is Cauchy by \ref{CauchyCriterion} and thus by completeness has a limit, say $y$. Then $Tx=y$ by continuity. Since $T$ has closed graph, $x\in\dom(T)$. So $\overline{\dom(T)}\subseteq \dom(T)$ and $\dom(T)$ is closed. 
+\end{proof}
+
+For closed graph theorem, see TVS.
+
+\subsection{Contractions}
+A linear operator $T$ on a normed space is a contraction if and only if it is bounded and $\norm{T}<1$. 
+
+\subsubsection{Neumann series}
+\begin{lemma}
+Let $T$ be a bounded linear operator on a normed space $X$ with $\norm{T}<1$. Then the series $\sum^\infty_{i=1}T^i(b)$ converges for all $b\in X$ and is the unique fixed point of $F(x) = T(x)+b$.
+\end{lemma}
+\begin{proof}
+The function $F$ is a contraction if and only if $\norm{T}<1$. So it has a unique fixed point. Starting the fixed point iteration at $b$ yields the series:
+\begin{align*}
+F(b) &= Tb + b \\
+F(Tb+b) &= T^2b + Tb + b \\
+&\hdots.
+\end{align*}
+Alternatively we could have used the inequality $\norm{T^nb} \leq \norm{T}^n\norm{b}$, the convergence of the geometric series and \ref{absoluteUnconditionalConvergenceBanach} to prove convergence. Proving it is a fixed point is then elementary.
+\end{proof}
+\begin{corollary}[Neumann series] \label{operatorNeumannSeries}
+Let $T$ be a bounded linear operator with $\norm{T}<1$. Then
+\[ (\id - T)^{-1} = \sum_{i=0}^\infty T^i \]
+with uniform convergence. Also
+\[ \norm{(\id - T)^{-1}} \leq \frac{1}{1-\norm{T}}. \]
+\end{corollary}
+\begin{proof}
+Let $x\in X$. Then set $(\id - T)^{-1}x = y$. This is equivalent to $x = y-Ty$ and means $y$ is the fixed point of $y\mapsto Ty+x$. So $y = \sum_{i=1}^\infty T^ix$.
+
+The convergence is uniform by TODO ref.
+
+Finally we have
+\[ \norm{(\id - T)^{-1}} = \norm{\sum_{i=0}^\infty T^i} \leq \sum_{i=0}^\infty \norm{T^i} = \frac{1}{1-\norm{T}} \]
+by the geometric series.
+\end{proof}
+TODO ref: uniform convergence if $\sum_i \norm{T_i} < \infty$??
+\begin{corollary} \label{operatorNeumannSeriesEventuallyContractive}
+Let $T$ be a bounded linear operator with $\norm{T^k}<1$ for some $k>0$. Then the Neumann series $(\id - T)^{-1} = \sum_{i=0}^\infty T^i$ converges uniformly.
+\end{corollary}
+\begin{proof}
+From the previous corollary, the Neumann series $\sum_{i=0}^\infty(T^k)^i$ converges uniformly. So
+\[ \sum_{i=0}^\infty T^i = (\id + T + T^2 +\ldots + T^{k-1})\sum_{i=0}^\infty(T^k)^i \]
+also converges uniformly.
+
+To show this convergent sequence acturally gives the correct inverse, we calculate
+\begin{align*}
+(\id-T)(\id + T + T^2 +\ldots + T^{k-1})(\id - T^k)^{-1} &= \Big(\id + T + T^2 +\ldots + T^{k-1} - T - T^2 -\ldots - T^{k}\Big)(\id - T^k)^{-1} \\
+&= (\id - T^k)(\id - T^k)^{-1} = \id.
+\end{align*}
+This shows that $\sum_{i=0}^\infty T^i$ is the correct right inverse. To show it is also a left inverse, we expand $(\id - T^k)^{-1}(\id + T + T^2 +\ldots + T^{k-1})(\id-T)$.
+\end{proof}
+
+\begin{proposition}
+Let $S: \dom(S)\subseteq X\to X$ be a closed, bijective linear operator on a Banach space $X$. Let $T\in\Bounded(X)$ be a bounded operator with $\norm{T} < \norm{S^{-1}}^{-1}$, then $S-T$ is invertible and
+\[ (S-T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
+Also $\dom((S-T)^{-1}) = X$.
+\end{proposition}
+The assumptions are enough to guarantee $S^{-1}\in \Bounded(X)$, so $\norm{S^{-1}}$ makes sense.
+\begin{proof}
+By injectivity, we can define $S^{-1}$. It is closed by \ref{algebraClosedOperators} and has closed domain, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}. Since $\norm{S^{-1}T} \leq \norm{S^{-1}}\;\norm{T} < 1$, it follows that by \ref{operatorNeumannSeries} that $\id - S^{-1}T$  has bounded inverse and that we can expand its bounded inverse as a Neumann power series. So we can calculate
+\[ (S-T)^{-1} = S^{-1}(\id - S^{-1}T)^{-1} = S^{-1}\sum_{n=0}^\infty \left(S^{-1}T\right)^n. \]
+\end{proof}
+
+\subsection{Compact operators}
+\begin{definition}
+A linear map $L:V\to W$ between normed spaces is called \udef{compact} if $L[\overline{B}(\vec{0}, 1)]$ is relatively compact.
+
+i.e.\ the image of the closed unit ball has compact closure.
+
+The space of compact maps from $V$ to $W$ is denoted $\mathcal{K}(V,W)$.
+\end{definition}
+
+These operators were introduced to study equations of the form
+\[ (T-\lambda I)x(t) = p(t). \]
+
+\begin{proposition}
+Let $L\in\Lin(V,W)$. The following are equivalent:
+\begin{enumerate}
+\item $L$ is compact;
+\item the image of any bounded subset of $V$ is relatively compact in $W$;
+\item there exists a neighbourhood $U$ of $0$ in $V$ such that the image of $U$ is a subset of a compact set in $W$;
+\item for any bounded sequence $(x_n)_{n\in\N} \subseteq V$, then sequence $(Lx_n)_{n\in\N}$ contains a converging subsequence.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+All maps of finite rank are compact.
+\end{corollary}
+\begin{proof}
+Closed balls in $\C^n$ are compact.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a normed space. Then $\mathcal{K}(V)$ is a closed two-sided ideal in $\Bounded(V)$.
+\end{proposition}
+
+\begin{lemma}
+The identity map on $X$ is compact \textup{if and only if} $X$ is finite-dimensional.
+\end{lemma}
+\begin{proof}
+The unit ball is compact iff $X$ is finite-dimensional, by \ref{compactnessUnitBall}.
+\end{proof}
+\begin{corollary}
+Let $T\in\Compact(X,Y)$. If $T$ is injective and $T^{-1}$ bounded, then $X$ is finite-dimensional.
+\end{corollary}
+\begin{proof}
+In this case $\id_X = T^{-1}T$ is compact by TODO ref.
+\end{proof}
+
+\subsubsection{Compact operators on Banach spaces}
+\begin{proposition}
+Let $L\in\Hom(V,W)$ with $V,W$ Banach spaces. Then $L$ is compact \textup{if and only if} the image of any bounded subset of $V$ under $L$ is totally bounded in $W$.
+\end{proposition}
+TODO proof
+
+\begin{lemma} \label{identityCompactFiniteDimensional}
+Let $X$ be a Banach space. Then $\id_X$ is compact \textup{if and only if} $X$ is finite dimensional.
+\end{lemma}
+
+\subsubsection{Calkin algebra}
+\begin{proposition}
+Let $X$ be a Banach space. Then $\Compact(X)$ is a closed two-sided ideal in $\Bounded(X)$.
+\end{proposition}
+\begin{proof}
+TODO + $*$-ideal for Hilbert spaces.
+\end{proof}
+\begin{corollary}
+An invertible operator $T$ on $X$ is compact \textup{if and only if} $X$ is finite-dimensional.
+\end{corollary}
+\begin{proof}
+If $T$ is compact, then so is $TT^{-1} = \id_X$, meaning that $X$ is finite-dimensional by \ref{identityCompactFiniteDimensional}. Conversely, all operators on a finite-dimensional Banach space are compact.
+\end{proof}
+
+\begin{definition}
+Let $X$ be a Banach space. The \udef{Calkin algebra} is the quotient $\Bounded(X)/\Compact(X)$.
+\end{definition}
+TODO: quotient algebra ($[A][B] = [AB]$)
+
+\begin{proposition}
+Let $[T]\in\Bounded(X)/\Compact(X)$. Then the following are equivalent:
+\begin{enumerate}
+\item $[T]$ is invertible in the Calkin algebra;
+\item $\exists S\in\Bounded(X):$ both $\vec{1}-TS$ and $\vec{1}-ST$ are compact;
+\item $T$ has closed range and finite-dimensional kernel and cokernel. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Point 1. and 2. are easily equivalent: $[S]$ is an inverse of $[T]$ if and only if $[\vec{1}] = [S][T] = [ST]$ and $[\vec{1}] = [T][S] = [TS]$. Then
+\[ [\vec{1}] = [ST] \iff [ST - \vec{1}] = [0] \qquad [\vec{1}] = [TS] \iff [TS - \vec{1}] = [0] \]
+and $[F]=[0]$ if and only if $F$ is compact.
+
+TODO
+\end{proof}
+
+
+
+
+\section{Unbounded operators}
+Should be: not-necessarily-bounded operators.
+\subsection{Operators bounded below}
+TODO: also unbounded operators!
+\begin{definition}
+Let $T$ be a linear operator. We say $T$ is \udef{bounded below} if
+\[ \exists b>0:\forall v\in \dom(T): \quad \norm{Tv}\geq b\norm{v} \]
+\end{definition}
+
+\begin{proposition} \label{boundedBelow}
+Let $T\in \Lin(V, W)$ be an operator. Then $T$ has a bounded inverse $T^{-1}: \im(T)\to V$ \textup{if and only if} $T$ is bounded below by some constant $b$.
+
+In this case
+\[ \displaystyle\norm{T^{-1}} = \left(\inf_{x\neq 0}\frac{\norm{Tx}}{\norm{x}}\right)^{-1} \leq \frac{1}{b}. \]
+\end{proposition}
+\begin{proof}
+First assume $T$ bounded below.
+To show $T$ is injective, take $x_1,x_2\in \dom T$ such that $Tx_1 = Tx_2$. Then
+\[ 0 = \norm{Tx_1 - Tx_2} = \norm{T(x_1 - x_2)} \geq b\norm{x_1 - x_2} \geq 0. \]
+So $\norm{x_1 - x_2} = 0$ and thus $x_1=x_2$.
+The existence of $T^{-1}$ is then clear. For boundedness notice that $T^{-1}y \in \dom(T)$, so because $T$ is bounded below,
+\[ b\norm{T^{-1}y} \leq \norm{TT^{-1}y} = \norm{y} \quad\implies\quad \norm{T^{-1}y} \leq \frac{1}{b}\norm{y}. \]
+
+This also shows that $\norm{T^{-1}} \leq 1/b$ for all lower bounds $b$. In other words $1/\norm{T^{-1}} \geq \inf_{x\neq 0}\norm{Tx}/\norm{x}$.
+
+Now assume $T^{-1}$ bounded. Then for all $x\in\dom(T)$: $\norm{x} = \norm{T^{-1}Tx} \leq \norm{T^{-1}}\norm{Tx}$, so $T$ is bounded below by $1/\norm{T^{-1}}$.
+
+This also shows that $1/\norm{T^{-1}}$ is a lower bound, so $1/\norm{T^{-1}} \leq \inf_{x\neq 0}\norm{Tx}/\norm{x}$.
+\end{proof}
+
+\subsection{The graph norm}
+Let $L:V\to W$ be a linear map between normed spaces. The graph of $L$
+\[ \setbuilder{(v,w)\in V\oplus W}{w = Lv} \]
+has a natural norm inherited from the direct sum:
+\[ \norm{(v,Lv)} = \norm{v}_V + \norm{Lv}_W. \]
+This norm can also be seen as a norm on $V$: the \udef{graph norm} induced by $L$ is defined as
+\[ \norm{v}_L := \norm{v}_V + \norm{Lv}_W. \]
+
+\begin{proposition}
+Let $L: \sSet{V, \norm{\cdot}_V}\to \sSet{W, \norm{\cdot}_W}$ be a linear map between normed spaces. Then $L: \sSet{V, \norm{\cdot}_L}\to \sSet{W, \norm{\cdot}_W}$ is bounded with norm $K$.
+Also
+\begin{enumerate}
+\item $K \leq 1$;
+\item $K < 1$ \textup{if and only if} $L: \sSet{V, \norm{\cdot}_V}\to \sSet{W, \norm{\cdot}_W}$ is bounded.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Take any $v\in V$. Then
+\[ \norm{L(v)}_W \leq \norm{L(v)}_W + \norm{v}_V = \norm{v}_L. \]
+This shows the $L$ is bounded and the norm is less than or equal to $1$.
+
+Now we can write
+\[ K = \sup_{v\in V\setminus\{0\}}\frac{\norm{L(v)}_W}{\norm{v}_L} = \sup_{v\in V\setminus\{0\}}\frac{\norm{L(v)}_W}{\norm{v}_V + \norm{L(v)}_W} \defeq \sup_{v\in V\setminus\{0\}}K_v, \]
+where we have set $K_v \defeq \frac{\norm{L(v)}_W}{\norm{v}_V + \norm{L(v)}_W}$.
+
+First assume $L: \sSet{V, \norm{\cdot}_V}\to \sSet{W, \norm{\cdot}_W}$ is bounded. Then, from $\norm{L_v}_W = K_v \big(\norm{L(v)}_W + \norm{v}_V\big)$, we calculate
+\[ K_v\norm{v}_V = \norm{L(v)}_W(1-K_v) \leq \norm{L}\;\norm{v}_V(1-K_v), \]
+which implies $K_v \leq \norm{L}(1-K_v)$. This can be written as $K_v \leq \frac{\norm{L}}{1+ \norm{L}}$.
+Thus $K = \sup_v K_v \leq \frac{\norm{L}}{1+ \norm{L}} < 1$.
+
+Now assume $L: \sSet{V, \norm{\cdot}_V}\to \sSet{W, \norm{\cdot}_W}$ is unbounded. We write
+\[ K_v = \frac{\norm{L(v)}_W}{\norm{v}_V + \norm{L(v)}_W} = \frac{\norm{L(v)}_W + \norm{v}_V - \norm{v}_V}{\norm{v}_V + \norm{L(v)}_W} = 1 - \frac{\norm{v}_V}{\norm{v}_V + \norm{L(v)}_W}. \]
+We can find a sequence $\seq{v_n}$ of unit vectors such that $\norm{L(v_n)}_W \to \infty$. Then $K_{v_n} = 1 - \frac{1}{1+\norm{L(v_n)}_W} \to 1$. Thus
+\[ K = \sup_{v\in V}K_v \geq \sup_{v\in \seq{v_n}}K_v \geq \limsup_{n}K_{v_n} \geq \lim_{n}K_{v_n} = 1, \]
+so $K = 1$.
+\end{proof}
+
+
+\subsection{Closed operators}
+\begin{definition}
+Let $T:\dom(T)\subseteq X\to Y$ be an operator. Then $T$ is a \udef{closed operator} if $\graph(T)$ is closed in $X\oplus Y$.
+\end{definition}
+This is not the same as a closed map in the topological sense!
+
+\begin{lemma} \label{graphNormConvergenceLemma}
+Let $T: X\not\to Y$ be an operator between normed spaces and $\seq{x_n}$ a sequence in $\dom(T)$. Then the following are equivalent:
+\begin{enumerate}
+\item $x_n \overset{\norm{\cdot}_T}{\longrightarrow} x$;
+\item $(x_n, Tx_n) \overset{\norm{\cdot}_{X\oplus Y}}{\longrightarrow} (x, Tx)$;
+\item $x_n\overset{\norm{\cdot}_X}{\longrightarrow} x$ and $Tx_n\overset{\norm{\cdot}_Y}{\longrightarrow} Tx$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We have the equivalences
+\begin{align*}
+x_n \overset{\norm{\cdot}_T}{\longrightarrow} x &\iff \norm{x_n - x}_T \longrightarrow 0 \\
+&\iff \norm{x_n - x}_X + \norm{Tx_n - Tx}_Y \longrightarrow 0 \\
+&\iff \norm{(x_n - x, Tx_n - Tx)}_{X\oplus Y} \longrightarrow 0 \\
+&\iff \norm{(x_n, Tx_n) - (x, Tx)}_{X\oplus Y} \longrightarrow 0 \\
+&\iff (x_n, Tx_n) \overset{\norm{\cdot}_{X\oplus Y}}{\longrightarrow} (x, Tx).
+\end{align*}
+Now if $x_n\overset{\norm{\cdot}_X}{\longrightarrow} x$ and $Tx_n\overset{\norm{\cdot}_Y}{\longrightarrow} Tx$, then $\norm{x_n - x}_X + \norm{Tx_n - Tx}_Y \longrightarrow 0$. 
+
+Conversely, from
+\[ 0 \leq \norm{x_n - x}_X\leq \norm{x_n - x}_X + \norm{Tx_n - Tx}_Y, \]
+we get $x_n\overset{\norm{\cdot}_X}{\longrightarrow} x$ by the squeeze theorem (TODO ref). We similarly get $Tx_n\overset{\norm{\cdot}_Y}{\longrightarrow} Tx$.
+\end{proof}
+
+The most important property of closed operators is given by the following proposition. It is sometimes taken as the definition.
+\begin{proposition} \label{closedGraphEquivalence}
+Let $X,Y$ be normed spaces and $T: \dom(T)\subset X \to Y$ be a linear operator. Then
+the following are equivalent:
+\begin{enumerate}
+\item $T$ is a closed operator;
+\item if $(x_n)_{n\in\N}\subset \dom(T)$ converges to $x\in X$ and $(Tx_n)_{n\in\N}$ converges to $y$, then $x\in\dom(T)$ and $Tx = y$;
+\item $\dom(T)$ is complete w.r.t. the graph norm.
+\end{enumerate}
+\end{proposition}
+TODO:  (? If domain is closed?) I.e. does this work outside the realm of Banach operators??
+\begin{corollary}
+All bounded operators have closed graph. (? If domain is closed?)
+\end{corollary}
+The converse is not true in general.
+
+\url{https://en.wikipedia.org/wiki/Unbounded_operator#Closed_linear_operators}
+\url{https://en.wikipedia.org/wiki/Closed_graph_theorem_(functional_analysis)}
+
+\begin{proposition} \label{algebraClosedOperators}
+Let $T$ be a closed and $S$ a bounded operator, then
+\begin{enumerate}
+\item $S+T$ is closed;
+\item $TS$ is closed;
+\item if $T$ is injective, then $T^{-1}: \im(T) \to \dom(T)$ is closed.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) TODO
+
+(2) TODO
+
+(3) We use \ref{closedGraphEquivalence}. Take $\seq{y_n}\subset \dom(T^{-1})$ such that $y_n\to y$ and $T^{-1}y_n\to x$. Set $x_n = T^{-1}y_n$, so then $Tx_n = TT^{-1}y_n = y_n\to y$. Because $T$ is closed it follows that $Tx = y$, so $T^{-1}y = x$, meaning $T^{-1}$ is closed.
+\end{proof}
+TODO example $ST$ need not be closed.
+
+\begin{lemma} \label{closedOperatorKernelClosed}
+Let $T$ be a closed operator, then $\ker(T)$ is closed.
+\end{lemma}
+\begin{proof}
+Let $\seq{x_n}\subset\ker(T)$ be a convergent sequence. Then $\seq{Tx_n}$ is identically zero and thus converges to $0$. By closedness of $T$, $Tx = 0$ and thus $x\in\ker(T)$. 
+\end{proof}
+\begin{proof}[Alternate proof.]
+Let $T: X\to Y$. Then $\ker(T)\times\{0\} = \graph(T)\cap X\times\{0\}$. As $\graph(T)$ is closed and $X\times\{0\}$ is closed by \ref{productOpenClosed}, we have that $\ker(T)$ is closed by \ref{productOpenClosed}.
+\end{proof}
+We have already proven this for bounded operators, see \ref{kerClosed}.
+
+\begin{proposition} \label{boundedBelowClosedRange}
+Let $T\in \Lin(X, Y)$ be a closed operator between Banach spaces that is bounded below. Then $\im(T)$ is closed.
+\end{proposition}
+\begin{proof}
+Let $T$ be bounded below by $b$ and let $\seq{Tx_n}$ be a Cauchy sequence in $\im(T)$. Then $\norm{x_m - x_n} \leq \frac{1}{b}\norm{T(x_m - x_n)}$, so $\seq{x_n}$ is also Cauchy by \ref{CauchyCriterion}.
+
+So we can find $x\in X,y\in Y$ such that $x_n\to x$ and $Tx_n\to y$. By closedness of $T$, we have $Tx = y$ and thus $y\in\im(T)$.
+\end{proof}
+
+\begin{proposition}
+Let $X,Y$ be Banach spaces and $S,T\in \Lin(X,Y)$ with $\dom(S) = \dom(T)$. If $S$ is a closed operator and there exist $\alpha,\beta,\gamma\in \R^+$ such that $0 < \gamma \leq 1$ and $\beta < 1/\gamma$ and
+\[ \norm{(S-T)u} \leq \alpha \norm{u} + \beta\norm{Su}^\gamma{u}^{1-\gamma} \qquad\text{for all $u\in \dom(S) = \dom(T)$,} \]
+then $T$ is also closed.
+\end{proposition}
+\begin{proof}
+TODO Jeribi.
+\end{proof}
+
+\subsubsection{Closable operators}
+\begin{definition}
+A linear operator is called \udef{closable} if it has closed extension.
+\end{definition}
+
+\begin{proposition} \label{closableCriterion}
+A linear operator $T$ is closable \textup{if and only if} for all sequences $\seq{x_n}\subset\dom(T)$
+\[ \left(x_n\to 0 \land T(x_n)\to v\right) \quad\implies\quad v = 0. \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}
+A closable operator $T$ has a minimal closed extension $\overline{T}$, which is given by the closure of the graph of $T$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma} \label{domImClosureOperator}
+Let $T$ be a closable operator. Then
+\begin{enumerate}
+\item $\dom(T)$ is dense in $\dom(\overline{T})$;
+\item $\im(T)$ is dense in $\im(\overline{T})$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We have $(x,\overline{T}x)\in\graph(\overline{T})$ iff there exists a sequence $\seq{x_n}$ in $\dom(T)$ such that $\seq{x_n,Tx_n}\overset{\norm{\cdot}_{X\oplus Y}}{\longrightarrow} (x,\overline{T}x)$. So we can conclude using \ref{graphNormConvergenceLemma}.
+\end{proof}
+
+\subsubsection{Domain and core}
+\begin{definition}
+Let $T: X\not\to Y$ be a closed operator between normed spaces and $D\subseteq \dom(T)$ a subspace. We call $D$ a \udef{core} or \udef{essential domain} for $T$ if $\setbuilder{(x,Tx)}{x\in D}$ is dense in $\graph(T)\subseteq X\oplus Y$.
+\end{definition}
+
+\begin{proposition} \label{operatorCoreCriterion}
+Let $T: X\not\to Y$ be a closed operator between normed spaces and $D\subseteq \dom(T)$ a subspace. Then $D$ is a core of $T$ \textup{if and only if} $D$ is dense in $\dom(T)$ w.r.t. the graph norm $\norm{\cdot}_T$ of $T$.
+\end{proposition}
+Note that the norm is bounded by the graph norm, so the graph norm topology is finer than the norm topology by \ref{normComparison}. Thus $\closure_{\norm{\cdot}_T}(D) \subseteq \closure_{\norm{\cdot}}(D)$ and it is not enough for $D$ to be norm dense in $\dom(T)$.
+\begin{proof}
+Immediate by \ref{graphNormConvergenceLemma}.
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+\section{The $L^p(X,\diff{\mu})$ spaces}
+\subsection{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
+\begin{definition}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $0<p<\infty \in \R$. The we define
+\begin{itemize}
+\item $\mathcal{L}^p(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $|f|^p$ is integrable w.r.t.\ $\mu$.
+\item $\mathcal{L}^\infty(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $\sup_x|f(x)|<\infty$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+Let $0< p<q \leq \infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then
+\begin{enumerate}
+\item $\mathcal{L}^p(X,\mu) \supseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of finite but arbitrary large measure;
+\item $\mathcal{L}^p(X,\mu) \subseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of non-zero but arbitrary small measure.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO \url{https://en.wikipedia.org/wiki/Lp_space#Embeddings}
+\end{proof}
+\begin{corollary}
+For all $0< p<q \leq \infty$ and $a,b\in\R$, we have $\mathcal{L}^p([a,b],\lambda) \supseteq \mathcal{L}^q([a,b],\lambda)$.
+\end{corollary}
+
+\begin{definition}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then we define the real functional
+\[ \norm{\cdot}_{p}: \mathcal{L}^p(X,\mu)\to \R: f\mapsto \left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
+\end{definition}
+We will prove that this functional is a seminorm.
+
+\begin{lemma} \label{pNormAbsolutelyHomogeneous}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_p$ is absolutely homogeneous.
+\end{lemma}
+\begin{proof}
+For all $\lambda\in \R$, we have
+\[ \norm{\lambda f}_{p} = \left(\int_X |\lambda f|^p\diff{\mu}\right)^{1/p} = \left(|\lambda|^p\int_X |f|^p\diff{\mu}\right)^{1/p} = |\lambda|\left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
+\end{proof}
+
+\begin{lemma} \label{pnormLemma}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $k,l\in\interval[o]{1,+\infty}$ and $f\in \mathcal{L}^{kl}(X,\mu)$. Then
+\[ \norm{|f|^k}_l = \left(\norm{f}_{kl}\right)^k. \]
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\left(\norm{f}_{kl}\right)^k &= \left(\left(\int_X|f|^{kl}\diff{\mu}\right)^{1/(kl)}\right)^{k} \\
+&= \left(\int_X\big||f|^{k}\big|^l\diff{\mu}\right)^{1/l} \\
+&= \norm{|f|^k}_l.
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Hölder's inequality] \label{HoeldersInequality}
+Let $p,q\in \R^+$ be Hölder conjugate and $\sSet{X,\mathcal{A},\mu}$ a measure space. Then for all $f\in \mathcal{L}^p(X,\mu), g\in \mathcal{L}^q(X,\mu)$:
+\begin{enumerate}
+\item $fg\in \mathcal{L}^1(X,\mu)$;
+\item $\norm{fg}_1 \leq \norm{f}_p\norm{g}_q$.
+\end{enumerate}
+We have equality \textup{if and only if} $\exists K\in \R$ such that $|f|^p = K|g|^q$ a.e.
+\end{theorem}
+\begin{proof}
+If either $\norm{f}_p = 0$ or $\norm{g}_q = 0$, then either $|f|^p$ or $|g|^q$ is $0$ a.e. by \ref{functionPropertiesFromIntegral}. Then $fg = 0$ a.e., so $\norm{fg}_1 = 0$.
+
+Now, assuming $\norm{f}_p \neq 0$ and $\norm{g}_q \neq 0$, we can write $f' = \norm{f}_p^{-1}f$ and $g' = \norm{g}_q^{-1}g$.
+These functions satisfy $\norm{f'}_p = 1$ and $\norm{g'}_q = 1$, because of \ref{pNormAbsolutelyHomogeneous}.
+
+Now we can apply Young's inequality \ref{YoungsInequality} pointwise to obtain
+\[ |f'(x)g'(x)| \leq \frac{|f'|^p}{p} + \frac{|g'|^q}{q} \qquad \forall x\in X. \]
+Integrating both sides (and using \ref{pNormAbsolutelyHomogeneous}), gives
+\begin{align*}
+\frac{\norm{fg}_1}{\norm{f}_p\norm{g}_q} = \norm{f'g'}_1 = \int_X|f'g'|\diff{\mu} &\leq \int_X\frac{|f'|^p}{p}\diff{\mu} + \int_X\frac{|g'|^q}{q}\diff{\mu} \\
+&= \frac{\norm{f'}_p^p}{p} + \frac{\norm{g'}_q^q}{q} = \frac{1}{p} + \frac{1}{q} = 1.
+\end{align*}
+The Hölder inequality follows.
+
+Now assume $\norm{fg}_1 = \norm{f}_p\norm{g}_q$. Then we must have the inequality is in fact an equality, i.e.\ 
+\[ \int_X|f'g'|\diff{\mu} = \int_X\left(\frac{|f'|^p}{p} + \frac{|g'|^q}{q}\right)\diff{\mu}. \]
+Then $|f'g'| = \frac{|f'|^p}{p} + \frac{|g'|^q}{q}$ a.e.\ by \ref{functionPropertiesFromIntegral}. By \ref{YoungsInequality} the equality $|f'(x)g'(x)| = \frac{|f'(x)|^p}{p} + \frac{|g'(x)|^q}{q}$ only holds if $|f'(x)|^p = |g'(x)|^q$. We conclude that
+\[ 1 = \frac{|g'|^q}{|f'|^p} = \frac{\norm{f}_p^p |g|^q}{\norm{g}_q^q |f|^p} = K \frac{|g|^q}{|f|^p} \]
+almost everywhere, for some $K\in \R^+$.
+\end{proof}
+\begin{proof}[Alternative proof]
+Using Jensen's inequality \url{https://en.wikipedia.org/wiki/H%C3%B6lder%27s_inequality}
+\end{proof}
+
+
+\begin{theorem}[Minkowski's inequality] \label{MinkowskisInequality}
+Let $1< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Let $f,g\in\mathcal{L}^p(X,\mu)$ be functions. Then
+\[ \norm{f+g}_p \leq \norm{f}_p + \norm{g}_p. \]
+\end{theorem}
+TODO invert inequality if $p<1$! TODO also inverse Hölder inequality.
+\begin{proof}
+First we show that $\norm{f+g}_p$ is finite. We show this using the convexity of $\R^+\to \R^+: x\mapsto |x|^p$:
+\begin{align*}
+|f+g|^p &= 2^p\left|\frac{1}{2}f+ \frac{1}{2}g\right|^p \\
+&\leq 2^p\left|\frac{1}{2}|f|+ \frac{1}{2}|g|\right|^p \\
+&\leq 2^p\left(\frac{1}{2}|f|^p + \frac{1}{2}|g|^p\right) = 2^{p-1}\left(|f|^p + |g|^p\right) < \infty.
+\end{align*}
+Then $\norm{f+g}_p^p < \infty$ by \ref{propertiesIntegralPositiveFunctions}, so $\norm{f+g}_p < \infty$.
+
+Now we can calculate (setting $q = \frac{p}{p-1}$, i.e.\ the Hölder conjugate of $p$)
+\begin{align*}
+\norm{f+g}_p^p &= \int_X|f+g|^p\diff{\mu} \\
+&= \int_X|f+g|\cdot |f+g|^{p-1}\diff{\mu} \\
+&\leq \int_X\big(|f|+|g|\big)\cdot |f+g|^{p-1}\diff{\mu} \\
+&= \norm{|f|\cdot |f+g|^{p-1}}_1 + \norm{|g|\cdot |f+g|^{p-1}}_1 \\
+&\leq \norm{f}_p\cdot \norm{|f+g|^{p-1}}_q + \norm{g}_p\cdot \norm{|f+g|^{p-1}}_q \\
+&= \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{|f+g|^{p-1}}_q
+\end{align*}
+using first the triangle inequality and then Hölder's inequality, \ref{HoeldersInequality}.
+
+Next we calculate
+\begin{align*}
+\norm{|f+g|^{p-1}}_q &= \left(\norm{f+g}_{(p-1)q}\right)^{p-1} = \left(\norm{f+g}_{(p-1)\frac{p}{p-1}}\right)^{p-1} = \norm{f+g}_{p}^{p-1},
+\end{align*}
+using \ref{pnormLemma} and \ref{HoelderConjugateEquivalents}.
+
+Putting these two calculations together gives
+\[ \norm{f+g}_p^p \leq \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{f+g}_{p}^{p-1}, \]
+or $\norm{f+g}_p \leq \norm{f}_p + \norm{g}_p$.
+\end{proof}
+\begin{corollary}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_{p}$ is a seminorm.
+\end{corollary}
+\begin{proof}
+We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. Subadditivity is given by the Minkowski inequality and absolute homogeneity by \ref{pNormAbsolutelyHomogeneous}.
+\end{proof}
+
+\subsubsection{Indentifying functions that are equal a.e.}
+
+TODO: identification of a.e.\ equal functions is compatible with algebraic operations by \ref{equalAECongruence}.
+
+TODO: allow functions that are only defined a.e.
+
+
+\begin{proposition}
+TODO every equivalence class contains exactly one continuous functions (for Borel measures?)
+\end{proposition}
+
+\begin{definition}
+
+\end{definition}
+
+\begin{theorem}[Riesz-Fisher]
+The space $L^p(X,\diff{\mu})$ is complete.
+\end{theorem}
+
+For $L^\infty$: essential supremum.
+
+\begin{proposition}
+Let $X$ be a set. For all $1\leq p < \infty$, the set of $p$-integrable simple functions is dense in $L^p(\diff{\mu})$.
+\end{proposition}
+
+
+\begin{proposition}
+Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. Then $\cont_c(X)$ is dense in $L^p(\diff{\mu})$ for all $1\leq p < \infty$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\subsection{Distributions}
+TODO rename and/or move!
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{distribution function} of $f$ is the function
+\[ d_f: \R\to \R^+: \alpha \mapsto \mu\setbuilder{\omega}{|f(\omega)|>\alpha}.  \]
+\end{definition}
+
+\begin{lemma} \label{distributionOfFunctionLemma}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f,g: \Omega\to \C$ measurable functions and $c\in \C\setminus\{0\}$. Then
+\begin{enumerate}
+\item if $|f| \leq |g|$ a.e., then $d_f \leq d_g$;
+\item $d_{cf}(\alpha) = d_f\Big(\frac{\alpha}{|c|}\Big)$;
+\item $d_{f+g}(\alpha+\beta) \leq d_f(\alpha) + d_g(\beta)$;
+\item $d_{fg}(\alpha\beta) \leq d_f(\alpha) + d_g(\beta)$.
+\end{enumerate}
+\end{lemma}
+In particular if $|f| = |g|$ a.e., then $d_f = d_g$.
+\begin{proof}
+(1) Fix $\alpha\in \R^+$ and set
+\[ N \defeq \setbuilder{\omega}{|f(\omega)| > |g(\omega)|}, \quad A \defeq \setbuilder{\omega}{|f(\omega)| \geq \alpha}, \quad\text{and}\quad B \defeq \setbuilder{\omega}{|g(\omega)| \geq \alpha}. \]
+Then clearly $A\cap N^c \subseteq B$ (as $|f(\omega)|\leq |g(\omega)|$ and $\alpha < |f(\omega)|$ imply $\alpha < |g(\omega)|$). Also $N$ is measurable (by \ref{measurablesSetsRealMeasurableFunction}) and a null set (by assumption). Also
+\[ A\cap N^c = A\setminus N = A\setminus (N\cap A). \]
+As $(N\cap A) \subseteq A$ and $N\cap A$ is measurable, we have \[ \mu\big(A\setminus (N\cap A)\big) = \mu(A) - \mu(N\cap A) = \mu(A) - 0 = \mu(A), \]
+using \ref{ringPositiveContent} and \ref{measureNullSet}. Thus we have
+\[ d_f(\alpha) = \mu(A) = \mu\big(A\setminus (N\cap A)\big) = \mu(A\cap N^c) \leq \mu(B) = d_g(\alpha), \]
+where the inequality given by \ref{semiringPositiveContent}.
+
+(2) We have
+\[ \setbuilder{\omega}{|cf(\omega)|>\alpha} = \setbuilder{\omega}{|f(\omega)|>\frac{\alpha}{|c|}}. \]
+
+(3) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. The triangle inequality then gives
+\[ \alpha + \beta < |f(\omega)+g(\omega)| \;\implies\; \alpha + \beta < |f(\omega)|+|g(\omega)|. \]
+Because the order on $\R$ is linear, \ref{additionVectorInequalities} gives
+\[ \alpha + \beta < |f(\omega)| + |g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta < |g(\omega)|\big). \]
+These implications show
+\[ \setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
+Thus we calculate
+\begin{align*}
+d_{f+g}(\alpha+\beta) &= \mu\setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \\
+&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
+&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
+&= d_f(\alpha) + d_g(\beta)
+\end{align*}
+by \ref{semiringPositiveContent}.
+
+(4) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. Then we have the implication
+\[ \alpha\beta < |f(\omega)g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta< |g(\omega)|\big), \]
+which means that
+\[ \setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
+Thus we calculate
+\begin{align*}
+d_{fg} &= \mu\setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \\
+&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
+&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu\setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
+&= d_f(\alpha) + d_g(\beta).
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $\varphi: \R^+\to \R^+$ a monotone differentiable function with $\phi(0) = 0$ and $f: X\to \C$ a measurable function such that $\varphi\circ |f|$ is integrable. Then
+\[ \int_\Omega\varphi\circ |f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha}. \]
+\end{proposition}
+\begin{proof}
+We have
+\begin{align*}
+\int_\Omega\varphi\big(|f(\omega)|\big) \diff{\mu(\omega)} &= \int_\Omega\int_{0}^{|f(\omega)|}\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_\Omega\int_{0}^{\infty}[\alpha < |f(\omega)|]\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)\int_\Omega[\alpha < |f(\omega)|]\diff{\mu(\omega)}\diff{\alpha} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)d_f(\alpha)\diff{\alpha}.
+\end{align*}
+by Tonelli's theorem \ref{tonellisTheorem} (as $\varphi'$ is positive) and (TODO ref fund theorem calculus).
+\end{proof}
+\begin{corollary} \label{LpNormFromDistribution}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
+\[ \norm{f}_p = \left(p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}\right)^{1/p}. \]
+\end{corollary}
+\begin{proof}
+Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ and so
+\[ \norm{f}_p^p = \int_\Omega |f|^p \diff{\mu} = \int_\Omega \varphi\circ|f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha} = p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}. \]
+\end{proof}
+
+\begin{lemma} \label{LpNormDistributionInequality}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $f: X\to \C$ a measurable function, $\alpha >0$ and $0<p<\infty$. Then
+\[ \alpha d_f(\alpha)^{1/p} \leq \norm{f}_p. \]
+\end{lemma}
+\begin{proof}
+This is immediate by corollary \ref{ChebyshevInequalityCorollary} of Chebyshev's inequality:
+\[ d_f(\alpha) = \mu\setbuilder{\omega}{|f(\omega)|>\alpha} \leq \frac{1}{\alpha^p}\int_\Omega |f|^p\diff{\mu} = \left(\frac{\norm{f}_p}{\alpha}\right)^p, \]
+so $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+\end{proof}
+
+\subsubsection{Decreasing rearrangements}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{decreasing rearrangement} of $f$ is the function
+\[ f': \R^+\to \R^+: t \mapsto \inf\setbuilder{\alpha > 0}{d_f(s)\leq t}.  \]
+\end{definition}
+
+The function $f'$ is decreasing and supported in $\interval[c]{0,\mu(X)}$.
+
+\subsection{Weak $L^p(X,\diff{\mu})$ spaces}
+\begin{definition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then we define the extended real functional
+\[ \norm{\cdot}_{p,\infty}: \meas(X, \C)\to \overline{\R}^+: f\mapsto \sup\setbuilder{\alpha d_f(\alpha)^{1/p}}{\alpha > 0}. \]
+The \udef{weak $L^p(X,\diff{\mu})$ space}, denoted $L^{p,\infty}(X,\diff{\mu})$, is the subset of functions $f$ in $\meas(X, \C)$ for which $\norm{f}_{p,\infty}$ is finite.
+\end{definition}
+
+\begin{lemma}
+Let $0<p<\infty$, let $\sSet{X,\mathcal{A}, \mu}$ be a measure space and $f\in \meas(X, \C)$. Then
+\[ \norm{f}_{p,\infty} = \inf\setbuilder{C\in \R^+}{\forall \alpha>0: \; d_f(\alpha) \leq \frac{C^p}{\alpha^p}}. \]
+\end{lemma}
+
+
+\begin{proposition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
+\begin{enumerate}
+\item the functional $\norm{\cdot}_{p,\infty}$ is constant on the equivalence classes of a.e.\ equality;
+\item $\norm{\cdot}_{p,\infty}: \Big(\meas(X, \C)/\overset{a.e.}{=}\Big) \to \overline{\R}^+$ is a quasi-norm;
+\item $\norm{\cdot}_{p,\infty} \leq \norm{\cdot}_{p}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) If $f = g$ a.e.\ then $d_f = d_g$ by \ref{distributionOfFunctionLemma}.
+
+(2) TODO
+
+(3) By \ref{LpNormDistributionInequality}, we have $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+\end{proof}
+\begin{corollary}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\diff{\mu})$ is a subspace of $L^{p}(X,\diff{\mu})$.
+\end{corollary}
+\begin{proof}
+TODO \ref{realPartExtendedRealFunctional}
+\end{proof}
+
+\begin{example}
+The inclusion $L^{p,\infty}(X,\diff{\mu}) \subseteq L^{p}(X,\diff{\mu})$ is strict in general. TODO
+\end{example}
+
+\subsection{Interpolation}
+
+\begin{proposition}
+Let $\sSet{X,\Omega, \mu}$ be a $\sigma$-finite measure space.
+Let $0<p<q<\infty$ and $f\in L^{p,\infty(X,\diff{\mu})} \cap L^{q,\infty(X,\diff{\mu})}$. Then for all $p<r<q$, we have
+\[ \norm{f}_r \leq \left(\frac{r}{r-p} + \frac{r}{q-r}\right)^{1/r}\norm{f}_{p,\infty}^{\frac{r^{-1}- q^{-1}}{p^{-1} - q^{-1}}}\norm{f}_{q,\infty}^{\frac{p^{-1}- r^{-1}}{p^{-1} - q^{-1}}}, \]
+with the interpretation $\infty^{-1} = 0$.
+\end{proposition}
+\begin{proof}
+We know that $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_{p,\infty}$, so $\alpha^p d_f(\alpha) \leq \norm{f}_{p,\infty}^p$. Similarly $\alpha^q d_f(\alpha) \leq \norm{f}_{q,\infty}^q$. Thus
+\[ d_f(\alpha) \leq \min\left(\frac{\norm{f}^p_p}{\alpha^p}, \frac{\norm{f}^q_q}{\alpha^q}\right). \]
+Now we have
+\[ \frac{\norm{f}^p_{p,\infty}}{\alpha^p} \leq \frac{\norm{f}^q_{q,\infty}}{\alpha^q} \iff \alpha \leq \left(\frac{\norm{f}_{q,\infty}^q}{\norm{f}_{p,\infty}^p}\right)^{\frac{1}{q-p}} \eqdef B. \]
+We calculate, using \ref{LpNormFromDistribution},
+\begin{align*}
+\norm{f}_r^r &= r \int_0^\infty\alpha^{r-1}d_f(\alpha)\diff{\alpha} \\
+&\leq r \int_0^\infty\alpha^{r-1}\min\left(\frac{\norm{f}^p_{p,\infty}}{\alpha^p}, \frac{\norm{f}^q_{q,\infty}}{\alpha^q}\right)\diff{\alpha} \\
+&= r \int_0^B\alpha^{r-1}\frac{\norm{f}^{p,\infty}}{\alpha^p}\diff{\alpha} + r \int_B^\infty\alpha^{r-1}\frac{\norm{f}^q_{q,\infty}}{\alpha^q}\diff{\alpha} \\
+&= r \norm{f}^p_{p,\infty} \int_0^B\alpha^{r-p-1}\diff{\alpha} + r \norm{f}^q_{q,\infty} \int_B^\infty\alpha^{r-q-1}\diff{\alpha} \\
+&= \frac{r}{r-p} \norm{f}^p_{p,\infty} B^{r-p} + \frac{r}{q-r} \norm{f}^q_{q,\infty} B^{r-q} \\
+&= \left(\frac{r}{r-p} + \frac{r}{q-r}\right)^{1/r}\left(\norm{f}_{p,\infty}^p\right)^{\frac{r^{-1}- q^{-1}}{p^{-1} - q^{-1}}}\norm{f}_{q,\infty}^{\frac{p^{-1}- r^{-1}}{p^{-1} - q^{-1}}}.
+\end{align*}
+Observe that the integrals converge because $p<r<q$, so $r-p>0$ and $r-q<0$.
+\end{proof}
+
+\subsubsection{The Marcinkiewicz interpolation theorem}
+TODO
+\subsubsection{The Riesz-Thorin Interpolation Theorem}
+TODO
+
+\subsection{Locally integrable spaces}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The \udef{locally $L^p$} space is the space
+\[ L^p_\text{loc}(\Omega) \defeq \setbuilder{f \in (\Omega\to\C)}{\text{$f\in L^p(K)$ for all compact $K\subset \Omega$}}. \]
+The functions in $L^1_\text{loc}(\Omega)$ are called \udef{locally integrable} on $\Omega$.
+\end{definition}
+TODO: deal with equivalence classes??
+
+\subsection{Sequence spaces}
+TODO:  $L^p(A,\mu)$ with $\mu$ counting measure.
+
+Let $J$ be a countable index set and $x:J\to \mathbb{F}$ a sequence indexed by $J$. We define
+\[ \norm{x}_p := \left(\sum_{j\in J}|x(j)|^p\right)^{1/p} \qquad\text{and}\qquad \norm{x}_\infty = \sup_{j\in J}|x(j)|. \]
+So $\norm{\cdot}_1$ is the standard norm on $\mathbb{F}^n$. For general sequences there is no guarantee that these norms do not diverge.
+\begin{definition}
+Let $J$ be an index set, $D$ a directed set and $p\geq 1$,
+\begin{align*}
+\ell^p(J) &= \setbuilder{x:J\to \F}{\norm{x}_p < +\infty},\\
+\ell^\infty(J) &= \setbuilder{x:J\to \F}{\norm{x}_\infty < +\infty},\\
+c_0(D) &= \setbuilder{x:D\to \F}{\lim_{n\to\infty}|x(n)| = 0}, \\
+c_{00}(D) &= \setbuilder{x:D\to \F}{\setbuilder{n\in D}{x(n)\neq 0}\;\text{has finite cardinality}}.
+\end{align*}
+unless specified we equip $c_0$ and $c_{00}$ with the norm $\norm{\cdot}_\infty$.
+\end{definition}
+
+\begin{lemma}
+$c_{00}$ is dense in $\ell^p$ if it is equipped with the norm $\norm{\cdot}_p$ and dense in $c_0$ if it is equipped with the norm $\norm{\cdot}_\infty$.
+\end{lemma}
+
+Let $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$. We have the inequalities
+\begin{align*}
+\norm{xy}_1 &\leq \norm{x}_p\norm{y}_q\qquad\text{(Hölder inequality)} \\
+\norm{x+y}_p &\leq \norm{x}_p+\norm{y}_p\qquad\text{(Minkowski inequality)}
+\end{align*}
+which follow from the general cases (TODO ref) by applying the counting measure.
+
+\begin{proposition}
+The continuous dual of $l^p(J)$ is $l^q(J)$ where $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$.
+Also, the continuous dual of $l^1$ is $l^\infty$.
+\end{proposition}
+
+\subsubsection{Operators on sequence spaces}
+TODO Gribanov's theorems
+
+3.7.1, 3.7.2 of Hanson / Yakovlev.
+
+\subsubsection{Series in Banach spaces}
+TODO
+\url{https://link.springer.com/content/pdf/10.1007%2F978-0-8176-4687-5_3.pdf}
+\begin{definition}
+Let $\seq{x_n}$ be a sequence in a Banach space $X$. As for series of scalars, we say a series $\sum_{n=1}^\infty x_n$ is
+\begin{itemize}
+\item \udef{unconditionally convergent} if $\sum_{n=1}^\infty x_{\sigma(n)}$ converges for every permutation $\sigma$ of $\N$;
+\item \udef{absolutely convergent} if $\sum_{n=1}^\infty \norm{x_n} < \infty$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{absoluteUnconditionalConvergenceBanach}
+Let $\seq{x_n}$ be a sequence in a Banach space $X$. If $\sum_{n=1}^\infty$ converges absolutely, then it converges unconditionally.
+\end{proposition}
+\begin{proof}
+Assume absolute convergence, so $\sum\norm{x_i}<\infty$. Then (for $m< n$)
+\[ \norm{\sum_{i=1}^n x_i - \sum_{i=1}^m x_i} = \norm{\sum_{i=m+1}^n x_i} \leq \sum_{i=m+1}^n\norm{x_i} = \sum_{i=1}^n \norm{x_i} - \sum_{i=1}^m \norm{x_i}, \]
+and because $\sum\norm{x_i}$ converges, it is a Cauchy sequence and by the inequality so is $\sum x_i$. By completeness this sequence is convergent.
+
+By (TODO ref) $\sum\norm{x_{\sigma(i)}}$ converges for any permutation $\sigma$ of $\N$. We can then repeat the argument to show $\sum x_{\sigma(i)}$ is also convergent and thus unconditionally convergent.
+\end{proof}
+
+\section{Completions and constructions}
+
+\begin{proposition}
+The completions of a space with respect to two different norms are isomorphic \textup{if and only if} the norms are equivalent.
+\end{proposition}
+
+TODO move down
+\subsection{Tensor products}
+TODO Ryan
+\url{https://math.stackexchange.com/questions/2712906/does-mathcalb-mathcalh-mathcalh-otimes-mathcalh-in-infinite-dime}
+\url{https://math.stackexchange.com/questions/35191/operator-norm-and-tensor-norms?noredirect=1&lq=1}
+
+\subsection{Direct sums}
+
+For arbitrary direct sums we can generalise: now that we have a concept of limits, we can relax the requirement that all but finitely many terms be zero. Instead we require that the sequence of norms is bounded in some way. This gives a whole family of related concepts of direct sum, named for which sequence space the sequence of norms belongs to.
+\begin{definition}
+Let $\{V_i\}_{i\in I}$ be an arbitrary family of Banach spaces over a field $\F$ and let $\ell(I,\F)$ be a space of sequences in $\F$ indexed by $I$. Then the \udef{$\ell$-direct sum} is the vector space with as field
+\[ \bigoplus_{i\in I}^\ell V_i = \setbuilder{(v_i)_{i\in I}}{\forall i\in I: v_i\in V_i \quad\text{and}\quad (\norm{v_i}_{V_i})_{i\in I}\in \ell(I,\F) }. \]
+In particular we have, for all $1\leq p<\infty$, the \udef{$\ell^p$-direct sum}
+\[ \bigoplus_{i\in I}^p V_i \defeq \setbuilder{(v_i)_{i\in I}}{\forall i\in I: v_i\in V_i \quad\text{and}\quad \sqrt[p]{\sum_{i\in I}\norm{v_i}_{V_i}^p}<\infty} \]
+and the \udef{$\ell^\infty$-direct sum}
+\[ \bigoplus_{i\in I}^\infty V_i \defeq \setbuilder{(v_i)_{i\in I}}{\forall i\in I: v_i\in V_i \quad\text{and}\quad \sup_{i\in I}\norm{v_i}_{V_i}<\infty}. \]
+\end{definition}
+
+\begin{proposition}
+For any sequence space that is a Banach space the direct sum is a Banach space. TODO: in particular algebraic direct sum as $c_{00}$? (one possible norm)? and finite direct sums?
+\end{proposition}
+
+\subsubsection{Direct sum of identical spaces}
+\begin{proposition}
+Let $V$ be a Banach space over $\F$, $I$ an arbitrary index set and $\ell(I,\F)$ a banach sequence space.
+\[ \bigoplus_{i\in I}^\ell V \cong \ell\otimes V \]
+\end{proposition}
+
+
+\section{Bochner integration}
+
+TODO: the Bochner integral is the unique extension of the integral of simple functions to the set of Bochner measurable functions???? (i.e.\ simple functions dense in Bochner space, with $L^1$ metric)
+\begin{definition}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space. Then a Bochner measurable function $f:\Omega\to Y$ is called \udef{Bochner integrable} if there exists a sequence of integrable simple functions $\seq{s_n}\subset\SF(\Omega,Y)$ such that
+\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0. \]
+Take such a sequence $\seq{s_n}$. The \udef{Bochner integral} of $f$ on $\Omega$ w.r.t. $\mu$ is defined as
+\[ \int_\Omega f\diff{\mu} \defeq \lim_{n\to\infty}\int_\Omega s_n\diff{\mu}. \]
+\end{definition}
+
+\begin{lemma}
+The Bochner integral is well-defined: let $\seq{s_n},\seq{t_n}\in \prescript{\N}{}{\SF(\Omega,Y)}$ be sequences such that
+\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0 = \lim_{n\to\infty}\int_\Omega \norm{f-t_n}\diff{\mu}.  \]
+Then
+\begin{enumerate}
+\item the limits $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu}$ and $\lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$ exist;
+\item $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu} = \lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}[Bochner integrability criterion] \label{BochnerIntegrabilityCondition}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space.
+
+A Bochner measurable function $f$ is Bochner integrable \textup{if and only if}
+\[ \int_\Omega \norm{f} \diff{\mu} < \infty. \]
+\end{proposition}
+
+\begin{proposition}
+Linearity and monotonicity.
+\end{proposition}
+
+\begin{theorem}[Hille's theorem] \label{HilleTheorem}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space, $X,Y$ normed vector spaces and $T: X\not\to Y$ a closed operator. If $T\circ f$ is integrable, then
+\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary} \label{boundedOperatorUnderIntegral}
+If $T$ is bounded, then $T\circ f$ is integrable and
+\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\end{corollary}
+\begin{proof}
+TODO: show that $T\circ f$ is integrable!
+\end{proof}
+
+TODO Dominated convergence.
+
+\subsection{Integration of bounded operators}
+\begin{lemma} \label{integralBoundedOperator}
+Let $X$ be a normed space and $(\Omega, \mathcal{A},\mu)$ a measure space. Let $T: \Omega \to \Bounded(X)$ be a function. If $T$ is integrable, then for all $x\in X$, $Tx$ is integrable and
+\[ \left(\int_\Omega T\diff{\mu}\right)x = \int_\Omega Tx\diff{\mu}. \]
+\end{lemma}
+\begin{proof}
+The evaluation map $\evalMap_x$ is linear and bounded by $\norm{x}$ for all $x\in X$, so we can use \ref{boundedOperatorUnderIntegral}.
+\end{proof}
+
+\chapter{Banach algebras}
+In this part we set $\F \in \{\R, \C\}$. Usually operator algebras are assumed to be complex. We will attempt to give results for real algebras where possible.
+\begin{definition}
+A \udef{normed algebra} is an associative algebra $A$ over $\F$ with norm $\norm{\cdot}$ such that $(\F, A,+, \norm{\cdot})$ is a normed space and we have \udef{submultiplicativity}, i.e.
+\[ \forall x,y\in A: \quad \norm{xy}\leq\norm{x}\norm{y}. \]
+We say $A$ is \udef{unital} if there exists a unit element $\vec{1}\in A$ such that
+\[ \forall x\in A: \vec{1}\cdot x = x = x\cdot \vec{1} \qquad \text{and} \qquad \norm{\vec{1}} = 1. \]
+\end{definition}
+TODO: which results also hold for normed algebras?
+\begin{definition}
+A \udef{Banach algebra} is a normed algebra that is also a Banach space.
+\end{definition}
+
+\begin{proposition}
+Let $X,Y$ be normed spaces. Then $\Bounded(X,Y)$ is a unital normed algebra.
+
+The algebra $\Bounded(X,Y)$ is a Banach algebra \textup{if and only if} $Y$ is a Banach space.
+\end{proposition}
+\begin{proof}
+We have $\Bounded(X,Y)\subseteq \Lin(X,Y)$. which is an algebra by \ref{linearMapsAlgebra}. Closure under multiplication follows from \ref{operatorNormIsNorm} and \ref{existenceOperatorNorm}. Submultiplicativity is also given by \ref{operatorNormIsNorm}.
+
+The algebra is unital because the identity operator is bounded.
+
+The condition for $\Bounded(X,Y)$ to be a Banach algebra is given by \ref{boundedOperatorsFormBanachSpace}.
+\end{proof}
+
+\begin{lemma} \label{multiplicationContinuous}
+Let $A$ be a Banach algebra. The multiplication map $\cdot: A\times A \to A: (x,y)\mapsto xy$ is continuous.
+\end{lemma}
+\begin{proof}
+Because $A\times A$ is a metric space, we can combine \ref{sequentialContinuity} and \ref{convergenceFiniteProductTopology} to conclude that the multiplication map is continuous iff $x_ny_n \to xy$ whenever $x_n \to x$ and $y_n \to y$.
+
+Assume $x_n \to x$ and $y_n \to y$. Then
+\begin{align*}
+\norm{x_ny_n - xy} &= \norm{x_ny_n - xy_n + xy_n - xy} \leq \norm{(x_n-x)y_n}+ \norm{x(y_n-y)}\\ 
+&\leq \norm{x_n-x}\cdot\norm{y_n}+ \norm{x}\cdot\norm{y_n-y} = \norm{x_n-x}\cdot\norm{y_n-y+y}+ \norm{x}\cdot\norm{y_n-y}\\
+&\leq \norm{x_n-x}\cdot(\norm{y_n-y} + \norm{y})+ \norm{x}\cdot\norm{y_n-y} \to 0
+\end{align*}
+\end{proof}
+As a consequence multiplication by a fixed factor, $x\mapsto cx$ or $x\mapsto xc$ for some $c$, is also continuous, by \ref{productInclusionsContinuous}. This is also immediate from the boundedness of multiplication $\norm{xy}\leq\norm{x}\norm{y}$ and \ref{boundedLinearMaps}.
+
+\begin{lemma}
+Let $A$ be a Banach algebra and $D\subset A$ a subset. Suppose $a\in A$ commutes with all elements of $D$, then $a$ commutes with the closure $\overline{D}$.
+\end{lemma}
+\begin{proof}
+Take an arbitrary element $d\in \overline{D}$. Take an arbitrary $\epsilon >0$. Then we can find an $x\in D$ such that $\norm{x-d}\leq \epsilon$. Then, using that $a$ and $x$ commute,
+\begin{align*}
+\norm{ad - da} &= \norm{a(d+x-x) - (d+x-x)} \\
+&= \norm{a(d-x) - (d-x)a} \leq 2\epsilon \norm{a}.
+\end{align*}
+Because we can choose $\epsilon$ arbitrarily small, $\norm{ad - da}$ must be zero.
+\end{proof}
+
+\begin{proposition} \label{smallestBanachAlgebra}
+Let $A$ be a Banach algebra and $S\subset A$ a subset. Then
+\[ \mathcal{B}(S) \defeq \overline{\Span}\setbuilder{s_1\cdot s_2 \cdot \ldots \cdot s_k}{k\geq 1, s_1,\ldots, s_k \in S} \]
+is the smallest Banach subalgebra in $A$ that contains $S$.
+\end{proposition}
+
+\begin{proposition}
+Let $A$ be a Banach algebra and $J\subset A$ a (two-sided) ideal. Then $A/J$ is a Banach algebra with the quotient norm
+\[ \norm{x+J}_J = \inf_{j\in J}\norm{x-j}. \]
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\section{$*$-algebras}
+\begin{definition}
+A \udef{$*$-algebra} is a $*$-r(i)ng $(A,+,\cdot, *)$, with involution $*$, that is an associative algebra over a commutative $*$-ring $(R,+,\cdot, ')$, with involution $'$,
+such that
+\[ \forall r\in R, x\in A: \quad (rx)^* = r'x^*. \]
+
+A \udef{complex $*$-algebra} is a $*$-algebra where the $*$-ring $R$ is $\C$ with complex conjugation as the involution $'$.
+
+A \udef{real $*$-algebra} is a $*$-algebra where the $*$-ring $R$ is $\R$ with the identity map as the involution $'$.
+
+If a $*$-algebra is also a Banach algebra and for all elements $\norm{x^*} =\norm{x}$, then it is called a \udef{Banach-$*$-algebra}.
+\end{definition}
+TODO: drop condition $\norm{x^*} =\norm{x}$? Not required for $C^*$ (already implied).
+
+\begin{lemma}
+Let $A$ be a $*$-algebra. The unitisation $A^\dagger = A\oplus \F$ can also be seen as a $*$-algebra with the involution defined by
+\[ (a, \lambda)^* = (a^*, \overline{\lambda}) \qquad \forall a\in A, \lambda\in \F.\]
+\end{lemma}
+\begin{lemma} \label{elementaryStarLemma}
+Let $A$ be a unital $*$-algebra. Then
+\begin{enumerate}
+\item $\vec{1}^* = \vec{1}$;
+\item if $x$ is invertible, then $x^*$ is invertible with $(x^*)^{-1} = (x^{-1})^*$;
+\item $\sigma(x^*) = \setbuilder{\overline{\lambda}}{\lambda \in \sigma(x)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Take some $x\in A$.
+\begin{enumerate}
+\item $\vec{1}^* x = (x^*\cdot \vec{1})^* = x^{**} = x$.
+Similarly $x\vec{1}^* = x$.
+\item $x^*\cdot (x^{-1})^* = (x^{-1}x)^* = \vec{1}^* = \vec{1}$. Similarly $(x^{-1})^*\cdot x^* = \vec{1}$.
+\end{enumerate}
+\end{proof}
+
+\begin{proposition} \label{smallestBanach*Algebra}
+Let $A$ be a Banach-$*$-algebra and $S\subset A$ a subset. Then
+\[ \mathcal{B}^*(S) \defeq \mathcal{B}(S\cup S^*) \]
+is the smallest Banach-$*$-subalgebra in $A$ that contains $S$, where $\mathcal{B}$ is defined as in \ref{smallestBanachAlgebra} and $S^* = \setbuilder{s^*\in A}{s\in S}$.
+\end{proposition}
+
+\begin{definition}
+Let $A$ be a $*$-algebra and $x\in A$. We say that $x$ is
+\begin{enumerate}
+\item \udef{normal}, if $x^*x = xx^*$;
+\item \udef{self-adjoint}, if $x=x^*$;
+\item \udef{unitary}, if $x^*x = xx^* = \vec{1}$ (assuming $A$ unital);
+\item a \udef{projection}, if $x=x^*=x^2$.
+\end{enumerate}
+The set of all
+\begin{enumerate}
+\item normal elements in $A$ is denoted $\Normals(A)$;
+\item self-adjoint elements in $A$ is denoted $\SelfAdjoints(A)$;
+\item unitaries in $A$ is denoted $\Unitaries(A)$;
+\item projections in $A$ is denoted $\Projections(A)$.
+\end{enumerate}
+
+\end{definition}
+\begin{lemma}
+We have the following implications:
+\[ \text{projection} \Rightarrow \text{self-adjoint} \Rightarrow \text{normal} \Leftarrow \text{unitary}. \]
+\end{lemma}
+
+\begin{lemma} \label{orthogonalProjection}
+Let $A$ be a unital $*$-algebra and $p\in\Projections(A)$. Then $\vec{1}-p$ is a projection.
+\end{lemma}
+\begin{proof}
+We simply calculate
+\[ (\vec{1}-p)^2 = (\vec{1}-p)(\vec{1}-p) = \vec{1} - p -p + p = \vec{1}-p = (\vec{1}-p)^*. \]
+\end{proof}
+
+\begin{lemma} \label{realImaginaryParts}
+Let $A$ be a $*$-algebra and $x\in A$. Then there are unique self-adjoint elements $x_1,x_2\in A$ such that $x = x_1+i\cdot x_2$. They are given by
+\[ x_1 = \frac{x+x^*}{2} \qquad \text{and} \qquad x_2 = \frac{x-x^*}{2i}. \]
+\end{lemma}
+We call $x_1$ and $x_2$ the \udef{real part} and \udef{imaginary part} of $x$, respectively.
+
+\subsection{$*$-homomorphisms}
+\begin{definition}
+Let $A,B$ be $*$-algebras. A \udef{$*$-homomorphism} is a linear, multiplicative, $*$-preserving map $\Psi: A \to B$.
+
+If $A,B$ are unital and $\Psi(\vec{1}_A) = \vec{1}_B$, then we say $\Psi$ is \udef{unital}.
+\end{definition}
+\begin{lemma}
+Let $A$ be a $*$-algebra, then $*$-homomorphisms map
+\begin{enumerate}
+\item normal elements to normal elements;
+\item self-adjoints to self-adjoints;
+\item projections to projections;
+\item unitaries to unitaries, if the $*$-homomorphism is unital.
+\end{enumerate}
+\end{lemma}
+
+\subsection{$*$-matrix algebras}
+TODO define matrix algebra.
+\begin{definition}
+Let $A$ be a $*$-algebra. Then the matrix algebra $A^{n\times n}$ is considered a $*$-algebra with the star operation given defined by
+\[ [a^*]_{i,j} \defeq [a]_{j,i}^*. \]
+for all components of $a\in A^{n\times n}$.
+\end{definition}
+Notice that the $*$-operation acts as the element-wise $*$-operation composed with the transpose.
+
+\section{Unitisation}
+\begin{definition}
+Let $A$ be a Banach algebra. Then the \udef{unitisation} of $A$ is the algebra $A^\dagger = A\oplus \F$ with multiplication
+\[ (x,\lambda)\cdot (y,\mu) = (xy+\lambda y + \mu x, \lambda\mu) \]
+and a norm that extends the norm $\norm{\cdot}$ on $A$ to a norm on $A^\dagger$. In other words, there is an isometric embedding
+\[ A \hookrightarrow A^\dagger: x\mapsto (x,0). \]
+\end{definition}
+TODO: is $A^\dagger$ necessarily complete?
+\begin{lemma}
+For any Banach algebra $A$, $A^\dagger$ is a unital Banach algebra with unit $\vec{1} = (0,1)$.
+\end{lemma}
+\begin{proof}
+TODO: is $A^\dagger$ necessarily complete?
+\end{proof}
+It is possible to use multiple norms for the unitisation.
+\begin{proposition} \label{normsOfUnitisation}
+Let $A$ be a Banach algebra. Of the possible norms for $A^\dagger$, the $1$-norm
+\[ \norm{(x,\lambda)}_1 = \norm{x}+|\lambda| \]
+is minimal and the operator norm
+\[ \norm{(x,\lambda)}_{op} = \sup\setbuilder{\norm{xa + \lambda a}}{a\in A \land \norm{a}\leq 1} \]
+is maximal. All possible norms are equivalent.
+\end{proposition}
+\begin{proof}
+TODO: prove the operator norm is actually a norm and isometric.
+\end{proof}
+
+We set
+\[ \tilde{A} = \begin{cases}
+A & \text{if $A$ unital} \\
+A^\dagger & \text{if $A$ non-unital.}
+\end{cases} \]
+If a Banach algebra $A$ is unital, we can identify $\F$ with $\F\cdot \vec{1} \subseteq A$.
+
+Alternatively we could define $\tilde{A}$ as the smallest unital Banach algebra containing $A$.
+
+\begin{lemma}
+Let $A$ be a Banach algebra. Then $A$ is an ideal of $A^\dagger$.
+\end{lemma}
+
+\begin{lemma}
+Let $A$ be a Banach algebra. We have the split exact sequence
+\[ \begin{tikzcd}
+0 \rar & A \rar[hook, "\iota"] & A^\dagger \rar[shift left, "\pi_2"] & \lar[hook, shift left, "\lambda"] \F \rar & 0.
+\end{tikzcd} \]
+\end{lemma}
+
+\begin{lemma}
+Let $A,B$ be Banach algebras. Every algebra homomorphism $\Psi:A\to B$ extends uniquely to a unital homomorphism $\Psi^\dagger: A^\dagger \to B^\dagger$:
+\[ \Psi^\dagger: A^\dagger \to B^\dagger: (a,\lambda) \mapsto (\Psi(a),\lambda). \]
+\end{lemma}
+\begin{proof}
+We want $\Psi^\dagger((a,0)) = (\Psi(a),0)$ for all $a\in A$. Because $\Psi$ is unital, we have $\Psi^\dagger((\vec{0},1)) = (\vec{0},1)$. So
+\[ \Psi^\dagger((a,\lambda)) = \Psi^\dagger((a,0))+\lambda \Psi^\dagger((\vec{0},1)) = (\Psi(a),0) + \lambda(\vec{0},1) = (\Psi(a),\lambda). \]
+\end{proof}
+\begin{corollary} \label{projectionOnACommutes}
+Let $\pi_1: A^\dagger \to A$ be the projection on the first component: $\pi_1(a,\alpha) = a$.
+
+The unital extension $\Psi^\dagger$ commutes with $\pi_2$:
+\[ \pi_2\circ\Psi^\dagger = \Psi^\dagger \circ \pi_2 = \Psi\circ \pi_2. \]
+Restricted to $A$, this is equal to $\Psi$.
+\end{corollary}
+As before we set, for $\Psi: A \to B$ an algebra homomorphism
+\[ \tilde{\Psi} = \begin{cases}
+\Psi & \text{if $A$ unital} \\
+\Psi^\dagger & \text{if $A$ non-unital.}
+\end{cases} \]
+Thus $\tilde{\Psi}$ is a function on $\tilde{A}$.
+
+\begin{lemma} \label{DaggerMorphismProperties}
+Let $A,B$ be Banach algebras and $\Psi:A\to B$ and algebra homomorphism. Then
+\begin{enumerate}
+\item $\im(\Psi^\dagger) = (\im\Psi)^\dagger$;
+\item $\ker(\Psi^\dagger) = \ker(\Psi)\oplus\{0\}$;
+\item $\Psi^\dagger$ is injective \textup{if and only if} $\Psi$ is injective;
+\item $\Psi^\dagger$ is surjective \textup{if and only if} $\Psi$ is surjective;
+\item $\norm{\Psi^\dagger} = \max\{\norm{\Psi},1\}$;
+\item $\Psi^\dagger$ is isometric \textup{if and only if} $\Psi$ is isometric.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The third point follows from the second and \ref{injectivityKernelTriviality}.
+\end{proof}
+
+\begin{definition}
+Let $A$ be a Banach algebra. We define the \udef{scalar mapping} to be
+\[ s = \lambda\circ \pi: A^\dagger \to A^\dagger: (a,\lambda) \mapsto (0,\lambda). \]
+\end{definition}
+Notice that $\pi\circ s = \pi$.
+
+\subsection{Approximate units}
+\begin{definition}
+Let $A$ be a Banach algebra. A net $(e_\lambda)_{\lambda\in\Lambda}$ is an \udef{approximate unit} if
+\begin{enumerate}
+\item $\norm{e_\lambda}\leq 1$ for all $\lambda$;
+\item $a = \lim_{\lambda\to \infty} e_\lambda \cdot a = \lim_{\lambda\to \infty} a \cdot e_\lambda$.
+\end{enumerate}
+We call $(e)_\lambda$ is an \udef{increasing approximate unit} if $\lambda_0 \leq \lambda_1$ implies $0\leq e_{\lambda_0} \leq e_{\lambda_1}$.
+\end{definition}
+\begin{lemma}
+If $A$ is unital, any approximate unit in $A$ converges to $\vec{1}$.
+\end{lemma}
+TODO: usually increasing. When not?
+
+\section{Algebras of real and complex functions}
+
+\section{Complexification}
+
+\section{Complex analysis on Banach algebras}
+There is a theory of holomorphic (analytic) functions from open sets in $\C$ taking values in a Banach space, which is nearly identical to the usual complex-valued theory. In particular, most of the standard theorems of complex analysis, such as the Cauchy Integral Formula, Liouville’s Theorem,and the existence and radius of convergence of Taylor and Laurent expansions,have exact analogs in this setting. 
+
+\begin{lemma}
+TODO: holomorphic?? And check sign.
+\[ \od{}{z} R_x(z) = (x-z)^{-2}. \]
+\end{lemma}
+
+\section{Series in Banach algebras}
+\subsection{Neumann series}
+\begin{proposition}[Neumann series] \label{NeumannSeries}
+Let $A$ be a unital Banach algebra and $x\in A$. 
+If $\norm{x}<1$, then $\vec{1}-x$ is invertible with inverse
+\[ (\vec{1}-x)^{-1} = \sum_{n=0}^\infty x^n. \]
+Equivalently, if $\norm{\vec{1}-x}< 1$, then $x$ is invertible with inverse
+\[ x^{-1} = \sum_{n=0}^\infty(\vec{1}-x)^n. \]
+\end{proposition}
+\begin{proof}
+Since $\norm{x^n}\leq \norm{x}^n$ for all $n\geq 1$ and $\sum \norm{x}^n$ is a convergent geometric series, the series $\sum x^n$ is convergent by \ref{absoluteUnconditionalConvergenceBanach}.
+\end{proof}
+\begin{corollary} \label{openSetInvertibles}
+Let $x\in\GL(A)$, then $B(x,\norm{x^{-1}}^{-1})\subset \GL(A)$. The invertible elements $\GL(A)$ form an open subset of $A$.
+\end{corollary}
+\begin{proof}
+The second assertion follows from the first by \ref{interior}. Let $y\in B(x,\norm{x^{-1}}^{-1})$. Then
+\[ \norm{\vec{1} - x^{-1}y} \leq \norm{x^{-1}}\cdot\norm{x-y} < \norm{x^{-1}}\cdot\norm{x^{-1}}^{-1} = 1  \]
+and, by the proposition, $x^{-1}y$ is invertible. Similarly $yx^{-1}$ is invertible and thus $y$ is invertible by \ref{productInvertibility}.
+\end{proof}
+\begin{corollary} \label{inverseMapContinuous}
+The map $^{-1}: \GL(A)\to\GL(A): x\mapsto x^{-1}$ is continuous.
+\end{corollary}
+\begin{proof}
+Take a convergent sequence $(x_n)\subset\GL(A)$ with limit $x$. We wish to prove $(x_n^{-1})$ converges to $x^{-1}$, because then the map is continuous by \ref{sequentialContinuity}. We can choose an $n_0$ such that $\forall n\geq n_0: x_n \in B(x,\norm{x^{-1}}^{-1})$. From now on we consider only the tails $(x_n)_{n=n_0}^\infty$ and $(x_n^{-1})_{n=n_0}^\infty$, which have the same limits by TODO ref. Then
+\[ \norm{x^{-1}}\cdot\norm{x-x_n} < \norm{x^{-1}}\cdot\norm{x^{-1}}^{-1} = 1. \]
+Also
+\[ \norm{\vec{1} - x^{-1}x_n} = \norm{x^{-1}(x-x_n)} \leq \norm{x^{-1}}\cdot\norm{x-x_n} < 1. \]
+We calculate, using the inequalities to apply the Neumann series formula and geometric series formula:
+\begin{align*}
+\norm{x_n^{-1} - x^{-1}} &= \norm{(x_n^{-1}x - \vec{1})x^{-1}} = \norm{((x^{-1}x_n)^{-1} - \vec{1})x^{-1}} \\
+&= \norm{\left(\sum_{k=0}^\infty[\vec{1} - x^{-1}x_n]^k - \vec{1}\right)x^{-1}} = \norm{\left(\sum_{k=1}^\infty[\vec{1} - x^{-1}x_n]^k\right)x^{-1}} \\
+&\leq \sum_{k=1}^\infty\norm{\vec{1} - x^{-1}x_n}^k\cdot\norm{x^{-1}} = \sum_{k=1}^\infty\norm{x^{-1}(x - x_n)}^k\cdot\norm{x^{-1}} \\
+&\leq \norm{x^{-1}}\sum_{k=1}^\infty\norm{x - x_n}^k\cdot\norm{x^{-1}}^{k} = \norm{x^{-1}}\sum_{k=0}^\infty\norm{x - x_n}^k\cdot\norm{x^{-1}}^{k} - \norm{x^{-1}} \\
+&= \frac{\norm{x^{-1}}}{1-\norm{x - x_n}\cdot\norm{x^{-1}}}-\norm{x^{-1}} = \frac{\norm{x - x_n}\cdot\norm{x^{-1}}^2}{1-\norm{x - x_n}\cdot\norm{x^{-1}}}.
+\end{align*}
+As the right-hand side converges to $0$, so must the left-hand side. Thus $(x_n^{-1})$ converges to $x^{-1}$.
+\end{proof}
+
+
+\subsection{The exponential}
+\begin{proposition}
+Let $A$ be a Banach algebra and $a\in A$. Then the series
+\[ \sum_{i=1}^\infty \frac{a^i}{i!} \]
+converges. We denote its limit $\exp(a)-1$ or $e^a-1$.
+\end{proposition}
+\begin{proof}
+By
+\[ \norm{\sum_{i=1}^N \frac{a^i}{i!}} \leq \sum_{i=1}^N \frac{\norm{a}^i}{i!} \]
+it is absolutely convergent and thus convergent, by \ref{absoluteUnconditionalConvergenceBanach}.
+\end{proof}
+The function $a\mapsto \exp(a) = \vec{1} + \sum_{i=1}^\infty \frac{a^i}{i!}$ is the \udef{exponential mapping}.
+
+\begin{lemma} \label{continuityExp}
+The exponential mapping is continuous.
+\end{lemma}
+\begin{proof}
+TODO - see Coleman
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a unital Banach algebra and $a,b\in A$. If $a$ and $b$ commute, then
+\[ \exp(a+b) = \exp(a)\exp(b). \]
+\end{proposition}
+\begin{proof}
+TODO - Coleman
+\end{proof}
+\begin{corollary}
+The image of the exponential function is contained in $\GL(A)$.
+\end{corollary}
+\begin{proof}
+As $a$ and $-a$ commute, we have $\exp(-a)\exp(a) = \exp(0) = \vec{1}$.
+\end{proof}
+
+\begin{lemma}
+Let $A$ be a Banach algebra and $a\in A$. Then
+\[ \exp(a) = \lim_{n\to\infty} \left(\vec{1} + \frac{a}{n}\right)^n. \]
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\section{Finite elements}
+elements of the socle. \url{https://link.springer.com/content/pdf/10.1023/A:1009717500980.pdf}
+
+have finite spectrum 
+
+\url{http://matwbn.icm.edu.pl/ksiazki/sm/sm104/sm10431.pdf}
+
+\section{The spectrum}
+TODO: remove unital requirement.
+\begin{definition}
+Let $A$ be a complex Banach algebra. The \udef{spectrum} of an element $x\in A$ is defined as
+\[ \sigma(x) = \sigma_A(x) \defeq \setbuilder{\lambda\in\C}{x-\lambda\cdot \vec{1} \in \tilde{A} \;\text{is not invertible}}. \]
+If $A$ is a real Banach algebra, then the spectrum of $x\in A$ is defined as
+\[ \sigma_A(x) \defeq \sigma_{A_\C}(x) = \setbuilder{\lambda\in\C}{x-\lambda\cdot \vec{1} \in \widetilde{A_\C} \;\text{is not invertible}}.  \]
+The \udef{resolvent set} of an element $x\in A$ is
+\[ \rho(x) = \C\setminus\sigma(x) \]
+and its \udef{resolvent map} is
+\[ R_x: \rho(x) \to A : z\mapsto (z-x)^{-1}. \]
+The \udef{spectral radius} of $x\in A$ is
+\[ \spr(x) = \max\{ |\lambda|\;|\; \lambda\in\sigma(x) \}. \]
+\end{definition}
+TODO redefine $\spr$ with $\sup$. Max is then proposition (spectrum compact).
+
+\begin{lemma}
+Let $A$ be a non-unital Banach algebra. Then $0\in\sigma_A(a)$ for all $a\in A$.
+\end{lemma}
+\begin{proof}
+Because $A\subset A^\dagger$ as an ideal, $(a,0)\in A^\dagger$ is not invertible.
+\end{proof}
+
+\begin{lemma}
+Let $A$ be a real Banach algebra. Then for all $a\in A$ and $\mu_1,\mu_2\in \R$:
+\begin{enumerate}
+\item $\spec(a) = \overline{\spec(a)}$;
+\item $\mu_1 + \mu_2 i \in \sigma(a)$ \textup{if and only if} $(a-\mu_1)^2+\mu_2^2$ is not invertible in $\tilde{A}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $\lambda \notin \spec(a)$, so $(a-\lambda)^{-1}$ exists. Then
+\[ \vec{1} = \overline{\vec{1}} = \overline{(a-\lambda)}\overline{(a-\lambda)^{-1}} = (a-\overline{\lambda})\overline{(a-\lambda)^{-1}}, \]
+so $a-\overline{\lambda}$ is invertible and $\overline{\lambda}\notin \sigma(a)$. The converse is identical, using $\overline{\lambda}$.
+
+(2) By (1), $a - (\mu_1 + \mu_2 i)$ is invertible if and only if $a - (\mu_1 - \mu_2 i)$ is invertible. Because $a - (\mu_1 + \mu_2 i)$ and $a - (\mu_1 - \mu_2 i)$ commute, this is equivalent to saying
+\[ (a - (\mu_1 + \mu_2 i))(a - (\mu_1 - \mu_2 i)) = (a-\mu_1)^2 + \mu_2^2 \]
+is invertible in $\widetilde{A_\C}$, by \ref{productInvertibility} and thus also in $A$, by TODO ref.
+\end{proof}
+
+\begin{proposition}
+Let $B$ be a complex Banach algebra and $A = B_\R$, then for all $a\in A$
+\[ \sigma_A(a) = \sigma_B(a) \cup \overline{\sigma_B(a)}. \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{spectrumCompact}
+For any $x\in A$, the spectrum $\sigma(x)$ is a compact subset of $\setbuilder{\lambda\in\C}{|\lambda|\leq \norm{x}}$.
+
+In particular, $\spr(x) \leq \norm{x}$.
+\end{proposition}
+\begin{proof}
+Let $\lambda\in \C$ be such that $|\lambda|>\norm{x}$, then
+\[ 1 > \frac{\norm{x}}{|\lambda|} = \frac{\lambda - (\lambda - \norm{x})}{|\lambda|} = \norm{\vec{1} - \left(\vec{1} - \frac{x}{\lambda}\right)}. \]
+By \ref{NeumannSeries}, $\vec{1} - x/\lambda$ is invertible and thus so is $x-\lambda$.
+
+It is then enough to show that $\sigma(x)$ is closed. By \ref{openSetInvertibles}, $\GL(A)$ is open and the set of non-invertibles $A\setminus \GL(A)$ is closed. Consider $f: \C \to A: \lambda \mapsto x-\lambda$. Then $\sigma(x) = f^{-1}[A\setminus \GL(A)]$ is the preimage of a closed set under a continuous map, and hence is closed.
+\end{proof}
+
+\begin{proposition}[Spectral radius formula] \label{spectralRadiusFormula}
+Let $A$ be a Banach algebra and $x\in A$. Then
+\[ \spr(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = \inf_{n\in\N}\norm{x^n}^{1/n}. \]
+\end{proposition}
+\begin{proof}
+TODO, with complex analysis. Does it imply \ref{spectrumCompact}?
+\end{proof}
+
+\begin{theorem}
+Let $A$ be a unital Banach algebra. For every $x\in A$, the spectrum $\sigma(x)$ is non-empty.
+\end{theorem}
+\begin{proof}
+TODO, uses complex analysis (Liouville's theorem). Also move higher?
+\end{proof}
+\begin{corollary}[Gelfand-Mazur] \label{GelfandMazur}
+Let $A$ be a unital complex Banach algebra. If every non-zero element is invertible, then $A=\C\cdot \vec{1}$.
+\end{corollary}
+\begin{proof}
+Suppose $x\in A\setminus (\C\cdot\vec{1})$. Then $\sigma(x) = \emptyset$, contradicting the theorem.
+\end{proof}
+In other words, $\C$ is the only normed complex division algebra.
+
+\begin{proposition}
+Let $A$ be a unital Banach algebra and $x,y\in A$. Then $\vec{1} - xy$ is invertible \textup{if and only if} $\vec{1} - yx$ is invertible.
+\end{proposition}
+\begin{proof}
+Assume $\vec{1} - xy$ invertible. Then the inverse of $\vec{1} - yx$ is
+\[ y(\vec{1} - xy)^{-1}x + \vec{1}. \]
+\end{proof}
+\begin{corollary}
+Let $A$ be a unital Banach algebra and $x,y\in A$. Then
+\[ \sigma(xy)\cup\{0\} = \sigma(yx)\cup\{0\}. \]
+\end{corollary}
+\begin{proof}
+Assuming $\lambda \neq 0$, we have $\lambda\in\sigma(xy) \iff \frac{xy}{\lambda} - \vec{1}$ is invertible.
+\end{proof}
+It is important to include $0$: there are cases when $0\in \sigma(xy)$, but $0\notin \sigma(yx)$.
+
+\begin{lemma} \label{spectrumOfImage}
+Let $A,B$ be unital Banach algebras and $\Psi: A\to B$ a unital algebra homomorphism. Then for all $x\in A$: $\sigma(\Psi(x)) \subseteq \sigma(x)$ and hence $\spr(\Psi(x)) \leq \spr(x)$.
+\end{lemma}
+\begin{proof}
+By contraposition: Assume $\lambda\notin\sigma(x)$, then $x-\lambda$ has an inverse, call it $a$. Then $(\Psi(x) - \lambda)$ has an inverse by
+\[ (\Psi(x) - \lambda)\Psi(a) = \Psi(x-\lambda)\Psi(a) = \Psi((x-\lambda)a) = \Psi(\vec{1}) = \vec{1},\]
+meaning $\lambda \notin \sigma(\Psi(x))$.
+\end{proof}
+
+In general if $B$ is a subalgebra of a Banach algebra $A$, then for any $x\in B$, $\sigma_B(x) \supseteq \sigma_A(x)$.
+
+\begin{proposition}
+Let $A$ be a unital Banach algebra and suppose that $S\subset A$ is a set of pairwise commuting elements. Then there exists a unital commutative Banach subalgebra $C$ such that $S\subset C\subset A$ and
+\[ \sigma_A(s) = \sigma_C(s) \qquad \text{for all $s\in S$.} \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsection{Quasinilpotent operators}
+\begin{definition}
+Let $A$ be a Banach algebra and $x\in A$. If $\spec(x) = \{0\}$, then $x$ is called \udef{quasinilpotent}
+\end{definition}
+\url{https://www.jstor.org/stable/2042882?seq=1}
+\url{https://www.researchgate.net/profile/Zbigniew-Slodkowski/publication/265547661_A_note_on_quasinilpotent_elements_of_a_Banach_algebra/links/5e7e8f94458515efa0b0fe83/A-note-on-quasinilpotent-elements-of-a-Banach-algebra.pdf?origin=publication_detail}
+
+\url{https://www.cambridge.org/core/services/aop-cambridge-core/content/view/AC3CBD3000D16515D0BD83C07B703186/S0013091500015352a.pdf/finite_dimensionality_nilpotents_and_quasinilpotents_in_banach_algebras.pdf}
+
+\url{https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C8F26DDF45A29D689C726A29D8F0BC2A/S0017089500008429a.pdf/algebraic-ideals-of-semiprime-banach-algebras.pdf}
+
+\begin{proposition} \label{nilpotentQuasinilpotent}
+Every nilpotent element is quasinilpotent. The converse holds for finite elements in semisimple Banach algebras (TODO correct version of finite).
+\end{proposition}
+\begin{proof}
+Let $x$ be a nilpotent element in a (unital) Banach algebra $A$.
+By the spectral radius formula \ref{spectralRadiusFormula}, we have
+\[ \spr(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = 0. \]
+This implies $\spec(x) = \{0\}$.
+
+Now assume $x$ a finite quasimilpotent element. Then $\dim(xAx) = n$ and so $x^2, \ldots x^{n+2}$ a linearly dependent and thus there exists a polynomial $p$ of degree at most $n+2$ such that $p(x) = 0$. We can factorise $p(x) = x^kq(x)$ where $q$ is some polynomial such that $q(0) \neq 0$ and $k\in \N$. Then by spectral mapping, we have that $\spec(q(x)) = q(\spec(x)) = q(\{0\}) \neq \{0\}$. Thus $q(x)$ is invertible and we have
+\[ x^k = x^kq(x)q(x)^{-1} = 0\cdot q(x)^{-1} = 0. \]
+This means $x$ is nilpotent.
+\end{proof}
+
+\section{Characters}
+\begin{definition}
+Let $A$ be a Banach algebra. A \udef{character} on $A$ is a non-zero algebra homomorphism $A\to\C$.
+\end{definition}
+In other words, a character on $A$ is a non-zero multiplicative linear functional $A\to \C$.
+In particular, if $A$ is a real algebra, a character is still complex valued, but now  an $\R$-linear functional on $A$. 
+
+\begin{lemma}
+Let $A$ be a real Banach algebra. Let $\varphi$ be a character on $A$. Then
+\[ \varphi \in \tdual{A} \iff \varphi = \overline{\varphi} \iff \varphi[A] \subset \R. \]
+\end{lemma}
+
+\begin{proposition} \label{charactersUnital} \label{charactersContinuous}
+Let $A$ be a Banach algebra and $\varphi$ a character on $A$, then $\varphi$ is continuous and
+\begin{enumerate}
+\item $\norm{\varphi}\leq 1$;
+\item $\norm{\varphi} = 1$ if $A$ contains an approximate unit;
+\item $\norm{\varphi} = 1 = \varphi(\vec{1})$ if $A$ is unital.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We first prove that $\varphi$ is unital if $A$ is unital: As $\varphi(x) = \varphi(x\cdot\vec{1}) = \varphi(x)\varphi(\vec{1})$ for all $x\in A$ and $\varphi \neq 0$, it follows that $\varphi(\vec{1}) = 1$.
+
+Next $\norm{\varphi}\leq 1$ follows from $\norm{\tilde{\varphi}} \leq 1$ by \ref{DaggerMorphismProperties}. To this end suppose that for some $x\in \tilde{A}$, $|\tilde{\varphi}(x)|>\norm{x}$. Then $x-\tilde{\varphi}(x)$ is invertible by corollary \ref{spectrumCompact}. Thus
+\[ 1 = \tilde{\varphi}(\vec{1}) = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})\tilde{\varphi}(x-\tilde{\varphi}(x)) = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})[\tilde{\varphi}(x)-\tilde{\varphi}(x)] = \tilde{\varphi}((x-\tilde{\varphi}(x))^{-1})\cdot 0 = 0 \]
+which is a contradiction. Then $\norm{\tilde{\varphi}} \leq 1$ and thus $\norm{\varphi} \leq 1$. By \ref{boundedLinearMaps}, $\varphi$ is continuous.
+
+Then it just remains to be shown that $\norm{\varphi} = 1$ if $A$ contains an approximate unit. TODO
+\end{proof}
+
+
+\section{Commutative Banach algebras}
+\subsection{The (Gelfand) spectrum}
+\begin{definition}
+Let $A$ be a commutative Banach algebra. The \udef{(Gelfand) spectrum} (or \udef{character space}) $\hat{A}$ is the set of characters on $A$.
+\end{definition}
+If we equip $\hat{A}$ with the weak-$*$ topology, the Banach-Alaoglu theorem (TODO ref) implies $\hat{A}$ is a locally compact Hausdorff space.
+
+TODO $\hat{A}$ compact if and only if $A$ unital.
+
+All elements of the Gelfand spectrum are unital and continuous, by \ref{charactersUnital} and \ref{charactersContinuous}.
+
+If $A$ is a real algebra, then
+\[ \hat{A} = \setbuilder{\varphi|_A}{\varphi\in \widehat{A_\C}}. \]
+
+\begin{proposition} \label{commutativeSameSpectrum}
+Let $A$ be  a  unital  Banach  algebra,  and  suppose  that $S\subseteq A$ is a subset  of  pairwise commuting elements.  Then there exists a unital commutative Banach subalgebra $C\subseteq A$ with $S\subseteq C$ such that
+\[ \forall s\in S: \quad \sigma_A(s) = \sigma_C(s). \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{BanachAlgebraIdeals}
+Let $A$ be a unital Banach algebra and $\mathcal{J}$ is a maximal ideal. Then 
+\begin{enumerate}
+\item $\mathcal{J}$ is closed;
+\item if $A$ is complex and commutative, then $A/\mathcal{J} \cong \C$;
+\item if $A$ is real and commutative, then $A/\mathcal{J} \cong \R$ or $A/\mathcal{J} \cong \C$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+If $\mathcal{J}$ is not closed, then $\overline{\mathcal{J}} = A$ by maximality. So by proposition \ref{closure} every open set must intersect $\mathcal{J}$, in particular the set $\GL(A)$, open by \ref{openSetInvertibles}. Because $\mathcal{J}$ is an ideal containing an invertible element, $\mathcal{J}=A$ by TODO ref. A contradiction.
+
+If $A$ is commutative, $A/\mathcal{J}$ is a field by TODO ref. It is also a unital Banach algebra (TODO), so $A/\mathcal{J} \cong \C$ by the Gelfand-Mazur theorem, \ref{GelfandMazur}.
+\end{proof}
+
+\begin{proposition} \label{characterMaximalIdealsComplex}
+Let $A$ be a complex unital commutative Banach algebra. Then we have a bijection
+\[ \ker: \hat{A} \twoheadrightarrowtail \{\text{maximal ideals in $A$}\}: \varphi \mapsto \ker(\varphi).  \]
+\end{proposition}
+\begin{proof}
+First we verify that for each character $\varphi$ the kernel is a maximal ideal. Indeed applying \ref{splittingMap} to $\varphi$ we get an isomorphism $A/\ker\varphi \cong \im\varphi = \C$, meaning $\ker(\varphi)$ has codimension 1 and thus is a maximal proper subspace. By \ref{kernelIsIdeal}, $\ker(\varphi)$ is an ideal.
+
+To prove $\ker$ is injective: let $\ker(\varphi) = \ker(\psi)$. Take some $a\in A$, which we can uniquely write as $\lambda+n$, with $n\in\ker(\varphi) = \ker(\psi)$. TODO ref + extract lemma! Then $\varphi(a) = \lambda = \psi(a)$, so $\varphi = \psi$.
+
+For surjectivity, take a maximal ideal $\mathcal{J}$.
+By \ref{BanachAlgebraIdeals}, $A/\mathcal{J}\cong \C$, so the quotient map $A\to A/\mathcal{J}\cong \C$ can be seen as a character with kernel $\mathcal{J}$.
+\end{proof}
+
+TODO characterMaximalIdealsReal!
+
+
+\begin{proposition} \label{spectrumFromSpectrum}
+Let $A$ be a unital commutative Banach algebra and $x\in A$. Then
+\[ \sigma(x) = \setbuilder{\varphi(x)}{\varphi\in\hat{A}} = \hat{x}[\hat{A}]. \]
+\end{proposition}
+TODO: introduce notation $\hat{x}$ earlier?
+\begin{proof}
+Suppose $\lambda = \varphi(x)$ for some $\varphi\in\hat{A}$. Then $x-\lambda\in\ker\varphi$, which is a proper ideal.
+So $x-\lambda \notin\GL(A)$ and $\lambda \in\sigma(x)$.
+
+Suppose $\lambda \in \sigma(x)$. Because $x-\lambda$ is non-invertible, the ideal generated by it is proper, by \ref{nonInvertibleGeneratedIdeals}, and $x-\lambda$ lies in a maximal ideal, by \ref{idealLatticeCoatomic}. By \ref{characterMaximalIdealsComplex}, this means $x-\lambda \in \ker\varphi$ for some $\varphi\in\hat{A}$ and then $\lambda = \varphi(x)$.
+\end{proof}
+
+\subsection{The Gelfand transform}
+\begin{definition}
+Let $A$ be a unital commutative Banach algebra. The \udef{Gelfand transform} of $A$ is the map
+\[ \wedge : A\to C(\hat{A}): x\mapsto \hat{x} \]
+where $\hat{x}(\varphi) = \varphi(x)$ for all $x\in A, \varphi\in\hat{A}$.
+\end{definition}
+\begin{lemma} \label{GelfandTransformHomomorphism}
+Let $A$ be a unital commutative Banach algebra with Gelfand transform $\wedge : A\to C(\hat{A})$. Then
+\begin{enumerate}
+\item $\wedge$ is well-defined, in the sense that $\hat{x} \in C(\hat{A})$;
+\item $\wedge$ is linear and multiplicative;
+\item $\norm{\hat{x}} = \spr(x) \leq \norm{x}$.
+\end{enumerate}
+Thus the Gelfand transform is a unital, norm-contractive Banach algebra homomorphism.
+\end{lemma}
+\begin{proof}
+We prove in turn:
+\begin{enumerate}
+\item We have equipped $\hat{A}$ with the weak-$*$ topology. Then proposition \ref{weak*continuousFunctional} says each $\hat{x}$ is continuous.
+\item $\hat{x}(\lambda \varphi + \psi) = \lambda \varphi(x) + \psi(x) = \lambda\hat{x}(\varphi) + \hat{x}(\psi)$ and $\hat{x}(\varphi\psi) = \varphi(x)\psi(x) = \hat{x}(\varphi)\hat{x}(\psi)$.
+\item For all $x\in A$:
+\[ \norm{\hat{x}} = \sup_{\varphi\in\hat{A}}\left( \frac{|\varphi(x)|}{\norm{\varphi}} \right) = \sup_{\varphi\in\hat{A}}(|\varphi(x)|) = \spr(x) \leq \norm{x} \]
+where we have used that $\norm{\varphi} = 1$ by \ref{charactersUnital}, $\sigma(x) = \setbuilder{|\varphi(x)|}{\varphi\in\hat{A}}$ by \ref{spectrumFromSpectrum} and the inequality is from \ref{spectrumCompact}.
+\end{enumerate}
+\end{proof}
+
