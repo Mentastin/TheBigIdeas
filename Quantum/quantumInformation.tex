@@ -159,6 +159,17 @@ Let $\ket{\psi(s)}$ be a nondegenerate eigenstate of $H(s)$ and $\{\omega_j\}$ t
 \chapter{Variational quantum algorithms}
 
 \chapter{Algorithms}
+\section{Some building blocks}
+\subsection{Preparing states}
+\subsubsection{Uniform superposition}
+\begin{lemma}
+Consider the Hilbert space $\hilbert_{\F_2^k}$. We can generate a uniform superposition of computational basis states by applying a Hadamard gate to each register, initialised to zero:
+\[ \frac{1}{2^k}\sum_{b\in \F_2^k}\ket{b} = W^{\otimes k}\ket{0}^{\otimes k}. \]
+\end{lemma}
+
+Projection on the $n$-dimensional uniform superposition is given by $\frac{1}{n}\mathbb{J}_{n\times n}$.
+\subsection{Quantum Fourier transform}
+
 \section{Quantum oracle querying}
 \subsection{Oracle set-up}
 \begin{definition}
@@ -169,12 +180,35 @@ where
 We call $O_f$ the \udef{quantum oracle} of $f$.
 \end{definition}
 
-\begin{lemma}
-We can convert an oracle $O_f$ to a unitary operator
-\[ U_f = \bra{0}_+(WX\otimes \id)O_f(WX\otimes \id)\ket{0}_+. \]
+\begin{lemma} \label{phaseUnitaryFromOracle}
+We can convert an oracle $O_f$ to a unitary operator $U_f: \hilbert_A\to\hilbert_A: \ket{k}\mapsto (-1)^{f(k)}\ket{k}$ using only a constant number of Hadamard and NOT gates:
+\[ \begin{quantikz}
+\lstick{\ket{k}} \qw & \qw & \qw & \qw & \gate[wires=2]{O_f} & \qw & \qw & \qw & \qw \rstick{$U_f \ket{k}$} \\
+{} & \lstick{\ket{0}} & \gate{X} & \gate{W} & {} & \gate{W} & \gate{X} & \trash{\ket{0}} & {}
+\end{quantikz} \]
+If $A$ is finite, then $U_f = \id - 2 \sum_{k\in f^{\preimf}(1)}\ketbra{k}{k}$, which is a Householder matrix.
 \end{lemma}
 \begin{proof}
+We show that the circuit transforms $\ket{k}$ into $(-1)^{f(k)}\ket{k}$.
 
+Given input $\ket{k}$, the oracle acts on $\ket{k}\otimes\ket{-} = \ket{k}\otimes\left(\frac{\ket{0}-\ket{1}}{\sqrt{2}}\right) = \frac{\ket{k}\otimes\ket{0}}{\sqrt{2}} - \frac{\ket{k}\otimes\ket{1}}{\sqrt{2}}$ and produces
+\begin{align*}
+\frac{\ket{k}\otimes\ket{f(k)}}{\sqrt{2}} - \frac{\ket{k}\otimes\ket{f(k)+1}}{\sqrt{2}} &= \begin{cases}
+\ket{k}\otimes\ket{-} & (f(k) = 0) \\
+-\ket{k}\otimes\ket{-} & (f(k) = 1) \\
+\end{cases} \\
+&= (-1)^{f(k)}\ket{k}\otimes\ket{-}.
+\end{align*}
+Given that $XW$ is the inverse of $WX$, the output $U_f\ket{k}$ is equal to $(-1)^{f(k)}\ket{k}$. The second register is left in the state $\ket{0}$, thus we can either measure of just discard it.
+
+Finally, assume $A$ finite. Then
+\begin{align*}
+U_f &= U_f\id = U_f\sum_{k\in A}\ketbra{k}{k} = \sum_{k\in f^{\preimf}(0)}U_f\ketbra{k}{k} + \sum_{k\in f^{\preimf}(1)}U_f\ketbra{k}{k} \\
+&= \sum_{k\in f^{\preimf}(0)}\ketbra{k}{k} - \sum_{k\in f^{\preimf}(1)}\ketbra{k}{k} \\
+&= \sum_{k\in f^{\preimf}(0)}\ketbra{k}{k} - \sum_{k\in f^{\preimf}(1)}\ketbra{k}{k} + \sum_{k\in f^{\preimf}(1)}\ketbra{k}{k} - \sum_{k\in f^{\preimf}(1)}\ketbra{k}{k} \\
+&= \left(\sum_{k\in f^{\preimf}(0)}\ketbra{k}{k} + \sum_{k\in f^{\preimf}(1)}\ketbra{k}{k}\right) - 2\sum_{k\in f^{\preimf}(1)}\ketbra{k}{k} \\
+&= \id - 2\sum_{k\in f^{\preimf}(1)}\ketbra{k}{k}
+\end{align*}
 \end{proof}
 
 \subsection{Deutsch's problem}
@@ -188,58 +222,106 @@ Determine whether $f$ is
 \end{itemize}
 \end{problem}
 
-\begin{lemma}
-The classical query complexity of Deutch's problem is 2.
-\end{lemma}
+\begin{proposition}
+The classical query complexity of Deutch's problem is 2. The quantum query complexity is 1.
+\end{proposition}
+\begin{proof}
+The classical case is clear.
+
+In the quantum case, we have access to the unitary $U_f: \hilbert_{\F_2}\to \hilbert_{\F_2}$ from \ref{phaseUnitaryFromOracle}. The state $WU_fW\ket{0}$ is as follows:
+\begin{align*}
+WU_fW\ket{0} &= WU_f\ket{+} = WU_f\left(\frac{\ket{0}+\ket{1}}{\sqrt{2}}\right) \\
+&= W\left(\frac{(-1)^{f(0)}\ket{0}+(-1)^{f(1)}\ket{1}}{\sqrt{2}}\right) \\
+&= W\begin{cases}
+(-1)^{f(0)}\frac{\ket{0} + \ket{1}}{\sqrt{2}} = (-1)^{f(0)}\ket{+} & (f(0) = f(1)) \\
+(-1)^{f(0)}\frac{\ket{0} - \ket{1}}{\sqrt{2}} = (-1)^{f(0)}\ket{-} & (f(0) \neq f(1))
+\end{cases} \\
+&= \begin{cases}
+(-1)^{f(0)}\ket{0} & (f(0) = f(1)) \\
+(-1)^{f(0)}\ket{1} & (f(0) \neq f(1))
+\end{cases}
+\end{align*} 
+If we measure this state, then we will certainly measure $0$ is $f$ is constant and $1$ if $f$ is balanced.
+\end{proof}
 
 
 
 \subsection{Grover's search algorithm}
+\begin{problem}
 Suppose we have a set $\mathcal{N}$ of $N$ items, some of which are marked. WLOG we can take $\mathcal{N}$ to be the set of bit strings of length $\nu$. The marked items form a subset $\mathcal{M}$ of size $M$. Suppose we have an oracle that tells us whether an object is marked or not:
 \[ f:\mathcal{N} \to \{0,1\}: x\mapsto \begin{cases}
 0 & (x\in \mathcal{M}) \\
 1 & (x\notin \mathcal{M})
 \end{cases} \]
-Now we want to find a marked item. Classically we need to check $\Theta(N/M)$ items on average.
+The problem is to find any marked item.
+\end{problem}
 
-\subsection{Circuit model}
-Let $\setbuilder{\ket{n}}{n\in\mathcal{N}}$ be a basis of a Hilbert space $\mathcal{H}_N$ and let $\mathcal{H}_2$ be a qubit space.
-
-\subsubsection{The oracle}
-We would like to use the operator
-\[ U_f: \mathcal{H}_N\to \mathcal{H}_N: \ket{n}\mapsto (-1)^{f(n)}\ket{n}. \]
-
-This can be constructed from the oracle
-\[ O_f: \mathcal{H}_N\otimes \mathcal{H}_2 \to \mathcal{H}_N\otimes \mathcal{H}_2: \ket{n}\otimes \ket{q}\mapsto \ket{n}\otimes\ket{f(n)\oplus q}, \]
-where $\oplus$ is addition modulo $2$, by preparing the qubit in the superposition $\frac{1}{\sqrt{2}}(\ket{0}-\ket{1})$. Then
-\begin{align*}
-O_f\left(\ket{n}\otimes \frac{1}{\sqrt{2}}(\ket{0}-\ket{1})\right)
-&= \ket{n}\otimes \frac{1}{\sqrt{2}}(\ket{f(n)}-\ket{f(n)\oplus 1}) \\
-&= (-1)^{f(n)}\ket{n}\otimes \frac{1}{\sqrt{2}}(\ket{0}-\ket{1}).
-\end{align*}
-
-The operator $U_f$ can also be written
-\[ U_f = \id_{\mathcal{H}_N} - 2\sum_{m\in\mathcal{M}}\ketbra{m}{m}. \]
+Classically we need to check $\Theta(N/M)$ items on average. Grover's algorithm has a query complexity of $O(\sqrt{N/M})$.
 
 \subsubsection{The algorithm}
-We construct the an initial state which is a superposition of all possible solutions
-\[ \ket{\mathcal{N}} = \frac{1}{\sqrt{N}}\sum_{n\in\mathcal{N}}\ket{n}. \]
-This can be prepared by applying a Hadamard gate $W$ to each qubit in the register.
+Define the states
+\[ \ket{\mathcal{N}} \defeq \frac{1}{\sqrt{N}}\sum_{n\in\mathcal{N}}\ketbra{n}{n}, \qquad\text{and}\qquad \ket{\mathcal{M}} \defeq \frac{1}{\sqrt{M}}\sum_{m\in\mathcal{M}}\ketbra{m}{m}. \]
 
-We also define the state
-\[ \ket{\mathcal{M}} = \frac{1}{\sqrt{M}}\sum_{m\in\mathcal{M}}\ket{m}. \]
+Using \ref{phaseUnitaryFromOracle}, construct the unitary $U_f = \id_{\mathcal{H}_N} - 2\sum_{m\in\mathcal{M}}\ketbra{m}{m}$. Also construct the Householder matrix
+\[ U = W^{\otimes\nu}(\id - 2\ketbra{0}{0})W^{\otimes\nu} = \id - \mathbb{J}_{2\times 2}^{\otimes\nu} = \id - \mathbb{J}_{2\nu\times 2\nu} = \id - 2\ketbra{\mathcal{N}}{\mathcal{N}}. \]
+(TODO Householder circuit).
 
-We define the operation
-\[ U_0 = W^{\otimes\nu}(\id - 2\ketbra{0}{0})W^{\otimes\nu}= \id - 2\ketbra{\mathcal{N}}{\mathcal{N}}. \]
-\[ U_0 = W^{\otimes\nu}(-Z)^{\otimes \nu}W^{\otimes\nu}= \id - 2\ketbra{\mathcal{N}}{\mathcal{N}}. \]
+Now consider the subspace $S \defeq \Span\{\ket{\mathcal{M}}, \ket{\mathcal{N}}\}$. We take an orthonormal basis $\{\ket{\mathcal{M}}, \ket{\mathcal{M}'}\}$ of $S$ where
+\[ \ket{\mathcal{M}'} \defeq \sqrt{\frac{N}{N-M}}\ket{\mathcal{N}} - \sqrt{\frac{M}{N-M}}\ket{\mathcal{M}} = \frac{1}{\sqrt{N-M}}\sum_{k\in \mathcal{N}\setminus\mathcal{M}}\ket{k}. \]
+Then we can write
+\[ \ket{\mathcal{N}} = \sqrt{\frac{N-M}{N}}\ket{\mathcal{M}'}+ \sqrt{\frac{M}{N}}\ket{\mathcal{M}} \]
+and (using $\id = \ketbra{\mathcal{M}}{\mathcal{M}} + \ketbra{\mathcal{M}'}{\mathcal{M}'}$)
+\begin{align*}
+U_f &= \id - 2 \ketbra{\mathcal{M}}{\mathcal{M}} = - \ketbra{\mathcal{M}}{\mathcal{M}} + \ketbra{\mathcal{M}'}{\mathcal{M}'} \\
+U &= \id - 2\left(\sqrt{\frac{N-M}{N}}\ket{\mathcal{M}'}+ \sqrt{\frac{M}{N}}\ket{\mathcal{M}}\right)\left(\sqrt{\frac{N-M}{N}}\bra{\mathcal{M}'}+ \sqrt{\frac{M}{N}}\bra{\mathcal{M}}\right) \\
+&= \frac{N-2M}{N}\ketbra{\mathcal{M}}{\mathcal{M}} + \frac{2M-N}{N}\ketbra{\mathcal{M}'}{\mathcal{M}'} - 2\left(\frac{\sqrt{M}\sqrt{N-M}}{N}\right)\big(\ketbra{\mathcal{M}}{\mathcal{M}'} +  \ketbra{\mathcal{M}'}{\mathcal{M}}\big)
+\end{align*}
+So $S$ is invariant under both $U$ and $U_f$ and we can write the matrix $G$ of $-UU_f$ in this basis:
+\[ G = \begin{pmatrix}
+1 - \frac{2M}{N} & -2 \frac{\sqrt{M}\sqrt{N-M}}{N} \\
+2 \frac{\sqrt{M}\sqrt{N-M}}{N} & 1 - \frac{2M}{N}
+\end{pmatrix}. \]
+We note that $1 - \frac{2M}{N}$ is some number between $-1$ and $1$, so we can write it as $\cos\alpha$. Then
+\[ \sin\alpha = \sqrt{1- \cos^2\alpha} = \sqrt{1 - \left(1-2 \frac{M}{N}\right)^2} = \sqrt{4 \frac{M}{N} - 4 \frac{M^2}{N^2}} = 2\sqrt{\frac{M}{N}}\sqrt{1- \frac{M}{N}} = 2 \frac{\sqrt{M}\sqrt{N-M}}{N}. \]
+Thus
+\[ G = \begin{pmatrix}
+\cos\alpha & -\sin\alpha \\
+\sin\alpha & \cos\alpha
+\end{pmatrix} = R_\alpha. \]
+We now want to apply $G$ a certain number of times, say $k$, such that
+\[ G^k\ket{\mathcal{N}} = G^k \begin{pmatrix}
+\sqrt{M/N} \\ \sqrt{1 - M/N}
+\end{pmatrix} = R_{k\alpha}R_{\tan^{-1}(\sqrt{N/M - 1})} \begin{pmatrix}
+1 \\ 0
+\end{pmatrix} \approx \begin{pmatrix}
+1 \\ 0
+\end{pmatrix} = \ket{\mathcal{M}}. \]
 
-Now $\Span\{\ket{\mathcal{N}}, \ket{\mathcal{M}}\}$ is invariant under both $U_0$ and $U_f$.
+TODO:
+\[ \sqrt{\frac{N}{M}} \approx T_k(\cos\alpha) - \sqrt{\frac{N}{M} - 1}U_{k-1}(\cos\alpha) \]
+or
+\[ 0 \approx \sqrt{\frac{N}{M}-1}T_k(\cos\alpha) + U_{k-1}(\cos\alpha)\sin\alpha \]
+and
+\[ (\cos\alpha + \sin\alpha)^k = T_k(\cos\alpha) + \sin\alpha U_{k-1}(\cos\alpha). \]
 
-\subsection{Analogue Grover}
+We also have $\cos\alpha + \sin\alpha = \frac{(\sqrt{N-M}-\sqrt{M})^2+2M}{N}$.
 
+\subsubsection{Analogue Grover}
+Consider the Hamiltonian $H = \ketbra{\mathcal{M}}{\mathcal{M}} + \ketbra{\mathcal{N}}{\mathcal{N}}$, which we can rewrite in terms of $\ket{\mathcal{M}}$ and $\ket{\mathcal{M}'}$:
+\[ H = \left(1 + \frac{M}{N}\right)\ketbra{\mathcal{M}}{\mathcal{M}} + \left(1 - \frac{M}{N}\right)\ketbra{\mathcal{M}'}{\mathcal{M}'} + \frac{\sqrt{M}\sqrt{N-M}}{M}\Big(\ketbra{\mathcal{M}}{\mathcal{M}'}+\ketbra{\mathcal{M}'}{\mathcal{M}}\Big), \]
+This operator is self-adjoint and leaves the subspace $S$ invariant, so $S$ has a basis of eigenvectors for it.
 
+By \zref{m-eigenvectorsGenerator}, all elements of $e^{-iHt}\ket{\mathcal{N}}$ lie in $S$. W.r.t.\ the basis $\{\ket{\mathcal{M}}, \ket{\mathcal{M}'}\}$, we have
+\[ e^{-iHt}\ket{\mathcal{N}} = \begin{pmatrix}
+\sqrt{M/N}\cos(\sqrt{M/N}t) - i\sin(\sqrt{M/N}t) \\ \sqrt{1- M/N}\cos(\sqrt{M/N}t)
+\end{pmatrix}. \]
+Thus $\braket[e^{-iHt}]{\mathcal{M}}{\mathcal{N}} = \frac{M}{N}\cos^2(\sqrt{M/N}t) + \sin^2(\sqrt{M/N}t)$. This is equal to 1 when $t = \frac{\pi}{2}\sqrt{\frac{N}{M}}$.
 
-\subsection{Adiabatic Grover}
+Thus we can produce $\ket{\mathcal{M}}$ in $O(\sqrt{N/M})$ time.
+
+TODO: optimality.
+
+\subsubsection{Adiabatic Grover}
 \[ H_0 = \vec{1} - \ketbra{\mathcal{N}}{\mathcal{N}} = \mathbb{1}-\mathbb{J}/N \]
 \[ H_f = \vec{1} - \sum_{m\in\mathcal{M}}\ketbra{m}{m} = \begin{pmatrix}
 0 & 0 \\ 0 & \mathbb{1}_{N-M}
