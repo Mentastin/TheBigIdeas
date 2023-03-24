@@ -2534,7 +2534,7 @@ Let $L$ be a lattice and $J\subseteq L$ a subset. Then
 \end{enumerate}
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma} \label{properFiltersSelfMesh}
 Let $S$ be a bounded $\wedge$-semilattice and $F\in\filters(S)$. Then $F$ is proper \textup{if and only if} $F\amesh F$.
 \end{lemma}
 \begin{proof}
@@ -2543,12 +2543,52 @@ Assume $F$ is proper and take $a, b\in F$. If $a\wedge b = \bot$, then $\bot\in 
 Now assume $F \amesh F$. Then $\bot \notin F$ (as $\bot$ does not mesh with any element of $F$), so $F$ is proper.
 \end{proof}
 
+\subsection{Image filters}
 \begin{lemma} \label{imageFilter}
 Let $\sSet{P,\Yleft_P}$, $\sSet{Q, \Yleft_Q}$ be ordered sets, $f: P\to Q$ an order-preserving function and $F\subseteq P$ a filter. Then $\upset f^{\imf}(F)$ is a filter.
 \end{lemma}
 \begin{proof}
 The set $\upset f^{\imf}(F)$ is downwards directed by \ref{imageDirectedSet}. It is upwards closed by construction.
 \end{proof}
+\begin{definition}
+We call $\upset f^\imf[F]$ the \udef{image filter} of $F$ under $f$.
+\end{definition}
+
+
+\begin{proposition} \label{filterResiduatedImageGaloisConnection}
+Let $P,Q$ be posets and $f: P\to Q$ a residuated function with residual $g: Q\to P$. Then
+\[ \upset\circ g^{\imf}: \filters(Q) \to \filters(P) \qquad\text{and}\qquad \upset\circ f^{\imf}: \filters(P) \to \filters(Q) \]
+form a Galois connection $(\upset\circ g^{\imf}, \upset\circ f^{\imf})$.
+\end{proposition}
+\begin{proof}
+We verify the Galois identity \ref{preorderGaloisIdentity}: take arbitrary $F\in \filters(Q), G\in \filters(P)$ and calculate (using \ref{functionImagePreimageGaloisConnection})
+\begin{align*}
+\upset g^{\imf}(F) \subseteq G &\iff g^\imf(F) \subseteq G \\
+&\iff \forall a\in F: \; g(a) \in G \\
+&\iff \forall a\in F: \exists b\in G: \; b \leq g(a) \\
+&\iff \forall a\in F: \exists b\in G: \; f(b) \leq a \\
+&\iff F \subseteq \upset f^{\imf}(G).
+\end{align*}
+\end{proof}
+\begin{corollary} \label{filterPreimageImageGaloisConnection}
+Let $X, Y$ be sets and $f: X\to Y$. Then
+\[ f^{\preimf\imf}: \powerfilters(Y) \to \powerfilters(X) \qquad\text{and}\qquad \upset\circ f^{\imf\imf}: \powerfilters(X) \to \powerfilters(Y) \]
+form a Galois connection $(\upset\circ f^{\preimf\imf}, \upset\circ f^{\imf\imf})$.
+\end{corollary}
+\begin{corollary} \label{imageFiltersPreservesIntersection}
+Let $X, Y$ be sets and $\mathcal{F}\subseteq\powerfilters(X)$. Let $f:X\to Y$ be a function. Then
+\[ \upset f^{\imf\imf}\Big[\bigcap \mathcal{F}\Big] = \bigcap (\upset\circ f^{\imf\imf})^{\imf}[\mathcal{F}]. \]
+In particular for $F,G\in \powerfilters(X)$, we have $\upset f^{\imf\imf}[F\cap G] = \upset f^{\imf\imf}[F] \cap \upset f^{\imf\imf}[G]$.
+\end{corollary}
+\begin{proof}
+Immediate from the proposition and \ref{GaloisConnectionLatticePreservation}.
+\end{proof}
+\begin{proof}[Alternate proof.]
+The inequality $\subseteq$ is given by \ref{orderPreservingFunctionLatticeOperations}.
+
+For the other inequality, take $A\in \bigcap (\upset\circ f^{\imf\imf})^{\imf}[\mathcal{F}]$. Then, for all $F\in\mathcal{F}$, there exists $B_F\in F$ such that $f^{\imf}[B_F] \subseteq A$. Now $f^{\imf}\left[\bigcup_{F\in\mathcal{F}}B_F\right] = \bigcup_{F\in\mathcal{F}}f^{\imf}[B_F] \subseteq A$. Also $\bigcup_{F\in\mathcal{F}}B_F \in \bigcap \mathcal{F}$ by upwards closure of each filter. Thus $A\in \upset f^{\imf\imf}[\bigcap \mathcal{F}]$.
+\end{proof}
+
 
 \subsection{Frink ideals}
 \begin{definition}
@@ -2663,7 +2703,7 @@ Let $L$ be a lattice and $F,G$ filters in $\filters(L)$. If $\mathcal{A}$ is a b
 \end{lemma}
 
 \begin{proposition} \label{joinProperFilter}
-Let $S$ be a $\wedge$-semilattice and $\{F_i\}_{i\in I} \in \filters(S)^I$ be set of filters. Then $\bigvee \{F_i\}_{i\in I}$ is a proper filter \textup{if and only if} $\{F_i\}_{i\in I}\amesh \{F_i\}_{i\in I}$.
+Let $S$ be a $\wedge$-semilattice and $\{F_i\}_{i\in I} \in \filters(S)^I$ be set of filters. Then $\bigvee \{F_i\}_{i\in I}$ is a proper filter \textup{if and only if} $\Big(\bigcup_{i\in I}F_i\Big)\amesh \Big(\bigcup_{i\in I}F_i\Big)$.
 \end{proposition}
 \begin{proof}
 TODO.
@@ -2816,6 +2856,8 @@ Let $L$ be a Boolean lattice and $F\subseteq L$ a subset. Then the following are
 TODO \ref{atomsJoinIrriducible} and \ref{BooleanUltrafilterDisjunction}
 \end{proof}
 
+TODO: compare with \ref{complementInIsotoneGrill}!
+
 \subsection{Free and principal filters}
 \begin{definition}
 Let $L$ be a complete lattice and $F\subseteq L$ a filter.
@@ -2829,8 +2871,13 @@ The set of principal filters in $P$ is denoted $\filters_*(P)$ and the set of fr
 The only filter that is both principal and free is $L$. A proper filter cannot be both principal and free.
 
 \begin{lemma}
-Let $L$ be a lattice and $F$ a principal filter in $L$. Then $F = \upset \{\ker F\}$.
+Let $L$ be a lattice and $F$ a filter in $L$. Then $F$ is principal \textup{if and only if} $F = \upset \{\ker F\}$.
 \end{lemma}
+\begin{proof}
+First assume $F$ is principal. Then $\upset \{\ker F\}\subseteq F$ by upwards closure. To show the other inclusion, take $a\in F$. Then $\ker(F)\leq a$ by definition, so $F = \upset \{\ker F\}$.
+
+The other direction is immediate.
+\end{proof}
 
 \begin{lemma} \label{kernelFilterBase}
 Let $L$ be a complete lattice, $F\in\filters(L)$ and $\mathcal{B}$ a base of $F$. Then $\ker(F) = \bigwedge \mathcal{B}$.
@@ -2864,13 +2911,23 @@ In particular, every ultrafilter is a principal ultrafilter.
 Every filter $F$ in a finite lattice is finite, so $\bigwedge F$ is a finite meet, and thus must be in $F$.
 \end{proof}
 
+\begin{proposition}
+Let $L$ be a lattice and $\mathcal{F}$ a set of filters. Then
+\begin{enumerate}
+\item $\ker\Big(\bigcap\mathcal{F}\Big) \geq \bigvee_{F\in\mathcal{F}} \ker(F)$;
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) As $\ker$ is order-reversing, we can apply \ref{orderPreservingFunctionLatticeOperations}. 
+\end{proof}
+
 \begin{proposition} \label{freePrincipalDecomposition}
 Let $L$ be a complete Boolean lattice and $F\subseteq L$ a filter. Then there exists a unique pair of filters $F_*$ and $F_0$ such that $F_*$ is principal, $F_0$ is free and
 \[ F = F_* \wedge F_0 \qquad L = F_* \vee F_0. \]
 These filters are given by
 \[ F_* = \upset\left\{\ker(F)\right\} \quad\text{and}\quad F_0 = F\vee \upset\left\{\overline{\ker(F)}\right\}.  \]
 \end{proposition}
-We call $F^*$ the \udef{principal part} and $F^0$ the \udef{free part} of the filter.
+We call $F_*$ the \udef{principal part} and $F_0$ the \udef{free part} of the filter.
 \begin{proof}
 We first verify that the given $F_*$ and $F_0$ satisfy the requirements of the decomposition.
 
@@ -3423,11 +3480,11 @@ We have
 \begin{align*}
 A\mesh f^\preimf(B) \iff& A\cap f^\preimf(B) \neq \emptyset \\
 \implies& f^{\preimf}\big(f^{\imf}(A)\big) \cap f^\preimf(B) \neq \emptyset \\
-\iff& f^{\preimf}\big(f^{\imf}(A) \cap f^\preimf(B)\big) \neq \emptyset \\
+\iff& f^{\preimf}\big(f^{\imf}(A) \cap B\big) \neq \emptyset \\
 \iff& f^{\imf}(A) \cap B \neq \emptyset \\
 \iff& f^{\imf}(A)\mesh B.
 \end{align*}
-For the opposite implication: $f^{\preimf}\big(f^{\imf}(A) \cap f^\preimf(B)\big) \neq \emptyset$ implies that there exists $x\in A$ such that $f(x) \in B$. Then $x\in \preimf(B)$, so $A\mesh f^\preimf(B)$.
+For the opposite implication: $f^{\imf}(A) \cap B \neq \emptyset$ implies that there exists $x\in A$ such that $f(x) \in B$. Then $x\in \preimf(B)$, so $A\mesh f^\preimf(B)$.
 \end{proof}
 \begin{corollary} \label{meshConnectionSetsOfSets}
 Let $f:X \to Y$ be a function between sets, $F \subseteq \powerset(X)$ and $G\subseteq \powerset(Y)$. Then
@@ -3445,9 +3502,12 @@ f^{\imf\imf}(F) \amesh G &\iff \forall A\in F, B\in G:\; f^{\imf}(A) \mesh B \\
 
 \subsection{Filters and ideals}
 
+Cfr. \ref{imageFilter}.
+
 \begin{proposition} \label{imageFilterProperties}
 Let $X, Y$ be sets, $f: X\to Y$ a function, $F\in\powerfilters(X)$ and $G\in\powerfilters(Y)$. Then
 \begin{enumerate}
+\item $f^{\preimf\imf}(G)$ is upwards closed; in particular $f^{\preimf\imf}(G)$ is a filter;
 \item if $F$ is proper, then $\upset f^{\imf\imf}[F]$ is proper;
 \item if $F$ is an ultrafilter, then $\upset f^{\imf\imf}[F]$ is also an ultrafilter;
 \item if $G$ is an ultrafilter in $\im(G)$ and $f$ is injective, then $f^{\preimf\imf}[G]$ is also an ultrafilter.
@@ -3470,40 +3530,6 @@ Let $X, Y$ be sets, $f: X\to Y$ an injective function and $F\in\powerfilters(X)$
 \end{corollary}
 \begin{proof}
 One direction was shown in (2) of the proposition. For the other, assume $\upset f^{\imf\imf}[F]$ is an ultrafilter. Then $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big]$ is ultra by point (3) of the proposition and because $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big] \subseteq F$, $F$ must also be ultra.  
-\end{proof}
-
-\begin{proposition}
-Let $f:X\to Y$ be a function between sets and $F\in \powerfilters(X)$ a filter. Then $\upset f[F]$ is a filter on $\powerset(Y)$. If $F$ is an ultrafilter on $\powerset(X)$, then $\upset f[F]$ is an ultrafilter on $\powerset(Y)$.
-\end{proposition}
-We call $\upset f[F]$ the \udef{image filter} of $F$ under $f$.
-
-
-\begin{proposition} \label{filterPreimageImageGaloisConnection}
-Let $X, Y$ be sets and $f: X\to Y$. Then
-\[ f^{\preimf\imf}: \powerfilters(Y) \to \powerfilters(X) \qquad\text{and}\qquad \upset\circ f^{\imf\imf}: \powerfilters(X) \to \powerfilters(Y) \]
-form a Galois connection $(f^{\preimf\imf}, \upset\circ f^{\imf\imf})$.
-\end{proposition}
-\begin{proof}
-We verify the Galois identity \ref{preorderGaloisIdentity}: take arbitrary $F\in \powerfilters(Y), G\in \powerfilters(X)$ and calculate (using \ref{functionImagePreimageGaloisConnection})
-\begin{align*}
-f^{\preimf\imf}(F) \subseteq G &\iff \forall A\in F: \; f^\preimf(A) \in G \\
-&\iff \forall A\in F: \exists B\in G: \; B \subseteq f^\preimf(A) \\
-&\iff \forall A\in F: \exists B\in G: \; f^{\imf}(B) \subseteq A \\
-&\iff F \subseteq \upset f^{\imf\imf}(G).
-\end{align*}
-\end{proof}
-\begin{corollary} \label{imageFiltersPreservesIntersection}
-Let $X, Y$ be sets and $\mathcal{F}\subseteq\powerfilters(X)$. Let $f:X\to Y$ be a function. Then
-\[ \upset f^{\imf\imf}\Big[\bigcap \mathcal{F}\Big] = \bigcap (\upset\circ f^{\imf\imf})^{\imf}[\mathcal{F}]. \]
-In particular for $F,G\in \powerfilters(X)$, we have $\upset f^{\imf\imf}[F\cap G] = \upset f^{\imf\imf}[F] \cap \upset f^{\imf\imf}[G]$.
-\end{corollary}
-\begin{proof}
-Immediate from the proposition and \ref{GaloisConnectionLatticePreservation}.
-\end{proof}
-\begin{proof}[Alternate proof.]
-The inequality $\subseteq$ is given by \ref{orderPreservingFunctionLatticeOperations}.
-
-For the other inequality, take $A\in \bigcap (\upset\circ f^{\imf\imf})^{\imf}[\mathcal{F}]$. Then, for all $F\in\mathcal{F}$, there exists $B_F\in F$ such that $f^{\imf}[B_F] \subseteq A$. Now $f^{\imf}\left[\bigcup_{F\in\mathcal{F}}B_F\right] = \bigcup_{F\in\mathcal{F}}f^{\imf}[B_F] \subseteq A$. Also $\bigcup_{F\in\mathcal{F}}B_F \in \bigcap \mathcal{F}$ by upwards closure of each filter. Thus $A\in \upset f^{\imf\imf}[\bigcap \mathcal{F}]$.
 \end{proof}
 
 \subsubsection{Cofinite filters}
@@ -3586,6 +3612,19 @@ This proposition assumes the ultrafilter lemma \ref{ultrafilterLemma}.
 \begin{proof}
 Consider the cofinite filter $F = \setbuilder{A\subseteq X}{X\setminus A\;\text{is finite}}$. By the ultrafilter lemma, \ref{ultrafilterLemma}, we can extend $F$ to an ultrafilter $\mathcal{U}$. Now $\mathcal{U}$ does not contain any sets of the form $\{x\}$ with $x\in X$. If it did, then it would contain both $\{x\}$ and $X\setminus\{x\}$, meaning it would also contain $\emptyset$ and thus would not be proper and in particular not an ultrafilter.
 \end{proof}
+
+\subsubsection{Covers}
+\begin{definition}
+Let $X$ be a set. A \udef{cover} of $X$ is a family of filters $\mathcal{F}\subseteq \powerfilters(X)$ such that $\bigcap \mathcal{F} = \{X\}$.
+\end{definition}
+
+\begin{lemma} \label{principalUltrafilterInCover}
+Let $X$ be a set and $\mathcal{F}$ a cover of $X$. Then for all $x\in X$ there exists $F\in \mathcal{F}$ such that $F\subseteq \pfilter{x}$.
+\end{lemma}
+\begin{proof}
+Because $\{x\}^c \notin \{X\} = \bigcap \mathcal{F}$, there must be $F\in \mathcal{F}$ such that $\{x\}^c \notin F$. Then $\{x\} \in F^\mesh$ by \ref{complementInIsotoneGrill}, so $x$ is in all elements of $F$, i.e. $F\subseteq \pfilter{x}$.
+\end{proof}
+Similar idea: the meet of a set of free filters is a least the cofinite filter $(X)_0$ by \ref{filterFreeIFFfinerThanCofinite}.
 
 \section{Multisets}
 \begin{definition}
