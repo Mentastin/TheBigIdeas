@@ -1071,7 +1071,7 @@ for every sequence $(E_n)$ in $\mathcal{B}$ of pairwise disjoint sets, we have
 
 \subsection{Outer measures}
 \begin{definition}
-Let $\Omega$ be a non-empty set. An \udef{outer measure} on $\Omega$ is a map $\nu: \powerset(\Omega)\to [0,\infty]$ satisfying
+Let $\Omega$ be a non-empty set. An \udef{outer measure} on $\Omega$ is a map $\nu: \powerset(\Omega)\to \overline{\R^+}$ satisfying
 \begin{itemize}
 \item $\nu(\emptyset) = 0$;
 \item if $E\subseteq F\subseteq \Omega$, then $\nu(E)\leq \nu(F)$;
@@ -1098,9 +1098,10 @@ The last inequality follows from the monotonicity of the outer measure.
 
 \subsubsection{Carathéodory measurability}
 \begin{definition}
-Let $\Omega$ be a set and $\rho: \powerset(\Omega)\to \overline{\R^+}$ a function. Then $A\subseteq \Omega$ is called \udef{Carathéodory measurable} w.r.t.\ $\rho$ if
+Let $\Omega$ be a set and $\rho: \powerset(\Omega)\to \overline{\R^+}$ a function. Then $A\subseteq \Omega$ is called \udef{(Carathéodory) measurable} w.r.t.\ $\rho$ if
 \[ \forall B\subseteq \Omega: \; \rho(B) = \rho(B\cap A) + \rho(B\cap A^c). \]
 \end{definition}
+Note that $A\subseteq \Omega$ is measurable if and only if $A^c$ is measurable.
 
 \begin{lemma}
 Let $\Omega$ be a set and $\rho: \powerset(\Omega)\to \overline{\R^+}$ a function. If $\rho(\emptyset) \neq 0$, then there exist no Carathéodory measurable sets.
@@ -1134,9 +1135,146 @@ and so $A$ is Carathéodory measurable by \ref{CaratheodoryMeasurableInequality}
 The case of $\nu(A^c) = 0$ is similar.
 \end{proof}
 
+\begin{lemma} \label{caratheodoryExtensionLemma}
+Let $\Omega$ be a set, $\rho: \powerset(\Omega) \to \overline{\R^+}$ a function and $\seq{A_i}_{i\in\N}$ a pairwise disjoint sequence of subsets of $\Omega$ that are Carathéodory measurable w.r.t.\ $\rho$. Then
+\[ \rho(B) = \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^nA_i^c)\big) \]
+for all $B\in \powerset(\Omega)$.
+\end{lemma}
+\begin{proof}
+The proof is by induction on $n$. The base case $n=0$ is just the Carathéodory measurability of $A_0$.
+
+For the induction step, we calculate
+\begin{align*}
+\rho(B) &= \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^nA_i^c)\big) \\
+&= \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^nA_i^c)\cap A_{n+1}\big) + \rho\big(B\cap (\bigcap_{i=0}^nA_i^c)\cap A_{n+1}^c\big) \\
+&= \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap A_{n+1}\big) + \rho\big(B\cap (\bigcap_{i=0}^{n+1}A_i^c)\big) \\
+&= \sum_{i=0}^{n+1}\rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^{n+1}A_i^c)\big).
+\end{align*}
+We conclude by induction.
+\end{proof}
+
+\begin{proposition} \label{caratheodoryMeasurableAlgebra}
+Let $\Omega$ be a set and $\rho: \powerset(\Omega) \to \overline{\R^+}$ a function such that $\rho(\emptyset) = 0$. Let $\mathcal{A}$ be the set of Carathéodory measurable subsets of $\Omega$. Then
+\begin{enumerate}
+\item $\mathcal{A}$ is an algebra;
+\item if $\rho$ is an outer measure, then $\mathcal{A}$ is a $\sigma$-algebra.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We use \ref{setAlgebraCriteria} the check that $\mathcal{A}$ is an algebra.
+\begin{itemize}
+\item For all $B\in \powerset(\Omega)$, we have
+\[ \rho(B) = \rho(B\cap \Omega) + 0 = \rho(B\cap \Omega) + \rho(\emptyset) = \rho(B\cap \Omega) + \rho(B\cap \Omega^c), \]
+so $\Omega\in \mathcal{A}$.
+\item Closure under complementation is clear as the definition of Carathéodory measurability is symmetric w.r.t.\ complementation.
+\item Assume $A_1,A_2 \in \mathcal{A}$. Take arbitrary $B\in\powerset(\Omega)$. Then
+\begin{align*}
+\rho(B) &= \rho(B\cap A_1) + \rho(B\cap A_1^c) \\
+&= \rho(B\cap A_1) + \rho(B\cap A_1^c\cap A_2) + \rho(B\cap A_1^c\cap A_2^c) \\
+&= \rho(B\cap A_1) + \rho(B\cap A_1^c\cap A_2) + m\big(B\cap (A_1\cup A_2)^c\big) \\
+&= \rho\big(B\cap (A_1\cup A_2)\cap A_1\big) + \rho\big(B\cap (A_1\cup A_2)\cap A_1^c\big) + \rho\big(B\cap (A_1\cup A_2)^c\big) \\
+&= \rho\big(B\cap (A_1\cup A_2)\big) + \rho\big(B\cap (A_1\cup A_2)^c\big),
+\end{align*}
+so $A_1\cup A_2\in \mathcal{A}$.
+\end{itemize}
+
+(2) To show $\mathcal{A}$ is a $\sigma$-algebra, it is enough to show closure under countable disjoint unions by \ref{conditionAlgebraIsSigmaAlgebra}. Let $\seq{A_n}$ be a sequence of pairwise disjoint sets in $\mathcal{A}$. 
+
+By \ref{caratheodoryExtensionLemma} and monotonicity, we have
+\[ \rho(B) \geq \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^\infty A_i^c)\big) \]
+for all $n\in \N$. Thus, taking the limit $n\to\infty$,
+\[ \rho(B) \geq \sum_{i=0}^\infty \rho(B\cap A_i) + \rho\Big(B\cap \big(\biguplus_{i=0}^\infty A_i\big)^c\Big) \geq \rho\Big(B\cap \big(\biguplus_{i=0}^\infty A_i\big)\Big) + \rho\Big(B\cap \big(\biguplus_{i=0}^\infty A_i\big)^c\Big), \]
+which is enough to prove the  Carathéodory measurability of $\biguplus_{i=0}^\infty A_i$ by \ref{CaratheodoryMeasurableInequality}.
+\end{proof}
+
+
+\subsubsection{Construction of outer measures}
+\begin{proposition} \label{outerMeasureConstruction}
+Let $\mathcal{X}$ be a family of subsets of $\Omega$ such that $\emptyset\in \mathcal{X}$ and let $\rho: \mathcal{X}\to \overline{\R^+}$ be a function such that $\rho(\emptyset) = 0$. Then
+\[ \rho^*: \powerset(\Omega) \to \overline{R^+}:\quad X\mapsto  \inf\setbuilder{\sum_{n\in\N}\rho(A_n)}{\big(\seq{A_n}_{n\in\N}\subseteq \mathcal{X}\big) \land \big(X\subseteq \bigcup_{n\in\N}A_n\big)} \]
+is an outer measure on $\Omega$.
+\begin{enumerate}
+\item If $\rho$ is a pre-measure, then $\rho(A) = \rho^*(A)$ for all $A\in\mathcal{X}$.
+\item If $\rho$ is a measure, then $\rho^*(X) = \inf\setbuilder{\rho(A)}{(A\in \mathcal{X}) \land (X\subseteq A)}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We first verify that $\rho^*$ is an outer measure.
+\begin{itemize}
+\item We have $\rho(\emptyset) = 0$, so $\rho^*(\emptyset)\leq 0$, but there is no element of $\overline{\R^+}$ smaller than $0$.
+\item Take $E\subseteq F\subseteq \Omega$. Then every cover of $F$ is a cover of $E$. So the least cover of $E$ is smaller than the least cover of $F$.
+\item Fix a sequence $\seq{E_n}$ in $\powerset(\Omega)$. Take some arbitrary $\epsilon > 0$. For each $E_n$, we can find some sequence $\seq{A_{n,k}}\subseteq \mathcal{X}$ such that $E_n\subseteq \bigcup_{k\in\N}A_{n,k}$ and $\sum_{k\in\N}\rho(A_{n,k}) \leq \rho^*(E_n) + \frac{\epsilon}{2^n}$.
+Now the countable set $\seq{A_{n,k}}_{n,k\in \N}$ is a cover of $\bigcup_{n\in\N}E_n$, so
+\[ \rho^*\Big(\bigcup_{n\in\N}E_n\Big) \leq \sum_{n,k\in\N}\rho(A_{n,k}) = \sum_{n\in\N}\sum_{k\in\N}\rho(A_{n,k}) \leq \sum_{n\in\N}\big(\rho^*(E_n)+ \frac{\epsilon}{2^n}\big) = 2\epsilon + \sum_{n\in\N}\rho^*(E_n), \]
+where we have used \ref{joinMeetUnion} and the fact that the infinite sums are suprema over finite sums.
+
+As the $\epsilon> 0$ was arbitrary, we have that
+\[ \rho^*\Big(\bigcup_{n\in\N}E_n\Big) \leq \sum_{n\in\N}\rho^*(E_n). \]
+\end{itemize}
+
+
+(1) Assume $\rho$ is a pre-measure and take $A\in\mathcal{X}$. By construction, $\rho^*(A) \leq \rho(A)$. 
+
+For the other inequality, take an arbitrary sequence $\seq{A_n}_{n\in\N}$ in $\mathcal{X}$ such that $A \subseteq \bigcup_{n\in\N}A_n$. Then
+\[ \sum_{n\in\N}\rho(A_n) \geq \sum_{n\in\N}\rho(A_n\cap A) \geq \rho\Big(\bigcup_{n\in\N}(A_n\cap A)\Big) = \rho(A), \]
+using monotonicity \ref{semiringPositiveContent} and subadditivity \ref{premeasureSubadditive}.
+
+(2) We calculate
+\begin{align*}
+\inf\setbuilder{\rho(A)}{(A\in \mathcal{X}) \land (X\subseteq A)} &\geq \inf\setbuilder{\sum_{n\in\N}\rho(A_n)}{\big(\seq{A_n}_{n\in\N}\subseteq \mathcal{X}\big) \land \big(X\subseteq \bigcup_{n\in\N}A_n\big)} \\
+&\geq \inf\setbuilder{\rho\Big(\bigcup_{n\in\N}A_n\Big)}{\big(\seq{A_n}_{n\in\N}\subseteq \mathcal{X}\big) \land \big(X\subseteq \bigcup_{n\in\N}A_n\big)} \\
+&\geq \inf\setbuilder{\rho(A)}{(A\in \mathcal{X}) \land (X\subseteq A)},
+\end{align*}
+where we have used first that $\rho(A)$ is a special case of the sum with just one term, next subadditivity of $\rho$ and finally the fact that $\mathcal{X}$ is a $\sigma$-algebra in this case, so $\bigcup_{n\in \N}A_n\in \mathcal{X}$ for all sequences $\seq{A_n}\in \mathcal{X}^\N$.
+\end{proof}
+
+\subsubsection{The extension theorem}
+\begin{proposition} \label{caratheodoryLemma}
+Let $\Omega$ be a set and $\rho: \powerset(\Omega) \to \overline{\R^+}$ a function such that $\rho(\emptyset) = 0$. Let $\mathcal{A}$ be the set of Carathéodory measurable subsets of $\Omega$. Then
+\begin{enumerate}
+\item $\rho|_{\mathcal{A}}$ is a complete content on the algebra $\mathcal{A}$;
+\item if $\rho$ is an outer measure, then $\rho|_{\mathcal{A}}$ is a complete measure.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have that $\mathcal{A}$ is an algebra by \ref{caratheodoryMeasurableAlgebra}. We just need to prove additivity. Take disjoint $A,B\in\mathcal{A}$. Then
+\begin{align*}
+\rho(A\uplus B) &= \rho\big((A\uplus B)\cap A\big) + \rho\big((A\uplus B)\cap A^c\big) \\
+&= \rho(A) + \rho(B).
+\end{align*}
+Completeness follows from \ref{nullSetsCaratheodoryMeasurable}.
+
+(2) In this case we have that $\mathcal{A}$ is a $\sigma$-algebra by \ref{caratheodoryMeasurableAlgebra}. The result follows straight from (1) and \ref{premeasureSubadditivityEquivalences}, because outer measures are $\sigma$-subadditive. 
+\end{proof}
+
+\begin{theorem}[Carathéodory-Fréchet-Hahn-Kolmogorov-Hopf extension theorem] \label{premeasureExtensionTheorem}
+Let $\mathcal{S}$ be a semi-ring on a set $\Omega$ and $\mu: \mathcal{S}\to \overline{\R^+}$ a pre-measure, then $\mu$ can be extended to a complete measure on $\sigma(\mathcal{S})$.
+\end{theorem}
+\begin{proof}
+We first construct the outer measure $\mu^*$ as in \ref{outerMeasureConstruction} and then restrict this to a complete measure as in \ref{caratheodoryLemma}. If we can prove that each $A\in \mathcal{S}$ is Carathéodory measurable, then the $\sigma$-algebra on which the measure is defined must contain $\sigma(\mathcal{S})$. In this case \ref{outerMeasureConstruction} gives $\mu^*(A) = \mu(A)$. Thus restricting the measure to $\sigma(\mathcal{S})$ gives the first result.
+
+We prove that each set in $\mathcal{S}$ is Carathéodory measurable. Take $A\in \mathcal{S}$. Pick an arbitrary $B\subseteq \Omega$ and fix some $\epsilon > 0$. Then we can find a sequence $\seq{B_n}_{n\in\N}$ in $\mathcal{S}$, that covers $B$, such that
+\[ \sum_{n\in\N}\mu(B_n) \leq \mu^*(B) + \epsilon. \]
+The sets $B_n\cap A$ are all in $\mathcal{S}$ and cover $B\cap A$. The sets $B_n\setminus A$ can be written as $B_n\setminus A = \biguplus_{k\in\N}D_{n,k}$, where $D_{n,k}\subseteq\mathcal{S}$ and only finitely many are non-empty.
+We have
+\begin{align*}
+\mu^*(B\cap A) &\leq \sum_{n\in\N}\mu(B_n\cap A) \\
+\mu^*(B\setminus A) &\leq \sum_{n,k\in\N} \mu(D_{n,k}).
+\end{align*}
+Then
+\[ \mu(B_n) = \mu\Big((B_n\cap A) \uplus \biguplus_{k\in\N}D_{n,k}\Big) = \mu(B_n\cap A) + \sum_{k\in \N}\mu(D_{n,k}),  \]
+by finite additivity (as there are only finitely many non-zero terms of the sum), and we get
+\begin{align*}
+\mu^*(B\cap A) + \mu^*(B\setminus A) &\leq \sum_{n\in\N}\mu(B_n\cap A) + \sum_{n,k\in\N} \mu(D_{n,k}) \\
+&= \sum_{n\in\N}\Big(\mu(B_n\cap A) + \sum_{k\in\N}\mu(D_{n,k})\Big) \\
+&= \sum_{n\in\N}\mu(B_n) \leq \mu^*(B) + \epsilon.
+\end{align*}
+As $\epsilon >0$ is arbitrary, we have $\mu^*(B) \geq \mu^*(B\cap A) + \mu^*(B\setminus A)$. By \ref{CaratheodoryMeasurableInequality}, this is enough to show the Carathéodory measurability of $A$.
+\end{proof}
+
 \subsubsection{Regular outer measures}
 \begin{definition}
-Let $\Omega$ be a non-empty set. An outer measure $\nu: \powerset(\Omega)\to \overline{\R^+}$ is called \udef{regular} if every set $A\subseteq \Omega$ is contained in a Carathéodory measurable set $B\subseteq \Omega$ such that $\nu(A) = \nu(B)$.
+Let $\Omega$ be a non-empty set. An outer measure $\nu: \powerset(\Omega)\to \overline{\R^+}$ is called \udef{regular} if for every set $A\subseteq \Omega$ there exists a Carathéodory measurable set $B\supseteq A$ such that $\nu(A) = \nu(B)$.
 \end{definition}
 
 \begin{proposition}
@@ -1166,132 +1304,44 @@ For $B$ we then have
 by monotonicity. By \ref{CaratheodoryMeasurableInequality}, this is enough to prove measurability of $A$. 
 \end{proof}
 
-\subsubsection{Construction of outer measures}
-\begin{proposition} \label{outerMeasureConstruction}
-Let $\mathcal{X}$ be a family of subsets of $\Omega$ such that $\emptyset\in \mathcal{X}$ and let $\rho: \mathcal{X}\to \overline{\R^+}$ be a function such that $\rho(\emptyset) = 0$. Then
-\[ \rho^*: \powerset(\Omega) \to \overline{R^+}:\quad X\mapsto  \inf\setbuilder{\sum_{n\in\N}\rho(A_n)}{\big(\seq{A_n}_{n\in\N}\subseteq \mathcal{X}\big) \land \big(X\subseteq \bigcup_{n\in\N}A_n\big)} \]
-is an outer measure on $\Omega$.
-
-If $\rho$ is a pre-measure, then $\rho(A) = \rho^*(A)$ for all $A\in\mathcal{X}$.
-\end{proposition}
-\begin{proof}
-We verify that $\rho^*$ is an outer measure.
-\begin{itemize}
-\item We have $\rho(\emptyset) = 0$, so $\rho^*(\emptyset)\leq 0$, but there is no element of $\overline{\R^+}$ smaller than $0$.
-\item Take $E\subseteq F\subseteq \Omega$. Then every cover of $F$ is a cover of $E$. So the least cover of $E$ is smaller than the least cover of $F$.
-\item Fix a sequence $\seq{E_n}$ in $\powerset(\Omega)$. Take some arbitrary $\epsilon > 0$. For each $E_n$, we can find some sequence $\seq{A_{n,k}}\subseteq \mathcal{X}$ such that $E_n\subseteq \bigcup_{k\in\N}A_{n,k}$ and $\sum_{k\in\N}\rho(A_{n,k}) \leq \rho^*(E_n) + \frac{\epsilon}{2^n}$.
-Now the countable set $\seq{A_{n,k}}_{n,k\in \N}$ is a cover of $\bigcup_{n\in\N}E_n$, so
-\[ \rho^*\Big(\bigcup_{n\in\N}E_n\Big) \leq \sum_{n,k\in\N}\rho(A_{n,k}) = \sum_{n\in\N}\sum_{k\in\N}\rho(A_{n,k}) \leq \sum_{n\in\N}\big(\rho^*(E_n)+ \frac{\epsilon}{2^n}\big) = 2\epsilon + \sum_{n\in\N}\rho^*(E_n), \]
-where we have used \ref{joinMeetUnion} and the fact that the infinite sums are suprema over finite sums.
-
-As the $\epsilon> 0$ was arbitrary, we have that
-\[ \rho^*\Big(\bigcup_{n\in\N}E_n\Big) \leq \sum_{n\in\N}\rho^*(E_n). \]
-\end{itemize}
-Finally, assume $\rho$ is a pre-measure and take $A\in\mathcal{X}$. By construction, $\rho^*(A) \leq \rho(A)$. 
-
-For the other inequality, take an arbitrary sequence $\seq{A_n}_{n\in\N}$ in $\mathcal{X}$ such that $A \subseteq \bigcup_{n\in\N}A_n$. Then
-\[ \sum_{n\in\N}\rho(A_n) \geq \sum_{n\in\N}\rho(A_n\cap A) \geq \rho\Big(\bigcup_{n\in\N}(A_n\cap A)\Big) = \rho(A), \]
-using monotonicity \ref{semiringPositiveContent} and subadditivity \ref{premeasureSubadditive}.
-\end{proof}
-
-
-\subsubsection{The extension theorem}
-\begin{lemma} \label{caratheodoryExtensionLemma}
-Let $\Omega$ be a set, $\rho: \powerset(\Omega) \to \overline{\R^+}$ a function and $\seq{A_i}_{i\in\N}$ a pairwise disjoint sequence of subsets of $\Omega$ that are Carathéodory measurable w.r.t.\ $\rho$. Then
-\[ \rho(B) = \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^nA_i^c)\big) \]
-for all $B\in \powerset(\Omega)$.
-\end{lemma}
-\begin{proof}
-The proof is by induction on $n$. The base case $n=0$ is just the Carathéodory measurability of $A_0$.
-
-For the induction step, we calculate
-\begin{align*}
-\rho(B) &= \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^nA_i^c)\big) \\
-&= \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^nA_i^c)\cap A_{n+1}\big) + \rho\big(B\cap (\bigcap_{i=0}^nA_i^c)\cap A_{n+1}^c\big) \\
-&= \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap A_{n+1}\big) + \rho\big(B\cap (\bigcap_{i=0}^{n+1}A_i^c)\big) \\
-&= \sum_{i=0}^{n+1}\rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^{n+1}A_i^c)\big).
-\end{align*}
-We conclude by induction.
-\end{proof}
-
-\begin{proposition} \label{caratheodoryLemma}
-Let $\Omega$ be a set and $\rho: \powerset(\Omega) \to \overline{\R^+}$ a function such that $\rho(\emptyset) = 0$. Let $\mathcal{A}$ be the set of Carathéodory measurable subsets of $\Omega$. Then
+\begin{proposition}
+Let $\Omega$ be a set, $\mathcal{S}$ a semi-ring on $\Omega$ and $\rho: \mathcal{S}\to\overline{\R^+}$ a premeasure. Let $\rho^*:\powerset(\Omega)\to \overline{\R^+}$ be the outer measure constructed in \ref{outerMeasureConstruction}. Then
 \begin{enumerate}
-\item $\mathcal{A}$ is an algebra;
-\item if $\rho$ is an outer measure, then $\mathcal{A}$ is a $\sigma$-algebra.
-\end{enumerate}
-Also,
-\begin{enumerate} \setcounter{enumi}{3}
-\item $\rho|_{\mathcal{A}}$ is a complete content;
-\item if $\rho$ is an outer measure, then $\rho|_{\mathcal{A}}$ is a complete measure.
+\item $\rho^*(X) = \inf\setbuilder{\rho^*(B)}{\text{$B\supseteq X$ is $\rho^*$-measurable}}$;
+\item $\rho^*$ is regular.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) We use \ref{setAlgebraCriteria} the check that $\mathcal{A}$ is an algebra.
-\begin{itemize}
-\item For all $B\in \powerset(\Omega)$, we have
-\[ \rho(B) = \rho(B\cap \Omega) + 0 = \rho(B\cap \Omega) + \rho(\emptyset) = \rho(B\cap \Omega) + \rho(B\cap \Omega^c), \]
-so $\Omega\in \mathcal{A}$.
-\item Closure under complementation is clear as the definition of Carathéodory measurability is symmetric w.r.t.\ complementation.
-\item Assume $A_1,A_2 \in \mathcal{A}$. Take arbitrary $B\in\powerset(\Omega)$. Then
+(1) We have $\rho^*(X) \leq \rho^*(B)$ for all $\rho^*$-measurable superset $B$ of $X$. Taking the infimum over the $B$s preserves the inequality, so $\rho^*(X) \leq \inf\setbuilder{\rho^*(B)}{\text{$B\supseteq X$ is $\rho^*$-measurable}}$. For the other inequality we calculate
 \begin{align*}
-\rho(B) &= \rho(B\cap A_1) + \rho(B\cap A_1^c) \\
-&= \rho(B\cap A_1) + \rho(B\cap A_1^c\cap A_2) + \rho(B\cap A_1^c\cap A_2^c) \\
-&= \rho(B\cap A_1) + \rho(B\cap A_1^c\cap A_2) + m\big(B\cap (A_1\cup A_2)^c\big) \\
-&= \rho\big(B\cap (A_1\cup A_2)\cap A_1\big) + \rho\big(B\cap (A_1\cup A_2)\cap A_1^c\big) + \rho\big(B\cap (A_1\cup A_2)^c\big) \\
-&= \rho\big(B\cap (A_1\cup A_2)\big) + \rho\big(B\cap (A_1\cup A_2)^c\big),
+\rho^*(X) &= \inf\setbuilder{\sum_{n\in\N}\rho(A_n)}{\big(\seq{A_n}_{n\in\N}\subseteq \mathcal{S}\big) \land \big(X\subseteq \bigcup_{n\in\N}A_n\big)} \\
+&\geq \inf\setbuilder{\rho\Big(\bigcup_{n\in \N}A_n\Big)}{\big(\seq{A_n}_{n\in\N}\subseteq \mathcal{S}\big) \land \big(X\subseteq \bigcup_{n\in\N}A_n\big)} \\
+&\geq \inf\setbuilder{\rho\Big(B\Big)}{\text{$B\supseteq X$ is $\rho^*$-measurable}},
 \end{align*}
-so $A_1\cup A_2\in \mathcal{A}$.
-\end{itemize}
+where we have used $\sigma$-subadditivity of the outer measure and the fact that all $A_n\in \mathcal{S}$ are $\rho^*$-measurable by \ref{premeasureExtensionTheorem}, so $\bigcup_{n\in \N}A_n$ is $\rho^*$-measurable by \ref{caratheodoryMeasurableAlgebra}.
 
-(2) To show $\mathcal{A}$ is a $\sigma$-algebra, it is enough to show closure under countable disjoint unions by \ref{conditionAlgebraIsSigmaAlgebra}. Let $\seq{A_n}$ be a sequence of pairwise disjoint sets in $\mathcal{A}$. 
+(2) Take an arbitrary $A\subseteq \Omega$. For all $n\in \N$, we can find $x_n\in \setbuilder{\rho^*(B)}{\text{$B\supseteq A$ is $\rho^*$-measurable}}$ such that $x_n \leq \rho^*(A) + \frac{1}{n}$. 
 
-By \ref{caratheodoryExtensionLemma} and monotonicity, we have
-\[ \rho(B) \geq \sum_{i=0}^n \rho(B\cap A_i) + \rho\big(B\cap (\bigcap_{i=0}^\infty A_i^c)\big) \]
-for all $n\in \N$. Thus, taking the limit $n\to\infty$,
-\[ \rho(B) \geq \sum_{i=0}^\infty \rho(B\cap A_i) + \rho\Big(B\cap \big(\biguplus_{i=0}^\infty A_i\big)^c\Big) \geq \rho\Big(B\cap \big(\biguplus_{i=0}^\infty A_i\big)\Big) + \rho\Big(B\cap \big(\biguplus_{i=0}^\infty A_i\big)^c\Big), \]
-which is enough to prove the  Carathéodory measurability of $\biguplus_{i=0}^\infty A_i$ by \ref{CaratheodoryMeasurableInequality}.
+Then we can find some sequence $\seq{B_n}$ of $\rho^*$-measurable supersets of $A$ such that $x_n = \rho^*(B_n)$.
 
-(3) We just need to prove additivity. Take disjoint $A,B\in\mathcal{A}$. Then
-\begin{align*}
-\rho(A\uplus B) &= \rho\big((A\uplus B)\cap A\big) + \rho\big((A\uplus B)\cap A^c\big) \\
-&= \rho(A) + \rho(B).
-\end{align*}
-Completeness follows from \ref{nullSetsCaratheodoryMeasurable}.
-
-(4) Follows straight from \ref{premeasureSubadditivityEquivalences} because outer measures are $\sigma$-subadditive. 
+We have that $\bigcap_{n\in\N}B_n$ is measurable by \ref{caratheodoryMeasurableAlgebra}. We claim that $\rho^*\Big(\bigcap_{n\in\N}B_n\Big) = \rho^*(A)$. Indeed $A \subseteq \bigcap_{n\in\N}B_n$ and \ref{orderPreservingFunctionLatticeOperations} imply
+\[ \rho^*\Big(\bigcap_{n\in\N}B_n\Big) \leq \inf_{n\in\N}\rho^*(B_n) = \inf_{n\in\N}\Big(\rho^*(A)+ \frac{1}{n}\Big) = \rho^*(A) \leq \rho^*\Big(\bigcap_{n\in\N}B_n\Big). \] 
+\end{proof}
+\begin{corollary}
+Let $\nu$ be an outer measure on $\Omega$. Then
+\[ \nu': \powerset(\Omega) \to \overline{R^+}:\quad X\mapsto  \inf\setbuilder{\nu(B)}{\text{$B\supseteq A$ is $\nu$-measurable}} \]
+is a regular outer measure.
+\end{corollary}
+This outer measure is called the \udef{regular outer measure associated to $\nu$}.
+\begin{proof}
+Let $\mathcal{A}$ be the $\sigma$-algebra (by \ref{caratheodoryMeasurableAlgebra}) of $\nu$-measurable sets. Then, because $\mathcal{A}$ is a $\sigma$-algebra, the function $\nu'$ is a the outer measure of \ref{outerMeasureConstruction} generated by the measure $\nu|_\mathcal{A}$.
 \end{proof}
 
-\begin{theorem}[Carathéodory-Fréchet-Hahn-Kolmogorov-Hopf extension theorem] \label{premeasureExtensionTheorem}
-Let $\mathcal{S}$ be a semi-ring on a set $\Omega$ and $\mu: \mathcal{S}\to \overline{\R^+}$ a pre-measure, then $\mu$ can be extended to a complete measure on $\sigma(\mathcal{S})$.
-\end{theorem}
+\begin{proposition}
+Regular outer measures preserve joins of countable chains.
+\end{proposition}
 \begin{proof}
-We first construct the outer measure $\mu^*$ as in \ref{outerMeasureConstruction} and then restrict this to a complete measure as in \ref{caratheodoryLemma}. If we can prove that each $A\in \mathcal{S}$ is Carathéodory measurable, then the $\sigma$-algebra on which the measure is defined must contain $\sigma(\mathcal{S})$. In this case \ref{outerMeasureConstruction} gives $\mu^*(A) = \mu(A)$. Thus restricting the measure to $\sigma(\mathcal{S})$ gives the first result.
-
-We prove that each set in $\mathcal{S}$ is Carathéodory measurable. Take $A\in \mathcal{S}$. Pick an arbitrary $B\subseteq \Omega$ and fix some $\epsilon > 0$. Then we can find a sequence $\seq{B_n}_{n\in\N}$ in $\mathcal{S}$, that covers $B$, such that
-\[ \sum_{n\in\N}\mu(B_n) \leq \mu^*(B) + \epsilon. \]
-The sets $B_n\cap A$ are all in $\mathcal{S}$ and cover $B\cap A$. The sets $B_n\setminus A$ can be written as $B_n\setminus A = \biguplus_{k\in\N}D_{n,k}$, where $D_{n,k}\subseteq\mathcal{S}$ and only finitely many are non-empty.
-We have
-\begin{align*}
-\mu^*(B\cap A) &\leq \sum_{n\in\N}\mu(B_n\cap A) \\
-\mu^*(B\setminus A) &\leq \sum_{n,k\in\N} \mu(D_{n,k}).
-\end{align*}
-Then
-\[ \mu(B_n) = \mu\Big((B_n\cap A) \uplus \biguplus_{k\in\N}D_{n,k}\Big) = \mu(B_n\cap A) + \sum_{k\in \N}\mu(D_{n,k}),  \]
-by finite additivity (as there are only finitely many non-zero terms of the sum), and we get
-\begin{align*}
-\mu^*(B\cap A) + \mu^*(B\setminus A) &\leq \sum_{n\in\N}\mu(B_n\cap A) + \sum_{n,k\in\N} \mu(D_{n,k}) \\
-&= \sum_{n\in\N}\Big(\mu(B_n\cap A) + \sum_{k\in\N}\mu(D_{n,k})\Big) \\
-&= \sum_{n\in\N}\mu(B_n) \leq \mu^*(B) + \epsilon.
-\end{align*}
-As $\epsilon >0$ is arbitrary, we have $\mu^*(B) \geq \mu^*(B\cap A) + \mu^*(B\setminus A)$. By \ref{CaratheodoryMeasurableInequality}, this is enough to show the Carathéodory measurability of $A$.
-\end{proof}
-
-\begin{lemma}
-The outer measure constructed in \ref{outerMeasureConstruction} is regular.
-\end{lemma}
-\begin{proof}
-TODO
+Let $\nu$ be a regular outer measure and $\seq{A_n}_{n\in\N}$ a monotonically growing sequence of sets. Then we can find a sequence $\seq{B_n}$ such that $\nu(A_n) = \nu(B_n)$ for all $n\in\N$. 
 \end{proof}
 
 \subsection{Constructions}
@@ -2102,6 +2152,57 @@ TODO Young's convolution inequality
 \section{Duality in integration}
 Distributions with kernels will be example.
 
+
+
+\chapter{Analysis on metric spaces}
+\begin{definition}
+A \udef{metric measure space} is a structured set $\sSet{X, d, \mu}$ such that $d$ is a metric on $X$ and $\mu$ is a Borel measure on $\sSet{X,d}$.
+\end{definition}
+\section{Doubling measures and differentiation}
+\subsection{Doubling measures}
+
+\subsection{Covering theorems}
+\subsubsection{Vitali spaces}
+\begin{definition}
+Let $\sSet{X,d,\mu}$ be a metric measure space. A \udef{Vitali covering} of $E\subseteq X$ is a set $\mathcal{C}\subseteq \powerset(X)$ such that 
+\[ \forall x\in E: \forall \delta >0: \exists C\in \mathcal{C}: \; (x\in C) \land \big(\diam(C) \leq \delta\big). \]
+TODO
+\end{definition}
+
+\subsubsection{Directionally limited spaces}
+
+
+\section{Maximal functions and differentiation}
+\subsection{The Hardy-Littlewood maximal operator}
+\begin{definition}
+Let $\sSet{X,d}$ be a metric space equipped with a Borel measure $\mu$. The \udef{Hardy-Littlewood maximal operator} $\HLmax$ maps a function $f: X\to \R^+$ to the function $\HLmax(f): X\to \overline{\R^+}$ defined by
+\[ \HLmax(f)(x) = \sup_{\delta >0}\frac{1}{\mu\big(\ball(x,\delta)\big)}\int_{\ball(x,\delta)} f \diff{\mu}. \]
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,d}$ be a metric space equipped with a Borel measure $\mu$ and $f: X\to \R^+$ some function. Then
+\begin{enumerate}
+\item if $\HLmax(f)$ is integrable, then $f = 0$ a.e.;
+\item if $\HLmax(f)(x) = 0$ for some $x\in X$, then $f=0$ a.e. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO!
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,d}$ be a metric space equipped with a Borel regular doubling measure $\mu$ with doubling function $D$, $f: X\to \R^+$ some function, $\epsilon > 0$ and $\alpha > 0$. Then
+\[ \mu\{\HLmax(f) > \alpha\} \leq \frac{D(3+\epsilon)}{\alpha}\int_{\{\HLmax(f) > \alpha\}}f\diff{\mu}. \]
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+\begin{corollary}
+
+\end{corollary}
+
+
+
 \chapter{Real Analysis}
 Dual numbers
 
@@ -2258,7 +2359,7 @@ Let $p,q\in \R$ be such that $p>0, q>0$ and $p^{-1} + q^{-1} = 1$. Then for all 
 Equality holds \textup{if and only if} $b = a^{p-1}$.
 \end{theorem}
 \begin{proof}[Proof using convexity of exponentiation]
-If either $a=0$ or $b =0$, then the result is immediate. Now assume $a>0$ nad $b>0$. Then
+If either $a=0$ or $b =0$, then the result is immediate. Now assume $a>0$ and $b>0$. Then
 \begin{align*}
 ab &= e^{\ln(ab)} \\
 &= e^{\ln(a)+\ln(b)} \\
@@ -2293,12 +2394,6 @@ TODO picture.
 We clearly have equality iff $a^{p-1} = b$.
 \end{proof}
 
-\section{Maximal functions and differentiation}
-\subsection{The Hardy-Littlewood maximal operator}
-\begin{definition}
-Let $f$ be a locally integrable function on $\R^n$. The function $\HLmax(f): \R^n\to \overline{\R^+}$ defined by
-\[ \HLmax(f)(x) = \sup \]
-\end{definition}
 
 
 

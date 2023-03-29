@@ -1255,102 +1255,6 @@ TODO
 \end{proof}
 
 
-\chapter{Evolution equations}
-\section{Evolution families}
-\begin{definition}
-A function $U: \{t\geq s\}\to \Bounded(X)$ is called a \udef{(strongly continuous) evolution family} if
-\begin{itemize}
-\item $U(t,s) = U(t,r)U(r,s)$ and $U(s,s) = \id_X$;
-\item it is strongly continuous.
-\end{itemize}
-Evolution families are also called \udef{evolution systems}, \udef{evolution operators},
-\udef{evolution processes}, \udef{propagators} or \udef{fundamental solutions}.
-\end{definition}
-
-\subsection{Growth bounds}
-\begin{definition}
-Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on $X$. We call $U$ \udef{exponentially bounded} if there exist $w\in\R$ and $M\geq 1$ such that
-\[ \forall t\geq s:\quad \norm{U(t,s)} \leq M e^{w(t-s)}. \]
-We call
-\[ w_0 = \inf\setbuilder{w\in \R}{\exists M_w \geq 1: \forall t\geq s:\; \norm{U(t,s)} \leq M_w e^{w(t-s)} } \]
-the \udef{growth bound} of the evolution family.
-\end{definition}
-Clearly $U$ is exponentially bounded if and only if $w_0 < \infty$.
-
-\begin{example}
-There exist evolution families that are not exponentially bounded. Take $X = \C$ and $U(t,s) = e^{t^2 - s^2}$. This is an evolution family because, for $t\geq r\geq s$,
-\[ U(t,s) = e^{t^2 - s^2} = e^{t^2 - r^2 + r^2 - s^2} = e^{t^2 - r^2}e^{r^2 - s^2} = U(t,r)U(r,s). \]
-It is also clearly not exponentially bounded because $e^{t^2 - s^2} = e^{(t+s)(t-s)}$.
-\end{example}
-
-\begin{proposition}
-Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on $X$ with growth bound $w_0$. Then
-\begin{enumerate}
-\item if there exist $M\geq 0, t_0>0$ such that
-\[ \forall s\in\R: \forall 0\leq t \leq t_0: \quad \norm{U(s+t, s)}\leq M, \]
-then $w_0\leq \frac{\ln(M_1)}{t_1}$;
-\item if $U$ is exponentially bounded, it is enough to check $\norm{U(s+t_0, s)}\leq M$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Pick $s\leq t \in \R$. We can find $n\in \N$ and $u\leq t_0$ such that $t-s = nt_0 + u$. Then $n\leq \frac{t-s}{t_0}$. WLOG we may assume $M\geq 1$. We calculate
-\begin{align*}
-\norm{U(t,s)} &= \norm{U(s+(t-s), s)} \\
-&= \norm{U(s+nt_0 + u, s)} \\
-&\leq \norm{U(s+nt_0 + u, s+nt_0)}\;\norm{U(s+nt_0, s)} \\
-&\leq M\;M^n \\
-&\leq M\;M^{\frac{t-s}{t_0}} \\
-&= M\;e^{\ln(M)t_0^{-1}(t-s)}.
-\end{align*}
-
-(2) Assume $\norm{U(t,s)} \leq M' e^{w'(t-s)}$ and cosider the proof in (1). We just need to be able to estimate $\norm{U(s+nt_0 + u, s+nt_0)}$ by some constant. We may take $M' e^{w't_0}$.
-\end{proof}
-
-\section{Evolution semigroups}
-\begin{definition}
-Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on a Banach space $X$. The associated \udef{evolution semigroup} is a semigroup
-\[ T: \R^{\geq 0} \to \sSet{\cont(\R, X), \norm{\cdot}_\infty} \]
-defined by
-\[ \big(T(t)f\big)(s) \defeq U(s,s-t)f(s-t), \]
-for all $s\in R$, $t\in\R^{\geq 0}$ and $f\in \sSet{\cont(\R, X), \norm{\cdot}_\infty}$.
-\end{definition}
-
-Note that the mapping of evolution families to evolution semigroups is injective.
-
-\begin{lemma}
-Evolution semigroups are semigroups. If the evolution family is exponentially bounded, then the evolution semigroup is strongly continuous.
-\end{lemma}
-\begin{proof}
-The semigroup property is immediate: we have $\big(T(0)f\big)(s) = U(s,s)f(s) = f(s)$, so $T(0) = \id_{\cont(\R,X)}$. Also
-\begin{align*}
-\big(T(t_1+t_2)f\big)(s) &= U(s,s-t_1-t_2)f(s-t_1-t_2) \\
-&= U(s,s-t_1)U(s-t_1,s-t_1-t_2)f(s-t_1-t_2) \\
-&= U(s,s-t_1)\big(T(t_2)f\big)(s-t_1) \\
-&= \Big(T(t_1)\big(T(t_2)f\big)\Big)(s).
-\end{align*}
-
-
-For strong continuity TODO pointwise continuity implies uniform continuity on compact sets ???
-\end{proof}
-
-\begin{proposition}
-Let $T$ be a strongly continuous semigroup on $E = cont(\R,X)$ with generator $G$. Then the following are equivalent:
-\begin{enumerate}
-\item $T$ is an evolution semigroup;
-\item TODO
-\end{enumerate}
-\end{proposition}
-
-\section{Solving nACP}
-\begin{proposition}
-Let $X$ be a Banach space and $A: \R\to \Bounded(X)$ a continuous function. Consider
-\[ U: \R\to \Bounded(X): t\mapsto \lim_{n\to\infty}\prod_{k=1}^ne^{\frac{t}{n}A\left(\frac{kt}{n}\right)}, \]
-where the limit is taken in the strong operator topology and is uniform for $t$ in compact intervals. This limit exists for all $t$ and
-\[ \dod{U(t)x}{t} = A(t)x \]
-\end{proposition}
-\begin{proof}
-
-\end{proof}
 
 \chapter{Operator equations}
 Linear Operator Equations: Approximation and Regularization
@@ -1452,13 +1356,170 @@ These functions are exactly the functions in the kernel of the boundary operator
 \subsection{Periodic boundary conditions}
 TODO
 
-\section{Linear dynamical systems}
+\section{Cauchy problems}
+\subsection{Homogeneous Cauchy problems}
+\begin{definition}
+Let $X$ be a Banach space, $A$ an operator on $X$ and $x\in X$. The operator equation
+\[ \begin{cases}
+\od{u(t)}{t} = Au(t) \\ u(0) = x
+\end{cases} \]
+is called the \udef{abstract Cauchy problem} associated to $A$ with \udef{initial value} $x$.
+
+A \udef{(classical) solution} of the Cauchy problem is a function $u\in \cont^1(\R^+, \dom(A))$ such that the operator equation holds.
+
+A \udef{mild solution} of the Cauchy problem is a function $u\in \cont^1(\R^+, X)$ such that $\int_0^tu(s)\diff{s} \in \dom(A)$ for all $t\geq 0$ and
+\[ u(t) = A\int_0^tu(s)\diff{s} + x. \]
+\end{definition}
+
+\begin{lemma}
+A classical solution to an abstract Cauchy problem is also a mild solution.
+\end{lemma}
+\begin{proof}
+Assume $u$ is a classical solution with $\od{u(t)}{t} = Au(t)$ and $u(0) = x$. Then we integrate using TODO ref Lebesgue fundamental theorem of calculus + TODO ref bounded operator commutes with integral.
+\[ \int \]
+\end{proof}
+
+\begin{proposition}
+Let $A$ be the generator of a strongly continuous semigroup $T: \R^+\to \Bounded(X)$ on a Banach space $X$. Then, for all initial values $x\in X$, the abstract Cauchy problem
+\[ \begin{cases}
+\od{u(t)}{t} = Au(t) \\ u(0) = x
+\end{cases} \]
+has a unique mild solution given by the orbit map
+\[ u: t\mapsto T(t)x. \]
+\end{proposition}
+\begin{proof}
+The fact that the orbit maps are mild solutions is given by \ref{integralOperatorSemigroupGenerator}.
+
+We now show that the mild solutions are unique. By linearity, it is enough to consider the initial value $x=0$ and show that the only mild solution is $u(t) = 0$.
+
+Take a mild solution $u$ and fix $t >0$. Using \ref{differentialOperatorSemigroupGenerator}, we obtain, $\forall s\in\interval[o]{0,t}$,
+\begin{align*}
+\od{}{s}\left(T(t-s)\int_0^su(r)\diff{r}\right) &= T(t-s)u(s) - T(t-s)A\int_0^su(r)\diff{r} \\
+&= T(t-s)\left(u(s) - A\int_0^su(r)\diff{r}\right) \\
+&= T(t-s)0 = 0.
+\end{align*}
+Integrating from $0$ to $t$ gives
+\[ 0 = T(0)\int_0^tu(r)\diff{r} = \int_0^tu(r)\diff{r}, \]
+so $u(t) = 0$ (TODO ref).
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a closed operator on a Banach space $X$. The associated Cauchy problem is well-posed \textup{if and only if} $A$ generates a strongly continuous semigroup on $X$. The solutions are given by orbit maps.
+\end{proposition}
+Recall ``well-posed = existence + uniqueness + continuous dependence on boundary conditions''.
+In this case  ``exitence'' should hold for all initial points in $\dom(A)$ and ``continuous dependence on boundary conditions'' means that the map $X\to \cont^1(\R^+, X): x\mapsto u$ that maps initial conditions to the unique solution is continuous when $\cont^1(\R^+, X)$ is equipped with the continuous convergence.
+\begin{proof}
+$\boxed{\Rightarrow}$
 
 
+$\boxed{\Leftarrow}$ It is clear that the orbit maps are solutions. 
+\end{proof}
 
-\section{Approximating well-posed problems}
-\section{Regularising ill-posed problems}
-\section{Regularised approximation methods}
+TODO: existence and uniqueness enough for strongly continuous semigroup generated by $A_1$ on $X_1$. See II.6.6 in [EN00].
+
+\subsection{Non-homogeneous Cauchy problems}
+
+
+\subsection{Evolution equations}
+\begin{definition}
+A function $U: \{t\geq s\}\to \Bounded(X)$ is called a \udef{(strongly continuous) evolution family} if
+\begin{itemize}
+\item $U(t,s) = U(t,r)U(r,s)$ and $U(s,s) = \id_X$;
+\item it is strongly continuous.
+\end{itemize}
+Evolution families are also called \udef{evolution systems}, \udef{evolution operators},
+\udef{evolution processes}, \udef{propagators} or \udef{fundamental solutions}.
+\end{definition}
+
+\subsubsection{Growth bounds}
+\begin{definition}
+Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on $X$. We call $U$ \udef{exponentially bounded} if there exist $w\in\R$ and $M\geq 1$ such that
+\[ \forall t\geq s:\quad \norm{U(t,s)} \leq M e^{w(t-s)}. \]
+We call
+\[ w_0 = \inf\setbuilder{w\in \R}{\exists M_w \geq 1: \forall t\geq s:\; \norm{U(t,s)} \leq M_w e^{w(t-s)} } \]
+the \udef{growth bound} of the evolution family.
+\end{definition}
+Clearly $U$ is exponentially bounded if and only if $w_0 < \infty$.
+
+\begin{example}
+There exist evolution families that are not exponentially bounded. Take $X = \C$ and $U(t,s) = e^{t^2 - s^2}$. This is an evolution family because, for $t\geq r\geq s$,
+\[ U(t,s) = e^{t^2 - s^2} = e^{t^2 - r^2 + r^2 - s^2} = e^{t^2 - r^2}e^{r^2 - s^2} = U(t,r)U(r,s). \]
+It is also clearly not exponentially bounded because $e^{t^2 - s^2} = e^{(t+s)(t-s)}$.
+\end{example}
+
+\begin{proposition}
+Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on $X$ with growth bound $w_0$. Then
+\begin{enumerate}
+\item if there exist $M\geq 0, t_0>0$ such that
+\[ \forall s\in\R: \forall 0\leq t \leq t_0: \quad \norm{U(s+t, s)}\leq M, \]
+then $w_0\leq \frac{\ln(M_1)}{t_1}$;
+\item if $U$ is exponentially bounded, it is enough to check $\norm{U(s+t_0, s)}\leq M$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Pick $s\leq t \in \R$. We can find $n\in \N$ and $u\leq t_0$ such that $t-s = nt_0 + u$. Then $n\leq \frac{t-s}{t_0}$. WLOG we may assume $M\geq 1$. We calculate
+\begin{align*}
+\norm{U(t,s)} &= \norm{U(s+(t-s), s)} \\
+&= \norm{U(s+nt_0 + u, s)} \\
+&\leq \norm{U(s+nt_0 + u, s+nt_0)}\;\norm{U(s+nt_0, s)} \\
+&\leq M\;M^n \\
+&\leq M\;M^{\frac{t-s}{t_0}} \\
+&= M\;e^{\ln(M)t_0^{-1}(t-s)}.
+\end{align*}
+
+(2) Assume $\norm{U(t,s)} \leq M' e^{w'(t-s)}$ and cosider the proof in (1). We just need to be able to estimate $\norm{U(s+nt_0 + u, s+nt_0)}$ by some constant. We may take $M' e^{w't_0}$.
+\end{proof}
+
+\subsubsection{Evolution semigroups}
+\begin{definition}
+Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on a Banach space $X$. The associated \udef{evolution semigroup} is a semigroup
+\[ T: \R^{\geq 0} \to \sSet{\cont(\R, X), \norm{\cdot}_\infty} \]
+defined by
+\[ \big(T(t)f\big)(s) \defeq U(s,s-t)f(s-t), \]
+for all $s\in R$, $t\in\R^{\geq 0}$ and $f\in \sSet{\cont(\R, X), \norm{\cdot}_\infty}$.
+\end{definition}
+
+Note that the mapping of evolution families to evolution semigroups is injective.
+
+\begin{lemma}
+Evolution semigroups are semigroups. If the evolution family is exponentially bounded, then the evolution semigroup is strongly continuous.
+\end{lemma}
+\begin{proof}
+The semigroup property is immediate: we have $\big(T(0)f\big)(s) = U(s,s)f(s) = f(s)$, so $T(0) = \id_{\cont(\R,X)}$. Also
+\begin{align*}
+\big(T(t_1+t_2)f\big)(s) &= U(s,s-t_1-t_2)f(s-t_1-t_2) \\
+&= U(s,s-t_1)U(s-t_1,s-t_1-t_2)f(s-t_1-t_2) \\
+&= U(s,s-t_1)\big(T(t_2)f\big)(s-t_1) \\
+&= \Big(T(t_1)\big(T(t_2)f\big)\Big)(s).
+\end{align*}
+
+
+For strong continuity TODO pointwise continuity implies uniform continuity on compact sets ???
+\end{proof}
+
+\begin{proposition}
+Let $T$ be a strongly continuous semigroup on $E = cont(\R,X)$ with generator $G$. Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is an evolution semigroup;
+\item TODO
+\end{enumerate}
+\end{proposition}
+
+\subsubsection{Solving nACP}
+\begin{proposition}
+Let $X$ be a Banach space and $A: \R\to \Bounded(X)$ a continuous function. Consider
+\[ U: \R\to \Bounded(X): t\mapsto \lim_{n\to\infty}\prod_{k=1}^ne^{\frac{t}{n}A\left(\frac{kt}{n}\right)}, \]
+where the limit is taken in the strong operator topology and is uniform for $t$ in compact intervals. This limit exists for all $t$ and
+\[ \dod{U(t)x}{t} = A(t)x \]
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+
+\section{Regularising problems}
+\subsection{Regularising ill-posed problems}
+\subsection{Regularised approximation methods}
 
 
 \chapter{Ordinary differential equations}
