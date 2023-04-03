@@ -1,0 +1,1849 @@
+\chapter{Uniform convergence}
+\section{Uniformities}
+\subsection{Operations on filters}
+\begin{definition}
+Let $X$ be a set, $x\in X$ and $F,G\in\powerfilters(X^2)$. We define
+\begin{enumerate}
+\item $F^{\transp} \defeq \setbuilder{A^\transp}{A\in F}$;
+\item $Fx \defeq \setbuilder{Ax}{A\in F}$;
+\item $F;G \defeq \upset \setbuilder{A;B}{A\in F, B\in G}$.
+\end{enumerate}
+We call a filter $H\in\powerfilters(X^2)$ \udef{diagonal} if $H\subseteq \upset \{\id_X\}$.
+\end{definition}
+
+We have $F^{\transp} = t^{\imf\imf}[F]$ where $t: X^2 \to X^2: (x,y)\mapsto (y,x)$.
+
+TODO Galois connection $\powerfilters(X^2) \leftrightarrow \powerfilters(X)^2$.
+
+\begin{lemma} \label{filterOperationsOnRelationFilters}
+Let $X$ be a set, $x\in X$ and $F,G\in\powerfilters(X^2)$. Then
+\begin{enumerate}
+\item $F^\transp$, $Fx$ and $F;G$ are filters;
+\item $F^\transp$ is proper \textup{if and only if} $F^\transp$ is proper;
+\item $F;G$ is proper \textup{if and only if} $p_2^{\imf\imf}[F]\amesh p_1^{\imf\imf}[G]$;
+\item $Fx$ is proper \textup{if and only if} $x\in\ker\big(p_2^{\imf\imf}(F)\big)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have that $(-)^\transp:\powerset(X^2)\to\powerset(X^2)$ is an order similarity. 
+
+Next we show that $F;G$ is closed under finite intersections: take $A,B\in F$ and $C,D\in G$. Then we have $A;C \supseteq (A\cap B);(C\cap D)$ and $B;D \supseteq (A\cap B);(C\cap D)$, so $A;C \cap B;D \supseteq (A\cap B);(C\cap D) \in F;G$. Thus $A;C \cap B;D\in F;G$ by upwards closure.
+
+First, it is clear that $Fx$ is upwards closed: take $Ax\in Fx$. Then for all $B\supseteq Ax$, we have $B = \big((B\times\{x\})\cup A\big)x$, so $B\in Fx$.
+
+Finally, to show closure under finite intersections, take $Ax, Bx\in F$. Then $Ax\cap Bx \supseteq (A\cap B)x \in Fx$ by \ref{orderPreservingFunctionLatticeOperations}.
+
+(2) Immediate from the order similarity $(-)^\transp:\powerset(X^2)\to\powerset(X^2)$.
+
+(3) We have $F;G = \powerset(X^2)$ iff there exist $A\in F,B\in G$ such that $A;B = \emptyset$. This is equivalent to $p_2^{\imf}[A]\perp p_1^{\imf}[B]$.
+
+Thus $F;G \neq \powerset(X^2)$ is equivalent to $p_2^{\imf}[A]\mesh p_1^{\imf}[B]$ for all $A\in F$ and $B\in G$, i.e.\ $p_2^{\imf\imf}[F]\amesh p_1^{\imf\imf}[G]$.
+
+(4) We have, for all $A\in F$, that $Ax = \emptyset$ iff $x\notin p_2^\imf(A)$. Thus $Fx$ is proper iff $x\in p_2^\imf(A)$ for all $A\in F$ iff $x\in \ker\big(p_2^{\imf\imf}(F)\big)$.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a set and $F\in\powerfilters(X)$ a filter. Then the function $F\otimes -$ preserves joins.
+\end{proposition}
+\begin{proof}
+We have $F\otimes G = \bigvee_{A\in F}\{A\}\times^{\imf}G$. The result follows from \ref{joinResiduatedMaps} and \ref{filterResiduatedImageGaloisConnection}.
+\end{proof}
+
+\begin{proposition} \label{filterCompositionResidual}
+Let $X$ be a set and $H\in\powerfilters(X^2)$ a filter. Then the function $H;-: \powerfilters(X^2) \to \powerfilters(X^2)$ preserves finite intersections.
+\end{proposition}
+\begin{proof}
+Let $\mathcal{F}\subseteq \powerfilters(X^2)$ be a finite set of filters. Then we calculate, using \ref{baseMeetJoinFilters},
+\begin{align*}
+\Big(\bigcap \mathcal{F}\Big); H &= \upset\setbuilder{A;B}{A\in \bigcap \mathcal{F}, B\in H} \\
+&= \upset\setbuilder{\Big(\bigcup_{F\in \mathcal{F}}A_F\Big);B}{\forall F\in\mathcal{F}: A_F\in F, B\in H} \\
+&= \upset\setbuilder{\bigcup_{F\in \mathcal{F}}A_F;B}{\forall F\in\mathcal{F}: A_F\in F, B\in H} \\
+&= \bigcap_{F\in \mathcal{F}} \upset\setbuilder{A_F; B}{A_F\in F, B\in H} \\
+&= \bigcap_{F\in \mathcal{F}} F;H.
+\end{align*}
+\end{proof}
+
+\begin{lemma} \label{principalImageProductFilter}
+Let $X$ be a set and $F,G\in\powerfilters(X)$. Then
+\[ (F\otimes G)x = \begin{cases}
+F & \big(x\in\ker(G)\big) \\
+\powerset(X) & (\text{otherwise}).
+\end{cases} \]
+\end{lemma}
+\begin{proof}
+If $x\notin\ker(F)$, then there exists $A\in G$ such that $(X\times A)x = \emptyset$. Thus $(F\otimes G)x = \powerset(X)$.
+
+Now suppose $x\in\ker(G)$. Take $B\in F\otimes G$, so there exist $C\in F, D\in G$ such that $C\times D \subseteq B$. Now $x\in D$, so $(C\times D)x = C$. Thus $(F\otimes G)x \subseteq F$. For the other inclusion, note that $A\times X\in F\otimes G$ and $(A\times X)x = A$ for all $A\in F$.
+\end{proof}
+
+\begin{lemma} \label{compositionProductFilters}
+Let $X$ be a set and $F,G, G', H\in\powerfilters(X)$. Then
+\[ (F\otimes G);(G'\otimes H) = \begin{cases}
+F\otimes H & (G\amesh G') \\
+\powerset(X ^2) & (\text{otherwise}).
+\end{cases}  \]
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+Note that for all proper filters $G$ we have $G\amesh G$. However $\powerset(X)\cancel\amesh\powerset(X)$, so $\big(F\otimes \powerset(X)\big);\big(\powerset(X)\otimes G\big) = \powerset(X^2)$, independent of $F$ and $G$.
+
+\begin{lemma} \label{componentInclusionsFilterComposition}
+Let $X$ be a set and $F,G\in\powerfilters(X^2)$. Then
+\begin{enumerate}
+\item $p_1^{\imf\imf}[F]\subseteq p_1^{\imf\imf}[F;G]$;
+\item $p_2^{\imf\imf}[G]\subseteq p_2^{\imf\imf}[F;G]$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) This follows immediately from $p_1^{\imf}[A;B] = \setbuilder{p_1((x,y))}{(x,y)\in A \land y\in p_1^{\imf}(B)} \subseteq p_1^{\imf}[A]$.
+
+(2) Similar.
+\end{proof}
+
+\begin{lemma} \label{filterCompositionFactorisationLemma}
+Let $X$ be a set, $H\in \powerfilters(X^2)\setminus \{\powerset(X^2)\}$ and $F,G\in\powerfilters(X)$. Then
+\[ F\otimes G = F\otimes p_1^{\imf\imf}(H); H; p_2^{\imf\imf}(H)\otimes G. \]
+\end{lemma}
+\begin{proof}
+This follows from the fact that for all $A\in F$, $B\in G$ and $C,D,E\in H$,
+\[ A\times B = \big(A \times p_1^{\imf}(C)\big);D;\big(p_2^\imf(E)\times B\big). \]
+Indeed we have
+\begin{align*}
+(a,b)\in \big(A \times p_1^{\imf}(C)\big);D;\big(p_2^\imf(E)\times B\big) &\iff \exists c,d: \begin{cases}
+(a,c)\in A\times p_1^\imf(C),\\ (c,d)\in D,\\ (d,b)\in p_2^\imf(E)\times B
+\end{cases} \\
+&\iff \begin{cases}
+a\in A, b\in B, \\
+\exists c,d: \; (c,d)\in D, c\in p_1^\imf(C), d\in p_2^\imf(E)
+\end{cases} \\
+&\iff a\in A, b\in B \\
+&\iff (a,b)\in A\times B.
+\end{align*}
+The statement $\exists c,d: \; (c,d)\in D, c\in p_1^\imf(C), d\in p_2^\imf(E)$ is true because we may take $(c,d)\in C\cap D\cap E$, which is not empty because $H$ is proper.
+\end{proof}
+Set $I\defeq F\otimes p_1^{\imf\imf}(H); H; p_2^{\imf\imf}(H)\otimes G$. The inclusion $\subseteq$ can also be calculated using \ref{componentInclusionsFilterComposition} and \ref{filterFactorisationInequality}:
+\[ F\otimes G = p_1^{\imf\imf}\big[F\otimes p_1^{\imf\imf}(H)\big] \otimes p_2^{\imf\imf}\big[p_2^{\imf\imf}(H)\otimes G\big] \subseteq p_1^{\imf\imf}[I]\otimes p_2^{\imf\imf}[I] \subseteq I. \]
+
+\begin{lemma} \label{principalImageOfInProductFilter}
+Let $X$ be a set, $F\in \powerfilters(X)$ a filter and $A\subseteq X^2$. Then
+\begin{enumerate}
+\item if $A\in F\otimes F$, then there exists $x\in X$ such that $Ax\in F$;
+\item if $Ax, xA\in F$, then $A;A \in F\otimes F$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $A\in F\otimes F$, then there exists $B\in F$ such that $B\times B\subseteq A$. If $B = \emptyset$, then $F$ is trivial, so $Ax\in F$ for all $x\in X$.
+
+If $B \neq \emptyset$, then we can take $x\in B$ and we have
+\[ B = (B\times B)x \subseteq Ax. \]
+By upwards closure, $Ax\in F$.
+
+(2) Suppose $Ax, xA\in F$. Then $Ax\times xA \in F\otimes F$ and, because $A;A = \bigcup_{y\in X}Ay\times yA \supseteq Ax\times xA$, we have $A;A\in F\otimes F$ by upwards closure.
+\end{proof}
+
+\begin{proposition} \label{imageFilterComposition}
+Let $X, Y$ be sets, $A,B\subseteq X^2$ and $F,G\in\powerfilters(X^2)$. Let $f: X\to Y$ be a function. Then
+\begin{enumerate}
+\item $(f,f)^{\imf}(A;B) \subseteq (f,f)^{\imf}(A);(f,f)^\imf(B)$;
+\item $\upset(f,f)^{\imf\imf}(F;G) \supseteq \big(\upset(f,f)^{\imf\imf}(F)\big);\big(\upset(f,f)^{\imf\imf}(G)\big)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Take $(x,y)\in A;B$. Then there exists $z\in X$ such that $xAz$ and $zBy$ and thus $f(x)\big((f,f)^{\imf}(A)\big)f(z)$ and $f(z)\big((f,f)^{\imf}(B)\big)f(y)$, so $\big(f(x), f(y)\big)\in (f,f)^{\imf}(A);(f,f)^\imf(B)$.
+
+(2) Immediate from (1).
+\end{proof}
+
+\subsection{Uniformities}
+\begin{definition}
+Let $X$ be a set. Let $\mathcal{U}$ be a set of filters in $\powerfilters(X^2)$. Suppose
+\begin{itemize}
+\item $\pfilter{x}\otimes \pfilter{x} \in \mathcal{U}$ for all $x\in X$;
+\item $\mathcal{U}$ is upwards closed;
+\item if $F\in \mathcal{U}$, then $F^\transp\in\mathcal{U}$;
+\item if $F, G\in \mathcal{U}$, then $F;G\in\mathcal{U}$.
+\end{itemize}
+Then we call $\mathcal{U}$ a \udef{uniformity} on $X$ and $\sSet{X,\mathcal{U}}$ a uniform space.
+
+If we drop the first condition, we get a \udef{preuniformity} and a \udef{preuniform space}.
+
+A uniformity is called 
+\begin{itemize}
+\item \udef{factorisable} if for all $H\in\mathcal{U}$, there exist $F,G\in \powerfilters(X^2)$ such that $F\otimes G \in\mathcal{U}$ and $F\otimes G\subseteq H$;
+\item \udef{symmetric} if each filter in $\mathcal{U}$ contains a symmetric filter in $\mathcal{U}$;
+\item of \udef{finite depth} if it is closed under finite intersections.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $\mathcal{U}$ be a uniformity. If $\mathcal{U}$ is of finite depth, then $\mathcal{U}$ is symmetric.
+\end{lemma}
+\begin{proof}
+Assume $\mathcal{U}$ is of finite depth. For all $F\in\mathcal{U}$, we have $F\supseteq F\cap F^\transp \in \mathcal{U}$.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. Then $\mathcal{U}$ is factorisable \textup{if and only if} $p_1^{\imf\imf}(H)\otimes p_2^{\imf\imf}(H) \in \mathcal{U}$ for all $H\in\mathcal{U}$.
+\end{lemma}
+\begin{proof}
+Assume $\mathcal{U} \ni F\otimes G \subseteq H$. Then
+\[ F\otimes G = p_1^{\imf\imf}(F\otimes G)\otimes p_2^{\imf\imf}(F\otimes G) \subseteq p_1^{\imf\imf}(H)\otimes p_2^{\imf\imf}(H) \in \mathcal{U}, \]
+where we have used \ref{projectionsOfProductFilter}.
+\end{proof}
+
+\subsubsection{Ordering uniformities}
+\begin{proposition} \label{latticeOfUniformities}
+Let $X$ be a set. Then the set of uniformities on $X$ is a complete sublattice of $\powerset\big(\powerfilters(X^2)\big)$ and the meet corresponds to the set-theoretic intersection.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsubsection{Diagonality}
+\begin{lemma}
+Let $X$ be a set, $\mathcal{F}$ an upwards closed set of filters in $\powerfilters(X)$ and $\mathcal{C}$ a cover of $X$. If
+\[ \forall C\in\mathcal{C}: \; \upset\{\Delta_C\} \in \mathcal{F}, \]
+where $\Delta_C = \setbuilder{(c,c)}{c\in C}$, then $\pfilter{x}\otimes\pfilter{x}\in\mathcal{F}$ for all $x\in X$.
+\end{lemma}
+\begin{proof}
+Because $\{(x,x)\}\subseteq \Delta_C$ for some $C\in\mathcal{C}$ and $\pfilter{x}\otimes\pfilter{x} = \upset \big\{\{(x,x)\}\big\} \supseteq \upset\{\Delta_C\} \in\mathcal{F}$.
+\end{proof}
+
+\begin{definition}
+Let $X$ be a set and $\mathcal{S}$ be a set of subsets of $X$. A uniformity $\mathcal{U}$ on $X$ is called \udef{$\mathcal{S}$-diagonal} if $\forall S\in\mathcal{S}: \; \upset\{\Delta_S\} \in \mathcal{U}$.
+
+The uniformity is simply called \udef{diagonal} if $\mathcal{S} = \{X\}$.
+\end{definition}
+We may call the first requirement in the definition of uniform space ``pointwise diagonality''.
+
+\begin{lemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space and $\mathcal{S}_1, \mathcal{S}_2$ sets of subsets of $X$. If $\mathcal{S}_1 \subseteq \downset \mathcal{S}_2$, then $\mathcal{S}_2$-diagonality implies $\mathcal{S}_1$-diagonality.
+\end{lemma}
+\begin{proof}
+Assume $\mathcal{S}_1 \subseteq \downset \mathcal{S}_2$ and that $\mathcal{U}$ is $\mathcal{S}_2$-diagonal.
+
+Take $S\in \mathcal{S}_1$. Then there exists an $S'\in \mathcal{S}_2$ such that $S\subseteq S'$. Thus $\upset\{\Delta_{S'}\} \subseteq \upset\{\Delta_{S}\}$ and $\upset\{\Delta_{S'}\}\in \mathcal{U}$. By upwards closure, $\upset\{\Delta_{S}\} \in \mathcal{U}$.
+\end{proof}
+
+\subsubsection{Entourages}
+\begin{definition}
+Let $\sSet{X, \mathcal{U}}$ be a uniform space. Then $\entourage_\mathcal{U} \defeq \bigcap \mathcal{U}$ is called the \udef{entourage filter} of $\mathcal{U}$ and the elements of $\entourage_\mathcal{U}$ are called \udef{entourages}.
+
+We call the uniform space \udef{topological} if $\mathcal{U} = \upset\{\entourage_\mathcal{U}\}$.
+\end{definition}
+
+\begin{lemma} \label{entourageLemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space with entourage filter $\entourage$. Then
+\begin{enumerate}
+\item $\entourage\subseteq \upset\{\id_X\}$;
+\item $\entourage^\transp = \entourage$;
+\item $\entourage;\entourage \subseteq \entourage$.
+\end{enumerate}
+If $\sSet{X,\mathcal{U}}$ is a topological uniform space, then
+\begin{enumerate}[1'.] \setcounter{enumi}{2}
+\item $\entourage;\entourage = \entourage$.
+\end{enumerate}
+Any filter in $\powerfilters(X\times X)$ satisfying properties 1., 2. and $\entourage \subseteq \entourage;\entourage$ is the entourage filter of a topological uniformity.
+\end{lemma}
+TODO: can we improve 3??
+\begin{proof}
+(1) We have
+\[ \entourage = \bigcap \mathcal{U} \subseteq \bigcap \setbuilder{\pfilter{x}\otimes \pfilter{x}}{x\in X} = \upset\big\{\setbuilder{(x,x)}{x\in X}\big\} = \upset\{\id_X\}. \]
+
+(2) We have
+\[ \entourage^\transp = \bigcap \setbuilder{H^\transp}{H\in\mathcal{U}} = \bigcap \setbuilder{H}{H\in\mathcal{U}} = \entourage, \]
+because the transpose is bijective and thus its image function is preserved under intersection.
+
+(3) First take $A;B \in\entourage;\entourage$. We claim $A\subseteq A;B$. Indeed take $(a,b)\in A$. By (1), we have $(b,b)\in B$ and so $(a,b)\in A;B$. Thus $\entourage;\entourage \subseteq \entourage$.
+
+(3') In the topological case, we have that $\entourage\in\mathcal{U}$ and thus $\entourage;\entourage\in \mathcal{U}$, so $\entourage \subseteq \entourage;\entourage$.
+
+To show any such filter is an entourage filter, we check the four requirements
+\begin{itemize}
+\item From (1), we have for all $x\in X$
+\[ \entourage \subseteq \upset\{\Delta\} \subseteq \upset\{(x,x)\} = \pfilter{x}\otimes\pfilter{x}. \]
+\item Upwards closure is by construction.
+\item If $\entourage \subseteq H$, then $\entourage = \entourage^\transp \subseteq H^\transp$.
+\item If $\entourage\subseteq G,H$, then $\entourage \subseteq \entourage;\entourage \subseteq G;H$.
+\end{itemize}
+\end{proof}
+\begin{corollary}
+A topological uniform space is diagonal and symmetric.
+\end{corollary}
+
+\begin{proposition}
+If a uniform space is topological and factorisable, then it is trivial.
+\end{proposition}
+\begin{proof}
+Let $\sSet{X,\mathcal{U}}$ be a topological and factorisable uniform space with entourage filter $\entourage_\mathcal{U}$. Then $\entourage_\mathcal{U} \subseteq p_1^{\imf\imf}[\entourage_\mathcal{U}]\otimes p_2^{\imf\imf}[\entourage_\mathcal{U}]$. Now each $A\in \entourage_\mathcal{U}$ contains $\Delta$, so $p_1^\imf[A] = X = p_2^\imf[A]$. Thus $p_1^{\imf\imf}[\entourage_\mathcal{U}]\otimes p_2^{\imf\imf}[\entourage_\mathcal{U}] = \{X^2\}$.
+
+Now $\entourage_\mathcal{U} = \upset\big\{\{X^2\}\big\}$, which is trivial.
+\end{proof}
+
+\subsection{Uniform relations}
+\begin{definition}
+Let $X$ be a sets. A \udef{uniform relation} on $X$ is a relation $R_\mathcal{U}$ on $\powerfilters(X)^2$ such that
+\begin{itemize}
+\item $\pfilter{x}\mathrel{R_\mathcal{U}}\pfilter{x}$ for all $x\in X$;
+\item $F\,R_\mathcal{U}$ is upwards closed for all $F\in \powerfilters(X)$;
+\item $R_\mathcal{U}$ is symmetric;
+\item $R_\mathcal{U}$ is transitive when restricted to $\powerfilters(X)\setminus\{\powerset(X)\}$.
+\end{itemize}
+We call the structured set $\sSet{X,R_\mathcal{U}}$ a \udef{uniform relation space}.
+
+We say the uniform relation
+\begin{itemize}
+\item  is of \udef{finite depth} if $F\,R_\mathcal{U}$ is a filter in $\filters\big(\powerfilters(X)\big)$ for all $F\in \powerfilters(X)$.
+\end{itemize}
+\end{definition}
+Finite depth add the requirement that $F\,R_\mathcal{U}$ is closed under finite intersections.
+
+\begin{lemma} \label{uniformRelationRelatedElementLemma}
+Let $R_\mathcal{U}$ be a uniform relation on $X$ and $F,G\in\powerfilters(X)$. Assume there exist proper filters $F',G'\in\powerfilters(X)$ such that $F\mathrel{R_\mathcal{U}} F'$ and $G\mathrel{R_\mathcal{U}}G'$. Then
+\begin{enumerate}
+\item $F\mathrel{R_\mathcal{U}} F$;
+\item if $F\amesh G$, then $F\mathrel{R_\mathcal{U}} G$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By symmetry we have $F'\mathrel{R_\mathcal{U}} F$ and by transitivity $F\mathrel{R_\mathcal{U}} F$.
+
+(2) If $F\amesh G$, then $F\vee G \neq \powerset(X)$ by \ref{joinProperFilter}. From (1) we have $F\mathrel{R_\mathcal{U}} F$ and $G\mathrel{R_\mathcal{U}} G$. By upwards closure, $F\mathrel{R_\mathcal{U}} (F\vee G)$ and $G\mathrel{R_\mathcal{U}} (F\vee G)$. By transitivity and symmetry, $F\mathrel{R_\mathcal{U}} G$.
+\end{proof}
+
+\begin{lemma} \label{uniformRelationUpwardsClosure}
+Let $R$ be a uniform relation on $X$ and $F,G, F', G'\in\powerfilters(X)$.
+\begin{enumerate}
+\item If $F \subseteq F'$, $G\subseteq G'$ and $F\mathrel{R} G$, then $F'\mathrel{R} G'$.
+\item If $F \mathrel{R} F'$, $G\mathrel{R} G'$ and $F\subseteq G$, then $F'\mathrel{R} G'$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By upwards closure, we have $F\mathrel{R} G'$ and  (using symmetry) $F'\mathrel{R} G$. Thus, again using symmetry,
+\[ F'\mathrel{R} G \;\text{and}\; G \mathrel{R} F \;\text{and}\; F \mathrel{R} G', \]
+so $F'\mathrel{R} G'$ by transitivity.
+
+(2) By symmetry and upwards closure, we have $F'RG$. By transitivity, $F'RG'$.
+\end{proof}
+
+\begin{proposition} \label{uniformRelationGaloisConnection}
+Let $X$ be a set; $\mathcal{U}$ a uniformity on $X$ and $R$ a uniform relation on $X$. We define a uniformity $\Theta(R)$ and a uniform relation $\Xi(\mathcal{U})$ by
+\begin{align*}
+\forall H\in \powerfilters(X^2):\qquad H\in\Theta(R) \quad&\defequiv\quad p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]; \\
+\forall F,G\in\powerfilters(X)\setminus\{\powerset(X)\}:\qquad F\mathrel{\Xi(\mathcal{U})}G \quad&\defequiv\quad F\otimes G\in \mathcal{U}. 
+\end{align*}
+Then the functions
+\begin{align*}
+&\Theta: \{\text{uniform relations on $X$}\} \to \{\text{uniformities on $X$}\} \\
+&\Xi: \{\text{uniformities on $X$}\} \to \{\text{uniform relations on $X$}\}
+\end{align*}
+form a Galois connection $(\Theta, \Xi)$. Additionally,
+\begin{enumerate}
+\item $\im(\Theta)$ is the set of factorisable uniformities on $X$;
+\item $\im(\Xi)$ is the set of uniform relations on $X$, i.e.\ $\Xi$ is surjective.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The prove $\Theta(R)$ is a uniformity, we verify the conditions:
+\begin{itemize}
+\item From $\pfilter{x}\mathrel{R}\pfilter{x}$, we get $\pfilter{x}\otimes \pfilter{x}\in\Theta(R)$.
+\item If $H\in\Theta(R)$ and $H\subseteq H'$, then $p_1^{\imf\imf}[H]\mathrel{R} p_2^{\imf\imf}[H]$, $p_1^{\imf\imf}[H]\subseteq p_1^{\imf\imf}[H']$ and $p_2^{\imf\imf}[H]\subseteq p_2^{\imf\imf}[H']$. Thus, by \ref{uniformRelationUpwardsClosure}, we have $p_1^{\imf\imf}[H']\mathrel{R} p_2^{\imf\imf}[H']$ and so $H'\in\Theta(R)$.
+\item Take $H\in \Theta(R)$. Then
+\[ p_1^{\imf\imf}[H]\mathrel{R} p_2^{\imf\imf}[H] \iff p_2^{\imf\imf}[H^\transp]\mathrel{R} p_1^{\imf\imf}[H^\transp] \iff p_1^{\imf\imf}[H^\transp]\mathrel{R} p_2^{\imf\imf}[H^\transp] \iff H^\transp\in \Theta(R). \]
+\item Take $H_1, H_2\in \Theta(R)$. If $H_1;H_2 = \powerset(X^2)$, then $H_1;H_2\in\Theta(R)$ by upwards closure. If $H_1;H_2 \neq \powerset(X^2)$, then $p_2^{\imf\imf}[H_1]\amesh p_1^{\imf\imf}[H_2]$ by \ref{filterOperationsOnRelationFilters} and thus $p_2^{\imf\imf}[H_1]\mathrel{R} p_1^{\imf\imf}[H_2]$ by \ref{uniformRelationRelatedElementLemma} (we have that $p_1^{\imf\imf}[H_1]\mathrel{R}p_2^{\imf\imf}[H_1]$, so $p_1^{\imf\imf}[H_1]\mathrel{R}\neq \emptyset$. Similarly $p_1^{\imf\imf}[H_2]\mathrel{R}p_2^{\imf\imf}[H_2]$ and $p_1^{\imf\imf}[H_2]\mathrel{R}\neq \emptyset$). So we have
+\[ p_1^{\imf\imf}[H_1]\;\mathrel{R} \;p_2^{\imf\imf}[H_1] \;\mathrel{R} \;p_1^{\imf\imf}[H_2]\; \mathrel{R} \;p_2^{\imf\imf}[H_2]. \]
+By \ref{componentInclusionsFilterComposition} and upward closure, we get $p_1^{\imf\imf}[H_1;H_2]\mathrel{R}p_2^{\imf\imf}[H_1;H_2]$, which means $H_1;H_2\in \Theta(R)$.
+\end{itemize}
+
+The prove $\Xi(\mathcal{U})$ is a uniform relation, we verify the conditions:
+\begin{itemize}
+\item From $\pfilter{x}\otimes \pfilter{x}\in\mathcal{U}$, we get $\pfilter{x}\mathrel{\Xi(\mathcal{U})}\pfilter{x}$.
+\item Assume $F\mathrel{\Xi(\mathcal{U})}G$ and $G\subseteq G'$. Then $F\otimes G\in \mathcal{U}$ and $F\otimes G\subseteq F\otimes G'$. By upwards closure, $F\otimes G'\in\mathcal{U}$.
+\item Symmetry is immediate from $(F\otimes G)^\transp = G\otimes F$.
+\item For transitivity, assume $F\mathrel{\Xi(\mathcal{U})}G$, $G\mathrel{\Xi(\mathcal{U})}H$ and $G \neq \powerset(X)$. Then $F\otimes G, G\otimes H\in\mathcal{U}$ and $G \amesh G$ (this would not hold if $G = \powerset(X)$), so $(F\otimes G);(G\otimes H) = F\otimes H$ by \ref{compositionProductFilters}. Thus $F\mathrel{\Xi(\mathcal{U})}H$.
+\end{itemize}
+
+To show $(\Theta,\Xi)$ is a Galois connection, we need to prove that $\Theta(R) \subseteq \mathcal{U}$ \textup{if and only if} $R \subseteq \Xi(\mathcal{U})$.
+
+First assume $\Theta(R) \subseteq \mathcal{U}$ and take $F,G\in\powerfilters(X)$ such that $F\mathrel{R} G$. Then $F\otimes G\in \Theta(R)\subseteq\mathcal{U}$ which means that $F\mathrel{\Xi(\mathcal{U})}G$.
+
+Now assume $R \subseteq \Xi(\mathcal{U})$ and take $H\in \Theta(R)$. Then $p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]$, which implies $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{U})}p_2^{\imf\imf}[H]$. Thus $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{U}$. By upwards closure and \ref{filterFactorisationInequality} we have $H\in \mathcal{U}$.
+
+(1) It is clear that $\im(\Theta)$ consists of factorisable uniformities. For the other inclusion, let $\mathcal{U}$ be a factorisable uniformity. It is enough to show that $\mathcal{U} \subseteq \Theta(\Xi(\mathcal{U}))$. Take $H\in \mathcal{U}$. By factorisability $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H]\in \mathcal{U}$. Then $p_1^{\imf\imf}[H]\mathrel{\Xi(\mathcal{U})} p_2^{\imf\imf}[H]$ and thus $H\in \Theta(\Xi(\mathcal{F}))$.
+
+(2) It is enough to prove that for all uniform relations $R$ we have $\Xi(\Theta(R)) \subseteq R$. Take $F,G\in\powerfilters(X)$. We have
+\[ F\mathrel{\Xi(\Theta(R))} G \implies F\otimes G \in\Theta(R) \implies F\mathrel{R}G. \]
+\end{proof}
+
+
+\subsubsection{Uniform convergence}
+\begin{definition}
+Let $\sSet{X,R}$ be a uniform relation space. Then the \udef{uniform convergence} $\Gamma(R)$ on $X$ is defined by
+\[ F \overset{\Gamma(R)}{\longrightarrow} x \qquad\defequiv\qquad F\mathrel{R}\pfilter{x}. \]
+We also denote the uniform convergence by $F\overset{u}{\longrightarrow} x$.
+\end{definition}
+If $\mathcal{U}$ is a uniformity, we write $\Gamma(\mathcal{U})$ to mean $\Gamma(\Xi(\mathcal{U}))$. We have
+\[ F \overset{\Gamma(\mathcal{U})}{\longrightarrow} x \qquad\iff\qquad F\otimes \pfilter{x}\in\mathcal{U}. \]
+
+\begin{lemma} \label{associatedUniformConvergence}
+A uniform convergence is a convergence. It is also reciprocal ($R_1$).
+\end{lemma}
+\begin{proof}
+Let $\sSet{X,R}$ be a uniform relation space. We have that $\Gamma(R)$ is centered, i.e.\ $\pfilter{x} \overset{\Gamma(R)}{\longrightarrow} x$, because $\pfilter{x}\mathrel{R}\pfilter{x}$.
+
+We have that $\Gamma(R)$ is monotonic by upwards closure of $R$.
+
+We prove reciprocity of $\Gamma(R)$ using point (5). of \ref{R1Conditions}. Assume $F \overset{\Gamma(R)}{\longrightarrow} x$ and $F \overset{\Gamma(R)}{\longrightarrow} y$. Then $F\mathrel{R}\pfilter{x}$ and $F\mathrel{R}\pfilter{y}$, so $\pfilter{x}\mathrel{R}\pfilter{y}$ by symmetry and transitivity. This implies
+\[ G \in {\lim}_{\Gamma(R)}^{-1}(x) \iff G\mathrel{R}\pfilter{x}\iff G\mathrel{R}\pfilter{y} \iff G\in {\lim}_{\Gamma(R)}^{-1}(y), \]
+and so $\lim_{\Gamma(R)}^{-1}(x) = \lim_{\Gamma(R)}^{-1}(y)$.
+\end{proof}
+
+\begin{proposition} \label{topologicalInducedUniformConvergence}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space and $x\in X$. Then
+\begin{enumerate}
+\item $\entourage_\mathcal{U}x \subseteq \vicinity_{\Gamma(\mathcal{U})}(x)$;
+\item if $\mathcal{U}$ is topological, then $\Gamma(\mathcal{U})$ is topological and
+\[ \neighbourhood_{\Gamma(\mathcal{U})}(x) = \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}. \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We show that if $F\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$, then $\entourage_\mathcal{U}x = \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}\subseteq F$. Indeed we have
+\begin{align*}
+F\otimes \pfilter{x}\in \mathcal{U} \implies& \entourage_\mathcal{U}\subseteq F\otimes \pfilter{x} \\
+\implies& \forall V\in \entourage_\mathcal{U}: \exists A\in F: \; A\times \{x\} \subseteq V \\
+\implies& \forall  V\in \entourage_\mathcal{U}: \exists A\in F: \; A \subseteq V x \\
+\implies& \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}\subseteq F.
+\end{align*}
+
+(2) We first show that $\Gamma(\mathcal{U})$ is pretopological with vicinity filter $\entourage_\mathcal{U}x = \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}$. By (1), it is enough to prove that $\entourage_\mathcal{U}x \to x$.
+Because $\entourage_\mathcal{U}$ is a topological entourage filter, we have
+\begin{align*}
+\entourage_\mathcal{U} &= \entourage_\mathcal{U};\entourage_\mathcal{U} \\
+&\subseteq \entourage_\mathcal{U}; \pfilter{x}\otimes \pfilter{x} \\
+&= \upset \setbuilder{V; \{(x,x)\}}{V\in \entourage_\mathcal{U}} \\
+&= \upset \setbuilder{V x\times\{x\}}{V\in \entourage_\mathcal{U}} \\
+&= \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}\otimes \pfilter{x}.
+\end{align*}
+Thus $\entourage_\mathcal{U}x \overset{\Gamma(\mathcal{U})}{\longrightarrow} x$.
+
+Finally to show that $\Gamma(\mathcal{U})$ is topological, we use \ref{pretopologicalSpaceTopological}: Take $Vx\in \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}$. Then because $\entourage_\mathcal{U} = \entourage_\mathcal{U};\entourage_\mathcal{U}$, we can find $U,U'\in \entourage_\mathcal{U}$ such that $V = U;U'$. Consider $U'x$. For all $y\in U'x$, we have that $zUy \implies zU;U'x \iff zVx$, so $Uy \subseteq Vx$. Thus $Vx \in \upset \setbuilder{V y}{V\in \entourage_\mathcal{U}}$.
+\end{proof}
+
+TODO: is there a way to have a notion of ``pretopological uniform space''?
+
+\begin{proposition}
+Let $\sSet{X,\mathcal{U}}$ be a topological uniform space and $V\in \entourage_\mathcal{U}$.
+
+Then $\interior_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(V) \in \entourage_\mathcal{U}$.
+\end{proposition}
+\begin{proof}
+By \ref{entourageLemma}, we have $\entourage_\mathcal{U} = \entourage_\mathcal{U};\entourage_\mathcal{U};\entourage_\mathcal{U}$, so can find $U_1,U_2,U_3$ such that $U_1;U_2;U_3 \subseteq V$. Let $U = U_1\cap U_1^\transp \cap U_2 \cap U_2^\transp \cap U_3\cap U_3^\transp$, so $U$ is symmetric and $U;U;U\subseteq V$.
+Now
+\[ U;U;U = \bigcup_{(x,y)\in U}U;\{(x, y)\};U = \bigcup_{(x,y)\in U}Ux \times Uy, \]
+by \ref{relationCompositionResiduated}. For all $x,y\in U$, $Ux$ is a neighbourhood of $x$ in $\Gamma(\mathcal{U})$ and $Uy$ is a neighbourhood of $y$ in $\Gamma(\mathcal{U})$, by \ref{topologicalInducedUniformConvergence}.  Thus $Ux \times Uy$ is a neighbourhood of $(x,y)$ in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$, as this is a vicinity by \ref{productVicinity} and the product convergence is topological by \ref{pretopologicalInitialConvergence}.
+
+By \ref{subsetWithVicinitiesInInherence}, we have that $U\subseteq \interior_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(V)$ and thus the proposition follows by upwards closure.
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, then $\entourage_\mathcal{U}$ has a base of sets open in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$.
+\end{corollary}
+
+\begin{proposition}
+Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, $A\subseteq X$ and $M\subseteq X^2$. Then
+\begin{enumerate}
+\item $\closure_{\Gamma(\mathcal{U})}(A) = \bigcap\setbuilder{U_A}{U\in \entourage_\mathcal{U}}$;
+\item $\closure_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(M) = \bigcap\setbuilder{V;M;V}{V\in\entourage_\mathcal{U}}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{principalAdherenceInherence} and \ref{topologicalInducedUniformConvergence}, we have
+\begin{align*}
+x\in \closure_{\Gamma(\mathcal{U})}(A) &\iff \forall U\in \entourage_\mathcal{U}: xU \mesh A \\
+&\iff \forall U\in \entourage_\mathcal{U}: \exists y\in A: xUy \\
+&\iff \forall U\in \entourage_\mathcal{U}: x\in {_A}U = U^\transp_A \\
+&\iff x\in\bigcap\setbuilder{U^\transp_A}{U\in \entourage_\mathcal{U}} \\
+&\iff x\in\bigcap\setbuilder{U_A}{U\in \entourage_\mathcal{U}}.
+\end{align*}
+For the last step, we have used the symmetry of $\entourage_\mathcal{U}$, \ref{entourageLemma}.
+
+(2) By \ref{principalAdherenceInherence}, \ref{topologicalInducedUniformConvergence} and \ref{productVicinity}, we have
+\begin{align*}
+(x,y) \in \closure_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(M) &\iff \forall U,V\in \entourage_\mathcal{U}: xU \times yV \mesh M \\
+&\iff \forall U,V\in \entourage_\mathcal{U}:\exists (a,b)\in M: xUa \land yVb \\
+&\iff \forall U,V\in \entourage_\mathcal{U}:(x,y) \in U;M;V^\transp \\
+&\iff (x,y) \in \bigcap\setbuilder{U;M;V^\transp}{U,V\in\entourage_\mathcal{U}} \\
+&\iff (x,y) \in \bigcap\setbuilder{V;M;V}{V\in\entourage_\mathcal{U}}.
+\end{align*}
+For the last step, we have used the symmetry of $\entourage_\mathcal{U}$, \ref{entourageLemma}, and the fact that it is a filter. We have also used \ref{relationCompositionResiduated}.
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, then $\entourage_\mathcal{U}$ has a base of sets closed in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$.
+\end{corollary}
+\begin{proof}
+Let $U\in \entourage_\mathcal{U}$. Then by \ref{entourageLemma}, we can find a $V\in\entourage_\mathcal{U}$ such that $V;V;V\subseteq U$. By the proposition, $V;V;V$ contains the closure of $V$. Thus each entourage contains a closed set.
+\end{proof}
+
+\begin{definition}
+For any property $\mathbf{P}$ that a convergence space may have, we say a uniform relation space $\sSet{X,R}$ has property $\mathbf{P}$ if $\Gamma(R)$ has property $\mathbf{P}$.
+\end{definition}
+
+\subsubsection{Induced uniform relation}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a reciprocal ($R_1$) convergence space. Let $\Phi(\xi)$ be a relation on $\powerfilters(X)$ defined by
+\[ F\mathrel{\Phi(\xi)}G \qquad\defequiv\qquad \exists: x\in X: \; \big(F\overset{\xi}{\longrightarrow} x\big) \land \big(G\overset{\xi}{\longrightarrow} x\big) \]
+for $F,G\in\powerfilters(X)$.
+Then $\Phi(\xi)$ is the \udef{uniform relation associated to} $\xi$.
+\end{definition}
+
+\begin{lemma} \label{uniformRelationAssociatedToR1Convergence}
+The uniform relation associated to a reciprocal convergence is a uniform relation.
+\end{lemma}
+\begin{proof}
+\begin{itemize}
+\item We have $\pfilter{x}\overset{\xi}{\longrightarrow} x$, so $\pfilter{x}\mathrel{\Phi(\xi)}\pfilter{x}$.
+\item The set $F\mathrel{\Phi(\xi)}$ is upwards closed by monotonicity of the convergence $\xi$.
+\item Symmetry is clear by construction.
+\item For transitivity, take proper filters $F,G,H$ such that $F\mathrel{\Phi(\xi)}G$ and $G\mathrel{\Phi(\xi)}H$. Then there exist $x,y\in X$ such that
+\[ \big(F\overset{\xi}{\longrightarrow} x\big) \land \big(G\overset{\xi}{\longrightarrow} x\big) \land \big(G\overset{\xi}{\longrightarrow} y\big) \land \big(H\overset{\xi}{\longrightarrow} y\big). \]
+Thus $G\in \lim^{-1}_\xi(x) \cap\lim^{-1}_\xi(y)$, so $\lim^{-1}_\xi(x) \mesh\lim^{-1}_\xi(y)$. Using reciprocity, we apply \ref{R1Conditions} to get $\lim^{-1}_\xi(x) = \lim^{-1}_\xi(y)$. Thus $H \overset{\xi}{\longrightarrow} x$, which means that $F\mathrel{\Phi(\xi)}H$.
+\end{itemize}
+\end{proof}
+
+\begin{proposition} \label{uniformConvergenceGaloisConnection}
+Let $X$ be a set. The functions
+\begin{align*}
+&\Phi: \{\text{$R_1$ convergences on $X$}\} \to \{\text{uniform relations on $X$}\} \\
+&\Gamma: \{\text{uniform relations on $X$}\} \to \{\text{$R_1$ convergences on $X$}\}
+\end{align*}
+form a Galois connection $(\Phi, \Gamma)$. Additionally,
+\begin{enumerate}
+\item $\im(\Phi)$ is the set of complete uniform relations on $X$;
+\item $\im(\Gamma)$ is the set of all reciprocal convergences on $X$; i.e\ $\Gamma$ is surjective.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The functions $\Phi$ and $\Gamma$ are well-defined by \ref{associatedUniformConvergence} and \ref{uniformRelationAssociatedToR1Convergence}.
+
+To prove the Galois connection, let $R$ be a uniform relation on $X$ and $\xi$ a convergence on $X$. Then we need to prove $\Phi(\xi) \subseteq R$ \textup{if and only if} $\xi \subseteq \Gamma(R)$.
+
+First assume $\Phi(\xi) \subseteq R$. Take $F\overset{\xi}{\longrightarrow} x$. Because also $\pfilter{x}\overset{\xi}{\longrightarrow} x$, we have $F\mathrel{\Phi(\xi)}\pfilter{x}$. By assumption $F\mathrel{R}\pfilter{x}$ and by definition $F\overset{\Gamma(R)}{\longrightarrow} x$.
+
+Now assume $\xi \subseteq \Gamma(R)$. Take $F,G\in \powerfilters(X)$ such that $F\mathrel{\Phi(\xi)}G$. Then $\exists x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By assumption $F\overset{\Gamma(R)}{\longrightarrow} x$ and $G\overset{\Gamma(R)}{\longrightarrow} x$, so by definition $F\mathrel{R}\pfilter{x}$ and $G\mathrel{R}\pfilter{x}$. By symmetry and transitivity $F\mathrel{R}G$.
+
+\begin{enumerate}
+\item For the inclusion $\subseteq$: assume $F\mathrel{\Phi(\xi)} F$. Then $F\to x$ for some $x\in X$, so $F\mathrel{\Phi(\xi)} \pfilter{x}$. Thus $F$ converges uniformly to some $x$.
+
+For the other inclusion, $\supseteq$, take a complete uniform relation $R$. It is enough to show that $R \subseteq \Phi(\Gamma(R))$. Take $F,G\in \powerfilters(X)$ such that $F\mathrel{R} G$. By completeness, $F\mathrel{R} \pfilter{x}$ for some $x\in X$. By symmetry and transitivity, $G\mathrel{R} \pfilter{x}$ as well. Thus $F\overset{\Gamma(R)}{\longrightarrow} x$ and $G\overset{\Gamma(R)}{\longrightarrow} x$, so $F\mathrel{\Phi(\Gamma(R))} G$.
+
+\item It is enough to prove $\Gamma(\Phi(\xi)) \subseteq \xi$ for any reciprocal convergence $\xi$. Take $F\overset{\Gamma(\Phi(\xi))}{\longrightarrow} x$. Then $F\mathrel{\Phi(\xi)} \pfilter{x}$ and so $\exists y\in X$ such that $F\overset{\xi}{\longrightarrow} y$ and $\pfilter{x}\overset{\xi}{\longrightarrow} y$. By reciprocity (and because $\pfilter{x}\subseteq \lim_{\xi}^{-1}(x) \cap \lim_{\xi}^{-1}(y)$), we have
+\[ F \in {\lim}_{\xi}^{-1}(y) = {\lim}_{\xi}^{-1}(x). \]
+So $F\overset{\xi}{\longrightarrow} x$.
+\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+Let $X$ be a set. The functions
+\begin{align*}
+&\Theta \circ \Phi: \{\text{$R_1$ convergences on $X$}\} \to \{\text{uniformities on $X$}\} \\
+&\Gamma\circ \Xi: \{\text{uniformities on $X$}\} \to \{\text{$R_1$ convergences on $X$}\}
+\end{align*}
+form a Galois connection $(\Theta \circ \Phi, \Gamma\circ \Xi)$. Additionally,
+\begin{enumerate}
+\item $\im(\Theta \circ \Phi)$ is the set of complete, factorisable uniformities on $X$;
+\item $\im(\Gamma\circ \Xi)$ is the set of all reciprocal convergences on $X$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+The Galois connection follows from \ref{uniformRelationGaloisConnection} and \ref{uniformConvergenceGaloisConnection}.
+
+(1) The inclusion $\subseteq$ is immediate, because a uniformity is called complete if and only if its associated uniform relation is complete.
+
+For the inclusion $\supseteq$, take some complete, factorisable uniformity $\mathcal{U}$. Then $\mathcal{U} = \Theta(R)$ for some uniform relation $R$, by \ref{uniformRelationGaloisConnection}. Now it is enough to note that $R$ is also complete, so there exists a reciprocal convergence $\xi$ such that $\mathcal{U} = \Theta(\Phi(\xi))$ by \ref{uniformConvergenceGaloisConnection}.
+
+(2) Immediate because both $\Gamma$ and $\Xi$ are surjective.
+\end{proof}
+
+We can summarise the mappings between uniformlities $\mathcal{U}$, uniform relations $R$ and uniform convergences $\xi$ as follows
+\[ \begin{tikzcd}[labels = {font=\large}, column sep=large]
+\mathcal{U} \arrow[bend left, rrr, "\substack{F\mathrel{\Xi(\mathcal{U})}G \Leftrightarrow F\otimes G\in \mathcal{U} \vspace{0.1em} \\ \vspace{0.1em} \Xi}"] &&& \arrow[lll, bend left, "\substack{\Theta \vspace{0.1em} \\ H\in\Theta(R) \Leftrightarrow p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]}"] R \arrow[rrr, bend left, "\substack{F\overset{\Gamma(R)}{\longrightarrow} x \Leftrightarrow F\mathrel{R}\pfilter{x} \vspace{0.1em} \\ \vspace{0.1em} \Gamma}"] &&& \arrow[lll, bend left, "\substack{\Phi \vspace{0.1em} \\ F\mathrel{\Phi(\xi)}G \Leftrightarrow \exists x: (F\to x)\land (G\to x)}"] \xi
+\end{tikzcd} \]
+
+\section{Uniform covers}
+\subsection{Stars of filters}
+\begin{definition}
+Let $X$ be a set, $\mathcal{F} \subseteq \powerfilters(X)$ a set of filters on $X$ and $F\in\powerfilters(X)$ a filter. The \udef{star} of $F$ w.r.t. $\mathcal{F}$, denoted $\starFilter(F,\mathcal{F})$, is defined as
+\[ \starFilter(F,\mathcal{F}) \defeq \bigcap \setbuilder{G\in \mathcal{F}}{G \amesh F}. \]
+The \udef{star} of $\mathcal{F}$, denoted $\mathcal{F}^*$, is defined as
+\[ \mathcal{F}^* \defeq \setbuilder{\starFilter(F,\mathcal{F})}{F\in \mathcal{F}}. \]
+\end{definition}
+
+\begin{lemma} \label{starRefinementLemma}
+Let $X$ be a set, $\mathcal{F} \subseteq \powerfilters(X)$ a set of filters on $X$ and $F\in \mathcal{F}$. Then
+\begin{enumerate}
+\item $\starFilter(F,\mathcal{F}) \subseteq F$;
+\item $\starFilter(\pfilter{x}, \mathcal{F}) = \Big(\bigcap\setbuilder{F\otimes F}{F\in\mathcal{F}}\Big)x$;
+\item $\mathcal{F} \subseteq \upset\mathcal{F}^*$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have $F\in \setbuilder{G\in \mathcal{F}}{G \amesh F}$ by \ref{properFiltersSelfMesh}, so
+\[ F \;\supseteq\; \bigcap \setbuilder{G\in \mathcal{F}}{G \amesh F} \;=\; \starFilter(F,\mathcal{F}). \]
+
+(2) By \ref{filterResiduatedImageGaloisConnection} and \ref{principalImageProductFilter}, we have
+\begin{align*}
+\Big(\bigcap\setbuilder{F\otimes F}{F\in\mathcal{F}}\Big)x &= \bigcap_{F\in\mathcal{F}}(F\otimes F)x \\
+&= \bigcap \setbuilder{F\in\mathcal{F}}{x\in\ker(F)} \\
+&= \bigcap \setbuilder{F\in\mathcal{F}}{F\amesh\pfilter{x}} = \starFilter(\pfilter{x}, \mathcal{F}).
+\end{align*}
+
+(3) Immediate from (1).
+\end{proof}
+
+\begin{lemma} \label{starFilterOrderingLemma}
+Let $X$ be a set, $\mathcal{F} \subseteq \powerfilters(X)$ a set of filters on $X$ and $G,H\in \powerfilters(X)$ filters. Then
+\begin{enumerate}
+\item if $G\subseteq H$, then $\starFilter(G,\mathcal{F}) \subseteq \starFilter(H,\mathcal{F})$;
+\item if $\mathcal{F}$ is a cover of $X$, then $\starFilter(\pfilter{x}, \mathcal{F}) \in \upset \mathcal{F}^*$ for all $x\in X$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) If $G\subseteq H$, then $F\amesh H$ implies $F\amesh G$ for all filters $F\in\powerfilters(X)$. Thus $\setbuilder{F\in\mathcal{F}}{F\amesh H} \subseteq \setbuilder{F\in\mathcal{F}}{F\amesh G}$, which implies
+\[ \starFilter(G,\mathcal{F}) = \bigcap\setbuilder{F\in\mathcal{F}}{F\amesh G} \subseteq \bigcap\setbuilder{F\in\mathcal{F}}{F\amesh H} = \starFilter(H,\mathcal{F}). \]
+
+(2) By \ref{principalUltrafilterInCover} there exists $F\in \mathcal{F}$ such that $F\subseteq \pfilter{x}$. Then $\starFilter(F, \mathcal{F}) \subseteq \starFilter(\pfilter{x}, \mathcal{F})$. As $\starFilter(F, \mathcal{F}) \in \mathcal{F}^*$, this implies the result.
+\end{proof}
+
+\begin{lemma}
+Let $X$ be a set, $F\in\powerfilters(X)$ and $\mathcal{F}\subseteq \powerfilters(X)$. Then
+\begin{enumerate}
+\item $(F\otimes F);\Big(\bigcap_{G\in \mathcal{F}}G\otimes G\Big) \supseteq F\otimes \starFilter(F, \mathcal{F})$;
+\item if $H\in\powerfilters(X^2)$ is symmetric, then $\starFilter(\pfilter{x}, \setbuilder{Hy}{y\in X}) = (H;H)x$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We calculate, using that $(F\otimes F);-$ preserves intersections by \ref{filterCompositionResidual}, as well as \ref{orderPreservingFunctionLatticeOperations},
+\begin{align*}
+(F\otimes F);\Big(\bigcap_{G\in \mathcal{F}}G\otimes G\Big) &= \bigcap \setbuilder{(F\otimes F); (G\otimes G)}{G\in \mathcal{F}} \\
+&= \bigcap \setbuilder{F\otimes G}{G\in \mathcal{F}, G\amesh F} \\
+&\supseteq F\otimes \bigcap \setbuilder{G \in \mathcal{F}}{G\amesh F} \\
+&= F\otimes \starFilter(F, \mathcal{F}).
+\end{align*}
+
+(2) ????
+\end{proof}
+
+\subsubsection{Barycentric refinement}
+\begin{definition}
+Let $X$ be a set and $\mathcal{F},\mathcal{G} \subseteq \powerfilters(X)$ sets of filters on $X$.
+Then we define the \udef{ultrastar} $\mathcal{F}^U$ of $\mathcal{F}$ as
+\[ \mathcal{F}^U \defeq \setbuilder{\starFilter(U, \mathcal{F})}{U\in \powerultrafilters(X) \cap \upset\mathcal{F}} \]
+We call $\mathcal{F}$ an \udef{ultrastar refinement} or a \udef{barycentric refinement} of $\mathcal{G}$ if $\mathcal{F}^U \subseteq \upset \mathcal{G}$.
+We write $\mathcal{F} <^B \mathcal{G}$.
+\end{definition}
+
+\subsubsection{Star-refinement}
+\begin{definition}
+Let $X$ be a set and $\mathcal{F},\mathcal{G} \subseteq \powerfilters(X)$ sets of filters on $X$. Then we call $\mathcal{F}$ a \udef{star-refinement} of $\mathcal{G}$ if $\mathcal{F}^* \subseteq \upset \mathcal{G}$. We write $\mathcal{F} <^* \mathcal{G}$.
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a set and $\mathcal{F}\subseteq \powerfilters(X)$ a cover of $X$. Then $\mathcal{F} <^* \big\{\{X\}\big\}$.
+\end{lemma}
+\begin{proof}
+Every set of filters is a subset of $\upset \big\{\{X\}\big\}$.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a set and $\mathcal{F},\mathcal{G}, \mathcal{H}\subseteq \powerfilters(X)$ covers of $X$. Then
+\begin{enumerate}
+\item if $\mathcal{F} <^* \mathcal{G}$, then $\mathcal{F} <^B \mathcal{G}$;
+\item if $\mathcal{F}$ contains no free filters, then $\mathcal{F} <^B \mathcal{G}$ and $\mathcal{G} <^B \mathcal{H}$ imply $\mathcal{F} <^* \mathcal{H}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) For all $U\in \powerultrafilters(X) \cap \upset\mathcal{F}$, there exists $F\in \mathcal{F}$ such that $F\subseteq U$. By \ref{starFilterOrderingLemma}, we have that $\starFilter(U,\mathcal{F}) \supseteq \starFilter(F, \mathcal{F})$. Thus $\mathcal{F}^U \subseteq \upset\mathcal{F}^*$. By assumption $\upset \mathcal{F}^* \subseteq \upset\mathcal{G}$. The result follows by transitivity.
+
+(2) Assume $\mathcal{F} <^B \mathcal{G}$ and $\mathcal{G} <^B \mathcal{H}$. Take $F\in\mathcal{F}$. We need to show that there exists $H\in \mathcal{H}$ such that $H \subseteq \starFilter(F,\mathcal{F})$.
+
+First consider the case $F = \powerset(X)$. Then any $H\in \mathcal{H}$ works because $\starFilter\big(\powerset(X), \mathcal{F}\big) = \powerset(X)$.
+
+Now let $F$ be proper. By the ultrafilter lemma \ref{ultrafilterLemma}, we can find an ultrafilter $U\supseteq F$. By assumption, there exists $H\in \mathcal{H}$ such that $H \subseteq \starFilter(\pfilter{x}, \mathcal{G})$. We claim this $H$ satisfies the requirement. To show
+\[ H \subseteq \starFilter(F,\mathcal{F}) = \bigcap\setbuilder{F'\in \mathcal{F}}{F'\amesh F}, \]
+we show that $H\subseteq F'$ for all $F'\in \mathcal{F}$ such that $F'\amesh F$.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a set. The relation $<^*$ is a transitive relation on $\powerset\big(\powerfilters(X)\big)$.
+\end{proposition}
+\begin{proof}
+Let $\mathcal{F}, \mathcal{G}, \mathcal{H}\subseteq \powerfilters(X)$ be sets of filters on $X$.
+
+Suppose $\mathcal{F}<^* \mathcal{G}$ and $\mathcal{G} <^* \mathcal{H}$.
+Then $\mathcal{F}^*\subseteq \upset \mathcal{G}$ and $\mathcal{G}^* \subseteq \upset \mathcal{H}$. By \ref{starRefinementLemma}, we have $\mathcal{G}\subseteq \upset \mathcal{G}^*$.
+
+These inclusions imply $\upset \mathcal{G}^* \subseteq \upset \mathcal{H}$ and $\upset \mathcal{G} \subseteq \upset \mathcal{G}^*$. Combining gives
+\[ \mathcal{F}^* \subseteq \upset \mathcal{G} \subseteq \upset \mathcal{G}^* \subseteq \upset \mathcal{H}, \]
+so $\mathcal{F} <^* \mathcal{H}$.
+\end{proof}
+TODO also from previous proposition?
+
+\subsection{Uniform covers}
+\begin{definition}
+Let $X$ be a set. A set $\mathbf{U}\subseteq \powerset\big(\powerfilters(X)\big)$ is called a \udef{uniform cover set} if it is a filter w.r.t. star-refinement.
+\end{definition}
+
+TODO: non-finite-depth: not any two, but any one element of $\mathcal{U}$ has a star-lower bound?
+
+\begin{lemma}
+A uniform cover set is upwards closed w.r.t. inclusion.
+\end{lemma}
+\begin{proof}
+Let $\mathbf{U}$ be a uniform cover on a set $X$. 
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a set. Then the function
+\[ \{\text{uniformities on $X$}\} \to \{\text{uniform cover sets of $X$}\}: \mathcal{U} \mapsto \setbuilder{\setbuilder{Hx}{x\in X}\big.}{H\in \mathcal{U}} \]
+is a bijection with inverse
+\[ \{\text{uniform cover sets of $X$}\} \to \{\text{uniformities on $X$}\}: \mathbf{U} \mapsto \upset\setbuilder{\bigcap \setbuilder{F \otimes F}{F\in \mathcal{F}}}{\mathcal{F}\in \mathbf{U}}. \]
+\end{proposition}
+\begin{proof}
+
+
+Now we show that $\upset\setbuilder{\bigcap \setbuilder{F \otimes F}{F\in \mathcal{F}}}{\mathcal{F}\in \mathbf{U}}$ is a uniformity for all uniform covers $\mathbf{U}$. It is clear that it is closed under transposition and upwards closure is given by construction.
+
+Take arbitrary $x\in X$. For $\pfilter{x}\otimes\pfilter{x}$ to be in the uniformity, it is enough to show that $\pfilter{x}\otimes\pfilter{x} \supseteq \bigcap\setbuilder{F\otimes F}{F\in\mathcal{F}}$ any $\mathcal{F}\in\mathbf{U}$. This follows straight from \ref{principalUltrafilterInCover}.
+\end{proof}
+
+
+\section{Properties of uniform spaces}
+\subsection{(Total) boundedness}
+TODO ref: BOUNDEDNESS IN UNIFORM SPACES, TOPOLOGICAL GROUPS, AND HOMOGENEOUS SPACES - Atkin
+
+\begin{definition}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. We call $\mathcal{D} \subseteq \powerset(X^2)$ a \udef{uniform cover} of $\sSet{X,\mathcal{U}}$ if
+\[ \forall H\in \mathcal{U}:\quad \mathcal{D}\mesh H. \]
+\begin{itemize}
+\item We say $B\subseteq X$ is \udef{totally bounded} if for all uniform covers $\mathcal{D}$, there exists a \emph{finite} $\mathcal{C} \subseteq \setbuilder{Ax}{A\in \mathcal{D}, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
+\item We say $B\subseteq X$ is \udef{bounded} if for all uniform covers $\mathcal{D}$, there exists a \emph{finite} $\mathcal{C} \subseteq \setbuilder{A^nx}{A\in \mathcal{D}, n\in \N, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{topologicalBoundednessLemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space and $B\subseteq X$ a subset. Then
+\begin{enumerate}
+\item if $B$ is totally bounded, then for all $A\in \entourage_\mathcal{U}$ there exists a finite $S\subseteq X$ such that $B\subseteq \bigcup_{x\in S}Ax$;
+\item if $B$ is bounded, then for all $A\in \entourage_\mathcal{U}$ there exists $n\in \N$ and a finite $S\subseteq X$ such that $B\subseteq \bigcup_{x\in S}A^nx$.
+\end{enumerate}
+The converses hold in a topological uniform space.
+\end{lemma}
+\begin{proof}
+We may simply observe that $\{V\}$ is a uniform cover for all $V\in \entourage_\mathcal{U}$. This proves (1) and (2).
+
+Now assume $\mathcal{U}$ topological. Then $\entourage_\mathcal{U} \in \mathcal{U}$, so each uniform cover contains an entourage. 
+\end{proof}
+
+
+\subsection{Compactness}
+\begin{proposition} \label{compactUltrafilterFactorisation}
+Let $\sSet{X,\mathcal{U}}$ be a compact uniform space. If $H$ is an ultrafilter in $\mathcal{U}$, then 
+\begin{enumerate}
+\item $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H] \in\mathcal{U}$;
+\item $p_1^{\imf\imf}[H]$ and $p_2^{\imf\imf}[H]$ converge in $\Gamma(\Xi(\mathcal{U}))$;
+\item $\lim\big(p_1^{\imf\imf}[H]\big) = \lim\big(p_2^{\imf\imf}[H]\big)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Let $H$ be an ultrafilter in $\mathcal{U}$. Then $p_1^{\imf\imf}[H]$ and $p_2^{\imf\imf}[H]$ are ultrafilters by \ref{projectionsOfUltrafilterAreUltra}. By compactness there exist $x,y\in X$ such that $p_1^{\imf\imf}[H] \overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$ and $p_2^{\imf\imf}[H] \overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} y$. Thus $p_1^{\imf\imf}[H]\otimes \pfilter{x}\in\mathcal{U}$ and $p_2^{\imf\imf}[H]\otimes \pfilter{y}\in\mathcal{U}$. 
+
+By \ref{filterCompositionFactorisationLemma} we have
+\[ \pfilter{x}\otimes \pfilter{y} = \pfilter{x}\otimes p_1^{\imf\imf}[H]; H; p_2^{\imf\imf}[H] \otimes \pfilter{y} \in \mathcal{U}. \]
+
+Finally
+\[ p_1^{\imf\imf}[H] \mathrel{\Xi(\mathcal{U})} \pfilter{x}, \quad \pfilter{x} \mathrel{\Xi(\mathcal{U})} \pfilter{y} \quad\text{and}\quad \pfilter{y}\mathrel{\Xi(\mathcal{U})} p_2^{\imf\imf}[H], \]
+so $p_1^{\imf\imf}[H] \mathrel{\Xi(\mathcal{U})} p_2^{\imf\imf}[H]$ by transitivity. Thus $p_1^{\imf\imf}[H]\otimes p_2^{\imf\imf}[H] \in \mathcal{U}$.
+\end{proof}
+
+\subsection{Depth properties}
+\subsubsection{Choquet uniform spaces}
+\begin{definition}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. We say $\mathcal{U}$ is \udef{uniformly Choquet} if for all $H\in \powerfilters(X^2)$,
+\[ H\in\mathcal{U} \qquad\iff\qquad \text{$I \in \mathcal{U}$ for all ultrafilters $I$ such that $H\subseteq I$.} \]
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. If $\mathcal{U}$ is uniformly Choquet, then $\Gamma(\Xi(\mathcal{U}))$ is Choquet.
+\end{lemma}
+\begin{proof}
+????????????????
+\end{proof}
+
+
+\section{Cauchy structure}
+\begin{definition}
+Let $\sSet{X,R}$ be a uniform relation space and let $\mathcal{F}\subseteq \powerfilters(X)$ be defined by
+\[ F\in \mathcal{F} \qquad\defequiv\qquad F\mathrel{R} F. \]
+Then $\mathcal{F}$ is called the \udef{induced Cauchy structure} and $\sSet{X,\mathcal{F}}$ is called the \udef{induced Cauchy space}.
+\end{definition}
+\begin{lemma}
+The induced Cauchy space $\sSet{X, \mathcal{F}}$ of a uniform relation space $\sSet{X,R}$ is a Cauchy space.
+
+If the uniform relation is of finite depth, then the induced Cauchy space is too.
+\end{lemma}
+\begin{proof}
+We immediately have $\pfilter{x}\in\mathcal{F}$ for all $x\in X$ because $\pfilter{x}\mathrel{R} \pfilter{x}$.
+
+We need to show upwards closure. Let $F\in \mathcal{F}$, meaning $F\mathrel{R} F$, and $F\subseteq G$. By upwards closure of $F\mathrel{R}$, we have $F\mathrel{R} G$. By symmetry we have $G\mathrel{R} F$ and by transitivity $G\mathrel{R} G$, so $G\in\mathcal{F}$.
+
+Finally, assume the uniform relation is of finite depth. Take $F,G\in \mathcal{F}$ such that $F\amesh G$. Then $F\mathrel{F}G$ by \ref{uniformRelationRelatedElementLemma}.
+From $F\mathrel{R}F$ and $F\mathrel{R}G$, we conclude $F\mathrel{R}F\cap G$ by finite depth, so $F\cap G$ is Cauchy by \ref{uniformRelationRelatedElementLemma}.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X, R}$ be a uniform relation space, $F$ a Cauchy filter and $F\mathrel{R} G$. Then $G$ is a Cauchy filter.
+\end{lemma}
+\begin{proof}
+The relationships $F\mathrel{R} F$ and $F\mathrel{R} G$ imply $G\mathrel{R} G$ by transitivity and symmetry.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,R}$ be a uniform relation space with induced Cauchy structure $\mathcal{F}$, $F\in \powerfilters(X)$ and $x\in X$. Then
+\begin{enumerate}
+\item if $F\cap\pfilter{x} \in \mathcal{F}$, then $F\overset{\Gamma(R)}{\longrightarrow} x$;
+\item the converse holds if $\Gamma(R)$ is a Kent space.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By upwards closure, we have that $\big(F\cap \pfilter{x}\big)\mathrel{R}\big(F\cap \pfilter{x}\big)$ implies $F\mathrel{R}\pfilter{x}$, so $F\overset{\Gamma(R)}{\longrightarrow} x$.
+
+(2) If $\Gamma(R)$ is a Kent space, then $F\overset{\Gamma(R)}{\longrightarrow} x$ implies $(F\cap\pfilter{x})\overset{\Gamma(R)}{\longrightarrow} x$. So $(F\cap\pfilter{x})\mathrel{R}\pfilter{x}$ and thus $\big(F\cap \pfilter{x}\big)\mathrel{R}\big(F\cap \pfilter{x}\big)$ by \ref{uniformRelationRelatedElementLemma}.
+\end{proof}
+TODO: when is $\Gamma(R)$ a Kent space?
+
+\begin{lemma} \label{uniformlyConvergentImpliesCauchy}
+Let $\sSet{X,R}$ be a uniform relation space and $F\in\powerfilters(X)$. If $F$ converges, then $F$ is a Cauchy filter.
+\end{lemma}
+\begin{proof}
+If $F$ converges uniformly to $x$, then $F\mathrel{R}\pfilter{x}$ and by symmetry also $\pfilter{x}\mathrel{R}F$. By transitivity $F\mathrel{R}F$. 
+\end{proof}
+If the converse to this lemma holds, then the uniform space is called complete.
+
+\subsection{Completeness}
+
+\begin{definition}
+A uniform relation space $\sSet{X,R}$ is called \udef{complete} if all Cauchy filters converge.
+\end{definition}
+
+A uniform space is complete iff for all $F\in\powerfilters(X)$,
+\[ F\mathrel{R}F \quad\iff\quad \exists x\in X:\; F\mathrel{R}\pfilter{x}. \]
+
+\begin{proposition} \label{compactImpliesComplete}
+Let $\sSet{X,R}$ be a uniform relation space. If $\sSet{X,\Gamma(R)}$ is compact, then $\sSet{X,R}$ is complete.
+\end{proposition}
+\begin{proof}
+Assume $\sSet{X,\Gamma(R)}$ is compact and take $F\in\powerfilters(X)$ such that $F\mathrel{R}F$. Then we can find an ultrafilter $F'\supseteq F$ by the ultrafilter lemma \ref{ultrafilterLemma}. By compactness $F'$ converges uniformly, so $F'\mathrel{R}\pfilter{x}$ for some $x\in X$. Then $F \mathrel{R}\pfilter{x}$ by \ref{uniformRelationUpwardsClosure}, so $F$ is uniformly convergent. Because $F$ was chosen arbitrarily this makes $\sSet{X,R}$ complete.
+\end{proof}
+
+\begin{proposition}
+Hausdorff: complete iff closed??
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsection{Precompactness}
+\begin{definition}
+Let $\sSet{X,R}$ be a uniform relation space, $F\in\powerfilters(X)$ a filter and $A\subseteq X$.
+Then 
+\begin{itemize}
+\item we call $F$ \udef{precompactoid} if every ultrafilter that contains $F$ is a Cauchy filter;
+\item we call $X$ \udef{precompact} if $\{X\}$ is precompactoid.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+A uniform space is compact \textup{if and only if} it is precompact and complete.
+\end{proposition}
+\begin{proof}
+Th direction $\Rightarrow$ is given by \ref{uniformlyConvergentImpliesCauchy} and \ref{compactImpliesComplete}.
+
+For the other direction: By precompactness, every ultrafilter is an Cauchy filter. By completeness, every Cauchy filter (and thus every ultrafilter) converges.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\mathcal{U}}$ be a symmetric uniform space. Then $X$ is precompact \textup{if and only if} $X$ is totally bounded.
+\end{proposition}
+\begin{proof}
+$\boxed{\Rightarrow}$ Assume $X$ is precompact and, towards a contradiction, that there exists a uniform cover $\mathcal{D}$ such that there is no finite subcover of $\setbuilder{Ax}{A\in \mathcal{D}, x\in X}$. Then
+\[ \setbuilder{(A_0x_0\cup \ldots \cup A_nx_n)^c}{n\in \N; A_0,\ldots, A_n \in \mathcal{D}; x_0, \ldots, x_n\in X} \]
+is a filter base and does not contain $\emptyset$, so the filter is generates is proper and we can find an ultrafilter $F$ that contains it by the ultrafilter lemma \ref{ultrafilterLemma}.
+
+Now $F$ is Cauchy, so $F\otimes F\in \mathcal{U}$ and thus $\mathcal{D}\mesh F$, i.e.\ there exists a $A\in \mathcal{D}\cap F\otimes F$. Then $Ax\in F$ for some $x\in X$ by \ref{principalImageOfInProductFilter}. By construction of $F$, we also have $(Ax)^c\in F$. Thus $\emptyset =  Ax \cap (Ax)^c \in F$, so $F$ is trivial and not an ultrafilter. This is a contradiction.
+
+$\boxed{\Leftarrow}$ Assume, towards a contradiction, that $X$ is not precompact. Then there exists an ultrafilter $F$ that is not Cauchy. This means that $H \not\subseteq F\otimes F$ for all symmetric $H\in\mathcal{U}$ and, in particular $H;H \not\subseteq F\otimes F$. As $H;H$ is generated by sets of the form $A;A$, where $A\in H$ is symmetric, we can find a set of this form that is not an element of $F\otimes F$. Let $\mathcal{D}$ consist of a set $A\in H$ such that $A;A\notin F\otimes F$ for all for all symmetric $H\in \mathcal{U}$. As $\mathcal{U}$ is symmetric, each $H'\in \mathcal{U}$ contains a symmetric $H$ and the corresponding $A$ is an element of $H'$. This means that $\mathcal{D}$ is a uniform cover.
+
+By assumption, there exists a finite subset $\setbuilder{A_0x_0, \ldots, A_nx_n}{\seq{A_k}_{k=0}^n\in \mathcal{D}^\N; \seq{x_k}_{k=0}^n \in X^\N}$ that covers $X$, so $A_0x_0 \cup \ldots \cup A_nx_n = X \in F$. Now $F$ is prime by \ref{booleanMaximalFiltersIdeals} and thus at least one $A_0x_0, \ldots, A_nx_n$ is an element of $F$. Call this $Ax$.
+
+In other words, there exists $A\in \mathcal{D}$ and $x\in X$ such that $Ax \in F$. By symmetry, $xA\in F$. Thus $A;A\in F\otimes F$ by \ref{principalImageOfInProductFilter}. This is a contradiction.
+\end{proof}
+
+\section{Uniform continuity}
+\begin{definition}
+Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if
+\[ H\in \mathcal{U} \quad\implies\quad \upset (f, f)^{\imf\imf}[H]\in \mathcal{V}. \]
+The set of uniform functions from $\sSet{X,\mathcal{U}}$ to $\sSet{Y,\mathcal{V}}$ is denoted $\ucont(\mathcal{U}, \mathcal{V})$ or $\ucont(X,Y)$.
+\end{definition}
+
+
+\begin{proposition} \label{uniformContinuityEntourages}
+Let $\sSet{X,\mathcal{U}}$, $\sSet{Y,\mathcal{V}}$ be uniform spaces and $f: X\to Y$ a function.
+\begin{enumerate}
+\item If $f$ is uniformly continuous, then $\entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}]$;
+\item If $\mathcal{V}$ is topological, then opposite implication also holds.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By uniform continuity we have
+\[ \entourage_\mathcal{V} \subseteq \bigcap\setbuilder{\upset (f, f)^{\imf\imf}[H]}{H\in \mathcal{U}} = \upset (f, f)^{\imf\imf}\left[\bigcap \mathcal{U}\right] = \upset (f, f)^{\imf\imf}\left[\entourage_\mathcal{U}\right]. \]
+The first equality follows from \ref{imageFiltersPreservesIntersection}.
+
+(2) Assume $\entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}]$ and take $H\in \mathcal{U}$. Then $\entourage_\mathcal{U}\subseteq H$, so
+\[ \entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}] \subseteq \upset (f, f)^{\imf\imf}[H]. \]
+Thus $\upset (f, f)^{\imf\imf}[H] \in\mathcal{V}$.
+\end{proof}
+
+\begin{proposition}
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, $\sSet{X,R}, \sSet{Y,S}$ uniform relation spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate}
+\item if $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous, then $\big(f: \sSet{X,\Xi(\mathcal{U})} \to \sSet{Y,\Xi(\mathcal{V})}\big)^{\imf\imf}$ is relation preserving;
+\item if $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\Gamma(R)} \to \sSet{Y,\Gamma(S)}$ is continuous;
+\item if $f: \sSet{X,\xi} \to \sSet{Y,\zeta}$ is continuous, then $\big(f: \sSet{X,\Phi(\xi)} \to \sSet{Y,\Phi(\zeta)}\big)^{\imf\imf}$ is relation preserving;
+\item if $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\Theta(R)} \to \sSet{Y,\Theta(S)}$ is uniformly continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume $f$ uniformly continuous and $F\mathrel{\Xi(\mathcal{U})} G$. Then $F\otimes G\in \mathcal{U}$. By uniform continuity $\upset (f, f)^{\imf\imf}[F\otimes G] = f^{\imf\imf}[F] \otimes f^{\imf\imf}[G] \in \mathcal{V}$, so $f^{\imf\imf}[F] \mathrel{\Xi(\mathcal{V})} f^{\imf\imf}[G]$.
+
+(2) Assume $f^{\imf\imf}$ relation preserving and take $F \overset{\Gamma(R)}{\longrightarrow} x$. Then $F\mathrel{R}\pfilter{x}$ and, by relation preservation, $f^{\imf\imf}[F]\mathrel{S}f^{\imf\imf}[\pfilter{x}]$. Now $f^{\imf\imf}[\pfilter{x}] = \pfilter{f}(x)$, so $f^{\imf\imf}[F] \overset{\Gamma(S)}{\longrightarrow} f(x)$.
+
+(3) Assume $f$ is continuous and $F\mathrel{\Phi(\xi)} G$. Then there exists $x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By continuity $f^{\imf\imf}[F]\overset{\zeta}{\longrightarrow} f(x)$ and $f^{\imf\imf}[G]\overset{\zeta}{\longrightarrow} f(x)$, so $f^{\imf\imf}[F] \mathrel{\Phi(\zeta)} f^{\imf\imf}[G]$.
+
+(4) Assume $f^{\imf\imf}$ is relation preserving and take $H\in \Theta(R)$. Then $p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]$, so $f^{\imf\imf}\big[p_1^{\imf\imf}[H]\big]\mathrel{S}f^{\imf\imf}\big[p_2^{\imf\imf}[H]\big]$. Now
+\[ f^{\imf\imf}\big[p_1^{\imf\imf}[H]\big] = (f\circ p_1)^{\imf\imf}[H] = \big(p_1\circ(f,f) \big)^{\imf\imf}[H] = p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]. \]
+Similarly $f^{\imf\imf}\big[p_2^{\imf\imf}[H]\big] = p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]$. Thus $p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]\mathrel{S}p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]$, which means that $(f,f)^{\imf\imf}[H]\in \Theta(S)$.
+\end{proof}
+\begin{corollary}
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, $\sSet{X,R}, \sSet{Y,S}$ uniform relation spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate}
+\item if $\mathcal{U}$ is factorisable and $\big(f: \sSet{X,\Xi(\mathcal{U})} \to \sSet{Y,\Xi(\mathcal{V})}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous;
+\item if $R$ is complete and $f: \sSet{X,\Gamma(R)} \to \sSet{Y,\Gamma(S)}$ is continuous, then $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) From the proposition, we have that $f: \sSet{X,\Theta(\Xi(\mathcal{U}))} \to \sSet{Y,\Theta(\Xi(\mathcal{V}))}$ is uniformly continuous. Because $\mathcal{U}$ is factorisable, $\Theta(\Xi(\mathcal{U})) = \mathcal{U}$. Also $\Theta(\Xi(\mathcal{V})) \subseteq \mathcal{V}$.
+
+(2) From the proposition, we have that $\big(f: \sSet{X,\Phi(\Gamma(R))} \to \sSet{Y,\Phi(\Gamma(S))}\big)^{\imf\imf}$ is relation preserving. Because $R$ is complete, we have $R = \Phi(\Gamma(R))$. Also $\Phi(\Gamma(S)) \subseteq S$.
+\end{proof}
+
+\begin{proposition}
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate}
+\item if $\mathcal{U}$ is compact, $\mathcal{V}$ is uniformly Choquet and $f: \sSet{X,\Gamma(\Xi(\mathcal{U}))} \to \sSet{Y,\Gamma(\Xi(\mathcal{V}))}$ is continuous, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Take $H\in\mathcal{U}$. Take arbitrary ultrafilter $I\in\powerfilters(Y^2)$ such that $(f,f)^{\imf\imf}[H]\subseteq I$. Then there exists an ultrafilter $J\in \powerfilters(X^2)$ such that $\upset (f,f)^{\imf\imf}[J] = I$ by \ref{preimageFilter}.
+
+By \ref{compactUltrafilterFactorisation}, there exists $x\in X$ such that $p_1^{\imf\imf}[J]\overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$ and $p_2^{\imf\imf}[J]\overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$. By continuity, symmetry and transitivity,
+\[ \mathcal{V} \ni (f\circ p_1)^{\imf\imf}[J]\otimes (f\circ p_2)^{\imf\imf}[J] = p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[J]\big]\otimes p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[J]\big] \subseteq (f,f)^{\imf\imf}[J] = I. \]
+As this is true for arbitrary ultrafilter $I$, we have $(f,f)^{\imf\imf}[H]\in\mathcal{V}$ because $\mathcal{V}$ is uniformly Choquet.
+\end{proof}
+
+\subsection{Initial and final uniform spaces}
+\begin{definition}
+Let $Y$ be a set.
+\begin{itemize}
+\item Given a set of uniform spaces $\{\sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ and a set of functions $\{f_i: Y\to Z_i\}_{i\in I}$, we define the \udef{initial uniformity} $\mathcal{X}$ on $Y$ as
+\[ \mathcal{X} = \bigvee \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}. \]
+\item Given a set of uniform spaces $\{\sSet{X_i, \mathcal{U}_i}\}_{i\in I}$ and a set of functions $\{g_i: X_i\to Y\}_{i\in I}$, we define the \udef{final uniformity} $\mathcal{Y}$ on $Y$ as
+\[ \mathcal{Y} = \bigwedge \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; g_i\in \ucont(\mathcal{U}_i, \mathcal{V})}. \]
+\end{itemize}
+\end{definition}
+
+TODO final uniformities!
+
+\begin{proposition} \label{initialFinalUniformity}
+Let $Y$ be a set.
+\begin{enumerate}
+\item Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be a set of functions to uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t.\ this set. Then
+\[ H\in \mathcal{X} \quad\iff\quad \forall i\in I: \; \upset(f_i,f_i)^{\imf\imf}(H)\in \mathcal{W}_i. \]
+\item TODO for final uniformities.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) The direction $\Rightarrow$ is clear: if $H\in \mathcal{X}$, then $H\in \mathcal{V}$ for all $\mathcal{V}\in \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}$. As any of these $\mathcal{V}$ makes all the $f_i$s uniformly continuous, we have $\upset(f_i,f_i)^{\imf\imf}(H)\in \mathcal{W}_i$ for all $i\in I$.
+
+For $\Leftarrow$, assume, towards a contradiction, that $H$ is such that $\forall i\in I: \; \upset(f_i,f_i)^{\imf\imf}(H) \in \mathcal{W}_i$, but $H \notin \mathcal{X}$. Then let $\mathcal{X}'$ be the least uniformity that contains $\mathcal{X}$ and $H$, which exists by \ref{latticeOfUniformities}.
+
+If we can show that $\mathcal{X}'$ makes all the $f_i$s uniformly continuous, then $\mathcal{X}'$ must be smaller than $\mathcal{X}$ by construction. This is a contradiction.
+
+For all $i\in I$, we have $\upset(f_i,f_i)^{\imf\imf}(H^\transp) \in \mathcal{W}_i$ and $\upset(f_i,f_i)^{\imf\imf}(H') \in \mathcal{W}_i$ for all $H'\supseteq H$.
+
+We just need to show that $\upset(f_i,f_i)^{\imf\imf}(H;H) \in \mathcal{W}_i$ and $\upset(f_i,f_i)^{\imf\imf}(H;H') \in \mathcal{W}_i$ for all $H'\in \mathcal{X}$. These facts follow from \ref{imageFilterComposition}, by upwards closure of $\mathcal{W}_i$.
+\end{proof}
+
+
+\begin{corollary}[Characteristic property of initial and final uniformity] \label{characteristicPropertyInitialFinalUniformity}
+Let $Y$ be a set, $\sSet{X,\mathcal{U}}$ and $\sSet{Z, \mathcal{W}}$ uniform spaces.
+\begin{enumerate}
+\item Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be set of functions to uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t. this set. A function $g: \sSet{X, \mathcal{U}}\to Y$ is uniformly continuous \textup{if and only if} $f_i \circ g$ is uniformly continuous for all $i\in I$.
+\[ \begin{tikzcd}
+Y \ar[r, "f_i"] & Z_i \\ X \ar[u, "g"] \ar[ur, swap, "f_i\circ g"]
+\end{tikzcd} \]
+\item TODO?? Let $\{g_i: \sSet{X_i, \mathcal{U}_i} \to Y\}_{i\in I}$ be set of functions from uniform spaces and $\mathcal{Y}$ the final preconvergence on $Y$ w.r.t. this set. A function $f: Y\to \sSet{Z,\mathcal{W}}$ is uniformly continuous \textup{if and only if} $f\circ g_i$ is uniformly continuous for all $i\in I$.
+\[ \begin{tikzcd}
+X_i \ar[r, "g_i"] \ar[dr, swap, "f\circ g_i"] & Y \ar[d, "f"] \\ & Z
+\end{tikzcd} \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) The uniform continuity of $g$ is equivalent to $\upset(g,g)^{\imf\imf}(H)\in \mathcal{X}$ for all $H\in \mathcal{U}$. By the proposition this is equivalent to
+\[ \forall i \in I: \; \upset(f_i, f_i)^{\imf\imf}\big(\upset(g,g)^{\imf\imf}(H)\big) = \upset\big((f_i, f_i)\circ (g,g)\big)^{\imf\imf}(H) = \upset(f_i\circ g, f_i\circ g)^{\imf\imf}(H) \in \mathcal{W}_i,  \]
+which is equivalent to the continuity of $f_i\circ g$ for all $i\in I$.
+
+(2) TODO!
+\end{proof}
+
+\begin{proposition} \label{topologicalInitialUniformity}
+Let $Y$ be a set. Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be set of functions to \emph{topological} uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t. this set. Then $\mathcal{X}$ is topological and
+\[ \entourage_\mathcal{X} = \mathfrak{F}\bigcup_{i\in I} (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) = \mathfrak{F}\setbuilder{(f_i,f_i)^\preimf(U)}{i\in I, U\in \entourage_{\mathcal{W}_i}}. \]
+\end{proposition}
+\begin{proof}
+(1) We have, by \ref{initialFinalUniformity} and \ref{filterPreimageImageGaloisConnection},
+\begin{align*}
+H \in \mathcal{X} &\iff \forall i\in I: \upset(f_i,f_i)^{\imf\imf}(H) \in \mathcal{W}_i \\
+&\iff \forall i\in I: \entourage_{\mathcal{W}_i} \subseteq \upset(f_i,f_i)^{\imf\imf}(H) \\
+&\iff \forall i\in I: \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \subseteq H \\
+&\iff \bigcup_{i\in I} \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \subseteq H.
+\end{align*}
+Thus the initial uniformity is topological and
+\begin{align*}
+\entourage_\mathcal{X} &= \mathfrak{F}\bigcup_{i\in I} \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \\
+&= \mathfrak{F}\bigcup_{i\in I}\setbuilder{(f_i,f_i)^\preimf(U)}{U\in \entourage_{\mathcal{W}_i}} \\
+&= \mathfrak{F}\setbuilder{(f_i,f_i)^\preimf(U)}{i\in I, U\in \entourage_{\mathcal{W}_i}}.
+\end{align*}
+\end{proof}
+
+\subsubsection{Product uniformity}
+\begin{definition}
+Let $\sSet{X_i, \mathcal{U}_i}$ be a uniform space for all $i\in I$. The \udef{product uniformity} $\bigotimes_{i\in I}\mathcal{U}_i$ is the initial uniformity on $\bigtimes_{i\in I}X_i$ w.r.t. the set of projections $p_i: \bigtimes_{i\in I}X_i \to X_i$.
+
+The product uniform space is denoted $\prod_{i\in I}X_i$.
+\end{definition}
+
+
+
+
+
+\section{Star refinement}
+\begin{definition}
+Let $X$ be a set and $U,V\subseteq \powerset(X)$ covers of $X$.
+\begin{itemize}
+\item The \udef{star} of $A\subseteq X$ w.r.t. $U$ is the set defined by
+\[ \operatorname{star}_U(A) \defeq \bigcup\setbuilder{B\in U}{A\mesh B}. \]
+\item The \udef{star} of $U$ is
+\[ U^* \defeq \setbuilder{\operatorname{star}_U(B)}{B\in U}. \]
+\item The cover $U$ \udef{star refines} the cover $V$ if $U^*\subseteq \downset V$. This is denoted $U <^* V$.
+\end{itemize}
+\end{definition}
+Note the different direction compared with the definition of refinement.
+
+\begin{lemma}
+Star refinement is a transitive relation on $\powerset^2(X)$.
+\end{lemma}
+\begin{proof}
+Assume $U <^* V$ and $V<^* W$, i.e.\ $U^* \subseteq \downset V$ and $V^* \subseteq \downset W$. The last inclusion implies $\downset V^* \subseteq \downset W$. Now $V\subseteq \downset V^*$ because $A\subseteq \operatorname{star}_V(A)$ for all $A\in V$, which implies $\downset V\subseteq \downset V^*$. Then we have
+\[ U^* \subseteq \downset V \subseteq \downset V^* \subseteq \downset W, \]
+and, by transitivity of inclusion, $U <^* W$.
+\end{proof}
+
+\begin{example}
+Star refinement is not reflexive in general. 
+
+Consider the set $X = \{0,1,2\}$ and the cover $U = \big\{\{0,1\}, \{1,2\}\big\}$. Then $U^* = \big\{\{0,1,2\}\big\}$, but $\{0,1,2\}\notin \downset U$.
+\end{example}
+
+\begin{lemma}
+Let $X$ be a set and $C,D\subseteq \powerset(X)$. If $C\subseteq D$, them $C^*\subseteq \downset D^*$.
+\end{lemma}
+\begin{proof}
+Take $A \in C^*$. Then $A = \operatorname{star}_C(B) = \bigcup \setbuilder{B'\in C}{B'\mesh B}$
+\end{proof}
+
+\subsubsection{Tolerance cover}
+\begin{definition}
+Let $V$ be a tolerance relation on a set $X$. The \udef{(tolerance) cover} of $X$ associated to $V$ is defined as
+\[ C_V \defeq \setbuilder{xV}{x\in X}. \]
+\end{definition}
+
+\begin{lemma}
+Let $V, W$ be tolerance relations on $X$ and $C_V, C_W$ their associated covers.
+\end{lemma}
+
+\begin{lemma} \label{toleranceCoverStarRefinement}
+Let $V$ be a tolerance relation on $X$ and $C_V$ its associated cover. Then
+\begin{enumerate}
+\item $\operatorname{star}_{C_V}(xV) = x(V;V;V)$;
+\item $C_V <^* C_{V;V;V}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We calculate
+\begin{align*}
+\operatorname{star}_{C_V}(xV) &= \bigcup \setbuilder{yV}{xV\mesh yV} \\
+&= \bigcup \setbuilder{yV}{x(V;V)y} \\
+&= x(V;V;V).
+\end{align*}
+
+(2) By (1), each $\operatorname{star}_{C_V}(xV)\in C_V^*$ is an element of $C_{V;V;V}$.
+\end{proof}
+
+\subsubsection{Uniform covers}
+\begin{definition}
+Let $X$ be a set. A \udef{uniform cover set} of $X$ is a filter of covers in $\sSet{\powerset^2(X), <^*}$. Members of a uniform cover set are called \udef{uniform covers}.
+\end{definition}
+
+\begin{proposition}
+Let $X$ be a set.
+\begin{enumerate}
+\item Let $\entourage$ be a topological entourage filter. Then
+\[ \setbuilder{C}{\exists V\in\entourage: C_V\subseteq \downset C} = \setbuilder{C_V}{V\in\entourage}_{<^*} \]
+is a uniform cover set.
+\item Let $\mathcal{C}$ be a uniform cover set. Then
+\[ \upset \setbuilder{\bigcup\setbuilder{A\times A}{A\in C}}{C\in\mathcal{C}} \]
+is a unform filter set.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We first verify the equality. Take $V\in \entourage$. Then there exists $W\in \entourage$ such that $W;W;W\subseteq V$.
+
+
+upwards closure: Let $C$ be a uniform cover and $C <^* D$. Then 
+\end{proof}
+
+
+
+\begin{definition}
+Let $X$ be a set. A \udef{uniform cover set} of $X$ is a filter of covers in $\sSet{\powerset^2(X), <^*}$.
+\end{definition}
+
+\section{Function spaces}
+\subsection{Evaluation uniformities}
+\begin{definition}
+Let $\sSet{X, \mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be preuniform spaces. The \udef{evaluation preuniformity} on $(X\to Y)$ is defined by
+\[ \mathcal{U}_E \defeq \bigcap \setbuilder{\left((\evalMap, \evalMap)^{\imf\imf}(-\otimes K)^\ttransp\right)^{\preimf}[\mathcal{V}] }{K\in\mathcal{U}}. \]
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X, \mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be preuniform spaces. The evaluation preuniformity on $(X\to Y)$ is a preuniformity. If (TODO when), then it is a (diagonal ?) uniformity.
+\end{lemma}
+\begin{proof}
+We verify the conditions:
+\begin{itemize}
+\item Upwards closure: If $G\in \mathcal{U}_E$ and $G\subseteq H$ for some $G,H\in\powerfilters(X\to Y)$, then for all $K\in \mathcal{U}$
+\[ (\evalMap, \evalMap)^{\imf\imf}(G\otimes K)^\ttransp \subseteq (\evalMap, \evalMap)^{\imf\imf}(H\otimes K)^\ttransp \in \mathcal{V}, \]
+by the upwards closure of $\mathcal{V}$. We conclude that $H\in \mathcal{U}_E$.
+\item Closure under transposition: take $G\in \mathcal{U}_E$ and arbitrary $K\in \mathcal{U}$. We have
+\[ (\evalMap, \evalMap)^{\imf\imf}(G^\transp\otimes K)^\ttransp = \Big((\evalMap, \evalMap)^{\imf\imf}(H\otimes K^\transp)^\ttransp\Big)^\transp \in \mathcal{V}, \]
+by the closure under transposition of $\mathcal{V}$. We conclude that $G^\transp\in \mathcal{U}_E$.
+\item Closure under composition: take $G,H\in\mathcal{U}_E$ and $K\in\mathcal{U}$. It is enough to show that there exists $K'\in\mathcal{U}$ such that
+\[ (\evalMap, \evalMap)^{\imf\imf}(G\otimes K')^\ttransp;(\evalMap, \evalMap)^{\imf\imf}(H\otimes K')^\ttransp \subseteq (\evalMap, \evalMap)^{\imf\imf}(G;H\otimes K)^\ttransp. \]
+
+
+, because they form bases, that for all $A\in G, B\in H$,
+\[ (\evalMap, \evalMap)^\imf\big((A;B) \times (C;D)\big)^\ttransp \subseteq (\evalMap, \evalMap)^\imf\big(A \times C\big)^\ttransp ; (\evalMap, \evalMap)^\imf\big(B \times D\big)^\ttransp. \]
+We first pick an arbitrary element of the left-hand set. Take $(x,y)\in C;D$ and $(f, g)\in A;B$, so there exist $z\in X$ and $h:X\to Y$ such that $(f,h)\in A$, $(h,g)\in B$, $(x,z)\in C$ and $(z,y)\in D$. Then
+\[ (\evalMap, \evalMap)\big((f,g), (x,y)\big)^\ttransp = (f(x), g(y)) \]
+and also
+\begin{align*}
+(f(x), g(y)) &\in \big\{\big(f(x), h(z)\big)\big\};\big\{\big(h(z), g(y)\big)\big\} \\
+&= \big\{(\evalMap, \evalMap)\big((f,h), (x,z)\big)^\ttransp\big\};\big\{(\evalMap, \evalMap)\big((h,g), (z,y)\big)^\ttransp\big\} \\
+&\subseteq (\evalMap, \evalMap)^\imf\big(A \times C\big)^\ttransp ; (\evalMap, \evalMap)^\imf\big(B \times D\big)^\ttransp.
+\end{align*}
+\end{itemize}
+Now assume $\sSet{Y, \mathcal{U}}$ diagonal. We verify the diagonality of $\mathcal{U}_\mathcal{S}$.
+
+For any $S\in \mathcal{S}$, we have
+\begin{align*}
+(\evalMap, \evalMap)^{\imf\imf}\big(\{\Delta_{(X\to Y)}\}\otimes \{\Delta_S\}\big)^\ttransp &= \upset \Big\{ (\evalMap, \evalMap)^{\imf}\big(\Delta_{(X\to Y)}\times \Delta_S\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}(\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \{(x,x)\}\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{(\evalMap, \evalMap)\big((f,x),(f,x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{\big(f(x), f(x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \Delta_{Y} \Big\} \in \mathcal{U}.
+\end{align*}
+This means that $\upset \{\Delta_{(X\to Y)}\} \in \mathcal{U}_\mathcal{S}$.
+\end{proof}
+
+
+\begin{lemma}
+Let $X$ be a set and $\sSet{Y,\mathcal{V}}$ a preuniform space. If $\mathcal{U}_1 \subseteq \mathcal{U}_2$ are preuniformities on $X$ with corresponding evaluation preuniformities $\mathcal{U}_{\mathcal{E}_1}$ and $\mathcal{U}_{\mathcal{E}_2}$, then $\mathcal{U}_{\mathcal{E}_2} \subseteq \mathcal{U}_{\mathcal{E}_1}$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsection{Uniform convergences and equicontinuity}
+\subsubsection{Diagonal maps and filters}
+\begin{definition}
+Let $X$ be a set and $A\subseteq X$ be a subset. The \udef{diagonal map} on $X$ is defined as
+\[ \Delta: \powerset(X)\to \powerset(X^2): A\mapsto \setbuilder{(a,a)}{a\in A}. \]
+We usually write $\Delta_A$ instead of $\Delta(A)$. Similarly if $\mathcal{S}\in\powerset^2(X^2)$, then we write $\Delta^\imf_\mathcal{S}$ instead of $\Delta^\imf(\mathcal{S})$.
+\end{definition}
+
+TODO: covers upwards directed.
+
+\subsubsection{Uniform convergences and equicontinuity}
+\begin{definition}
+Let $X$ be a set and $\sSet{Y, \mathcal{U}}$ a  uniform space. For any set $S$, let $\Delta_S = \setbuilder{(s,s)\in S^2}{s\in S}$ be the diagonal on $S$.
+\begin{itemize}
+\item If $\mathcal{S}$ is a set of subsets of $X$. Then
+\[ \mathcal{U}_\mathcal{S} \defeq \setbuilder{H\in \powerfilters\big((X\to Y)^2\big)}{\forall S\in \mathcal{S}:\; (\evalMap, \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp \in \mathcal{U}} \]
+is called the \udef{$\mathcal{S}$-uniformity}.
+\item If $\mathcal{S}$ is a set of subsets of $X$ and $K\subseteq (X\to Y)$. Then $K$ is called \udef{$\mathcal{S}$-equicontinuous} if
+\[ \forall S\in \mathcal{S}:\; \upset\big\{(\evalMap, \evalMap)^\imf(\Delta_K\times \Delta_S)^\ttransp\big\}\in \mathcal{U}. \]
+\end{itemize}
+In particular:
+\begin{itemize}
+\item $\setbuilder{\{x\}}{x\in X}$-convergence is called \udef{pointwise convergence};
+\item $\{X\}$-uniform convergence is just called \udef{uniform convergence};
+\item $\setbuilder{\{x\}}{x\in X}$-equicontinuity is called \udef{(pointwise) equicontinuity};
+\item $\{X\}$-equicontinuity is called \udef{uniform equicontinuity}.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a set, $\sSet{Y, \mathcal{U}}$ a diagonal uniform space and $\mathcal{S} \subseteq \powerset(X)$. Then
+\[ \mathcal{U}_\mathcal{S} = \left(H\mapsto (\evalMap, \evalMap)^{\imf\imf\imf}\big((H\otimes -)^\imf(\Delta^\imf_\mathcal{S})\big)^\ttransp\right)^\preimf[\powerset(\mathcal{U})]. \]
+\end{lemma}
+
+\begin{lemma}
+Let $X$ be a set, $\sSet{Y, \mathcal{U}}$ a preuniform space and $\mathcal{S}$ a set of subsets of $X$. The preuniformity of $\mathcal{S}$-uniform convergence is a preuniformity on $(X\to Y)$.
+
+If $\sSet{Y, \mathcal{U}}$ is diagonal, then the preuniformity of $\mathcal{S}$-uniform convergence is a diagonal uniformity.
+\end{lemma}
+Note that if $\mathcal{U}$ is not diagonal, then $\mathcal{U}_\mathcal{S}$ is not necessarily a uniformity.
+\begin{proof}
+We verify the conditions:
+\begin{itemize}
+\item Upwards closure: If $G\subseteq H$ for some $G,H\in\powerfilters(X\to Y)$, then
+\[ (\evalMap, \evalMap)^{\imf\imf}(G\otimes \{\Delta_S\})^\ttransp \subseteq (\evalMap, \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp \]
+and so we conclude by the upwards closure of $\mathcal{U}$.
+\item Closure under transposition: we have
+\[ (\evalMap, \evalMap)^{\imf\imf}(H^\transp\otimes \{\Delta_S\})^\ttransp = \Big((\evalMap, \evalMap)^{\imf\imf}(H\otimes \{\Delta_S\})^\ttransp\Big)^\transp, \]
+and so we conclude by the closure under transposition of $\mathcal{U}$.
+\item Closure under composition: take $G,H\in\mathcal{U}_\mathcal{S}$ and $S\in\mathcal{S}$. It is enough to show, because they form bases, that for all $A\in G, B\in H$,
+\[ (\evalMap, \evalMap)^\imf\big(A;B \times \Delta_S\big)^\ttransp \subseteq (\evalMap, \evalMap)^\imf\big(A \times \Delta_S\big)^\ttransp ; (\evalMap, \evalMap)^\imf\big(B \times \Delta_S\big)^\ttransp. \]
+We first pick an arbitrary element of the left-hand set. Take $(x,x)\in\Delta_S$ and $(f, g)\in A;B$, so there exists $h:X\to Y$ such that $(f,h)\in A$ and $(h,g)\in B$. Then
+\[ (\evalMap, \evalMap)\big((f,g), (x,x)\big)^\ttransp = (f(x), g(x)) \]
+and also
+\begin{align*}
+(f(x), g(x)) &\in \big\{\big(f(x), h(x)\big)\big\};\big\{\big(h(x), g(x)\big)\big\} \\
+&= \big\{(\evalMap, \evalMap)\big((f,h), (x,x)\big)^\ttransp\big\};\big\{(\evalMap, \evalMap)\big((h,g), (x,x)\big)^\ttransp\big\} \\
+&\subseteq (\evalMap, \evalMap)^\imf\big(A \times \Delta_S\big)^\ttransp ; (\evalMap, \evalMap)^\imf\big(B \times \Delta_S\big)^\ttransp.
+\end{align*}
+\end{itemize}
+Now assume $\sSet{Y, \mathcal{U}}$ diagonal. We verify the diagonality of $\mathcal{U}_\mathcal{S}$.
+
+For any $S\in \mathcal{S}$, we have
+\begin{align*}
+(\evalMap, \evalMap)^{\imf\imf}\big(\{\Delta_{(X\to Y)}\}\otimes \{\Delta_S\}\big)^\ttransp &= \upset \Big\{ (\evalMap, \evalMap)^{\imf}\big(\Delta_{(X\to Y)}\times \Delta_S\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}(\evalMap, \evalMap)^{\imf}\big(\{(f,f)\}\times \{(x,x)\}\big)^\ttransp \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{(\evalMap, \evalMap)\big((f,x),(f,x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \bigcup_{f\in (X\to Y)}\bigcup_{x\in S}\big\{\big(f(x), f(x)\big)\big\} \Big\} \\
+&= \upset \Big\{ \Delta_{Y} \Big\} \in \mathcal{U}.
+\end{align*}
+This means that $\upset \{\Delta_{(X\to Y)}\} \in \mathcal{U}_\mathcal{S}$.
+\end{proof}
+
+\begin{lemma}
+Take $\mathcal{S}_1, \mathcal{S}_2 \in\powerset^2(X)$. If $\mathcal{S}_1 \preceq \mathcal{S}_2$ (i.e.\ $\mathcal{S}_2$ refines $\mathcal{S}_1$), then $\mathcal{U}_{\mathcal{S}_2} \subseteq \mathcal{U}_{\mathcal{S}_1}$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+
+
+\begin{lemma}
+Let $X$ be a set and $\sSet{Y, \mathcal{U}}$ a uniform space. Then the uniformity of pointwise convergence induces pointwise convergence on $(X\to Y)$.
+\end{lemma}
+\begin{proof}
+Let $H$ be a filter in $\powerfilters(X\to Y)$ and $f\in (X\to Y)$. Set $\mathcal{S} = \setbuilder{\{x\}}{x\in X}$. Then
+\begin{align*}
+H\overset{\text{pt-wise}}{\longrightarrow} f &\iff \forall x\in X: \; \evalMap^{\imf\imf}(H, \pfilter{x}) \overset{\mathcal{U}}{\longrightarrow} f(x) \\
+&\iff \forall x\in X: \; \evalMap^{\imf\imf}(H, \pfilter{x}) \otimes \pfilter{f}(x) \in\mathcal{U} \\
+&\iff \forall x\in X: \; \evalMap^{\imf\imf}(H, \pfilter{x}) \otimes \evalMap^{\imf\imf}(\pfilter{f}, \pfilter{x}) \in\mathcal{U} \\
+&\iff \forall x\in X: \; (\evalMap, \evalMap)^{\imf\imf}\big((H\otimes \pfilter{x}) \otimes (\pfilter{f}, \pfilter{x})\big) \in\mathcal{U} \\
+&\iff \forall x\in X: \; (\evalMap, \evalMap)^{\imf\imf}\big((H\otimes \pfilter{f}) \otimes (\pfilter{x}, \pfilter{x})\big)^\ttransp \in\mathcal{U} \\
+&\iff \forall x\in X: \; (\evalMap, \evalMap)^{\imf\imf}\big((H\otimes \pfilter{f}) \otimes \{\Delta_{\{x\}}\}\big)^\ttransp \in\mathcal{U} \\
+&\iff H\otimes \pfilter{f} \in \mathcal{U}_\mathcal{S} \\
+&\iff H \overset{\mathcal{U}_\mathcal{S}}{\longrightarrow} f.
+\end{align*}
+\end{proof}
+
+\subsection{Continuous convergence}
+\begin{definition}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. A filter $H\in(X\to Y)$ converges in \udef{continuous preconvergence} to $f\in(X\to Y)$ if
+\[ \evalMap^{\imf\imf}(H\otimes F) \overset{\zeta}{\longrightarrow} f(x) \]
+for all $F\overset{\xi}{\longrightarrow} x$.
+
+The space $(X\to Y)$ equipped with the continuous convergence is denoted $(X \to Y)_c$.
+\end{definition}
+
+The space $\cont(X,Y)$, when viewed as a convergence subspace of $(X\to Y)_c$, is denoted $\cont_c(X,Y)$
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. Then
+\begin{enumerate}
+\item $(X\to Y)_c$ is a preconvergence space;
+\item $\cont_c(X,Y)$ is a convergence space.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+It is clear that the continuous preconvergence is monotonic. We just need to show that it is centered, when restricted to $\cont(X,Y)$. Take $f\in \cont(X,Y)$. The for all $F\to x\in X$ we have $\evalMap^{\imf\imf}(\pfilter{f}\otimes F) = f^{\imf\imf}[F] \to f(x)$ by continuity. Thus $\pfilter{f}\to f$ in $\cont_c(X,Y)$.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces and $H\in \powerfilters(X\to Y)$. If $\xi$ is pretopological, then $H\overset{(X\to Y)_c}{\longrightarrow} f$ \textup{if and only if}
+\[ H\overset{(X\to Y)_c}{\longrightarrow} f\qquad \text{if and only if} \qquad \evalMap^{\imf\imf}\big(H\otimes \vicinity(x)\big) \overset{\zeta}{\longrightarrow} f(x). \]
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{example}
+There exists a sequence of continuous functions that converges pointwise to a continuous function, but does not converge in continuous convergence.
+
+Consider $\seq{f_n} \subseteq (\R\to\R)$ defined by
+\[ f_n: \R\to\R: x\mapsto \begin{cases}
+n\cdot x & (x\in \interval{0,n^{-1}}) \\
+2 - nx & (x\in \interval{n^{-1}, 2n^{-1}}) \\
+0 & (\text{otherwise}).
+\end{cases} \]
+TODO image.
+\end{example}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. The continuous preconvergence on $(X\to Y)$ is the coarsest preconvergence such that the evaluation map $\evalMap: (X\to Y)\times X \to Y$ is continuous.
+\end{lemma}
+\begin{proof}
+We first show that the continuous convergence makes the evaluation map continuous. A filter $G\in\powerfilters\big((X\to Y)_c\times X\big)$ converges iff $p_1[G]\to f$ and $p_2[G]\to x$ converge. By definition of continuous convergence $\evalMap^{\imf\imf}(p_1[G] \otimes p_2[G]) \to f(x)$ and thus $\evalMap^{\imf\imf}(p_1[G] \otimes p_2[G]) \subseteq \evalMap^{\imf\imf}(G) \to f(x)$.
+
+Now assume there is some other preconvergence $\sigma$ on $(X\to Y)$ that makes the evaluation map continuous. Take $H \overset{\sigma}{\longrightarrow} f$. Then for all $F\overset{\xi}{\longrightarrow}x$ we have $H\otimes F\overset{\sigma\otimes \xi}{\longrightarrow} (f,x)$, so $\evalMap^{\imf\imf}(H\otimes F) \overset{\zeta}{\longrightarrow} f(x)$ by continuity of the evaluation map. Thus $H\overset{(X,Y)_c}{\longrightarrow} f$.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, then the continuous convergence is finer than pointwise convergence on $(X\to Y)$.
+\end{lemma}
+\begin{proof}
+Assume $H\to f$ in continuous convergence. Then
+\[ \forall x\in X: \; \evalMap^{\imf\imf}(H\otimes \pfilter{x}) \to f(x), \]
+because $\pfilter{x}\to x$. This is exactly the requirement for $H\to f$ in pointwise convergence.
+\end{proof}
+
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. If $Y$ is of finite depth, then so is $(X\to Y)_c$.
+\end{lemma}
+\begin{proof}
+Let $G, H\overset{(X\to Y)_c}{\longrightarrow} f$. Then for all $F\to x\in X$, we have
+\begin{align*}
+\evalMap^{\imf\imf}\big((G\cap H)\otimes F\big) &= \evalMap^{\imf\imf}\big((G \otimes F) \cap (H \otimes F)\big) \\
+&= \evalMap^{\imf\imf}(G \otimes F) \cap \evalMap^{\imf\imf}(H \otimes F) \; \overset{\zeta}{\longrightarrow} f(x),
+\end{align*}
+using \ref{intersectionProductFilters}, \ref{imageFiltersPreservesIntersection} and the finite depth of $Y$.
+\end{proof}
+Note that this does not imply the Kent property, because $(X\to Y)_c$ is only a preconvergence space. The space $\cont_c(X,Y)$ does have the Kent property if $Y$ is of finite depth.
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. Either of the following is sufficient to make all limit functions in $(X\to Y)_c$ continuous:
+\begin{enumerate}
+\item $(X\to Y)_c$ is a Kent space;
+\item $\sSet{Y,\zeta}$ is regular. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Take $H\in\powerfilters\big((X\to Y)\big)$ such that $\begin{tikzcd}H \arrow[r, "{(X\to Y)_c}"] & f\end{tikzcd}$. We have, for all $F\to x\in X$,
+\begin{align*}
+\evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big) &= \evalMap^{\imf\imf}\big((H \otimes F) \cap (\pfilter{f} \otimes F)\big) \\
+&= \evalMap^{\imf\imf}(H \otimes F) \cap \evalMap^{\imf\imf}(\pfilter{f} \otimes F),
+\end{align*} 
+using \ref{intersectionProductFilters} and \ref{imageFiltersPreservesIntersection}. By the Kent property, $\evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big)$ converges to $f(x)$. And thus by monotonicity of the convergence,
+\[ \evalMap^{\imf\imf}(\pfilter{f} \otimes F) = f^{\imf\imf}[F] \overset{\zeta}{\longrightarrow} f(x). \]
+Thus $f$ is continuous.
+
+(2) Take $H\in\powerfilters\big((X\to Y)\big)$ such that $\begin{tikzcd}H \arrow[r, "{(X\to Y)_c}"] & f\end{tikzcd}$ and $F\in\powerfilters(X)$ such that $F\overset{\xi}{\longrightarrow} x$. Take $A\in F$ and $B\in H$.
+
+Now take $a\in A$. By continuous convergence, we have $\evalMap^{\imf\imf}(H\otimes\dot{a}) \overset{\zeta}{\longrightarrow} f(a)$. We have $f(a)\in\adh_\zeta\big(\evalMap^\imf(B\times\{a\})\big) \subseteq \adh_\zeta\big(\evalMap^\imf(B\times A)\big)$ by \ref{adherenceLimitFilter}. As this is true for all $a\in A$, we have $f^\imf(A) \subseteq \adh_\zeta\big(\evalMap^\imf(B\times A)\big)$.
+
+From this last inclusion we can conclude that $\adh_\zeta^\imf\big(\evalMap^{\imf\imf}(H\otimes F)\big) \subseteq f^{\imf\imf}(F)$. Now $\evalMap^{\imf\imf}(H\otimes F)\overset{\zeta}{\longrightarrow} f(x)$ by continuous convergence, so $\adh_\zeta^\imf\big(\evalMap^{\imf\imf}(H\otimes F)\big)\overset{\zeta}{\longrightarrow} f(x)$ by regularity and thus $f^{\imf\imf}(F)\overset{\zeta}{\longrightarrow} f(x)$ by monotonicity.
+
+We conclude that $f$ is continuous.
+\end{proof}
+
+\begin{example}
+There exist non-continuous limit points in spaces of continuous convergence.
+
+Set $X = \{a,b\}$ and $Y = \{1,2\}$.
+
+Let $X$ have the convergences $\begin{cases}
+\pfilter{a} \to a \\
+\pfilter{b} \to b \\
+\pfilter{b} \to a
+\end{cases}$ and let $Y$ have the convergences $\begin{cases}
+\pfilter{1} \to 1 \\
+\pfilter{1} \to 2 \\
+\pfilter{2} \to 2
+\end{cases}$.
+Consider the functions $f: X\to Y: \begin{cases}
+a\mapsto 1 \\ b\mapsto 2
+\end{cases}$ and $g: X\to Y: \begin{cases}
+a\mapsto 1 \\ b\mapsto 1
+\end{cases}$.
+
+Then it is straightforward to verify that $\pfilter{g} \overset{(X\to Y)_c}{\longrightarrow} f$, but $f$ is not continuous. Indeed $\pfilter{b} \to a$, but $f^{\imf\imf}[\pfilter{b}] = \pfilter{2} \not\to f(a) = 1$.
+\end{example}
+
+\begin{proposition}[Universal property of the continuous convergence structure] \label{universalPropertyContinuousConvergence}
+Let $\sSet{X, \xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergences spaces. A function $h: X\to (Y \to Z)_c$ if continuous \textup{if and only if} $\curry_1^{-1}(h): (X\times Y)\to Z$ is continuous.
+\end{proposition}
+\begin{proof}
+First assume $h$ is continuous. Then $\curry_1^{-1}(h) = \evalMap \circ (h,\id_Y)$ and thus $\curry_1^{-1}(h)$ is continuous. (TODO ref).
+
+Now assume $\curry_1^{-1}(h): (X\times Y)\to Z$ is continuous and take $F\to x\in X$. Now for all $G\to y\in Y$ we have that
+\begin{align*}
+\evalMap^{\imf\imf}\Big(h^{\imf\imf}[F]\otimes G\Big) &= \big(\evalMap \circ (h,\id_Y)\big)^{\imf\imf}(F\otimes G) \\
+&= \curry_1^{-1}(h)^{\imf\imf}(F\otimes G) \\
+&\to \curry_1^{-1}(h)(x,y) = h(x)(y)
+\end{align*}
+by continuity of $\curry_1^{-1}(h)$. Thus $h^{\imf\imf}[F]$ converges to $h(x)$ by definition of continuous convergence.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X, \xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergences spaces. Then
+\[ \curry_1: (X\times Y \to Z)_c \to (X\to (Y\to Z)_c)_c \]
+is a homeomorphism.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+The category of convergence spaces is cartesian closed.
+\end{corollary}
+
+\begin{proposition}
+$\cont_c(X,Y)$ is closed subset of $(X\to Y)_c$??
+\end{proposition}
+
+\begin{proposition}
+Let $\sSet{X, \xi}, \sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergences spaces. The composition operation
+\[ \circ: (Y\to Z)_c \times (X\to Y)_c \to (X\to Z)_c \]
+is continuous.
+\end{proposition}
+\begin{proof}
+By \ref{universalPropertyContinuousConvergence}, this is equivalent to the continuity of $\curry_1^{-1}(\circ): (Y\to Z)_c \times (X\to Y)_c \times X \to Z$, which follows from the commutativity of the following diagram:
+\[\begin{tikzcd}
+(Y\to Z)_c \times (X\to Y)_c \times X \ar[d, swap, "\id_{(Y\to Z)}\times \evalMap"] \ar[dr, "\curry_1^{-1}(\circ)"] & \\
+(Y\to Z)_c\times Y \ar[r, "\evalMap"] & Z.
+\end{tikzcd} \]
+\end{proof}
+
+\begin{proposition}
+The map $X\to \cont_c\big(\cont_c(X,Y),Y\big): x\mapsto \evalMap_x$ is continuous.
+\end{proposition}
+
+\begin{proposition}
+If $Y$ is pseudotopological/regular/Hausdorff, then so is $\cont_c(X,Y)$.
+\end{proposition}
+
+\subsubsection{Compact-open topology}
+\begin{definition}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. The set
+\[ \setbuilder{\setbuilder{f\in \cont(X,Y)}{f^\imf(K)\subseteq U}}{\text{$K\subseteq X$ compact, $U\subseteq Y$ open}} \]
+is a subbasis for the \udef{compact-open topology} on $\cont(X,Y)$. The associated convergence is the \udef{compact-open convergence}.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. The continuous convergence on $\cont(X,Y)$ is stronger than the compact-open convergence.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta}$ a regular convergence space. Then the following are equivalent:
+\begin{enumerate}
+\item $\cont_c(X,Y)$ is topological;
+\item $\sSet{X,\xi}$ is locally compact;
+\item the continuous convergence on $\cont(X,Y)$ is equal to the compact-open convergence.
+\end{enumerate}
+\end{proposition}
+TODO: need completely regular? TODO: need $Y$ topological?
+\begin{proof}
+$(1) \Rightarrow (2)$ TODO
+
+$(2) \Rightarrow (3)$ TODO
+
+$(3) \Rightarrow (1)$ Immediate.
+\end{proof}
+
+\subsubsection{Continuous uniform convergence}
+\begin{definition}
+Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{U}}$ a uniform space. The \udef{uniformity of continuous convergence} is defined by
+\[ \mathcal{U}_c \defeq \setbuilder{H\in \powerfilters\big((X\to Y)^2\big)}{\forall F\overset{\xi}{\longrightarrow} x:\; (\evalMap, \evalMap)^{\imf\imf}\Big(H\otimes (F\otimes F)\Big)^\ttransp \in \mathcal{U}}. \]
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{U}}$ a uniform space. Then the uniformity of continuous convergence
+\begin{enumerate}
+\item is a preuniformity on $(X\to Y)$;
+\item a uniformity on $\cont(X,Y)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\mathcal{U}}$ a uniform space. We verify the three conditions
+\begin{itemize}
+\item Take $f\in \cont(X,Y)$. We need to show that $f^{\imf\imf}[F]\mathrel{\mathcal{U}}f^{\imf\imf}[F]$ for all $F\overset{\xi}{\longrightarrow}x$. Because $f$ is continuous, we have that $f^{\imf\imf}[F]$ converges and the statement follows from \ref{uniformlyConvergentImpliesCauchy}.
+\item Take $H,K_1,K_2$ in $\powerfilters(\cont(X,Y))$. Assume $H\mathrel{\mathcal{U}_c}K_1$ and $K_1\subseteq K_2$. Now $\evalMap^{\imf\imf}(K_1\otimes F) \subseteq \evalMap^{\imf\imf}(K_2\otimes F)$ for all $F\overset{\xi}{\longrightarrow}x$. Then upwards closure of $\mathcal{U}_c$ follows from the upwards closure of $\mathcal{U}$.
+\item The symmetry and transitivity of $\mathcal{U}_c$ follow from the symmetry and transitivity of $\mathcal{U}$.
+\end{itemize}
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{U}}$ a uniform space. If $\mathcal{U}$ is factorisable, then
+\[ \mathcal{U}_c = (\Theta\circ\Phi)\Big(\big(\sSet{X,\xi} \to \sSet{Y, (\Xi\circ\Gamma)(\mathcal{U})}\big)_c\Big). \]
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{U}}$ a uniform space. Then the uniformity of continuous convergence induces continous convergence on $\cont(X,Y)$.
+\end{lemma}
+\begin{proof}
+Let $H$ be a filter in $\powerfilters\big(\cont(X,Y)\big)$ and $f\in \cont(X, Y)$. Then
+\begin{align*}
+H\overset{(X\to Y)_c}{\longrightarrow} f &\iff \forall F\overset{\xi}{\longrightarrow}x: \; \evalMap^{\imf\imf}(H\otimes F) \overset{\mathcal{U}}{\longrightarrow} f(x) \\
+&\iff \forall F\overset{\xi}{\longrightarrow}x: \; \evalMap^{\imf\imf}(H\otimes F)\otimes \pfilter{f}(x) \in\mathcal{U} \\
+&\iff \forall F\overset{\xi}{\longrightarrow}x: \; \evalMap^{\imf\imf}(H\otimes F)\otimes f^{\imf\imf}(F) \in\mathcal{U} \\
+&\iff \forall F\overset{\xi}{\longrightarrow}x: \; \evalMap^{\imf\imf}(H\otimes F)\otimes \evalMap^{\imf\imf}(\pfilter{f}\otimes F) \in\mathcal{U} \\
+&\iff \forall F\overset{\xi}{\longrightarrow}x: \; (\evalMap, \evalMap)^{\imf\imf}\big((H\otimes F)\otimes (\pfilter{f}\otimes F)\big) \in\mathcal{U} \\
+&\iff \forall F\overset{\xi}{\longrightarrow}x: \; (\evalMap, \evalMap)^{\imf\imf}\big((H\otimes \pfilter{f})\otimes (F \otimes F)\big)^\ttransp \in\mathcal{U} \\
+&\iff H\otimes \pfilter{f}\in \mathcal{U}_c \\
+&\iff H\overset{\mathcal{U}_c}{\longrightarrow} f.
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X, \xi}$ be a convergence space, $\sSet{Y, \mathcal{U}}$ a uniform space and $\mathcal{S}$ a set of compact subsets of $X$. The continuous convergence uniformity is stronger than the $\mathcal{S}$-uniformity on $\cont(X,Y)$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\subsection{The Arzelà-Ascoli theorem}
+
+
+\section{Metric and pseudometric spaces}
+\begin{definition}
+Let $X$ be a set. A \udef{pseudometric} on $X$ is a function $d: X\times X\to \R$ satisfying, for all $x,y,z\in X$,
+\begin{itemize}
+\item \emph{positivity}: $d(x,y) \geq 0$;
+\item \emph{symmetry}: $d(x,y) = d(y,x)$;
+\item the \emph{triangle inequality}: $d(x,z) \leq d(x,y) + d(y,z)$.
+\end{itemize}
+The structured set $\sSet{X,d}$ is called a \udef{pseudometric space}.
+
+If $d$ also satisfies
+\begin{itemize}
+\item \emph{definiteness}: $d(x,y) = 0$ \textup{if and only if} $x=y$;
+\end{itemize}
+then it is called a \udef{metric} and the structured set $\sSet{X,d}$ is called a \udef{metric space}.
+\end{definition}
+
+\subsection{Subsets of (pseudo)metric spaces}
+\begin{definition}
+Let $\sSet{X,d}$ be a metric space, $\epsilon >0$ and $x\in X$,
+\begin{itemize}
+\item The \udef{$\epsilon$-entourage} as the set
+\[ V_\epsilon \defeq \setbuilder{(y,z)\in X^2}{d(y,z)\leq \epsilon} = d^{\preimf}\big(\interval{0,\epsilon}\big). \]
+\item The \udef{$\epsilon$-ball centered at $x$} as the set
+\[ \ball_d(x,\epsilon) \defeq \setbuilder{y\in X}{d(x,y)< \epsilon} \]
+of all points $y$ whose distance to $x$ is less than $\epsilon$.
+\item The \udef{closed $\epsilon$-ball centered at $x$} as the set
+\[ \cball_d(x,\epsilon) \defeq \setbuilder{y\in X}{d(x,y)\leq \epsilon} \]
+of all points $y$ whose distance to $x$ is less than or equal to $\epsilon$.
+\item The \udef{$\epsilon$-sphere centered at $x$} as the set
+\[ \sphere_d(x,\epsilon) \defeq \setbuilder{y\in X}{d(x,y) = \epsilon}. \]
+\end{itemize}
+Let $A\subseteq X$ be a subset. The \udef{diameter} of $A$ is defined by
+\[ \diam(A) \defeq \sup \setbuilder{d(x,y)}{x,y\in A}. \]
+\end{definition}
+
+\subsection{Uniform structure on a (pseudo)metric space}
+\begin{definition}
+Let $\sSet{X,d}$ be a pseudometric space. The \udef{pseudometric uniformity} $\mathcal{U}_d$ is the uniformity given by
+\[ \mathcal{U}_d \quad\defeq\quad \setbuilder{H\in \powerfilters(X^2)}{d^{\imf\imf}(H) \overset{\R}{\longrightarrow} 0}.  \]
+\end{definition}
+TODO the convergence on $\R$ used is the Scott convergence??
+
+\begin{lemma}
+Let $\sSet{X,d}$ be a pseudometric space. Then
+\begin{enumerate}
+\item $\cball_d(x,\epsilon) = V_\epsilon x = xV_\epsilon$;
+\item $\sphere_d(x,\epsilon) = \cball_d(x,\epsilon)\setminus \ball_d(x,\epsilon)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{X,d}$ be a pseudometric space. Then
+\begin{enumerate}
+\item the pseudometric uniformity is a uniformity;
+\item the pseudometric uniformity is a topological uniformity;
+\item $\{V_\epsilon\}_{\epsilon>0}$ is a base of the entourage filter.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We need to show that
+\begin{itemize}
+\item $\{V_\epsilon\}_{\epsilon>0}$ is a filter base;
+\item that $\upset\{V_\epsilon\}_{\epsilon>0}$ is an element of $\mathcal{U}_d$;
+\item that $\{V_\epsilon\}_{\epsilon>0}\subseteq H$ for all $H\in \mathcal{U}_d$;
+\item the metric uniformity is indeed a uniformity, which we do using \ref{entourageLemma}. We need to prove
+\begin{itemize}
+\item $\{V_\epsilon\}_{\epsilon>0}\subseteq\upset\{\Delta\}$;
+\item $\{V_\epsilon\}_{\epsilon>0}^\transp = \{V_\epsilon\}_{\epsilon>0}$;
+\item $\{V_\epsilon\}_{\epsilon>0} \subseteq \{V_\epsilon\}_{\epsilon>0}; \{V_\epsilon\}_{\epsilon>0}$.
+\end{itemize}
+\end{itemize}
+Indeed:
+\begin{itemize}
+\item That $\{V_\epsilon\}_{\epsilon>0}$ is a filter base is immediate from $V_\epsilon \cap V_\delta = V_{\min(\epsilon, \delta)}$.
+\item By definition, $d^{\imf}(V_\epsilon) \subseteq \interval{0,\epsilon}$, so $\setbuilder{\interval{0,\epsilon}}{\epsilon>0} \subseteq d^{\imf\imf}\big(\{V_\epsilon\}_{\epsilon>0}\big)$. Because $\setbuilder{\interval{0,\epsilon}}{\epsilon>0} \overset{\R}{\longrightarrow} 0$, we have $d^{\imf\imf}\big(\{V_\epsilon\}_{\epsilon>0}\big) \overset{\R}{\longrightarrow} 0$ and so $\upset\{V_\epsilon\}_{\epsilon>0} \in \mathcal{U}_d$.
+\item Take $H\in \mathcal{U}_d$. 
+Now we need to prove that for all $\epsilon >0$ there exists an $A\in H$ such that $V_\epsilon \subseteq A$. Fix an $\epsilon > 0$. By assumption (and definition of Scott convergence), we have
+\[ \bigwedge \setbuilder{\bigvee d^\imf(A)}{A\in H} = 0. \]
+So there exists $A\in H$ such that $\bigvee d^\imf(A) \leq \epsilon$. This implies $d^\imf(A) \subseteq \interval{0,\epsilon}$ and thus
+\[ A \subseteq d^\preimf\big(d^{\imf}(A)\big) \subseteq d^\preimf\big(\interval{0,\epsilon}\big) = V_\epsilon. \]
+\item Finally,
+\begin{itemize}
+\item $d^{\imf}(\Delta) = 0$, so $\Delta \subseteq V_\epsilon$ for all $\epsilon > 0$;
+\item $\{V_\epsilon\}_{\epsilon>0}^\transp = \{V_\epsilon\}_{\epsilon>0}$ by symmetry of the metric;
+\item take $\epsilon>0$, then $V_{\epsilon/2};V_{\epsilon/2} \subseteq V_\epsilon$ by the triangle inequality, so $V_\epsilon \in \{V_\epsilon\}_{\epsilon>0}; \{V_\epsilon\}_{\epsilon>0}$.
+\end{itemize}
+\end{itemize}
+\end{proof}
+\begin{corollary}
+Let $\sSet{X, d_X}$ and $\sSet{Y, d_Y}$ be metric spaces and $f:X\to Y$ a function. Then $f$ is uniformly continuous \textup{if and only if}
+\[ \forall \epsilon >0: \exists \delta >0: \forall x,y\in X: \quad d_X(x,y) \leq \delta \implies d_Y(f(x), f(y)) \leq \epsilon. \]
+\end{corollary}
+\begin{proof}
+By \ref{uniformContinuityEntourages} we have that $f$ is uniformly continuous \textup{if and only if}
+\begin{align*}
+\entourage_Y \subseteq \upset(f\times f)^{\imf\imf}[\entourage_X] &\iff \forall V_\epsilon \in \entourage_Y: \exists V_\delta \in \entourage_X: \; (f\times f)^{\imf\imf}[V_\delta] \subseteq V_\epsilon \\
+&\iff \forall \epsilon>0: \exists \delta>0: \forall (y,y')\in (f\times f)^{\imf\imf}[V_\delta]: \; (y,y')\in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists \delta>0: \forall (x,x')\in V_\delta:\; (f(x),f(x'))\in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists \delta>0: \forall x,x'\in X: \; d_X(x,x')\leq \delta \implies d_Y(f(x),f(x'))\leq \epsilon.
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,d}$ be a metric space and $\seq{x_n}$ a sequence in $X$. Then $\seq{x_n}$ is a Cauchy sequence \textup{if and only if}
+\[ \forall \epsilon >0: \exists N\in\N: \forall m,n \geq N: \quad d(x_m, x_n)\leq \epsilon. \]
+\end{lemma}
+\begin{proof}
+We have that $\TailsFilter\seq{x_n}$ is a Cauchy filter \textup{if and only if} $\entourage_d \subseteq \TailsFilter\seq{x_n}\otimes \TailsFilter\seq{x_n}$. This is true iff $\forall \epsilon>0$:
+\begin{align*}
+V_\epsilon \in \TailsFilter\seq{x_n}\otimes \TailsFilter\seq{x_n} &\iff \exists M,N\in\N: \setbuilder{x_n}{n\geq N}\times\setbuilder{x_n}{n\geq M} \subseteq V_\epsilon \\
+&\iff \exists N\in\N: \setbuilder{x_n}{n\geq N}\times\setbuilder{x_n}{n\geq N} \subseteq V_\epsilon \\
+&\iff \exists N\in\N: \forall m,n \geq N: d(x_m, x_n)\leq \epsilon.
+\end{align*}
+\end{proof}
+
+\begin{definition}
+Let $\sSet{X,d}$ be a metric space. The convergence $\Gamma(\mathcal{U}_d)$ induced by the metric uniformity $\mathcal{U}_d$ is called the \udef{metric convergence}.
+
+If $F\in\powerfilters(X)$ converges to $x\in X$ in the metric convergence, we write $F\overset{d}{\longrightarrow} x$.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,d}$ be a metric space. The metric convergence is topological and
+\[ \neighbourhood_d(x) = \upset\setbuilder{\cball_d(x,\epsilon)}{\epsilon >0}. \]
+\end{lemma}
+\begin{proof}
+The metric convergence is topological by \ref{topologicalInducedUniformConvergence}, which also gives the form of the neighbourhood filter. 
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,d}$ be a metric space and $\seq{x_n}$ a sequence in $X$. Then $\seq{x_n}$ converges to $x\in X$ \textup{if and only if}
+\[ \forall \epsilon>0: \exists N\in\N: \forall n\geq N: \quad d(x_n,x)\leq \epsilon. \]
+\end{corollary}
+
+\subsubsection{Metric convergence in $\R$}
+\begin{lemma}
+The function
+\[ \R\times \R\to\R^+: (x,y) \mapsto |x-y| \]
+is a metric on $\R$. The metric topology induced by this metric is equal to the Scott topology on $\R$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsubsection{Uniform convergence}
+\begin{proposition}
+Let $X$ be a set, $\sSet{Y,d}$ a metric space and $\seq{f_n}$ a sequence in $(X\to Y)$. The following are equivalent:
+\begin{enumerate}
+\item  $\seq{f_n}$ converges uniformly to $f: X\to Y$;
+\item $\forall \epsilon > 0: \exists N\in \N: \forall n \geq N: \forall x\in X:  d(f_n(x), f(x)) \leq \epsilon$;
+\item $\forall \epsilon > 0: \exists N\in \N: \forall n \geq N: \sup_{x\in X} d(f_n(x), f(x)) \leq \epsilon$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The equivalence of (2) and (3) is clear. We prove $(1) \Leftrightarrow (2)$.
+\begin{align*}
+\seq{f_n} \overset{\text{unif.}}{\longrightarrow} f &\iff \TailsFilter\seq{f_n} \otimes \pfilter{f} \in \mathcal{U}_{(X\to Y)} \\
+&\iff (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\Delta_X\}\big)^\ttransp \in \mathcal{U}_d \\
+&\iff \{V_\epsilon\}_\epsilon \subseteq (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\Delta_X\}\big)^\ttransp \\
+&\iff \forall \epsilon>0: \exists N\in \N: \; (\evalMap, \evalMap)^{\imf}\big((\setbuilder{f_n}{n\geq N} \times \{f\})\times \Delta_X\big)^\ttransp \subseteq V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \; \bigcup_{n\geq N}\bigcup_{x\in X}(\evalMap, \evalMap)^{\imf}\big((\{f_n\} \times \{f\})\times \{(x,x)\}\big)^\ttransp \subseteq V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \;(\evalMap, \evalMap)^{\imf}\big((\{f_n\} \times \{f\})\times \{(x,x)\}\big)^\ttransp \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (\evalMap, \evalMap)^{\imf}\big(\{((f_n, f), (x,x))^\ttransp\}\big) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (\evalMap, \evalMap)\big((f_n,x),(f,x)\big) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (f_n(x), f(x)) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; d(f_n(x), f(x)) \leq \epsilon.
+\end{align*}
+\end{proof}
+\begin{corollary}
+
+\end{corollary}
+
+
+
+\subsubsection{(Pseudo)metrisation of uniform spaces}
+\begin{lemma}
+Let $X$ be a set and $\seq{U_n}_{n\in \N}\in (X^2)^\N$ a sequence of subsets of $X^2$ such that
+\begin{itemize}
+\item $U_0 = X^2$;
+\item $\id_X \subseteq U_n$ for all $n\in\N$;
+\item $U_{n+1};U_{n+1};U_{n+1} \subseteq U_n$ for all $n\in\N$.
+\end{itemize}
+Then there exists a function $d: X^2 \to \R^+$ such that
+\begin{enumerate}
+\item $d(x,z) \leq d(x,y)+d(y,z)$ for all $x,y,z\in X$;
+\item $U_{n+1} \subseteq \setbuilder{(x,y)\in X^2}{d(x,y)< 2^{-n}} \subseteq U_{n}$ for all $n\in\N$.
+\end{enumerate}
+If each $U_n$ is symmetric, then $d$ can be taken to be a pseudometric.
+\end{lemma}
+\begin{proof}
+Define a function
+\[ f: X^2 \to \R^+: (x,y) \mapsto \begin{cases}
+2^{-n} & \big((x,y)\in U_{n}\setminus U_{n+1}\big)
+\end{cases} \]
+We use this function to construct the desired function $d$, which we define by
+\[ d(x,y) \defeq \int\setbuilder{\sum_{i=0}^k f(x_i, x_{i+1})}{\seq{x_i}_{i=0}^k\in X^*, x_0 = x, x_k = y} \]
+\end{proof}
+
+\begin{theorem}
+A topological uniform space is pseudometrisable \textup{if and only if} its entourage has a countable base.
+\end{theorem}
+\begin{proof}
+
+\end{proof}
+
+\begin{proposition}
+
+\end{proposition}
+
+\subsubsection{Bounded subsets}
+
+\begin{proposition}
+Let $\sSet{X, \mathcal{U}}$ be a uniform space and $B\subseteq X$. Then the following are equivalent:
+\begin{enumerate}
+\item $B$ is bounded;
+\item every real-valued uniformly continuous function on $X$ is bounded on $A$;
+\item $A$ is of finite diameter w.r.t. every uniformly continuous pseudometric on $X$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,d}$ be a pseudometric space. Then $B\subseteq X$ is bounded \textup{if and only if} it is of finite diameter.
+\end{corollary}
+Pseudometric uniformly continuous iff defines subuniformity. TODO
+
+\subsection{Continuous convergence structure}
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a compact convergence space and $\sSet{Y,d}$ a metric space. The continuous convergence on $\cont(X,Y)$ is given by
+\[ \forall H\in\powerset(\cont(X,Y)_c): \qquad H\to f \iff \sup_{x\in X}d(H(x), f(x)) \to 0. \]
+\end{proposition}
+\begin{proof}
+First assume $\sup_{x\in X}d(H(x), f(x)) \to 0$. 
+
+Now assume $\sup_{x\in X}d(H(x), f(x)) \not\to 0$. Then there exists $A\in \neighbourhood(0)$ such that $A \notin \sup_{x\in X}d(H(x), f(x))$ we can construct the set
+\[ \setbuilder{\setbuilder{x\in X}{d(h(x), f(x)) \notin A \forall h\in S}}{S\in H}. \]
+We claim this is a proper filter in $X$. It is contained in an ultrafilter by the ultrafilter lemma \ref{ultrafilterLemma} and this ultrafilter $F$ converges by compactness. Thus $d(H[F], f[F]) \not\to 0$ and so $H\not\to f$.
+\end{proof}
+
+
+\subsection{Covering theorems}
+\begin{proposition}[Finite covering lemma \textit{or} 3-fold covering lemma]
+Let $\sSet{X,d}$ be a metric space and $\ball(x_0, r_0), \ldots \ball(x_n, r_n)$ a finite set of balls in $X$. Then there exists a subset $\ball(x_{i_0}, r_{i_0}), \ldots \ball(x_{i_k}, r_{i_k})$ of pairwise disjoint balls such that
+\[ \bigcup_{j=0}^n\ball(x_j, r_j) \subseteq \bigcup_{j=0}^k \ball(x_{i_j}, 3r_{i_j}). \]
+\end{proposition}
+\begin{proof}
+We pick the set of balls recursively: we let $i_{l+1}$ be the index of the ball with the largest radius that is disjoint with $\bigcup_{j=0}^l \ball(x_j, r_j)$. If there are multiple, choose one arbitrarily. If there are none, terminate. (TODO ref recursion).
+
+We now show that the inclusion holds. Take some $\ball(x_j, r_j)$. It must mesh with some element $\ball(x_{i_m}, r_{i_m})$ (if not it would have been added and in that case it would mesh with itself). Take $y\in \ball(x_j, r_j) \cap \ball(x_{i_m}, r_{i_m})$. By construction we also have $r_{i_m} \geq r_j$. Now take any $z\in \ball(x_j, r_j)$. By the triangle inequality, we have
+\begin{align*}
+d(x_{i_m}, z) &\leq d(x_{i_m}, y) + d(y, x_j) + d(x_j, z) \\
+&\leq r_{i_m} + r_j + r_j \leq 3r_{i_m}.
+\end{align*}
+So $z\in \ball(x_{i_m}, 3r_{i_m})$ and thus $\ball(x_j, r_j)\subseteq\ball(x_{i_m}, 3r_{i_m})$. This implies the inclusion of unions.
+\end{proof}
+
+\begin{proposition}[Infinite covering lemma \textit{or} 5-fold covering lemma]
+Let $\sSet{X,d}$ be a metric space and $\{\ball(x_i, r_i)\}_{i\in I}$ an arbitrary set of balls in $X$ such that $\sup_{i\in I}r_i < \infty$. Then there exists a subset $\{\ball(x_j, r_j)\}_{j\in J}$ of pairwise disjoint balls such that
+\[ \bigcup_{i\in I}\ball(x_i, r_i) \subseteq \bigcup_{j\in J} \ball(x_j, 5\, r_j). \]
+\end{proposition}
+\begin{proof}
+Set $R \defeq \sup_{i\in I}r_i < \infty$ and consider the partition $\{F_n\}_{n\in \N}$ of $\{\ball(x_i, r_i)\}_{i\in I}$ defined by
+\[ F_n \defeq \setbuilder{\ball(x_i, r_i)}{\frac{R}{2^{n+1}} < r_i \leq \frac{R}{2^n}}. \]
+Define two sequences $\seq{G_n}, \seq{H_n}$ of subsets of $\{\ball(x_i, r_i)\}_{i\in I}$ as follows: $H_0 = F_0$ and $G_0$ is a maximal disjoint subcollection of $H_0$ (which exists by \ref{maximalSubsetOfDisjointSets}). We define the sequences recursively by
+\[ H_{n+1} = F_{n+1} \cap \left(\bigcup_{k=0}^nG_k\right)^\perp \qquad\text{and $G_{n+1}$ is a maximal disjoint subcollection of $H_{n+1}$.} \]
+Now we claim $G \defeq \bigcup_{n\in\N}G_n$ is the subset we are looking for. First note that $G$ is pairwise disjoint: take $A,B\in G$, then $A\in G_k$ and $B\in G_l$. If $k = l$, then $A\perp B$ by construction. Now suppose $k\neq l$, WLOG we may take $l\leq k$. Then $A\in H_k \subseteq G_l^\perp$, by construction. Thus $A\perp B$.
+
+Now take some $\ball(x_m, r_m) \in \bigcup_{i\in I}\ball(x_i, r_i)$. Then $r_m \leq R$, so we can find $n\in \N$ such that $\frac{R}{2^{n+1}} < r_i \leq \frac{R}{2^n}$ and thus $\ball(x_m, r_m)\in F_n$. By construction, either $\ball(x_m, r_m)\in H_n$ or $\ball(x_m, r_m)\notin \Big(\bigcup_{k=0}^{n-1}G_k\Big)^\perp$. In both cases $\ball(x_m, r_m)$ must intersect some $\ball(x_j, r_j)$ with $j\in J$ such that $r_j \geq \frac{R}{2^{n+1}}$. We have $r_m \leq \frac{R}{2^n} = 2 \frac{R}{2^{n+1}} \leq 2 r_j$ and we can find $y\in \ball(x_m, r_m) \cap \ball(x_j, r_j)$.
+
+It is now enough to show that $\ball(x_m, r_m) \subseteq \ball(x_j, r_j)$. Take an arbitrary $z\in \ball(x_m, r_m)$. Then we have
+\begin{align*}
+d(x_j, z) &\leq d(x_j, y) + d(y, x_m) + d(x_m, z) \\
+&\leq r_j + r_m + r_m \\
+&\leq r_j + 2r_j + 2r_j = 5r_j.
+\end{align*}
+So $z\in \ball(x_j, 5r_j)$ and thus $\ball(x_m, r_m)\subseteq\ball(x_j, 5r_j)$. This implies the inclusion of unions.
+\end{proof}
+\begin{corollary}
+The constant $5$ can be improved to $3+\epsilon$ for all $\epsilon >0$.
+\end{corollary}
+\begin{proof}
+In the proof we can replace $2$ by $1+\epsilon/2$. Then the bound becomes $1+(1+\epsilon/2) + (1+\epsilon/2) = 3+\epsilon$.
+\end{proof}
+\begin{corollary}
+If $\sSet{X,d}$ is separable, then the subset is countable.
+\end{corollary}
+\begin{proof}
+TODO ref: every set of disjoint neighbourhoods is countable.
+\end{proof}
+
+\begin{example}
+The hypothesis that the radius be bounded is necessary: consider the set $\{\ball(x, 1/n)\}_{n\in \N}$. Then no two two balls are disjoint, so a disjoint subset contains at most one ball. The one ball cannot be scaled up to cover everything.
+\end{example}
