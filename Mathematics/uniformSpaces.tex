@@ -144,16 +144,40 @@ By upwards closure, $Ax\in F$.
 \end{proof}
 
 \begin{proposition} \label{imageFilterComposition}
-Let $X, Y$ be sets, $A,B\subseteq X^2$ and $F,G\in\powerfilters(X^2)$. Let $f: X\to Y$ be a function. Then
+Let $X, Y$ be sets, $A,B\subseteq X^2$, $C,D\subseteq Y^2$, $F,G\in\powerfilters(X^2)$ and $H,I\in \powerfilters(Y^2)$. Let $f: X\to Y$ be a function. Then
 \begin{enumerate}
 \item $(f,f)^{\imf}(A;B) \subseteq (f,f)^{\imf}(A);(f,f)^\imf(B)$;
+\item $(f,f)^{\preimf}(C);(f,f)^\preimf(D) \subseteq (f,f)^{\preimf}(C;D)$;
 \item $\upset(f,f)^{\imf\imf}(F;G) \supseteq \big(\upset(f,f)^{\imf\imf}(F)\big);\big(\upset(f,f)^{\imf\imf}(G)\big)$.
+\item $\big(\upset(f,f)^{\preimf\imf}(H)\big);\big(\upset(f,f)^{\preimf\imf}(I)\big) \supseteq \upset(f,f)^{\preimf\imf}(H;I)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
 (1) Take $(x,y)\in A;B$. Then there exists $z\in X$ such that $xAz$ and $zBy$ and thus $f(x)\big((f,f)^{\imf}(A)\big)f(z)$ and $f(z)\big((f,f)^{\imf}(B)\big)f(y)$, so $\big(f(x), f(y)\big)\in (f,f)^{\imf}(A);(f,f)^\imf(B)$.
 
-(2) Immediate from (1).
+(2) We calculate, using (1),
+\begin{align*}
+(f,f)^{\preimf}(C);(f,f)^\preimf(D) &\subseteq \big((f,f)^{\preimf}\circ (f,f)^\imf\big)\big((f,f)^{\preimf}(C);(f,f)^{\preimf}(D)\big) \\
+&\subseteq (f,f)^{\preimf}\Big(\big((f,f)^{\imf}\circ(f,f)^{\preimf}\big)(C);\big((f,f)^{\imf}\circ(f,f)^{\preimf}\big)(D)\Big) \\
+&\subseteq (f,f)^{\preimf}(C;D).
+\end{align*}
+
+(3) Immediate from (1).
+
+(4) Immediate from (2).
+\end{proof}
+
+\begin{lemma} \label{principalImageUnderRelationMapping}
+Let $X, Y$ be sets, $A\subseteq Y^2$, $x\in X$ and $f: X\to Y$ a function. Then $(f,f)^\preimf(A)x = f^\preimf\big(Af(x)\big)$.
+\end{lemma}
+\begin{proof}
+Take arbitrary $y \in X$. Then
+\begin{align*}
+y \in (f,f)^\preimf(A)x \iff& (y,x)\in (f,f)^\preimf(A) \\
+\iff& (f,f)(y,x) = \big(f(y), f(x)\big) \in A \\
+\iff& f(y) \in Af(x) \\
+\iff& y \in f^\preimf\big(Af(x)\big).
+\end{align*}
 \end{proof}
 
 \subsection{Uniformities}
@@ -717,10 +741,169 @@ Now we show that $\upset\setbuilder{\bigcap \setbuilder{F \otimes F}{F\in \mathc
 Take arbitrary $x\in X$. For $\pfilter{x}\otimes\pfilter{x}$ to be in the uniformity, it is enough to show that $\pfilter{x}\otimes\pfilter{x} \supseteq \bigcap\setbuilder{F\otimes F}{F\in\mathcal{F}}$ any $\mathcal{F}\in\mathbf{U}$. This follows straight from \ref{principalUltrafilterInCover}.
 \end{proof}
 
+\section{Uniform continuity}
+\begin{definition}
+Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if
+\[ H\in \mathcal{U} \quad\implies\quad \upset (f, f)^{\imf\imf}[H]\in \mathcal{V}. \]
+The set of uniform functions from $\sSet{X,\mathcal{U}}$ to $\sSet{Y,\mathcal{V}}$ is denoted $\ucont(\mathcal{U}, \mathcal{V})$ or $\ucont(X,Y)$.
+\end{definition}
+
+
+\begin{proposition} \label{uniformContinuityEntourages}
+Let $\sSet{X,\mathcal{U}}$, $\sSet{Y,\mathcal{V}}$ be uniform spaces and $f: X\to Y$ a function.
+\begin{enumerate}
+\item If $f$ is uniformly continuous, then $\entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}]$;
+\item If $\mathcal{V}$ is topological, then opposite implication also holds.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By uniform continuity we have
+\[ \entourage_\mathcal{V} \subseteq \bigcap\setbuilder{\upset (f, f)^{\imf\imf}[H]}{H\in \mathcal{U}} = \upset (f, f)^{\imf\imf}\left[\bigcap \mathcal{U}\right] = \upset (f, f)^{\imf\imf}\left[\entourage_\mathcal{U}\right]. \]
+The first equality follows from \ref{imageFiltersPreservesIntersection}.
+
+(2) Assume $\entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}]$ and take $H\in \mathcal{U}$. Then $\entourage_\mathcal{U}\subseteq H$, so
+\[ \entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}] \subseteq \upset (f, f)^{\imf\imf}[H]. \]
+Thus $\upset (f, f)^{\imf\imf}[H] \in\mathcal{V}$.
+\end{proof}
+
+\begin{proposition}
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, $\sSet{X,R}, \sSet{Y,S}$ uniform relation spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate}
+\item if $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous, then $\big(f: \sSet{X,\Xi(\mathcal{U})} \to \sSet{Y,\Xi(\mathcal{V})}\big)^{\imf\imf}$ is relation preserving;
+\item if $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\Gamma(R)} \to \sSet{Y,\Gamma(S)}$ is continuous;
+\item if $f: \sSet{X,\xi} \to \sSet{Y,\zeta}$ is continuous, then $\big(f: \sSet{X,\Phi(\xi)} \to \sSet{Y,\Phi(\zeta)}\big)^{\imf\imf}$ is relation preserving;
+\item if $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\Theta(R)} \to \sSet{Y,\Theta(S)}$ is uniformly continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume $f$ uniformly continuous and $F\mathrel{\Xi(\mathcal{U})} G$. Then $F\otimes G\in \mathcal{U}$. By uniform continuity $\upset (f, f)^{\imf\imf}[F\otimes G] = f^{\imf\imf}[F] \otimes f^{\imf\imf}[G] \in \mathcal{V}$, so $f^{\imf\imf}[F] \mathrel{\Xi(\mathcal{V})} f^{\imf\imf}[G]$.
+
+(2) Assume $f^{\imf\imf}$ relation preserving and take $F \overset{\Gamma(R)}{\longrightarrow} x$. Then $F\mathrel{R}\pfilter{x}$ and, by relation preservation, $f^{\imf\imf}[F]\mathrel{S}f^{\imf\imf}[\pfilter{x}]$. Now $f^{\imf\imf}[\pfilter{x}] = \pfilter{f}(x)$, so $f^{\imf\imf}[F] \overset{\Gamma(S)}{\longrightarrow} f(x)$.
+
+(3) Assume $f$ is continuous and $F\mathrel{\Phi(\xi)} G$. Then there exists $x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By continuity $f^{\imf\imf}[F]\overset{\zeta}{\longrightarrow} f(x)$ and $f^{\imf\imf}[G]\overset{\zeta}{\longrightarrow} f(x)$, so $f^{\imf\imf}[F] \mathrel{\Phi(\zeta)} f^{\imf\imf}[G]$.
+
+(4) Assume $f^{\imf\imf}$ is relation preserving and take $H\in \Theta(R)$. Then $p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]$, so $f^{\imf\imf}\big[p_1^{\imf\imf}[H]\big]\mathrel{S}f^{\imf\imf}\big[p_2^{\imf\imf}[H]\big]$. Now
+\[ f^{\imf\imf}\big[p_1^{\imf\imf}[H]\big] = (f\circ p_1)^{\imf\imf}[H] = \big(p_1\circ(f,f) \big)^{\imf\imf}[H] = p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]. \]
+Similarly $f^{\imf\imf}\big[p_2^{\imf\imf}[H]\big] = p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]$. Thus $p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]\mathrel{S}p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]$, which means that $(f,f)^{\imf\imf}[H]\in \Theta(S)$.
+\end{proof}
+\begin{corollary}
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, $\sSet{X,R}, \sSet{Y,S}$ uniform relation spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate}
+\item if $\mathcal{U}$ is factorisable and $\big(f: \sSet{X,\Xi(\mathcal{U})} \to \sSet{Y,\Xi(\mathcal{V})}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous;
+\item if $R$ is complete and $f: \sSet{X,\Gamma(R)} \to \sSet{Y,\Gamma(S)}$ is continuous, then $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) From the proposition, we have that $f: \sSet{X,\Theta(\Xi(\mathcal{U}))} \to \sSet{Y,\Theta(\Xi(\mathcal{V}))}$ is uniformly continuous. Because $\mathcal{U}$ is factorisable, $\Theta(\Xi(\mathcal{U})) = \mathcal{U}$. Also $\Theta(\Xi(\mathcal{V})) \subseteq \mathcal{V}$.
+
+(2) From the proposition, we have that $\big(f: \sSet{X,\Phi(\Gamma(R))} \to \sSet{Y,\Phi(\Gamma(S))}\big)^{\imf\imf}$ is relation preserving. Because $R$ is complete, we have $R = \Phi(\Gamma(R))$. Also $\Phi(\Gamma(S)) \subseteq S$.
+\end{proof}
+
+\begin{proposition}
+Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
+\begin{enumerate}
+\item if $\mathcal{U}$ is compact, $\mathcal{V}$ is uniformly Choquet and $f: \sSet{X,\Gamma(\Xi(\mathcal{U}))} \to \sSet{Y,\Gamma(\Xi(\mathcal{V}))}$ is continuous, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Take $H\in\mathcal{U}$. Take arbitrary ultrafilter $I\in\powerfilters(Y^2)$ such that $(f,f)^{\imf\imf}[H]\subseteq I$. Then there exists an ultrafilter $J\in \powerfilters(X^2)$ such that $\upset (f,f)^{\imf\imf}[J] = I$ by \ref{preimageFilter}.
+
+By \ref{compactUltrafilterFactorisation}, there exists $x\in X$ such that $p_1^{\imf\imf}[J]\overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$ and $p_2^{\imf\imf}[J]\overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$. By continuity, symmetry and transitivity,
+\[ \mathcal{V} \ni (f\circ p_1)^{\imf\imf}[J]\otimes (f\circ p_2)^{\imf\imf}[J] = p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[J]\big]\otimes p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[J]\big] \subseteq (f,f)^{\imf\imf}[J] = I. \]
+As this is true for arbitrary ultrafilter $I$, we have $(f,f)^{\imf\imf}[H]\in\mathcal{V}$ because $\mathcal{V}$ is uniformly Choquet.
+\end{proof}
+
+\subsection{Initial and final uniform spaces}
+\begin{definition}
+Let $Y$ be a set.
+\begin{itemize}
+\item Given a set of uniform spaces $\{\sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ and a set of functions $\{f_i: Y\to Z_i\}_{i\in I}$, we define the \udef{initial uniformity} $\mathcal{X}$ on $Y$ as
+\[ \mathcal{X} = \bigvee \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}. \]
+\item Given a set of uniform spaces $\{\sSet{X_i, \mathcal{U}_i}\}_{i\in I}$ and a set of functions $\{g_i: X_i\to Y\}_{i\in I}$, we define the \udef{final uniformity} $\mathcal{Y}$ on $Y$ as
+\[ \mathcal{Y} = \bigwedge \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; g_i\in \ucont(\mathcal{U}_i, \mathcal{V})}. \]
+\end{itemize}
+\end{definition}
+
+TODO final uniformities!
+
+\begin{proposition} \label{initialFinalUniformity}
+Let $Y$ be a set.
+\begin{enumerate}
+\item Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be a set of functions to uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t.\ this set. Then
+\[ H\in \mathcal{X} \quad\iff\quad \forall i\in I: \; \upset(f_i,f_i)^{\imf\imf}(H)\in \mathcal{W}_i. \]
+\item TODO for final uniformities.
+\end{enumerate}
+\end{proposition}
+In particular, all $f_i$s are uniformly continuous w.r.t. the initial uniformity.
+\begin{proof}
+(1) The direction $\Rightarrow$ is clear: if $H\in \mathcal{X}$, then $H\in \mathcal{V}$ for all $\mathcal{V}\in \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}$. As any of these $\mathcal{V}$ makes all the $f_i$s uniformly continuous, we have $\upset(f_i,f_i)^{\imf\imf}(H)\in \mathcal{W}_i$ for all $i\in I$.
+
+For $\Leftarrow$, assume, towards a contradiction, that $H$ is such that $\forall i\in I: \; \upset(f_i,f_i)^{\imf\imf}(H) \in \mathcal{W}_i$, but $H \notin \mathcal{X}$. Then let $\mathcal{X}'$ be the least uniformity that contains $\mathcal{X}$ and $H$, which exists by \ref{latticeOfUniformities}.
+
+If we can show that $\mathcal{X}'$ makes all the $f_i$s uniformly continuous, then $\mathcal{X}'$ must be smaller than $\mathcal{X}$ by construction. This is a contradiction.
+
+For all $i\in I$, we have $\upset(f_i,f_i)^{\imf\imf}(H^\transp) \in \mathcal{W}_i$ and $\upset(f_i,f_i)^{\imf\imf}(H') \in \mathcal{W}_i$ for all $H'\supseteq H$.
+
+We just need to show that $\upset(f_i,f_i)^{\imf\imf}(H;H) \in \mathcal{W}_i$ and $\upset(f_i,f_i)^{\imf\imf}(H;H') \in \mathcal{W}_i$ for all $H'\in \mathcal{X}$. These facts follow from \ref{imageFilterComposition}, by upwards closure of $\mathcal{W}_i$.
+\end{proof}
+
+
+\begin{corollary}[Characteristic property of initial and final uniformity] \label{characteristicPropertyInitialFinalUniformity}
+Let $Y$ be a set, $\sSet{X,\mathcal{U}}$ and $\sSet{Z, \mathcal{W}}$ uniform spaces.
+\begin{enumerate}
+\item Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be set of functions to uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t. this set. A function $g: \sSet{X, \mathcal{U}}\to Y$ is uniformly continuous \textup{if and only if} $f_i \circ g$ is uniformly continuous for all $i\in I$.
+\[ \begin{tikzcd}
+Y \ar[r, "f_i"] & Z_i \\ X \ar[u, "g"] \ar[ur, swap, "f_i\circ g"]
+\end{tikzcd} \]
+\item TODO?? Let $\{g_i: \sSet{X_i, \mathcal{U}_i} \to Y\}_{i\in I}$ be set of functions from uniform spaces and $\mathcal{Y}$ the final preconvergence on $Y$ w.r.t. this set. A function $f: Y\to \sSet{Z,\mathcal{W}}$ is uniformly continuous \textup{if and only if} $f\circ g_i$ is uniformly continuous for all $i\in I$.
+\[ \begin{tikzcd}
+X_i \ar[r, "g_i"] \ar[dr, swap, "f\circ g_i"] & Y \ar[d, "f"] \\ & Z
+\end{tikzcd} \]
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) The uniform continuity of $g$ is equivalent to $\upset(g,g)^{\imf\imf}(H)\in \mathcal{X}$ for all $H\in \mathcal{U}$. By the proposition this is equivalent to
+\[ \forall i \in I: \; \upset(f_i, f_i)^{\imf\imf}\big(\upset(g,g)^{\imf\imf}(H)\big) = \upset\big((f_i, f_i)\circ (g,g)\big)^{\imf\imf}(H) = \upset(f_i\circ g, f_i\circ g)^{\imf\imf}(H) \in \mathcal{W}_i,  \]
+which is equivalent to the continuity of $f_i\circ g$ for all $i\in I$.
+
+(2) TODO!
+\end{proof}
+
+
+\begin{proposition} \label{topologicalInitialUniformity}
+Let $Y$ be a set. Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be set of functions to \emph{topological} uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t. this set. Then $\mathcal{X}$ is topological and
+\[ \entourage_\mathcal{X} = \mathfrak{F}\bigcup_{i\in I} (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) = \mathfrak{F}\setbuilder{(f_i,f_i)^\preimf(U)}{i\in I, U\in \entourage_{\mathcal{W}_i}}. \]
+\end{proposition}
+\begin{proof}
+(1) We have, by \ref{initialFinalUniformity} and \ref{filterPreimageImageGaloisConnection},
+\begin{align*}
+H \in \mathcal{X} &\iff \forall i\in I: \upset(f_i,f_i)^{\imf\imf}(H) \in \mathcal{W}_i \\
+&\iff \forall i\in I: \entourage_{\mathcal{W}_i} \subseteq \upset(f_i,f_i)^{\imf\imf}(H) \\
+&\iff \forall i\in I: \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \subseteq H \\
+&\iff \bigcup_{i\in I} \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \subseteq H.
+\end{align*}
+Thus the initial uniformity is topological and
+\begin{align*}
+\entourage_\mathcal{X} &= \mathfrak{F}\bigcup_{i\in I} \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \\
+&= \mathfrak{F}\bigcup_{i\in I}\setbuilder{(f_i,f_i)^\preimf(U)}{U\in \entourage_{\mathcal{W}_i}} \\
+&= \mathfrak{F}\setbuilder{(f_i,f_i)^\preimf(U)}{i\in I, U\in \entourage_{\mathcal{W}_i}}.
+\end{align*}
+\end{proof}
+
+\subsubsection{Product uniformity}
+\begin{definition}
+Let $\sSet{X_i, \mathcal{U}_i}$ be a uniform space for all $i\in I$. The \udef{product uniformity} $\bigotimes_{i\in I}\mathcal{U}_i$ is the initial uniformity on $\bigtimes_{i\in I}X_i$ w.r.t. the set of projections $p_i: \bigtimes_{i\in I}X_i \to X_i$.
+
+The product uniform space is denoted $\prod_{i\in I}X_i$.
+\end{definition}
+
 
 \section{Properties of uniform spaces}
 \subsection{(Total) boundedness}
 TODO ref: BOUNDEDNESS IN UNIFORM SPACES, TOPOLOGICAL GROUPS, AND HOMOGENEOUS SPACES - Atkin
+
+J. Hejcman, Boundedness in uniform space and topological group, J. Czechosolvak
+math.,Vol. 9, No. 4 (1959), 544-563.
 
 \begin{definition}
 Let $\sSet{X,\mathcal{U}}$ be a uniform space. We call $\mathcal{D} \subseteq \powerset(X^2)$ a \udef{uniform cover} of $\sSet{X,\mathcal{U}}$ if
@@ -730,6 +913,10 @@ Let $\sSet{X,\mathcal{U}}$ be a uniform space. We call $\mathcal{D} \subseteq \p
 \item We say $B\subseteq X$ is \udef{bounded} if for all uniform covers $\mathcal{D}$, there exists a \emph{finite} $\mathcal{C} \subseteq \setbuilder{A^nx}{A\in \mathcal{D}, n\in \N, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
 \end{itemize}
 \end{definition}
+
+\begin{lemma}
+Total boundedness implies boundedness.
+\end{lemma}
 
 \begin{lemma} \label{topologicalBoundednessLemma}
 Let $\sSet{X,\mathcal{U}}$ be a uniform space and $B\subseteq X$ a subset. Then
@@ -745,6 +932,56 @@ We may simply observe that $\{V\}$ is a uniform cover for all $V\in \entourage_\
 Now assume $\mathcal{U}$ topological. Then $\entourage_\mathcal{U} \in \mathcal{U}$, so each uniform cover contains an entourage. 
 \end{proof}
 
+\begin{lemma} \label{singletonsTotallyBounded}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space and $x\in X$. Then $\{x\}$ is totally bounded.
+\end{lemma}
+\begin{proof}
+Let $\mathcal{D}$ be a uniform cover. As $\pfilter{x}\otimes \pfilter{x}\in \mathcal{U}$, there exists $A\in \mathcal{D} \cap \pfilter{x}\otimes \pfilter{x}$. Now $(x,x)\in A$, so $\mathcal{C} = \{Ax\}$ is finite and such that $\{x\} \subseteq \bigcup \mathcal{C} = Ax$.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. The set of all totally bounded subsets
+\begin{enumerate}
+\item is an ideal in $\powerset(X)$;
+\item covers $X$.
+\end{enumerate}
+The same holds for the set of all bounded subsets.
+\end{lemma}
+\begin{proof}
+(1) First we show that a subset $C$ of a bounded set $B$ is bounded. Take an arbitrary uniform cover $\mathcal{D}$ and finite $\mathcal{C}\subseteq \setbuilder{Ax}{A\in \mathcal{D}, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$. Then $C\subseteq \bigcup \mathcal{C}$, so $C$ is bounded.
+
+Now let both $B$ and $C$ be bounded sets and let $\mathcal{D}$ be a uniform cover. We can find finite $\mathcal{C}, \mathcal{C}'\subseteq \setbuilder{Ax}{A\in \mathcal{D}, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$ and $C\subseteq \bigcup \mathcal{C}'$. Then $B\cup C \subseteq \bigcup (\mathcal{C}\cup \mathcal{C}')$ and $\mathcal{C}\cup \mathcal{C}'$ is finite.
+
+(2) Every $x\in X$ is an element of a totally bounded set as $x\in \{x\}$, which is bounded by \ref{singletonsTotallyBounded}.
+
+(Bounded) We can repeat the arguments using $\setbuilder{A^nx}{A\in \mathcal{D}, n\in\N, x\in X}$ instead of $\setbuilder{Ax}{A\in \mathcal{D}, x\in X}$.
+\end{proof}
+\begin{corollary}
+Every finite subset of a uniform space is totally bounded.
+\end{corollary}
+
+TODO: closure of bounded set is bounded.
+
+\begin{proposition} \label{imageBoundedSet}
+Let $f: \sSet{X,\mathcal{U}}\to \sSet{Y, \mathcal{V}}$ be a unifromly continuous function between uniform spaces and $B\subseteq X$ a subset.
+\begin{enumerate}
+\item If $\mathcal{D}$ is a uniform cover of $\mathcal{V}$, then $(f,f)^{\preimf\imf}(\mathcal{D})$ is a uniform cover of $\mathcal{U}$.
+\item If $B$ is bounded, then $f^\imf(B)$ is also bounded.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Assume $\mathcal{D}$ is a uniform cover of $\mathcal{V}$ and take arbitrary $H\in \mathcal{U}$. Then $\upset (f,f)^{\imf\imf}(H)\in \mathcal{V}$, so there exists $A\in \mathcal{D} \cap \upset (f,f)^{\imf\imf}(H)$.
+Then there exists $(f,f)^\imf(A')\in (f,f)^{\imf\imf}(H)$ such that $(f,f)^\imf(A') \subseteq A$, or, equivalently, $A'\subseteq (f,f)^\preimf(A)$. Thus $(f,f)^\preimf(A) \in H$.
+
+(2) Now take an arbitrary uniform cover $\mathcal{D}'$ of $\mathcal{V}$. As $(f,f)^{\preimf\imf}(\mathcal{D})$ is a uniform cover of $\mathcal{U}$, by point (1), we can find some finite $\mathcal{C} \subseteq \setbuilder{(f,f)^\preimf(A)^nx}{A\in \mathcal{D}', n\in\N, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
+
+Now by \ref{imageFilterComposition} and \ref{principalImageUnderRelationMapping}, we have
+\[ (f,f)^\preimf(A)^nx \subseteq (f,f)^\preimf(A^n)x \subseteq f^\preimf\big(A^nf(x)\big). \]
+Set $\mathcal{C}' \defeq \setbuilder{A^nf(x)}{(f,f)^\preimf(A^n)x \in \mathcal{C}}$. Thus
+\[ B \subseteq \bigcup_{(f,f)^\preimf(A)^nx \in \mathcal{C}}(f,f)^\preimf(A)^nx \subseteq \bigcup_{A^nf(x) \in \mathcal{C}'}f^\preimf\big(A^nf(x)\big) = f^\preimf\Big(\bigcup_{A^nf(x) \in \mathcal{C}'}A^nf(x)\Big), \]
+and so also
+\[ f^\imf(B) \subseteq \bigcup_{A^nf(x) \in \mathcal{C}'}A^nf(x) = \bigcup \mathcal{C}'. \]
+\end{proof}
 
 \subsection{Compactness}
 \begin{proposition} \label{compactUltrafilterFactorisation}
@@ -889,159 +1126,6 @@ By assumption, there exists a finite subset $\setbuilder{A_0x_0, \ldots, A_nx_n}
 In other words, there exists $A\in \mathcal{D}$ and $x\in X$ such that $Ax \in F$. By symmetry, $xA\in F$. Thus $A;A\in F\otimes F$ by \ref{principalImageOfInProductFilter}. This is a contradiction.
 \end{proof}
 
-\section{Uniform continuity}
-\begin{definition}
-Let $\sSet{X,\mathcal{U}}$ and $\sSet{Y,\mathcal{V}}$ be uniform spaces. A function $f: X\to Y$ is called \udef{uniformly continuous} if
-\[ H\in \mathcal{U} \quad\implies\quad \upset (f, f)^{\imf\imf}[H]\in \mathcal{V}. \]
-The set of uniform functions from $\sSet{X,\mathcal{U}}$ to $\sSet{Y,\mathcal{V}}$ is denoted $\ucont(\mathcal{U}, \mathcal{V})$ or $\ucont(X,Y)$.
-\end{definition}
-
-
-\begin{proposition} \label{uniformContinuityEntourages}
-Let $\sSet{X,\mathcal{U}}$, $\sSet{Y,\mathcal{V}}$ be uniform spaces and $f: X\to Y$ a function.
-\begin{enumerate}
-\item If $f$ is uniformly continuous, then $\entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}]$;
-\item If $\mathcal{V}$ is topological, then opposite implication also holds.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) By uniform continuity we have
-\[ \entourage_\mathcal{V} \subseteq \bigcap\setbuilder{\upset (f, f)^{\imf\imf}[H]}{H\in \mathcal{U}} = \upset (f, f)^{\imf\imf}\left[\bigcap \mathcal{U}\right] = \upset (f, f)^{\imf\imf}\left[\entourage_\mathcal{U}\right]. \]
-The first equality follows from \ref{imageFiltersPreservesIntersection}.
-
-(2) Assume $\entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}]$ and take $H\in \mathcal{U}$. Then $\entourage_\mathcal{U}\subseteq H$, so
-\[ \entourage_\mathcal{V} \subseteq \upset (f, f)^{\imf\imf}[\entourage_\mathcal{U}] \subseteq \upset (f, f)^{\imf\imf}[H]. \]
-Thus $\upset (f, f)^{\imf\imf}[H] \in\mathcal{V}$.
-\end{proof}
-
-\begin{proposition}
-Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, $\sSet{X,R}, \sSet{Y,S}$ uniform relation spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
-\begin{enumerate}
-\item if $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous, then $\big(f: \sSet{X,\Xi(\mathcal{U})} \to \sSet{Y,\Xi(\mathcal{V})}\big)^{\imf\imf}$ is relation preserving;
-\item if $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\Gamma(R)} \to \sSet{Y,\Gamma(S)}$ is continuous;
-\item if $f: \sSet{X,\xi} \to \sSet{Y,\zeta}$ is continuous, then $\big(f: \sSet{X,\Phi(\xi)} \to \sSet{Y,\Phi(\zeta)}\big)^{\imf\imf}$ is relation preserving;
-\item if $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\Theta(R)} \to \sSet{Y,\Theta(S)}$ is uniformly continuous.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Assume $f$ uniformly continuous and $F\mathrel{\Xi(\mathcal{U})} G$. Then $F\otimes G\in \mathcal{U}$. By uniform continuity $\upset (f, f)^{\imf\imf}[F\otimes G] = f^{\imf\imf}[F] \otimes f^{\imf\imf}[G] \in \mathcal{V}$, so $f^{\imf\imf}[F] \mathrel{\Xi(\mathcal{V})} f^{\imf\imf}[G]$.
-
-(2) Assume $f^{\imf\imf}$ relation preserving and take $F \overset{\Gamma(R)}{\longrightarrow} x$. Then $F\mathrel{R}\pfilter{x}$ and, by relation preservation, $f^{\imf\imf}[F]\mathrel{S}f^{\imf\imf}[\pfilter{x}]$. Now $f^{\imf\imf}[\pfilter{x}] = \pfilter{f}(x)$, so $f^{\imf\imf}[F] \overset{\Gamma(S)}{\longrightarrow} f(x)$.
-
-(3) Assume $f$ is continuous and $F\mathrel{\Phi(\xi)} G$. Then there exists $x\in X$ such that $F\overset{\xi}{\longrightarrow} x$ and $G\overset{\xi}{\longrightarrow} x$. By continuity $f^{\imf\imf}[F]\overset{\zeta}{\longrightarrow} f(x)$ and $f^{\imf\imf}[G]\overset{\zeta}{\longrightarrow} f(x)$, so $f^{\imf\imf}[F] \mathrel{\Phi(\zeta)} f^{\imf\imf}[G]$.
-
-(4) Assume $f^{\imf\imf}$ is relation preserving and take $H\in \Theta(R)$. Then $p_1^{\imf\imf}[H]\mathrel{R}p_2^{\imf\imf}[H]$, so $f^{\imf\imf}\big[p_1^{\imf\imf}[H]\big]\mathrel{S}f^{\imf\imf}\big[p_2^{\imf\imf}[H]\big]$. Now
-\[ f^{\imf\imf}\big[p_1^{\imf\imf}[H]\big] = (f\circ p_1)^{\imf\imf}[H] = \big(p_1\circ(f,f) \big)^{\imf\imf}[H] = p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]. \]
-Similarly $f^{\imf\imf}\big[p_2^{\imf\imf}[H]\big] = p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]$. Thus $p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]\mathrel{S}p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[H]\big]$, which means that $(f,f)^{\imf\imf}[H]\in \Theta(S)$.
-\end{proof}
-\begin{corollary}
-Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces, $\sSet{X,R}, \sSet{Y,S}$ uniform relation spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
-\begin{enumerate}
-\item if $\mathcal{U}$ is factorisable and $\big(f: \sSet{X,\Xi(\mathcal{U})} \to \sSet{Y,\Xi(\mathcal{V})}\big)^{\imf\imf}$ is relation preserving, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous;
-\item if $R$ is complete and $f: \sSet{X,\Gamma(R)} \to \sSet{Y,\Gamma(S)}$ is continuous, then $\big(f: \sSet{X,R} \to \sSet{Y,S}\big)^{\imf\imf}$ is relation preserving.
-\end{enumerate}
-\end{corollary}
-\begin{proof}
-(1) From the proposition, we have that $f: \sSet{X,\Theta(\Xi(\mathcal{U}))} \to \sSet{Y,\Theta(\Xi(\mathcal{V}))}$ is uniformly continuous. Because $\mathcal{U}$ is factorisable, $\Theta(\Xi(\mathcal{U})) = \mathcal{U}$. Also $\Theta(\Xi(\mathcal{V})) \subseteq \mathcal{V}$.
-
-(2) From the proposition, we have that $\big(f: \sSet{X,\Phi(\Gamma(R))} \to \sSet{Y,\Phi(\Gamma(S))}\big)^{\imf\imf}$ is relation preserving. Because $R$ is complete, we have $R = \Phi(\Gamma(R))$. Also $\Phi(\Gamma(S)) \subseteq S$.
-\end{proof}
-
-\begin{proposition}
-Let $X,Y$ be sets, $\sSet{X,\mathcal{U}}, \sSet{Y,\mathcal{V}}$ uniform spaces and $\sSet{X,\xi}, \sSet{Y,\zeta}$ reciprocal convergence spaces. Let $f: X\to Y$ be a function.
-\begin{enumerate}
-\item if $\mathcal{U}$ is compact, $\mathcal{V}$ is uniformly Choquet and $f: \sSet{X,\Gamma(\Xi(\mathcal{U}))} \to \sSet{Y,\Gamma(\Xi(\mathcal{V}))}$ is continuous, then $f: \sSet{X,\mathcal{U}} \to \sSet{Y,\mathcal{V}}$ is uniformly continuous.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-Take $H\in\mathcal{U}$. Take arbitrary ultrafilter $I\in\powerfilters(Y^2)$ such that $(f,f)^{\imf\imf}[H]\subseteq I$. Then there exists an ultrafilter $J\in \powerfilters(X^2)$ such that $\upset (f,f)^{\imf\imf}[J] = I$ by \ref{preimageFilter}.
-
-By \ref{compactUltrafilterFactorisation}, there exists $x\in X$ such that $p_1^{\imf\imf}[J]\overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$ and $p_2^{\imf\imf}[J]\overset{\Gamma(\Xi(\mathcal{U}))}{\longrightarrow} x$. By continuity, symmetry and transitivity,
-\[ \mathcal{V} \ni (f\circ p_1)^{\imf\imf}[J]\otimes (f\circ p_2)^{\imf\imf}[J] = p_1^{\imf\imf}\big[(f,f)^{\imf\imf}[J]\big]\otimes p_2^{\imf\imf}\big[(f,f)^{\imf\imf}[J]\big] \subseteq (f,f)^{\imf\imf}[J] = I. \]
-As this is true for arbitrary ultrafilter $I$, we have $(f,f)^{\imf\imf}[H]\in\mathcal{V}$ because $\mathcal{V}$ is uniformly Choquet.
-\end{proof}
-
-\subsection{Initial and final uniform spaces}
-\begin{definition}
-Let $Y$ be a set.
-\begin{itemize}
-\item Given a set of uniform spaces $\{\sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ and a set of functions $\{f_i: Y\to Z_i\}_{i\in I}$, we define the \udef{initial uniformity} $\mathcal{X}$ on $Y$ as
-\[ \mathcal{X} = \bigvee \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}. \]
-\item Given a set of uniform spaces $\{\sSet{X_i, \mathcal{U}_i}\}_{i\in I}$ and a set of functions $\{g_i: X_i\to Y\}_{i\in I}$, we define the \udef{final uniformity} $\mathcal{Y}$ on $Y$ as
-\[ \mathcal{Y} = \bigwedge \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; g_i\in \ucont(\mathcal{U}_i, \mathcal{V})}. \]
-\end{itemize}
-\end{definition}
-
-TODO final uniformities!
-
-\begin{proposition} \label{initialFinalUniformity}
-Let $Y$ be a set.
-\begin{enumerate}
-\item Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be a set of functions to uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t.\ this set. Then
-\[ H\in \mathcal{X} \quad\iff\quad \forall i\in I: \; \upset(f_i,f_i)^{\imf\imf}(H)\in \mathcal{W}_i. \]
-\item TODO for final uniformities.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) The direction $\Rightarrow$ is clear: if $H\in \mathcal{X}$, then $H\in \mathcal{V}$ for all $\mathcal{V}\in \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}$. As any of these $\mathcal{V}$ makes all the $f_i$s uniformly continuous, we have $\upset(f_i,f_i)^{\imf\imf}(H)\in \mathcal{W}_i$ for all $i\in I$.
-
-For $\Leftarrow$, assume, towards a contradiction, that $H$ is such that $\forall i\in I: \; \upset(f_i,f_i)^{\imf\imf}(H) \in \mathcal{W}_i$, but $H \notin \mathcal{X}$. Then let $\mathcal{X}'$ be the least uniformity that contains $\mathcal{X}$ and $H$, which exists by \ref{latticeOfUniformities}.
-
-If we can show that $\mathcal{X}'$ makes all the $f_i$s uniformly continuous, then $\mathcal{X}'$ must be smaller than $\mathcal{X}$ by construction. This is a contradiction.
-
-For all $i\in I$, we have $\upset(f_i,f_i)^{\imf\imf}(H^\transp) \in \mathcal{W}_i$ and $\upset(f_i,f_i)^{\imf\imf}(H') \in \mathcal{W}_i$ for all $H'\supseteq H$.
-
-We just need to show that $\upset(f_i,f_i)^{\imf\imf}(H;H) \in \mathcal{W}_i$ and $\upset(f_i,f_i)^{\imf\imf}(H;H') \in \mathcal{W}_i$ for all $H'\in \mathcal{X}$. These facts follow from \ref{imageFilterComposition}, by upwards closure of $\mathcal{W}_i$.
-\end{proof}
-
-
-\begin{corollary}[Characteristic property of initial and final uniformity] \label{characteristicPropertyInitialFinalUniformity}
-Let $Y$ be a set, $\sSet{X,\mathcal{U}}$ and $\sSet{Z, \mathcal{W}}$ uniform spaces.
-\begin{enumerate}
-\item Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be set of functions to uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t. this set. A function $g: \sSet{X, \mathcal{U}}\to Y$ is uniformly continuous \textup{if and only if} $f_i \circ g$ is uniformly continuous for all $i\in I$.
-\[ \begin{tikzcd}
-Y \ar[r, "f_i"] & Z_i \\ X \ar[u, "g"] \ar[ur, swap, "f_i\circ g"]
-\end{tikzcd} \]
-\item TODO?? Let $\{g_i: \sSet{X_i, \mathcal{U}_i} \to Y\}_{i\in I}$ be set of functions from uniform spaces and $\mathcal{Y}$ the final preconvergence on $Y$ w.r.t. this set. A function $f: Y\to \sSet{Z,\mathcal{W}}$ is uniformly continuous \textup{if and only if} $f\circ g_i$ is uniformly continuous for all $i\in I$.
-\[ \begin{tikzcd}
-X_i \ar[r, "g_i"] \ar[dr, swap, "f\circ g_i"] & Y \ar[d, "f"] \\ & Z
-\end{tikzcd} \]
-\end{enumerate}
-\end{corollary}
-\begin{proof}
-(1) The uniform continuity of $g$ is equivalent to $\upset(g,g)^{\imf\imf}(H)\in \mathcal{X}$ for all $H\in \mathcal{U}$. By the proposition this is equivalent to
-\[ \forall i \in I: \; \upset(f_i, f_i)^{\imf\imf}\big(\upset(g,g)^{\imf\imf}(H)\big) = \upset\big((f_i, f_i)\circ (g,g)\big)^{\imf\imf}(H) = \upset(f_i\circ g, f_i\circ g)^{\imf\imf}(H) \in \mathcal{W}_i,  \]
-which is equivalent to the continuity of $f_i\circ g$ for all $i\in I$.
-
-(2) TODO!
-\end{proof}
-
-\begin{proposition} \label{topologicalInitialUniformity}
-Let $Y$ be a set. Let $\{f_i: Y\to \sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ be set of functions to \emph{topological} uniform spaces and $\mathcal{X}$ the initial uniformity on $Y$ w.r.t. this set. Then $\mathcal{X}$ is topological and
-\[ \entourage_\mathcal{X} = \mathfrak{F}\bigcup_{i\in I} (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) = \mathfrak{F}\setbuilder{(f_i,f_i)^\preimf(U)}{i\in I, U\in \entourage_{\mathcal{W}_i}}. \]
-\end{proposition}
-\begin{proof}
-(1) We have, by \ref{initialFinalUniformity} and \ref{filterPreimageImageGaloisConnection},
-\begin{align*}
-H \in \mathcal{X} &\iff \forall i\in I: \upset(f_i,f_i)^{\imf\imf}(H) \in \mathcal{W}_i \\
-&\iff \forall i\in I: \entourage_{\mathcal{W}_i} \subseteq \upset(f_i,f_i)^{\imf\imf}(H) \\
-&\iff \forall i\in I: \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \subseteq H \\
-&\iff \bigcup_{i\in I} \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \subseteq H.
-\end{align*}
-Thus the initial uniformity is topological and
-\begin{align*}
-\entourage_\mathcal{X} &= \mathfrak{F}\bigcup_{i\in I} \upset (f_i,f_i)^{\preimf\imf}\big(\entourage_{\mathcal{W}_i}\big) \\
-&= \mathfrak{F}\bigcup_{i\in I}\setbuilder{(f_i,f_i)^\preimf(U)}{U\in \entourage_{\mathcal{W}_i}} \\
-&= \mathfrak{F}\setbuilder{(f_i,f_i)^\preimf(U)}{i\in I, U\in \entourage_{\mathcal{W}_i}}.
-\end{align*}
-\end{proof}
-
-\subsubsection{Product uniformity}
-\begin{definition}
-Let $\sSet{X_i, \mathcal{U}_i}$ be a uniform space for all $i\in I$. The \udef{product uniformity} $\bigotimes_{i\in I}\mathcal{U}_i$ is the initial uniformity on $\bigtimes_{i\in I}X_i$ w.r.t. the set of projections $p_i: \bigtimes_{i\in I}X_i \to X_i$.
-
-The product uniform space is denoted $\prod_{i\in I}X_i$.
-\end{definition}
 
 
 
@@ -1570,12 +1654,22 @@ If $d$ also satisfies
 then it is called a \udef{metric} and the structured set $\sSet{X,d}$ is called a \udef{metric space}.
 \end{definition}
 
-\subsection{Subsets of (pseudo)metric spaces}
+\begin{lemma}[Reverse triangle inequality] \label{metricReverseTriangleInequality}
+Let $X$ be a set and $d: X^2\to\R^+$ a pseudometric on $X$. Then for all $x,y,a\in X$, we have
+\[ \big|d(x,a) - d(a,y)\big| \;\leq\; d(x,y) \;\leq\; d(x,a) + d(a,y). \]
+\end{lemma}
+\begin{proof}
+The second inequality is just the triangle inequality. For the first inequality, note that the triangle inequalities $d(x,a) \leq d(a,y) + d(x,y)$ and $d(a,y)\leq d(x,a) + d(x,y)$ hold. Thus
+\[ d(x,a) - d(a,y) \leq d(x,y) \qquad\text{and}\qquad d(a,y) = d(x,a) \leq d(x,y). \]
+Combinding these results gives the inequality.
+\end{proof}
+
+\subsection{Subsets of pseudometric spaces}
 \begin{definition}
-Let $\sSet{X,d}$ be a metric space, $\epsilon >0$ and $x\in X$,
+Let $\sSet{X,d}$ be a pseudometric space, $\epsilon >0$ and $x\in X$,
 \begin{itemize}
 \item The \udef{$\epsilon$-entourage} as the set
-\[ V_\epsilon \defeq \setbuilder{(y,z)\in X^2}{d(y,z)\leq \epsilon} = d^{\preimf}\big(\interval{0,\epsilon}\big). \]
+\[ V_\epsilon \defeq \setbuilder{(y,z)\in X^2}{d(y,z)< \epsilon} = d^{\preimf}\big(\interval{0,\epsilon}\big). \]
 \item The \udef{$\epsilon$-ball centered at $x$} as the set
 \[ \ball_d(x,\epsilon) \defeq \setbuilder{y\in X}{d(x,y)< \epsilon} \]
 of all points $y$ whose distance to $x$ is less than $\epsilon$.
@@ -1589,12 +1683,39 @@ Let $A\subseteq X$ be a subset. The \udef{diameter} of $A$ is defined by
 \[ \diam(A) \defeq \sup \setbuilder{d(x,y)}{x,y\in A}. \]
 \end{definition}
 
-\subsection{Uniform structure on a (pseudo)metric space}
+\begin{lemma} \label{diameterBoundedByTwiceRadius}
+Let $sSet{X,d}$ be a pseudometric space, $c\in X$ and $A\subseteq X$. Then
+\[ \diam(A) \leq 2\sup_{x\in A}d(c,x). \]
+\end{lemma}
+\begin{proof}
+We need to prove
+\[ \forall x,y\in A: \exists z\in A: \; d(x,y) \leq 2d(c,z). \]
+Take arbitrary $x,y\in A$. Then let $z$ be $x$ if $d(c,x)\geq d(c,y)$ and $y$ otherwise. Now, by the triangle inequality, we have
+\[ d(x,y) \leq d(x,c) + d(c,y) \leq d(z,c) + d(c,z) = 2d(c,z). \]
+\end{proof}
+
+TODO $\sup_{x\in A}{d(c,x)} \leq \diam(A)$ for all $c\in X$ definition of metric convexity??
+
+\subsection{Uniform structure on a pseudometric space}
 \begin{definition}
 Let $\sSet{X,d}$ be a pseudometric space. The \udef{pseudometric uniformity} $\mathcal{U}_d$ is the uniformity given by
 \[ \mathcal{U}_d \quad\defeq\quad \setbuilder{H\in \powerfilters(X^2)}{d^{\imf\imf}(H) \overset{\R}{\longrightarrow} 0}.  \]
 \end{definition}
 TODO the convergence on $\R$ used is the Scott convergence??
+
+\begin{lemma} \label{pseudometricUniformityTopological}
+Let $\sSet{X,d}$ be a pseudometric space. Then the pseudometric uniformity is topological and
+\[ \entourage_{\mathcal{U}_d} = \upset d^{\preimf\imf}\big(\neighbourhood_\R(0)\big). \]
+Also $\neighbourhood_\R(0) \subseteq \upset d^{\imf\imf}(\entourage_{\mathcal{U}_d})$.
+\end{lemma}
+\begin{proof}
+We calculate, using \ref{filterPreimageImageGaloisConnection},
+\begin{align*}
+H \in \mathcal{U}_d &\iff \upset d^{\imf\imf}(H)\overset{\R}{\longrightarrow} 0 \\
+&\iff \upset d^{\imf\imf}(H)\supseteq \neighbourhood_\R(0) \\
+&\iff H \supseteq \upset d^{\preimf\imf}\big(\neighbourhood_\R(0)\big).
+\end{align*}
+\end{proof}
 
 \begin{lemma}
 Let $\sSet{X,d}$ be a pseudometric space. Then
@@ -1690,9 +1811,16 @@ Let $\sSet{X,d}$ be a metric space and $\seq{x_n}$ a sequence in $X$. Then $\seq
 \subsubsection{Metric convergence in $\R$}
 \begin{lemma}
 The function
-\[ \R\times \R\to\R^+: (x,y) \mapsto |x-y| \]
+\[ d_\R: \R\times \R\to\R^+: (x,y) \mapsto |x-y| \]
 is a metric on $\R$. The metric topology induced by this metric is equal to the Scott topology on $\R$.
 \end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{boundedSubsetsRealNumbers}
+A set $A\subseteq \R$ is bounded \textup{if and only if} $\sup(A) < \infty$.
+\end{proposition}
 \begin{proof}
 TODO
 \end{proof}
@@ -1721,14 +1849,11 @@ The equivalence of (2) and (3) is clear. We prove $(1) \Leftrightarrow (2)$.
 &\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; d(f_n(x), f(x)) \leq \epsilon.
 \end{align*}
 \end{proof}
-\begin{corollary}
-
-\end{corollary}
 
 
 
 \subsubsection{(Pseudo)metrisation of uniform spaces}
-\begin{lemma}
+\begin{lemma} \label{metrisationLemma}
 Let $X$ be a set and $\seq{U_n}_{n\in \N}\in (X^2)^\N$ a sequence of subsets of $X^2$ such that
 \begin{itemize}
 \item $U_0 = X^2$;
@@ -1736,49 +1861,140 @@ Let $X$ be a set and $\seq{U_n}_{n\in \N}\in (X^2)^\N$ a sequence of subsets of 
 \item $U_{n+1};U_{n+1};U_{n+1} \subseteq U_n$ for all $n\in\N$.
 \end{itemize}
 Then there exists a function $d: X^2 \to \R^+$ such that
-\begin{enumerate}
-\item $d(x,z) \leq d(x,y)+d(y,z)$ for all $x,y,z\in X$;
+\begin{itemize}
+\item the triangle inequality holds: $d(x,z) \leq d(x,y)+d(y,z)$ for all $x,y,z\in X$;
 \item $U_{n+1} \subseteq \setbuilder{(x,y)\in X^2}{d(x,y)< 2^{-n}} \subseteq U_{n}$ for all $n\in\N$.
+\end{itemize}
+Also
+\begin{enumerate}
+\item If each $U_n$ is symmetric, then $d$ can be taken to be a pseudometric.
+\item If $\{U_n\}_{n\in\N} \subseteq \entourage_\mathcal{U}$ for some uniformity $\mathcal{U}$ on $X$, then $\mathcal{U} \subseteq \mathcal{U}_d$.
 \end{enumerate}
-If each $U_n$ is symmetric, then $d$ can be taken to be a pseudometric.
 \end{lemma}
 \begin{proof}
-Define a function
-\[ f: X^2 \to \R^+: (x,y) \mapsto \begin{cases}
-2^{-n} & \big((x,y)\in U_{n}\setminus U_{n+1}\big)
+First notice that $\seq{U_n}_{n\in \N}$ determines a chain in $X^2$: for all $n\in\N$ we have
+\[ U_n \supseteq U_{n+1};U_{n+1};U_{n+1} \supseteq \id_X;U_{n+1};\id_X = U_{n+1}. \]
+Now define a function
+\[ f: X^2 \to \interval{0,1}: (x,y) \mapsto \begin{cases}
+2^{-n} & \big((x,y)\in U_{n}\setminus U_{n+1}\big) \\
+0 & \big((x,y)\in \bigcap_{k\in\N}U_k\big).
 \end{cases} \]
+Then $(x,y)\in U_{n+1}$ iff $f(x,y) < 2^{-n}$ iff $f(x,y) \leq 2^{-(n+1)}$.
 We use this function to construct the desired function $d$, which we define by
-\[ d(x,y) \defeq \int\setbuilder{\sum_{i=0}^k f(x_i, x_{i+1})}{\seq{x_i}_{i=0}^k\in X^*, x_0 = x, x_k = y} \]
+\[ d(x,y) \defeq \inf\setbuilder{\sum_{i=0}^k f(u_i, u_{i+1})}{\seq{u_i}_{i=0}^k\in X^*, u_0 = x, u_k = y}. \]
+It is clear that $d$ satisfies the triangle inequality.
+
+For all $x,y\in X$, we have $d(x,y) \leq f(x,y)$. If we can prove that $f(x,y) \leq 2 d(x,y)$, then we have
+\begin{align*}
+U_{n+1} &= \setbuilder{(x,y)\in X^2}{f(x,y)< 2^{-n}} \\
+&\subseteq \setbuilder{(x,y)\in X^2}{d(x,y)< 2^{-n}} \\
+&\subseteq \setbuilder{(x,y)\in X^2}{f(x,y)< 2^{-n+1}} = U_{n}.
+\end{align*}
+
+We prove $f(x,y) \leq 2 d(x,y)$ by proving that, for all $x,y\in X$, $f(x,y) \leq 2 \sum_{k\leq\len(u)}f(u_k, u_{k+1})$ for all $u\in X^*$ such that $u_0 = x$ and $u_{\len(u)} = y$. The proof is by induction on $\len(u)$.
+
+Suppose that the induction hypothesis holds, i.e.\ for all $x,y\in X$ we have that $f(x,y) \leq 2 \sum_{k<\len(u)}f(u_k, u_{k+1})$ for all $u\in X^*$ such that $u_0 = x$, $u_{\len(u)} = y$ and $\len(u)\leq n$. We now need to prove that the inequality holds for all sequences of length $n+1$. Take such a sequence $v \in X^{(n+1)}$ with $v_0 = x$, $v_{n+1} = y$. Set $a\defeq \sum_{k=0}^{n}f(v_k,v_{k+1})$. If $a\geq 1$, then $f(x,y)\leq a$ because $f(x,y)\leq 1$ by definition, so $f(x,y) \leq 2a$. We may restrict to the case $a<1$. Now let $m$ be the largest natural number such that $\sum_{k=0}^{m-1}f(v_k,v_{k+1}) \leq a/2$, then
+\[ a = \Big(\sum_{k=0}^{m-1}f(v_k,v_{k+1})\Big) + f(v_m, v_{m+1}) + \Big(\sum_{k=m+1}^{n}f(v_k,v_{k+1})\Big) \eqdef b + f(v_m, v_{m+1}) + c, \]
+so $c \leq a/2$ (as otherwise we could have absorbed $f(v_m, v_{m+1})$ into the first part). By the induction hypothesis, we have $f(x, v_m) \leq 2b \leq a$ and $f(v_{m+1}, y) \leq 2c \leq a$. Clearly $f(v_{m}, v_{m+1})\leq a$. Now let $p\in \N$ be the 
+natural number such that $2^{-p-1}\leq a< 2^{-p}$ (this exists because we already restricted to the case $a< 1$).
+Then $f(x,v_m), f(v_m, v_{m+1}), f(v_{m+1}, y) \leq a < 2^{-p}$, so $(x,v_m), (v_m, v_{m+1}), (v_{m+1}, y)\in U_{p+1}$ and so
+\[ (x,y) \in \{(x,v_m)\}; \{(v_m, v_{m+1})\};\{(v_{m+1}, y)\} \subseteq U_{p+1};U_{p+1};U_{p+1} \subseteq U_p. \]
+Thus $f(x,y) \leq 2^{-p} = 2\cdot 2^{-p-1} \leq 2a$. This concludes the induction step.
+
+(1) Positivity holds by construction. If each $U_n$ is symmetric, then $f$ is symmetric and thus also $d$. The triangle inequality has already been proven.
+
+(2) Take $H\in \mathcal{U}$. In order to prove $H\in \mathcal{U}_d$, we need to prove that $d^{\imf\imf}(H)\overset{\R}{\longrightarrow} 0$. Indeed we have
+\[ \neighbourhood_\R(0) \subseteq \upset \setbuilder{\interval[co]{0, n^{-1}}}{n\in \N} \subseteq \upset d^{\imf\imf}\big(\{U_n\}_{n\in\N}\big) \subseteq d^{\imf\imf}(H). \]
 \end{proof}
 
-\begin{theorem}
-A topological uniform space is pseudometrisable \textup{if and only if} its entourage has a countable base.
+\begin{theorem}[Urysohn metrisation theorem]
+A topological uniform space is pseudometrisable \textup{if and only if} its entourage filter has a countable base.
 \end{theorem}
 \begin{proof}
+Let $\sSet{X,\mathcal{U}}$ be a topological uniform space. First suppose $\mathcal{U}$ is generated by a pseudometric $d$. Then each $\epsilon$-entourage is contained in a $n^{-1}$-entourage, for some $n\in \N$. This shows that the entourage filter is countably based.
 
+Now suppose $\entourage_\mathcal{U}$ has a countable basis $\seq{B_n}_{n\in \N}$. WLOG we may take $B_0 = X^2$. Then define $\seq{C_n}$ recursively by setting $C_0 = X^2$ and, given $C_{n-1}$, finding some $C'_{n}\in \entourage_\mathcal{U}$ such that $C'_{n};C'_{n};C'_{n} \subseteq C_{n-1}$ and setting $C_n \defeq C'_n \cap B_n$. We have $C_n\subseteq B_n$ for all $n\in \N$ and each $C_n\in \entourage_\mathcal{U}$. Thus $\seq{C_n}$ forms a basis of the intourage filter and thus the entourage filter is generated by a pseudometric by \ref{metrisationLemma}. 
 \end{proof}
 
-\begin{proposition}
-
+\begin{proposition} \label{topologicalUniformityGeneratedByPseudometrics}
+Let $X$ be a set and $\mathcal{U}$ a topological uniformity on $X$. Then 
+\[ \mathcal{U} =  \bigwedge \setbuilder{\mathcal{U}_d}{\text{$d$ is a pseudometric on $X$ and $\mathcal{U}\subseteq \mathcal{U}_d$}}. \]
 \end{proposition}
+\begin{proof}
+We clearly have
+\[ \mathcal{U} \subseteq \bigwedge \setbuilder{\mathcal{U}_d}{\text{$d$ is a pseudometric on $X$ and $\mathcal{U}\subseteq \mathcal{U}_d$}}. \]
+
+For the other inclusion, it is enough to prove $\entourage_\mathcal{U} \subseteq \entourage_{\bigwedge \mathcal{U}_d}$. Take $V\in \entourage_\mathcal{U}$ and define $\seq{B_n}$ recursively by $B_0 = X^2$, $B_1 = V$ and $B_{n+1}$ is any symmetric set in $\entourage_\mathcal{U}$ such that $B_{n+1};B_{n+1};B_{n+1} \subseteq B_n$. Construct a pseudometric $d'$ as in \ref{metrisationLemma}. Then $d^{\prime\preimf}(\interval[co]{0,1/2})\subseteq V$, so, by \ref{pseudometricUniformityTopological},
+\[ V \in \entourage_{d'} \subseteq \entourage_{\bigwedge \mathcal{U}_d}. \]
+\end{proof}
+
+\begin{definition}
+Let $\sSet{X, \mathcal{U}}$ be a uniform space and $d: X\times X\to \R^+$ a pseudometric on $X$. Then we call $d$ a \udef{continuous pseudometric} on $X$ if $\mathcal{U}\subseteq \mathcal{U}_d$.
+\end{definition}
+
+\begin{proposition} \label{continuousPseudometricFunctionLemma}
+Let $\sSet{X, \mathcal{U}}$ be a uniform space, $a\in X$, $d: X^2\to \R^+$ a pseudometric and $f: X\to \R$ a function.
+\begin{enumerate}
+\item if $d$ is a continuous pseudometric, then $d(a, -): X\to \R$ is uniformly continuous;
+\item if $f$ is uniformly continuous, then $d_\R\circ (f,f): X^2\to \R^+: (x,y)\mapsto |f(x)- f(f)|$ is a continuous pseudometric.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{uniformContinuityEntourages}, it is enough to prove that $\entourage_\R \subseteq \upset \big(d(a, -), d(a,-)\big)^{\imf\imf}(\entourage_\mathcal{U})$ and by continuity of the pseudometric, we have $\entourage_d \subseteq \entourage_{\mathcal{U}}$, so we need to prove that
+\[ \entourage_\R \subseteq \upset \big(d(a, -), d(a,-)\big)^{\imf\imf}(\entourage_d). \]
+Take arbitrary $\epsilon>0$. Then it is enough to prove thave there exists $A\in \entourage_d$ such that $\big(d(a, -), d(a,-)\big)^{\imf}(A) \subseteq V_\epsilon$. Now, by \ref{pseudometricUniformityTopological}, there exists $A\in \entourage_d$ such that $d^{\imf}(A)\subseteq \cball(0,\epsilon)$. We claim this is the set we want, indeed
+\begin{align*}
+d^{\imf}(A)\subseteq \cball(0,\epsilon) \iff& \forall (x,y)\in A: \; d(x,y) \leq \epsilon \\
+\implies& \forall (x,y)\in A: \; |d(x,a), d(a,y)| \leq \epsilon \\
+\iff& \forall (x,y)\in A: \; \big(d(-,a), d(a,-)\big)(x,y) \in V_\epsilon \\
+\iff& \big(d(-,a), d(a,-)\big)^\imf(A) = \big(d(a,-), d(a,-)\big)^\imf(A) \subseteq V_\epsilon,
+\end{align*}
+where we have used the reverse triangle inequality, \ref{metricReverseTriangleInequality}.
+
+(2) Set $d_f \defeq d_\R\circ(f,f)$. It is enough to prove that $\entourage_{d_f}\subseteq \entourage_\mathcal{U}$. Using \ref{pseudometricUniformityTopological} for the first and third equality, we indeed have
+\[ \entourage_{d_f} = \upset \big(d_\R\circ (f,f)\big)^{\preimf\imf}\big(\neighbourhood_\R(0)\big) = \upset (f,f)^{\preimf\imf}\Big(d_\R^{\preimf\imf}\big(\neighbourhood_\R(0)\big)\Big) = \upset (f,f)^{\preimf\imf}(\entourage_\R) \subseteq \entourage_\mathcal{U}, \]
+where the last inclusion follows by \ref{filterPreimageImageGaloisConnection} from $\entourage_\R \subseteq \upset (f,f)^{\imf\imf}(\entourage_\mathcal{U})$, which in turn is the expression of uniform continuity of $f$, by \ref{uniformContinuityEntourages}.
+\end{proof}
 
 \subsubsection{Bounded subsets}
 
-\begin{proposition}
-Let $\sSet{X, \mathcal{U}}$ be a uniform space and $B\subseteq X$. Then the following are equivalent:
+\begin{proposition} \label{metricBoundedness}
+Let $\sSet{X, \mathcal{U}}$ be a topological uniform space and $B\subseteq X$. Then the following are equivalent:
 \begin{enumerate}
 \item $B$ is bounded;
-\item every real-valued uniformly continuous function on $X$ is bounded on $A$;
-\item $A$ is of finite diameter w.r.t. every uniformly continuous pseudometric on $X$.
+\item every real-valued uniformly continuous function on $X$ is bounded on $B$;
+\item $B$ is of finite diameter w.r.t. every continuous pseudometric on $X$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO
+$(1) \Rightarrow (2)$ Follows from \ref{imageBoundedSet}.
+
+$(2) \Rightarrow (3)$ Let $d$ be a continuous pseudometric on $X$ and take $a\in X$. Then $f_a \defeq d(a,-)$ is uniformly continuous by \ref{continuousPseudometricFunctionLemma}. Now $\diam(B)\leq 2\sup_{x\in B}f_a(x)$ by \ref{diameterBoundedByTwiceRadius} and $f_a^\imf(B)$ is bounded by assumption, so $\sup_{x\in B}f_a(x) < \infty $ by \ref{boundedSubsetsRealNumbers}. Thus $\diam(B)$ is also finite.
+
+$(3) \Rightarrow (1)$ We use \ref{topologicalBoundednessLemma}. Take an arbitrary symmetric $V\in \entourage_\mathcal{U}$ and let $W$ be the transitive closure of $V$, which is an equivalence relation. Let $\seq{A_n}$ be a sequence of distinct $W$-equivalence classes and define
+\[ f: X\to \N: x\mapsto \begin{cases}
+n & (x\in A_n) \\
+0 & (\text{otherwise}).
+\end{cases} \]
+Now take $(x,y)\in V$. Then $x$ and $y$ must be in the same equivalence class, so $\big(f(x), f(y)\big) = (n,n)$ for some $n\in\N$. Thus $(f,f)^\imf(V)\subseteq \id_\R \subseteq V_\epsilon$ for all $\epsilon>0$. By \ref{uniformContinuityEntourages}, we have that $f$ is uniformly continuous. Now consider the pseudometric $d_f(x,y) = |f(x)-f(y)|$, which is continuous by \ref{continuousPseudometricFunctionLemma}. By assumption, $B$ is of finite radius w.r.t. $d_f$ and thus $B$ meshes with only finitely many $W$-equivalence classes. Let the finite set $F$ consist of one point from the intersection of $B$ with each $W$-equivalence class that meshes with $B$.
+
+Now take some continuous pseudometric $d$ constructed in \ref{topologicalUniformityGeneratedByPseudometrics} and rescaled such that $d^\preimf(\interval[co]{0,1}) \subseteq V$.
+
+Now consider the function $d': X^2\to \R^+$ defined by
+\[ d'(x,y) \defeq \begin{cases}
+\setbuilder{\sum_{i=0}^kd(u_i, u_{i+1})}{\seq{u_i}_{i=0}^k\in X^*, u_0 = x, u_k = y, (u_{j},u_{j+1})} & \big((x,y)\in W\big) \\
+2 & (\text{otherwise})
+\end{cases} \]
+It is a continuous pseudometric because $d = d'\wedge \underline{2}$ (TODO ref).
+
+Take $x,y\in B$ such that $(x,y)\in W$. If $d'(x,y)\leq m\in\N$, then $(x,y)\in V^m$. As $d'$ is bounded on $B$, we can find some $m\in \N$ such that each $x,y\in B$ that are in the same $W$-equivalence class are $V^m$-related.
 \end{proof}
-\begin{corollary}
-Let $\sSet{X,d}$ be a pseudometric space. Then $B\subseteq X$ is bounded \textup{if and only if} it is of finite diameter.
-\end{corollary}
-Pseudometric uniformly continuous iff defines subuniformity. TODO
+
+\begin{example}
+It is important in \ref{metricBoundedness} to check that $B$ has finite diameter w.r.t. every continuous pseudometric on $X$.
+
+For example, consider $d_\R$ and $d' \defeq d_\R \wedge \underline{1}$. Then both metrics define the same uniformity, but $\sup d^{\prime\imf}(A) \leq 1$ for all subsets $A\subseteq \R$. 
+\end{example}
 
 \subsection{Continuous convergence structure}
 \begin{proposition}
