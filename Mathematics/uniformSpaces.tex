@@ -898,6 +898,24 @@ Let $\sSet{X_i, \mathcal{U}_i}$ be a uniform space for all $i\in I$. The \udef{p
 The product uniform space is denoted $\prod_{i\in I}X_i$.
 \end{definition}
 
+\subsubsection{Subspace uniformity}
+\begin{definition}
+Let $\sSet{X, \mathcal{U}}$ be a uniform space and $A\subseteq X$ a subset. The \udef{subspace uniformity} $\mathcal{U}|_A$ is the initial uniformity w.r.t. the inclusion $A\hookrightarrow X$.
+\end{definition}
+
+\begin{proposition} \label{subspaceUniformConvergence}
+Let $\sSet{X, \mathcal{U}}$ be a uniform space and $A\subseteq X$ a subset. Then $\Gamma(\mathcal{U}|_A) = \Gamma(\mathcal{U})|_A$. 
+\end{proposition}
+\begin{proof}
+Take $F\in \powerfilters{A}$ and $a\in A$. Let $\iota: A\hookrightarrow X$ be the inclusion function. Then we have, by \ref{initialFinalConvergence} and \ref{initialFinalUniformity}
+\begin{align*}
+F \overset{\Gamma(\mathcal{U})|_A}{\longrightarrow} a &\iff \upset\iota^{\imf\imf}(F) \overset{\Gamma(\mathcal{U})}{\longrightarrow} a \\
+&\iff \upset\iota^{\imf\imf}(F)\otimes \pfilter{a} \in \mathcal{U} \\
+&\iff \upset(\iota, \iota)^{\imf\imf}\big(F\otimes \pfilter{a}\big) \in \mathcal{U} \\
+&\iff F\otimes \pfilter{a} \in \mathcal{U}|_A \\
+&\iff F \overset{\Gamma(\mathcal{U}|_A)}{\longrightarrow} a.
+\end{align*}
+\end{proof}
 
 \section{Properties of uniform spaces}
 \subsection{(Total) boundedness}
@@ -1086,6 +1104,13 @@ If $F$ converges uniformly to $x$, then $F\mathrel{R}\pfilter{x}$ and by symmetr
 \end{proof}
 If the converse to this lemma holds, then the uniform space is called complete.
 
+\begin{lemma} \label{continuousImageOfCauchy}
+Let $\sSet{X,\mathcal{U}}$, $\sSet{Y,\mathcal{V}}$ be uniform spaces and $f: X\to Y$ a uniformly continuous function. If $F\in\powerfilters(X)$ is Cauchy, then $\upset f^{\imf\imf}(F)$ is also Cauchy.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
 \subsection{Completeness}
 
 \begin{definition}
@@ -1102,11 +1127,25 @@ Let $\sSet{X,R}$ be a uniform relation space. If $\sSet{X,\Gamma(R)}$ is compact
 Assume $\sSet{X,\Gamma(R)}$ is compact and take $F\in\powerfilters(X)$ such that $F\mathrel{R}F$. Then we can find an ultrafilter $F'\supseteq F$ by the ultrafilter lemma \ref{ultrafilterLemma}. By compactness $F'$ converges uniformly, so $F'\mathrel{R}\pfilter{x}$ for some $x\in X$. Then $F \mathrel{R}\pfilter{x}$ by \ref{uniformRelationUpwardsClosure}, so $F$ is uniformly convergent. Because $F$ was chosen arbitrarily this makes $\sSet{X,R}$ complete.
 \end{proof}
 
-\begin{proposition}
-Hausdorff: complete iff closed??
+\begin{proposition} \label{closedComplete}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space and $A\subseteq X$ a subset. Then
+\begin{enumerate}
+\item if $X$ is complete and $A$ is closed, then $A$ is complete;
+\item if $X$ is Hausdorff and $A$ is complete, then $A$ is closed.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO
+(1) Let $F\in\powerfilters(A)$ be a Cauchy filter in $A$ and $\iota: A\hookrightarrow X$ the inclusion function. Then $\upset \iota^{\imf\imf}(F)\in\powerfilters(X)$ is a Cauchy filter in $X$. So $\upset \iota^{\imf\imf}(F)$ converges to $x$ in $X$ by completeness of $X$. Now, by \ref{properSubsemilatticeLemma},
+\[ A \in \upset \iota^{\imf\imf}(F) \subseteq \big(\upset \iota^{\imf\imf}(F)\big)^{\mesh} \subseteq \vicinity_{\Gamma(\mathcal{U})}(x)^{\mesh}, \]
+so $x\in \adh_{\Gamma(\mathcal{U})}(A) = A$. Thus $F$ converges to $x$ in $\Gamma(\mathcal{U})|_A$ by \ref{initialFinalConvergence} and by \ref{subspaceUniformConvergence} this is the same as uniform convergence in $A$ (i.e.\ in $\Gamma(\mathcal{U}|_A)$).
+
+(2) We need to show that $\adh(A)\subseteq A$. Take $x\in \adh(A)$. By \ref{principalAdherenceInherence}, this means that there exists a filter $F\in \powerfilters(X)$ that converges to $x$ and is such that $A\in F$. By \ref{uniformRelationRelatedElementLemma}, we have that $F$ is Cauchy. By \ref{setTraceFilterLemma}, we have $F = \upset(\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F)$. Then we have, using \ref{functionsOfProductFilters} and \ref{initialFinalUniformity},
+\begin{align*}
+F\otimes F \in \mathcal{U} &\iff \big(\upset(\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F)\big)\otimes \big(\upset(\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F)\big) \in \mathcal{U} \\
+&\iff \upset(\iota, \iota)^{\imf\imf}\big((\iota, \iota)^{\preimf\imf}(F)\otimes (\iota, \iota)^{\preimf\imf}(F)\big) \in \mathcal{U} \\
+&\iff \upset (\iota, \iota)^{\preimf\imf}(F)\otimes (\iota, \iota)^{\preimf\imf}(F) \in \mathcal{U}|_A.
+\end{align*}
+Thus $\upset (\iota, \iota)^{\preimf\imf}(F)$ is a Cauchy filter in $A$, so it converges to some $a\in A$. By continuity of the inclusion, we have that $\upset(\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F) = F$ also converges to $a$. As $\Gamma(\mathcal{U})$ is Hausdorff, we have $x = a$, so $x\in A$. This shows indeed that $\adh(A)\subseteq A$.
 \end{proof}
 
 \subsection{Precompactness}

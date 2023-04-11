@@ -422,6 +422,18 @@ Let $V$ be a vector space over a field $\F$. The \udef{algebraic convergence} on
 We denote this convergence $\mathfrak{a}$ and thus write $F \overset{\mathfrak{a}}{\longrightarrow} x$ and $x\in \lim_\mathfrak{a} F$.
 \end{definition}
 
+\begin{lemma}
+Let $V$ be a vector space  over a field $\F$, $\sSet{W,\zeta}$ a convergence vector space over $\F$ and $f: V\to W$ a function. If $f$ is homogeneous, then $f: \sSet{V, \mathfrak{a}}\to \sSet{W,\zeta}$ is continuous.
+\end{lemma}
+TODO converse?
+\begin{proof}
+Let $m_v: \F \to V: \lambda\mapsto \lambda \cdot v$ the functions w.r.t. which the algebraic convergence is defined. 
+Now, for all $\lambda\in \F$ and $v\in V$, we have
+\[ (f\circ m_v)(\lambda) = f(\lambda v) = \lambda f(v) = m_{f(v)} \]
+Now $m_{f(v)}$ is continuous in any vector space convergence by \ref{continuityLemmaVectorConvergence}.
+So $f$ is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+\end{proof}
+
 \begin{lemma} \label{algebraicConvergence}
 Let $V$ be a vector space over a field $\F$ and $F\in \powerfilters(V)$. Then the algebraic convergence is defined by
 \[ F \overset{\mathfrak{a}}{\longrightarrow} x \iff \begin{cases}
@@ -1946,6 +1958,8 @@ Let $\sSet{V,W,\pair{\cdot,\cdot}}$ be a dual pair. Then $\sSet{W,V,\pair{\cdot,
 \begin{definition}
 Let $(X,Y,\pair{\cdot,\cdot})$ be paired vector spaces. 
 The initial convergence on $Y$ w.r.t. the set of linear functionals $\setbuilder{\pair{x,\cdot}}{x\in X}$ is called the \udef{weak topology} $\sigma(X,Y)$ on $Y$ for the pair $\sSet{X,Y}$\footnote{What we denote $\sigma(X,Y)$ is usually denoted $\sigma(Y,X)$.}.
+
+The \udef{weak-$*$ topology} $\sigma^*(X,Y)$ on $X$ is the weak topology $\sigma(Y,X)$ (i.e. the weak topology for the pairing $(Y,X,\pair{\cdot,\cdot}^d)$).
 \end{definition}
 
 \begin{lemma} \label{weakTopologyLCTVS}
@@ -1992,11 +2006,19 @@ Now take $f\in \dual{(Y,\sigma(X,Y))}$. By point (3) of \ref{initialSeminormConv
 \[ f = \sum_{i=0}^n \alpha_i \pair{x_i, \cdot} = \pair{\sum_{i=0}^n \alpha_i x_i, \cdot}. \]
 \end{proof}
 \begin{corollary} \label{dualSystemBijection}
-Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing such that $Y$ separates $X$. Then $X\to Y^*: x\mapsto \pair{x,\cdot}$ is a bijection.
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing such that $Y$ separates $X$. Then
+\begin{enumerate}
+\item $X\to \sSet{Y, \sigma}^*: x\mapsto \pair{x,\cdot}$ is a bijection;
+\item it is a homeomorphism if $X$ has the weak-$*$ topology and $(Y,\sigma)^*$ the pointwise topology.
+\end{enumerate} 
 \end{corollary}
 In particular this holds if $\sSet{X,Y,\pair{\cdot,\cdot}}$ is a dual system.
 \begin{proof}
-Injectivity is given by \ref{dualSystemInjective}. Surjectivity by the proposition.
+(1) Injectivity is given by \ref{dualSystemInjective}. Surjectivity by the proposition.
+
+(2) Take arbitrary $y\in Y$. We have, for all $y\in Y$,
+\[ \pair{\cdot, y}(x) = \pair{x,y} = \evalMap_y\big(\pair{x, \cdot}\big), \]
+so $\pair{\cdot, y} = \evalMap_y \circ (x\mapsto \pair{x,\cdot})$ and $\evalMap_y = \pair{\cdot, y} \circ (x\mapsto \pair{x,\cdot})^{-1}$. Thus both $(x\mapsto \pair{x,\cdot})$ and its inverse are continuous by \ref{characteristicPropertyInitialFinalConvergence}.
 \end{proof}
 \begin{corollary}
 Let $V$ be a convergence vector space. Then $V^* = \sSet{V, \sigma(V^*, V)}^*$.
@@ -2019,23 +2041,36 @@ If $T: V\to W$ is continuous, then it is weakly continuous.
 By the characteristic property of the initial convergence \ref{characteristicPropertyInitialFinalConvergence}, the weak continuity of $T$ is equivalent to the continuity of $f\circ T$ for all $f\in W^*$. This holds because the composition of continuous functions is continuous, \ref{continuityComposition}.
 \end{proof}
 
-\subsubsection{Weak boundedness}
+\subsubsection{Weak boundedness and completeness}
 \begin{proposition} \label{weakBoundedness}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a dual system. A subset $B\subseteq Y$ is weakly bounded \textup{if and only if} $B$ is weakly totally bounded.
 \end{proposition}
 \begin{proof}
 The direction $\Leftarrow$ is immediate.
 
-For the other direction, consider the topology on $Y$ as the initial topology w.r.t. the function $f: Y\to \prod_{x\in X}\F$, where $p_x(f(y)) = \pair{x,y}$, as constructed in \ref{initialConvergenceWrtOneFunction}. This function is injective and the inverse is continuous (TODO ref). As the inverse is also linear, it is uniformly continuous by \ref{uniformContinuityGroupHomomorphism}.
+For the other direction, take arbitrary $x\in X$. Then $\pair{x,\cdot}: \sSet{Y,\sigma}\to \F$ is a continuous linear functional and thus uniformly continuous by \ref{uniformContinuityGroupHomomorphism}. 
 
-Now by \ref{boundednessTVS} (and \ref{uniformContinuityGroupHomomorphism}, \ref{metricBoundedness}) $\abspair{x, B}$ is bounded for all $x\in X$. Then $\overline{\abspair{x,B}}$ is also bounded by \ref{adherenceBoundedSet}.
+By \ref{imageBoundedSet}, we have that $\pair{x, B}$ is bounded and thus $\overline{\pair{x,B}}$ is also bounded by \ref{adherenceBoundedSet}. As $\F$ has the Heine-Borel property (TODO ref), $\overline{\pair{x,B}}$ is in fact compact.
 
-As $\overline{\abspair{x, B}}\subseteq \R$, we have that it is totally bounded by \ref{realBoundedIffTotallyBounded} and thus precompact by \ref{precompactTotallyBounded}. It is also complete by (TODO ref) and thus compact by \ref{compactPrecompactComplete}.
+Now $\prod_{x\in X}\overline{\pair{x, B}}$ is compact by Tychonoff's theorem \ref{TychonoffsTheorem}, and in particular totally bounded by \ref{precompactTotallyBounded} and \ref{compactPrecompactComplete}.
 
-Now $\prod_{x\in X}\overline{\abspair{x, B}}$ is compact by Tychonoff's theorem \ref{TychonoffsTheorem}, and in particular totally bounded by \ref{precompactTotallyBounded} and \ref{compactPrecompactComplete}. 
-
-Now $f^\imf(B) \subseteq \prod_{x\in X}\overline{\abspair{x, B}}$, so $B\subseteq f^\preimf\Big(\prod_{x\in X}\overline{\abspair{x, B}}\Big) = (f^{-1})^\imf\Big(\prod_{x\in X}\overline{\abspair{x, B}}\Big)$ and thus $B$ is totally bounded by \ref{imageBoundedSet} and \ref{boundedSetsIdeal}.
+By \ref{dualSystemBijection} and \ref{pointwiseConvergenceProductSpace}, we have
+\[ Y \cong \sSet{X,\sigma^*}^* \hookrightarrow (X\to \F)_p \cong \prod_{x\in X}\F, \]
+so we have an embedding $f: Y \hookrightarrow \prod_{x\in X}\F$, with respect to which $Y$ has the initial topology (TODO ref). We restrict $f$ to its range, such that it is a bijection and thus a homeomorphism by \ref{initialBijectionHomeomorphism}. As the function $f$ is linear, it is uniformly continuous by \ref{uniformContinuityGroupHomomorphism}.
+We have
+\[ B = (f^{-1})^\imf\circ f^\imf(B) \subseteq (f^{-1})^\imf\Big(\prod_{x\in X}\overline{\pair{x, B}}\Big), \]
+and thus $B$ is totally bounded by \ref{imageBoundedSet} and \ref{boundedSetsIdeal}.
 \end{proof}
+
+\begin{proposition} \label{algebraicDualComplete}
+Let $V$ be a vector space over the field $\F$. Then $\Lin(V,\F)$ is pointwise-complete.
+\end{proposition}
+\begin{proof}
+Let $F\in\powerfilters\big(\Lin(V,\F)\big)$ be a Cauchy filter. Take a $v\in V$ then $\evalMap_v: \Lin(V,\F)\to \F$ is continuous and linear, which means it is uniformly continuous by \ref{uniformContinuityGroupHomomorphism}. Thus $\upset\evalMap_v^{\imf\imf}(F)$ is Cauchy by \ref{continuousImageOfCauchy}. Now $\upset\evalMap_v^{\imf\imf}(F)$ converges to a unique $y$ in $\F$ by Hausdorffity and completeness of $\F$. Consider the function $f: V\to \F$ that maps each such $v$ to the corresponding $y$.
+
+It is clear that $f$ is linear and thus in $\Lin(V,\F)$. By \label{initialFinalConvergence}, $F$ converges to this $f$ in the pointwise convergence.
+\end{proof}
+TODO $\big(\Lin(V,\F),V\big)$ \udef{semi-Montel space}.
 
 \subsubsection{The pair $(V^*, V)$}
 \begin{definition}
@@ -2058,18 +2093,7 @@ Thus $x\notin \closure_{\sigma(V^*, V)}(A)$ by \ref{interiorClosureMembership}.
 \end{proof}
 
 
-\subsubsection{Weak-$*$ topology}
-\begin{definition}
-Let $(X,Y,\pair{\cdot,\cdot})$ be paired vector spaces. The \udef{weak-$*$ topology} $\sigma^*(X,Y)$ on $X$ for this pairing is the weak topology $\sigma(Y,X)$ for the pairing $(Y,X,\pair{\cdot,\cdot}^d)$.
-\end{definition}
 
-\begin{proposition} \label{weak*continuousFunctional}
-Let $X$ be a Banach space and let $X'$ have the weak-$*$ topology. Then a linear functional $\theta: X'\to \C$ is continuous \textup{if and only if}
-\[ \exists x\in X: \forall \omega\in X': \quad \theta(\omega) = \omega(x). \]
-\end{proposition}
-\begin{proof}
-TODO 9.2 in lecture notes.
-\end{proof}
 
 \subsection{Polars}
 \subsubsection{Polar sets}
@@ -2198,6 +2222,10 @@ Let $(X,Y,\pair{\cdot,\cdot})$ be a dual system and $A\subseteq Y$ a neighbourho
 Since $A$ is absorbent, by \ref{TVSconstruction}, we have that $A\subseteq A^{\pol\pol}$ is also absorbent. Then $A^\pol = A^{\pol\pol\pol}$ is weak-$*$ bounded by \ref{weaklyBoundedLemma} and thus weak-$*$ totally bounded by \ref{weakBoundedness}.
 
 Now $A^\pol$ is $\sigma^*(X,Y)$-closed by \ref{polarPropertiesLemma}. TODO!!
+
+\ref{algebraicDualComplete}
+
+\ref{closedComplete}
 \end{proof}
 
 \subsubsection{Orthogonal complements}
