@@ -1524,6 +1524,16 @@ TODO notation $(f,g)$ and $\begin{pmatrix}
 f \\ g
 \end{pmatrix}$.
 
+\begin{proposition} \label{associatorTernaryProducts}
+Let $\cat{C}$ be a category with binary products and $A,B,C$ objects in this category. Then there exists a unique isomorphism
+\[ (A\times B)\times C \to A\times (B\times C). \]
+\end{proposition}
+\begin{proof}
+Both $(A\times B)\times C$ and $A\times (B\times C)$ are limits of the diagram $\begin{tikzcd}
+A & B & C
+\end{tikzcd}$.
+\end{proof}
+
 \subsection{Equalisers and coequalisers}
 \begin{definition}
 Consider the category $\mathbb{D}: \begin{tikzcd}
@@ -1683,6 +1693,8 @@ Let $\cat{C}$ be a category. If products and equalisers exist, then all finite l
 Note that we assume all products exist, including products of zero factors (i.e.\ terminal objects).
 \begin{proof}
 Take product over all objects in diagram and the equalise over all paths that need to be the same in order for the cone to commute properly.
+
+TODO: Show that multiple equalisation commutes.
 \end{proof}
 \begin{corollary} \label{productsMonicPullbacksComplete}
 Let $\cat{C}$ be a category. If products and pullbacks of monomorphisms exist, then all finite limits exist.
@@ -1707,6 +1719,69 @@ A_1 \ar[r, "f"] & B & \ar[l, swap, "g"] A_2
 
 We denote the unique morphism $(f \bbslash g)$.
 
+\section{Infinite limits and colimits}
+\subsection{Projective (or inverse) limit}
+\begin{definition}
+Let $\sSet{I, \preceq}$ be a reflexive upwards directed set and $\cat{C}$ a category. Let $X_i$ be an object in $\cat{C}$ for all $i\in I$ and let $p_{j,i}: X_j \to X_i$ be a morphism in $\cat{C}$ for all $i \preceq j$ such that
+\begin{itemize}
+\item $p_{i,i} = \id_{X_i}$ for all $i\in I$;
+\item $p_{k,i} = p_{k,j}; p_{j,i} = p_{j,i}\circ p_{k,j}$ for all $i\preceq j \preceq k$.
+\end{itemize}
+Then the structure $\sSet{I, \{X_i\}_{i\in I}, \{p_{j,i}\}_{i\preceq j}}$ is called a \udef{projective system} (or \udef{inverse system}).
+
+A limit of the diagram
+\[ \begin{tikzcd}
+{}&{}&{}&{}&{} \\
+\hdots \ar[r] & X_k \ar[dr]\ar[ur] \ar[r, "p_{k,j}"]  & X_j \ar[dr]\ar[ur]\ar[r, "p_{j,i}"] & X_i \ar[r]\ar[dr]\ar[ur] & \hdots \\
+{}&{}&{}&{}&{}\\
+\end{tikzcd} \]
+is called a \udef{projective limit} (or \udef{inverse limit}) and is denoted $X=\varprojlim _{i\in I}{X_{i}}$.
+\end{definition}
+In other words, we have a projective system if the diagram
+\[ \begin{tikzcd}[column sep=large]
+X_k \ar[rr, "p_{k,i}"] \ar[rd, "p_{k,j}"] & & X_i \\
+& X_j \ar[ur, "p_{j,i}"]
+\end{tikzcd} \qquad \text{commutes for all $i\preceq j \preceq k$.} \]
+
+TODO: definition using contravariant functor $I\to \cat{C}$.
+
+\begin{proposition}
+In the category $\cat{Set}$ the projective limit of each projective system $\sSet{I, \{X_i\}_{i\in I}, \{p_{j,i}\}_{i\preceq j}}$ exists and is given by
+\[ \varprojlim _{i\in I}{X_{i}}=\setbuilder{a\in \prod _{i\in I}A_{i}}{\forall i\preceq j:\; \pi_i(a) = p_{j,i}\big(\pi_j(a)\big)}. \]
+\end{proposition}
+Compare with constructions in infinitely complete categories.
+
+\subsection{Inductive (or direct) colimit}
+\begin{definition}
+Let $\sSet{I, \preceq}$ be a reflexive upwards directed set and $\cat{C}$ a category. Let $X_i$ be an object in $\cat{C}$ for all $i\in I$ and let $e_{i,j}: X_i \to X_j$ be a morphism in $\cat{C}$ for all $i \preceq j$ such that
+\begin{itemize}
+\item $e_{i,i} = \id_{X_i}$ for all $i\in I$;
+\item $e_{i,k} = e_{i,j}; e_{j,k} = e_{j,k}\circ e_{i,j}$ for all $i\preceq j \preceq k$.
+\end{itemize}
+Then the structure $\sSet{I, \{X_i\}_{i\in I}, \{e_{i,j}\}_{i\preceq j}}$ is called an \udef{inductive system} (or \udef{direct system}).
+
+A colimit of the diagram
+\[ \begin{tikzcd}
+{} \ar[dr]&{}\ar[dr]&{}\ar[dr]&{}&{}\\
+\hdots \ar[r] & X_i \ar[r, "e_{i,j}"] & X_j \ar[r, "e_{j,k}"] & X_k \ar[r] & {}\hdots \\
+{}\ar[ur]&{}\ar[ur]&{}\ar[ur]&{}&{}\\
+\end{tikzcd} \]
+is called an \udef{inductive colimit} (or \udef{direct colimit}) and is denoted $X=\varinjlim_{i\in I}{X_i}$.
+\end{definition}
+In other words, we have an inductive system if the diagram
+\[ \begin{tikzcd}[column sep=large]
+X_i \ar[rr, "e_{i,k}"] \ar[rd, "e_{i,j}"] & & X_k \\
+& X_j \ar[ur, "e_{j,k}"]
+\end{tikzcd} \qquad \text{commutes for all $i\preceq j \preceq k$.} \]
+
+TODO: definition using functor $I\to \cat{C}$??
+
+\begin{proposition}
+In the category $\cat{Set}$ the inductive colimit of each inductive system $\sSet{I, \{X_i\}_{i\in I}, \{e_{i,j}\}_{i\preceq j}}$ exists and is given by
+\[ \varinjlim X_{i}=\coprod_{i\in I}X_{i}{\Big /}\sim, \]
+where $x\sim y$ for some $x\in X_i, y\in X_j$ if there exists $k \succeq i,j$ such that $e_{i,k}(x) = e_{j,k}(y)$.
+\end{proposition}
+Compare with constructions in infinitely complete categories.
 
 \chapter{Types of categories}
 \section{Abelian categories}
