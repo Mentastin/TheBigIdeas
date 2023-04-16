@@ -2129,7 +2129,7 @@ c \ar[rd, dash] \ar[rru, leftrightarrow] & & d \ar[ld, dash] \\
 \end{itemize}
 \end{example}
 
-\begin{theorem}[De Morgan's laws]
+\begin{theorem}[De Morgan's laws] \label{deMorganLaws}
 Let $L$ be an ortholattice, then for all $x,y\in L$
 \begin{enumerate}
 \item $\overline{(x\vee y)} = \overline{x} \wedge \overline{y}$;
@@ -2209,6 +2209,7 @@ Let $L$ be a Boolean lattice and $x,y\in L$. Then the following are equivalent:
 \item $x\wedge \overline{y} = \bot$;
 \item $\overline{x} \vee y = \top$.
 \end{enumerate}
+This can also be expressed as $x\leq y \iff x\perp \overline{y}$.
 \end{corollary}
 \begin{proof}
 We calculate
@@ -2409,6 +2410,76 @@ Let $B$ be a Boolean lattice.
 \item $x\leftrightarrow y = ((x|(y|y))|(y|(x|x)))|((x|(y|y))|(y|(x|x)))$.
 \end{enumerate}
 \end{proposition}
+
+\subsubsection{Grills}
+\begin{definition}
+Let $L$ be a Boolean lattice. Let $A \subseteq L$ be a subset. The \udef{grill} of $A$ is defined as the polar $A^{\mesh}$.
+\end{definition}
+
+\begin{proposition} \label{complementInIsotoneGrill}
+Let $L$ be a Boolean lattice. Let $A \subseteq L$ be upwards closed. Then
+\[ a \notin A \quad\iff\quad \overline{a} \in A^\mesh. \]
+In this case we also have $A = A^{\mesh\mesh}$.
+\end{proposition}
+\begin{proof}
+First assume $\overline{a} \in A^\mesh$. If $a$ were and element of $A$, then $a\mesh \overline{a}$ and so $\neg(a\leq a)$ by \ref{BooleanInequalities}, which is a contradiction.
+
+Now assume $a \notin A$. Take arbitrary $b\in A$. Now $a\wedge b \notin A$ (if $a\wedge b\in A$, then $a\in A$ by upwards closure and this was assumed not the case).
+
+Then we have the implications, using \ref{BooleanInequalities},
+\begin{align*}
+a\wedge b\notin A &\implies a\wedge b \neq b \\
+&\iff \neg(a\wedge b = b) \\
+&\iff \neg(b\leq a) \\
+&\iff \neg(\overline{a}\perp b) \\
+&\iff \overline{a}\mesh b.
+\end{align*}
+
+To show $A = A^{\mesh\mesh}$, we observe the equivalences
+\[ a\in A \quad\iff\quad \overline{a} \notin A^\mesh \quad\iff\quad a = \overline{\overline{a}} \in A^{\mesh\mesh}. \]
+\end{proof}
+
+
+\begin{lemma} \label{upwardClosureGrill}
+Let $L$ be a Boolean lattice and $A \subseteq L$ a subset. Then
+\begin{enumerate}
+\item $A^\mesh$ is upwards closed;
+\item $A^{\mesh\mesh} = \upset A$.
+\end{enumerate}
+In particular, $A^\mesh = A^{\mesh\mesh\mesh} = (\upset A)^\mesh$.
+\end{lemma}
+\begin{proof}
+(1) Take $b\in A^\mesh$ and $c\geq b$. Then for all $a\in A$, $a\wedge c \geq a\wedge b > \bot$. So $c\in A^\mesh$, which means that $A^\mesh$ is upwards closed.
+
+(2) Because $\big((-)^\mesh, (-)^\mesh\big)$ is a Galois connection (\ref{polarsGaloisConnection}), we have $A \subseteq A^{\mesh\mesh}$ by \ref{preorderGaloisCondition}. As $A^{\mesh\mesh}$ is upwards closed (by point 1), we have $\upset A \subseteq A^{\mesh\mesh}$.
+
+Now we use the fact that $(-)^{\mesh\mesh}$ is monotone to observe $A^{\mesh\mesh} \subseteq (\upset A)^{\mesh\mesh}$. Also $(\upset A)^{\mesh\mesh} = \upset A$ by
+\ref{complementInIsotoneGrill}. So $A^{\mesh\mesh} \subseteq \upset A$.
+\end{proof}
+\begin{corollary} \label{grillUpsetOrderSimilarity}
+Let $L$ be a Boolean lattice.
+Then $(-)^\mesh$ is an antitone bijection between upwards closed sets of subsets of $L$ and its inverse is itself.
+\end{corollary}
+\begin{proof}
+We use \ref{relationPreservingGeneralisedInversesEmbeddings}. It is enough to note that $\im\big((-)^\mesh\big)$ is the set of upwards closed sets, which follows straight from the lemma. (The first point shows that $\im\big((-)^\mesh\big)$ consists of upwards closed sets. The second shows that every upwards closed set is in $\im\big((-)^\mesh\big)$.)
+\end{proof}
+\begin{corollary} \label{grillIntersectionUnion}
+Let $L$ be a Boolean lattice and $\mathcal{E}\subseteq\powerset(L)$ such that each element of $\mathcal{E}$ is upwards closed. Then
+\[ \Big(\bigcap\mathcal{E}\Big)^\mesh = \bigcup_{G\in\mathcal{E}}G^\mesh \qquad\text{and}\qquad \Big(\bigcup\mathcal{E}\Big)^\mesh = \bigcap_{G\in\mathcal{E}}G^\mesh. \]
+\end{corollary}
+\begin{proof}
+It is enough to note that the intersection of upwards closed sets is closed and the union of upwards closed sets is closed, so the meet and join in the lattice of upwards closed sets are just the intersection and union.
+\end{proof}
+\begin{corollary} \label{ameshUpwardClosure}
+Let $L$ be a Boolean lattice and $A, B \subseteq L$. Then $A \amesh B$ \textup{if and only if} $(\upset A) \amesh B$.
+\end{corollary}
+\begin{proof}
+We have
+\[ A\amesh B \iff A\subseteq B^\mesh \iff \upset A\subseteq B^\mesh \iff (\upset A)\amesh B. \]
+\end{proof}
+
+
+
 
 \section{Residuated lattices}
 
@@ -2846,21 +2917,139 @@ Because $F$ is prime, we have $F = F\vee \upset x$ or $F\vee \upset y$.
 Now assume TODO \url{http://www.ascent-journals.com/IJPEM/Vol3No3/1-sagi.pdf} using \ref{joinIrreducibleLemma}.
 \end{proof}
 
-\subsubsection{Filters and ideals on a Boolean algebra}
-
+\subsection{Filters and ideals on a Boolean algebra}
 \begin{proposition} \label{booleanMaximalFiltersIdeals}
-Let $L$ be a Boolean lattice and $F\subseteq L$ a subset. Then the following are equivalent:
+Let $L$ be a Boolean lattice and $F\subseteq L$ an upwards closed subset. Then the following are equivalent:
 \begin{enumerate}
 \item $F$ is an ultrafilter;
 \item $F$ is a prime filter;
-\item either $x\in F$ or $\overline{x}\in F$ for all $x\in L$.
+\item for all $x\in L$, exactly one of either $x\in F$ or $\overline{x}\in F$ holds.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO \ref{atomsJoinIrriducible} and \ref{BooleanUltrafilterDisjunction}
+TODO \ref{atomsJoinIrriducible} and \ref{BooleanUltrafilterDisjunction}. TODO: is upwards closure enough?
 \end{proof}
 
 TODO: compare with \ref{complementInIsotoneGrill}!
+
+
+\begin{proposition}\label{filterGrillIsPrime}
+Let $L$ be a Boolean lattice, $a,b\in L$ and $F \in \filters(L)$ a filter. If $a\vee b\in F^\mesh$, then either $a\in F^\mesh$ or $b\in F^\mesh$.
+\end{proposition}
+TODO: cfr. ultrafilters.
+\begin{proof}
+We have the implications, by \ref{deMorganLaws} and \ref{complementInIsotoneGrill},
+\begin{align*}
+a \vee b\in F^\mesh \iff& \overline{a\vee b} = \overline{a}\wedge\overline{b} \notin F \\
+\implies& \big(\overline{a} \notin F\big)\lor \big(\overline{b} \notin F\big) \\
+\iff& \big(a \in F^\mesh\big)\lor \big(b \in F^\mesh\big).
+\end{align*}
+\end{proof}
+
+\subsubsection{Filter ideal duality}
+\begin{proposition} \label{filterIdealDuality}
+Let $L$ be a Boolean lattice and $F,I\subseteq L$. Then
+\begin{enumerate}
+\item if $F$ is a (proper) filter, then $I_F \defeq \setbuilder{\overline{x}}{x\in F}$ is a (proper) ideal;
+\item if $I$ is a (proper) ideal, then $F_I \defeq \setbuilder{\overline{x}}{x\in I}$ is a (proper) filter;
+\item the folowing are equivalent:
+\begin{enumerate}
+\item $I \mesh F$;
+\item $F_I \vee F = L$;
+\item $I_F \vee I = L$.
+\end{enumerate}
+\end{enumerate}
+\end{proposition}
+
+\begin{lemma}
+Let $L$ be a Boolean lattice and $U\subseteq L$ an ultrafilter. Then
+\[ U^c = \setbuilder{\overline{x}}{x\in U} \]
+and this is an ideal.
+\end{lemma}
+
+\begin{lemma} \label{idealFromUltrafilter}
+Let $L$ be a Boolean lattice, $F\in \filters(L)$ and $I\in \ideals(L)$. Then
+\[ I \subseteq F^c \quad\iff\quad \exists U\in \ultrafilters(L): \; I \subseteq U^c \subseteq F^c. \]
+\end{lemma}
+\begin{proof}
+The direction $\Leftarrow$ is immediate by transitivity of the inclusion.
+
+Now assume $I \subseteq F^c$, then for all $a\in I$ we have $a\notin F$, which is equivalent to $\overline{a}\in F^\mesh$ by \ref{complementInIsotoneGrill}. Thus, setting $F_I \defeq \setbuilder{\overline{a}}{a\in I}$, which is a filter by \ref{filterIdealDuality}, we have $F \amesh F_I$. Thus $F\vee F_I$ is proper by \ref{joinProperFilter} and contained in an ultrafilter $U$ by \ref{ultrafilterLemma}.
+
+Now this $U$ satisfies the requirements. Clearly $U^c\subseteq F^c$ and $I \subseteq \setbuilder{\overline{b}}{b\in U} = U^c$ by \ref{idealFromUltrafilter}.
+\end{proof}
+
+\begin{proposition} \label{ChoquetModificationFilterSet}
+Let $L$ be a Boolean lattice and $\mathcal{F}$ an upwards closed set of filters and $F\in \filters(L)$. Then the following are equivalent:
+\begin{enumerate}
+\item $U\in \mathcal{F}$ for all ultrafilters $U\supseteq F$;
+\item $F\in \mathfrak{I}^\imf(\mathcal{F}^\mesh)^\mesh$;
+\item for all $C\in \mathcal{F}^\mesh$, there exist finitely many $c_0,\ldots, c_n \in C$ such that $c_0 \vee \ldots \vee c_n \in F$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+By \ref{complementInIsotoneGrill}, we have $F\in \mathfrak{I}^\imf(\mathcal{F}^\mesh)^\mesh = \big(\upset \mathfrak{I}^\imf(\mathcal{F}^\mesh)\big)^\mesh$ iff $F^c \notin \upset \mathfrak{I}^\imf(\mathcal{F}^\mesh)$ iff there exist no ideals $I$ that are subsets of $F^c$ in $\mathfrak{I}^\imf(\mathcal{F}^\mesh)$.
+
+By \ref{idealFromUltrafilter}, this is equivalent to requiring that there are no ideals in $\mathfrak{I}^\imf(\mathcal{F}^\mesh)$ that are subsets of $F^c$ and of the form $U^c$ for some ultrafilter $U$. In other words, all ultrafilters larger than $F$ are not elements of $\mathcal{F}^\mesh$. Again by \ref{complementInIsotoneGrill}, this is equivalent to requiring that all ultrafilters larger than $F$ are elements of $\mathcal{F}$.
+\end{proof}
+
+\subsubsection{Image filters and ideals}
+Cfr. \ref{imageFilter}.
+
+\begin{proposition} \label{imageFilterProperties}
+Let $X, Y$ be sets, $f: X\to Y$ a function, $F\in\powerfilters(X)$ and $G\in\powerfilters(Y)$. Then
+\begin{enumerate}
+\item if $F$ is proper, then $\upset f^{\imf\imf}[F]$ is proper;
+\item if $F$ is an ultrafilter, then $\upset f^{\imf\imf}[F]$ is also an ultrafilter;
+\item if $G$ is an ultrafilter, $\im(f)\in G^\mesh$ and $f$ is injective, then $\upset f^{\preimf\imf}[G]$ is also an ultrafilter.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have
+\[ \emptyset \in \upset f^{\imf\imf}[F] \iff \emptyset\in f^{\imf\imf}[F] \iff \emptyset\in F. \]
+
+(2) We verify $\upset f^{\imf\imf}[F]$ is an ultrafilter with \ref{ultrafilterCriteria}. As $F$ is proper, $\upset f^{\imf\imf}[F]$ is proper by the first point. Now take $B\subseteq Y$ and assume $B\in \upset f^{\imf\imf}[F]^\mesh$. Then, by \ref{meshConnectionSetsOfSets},
+\[ B\in \upset f^{\imf\imf}[F]^\mesh \iff \upset f^{\imf\imf}[F] \amesh \{B\} \iff f^{\imf\imf}[F] \amesh \{B\} \iff F \amesh f^{\preimf\imf}[\{B\}] = \{f^\preimf(B)\}. \]
+As $F$ is an ultrafilter, we have $f^\preimf(B) \in F$ by \ref{ultrafilterCriteria}. Then $f^{\imf\imf}[F] \ni f^\imf(f^\preimf)(B) \subseteq B$, so $B\in \upset f^{\imf\imf}[F]$.
+
+(3) As before, we verify $\upset f^{\preimf\imf}[G]$ is an ultrafilter with \ref{ultrafilterCriteria}. If $\im(f)\in G^\mesh$, then $\upset f^{\preimf\imf}[G]$ is proper. Now take $A\subseteq X$ and assume $A\in (\upset f^{\preimf\imf}[G])^\mesh$. Then, by \ref{meshConnectionSetsOfSets},
+\[ A\in (\upset f^{\preimf\imf}[G])^\mesh \iff \upset f^{\preimf\imf}[G] \amesh \{A\} \iff f^{\preimf\imf}[G] \amesh \{A\} \iff G \amesh f^{\imf\imf}[\{A\}] = \{f^\imf(A)\}. \]
+As $G$ is an ultrafilter, we have $f^\imf(A) \in G$ by \ref{ultrafilterCriteria}. As $f$ is injective, we have $A = f^{\preimf}\big(f^\imf(A)\big) \in f^{\preimf\imf}(G)$.
+\end{proof}
+\begin{corollary}
+Let $X, Y$ be sets, $f: X\to Y$ an injective function and $F\in\powerfilters(X)$. Then $\upset f^{\imf\imf}[F]$ is an ultrafilter \textup{if and only if} $F$ is an ultrafilter.
+\end{corollary}
+\begin{proof}
+One direction was shown in (2) of the proposition. For the other, assume $\upset f^{\imf\imf}[F]$ is an ultrafilter. Then $F$ is proper by point (1) and $\upset f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big]$ is ultra by point (3) of the proposition and because $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big] \subseteq F$ by \ref{filterPreimageImageGaloisConnection}, $F$ must also be ultra.  
+\end{proof}
+
+\begin{lemma}
+Let $X, Y$ be sets, $f: X\to Y$ a function and $G\in\powerfilters(Y)$. If $f$ is injective and $\im(f)\in G$, then $f^{\preimf\imf}(G)$ is upwards closed. In particular $f^{\preimf\imf}(G)$ is a filter.
+\end{lemma}
+\begin{proof}
+Take $B\in G$ ans suppose $A\subseteq X$ is such that $f^\preimf(B)\subseteq A$, then we need to show that $A\in f^{\preimf\imf}(G)$. Then
+\[ f^\preimf(B)\subseteq A = f^{\preimf}\big(f^\imf(A)\big) \iff f^\imf\big(f^\preimf(B)\big) \subseteq f^\imf(A) \iff B\cap \im(f) \subseteq f^\imf(A).  \]
+As $\im(f)\in G$, we have $B\cap \im(f)\in G$ and thus $f^{\imf}(A)\in G$ by upwards closure. Then $A = f^{\preimf}\big(f^\imf(A)\big) \in G^{\preimf\imf}$.
+\end{proof}
+
+\begin{lemma} \label{mappingUltrafiltersLemma}
+Let $X,Y$ be sets, $f: X\to Y$ a function, $F\in\powerfilters(X)$ and $V\in \powerultrafilters(Y)$. Then
+\begin{enumerate}
+\item $V = \upset f^{\imf\imf}\big(f^{\preimf\imf}V\big)$;
+\item if $\upset f^{\imf\imf}(F)\subseteq V$, then there exists $U\in \powerultrafilters(X)$ such that $\upset f^{\imf\imf}(U) = V$ and $F\subseteq U$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have that $V \subseteq \upset f^{\imf\imf}\big(f^{\preimf\imf}V\big)$ by \ref{filterPreimageImageGaloisConnection} and $\upset f^{\imf\imf}\big(f^{\preimf\imf}V\big)$ is proper, so the equality follows because $V$ is ultra.
+
+(2) By \ref{ultrafilterCriteria}, we have $\upset f^{\imf\imf}(F)\subseteq V = V^\mesh$, so by \ref{meshConnectionSetsOfSets}
+\[ f^{\imf\imf}(F) \amesh V \iff F\amesh f^{\preimf\imf}(V). \]
+Thus $F\vee f^{\preimf\imf}(V)$ is proper by \ref{joinProperFilter}.
+
+Now we can find an ultrafilter $U$ larger than $F\vee f^{\preimf\imf}(V)$ by \ref{ultrafilterLemma}. Clearly $F\subseteq U$. Also $V \upset f^{\imf\imf}\big(f^{\preimf\imf}(V)\big) \subseteq \upset f^{\imf\imf}(U)$. As the last filter is still proper, we have $V = \upset f^{\imf\imf}(U)$.
+\end{proof}
+
+
 
 \subsection{Free and principal filters}
 \begin{definition}
@@ -3373,84 +3562,9 @@ Let $A,B \subseteq U$ be sets. Then
 \end{enumerate}
 \end{corollary}
 
-\subsection{Grills}
-TODO for general filters.
-\begin{definition}
-Let $X$ be a set. Let $\mathcal{A} \subseteq \powerset(X)$. The \udef{grill} of $\mathcal{A}$ is defined as the polar $\mathcal{A}^{\mesh}$.
-\end{definition}
+\subsection{Filters, ideals and grills}
 
-\begin{proposition} \label{complementInIsotoneGrill}
-Let $X$ be a set. Let $\mathcal{A} \subseteq \powerset(X)$ be upwards closed. Then
-\[ A \notin \mathcal{A} \quad\iff\quad A^c \in \mathcal{A}^\mesh. \]
-In this case we also have $\mathcal{A} = \mathcal{A}^{\mesh\mesh}$.
-\end{proposition}
-\begin{proof}
-First assume $A^c \in \mathcal{A}^\mesh$. If $A\in\mathcal{A}$, then $A\mesh A^c$, which is a contradiction.
-
-Now assume $A \notin \mathcal{A}$. Take arbitrary $B\in \mathcal{A}$. Now $A\cap B\notin \mathcal{A}$ (if $A\cap B\in \mathcal{A}$, then $A\in \mathcal{A}$ by upwards closure and this was assumed not the case).
-
-Then we have the implications
-\begin{align*}
-A\cap B\notin \mathcal{A} &\implies A\cap B \neq B \\
-&\implies B\nsubseteq A \\
-&\implies A^c \mesh B.
-\end{align*}
-
-To show $\mathcal{A} = \mathcal{A}^{\mesh\mesh}$, we observe the equivalences
-\[ A\in\mathcal{A} \quad\iff\quad A^c \notin \mathcal{A}^\mesh \quad\iff\quad A = A^{cc} \in \mathcal{A}^{\mesh\mesh}. \]
-\end{proof}
-\begin{corollary}\label{filterGrillIsPrime}
-Let $X$ be a set, $A,B\subseteq X$ and $F \in \powerfilters{X}$ a filter. If $A\cup B\in F^\mesh$, then either $A\in F^\mesh$ or $B\in F^\mesh$.
-\end{corollary}
-TODO: cfr. ultrafilters. + generalise to Boolean lattices.
-\begin{proof}
-We have the implications
-\begin{align*}
-A\cup B\in F^\mesh \iff& (A\cup B)^c = A^c \cap B^c \notin F \\
-\implies& \big(A^c \notin F\big)\lor \big(B^c \notin F\big) \\
-\iff& \big(A \in F^\mesh\big)\lor \big(B \in F^\mesh\big).
-\end{align*}
-\end{proof}
-
-\begin{lemma} \label{upwardClosureGrill}
-Let $X$ be a set, $\powerset(X)$ be ordered by inclusion and $\mathcal{A} \subseteq \powerset(X)$. Then
-\begin{enumerate}
-\item $\mathcal{A}^\mesh$ is upwards closed;
-\item $\mathcal{A}^{\mesh\mesh} = \upset\mathcal{A}$.
-\end{enumerate}
-In particular, $\mathcal{A}^\mesh = \mathcal{A}^{\mesh\mesh\mesh} = (\upset\mathcal{A})^\mesh$.
-\end{lemma}
-\begin{proof}
-(1) Take $B\in \mathcal{A}^\mesh$ and $C\supseteq B$. Then for all $A\in\mathcal{A}$, $A\cap C \supseteq A\cap B \supsetneq \emptyset$. So $C\in \mathcal{A}^\mesh$, which means that $\mathcal{A}^\mesh$ is upwards closed.
-
-(2) Because $\big((-)^\mesh, (-)^\mesh\big)$ is a Galois connection (\ref{polarsGaloisConnection}), we have $\mathcal(A) \subseteq \mathcal{A}^{\mesh\mesh}$ by \ref{preorderGaloisCondition}. As $\mathcal{A}^{\mesh\mesh}$ is upwards closed (by point 1), we have $\upset \mathcal{A} \subseteq \mathcal{A}^{\mesh\mesh}$.
-
-Now we use the fact that $(-)^{\mesh\mesh}$ is monotone to observe $\mathcal{A}^{\mesh\mesh} \subseteq (\upset\mathcal{A})^{\mesh\mesh}$. Also $(\upset\mathcal{A})^{\mesh\mesh} = \upset \mathcal{A}$ by
-\ref{complementInIsotoneGrill}. So $\mathcal{A}^{\mesh\mesh} \subseteq \upset\mathcal{A}$.
-\end{proof}
-\begin{corollary} \label{grillUpsetOrderSimilarity}
-Let $X$ be a set and let $\powerset(X)$ be ordered by inclusion.
-
-Then $(-)^\mesh$ is an antitone bijection between upwards closed sets of subsets and its inverse is itself.
-\end{corollary}
-\begin{proof}
-We use \ref{relationPreservingGeneralisedInversesEmbeddings}. It is enough to note that $\im\big((-)^\mesh\big)$ is the set of upwards closed sets, which follows straight from the lemma. (The first point shows that $\im\big((-)^\mesh\big)$ consists of upwards closed sets. The second shows that every upwards closed set is in $\im\big((-)^\mesh\big)$.)
-\end{proof}
-\begin{corollary} \label{grillIntersectionUnion}
-Let $X$ be a set and $\mathcal{E}\in\powerset^2(X)$ such that each element of $\mathcal{E}$ is upwards closed. Then
-\[ \Big(\bigcap\mathcal{E}\Big)^\mesh = \bigcup_{G\in\mathcal{E}}G^\mesh \qquad\text{and}\qquad \Big(\bigcup\mathcal{E}\Big)^\mesh = \bigcap_{G\in\mathcal{E}}G^\mesh. \]
-\end{corollary}
-\begin{proof}
-It is enough to note that the intersection of upwards closed sets is closed and the union of upwards closed sets is closed, so the meet and join in the lattice of upwards closed sets are just the intersection and union.
-\end{proof}
-\begin{corollary} \label{ameshUpwardClosure}
-Let $X$ be a set, $\powerset(X)$ be ordered by inclusion and $\mathcal{A}, \mathcal{B} \subseteq \powerset(X)$. Then $\mathcal{A} \amesh \mathcal{B}$ \textup{if and only if} $\mathcal{A} \amesh (\upset\mathcal{B})$.
-\end{corollary}
-\begin{proof}
-We have
-\[ \mathcal{A}\amesh \mathcal{B} \iff \mathcal{A}\subseteq \mathcal{B}^\mesh \iff \mathcal{A}\subseteq (\upset\mathcal{B})^\mesh \iff \mathcal{A}\amesh (\upset\mathcal{B}). \]
-\end{proof}
-
+\subsubsection{Mesh Galois connection}
 \begin{proposition} \label{meshConnection}
 Let $f:X \to Y$ be a function between sets, $A\subseteq X$ and $B\subseteq Y$. Then
 \[ f^{\imf}(A)\mesh B \iff A\mesh f^\preimf(B). \]
@@ -3491,39 +3605,6 @@ G\subseteq f^{\imf\imf}(F)^\mesh &\iff G \amesh f^{\imf\imf}(F) \\
 &\iff G \subseteq \upset f^{\imf\imf}(F^\mesh),
 \end{align*}
 where we have used point (1), the fact that $F^\mesh$ is upwards closed (\ref{upwardClosureGrill}) and the Galois connection in \ref{filterPreimageImageGaloisConnection}.
-\end{proof}
-
-
-\subsection{Filters and ideals}
-
-Cfr. \ref{imageFilter}.
-
-\begin{proposition} \label{imageFilterProperties}
-Let $X, Y$ be sets, $f: X\to Y$ a function, $F\in\powerfilters(X)$ and $G\in\powerfilters(Y)$. Then
-\begin{enumerate}
-\item $f^{\preimf\imf}(G)$ is upwards closed; in particular $f^{\preimf\imf}(G)$ is a filter;
-\item if $F$ is proper, then $\upset f^{\imf\imf}[F]$ is proper;
-\item if $F$ is an ultrafilter, then $\upset f^{\imf\imf}[F]$ is also an ultrafilter;
-\item if $G$ is an ultrafilter in $\im(G)$ and $f$ is injective, then $f^{\preimf\imf}[G]$ is also an ultrafilter.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) We have
-\[ \emptyset \in \upset f^{\imf\imf}[F] \iff \emptyset\in f^{\imf\imf}[F] \iff \emptyset\in F. \]
-
-(2) We verify $\upset f^{\imf\imf}[F]$ is an ultrafilter with \ref{ultrafilterCriteria}. Clearly $\upset f^{\imf\imf}[F]$ is proper if $F$ is. Now take $B\subseteq Y$ and assume $B\in \upset f^{\imf\imf}[F]^\mesh$. Then, by \ref{meshConnectionSetsOfSets},
-\[ B\in \upset f^{\imf\imf}[F]^\mesh \iff \upset f^{\imf\imf}[F] \amesh \{B\} \iff f^{\imf\imf}[F] \amesh \{B\} \iff F \amesh f^{\preimf\imf}[\{B\}] = \{f^\preimf(B)\}. \]
-As $F$ is an ultrafilter, we have $f^\preimf(B) \in F$ by \ref{ultrafilterCriteria}. Then $f^{\imf\imf}[F] \ni f^\imf(f^\preimf)(B) \subseteq B$, so $B\in \upset f^{\imf\imf}[F]$.
-
-(3) As before, we verify $f^{\preimf\imf}[G]$ is an ultrafilter with \ref{ultrafilterCriteria}. If $G$ is a proper filter and $\im(f)\in G^\mesh$, then $f^{\preimf\imf}[G]$ is proper. Now take $A\subseteq X$ and assume $A\in f^{\preimf\imf}[G]^\mesh$. Then, by \ref{meshConnectionSetsOfSets},
-\[ f^{\preimf\imf}[G] \amesh \{A\} \iff G \amesh f^{\imf\imf}[\{A\}] = \{f^\imf(A)\}. \]
-As $F$ is an ultrafilter, we have $f^\imf(A) \in G$ by \ref{ultrafilterCriteria}. As $f$ is injective, we have $A = f^{\preimf}\big(f^\imf(A)\big) \in f^{\preimf\imf}[G]$.
-\end{proof}
-\begin{corollary}
-Let $X, Y$ be sets, $f: X\to Y$ an injective function and $F\in\powerfilters(X)$. Then $\upset f^{\imf\imf}[F]$ is an ultrafilter \textup{if and only if} $F$ is an ultrafilter.
-\end{corollary}
-\begin{proof}
-One direction was shown in (2) of the proposition. For the other, assume $\upset f^{\imf\imf}[F]$ is an ultrafilter. Then $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big]$ is ultra by point (3) of the proposition and because $f^{\preimf\imf}\big[\upset f^{\imf\imf}[F]\big] \subseteq F$, $F$ must also be ultra.  
 \end{proof}
 
 \subsubsection{Cofinite filters}
