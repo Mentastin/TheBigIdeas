@@ -1541,7 +1541,7 @@ Also
 \[ \norm{(\vec{1} - x)^{-1}} = \norm{\sum_{i=0}^\infty x^i} \leq \sum_{i=0}^\infty \norm{x}^i = \frac{1}{1-\norm{x}} \]
 by the geometric series.
 \end{proof}
-We can in fact weaken the requirement of $\norm{x}<1$ to $\exists k\in\N: \norm{x^k}<1$.
+We can in fact weaken the requirement of $\norm{x}<1$ to $\exists k\in\N: \norm{x^k}<1$:
 \begin{corollary} \label{NeumannSeriesEventuallyContractive}
 Let $A$ be a unital Banach algebra and $x\in A$ such that $\norm{x^k}<1$ for some $k>0$. Then $\vec{1} - x$ is invertible and $(\vec{1} - x)^{-1} = \sum_{i=0}^\infty x^i$.
 \end{corollary}
@@ -1838,11 +1838,11 @@ Take arbitrary $\epsilon > 0$. We can find an $n\in\N$ such that $|\lambda| > \n
 Finally $\norm{R_x(\lambda)} \leq \sum_{n=0}^\infty\frac{\norm{x}^n}{|\lambda|^{n+1}} = \frac{1}{|\lambda|(1-\frac{\norm{x}}{\lambda})} = \frac{1}{|\lambda|-\norm{x}}$.
 \end{proof}
 
-\subsubsection{Pseudoresolvents}
+\subsubsection{Pseudoresolvents and first resolvent identity}
 \begin{definition}
 Let $A$ be a Banach algebra. A function $\mathcal{R}:\Lambda \subseteq \C \to A$ is called a \udef{pseudoresolvent} if, for all $\lambda,\mu\in\Lambda$
 \[ \mathcal{R}(\lambda) - \mathcal{R}(\mu) = (\mu-\lambda)\mathcal{R}(\lambda)\mathcal{R}(\mu). \]
-This equation is known as the \udef{resolvent identity}.
+This equation is known as the (first) \udef{resolvent identity}.
 \end{definition}
 
 Note that if a pseudoresolvent $\mathcal{R}$ is zero anywhere, it is identically zero.
@@ -1857,7 +1857,7 @@ If $\lambda = \mu$, then the result is immediate. If $\lambda \neq \mu$, then
 
 \begin{proposition} \label{firstNeumannSeries}
 Let $\mathcal{R}:\Lambda \subseteq \C \to A$ be a pseudoresolvent and $\lambda_0,\lambda\in\Lambda$ such that $|\lambda-\lambda_0|\,\norm{\mathcal{R}(\lambda_0)} < 1$. Then
-\[ \mathcal{R}(\lambda) = \sum_{n=0}^\infty(\lambda_0 - \lambda)^n \mathcal{R}(\lambda_0)^{n+1} \qquad\text{and}\qquad \norm{\mathcal{R}(\lambda)} \leq \frac{\norm{\mathcal{R}(\lambda_0)}}{1 - |\lambda_0-\lambda|\,\norm{\mathcal{R}(\lambda_0)}}. \]
+\[ \mathcal{R}(\lambda) = \sum_{n=0}^\infty(\lambda_0 - \lambda)^n \mathcal{R}(\lambda_0)^{n+1} \qquad\text{and}\qquad \norm{\mathcal{R}(\lambda)} \leq \frac{1}{\norm{\mathcal{R}(\lambda_0)}^{-1} - |\lambda_0-\lambda|}. \]
 In particular $\mathcal{R}$ is analytic and can be analytically continued to $\Lambda \cup \ball(\lambda_0, \norm{\mathcal{R}(\lambda_0)}^{-1})$. The analytic continuation still satisfies the resolvent identity.
 \end{proposition}
 \begin{proof}
@@ -1870,7 +1870,12 @@ so, using the Neumann series expansion,
 \end{align*}
 This series converges in norm for all $\lambda\in \C$ such that $|\lambda-\lambda_0| < \norm{\mathcal{R}(\lambda_0)}^{-1}$. Running the equalities in reverse gives the resolvent identity.
 
-The norm estimate is also given by \ref{NeumannSeries}.
+The norm estimate is also given by \ref{NeumannSeries}:
+\begin{align*}
+\norm{\mathcal{R}(\lambda)} &\leq \norm{\big(\id_X - (\lambda_0 - \lambda)\mathcal{R}(\lambda_0)\big)^{-1}}\norm{\mathcal{R}(\lambda_0)} \\
+&\leq \frac{1}{1 - |\lambda_0-\lambda|\,\norm{\mathcal{R}(\lambda_0)}}\norm{\mathcal{R}(\lambda_0)} \\
+&= \frac{1}{\norm{\mathcal{R}(\lambda_0)}^{-1} - |\lambda_0-\lambda|}.
+\end{align*}
 \end{proof}
 \begin{corollary} \label{derivativePseudoresolvent}
 Let $\mathcal{R}:\Lambda \subseteq \C \to A$ be a pseudoresolvent. Then
@@ -1890,7 +1895,7 @@ We calculate
 For the last equality we have used the fact that $\mathcal{R}$ is continuous, which follows from its analyticity.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{firstResolventIdentity}
 Let $A$ be a Banach algebra and $x\in A$. Then the resolvent map
 \[ R_x: \res(x)\to A: \lambda \mapsto (\lambda\cdot\vec{1} - x)^{-1} \]
 is a pseudoresolvent.
@@ -1900,9 +1905,52 @@ We first note that $R_x(\lambda), R_x(\mu)$ commute for any $\lambda,\mu\in\spec
 
 We then calculate
 \begin{align*}
-R_x(\lambda) - R_x(\mu) &= R_x(\lambda)R_x(\mu)(\mu - x) - R_x(\mu)R_x(\lambda)(\lambda - x) \\
-&= \mu R_x(\lambda)R_x(\mu) - \cancel{R_x(\lambda)R_x(\mu) x} - \lambda R_x(\mu)R_x(\lambda) + \cancel{R_x(\mu)R_x(\lambda) x} \\
+R_x(\lambda) - R_x(\mu) &= R_x(\lambda)(\mu - x)R_x(\mu) - R_x(\lambda)(\lambda - x)R_x(\mu) \\
+&= \mu R_x(\lambda)R_x(\mu) - R_x(\lambda)xR_x(\mu) - \lambda R_x(\lambda)R_x(\mu) + R_x(\lambda)xR_x(\mu) \\
+&= \mu R_x(\lambda)R_x(\mu) - \cancel{R_x(\lambda)xR_x(\mu)} - \lambda R_x(\lambda)R_x(\mu) + \cancel{R_x(\lambda)xR_x(\mu)} \\
 &= (\mu - \lambda)R_x(\lambda)R_x(\mu).
+\end{align*}
+\end{proof}
+
+\subsubsection{Second resolvent identity}
+\begin{proposition}[Second resolvent identity] \label{secondResolventIdentity}
+Let $A$ be a Banach algebra and $x,y\in A$. Then for all $\lambda \in \res(x)\cap \res(y)$ we have
+\[ R_x(\lambda) - R_y(\lambda) = R_x(\lambda)\big(x-y\big)R_y(\lambda). \]
+\end{proposition}
+\begin{proof}
+We have
+\begin{align*}
+R_x(\lambda)\big(x-y\big)R_y(\lambda) &= R_x(\lambda)\big(\lambda\vec{1}-y - (\lambda\vec{1} - x)\big)R_y(\lambda) \\
+&= R_x(\lambda)\cancel{(\lambda\vec{1}-y)R_y(\lambda)} - \cancel{R_x(\lambda)(\lambda\vec{1} - x)}R_y(\lambda) \\
+&= R_x(\lambda) - R_y(\lambda).
+\end{align*}
+\end{proof}
+We can obtain the first resolvent identity from the second by setting $y = (\lambda-\mu)\vec{1} + x$. Then $R_{(\lambda-\mu)\vec{1} + x}(\lambda) = R_x(\mu)$, so
+\begin{align*}
+R_x(\lambda) - R_x(\mu) &= R_x(\lambda) - R_{(\lambda-\mu)\vec{1} + x}(\lambda) \\
+&= R_x(\lambda)(x - (\lambda-\mu)\vec{1} + x)R_{(\lambda-\mu)\vec{1} + x}(\lambda) \\
+&= (\lambda - \mu)R_x(\lambda)R_{(\lambda-\mu)\vec{1} + x}(\lambda) \\
+&= (\lambda - \mu)R_x(\lambda)R_x(\mu).
+\end{align*}
+
+\begin{corollary}
+Let $x,y\in A$ and $\lambda\in \res(x)\cap \res(y)$ be such that $\norm{R_x(\lambda)(y-x)}<1$. Then 
+\[ R_y(\lambda) = \sum_{n=0}^\infty \big(R_x(\lambda)(y-x)\big)^nR_x(\lambda) \quad\text{and}\quad \norm{R_y(\lambda)} \leq \frac{1}{\norm{R_x(\lambda)}^{-1} - \norm{y-x}}. \]
+\end{corollary}
+\begin{proof}
+We have
+\[ R_x(\lambda) = R_y(\lambda) + R_x(\lambda)(x-y)R_y(\lambda) = \big(\vec{1} + R_x(\lambda)(x-y)\big)R_y(\lambda) = \big(\vec{1} - R_x(\lambda)(y-x)\big)R_y(\lambda). \]
+Because $R_x(\lambda)(y-x)$ was assumed a contraction, $\vec{1} + R_x(\lambda)(x-y)$ has an inverse given by its Neumann series, \ref{NeumannSeries}, so
+\begin{align*}
+R_y(\lambda) &= \big(\vec{1} - R_x(\lambda)(y-x)\big)^{-1} R_x(\lambda) \\
+&= \sum_{n=0}^\infty \big(R_x(\lambda)(y-x)\big)^n R_x(\lambda).
+\end{align*}
+The norm estimate is also given by \ref{NeumannSeries}:
+\begin{align*}
+\norm{R_y(\lambda)} &\leq \norm{\big(\vec{1} - R_x(\lambda)(y-x)\big)^{-1}}\norm{R_x(\lambda)} \\
+&\leq \frac{1}{1 - \norm{R_x(\lambda)(y-x)}}\norm{R_x(\lambda)} \\
+&\leq \frac{1}{1 - \norm{R_x}\,\norm{(\lambda)(y-x)}}\norm{R_x(\lambda)} \\
+&= \frac{1}{\norm{R_x(\lambda)}^{-1} - \norm{(\lambda)(y-x)}}.
 \end{align*}
 \end{proof}
 
