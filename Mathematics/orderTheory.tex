@@ -2615,12 +2615,19 @@ Let $L$ be a lattice and $J\subseteq L$ a subset. Then
 \end{lemma}
 
 \begin{lemma} \label{properFiltersSelfMesh}
-Let $S$ be a bounded $\wedge$-semilattice and $F\in\filters(S)$. Then $F$ is proper \textup{if and only if} $F\amesh F$.
+Let $S$ be a bounded $\wedge$-semilattice and $F\in\filters(S)$. Then the following are equivalent:
+\begin{enumerate}
+\item $F$ is proper;
+\item $F\amesh F$;
+\item $F\subseteq F^\mesh$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-Assume $F$ is proper and take $a, b\in F$. If $a\wedge b = \bot$, then $\bot\in F$, which is a contradiction, so $a\mesh b$.
+$(1)\Rightarrow (2)$ Assume $F$ is proper and take $a, b\in F$. If $a\wedge b = \bot$, then $\bot\in F$, which is a contradiction, so $a\mesh b$.
 
-Now assume $F \amesh F$. Then $\bot \notin F$ (as $\bot$ does not mesh with any element of $F$), so $F$ is proper.
+$(2) \Rightarrow (1)$ Now assume $F \amesh F$. Then $\bot \notin F$ (as $\bot$ does not mesh with any element of $F$), so $F$ is proper.
+
+$(2) \Leftrightarrow (3)$ Immediate.
 \end{proof}
 
 \subsection{Image filters}
@@ -3591,10 +3598,12 @@ A\mesh f^\preimf(B) \iff& A\cap f^\preimf(B) \neq \emptyset \\
 For the opposite implication: $f^{\imf}(A) \cap B \neq \emptyset$ implies that there exists $x\in A$ such that $f(x) \in B$. Then $x\in f^\preimf(B)$, so $A\mesh f^\preimf(B)$.
 \end{proof}
 \begin{corollary} \label{meshConnectionSetsOfSets}
-Let $f:X \to Y$ be a function between sets, $F \subseteq \powerset(X)$ and $G\subseteq \powerset(Y)$. Then
+Let $f:X \to Y$ be a function between sets, $F \subseteq \powerset(X)$, $A\subseteq X$ and $G\subseteq \powerset(Y)$. Then
 \begin{enumerate}
 \item $f^{\imf\imf}(F) \amesh G \iff F \amesh f^{\preimf\imf}(G)$;
-\item $f^{\imf\imf}(F)^\mesh = \upset f^{\imf\imf}(F^\mesh)$.
+\item $f^{\imf\imf}(F)^\mesh = \upset f^{\imf\imf}(F^\mesh)$;
+\item if $G$ is a filter, then $f^\imf(A)\in G \implies A \in f^{\preimf\imf}(G)^\mesh$;
+\item if $G$ is an ultrafilter, then $f^\imf(A)\in G \iff A \in f^{\preimf\imf}(G)^\mesh$.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
@@ -3614,6 +3623,34 @@ G\subseteq f^{\imf\imf}(F)^\mesh &\iff G \amesh f^{\imf\imf}(F) \\
 &\iff G \subseteq \upset f^{\imf\imf}(F^\mesh),
 \end{align*}
 where we have used point (1), the fact that $F^\mesh$ is upwards closed (\ref{upwardClosureGrill}) and the Galois connection in \ref{filterPreimageImageGaloisConnection}.
+
+(3) By \ref{properFiltersSelfMesh} and point (1), we have
+\begin{align*}
+f^\imf(A)\in G \implies& f^\imf(A)\in G^\mesh \\
+\iff& f^{\imf\imf}\big(\{A\}\big)\amesh G \\
+\iff& \{A\} \mesh f^{\preimf\imf}(G) \\
+\iff& A \in f^{\preimf\imf}(G)^\mesh.
+\end{align*}
+
+(4) In the previous proof the implication becomes an equivalence by \ref{ultrafilterCriteria}.
+\end{proof}
+
+\begin{lemma} \label{meshProductIsotoneSets}
+Let $X,Y$ be sets and $F\subseteq \powerset(X), G\subseteq \powerset(Y), H\subseteq \powerset(X\times Y)$ upwards closed. Then
+\[ F\otimes G \amesh H \iff \begin{cases}
+F \amesh \pi_1^{\imf\imf}(H) \\ G \amesh \pi_2^{\imf\imf}(H)
+\end{cases} \]
+\end{lemma}
+\begin{proof}
+First assume $F\otimes G \amesh H$, which is equivalent to $F\otimes G\subseteq H^\mesh$.
+By \ref{projectionsOfProductFilter} and \ref{meshConnectionSetsOfSets}, we have
+\[ F = \upset\pi_1^{\imf\imf}(F\otimes G) \subseteq \upset\pi_1^{\imf\imf}(H^\mesh) = \pi_1^{\imf\imf}(H)^\mesh. \]
+Similarly $G\subseteq \pi_1^{\imf\imf}(H)^\mesh$. Thus $F \amesh \pi_1^{\imf\imf}(H)$ and $G \amesh \pi_2^{\imf\imf}(H)$.
+
+Now assume the right-hand side.
+By \ref{meshConnectionSetsOfSets} and \ref{filterFactorisationInequality}, we have
+\[ F\otimes G \subseteq \pi_1^{\imf\imf}(H)^\mesh\otimes \pi_2^{\imf\imf}(H)^\mesh = \pi_1^{\imf\imf}(H^\mesh)\otimes \pi_2^{\imf\imf}(H^\mesh) \subseteq H^\mesh, \]
+so $F\otimes G \amesh H$.
 \end{proof}
 
 \subsubsection{Cofinite filters}

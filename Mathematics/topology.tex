@@ -865,14 +865,15 @@ TODO!!
 \begin{proposition} \label{compactConstructions}
 Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces. Let $A,B\subseteq X$ be subsets and $f: \sSet{X,\xi}\to \sSet{Y,\zeta}$ a continuous function.
 \begin{enumerate}
+\item If $A$ is $B$-compactoid, then $f^\imf(A)$ is $f^\imf(B)$-compactoid.
 \item If $(f^{\preimf}\circ f^{\imf})(A)$ is compact, then $f^{\imf}(A)$ is compact.
 \item If $A$ and $B$ are compact, then $A\cup B$ is compact.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Take an ultrafilter $G$ in $f^{\imf}(A)$. Then $f^{\preimf\imf}(G)$ is a proper filter in $(f^{\preimf}\circ f^{\imf})(A)$ and we can extend it to an ultrafilter $F$ by the ultrafilter lemma \ref{ultrafilterLemma}. Then $F\to x\in X$ by compactness. By continuity and \ref{imageFilterProperties}, we have that $\upset f^{\imf\imf}[F]$ is an ultrafilter and $\upset f^{\imf\imf}[F] \to f(x)$. Now, by \ref{filterPreimageImageGaloisConnection}, we have
-\[ G \subseteq \upset f^{\imf\imf}\big(f^{\preimf\imf}(G)\big) \subseteq \upset f^{\imf\imf}[F]. \]
-As both $G$ and $\upset f^{\imf\imf}[F]$ are ultrafilters, we must have $G = \upset f^{\imf\imf}[F]$ and so $G$ converges.
+(1) Take an ultrafilter $G$ such that $f^{\imf}(A)\in G$. Then $\{A\}\amesh f^{\preimf\imf}(G)$ by \ref{meshConnectionSetsOfSets}, so $G' \defeq \upset\{A\}\vee f^{\preimf\imf}(G)$ is proper by \ref{joinProperFilter}. It is contained in an ultrafilter $U$ by \ref{ultrafilterLemma}, which converges to some $x\in B$ by assumption. Then $\upset f^{\imf\imf}(U) \to f(x)\in f^\imf(B)$ and
+\[ G \subseteq \upset f^{\imf\imf}\big(f^{\preimf\imf}(G)\big) \subseteq \upset f^{\imf\imf}(U), \]
+so $G = \upset f^{\imf\imf}(U)$ because $G$ is ultra and $\upset f^{\imf\imf}(U)$ is proper, so $G\to f(x)\in f^\imf(B)$.
 
 (2) Take any ultrafilter $F$ in $A\cup B$. Then either $A\in F$ or $B$ in $F$: if not, then $A^c\in F$ and $B^c \in F$ by \ref{BooleanUltrafilterDisjunction}, so $A^c\cap B^c\cap (A\cup B) = \emptyset \in F$, which is disallowed.
 
@@ -930,24 +931,8 @@ TODO
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. We call $A$ \udef{relatively compact} if $\adh_\xi(A)$ is compact.
 \end{definition}
 
-TODO compactoid!
+Notice that if $A$ is relatively compact, it is $\adh(A)$-compactoid. The converse does not hold.
 
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$. Then $A$ is relatively compact \textup{if and only if} every ultrafilter in $A$ converges in $X$.
-\end{lemma}
-The difference with compactness is that we do not require every ultrafilter in $A$ to converge in $A$.
-\begin{proof}
-$\boxed{\Rightarrow}$ Assume $A$ is relatively compact. As every ultrafilter in $A$ is also an ultrafilter in $\adh_\xi(A)$, we have that every ultrafilter in $A$ converges in $\adh_\xi(A)$.
-
-$\boxed{\Leftarrow}$ Assume every ultrafilter in $A$ converges in $X$. Then every ultrafilter in $A$ converges in $\adh_\xi(A)$ by \ref{adherenceLimitFilter}.
-
-Now let $U$ be an ultrafilter in $\adh_\xi(A)$ that is not in $A$. By TODO ref it is an ultrafilter in
-\end{proof}
-
-\subsubsection{Conditional compactness}
-\begin{definition}
-
-\end{definition}
 
 \subsubsection{Local compactness}
 \begin{definition}
@@ -2111,6 +2096,8 @@ These two equations are equivalent.
 \end{proof}
 
 \subsubsection{Properties of product filters}
+TODO generalise to upwards closed sets!!
+
 \begin{lemma}
 The product filter of proper filters is proper.
 \end{lemma}
@@ -2535,7 +2522,7 @@ because $\pfilter{x}\to x$. This is exactly the requirement for $H\to f$ in poin
 \end{proof}
 
 
-\begin{proposition}
+\begin{proposition} \label{continuousLimitsContinuous}
 Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. Either of the following is sufficient to make all limit functions in $(X\to Y)_c$ continuous:
 \begin{enumerate}
 \item $(X\to Y)_c$ is a Kent space;
@@ -2572,11 +2559,9 @@ Set $X = \{a,b\}$ and $Y = \{1,2\}$.
 
 Let $X$ have the convergences $\begin{cases}
 \pfilter{a} \to a \\
-\pfilter{b} \to b \\
-\pfilter{b} \to a
+\pfilter{b} \to a,b
 \end{cases}$ and let $Y$ have the convergences $\begin{cases}
-\pfilter{1} \to 1 \\
-\pfilter{1} \to 2 \\
+\pfilter{1} \to 1,2 \\
 \pfilter{2} \to 2
 \end{cases}$.
 Consider the functions $f: X\to Y: \begin{cases}
@@ -2749,6 +2734,79 @@ $(2) \Rightarrow (3)$ Immediate.
 $(3) \Rightarrow (1)$ TODO
 \end{proof}
 
+\subsection{Even continuity}
+\begin{definition}
+Let $\sSet{X,\xi},\sSet{Y, \zeta}$ be convergence spaces, $x\in X$ and $H\subseteq (X\to Y)$. Then $H$ is
+\begin{itemize}
+\item \udef{evenly continuous at $x$} if pointwise and continuous convergence at $x$ coincide for all filters that contain $H$;
+\item \udef{evenly continuous} if pointwise and continuous convergence coincide in for all filters that contain $H$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{evenlyContinuousLemma}
+Let $X,Y$ be convergence spaces, $x\in X$ and $H\subseteq (X\to Y)$. Then $H$ is evenly continuous at $x$ \textup{if and only if} for all filters $F\in \powerfilters(X\to Y)$ that contain $H$, all $G\in \powerfilters(X)$ and all $y\in Y$, we have
+\[ \left.\begin{aligned}
+\upset\evalMap^{\imf\imf}(F\otimes \pfilter{x}) &\to y \\
+G&\to x
+\end{aligned}\right\}\qquad\implies\qquad \evalMap^{\imf\imf}(F\otimes G)\to y. \]
+\end{lemma}
+
+\begin{proposition}
+Let $\sSet{X,\xi},\sSet{Y, \zeta}$ be convergence spaces and $H\subseteq (X\to Y)$.
+
+If $H$ evenly continuous and $\evalMap_x^\imf(H)$ compactoid in $Y$ for all $x\in X$, then $H$ is compactoid in $(X\to Y)_c$.
+\end{proposition}
+\begin{proof}
+Let $U\in\powerultrafilters\big((X\to Y)\big)$ be an ultrafilter that contains $H$. Take arbitrary $x\in X$. Then $\evalMap_x^\imf(H) = \evalMap^\imf(H\times \{x\})\in \upset\evalMap^{\imf\imf}(U\otimes \pfilter{x})$. Because $\evalMap_x^\imf(H)$ was assumed compactoid, $\upset\evalMap^{\imf\imf}(U\otimes \pfilter{x})$ converges to some $y\in Y$.
+
+Now let $f: X\to Y$ be a function that maps each $x$ to such a $y$. By construction, $U$ converges pointwise to $f$. As $H$ is evenly continuous and $U$ contains $H$, we have that $U$ converges in continuous convergence to $f$.
+\end{proof}
+\begin{corollary}
+If $H\subseteq \cont(X,Y)$ and $Y$ is regular, then $H$ is compactoid in $\cont_c(X, Y)$ under the same assumptions.
+\end{corollary}
+\begin{proof}
+We need to show that in this case the function $f$ may be chosen continous. As $f$ is a limit of the continuous convergence, its continuity is given by \ref{continuousLimitsContinuous}.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{Y, \zeta}$ a Hausdorff pseudotopological convergence space and $H\subseteq (X\to Y)$. If $H$ is compactoid in $(X\to Y)_c$, then
+\begin{enumerate}
+\item $\evalMap_x^\imf(H)$ compactoid for all $x\in X$;
+\item $H$ is evenly continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) As $\evalMap_x$ is continuous, this follows from \ref{compactConstructions}.
+
+(2) We use \ref{evenlyContinuousLemma}. Take arbitrary $x\in X$, $y\in Y$, $G\in \powerfilters(X)$ that converges to $x$ and $F\in \powerfilters(X\to Y)$ such $H\in F$. Assume $\upset\evalMap^{\imf\imf}(F\otimes \pfilter{x})\to y$. We need to show that $\upset\evalMap^{\imf\imf}(F\otimes G) \to y$. Because $Y$ is a pseudotopology, it is enough to show that $U\to y$ for all ultrafilters $U\supseteq \upset\evalMap^{\imf\imf}(F\otimes G)$.
+
+By \ref{properFiltersSelfMesh}, we have $\upset\evalMap^{\imf\imf}(F\otimes G) \subseteq U^\mesh$, which implies
+\[ \upset\evalMap^{\imf\imf}(F\otimes G) \amesh U \iff F\otimes G \amesh \evalMap^{\preimf\imf}(U) \iff \begin{cases}
+F \amesh \pi_1^{\imf\imf}\big(\evalMap^{\preimf\imf}(U)\big) \\
+G \amesh \pi_2^{\imf\imf}\big(\evalMap^{\preimf\imf}(U)\big)
+\end{cases} \]
+by \ref{meshConnectionSetsOfSets} and \ref{meshProductIsotoneSets}. Now $F \vee \pi_1^{\imf\imf}\big(\evalMap^{\preimf\imf}(U)\big)$ is proper by \ref{joinProperFilter} and thus it is contained in an ultrafilter $F'$ by \ref{ultrafilterLemma}. Now $H\in F\subseteq F'$, so $F'$ converges continuously to some $f\in (X\to Y)$.
+
+Also $\pi_1^{\imf\imf}\big(\evalMap^{\preimf\imf}(U)\big) \subseteq F' \subseteq F^{\prime\mesh}$ by \ref{properFiltersSelfMesh}, so
+\begin{multline*}
+\left.\begin{aligned}F' \amesh \pi_1^{\imf\imf}\big(\evalMap^{\preimf\imf}(U)\big) \\
+G \amesh \pi_2^{\imf\imf}\big(\evalMap^{\preimf\imf}(U)\big)\end{aligned}\right\} \iff  F'\otimes G \amesh \evalMap^{\preimf\imf}(U) \iff \upset\evalMap^{\imf\imf}(F'\otimes G) \amesh U \\
+\iff \upset\evalMap^{\imf\imf}(F'\otimes G) \subseteq U^\mesh = U,
+\end{multline*}
+again by \ref{meshProductIsotoneSets}, \ref{meshConnectionSetsOfSets} and \ref{ultrafilterCriteria}.
+
+By continuous convergence of $F'$, we have $\upset\evalMap^{\imf\imf}(F'\otimes G) \to f(x)$ and thus also $U\to f(x)$.
+
+Finally we need to show that $f(x) = y$. By upwards closure of the convergence, we have that $\evalMap(F'\otimes \pfilter{x}) \to y$. By continuous convergence, we also have $\evalMap(F'\otimes \pfilter{x}) \to f(x)$. As $Y$ is Hausdorff, we must have $f(x) = y$.
+\end{proof}
+
+\begin{corollary}[Arzelà-Ascoli theorem]
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{Y, \zeta}$ a regular Hausdorff pseudotopological convergence space and $H\subseteq \cont(X, Y)$. Then $H$ is compactoid in $\cont_c(X, Y)$ \textup{if and only if}
+\begin{enumerate}
+\item $\evalMap_x^\imf(H)$ compactoid for all $x\in X$;
+\item $H$ is evenly continuous.
+\end{enumerate}
+\end{corollary}
 
 \chapter{Separation axioms and other properties of convergences spaces}
 
