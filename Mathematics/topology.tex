@@ -21,8 +21,10 @@ Let $X$ be a set and let $\xi$ be a relation between non-empty downward directed
 \end{itemize}
 If $\xi$ is a convergence, then we call $\sSet{X, \xi}$ a \udef{convergence space}.
 
-If $\lim_\xi F \neq \emptyset$, we say the directed set $F$ \udef{converges}.
+If $\lim_\xi F \neq \emptyset$, we say the directed set $F$ \udef{converges}. If there exists a filter that converges to a point $x\in X$, then we call $x$ a \udef{limit point}.
 \end{definition}
+In a convergence space every point is a limit point.
+
 We write ${\lim_\xi}^{-1}$ for the preimage function of $\xi$ restricted to directed sets $\nsim \powerset(X)$. Thus ${\lim_\xi}^{-1}(x)$ is the set of all directed sets $D$ such that
 \begin{itemize}
 \item $D\overset{\xi}{\longrightarrow} x$;
@@ -109,7 +111,7 @@ Let $\sSet{X,\xi}$ be a convergence space. The function $X\to \powerfilters(X): 
 
 \subsection{Depth requirements}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Take arbitrary $F,G \in \powerfilters(X)$, $\mathcal{F}\subseteq \powerfilters(X)$ and $x\in X$. The convergence space is called
+Let $\sSet{X,\xi}$ be a preconvergence space. Take arbitrary $F,G \in \powerfilters(X)$, $\mathcal{F}\subseteq \powerfilters(X)$ and $x\in X$. The preconvergence space is called
 \begin{itemize}
 \item a \udef{Kent space} if $F \to x \implies F\cap \pfilter{x} \to x$;
 \item \udef{finitely deep} or a \udef{limit space} if $\lim_\xi(F\cap G) = \lim_\xi F \cap \lim_\xi G$;
@@ -121,6 +123,13 @@ Let $\sSet{X,\xi}$ be a convergence space. Take arbitrary $F,G \in \powerfilters
 \end{definition}
 
 The point of a Kent space is that if $F\to x$, then ``essentially'' every $A\in F$ contains $x$.
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a preconvergence space. If $\xi$ is a Kent space and each element of $x$ is a limit point, then it is a convergence space.
+\end{lemma}
+\begin{proof}
+Take arbitrary $x\in X$. As $x$ is a limit point, there exists $F\to x$. Now $F\cap \pfilter{x} \to x$, so $\pfilter{x} \to x$ by monotonicity of the preconvergence.
+\end{proof}
 
 \begin{lemma} \label{finiteDepthLemma}
 Let $X$ be a set and $\xi$ a preconvergence on $X$. Then the following are equivalent:
@@ -793,38 +802,6 @@ Let $\sSet{X,\xi}$ be a convergence space.
 
 A convergence space is discete if and only if each point is isolated. A discrete convergence space is prime.
 
-\section{Convergence modification}
-The convergence modification is obtained from a preconvergence space by adding all convergence of the form $\pfilter{x}\to x$.
-
-\begin{definition}
-Let $\sSet{X,\xi}$ be a preconvergence space. The convergence modification of $\xi$ is denoted $\convMod(\xi)$.
-\end{definition}
-
-\begin{proposition} \label{vicinitiesConvergenceModification}
-Let $\sSet{X,\xi}$ be a preconvergence space, $x\in X$ and $A\subseteq X$. Then
-\begin{enumerate}
-\item $\vicinity_{\convMod(\xi)}(x) = \vicinity_{\xi}(x)\cap \pfilter{x}$;
-\item $\adh_{\convMod(\xi)}(A) = \adh_\xi(A) \cup A$;
-\item $\inh_{\convMod(\xi)}(A) = \inh_\xi(A) \cap A$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Immediate.
-
-(2) We have, using (1) and \ref{grillIntersectionUnion},
-\begin{align*}
-x\in \adh_{\convMod(\xi)}(A) &\iff A\in \vicinity_{\convMod(\xi)}(x)^\mesh \\
-&\iff A\in \big(\vicinity_{\xi}(x) \cap \pfilter{x}\big)^\mesh \\
-&\iff A\in \vicinity_{\xi}(x)^\mesh \cup \pfilter{x}^\mesh \\
-&\iff \big(A\in \vicinity_{\xi}(x)^\mesh\big) \lor \big(A\in \pfilter{x}^\mesh\big) \\
-&\iff \big(x\in \adh_\xi(A)\big) \lor \big(x\in A\big) \\
-&\iff x \in \adh_\xi(A) \cup A.
-\end{align*}
-
-(3) We calculate, using \ref{principalInherenceComplementAdherence},
-\[ \inh_{\convMod(\xi)}(A) = \adh_{\convMod(\xi)}(A^c)^c = \big(\adh_\xi(A^c)\cup A^c\big)^c = \adh_\xi(A^c)^c \cap A = \inh_\xi(A) \cap A. \]
-\end{proof}
-
 \section{Examples of (pre)convergences}
 
 \subsection{Convergences on ordered sets}
@@ -1351,6 +1328,189 @@ Let $X,Y$ be sets, $F\in\powerfilters(X)$, $G\in\powerfilters(Y)$ and $f: X\to Y
 TODO
 \end{proof}
 
+\section{Sublattices of convergences}
+\subsection{Depth properties}
+By ``depth properties'' we mean properties of $\lim^{-1}(x)$.
+\subsubsection{Convergence spaces}
+\begin{lemma}
+Let $X$ be a set. The set of convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{proof}
+\ref{completeSubsemilatticeClosure}
+\end{proof}
+
+\begin{definition}
+Let $\sSet{X,\xi}$ be a preconvergence space. Then the \udef{convergence modification} $\convMod(\xi)$ is the closure of $\xi$ into the lattice of convergence spaces.
+\end{definition}
+
+\begin{lemma} \label{convModConstruction}
+Let $\sSet{X,\xi}$ be a preconvergence space. Then $\convMod(\xi) = \xi \cup \setbuilder{(\pfilter{x}, x)}{x\in X}$.
+\end{lemma}
+
+\begin{proposition} \label{vicinitiesConvergenceModification}
+Let $\sSet{X,\xi}$ be a preconvergence space, $x\in X$ and $A\subseteq X$. Then
+\begin{enumerate}
+\item $\vicinity_{\convMod(\xi)}(x) = \vicinity_{\xi}(x)\cap \pfilter{x}$;
+\item $\adh_{\convMod(\xi)}(A) = \adh_\xi(A) \cup A$;
+\item $\inh_{\convMod(\xi)}(A) = \inh_\xi(A) \cap A$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Immediate by \ref{convModConstruction}.
+
+(2) We have, using (1) and \ref{grillIntersectionUnion},
+\begin{align*}
+x\in \adh_{\convMod(\xi)}(A) &\iff A\in \vicinity_{\convMod(\xi)}(x)^\mesh \\
+&\iff A\in \big(\vicinity_{\xi}(x) \cap \pfilter{x}\big)^\mesh \\
+&\iff A\in \vicinity_{\xi}(x)^\mesh \cup \pfilter{x}^\mesh \\
+&\iff \big(A\in \vicinity_{\xi}(x)^\mesh\big) \lor \big(A\in \pfilter{x}^\mesh\big) \\
+&\iff \big(x\in \adh_\xi(A)\big) \lor \big(x\in A\big) \\
+&\iff x \in \adh_\xi(A) \cup A.
+\end{align*}
+
+(3) We calculate, using \ref{principalInherenceComplementAdherence},
+\[ \inh_{\convMod(\xi)}(A) = \adh_{\convMod(\xi)}(A^c)^c = \big(\adh_\xi(A^c)\cup A^c\big)^c = \adh_\xi(A^c)^c \cap A = \inh_\xi(A) \cap A. \]
+\end{proof}
+
+\subsubsection{Kent property}
+\begin{lemma}
+Let $X$ be a set. The set of Kent convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{Kent modification} $\kentMod(\xi)$ is the closure of $\xi$ into the lattice of Kent spaces.
+\end{definition}
+
+
+\subsubsection{Finite depth spaces}
+\begin{lemma}
+Let $X$ be a set. The set of finite depth preconvergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{finite depth modification} $\finDepthMod(\xi)$ is the closure of $\xi$ into the lattice of convergences of finite depth.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the finite depth modification $\finDepthMod(\xi)$ exists and is given by
+\[ F \overset{\finDepthMod(\xi)}{\longrightarrow} x \quad\iff\quad \exists n\in\N, G_0,\ldots, G_n \in {\lim}^{-1}(x): \; F = \bigcap_{k=0}^n G_k. \]
+\end{proposition}
+
+\subsubsection{Pseudotopological spaces}
+\begin{lemma}
+Let $X$ be a set. The set of pseudotopological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{pseudotopological modification} $\pseudotopMod(\xi)$ is the closure of $\xi$ into the lattice of pseudotopological convergences.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the pseudotopological modification $\pseudotopMod(\xi)$ exists and is given by
+\[ F \overset{\pseudotopMod(\xi)}{\longrightarrow} x \quad\iff\quad \forall H\in \powerultrafilters(X): (F\subseteq H) \implies \big(H \overset{\xi}{\longrightarrow} x\big). \]
+\end{proposition}
+
+\begin{proposition}
+The following are equivalent:
+\begin{enumerate}
+\item $F \overset{\pseudotopMod(\xi)}{\longrightarrow} x$;
+\item $\forall H\in \powerultrafilters(X): (F\subseteq H) \implies \big(H \overset{\xi}{\longrightarrow} x\big)$;
+\item $x\in \bigcap_{U\in \powerultrafilters(X)\cap \pfilter{F}}\lim_\xi U$;
+\item $x\in \bigcap_{G\mesh F}\adh_\xi(G)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition} \label{pseudotopologiserCommutesWithInitialStructure}
+Let $Y$ be a set, $\sSet{Z_i, \zeta_i}$ a convergence space for all $i\in I$ and $\{f_i: Y\to Z_i\}_{i\in i}$. Then the pseudotopological modification of the initial convergence w.r.t. $\{f_i: Y\to Z_i\}_{i\in i}$ is equal to the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$.
+\end{proposition}
+\begin{proof}
+Let $\mu$ be the initial convergence w.r.t. $\{f_i: Y\to Z_i\}_{i\in i}$. Then each $f_i: Y\to \pseudotopMod(Z_i)$ is continuous and the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$ is pseudotopological by \ref{pretopologicalInitialConvergence}. Thus $\pseudotopMod(\mu)$ is stronger than the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$.
+
+For the converse, it is enough to note that for each ultrafilter $U\in \powerultrafilters(Y)$, convergence in the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$ implies convergence in $\mu$. Indeed $f_i^{\imf\imf}(U)$ is an ultrafilter (by \ref{imageFilterProperties}) that converges in $\pseudotopMod(Z_i)$ and thus also in $Z_i$.
+\end{proof}
+
+\subsubsection{Pretopological spaces}
+\begin{lemma}
+Let $X$ be a set. The set of pretopological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{pretopological modification} $\pretopMod(\xi)$ is the closure of $\xi$ into the lattice of pretopological convergences.
+\end{definition}
+
+\begin{proposition} \label{pretopologicalModification}
+Let $\sSet{X,\xi}$ be a convergence space. Then the pretopological modification $\pretopMod(\xi)$ exists and is given by
+\[ F \overset{\pretopMod(\xi)}{\longrightarrow} x \quad\iff\quad \vicinity_\xi(x) \subseteq F. \]
+\end{proposition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space, $x\in X$ and $A\subseteq X$. Then
+\begin{enumerate}
+\item $\vicinity_{\xi}(x) = \vicinity_{\pretopMod(\xi)}(x)$;
+\item $\adh_\xi(A) = \adh_{\pretopMod(\xi)}(A)$ and $\inh_\xi(A) = \inh_{\pretopMod(\xi)}(A)$;
+\item $\neighbourhood_{\xi}(x) = \neighbourhood_{\pretopMod(\xi)}(x)$;
+\item $\topology_{\xi} = \topology_{\pretopMod(\xi)}$;
+\item $\interior_\xi(A) = \interior_{\pretopMod(\xi)}(A)$ and $\closure_\xi(A) = \closure_{\pretopMod(\xi)}(A)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) is immediate from \ref{pretopologicalModification}. The rest follows immediately from (1).
+\end{proof}
+
+
+\subsection{Topological spaces}
+\begin{lemma}
+Let $X$ be a set. The set of topological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{proof}
+Let $\{\xi_i\}_{i\in I}$ be a set of topological convergences on $X$. We need to show that $\bigwedge_{i\in I}\xi_i$ is topological, for which we use \ref{pretopologicalSpaceTopological}.
+
+TODO!!
+\end{proof}
+TODO: easier to verify that closure operator is a closure operator?
+
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{topological modification} $\topMod(\xi)$ is the closure of $\xi$ into the lattice of topological convergences.
+\end{definition}
+
+\begin{proposition} \label{topologicalModificationConstruction}
+Let $\sSet{X,\xi}$ be a convergence space. Then the topological modification $\topMod(\xi)$ exists and is given by
+\[ F \overset{\topMod(\xi)}{\longrightarrow} x \quad\iff\quad \neighbourhood_\xi(x) \subseteq F. \]
+\end{proposition}
+
+\begin{proposition} \label{topologicalModificationPreservation}
+Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $x\in X$. Then
+\begin{enumerate}
+\item $A$ is open (closed) in $\topMod(\xi)$ \textup{if and only if} $A$ is open (closed) in $\xi$;
+\item $\topology_{\topMod(\xi)} = \topology_\xi$;
+\item $\interior_{\topMod(\xi)}(A) = \interior_{\xi}(A)$ and $\closure_{\topMod(\xi)}(A) = \closure_{\xi}(A)$;
+\item $\neighbourhood_{\topMod(\xi)}(x) = \neighbourhood_\xi(x)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{openClosedCriteria}, we have that $A$ is open in $\topMod(\xi)$ iff $A\in \vicinity_{\topMod(\xi)}(x)$ for all $x\in A$. Thus
+\begin{align*}
+\text{$A$ is $\topMod(\xi)$-open} &\iff \forall x\in A: \; A\in \vicinity_{\topMod(\xi)}(x) \\
+&\iff \forall x\in A: \; A\in \neighbourhood_\xi(x) \\
+&\iff \forall x\in A: \; x\in \interior_\xi(A) \\
+&\iff A\subseteq \interior_\xi(A) \\
+&\iff \text{$A$ is $\xi$-open}.
+\end{align*}
+The statement for closed sets follows straight from \ref{openClosedComplement}.
+
+(2), (3) Immediate.
+
+(4) From \ref{topologicalModificationConstruction}, $\neighbourhood_\xi(x) = \vicinity_{\topMod(\xi)}(x)$. The result follows because $\topMod(\xi)$ is topological.
+\end{proof}
+
+\subsection{Countability modifications}
+\subsubsection{Sequential modification}
+\begin{definition}
+$\Seq(\xi)$
+\end{definition}
+
+\subsection{(Generalised) compactness modifications}
+TODO Cech-stone, alexandroff
+
+Lindelöf.
+
+
 \section{Continuous functions}
 \begin{definition}
 Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be (pre)convergence spaces. A function $f: X\to Y$ is called \udef{continuous} if it preserves limits: for all $D \in \powerdirected(X)$ and $x\in X$:
@@ -1640,6 +1800,16 @@ Let $Y$ be a set.
 \end{itemize}
 \end{definition}
 
+\begin{proposition}
+Let $Y$ be a set. 
+\begin{itemize}
+\item Given a set of (pre)convergence spaces $\{\sSet{Z_i,\zeta_i}\}_{i\in I}$ and a set of functions $\{f_i: Y\to Z_i\}_{i\in I}$, we define the \udef{initial (pre)convergence} $\mu$ on $Y$ w.r.t. $\{f_i: Y\to Z_i\}$ as the coarsest (pre)convergence on $Y$ that makes all functions in $\{f_i: Y\to Z_i\}$ continuous:
+\[ \mu = \bigvee \setbuilder{\sigma}{\forall i\in I: f_i\in  \cont_\text{(pre)}(\sigma, \zeta_i)}. \]
+\item Given a set of convergence spaces $\{\sSet{X_i,\xi_i}\}_{i\in I}$ and a set of functions $\{g_i: X_i \to Y\}_{i\in I}$, we define the \udef{final convergence} $\nu$ on $Y$ w.r.t. $\{g_i: X_i\to Y\}$ as the finest convergence on $Y$ that makes all functions in $\{g_i: X_i \to Y\}$ continuous:
+\[ \nu = \bigwedge \setbuilder{\sigma}{\forall i\in I: g_i\in  \cont_\text{(pre)}(\xi_i, \sigma)}. \]
+\end{itemize}
+\end{proposition}
+
 \begin{proposition} \label{initialFinalConvergenceModification}
 Let $Y$ be a set.
 \begin{enumerate}
@@ -1761,12 +1931,13 @@ Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$.
 \[ \vicinity_\nu(y) = \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}\upset g_i^{\imf\imf}\big[\vicinity_{\xi_i}(x)\big]. \]
 \item If $\{\sSet{X_i, \xi_i}\}_{i\in I}$ is a set of \emph{convergence} spaces, then
 \[ \vicinity_\nu(y) = \pfilter{y} \cap \bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}\upset g_i^{\imf\imf}\big[\vicinity_{\xi_i}(x)\big]. \]
-\item If $\{\sSet{X_i, \xi_i}\}_{i\in I}$ is a set of \emph{pretopological} convergence spaces, then $\nu$ is pretopological.
+\item If $\{\sSet{X_i, \xi_i}\}_{i\in I}$ is a set of \emph{pretopological} \emph{pre}convergence spaces, then $\nu$ is pretopological.
 \item If $\{\sSet{X_i, \xi_i}\}_{i\in I}$ is a set of \emph{topological} convergence spaces, then
 \[ \topology_\nu = \setbuilder{U\in\powerset(Y)}{\forall i\in I: g_i^{\preimf}(U)\in\topology_{\xi_i}}. \]
 In general, $\nu$ is \emph{not} topological in this case.
 \end{enumerate}
 \end{proposition}
+TODO not correct?? Check modifications!
 \begin{proof}
 (1) We have, by \ref{initialFinalConvergence}, for $y\in Y$
 \[ {\lim}^{-1}(y) = \setbuilder{G\in\powerfilters(Y)}{\exists i\in I: \exists x\in g_i^\preimf\{y\}: \exists F\overset{\xi_i}{\longrightarrow}x:\; g_i^{\imf\imf}(F)\subseteq G}. \]
@@ -2052,7 +2223,7 @@ Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. The \udef
 \begin{lemma} \label{setTraceFilterLemma}
 Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $F\in\powerfilters(X)$ a filter. Then
 \begin{enumerate}
-\item $F|_A = \upset(\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F)$;
+\item $F|_A = \upset \setbuilder{B\cap A}{B\in F} = \upset( \iota^{\imf}\circ \iota^{\preimf})^\imf(F) = \upset(\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F)$;
 \item $F = \upset(\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F)$ \textup{if and only if} $A\in F$.
 \end{enumerate}
 \end{lemma}
@@ -2063,53 +2234,33 @@ Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $F\in\powerfilters
 \end{proof}
 
 \begin{lemma} \label{subspaceConvergence}
-Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \powerfilters(A)$ and $G\in \powerfilters(X)$. Then
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \powerfilters(A)$, $G\in \powerfilters(X)$ and $a\in A$. Then
 \begin{enumerate}
 \item $F \overset{\xi|_A}{\longrightarrow} a$ if and only if $\upset \iota^{\imf\imf}[F] \overset{\xi}{\longrightarrow} a$;
-\item if $G\overset{\xi}{\longrightarrow} a \in A$, then $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$;
+\item if $G\overset{\xi}{\longrightarrow} a$, then $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$;
 \item if $A\in G$ and $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$, then $G\overset{\xi}{\longrightarrow} a$.
 \end{enumerate}
 \end{lemma}
-We may write $\upset F$ for $\upset \iota^{\imf\imf}[F]$.
 \begin{proof}
 (1) By \ref{initialFinalConvergence}.
 
 (2) Assume $G\overset{\xi}{\longrightarrow} a \in A$. Then $G \subseteq \upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \to a$ by \ref{filterPreimageImageGaloisConnection} and so $\iota^{\preimf\imf}[G] \to a$ by \ref{initialFinalConvergence}.
 
-(3) We have $\upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \to a$. If $A\in G$, then, by \ref{traceFilterLemma},
-\[ \upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] = \upset( \iota^{\imf}\circ \iota^{\preimf})^\imf[G] = \upset \setbuilder{B\cap A}{B\in G} = G|_A = G, \]
-so $G\to a$.
+(3) We have $\upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \overset{\xi}{\longrightarrow} a$ by continuity of the inclusion. If $A\in G$, then, by \ref{setTraceFilterLemma}, $\upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] = G$, so $G \overset{\xi}{\longrightarrow} a$.
 \end{proof}
 
 \begin{proposition}
-Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a closed subset. Let $B\subseteq A$ and $x\in A$. Then
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Let $B\subseteq A$ and $x\in A$. Then
 \begin{enumerate}
-\item $\adh_{\xi|_A}(B) = \adh_\xi(B)$.
+\item $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A$;
+\item if $A$ is closed, then $\adh_{\xi|_A}(B) = \adh_\xi(B)$;
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) We have $\iota^\imf(B) = B$, so $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B)$ by \ref{adherenceInherenceContinuity}.
+(1) We have $\iota^\imf(B) = B$ and $\iota^\imf\big(\adh_{\xi|_A}(B)\big)$, so $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B)$ by \ref{adherenceInherenceContinuity}. Then we immediately have $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B) \cap A$.
+
+TODO
 \end{proof}
-
-\begin{lemma} \label{subspaceUltrafilters}
-Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \powerfilters(A)$ and $G\in \powerfilters(X)$. Then
-\begin{enumerate}
-\item $F$ is an ultrafilter \textup{if and only if} $\upset \iota^{\imf\imf}[F]$ is an ultrafilter;
-\item if $A\in G$, then $G$ is an ultrafilter \textup{if and only if} $\iota^{\preimf\imf}[G]$ is an ultrafilter.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) By \ref{imageFilterProperties}, using that $\iota$ is injective.
-
-(2) If $A\in G$, then, by \ref{traceFilterLemma},
-\[ \upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] = \upset( \iota^{\imf}\circ \iota^{\preimf})^\imf[G] = \upset \setbuilder{B\cap A}{B\in G} = G|_A = G, \]
-so the result follows from (1).
-\end{proof}
-
-
-\begin{lemma}
-Restrictions on continuous functions are continuous (domain + codomain).
-\end{lemma}
 
 \begin{proposition} \label{continuityRestrictionExpansion}
 Let $\sSet{X,\xi}$, $\sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergence spaces.
@@ -2141,17 +2292,21 @@ is surjective. The quotient convergence on $X/{\sim}$ w.r.t. $[\cdot]_\sim$ is t
 \end{example}
 
 \begin{proposition} \label{convergenceSpaceQuotientOfTopologicalSpace}
-Each convergence space is the quotient convergence space of a topological space.
+Each Kent convergence space is the quotient convergence space of a topological space.
 \end{proposition}
 \begin{proof}
 Let $\sSet{X,\xi}$ be a convergence space. For each $F\overset{\xi}{\longrightarrow} x$, let $\xi_F$ be the pretopological convergence defined by
 \[ \begin{cases}
-\vicinity_{\xi_F}(x) = \upset\{F\} \\
-\vicinity_{\xi_F}(y) = \{\pfilter{y}, \powerset{X}\} & (y \neq x).
+\vicinity_{\xi_F}(x) = F \cap \pfilter{x}  \\
+\vicinity_{\xi_F}(y) = \pfilter{y} & (y \neq x).
 \end{cases} \]
-This pretopological convergence is in fact topological: consider point (6) of \ref{pretopologicalSpaceTopological}, in which we may take $V = U$.
+This pretopological convergence is in fact topological: consider point (6) of \ref{pretopologicalSpaceTopological}.
 
-Now consider the convergence space $\coprod_{\text{$F$ converges in $\xi$}}\sSet{X, \xi_F}$, which is topological by \ref{topologicalInitialFinalConvergence}. Then the convergence $\xi$ is equal to the final convergence on $X$ w.r.t. to the projection $p_2: \coprod_{\text{$F$ converges in $\xi$}}\sSet{X, \xi_F} \to X$.
+First consider a point $y\neq x$ and take arbitrary $U\in \vicinity_{\xi_F}(y)$. Then we can take $V = \{y\} \in \vicinity_{\xi_F}(y)$ and we have $U\in \vicinity_{\xi_F}(y)$.
+
+Now consider the point $x$ and take arbitrary $U\in \vicinity_{\xi_F}(x)$. Then we can take $V = U \in \vicinity_{\xi_F}(x)$. For all $y'\in U$ we clearly have $U\in \vicinity_{\xi_F}(y') = \pfilter{y}'$.
+
+Now consider the convergence space $\coprod_{\text{$F$ converges in $\xi$}}\sSet{X, \xi_F}$, which is topological by \ref{pretopologicalFinalConvergence} (TODO why???). Then the convergence $\xi$ is equal to the final convergence on $X$ w.r.t. to the projection $p_2: \coprod_{\text{$F$ converges in $\xi$}}\sSet{X, \xi_F} \to X$.
 \end{proof}
 
 \subsection{Projective and injective limits}
@@ -2169,123 +2324,6 @@ All inductive systems $\sSet{I, \{\sSet{X_i, \xi_i}\}_{i\in I}, \{e_{i,j}\}_{i\p
 This colimit is given by the colimit in the category $\cat{Set}$ equipped with the final convergence w.r.t. all the leg morphisms.
 \end{proposition}
 
-\section{Modifications and (co)reflections}
-\subsection{Modifications on the way to topological}
-\subsubsection{Finite depth modification}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{Kent modification} $\kentMod(\xi)$ is the smallest convergence in $\upset \{\xi\}$ that is a Kent space.
-\end{definition}
-
-
-\subsubsection{Finite depth modification}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{finite depth modification} $\finDepthMod(\xi)$ is the smallest convergence in $\upset \{\xi\}$ that is of finite depth.
-\end{definition}
-
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the finite depth modification $\finDepthMod(\xi)$ exists and is given by
-\[ F \overset{\finDepthMod(\xi)}{\longrightarrow} x \quad\iff\quad \exists n\in\N, G_0,\ldots, G_n \in {\lim}^{-1}(x): \; F = \bigcap_{k=0}^n G_k. \]
-\end{proposition}
-
-\subsubsection{Pseudotopological modification}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{pseudotopological modification} $\pseudotopMod(\xi)$ is the smallest convergence in $\upset \{\xi\}$ that is pseudotopological.
-\end{definition}
-
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the pseudotopological modification $\pseudotopMod(\xi)$ exists and is given by
-\[ F \overset{\pseudotopMod(\xi)}{\longrightarrow} x \quad\iff\quad \forall H\in \powerultrafilters(X): (F\subseteq H) \implies \big(H \overset{\xi}{\longrightarrow} x\big). \]
-\end{proposition}
-
-\begin{proposition}
-The following are equivalent:
-\begin{enumerate}
-\item $F \overset{\pseudotopMod(\xi)}{\longrightarrow} x$;
-\item $\forall H\in \powerultrafilters(X): (F\subseteq H) \implies \big(H \overset{\xi}{\longrightarrow} x\big)$;
-\item $x\in \bigcap_{U\in \powerultrafilters(X)\cap \pfilter{F}}\lim_\xi U$;
-\item $x\in \bigcap_{G\mesh F}\adh_\xi(G)$.
-\end{enumerate}
-\end{proposition}
-
-\begin{proposition} \label{pseudotopologiserCommutesWithInitialStructure}
-Let $Y$ be a set, $\sSet{Z_i, \zeta_i}$ a convergence space for all $i\in I$ and $\{f_i: Y\to Z_i\}_{i\in i}$. Then the pseudotopological modification of the initial convergence w.r.t. $\{f_i: Y\to Z_i\}_{i\in i}$ is equal to the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$.
-\end{proposition}
-\begin{proof}
-Let $\mu$ be the initial convergence w.r.t. $\{f_i: Y\to Z_i\}_{i\in i}$. Then each $f_i: Y\to \pseudotopMod(Z_i)$ is continuous and the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$ is pseudotopological by \ref{pretopologicalInitialConvergence}. Thus $\pseudotopMod(\mu)$ is stronger than the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$.
-
-For the converse, it is enough to note that for each ultrafilter $U\in \powerultrafilters(Y)$, convergence in the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$ implies convergence in $\mu$. Indeed $f_i^{\imf\imf}(U)$ is an ultrafilter (by \ref{imageFilterProperties}) that converges in $\pseudotopMod(Z_i)$ and thus also in $Z_i$.
-\end{proof}
-
-\subsubsection{Pretopological modification}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{pretopological modification} $\pretopMod(\xi)$ is the smallest convergence in $\upset \{\xi\}$ that is pretopological.
-\end{definition}
-
-\begin{proposition} \label{pretopologicalModification}
-Let $\sSet{X,\xi}$ be a convergence space. Then the pretopological modification $\pretopMod(\xi)$ exists and is given by
-\[ F \overset{\pretopMod(\xi)}{\longrightarrow} x \quad\iff\quad \vicinity_\xi(x) \subseteq F. \]
-\end{proposition}
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space, $x\in X$ and $A\subseteq X$. Then
-\begin{enumerate}
-\item $\vicinity_{\xi}(x) = \vicinity_{\pretopMod(\xi)}(x)$;
-\item $\adh_\xi(A) = \adh_{\pretopMod(\xi)}(A)$ and $\inh_\xi(A) = \inh_{\pretopMod(\xi)}(A)$;
-\item $\neighbourhood_{\xi}(x) = \neighbourhood_{\pretopMod(\xi)}(x)$;
-\item $\topology_{\xi} = \topology_{\pretopMod(\xi)}$;
-\item $\interior_\xi(A) = \interior_{\pretopMod(\xi)}(A)$ and $\closure_\xi(A) = \closure_{\pretopMod(\xi)}(A)$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) is immediate from \ref{pretopologicalModification}. The rest follows immediately from (1).
-\end{proof}
-
-
-\subsubsection{Topological modification}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{topological modification} $\topMod(\xi)$ is the smallest convergence in $\upset \{\xi\}$ that is topological.
-\end{definition}
-
-\begin{proposition} \label{topologicalModificationConstruction}
-Let $\sSet{X,\xi}$ be a convergence space. Then the topological modification $\topMod(\xi)$ exists and is given by
-\[ F \overset{\topMod(\xi)}{\longrightarrow} x \quad\iff\quad \neighbourhood_\xi(x) \subseteq F. \]
-\end{proposition}
-
-\begin{proposition} \label{topologicalModificationPreservation}
-Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $x\in X$. Then
-\begin{enumerate}
-\item $A$ is open (closed) in $\topMod(\xi)$ \textup{if and only if} $A$ is open (closed) in $\xi$;
-\item $\topology_{\topMod(\xi)} = \topology_\xi$;
-\item $\interior_{\topMod(\xi)}(A) = \interior_{\xi}(A)$ and $\closure_{\topMod(\xi)}(A) = \closure_{\xi}(A)$;
-\item $\neighbourhood_{\topMod(\xi)}(x) = \neighbourhood_\xi(x)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) By \ref{openClosedCriteria}, we have that $A$ is open in $\topMod(\xi)$ iff $A\in \vicinity_{\topMod(\xi)}(x)$ for all $x\in A$. Thus
-\begin{align*}
-\text{$A$ is $\topMod(\xi)$-open} &\iff \forall x\in A: \; A\in \vicinity_{\topMod(\xi)}(x) \\
-&\iff \forall x\in A: \; A\in \neighbourhood_\xi(x) \\
-&\iff \forall x\in A: \; x\in \interior_\xi(A) \\
-&\iff A\subseteq \interior_\xi(A) \\
-&\iff \text{$A$ is $\xi$-open}.
-\end{align*}
-The statement for closed sets follows straight from \ref{openClosedComplement}.
-
-(2), (3) Immediate.
-
-(4) From \ref{topologicalModificationConstruction}, $\neighbourhood_\xi(x) = \vicinity_{\topMod(\xi)}(x)$. The result follows because $\topMod(\xi)$ is topological.
-\end{proof}
-
-\subsection{Countability modifications}
-\subsubsection{Sequential modification}
-\begin{definition}
-$\Seq(\xi)$
-\end{definition}
-
-\subsection{(Generalised) compactness modifications}
-TODO Cech-stone, alexandroff
-
-Lindelöf.
 
 
 \section{Function spaces}
