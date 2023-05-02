@@ -2122,6 +2122,13 @@ $(2 \Leftrightarrow 3)$ This is the particular case of principal images. A relat
 
 $(4, 5)$ Here we are taking images of $f^\transp;R \subseteq S;f^\transp$.
 \end{proof}
+\begin{corollary} \label{closurePreimageRelationPreservingFunctions}
+Let $\sSet{A,R}$ and $\sSet{B, S}$ be relational structures and $f: A\to B$ a relation-preserving function. Then the preimage of an $S$-closed set is $R$-closed.
+\end{corollary}
+\begin{proof}
+Suppose $Y\subseteq B$ is an $S$-closed set, i.e.\ $Y_S\subseteq Y$. Then $f^\preimf(Y)_R \subseteq f^\preimf(Y_S)\subseteq f^\preimf(Y)$, so $f^\preimf(Y)$ is $R$-closed.
+\end{proof}
+
 \begin{note}
 Useful exercise: give elementary proof of \ref{functionImagesPreimagesAndPrincipalImages}. This can be based on the calculations
 \[ y\in xR \iff xRy \implies f(x)Rf(y) \iff f(y) \in f(x)R \]
@@ -2450,8 +2457,8 @@ By \ref{preorderGaloisIdentity} we just need to verify the Galois identity. Take
 \begin{definition}
 Let $\sSet{A,R}$ be a relational structure and $f: A\to A$ a function. We call $f$ a
 \begin{itemize}
-\item \udef{monad} if there exists a relational structure $\sSet{B,S}$ and functions $a: A\to B$ and $a': B\to A$ such that $(a, a')$ is a Galois connection and $f = a'a$;
-\item \udef{comonad} if $f = aa'$.
+\item \udef{monad} if there exists a relational structure $\sSet{B,S}$ and functions $a: A\to B$ and $a': B\to A$ such that $(a, a')$ is a Galois connection and $f = aa'$;
+\item \udef{comonad} if $f = a'a$.
 \end{itemize}
 \end{definition}
 
@@ -2464,13 +2471,13 @@ Let $\sSet{A,R}$ be a relational structure and $f: A \to A$ a function. Then
 \begin{enumerate}
 \item $f$ is relation-preserving;
 \item $f$ is idempotent: $f^2 = f$;
-\item $f$ is right-restrictive: $R;f^\transp \subseteq R$.
+\item $f$ is left-restrictive: $f;R \subseteq R$;
 \end{enumerate}
 \item $f$ is a comonad \textup{if and only if}
 \begin{enumerate}
 \item $f$ is relation-preserving;
 \item $f$ is idempotent: $f^2 = f$;
-\item $f$ is left-restrictive: $f;R \subseteq R$;
+\item $f$ is right-restrictive: $R;f^\transp \subseteq R$.
 \end{enumerate}
 \end{enumerate}
 \end{lemma}
@@ -2506,6 +2513,25 @@ Bijection monads - images of monads.
 \begin{definition}
 Completeness
 \end{definition}
+
+\begin{proposition}
+Let $\sSet{A,R}$ be a relational structure and $f: A\to A$ a function. Then
+\begin{enumerate}
+\item if $f$ is a monad, then $R; f^\transp = f;R;f^\transp$;
+\item if $f$ is a comonad, then $f;R = f;R;f^\transp$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We calculate
+\[ f;R;f^\transp \subseteq R;f^\transp \subseteq f;R;(f;f)^\transp = f;R;f^\transp, \]
+where we have first used left-restrictivity, then relation preservation and finally idempotency.
+
+(2) Similarly we have
+\[ f;R;f^\transp \subseteq f;R \subseteq f;f;R;f^\transp = f;R;f^\transp. \]
+\end{proof}
+\begin{corollary} \label{closureInclusionLemma}
+Let $\sSet{A,R}$ be a relational structure and $X,Y\subseteq A$. Then $X\subseteq \Closure_R(Y) \iff \Closure_R(X)\subseteq \Closure_R(Y)$.
+\end{corollary}
 
 \subsection{Inclusion-preserving functions on powersets}
 \url{file:///C:/Users/user/Downloads/(Mathematics%20and%20Its%20Applications%20565)%20Marcel%20Ern%C3%A9%20(auth.),%20K.%20Denecke,%20M.%20Ern%C3%A9,%20S.%20L.%20Wismath%20(eds.)%20-%20Galois%20Connections%20and%20Applications-Springer%20Netherlands%20(2004).pdf}
@@ -2665,17 +2691,84 @@ Let $P, Q$ be partial orders.
 \begin{proof}
 Both direction $\Rightarrow$ are given by \ref{residuationPreservesSupInf}.
 
-By \ref{preorderGaloisCondition} it is enough to verify that $f^+$ and $g^-$ are order-preserving and for all $x\in P, y\in Q$:
-\[ f^+(f(x)) \leq x, \quad f(f^+(y)) \geq y, \quad g(g^-(x)) \leq x, \quad\text{and}\quad g^-(g(y)) \geq y. \]
-To prove $f^+$ is order-preserving, take arbitrary $y_1,y_2\in Q$. Then
-\[ y_1 \leq y_2 \implies \downset y_1 \subseteq \downset y_2 \implies f^{-1}[\downset y_1] \subseteq f^{-1}[\downset y_2] \implies \bigvee f^{-1}[\downset y_1] \leq \bigvee f^{-1}[\downset y_2]. \]
-The proof for $g^-$ is similar. Now we prove $f^+(f(x)) \leq x$, for any arbitrary $x\in P$:
-\[ todo \]
-\[ f(f^{+}(y)) = f\left(\bigvee f^{-1}[\downset y]\right) = \bigvee f\left[^{-1}[\downset y]\right] \geq y, \]
-where the last inequality follows from $\{y\} \subseteq f\left[^{-1}[\downset y]\right]$.
-TODO
+\ref{closureInclusionLemma}
 \end{proof}
-TODO anti-symmetry, means preservation of inf/sup means equality.
+
+
+
+\begin{proposition} \label{upsetDownsetConnections}
+Let $P$ be a poset. Then
+\begin{enumerate}
+\item if $\mathcal{J}\subseteq \powerset(P)$ is the set of subsets of $P$ that have a join, then
+\[ \mathcal{J} \to P: A\mapsto \bigvee A \qquad\text{and}\qquad P\to \mathcal{J}: x\to \downset x \]
+form a Galois connection and the image in $\mathcal{J}$ is the set of principal down sets;
+\item if $\mathcal{M}\subseteq \powerset(P)$ is the set of subsets of $P$ that have a meet, then
+\[ P\to \mathcal{M}^o: x\to \upset x \qquad\text{and}\qquad \mathcal{M}^o \to P: A\mapsto \bigwedge A \]
+form a Galois connection and the image in $\mathcal{M}$ is the set of principal up sets. 
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have, for all $A\in \mathcal{J}$ and $x\in P$,
+\[ \bigvee A \leq x \qquad \iff\qquad A\subseteq \downset x. \]
+(2) We have, for all $A\in \mathcal{M}$ and $x\in P$,
+\[ \upset x \supseteq A \qquad \iff\qquad x\leq \bigwedge A. \]
+\end{proof}
+
+TODO:
+\[ f(x) \leq y \qquad\iff\qquad x\in \downset f^{\preimf}(y). \]
+
+\begin{proposition} \label{GaloisConnectionLatticePreservation}
+Let $P, Q$ be partial orders.
+\begin{enumerate}
+\item If $P$ is a complete $\vee$-semilattice and $f: P\to Q$ a function, then the following are equivalent:
+\begin{enumerate}
+\item $f$ is a lower adjoint;
+\item $f$ preserves joins;
+\item the inverse image under $f$ of a principal down set is a principal down set.
+\end{enumerate}
+In this case the upper adjoint is given by
+\[ f^+: Q\to P: y\mapsto \bigvee f^{\preimf}(\downset y). \]
+\item If $Q$ is a complete $\wedge$-semilattice and $g: Q\to P$ a function, then the following are equivalent:
+\begin{enumerate}
+\item $g$ is an upper adjoint;
+\item $g$ preserves meets;
+\item the inverse image under $f$ of a principal up set is a principal up set.
+\end{enumerate}
+In this case the lower adjoint is given by
+\[ g^-: P\to Q: x\mapsto \bigwedge g^{\preimf}(\upset x). \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\begin{enumerate}
+\item $(a) \Rightarrow (b)$ By \ref{residuationPreservesSupInf}.
+
+$(b) \Rightarrow (c)$ Assume $f$ preserves joins. By \ref{upsetDownsetConnections} we need to show that $\downset \bigvee f^{\preimf}(\downset y) = f^{\preimf}(\downset y)$ for all $y\in Q$. In fact it is enough to prove $\downset \bigvee f^{\preimf}(\downset y) \subseteq f^{\preimf}(\downset y)$. We calculate
+\begin{align*}
+f^{\imf}\big(f^\preimf(\downset y)\big) \subseteq \downset y  \iff& \bigvee f^{\imf}\big(f^\preimf(\downset y)\big) \leq y \\
+\iff& f\big(\bigvee f^\preimf(\downset y)\big) \leq y \\
+\iff& f\big(\bigvee f^\preimf(\downset y)\big) \in \downset y \\
+\iff& f^\imf\big\{\bigvee f^\preimf(\downset y)\big\} \subseteq \downset y \\
+\iff& \big\{\bigvee f^\preimf(\downset y)\big\} \subseteq f^\preimf(\downset y) \\
+\iff& \big\{\bigvee f^\preimf(\downset y)\big\} \subseteq \upset f^\preimf(\downset y) \\
+\iff& \upset\bigvee f^\preimf(\downset y) \subseteq \upset f^\preimf(\downset y) \\
+\iff& \upset\bigvee f^\preimf(\downset y) \subseteq f^\preimf(\downset y),
+\end{align*}
+using \ref{functionImagePreimageGaloisConnection}, \ref{upsetDownsetConnections}, preservation of joins, \ref{closurePreimageRelationPreservingFunctions} and \ref{closureInclusionLemma}.
+
+$(c) \Rightarrow (a)$ Take arbitrary $x\in P$ and $y\in Q$.
+By \ref{upsetDownsetConnections}, the assumption implies $f^{\preimf}(\downset y) = \downset \bigvee f^{\preimf}(\downset y)$, so we can calculate
+\begin{align*}
+f(x) \leq y &\iff f^\imf\big(\{x\}\big) \subseteq \downset y \\
+&\iff \{x\} \subseteq f^\preimf(\downset y) \\
+&\iff \downset x \subseteq f^\preimf(\downset y) \\
+&\iff \downset x \subseteq \downset \bigvee f^\preimf(\downset y) \\
+&\iff x \leq \bigvee f^\preimf(\downset y),
+\end{align*}
+using \ref{closureInclusionLemma}. Thus $f$ has an upper adjoint.
+
+\item Dual.
+\end{enumerate}
+\end{proof}
 
 \begin{corollary} \label{polarOfUnion}
 Let $R$ be a relation on $(A,B)$ and $\mathcal{E}\subseteq \powerset(A)$. Then
@@ -2699,24 +2792,7 @@ Let $P$ be a partial order and $D\subseteq P$ a subset.
 \end{proof}
 TODO: swap monad - comonad??
 
-\begin{proposition} \label{upsetDownsetConnections}
-Let $P$ be a poset. Then
-\begin{enumerate}
-\item if $\mathcal{J}\subseteq \powerset(P)$ is the set of subsets of $P$ that have a join, then
-\[ \mathcal{J} \to P: A\mapsto \bigvee A \qquad\text{and}\qquad P\to \mathcal{J}: x\to \downset x \]
-form a Galois connection;
-\item if $\mathcal{M}\subseteq \powerset(P)$ is the set of subsets of $P$ that have a meet, then
-\[ P\to \mathcal{M}^o: x\to \upset x \qquad\text{and}\qquad \mathcal{M}^o \to P: A\mapsto \bigwedge A \]
-form a Galois connection. 
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) We have, for all $A\in \mathcal{J}$ and $x\in P$,
-\[ \bigvee A \leq x \qquad \iff\qquad A\subseteq \downset x. \]
-(2) We have, for all $A\in \mathcal{M}$ and $x\in P$,
-\[ \upset x \supseteq A \qquad \iff\qquad x\leq \bigwedge A. \]
-\end{proof}
-\begin{corollary} \label{joinMeetUnion}
+\begin{proposition} \label{joinMeetUnion}
 Let $P$ be a poset. Then
 \begin{enumerate}
 \item if $\{A_i\}_{i\in I}\subseteq \mathcal{J}$ is a set of subsets such that $\bigcup_{i\in I}A_i \in \mathcal{J}$, then $\big\{\bigvee A_i\big\}_{i\in I} \in \mathcal{J}$ and
@@ -2724,9 +2800,9 @@ Let $P$ be a poset. Then
 \item if $\{A_i\}_{i\in I}\subseteq \mathcal{M}$ is a set of subsets such that $\bigcup_{i\in I}A_i \in \mathcal{M}$, then $\big\{\bigwedge A_i\big\}_{i\in I} \in \mathcal{M}$ and
 \[ \bigwedge \Big(\bigcup_{i\in I}A_i\Big) = \bigwedge_{i\in I}\Big(\bigwedge A_i\Big). \]
 \end{enumerate}
-\end{corollary}
+\end{proposition}
 \begin{proof}
-Application of \ref{GaloisConnectionLatticePreservation}.
+Application of \ref{GaloisConnectionLatticePreservation} to \ref{upsetDownsetConnections}.
 \end{proof}
 
 \subsubsection{Sets of functions and relations}
