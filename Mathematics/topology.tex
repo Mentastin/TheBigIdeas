@@ -510,6 +510,7 @@ Let $\sSet{X,\xi}$ be a preconvergence space and $A\subseteq X$ a subset. Then
 \begin{enumerate}
 \item $x\in \adh_\xi(A)$;
 \item $\displaystyle A \in \bigcup_{\substack{\text{$F$ proper filter} \\F\to x}} F$;
+\item there exists $F\in\powerfilters(X)$ such that $F\to x$ and $A\in F$;
 \item $A\in \vicinity_\xi(x)^{\mesh}$;
 \item $\displaystyle A \in \bigcup_{F\to x} F^{\mesh}$;
 \end{enumerate}
@@ -519,15 +520,17 @@ Let $\sSet{X,\xi}$ be a preconvergence space and $A\subseteq X$ a subset. Then
 \begin{proof}
 (1) $(a) \Rightarrow (b)$ Assume $x\in \adh_\xi(A)$. Then, by \ref{differentUnionsForAdherence}, there exists a proper filter $F$ such that $\upset\{A\}\subseteq F$ and $F\to x$. This is equivalent to (b).
 
-$(b) \Rightarrow (c)$ We have that there exists a proper filter $F$ such that $\upset\{A\}\subseteq F$ and $F\to x$. Also $\vicinity_\xi(x)\subseteq \bigcup_{F\to x} F$, so $\left(\bigcup_{F\to x} F\right)^\mesh \subseteq \vicinity_\xi(x)^\mesh$ and $F\subseteq F^\mesh$ by \ref{properSubsemilatticeLemma}. Then
+$(b) \Leftrightarrow (c)$ Immediate translation.
+
+$(b) \Rightarrow (d)$ We have that there exists a proper filter $F$ such that $\upset\{A\}\subseteq F$ and $F\to x$. Also $\vicinity_\xi(x)\subseteq \bigcup_{F\to x} F$, so $\left(\bigcup_{F\to x} F\right)^\mesh \subseteq \vicinity_\xi(x)^\mesh$ and $F\subseteq F^\mesh$ by \ref{properSubsemilatticeLemma}. Then
 \[ \{A\} \subseteq F\subseteq F^\mesh\subseteq \vicinity_\xi(x)^\mesh, \]
 so $A\in \vicinity_\xi(x)^\mesh$.
 
-$(c) \Rightarrow (d)$ We have
+$(d) \Rightarrow (e)$ We have
 \[ \vicinity_\xi(x)^\mesh = \left(\bigcap_{F\to x} F\right)^\mesh = \bigcup_{F\to x}F^\mesh, \]
 by \ref{grillUpsetOrderSimilarity} (and the fact that joins and meets in the lattice of upwards closed sets are just given by the union and intersection, see \ref{meetJoinRClosedSets}).
 
-$(d) \Rightarrow (a)$ There exists a filter $F\to x$ such that $A\in F^\mesh$. Then $x\in \bigcup_{A\subseteq F^\mesh}\lim_\xi(F) = \adh_\xi(A)$.
+$(e) \Rightarrow (a)$ There exists a filter $F\to x$ such that $A\in F^\mesh$. Then $x\in \bigcup_{A\subseteq F^\mesh}\lim_\xi(F) = \adh_\xi(A)$.
 
 (2) We use \ref{principalInherenceComplementAdherence} and \ref{complementInIsotoneGrill} to compute
 \[ x\in \inh_\xi(A) \iff x\in \adh_\xi(A^c)^c \iff x\notin \adh_\xi(A^c) \iff A^c\notin \vicinity_\xi(x)^\mesh \iff A\in \vicinity_\xi(x). \]
@@ -802,6 +805,28 @@ A convergence space is discete if and only if each point is isolated. A discrete
 
 \section{Examples of (pre)convergences}
 
+\subsection{Specified set convergence}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a cover of $X$ (i.e. $\bigcup \mathcal{A} = X$). Then the \udef{specified sets convergence} $\xi_A$ is defined by
+\[ \forall F\in\powerfilters(X), x\in X: \qquad F\overset{\xi_A}{\longrightarrow} x \iff \Big(F \overset{\xi}{\longrightarrow} x\Big) \land (F \mesh \mathcal{A}). \]
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a cover of $X$. Then
+\begin{enumerate}
+\item the specified sets convergence $\xi_A$ is a convergence;
+\item if $\mathcal{A}$ is closed under finite unions and $\xi$ is of finite depth, then $\xi_A$ is of finite depth.
+\end{enumerate}
+
+
+If $\xi $
+\end{lemma}
+\begin{proof}
+(1) Upwards closure is immediate. To show $\xi_A$ is centered, take $x\in X$. Then $\bigcup \mathcal{A} = X$ implies there exists an $A\in \mathcal{A}$ such that $x\in A$. Then $A\in \pfilter{x}$, so $\pfilter{x} \overset{\xi_A}{\longrightarrow} x$.
+
+(2) TODO
+\end{proof}
+
 \subsection{Convergences on ordered sets}
 \subsubsection{Ordering of filters}
 \begin{definition}
@@ -1068,7 +1093,7 @@ Let $X$ be a set and $\zeta \leq \xi$, then $\topology_{\xi} \subseteq \topology
 Take $O\in \topology_{\xi}$. Then $O\subseteq \inh_\xi(O) \subseteq \inh_\zeta(O)$, so $O\in \topology_\zeta$ by \ref{openClosedCriteria}.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{openClosedConvergenceInclusions}
 Let $X$ be a set, $\zeta, \xi$ convergences on $X$ such that $\zeta\leq\xi$ and $A\subseteq X$ a subset.
 \begin{enumerate}
 \item if $A$ is open in $\xi$, then it is also open in $\zeta$;
@@ -2216,6 +2241,14 @@ Let $X,Y$ be sets, $F,G\in \powerfilters(X)$ and $H\in\powerfilters(Y)$. Then
 $\boxed{\subseteq}$ Take $A\in (F\cap G)$ and $B\in H$. Then $A\times B\in F\otimes H$ and $A\times B\in G\otimes H$.
 
 $\boxed{\supseteq}$ Take $A \in (F\otimes H)\cap (G\otimes H)$. Then we can find $B_1\in F$, $C_1,C_2\in H$ and $B_2\in G$ such that $B_1\times C_1 \subseteq A$ and $B_2\times C_2 \subseteq A$. Now $(B_1\cup B_2)\times (C_1\cap C_2) \subseteq A$. Also $B_1\cup B_2 \in F\cap G$ and $C_1\cap C_2 \in H$, so $(B_1\cup B_2)\times (C_1\cap C_2) \in (F\cap G)\otimes H$. By upwards closure $A\in (F\cap G)\otimes H$.
+\end{proof}
+
+\begin{lemma} \label{filterPairingLemma}
+Let $X,Y$ be sets, $F\in\powerfilters(X)$, $\Delta: X\to X^2: x\mapsto (x,x)$ and $f: X^2\to Y$ a function. Then
+\[ \upset f^{\imf\imf}(F\otimes F) = \upset (f\circ \Delta)^{\imf\imf}(F). \]
+\end{lemma}
+\begin{proof}
+Let $A,B,C\in F$. Any basis set of the form $f^{\imf}(A\times B)$ contains a set of the form $f^\imf(C\times C)$, namely $f^{\imf}\big((A\cap B)\times (A\cap B)\big)$.
 \end{proof}
 
 \begin{lemma} \label{convergenceFiniteProductFilter}
@@ -5815,6 +5848,31 @@ Now assume $N$ closed. Then $[\cdot]^{\imf}_N(G\setminus N)$ is open because $[\
 (2) We have that $N$ is open iff $\{[1]_N\}$ is open by \ref{groupHomomorphismQuotient}. This is equivalent to all singletons being open, by \ref{shiftHomeomorphism}, which is equivalent to the $G/N$ being discrete by \ref{discreteTopologyCharacterisation}.
 \end{proof}
 
+\subsection{Continuous convergence}
+\begin{proposition} \label{continuousConvergenceGroup}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{G, \cdot, 1, \zeta}$ a convergence group. Then
+\begin{enumerate}
+\item $(X\to G)_c$ is a preconvergence group;
+\item $\cont_c(X,G)$ is a convergence group.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We first show that pointwise multiplication, $\cdot_\text{pt}: (X\to G)_c^2 \to (X\to G)_c$ is continuous. By \ref{universalPropertyContinuousConvergence}, this is equivalent to the continuity of $\curry_1^{-1}(\cdot_\text{pt}): (X\to G)_c^2\times X \to G$, which follows from the commutativity of the following diagram:
+\[ \begin{tikzcd}[column sep=large]
+(X\to G)_c^2\times X \to G \arrow[r, "{\curry_1^{-1}(\cdot_\text{pt})}"] \arrow[d, "h"] & G \\
+(X\to G)_c\times X \times (X\to G)_c \times X \arrow[r, "(\evalMap|\evalMap)"] & G\times G \arrow[u, "{\boldsymbol{\cdot}}"]
+\end{tikzcd} \]
+where the map $h: (f,g,x) \mapsto (f,x,g,x)$ is continuous by the continuity of the associator, swap and diagonal maps (\ref{swapMorphism}, \ref{associatorTernaryProducts}) and $\evalMap$ is continuous by \ref{evalMapContinuous}.
+
+Now we show that the pointwise inversion, $(-)^{-1}_\text{pt}: (X\to G)_c \to (X\to G)_c$ is continuous. By \ref{universalPropertyContinuousConvergence}, this is equivalent to the continuity of $\curry_1^{-1}((-)^{-1}_\text{pt}): (X\to G)_c\times X \to G$, which follows from the commutativity of the following diagram:
+\[ \begin{tikzcd}
+(X\to G)_c\times X \to G \arrow[rr, "{\curry_1^{-1}(\cdot_\text{pt})}"] \arrow[dr, swap, "\evalMap"] & {} & G \\
+{} & G \arrow[ur, swap, "{(-)^{-1}}"] & {}
+\end{tikzcd}. \]
+
+(2) We just need to show that the pointwise multiplication of two continuous functions is continuous. This follows immediately from the continuity of the pointwise multiplication, because $f\cdot_\text{pt} g = \cdot_\text{pt}\circ (f,g)$.
+\end{proof}
+
 \section{Uniform structure}
 This section makes use of the function $\Delta = \Delta_r$ from section \ref{sec:translationInvariance}. \label{sec:groupUniformStructure}
 
@@ -5983,9 +6041,9 @@ Let $G$ be a convergence group and $A,B\subseteq G$ subsets.
 (4) We need to show that $\adh(A\cdot B) \subseteq A\cdot B$. To that end, take $x\in \adh(A\cdot B)$. By \ref{differentUnionsForAdherence} there exist an ultrafilter $U\in \powerultrafilters(G)$ that converges to $x$ and contains $A\cdot B$, i.e.\ $\upset\cdot^{\imf\imf}\{A\times B\} \subseteq U$. By \ref{mappingUltrafiltersLemma}, there exists $U'\in \powerultrafilters(G)$ such that $\upset\cdot^{\imf\imf}(U') = U$ and $A\times B \in U'$. By \ref{imageFilterProperties}, $\upset \pi_2^{\imf\imf}(U')$ is an ultrafilter and it contains $B$ by construction.
 By compactness, $\upset \pi_2^{\imf\imf}(U')$ converges to some $b\in B$.
 
-Finally consider $U\cdot \pi_2^{\imf\imf}(U')^{-1}$, which converges to $xb^{-1}$. If we can show $xb^{-1}\in A$, then $x\in A\cdot B$ and we are done. As $A$ is closed, it is enough to show that $A\in \big(U\cdot \pi_2^{\imf\imf}(U')^{-1}\big)^\mesh$:
-\[ A\in \big(U\cdot \pi_2^{\imf\imf}(U')^{-1}\big)^\mesh \subseteq \vicinity(xb^{-1})^\mesh \quad\implies\quad xb^{-1}\in \adh(A) = A. \]
-To complete the proof, take $C = D\cdot E^{-1} \in U\cdot \pi_2^{\imf\imf}(U')^{-1}$. We can then write $C \supseteq \cdot^{\imf}(F)$, where $F\in U'$. WLOG we can take $F\subseteq A\times E$, by replacing it with $F\cap (A\times E)$. Then $C \supseteq \cdot^{\imf}(F) \cdot E^{-1}$ contains some elements of $A$: if $(a,x)\in F$, then $a\in C$, because $x^{-1}\in E^{-1}$.
+Finally consider $U\cdot \pi_2^{\imf\imf}(U')^{-1}$, which converges to $xb^{-1}$. By \ref{filterPairingLemma}, we have
+\[ U\cdot \pi_2^{\imf\imf}(U')^{-1} = \upset\cdot^{\imf\imf}(U')\cdot \pi_2^{\imf\imf}(U')^{-1} = \upset \big((x,y)\mapsto x\cdot y \cdot y^{-1}\big)^{\imf\imf}(U') = \upset \pi_1^{\imf\imf}(U') \ni A. \]
+By \ref{principalAdherenceInherence}, this implies that $xb^{-1}\in \adh(A) = A$, so $x\in A\cdot B$.
 \end{proof}
 
 
