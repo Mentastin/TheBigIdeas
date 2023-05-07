@@ -1488,7 +1488,7 @@ Let $\cat{C}$ be a category and $\cat{I}\subseteq \cat{J}$ small categories such
 \item there exists an isomorphism between cocones under $D$ and cocones under $D|_\cat{I}$.
 \end{enumerate}
 \end{proposition}
-TODO define reachable.
+TODO define reachable. TODO: we are not allowed to add edges to existing nodes, except if they are isomorphisms.
 \begin{proof}
 TODO
 \end{proof}
@@ -1501,6 +1501,17 @@ Let $\cat{C}$ be a category and $\cat{I}$ a small category. Let $\cat{J}$ be a p
 \end{enumerate}
 \end{proposition}
 TODO pointed extension: one additional vertex with edges pointing to existing vertices.
+
+The following operations preserve the class of cones:
+\begin{itemize}
+\item adding a morphism to a new node;
+\item adding a morphism that already exists on the diagram;
+\item adding the inverse of an isomorphism;
+\item adding a limit of a subdiagram with leg morphisms.
+\end{itemize}
+TODO: for now I refer to \ref{walkingConesCocones} for all these points.
+
+TODO: arrows in diagrams as constraints!!
 
 \begin{proposition}
 Cone category is intersection \emph{of objects} in leg categories.
@@ -1603,6 +1614,19 @@ Consider the category $\mathbb{D}: \begin{tikzcd}
 
 A \udef{coequaliser} in $\cat{C}$ is the colimit of a $\mathbb{D}$-diagram in $\cat{C}$.
 \end{definition}
+
+Note that $\mathbb{D}$ is not a preorder category! Thus $\mathbb{D}$-diagrams are not commutative. TODO better to define equaliser as limit over
+\[ \begin{tikzcd}[row sep=tiny]
+{} & A \ar[dr, "f"] & {} \\
+A \ar[ur, "{\id_A}"] \ar[dr, swap, "{\id_A}"] & {} & B \\
+{} & A \ar[ur, swap, "g"] & {}
+\end{tikzcd} \qquad\text{or}\qquad \begin{tikzcd}[row sep=tiny]
+{} & B \ar[dr, "{\id_B}"] & {} \\
+A \ar[ur, "f"] \ar[dr, swap, "g"] & {} & B \\
+{} & B \ar[ur, swap, "{\id_B}"] & {}
+\end{tikzcd} \]
+and coequaliser as colimit under either of these diagrams.
+
 
 \begin{lemma}
 Let $\cat{C}$ be a category and $f,g: A\to B$ morphisms in $\cat{C}$ with equaliser
@@ -1710,7 +1734,7 @@ D \ar[r] & B & \ar[l] B\times_A C
 {} & B\times_A C \pbCorner \ar[d] \ar[r] & C \ar[d] \\
 D \ar[r] & B \ar[r] & A
 \end{tikzcd} \]
-by \ref{walkingConesCocones}. By \ref{limitExtensionConesCocones}, $\begin{tikzcd}[column sep=small]
+by \ref{walkingConesCocones}. By \ref{walkingConesCocones}, $\begin{tikzcd}[column sep=small]
 D \ar[r] & B & \ar[l] B\times_A C
 \end{tikzcd}$ also has the same cones as this diagram.
 
@@ -1739,13 +1763,17 @@ because the diagrams $\begin{tikzcd}
 A \ar[r, shift left, "f"] \ar[r, shift right, swap, "g"] & B
 \end{tikzcd}$ and $\begin{tikzcd}
 A \ar[r, "{(f,g)}"] & B^2 & \ar[l, swap, "{\delta_B}"] B
-\end{tikzcd}$ are contained in the commuting diagram
+\end{tikzcd}$ have the same cones. To show this, consider diagram
 \[ \begin{tikzcd}[column sep=large]
 & B \ar[dr, leftrightarrow, "{\id_B}"] & \\
 A \ar[r, pos=0.6, "{(f,g)}"] \ar[ur, "f"] \ar[dr, swap, "g"] & B^2 & \ar[l, swap, "{\delta_B}"] B \\
 & B \ar[ur,swap, leftrightarrow, "{\id_B}"] &
 \end{tikzcd} \]
-so we can apply \ref{walkingConesCocones}.
+The diagram obtained by removing the morphism $(f,g)$ clearly has the same cones as the equaliser diagram by \ref{walkingConesCocones}. By a diagram chase, $(f,g)$ is already present in this diagram, so it may be freely added.
+
+A similar argument shows that $\begin{tikzcd}
+A \ar[r, "{(f,g)}"] & B^2 & \ar[l, swap, "{\delta_B}"] B
+\end{tikzcd}$ also has the same cones as this diagram.
 
 (2) The equaliser of $f,g$ is the pullback
 \[ \begin{tikzcd}
@@ -1790,7 +1818,7 @@ A_1 \ar[r, "f"] & B & \ar[l, swap, "g"] A_2
 & A_1 \times A_2 \ar[dl, swap, "\proj_1"] \ar[dr, "\proj_2"] & \\
 A_1 \ar[r, "f"] & B & \ar[l, swap, "g"] A_2
 \end{tikzcd} \]
-TODO: using \ref{limitExtensionConesCocones}.
+TODO: using \ref{walkingConesCocones}.
 
 \end{example}
 
@@ -1940,6 +1968,16 @@ commutes if we remove $h$. By \ref{leftRightRelatedIsomorphic} the entire diagra
 The opposite implication is dual.
 \end{proof}
 
+\begin{lemma}
+Let $\cat{C}$ be an abelian category. Then
+\begin{enumerate}
+\item $\ker(0) = \id$;
+\item $\coker(0) = \id$;
+\item $\ker(\id) = 0$;
+\item $\coker(\id) = 0$.
+\end{enumerate}
+\end{lemma}
+
 \begin{proposition}
 Let $\cat{C}$ be an abelian category. Then
 \begin{enumerate}
@@ -1992,16 +2030,52 @@ so there exists a unique morphism $m:X'\to X$ such that $p_1' = p_1m$. We now ju
 and $g$ is monic, so $p_2' = p_2m$.
 \end{proof}
 
-\subsection{Images and coimages}
-\subsubsection{Factorisation}
 \begin{proposition}
-Let $\cat{C}$ be an abelian category.
+Let $\cat{C}$ be an abelian category and $f: A\to B$ a morphism. Then
+\begin{enumerate}
+\item $f$ is monic \textup{if and only if} $\ker(f) = 0$;
+\item $f$ is epic \textup{if and only if} $\coker(f) = 0$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO \ref{walkingConesCocones}?
+\end{proof}
+
+\subsection{Images and coimages}
+\begin{definition}
+Let $\cat{C}$ be an abelian category and define
+\begin{itemize}
+\item $\im(f) = \ker\coker(f)$;
+\item $\coim(f) = \coker\ker(f)$.
+\end{itemize}
+\end{definition}
+\subsubsection{Exact sequences}
+\begin{proposition} \label{exactnessConditions}
+The following are equivalent for all morphisms $\begin{tikzcd}
+A \ar[r, "f"] & B \ar[r, "g"] & C
+\end{tikzcd}$:
+\begin{enumerate}
+\item $\im(f) = \ker(g)$;
+\item $\coim(g) = \coker(f)$;
+\item $f = \ker\coker\ker(g)$(?)
+\end{enumerate}
 \end{proposition}
 
-\subsubsection{Exact sequences}
+\begin{definition}
+A sequence of chained morphisms is \udef{exact} if each link satisfies the conditions in \ref{exactnessConditions}.
+\end{definition}
+
 \subsubsection{Short exact sequences}
 
 \subsection{Additive structure}
+
+\begin{proposition} \label{biproductIsomorphism}
+Let $\cat{C}$ be an abelian category and $A,B$ objects in $\cat{C}$. Then
+\[\begin{tikzcd}
+A + B \ar[r, "\coprodMorph{(\id_A, 0)}{(0, \id_B)}"] & A\times B
+\end{tikzcd} \]
+is an isomorphism.
+\end{proposition}
 
 \section{Extensive categories}
 TODO \url{https://www.sciencedirect.com/science/article/pii/002240499390035R}
