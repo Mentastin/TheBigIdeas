@@ -149,7 +149,9 @@ for all $\lambda \in \F, v \in V$. This means that $L_i\circ m = m_i \circ (\id_
 \begin{corollary}
 Let $\{V_i\}_{i\in I}$ be a set of convergence vector spaces. Then the direct product $\prod_{i\in I} V_i$ with the product convergence is a convergence vector space.
 \end{corollary}
-
+\begin{corollary} 
+Let $\sSet{I, \{\sSet{V_i, \xi_i}\}_{i\in I}, \{p_{j,i}\}_{i\preceq j}}$ be an projective system of convergence vector spaces with linear linking morphisms $p_{j,i}$. Then the projective limit $\varprojlim_{i\in I} V_i$ in the category set, equipped with the projective limit preconvergence structure and the projective limit vector space structure is a convergence vector space.
+\end{corollary}
 
 \subsubsection{Quotient spaces}
 \begin{proposition}
@@ -230,6 +232,40 @@ To show the continuity of scalar multiplication, take a filter $F\in \powerfilte
 \[ H \cdot F \supseteq H\cdot e_i^{\imf\imf}(F') = e_i^{\imf\imf}(H\cdot F') \to e_i(\lambda v') = \lambda e_i(v') = \lambda v. \]
 \end{proof}
 TODO generalise to groups and general algebraic structures.
+
+\begin{proposition}
+Let $\sSet{I, \{\sSet{V_i, \xi_i}\}_{i\in I}, \{e_{i,j}\}_{i\preceq j}}$ be an inductive system of convergence vector spaces. Let $\sSet{F, \{f_i\}_{i\in I}}$ be a cone under the inductive system such that
+\begin{enumerate}
+\item all $f_i$ are injective;
+\item $F = \bigcup_{i\in I}f_i^\imf(V_i)$;
+\item $F$ carries the final convergence structure w.r.t. $\{f_i\}_{i\in I}$.
+\end{enumerate}
+Then $\sSet{F, \{f_i\}_{i\in I}}$ is the inductive limit.
+\end{proposition}
+\begin{proof}
+Let $\sSet{F', \{f_i'\}_{i\in I}}$ be another cone under the inductive system. We define a function $u: F \to F'$ by mapping $x\in F$ to the unique element of
+\[ \bigcup_{i\in I}f_i^{\prime\imf}\Big(f_i^{\preimf}\big(\{x\}\big)\Big). \]
+We need to show that this set indeed has exactly one element. For each $i\in I$, the set $f_i^{\prime\imf}\Big(f_i^{\preimf}\big(\{x\}\big)\Big)$ has at most one element by injectivity. There is also at least one $i\in I$ such that this set has an element by the second point. Finally let $y_i$ be the unique element in $f_i^{\prime\imf}\Big(f_i^{\preimf}\big(\{x\}\big)\Big)$ and $y_j$ the unique element in $f_j^{\prime\imf}\Big(f_j^{\preimf}\big(\{x\}\big)\Big)$. Take $k\succeq i,j$. Then, by compatibility, 
+\begin{align*}
+f_i^{\prime\imf}\circ f_i^{\preimf}\big(\{x\}\big) \cup f_j^{\prime\imf}\circ f_j^{\preimf}\big(\{x\}\big) &= (f_k'\circ e_{i,k})^{\imf}\circ (f_k\circ e_{i,k})^{\preimf}\big(\{x\}\big) \cup (f_k'\circ e_{j,k})^{\imf}\circ (f_k\circ e_{j,k})^{\preimf}\big(\{x\}\big) \\
+&= f_k^{\prime\imf}\circ e_{i,k}^{\imf}\circ e_{i,k}^{\preimf} \circ f_k^\preimf \big(\{x\}\big) \cup f_k^{\prime\imf}\circ e_{j,k}^{\imf}\circ e_{j,k}^{\preimf} \circ f_k^\preimf \big(\{x\}\big) \\
+&= f_k^{\prime\imf} \circ f_k^\preimf \big(\{x\}\big) \cup f_k^{\prime\imf}\circ f_k^\preimf \big(\{x\}\big) \\
+&= f_k^{\prime\imf} \circ f_k^\preimf \big(\{x\}\big),
+\end{align*}
+where we have used that $e_{i,k}^{\imf}\circ e_{i,k}^{\preimf} \circ f_k^\preimf \big(\{x\}\big) = f_k^\preimf \big(\{x\}\big)$, because $f_k^\preimf \big(\{x\}\big) \subseteq \im(e_{i,k})$.
+
+By construction, $u$ is linear and also the unique function such that $f_i' = u\circ f_i$ for all $i\in I$. Finally $u$ is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+\end{proof}
+
+\begin{proposition}
+The colimit of a reduced inductive family of complete convergence vector spaces is complete.
+\end{proposition}
+\begin{proof}
+TODO Beattie / Butzmann p. 101.
+\end{proof}
+\begin{corollary}
+Let $\{\sSet{V_i, \xi_i}\}_{i\in I}$ be a set of complete convergence vector spaces. Then $\bigoplus_{i\in I}V_i$ is complete.
+\end{corollary}
 
 \subsection{Continuity}
 
@@ -1515,7 +1551,7 @@ For the other inequality we use \ref{gaugeLemma}: take $v\in V$ and arbitrary $\
 \end{proof}
 
 \subsubsection{Seminorms}
-\begin{lemma}
+\begin{lemma} \label{kernelSeminormVectorSpace}
 The kernel of a seminorm is a vector space.
 \end{lemma}
 Note this does not follow from \ref{kernelSubspace} because seminorms are not linear.
@@ -1526,24 +1562,47 @@ Now take $v,w\in \ker(p)$ and $\lambda\in \F$. Then $0\leq p(v+\lambda w) \leq p
 \end{proof}
 
 \begin{proposition} \label{uniformContinuitySeminorms}
-Let $\sSet{V,\xi}$ be a convergence vector space and $f: V\to \R^+$ a seminorm. Then the following are equivalent:
+Let $\sSet{V,\xi}$ be a convergence vector space and $p: V\to \R^+$ a seminorm. Then the following are equivalent:
 \begin{enumerate}
-\item $f$ is continuous;
-\item $f$ is continuous at $0$;
-\item $f$ is uniformly continuous.
+\item $p$ is continuous;
+\item $p$ is continuous at $0$;
+\item $p$ is uniformly continuous.
 \end{enumerate}
 \end{proposition}
 Cfr. \ref{uniformContinuityGroupHomomorphism}.
 \begin{proof}
 $(1) \Rightarrow (2)$ Immediate.
 
-$(2) \Rightarrow (3)$ We have that $f\circ \Delta$ is a pseudometric. We first show that $f\circ \Delta$ is a continuous pseudometric by taking $H\in \uniformity_V$. By definition of the uniformity, we have $\Delta^{\imf\imf}(H)\overset{\xi}{\longrightarrow} 0$, so $(f\circ \Delta)^{\imf\imf}(H) \overset{\R}{\longrightarrow} 0$ by continuity of $f$ at $0$. Thus $H\in \uniformity_{f\circ \Delta}$ and $f\circ \delta$ is continuous.
+$(2) \Rightarrow (3)$ We have that $p\circ \Delta$ is a pseudometric. We first show that $p\circ \Delta$ is a continuous pseudometric by taking $H\in \uniformity_V$. By definition of the uniformity, we have $\Delta^{\imf\imf}(H)\overset{\xi}{\longrightarrow} 0$, so $(p\circ \Delta)^{\imf\imf}(H) \overset{\R}{\longrightarrow} 0$ by continuity of $p$ at $0$. Thus $H\in \uniformity_{p\circ \Delta}$ and $p\circ \delta$ is continuous.
 
-We conclude that $f = (f\circ \Delta)(0,-)$ is uniformly continuous by \ref{continuousPseudometricFunctionLemma}.
+We conclude that $p = (p\circ \Delta)(0,-)$ is uniformly continuous by \ref{continuousPseudometricFunctionLemma}.
 
 $(3) \Rightarrow (1)$ This follows from \ref{preservationUniformStructure}.
 \end{proof}
 
+\begin{proposition} \label{seminormFactorisation}
+Let $V$ be a vector space and $p: V\to \R$ a function. Then $p$ is a seminorm \textup{if and only if} there exists a normed space $\sSet{W,\norm{\cdot}}$ and linear function $T: V\to W$ such that $p = \norm{\cdot}\circ T$.
+\end{proposition}
+\begin{proof}
+If $p$ is of the form $\norm{\cdot}\circ T$, then it is clearly a seminorm.
+
+Now assume $p$ is a seminorm, then define $W \defeq V/\ker(p)$, which works because $\ker(p)$ is a vector space by \ref{kernelSeminormVectorSpace}. Then define
+\[ \norm{[x]_{\ker(p)}} \defeq p(x). \]
+We show that this is well-defined: if $[x]_{\ker(p)} = [y]_{\ker(p)}$, then $x-y\in \ker(p)$, so 
+\[ |p(x) - p(y)| \leq p(x-y) = 0, \]
+by the reverse triangle inequality \ref{reverseTriangleInequality}. It is easy to verify that $\norm{\cdot}$ is a norm.
+
+Finally set $T \defeq [\cdot]_{\ker(p)}$, which is linear. We have $p = \norm{\cdot}\circ [\cdot]_{\ker(p)} = \norm{\cdot}\circ T$.
+\end{proof}
+
+\begin{example}
+The kernel of a seminorm is a vector space, but, unlike linear functionals, it is not generally a hyperplane. Equivalently, the space $W$ in \ref{seminormFactorisation} is not generally $1$ dimensional.
+
+For example take any norm on a space that is not $1$ dimensional.
+\end{example}
+
+
+\subsection{Locally convex topological spaces}
 \begin{proposition} \label{initialSeminormConvergence}
 Let $V$ be a vector space and $S$ a set of seminorms on $V$. Let $\xi$ be the initial convergence on $V$ w.r.t. $S$. Then
 \begin{enumerate}
@@ -1626,8 +1685,17 @@ TODO + previous as corollary
 Note: metrisable is not equivalent to normable!
 
 
+\subsubsection{Locally convex modification}
+\begin{definition}
+Let $\sSet{V, \xi}$ be a convergence vector space. The \udef{locally convex modification} of $V$ is the initial convergence on $V$ w.r.t. the set of continuous seminorms on $V$.
+\end{definition}
 
-
+\begin{proposition}
+Let $\sSet{V, \xi}$ be a convergence vector space. The locally convex modification is a topological convergence vector space.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
 
 \subsection{Hahn-Banach extension theorems}
@@ -3845,6 +3913,3 @@ on $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$.
 
 \subsection{Jordan decomposition}
 TODO matrix representation + matrix representation of Lagrange-Sylvester. See Baumgärtel
-
-
-

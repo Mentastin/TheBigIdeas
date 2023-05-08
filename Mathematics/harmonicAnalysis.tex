@@ -1,0 +1,460 @@
+\chapter{Functions on measure spaces}
+\section{The $L^p(X,\diff{\mu})$ spaces}
+\subsection{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
+\begin{definition}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $0<p<\infty \in \R$. The we define
+\begin{itemize}
+\item $\mathcal{L}^p(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $|f|^p$ is integrable w.r.t.\ $\mu$.
+\item $\mathcal{L}^\infty(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $\sup_x|f(x)|<\infty$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+Let $0< p<q \leq \infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then
+\begin{enumerate}
+\item $\mathcal{L}^p(X,\mu) \supseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of finite but arbitrary large measure;
+\item $\mathcal{L}^p(X,\mu) \subseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of non-zero but arbitrary small measure.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO \url{https://en.wikipedia.org/wiki/Lp_space#Embeddings}
+\end{proof}
+\begin{corollary}
+For all $0< p<q \leq \infty$ and $a,b\in\R$, we have $\mathcal{L}^p([a,b],\lambda) \supseteq \mathcal{L}^q([a,b],\lambda)$.
+\end{corollary}
+
+\begin{definition}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then we define the real functional
+\[ \norm{\cdot}_{p}: \mathcal{L}^p(X,\mu)\to \R: f\mapsto \left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
+\end{definition}
+We will prove that this functional is a seminorm.
+
+\begin{lemma} \label{pNormAbsolutelyHomogeneous}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_p$ is absolutely homogeneous.
+\end{lemma}
+\begin{proof}
+For all $\lambda\in \R$, we have
+\[ \norm{\lambda f}_{p} = \left(\int_X |\lambda f|^p\diff{\mu}\right)^{1/p} = \left(|\lambda|^p\int_X |f|^p\diff{\mu}\right)^{1/p} = |\lambda|\left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
+\end{proof}
+
+\begin{lemma} \label{pnormLemma}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $k,l\in\interval[o]{1,+\infty}$ and $f\in \mathcal{L}^{kl}(X,\mu)$. Then
+\[ \norm{|f|^k}_l = \left(\norm{f}_{kl}\right)^k. \]
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\left(\norm{f}_{kl}\right)^k &= \left(\left(\int_X|f|^{kl}\diff{\mu}\right)^{1/(kl)}\right)^{k} \\
+&= \left(\int_X\big||f|^{k}\big|^l\diff{\mu}\right)^{1/l} \\
+&= \norm{|f|^k}_l.
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Hölder's inequality] \label{HoeldersInequality}
+Let $p,q\in \R^+$ be Hölder conjugate and $\sSet{X,\mathcal{A},\mu}$ a measure space. Then for all $f\in \mathcal{L}^p(X,\mu), g\in \mathcal{L}^q(X,\mu)$:
+\begin{enumerate}
+\item $fg\in \mathcal{L}^1(X,\mu)$;
+\item $\norm{fg}_1 \leq \norm{f}_p\norm{g}_q$.
+\end{enumerate}
+We have equality \textup{if and only if} $\exists K\in \R$ such that $|f|^p = K|g|^q$ a.e.
+\end{theorem}
+\begin{proof}
+If either $\norm{f}_p = 0$ or $\norm{g}_q = 0$, then either $|f|^p$ or $|g|^q$ is $0$ a.e. by \ref{functionPropertiesFromIntegral}. Then $fg = 0$ a.e., so $\norm{fg}_1 = 0$.
+
+Now, assuming $\norm{f}_p \neq 0$ and $\norm{g}_q \neq 0$, we can write $f' = \norm{f}_p^{-1}f$ and $g' = \norm{g}_q^{-1}g$.
+These functions satisfy $\norm{f'}_p = 1$ and $\norm{g'}_q = 1$, because of \ref{pNormAbsolutelyHomogeneous}.
+
+Now we can apply Young's inequality \ref{YoungsInequality} pointwise to obtain
+\[ |f'(x)g'(x)| \leq \frac{|f'|^p}{p} + \frac{|g'|^q}{q} \qquad \forall x\in X. \]
+Integrating both sides (and using \ref{pNormAbsolutelyHomogeneous}), gives
+\begin{align*}
+\frac{\norm{fg}_1}{\norm{f}_p\norm{g}_q} = \norm{f'g'}_1 = \int_X|f'g'|\diff{\mu} &\leq \int_X\frac{|f'|^p}{p}\diff{\mu} + \int_X\frac{|g'|^q}{q}\diff{\mu} \\
+&= \frac{\norm{f'}_p^p}{p} + \frac{\norm{g'}_q^q}{q} = \frac{1}{p} + \frac{1}{q} = 1.
+\end{align*}
+The Hölder inequality follows.
+
+Now assume $\norm{fg}_1 = \norm{f}_p\norm{g}_q$. Then we must have the inequality is in fact an equality, i.e.\ 
+\[ \int_X|f'g'|\diff{\mu} = \int_X\left(\frac{|f'|^p}{p} + \frac{|g'|^q}{q}\right)\diff{\mu}. \]
+Then $|f'g'| = \frac{|f'|^p}{p} + \frac{|g'|^q}{q}$ a.e.\ by \ref{functionPropertiesFromIntegral}. By \ref{YoungsInequality} the equality $|f'(x)g'(x)| = \frac{|f'(x)|^p}{p} + \frac{|g'(x)|^q}{q}$ only holds if $|f'(x)|^p = |g'(x)|^q$. We conclude that
+\[ 1 = \frac{|g'|^q}{|f'|^p} = \frac{\norm{f}_p^p |g|^q}{\norm{g}_q^q |f|^p} = K \frac{|g|^q}{|f|^p} \]
+almost everywhere, for some $K\in \R^+$.
+\end{proof}
+\begin{proof}[Alternative proof]
+Using Jensen's inequality \url{https://en.wikipedia.org/wiki/H%C3%B6lder%27s_inequality}
+\end{proof}
+
+
+\begin{theorem}[Minkowski's inequality] \label{MinkowskisInequality}
+Let $1< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Let $f,g\in\mathcal{L}^p(X,\mu)$ be functions. Then
+\[ \norm{f+g}_p \leq \norm{f}_p + \norm{g}_p. \]
+\end{theorem}
+TODO invert inequality if $p<1$! TODO also inverse Hölder inequality.
+\begin{proof}
+First we show that $\norm{f+g}_p$ is finite. We show this using the convexity of $\R^+\to \R^+: x\mapsto |x|^p$:
+\begin{align*}
+|f+g|^p &= 2^p\left|\frac{1}{2}f+ \frac{1}{2}g\right|^p \\
+&\leq 2^p\left|\frac{1}{2}|f|+ \frac{1}{2}|g|\right|^p \\
+&\leq 2^p\left(\frac{1}{2}|f|^p + \frac{1}{2}|g|^p\right) = 2^{p-1}\left(|f|^p + |g|^p\right) < \infty.
+\end{align*}
+Then $\norm{f+g}_p^p < \infty$ by \ref{propertiesIntegralPositiveFunctions}, so $\norm{f+g}_p < \infty$.
+
+Now we can calculate (setting $q = \frac{p}{p-1}$, i.e.\ the Hölder conjugate of $p$)
+\begin{align*}
+\norm{f+g}_p^p &= \int_X|f+g|^p\diff{\mu} \\
+&= \int_X|f+g|\cdot |f+g|^{p-1}\diff{\mu} \\
+&\leq \int_X\big(|f|+|g|\big)\cdot |f+g|^{p-1}\diff{\mu} \\
+&= \norm{|f|\cdot |f+g|^{p-1}}_1 + \norm{|g|\cdot |f+g|^{p-1}}_1 \\
+&\leq \norm{f}_p\cdot \norm{|f+g|^{p-1}}_q + \norm{g}_p\cdot \norm{|f+g|^{p-1}}_q \\
+&= \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{|f+g|^{p-1}}_q
+\end{align*}
+using first the triangle inequality and then Hölder's inequality, \ref{HoeldersInequality}.
+
+Next we calculate
+\begin{align*}
+\norm{|f+g|^{p-1}}_q &= \left(\norm{f+g}_{(p-1)q}\right)^{p-1} = \left(\norm{f+g}_{(p-1)\frac{p}{p-1}}\right)^{p-1} = \norm{f+g}_{p}^{p-1},
+\end{align*}
+using \ref{pnormLemma} and \ref{HoelderConjugateEquivalents}.
+
+Putting these two calculations together gives
+\[ \norm{f+g}_p^p \leq \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{f+g}_{p}^{p-1}, \]
+or $\norm{f+g}_p \leq \norm{f}_p + \norm{g}_p$.
+\end{proof}
+\begin{corollary}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_{p}$ is a seminorm.
+\end{corollary}
+\begin{proof}
+We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. Subadditivity is given by the Minkowski inequality and absolute homogeneity by \ref{pNormAbsolutelyHomogeneous}.
+\end{proof}
+
+\subsubsection{Indentifying functions that are equal a.e.}
+
+TODO: identification of a.e.\ equal functions is compatible with algebraic operations by \ref{equalAECongruence}.
+
+TODO: allow functions that are only defined a.e.
+
+
+\begin{proposition}
+TODO every equivalence class contains exactly one continuous functions (for Borel measures?)
+\end{proposition}
+
+\begin{definition}
+
+\end{definition}
+
+\begin{theorem}[Riesz-Fisher]
+The space $L^p(X,\diff{\mu})$ is complete.
+\end{theorem}
+
+For $L^\infty$: essential supremum.
+
+\begin{proposition}
+Let $X$ be a set. For all $1\leq p < \infty$, the set of $p$-integrable simple functions is dense in $L^p(\diff{\mu})$.
+\end{proposition}
+
+
+\begin{proposition}
+Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. Then $\cont_c(X)$ is dense in $L^p(\diff{\mu})$ for all $1\leq p < \infty$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\subsection{Distributions}
+TODO rename and/or move!
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{distribution function} of $f$ is the function
+\[ d_f: \R\to \R^+: \alpha \mapsto \mu\setbuilder{\omega}{|f(\omega)|>\alpha}.  \]
+\end{definition}
+
+\begin{lemma} \label{distributionOfFunctionLemma}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f,g: \Omega\to \C$ measurable functions and $c\in \C\setminus\{0\}$. Then
+\begin{enumerate}
+\item if $|f| \leq |g|$ a.e., then $d_f \leq d_g$;
+\item $d_{cf}(\alpha) = d_f\Big(\frac{\alpha}{|c|}\Big)$;
+\item $d_{f+g}(\alpha+\beta) \leq d_f(\alpha) + d_g(\beta)$;
+\item $d_{fg}(\alpha\beta) \leq d_f(\alpha) + d_g(\beta)$.
+\end{enumerate}
+\end{lemma}
+In particular if $|f| = |g|$ a.e., then $d_f = d_g$.
+\begin{proof}
+(1) Fix $\alpha\in \R^+$ and set
+\[ N \defeq \setbuilder{\omega}{|f(\omega)| > |g(\omega)|}, \quad A \defeq \setbuilder{\omega}{|f(\omega)| \geq \alpha}, \quad\text{and}\quad B \defeq \setbuilder{\omega}{|g(\omega)| \geq \alpha}. \]
+Then clearly $A\cap N^c \subseteq B$ (as $|f(\omega)|\leq |g(\omega)|$ and $\alpha < |f(\omega)|$ imply $\alpha < |g(\omega)|$). Also $N$ is measurable (by \ref{measurablesSetsRealMeasurableFunction}) and a null set (by assumption). Also
+\[ A\cap N^c = A\setminus N = A\setminus (N\cap A). \]
+As $(N\cap A) \subseteq A$ and $N\cap A$ is measurable, we have \[ \mu\big(A\setminus (N\cap A)\big) = \mu(A) - \mu(N\cap A) = \mu(A) - 0 = \mu(A), \]
+using \ref{ringPositiveContent} and \ref{measureNullSet}. Thus we have
+\[ d_f(\alpha) = \mu(A) = \mu\big(A\setminus (N\cap A)\big) = \mu(A\cap N^c) \leq \mu(B) = d_g(\alpha), \]
+where the inequality given by \ref{semiringPositiveContent}.
+
+(2) We have
+\[ \setbuilder{\omega}{|cf(\omega)|>\alpha} = \setbuilder{\omega}{|f(\omega)|>\frac{\alpha}{|c|}}. \]
+
+(3) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. The triangle inequality then gives
+\[ \alpha + \beta < |f(\omega)+g(\omega)| \;\implies\; \alpha + \beta < |f(\omega)|+|g(\omega)|. \]
+Because the order on $\R$ is linear, \ref{additionVectorInequalities} gives
+\[ \alpha + \beta < |f(\omega)| + |g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta < |g(\omega)|\big). \]
+These implications show
+\[ \setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
+Thus we calculate
+\begin{align*}
+d_{f+g}(\alpha+\beta) &= \mu\setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \\
+&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
+&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
+&= d_f(\alpha) + d_g(\beta)
+\end{align*}
+by \ref{semiringPositiveContent}.
+
+(4) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. Then we have the implication
+\[ \alpha\beta < |f(\omega)g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta< |g(\omega)|\big), \]
+which means that
+\[ \setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
+Thus we calculate
+\begin{align*}
+d_{fg} &= \mu\setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \\
+&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
+&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu\setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
+&= d_f(\alpha) + d_g(\beta).
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $\varphi: \R^+\to \R^+$ a monotone differentiable function with $\phi(0) = 0$ and $f: X\to \C$ a measurable function such that $\varphi\circ |f|$ is integrable. Then
+\[ \int_\Omega\varphi\circ |f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha}. \]
+\end{proposition}
+\begin{proof}
+We have
+\begin{align*}
+\int_\Omega\varphi\big(|f(\omega)|\big) \diff{\mu(\omega)} &= \int_\Omega\int_{0}^{|f(\omega)|}\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_\Omega\int_{0}^{\infty}[\alpha < |f(\omega)|]\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)\int_\Omega[\alpha < |f(\omega)|]\diff{\mu(\omega)}\diff{\alpha} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)d_f(\alpha)\diff{\alpha}.
+\end{align*}
+by Tonelli's theorem \ref{tonellisTheorem} (as $\varphi'$ is positive) and (TODO ref fund theorem calculus).
+\end{proof}
+\begin{corollary} \label{LpNormFromDistribution}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
+\[ \norm{f}_p = \left(p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}\right)^{1/p}. \]
+\end{corollary}
+\begin{proof}
+Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ and so
+\[ \norm{f}_p^p = \int_\Omega |f|^p \diff{\mu} = \int_\Omega \varphi\circ|f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha} = p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}. \]
+\end{proof}
+
+\begin{lemma} \label{LpNormDistributionInequality}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $f: X\to \C$ a measurable function, $\alpha >0$ and $0<p<\infty$. Then
+\[ \alpha d_f(\alpha)^{1/p} \leq \norm{f}_p. \]
+\end{lemma}
+\begin{proof}
+This is immediate by corollary \ref{ChebyshevInequalityCorollary} of Chebyshev's inequality:
+\[ d_f(\alpha) = \mu\setbuilder{\omega}{|f(\omega)|>\alpha} \leq \frac{1}{\alpha^p}\int_\Omega |f|^p\diff{\mu} = \left(\frac{\norm{f}_p}{\alpha}\right)^p, \]
+so $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+\end{proof}
+
+\subsubsection{Decreasing rearrangements}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{decreasing rearrangement} of $f$ is the function
+\[ f': \R^+\to \R^+: t \mapsto \inf\setbuilder{\alpha > 0}{d_f(s)\leq t}.  \]
+\end{definition}
+
+The function $f'$ is decreasing and supported in $\interval[c]{0,\mu(X)}$.
+
+\subsection{Weak $L^p(X,\diff{\mu})$ spaces}
+\begin{definition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then we define the extended real functional
+\[ \norm{\cdot}_{p,\infty}: \meas(X, \C)\to \overline{\R}^+: f\mapsto \sup\setbuilder{\alpha d_f(\alpha)^{1/p}}{\alpha > 0}. \]
+The \udef{weak $L^p(X,\diff{\mu})$ space}, denoted $L^{p,\infty}(X,\diff{\mu})$, is the subset of functions $f$ in $\meas(X, \C)$ for which $\norm{f}_{p,\infty}$ is finite.
+\end{definition}
+
+\begin{lemma}
+Let $0<p<\infty$, let $\sSet{X,\mathcal{A}, \mu}$ be a measure space and $f\in \meas(X, \C)$. Then
+\[ \norm{f}_{p,\infty} = \inf\setbuilder{C\in \R^+}{\forall \alpha>0: \; d_f(\alpha) \leq \frac{C^p}{\alpha^p}}. \]
+\end{lemma}
+
+
+\begin{proposition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
+\begin{enumerate}
+\item the functional $\norm{\cdot}_{p,\infty}$ is constant on the equivalence classes of a.e.\ equality;
+\item $\norm{\cdot}_{p,\infty}: \Big(\meas(X, \C)/\overset{a.e.}{=}\Big) \to \overline{\R}^+$ is a quasi-norm;
+\item $\norm{\cdot}_{p,\infty} \leq \norm{\cdot}_{p}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) If $f = g$ a.e.\ then $d_f = d_g$ by \ref{distributionOfFunctionLemma}.
+
+(2) TODO
+
+(3) By \ref{LpNormDistributionInequality}, we have $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+\end{proof}
+\begin{corollary}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\diff{\mu})$ is a subspace of $L^{p}(X,\diff{\mu})$.
+\end{corollary}
+\begin{proof}
+TODO \ref{realPartExtendedRealFunctional}
+\end{proof}
+
+\begin{example}
+The inclusion $L^{p,\infty}(X,\diff{\mu}) \subseteq L^{p}(X,\diff{\mu})$ is strict in general. TODO
+\end{example}
+
+\subsection{Interpolation}
+
+\begin{proposition}
+Let $\sSet{X,\Omega, \mu}$ be a $\sigma$-finite measure space.
+Let $0<p<q<\infty$ and $f\in L^{p,\infty(X,\diff{\mu})} \cap L^{q,\infty(X,\diff{\mu})}$. Then for all $p<r<q$, we have
+\[ \norm{f}_r \leq \left(\frac{r}{r-p} + \frac{r}{q-r}\right)^{1/r}\norm{f}_{p,\infty}^{\frac{r^{-1}- q^{-1}}{p^{-1} - q^{-1}}}\norm{f}_{q,\infty}^{\frac{p^{-1}- r^{-1}}{p^{-1} - q^{-1}}}, \]
+with the interpretation $\infty^{-1} = 0$.
+\end{proposition}
+\begin{proof}
+We know that $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_{p,\infty}$, so $\alpha^p d_f(\alpha) \leq \norm{f}_{p,\infty}^p$. Similarly $\alpha^q d_f(\alpha) \leq \norm{f}_{q,\infty}^q$. Thus
+\[ d_f(\alpha) \leq \min\left(\frac{\norm{f}^p_p}{\alpha^p}, \frac{\norm{f}^q_q}{\alpha^q}\right). \]
+Now we have
+\[ \frac{\norm{f}^p_{p,\infty}}{\alpha^p} \leq \frac{\norm{f}^q_{q,\infty}}{\alpha^q} \iff \alpha \leq \left(\frac{\norm{f}_{q,\infty}^q}{\norm{f}_{p,\infty}^p}\right)^{\frac{1}{q-p}} \eqdef B. \]
+We calculate, using \ref{LpNormFromDistribution},
+\begin{align*}
+\norm{f}_r^r &= r \int_0^\infty\alpha^{r-1}d_f(\alpha)\diff{\alpha} \\
+&\leq r \int_0^\infty\alpha^{r-1}\min\left(\frac{\norm{f}^p_{p,\infty}}{\alpha^p}, \frac{\norm{f}^q_{q,\infty}}{\alpha^q}\right)\diff{\alpha} \\
+&= r \int_0^B\alpha^{r-1}\frac{\norm{f}^{p,\infty}}{\alpha^p}\diff{\alpha} + r \int_B^\infty\alpha^{r-1}\frac{\norm{f}^q_{q,\infty}}{\alpha^q}\diff{\alpha} \\
+&= r \norm{f}^p_{p,\infty} \int_0^B\alpha^{r-p-1}\diff{\alpha} + r \norm{f}^q_{q,\infty} \int_B^\infty\alpha^{r-q-1}\diff{\alpha} \\
+&= \frac{r}{r-p} \norm{f}^p_{p,\infty} B^{r-p} + \frac{r}{q-r} \norm{f}^q_{q,\infty} B^{r-q} \\
+&= \left(\frac{r}{r-p} + \frac{r}{q-r}\right)^{1/r}\left(\norm{f}_{p,\infty}^p\right)^{\frac{r^{-1}- q^{-1}}{p^{-1} - q^{-1}}}\norm{f}_{q,\infty}^{\frac{p^{-1}- r^{-1}}{p^{-1} - q^{-1}}}.
+\end{align*}
+Observe that the integrals converge because $p<r<q$, so $r-p>0$ and $r-q<0$.
+\end{proof}
+
+\subsubsection{The Marcinkiewicz interpolation theorem}
+TODO
+\subsubsection{The Riesz-Thorin Interpolation Theorem}
+TODO
+
+\subsection{Locally integrable spaces}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The \udef{locally $L^p$} space is the space
+\[ L^p_\text{loc}(\Omega) \defeq \setbuilder{f \in (\Omega\to\C)}{\text{$f\in L^p(K)$ for all compact $K\subset \Omega$}}. \]
+The functions in $L^1_\text{loc}(\Omega)$ are called \udef{locally integrable} on $\Omega$.
+\end{definition}
+TODO: deal with equivalence classes??
+
+\subsection{Sequence spaces}
+TODO:  $L^p(A,\mu)$ with $\mu$ counting measure.
+
+Let $J$ be a countable index set and $x:J\to \mathbb{F}$ a sequence indexed by $J$. We define
+\[ \norm{x}_p := \left(\sum_{j\in J}|x(j)|^p\right)^{1/p} \qquad\text{and}\qquad \norm{x}_\infty = \sup_{j\in J}|x(j)|. \]
+So $\norm{\cdot}_1$ is the standard norm on $\mathbb{F}^n$. For general sequences there is no guarantee that these norms do not diverge.
+\begin{definition}
+Let $J$ be an index set, $D$ a directed set and $p\geq 1$,
+\begin{align*}
+\ell^p(J) &= \setbuilder{x:J\to \F}{\norm{x}_p < +\infty},\\
+\ell^\infty(J) &= \setbuilder{x:J\to \F}{\norm{x}_\infty < +\infty},\\
+c_0(D) &= \setbuilder{x:D\to \F}{\lim_{n\to\infty}|x(n)| = 0}, \\
+c_{00}(D) &= \setbuilder{x:D\to \F}{\setbuilder{n\in D}{x(n)\neq 0}\;\text{has finite cardinality}}.
+\end{align*}
+unless specified we equip $c_0$ and $c_{00}$ with the norm $\norm{\cdot}_\infty$.
+\end{definition}
+
+\begin{lemma}
+$c_{00}$ is dense in $\ell^p$ if it is equipped with the norm $\norm{\cdot}_p$ and dense in $c_0$ if it is equipped with the norm $\norm{\cdot}_\infty$.
+\end{lemma}
+
+Let $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$. We have the inequalities
+\begin{align*}
+\norm{xy}_1 &\leq \norm{x}_p\norm{y}_q\qquad\text{(Hölder inequality)} \\
+\norm{x+y}_p &\leq \norm{x}_p+\norm{y}_p\qquad\text{(Minkowski inequality)}
+\end{align*}
+which follow from the general cases (TODO ref) by applying the counting measure.
+
+\begin{proposition}
+The continuous dual of $l^p(J)$ is $l^q(J)$ where $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$.
+Also, the continuous dual of $l^1$ is $l^\infty$.
+\end{proposition}
+
+\subsubsection{Operators on sequence spaces}
+TODO Gribanov's theorems
+
+3.7.1, 3.7.2 of Hanson / Yakovlev.
+
+\subsubsection{Series in Banach spaces}
+TODO
+\url{https://link.springer.com/content/pdf/10.1007%2F978-0-8176-4687-5_3.pdf}
+\begin{definition}
+Let $\seq{x_n}$ be a sequence in a Banach space $X$. As for series of scalars, we say a series $\sum_{n=1}^\infty x_n$ is
+\begin{itemize}
+\item \udef{unconditionally convergent} if $\sum_{n=1}^\infty x_{\sigma(n)}$ converges for every permutation $\sigma$ of $\N$;
+\item \udef{absolutely convergent} if $\sum_{n=1}^\infty \norm{x_n} < \infty$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{absoluteUnconditionalConvergenceBanach}
+Let $\seq{x_n}$ be a sequence in a Banach space $X$. If $\sum_{n=1}^\infty$ converges absolutely, then it converges unconditionally.
+\end{proposition}
+\begin{proof}
+Assume absolute convergence, so $\sum\norm{x_i}<\infty$. Then (for $m< n$)
+\[ \norm{\sum_{i=1}^n x_i - \sum_{i=1}^m x_i} = \norm{\sum_{i=m+1}^n x_i} \leq \sum_{i=m+1}^n\norm{x_i} = \sum_{i=1}^n \norm{x_i} - \sum_{i=1}^m \norm{x_i}, \]
+and because $\sum\norm{x_i}$ converges, it is a Cauchy sequence and by the inequality so is $\sum x_i$. By completeness this sequence is convergent.
+
+By (TODO ref) $\sum\norm{x_{\sigma(i)}}$ converges for any permutation $\sigma$ of $\N$. We can then repeat the argument to show $\sum x_{\sigma(i)}$ is also convergent and thus unconditionally convergent.
+\end{proof}
+
+
+
+
+
+\section{Bochner integration}
+
+TODO: the Bochner integral is the unique extension of the integral of simple functions to the set of Bochner measurable functions???? (i.e.\ simple functions dense in Bochner space, with $L^1$ metric)
+\begin{definition}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space. Then a Bochner measurable function $f:\Omega\to Y$ is called \udef{Bochner integrable} if there exists a sequence of integrable simple functions $\seq{s_n}\subset\SF(\Omega,Y)$ such that
+\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0. \]
+Take such a sequence $\seq{s_n}$. The \udef{Bochner integral} of $f$ on $\Omega$ w.r.t. $\mu$ is defined as
+\[ \int_\Omega f\diff{\mu} \defeq \lim_{n\to\infty}\int_\Omega s_n\diff{\mu}. \]
+\end{definition}
+
+\begin{lemma}
+The Bochner integral is well-defined: let $\seq{s_n},\seq{t_n}\in \prescript{\N}{}{\SF(\Omega,Y)}$ be sequences such that
+\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0 = \lim_{n\to\infty}\int_\Omega \norm{f-t_n}\diff{\mu}.  \]
+Then
+\begin{enumerate}
+\item the limits $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu}$ and $\lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$ exist;
+\item $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu} = \lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}[Bochner integrability criterion] \label{BochnerIntegrabilityCondition}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space.
+
+A Bochner measurable function $f$ is Bochner integrable \textup{if and only if}
+\[ \int_\Omega \norm{f} \diff{\mu} < \infty. \]
+\end{proposition}
+
+\begin{proposition}
+Linearity and monotonicity.
+\end{proposition}
+
+\begin{theorem}[Hille's theorem] \label{HilleTheorem}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space, $X,Y$ normed vector spaces and $T: X\not\to Y$ a closed operator. If $T\circ f$ is integrable, then
+\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary} \label{boundedOperatorUnderIntegral}
+If $T$ is bounded, then $T\circ f$ is integrable and
+\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\end{corollary}
+\begin{proof}
+TODO: show that $T\circ f$ is integrable!
+\end{proof}
+
+TODO Dominated convergence.
+
+\subsection{Integration of bounded operators}
+\begin{lemma} \label{integralBoundedOperator}
+Let $X$ be a normed space and $(\Omega, \mathcal{A},\mu)$ a measure space. Let $T: \Omega \to \Bounded(X)$ be a function. If $T$ is integrable, then for all $x\in X$, $Tx$ is integrable and
+\[ \left(\int_\Omega T\diff{\mu}\right)x = \int_\Omega Tx\diff{\mu}. \]
+\end{lemma}
+\begin{proof}
+The evaluation map $\evalMap_x$ is linear and bounded by $\norm{x}$ for all $x\in X$, so we can use \ref{boundedOperatorUnderIntegral}.
+\end{proof}
