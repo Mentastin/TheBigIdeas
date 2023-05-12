@@ -2391,7 +2391,7 @@ TODO 3.18 Rudin
 
 \subsection{Weak boundedness and completeness}
 \begin{proposition} \label{weakBoundedness}
-Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a dual system. A subset $B\subseteq Y$ is weakly bounded \textup{if and only if} $B$ is weakly totally bounded.
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing such that $Y$ separates $X$. A subset $B\subseteq Y$ is weakly bounded \textup{if and only if} $B$ is weakly totally bounded.
 \end{proposition}
 \begin{proof}
 The direction $\Leftarrow$ is immediate.
@@ -2520,11 +2520,11 @@ $(2) \Leftrightarrow (3)$ By \ref{polarLemma}, point (2) is equivalent to the fi
 
 \begin{proposition}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $\mathcal{A}\subseteq\powerset(Y)$ a set of weakly bounded sets. Then the filter
-\[ N = \mathfrak{F}\setbuilder{\lambda A^\pol}{\lambda\in \F, A\in \mathcal{A}} \]
+\[ N = \mathfrak{F}\setbuilder{\epsilon A^\pol}{\epsilon>0, A\in \mathcal{A}} \]
 is the neighbourhood filter of $0$ in a locally convex vector space topology on $X$.
 \end{proposition}
 \begin{proof}
-We use \ref{TVSbase} to verify that this filter is the neighbourhood filter of a topological vector space. Indeed, the sets $\lambda A^\pol$ are absorbent by \ref{boundedSetLemma} and \ref{weaklyBoundedLemma}. They are balanced by \ref{polarPropertiesLemma}. Finaly by convexity (\ref{polarPropertiesLemma}), we have $\frac{1}{2}\lambda A^\pol + \frac{1}{2} \lambda A^\pol \subseteq \lambda A^\pol$.
+We use \ref{TVSbase} to verify that this filter is the neighbourhood filter of a topological vector space. Indeed, the sets $\epsilon A^\pol$ are absorbent by \ref{boundedSetLemma} and \ref{weaklyBoundedLemma}. They are balanced by \ref{polarPropertiesLemma}. Finaly by convexity (\ref{polarPropertiesLemma}), we have $\frac{1}{2}\epsilon A^\pol + \frac{1}{2} \epsilon A^\pol \subseteq \epsilon A^\pol$.
 
 As noted, the basis sets are convex, so the topology is locally convex.
 \end{proof}
@@ -2533,7 +2533,7 @@ Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $\mathcal{A}\subseteq\power
 If $\mathcal{A}$ is upwards directed and closed under scalar multiplication, then $\upset\{A^\pol\}_{A\in \mathcal{A}}$ is the neighbourhood filter of $0$ in a locally convex vector space topology on $X$.
 \end{corollary}
 \begin{proof}
-For all $A\in \mathcal{A}$ and $\lambda\in \F$, we have $\lambda A^\pol = (\lambda^{-1}A)^\pol$. Thus $\mathfrak{F}\setbuilder{\lambda A^\pol}{\lambda\in \F, A\in \mathcal{A}} = \mathfrak{F}\setbuilder{A^\pol}{A\in \mathcal{A}}$.
+For all $A\in \mathcal{A}$ and $\epsilon>0$, we have $\epsilon A^\pol = (\epsilon^{-1}A)^\pol$. Thus $\mathfrak{F}\setbuilder{\epsilon A^\pol}{\epsilon>0, A\in \mathcal{A}} = \mathfrak{F}\setbuilder{A^\pol}{A\in \mathcal{A}}$.
 
 We just need to show that $\upset\setbuilder{A^\pol}{A\in \mathcal{A}}$ is closed under intersections. Take $A,B\in \mathcal{A}$. By the upwards direction, we have $C\in \mathcal{A}$ such that $A\cup B \subseteq C$.
 Then, using \ref{polarOfUnion}, $A^\pol\cap B^\pol = (A\cup B)^\pol \supseteq C^\pol$.
@@ -2582,6 +2582,24 @@ Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing. The polar topology determined 
 Comparing with \ref{weakTopologyLCTVS}, we have, for all $y\in Y$, that $\setbuilder{x\in X}{\abspair{x,y}\leq 1} = \{y\}^\pol$ by \ref{polarLemma}.
 \end{proof}
 
+
+\begin{lemma} \label{dualPolarTopology}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $\mathcal{A}$ a set of weakly bounded subsets of $Y$. Then
+\[ \dual{\sSet{X, \polarTop{\mathcal{A}}}} = \bigcup_{A\in \mathcal{A}, \epsilon>0}\epsilon A^{\pol\pol'}, \]
+where $\pol'$ is the polar relation in the pair $\sSet{\Lin(X, \F), X, \evalMap}$.
+\end{lemma}
+\begin{proof}
+From \ref{dualFromPolars} we have
+\begin{align*}
+\dual{\sSet{X, \polarTop{\mathcal{A}}}} &= \bigcup_{U\in \neighbourhood_{\polarTop{\mathcal{A}}}(0)}U^{\pol'} \\
+&= \bigcup \big((-)^{\pol'}\big)^\imf\Big(\mathfrak{F}\setbuilder{(\epsilon A)^\pol}{\epsilon>0, A\in \mathcal{A}}\Big) \\
+&= \bigcup \downset\big((-)^{\pol'}\big)^\imf\Big(\mathfrak{F}\setbuilder{(\epsilon A)^\pol}{\epsilon, A\in \mathcal{A}}\Big) \\
+&= \bigcup \mathfrak{I}\setbuilder{(\epsilon A)^{\pol\pol'}}{\epsilon>0, A\in \mathcal{A}} \\
+&= \bigcup \setbuilder{(\epsilon A)^{\pol\pol'}}{\epsilon>0, A\in \mathcal{A}} \\
+&= \bigcup_{A\in \mathcal{A}, \epsilon>0}\epsilon A^{\pol\pol'}.
+\end{align*}
+\end{proof}
+
 \subsubsection{Strong topology}
 \begin{definition}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing. The polar topology on $X$ determined by the set of all weakly bounded subsets of $Y$ is called the \udef{strong topology} and is denoted $\beta(X,Y)$.
@@ -2596,24 +2614,58 @@ Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing. The polar topology determined 
 
 TODO: for Banach space Mackey topology determined by weak-compact sets
 
+\begin{proposition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing. Then $\dual{\sSet{X, \tau(X,Y)}} = \dual{\sSet{X, \sigma^*(X,Y)}}$.
+\end{proposition}
+\begin{proof}
+Let $\pol$ be the polar relation in the pairing $\sSet{X,Y,\pair{\cdot,\cdot}}$ and $\pol'$ the polar relation in the pairing $\sSet{\dual{\sSet{X, \tau(X,Y)}}, X, \evalMap}$. Let $K$ be the set of weak-compact and absolutely convex subsets of $Y$. As $K$ is closed under scalar multiplication (by \ref{diskedHullHomogeneous} and \ref{continuityLemmaVectorConvergence}), we have, by \ref{dualPolarTopology}
+\[ \dual{\sSet{X, \tau(X,Y)}} = \bigcup_{A\in K}A^{\pol\pol'} \]
+\end{proof}
+
 
 \subsection{Weak-$*$-compactness}
 \begin{theorem}[Banach/Bourbaki-Alaoglu] \label{alaogluTheorem}
-Let $(X,Y,\pair{\cdot,\cdot})$ be a dual system and $A\subseteq Y$ a neighbourhood of the origin in the weak topology. Then $A^\pol$ is $\sigma^*(X,Y)$-compact.
+Let $(X,Y,\pair{\cdot,\cdot})$ be a pairing such that $Y$ separates $X$ and $A\subseteq Y$ a neighbourhood of the origin in the weak topology. Then $A^\pol$ is $\sigma^*(X,Y)$-compact.
 \end{theorem}
 \begin{proof}
 Since $A$ is absorbent, by \ref{TVSconstruction}, we have that $A\subseteq A^{\pol\pol}$ is also absorbent. Then $A^\pol = A^{\pol\pol\pol}$ is weak-$*$ bounded by \ref{weaklyBoundedLemma} and thus weak-$*$ totally bounded by \ref{weakBoundedness}.
 
-By \ref{dualSystemBijection} we have $\sSet{X, \sigma^*(X,Y)} \cong \dual{\sSet{Y, \sigma(X,Y)}} \subseteq \Lin(Y, \F)_p$. Let $\pol'$ be the relation defined on the pairing $\sSet{\dual{\sSet{Y, \sigma(X,Y)}},Y, \evalMap}$ and $\pol^{\prime\prime}$ the relation defined on the pairing $\sSet{\Lin(Y, \F),Y, \evalMap}$. We show that $A^{\pol'} = A^{\pol^{\prime\prime}}$. Clearly $A^{\pol'} = A^{\pol^{\prime\prime}} \cap \dual{\sSet{Y, \sigma(X,Y)}}$, so $A^{\pol'} \subseteq A^{\pol^{\prime\prime}}$. For the other inclusion, take $f\in A^{\pol^{\prime\prime}}$, which is bounded on a neighbourhood of the origin (i.e. $A$) and thus is is continuous by \ref{boundedOnVicinityImpliesContinuous}, which means that $f\in A^{\pol^{\prime\prime}}$.
+By \ref{dualSystemBijection} we have $\sSet{X, \sigma^*(X,Y)} \cong \dual{\sSet{Y, \sigma(X,Y)}} \subseteq \Lin(Y, \F)_p$. Let $\pol'$ be the relation defined on the pairing $\sSet{\dual{\sSet{Y, \sigma(X,Y)}},Y, \evalMap}$ and $\pol^{\prime\prime}$ the relation defined on the pairing $\sSet{\Lin(Y, \F),Y, \evalMap}$. Clearly $A^{\pol'} = A^{\pol^{\prime\prime}} \cap \dual{\sSet{Y, \sigma(X,Y)}}$, so $A^{\pol'} = A^{\pol^{\prime\prime}}$ by \ref{dualFromPolars}.
 
 Now $\sigma^*(\Lin(Y, \F), Y)$-convergence is exactly pointwise convergence and in this convergence, $A^{\pol^{\prime\prime}}$ is totally bounded by \ref{subspaceBoundedness} and closed by \ref{polarPropertiesLemma}, complete by \ref{algebraicDualComplete} and \ref{closedComplete} and thus finally compact by \ref{compactPrecompactComplete}.
 \end{proof}
+
+\subsubsection{The Mackey-Arens theorem}
+
+
+\ref{HausdorffLCTVSdualSystem}
+
+\begin{theorem}[Mackey-Arens]
+Let $\sSet{V,\xi}$ be a Hausdorff convergence vector space and consider the pairing $\sSet{\dual{V}, V, \evalMap}$. Let $\zeta$ be a locally convex topological vector space convergence on $V$. Then the following are equivalent:
+\begin{enumerate}
+\item $\dual{\sSet{V,\xi}} = \dual{\sSet{V,\zeta}}$;
+\item $\zeta$ is a polar topology determined by a cover of absolutely convex $\sigma(\dual{V}, V)$-compact subsets of $\dual{V}$;
+\item $\tau(\dual{V}, V) \subseteq \zeta \subseteq \sigma(\dual{V}, V)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+$(1) \Rightarrow (2)$ By \ref{lconvModPolarTopology}, $\zeta$ is the polar topology determined by $\setbuilder{U^\pol}{U\in \neighbourhood_\zeta(0)}$, which is a set of absolutely convex $\sigma(\dual{V}, V)$-compact (= $\sigma(\dual{\sSet{V, \xi}}, V)$-compact = $\sigma(\dual{\sSet{V, \zeta}}, V)$-compact) subsets of $\dual{V}$, by \ref{polarPropertiesLemma} and \ref{alaogluTheorem}.
+
+$(2) \Rightarrow (3)$ Clearly $\tau(\dual{V}, V)$ is the strongest such convergence. That $\sigma(\dual{V}, V)$ is such a convergence is given by \ref{weak*topologyPolarTopology}. 
+
+Now take any such convergence $\polarTop{\mathcal{A}}$, where $\mathcal{A}$ covers $\dual{V}$. By \ref{setsDeterminingTheSamePolarTopologies}, $\polarTop{\mathcal{A}}$ is also determined by $\mathfrak{I}(\mathcal{A})$ and $\setbuilder[\big]{\{f\}}{f\in \dual{V}} \subseteq \mathfrak{I}(\mathcal{A})$, so $\polarTop{\mathcal{A}} \subseteq \sigma(\dual{V}, V)$ by \ref{polarTopologyOrdering}.
+
+$(3) \Rightarrow (1)$ It is enough to show $\dual{\sSet{V,\sigma(\dual{V}, V)}} = \dual{\sSet{V,\xi}} = \dual{\sSet{V,\tau(\dual{V}, V)}}$. The first equality is given by \ref{functionalContinuityWeakTopology}. 
+\end{proof}
+
 
 \subsection{The pairing $\sSet{V^*, V, \evalMap}$}
 \subsubsection{Equicontinuity and polars}
 \begin{proposition} \label{equicontinuityTopologicalFunctionals}
 Let $\sSet{V, \xi}$ be a topological convergence space. A subset $H\subseteq \dual{V}$ is equicontinuous \textup{if and only if} there exists $U\in \neighbourhood_\xi(0)$ such that $H\subseteq U^\pol$.
 \end{proposition}
+The polar is taken in either $\sSet{\Lin(V,\F), V,\evalMap}$ or
+$\sSet{\dual{V}, V,\evalMap}$.
 \begin{proof}
 By \ref{equicontinuityGroupHomomorphisms}, the equicontinuity of $H$ is equivalent to
 \begin{align*}
@@ -2645,46 +2697,6 @@ By \ref{equicontinuityTopologicalFunctionals} this base consist of polars of equ
 Conversely, every equicontinuous subset of $\dual{V}$ is contained in the upwards closure of this base, by \ref{equicontinuityTopologicalFunctionals}.
 \end{proof}
 
-
-\subsubsection{The dual from polars}
-
-\ref{dualFromPolars}
-\begin{corollary}
-Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $\mathcal{A}$ a set of weakly bounded subsets of $Y$. Then
-\[ \dual{\sSet{X, \polarTop{\mathcal{A}}}} = \bigcup_{A\in \mathcal{A}}A^{\pol\pol'}, \]
-where $\pol'$ is the polar relation in the pair $\sSet{\Lin(X, \F), X, \evalMap}$.
-\end{corollary}
-TODO: polars taken w.r.t. which pairings?
-
-\subsubsection{The Mackey-Arens theorem}
-
-\begin{proposition}
-Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing. Then $\dual{\sSet{X, \tau(X,Y)}} = \dual{\sSet{X, \sigma^*(X,Y)}}$.
-\end{proposition}
-\begin{proof}
-Let $\pol$ be the polar relation in the pairing $\sSet{X,Y,\pair{\cdot,\cdot}}$ and $\pol'$ the polar relation in the pairing $\sSet{\dual{\sSet{X, \tau(X,Y)}}, X, \evalMap}$.
-\end{proof}
-
-
-\ref{HausdorffLCTVSdualSystem}
-
-\begin{theorem}[Mackey-Arens]
-Let $\sSet{V,\xi}$ be a Hausdorff convergence vector space and consider the pairing $\sSet{\dual{V}, V, \evalMap}$. Let $\zeta$ be a locally convex topological vector space convergence on $V$. Then the following are equivalent:
-\begin{enumerate}
-\item $\dual{\sSet{V,\xi}} = \dual{\sSet{V,\zeta}}$;
-\item $\zeta$ is a polar topology determined by a cover of absolutely convex $\sigma(\dual{V}, V)$-compact subsets of $\dual{V}$;
-\item $\tau(\dual{V}, V) \subseteq \zeta \subseteq \sigma(\dual{V}, V)$.
-\end{enumerate}
-\end{theorem}
-\begin{proof}
-$(1) \Rightarrow (2)$ By \ref{lconvModPolarTopology}, $\zeta$ is the polar topology determined by $\setbuilder{U^\pol}{U\in \neighbourhood_\zeta(0)}$, which is a set of absolutely convex $\sigma(\dual{V}, V)$-compact (= $\sigma(\dual{\sSet{V, \xi}}, V)$-compact = $\sigma(\dual{\sSet{V, \zeta}}, V)$-compact) subsets of $\dual{V}$, by \ref{polarPropertiesLemma} and \ref{alaogluTheorem}.
-
-$(2) \Rightarrow (3)$ Clearly $\tau(\dual{V}, V)$ is the strongest such convergence. That $\sigma(\dual{V}, V)$ is such a convergence is given by \ref{weak*topologyPolarTopology}. 
-
-Now take any such convergence $\polarTop{\mathcal{A}}$, where $\mathcal{A}$ covers $\dual{V}$. By \ref{setsDeterminingTheSamePolarTopologies}, $\polarTop{\mathcal{A}}$ is also determined by $\mathfrak{I}(\mathcal{A})$ and $\setbuilder[\big]{\{f\}}{f\in \dual{V}} \subseteq \mathfrak{I}(\mathcal{A})$, so $\polarTop{\mathcal{A}} \subseteq \sigma(\dual{V}, V)$ by \ref{polarTopologyOrdering}.
-
-$(3) \Rightarrow (1)$ It is enough to show $\dual{\sSet{V,\sigma(\dual{V}, V)}} = \dual{\sSet{V,\xi}} = \dual{\sSet{V,\tau(\dual{V}, V)}}$. The first equality is given by \ref{functionalContinuityWeakTopology}. 
-\end{proof}
 
 
 \subsection{Orthogonal complements}
