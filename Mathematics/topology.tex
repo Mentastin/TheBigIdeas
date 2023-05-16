@@ -2807,6 +2807,9 @@ In particular this holds if $f_i$ is an injective function to a Hausdorff space 
 \begin{proof}
 Take $x\neq y\in Y$ and suppose, towards a contradiction, that $F\overset{Y}{\longrightarrow} x,y$. Take $i\in I$ such that $f_i(x) \neq f_i(y)$ and $Z_i$ is $T_2$. Then, by continuity, $\upset f_i^{\imf\imf} \overset{\zeta_i}{\longrightarrow} f_i(x), f_i(y)$, which contradicts the fact that $Z_i$ is $T_2$.
 \end{proof}
+\begin{corollary} \label{HausdorffSubspace}
+Any subspace of a Hausdorff space is Hausdorff.
+\end{corollary}
 
 \begin{proposition}
 TODO: move: topological Hausdorff implies regular. This does not hold for non-topological convergence in general.
@@ -2889,20 +2892,6 @@ Let $Y$ be a set, $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ a set of function
 Take $F\in \powerfilters(Y)$ such that $F\overset{\mu}{\longrightarrow} y$. Then, for all $i\in I$, we have $\upset\adh_{\zeta_i}^\imf\big(\upset f_i^{\imf\imf}(F)\big)\subseteq \upset f_i^{\imf\imf}\big(\adh_{\mu}^{\imf}(F)\big)$ by \ref{adherenceInherenceContinuity}.
 
 Now $\upset\adh_{\zeta_i}^\imf\big(\upset f_i^{\imf\imf}(F)\big)$ converges by continuity of $f_i$ and regularity of $\zeta_i$, so $\upset f_i^{\imf\imf}\big(\adh_{\mu}^{\imf}(F)\big)$ converges by monotonicity and thus $\adh_{\mu}^{\imf}(F)$ converges by \ref{initialFinalConvergence}.
-\end{proof}
-
-\begin{proposition}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be non-empty convergence spaces. Then $\cont_c(X,Y)$ is regular \textup{if and only if} $\sSet{Y,\zeta}$ is.
-\end{proposition}
-\begin{proof}
-The direction $\Rightarrow$ is given by \ref{embeddingInContinuousConvergence}: $Y$ is homeomorphic to a subspace of $\cont_c(X,Y)$ and must therefore be regular by \ref{regularityInitialConvergence}.
-
-For the other direction, assume $\sSet{Y,\zeta}$ is regular and let $H \overset{\cont_c(X,Y)}{\longrightarrow} f$.
-Take an arbitrary $F\overset{\xi}{\longrightarrow} x\in X$. We claim $\upset\adh_\zeta^{\imf}\big(\evalMap^{\imf\imf}(H\otimes F)\big)\subseteq \upset \evalMap^{\imf\imf}\big(\adh_c(H)\otimes F\big)$. Indeed, for all $A\subseteq \cont(X,Y)$ and $B\subseteq X$, we have
-\[ \evalMap^{\imf}(\adh_{c}(A)\times B) \subseteq \evalMap^{\imf}(\adh_{c}(A)\times \adh_\xi(B)) = \evalMap^{\imf}\big(\adh_{c\otimes \xi}(A\times B)\big) \subseteq \adh_{\zeta}\big(\evalMap^\imf(A\times B)\big), \]
-by \ref{principalInherenceAdherenceProperties}, \ref{productAdherence} and \ref{adherenceInherenceContinuity}.
-
-Now $\upset\adh_\zeta^{\imf}\big(\evalMap^{\imf\imf}(H\otimes F)\big)$ converges by the product covergence \ref{convergenceFiniteProductFilter}, continuity of the evaluation map \ref{evalMapContinuous}, and regularity of $\zeta$. Then $\upset \evalMap^{\imf\imf}\big(\adh_c(H)\otimes F\big)$ converges by monotonicity and $\adh_c(H)$ converges in the continuous convergence.
 \end{proof}
 
 \subsection{$T_3$ or regular Hausdorff}
@@ -3179,11 +3168,25 @@ Now $G$ converges to some $a\in A$ by compactness. By continuity of the inclusio
 
 As $\upset\iota^{\imf\imf}(G)$ converges to both $x$ and $a$, and $\xi$ is a Hausdorff convergence, we have $x = a$, and thus $x\in A$. This shows indeed that $\adh(A)\subseteq A$.
 \end{proof}
-\begin{corollary} \label{compactClosedIntersectionCompact}
-If $A$ is compact and $B\subseteq X$ is closed, then $A\cap B$ is compact.
+\begin{corollary} \label{HausdorffCompactIntersection}
+Let $\sSet{X,\xi}$ be a Hausdorff convergence space and $\{A_i\}_{i\in I}$ a set of compact sets. Then $\bigcap_{i\in I}A_i$ is compact.
 \end{corollary}
 \begin{proof}
-TODO!!
+As each $A_i$ is closed, $\bigcap_{i\in I}A_i$ is closed by \ref{propertiesTopology} and a subset of a compact set. Thus it is compact.
+\end{proof}
+
+\begin{example}
+If $\sSet{X,\xi}$ is not Hausdorff, then the intersection of two compact sets can fail to be compact.
+
+Consider the bug-eyed line $\R\sqcup\{0'\}$, where any filter converges to $0'$ iff it converges to $0$. Consider the sets $A = \interval{0,1}$ and $B= (A\setminus\{0\})\cup \{0'\}$. Then both $A$ and $B$ are compact, but $A\cap B = \interval[oc]{0,1}$ is not.
+\end{example}
+
+
+\begin{proposition} \label{compactClosedIntersectionCompact}
+If $A$ is compact and $B\subseteq X$ is closed, then $A\cap B$ is compact.
+\end{proposition}
+\begin{proof}
+Let $F\in \powerultrafilters(X)$ be an arbitrary ultrafilter that contains $A\cap B$. As $F$ contains $A$, it converges to some $x\in A$. As $B\in F$, all limits lie in $B$. In particular $x\in B$. Thus $x\in A\cap B$. As $F$ was taken arbitrarily, $A\cap B$ is compact.
 \end{proof}
 
 \begin{proposition} \label{compactConstructions}
@@ -3254,11 +3257,18 @@ TODO
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. We call $A$ \udef{relatively compact} if $\adh_\xi(A)$ is compact.
 \end{definition}
 
-Notice that if $A$ is relatively compact, it is $\adh(A)$-compactoid. The converse does not hold.
+Notice that if $A$ is relatively compact, it is compactoid. The converse does not hold.
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a relatively compact subset. Then $A$ is contained in a compact set.
+\end{lemma}
+This is not generally true for compactoid subsets
 
 \begin{example}
-TODO example where converse does not hold.
+Consider $\cball(0,1)\subseteq \C$ with the usual subspace convergence. Consider the cover $\{\ball(0,1)\}\cup \bigcup_{x\in \sphere(0,1)}\big\{\{x\}\}$ and the specified sets convergence determined by this cover. Then $\ball(0,1)$ is compactoid, but not contained in any compact set.
+In particular, it is not relatively compact.
 \end{example}
+
 
 \begin{proposition}
 Let $\sSet{X,\xi}$ be a Hausdorff convergence space and $A\subseteq X$.
@@ -3500,7 +3510,7 @@ From this last inclusion we can conclude that $\adh_\zeta^\imf\big(\evalMap^{\im
 
 We conclude that $f$ is continuous.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{setOfContinuousFunctionsContinuouslyClosed}
 In either of these cases, $\cont_c(X,Y)$ is closed subset of $(X\to Y)_c$.
 \end{corollary}
 
@@ -3617,22 +3627,36 @@ using \ref{intersectionProductFilters}, \ref{imageFiltersPreservesIntersection} 
 \end{proof}
 Note that this does not imply the Kent property, because $(X\to Y)_c$ is only a preconvergence space. The space $\cont_c(X,Y)$ does have the Kent property if $Y$ is of finite depth.
 
-\begin{proposition}
-Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be non-empty convergence spaces. Then $\cont_c(X,Y)$ is pseudotopological \textup{if and only if} $Y$ is pseudotopological.
+\begin{proposition} \label{continuousConvergencePropertiesFromCodomain}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be non-empty convergence spaces. Then
+\begin{enumerate}
+\item $\cont_c(X,Y)$ is pseudotopological \textup{if and only if} $Y$ is pseudotopological;
+\item $\cont_c(X,Y)$ is Hausdorff \textup{if and only if} $Y$ is Hausdorff;
+\item $\cont_c(X,Y)$ is regular \textup{if and only if} $Y$ is regular.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-First assume $\cont_c(X,Y)$ is pseudotopological. Then $Y$ is homeomorphic to a subspace of $\cont_c(X,Y)$ by \ref{embeddingInContinuousConvergence} and thus pseudotopological by \ref{pretopologicalInitialConvergence}.
+(1) First assume $\cont_c(X,Y)$ is pseudotopological. Then $Y$ is homeomorphic to a subspace of $\cont_c(X,Y)$ by \ref{embeddingInContinuousConvergence} and thus pseudotopological by \ref{pretopologicalInitialConvergence}.
 
 Now assume $Y$ pseudotopological. By \ref{evalMapContinuous}, it is enough to prove that $\pseudotopMod\big(\cont_c(X,Y)\big)\otimes X$ makes the evaluation map $\evalMap: \big(\cont(X,Y)\times X\big) \to Y$ continuous, as $\pseudotopMod\big(\cont_c(X,Y)\big)$ is weaker than $\cont_c(X,Y)$ by definition.
 
 Let $\mu$ be the initial convergence on $\cont(X,Y)\times X$ w.r.t. the evaluation map. We have that $\cont_c(\xi,\zeta)\otimes \xi \subseteq \mu$ by \ref{evalMapContinuous}. Now
 \[ \pseudotopMod\big(\cont_c(\xi,\zeta)\big)\otimes \xi \subseteq \pseudotopMod\big(\cont_c(\xi,\zeta)\big)\otimes \pseudotopMod(\xi) = \pseudotopMod\big(\cont_c(\xi,\zeta)\otimes \xi\big) \subseteq \pseudotopMod(\mu) = \mu, \]
 where the equality is given by \ref{pseudotopologiserCommutesWithInitialStructure}. Thus $\pseudotopMod\big(\cont_c(\xi,\zeta)\big)$ makes the evaluation map continuous by \ref{continuityUnderConvergenceLatticeOperations}.
-\end{proof}
 
-\begin{proposition}
-If $Y$ is pseudotopological/regular/Hausdorff, then so is $\cont_c(X,Y)$.
-\end{proposition}
+(2) First assume $\cont_c(X,Y)$ is Hausdorff. Then $Y$ is homeomorphic to a subspace of $\cont_c(X,Y)$ by \ref{embeddingInContinuousConvergence} and thus Hausdorff by \ref{HausdorffSubspace}.
+
+Now assume $Y$ Hausdorff and suppose $H\in \powerfilters\big(\cont_c(X,Y)\big)$ converges to both $f$ and $g$. Then, for all $x\in X$, $\evalMap^{\imf\imf}(H\otimes \pfilter{x})$ converges to both $f(x)$ and $g(x)$ in $Y$. As $Y$ is Hausdorff, $f(x) = g(x)$. Thus $f=g$.
+
+(3) The direction $\Rightarrow$ is given by \ref{embeddingInContinuousConvergence}: $Y$ is homeomorphic to a subspace of $\cont_c(X,Y)$ and must therefore be regular by \ref{regularityInitialConvergence}.
+
+For the other direction, assume $\sSet{Y,\zeta}$ is regular and let $H \overset{\cont_c(X,Y)}{\longrightarrow} f$.
+Take an arbitrary $F\overset{\xi}{\longrightarrow} x\in X$. We claim $\upset\adh_\zeta^{\imf}\big(\evalMap^{\imf\imf}(H\otimes F)\big)\subseteq \upset \evalMap^{\imf\imf}\big(\adh_c(H)\otimes F\big)$. Indeed, for all $A\subseteq \cont(X,Y)$ and $B\subseteq X$, we have
+\[ \evalMap^{\imf}(\adh_{c}(A)\times B) \subseteq \evalMap^{\imf}(\adh_{c}(A)\times \adh_\xi(B)) = \evalMap^{\imf}\big(\adh_{c\otimes \xi}(A\times B)\big) \subseteq \adh_{\zeta}\big(\evalMap^\imf(A\times B)\big), \]
+by \ref{principalInherenceAdherenceProperties}, \ref{productAdherence} and \ref{adherenceInherenceContinuity}.
+
+Now $\upset\adh_\zeta^{\imf}\big(\evalMap^{\imf\imf}(H\otimes F)\big)$ converges by the product covergence \ref{convergenceFiniteProductFilter}, continuity of the evaluation map \ref{evalMapContinuous}, and regularity of $\zeta$. Then $\upset \evalMap^{\imf\imf}\big(\adh_c(H)\otimes F\big)$ converges by monotonicity and $\adh_c(H)$ converges in the continuous convergence.
+\end{proof}
 
 \subsubsection{$c$-embedded spaces}
 
@@ -3695,6 +3719,7 @@ Let $\sSet{X,\xi},\sSet{Y, \zeta}$ be convergence spaces, $x\in X$ and $H\subset
 \end{itemize}
 \end{definition}
 
+
 \begin{lemma} \label{evenlyContinuousLemma}
 Let $X,Y$ be convergence spaces, $x\in X$ and $H\subseteq (X\to Y)$. Then $H$ is evenly continuous at $x$ \textup{if and only if} for all filters $F\in \powerfilters(X\to Y)$ that contain $H$, all $G\in \powerfilters(X)$ and all $y\in Y$, we have
 \[ \left.\begin{aligned}
@@ -3722,27 +3747,48 @@ Assume $H$ is evenly continuous at $x$ and take arbitrary $f\in H$. Now take arb
 implies $\upset f^{\imf\imf}(G) = \upset\evalMap^{\imf\imf}(\pfilter{f}\otimes G) \to f(x)$, which means that $f$ is continuous at $x$.
 \end{proof}
 
+\subsubsection{The Arzelà-Ascoli theorem}
 \begin{proposition}
-Let $\sSet{X,\xi},\sSet{Y, \zeta}$ be convergence spaces and $H\subseteq \cont(X, Y)$.
+Let $\sSet{X,\xi},\sSet{Y, \zeta}$ be convergence spaces, $H\subseteq \cont(X, Y)$ and $\{A_x\}_{x\in X}\subseteq \powerset(Y)$.
 
-If $H$ evenly continuous and $\evalMap_x^\imf(H)$ compactoid in $Y$ for all $x\in X$, then $H$ is compactoid in $(X\to Y)_c$.
+If $H$ is evenly continuous and $\evalMap_x^\imf(H)$ is $A_x$-compactoid in $Y$ for all $x\in X$, then $H$ is $\prod A_x$-compactoid in $(X\to Y)_c$.
 \end{proposition}
 \begin{proof}
-Let $U\in\powerultrafilters\big((X\to Y)\big)$ be an ultrafilter that contains $H$. Take arbitrary $x\in X$. Then $\evalMap_x^\imf(H) = \evalMap^\imf(H\times \{x\})\in \upset\evalMap^{\imf\imf}(U\otimes \pfilter{x})$. Because $\evalMap_x^\imf(H)$ was assumed compactoid, $\upset\evalMap^{\imf\imf}(U\otimes \pfilter{x})$ converges to some $y\in Y$.
+Let $U\in\powerultrafilters\big((X\to Y)\big)$ be an ultrafilter that contains $H$. Take arbitrary $x\in X$. Then $\evalMap_x^\imf(H) \in \upset\evalMap_x^{\imf\imf}(U)$, which is an ultrafilter by \ref{imageFilterProperties}. Because $\evalMap_x^\imf(H)$ was assumed $A_x$-compactoid, $\upset\evalMap_x^{\imf\imf}(U)$ converges to some $y\in A_x$.
 
-Now let $f: X\to Y$ be a function that maps each $x$ to such a $y$. By construction, $U$ converges pointwise to $f$. As $H$ is evenly continuous and $U$ contains $H$, we have that $U$ converges in continuous convergence to $f$.
+Now let $f: X\to Y$ be a function that maps each $x$ to such a $y$. By construction, $U$ converges pointwise to $f$. As $H$ is evenly continuous and $U$ contains $H$, we have that $U$ converges in continuous convergence to $f$. Also $f\in \prod A_x$ because $f(x) \in A_x$ for all $x\in X$.
 \end{proof}
 \begin{corollary}
-If $Y$ is regular, then $H$ is compactoid in $\cont_c(X, Y)$ under the same assumptions.
+Let $\sSet{X,\xi}$, $\sSet{Y, \zeta}$ be a convergence spaces, $H\subseteq \cont(X, Y)$ and $A\subseteq(X\to Y)_c$ a closed subset.
+If $H$ is evenly continuous, $H\subseteq A$ and $\evalMap_x^\imf(H)$ is $\evalMap_x^\imf(A)$-compactoid for all $x\in X$, then  $H$ is $A$-compactoid.
 \end{corollary}
 \begin{proof}
-We need to show that in this case the function $f$ may be chosen continous. As $f$ is a limit of the continuous convergence, its continuity is given by \ref{continuousLimitsContinuous}.
+We need to show that the limit function $f$ constructed in the proof of the proposition is an element of $A$.
+
+This is immediate because $A\in U$ and $A$ is continuously closed.
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{Y, \zeta}$ a regular convergence spaces and $H\subseteq \cont(X, Y)$.
+
+If $H$ is evenly continuous and $\evalMap_x^\imf(H)$ is compactoid in $Y$ for all $x\in X$, then $H$ is compactoid in $\cont(X, Y)_c$.
+\end{corollary}
+\begin{proof}
+We set $A = \cont(X,Y)$ in the previous corollary. This is continuously closed if $Y$ is regular, by \ref{setOfContinuousFunctionsContinuouslyClosed}.
+\end{proof}
+\begin{corollary} \label{evenContinuityRelativeCompactness}
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{Y, \zeta}$ a Hausdorff, regular, pseudotopological convergence space and $H\subseteq \cont(X, Y)$.
+
+If $H$ is evenly continuous and $\evalMap_x^\imf(H)$ is relatively compact in $Y$ for all $x\in X$, then $H$ is relatively compact in $\cont(X, Y)_c$.
+\end{corollary}
+\begin{proof}
+By assumption, $\adh_\zeta\big(\evalMap_x^\imf(H)\big)$ is compact, and by the proposition $H$ is $\prod_{x\in X}\adh_\zeta\big(\evalMap_x^\imf(H)\big)$-compactoid. Now $\prod_{x\in X}\adh_\zeta\big(\evalMap_x^\imf(H)\big)$ is compact by Tychonoff's theorem \ref{TychonoffsTheorem} and thus topological by \ref{T3pseudotopologyTopological}. This means that $\adh(H)$ is closed. It is compact by \ref{compactClosedSets}.
 \end{proof}
 
+
 \begin{proposition}
-Let $\sSet{X,\xi}$ be a convergence space, $\sSet{Y, \zeta}$ a Hausdorff pseudotopological convergence space and $H\subseteq (X\to Y)$. If $H$ is compactoid in $(X\to Y)_c$, then
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{Y, \zeta}$ a Hausdorff pseudotopological convergence space and $H, A\subseteq (X\to Y)$. If $H$ is $A$-compactoid in $(X\to Y)_c$, then
 \begin{enumerate}
-\item $\evalMap_x^\imf(H)$ compactoid for all $x\in X$;
+\item $\evalMap_x^\imf(H)$ is $\evalMap_x^\imf(A)$-compactoid for all $x\in X$;
 \item $H$ is evenly continuous.
 \end{enumerate}
 \end{proposition}
@@ -3778,15 +3824,6 @@ Let $\sSet{X,\xi}$ be a convergence space, $\sSet{Y, \zeta}$ a regular Hausdorff
 \item $H$ is evenly continuous.
 \end{enumerate}
 \end{corollary}
-
-\subsubsection{Compactoid vs. relatively compact}
-
-\begin{proposition}
-Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces. If $H$ is compactoid in $\cont_c(X, Y)$ and $\evalMap_x^\imf(H)$ relatively compact for all $x\in X$, then $H$ is relatively compact in $\cont_c(X, Y)$.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
 
 
 \chapter{Related types of spaces}
@@ -3881,6 +3918,31 @@ Let $\sSet{X, \mathcal{F}}$ be a Cauchy space. A \udef{completion} of $\sSet{X, 
 
 \section{Merotopic and nearness spaces}
 \url{https://en.wikipedia.org/wiki/Proximity_space}
+
+\section{Bornological spaces}
+\begin{definition}
+Let $X$ be a s. A set $\mathcal{B}\subseteq \powerset(X)$ of subsets of $X$ is called a \udef{bornology} if
+\begin{itemize}
+\item it is an ideal;
+\item it covers $V$.
+\end{itemize}
+A pair $\sSet{X,\mathcal{B}}$, where $X$ is a set and $\mathcal{B}$ is a bornology on $X$ is called a \udef{bornological space}.
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a set and $\mathcal{B}\subseteq \powerset(X)$ an ideal of subsets of $X$. Then $\mathcal{B}$ covers $X$ \textup{if and only if} $\{x\}\in \mathcal{B}$ for all $x\in X$.
+\end{lemma}
+
+\begin{example}
+Let $\sSet{X,\xi}$ be a convergence space. The set of compactoid subsets forms a bornology.
+\end{example}
+
+
+
+\subsection{Bounded maps}
+\begin{definition}
+Let $\sSet{X, \mathcal{B}}$, $\sSet{Y,\mathcal{C}}$ be bornological spaces. A function $f: X\to Y$ is called \udef{bounded} if $f^{\imf\imf}(\mathcal{B}) \subseteq \mathcal{C}$.
+\end{definition}
 
 
 \input{uniformSpaces}
