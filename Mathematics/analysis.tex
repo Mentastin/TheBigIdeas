@@ -121,7 +121,7 @@ We calculate, using \ref{chainLemma},
 \[ \left.\dod{f}{y}\right|_{y_0} \left.\dod{y}{x}\right|_{x_0} = \st\left(\frac{\Delta_y f}{\Delta y}\frac{\Delta_x y}{\Delta x}\right) = \st\left(\frac{\Delta_x f\circ y}{\Delta_x y}\frac{\Delta_x y}{\Delta x}\right) = \st\left(\frac{\Delta_x f\circ y}{\Delta x}\right) = \left.\dod{f\circ y}{x}\right|_{x_0}. \]
 \end{proof}
 
-\chapter{Series and sequences}
+\chapter{Sums and series}
 \input{series}
 
 \chapter{Measure theory}
@@ -496,8 +496,8 @@ Let $\mathcal{S}$ be a \emph{ring} on a set $\Omega$, $\mu$ a positive content a
 \begin{enumerate}
 \item $A\subseteq B$ and $\mu(A)<\infty$ implies $\mu(B\setminus A) = \mu(B) - \mu(A)$;
 \item $\mu(A \cup B) + \mu(A\cap B) = \mu(A) + \mu(B)$;
-\item let $\seq{A_n}_{n\in \N}$ be a sequence of disjoint sets in $\mathcal{S}$ such that $\biguplus_{n\in\N}A_n \in \mathcal{S}$, then
-\[ \mu\Big(\biguplus_{n\in\N}A_n\Big) \geq \sum_{n\in\N}\mu(A_n). \]
+\item let $\{A_n\}_{i\in I}$ be a set of pairwise disjoint sets in $\mathcal{S}$ such that $\biguplus_{i\in I}A_i \in \mathcal{S}$, then
+\[ \mu\Big(\biguplus_{i\in I}A_n\Big) \geq \sum_{i\in I}\mu(A_n). \]
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -511,11 +511,11 @@ Let $\mathcal{S}$ be a \emph{ring} on a set $\Omega$, $\mu$ a positive content a
 &= \mu(A) + \mu(B).
 \end{align*}
 
-(3) Consider the sequence
-\[ \seq{\mu\Big(\biguplus_{n=0}^k A_n\Big)}_{k\in \N} = \enspace \seq{\sum_{n=0}^k\mu(A_n)}_{k\in\N}. \]
-This sequence is increasing, so its limit is the supremum of its terms. Thus
-\[ \sum_{n\in\N}\mu(A_n) = \sup_{k\in\N}\mu\Big(\biguplus_{n=0}^k A_n\Big) \leq \mu\Big(\biguplus_{n\in\N}A_n\Big). \]
-The last inequality follows straight from monotonicity \ref{semiringPositiveContent} and the fact that the supremum preserves the inequality.
+(3) We have
+\[ \biguplus_{i\in I} A_i = \bigcup_{\substack{F\subseteq I \\ \text{finite}}}\biguplus_{i\in F}A_i. \]
+Because the content is monotone (by \ref{semiringPositiveContent}), we have
+\[ \sum_{i\in I}\mu(A_i) = \sup_{\substack{F\subseteq I \\ \text{finite}}}\sum_{i\in F}\mu(A_i) = \sup_{\substack{F\subseteq I \\ \text{finite}}}\mu\Big(\biguplus_{i\in F}A_i\Big) \leq \mu\Big(\bigcup_{\substack{F\subseteq I \\ \text{finite}}}\biguplus_{i\in F}A_i\Big) = \mu\Big(\biguplus_{i\in I} A_i\Big), \]
+by \ref{orderPreservingFunctionLatticeOperations}.
 \end{proof}
 
 \subsubsection{Null sets}
@@ -1523,7 +1523,7 @@ Define the measure $\nu: E\mapsto \int_E s\diff{\mu}$. Then by TODO ref
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and let $f:\Omega\to[0,+\infty]$ be a positive measurable function. Define
 
 We define the \udef{Lebesgue integral} of $f$ on $\Omega$ w.r.t. $\mu$ as
-\[ \int_\Omega f \diff{\mu} \defeq \sup\setbuilder{\int_\Omega s \diff{\mu}}{s\in\SF(\Omega, [0,+\infty[)\;\land\; s\leq f}. \]
+\[ \int_\Omega f \diff{\mu} \defeq \sup\setbuilder{\int_\Omega s \diff{\mu}}{s\in\SF(\Omega, \interval[co]{0,+\infty})\;\land\; s\leq f}. \]
 We call $f$ \udef{integrable} when $\int_\Omega f \diff{\mu} < \infty$.
 \end{definition}
 For simple functions this definition corresponds to the previous one by \ref{integrationOrderPreserving}.
@@ -1557,7 +1557,9 @@ Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and let $f,g:\Omega\to[0,+\i
 \item \textup{(Beppo Levi's lemma)} if $(f_n)$  is an increasing sequence of positive functions that converges to $f$ point-wise, then $(\int_\Omega f_n\diff{\mu})_n$ is an increasing sequence and
 \[ \lim_{n\to\infty}\int_\Omega f_n\diff{\mu} = \int_\Omega \lim_{n\to\infty}f_n\diff{\mu} = \int_\Omega f\diff{\mu}; \]
 \item the integral is positive linear: $\forall c\geq 0$:
-\[ \int_\Omega(cf+g)\diff{\mu} = c\int_\Omega f\diff{\mu} + \int_\Omega g\diff{\mu}. \]
+\[ \int_\Omega(cf+g)\diff{\mu} = c\int_\Omega f\diff{\mu} + \int_\Omega g\diff{\mu}; \]
+\item if $\seq{E_n}_{n\in \N}$ is a sequence of pairwise disjoint events in $\mathcal{A}$, then
+\[ \int_{\biguplus_{n\in \N}E_n}f\diff{\mu} = \sum_{n\in \N}\int_{E_n}f\diff{\mu}. \]
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -1583,6 +1585,18 @@ that increase pointwise to $f$ and $g$, respectively. Then $cs_n+t_n$ converges 
 &= c\lim_{n\to\infty}\int_\Omega s_n\diff{\mu}+\lim_{n\to\infty}\int_\Omega t_n\diff{\mu} \\
 &= c\int_\Omega f\diff{\mu} + \int_\Omega g\diff{\mu}.
 \end{align*}
+
+(5) We calculate
+\begin{align*}
+\sum_{n\in \N}\int_{E_n}f\diff{\mu} &= \lim_{n\to \infty} \sum_{i=0}^n \int_{E_i}f \diff{\mu} \\
+&= \lim_{n\to \infty} \sum_{i=0}^n \int_{\Omega}f\cdot\charFunc{E_i} \diff{\mu} \\
+&= \lim_{n\to \infty} \int_{\Omega}f\cdot \sum_{i=0}^n\charFunc{E_i} \diff{\mu} \\
+&= \lim_{n\to \infty} \int_{\Omega}f\cdot \charFunc{\biguplus_{i=0}^nE_i} \diff{\mu} \\
+&= \int_{\Omega}f\cdot \lim_{n\to \infty}\charFunc{\biguplus_{i=0}^nE_i} \diff{\mu} \\
+&= \int_{\Omega}f\cdot \charFunc{\biguplus_{n\in \N}E_n} \diff{\mu} \\
+&= \int_{\biguplus_{n\in \N}E_n}f \diff{\mu},
+\end{align*}
+using \ref{integralOverSubset}, the previous parts of this proposition and \ref{indicatorFunctionHomeomorphism}.
 \end{proof}
 
 \begin{proposition}[Fatou's lemma] \label{FatouLemma}
@@ -1691,47 +1705,46 @@ Now we calculate, using \ref{tonelliLemma},
 For the general case, we again argue using Beppo Levi's lemma \ref{propertiesIntegralPositiveFunctions}.
 \end{proof}
 
-\subsubsection{Integral inequalities}
-\begin{proposition}[Markov's inequality]
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function and $\alpha>0$. Then
-\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\alpha}\int_\Omega f\diff{\mu}. \]
-\end{proposition}
-Also called Chebyshev's inequality or Chebyshev's first inequality. The next inequality would then be Chebyshev's second inequality. 
-\begin{proof}
-We have $\alpha\cdot [f(\omega)\leq \alpha]\leq f(\omega)$, so
-\[ \alpha\cdot \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} = \alpha \int_{\Omega}[f(\omega)\leq \alpha]\diff{\mu(\omega)} = \int_{\Omega}\alpha[f(\omega)\leq \alpha]\diff{\mu(\omega)} \leq \int_\Omega f\diff{\mu}, \]
-using \ref{measureFromIntegralCharacteristicFunctions} and \ref{propertiesIntegralPositiveFunctions}. This implies Markov's inequality.
-\end{proof}
-\begin{corollary}[Chebyshev's inequality]
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R$ a measurable function, $\varphi:\im(f) \to \R^+$ a monotone measurable function and $\alpha>0$. Then
-\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
-\end{corollary}
-\begin{proof}
-Since $\varphi$ is monotone, we have $\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \subseteq \setbuilder{\omega\in\Omega}{\varphi\big(f(\omega)\big)\geq \varphi(\alpha)}$, so
-\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \mu\setbuilder{\omega\in\Omega}{\varphi\big(f(\omega)\big)\geq \varphi(\alpha)} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
-\end{proof}
-By choosing specific functions $\varphi$, we obtain the following forms of Chebyshev's inequality:
-\begin{corollary} \label{ChebyshevInequalityCorollary}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function, $\alpha>0$ and $0<p$. Then
-\begin{enumerate}
-\item $\mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\alpha^p}\int_\Omega f(\omega)^p\diff{\mu(\omega)}$;
-\end{enumerate}
-\end{corollary}
-
 \subsection{Complex functions}
 Let $\Omega$ be a set and $f:\Omega \to \C$ a function.  Then we can uniquely decompose $f$ into $f= u+iv$ where $u,v: \Omega\to \R$. We can further decompose
 \[ \begin{cases}
 u = u^+ - u^- & \text{such that $u^+u^- = 0$} \\
 v = v^+ - v^- & \text{such that $v^+v^- = 0$.}
 \end{cases} \]
-If $\Omega $ carries a $\sigma$-algebra such that $f$ is measurable, then $u^+,u^-,v^+,v^-$ are also measurable.
+
+\begin{lemma}
+If $\Omega $ carries a $\sigma$-algebra such that $f$ is measurable, then
+\begin{enumerate}
+\item $u^+,u^-,v^+,v^-$ are measurable;
+\item $|f| = \sqrt{(u^+)^2+ (u^-)^2 + (v^+)^2 + (v^-)^2}$.
+\end{enumerate}
+\end{lemma}
+
 \begin{definition}
-Let $\seq{\Omega, \mathcal{A},\mu}$ be a measure space. We say a measurable function $f: \Omega \to \C$ is \udef{integrable}, if $|f|:\Omega\to [0,\infty[$ is integrable. In this case we define the \udef{integral} of $f$ as
+Let $\sSet{\Omega, \mathcal{A},\mu}$ be a measure space. We say a measurable function $f: \Omega \to \C$ is \udef{integrable}, if $|f|:\Omega\to [0,\infty[$ is integrable. In this case we define the \udef{integral} of $f$ as
 \[ \int_\Omega f\diff{\mu} = \int_\Omega u^+\diff{\mu} - \int_\Omega u^-\diff{\mu} + i\int_\Omega v^+\diff{\mu} - i\int_\Omega v^-\diff{\mu}. \]
 The set of all integrable functions in $(\Omega \to \C)$ is denoted $\mathcal{L} ^1(\Omega,\mathcal{A},\mu)$ or $\mathcal{L} ^1(\mu)$.
 \end{definition}
 
-TODO
+\begin{lemma}
+Let $\sSet{\Omega, \mathcal{A},\mu}$ be a measure space and $f: \Omega \to \C$ a measurable function with decomposition $f = u^+ - u^- + i(v^+ -v^-)$. If $f$ is integrable, then $u^+, u^-, v^+$ and $v^-$ are integrable.
+\end{lemma}
+\begin{proof}
+We have by \ref{propertiesIntegralPositiveFunctions}
+\[ \int_\Omega u^+ \diff{\mu} = \int_\Omega \sqrt{(u^+)^2} \diff{\mu} \leq \int_\Omega \sqrt{(u^+)^2+ (u^-)^2 + (v^+)^2 + (v^-)^2} \diff{\mu} = \int_\Omega|f|\diff{\mu} < \infty. \]
+The argument for $u^-,v^+$ and $v^-$ is similar.
+\end{proof}
+
+\begin{lemma} \label{finiteMeasureBoundedFunctionMeasurable}
+Let $\sSet{\Omega, \mathcal{A},\mu}$ be a finite measure space and $f: \Omega \to \C$ a function such that $\sup_{x\in \Omega}|f(x)|<\infty$, then $f$ is integrable.
+\end{lemma}
+\begin{proof}
+Set $\sup_{x\in \Omega}|f(x)| = k$. Then
+\[ \int_\Omega |f|\diff{\mu} \leq \int_\Omega \underline{k}\diff{\mu} = k\mu(\Omega) < \infty, \]
+by \ref{propertiesIntegralPositiveFunctions}.
+\end{proof}
+
+
 \begin{proposition}[Reverse Fatou lemma]
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $(h_n)$ any sequence of measurable functions that is dominated by a positive integrable function $g$ (i.e.\ $h_n\leq g$ for all $n\in\N$). Then
 \[ f: \Omega\to[0,+\infty]: x\mapsto \limsup_{n\to\infty}h_n(x) \]
@@ -1825,6 +1838,272 @@ TODO Young's convolution inequality
 \section{Duality in integration}
 Distributions with kernels will be example.
 
+\chapter{Real Analysis}
+Dual numbers
+
+Dini theorem
+
+\section{Continuity}
+
+\subsection{Left and right limits}
+\begin{definition}
+Let $f:A\subseteq\R\to\R$ be a function and $p$ a limit point of $A$. Then
+\begin{itemize}
+\item the \udef{left limit} of $f(x)$ as $x$ approaches $p$ is the limit of $f|_{A\cap]-\infty,p]}$ as $x\to p$, denoted
+\[ \lim_{x\overset{<}{\to} p}f(x) \qquad \text{or} \qquad \lim_{x\to p^-}f(x); \]
+\item the \udef{right limit} of $f(x)$ as $x$ approaches $p$ is the limit of $f|_{A\cap[p,+\infty[}$ as $x\to p$, denoted
+\[ \lim_{x\overset{>}{\to} p}f(x) \qquad \text{or} \qquad \lim_{x\to p^+}f(x). \]
+\end{itemize}
+\end{definition}
+\begin{lemma}
+Let $f:A\subseteq\R\to\R$ be a function and $p$ a limit point of both $A\cap]-\infty,p]$ and $A\cap[p,+\infty[$. Then $\lim_{x\to p} f(x)$ exists if the left and right limit exist and are equal to each other. In this case
+\[ \lim_{x\to p} f(x) = \lim_{x\to p^-} f(x) = \lim_{x\to p^+} f(x). \]
+\end{lemma}
+
+\subsection{Discontinuities}
+If a function $f:A\subseteq\R\to\R$ is not continuous at $p$, then $p$ is a limit point of $A$ by \ref{continuityAtIsolatedPoint} and \ref{notLimitPointSingletonOpen}.
+\begin{definition}
+Let $f:A\subseteq\R\to\R$ be a function and $p\in A$ such that $f$ is not continuous at $p$. Then
+\begin{itemize}
+\item if $\lim_{x\to p}f(x)$ exists and is finite, we call $p$ a \udef{removable discontinuity};
+\item if both $\lim_{x\to p^-}f(x)$ and $\lim_{x\to p^+}f(x)$ exist and are finite, but are different, we call $p$ a \udef{jump discontinuity};
+\item if either $\lim_{x\to p^-}f(x)$ or $\lim_{x\to p^+}f(x)$ do not exist, we call $p$ an \udef{essential discontinuity}.
+\end{itemize}
+Removable and jump discontinuities are also called \udef{discontinuities of the first kind}. Essential discontinuities are also called \udef{discontinuities of the second kind}.
+\end{definition}
+TODO: should discontinuities of type 1/x be considered essential?
+
+\subsubsection{Jump discontinuities}
+\begin{proposition} \label{monotoneDiscontinuities}
+Let $f$ be a monotone real-valued function on an interval $I$. Then all discontinuities are jump discontinuities.
+\end{proposition}
+\begin{theorem}[Darboux-Froda] \label{DarbouxFroda}
+Let $f$ be a monotone real-valued function on an interval $I$. Then the set of discontinuities is at most countable.
+\end{theorem}
+
+TODO: intervals must be closed / open?? In \ref{monotoneDiscontinuities} and \ref{DarbouxFroda}.
+
+
+\begin{definition}
+Let $f$ be a real function. We define the \udef{difference operator}
+\[ \Delta_{x_0}f \defeq \lim_{x\to x_0+} f(x) - \lim_{x\to x_0-} f(x) \]
+\end{definition}
+
+\subsection{Extreme and intermediate value theorems}
+\begin{theorem}[Fermat's theorem] \label{fermatsTheorem}
+Let $a<b\in \R$ and $f: \interval[o]{a,b}\to \R$ be a real function. If $c\in \interval[o]{a,b}$ is such that $f(c)$ is a maximum or a minimum in $\im(f)$ and $f$ is differentiable at $c$, then $f'(c) = 0$.
+\end{theorem}
+\begin{proof}
+First assume $f(c)$ is a minimum. Then $f(c+h)-f(c) \geq 0$ for all $h\in \interval[o]{a-c, b-c}$, so
+\[ \frac{f(c+n^{-1})-f(c)}{n^{-1}} \geq 0 \qquad\text{and}\qquad \frac{f(c-n^{-1})-f(c)}{-n^{-1}} \leq 0 \]
+for all $n\in \N$ such that $n^{-1}\in \interval[o]{a-c, b-c}$ and $-n^{-1}\in \interval[o]{a-c, b-c}$. Taking both limits, we see that $f'(c) \geq 0$ and $f'(c) \leq 0$, so $f'(c) = 0$.
+
+The case of $f(c)$ being a maximum is analoguous.
+\end{proof}
+
+\begin{theorem}[Extreme value theorem] \label{extremeValueTheorem}
+Let $\sSet{X,\xi}$ be a convergence space, $f: X\to \R$ a continuous function and $A\subseteq X$ a non-empty compact subset. Then $f^\imf(A)$ has both a minimum and a maximum.
+\end{theorem}
+\begin{proof}
+We have that $f^\imf(A)$ is compact by \ref{compactConstructions} and thus bounded by \ref{compactImpliesBounded}, which means that $f^\imf(A) \subseteq \interval{a,b}$ for some $a,b\in R$ by \ref{boundedSubsetsRealNumbers}.
+
+Thus we have that $\sup f^{\imf}(A) = c \leq b$. We need to show that $c\in A$. We construct a sequence $\seq{x_n}$ as follows: for all $n\in \N$ we let $x_n$ be some element of $\ball(c, n^{-1})\cap f^{\imf}(A)$.
+
+Each of these sets is non-empty. If one of them was empty for some $n$, then $c-n^{-1}$ would be an upper bound, which is a contradiction.
+
+Clearly $\seq{x_n}$ converges to $c$ in $\R$. As $f^\imf(A)$ is closed by \ref{compactClosedSets} and \ref{metricConvergenceHausdorff}, we have $c\in f^\imf(A)$ and $f^{\imf}(A)$ reaches a maximum.
+
+Similarly $f^{\imf}(A)$ reaches a minimum.
+\end{proof}
+\begin{corollary}[Rolle's theorem] \label{RollesTheorem}
+Let $a<b\in \R$ and $f: \interval{a,b}\to \R$ be a continuous real function that is differentiable on $\interval[o]{a,b}$ such that $f(a) = f(b)$. Then there exists $c\in \interval[o]{a,b}$ such that $f'(c) = 0$.
+\end{corollary}
+\begin{proof}
+We know that $f^{\imf}\big(\interval{a,b}\big)$ has both a maximum and a minimum ($\interval{a,b}$ is compact by \ref{closedRealIntervalCompact}). If $f(a) = f(b)$ is both the minimum and maximum, then for all $c\in \interval[o]{a,b}$, $f(c) = f(a) = f(b)$, so $f(c)$ is both the minimum and maximum, which means that $f'(c) = 0$ by \ref{fermatsTheorem}.
+
+If $f(a) = f(b)$ is not both the minimum and maximum, then there exists another $c\in \interval{a,b}\setminus\{a,b\} = \interval[o]{a,b}$ such that $f(c)$ is either a minimum or a maximum. Then $f'(c) = 0$ by \ref{fermatsTheorem}.
+\end{proof}
+
+
+\begin{theorem}[Mean value theorem] \label{meanValueTheorem}
+Let $a<b\in \R$ and $f: \interval{a,b}\to \R$ be a continuous real function that is differentiable on $\interval[o]{a,b}$. Then there exists $c\in \interval[o]{a,b}$ such that
+\[f'(c) = \frac{f(b)-f(a)}{b-a}. \]
+\end{theorem}
+\begin{proof}
+Define $g(x) = f(x) - x\frac{f(b)-f(a)}{b-a}$. Then
+\begin{multline*}
+g(a) = f(a) - a\frac{f(b)-f(a)}{b-a} = \frac{bf(a) - af(a)}{b-a} - a\frac{f(b)-f(a)}{b-a} = \\ \frac{bf(a)-af(b)}{b-a} = \frac{bf(a)-bf(b) + bf(b)-af(b)}{b-a} = \\ \frac{bf(b) - af(b)}{b-a} - \frac{bf(b) - bf(a)}{b-a} = f(b) - b \frac{f(b)-f(a)}{b-a} = g(b),
+\end{multline*}
+so we can apply Rolle's theorem \ref{RollesTheorem} to $g$. Thus there exists $c\in \interval[o]{a,b}$ such that $0 = g'(c) = f'(c) - \frac{f(b)-f(a)}{b-a}$. Thus $f'(c) = \frac{f(b)-f(a)}{b-a}$.
+\end{proof}
+
+\begin{proposition}[Intermediate value theorem]
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ a real function. For all $y\in \interval{f(a), f(b)}$ there exists $c\in \interval{a,b}$ such that $f(c) = y$.
+\end{proposition}
+\begin{proof}
+Follows from \ref{generalisedIntermediateValueTheorem} and \ref{connectedSubsetReals}.
+\end{proof}
+\begin{corollary} \label{extremaIntermediateValueTheorem}
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ a real function. For all $y\in \interval{\inf\im(f), \sup\im(f)}$ there exists $c\in \interval{a,b}$ such that $f(c) = y$.
+\end{corollary}
+\begin{proof}
+Both $\inf\im(f)$ and $\sup\im(f)$ are attained on the interval by \ref{extremeValueTheorem}, say at points $b,c\in \interval{a,b}$. We can then apply the intermediate value theorem 
+\end{proof}
+
+\section{Integration}
+\begin{lemma}
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous real function. Then $f$ is integrable.
+\end{lemma}
+\begin{proof}
+By \ref{extremeValueTheorem}, $\im(f)$ has a minimum $m$ and maximum $M$.
+
+Then $\max\big(\im(|f|)\big) = \max\{|m|, |M|\}<\infty$. Also $\interval{a,b}$ has measure $|b-a|<\infty$, so $f$ is measurable by \ref{finiteMeasureBoundedFunctionMeasurable}.
+\end{proof}
+
+\begin{proposition}[Mean value theorem for definite integrals] \label{meanValueTheoremIntegrals}
+Let $a<b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous real function. Then there exists $c\in \interval{a,b}$ such that
+\[ \int_a^bf(x)\diff{x} = f(c)(b-a). \]
+\end{proposition}
+TODO in fact we can take $c\in \interval[o]{a,b}$
+\begin{proof}
+By the extreme value theorem, $f$ reaches both a minimum $m$ and a maximum $M$ on the interval. Then we have
+\[ m(b-a) = \int_a^bm\diff{x} \leq \int_a^bf(x)\diff{x} \leq \int_a^bM\diff{x} = M(b-a) \]
+and thus $(b-a)^{-1}\int_a^bf(x)\diff{x}$ lies between the extrema. By \ref{extremaIntermediateValueTheorem} there exists $c\in \interval{a,b}$ such that $f(c) = (b-a)^{-1}\int_a^bf(x)\diff{x}$.
+\end{proof}
+
+\begin{theorem}[First fundamental theorem of calculus]
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous real function. Set
+\[ F: \interval{a,b} \to \R: x\mapsto \int_a^x f(t) \diff{t}. \]
+Then
+\begin{enumerate}
+\item $F$ is continuous on $\interval{a,b}$;
+\item $F$ is differentiable on $\interval[o]{a,b}$;
+\item $F'(x) = f(x)$ for all $x\in \interval[o]{a,b}$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+For any $x,h\in \R$ such that $x, x+h\in \interval{a,b}$, we have
+\[ F(x+h) - F(x) = \int_a^{x+h}f(t)\diff{t} - \int_a^{x}f(t)\diff{t} = \int_x^{x+h}f(t)\diff{t}. \]
+By the mean value theorem for integrals, \ref{meanValueTheoremIntegrals}, we have $F(x+h) - F(x) = f(c_h)\cdot h$ for some $c_h\in \interval{x,x+h}$. In the limit $h\to 0$, we have $c_h\to x$ be the squeeze theorem and thus $f(c_h)\to f(x)$ by continuity of $f$. Thus
+\[ \lim_{h\to 0}F(x+h) - F(x) = \lim_{h\to 0}f(c_h)\cdot h = f(x)\lim_{h\to 0}h = 0, \]
+which implies that $F$ is continuous on $\interval{a,b}$.
+Also
+\[ f(x) = \lim_{h\to 0}f(c_h) = \lim_{h\to 0}\frac{F(x+h) - F(x)}{h} = F'(x). \]
+\end{proof}
+\begin{corollary} [Weak second fundamental theorem of calculus] \label{weakSecondTheoremCalculus}
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a differentiable real function such that $f': \interval{a,b}\to \R$ is continuous. Then
+\[ \int_a^bf'(t)\diff{t} = f(b)-f(a). \]
+\end{corollary}
+TODO: We can drop the hypothesis that $f'$ is continuous, so long as it is (Riemann) integrable. This strengthening is the second fundamental theorem of calculus.
+\begin{proof}
+Set $g: \interval{a,b}\to \R: x\mapsto \int_a^xf'(t)\diff{t}$, which is differentiable by the first fundamental theorem and $g'(x) = f'(x)$ for all $x\in \interval[o]{a,b}$. Thus we can apply the means value theorem \ref{meanValueTheorem} to $f-g$, restricted to $\interval{a,x}$: there exists $c\in interval[o]{a,x}$ such that
+\[ \frac{(f-g)(x) - (f-g)(a)}{x-a} = (f-g)'(c) = 0. \]
+This implies that $f-g$ is a constant function. In order to fix this constant, note that $g(a) = 0$, so $f(x) = f(a) + g(x)$ and, in particular, $f(b) = f(a) + \int_a^bf'(t)\diff{t}$.
+\end{proof}
+
+\subsection{Henstock-Kurzweil integral}
+
+\subsection{Riemann integration}
+\begin{lemma}
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous real function. Then $f$ is Riemann integrable.
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+\subsubsection{Riemann-Stieltjes}
+
+\begin{lemma} \label{rectanglePartitionedByMonotonicFunction}
+Let $f: \R^+ \to \R^+$ be an invertible monotonic function and $a\in\R^+$. Then
+\[ a\cdot f(a) = \int_0^a f(x)\diff{x} + \int_0^{f(a)} f^{-1}(y)\diff{y}. \]
+\end{lemma}
+\begin{proof}
+We will be evaluating the integral $a\cdot f(a) = \iint_{(x,y)\in S}\diff{x}\diff{y}$, where $S = \setbuilder{(x,y)\in \R^2}{x\leq a, y\leq f(a)}$. To that end, note the partition
+\begin{align*}
+S &= \setbuilder{(x,y)\in S}{y\leq f(x)} \uplus \setbuilder{(x,y)\in S}{y > f(x)} \\
+&= \setbuilder{(x,y)\in S}{y\leq f(x)} \uplus \setbuilder{(x,y)\in S}{x < f^{-1}(y)} \\
+&\eqdef S_1 \uplus S_2.
+\end{align*}
+Then we can calculate
+\begin{align*}
+ab = \iint_{(x,y)\in S_1}\diff{x}\diff{y} + \iint_{(x,y)\in S_2}\diff{x}\diff{y} \\
+\int_0^a\int_0^{f(x)}\diff{y}\diff{x} + \int_0^{f(a)}\int_0^{f^{-1}(y)}\diff{x}\diff{y} \\
+\int_0^a\int_0^{f(x)}\diff{y}\diff{x} + \int_0^{f(a)}\int_0^{f^{-1}(y)}\diff{x}\diff{y} \\
+\int_0^a f(x)\diff{x} + \int_0^{f(a)} f^{-1}(y)\diff{y}.
+\end{align*}
+\end{proof}
+
+
+
+\section{Inequalities}
+
+\subsection{Young's inequality}
+TODO: compare (+use) Jensen's inequality.
+
+\subsubsection{Hölder conjugates}
+\begin{definition}
+Two numbers $p,q\in \R^+$ are called \udef{Hölder conjugate} iff $p^{-1} + q^{-1} = 1$.
+\end{definition}
+
+\begin{lemma}
+Let $p\in \R^+$. Then $p$ is Hölder conjugate to some $q\in \R^+$ \textup{if and only if} $p > 1$.
+\end{lemma}
+
+\begin{lemma} \label{HoelderConjugateEquivalents}
+Let $p,q\in \R^+$. The following are equivalent:
+\begin{enumerate}
+\item $p$ and $q$ are Hölder conjugate (i.e.\ $p^{-1}+q^{-1} = 1$);
+\item $p+q = pq$;
+\item $(p-1)(q-1) = 1$;
+\item $(p-1) = (q-1)^{-1}$;
+\item $p = \frac{q}{q-1}$;
+\item $q = \frac{p}{p-1}$;
+\item $pq^{-1} = p-1$;
+\item $qp^{-1} = q-1$.
+\end{enumerate}
+\end{lemma}
+
+\subsubsection{Young's inequality}
+\begin{theorem}[Young's inequality] \label{YoungsInequality}
+Let $p,q\in \R$ be such that $p>0, q>0$ and $p^{-1} + q^{-1} = 1$. Then for all $a,b \geq 0$, we have
+\[ ab \leq \frac{a^p}{p} + \frac{b^q}{q}. \]
+Equality holds \textup{if and only if} $b = a^{p-1}$.
+\end{theorem}
+\begin{proof}[Proof using convexity of exponentiation]
+If either $a=0$ or $b =0$, then the result is immediate. Now assume $a>0$ and $b>0$. Then
+\begin{align*}
+ab &= e^{\ln(ab)} \\
+&= e^{\ln(a)+\ln(b)} \\
+&= e^{p^{-1}p\ln(a)+q^{-1}q\ln(b)} \\
+&= e^{p^{-1}\ln(a^p)+(1-p^{-1})\ln(b^q)} \\
+&\leq p^{-1}e^{\ln(a^p)}+(1-p^{-1})e^{\ln(b^q)} \\
+&= \frac{a^p}{p} + \frac{b^q}{q}.
+\end{align*}
+The inequality is due to the convexity of the exponentiation. It is an equality (TODO ref strict convexity) iff
+\begin{align*}
+\ln(b^q) = \ln(a^p) &\iff b^q = a^p \\
+&\iff b = a^{pq^{-1}} = a^{p-1}.
+\end{align*}
+The last equality follows from \ref{HoelderConjugateEquivalents}.
+\end{proof}
+\begin{proof}[Geometric proof]
+From \ref{HoelderConjugateEquivalents}, we have $(x\mapsto x^{p-1})^{-1} = y\mapsto y^{q-1}$. These functions are monotone (TODO ref).
+
+We have either $a^{p-1}\leq b$ or $b\leq a^{p-1} \iff b^{q-1} \leq a$. If the second option holds, we swap $a$ with $b$ and $p$ with $q$.
+
+Now we can calculate, using \ref{rectanglePartitionedByMonotonicFunction},
+\begin{align*}
+ab &= aa^{p-1} + a(b-a^{p-1}) \\
+&= \int_0^a x^{p-1}\diff{x} + \int_0^{a^{p-1}} y^{q-1}\diff{y} + a(b-a^{p-1}) \\
+&= \int_0^a x^{p-1}\diff{x} + \int_0^{a^{p-1}} y^{q-1}\diff{y} + \int_{a^{p-1}}^b a\diff{y} \\
+&\leq \int_0^a x^{p-1}\diff{x} + \int_0^{a^{p-1}} y^{q-1}\diff{y} + \int_{a^{p-1}}^b y^{q-1}\diff{y} \\
+&= \int_0^a x^{p-1}\diff{x} + \int_0^{b} y^{q-1}\diff{y} \\
+&= \frac{a^p}{p} + \frac{b^q}{q}.
+\end{align*}
+TODO picture.
+
+We clearly have equality iff $a^{p-1} = b$.
+\end{proof}
+
 
 \chapter{Function spaces}
 \section{Classification by support}
@@ -1864,6 +2143,402 @@ Let $\sSet{\Omega, \xi}$ be a convergence space and $\sSet{V,\zeta}$ a convergen
 Note that $(\Omega\to V)_C \neq (\Omega\to V)_c$ and $\cont_C(\Omega) \neq \cont_c(\Omega)$!
 
 Observation: if $\Omega$ is Hausdorff, then the set of compact subsets of $\Omega$ forms a $\pi$-system of closed subsets of $\Omega$. This means that
+
+\section{The $L^p(X,\diff{\mu})$ spaces}
+\subsection{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
+\begin{definition}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $0<p<\infty \in \R$. The we define
+\begin{itemize}
+\item $\mathcal{L}^p(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $|f|^p$ is integrable w.r.t.\ $\mu$.
+\item $\mathcal{L}^\infty(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $\sup_x|f(x)|<\infty$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+Let $0< p<q \leq \infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then
+\begin{enumerate}
+\item $\mathcal{L}^p(X,\mu) \supseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of finite but arbitrary large measure;
+\item $\mathcal{L}^p(X,\mu) \subseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of non-zero but arbitrary small measure.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO \url{https://en.wikipedia.org/wiki/Lp_space#Embeddings}
+\end{proof}
+\begin{corollary}
+For all $0< p<q \leq \infty$ and $a,b\in\R$, we have $\mathcal{L}^p([a,b],\lambda) \supseteq \mathcal{L}^q([a,b],\lambda)$.
+\end{corollary}
+
+\begin{definition}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then we define the real functional
+\[ \norm{\cdot}_{p}: \mathcal{L}^p(X,\mu)\to \R: f\mapsto \left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
+\end{definition}
+We will prove that this functional is a seminorm.
+
+\begin{lemma} \label{pNormAbsolutelyHomogeneous}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_p$ is absolutely homogeneous.
+\end{lemma}
+\begin{proof}
+For all $\lambda\in \R$, we have
+\[ \norm{\lambda f}_{p} = \left(\int_X |\lambda f|^p\diff{\mu}\right)^{1/p} = \left(|\lambda|^p\int_X |f|^p\diff{\mu}\right)^{1/p} = |\lambda|\left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
+\end{proof}
+
+\begin{lemma} \label{pnormLemma}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $k,l\in\interval[o]{1,+\infty}$ and $f\in \mathcal{L}^{kl}(X,\mu)$. Then
+\[ \norm{|f|^k}_l = \left(\norm{f}_{kl}\right)^k. \]
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\left(\norm{f}_{kl}\right)^k &= \left(\left(\int_X|f|^{kl}\diff{\mu}\right)^{1/(kl)}\right)^{k} \\
+&= \left(\int_X\big||f|^{k}\big|^l\diff{\mu}\right)^{1/l} \\
+&= \norm{|f|^k}_l.
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Hölder's inequality] \label{HoeldersInequality}
+Let $p,q\in \R^+$ be Hölder conjugate and $\sSet{X,\mathcal{A},\mu}$ a measure space. Then for all $f\in \mathcal{L}^p(X,\mu), g\in \mathcal{L}^q(X,\mu)$:
+\begin{enumerate}
+\item $fg\in \mathcal{L}^1(X,\mu)$;
+\item $\norm{fg}_1 \leq \norm{f}_p\norm{g}_q$.
+\end{enumerate}
+We have equality \textup{if and only if} $\exists K\in \R$ such that $|f|^p = K|g|^q$ a.e.
+\end{theorem}
+\begin{proof}
+If either $\norm{f}_p = 0$ or $\norm{g}_q = 0$, then either $|f|^p$ or $|g|^q$ is $0$ a.e. by \ref{functionPropertiesFromIntegral}. Then $fg = 0$ a.e., so $\norm{fg}_1 = 0$.
+
+Now, assuming $\norm{f}_p \neq 0$ and $\norm{g}_q \neq 0$, we can write $f' = \norm{f}_p^{-1}f$ and $g' = \norm{g}_q^{-1}g$.
+These functions satisfy $\norm{f'}_p = 1$ and $\norm{g'}_q = 1$, because of \ref{pNormAbsolutelyHomogeneous}.
+
+Now we can apply Young's inequality \ref{YoungsInequality} pointwise to obtain
+\[ |f'(x)g'(x)| \leq \frac{|f'|^p}{p} + \frac{|g'|^q}{q} \qquad \forall x\in X. \]
+Integrating both sides (and using \ref{pNormAbsolutelyHomogeneous}), gives
+\begin{align*}
+\frac{\norm{fg}_1}{\norm{f}_p\norm{g}_q} = \norm{f'g'}_1 = \int_X|f'g'|\diff{\mu} &\leq \int_X\frac{|f'|^p}{p}\diff{\mu} + \int_X\frac{|g'|^q}{q}\diff{\mu} \\
+&= \frac{\norm{f'}_p^p}{p} + \frac{\norm{g'}_q^q}{q} = \frac{1}{p} + \frac{1}{q} = 1.
+\end{align*}
+The Hölder inequality follows.
+
+Now assume $\norm{fg}_1 = \norm{f}_p\norm{g}_q$. Then we must have the inequality is in fact an equality, i.e.\ 
+\[ \int_X|f'g'|\diff{\mu} = \int_X\left(\frac{|f'|^p}{p} + \frac{|g'|^q}{q}\right)\diff{\mu}. \]
+Then $|f'g'| = \frac{|f'|^p}{p} + \frac{|g'|^q}{q}$ a.e.\ by \ref{functionPropertiesFromIntegral}. By \ref{YoungsInequality} the equality $|f'(x)g'(x)| = \frac{|f'(x)|^p}{p} + \frac{|g'(x)|^q}{q}$ only holds if $|f'(x)|^p = |g'(x)|^q$. We conclude that
+\[ 1 = \frac{|g'|^q}{|f'|^p} = \frac{\norm{f}_p^p |g|^q}{\norm{g}_q^q |f|^p} = K \frac{|g|^q}{|f|^p} \]
+almost everywhere, for some $K\in \R^+$.
+\end{proof}
+\begin{proof}[Alternative proof]
+Using Jensen's inequality \url{https://en.wikipedia.org/wiki/H%C3%B6lder%27s_inequality}
+\end{proof}
+
+
+\begin{theorem}[Minkowski's inequality] \label{MinkowskisInequality}
+Let $1< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Let $f,g\in\mathcal{L}^p(X,\mu)$ be functions. Then
+\[ \norm{f+g}_p \leq \norm{f}_p + \norm{g}_p. \]
+\end{theorem}
+TODO invert inequality if $p<1$! TODO also inverse Hölder inequality.
+\begin{proof}
+First we show that $\norm{f+g}_p$ is finite. We show this using the convexity of $\R^+\to \R^+: x\mapsto |x|^p$:
+\begin{align*}
+|f+g|^p &= 2^p\left|\frac{1}{2}f+ \frac{1}{2}g\right|^p \\
+&\leq 2^p\left|\frac{1}{2}|f|+ \frac{1}{2}|g|\right|^p \\
+&\leq 2^p\left(\frac{1}{2}|f|^p + \frac{1}{2}|g|^p\right) = 2^{p-1}\left(|f|^p + |g|^p\right) < \infty.
+\end{align*}
+Then $\norm{f+g}_p^p < \infty$ by \ref{propertiesIntegralPositiveFunctions}, so $\norm{f+g}_p < \infty$.
+
+Now we can calculate (setting $q = \frac{p}{p-1}$, i.e.\ the Hölder conjugate of $p$)
+\begin{align*}
+\norm{f+g}_p^p &= \int_X|f+g|^p\diff{\mu} \\
+&= \int_X|f+g|\cdot |f+g|^{p-1}\diff{\mu} \\
+&\leq \int_X\big(|f|+|g|\big)\cdot |f+g|^{p-1}\diff{\mu} \\
+&= \norm{|f|\cdot |f+g|^{p-1}}_1 + \norm{|g|\cdot |f+g|^{p-1}}_1 \\
+&\leq \norm{f}_p\cdot \norm{|f+g|^{p-1}}_q + \norm{g}_p\cdot \norm{|f+g|^{p-1}}_q \\
+&= \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{|f+g|^{p-1}}_q
+\end{align*}
+using first the triangle inequality and then Hölder's inequality, \ref{HoeldersInequality}.
+
+Next we calculate
+\begin{align*}
+\norm{|f+g|^{p-1}}_q &= \left(\norm{f+g}_{(p-1)q}\right)^{p-1} = \left(\norm{f+g}_{(p-1)\frac{p}{p-1}}\right)^{p-1} = \norm{f+g}_{p}^{p-1},
+\end{align*}
+using \ref{pnormLemma} and \ref{HoelderConjugateEquivalents}.
+
+Putting these two calculations together gives
+\[ \norm{f+g}_p^p \leq \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{f+g}_{p}^{p-1}, \]
+or $\norm{f+g}_p \leq \norm{f}_p + \norm{g}_p$.
+\end{proof}
+\begin{corollary}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_{p}$ is a seminorm.
+\end{corollary}
+\begin{proof}
+We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. Subadditivity is given by the Minkowski inequality and absolute homogeneity by \ref{pNormAbsolutelyHomogeneous}.
+\end{proof}
+
+\subsubsection{Indentifying functions that are equal a.e.}
+
+TODO: identification of a.e.\ equal functions is compatible with algebraic operations by \ref{equalAECongruence}.
+
+TODO: allow functions that are only defined a.e.
+
+
+\begin{proposition}
+TODO every equivalence class contains exactly one continuous functions (for Borel measures?)
+\end{proposition}
+
+\begin{definition}
+
+\end{definition}
+
+\begin{theorem}[Riesz-Fisher]
+The space $L^p(X,\diff{\mu})$ is complete.
+\end{theorem}
+
+For $L^\infty$: essential supremum.
+
+\begin{proposition}
+Let $X$ be a set. For all $1\leq p < \infty$, the set of $p$-integrable simple functions is dense in $L^p(\diff{\mu})$.
+\end{proposition}
+
+
+\begin{proposition}
+Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. Then $\cont_c(X)$ is dense in $L^p(\diff{\mu})$ for all $1\leq p < \infty$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\subsection{Distributions}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{distribution function} of $f$ is the function
+\[ d_f: \R\to \R^+: \alpha \mapsto \mu\setbuilder[\big]{\omega}{|f(\omega)|>\alpha}.  \]
+\end{definition}
+
+\begin{lemma} \label{distributionOfFunctionLemma}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f,g: \Omega\to \C$ measurable functions and $c\in \C\setminus\{0\}$. Then
+\begin{enumerate}
+\item if $|f| \leq |g|$ a.e., then $d_f \leq d_g$;
+\item $d_{cf}(\alpha) = d_f\Big(\frac{\alpha}{|c|}\Big)$;
+\item $d_{f+g}(\alpha+\beta) \leq d_f(\alpha) + d_g(\beta)$;
+\item $d_{fg}(\alpha\beta) \leq d_f(\alpha) + d_g(\beta)$.
+\end{enumerate}
+\end{lemma}
+In particular if $|f| = |g|$ a.e., then $d_f = d_g$.
+\begin{proof}
+(1) Fix $\alpha\in \R^+$ and set
+\[ N \defeq \setbuilder{\omega}{|f(\omega)| > |g(\omega)|}, \quad A \defeq \setbuilder{\omega}{|f(\omega)| \geq \alpha}, \quad\text{and}\quad B \defeq \setbuilder{\omega}{|g(\omega)| \geq \alpha}. \]
+Then clearly $A\cap N^c \subseteq B$ (as $|f(\omega)|\leq |g(\omega)|$ and $\alpha < |f(\omega)|$ imply $\alpha < |g(\omega)|$). Also $N$ is measurable (by \ref{measurablesSetsRealMeasurableFunction}) and a null set (by assumption). Also
+\[ A\cap N^c = A\setminus N = A\setminus (N\cap A). \]
+As $(N\cap A) \subseteq A$ and $N\cap A$ is measurable, we have \[ \mu\big(A\setminus (N\cap A)\big) = \mu(A) - \mu(N\cap A) = \mu(A) - 0 = \mu(A), \]
+using \ref{ringPositiveContent} and \ref{measureNullSet}. Thus we have
+\[ d_f(\alpha) = \mu(A) = \mu\big(A\setminus (N\cap A)\big) = \mu(A\cap N^c) \leq \mu(B) = d_g(\alpha), \]
+where the inequality given by \ref{semiringPositiveContent}.
+
+(2) We have
+\[ \setbuilder{\omega}{|cf(\omega)|>\alpha} = \setbuilder{\omega}{|f(\omega)|>\frac{\alpha}{|c|}}. \]
+
+(3) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. The triangle inequality then gives
+\[ \alpha + \beta < |f(\omega)+g(\omega)| \;\implies\; \alpha + \beta < |f(\omega)|+|g(\omega)|. \]
+Because the order on $\R$ is linear, \ref{additionVectorInequalities} gives
+\[ \alpha + \beta < |f(\omega)| + |g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta < |g(\omega)|\big). \]
+These implications show
+\[ \setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
+Thus we calculate
+\begin{align*}
+d_{f+g}(\alpha+\beta) &= \mu\setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \\
+&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
+&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
+&= d_f(\alpha) + d_g(\beta)
+\end{align*}
+by \ref{semiringPositiveContent}.
+
+(4) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. Then we have the implication
+\[ \alpha\beta < |f(\omega)g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta< |g(\omega)|\big), \]
+which means that
+\[ \setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
+Thus we calculate
+\begin{align*}
+d_{fg} &= \mu\setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \\
+&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
+&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu\setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
+&= d_f(\alpha) + d_g(\beta).
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $\varphi: \R^+\to \R^+$ a monotone differentiable function with $\phi(0) = 0$ and $f: X\to \C$ a measurable function such that $\varphi\circ |f|$ is integrable. Then
+\[ \int_\Omega\varphi\circ |f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha}. \]
+\end{proposition}
+\begin{proof}
+We have
+\begin{align*}
+\int_\Omega\varphi\big(|f(\omega)|\big) \diff{\mu(\omega)} &= \int_\Omega\int_{0}^{|f(\omega)|}\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_\Omega\int_{0}^{\infty}[\alpha < |f(\omega)|]\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)\int_\Omega[\alpha < |f(\omega)|]\diff{\mu(\omega)}\diff{\alpha} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)d_f(\alpha)\diff{\alpha}.
+\end{align*}
+by Tonelli's theorem \ref{tonellisTheorem} (as $\varphi'$ is positive) and \ref{weakSecondTheoremCalculus}.
+\end{proof}
+\begin{corollary} \label{LpNormFromDistribution}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
+\[ \norm{f}_p = \left(p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}\right)^{1/p}. \]
+\end{corollary}
+\begin{proof}
+Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ and so
+\[ \norm{f}_p^p = \int_\Omega |f|^p \diff{\mu} = \int_\Omega \varphi\circ|f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha} = p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}. \]
+\end{proof}
+
+\subsubsection{Distribution inequalities}
+\begin{proposition}[Markov's inequality]
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function and $\alpha>0$. Then
+\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\alpha}\int_\Omega f\diff{\mu}. \]
+\end{proposition}
+Also called Chebyshev's inequality or Chebyshev's first inequality. The next inequality would then be Chebyshev's second inequality. 
+\begin{proof}
+We have $\alpha\cdot [f(\omega)\leq \alpha]\leq f(\omega)$, so
+\[ \alpha\cdot \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} = \alpha \int_{\Omega}[f(\omega)\leq \alpha]\diff{\mu(\omega)} = \int_{\Omega}\alpha[f(\omega)\leq \alpha]\diff{\mu(\omega)} \leq \int_\Omega f\diff{\mu}, \]
+using \ref{measureFromIntegralCharacteristicFunctions} and \ref{propertiesIntegralPositiveFunctions}. This implies Markov's inequality.
+\end{proof}
+\begin{corollary}[Chebyshev's inequality]
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R$ a measurable function, $\varphi:\im(f) \to \R^+$ a monotone measurable function and $\alpha>0$. Then
+\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
+\end{corollary}
+\begin{proof}
+Since $\varphi$ is monotone, we have $\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \subseteq \setbuilder{\omega\in\Omega}{\varphi\big(f(\omega)\big)\geq \varphi(\alpha)}$, so
+\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \mu\setbuilder{\omega\in\Omega}{\varphi\big(f(\omega)\big)\geq \varphi(\alpha)} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
+\end{proof}
+By choosing specific functions $\varphi$, we obtain the following forms of Chebyshev's inequality:
+\begin{corollary} \label{ChebyshevInequalityCorollary}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function, $\alpha>0$ and $0<p$. Then
+\begin{enumerate}
+\item $\mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\alpha^p}\int_\Omega f(\omega)^p\diff{\mu(\omega)}$;
+\end{enumerate}
+\end{corollary}
+
+
+\begin{lemma} \label{LpNormDistributionInequality}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $f: X\to \C$ a measurable function, $\alpha >0$ and $0<p<\infty$. Then
+\[ \alpha d_f(\alpha)^{1/p} \leq \norm{f}_p. \]
+\end{lemma}
+\begin{proof}
+This is immediate by corollary \ref{ChebyshevInequalityCorollary} of Chebyshev's inequality:
+\[ d_f(\alpha) = \mu\setbuilder{\omega}{|f(\omega)|>\alpha} \leq \frac{1}{\alpha^p}\int_\Omega |f|^p\diff{\mu} = \left(\frac{\norm{f}_p}{\alpha}\right)^p, \]
+so $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+\end{proof}
+
+\subsubsection{Decreasing rearrangements}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{decreasing rearrangement} of $f$ is the function
+\[ f': \R^+\to \R^+: t \mapsto \inf\setbuilder{\alpha > 0}{d_f(s)\leq t}.  \]
+\end{definition}
+
+The function $f'$ is decreasing and supported in $\interval[c]{0,\mu(X)}$.
+
+\subsection{Weak $L^p(X,\diff{\mu})$ spaces}
+\begin{definition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then we define the extended real functional
+\[ \norm{\cdot}_{p,\infty}: \meas(X, \C)\to \overline{\R}^+: f\mapsto \sup\setbuilder{\alpha d_f(\alpha)^{1/p}}{\alpha > 0}. \]
+The \udef{weak $L^p(X,\diff{\mu})$ space}, denoted $L^{p,\infty}(X,\diff{\mu})$, is the subset of functions $f$ in $\meas(X, \C)$ for which $\norm{f}_{p,\infty}$ is finite.
+\end{definition}
+
+\begin{lemma}
+Let $0<p<\infty$, let $\sSet{X,\mathcal{A}, \mu}$ be a measure space and $f\in \meas(X, \C)$. Then
+\[ \norm{f}_{p,\infty} = \inf\setbuilder{C\in \R^+}{\forall \alpha>0: \; d_f(\alpha) \leq \frac{C^p}{\alpha^p}}. \]
+\end{lemma}
+
+
+\begin{proposition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
+\begin{enumerate}
+\item the functional $\norm{\cdot}_{p,\infty}$ is constant on the equivalence classes of a.e.\ equality;
+\item $\norm{\cdot}_{p,\infty}: \Big(\meas(X, \C)/\overset{a.e.}{=}\Big) \to \overline{\R}^+$ is a quasi-norm;
+\item $\norm{\cdot}_{p,\infty} \leq \norm{\cdot}_{p}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) If $f = g$ a.e.\ then $d_f = d_g$ by \ref{distributionOfFunctionLemma}.
+
+(2) TODO
+
+(3) By \ref{LpNormDistributionInequality}, we have $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+\end{proof}
+\begin{corollary}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\diff{\mu})$ is a subspace of $L^{p}(X,\diff{\mu})$.
+\end{corollary}
+\begin{proof}
+TODO \ref{realPartExtendedRealFunctional}
+\end{proof}
+
+\begin{example}
+The inclusion $L^{p,\infty}(X,\diff{\mu}) \subseteq L^{p}(X,\diff{\mu})$ is strict in general. TODO
+\end{example}
+
+\subsection{Interpolation}
+
+\begin{proposition}
+Let $\sSet{X,\Omega, \mu}$ be a $\sigma$-finite measure space.
+Let $0<p<q<\infty$ and $f\in L^{p,\infty(X,\diff{\mu})} \cap L^{q,\infty(X,\diff{\mu})}$. Then for all $p<r<q$, we have
+\[ \norm{f}_r \leq \left(\frac{r}{r-p} + \frac{r}{q-r}\right)^{1/r}\norm{f}_{p,\infty}^{\frac{r^{-1}- q^{-1}}{p^{-1} - q^{-1}}}\norm{f}_{q,\infty}^{\frac{p^{-1}- r^{-1}}{p^{-1} - q^{-1}}}, \]
+with the interpretation $\infty^{-1} = 0$.
+\end{proposition}
+\begin{proof}
+We know that $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_{p,\infty}$, so $\alpha^p d_f(\alpha) \leq \norm{f}_{p,\infty}^p$. Similarly $\alpha^q d_f(\alpha) \leq \norm{f}_{q,\infty}^q$. Thus
+\[ d_f(\alpha) \leq \min\left(\frac{\norm{f}^p_p}{\alpha^p}, \frac{\norm{f}^q_q}{\alpha^q}\right). \]
+Now we have
+\[ \frac{\norm{f}^p_{p,\infty}}{\alpha^p} \leq \frac{\norm{f}^q_{q,\infty}}{\alpha^q} \iff \alpha \leq \left(\frac{\norm{f}_{q,\infty}^q}{\norm{f}_{p,\infty}^p}\right)^{\frac{1}{q-p}} \eqdef B. \]
+We calculate, using \ref{LpNormFromDistribution},
+\begin{align*}
+\norm{f}_r^r &= r \int_0^\infty\alpha^{r-1}d_f(\alpha)\diff{\alpha} \\
+&\leq r \int_0^\infty\alpha^{r-1}\min\left(\frac{\norm{f}^p_{p,\infty}}{\alpha^p}, \frac{\norm{f}^q_{q,\infty}}{\alpha^q}\right)\diff{\alpha} \\
+&= r \int_0^B\alpha^{r-1}\frac{\norm{f}^{p,\infty}}{\alpha^p}\diff{\alpha} + r \int_B^\infty\alpha^{r-1}\frac{\norm{f}^q_{q,\infty}}{\alpha^q}\diff{\alpha} \\
+&= r \norm{f}^p_{p,\infty} \int_0^B\alpha^{r-p-1}\diff{\alpha} + r \norm{f}^q_{q,\infty} \int_B^\infty\alpha^{r-q-1}\diff{\alpha} \\
+&= \frac{r}{r-p} \norm{f}^p_{p,\infty} B^{r-p} + \frac{r}{q-r} \norm{f}^q_{q,\infty} B^{r-q} \\
+&= \left(\frac{r}{r-p} + \frac{r}{q-r}\right)^{1/r}\left(\norm{f}_{p,\infty}^p\right)^{\frac{r^{-1}- q^{-1}}{p^{-1} - q^{-1}}}\norm{f}_{q,\infty}^{\frac{p^{-1}- r^{-1}}{p^{-1} - q^{-1}}}.
+\end{align*}
+Observe that the integrals converge because $p<r<q$, so $r-p>0$ and $r-q<0$.
+\end{proof}
+
+\subsubsection{The Marcinkiewicz interpolation theorem}
+TODO
+\subsubsection{The Riesz-Thorin Interpolation Theorem}
+TODO
+
+\subsection{Locally integrable spaces}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The \udef{locally $L^p$} space is the space
+\[ L^p_\text{loc}(\Omega) \defeq \setbuilder{f \in (\Omega\to\C)}{\text{$f\in L^p(K)$ for all compact $K\subset \Omega$}}. \]
+The functions in $L^1_\text{loc}(\Omega)$ are called \udef{locally integrable} on $\Omega$.
+\end{definition}
+TODO: deal with equivalence classes??
+
+\subsection{Sequence spaces}
+TODO:  $L^p(A,\mu)$ with $\mu$ counting measure.
+
+Let $J$ be a countable index set and $x:J\to \mathbb{F}$ a sequence indexed by $J$. We define
+\[ \norm{x}_p := \left(\sum_{j\in J}|x(j)|^p\right)^{1/p} \qquad\text{and}\qquad \norm{x}_\infty = \sup_{j\in J}|x(j)|. \]
+So $\norm{\cdot}_1$ is the standard norm on $\mathbb{F}^n$. For general sequences there is no guarantee that these norms do not diverge.
+\begin{definition}
+Let $J$ be an index set, $D$ a directed set and $p\geq 1$,
+\begin{align*}
+\ell^p(J) &= \setbuilder{x:J\to \F}{\norm{x}_p < +\infty},\\
+\ell^\infty(J) &= \setbuilder{x:J\to \F}{\norm{x}_\infty < +\infty},\\
+c_0(D) &= \setbuilder{x:D\to \F}{\lim_{n\to\infty}|x(n)| = 0}, \\
+c_{00}(D) &= \setbuilder{x:D\to \F}{\setbuilder{n\in D}{x(n)\neq 0}\;\text{has finite cardinality}}.
+\end{align*}
+unless specified we equip $c_0$ and $c_{00}$ with the norm $\norm{\cdot}_\infty$.
+\end{definition}
+
+\begin{lemma}
+$c_{00}$ is dense in $\ell^p$ if it is equipped with the norm $\norm{\cdot}_p$ and dense in $c_0$ if it is equipped with the norm $\norm{\cdot}_\infty$.
+\end{lemma}
+
+Let $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$. We have the inequalities
+\begin{align*}
+\norm{xy}_1 &\leq \norm{x}_p\norm{y}_q\qquad\text{(Hölder inequality)} \\
+\norm{x+y}_p &\leq \norm{x}_p+\norm{y}_p\qquad\text{(Minkowski inequality)}
+\end{align*}
+which follow from the general cases (TODO ref) by applying the counting measure.
+
+\begin{proposition}
+The continuous dual of $l^p(J)$ is $l^q(J)$ where $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$.
+Also, the continuous dual of $l^1$ is $l^\infty$.
+\end{proposition}
 
 
 \section{Spaces of test functions}
@@ -2102,36 +2777,70 @@ A \udef{metric measure space} is a structured set $\sSet{X, d, \mu}$ such that $
 \subsection{Doubling measures}
 \begin{definition}
 A metric measure space $\sSet{X,d,\mu}$ is called a \udef{doubling space} and the measure $\mu$ a \udef{doubling measure} if
+\begin{itemize}
+\item each ball of non-zero radius has finite and non-zero measure;
+\item there exists $C\geq 1$ such that
 \[ \forall x\in X: \delta >0:\quad \mu\big(\ball_d(x, 2\delta)\big) \leq C \mu\big(\ball_d(x, \delta)\big). \]
+\end{itemize}
+We call $C$ the \udef{doubling constant}.
 \end{definition}
+TODO: $C\geq 2$ \url{https://www.acadsci.fi/mathematica/Vol44/vol44pp1015-1030.pdf}
+
+\begin{lemma} \label{doublingMeasureFiniteMeasureOfBallsImpliesCountableCollection}
+Let $\sSet{X,d,\mu}$ be a doubling metric measure space and $\big\{\ball(x_i, \epsilon_i)\big\}_{i\in I}$ a set of pairwise disjoint balls such that $\mu\Big(\biguplus_{i\in I}\ball(x_i, \epsilon_i)\Big) < \infty$. Then at most countably many $\epsilon_i$ are non-zero.
+\end{lemma}
+\begin{proof}
+We have
+\[ \sum_{i\in I}\mu\big(\ball(x_i, \epsilon_i)\big) \leq \mu\Big(\biguplus_{i\in I}\ball(x_i, \epsilon_i)\Big) < \infty \]
+by \ref{ringPositiveContent}, so only countably many balls have non-zero measure by \ref{finiteSumsAreCountable} and each ball with non-zero radius has non-zero measure, by definition.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,d,\mu}$ be a doubling metric measure space with doublng constant $C$, $x\in X$ and $r,k>0$. Then
+\[ \mu\big(\ball(x,kr)\big) \leq C^{\ceil{\log_2(k)}}\ball(x,r). \]
+\end{lemma}
+\begin{proof}
+We have
+\[ \mu\big(\ball(x,kr)\big) = \mu\big(\ball(x,2^{\log_2(k)}r)\big) \leq \mu\big(\ball(x,2^{\ceil{\log_2(k)}}r)\big) \leq C^{\ceil{\log_2(k)}}\mu\big(\ball(x,r)\big). \]
+\end{proof}
 
 \subsection{Covering theorems}
 \subsubsection{Vitali spaces}
 \begin{definition}
-Let $\sSet{X,d,\mu}$ be a metric measure space. A \udef{Vitali covering} of $E\subseteq X$ is a set $\mathcal{C}\subseteq \powerset(X)$ such that 
-\[ \forall x\in E: \forall \delta >0: \exists C\in \mathcal{C}: \; (x\in C) \land \big(\diam(C) \leq \delta\big). \]
+Let $\sSet{X,d,\mu}$ be a metric measure space.
+\begin{itemize}
+\item A \udef{Vitali covering} of $E\subseteq X$ is a set $\mathcal{C}$ of closed balls such that 
+\[ \forall x\in E: \inf \setbuilder{\epsilon > 0}{\cball(x,\epsilon) \in \mathcal{C}} = 0. \]
+\item We call $\sSet{X,d,\mu}$ a \udef{Vitali space} if balls in $X$ have finite measure every Vitali covering of $E$ has a countable disjoint subset that covers almost all of $E$.
+\end{itemize}
 \end{definition}
+TODO: allow Vitali coverings that are not balls.
 
 \begin{theorem}[Vitali's covering theorem]
-Let $\sSet{X,d,\mu}$ be a doubling metric measure space, $A\subseteq X$ a subset and $\mathcal{F}$ a collection of closed balls whose centers are in $A$ such that
-\[ \forall a\in A:\quad \inf\setbuilder{r}{\cball(a,r)\in \mathcal{F}} = 0. \]
-THen there exists a countable disjoint subfamily $\mathcal{G}\subseteq \mathcal{F}$ such that
-\[ \mu\Big(A\setminus \bigcup \mathcal{G}\Big) = 0. \]
+Every doubling metric measure space $\sSet{X,d,\mu}$ is a Vitali space.
 \end{theorem}
-Notice that in particular $\mathcal{F}$ must cover $A$.
+\begin{proof}
+Take $E\subseteq X$ and let $\mathcal{C}$ be a Vitali covering of $E$. We can restrict $\mathcal{C}$ to the balls contained in it with diameter strictly larger than $0$ and less than $1$. By \ref{5foldCoveringLemma} we can find a pairwise disjoint subset $\mathcal{C}'\subseteq \mathcal{C}$ such that $A\subseteq \bigcup_{\cball(x,r)\in \mathcal{C}'}\cball(x,5r)$.
+
+If $\bigcup \mathcal{C}'$ has finite measure, then it is countable by \ref{doublingMeasureFiniteMeasureOfBallsImpliesCountableCollection}.
+
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $d$ be the standard metric on $\R^n$ and $\mu$ a Radon measure. Then $\sSet{\R^n, d,\mu}$ is a Vitali space.
+\end{proposition}
 \begin{proof}
 TODO
 \end{proof}
 
-
-
 \begin{theorem}[Lebesgue's differentiation theorem]
-Let $\sSet{X,d,\mu}$ be a doubling metric measure space and $f: X\to \R^+$ a locally integrable function. Then
+Let $\sSet{X,d,\mu}$ be a Vitali space and $f: X\to \R^+$ a positive locally integrable function. Then
 \[ \lim_{r\to 0} \frac{1}{\mu\big(\ball(x, r)\big)}\int_{\ball(x, r)}f\diff{\mu} = f(x) \]
 for almost all $x\in X$.
 \end{theorem}
 \begin{proof}
-TODO
+Let $E$ be the set of points in $X$ where the statement does not hold. 
 \end{proof}
 
 \subsubsection{Directionally limited spaces}
@@ -2157,208 +2866,30 @@ TODO!
 \end{proof}
 
 \begin{proposition}
-Let $\sSet{X,d}$ be a metric space equipped with a Borel regular doubling measure $\mu$ with doubling function $D$, $f: X\to \R^+$ some function, $\epsilon > 0$ and $\alpha > 0$. Then
-\[ \mu\{\HLmax(f) > \alpha\} \leq \frac{D(3+\epsilon)}{\alpha}\int_{\{\HLmax(f) > \alpha\}}f\diff{\mu}. \]
+Let $\sSet{X,d, \mu}$ be a doubling space with doubling contstant $C$, $f: X\to \R^+$ some function and $\alpha > 0$. Then
+\[ \mu\{\HLmax(f) > \alpha\} \leq \frac{C^2}{\alpha}\int_{X}f\diff{\mu}. \]
 \end{proposition}
 \begin{proof}
+For any $R>0$ we define the bounded Hardy-Littlewood maximal operator $\HLmax_R(f)$ by
+\[ \HLmax_R(f)(x) \defeq \sup_{R\geq\delta >0}\frac{1}{\mu\big(\ball(x,\delta)\big)}\int_{\ball(x,\delta)} f \diff{\mu}. \]
+For all $x\in \{\HLmax_R(f) > \alpha\}$, we can find a ball $\ball(x,r)$ with $0<r\leq R$ such that
+\[ \int_{\ball(x,r)}f \diff{\mu} \geq \alpha\mu\big(\ball(x,r)\big). \]
+Clearly $\HLmax(f) = \sup_{R>0}\HLmax_R(f)$.
+
+We can now apply \ref{5foldCoveringLemma} to this collection of balls (with an improved constant of $4 = 2^2$ by \ref{improvedConstant5foldCoveringLemma}) to obtain a countable subset $\mathcal{C}$ such that
+\begin{align*}
+\mu\{\HLmax_R(f) > \alpha\} &\leq \mu\Big(\bigcup_{\ball(x,r)\in \mathcal{C}}\ball(x,4r)\Big) \\
+&\leq \sum_{\ball(x,r)\in \mathcal{C}}\mu\Big(\ball(x,4r)\Big) \\
+&\leq C^2\sum_{\ball(x,r)\in \mathcal{C}}\mu\Big(\ball(x,r)\Big) \\
+&\leq C^2\sum_{\ball(x,r)\in \mathcal{C}}\frac{1}{\alpha}\int_{\ball(x,r)}f \diff{\mu} = \frac{C^2}{\alpha}\int_{\biguplus \mathcal{C}} f \diff{\mu} \leq \frac{C^2}{\alpha}\int_{X} f \diff{\mu}.
+\end{align*} 
+
+
 
 \end{proof}
 \begin{corollary}
 
 \end{corollary}
-
-
-
-\chapter{Real Analysis}
-Dual numbers
-
-Dini theorem
-
-TODO: all versions of homogeneity.
-
-The objects of study in real analysis are real functions, and more generally functions between Euclidean spaces, i.e.\ real, finite-dimensional, normed vector spaces.
-
-\section{Limits}
-In this section infinities can appear because we assume $\N$ and $\R$ are embedded in their Dedekind-MacNeille completions $\overline{\N} = \N\cup\{\infty\}$ and $\overline{\R} = \R\cup\{-\infty, +\infty\}$.
-
-\url{https://en.wikipedia.org/wiki/Interchange_of_limiting_operations}
-
-
-\subsection{Real functions}
-Applying the definition of limits to functions in $\R$ gives the so-called $\varepsilon-\delta$ definition of limits:
-\begin{proposition}
-Let $f:A\subseteq\R\to\R$ be a real function and $p$ a limit point o $A$. Then $L\in \R$ is the limit of $f(x)$ as $x$ approaches $p$ \textup{if and only if}
-\[ \forall \varepsilon>0: \exists \delta> 0: \forall x\in A: |x-p| < \delta \implies |f(x)-L|<\varepsilon. \]
-\end{proposition}
-TODO: criteria for limits involving infinities.
-
-In addition we can define some special types of limits.
-\begin{definition}
-Let $f:A\subseteq\R\to\R$ be a function and $p$ a limit point of $A$. Then
-\begin{itemize}
-\item the \udef{left limit} of $f(x)$ as $x$ approaches $p$ is the limit of $f|_{A\cap]-\infty,p]}$ as $x\to p$, denoted
-\[ \lim_{x\overset{<}{\to} p}f(x) \qquad \text{or} \qquad \lim_{x\to p^-}f(x); \]
-\item the \udef{right limit} of $f(x)$ as $x$ approaches $p$ is the limit of $f|_{A\cap[p,+\infty[}$ as $x\to p$, denoted
-\[ \lim_{x\overset{>}{\to} p}f(x) \qquad \text{or} \qquad \lim_{x\to p^+}f(x). \]
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-Let $f:A\subseteq\R\to\R$ be a function and $p$ a limit point of both $A\cap]-\infty,p]$ and $A\cap[p,+\infty[$. Then $\lim_{x\to p} f(x)$ exists if the left and right limit exist and are equal to each other. In this case
-\[ \lim_{x\to p} f(x) = \lim_{x\to p^-} f(x) = \lim_{x\to p^+} f(x). \]
-\end{lemma}
-
-\subsection{Properties of limits}
-TODO: for functions $X\to \R$.
-
-We enumerate some of the properties for limits here. These properties are valid for all types of limit of real functions, so long as all limits in the equation are limits to the same point (or infinity, TODO elaborate!).  In fact the properties also hold true for sequences of real numbers.
-\begin{itemize}
-\item Taking the limit is a linear operation:
-\[\lim  (f(x) + g(x)) = \lim  f(x) + \lim g(x)\]
-\[\lim  (a\cdot f(x)) = a\cdot \lim  f(x) \qquad \forall a \in \R\]
-\item The limit of the product:
-\[ \lim (f(x)\cdot g(x)) = \left(\lim  f(x)\right) \cdot \left(\lim  g(x)\right) \]
-\item The limit of the quotient (assuming $\lim  g(x) \neq 0$):
-\[ \lim \left(\frac{f(x)}{g(x)}\right) = \frac{\lim  f(x)}{\lim  g(x)}  \]
-\item The limit of a power (with $m$ an integer and $n$ a positive integer):
-\[ \lim  [f(x)]^{m/n} = \left(\lim  f(x)\right)^{m/n} \]
-\item Partial order is preserved. Assume $f(x) \leq g(x)$ on some interval containing $x_0$. Then
-\[ \lim f(x) \leq \lim g(x) \]
-The same is not true for the strict order $<$!
-\end{itemize}
-
-\subsubsection{The squeeze theorem}
-
-\section{Continuity}
-\begin{proposition}
-Let $f:A\subseteq\R\to\R$ be a function and $p\in A\cap A'$, where $A'$ is the set of limit points of $A$. Then
-\[ \text{$f$ is continuous at $p$} \quad\iff\quad \lim_{x\to p}f(x) = f(x). \]
-\end{proposition}
-
-\subsection{Left and right continuity}
-TODO
-
-\subsection{Discontinuities}
-If a function $f:A\subseteq\R\to\R$ is not continuous at $p$, then $p$ is a limit point of $A$ by \ref{continuityAtIsolatedPoint} and \ref{notLimitPointSingletonOpen}.
-\begin{definition}
-Let $f:A\subseteq\R\to\R$ be a function and $p\in A$ such that $f$ is not continuous at $p$. Then
-\begin{itemize}
-\item if $\lim_{x\to p}f(x)$ exists and is finite, we call $p$ a \udef{removable discontinuity};
-\item if both $\lim_{x\to p^-}f(x)$ and $\lim_{x\to p^+}f(x)$ exist and are finite, but are different, we call $p$ a \udef{jump discontinuity};
-\item if either $\lim_{x\to p^-}f(x)$ or $\lim_{x\to p^+}f(x)$ do not exist, we call $p$ an \udef{essential discontinuity}.
-\end{itemize}
-Removable and jump discontinuities are also called \udef{discontinuities of the first kind}. Essential discontinuities are also called \udef{discontinuities of the second kind}.
-\end{definition}
-TODO: should discontinuities of type 1/x be considered essential?
-
-\subsubsection{Jump discontinuities}
-\begin{proposition} \label{monotoneDiscontinuities}
-Let $f$ be a monotone real-valued function on an interval $I$. Then all discontinuities are jump discontinuities.
-\end{proposition}
-\begin{theorem}[Darboux-Froda] \label{DarbouxFroda}
-Let $f$ be a monotone real-valued function on an interval $I$. Then the set of discontinuities is at most countable.
-\end{theorem}
-
-TODO: intervals must be closed / open?? In \ref{monotoneDiscontinuities} and \ref{DarbouxFroda}.
-
-
-\begin{definition}
-Let $f$ be a real function. We define the \udef{difference operator}
-\[ \Delta_{x_0}f \defeq \lim_{x\to x_0+} f(x) - \lim_{x\to x_0-} f(x) \]
-\end{definition}
-
-\section{Riemann integration}
-\subsection{Riemann-Stieltjes}
-
-\begin{lemma} \label{rectanglePartitionedByMonotonicFunction}
-Let $f: \R^+ \to \R^+$ be an invertible monotonic function and $a\in\R^+$. Then
-\[ a\cdot f(a) = \int_0^a f(x)\diff{x} + \int_0^{f(a)} f^{-1}(y)\diff{y}. \]
-\end{lemma}
-\begin{proof}
-We will be evaluating the integral $a\cdot f(a) = \iint_{(x,y)\in S}\diff{x}\diff{y}$, where $S = \setbuilder{(x,y)\in \R^2}{x\leq a, y\leq f(a)}$. To that end, note the partition
-\begin{align*}
-S &= \setbuilder{(x,y)\in S}{y\leq f(x)} \uplus \setbuilder{(x,y)\in S}{y > f(x)} \\
-&= \setbuilder{(x,y)\in S}{y\leq f(x)} \uplus \setbuilder{(x,y)\in S}{x < f^{-1}(y)} \\
-&\eqdef S_1 \uplus S_2.
-\end{align*}
-Then we can calculate
-\begin{align*}
-ab = \iint_{(x,y)\in S_1}\diff{x}\diff{y} + \iint_{(x,y)\in S_2}\diff{x}\diff{y} \\
-\int_0^a\int_0^{f(x)}\diff{y}\diff{x} + \int_0^{f(a)}\int_0^{f^{-1}(y)}\diff{x}\diff{y} \\
-\int_0^a\int_0^{f(x)}\diff{y}\diff{x} + \int_0^{f(a)}\int_0^{f^{-1}(y)}\diff{x}\diff{y} \\
-\int_0^a f(x)\diff{x} + \int_0^{f(a)} f^{-1}(y)\diff{y}.
-\end{align*}
-\end{proof}
-
-\section{Inequalities}
-
-\subsection{Young's inequality}
-TODO: compare (+use) Jensen's inequality.
-
-\subsubsection{Hölder conjugates}
-\begin{definition}
-Two numbers $p,q\in \R^+$ are called \udef{Hölder conjugate} iff $p^{-1} + q^{-1} = 1$.
-\end{definition}
-
-\begin{lemma}
-Let $p\in \R^+$. Then $p$ is Hölder conjugate to some $q\in \R^+$ \textup{if and only if} $p > 1$.
-\end{lemma}
-
-\begin{lemma} \label{HoelderConjugateEquivalents}
-Let $p,q\in \R^+$. The following are equivalent:
-\begin{enumerate}
-\item $p$ and $q$ are Hölder conjugate (i.e.\ $p^{-1}+q^{-1} = 1$);
-\item $p+q = pq$;
-\item $(p-1)(q-1) = 1$;
-\item $(p-1) = (q-1)^{-1}$;
-\item $p = \frac{q}{q-1}$;
-\item $q = \frac{p}{p-1}$;
-\item $pq^{-1} = p-1$;
-\item $qp^{-1} = q-1$.
-\end{enumerate}
-\end{lemma}
-
-\subsubsection{Young's inequality}
-\begin{theorem}[Young's inequality] \label{YoungsInequality}
-Let $p,q\in \R$ be such that $p>0, q>0$ and $p^{-1} + q^{-1} = 1$. Then for all $a,b \geq 0$, we have
-\[ ab \leq \frac{a^p}{p} + \frac{b^q}{q}. \]
-Equality holds \textup{if and only if} $b = a^{p-1}$.
-\end{theorem}
-\begin{proof}[Proof using convexity of exponentiation]
-If either $a=0$ or $b =0$, then the result is immediate. Now assume $a>0$ and $b>0$. Then
-\begin{align*}
-ab &= e^{\ln(ab)} \\
-&= e^{\ln(a)+\ln(b)} \\
-&= e^{p^{-1}p\ln(a)+q^{-1}q\ln(b)} \\
-&= e^{p^{-1}\ln(a^p)+(1-p^{-1})\ln(b^q)} \\
-&\leq p^{-1}e^{\ln(a^p)}+(1-p^{-1})e^{\ln(b^q)} \\
-&= \frac{a^p}{p} + \frac{b^q}{q}.
-\end{align*}
-The inequality is due to the convexity of the exponentiation. It is an equality (TODO ref strict convexity) iff
-\begin{align*}
-\ln(b^q) = \ln(a^p) &\iff b^q = a^p \\
-&\iff b = a^{pq^{-1}} = a^{p-1}.
-\end{align*}
-The last equality follows from \ref{HoelderConjugateEquivalents}.
-\end{proof}
-\begin{proof}[Geometric proof]
-From \ref{HoelderConjugateEquivalents}, we have $(x\mapsto x^{p-1})^{-1} = y\mapsto y^{q-1}$. These functions are monotone (TODO ref).
-
-We have either $a^{p-1}\leq b$ or $b\leq a^{p-1} \iff b^{q-1} \leq a$. If the second option holds, we swap $a$ with $b$ and $p$ with $q$.
-
-Now we can calculate, using \ref{rectanglePartitionedByMonotonicFunction},
-\begin{align*}
-ab &= aa^{p-1} + a(b-a^{p-1}) \\
-&= \int_0^a x^{p-1}\diff{x} + \int_0^{a^{p-1}} y^{q-1}\diff{y} + a(b-a^{p-1}) \\
-&= \int_0^a x^{p-1}\diff{x} + \int_0^{a^{p-1}} y^{q-1}\diff{y} + \int_{a^{p-1}}^b a\diff{y} \\
-&\leq \int_0^a x^{p-1}\diff{x} + \int_0^{a^{p-1}} y^{q-1}\diff{y} + \int_{a^{p-1}}^b y^{q-1}\diff{y} \\
-&= \int_0^a x^{p-1}\diff{x} + \int_0^{b} y^{q-1}\diff{y} \\
-&= \frac{a^p}{p} + \frac{b^q}{q}.
-\end{align*}
-TODO picture.
-
-We clearly have equality iff $a^{p-1} = b$.
-\end{proof}
 
 
 

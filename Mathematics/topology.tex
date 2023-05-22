@@ -1011,6 +1011,17 @@ Let $L, M$ be complete lattices and $f: L\to M$ a function. Then
 (1) First assume $f$ preserves (arbitrary) meets and take $F\overset{\longrightarrow}{S_*}x\in L$
 \end{proof}
 
+\subsubsection{Set-theoretic convergence}
+\begin{definition}
+Let $X$ be a set. The \udef{set-theoretic convergence} on $\powerset(X)$ is the order convergence determined by $\subseteq$.
+\end{definition}
+
+\begin{lemma} \label{indicatorFunctionHomeomorphism}
+Let $X$ be a set. Then the indicator function determines a homeomorphism
+\[ \charFunc{-}: \powerset{X} \to (X\to \{0,1\})_p: A\mapsto \charFunc{A}, \]
+if $\powerset(X)$ carries the set-theoretic convergence.
+\end{lemma}
+
 \chapter{Topology}
 \section{Open and closed sets}
 \begin{definition}
@@ -2301,7 +2312,8 @@ Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Let $B\subseteq A$ and $x\in A$. Then
 \begin{enumerate}
 \item $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A$;
-\item if $A$ is closed, then $\adh_{\xi|_A}(B) = \adh_\xi(B)$.
+\item if $A$ is closed, then $\adh_{\xi|_A}(B) = \adh_\xi(B)$;
+\item if $B$ is $\xi$-closed, then it is $\xi|_A$-closed.
 \end{enumerate}
 \end{proposition}
 TODO does this hold for closures as well??
@@ -2311,6 +2323,8 @@ TODO does this hold for closures as well??
 Now take $x\in \adh_\xi(B) \cap A$. Then, by \ref{principalAdherenceInherence}, there exists a proper filter $F\overset{\xi}{\longrightarrow} x$ such that $B\in F$. Then also $A\in F$ and so $\upset \iota^{\preimf\imf}(F)\overset{\xi|_A}{\longrightarrow} x$ by \ref{subspaceConvergence} (where we have used that $x\in A$). Because $B\in \upset \iota^{\preimf\imf}(F)$, we have $x\in \adh_{\xi|_A}(B)$.
 
 (2) If $A$ is closed, then $\adh_\xi(B)\subseteq \adh_\xi(A) = A$ by \ref{principalInherenceAdherenceProperties} and so $\adh_\xi(B)\cap A = \adh_\xi(B)$.
+
+(3) Assume $B$ is $\xi$-closed. From (1) we have $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A = B\cap A = B$.
 \end{proof}
 
 \begin{proposition} \label{continuityRestrictionExpansion}
@@ -3234,7 +3248,7 @@ Take arbitrary $F \overset{\zeta}{\longrightarrow} x$. Then all ultrafilters lar
 Take arbitrary $F \overset{\xi}{\longrightarrow} x$. Then all ultrafilters larger than $F$ converge in $\xi$ to $x$. These ultrafilters must also converge in $\zeta$, with limit $x$, by compactness of $\zeta$ and Hausdorffness of $\xi$. Then $F \overset{\zeta}{\longrightarrow} x$ because $\zeta$ is Choquet.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{compactToHausdorffHomeomorphism}
 Let $\sSet{X,\xi}$ be a compact Choquet space and $\sSet{Y, \zeta}$ a Hausdorff convergence space. A bijective, continuous function $f: X\to Y$ is a homeomorphism.
 \end{proposition}
 \begin{proof}
@@ -3304,7 +3318,7 @@ The space $X$ is said to be \udef{connected} if there does not exist a separatio
 Let $\sSet{X, \xi}$ be a convergence space and $U,V\subseteq X$. The following are equivalent:
 \begin{enumerate}
 \item $(U, V)$ is a separation;
-\item $U$ is clopen and $U= V^c$;
+\item $U$ is clopen and not equal to $\emptyset$ or $X$ (then $V= U^c$);
 \item $(U^c, V^c)$ is a separation.
 \end{enumerate}
 \end{lemma}
@@ -3315,22 +3329,28 @@ $(2) \Rightarrow (3)$ We have $U^c = V^{cc}$, so $U^c \subseteq V^{cc}$ and $V^{
 
 $(3) \Rightarrow (1)$ This follows by applying the implication $(1) \Rightarrow (3)$ to the separation $(U^c, V^c)$: we get that $(U^{cc}, V^{cc}) = (U,V)$ is a separation.
 \end{proof}
-
-\begin{proposition} \label{connectedCriteria}
-Let $\sSet{X, \xi}$ be a convergence space and $Y$ a discrete convergence space with at least two elements. The following are equivalent:
+\begin{corollary} \label{connectedCriteria}
+Let $\sSet{X, \xi}$ be a convergence space. The following are equivalent:
 \begin{enumerate}
 \item $X$ is connected;
 \item $X$ does not contain a pair of disjoint nonempty open subsets, whose union is $X$;
-\item the only clopen subsets of $X$ are $X$ and $\emptyset$;
+\item the only clopen subsets of $X$ are $X$ and $\emptyset$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proposition} 
+Let $\sSet{X, \xi}$ be a convergence space and $Y$ a discrete convergence space with at least two elements. The following are equivalent:
+\begin{enumerate}
+\item $X$ is connected;
 \item all continuous functions from $X$ to $Y$ are constant.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Leftrightarrow (2) \Leftrightarrow (3)$ By \ref{disconnectionLemma}.
+By \ref{connectedCriteria}, (1) is equivalent to $X,\emptyset$ being the only clopen sets in $X$.
 
-$(3) \Rightarrow (4)$ Take arbitrary continuous $f\in (X\to Y)$ and take $y\in \im(f)$. Then $\{y\}$ is clopen by \ref{discreteTopologyCharacterisation}. Now $f^\preimf\{y\}$ is clopen by \ref{preimageOpenClosed} and $f^\preimf\{y\}\neq \emptyset$ (because $y\in\im(f)$). So $f^\preimf\{y\} = X$, which means that $f$ is constant.
+$(1) \Rightarrow (2)$ Take arbitrary continuous $f\in (X\to Y)$ and take $y\in \im(f)$. Then $\{y\}$ is clopen by \ref{discreteTopologyCharacterisation}. Now $f^\preimf\{y\}$ is clopen by \ref{preimageOpenClosed} and $f^\preimf\{y\}\neq \emptyset$ (because $y\in\im(f)$). So $f^\preimf\{y\} = X$, which means that $f$ is constant.
 
-$(4) \Rightarrow (3)$ Take some clopen $A\subseteq X$. Take distinct $y_1,y_2\in Y$. And set
+$(2) \Rightarrow (1)$ Take some clopen $A\subseteq X$. Take distinct $y_1,y_2\in Y$. And set
 \[ f: X\to Y: x\mapsto \begin{cases}
 y_1 & (x\in A) \\
 y_2 & (x\notin A)
@@ -3348,6 +3368,20 @@ Let $Y$ be a subspace of a topological space $X$. A pair of disjoint nonempty se
 \end{lemma}
 \begin{proof}
 TODO ??
+\end{proof}
+
+\begin{proposition} \label{connectednessImage}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a continuous function. If $X$ is connected, then $\im(f)$ is a connected subspace of $Y$.
+\end{proposition}
+\begin{proof}
+Suppose, towards a contradiction, that $\im(f)$ is not connected, so there exists a separation $(U,V)$ of $\im(f)$. As $f: X\to \im(f)$ is continuous, we have that $f^\preimf(U)$ and $f^{\preimf}(V)$ are closed by \ref{preimageOpenClosed}. They are clearly not empty. We also have that $f^\preimf(U)$ and $f^{\preimf}(V)$ are disjoint because $\emptyset = f^\preimf(\emptyset) = f^\preimf(U\cap V) = f^\preimf(U)\cap f^\preimf(V)$, by \ref{imagePreimageGaloisConnection}. Thus $\big(f^\preimf(U), f^\preimf(V)\big)$ is a separation of $X$. This is a contradiction because $X$ was assumed connected.
+\end{proof}
+
+\begin{proposition} \label{generalisedIntermediateValueTheorem}
+Let $\sSet{X,\xi}$ be a connected convergence space and $\sSet{Y, \leq}$ a totally ordered set with the order convergence. For all $a,b\in X$ and $y\in Y$ such that $f(a) \leq y \leq f(b)$, there exists $c\in X$ such that $f(c) = y$.
+\end{proposition}
+\begin{proof}
+Assume, towards a contradiction, that $y\notin \im(f)$. Then $Y\cap \downset \{y\}$ and $Y\cap \upset \{y\}$ constitutes a separation of $\im(f)$. This contradicts \ref{connectednessImage}.
 \end{proof}
 
 \subsection{Chains}
@@ -4722,45 +4756,6 @@ By contraposition of lemma \ref{meagreSubset}, we see that $A$ must be non-meagr
 TODO + relocate
 \end{proof}
 
-
-\section{Compactness}
-TODO relatively compact.
-
-TODO every compact set in (pseudo??)metric space is closed and bounded. Converse is not automatic (Heine-Borel property).
-
-\begin{proposition} \label{imageCompactIsCompact}
-The continuous image of a compact set is compact.
-\end{proposition}
-\begin{corollary} \label{imageCompactIsClosedBounded}
-If $f:X\to Y$ is a continuous function from a topological space to a metric space and $K\subset X$ a compact set, then $f[K]$ is closed and bounded.
-\end{corollary}
-\begin{corollary}
-Let $f:X\to V$ be a function from a compact topological space to a TVS with Heine Borel property. Then $\im(f)$ has a maximum and minimum.
-\end{corollary}
-
-\begin{proposition}
-A compact set in a Hausdorff space is closed.
-\end{proposition}
-
-\begin{proposition} \label{compactToHausdorffHomeomorphism}
-Let $f:X\to Y$ be a continuous bijection between topological spaces. If $X$ is compact and $Y$ is Hausdorff, then $f$ is a homeomorphism.
-\end{proposition}
-\begin{proof}
-We just need to prove $f^{-1}$ is continuous. This is equivalent to $f$ being closed by \ref{continuity}. TODO
-\end{proof}
-
-\begin{proposition}
-Let $X$ be a topological space. Then $X$ is compact \textup{if and only if} every ultrafilter converges.
-\end{proposition}
-\begin{proof}
-We prove the contrapositive. Assume $U$ is an ultrafilter that does not converge. Then for all $x\in X$ we have $\neighbourhood(x) \nleq U$, so we can find some $V_x \in \neighbourhood(x) \setminus U$ and thus also an open set $U_x \setminus V_x \in \neighbourhood(x) \setminus U$. (If $U_x$ were in $U$, then also $V_x\in U$, which is not possible.) The set $\{U_x\}_{x\in X}$ is an open cover. By compactness, we can find a finite subcover $\{U_{x_i}\}_{i=0}^n$. Then $U_{x_0}\cup \ldots \cup U_{x_n} = X \in U$. Because every ultrafilter on $\powerset(X)$ is a prime filter \ref, we can find a $U_{x_i}$ such that $U_{x_i}\in U$, which is a contradiction.
-
-Now assume $X$ is not compact. Then there exists an open cover $\{U_i\}_{i\in I}$ that does not have a finite subcover. Consider the family $\{U_i^c\}_{i\in I}$. Every finite intersection of sets in $\{U_i^c\}_{i\in I}$ is nonempty. (If there was such an empty intersection, then taking the complement would give a finite union equaling $X$.) This means the $\cap$-closure of $\{U_i^c\}_{i\in I}$ does not contain $\emptyset$, meaning $F = \mathfrak{F}\{U_i^c\}_{i\in I}$ is a proper filter. Assume, towards a contradiction, that $F$ converges to $a\in X$. We can find a $U_a$ in the cover $\{U_i\}_{i\in I}$ such that $a\in U_a$. Because $F \geq \neighbourhood(x)$, we have $U_a \in F$. But $U_a^c$ is an element of the subbasis of $F$, so $U_a^c\in F$. Thus $U_a\cap U_a^c = \emptyset \in F$, meaning $F$ is not proper.
-\end{proof}
-
-\url{https://fa.ewi.tudelft.nl/~hart/37/publications/the_papers/betaR.pdf}
-
-
 \section{The metric topology}
 \begin{definition}
 A \udef{metric} on a set $X$ is a function
@@ -5112,13 +5107,6 @@ where $\bar{d}$ is the standard bounded metric on $\R$. The metric space $(\R^J,
 \begin{proposition}
 On the set $\R^J$, the box topology is finer than the uniform topology is finer than the product topology. These topologies are all different \textup{if and only if} $J$ is infinite.
 \end{proposition}
-
-\section{Set-theoretic topology}
-\url{https://en.wikipedia.org/wiki/Set-theoretic_limit}
-\url{https://math.stackexchange.com/questions/3384916/topology-of-set-theoretic-limits}
-\url{https://math.stackexchange.com/questions/2799181/is-there-a-way-to-express-the-set-theoretic-limit-in-terms-of-topology-filters}
-\url{https://math.stackexchange.com/questions/97440/do-limits-of-sequences-of-sets-come-from-a-topology}
-\url{https://math.stackexchange.com/questions/1947171/the-topology-of-sets}
 
 
 
