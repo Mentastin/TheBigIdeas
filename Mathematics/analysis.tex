@@ -1951,7 +1951,7 @@ Both $\inf\im(f)$ and $\sup\im(f)$ are attained on the interval by \ref{extremeV
 \end{proof}
 
 \section{Integration}
-\begin{lemma}
+\begin{lemma} \label{continuousRealFunctionIntegrable}
 Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous real function. Then $f$ is integrable.
 \end{lemma}
 \begin{proof}
@@ -1991,14 +1991,16 @@ Also
 \[ f(x) = \lim_{h\to 0}f(c_h) = \lim_{h\to 0}\frac{F(x+h) - F(x)}{h} = F'(x). \]
 \end{proof}
 \begin{corollary} [Weak second fundamental theorem of calculus] \label{weakSecondTheoremCalculus}
-Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a differentiable real function such that $f': \interval{a,b}\to \R$ is continuous. Then
-\[ \int_a^bf'(t)\diff{t} = f(b)-f(a). \]
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a differentiable real function such that $f': \interval{a,b}\to \R$ is continuous. Then, for all $x\in \interval{a,b}$,
+\[ f(x) = f(a) + \int_a^xf'(t)\diff{t}. \]
+In particular $\int_a^bf'(t)\diff{t} = f(b)-f(a)$.
 \end{corollary}
 TODO: We can drop the hypothesis that $f'$ is continuous, so long as it is (Riemann) integrable. This strengthening is the second fundamental theorem of calculus.
 \begin{proof}
-Set $g: \interval{a,b}\to \R: x\mapsto \int_a^xf'(t)\diff{t}$, which is differentiable by the first fundamental theorem and $g'(x) = f'(x)$ for all $x\in \interval[o]{a,b}$. Thus we can apply the means value theorem \ref{meanValueTheorem} to $f-g$, restricted to $\interval{a,x}$: there exists $c\in interval[o]{a,x}$ such that
+The function $f'$ is integrable by \ref{continuousRealFunctionIntegrable}.
+Set $g: \interval{a,b}\to \R: x\mapsto \int_a^xf'(t)\diff{t}$, which is differentiable by the first fundamental theorem and $g'(x) = f'(x)$ for all $x\in \interval[o]{a,b}$. Thus we can apply the means value theorem \ref{meanValueTheorem} to $f-g$, restricted to $\interval{a,x}$: there exists $c\in \interval[o]{a,x}$ such that
 \[ \frac{(f-g)(x) - (f-g)(a)}{x-a} = (f-g)'(c) = 0. \]
-This implies that $f-g$ is a constant function. In order to fix this constant, note that $g(a) = 0$, so $f(x) = f(a) + g(x)$ and, in particular, $f(b) = f(a) + \int_a^bf'(t)\diff{t}$.
+This implies that $f-g$ is a constant function. In order to fix this constant, note that $g(a) = 0$, so $f(x) = f(a) + g(x) = f(a) + \int_a^xf'(t)\diff{t}$ and, in particular, $f(b) = f(a) + \int_a^bf'(t)\diff{t}$.
 \end{proof}
 
 \subsection{Henstock-Kurzweil integral}
@@ -2035,6 +2037,59 @@ ab = \iint_{(x,y)\in S_1}\diff{x}\diff{y} + \iint_{(x,y)\in S_2}\diff{x}\diff{y}
 
 
 \section{Inequalities}
+\subsection{Based on mean value theorems}
+\begin{proposition}
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a differentiable real function such that $f': \interval{a,b}\to \R$ is continuous. Then
+\[ 0 \leq \int_a^b|f(x)|\diff{x} - \left|\int_a^bf(x)\diff{x}\right| \leq \frac{(b-a)^2}{2}\max_{x'\in\interval{a,b}}|f'(x')|. \]
+\end{proposition}
+TODO: according to \url{https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.625.7106&rep=rep1&type=pdf}, we can improve the constant to $1/3$.
+\begin{proof}
+For all $x,c\in \interval{a,b}$, there exists $d\in\interval{a,b}$ such that
+\[ |f(x)-f(c)| = |x-c|\,|f'(d)| \leq |x-c|\max_{x'\in \interval{a,b}}|f'(x')| \]
+by the mean value theorem \ref{meanValueTheorem}, and the fact that $f'$ achieves its extrema by the extreme value theorem \ref{extremeValueTheorem}. Thus we have
+\[ \int_a^b|f(x)|\diff{x} - |f(c)|(b-a) = \int_a^b|f(x)| - |f(c)|\diff{x} \leq \int_a^b|f(x) - f(x)|\diff{x}\leq \int_a^b|x-c|\diff{x}\max_{x'\in \interval{a,b}}|f'(x')|. \]
+We can then calculate
+\[ \int_a^b|x-c|\diff{x} = \frac{(c-a)^2}{2} + \frac{(c-b)^2}{2} = c^2 -ac-bc + \frac{a^2}{2} + \frac{b^2}{2}, \]
+which, in function of $c$, is a parabola that has a maximum at either $a$ or $b$, so $\int_a^b|x-c|\diff{x}\leq \frac{(b-a)^2}{2}$. Finally we note that we can take $c$ such that $f(c) = \frac{1}{b-a}\int_a^bf(x)\diff{x}$ by \ref{meanValueTheoremIntegrals}. Putting everything together yields the result.
+\end{proof}
+
+\begin{lemma}
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a differentiable real function such that $f': \interval{a,b}\to \R$ is continuous. Then
+\begin{enumerate}
+\item $\max_{t\in \interval{a,b}}|f(t)| \leq \int_a^b \frac{|f(x)|}{b-a} + |f'(x)| \diff{x}$;
+\item if $f(a) = f(b) = 0$, then $\max_{t\in \interval{a,b}}|f(t)| \leq \frac{1}{2}\int_a^b|f'(x)|\diff{x}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By \ref{meanValueTheoremIntegrals}, there exists $c\in \interval{a,b}$ such that $|f(c)| = \left|\int_a^b\frac{f(x)}{b-a}\diff{x}\right| \leq \int_a^b\frac{|f(x)|}{b-a}\diff{x}$.
+For all $t\in \interval{a,c}$, we have, by \ref{weakSecondTheoremCalculus}, $f(c) = f(t) + \int_t^c f'(x)\diff{x}$, so
+\[ |f(t)| \leq |f(c)| + \left|-\int_t^c f'(x) \diff{x}\right| \leq |f(c)| + \int_t^c |f'(x)|\diff{x} \leq |f(c)| + \int_a^b |f'(x)|\diff{x}. \]
+For all $t\in \interval{c,b}$, we have $f(t) = f(c) + \int_c^t f'(x)\diff{x}$ and thus
+\[ |f(t)| \leq |f(c)| + \left|\int_c^t f'(x) \diff{x}\right| \leq |f(c)| + \int_c^t |f'(x)|\diff{x} \leq |f(c)| + \int_a^b |f'(x)|\diff{x}. \]
+Then we have
+\[ \max_{t\in \interval{a,b}}|f(t)| \leq |f(c)| + \int_a^b |f'(x)|\diff{x} \leq \int_a^b\frac{|f(x)|}{b-a}\diff{x} + \int_a^b |f'(x)|\diff{x}. \]
+
+(2) By \ref{weakSecondTheoremCalculus}, we have, for all $t\in \interval{a,b}$, $f(t) = \int_a^t f'(x) \diff{x}$ and $f(t) = -\int_t^b f'(x)\ diff{x}$, so
+\[ 2|f(t)| = \left|\int_a^t f'(x) \diff{x}\right| + \left|\int_t^b -f'(x) \diff{x}\right| \leq \int_a^t|f'(x)|\diff{x} + \int_t^b |f'(x)|\diff{x} = \int_a^b |f'(x)|\diff{x}. \]
+\end{proof}
+
+\subsection{Jensen's inequality}
+\begin{theorem}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a probability measure space, $f:\Omega\to \R$ a real measurable function and $\varphi:\R\to \R$ a convex function. Then
+\[ \varphi\Big(\int_\Omega f \diff{\mu}\Big) \leq \int_\Omega \varphi\circ f \diff{\mu}. \]
+\end{theorem}
+It is important that $\mu(\Omega) = 1$.
+\begin{proof}
+Let $x_0 = \int_\Omega f \diff{\mu}$. Since $\varphi$ has a subdifferential $m$ at $x_0$ by \ref{existenceSubdifferential}, we have
+\[ \varphi\big(f(x)\big) \geq \varphi(x_0) + m\big(f(x) - x_0\big). \]
+Integrating over $x$ gives
+\begin{align*}
+\int_\Omega \varphi\circ f \diff{\mu} &\geq \int_\Omega\varphi(x_0)\diff{\mu} + \int_\Omega m\big(f(x) - x_0\big) \diff{\mu} \\
+&= \varphi(x_0)\int_\Omega\diff{\mu} + m\Big(\int_\Omega f(x)\diff{mu} -\int_\Omega x_0 \diff{\mu}\Big) \\
+&= \varphi(x_0) + m\Big(\int_\Omega f(x)\diff{mu} -x_0\Big) \\
+&= \varphi(x_0) = \varphi\Big(\int_\Omega f \diff{\mu}\Big).
+\end{align*}
+\end{proof}
 
 \subsection{Young's inequality}
 TODO: compare (+use) Jensen's inequality.
@@ -2143,6 +2198,148 @@ Let $\sSet{\Omega, \xi}$ be a convergence space and $\sSet{V,\zeta}$ a convergen
 Note that $(\Omega\to V)_C \neq (\Omega\to V)_c$ and $\cont_C(\Omega) \neq \cont_c(\Omega)$!
 
 Observation: if $\Omega$ is Hausdorff, then the set of compact subsets of $\Omega$ forms a $\pi$-system of closed subsets of $\Omega$. This means that
+
+\section{Distributions}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \overline{\R^+}$ a measurable function. The \udef{distribution function} of $f$ is the function
+\[ D_f: \overline{\R^+}\to \overline{\R^+}: \alpha \mapsto \mu\setbuilder[\big]{\omega}{f(\omega)>\alpha}.  \]
+\end{definition}
+
+\begin{lemma} \label{distributionOfFunctionLemma}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f,g: \Omega\to \overline{\R^+}$ measurable functions and $c\in \interval[o]{0,\infty}$. Then
+\begin{enumerate}
+\item if $f \leq g$ a.e., then $D_f \leq D_g$;
+\item $D_{cf}(\alpha) = D_f\Big(\frac{\alpha}{c}\Big)$;
+\item $D_{f+g}(\alpha+\beta) \leq D_f(\alpha) + D_g(\beta)$;
+\item $D_{fg}(\alpha\beta) \leq D_f(\alpha) + D_g(\beta)$.
+\end{enumerate}
+\end{lemma}
+In particular if $f = g$ a.e., then $D_f = D_g$. If $h,h': \Omega\to \C$ are measurable functions, then $D_{|h+h'|}\leq D_{|h|+|h'|} \leq D_{|h|} \leq D_{|h'|}$.
+\begin{proof}
+(1) Fix $\alpha\in \overline{\R^+}$ and set
+\[ N \defeq \{f > g\}, \quad A \defeq \{f \geq \alpha\}, \quad\text{and}\quad B \defeq \{g \geq \alpha\}. \]
+For all $\omega\in\Omega$, we have that $f(\omega)\leq g(\omega)$ and $\alpha < f(\omega)$ imply $\alpha < g(\omega)$, so
+\[ A\setminus (N\cap A) = A\setminus N = A\cap N^c \subseteq B. \]
+Also $N$ is measurable (by \ref{measurablesSetsRealMeasurableFunction}) and a null set (by assumption). 
+As $(N\cap A) \subseteq A$ and $N\cap A$ is measurable, we have \[ \mu\big(A\setminus (N\cap A)\big) = \mu(A) - \mu(N\cap A) = \mu(A) - 0 = \mu(A), \]
+using \ref{ringPositiveContent} and \ref{measureNullSet}. Thus we have
+\[ D_f(\alpha) = \mu(A) = \mu\big(A\setminus (N\cap A)\big) = \mu(A\cap N^c) \leq \mu(B) = D_g(\alpha), \]
+where the inequality is given by \ref{semiringPositiveContent}.
+
+(2) We have $\{cf>\alpha\} = \{f>\frac{\alpha}{c}\}$.
+
+(3) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. 
+Because the order on $\overline{\R^+}$ is linear, \ref{additionVectorInequalities} gives
+\[ \alpha + \beta < f(\omega) + g(\omega) \;\implies\; \big(\alpha < f(\omega)\big) \lor \big(\beta < g(\omega)\big). \]
+This implications shows
+\[ \{\alpha + \beta < f(\omega)+g(\omega)\} \;\subseteq\; \{\alpha < f(\omega)\} \cup \{\beta < g(\omega)\}. \]
+Thus we calculate
+\begin{align*}
+D_{f+g}(\alpha+\beta) &= \mu\{\alpha + \beta < f(\omega)+g(\omega)\} \\
+&\leq \mu\Big(\{\alpha < f(\omega)\} \cup \{\beta < g(\omega)\}\Big) \\
+&\leq \mu\{\alpha < f(\omega)\} + \mu \{\beta < g(\omega)\} \\
+&= D_f(\alpha) + D_g(\beta)
+\end{align*}
+by \ref{semiringPositiveContent}.
+
+(4) Take $\alpha,\beta\in \overline{\R^+}$ and $\omega\in \Omega$. Then we have the implication
+\[ \{\alpha\beta < f(\omega)g(\omega)\} \;\subseteq\; \{\alpha < f(\omega)\} \cup \{\beta < g(\omega)\}. \]
+Thus we calculate
+\begin{align*}
+D_{fg}(\alpha+\beta) &= \mu\{\alpha\beta < f(\omega)g(\omega)\} \\
+&\leq \mu\Big(\{\alpha < f(\omega)\} \cup \{\beta < g(\omega)\}\Big) \\
+&\leq \mu\{\alpha < f(\omega)\} + \mu \{\beta < g(\omega)\} \\
+&= D_f(\alpha) + D_g(\beta)
+\end{align*}
+by \ref{semiringPositiveContent}.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $\varphi: \R^+\to \R^+$ a monotone differentiable function with $\phi(0) = 0$ and $f: X\to \R^+$ a measurable function such that $\varphi\circ f$ is integrable. Then
+\[ \int_\Omega\varphi\circ f \diff{\mu} = \int_0^\infty \varphi'(\alpha)D_f(\alpha)\diff{\alpha}. \]
+\end{proposition}
+\begin{proof}
+We have
+\begin{align*}
+\int_\Omega\varphi\big(f(\omega)\big) \diff{\mu(\omega)} &= \int_\Omega\int_{0}^{f(\omega)}\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_\Omega\int_{0}^{\infty}[\alpha < f(\omega)]\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)\int_\Omega[\alpha < f(\omega)]\diff{\mu(\omega)}\diff{\alpha} \\
+&= \int_{0}^{\infty}\varphi'(\alpha)D_f(\alpha)\diff{\alpha}.
+\end{align*}
+by Tonelli's theorem \ref{tonellisTheorem} (as $\varphi'$ is positive) and \ref{weakSecondTheoremCalculus}.
+\end{proof}
+\begin{corollary} \label{LpNormFromDistribution}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
+\[ \norm{f}_p = \left(p\int_0^\infty \alpha^{p-1}D_f(\alpha)\diff{\alpha}\right)^{1/p}. \]
+\end{corollary}
+\begin{proof}
+Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ and so
+\[ \norm{f}_p^p = \int_\Omega |f|^p \diff{\mu} = \int_\Omega \varphi\circ|f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)D_f(\alpha)\diff{\alpha} = p\int_0^\infty \alpha^{p-1}D_f(\alpha)\diff{\alpha}. \]
+\end{proof}
+
+\subsection{Distribution inequalities}
+\begin{proposition}[Markov's inequality]
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\C$ a measurable function and $\alpha>0$. Then
+\[ \mu\{f\geq \alpha\} = D_f(\alpha) + \mu\{f = \alpha\} \leq \frac{1}{\alpha}\int_\Omega f\diff{\mu}. \]
+\end{proposition}
+Also called Chebyshev's inequality or Chebyshev's first inequality. The next inequality would then be Chebyshev's second inequality. 
+\begin{proof}
+We have $\alpha\cdot \big[f(\omega)\geq \alpha\big]\leq f(\omega)$ for all $\omega\in\Omega$, so
+\[ \alpha\cdot \mu\{f\geq \alpha\} = \alpha \int_{\Omega}\big[f(\omega)\geq \alpha\big]\diff{\mu(\omega)} = \int_{\Omega}\alpha\big[f(\omega)\geq \alpha\big]\diff{\mu(\omega)} \leq \int_\Omega f\diff{\mu}, \]
+using \ref{measureFromIntegralCharacteristicFunctions} and \ref{propertiesIntegralPositiveFunctions}. This implies Markov's inequality.
+\end{proof}
+\begin{corollary}[Chebyshev's inequality]
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R$ a measurable function, $\varphi:\im(f) \to \R^+$ a monotone measurable function and $\alpha>0$. Then
+\[ \mu\{f\geq \alpha\} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
+\end{corollary}
+\begin{proof}
+Since $\varphi$ is monotone, we have $\{f\geq \alpha\} \subseteq \{\varphi\circ f\geq \varphi(\alpha)\}$, so
+\[ \mu\{f\geq \alpha\} \leq \mu\{\varphi\circ f\geq \varphi(\alpha)\} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}, \]
+using \ref{semiringPositiveContent}.
+\end{proof}
+By choosing specific functions $\varphi$, we obtain the following forms of Chebyshev's inequality:
+\begin{corollary} \label{ChebyshevInequalityCorollary}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function, $g: \Omega\to \C$ a measurable function, $\alpha>0$ and $0<p$. Then
+\begin{enumerate}
+\item $\mu\{f\geq \alpha\} \leq \frac{1}{\alpha^p}\int_\Omega f(\omega)^p\diff{\mu(\omega)}$;
+\item $\alpha D_{|g|}(\alpha)^{1/p}\leq \norm{g}_p$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) The function $x\mapsto x^p$ is monotone.
+
+(2) We use (1) to obtain $D_{|g|}(\alpha) \leq D_{|g|}(\alpha) + \mu\{|g| = \alpha\} \leq \frac{1}{\alpha^p}\int_\Omega |f|^p\diff{\mu} = \left(\frac{\norm{f}_p}{\alpha}\right)^p$.
+\end{proof}
+
+\subsection{Decreasing rearrangements}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \R$ a measurable function. The \udef{decreasing rearrangement} of $f$ is the function
+\[ \decRearrange{f}: \overline{\R^+}\to \overline{\R^+}: t \mapsto \inf\setbuilder{\alpha > 0}{D_f(\alpha)\leq t} = \inf D_f^{\preimf}\big(\interval{0,t}\big).  \]
+\end{definition}
+
+The function $\decRearrange{f}$ is decreasing and supported in $\interval[c]{0,\mu(X)}$.
+
+
+
+\begin{proposition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space, $f: \Omega\to \overline{\R^+}$ a measurable function and $s,t\in \overline{\R^+}$. Then
+\begin{enumerate}
+\item $\decRearrange{f}\big(D_f(t)\big) \leq t$;
+\item $D_f\big(\decRearrange{f}(s)\big) \leq s$;
+\item $s < \decRearrange{f}(s) \iff t < D_f(s)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have $t\in D_f^\preimf\big(\interval{0,D_f(t)}\big)$, so
+\[ \decRearrange{f}\big(D_f(t)\big) = \inf D_f^\preimf\big(\interval{0,D_f(t)}\big)\leq \inf\{t\} = t. \]
+
+(2)
+
+(3) We calculate
+\[ s < \decRearrange{f}(s) \iff s< \inf D_f^{\preimf}\big(\interval{0,t}\big) \iff s\notin D_f^{\preimf}\big(\interval{0,t}\big) \iff D_f(s) \notin \interval{0,t} \iff t < D_f(s), \]
+where we have used the fact that $D_f^{\preimf}\big(\interval{0,t}\big)$ is upwards closed and topologically closed.
+\end{proof}
+
 
 \section{The $L^p(X,\diff{\mu})$ spaces}
 \subsection{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
@@ -2271,6 +2468,7 @@ Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm
 We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. Subadditivity is given by the Minkowski inequality and absolute homogeneity by \ref{pNormAbsolutelyHomogeneous}.
 \end{proof}
 
+\subsection{The $L^p(\Omega,\mu)$ spaces}
 \subsubsection{Indentifying functions that are equal a.e.}
 
 TODO: identification of a.e.\ equal functions is compatible with algebraic operations by \ref{equalAECongruence}.
@@ -2286,6 +2484,47 @@ TODO every equivalence class contains exactly one continuous functions (for Bore
 
 \end{definition}
 
+\subsubsection{$L^0(\Omega, \mu)$ and convergence in measure}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $F\in \powerfilters\big(\meas(\Omega, \C)\big)$ and $f\in \meas(\Omega, \C)$. Then $F$ is said to \udef{converge in measure} to $f$ if
+\[ \upset D_{|-|}(\epsilon)^{\imf\imf}(F-f) \overset{\overline{\R^+}}{\longrightarrow} 0 \]
+for all $\epsilon > 0$.
+\end{definition}
+
+\begin{lemma}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The following are pseudometrics on $\meas(\Omega, \C)$ whose pseudometric topology coincides with convergence in measure:
+\begin{enumerate}
+\item $d_1: (f,g) \mapsto \inf\setbuilder[\big]{\epsilon > 0}{D_{|f-g|}(\epsilon) \leq \epsilon}$;
+\item $d_2: (f,g) \mapsto \inf_{\epsilon>0} D_{|f-g|}(\epsilon) + \epsilon$;
+\item if $\mu$ is finite, $d_4: (f,g) \mapsto \int_\Omega \frac{|f-g|}{1+|f-g|}\diff{\mu}$;
+\item if $\mu$ is finite, $d_5: (f,g) \mapsto \int_\Omega\min\{|f-g|, \underline{1}\}\diff{\mu}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{definition}
+The metric $d_1$ is known as the \udef{Ky Fan metric}.
+\end{definition}
+
+\begin{lemma}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. Then convergence in measure is a topological vector space convergence on $\meas(\Omega,\C)$ with neighbourhood filter
+\[ \neighbourhood(0) = \bigvee_{\epsilon > 0}\upset D_{|-|}(\epsilon)^{\preimf\imf}(\neighbourhood_\R(0)). \]
+\end{lemma}
+\begin{proof}
+By construction, the function $f\mapsto f+g$ is a homeomorphism for all $g\in \meas(\Omega, \C)$. Thus it is sufficient to consider the vicinity at the origin and verify the conditions in \ref{TVSconstruction}.
+
+Take $F\in\powerfilters\big(\meas(\Omega,\C)\big)$. Then
+\begin{align*}
+\upset D_{|-|}(\epsilon)^{\imf\imf}(F) \overset{\overline{\R^+}}{\longrightarrow} 0 &\iff \neighbourhood_\R(0) \subseteq \upset D_{|-|}(\epsilon)^{\imf\imf}(F) \\
+&\iff \upset D_{|-|}(\epsilon)^{\preimf\imf}(\neighbourhood_\R(0)) \subseteq F.
+\end{align*}
+This holds for all $\epsilon > 0$ if and only if $\bigvee_{\epsilon>0}\upset d_{|-|}(\epsilon)^{\preimf\imf}(\neighbourhood_\R(0)) \subseteq F$. Thus the convergence is pretopological with the prescribed neighbourhood filter.
+
+We are now ready to verify the conditions in \ref{TVSconstruction}. Take arbitrary $A\in \bigvee_{\epsilon>0}\upset D_{|-|}(\epsilon)^{\preimf\imf}(\neighbourhood_\R(0))$. So for all $\epsilon > 0$ there exists $\delta > 0$ such that $D_{|-|}(\epsilon)^{\preimf}\big(\interval{0,\delta}\big) \subseteq A$, which is equivalent to
+\[ \interval{0,\delta} \subseteq D_{|-|}(\epsilon)^{\imf\imf}\big(\interval{0,\delta}\big) \]
+Take arbitrary $\lambda\in \C$. \ref{distributionOfFunctionLemma}
+\end{proof}
+
+\subsubsection{Completeness and density}
 \begin{theorem}[Riesz-Fisher]
 The space $L^p(X,\diff{\mu})$ is complete.
 \end{theorem}
@@ -2304,131 +2543,6 @@ Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. T
 
 \end{proof}
 
-\subsection{Distributions}
-\begin{definition}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{distribution function} of $f$ is the function
-\[ d_f: \R\to \R^+: \alpha \mapsto \mu\setbuilder[\big]{\omega}{|f(\omega)|>\alpha}.  \]
-\end{definition}
-
-\begin{lemma} \label{distributionOfFunctionLemma}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f,g: \Omega\to \C$ measurable functions and $c\in \C\setminus\{0\}$. Then
-\begin{enumerate}
-\item if $|f| \leq |g|$ a.e., then $d_f \leq d_g$;
-\item $d_{cf}(\alpha) = d_f\Big(\frac{\alpha}{|c|}\Big)$;
-\item $d_{f+g}(\alpha+\beta) \leq d_f(\alpha) + d_g(\beta)$;
-\item $d_{fg}(\alpha\beta) \leq d_f(\alpha) + d_g(\beta)$.
-\end{enumerate}
-\end{lemma}
-In particular if $|f| = |g|$ a.e., then $d_f = d_g$.
-\begin{proof}
-(1) Fix $\alpha\in \R^+$ and set
-\[ N \defeq \setbuilder{\omega}{|f(\omega)| > |g(\omega)|}, \quad A \defeq \setbuilder{\omega}{|f(\omega)| \geq \alpha}, \quad\text{and}\quad B \defeq \setbuilder{\omega}{|g(\omega)| \geq \alpha}. \]
-Then clearly $A\cap N^c \subseteq B$ (as $|f(\omega)|\leq |g(\omega)|$ and $\alpha < |f(\omega)|$ imply $\alpha < |g(\omega)|$). Also $N$ is measurable (by \ref{measurablesSetsRealMeasurableFunction}) and a null set (by assumption). Also
-\[ A\cap N^c = A\setminus N = A\setminus (N\cap A). \]
-As $(N\cap A) \subseteq A$ and $N\cap A$ is measurable, we have \[ \mu\big(A\setminus (N\cap A)\big) = \mu(A) - \mu(N\cap A) = \mu(A) - 0 = \mu(A), \]
-using \ref{ringPositiveContent} and \ref{measureNullSet}. Thus we have
-\[ d_f(\alpha) = \mu(A) = \mu\big(A\setminus (N\cap A)\big) = \mu(A\cap N^c) \leq \mu(B) = d_g(\alpha), \]
-where the inequality given by \ref{semiringPositiveContent}.
-
-(2) We have
-\[ \setbuilder{\omega}{|cf(\omega)|>\alpha} = \setbuilder{\omega}{|f(\omega)|>\frac{\alpha}{|c|}}. \]
-
-(3) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. The triangle inequality then gives
-\[ \alpha + \beta < |f(\omega)+g(\omega)| \;\implies\; \alpha + \beta < |f(\omega)|+|g(\omega)|. \]
-Because the order on $\R$ is linear, \ref{additionVectorInequalities} gives
-\[ \alpha + \beta < |f(\omega)| + |g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta < |g(\omega)|\big). \]
-These implications show
-\[ \setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
-Thus we calculate
-\begin{align*}
-d_{f+g}(\alpha+\beta) &= \mu\setbuilder{\omega\in\Omega}{\alpha + \beta < |f(\omega)+g(\omega)|} \\
-&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
-&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
-&= d_f(\alpha) + d_g(\beta)
-\end{align*}
-by \ref{semiringPositiveContent}.
-
-(4) Take $\alpha,\beta\in \R^+$ and $\omega\in \Omega$. Then we have the implication
-\[ \alpha\beta < |f(\omega)g(\omega)| \;\implies\; \big(\alpha < |f(\omega)|\big) \lor \big(\beta< |g(\omega)|\big), \]
-which means that
-\[ \setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \;\subseteq\; \setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}. \]
-Thus we calculate
-\begin{align*}
-d_{fg} &= \mu\setbuilder{\omega\in\Omega}{\alpha\beta < |f(\omega)g(\omega)|} \\
-&\leq \mu\Big(\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} \cup \setbuilder{\omega\in\Omega}{\beta < |g(\omega)|}\Big) \\
-&\leq \mu\setbuilder{\omega\in\Omega}{\alpha < |f(\omega)|} + \mu\setbuilder{\omega\in\Omega}{\beta < |g(\omega)|} \\
-&= d_f(\alpha) + d_g(\beta).
-\end{align*}
-\end{proof}
-
-\begin{proposition}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $\varphi: \R^+\to \R^+$ a monotone differentiable function with $\phi(0) = 0$ and $f: X\to \C$ a measurable function such that $\varphi\circ |f|$ is integrable. Then
-\[ \int_\Omega\varphi\circ |f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha}. \]
-\end{proposition}
-\begin{proof}
-We have
-\begin{align*}
-\int_\Omega\varphi\big(|f(\omega)|\big) \diff{\mu(\omega)} &= \int_\Omega\int_{0}^{|f(\omega)|}\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
-&= \int_\Omega\int_{0}^{\infty}[\alpha < |f(\omega)|]\varphi'(\alpha)\diff{\alpha} \diff{\mu(\omega)} \\
-&= \int_{0}^{\infty}\varphi'(\alpha)\int_\Omega[\alpha < |f(\omega)|]\diff{\mu(\omega)}\diff{\alpha} \\
-&= \int_{0}^{\infty}\varphi'(\alpha)d_f(\alpha)\diff{\alpha}.
-\end{align*}
-by Tonelli's theorem \ref{tonellisTheorem} (as $\varphi'$ is positive) and \ref{weakSecondTheoremCalculus}.
-\end{proof}
-\begin{corollary} \label{LpNormFromDistribution}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
-\[ \norm{f}_p = \left(p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}\right)^{1/p}. \]
-\end{corollary}
-\begin{proof}
-Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ and so
-\[ \norm{f}_p^p = \int_\Omega |f|^p \diff{\mu} = \int_\Omega \varphi\circ|f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)d_f(\alpha)\diff{\alpha} = p\int_0^\infty \alpha^{p-1}d_f(\alpha)\diff{\alpha}. \]
-\end{proof}
-
-\subsubsection{Distribution inequalities}
-\begin{proposition}[Markov's inequality]
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function and $\alpha>0$. Then
-\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\alpha}\int_\Omega f\diff{\mu}. \]
-\end{proposition}
-Also called Chebyshev's inequality or Chebyshev's first inequality. The next inequality would then be Chebyshev's second inequality. 
-\begin{proof}
-We have $\alpha\cdot [f(\omega)\leq \alpha]\leq f(\omega)$, so
-\[ \alpha\cdot \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} = \alpha \int_{\Omega}[f(\omega)\leq \alpha]\diff{\mu(\omega)} = \int_{\Omega}\alpha[f(\omega)\leq \alpha]\diff{\mu(\omega)} \leq \int_\Omega f\diff{\mu}, \]
-using \ref{measureFromIntegralCharacteristicFunctions} and \ref{propertiesIntegralPositiveFunctions}. This implies Markov's inequality.
-\end{proof}
-\begin{corollary}[Chebyshev's inequality]
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R$ a measurable function, $\varphi:\im(f) \to \R^+$ a monotone measurable function and $\alpha>0$. Then
-\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
-\end{corollary}
-\begin{proof}
-Since $\varphi$ is monotone, we have $\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \subseteq \setbuilder{\omega\in\Omega}{\varphi\big(f(\omega)\big)\geq \varphi(\alpha)}$, so
-\[ \mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \mu\setbuilder{\omega\in\Omega}{\varphi\big(f(\omega)\big)\geq \varphi(\alpha)} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
-\end{proof}
-By choosing specific functions $\varphi$, we obtain the following forms of Chebyshev's inequality:
-\begin{corollary} \label{ChebyshevInequalityCorollary}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function, $\alpha>0$ and $0<p$. Then
-\begin{enumerate}
-\item $\mu\setbuilder{\omega\in\Omega}{f(\omega)\geq \alpha} \leq \frac{1}{\alpha^p}\int_\Omega f(\omega)^p\diff{\mu(\omega)}$;
-\end{enumerate}
-\end{corollary}
-
-
-\begin{lemma} \label{LpNormDistributionInequality}
-Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $f: X\to \C$ a measurable function, $\alpha >0$ and $0<p<\infty$. Then
-\[ \alpha d_f(\alpha)^{1/p} \leq \norm{f}_p. \]
-\end{lemma}
-\begin{proof}
-This is immediate by corollary \ref{ChebyshevInequalityCorollary} of Chebyshev's inequality:
-\[ d_f(\alpha) = \mu\setbuilder{\omega}{|f(\omega)|>\alpha} \leq \frac{1}{\alpha^p}\int_\Omega |f|^p\diff{\mu} = \left(\frac{\norm{f}_p}{\alpha}\right)^p, \]
-so $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
-\end{proof}
-
-\subsubsection{Decreasing rearrangements}
-\begin{definition}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \C$ a measurable function. The \udef{decreasing rearrangement} of $f$ is the function
-\[ f': \R^+\to \R^+: t \mapsto \inf\setbuilder{\alpha > 0}{d_f(s)\leq t}.  \]
-\end{definition}
-
-The function $f'$ is decreasing and supported in $\interval[c]{0,\mu(X)}$.
 
 \subsection{Weak $L^p(X,\diff{\mu})$ spaces}
 \begin{definition}
@@ -2456,7 +2570,7 @@ Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
 
 (2) TODO
 
-(3) By \ref{LpNormDistributionInequality}, we have $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+(3) By \ref{ChebyshevInequalityCorollary}, we have $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
 \end{proof}
 \begin{corollary}
 Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\diff{\mu})$ is a subspace of $L^{p}(X,\diff{\mu})$.

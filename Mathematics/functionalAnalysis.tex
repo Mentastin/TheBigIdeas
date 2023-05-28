@@ -1,5 +1,188 @@
 \input{functionalAnalysis/banachSpaces}
 
+\chapter{Convex analysis}
+
+\section{Extrema of functions on convex sets}
+\begin{definition}
+Let $\sSet{V,\xi}$ be a convergence vector space, $A\subseteq V$ a subset and $a\in A$. A continuous linear functional $f\in \dual{V}$ is said to \udef{support} $A$ at $a$ if $f(a)$ is a maximum of $f^\imf(A)$.
+\begin{itemize}
+\item If $a\in A$ is such that there exists $f\in \dual{V}$ that supports $A$ at $a$, then $a$ is called a \udef{support point} of $A$.
+\item If $A$ is supported at $a$ by $f$ and $f^{\imf}(A) \neq \{f(a)\}$, then $f$ is said to \udef{properly support} $A$ at $a$.
+\end{itemize}
+\end{definition}
+Note that $f$ attains a maximum iff $-f$ attains a minimum, so we can equivalently define support points using minimisers.
+
+\begin{lemma} \label{supportPointsNotInCore}
+Let $\sSet{V,\xi}$ be a convergence vector space, $A\subseteq V$ a subset and $a\in A$. If $a$ is a proper support point, then $a\notin \inh_\mathfrak{a}(A)$.
+\end{lemma}
+\begin{proof}
+Suppose, towards a contradiction, that $a\in \inh_\mathfrak{a}(A)$. Let $f$ be the functional that supports $A$ at $a$. Since the support is proper, $f$ is not constant and thus there exists $x\in V$ such that $f(x) \neq f(a)$.
+
+Now since $a\in \inh_\xi(A)$, there exists, by \ref{constructionsInAlgebraicConvergence}, an $\epsilon >0$ such that $a+\epsilon(x-a)\in C$ and $a-\epsilon (x-a)\in C$. Since $a$ is a support point, we have $f(a) \geq f(a) + \epsilon \big(f(x) - f(a)\big)$, so $f(a) \geq f(x)$, and $f(a) \geq f(a) - \epsilon \big(f(x) - f(a)\big)$, so $f(a)\leq f(x)$. Thus $f(a) = f(x)$, which is a contradiction.
+\end{proof}
+
+\begin{proposition} \label{properSupportConvexSets}
+Let $\sSet{V,\xi}$ be a real topological convergence vector space and $C\subseteq V$ a convex subset with non-empty interior. If $x$ is a boundary point that belongs to $C$, then $C$ is properly supported at $x$.
+\end{proposition}
+\begin{proof}
+Since the interior of $C$ is a nonempty open convex (by \ref{inherenceAdherenceConvex}) set and $\{x\}$ is convex, we can apply \ref{separatingFunctionalOrderedImage} to obtain a continuous functional such that $f(x)$ is a strict upper bound of $f^\imf\big(\interior_\xi(C)\big)$.
+
+Then $f(x)$ is also an upper bound of $\closure_\R\Big(f^\imf\big(\interior_\xi(C)\big)\Big)$ and we have
+\[ \closure_\R\Big(f^\imf\big(\interior_\xi(C)\big)\Big) \supseteq f^\imf\big(\closure_\xi\circ\interior_\xi(C)\big) = f^\imf\big(\closure_\xi(C)\big) \supseteq f^\imf(C), \]
+by \ref{adherenceInherenceContinuity} and \ref{adherenceInherenceClosureConvexSets}.
+Thus $f$ supports $C$ at $x$.
+
+The support is proper because the upper bound was strict, so $f(y) < f(x)$ for all $y\in \interior_\xi(C)$, which was assumed non-empty.
+\end{proof}
+
+\begin{theorem}[Bishop-Phelps]
+Aliprantis / Border p.284, 285
+\end{theorem}
+
+\begin{theorem}[Brøndsted-Rockafellar]
+Aliprantis / Border p.287
+\end{theorem}
+
+\section{Subgradients and subdifferentials}
+\begin{definition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing, $f: C\subseteq Y\to \R$ a convex function and $y\in Y$. An element $x\in X$ such that
+\[ \forall y'\in C: \qquad f(y') \geq f(y) + \pair{x, y'-y}  \]
+is called a \udef{subgradient} of $f$ at $y$. The set of all subgradients at $y$ is called the \udef{subdifferential} of $f$ at $y$ and is denoted $\subdiff{f}(y)$.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing, $f: C\subseteq Y\to \R$ a convex functional and $y\in C$. Then $f(y) = \min\big(\im(f)\big)$ \textup{if and only if} $0\in \subdiff{f}(y)$.
+\end{lemma}
+\begin{proof}
+We have $f(y) = \min\big(\im(f)\big)$ iff $f(y')\geq f(y)$ for all $y'\in C$, which is equivalent to saying $0\in X$ is a subgradient.
+\end{proof}
+
+\begin{lemma} \label{subgradientEpigraphSupport}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing, $C\subseteq Y$ a convex set and $f: C\to \R$ a convex functional and $y\in Y$. Then
+\begin{enumerate}
+\item $x\in X$ is a subgradient of $f$ at $y$ \textup{if and only if} $\pair{x, \cdot}\circ \proj_1 - \proj_2$ supports $\epigraph(f)$ at $\big(y, f(y)\big)$;
+\item if $g$ supports $\epigraph(f)$ at $\big(y, f(y)\big)$ and either
+\begin{enumerate}
+\item $g(0,1)\neq 0$, or
+\item $y\in \inh_\mathfrak{a}(C)$ and $g$ is a proper support,
+\end{enumerate}
+then there exists $x\in X$ such that $\pair{x,\cdot} = g(\cdot,0)$ and $g(0,-1)^{-1}x$ is a subgradient of $f$ at $y$. 
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Pick arbitrary $y'\in C$. Then
+\begin{align*}
+f(y') \geq f(y) + \pair{x, y'-y} &\iff \pair{x,y} - f(y) \geq \pair{x, y'} - f(y') \\
+&\iff \big(\pair{x, \cdot}\circ \proj_1 - \proj_2\big)\big(y, f(y)\big) \geq \big(\pair{x, \cdot}\circ \proj_1 - \proj_2\big)\big(y', f(y')\big).
+\end{align*}
+
+(2) Since $g(\cdot, 0) = g\circ(\id, \underline{0})$ is a continuous linear functional, the existence of $x\in X$ such that $\pair{x,\cdot} = g(\cdot, 0)$ is given by \ref{functionalContinuityWeakTopology}.
+
+Now we have $g(y',r) = g(y,0) + g(0,r)$, so
+\begin{align*}
+g(0,-1)^{-1}\cdot g(y',r) &= g(0,-1)^{-1}\cdot \big(g(y',0) + g(0,r)\big) \\
+&= g(0,-1)^{-1}\pair{x, y'} + g(0,-1)^{-1}g(0,1)r \\
+&= g(0,-1)^{-1}\pair{x, y'} - r \\
+&= \big(\pair{g(0,-1)^{-1}x, \cdot}\circ\proj_1 - \proj_2\big)(y',r).
+\end{align*}
+So $g(0,-1)^{-1}\cdot g = \pair{g(0,-1)^{-1}x, \cdot}\circ\proj_1 - \proj_2$. If $g(0,-1)^{-1} \geq 0$, then $g(0,-1)^{-1}\cdot g$ supports $\epigraph(f)$ at $\big(y, f(y)\big)$, so $g(0,-1)^{-1}x$ is a subgradient of $f$ at $y$, by point (1).
+
+We now just need to prove that $g(0,-1)^{-1} \geq 0$, or, equivalently, $g(0,1) \leq 0$.
+Now consider the function $r\mapsto g(y,r) = g(y,0)+rg(1,0)$. For all $r\geq f(y)$, we have $g(y,r) \leq f(y)$. Considering very large and positive $r$, this is clearly only possible if $g(1,0)\leq 0$.
+
+Finally we prove hypothesis $(a)$ from hypothesis $(b)$. Suppose, towards a contradiction, that $g(0,1) = 0$. Then $g(y', r) = g(y',0)+ rg(0,1) = g(y',0)$ for all $y'\in Y$. As $g$ supports $\epigraph(f)$ at $\big(y, f(y)\big)$, we have that $g(y,0)$ is a maximum of $g^\imf(C\times\{0\})$.
+
+So $g\circ (\id_Y,\underline{0})$, which is a continuous functional, supports $C$ at $y$. This is a contradiction by \ref{supportPointsNotInCore}.
+\end{proof}
+
+\begin{proposition} \label{existenceSubdifferential}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing of real vector spaces, $C\subseteq Y$ a convex subset, $f: C\to \R$ a convex function and $y\in \inh_\mathfrak{a}(C)$. If $f$ is $\sigma(X,Y)$-continuous at $y$, then $\subdiff{f}(y) \neq \emptyset$.
+\end{proposition}
+\begin{proof}
+By \ref{convexContinuity}, there exists $U\in \neighbourhood_{\sigma(X,Y)}(y)$ such that $f$ is bounded above on $U$, say by $c\in \R$. We WLOG may take $U$ to be open. Then $U\oplus \interval[o]{c, +\infty}$ is an open subset of $Y\oplus \R$ (by \ref{directSumsOpenClosedSets}) that is a subset of $\epigraph(f)$. Thus, by \ref{epigraphProperties}, $\epigraph(f)$ is a convex subset of $V\oplus \R$ with non-empty interior.
+
+Now $\big(y,f(y)\big) \in \epigraph(f)$ is not an interior point, so it is a proper support point of $\epigraph(f)$ by \ref{properSupportConvexSets}. Thus there exists a continuous linear functional $g: Y\oplus \R\to \R$ that supports $\epigraph(f)$ at $\big(y,f(y)\big)$. By \ref{subgradientEpigraphSupport} this implies the existence of a subgradient.
+\end{proof}
+
+\begin{proposition}
+$\subdiff{f}(y)$ is weak-$*$-compact, convex subset of $X$
+\end{proposition}
+\begin{proof}
+TODO p.265 Aliprantis / Border.
+\end{proof}
+
+
+\subsection{The one-sided directional derivative}
+\begin{lemma} \label{oneSidedDirectionalDerivativeLemma}
+Let $V$ be a vector space and $f: C\to \R$ a convex functional on a convex set. Let $x\in C$ and $v\in V$ and $0<\lambda <\mu$ such that $x+\lambda v\in C$ and $x+\mu v\in C$. Then
+\[ \frac{f(x+\mu v) - f(x)}{\mu} \leq \frac{f(x+\lambda v)-f(x)}{\lambda}. \]
+In particular, $\lim_{\lambda\downarrow 0}\frac{f(x+\lambda v)-f(x)}{\lambda}$ exists in $\overline{\R}$.
+\end{lemma}
+\begin{proof}
+We have
+\[ x + \mu v = \frac{\mu}{\lambda}(x+ \lambda v) + \Big(1 -\frac{\mu}{\lambda}\Big)x, \]
+so by convexity,
+\[ f(x+\mu v) \leq \frac{\mu}{\lambda}f(x+ \lambda v) + \Big(1 -\frac{\mu}{\lambda}\Big)f(x). \]
+Dividing by $\mu$ and rearranging gives the result.
+\end{proof}
+\begin{definition}
+Let $V$ be a vector space, $f: C\to \R$ a convex functional on a convex set and $x\in C$. The \udef{one-sided directional derivative} of $f$ is defined as
+\[ \diff{^+_xf}: V \to \overline{\R}: v \mapsto \lim_{\lambda\downarrow 0} \frac{f(x+\lambda v)-f(x)}{\lambda}. \]
+\end{definition}
+It is a one-sided version of the Gateaux differential. If $\diff{^+_xf}$ is linear, then it is called the one-sided Gateaux derivative.
+
+\begin{proposition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing of real vector spaces, $f: C\subseteq Y\to \R$ a convex function on a convex set and $y\in C$. Then $x\in X$ is a subgradient of $f$ at $y$ \textup{if and only if} $\pair{x, \cdot} \leq \diff{^+_x f}$.
+\end{proposition}
+\begin{proof}
+First assume $x$ is a subgradient. Setting $y' = y + \lambda v$, for some $\lambda > 0$ and $v\in Y$, we have $f(y+\lambda v) \geq f(y) + \pair{x, y+\lambda v - y}$, so
+\[ \frac{f(y+\lambda v) - f(y)}{\lambda} \geq \lambda^{-1}\pair{x, \lambda v} = \pair{x,v}. \]
+Taking the limit $\lambda\downarrow 0$ gives $\diff{^+_x f}(v) \geq \pair{x,v}$.
+
+Take $y'\in C$. By \ref{oneSidedDirectionalDerivativeLemma}, $\diff{^+_x f}(y'-y) \geq \pair{x,y'-y}$ implies $\pair{x,y'-y} \leq \frac{f\big(y+ \lambda(y'-y)\big)-f(x)}{\lambda}$ for all $\lambda >0$. In particular setting $\lambda =1$ gives $f(y')\geq f(y) + \pair{x, y'-y}$.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing, $f: Y\to \R$ a convex functional and $y\in Y$. Then $f$ is differentiable at $y$ \textup{if and only if} $\subdiff{f}(y)$ is a singleton.
+\end{proposition}
+\begin{proof}
+\url{https://mathoverflow.net/questions/221856/hahn-banach-theorem-with-convex-majorant}
+\end{proof}
+
+\section{Convex functions on finite-dimensional spaces}
+\subsection{Convex functions on an interval}
+\begin{proposition}
+Let $a,b\in \R$ and $f: \interval{a,b}\to \R$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is convex;
+\item for all $a \leq x<y<z \leq b$, we have
+\[ f(y) \leq \frac{z-y}{z-x}f(x) + \frac{y-x}{z-x}f(z); \]
+\item for all $a \leq x<y<z \leq b$, we have
+\[ \frac{f(y)-f(x)}{y-x} \leq \frac{f(z)-f(x)}{z-x} \leq \frac{f(z)-f(y)}{z-y}. \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ We have that $y$ is a convex combination of $x$ and $z$:
+\[ y = \left(1 - \frac{y-x}{z-x}\right)x + \frac{y-x}{z-x}z =  \frac{z-y}{z-x}x + \frac{y-x}{z-x}z. \]
+
+$(2) \Rightarrow (3)$ We have
+\[ f(y) - f(x) \leq \frac{z-y}{z-x}f(x) + \frac{y-x}{z-x}f(z) - f(x) = \frac{y-x}{z-x}\big(f(z)-f(x)\big) \]
+and the first equality follows. Similarly
+\[ f(z) - f(y) \geq f(z) - \frac{z-y}{z-x}f(x) - \frac{y-x}{z-x}f(z) = \frac{z-y}{z-x}\big(f(z)-f(x)\big). \]
+
+$(3) \Rightarrow (1)$ Pick $x<y$ and $0<\lambda< 1$. Then we can set $y = \lambda x + (1-\lambda)z$, so $\lambda = \frac{z-y}{z-x}$ and $1-\lambda = \frac{y-x}{z-x}$, so
+\begin{align*}
+f(\lambda x + (1-\lambda)z) &= f(y) \\
+&\leq f(x) + \frac{y-x}{z-x}\big(f(z)-f(x)\big) \\
+&= f(x) + (1-\lambda)\big(f(z) - f(x)\big) \\
+&= \lambda f(x) + (1-\lambda)f(z).
+\end{align*}
+\end{proof}
+
+\section{Extreme points of convex sets}
+\begin{theorem}[Krein-Milman]
+Aliprantis / Border p. 297
+\end{theorem}
 
 \chapter{Spectral theory and functional calculus}
 \section{Invariant subspaces}

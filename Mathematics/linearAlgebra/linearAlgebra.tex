@@ -529,7 +529,7 @@ We also say an operator is a function $T: \dom(T)\subseteq V\to W$.
 \end{definition}
 The requirement that $\dom(T)$ be a subspace of $V$ is necessary for linearity to make sense!
 
-Some authors (e.g\ Axler) use the word ``operator'' to mean a linear endomorphism.
+Some authors (e.g.\ Axler) use the word ``operator'' to mean a linear endomorphism.
 
 \subsubsection{Image and kernel}
 \begin{definition}
@@ -1120,7 +1120,8 @@ Let $V$ be a vector space and $B\subseteq V$ a subset. Then the following are eq
 Let $V$ be a vector space and $B,C\subseteq V$ balanced subsets. Then
 \begin{enumerate}
 \item for all $\lambda\in \F$: $\lambda B = |\lambda| B$;
-\item $B\cap C$ is balanced.
+\item $B\cap C$ is balanced;
+\item the set of balanced sets is closed under arbitrary unions.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -1129,6 +1130,8 @@ Let $V$ be a vector space and $B,C\subseteq V$ balanced subsets. Then
 
 (2) We have, using \ref{orderPreservingFunctionLatticeOperations},
 \[ \cball(0,1)\cdot (B\cap C) \subseteq \cball(0,1)\cdot B \cap \cball(0,1)\cdot C = B\cap C. \]
+
+(3) Let $\{B_i\}_{i\in I}$ be a set of balanced sets. Take $v\in \bigcup_{i\in I}B_i$ and $r\in \cball_\F(0,1)$. Then there exists some $j\in I$ such that $v\in B_j$. Because $B_j$ is balanced, we have $rv\in B_j$, so $rv\in \bigcup_{i\in I}B_i$.
 \end{proof}
 
 
@@ -1150,7 +1153,7 @@ Note that this is a stronger property than metric convexity!
 Let $C$ be the set of all vectors with norm in $\Q\cap [0,1]$. The is metrically convex, but not a convex set of vectors.
 \end{example}
 
-\begin{lemma}
+\begin{lemma} \label{convexHullLemma}
 Let $V$ be a vector space and $X\subseteq V$ a subset. Then 
 \begin{align*}
 \convex(X) &= \setbuilder{rx + (1-r)y}{0\leq r \leq 1, x,y\in B} \\
@@ -1687,6 +1690,14 @@ We call $(\R, V, +, \precsim)$ a \udef{preordered vector space}.
 \end{itemize}
 \end{definition}
 
+\begin{example}
+\begin{itemize}
+\item The finite-dimensional vector spaces $\R^n$ with coordinate-wise addition, scalar multiplication and order are Riesz spaces.
+\item The finite-dimensional vector spaces $\R^n$ with coordinate-wise addition, scalar multiplication and lexicographical order are Riesz spaces.
+\item Let $X$ be a set. The set $(X\to \R)$ is a real vector space with point-wise addition and scalar multiplication. If the order is also defined point-wise, i.e.\ $f \leq g$ iff $\forall x\in X: f(x) \leq g(x)$, then $(X\to \R)$ is a Riesz space.
+\end{itemize}
+\end{example}
+
 \begin{lemma} \label{positiveConeOrderCharacterisation}
 Let $\sSet{\R, V, +}$ be a real vector space and $\precsim$ a preorder on the set $V$. The compatibility of the order can equivalently be expressed by:
 $\forall x,y,z\in V, \lambda\in\R$
@@ -1720,7 +1731,7 @@ If $\precsim$ is connex, then
 \[ v+ x \precsim w+y \;\implies\; \big(v\precsim w\big)\lor\big( x\precsim y\big). \]
 \end{lemma}
 \begin{proof}
-We calculate $v + x \leq w + x \leq w+y$ for the first implication.
+We calculate $v + x \precsim w + x \precsim w+y$ for the first implication.
 
 For the second implication, assume $w\precsim v$, so $w-v \precsim 0$. We can then calculate
 \[ v+ x \precsim w+y \implies x\precsim y + w - v \precsim y + 0 = y. \]
@@ -1728,13 +1739,6 @@ For the second implication, assume $w\precsim v$, so $w-v \precsim 0$. We can th
 Now let $\precsim$ be connex and assume $v+ x \precsim w+y$. By connexity, we either have $v\precsim w$ or $w\precsim v$. By the previous part, $w\precsim v$ implies $x\precsim y$. So either $v\precsim w$ or $x\precsim y$.
 \end{proof}
 
-\begin{example}
-\begin{itemize}
-\item The finite-dimensional vector spaces $\R^n$ with coordinate-wise addition, scalar multiplication and order are Riesz spaces.
-\item The finite-dimensional vector spaces $\R^n$ with coordinate-wise addition, scalar multiplication and lexicographical order are Riesz spaces.
-\item Let $X$ be a set. The set $(X\to \R)$ is a real vector space with point-wise addition and scalar multiplication. If the order is also defined point-wise, i.e.\ $f \leq g$ iff $\forall x\in X: f(x) \leq g(x)$, then $(X\to \R)$ is a Riesz space.
-\end{itemize}
-\end{example}
 
 \begin{lemma}
 Let $X$ be a topological space. The spaces
@@ -1778,6 +1782,8 @@ Let $V$ be a preordered vector space, $S\subseteq V$ a subset, $v\in V$ and $\al
 Let $V$ be a preordered vector space. The subset
 \[ V^+ \defeq \setbuilder{v\in V}{0 \precsim v} \]
 is called the \udef{positive cone} of $V$. The elements of the positive cone $V^+$ are called the \udef{positive elements} of $V$.
+
+Let $A\subseteq V$ be a subset. We define $A^+ \defeq A\cap V^+$.
 \end{definition}
 That the positive cone is in fact a cone follows from \ref{positiveConeOrderCharacterisation}
 \begin{proposition} \label{positiveCone}
@@ -1813,10 +1819,10 @@ y-x \in V^+ \\ z-y \in V^+
 
 
 \begin{lemma} \label{scalarMultiplicationInequalities}
-Let $V$ be a preordered vector space, $v\in V^+$ and $\alpha\in \R$.
+Let $V$ be a preordered vector space, $v\in V^+$ and $\alpha\in \R$. Then
 \begin{enumerate}
-\item If $\alpha \geq 1$, then $\alpha v \succsim v$.
-\item If $\alpha \leq 1$, then $\alpha v \precsim v$.
+\item if $\alpha \geq 1$, then $\alpha v \succsim v$;
+\item if $\alpha \leq 1$, then $\alpha v \precsim v$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -1825,7 +1831,22 @@ Let $V$ be a preordered vector space, $v\in V^+$ and $\alpha\in \R$.
 (2) We have $v\succsim 0$ and $(\alpha-1) \leq 0$, so $(\alpha-1)v \precsim 0$ and $\alpha v \precsim v$.
 \end{proof}
 
+\begin{lemma} \label{positiveVectorAddition}
+Let $V$ be a preordered vector space, $v\in V^+$ and $x\in V$. Then
+\begin{enumerate}
+\item $x \precsim x+v$;
+\item $x - v \precsim x$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have $x\precsim x$ and $0\precsim v$, so $x = (x+0)\precsim x+v$ by \ref{additionVectorInequalities}.
+
+(2) Immediate from (1).
+\end{proof}
+
 \section{Riesz spaces}
+
+We take the convention that lattice operations bind tighter than addition, so $u\vee v + w = (u\vee v) + w$.
 
 \begin{lemma} \label{lemmaRieszSpaces}
 Let $V$ be a Riesz space, $u,v,w\in V$ and $\alpha\in \R$, then
@@ -1862,38 +1883,60 @@ Let $V$ be a Riesz space and $v,w\in V$, then
 \end{proposition}
 \begin{proof}
 We calculate
-\[ (v \vee w) + (v \wedge w) = v + 0 \vee (w-v) + w + (v-w)\wedge 0 = (v + w) + 0 \vee (w-v) - 0 \vee (w-v) = v + w. \]
+\begin{align*}
+(v \vee w) + (v \wedge w) &= v + 0 \vee (w-v) + w + (v-w)\wedge 0 \\
+&= (v + w) + 0 \vee (w-v) + (-0)\wedge \big(-(w-v)\big) \\
+&= (v + w) + 0 \vee (w-v) - 0 \vee (w-v) \\
+&= v + w.
+\end{align*}
 \end{proof}
+
+\begin{proposition}[Infinite distributivity in Riesz spaces] \label{distributivityRieszSpaces}
+Let $V$ be a Riesz space, $v\in V$ and $S\subseteq V$ a subset. Then
+\begin{enumerate}
+\item if $\bigvee S$ exists, then $\big(\bigvee S\big) \wedge v = \bigvee (S\wedge v)$;
+\item if $\bigwedge S$ exists, then $\big(\bigwedge S\big) \vee v = \bigwedge (S\vee v)$;
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We already have that $\big(\bigvee S\big) \wedge v$ is an upper bound of $S\wedge v$ by \ref{infiniteDistributiveInequalities}. Now let $m\in V$ be another upper bound. For all $w\in S$, we then have
+\[ m \geq w\wedge v = w+v - w\vee v \geq w+v - \big(\bigvee S\big)\vee v, \]
+using \ref{sumAsMeetJoin}. So $m - v + \big(\bigvee S\big)\vee v \geq w$ and thus $m - v + \big(\bigvee S\big)\vee v \geq \big(\bigvee S\big)$, which means that
+\[ m \geq \big(\bigvee S\big) + v - \big(\bigvee S\big)\vee v = \big(\bigvee S\big)\wedge v. \]
+This shows that $\big(\bigvee S\big)\wedge v$ is the least upper bound.
+
+(2) Dual.
+\end{proof}
+\begin{corollary}
+Riesz spaces are distributive lattices.
+\end{corollary}
 
 \begin{proposition}
 Let $V$ be a Riesz space, $u,v,w\in V$ and $x,y,z\in V^+$. Then
 \begin{enumerate}
 \item $(u+v)\vee (2w) \leq u\vee w + v\vee w$;
 \item $(u+v)\vee z \leq u\vee z + v\vee z$;
-\item $(x+y)\wedge z \leq x\wedge z + y\wedge z$.
+\item $(x+y)\wedge z \leq x\wedge z + y\wedge z$;
+\item if $x\wedge y = 0$, then $(x+y)\wedge z = x\wedge z + y\wedge z$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
 (1) From $u\leq u\vee w$ and $v\leq v\vee w$, we get $u+v \leq u\vee w + v\vee w$. Similarly from $w\leq u\vee w$ and $w\leq v\vee w$, we get $2w \leq u\vee w + v\vee w$. Together this gives (1).
 
-(2) We have $2z \geq z$ by \ref{scalarMultiplicationInequalities}.
+(2) We have $2z \geq z$ by \ref{scalarMultiplicationInequalities}, so we can apply (1).
 
-(3) TODO (use Birkhoff inequality??)
-\end{proof}
+(3) We have $z \leq z+y$ by \ref{positiveVectorAddition}. By \ref{lemmaRieszSpaces},
+\[ (x+y)\wedge z \leq (x+y)\wedge (z+y) = y + x\wedge z \]
+and thus $(x+y)\wedge z - x\wedge z \leq y$. 
 
-\begin{proposition}[Infinite distributivity in Riesz spaces]
-Let $V$ be a Riesz space, $v\in V$ and $S\subseteq V$ a subset. Then
-\begin{enumerate}
-\item if $\bigvee S$ exists, then $\left(\bigvee S\right) \wedge v = \bigvee (S\wedge v)$;
-\item if $\bigwedge S$ exists, then $\left(\bigwedge S\right) \vee v = \bigwedge (S\vee v)$;
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-We already have the inequality $\left(\bigvee S\right) \wedge v \geq \bigvee (S\wedge v)$ from \ref{infiniteDistributiveInequalities}. To show the other inequality, it is enough to show that for 
+Now $x\wedge z \geq 0$ from $x\geq 0$ and $z\geq 0$, so $(x+y)\wedge z - x\wedge z \leq (x+y)\wedge z \leq z$ by \ref{positiveVectorAddition}.
+
+Putting the two inequalities together gives $(x+y)\wedge z - x\wedge z \leq y\wedge z$. This implies the result.
+
+(4) By \ref{sumAsMeetJoin}, we have $x+y = x\vee y$. Then $(x\wedge z)\wedge (y\wedge z) = x\wedge y \wedge z \leq 0$, but also $x\wedge y \wedge z \geq 0$, so it equals $0$. Then $(x\wedge z) + (y\wedge z) = (x\wedge z) \vee (y\wedge z)$, similarly by \ref{sumAsMeetJoin}. We can then calculate
+\[ (x+y)\wedge z = (x\vee y)\wedge z = (x\wedge z)\vee (y\wedge z) = (x\wedge z) + (y\wedge z), \]
+where we have used distributivity \ref{distributivityRieszSpaces}.
 \end{proof}
-\begin{corollary}
-Riesz spaces are distributive lattices.
-\end{corollary}
 
 \subsection{Positive elements}
 \subsubsection{Positive and negative parts}
@@ -1914,7 +1957,7 @@ Let $V$ be a Riesz space and $v,w\in V$. Then
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-We calculate $v\vee w = (v-w)\vee 0 + w = (v-w)^+ + w$. The other equalities are similar.
+We calculate $v\vee w = (v-w)\vee 0 + w = (v-w)^+ + w$, using point (4) of \ref{lemmaRieszSpaces}. The other equalities are similar.
 \end{proof}
 
 \begin{proposition} \label{PositiveNegativeElements} \label{minimalPositiveDecomposition} 
@@ -1922,7 +1965,7 @@ Let $V$ be a Riesz space and $v,w\in V$. Then
 \begin{enumerate}
 \item $v^+, v^- \in V^+$;
 \item $v= v^+ - v^-$;
-\item $v^+\perp v^-$ (i.e.\ $v^+ \wedge v^- = 0$).
+\item $v^+ \wedge v^- = 0$.
 \end{enumerate}
 Furthermore,
 \begin{enumerate} \setcounter{enumi}{3}
@@ -2022,10 +2065,18 @@ We calculate, using \ref{lemmaRieszSpaces}
 \[ (v+w)\vee (v-w) = v+ w\vee(-w) = v+ |w| \quad\text{and}\quad (v+w)\wedge (v-w) = v + w\wedge(-w) = v-|w|. \]
 The next two equalities follow by the substitutions $v+w \leftrightarrow v$ and $v-w \leftrightarrow w$.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{absoluteValueDifference}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \[ |v - w| = (v \vee w) - (v \wedge w). \]
 \end{corollary}
+\begin{proof}
+We have
+\begin{align*}
+|v-w| &= 2(v\vee w) - (v+w) \\
+&= 2(v\vee w) - v\vee w - v \wedge w = v\vee w - v\wedge w.
+\end{align*}
+using \ref{sumAsMeetJoin}.
+\end{proof}
 \begin{corollary} \label{meetJoinAbsoluteValues}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \begin{enumerate}
@@ -2035,24 +2086,6 @@ Let $V$ be a Riesz space and $v,w\in V$, then
 \end{corollary}
 \begin{proof}
 Substitute $v\to |v|$ and $w\to |w|$.
-\end{proof}
-\begin{corollary}
-Let $V$ be a Riesz space and $u,v,w\in V$, then
-\begin{enumerate}
-\item $|u\vee v - u\vee w| + |u\wedge v - u\wedge w| = |v-w|$;
-\item $|v^+-w^+|\leq |v-w|$ and $|v^- - w^-|\leq |v-w|$.
-\end{enumerate}
-\end{corollary}
-\begin{proof}
-(1) Using the proposition, we get
-\[ |u\vee v - u\vee w| + |u\wedge v - u\wedge w| = (u\vee v)\vee(u\vee w) - (u\vee v)\wedge (u\vee w) + (u\wedge v)\vee(u\wedge w) - (u\wedge v)\wedge(u\wedge w). \]
-Using distributivity this simplifies to $(v\vee w) - (v\wedge w) = |v-w|$.
-
-(2) Using (1) we have
-\[ |v-w| = |0\vee v - 0\vee w| + |0\wedge v - 0\wedge w| = |v^+ -w^+| + |v^- - w^-| \geq \begin{cases}
-|v^+ -w^+| \\
-|v^- - w^-|.
-\end{cases}  \]
 \end{proof}
 
 \begin{proposition}
@@ -2118,13 +2151,96 @@ The first inequality is the triangle inequality. It follows straight from \ref{t
 The second inequality is the reverse triangle inequality and follows from the triangle inequality as in \ref{reverseTriangleInequality}.
 \end{proof}
 
+\begin{proposition}[Birkhoff-Nakano identity] \label{birkhoffIdentity}
+Let $V$ be a Riesz space and $u,v,w\in V$, then
+\[ |u\vee v - u\vee w| + |u\wedge v - u\wedge w| = |v-w|. \]
+\end{proposition}
+\begin{proof}
+Using \ref{absoluteValueDifference} and \ref{sumAsMeetJoin}, we get
+\begin{align*}
+|u\vee v - u\vee w| + |u\wedge v - u\wedge w| &= (u\vee v)\vee(u\vee w) - (u\vee v)\wedge (u\vee w) + (u\wedge v)\vee(u\wedge w) - (u\wedge v)\wedge(u\wedge w) \\
+&= u\vee (v \vee w) - u \vee (v\wedge w) + u\wedge (v\vee w) - u\wedge (v \wedge w) \\
+&= \big(u\vee (v \vee w) + u\wedge (v\vee w)\big) - \big(u \vee (v\wedge w) + u\wedge (v \wedge w)\big) \\
+&= \big(u + (v \vee w)\big) - \big(u + (v \wedge w)\big) \\
+&= (v \vee w) - (v \wedge w) = |v-w|.
+\end{align*}
+\end{proof}
+\begin{corollary}[Birkhoff inequalities]
+Let $V$ be a Riesz space and $u,v,w\in V$, then
+\begin{enumerate}
+\item $|u\vee v - u\vee w| \leq |v-w|$ and $|u\wedge v - u\wedge w| \leq |v-w|$;
+\item $|v^+-w^+|\leq |v-w|$ and $|v^- - w^-|\leq |v-w|$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) These follow from the lemma, \ref{positiveVectorAddition} and the fact that the absolute value is positive.
+
+(2) Follows from (1) because
+\[ |0\vee v - 0\vee w| = |v^+ -w^+| \qquad\text{and}\qquad |0\wedge v - 0\wedge w| = |v^- - w^-|. \]
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $v,w\in V$, then
+\begin{enumerate}
+\item $|v| + |w| - |v+w| = 2(v^+\wedge w^- + v^-\wedge w^+)$;
+\item $|v| + |w| - |v-w| = 2(v^+\wedge w^+ + v^-\wedge w^-)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) As $v^+, v^-, w^+, w^- \geq 0$, they are all equal to their absolute values. Then \ref{meetJoinAbsoluteValues} gives
+\begin{align*}
+v^+\wedge w^- &= \frac{1}{2}\big(v^++w^- - |v^+-w^-|\big) \\
+v^-\wedge w^+ &= \frac{1}{2}\big(v^-+w^+ - |v^--w^+|\big). 
+\end{align*}
+Adding these gives
+\begin{align*}
+2(v^+\wedge w^- + v^-\wedge w^+) &= |v| + |w| - \big(|v^+-w^-|+ |v^--w^+|\big) \\
+&= |v| + |w| - \big(|0\vee v - 0\vee (-w)|+ |0\wedge v- 0\wedge (-w)|\big) \\
+&= |v| + |w| - |v- (-w)| = |v| + |w| - |v + w|.
+\end{align*}
+where we have used using \ref{birkhoffIdentity}.
+
+(2) Now we use \ref{meetJoinAbsoluteValues} to get
+\begin{align*}
+v^+\wedge w^+ &= \frac{1}{2}\big(v^++w^+ - |v^+-w^+|\big) \\
+v^-\wedge w^- &= \frac{1}{2}\big(v^-+w^- - |v^--w^-|\big). 
+\end{align*}
+Adding these gives
+\begin{align*}
+2(v^+\wedge w^+ + v^-\wedge w^-) &= |v| + |w| - \big(|v^+-w^+|+ |v^--w^-|\big) \\
+&= |v| + |w| - \big(|0\vee v - 0\vee w|+ |0\wedge v- 0\wedge w|\big) \\
+&= |v| + |w| - |v- w|,
+\end{align*}
+where we have used using \ref{birkhoffIdentity}.
+\end{proof}
+\begin{corollary}
+Let $V$ be a Riesz space and $v,w\in V$, then $|v+w| = |v| + |w|$ \textup{if and only if} $v^+\wedge w^- = 0 = v^- \wedge w^+$.
+\end{corollary}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $v,v',w,w'\in V$, then
+\[ |(v\vee v')- (w\vee w')| \leq |v-w| \vee |v'- w'|. \]
+\end{proposition}
+\begin{proof}
+We calculate
+\begin{align*}
+|(v\vee v')- (w\vee w')| &= (v\vee v')\vee(w\vee w') - (v\vee w)\wedge (v'\vee w') \\
+&\leq (v\vee w)\vee(v\vee w') - (v\wedge w)\vee (v'\wedge w') \\
+&= \big((v\vee w) - (v\wedge w)\vee (v'\wedge w')\big)\vee\big((v'\vee w') - (v\wedge w)\vee (v'\wedge w')\big) \\
+&\leq \big((v\vee w) - (v\wedge w)\big)\vee\big((v'\vee w') - (v'\wedge w')\big) \\
+&= |v-w|\vee |v'-w'|,
+\end{align*}
+where we have used \ref{absoluteValueDifference}, \ref{firstMiniMaxCorollary} and \ref{lemmaRieszSpaces}.
+\end{proof}
+
 \subsection{Subsets}
 \begin{definition}
 Let $V$ be a Riesz space. A subset $E$ is called
 \begin{itemize}
 \item a \udef{Riesz subspace} if it is both a subspace and a sublattice;
 \item \udef{solid} if for all $v\in E$ the interval $[-|v|,|v|]$ is a subset of $E$;
-\item a \udef{band} if for all subsets $S\subseteq E$ we have $\sup(S) \subset E$. 
+\item a \udef{Riesz ideal} if it is a solid subspace;
+\item a \udef{band} if it is a Riesz ideal such that for all subsets $S\subseteq E$, we have $\sup(S) \subset E$. 
 \end{itemize}
 \end{definition}
 
@@ -2143,11 +2259,30 @@ Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is solid \textup{
 \end{corollary}
 
 \begin{lemma}
-Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is an (order) ideal \textup{if and only if} it is a solid Riesz subspace.
+Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then the following are equivalent:
+\begin{enumerate}
+\item $E$ is solid;
+\item $|w|\leq |v| \implies w\in E$ for all $v\in E$ and $w\in V$;
+\item we have
+\begin{enumerate}
+\item $w \in E \iff |w|\in E$ for all $w\in V$;
+\item $0\leq w \leq v \implies w\in E$ for all $v\in E$ and $w\in V$;
+\end{enumerate}
+\item we have
+\begin{enumerate}
+\item $w \in E \iff |w|\in E$ for all $w\in V$;
+\item $v\wedge w\in E$ for all $v\in E^+$ and $w\in V^+$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is a Riesz subspace if $E$ is a subspace that is closed under taking joins.
 \end{lemma}
 \begin{proof}
-TODO
+For all $v,w\in E$, we have $v\wedge w = -\big((-v)\vee (-w)\big)\in E$.
 \end{proof}
+
 
 
 \subsection{Disjointness}

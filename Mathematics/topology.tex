@@ -139,7 +139,7 @@ Let $X$ be a set and $\xi$ a preconvergence on $X$. Then the following are equiv
 \end{lemma}
 In other words, a preconvergence is finitely deep \textup{if and only if} $\lim_\xi^{-1}(x)$ is \emph{directed} (and thus a filter) for all $x\in X$.
 
-\begin{proposition}
+\begin{proposition} \label{depthImplications}
 Let $X$ be a set and $\xi$ a preconvergence on $X$. Then each of the following statements implies the next:
 \begin{enumerate}
 \item $\xi$ is pretopological;
@@ -514,7 +514,7 @@ Let $\sSet{X,\xi}$ be a preconvergence space and $A\subseteq X$ a subset. Then
 \item $A\in \vicinity_\xi(x)^{\mesh}$;
 \item $\displaystyle A \in \bigcup_{F\to x} F^{\mesh}$;
 \end{enumerate}
-\item $x\in \inh_\xi(A)$ \textup{if and only if} $A\in \vicinity_\xi(x) = \displaystyle \bigcap_{F\to x}F$.
+\item $x\in \inh_\xi(A)$ \textup{if and only if} $A\in \vicinity_\xi(x)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -872,8 +872,17 @@ TODO $\leq_s$
 \end{proof}
 TODO contours for propositions.
 
+\begin{proposition} \label{pointwisefunctionToFilterInequality}
+Let $X$ be a set, $\sSet{Y,\leq}$ a poset and $f,g: X\to Y$. Then $f\leq g$ pointwise \textup{if and only if} $\upset f^{\imf\imf}(F) \leq_w \upset g^{\imf\imf}(F)$ for all proper filters $F\in \powerfilters(X)$.
+\end{proposition}
+\begin{proof}
+First suppose $f\leq g$ pointwise and pick a proper filter $F\in \powerfilters(X)$. We show the weak inequality using \ref{filterInequalityCriterion}. Pick arbitrary $A\in \upset f^{\imf\imf}(F)$ and $B\in \upset g^{\imf\imf}(F)$. Thus there exist $A',B'\in F$ such that $f^{\imf}(A')\subseteq A$ and $g^{\imf}(B')\subseteq B$. Set $C = A'\cap B' \neq \emptyset$. We can pick $x\in C$ and by the pointwise inequality $f(x) \leq g(x)$. Thus the weak inequality holds because $f(x)\in A$ and $g(x)\in B$.
+
+For the converse, it is enough to note that $\upset f^{\imf\imf}(\pfilter{x}) \leq_w \upset g^{\imf\imf}(\pfilter{x})$ implies $f(x)\leq g(x)$.
+\end{proof}
 
 \subsubsection{Convergence compatible with the order}
+TODO: we assume complete lattice everywhere (?)
 \begin{definition}
 Let $\sSet{X,\leq}$ be a poset. A convergence $\xi$ in $X$ is called
 \begin{itemize}
@@ -881,7 +890,7 @@ Let $\sSet{X,\leq}$ be a poset. A convergence $\xi$ in $X$ is called
 \item \udef{compatible with the strong order} if $F \leq_s G$, $x\in\lim_\xi F$ and $y\in \lim_\xi G$ imply $x\leq y$.
 \end{itemize}
 \end{definition}
-
+TODO: following lemma makes sense as definition for posets that are not complete lattices?
 
 \begin{lemma}
 Let $\sSet{X,\leq}$ be a poset and $\xi$ a convergence on $X$. Then
@@ -894,10 +903,22 @@ Let $\sSet{X,\leq}$ be a poset and $\xi$ a convergence on $X$. Then
 We have $F \leq \pfilter{x} \iff \liminf F \leq x$ by \ref{filterInequalityCriterion}. This implies 
 $F \leq \pfilter{\liminf F}$ and thus for all $y\in\lim_\xi F$ we must have $y\leq \liminf F$ by compatability of the order. By a similar argument, we have $\limsup F \leq y$.
 \end{proof}
-\begin{corollary} \mbox{}
+\begin{corollary}
 The weakest convergence compatible with the weak order is given by $\lim F = \liminf F =\limsup F$, if they coincide, for all $F\in \powerfilters(X)$.
-\end{corollary}
-TODO: there is no weakest convergence compatible with the strong order??
+\end{corollary}\
+
+\begin{definition}
+The weakest convergence compatible with the weak order is called the \udef{order convergence}, denoted $\mathfrak{o}$.
+\end{definition}
+
+\begin{proposition}[Squeeze theorem] \label{squeezeTheorem}
+Let $X$ be a set, $\sSet{Y,\leq}$ a complete lattice, $F\in \powerfilters(X)$ and $f,g,h: X\to Y$ such that $f\leq g\leq h$ pointwise. If $\upset f^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$ and $\upset h^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$, then $\upset g^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$.
+\end{proposition}
+\begin{proof}
+By TODO ref (!), we have
+\[ y = \liminf \upset f^{\imf\imf}(F) \leq \liminf \upset g^{\imf\imf}(F) \quad\text{and}\quad \limsup \upset g^{\imf\imf}(F) \leq \limsup \upset h^{\imf\imf}(F) = y, \]
+so $y\leq \liminf \upset g^{\imf\imf}(F) \leq \limsup \upset g^{\imf\imf}(F) \leq y$ and so $\upset g^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$.
+\end{proof}
 
 \subsubsection{Order closure and order regularity}
 \begin{definition}
@@ -1090,7 +1111,9 @@ as are the following:
 \begin{enumerate}
 \item $C$ is closed;
 \item $\adh(C)\subseteq C$;
-\item $\closure(C)\subseteq C$.
+\item $\closure(C)\subseteq C$;
+\item for all $x\in X$: $C\in \vicinity_\xi(x)^\mesh \implies x\in C$;
+\item for all $x\in X$: $C\in \vicinity_\xi(x)^\mesh \iff x\in C$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -2325,6 +2348,19 @@ Now take $x\in \adh_\xi(B) \cap A$. Then, by \ref{principalAdherenceInherence}, 
 (2) If $A$ is closed, then $\adh_\xi(B)\subseteq \adh_\xi(A) = A$ by \ref{principalInherenceAdherenceProperties} and so $\adh_\xi(B)\cap A = \adh_\xi(B)$.
 
 (3) Assume $B$ is $\xi$-closed. From (1) we have $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A = B\cap A = B$.
+\end{proof}
+
+\begin{proposition} \label{subspaceVicinityFilter}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. If $A$ is open, then
+\[ \upset\iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big) = \vicinity_\xi(a) \]
+for all $a\in A$.
+\end{proposition}
+\begin{proof}
+We have $\vicinity_\xi(a) \subseteq \upset\iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big)$ by continuity of $\iota$.
+
+For the other inclusion, we have $A\in \vicinity_\xi(a)$ by \ref{openClosedCriteria}, so $A$ is an element of each filter that converges to $a$ in $\xi$. Now take arbitrary $F\overset{\xi}{\longrightarrow} a$. By \ref{subspaceConvergence} we have $\vicinity_{\xi|_A}(a) \subseteq \upset \iota^{\preimf\imf}(F)$, which implies
+\[ \upset \iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big) \subseteq \upset (\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F) = F, \]
+by \ref{setTraceFilterLemma}. Taking the intersection over all such $F$ gives the result.
 \end{proof}
 
 \begin{proposition} \label{continuityRestrictionExpansion}
@@ -5699,7 +5735,7 @@ such that
 \item $\boldsymbol{\cdot}: G\times G \to G$ is continuous; and
 \item $^{-1}: G\to G: x\mapsto x^{-1}$ is continuous.
 \end{itemize}
-Then we call $\sSet{G, \boldsymbol{\cdot}, \xi}$ a \udef{convergence group}.
+Then we call $\xi$ a group convergence and $\sSet{G, \boldsymbol{\cdot}, \xi}$ a \udef{convergence group}.
 \end{definition}
 
 \begin{lemma} \label{convergenceGroupCriterion}
@@ -5711,6 +5747,18 @@ is continuous.
 If $G$ is a convergence group, the function $(x,y) \mapsto xy^{-1}$ is the composition of two continuous functions and thus continuous.
 
 Conversely, assume $(x,y) \mapsto xy^{-1}$ continuous. Then $y \mapsto 1y^{-1} = y^{-1}$ is continuous by \ref{continuousEmbeddingProduct}. Then $\boldsymbol{\cdot}: (x,y) \mapsto xy = x(y^{-1})^{-1}$ is a composition of continuous functions.
+\end{proof}
+
+\begin{lemma} \label{groupConvergenceIffDeltasContinuous}
+Let $\sSet{G,\cdot, 1}$ be a group and $\xi$ a convergence on $G$. Then the following are equivalent:
+\begin{enumerate}
+\item $\xi$ is a group convergence;
+\item $\Delta_r: G\times G \to G: (x,y) \mapsto xy^{-1}$ is continuous;
+\item $\Delta_l: G\times G \to G: (x,y) \mapsto x^{-1}y$ is continuous;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Immediate from the constructions in \ref{leftToRightTranslationInvarianceLemma}.
 \end{proof}
 
 \begin{lemma} \label{closureGroupOperation}
@@ -5944,6 +5992,8 @@ Now we show that the pointwise inversion, $(-)^{-1}_\text{pt}: (X\to G)_c \to (X
 This section makes use of the function $\Delta = \Delta_r$ from section \ref{sec:translationInvariance}. \label{sec:groupUniformStructure}
 
 TODO: redo with $\Delta_l$??
+
+If $G$ does not commute, then we can define two different uniform structures.
 
 \begin{definition}
 Let $\sSet{G, \cdot, 1, \xi}$ be a convergence group. Consider the function $\Delta_r: G\times G\to G: (x,y) \mapsto x\cdot y^{-1}$. Then the \udef{uniform structure} of the group is given by
@@ -6204,14 +6254,48 @@ Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group. Then the following are equi
 \end{enumerate}
 \end{theorem}
 
+
+\subsection{Group norms and seminorms}
 \begin{definition}
-Let $\sSet{G, \cdot, 1}$ be a group. We call a function $\norm{\cdot}: G\to \R^+$ a \udef{group norm} on $G$ if $\forall x,y\in G$ the following hold
+Let $\sSet{G, \cdot, 1}$ be a group. We call a function $\norm{\cdot}: G\to \R^+$ a \udef{group seminorm} on $G$ if $\forall x,y\in G$ the following hold
 \begin{enumerate}
 \item triangle inequality / subadditivity: $\norm{xy} \leq \norm{x} + \norm{y}$;
-\item positivity $\norm{x} > 0$ if $x \neq 1$;
 \item inversion $\norm{x^{-1}} = \norm{x}$.
 \end{enumerate}
-We call the norm \udef{cyclically permutable} if $\forall x,y\in G$: $\norm{xy} = \norm{yx}$.
+We call the group seminorm
+\begin{itemize}
+\item a \udef{group norm} if $\norm{x} = 0 \implies x = 1$;
+\item \udef{cyclically permutable} if $\forall x,y\in G$: $\norm{xy} = \norm{yx}$
+\end{itemize}
 
-If $\norm{\cdot}$ is a group norm for $G$, then we call $\sSet{G, \cdot, 1, \norm{\cdot}}$ a \udef{normed group}.
+If $\norm{\cdot}$ is a group (semi)norm for $G$, then we call $\sSet{G, \cdot, 1, \norm{\cdot}}$ a \udef{(semi)normed group}.
 \end{definition}
+
+\begin{proposition}
+Let $\sSet{G, \cdot, 1, \norm{\cdot}}$ be a cyclically permutable seminormed group. Then 
+\begin{enumerate}
+\item $\norm{\cdot}\circ \Delta_r = \norm{\cdot}\circ \Delta_l$ is a pseudometric;
+\item the pseudometric convergence is a group convergence;
+\item the pseudometric uniformity correspond to the group uniformity.
+\end{enumerate} 
+\end{proposition}
+\begin{proof}
+(1) We first calculate the equality:
+\[ (\norm{\cdot}\circ \Delta_r)(x,y) = \norm{xy^{-1}} = \norm{(yx^{-1})^{-1}} = \norm{yx^{-1}} = \norm{x^{-1}y} = (\norm{\cdot}\circ \Delta_l)(x,y). \]
+
+We verify it is a pseudometric. Positivity is immediate. Symmetry follows from the previous calculation. For the triangle inequality, we have
+\[ \norm{xy^{-1}} = \norm{xz^{-1}zy^{-1}} \leq \norm{xz^{-1}} + \norm{zy^{-1}}. \]
+
+(2) By \ref{groupConvergenceIffDeltasContinuous} it is enough to show that $\Delta_r$ is continuous. Let $F\to x$ and $F'\to y\in G$. By \ref{imagePseudometricConvergesToZero}, this is equivalent to $\norm{F\cdot x^{-1}} \overset{\R}{\longrightarrow} 0$ and $\norm{F'\cdot y^{-1}} \overset{\R}{\longrightarrow} 0$. Now
+\begin{align*}
+\norm{\Delta_r\big(\Delta_r(F\otimes F')\otimes \pfilter\Delta_r(x,y)^{-1}\big)} &= \norm{F\cdot (F')^{-1}\cdot y\cdot x^{-1}} \\
+&= \norm{x^{-1}\cdot F\cdot (F')^{-1}\cdot y} \\
+&\leq \norm{x^{-1}\cdot F}+ \norm{(F')^{-1}\cdot y} \\
+&= \norm{F\cdot x^{-1}} + \norm{F'\cdot y^{-1}} \overset{\R}{\longrightarrow} 0,
+\end{align*}
+so $\Delta_r(F\otimes F')\to \Delta_r(x,y)$, which means that $\Delta_r$ is continuous.
+
+(3) Take $H\in\powerfilters(G^2)$. Then $H$ is an element of the pseudometric uniformity if $\norm{\Delta_r(H)}\overset{\R}{\longrightarrow} 0$ and $H$ is an element of the group uniformity if $\Delta_r(H)\overset{G}{\longrightarrow} 1$, which, by definition of the group convergence is equivalent to $\norm{\Delta_r\big(\Delta_r(H)\otimes\pfilter{1}\big)}\overset{\R}{\longrightarrow} 0$.
+
+Since $\Delta_r\big(\Delta_r(H)\otimes\pfilter{1}\big) = \Delta_r(H)$, these conditions are the same.
+\end{proof}

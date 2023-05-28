@@ -1648,6 +1648,15 @@ Let $L$ be a lattice and let $\seq{a_{i,j}}\subset L$ be indexed by $i,j\in \N$.
 \begin{proof}
 For all $k,l$ we have $a_{k,l}\leq \bigvee_{j=1}^n a_{k,j}$. This implies $\bigwedge_{i=1}^m a_{i,l} \leq \bigwedge_{i=1}^m \left(\bigvee_{j=1}^n a_{i,j}\right)$ for all $l$. Taking the supremum over $l$ gives the result.
 \end{proof}
+\begin{corollary} \label{firstMiniMaxCorollary}
+Let $L$ be a lattice and $a,b,c,d \in L$, then
+\[ (a\wedge b)\vee (c\wedge d) \leq (a\vee c)\wedge (b\vee d). \]
+\end{corollary}
+\begin{proof}
+Use $a_{i,j} = \begin{pmatrix}
+a & c \\ b & d
+\end{pmatrix}$.
+\end{proof}
 \begin{corollary}[Median inequality]
 Let $L$ be a lattice and $a,b,c \in L$, then
 \[ (a\wedge b) \vee (b\wedge c) \vee (c\wedge a) \leq (a\vee b)\wedge (b\vee c) \wedge (c\vee a). \]
@@ -1688,12 +1697,20 @@ The maps $y\mapsto y\vee x$ and $y\mapsto y \wedge x$ are order-preserving, so w
 \begin{corollary}[Infinite distributive inequalities] \label{infiniteDistributiveInequalities}
 Let $L$ be a lattice $x\in L$ and $S\subseteq L$ a subset. Assume all relevant suprema exist, then
 \begin{enumerate}
-\item $\sup(S)\wedge x \geq \sup(S \wedge x)$;
-\item $\inf(S)\vee x \leq \inf(S \vee x)$.
+\item if $\sup(S)$ exists, then $\sup(S) \wedge x$ is an upper bound of $S\wedge x$;
+\item if $\inf(S)$ exists, then $\inf(S) \vee x$ is a lower bound of $S\vee x$.
 \end{enumerate}
+In particular,
+\begin{enumerate} \setcounter{enumi}{2}
+\item $\sup(S)\wedge x \geq \sup(S \wedge x)$;
+\item $\inf(S)\vee x \leq \inf(S \vee x)$;
+\end{enumerate}
+if the relevant suprema / infima exist.
 \end{corollary}
 \begin{proof}
-Because $\sup(S)\in S^u$, we have $\sup(S)\wedge x \in S^u\wedge x$, so $\sup(S)\wedge x \in (S\wedge x)^u$ and $\sup(S)\wedge x \geq \min((S\wedge x)^u) = \sup(S\wedge x)$. The second part is dual.
+Because $\sup(S)\in S^u$, we have $\sup(S)\wedge x \in S^u\wedge x$, so $\sup(S)\wedge x \in (S\wedge x)^u$. The second part is dual.
+
+Points (3), (4) are then immediate.
 \end{proof}
 In particular if $S$ has two elements, we recover the distributive inequalities.
 
@@ -2198,9 +2215,6 @@ if the maximum exists.
 If for all $x\in S$ the pseudocomplement exists, we say $S$ is \udef{pseudocomplemented}.
 \end{definition}
 
-\begin{lemma}
-
-\end{lemma}
 
 \subsection{Boolean lattices}
 \begin{definition}
@@ -2208,9 +2222,14 @@ A distributive complemented lattice is called a \udef{Boolean lattice} or \udef{
 \end{definition}
 We will use $\overline{x}$ to denote the (necessarily unique, \ref{distributiveComplementUnique}) completement of $x$.
 
+\begin{example}
+An algebra of sets is a Boolean algebra with as top the unit $\Omega$, as bottom the empty set $\emptyset$ and as complement $A\mapsto A^c = \Omega\setminus A$.
+\end{example}
+
 \begin{lemma} \label{BooleanComplementLargestDisjoint}
 Let $L$ be a Boolean lattice and $x\in L$. Then $\{x\}^\perp = \downset \{\overline{x}\}$.
 \end{lemma}
+The complement $\overline{x}$ is the largest element disjoint from $x$.
 \begin{proof}
 From the requirement $x\wedge \overline{x} = \bot$, we see that $\overline{x}\in \{x\}^\perp$. Now $\{\overline{x}\} \subseteq \{x\}^\perp$ implies $\downset \{\overline{x}\} \subseteq \downset\{x\}^\perp = \{x\}^\perp$. For the last equality we have used the fact that $\{x\}^\perp$ is downwards closed (in fact even an ideal), see \ref{disjointComplementIdeal}.
 
@@ -2316,16 +2335,19 @@ Point (2) is dual.
 Let $L$ be a Boolean lattice with complement and $a,b\in L$. Then $[a,b]$ is a Boolean lattice with complementation $x\mapsto \widetilde{x} = (\overline{x} \wedge b)\vee a$. 
 \end{proposition}
 \begin{proof}
-Clearly $[a,b]$ inherits distributivity from $L$. All we need to show is that for all $x\in [a,b]$ the complement of $x$ in $[a,b]$ is $\widetilde{x}$. We calculate
+Clearly $[a,b]$ inherits distributivity from $L$. All we need to show is that for all $x\in [a,b]$ the complement of $x$ in $[a,b]$ is $\widetilde{x}$. We calculate, using distributivity,
 \begin{align*}
-x \wedge \widetilde{x} &= x\wedge ((\overline{x} \wedge b)\vee a) = (x\wedge(\overline{x} \wedge b))\vee (x\wedge a) = (( x\wedge \overline{x}) \wedge b)\vee (x\wedge a) = (\bot \wedge b)\vee a = \bot \vee a = a \\
-x \vee \widetilde{x} &= x\vee ((\overline{x} \wedge b)\vee a) = ((x\vee \overline{x}) \wedge (x\vee b))\vee a = (\top \wedge b) \vee a = b\vee a = b.
+x \wedge \widetilde{x} &= x\wedge \big((\overline{x} \wedge b)\vee a\big) \\
+&= \big(x\wedge(\overline{x} \wedge b)\big)\vee (x\wedge a) \\
+&= \big(( x\wedge \overline{x}) \wedge b\big)\vee (x\wedge a) \\
+&= (\bot \wedge b)\vee a = \bot \vee a = a \\
+x \vee \widetilde{x} &= x\vee \big((\overline{x} \wedge b)\vee a\big) \\
+&= \big((x\vee \overline{x}) \wedge (x\vee b)\big)\vee a \\
+&= (\top \wedge b) \vee a = b\vee a = b.
 \end{align*}
 \end{proof}
 
-\begin{proposition}
-An algebra of sets is a Boolean algebra with as top the unit $\Omega$, as bottom the empty set $\emptyset$ and as complement $A\mapsto A^c = \Omega\setminus A$.
-\end{proposition}
+
 
 \subsubsection{Duality and complementation}
 TODO: dual expression can be obtained by taking the complement? Dual statement of equality is equality of complements?
@@ -2533,7 +2555,7 @@ A \udef{concept} is a pair $\seq{A,B}$ where $A\subset G$ is a set of objects an
 \end{definition}
 The letters $G$ and $M$ come from the German: Gegenstände and Merkmale. The $I$ is for ``incidence relation'' (I think).
 
-\section{Filters and ideals}
+\chapter{Filters and ideals}
 \begin{definition}
 Let $\sSet{P,\Yleft}$ be an ordered set. A subset $A\subseteq P$ is called
 \begin{itemize}
@@ -2650,7 +2672,7 @@ $(2) \Leftrightarrow (3)$ Immediate.
 
 
 
-\subsection{Frink ideals}
+\section{Frink ideals}
 \begin{definition}
 Let $\sSet{P,\Yleft}$ be an ordered set. A subset $A\subseteq P$ is called\footnote{TODO: Frink, Orrin (1954), "Ideals In Partially Ordered Sets", Am. Math. Mon., 61: 223-234, doi:10.1080/00029890.1954.11988449}
 \begin{itemize}
@@ -2671,7 +2693,7 @@ The case for ideals is dual.
 \end{proof}
 
 
-\subsection{Filter bases and subbases}
+\section{Filter bases and subbases}
 
 \begin{lemma}
 Let $\sSet{P,\Yleft}$ be an ordered set and $\{F_i\}_{i\in I}$ a family of subsets.
@@ -2736,7 +2758,7 @@ It is clear that $b$ is decreasing (TODO recursion invariant).
 To see that $b$ is a base, first note that each $b_n$ is in $F$ (as $F$ is a $\wedge$-subsemilattice and all meets are finite). Also $b_n \leq f(n)$ for all $n\in\N$.
 \end{proof}
 
-\subsection{Ordering filters and ideals}
+\section{Ordering filters and ideals}
 
 \begin{proposition}[The lattices of filters and ideals] \label{latticeFiltersIdeals}
 Let $P$ be an ordered set and $I$ an index set.
@@ -2781,7 +2803,7 @@ Let $L$ be a lattice and $a,b\in L$. Then
 \end{enumerate}
 \end{lemma}
 
-\subsubsection{Maximal filters and ideals}
+\subsection{Maximal filters and ideals}
 \begin{definition}
 Let $\sSet{P,\Yleft}$ be an ordered set.
 \begin{itemize}
@@ -2851,7 +2873,7 @@ by distributivity in \ref{latticeFiltersIdeals}. Then either $U = U\vee F$ or $U
 \end{proof}
 Note this does not work for arbitrary intersections!
 
-\subsubsection{Prime filters and ideals}
+\subsection{Prime filters and ideals}
 \begin{definition}
 Let $\sSet{P,\Yleft}$ be an ordered set.
 \begin{itemize}
@@ -2903,7 +2925,7 @@ Because $F$ is prime, we have $F = F\vee \upset x$ or $F\vee \upset y$.
 Now assume TODO \url{http://www.ascent-journals.com/IJPEM/Vol3No3/1-sagi.pdf} using \ref{joinIrreducibleLemma}.
 \end{proof}
 
-\subsection{Image filters}
+\section{Image filters}
 \begin{lemma} \label{imageFilter}
 Let $\sSet{P,\Yleft_P}$, $\sSet{Q, \Yleft_Q}$ be ordered sets, $f: P\to Q$ an order-preserving function and $F\subseteq P$ a filter. Then $\upset f^{\imf}(F)$ is a filter.
 \end{lemma}
@@ -2953,7 +2975,7 @@ For the other inequality, take $A\in \bigcap (\upset\circ f^{\imf\imf})^{\imf}[\
 \end{proof}
 
 
-\subsection{Filters and ideals on a Boolean algebra}
+\section{Filters and ideals on a Boolean algebra}
 \begin{proposition} \label{booleanMaximalFiltersIdeals}
 Let $L$ be a Boolean lattice and $F\subseteq L$ an upwards closed subset. Then the following are equivalent:
 \begin{enumerate}
@@ -2982,7 +3004,7 @@ a \vee b\in F^\mesh \iff& \overline{a\vee b} = \overline{a}\wedge\overline{b} \n
 \end{align*}
 \end{proof}
 
-\subsubsection{Filter ideal duality}
+\subsection{Filter ideal duality}
 \begin{proposition} \label{filterIdealDuality}
 Let $L$ be a Boolean lattice and $F,I\subseteq L$. Then
 \begin{enumerate}
@@ -3029,7 +3051,7 @@ By \ref{complementInIsotoneGrill}, we have $F\in \mathfrak{I}^\imf(\mathcal{F}^\
 By \ref{idealFromUltrafilter}, this is equivalent to requiring that there are no ideals in $\mathfrak{I}^\imf(\mathcal{F}^\mesh)$ that are subsets of $F^c$ and of the form $U^c$ for some ultrafilter $U$. In other words, all ultrafilters larger than $F$ are not elements of $\mathcal{F}^\mesh$. Again by \ref{complementInIsotoneGrill}, this is equivalent to requiring that all ultrafilters larger than $F$ are elements of $\mathcal{F}$.
 \end{proof}
 
-\subsubsection{Image filters and ideals}
+\subsection{Image filters and ideals}
 Cfr. \ref{imageFilter}.
 
 \begin{proposition} \label{imageFilterProperties}
@@ -3090,7 +3112,7 @@ Now we can find an ultrafilter $U$ larger than $F\vee f^{\preimf\imf}(V)$ by \re
 
 
 
-\subsection{Free and principal filters}
+\section{Free and principal filters}
 \begin{definition}
 Let $L$ be a complete lattice and $F\subseteq L$ a filter.
 \begin{itemize}
@@ -3202,7 +3224,7 @@ Suppose the ultrafilter is neither principal nor free, then is is contained in b
 \end{proof}
 
 
-\subsubsection{Trace filters}
+\subsection{Trace filters}
 \begin{definition}
 Let $S$ be a bounded $\wedge$-semilattice, $a\in S$ and $F\in\filters(S)$ such that $a\in F^\mesh$.
 Then
@@ -3845,7 +3867,7 @@ The indicator functions define a bijection between $\powerset(U)$ and $(U\to \{0
 \subsection{Iverson bracket}
 \begin{definition}
 Let $P$ be some proposition. Then we define the \udef{Iverson bracket} of $P$ as
-\[ [P] \;\defeq\; \begin{cases}
+\[ \Iverson{P} \;\defeq\; \begin{cases}
 0 & (\text{$P$ is false}) \\
 1 & (\text{$P$ is true}).
 \end{cases} \]
