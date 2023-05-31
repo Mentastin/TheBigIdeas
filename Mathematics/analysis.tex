@@ -1971,7 +1971,7 @@ By the extreme value theorem, $f$ reaches both a minimum $m$ and a maximum $M$ o
 and thus $(b-a)^{-1}\int_a^bf(x)\diff{x}$ lies between the extrema. By \ref{extremaIntermediateValueTheorem} there exists $c\in \interval{a,b}$ such that $f(c) = (b-a)^{-1}\int_a^bf(x)\diff{x}$.
 \end{proof}
 
-\begin{theorem}[First fundamental theorem of calculus]
+\begin{theorem}[First fundamental theorem of calculus] \label{firstFundamentalTheoremCalculus}
 Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous real function. Set
 \[ F: \interval{a,b} \to \R: x\mapsto \int_a^x f(t) \diff{t}. \]
 Then
@@ -2118,11 +2118,33 @@ Let $p,q\in \R^+$. The following are equivalent:
 \end{lemma}
 
 \subsubsection{Young's inequality}
-\begin{theorem}[Young's inequality] \label{YoungsInequality}
+\begin{theorem}
+Let $a\in \R$ and $f: \interval{0,a}\to \interval{0,f(a)}$ be a strictly increasing continuous function such that $f(0) = 0$. Then
+\[ xy \leq \int_0^x f(t)\diff{t} + \int_0^y f^{-1}(t)\diff{t} \]
+for all $x\in \interval{0,a}$ and $y\in \interval{0,f(a)}$.
+\end{theorem}
+\begin{proof}/
+Define the real function $g$ by
+\[ g(x) \defeq \int_0^x f(t)\diff{t} + \int_0^{f(x)}f^{-1}(t)\diff{t} - xf(x). \]
+Then $g$ is differentiable by \ref{firstFundamentalTheoremCalculus} and (TODO ref chain rule and product rule). The derivative is given by $g'(x) = 0$ for all $x\in \interval{0,a}$. Since $g(0) = 0$, we have $g(x) = 0$ for all $x\in\interval{0,a}$ by \ref{weakSecondTheoremCalculus}. Thus
+\[ xf(x) = \int_0^x f(t)\diff{t} + \int_0^{f(x)}f^{-1}(t)\diff{t}. \]
+Now we have
+\begin{align*}
+xy &= xf(x) - x\big(f(x)-y\big) \\
+&= \int_0^x f(t)\diff{t} + \int_0^{y}f^{-1}(t)\diff{t} + \int_y^{f(x)}f^{-1}(t)\diff{t} - x\big(f(x)-y\big) \\
+&= \int_0^x f(t)\diff{t} + \int_0^{y}f^{-1}(t)\diff{t} + \int_y^{f(x)}\big(f^{-1}(t) - x\big)\diff{t} \\
+&\leq \int_0^x f(t)\diff{t} + \int_0^{y}f^{-1}(t)\diff{t},
+\end{align*}
+where the inequality follows from the fact that $\int_y^{f(x)}\big(f^{-1}(t) - x\big)\diff{t}$ is always positive: if $t \leq f(x)$, then $f^{-1}(t)\leq x$ and if $f(x)\leq t$, then $x\leq f^{-1}(t)$. Since either $y\leq f(x)$ or $f(x)\leq y$, the integral is positive in both cases.
+\end{proof}
+\begin{corollary}[Young's inequality] \label{YoungsInequality}
 Let $p,q\in \R$ be such that $p>0, q>0$ and $p^{-1} + q^{-1} = 1$. Then for all $a,b \geq 0$, we have
 \[ ab \leq \frac{a^p}{p} + \frac{b^q}{q}. \]
 Equality holds \textup{if and only if} $b = a^{p-1}$.
-\end{theorem}
+\end{corollary}
+\begin{proof}
+TODO
+\end{proof}
 \begin{proof}[Proof using convexity of exponentiation]
 If either $a=0$ or $b =0$, then the result is immediate. Now assume $a>0$ and $b>0$. Then
 \begin{align*}
@@ -2252,6 +2274,13 @@ D_{fg}(\alpha+\beta) &= \mu\{\alpha\beta < f(\omega)g(\omega)\} \\
 &= D_f(\alpha) + D_g(\beta)
 \end{align*}
 by \ref{semiringPositiveContent}.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \overline{\R^+}$ a measurable function. Then $D_f$ is right-continuous.
+\end{lemma}
+\begin{proof}
+Let $\seq{x_n}$ be 
 \end{proof}
 
 \begin{proposition}
@@ -2480,11 +2509,11 @@ TODO: allow functions that are only defined a.e.
 TODO every equivalence class contains exactly one continuous functions (for Borel measures?)
 \end{proposition}
 
-\begin{definition}
 
-\end{definition}
+\subsubsection{$L^0(\Omega, \mu)$}
+TODO: $\norm{f}_0 = \mu\{f\neq 0\}$ (?)
 
-\subsubsection{$L^0(\Omega, \mu)$ and convergence in measure}
+\subsubsection{Convergence in measure}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $F\in \powerfilters\big(\meas(\Omega, \C)\big)$ and $f\in \meas(\Omega, \C)$. Then $F$ is said to \udef{converge in measure} to $f$ if
 \[ \upset D_{|-|}(\epsilon)^{\imf\imf}(F-f) \overset{\overline{\R^+}}{\longrightarrow} 0 \]
@@ -2494,16 +2523,33 @@ for all $\epsilon > 0$.
 \begin{lemma}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The following are pseudometrics on $\meas(\Omega, \C)$ whose pseudometric topology coincides with convergence in measure:
 \begin{enumerate}
-\item $d_1: (f,g) \mapsto \inf\setbuilder[\big]{\epsilon > 0}{D_{|f-g|}(\epsilon) \leq \epsilon}$;
+\item $d_1: (f,g) \mapsto \min\setbuilder[\big]{\epsilon > 0}{D_{|f-g|}(\epsilon) \leq \epsilon}$;
 \item $d_2: (f,g) \mapsto \inf_{\epsilon>0} D_{|f-g|}(\epsilon) + \epsilon$;
 \item if $\mu$ is finite, $d_4: (f,g) \mapsto \int_\Omega \frac{|f-g|}{1+|f-g|}\diff{\mu}$;
 \item if $\mu$ is finite, $d_5: (f,g) \mapsto \int_\Omega\min\{|f-g|, \underline{1}\}\diff{\mu}$.
 \end{enumerate}
 \end{lemma}
+\begin{proof}
+(1) We first need to show that this is well-defined, i.e.\ that the minimum
+
+$\inf\setbuilder[\big]{\epsilon > 0}{D_{|f-g|}(\epsilon) \leq \epsilon}$
+
+
+
+\url{https://dspace.mit.edu/bitstream/handle/1721.1/96865/18-175-fall-2008/contents/lecture-notes/section_19.pdf}
+\end{proof}
 
 \begin{definition}
-The metric $d_1$ is known as the \udef{Ky Fan metric}.
+The metric $d_1$ is known as the \udef{Ky Fan metric}. We can define a whole family of Ky Fan metrics
+\[ K_\lambda: (f,g) \mapsto \inf\setbuilder[\big]{\epsilon > 0}{D_{|f-g|}(\lambda\epsilon) \leq \epsilon} \]
 \end{definition}
+
+\begin{proposition}
+$\lim_{\lambda\to 0}K_\lambda(\cdot) = \norm{\cdot}_0$ and $\lim_{\lambda\to \infty}K_\lambda(\cdot) = \norm{\cdot}_\infty$.
+\end{proposition}
+\begin{proof}
+TODO \url{https://statistik.econ.kit.edu/download/doc_secure1/3_StochModels_Appendix.pdf}
+\end{proof}
 
 \begin{lemma}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. Then convergence in measure is a topological vector space convergence on $\meas(\Omega,\C)$ with neighbourhood filter
