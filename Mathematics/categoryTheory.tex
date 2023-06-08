@@ -1041,6 +1041,14 @@ such that
 
 \chapter{Object-free category theory}
 
+\section{``Down with categories'' spiel}
+\begin{itemize}
+\item it is easy to consider composition in $\cat{Set}$ such that it is not a category;
+\item difficulty of formal methods hurdle for foundational use;
+\item monoidal categories;
+\item complicated enough that people can justify working on trivialities.
+\end{itemize}
+
 \section{Categories as associative classes}
 \subsection{Definition and identities}
 \begin{definition}
@@ -1479,7 +1487,65 @@ A \udef{univeral property} of an object $c\in \cat{C}$ is expressed by a represe
 \chapter{Cones and cocones}
 
 \section{Cone and leg categories}
-TODO limit and colimit stars in diagrams.
+TODO: diagram is just graph homomorphism
+\begin{definition}
+Let $\cat{C}$ be a category, $G= \sSet{V,E}$ a graph and $\mathbb{D}: G\to \cat{C}$ a diagram.
+\begin{itemize}
+\item A \udef{star} over $G$ is a pair $(C, l)$, where
+\begin{itemize}
+\item $C$ is an object;
+\item $l: V\to \mor(\cat{C})$ is a function such that $\dom\big(l_v\big) = C$ for all $v\in V$.
+\end{itemize}
+\item A star $(C,l)$ over $\mathbb{D}$ is \udef{compatible} with an edge $(v,v')\in E$ if $l_{v'} = \mathbb{D}(v,v') \circ l_v$. We write $(v,v')\smile (C,l)$.
+\item A star $(C,l)$ is a \udef{cone} over $\mathbb{D}$ if it is an element of $\im(\mathbb{D})^{\smile}$.
+\item A diagram $\mathbb{D}': G'\to \cat{C}$ is a \udef{conservative extension} of $\mathbb{D}$ if each cone $(C,l)$ over $\mathbb{D}$ has a unique extension to a cone $(C, l')$ over $\mathbb{D}'$.
+\item A cone $(C,l)$ over $\mathbb{D}$ is called a \udef{limit} if the extension $\mathbb{D}_C: G_C\to \cat{C}$ is conservative, where
+\begin{itemize}
+\item $G_C = \sSet{V\sqcup \{C\}, E\sqcup\setbuilder{(C, v)}{v\in V}}$;
+\item $\mathbb{D}_C(C,v) = l_v$.
+\end{itemize} 
+\end{itemize}
+\end{definition}
+Note we write $l_v$ for $l(v)$.
+
+\begin{lemma} \label{coneOverSubdiagram}
+Let $\cat{C}$ be a category, $\mathbb{D}: G\to \cat{C}$ a diagram and $G'\subseteq G$. If $(C,l)$ is a cone over $\mathbb{D}$, then $(C, l|_{G'})$ is a cone over $\mathbb{D}|_{G'}$.
+\end{lemma}
+\begin{proof}
+It is clear that $(C, l|_{G'})$ is a star over $G'$. Since each edge $(v,v')\in G'$ is an edge of $G$, we have
+\[ l|_{G'}(v') = l(v') = \mathbb{D}(v, v')\circ l(v) = \mathbb{D}|_{G'}(v, v')\circ l|_{G'}(v), \]
+so $(C, l|_{G'})$ is a cone over $\mathbb{D}|_{G'}$.
+\end{proof}
+
+\begin{lemma}
+Let $\cat{C}$ be a category and $\mathbb{D}: G\to \cat{C}, \mathbb{D}': G'\to \cat{C}, \mathbb{D}^{\prime\prime}: G^{\prime\prime}\to \cat{C}$ diagrams such that $G\subseteq G', G^{\prime\prime}$ and $(G'\setminus G)\perp (G^{\prime\prime}\setminus G)$.
+
+If $\mathbb{D}'$ is a conservative extension of $\mathbb{D}$, then $\mathbb{D}^{\prime\prime}$ is a conservative extension of $\mathbb{D}$ \textup{if and only if} $\mathbb{D}^{\prime\prime}\cup \mathbb{D}': G^{\prime\prime}\cup G' \to \cat{C}$ is a conservative extension of $\mathbb{D}'$.
+\end{lemma}
+Due to the assumption $(G'\setminus G)\perp (G^{\prime\prime}\setminus G)$, the diagram $\mathbb{D}^{\prime\prime}\cup \mathbb{D}': G^{\prime\prime}\cup G' \to \cat{C}$ is well-defined.
+\begin{proof}
+First assume $\mathbb{D}^{\prime\prime}$ is a conservative extension of $\mathbb{D}$ and take a cone $(C,l)$ over $\mathbb{D}'$. Now $(C, l|_G)$ is a cone over $\mathbb{D}$ by \ref{coneOverSubdiagram}, so it has a unique extension to a cone $(C, l')$ over $\mathbb{D}^{\prime\prime}$. We can consider the star $(C, l\cup l')$, which is clearly a cone because it is compatible with each edge in $G'\cup G^{\prime\prime}$.
+This shows the existence of an extension.
+
+To show uniqueness, TODO
+\end{proof}
+\begin{corollary}
+Let $\cat{C}$ be a category and $\mathbb{D}: G\to \cat{C}, \mathbb{D}': G'\to \cat{C}$ diagrams such that $\mathbb{D}'$ is a conservative extension of $\mathbb{D}$. Let $(C, l)$ be a cone over $\mathbb{D}$ with unique extension to the cone $(C, l')$ over $\mathbb{D}'$. Then $(C, l)$ is a limit \textup{if and only if} $(C, l')$ is a limit.
+\end{corollary}
+
+\begin{lemma}
+Let $\cat{C}$ be a category, $G = \sSet{V,E}$ a graph, $\mathbb{D}: G\to \cat{C}$ a diagram, $v\in V$ and $f: \mathbb{D}(v)\to B$ a morphism whose domain is in the image of $\mathbb{D}$. Then the diagram $\mathbb{D}': G'\to \cat{C}$, where $G' = \sSet{V,\cup \{B\}, E\cup \{(v,B)\}}$ and $\mathbb{D}'(v,B) = f$, is a conservative extension of $\mathbb{D}$.
+\end{lemma}
+\begin{proof}
+Let $(C,l)$ be a cone over $\mathbb{D}$. In order for the extension to be compatible with the edge $(v, B)$, we need to set $l'(B) = f\circ l(v)$.
+\end{proof}
+
+
+\begin{lemma}
+Adding an identity that starts and ends at the same node to a diagram gives a conservative extension.
+\end{lemma}
+Adding an identity that joins different nodes is clearly not conservative in general.
+
 
 \begin{proposition}[Walking cones and cocones] \label{walkingConesCocones}
 Let $\cat{C}$ be a category and $\cat{I}\subseteq \cat{J}$ small categories such that the whole of $\cat{J}$ is reachable from $\cat{I}$. Let $D: \cat{J}\to \cat{C}$ be a diagram. Then
@@ -1504,14 +1570,54 @@ TODO pointed extension: one additional vertex with edges pointing to existing ve
 
 The following operations preserve the class of cones:
 \begin{itemize}
-\item adding a morphism to a new node;
-\item adding a morphism that already exists on the diagram;
-\item adding the inverse of an isomorphism;
-\item adding a limit of a subdiagram with leg morphisms.
+\item adding a morphism from an existing node to a new node;
+\item adding a morphism that is the composition of morphisms that are already in the diagram;
+\item adding the inverse of an existing isomorphism;
+\item adding a limit of a subdiagram with leg morphisms;
+\item adding the diagram of an existing cone;
+\item adding the universal morphism from an object to a limit of a subdiagram.
 \end{itemize}
 TODO: for now I refer to \ref{walkingConesCocones} for all these points.
 
 TODO: arrows in diagrams as constraints!!
+
+\begin{lemma} \label{conesOverCompositions}
+Let $f: A\to B$, $g: B\to C$ be morphisms. Then
+\begin{enumerate}
+\item the class of cones over the following diagrams are equal:
+\begin{enumerate}
+\item $\begin{tikzcd}
+A \ar[r, "f"] & B \ar[r, "g"] & C
+\end{tikzcd}$;
+\item $\begin{tikzcd}
+A \ar[rr, "{g\circ f}"] & \phantom{B} & C
+\end{tikzcd}$;
+\item $\begin{tikzcd}
+A \ar[r, "f"] \ar[rr, bend right, "{g\circ f}"] & B \ar[r, "g"] & C
+\end{tikzcd}$;
+\end{enumerate}
+\item the class of cocones under the following diagrams are equal:
+\begin{enumerate}
+\item $\begin{tikzcd}
+A \ar[r, "f"] & B \ar[r, "g"] & C
+\end{tikzcd}$;
+\item $\begin{tikzcd}
+A \ar[rr, "{g\circ f}"] & \phantom{B}  & C
+\end{tikzcd}$;
+\item $\begin{tikzcd}
+A \ar[rr, bend right, "{g\circ f}"] \ar[r, "f"] & B \ar[r, "g"]  & C
+\end{tikzcd}$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Clearly any cone over (c) is a cone over the other two diagrams. First let $K$ be a cone over (a) with legs $l_A, l_B, l_C$. Then $f\circ l_A = l_B$ and $g\circ l_B = l_C$, so $l_c = g\circ (f\circ l_A) = (g\circ f)\circ l_A$ and $K$ is a cone over (c).
+
+Now let $K$ be a cone over (b) with legs $l_A, l_C$. Then there is a unique choice for the leg $l_B$, namely $l_B = f\circ l_A$. Since $g\circ f\circ l_A = l_C$, we have $l_C = g\circ (f\circ l_A) = g\circ l_B$ and $K$ is a cone over (c).
+
+(2) The arguments are dual.
+\end{proof}
+
 
 \begin{proposition}
 Cone category is intersection \emph{of objects} in leg categories.
@@ -1701,7 +1807,9 @@ Let $\cat{C}$ be a category with zero element and $A\in\ob(\cat{C})$. Then
 
 \subsection{Pullbacks}
 \begin{definition}
-
+The limit of the diagram $\begin{tikzcd}
+A \ar[r] & C & \ar[l] B
+\end{tikzcd}$ is the \udef{pullback} $A\times_C B$.
 \end{definition}
 
 \begin{lemma} \label{productAsPullback}
@@ -1727,6 +1835,9 @@ D \ar[r] & B \ar[r] & A
 Then the left square is a pullback \textup{if and only if} the rectangle is a pullback.
 \end{proposition}
 \begin{proof}
+\ref{conesOverCompositions}
+
+
 The diagram $\begin{tikzcd}[column sep=small]
 D \ar[r] & B & \ar[l] B\times_A C
 \end{tikzcd}$ has the same cones as

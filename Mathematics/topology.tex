@@ -118,7 +118,7 @@ Note we do \emph{not} require $I$ to be a partial order.
 \subsubsection{From nets to filters}
 \begin{lemma}
 Let $X$ be a set, $I$ a directed index set and $\seq{x_i}_{i\in I}$ a net in $X$. Then
-\[ \Tails(\seq{x_i}_{i\in I}) \defeq \setbuilder{\setbuilder{x_i}{i \geq j}}{j\in I} \]
+\[ \Tails(\seq{x_i}_{i\in I}) \defeq \setbuilder[\big]{\setbuilder{x_i}{i \geq j}}{j\in I} \]
 is a downward directed subset of $\powerset(X)$.
 \end{lemma}
 \begin{proof}
@@ -320,7 +320,7 @@ Assume $\zeta \leq \xi$. For all $F\in \powerfilters(X)$ we have $\lim_\zeta^{-1
 A convergence space $\sSet{X,\xi}$ is pretopological if it $1$-paved, i.e.\ at each point $x$ there is a filter $G$ that converges to $x$ such that
 \[ F\in {\lim}_\xi^{-1}(x) \implies G \leq F. \]
 
-\begin{lemma}
+\begin{lemma} \label{pretopologyLemma}
 Let $\xi$ be a convergence on a set $X$. Then the following are equivalent:
 \begin{enumerate}
 \item $\xi$ is a pretopology;
@@ -340,6 +340,14 @@ $(3) \Leftrightarrow (4)$. The set $\lim^{-1}_\xi x$ is upwards closed.
 $(4) \Leftrightarrow (5)$. The opposite implication to (4) is immediate because $\vicinity_\xi(x)$ is the infimum of $\lim^{-1}_\xi$.
 \end{proof}
 Thus in a pretopological convergence space we can determine whether $x$ is in the limit of a filter $F$ by simply comparing $F$ to the vicinity filter of $x$.
+
+\begin{lemma} \label{pretopologicalNetConvergence}
+Let $\sSet{X,\xi}$ be a pretopological convergence space, $x\in X$ and $\seq{x_i}_{i\in I}$ a net. Then $\TailsFilter\seq{x_i} \overset{\xi}{\longrightarrow} x$ \textup{if and only if}
+\[ \forall A\in \vicinity_\xi(x): \exists i_0\in I: \forall i \geq i_0: \quad x_i\in A. \]
+\end{lemma}
+\begin{proof}
+By \ref{pretopologyLemma}, $\TailsFilter\seq{x_i} \overset{\xi}{\longrightarrow} x$ is equivalent to $\vicinity_\xi(x) \subseteq \TailsFilter\seq{x_i} = \upset \Tails\seq{x_i}$. Unpacking definitions gives the statement.
+\end{proof}
 
 \begin{lemma} \label{filterFunctionToPretopology}
 Let $X$ be a set and $\mathcal{F}:X\to \powerfilters(X)$ a filter-valued function. If $\mathcal{F}(x) \subseteq \pfilter{x}$ for all $x\in X$, then $\mathcal{F}$ is the vicinity filter of a pretopological convergence.
@@ -1065,6 +1073,14 @@ Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. We call a subset $A\subs
 
 The set of all neighbourhoods of $x$ is denoted $\neighbourhood_\xi(x)$.
 \end{definition}
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then $\neighbourhood_\xi(x)$ is a filter.
+\end{lemma}
+\begin{proof}
+By construction it is clearly upwards closed: if a set $A$ contains an open set $O$ that contains $x$, then any superset of $A$ also contains $O$.
+
+Now take $A,B\in \neighbourhood_xi(x)$. Then there exist $O_A, O_B \in \topology_\xi$ such that $x\in O_A$ and $x\in O_B$. Now $x\in O_A\cap O_B$ and $O_A\cap O_B \in \topology_\xi$ by \ref{propertiesTopology}. Since $O_A\cap O_B\subseteq A\cap B$, we have $A\cap B\in \neighbourhood_\xi(x)$.
+\end{proof}
 
 \begin{proposition} \label{interiorClosureMembership}
 Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $x\in X$. Then
@@ -1140,6 +1156,21 @@ TODO
 \begin{corollary}
 Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is topological \textup{if and only if} $\neighbourhood_\xi(x) \overset{\xi}{\longrightarrow} x$ for all $x\in X$.
 \end{corollary}
+
+\begin{lemma} \label{topologicalNetConvergence}
+Let $\sSet{X,\xi}$ be a pretopological convergence space, $x\in X$ and $\seq{x_i}_{i\in I}$ a net. Then the following are equivalent:
+\begin{enumerate}
+\item $\TailsFilter\seq{x_i} \overset{\xi}{\longrightarrow} x$;
+\item $\forall A\in \neighbourhood_\xi(x): \exists i_0\in I: \forall i \geq i_0: \quad x_i\in A$;
+\item $\forall A\in \topology_\xi: x\in A \implies \Big(\exists i_0\in I: \forall i \geq i_0: \; x_i\in A\Big)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Leftrightarrow (2)$ By \ref{topologicalNetConvergence} (with $\vicinity_\xi(x) = \neighbourhood_\xi(x)$ by \ref{pretopologicalSpaceTopological}).
+
+
+$(2) \Leftrightarrow (3)$ The set of all $A\in \topology_\xi$ such that $x\in A$ forms a basis of $\neighbourhood_\xi(x)$.
+\end{proof}
 
 TODO: direct characterisation of topological convergence spaces \url{https://en.wikipedia.org/wiki/Axiomatic_foundations_of_topological_spaces}.
 
@@ -1872,7 +1903,26 @@ The statement for closed sets follows straight from \ref{openClosedComplement}.
 (4) From \ref{topologicalModificationConstruction}, $\neighbourhood_\xi(x) = \vicinity_{\topMod(\xi)}(x)$. The result follows because $\topMod(\xi)$ is topological.
 \end{proof}
 
+\subsection{Base properties}
+\begin{lemma}
+Let $X$ be a set and $\mathcal{B}\subseteq \powerfilters(X)$ a set of filters. The set of convergences on $X$ that are based in $\mathcal{B}$ is closed under joins.
+\end{lemma}
+\begin{proof}
+Let $\Xi$ be a set of convergences on $X$ that are all based in $\mathcal{B}$. And suppose $F\in\powerfilters(X)$ conververges to $x\in X$ according to $\bigvee \Xi$. By \ref{latticeConvergences}, there exists $\xi\in \Xi$ such that $F\overset{\xi}{\longrightarrow} x$.
 
+By assumption, there exists $G\in\powerfilters(X)$ such that $G\subseteq F$, $G\overset{\xi}{\longrightarrow} x$ and $G$ is based in $\mathcal{B}$.
+
+Then $G\overset{\Xi}{\longrightarrow} x$. As $F\overset{\xi}{\longrightarrow} x$ was chosed arbitrarily, we have that $\Xi$ is based in $\mathcal{B}$.
+\end{proof}
+
+\begin{definition}
+Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. The \udef{$\mathcal{B}$-based modification} $\basedMod_\mathcal{B}(\xi)$ is the coclosure into the lattice of $\mathcal{B}$-based convergences.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. Then
+\[ \basedMod_\mathcal{B}(\xi) = \setbuilder{(F,x)\in \powerfilters(X)\times X}{\exists G\in \powerfilters(X): \; G\subseteq, G\overset{\xi}{\longrightarrow} x, \text{$G$ is based in $\mathcal{B}$}}. \]
+\end{lemma}
 
 \section{Convergences on ordered sets}
 \subsection{Ordering of filters}
@@ -2071,8 +2121,8 @@ Let $L, M$ be complete lattices and $f: L\to M$ a function. Then
 \begin{enumerate}
 \item $f$ preserves (arbitrary) meets \textup{if and only if} $f$ is in $\cont\big(\sSet{L, S_*}, \sSet{M, S_*}\big)$;
 \item $f$ preserves (arbitrary) joins \textup{if and only if} $f$ is in $\cont\big(\sSet{L, S^*}, \sSet{M, S^*}\big)$;
-\item $f$ preserves countable meets \textup{if and only if} $f$ is in $\cont\big(\Seq\sSet{L, S_*}, \Seq\sSet{M, S_*}\big)$;
-\item $f$ preserves countable joins \textup{if and only if} $f$ is in $\cont\big(\Seq\sSet{L, S^*}, \Seq\sSet{M, S^*}\big)$.
+\item $f$ preserves countable meets \textup{if and only if} $f$ is in $\cont\big(\seqMod\sSet{L, S_*}, \seqMod\sSet{M, S_*}\big)$;
+\item $f$ preserves countable joins \textup{if and only if} $f$ is in $\cont\big(\seqMod\sSet{L, S^*}, \seqMod\sSet{M, S^*}\big)$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -2802,33 +2852,9 @@ Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{F}$ a $\pi$-system of cl
 \end{definition}
 
 \chapter{Sequential spaces}
-\begin{definition}
-$\Seq(\xi)$
-\end{definition}
 
-\section{Sequences}
-\subsection{Sequential filters}
-
-\begin{lemma}
-Let $X$ be a set and $\seq{x_n}$ a sequence in $X$. Then
-\[ \Tails(\seq{x_n}) \defeq \setbuilder{\setbuilder{x_n}{n \geq k}}{k\in \N} = \setbuilder{\seq{x_n}[k:\infty]}{k\in \N} \]
-is a downward directed subset of $\powerset(X)$.
-\end{lemma}
-\begin{proof}
-Take $A,B\in \Tails(\seq{x_n})$. If $A = \setbuilder{x_n}{n \geq a}$ and $B = \setbuilder{x_n}{n \geq b}$, then $A$ is a lower bound of $\{A,B\}$ if $a\geq b$. Otherwise $B$ is a lower bound.
-\end{proof}
-
-\begin{definition}
-Let $X$ be a set and $\seq{x_n}$ a sequence in $X$. We call
-\begin{itemize}
-\item $\Tails(\seq{x_n})$ the \udef{sequential filter base} of $\seq{x_n}$;
-\item the filter generated by $\Tails(\seq{x_n})$ in $\powerset(X)$ the \udef{(sequential) filter} of $\seq{x_n}$, which we denote $\TailsFilter(\seq{x_n})$;
-\item any filter that is generated by a sequence a \udef{sequential filter};
-\item the \udef{kernel} of the sequence the kernel of the associated sequential filter.
-\end{itemize}
-We have 
-\[ \TailsFilter(\seq{x_n}) = \upset \Tails(\seq{x_n}). \]
-\end{definition}
+\section{Sequential filters}
+A sequential filter a filter that is the tails filter of a sequence.
 
 \begin{proposition} \label{sequenceConstructionsSequentialFilters}
 Let $X$ be a set.
@@ -2993,8 +3019,54 @@ Let $(X,\mathcal{T})$ be a topological space and $(a_n)_{n\in\N}$ a sequence in 
 
 TODO: Bolzano-Weierstrass (sequence version + accumulation point version)
 
-\subsection{Sequential spaces}
-\subsubsection{The sequential topology}
+\section{Sequentially based spaces and the sequential modification}
+\begin{definition}
+Let $X$ be a set. A convergence $\xi$  on $x$ is called \udef{sequentially based} if it is based in the set of sequential filters in $X$.
+\end{definition}
+
+\subsection{Sequential properties}
+\subsubsection{Sequential continuity}
+\begin{definition}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. Then $f$ is called \udef{sequentially continuous} if $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \zeta}$ is continuous.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. Then $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \zeta}$ is continuous \textup{if and only if} $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \seqMod(\zeta)}$.
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. Then $f$ is sequentially continuous \textup{if and only if} for all convergent sequences $\seq{x_n}\overset{\xi}{\longrightarrow} x$ in $X$, the sequence $\seq{f(x_n)}$ converges to $f(x)$.
+\end{proposition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. If $f:\sSet{X,\xi}\to \sSet{Y,\zeta}$ is continuous, then $f$ is sequentially continuous.
+\end{proposition}
+
+\section{Sequential spaces}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then
+\begin{itemize}
+\item $\xi$ is called \udef{sequential} if $\topMod(\xi) = (\topMod\circ \seqMod)(\xi)$;
+\item $X$ is called a \udef{sequential space}.
+\end{itemize} 
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space. The following are equivalent
+\begin{enumerate}
+\item $\xi$ is sequential;
+\item $\xi \leq (\topMod\circ \seqMod)(\xi)$;
+\item $\closure_\xi = \closure_{\seqMod(\xi)}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
+\subsection{The sequential topology}
 \begin{definition}
 Let $(X,\mathcal{T})$ be a topological space and $S\subseteq X$ a subset.
 \begin{itemize}
@@ -3063,11 +3135,11 @@ Let $(X,\mathcal{T})$ be a topological space and $(x_n)$ a sequence in $X$. Then
 Now $\mathcal{T}_\text{seq}$ is finer than $\mathcal{T}$, so the $\Leftarrow$ direction is evident. For the $\Rightarrow$ direction, assume $x_n\to x$ in the original topology. Let $V(x)$ be an open neighbourhood in the sequential topology. By definition of the sequential topology $(x_n)$ has a tail in $V$. This means $x_n\to x$ in the sequential topology by \ref{sequenceConvergence}.
 \end{proof}
 
-\subsubsection{Transfinite sequential closure}
+\subsection{Transfinite sequential closure}
 It is possible that the sequential closure is not idempotent (unlike the normal topological closure), i.e.\
 \[ \operatorname{SeqCl}(\operatorname{SeqCl}(S)) \neq \operatorname{SeqCl}(S). \]
 
-\subsubsection{Sequential continuity}
+\subsection{Sequential continuity}
 \begin{definition}
 A function $f:(X,\mathcal{T})\to(Y,\mathcal{T}')$ is called \udef{sequentially continuous} if
 \[ f:(X,\mathcal{T}_\text{seq})\to(Y,\mathcal{T}'_\text{seq}) \]
@@ -3091,7 +3163,7 @@ Every continuous function is sequentially continuous.
 We use the characterisation of sequential continuity in \ref{sequentialContinuity}. Let $x_n\to x$. Let $V$ be an open neighbourhood of $f(x)$. Then there exists an open neighbourhood $U(x)$ such that $f[U]\subset V$. By \ref{sequenceConvergence} $U$ contains all but finitely many elements of the sequence $(x_n)$. Thus $V$ contains all but finitely many of the elements of the sequence $(f(x_n))$. Take $n_0$ larger than the indices of all elements of $(f(x_n))$ omitted from $V$. By \ref{sequenceConvergence} $f(x_n)\to f(x)$.
 \end{proof}
 
-\subsubsection{Sequential spaces}
+\subsection{Sequential spaces}
 \begin{definition}
 A topological space $(X,\mathcal{T})$ is called a \udef{sequential space} if $\mathcal{T} = \mathcal{T}_\text{seq}$.
 \end{definition}
@@ -3126,19 +3198,19 @@ Let $(X,\mathcal{T})$ be a topological space. Then $X$ is sequential \textup{if 
 \end{proposition}
 
 
-\subsubsection{$T$-sequential and $N$-sequential spaces}
+\subsection{$T$-sequential and $N$-sequential spaces}
 
-\subsubsection{Fréchet–Urysohn spaces}
+\subsection{Fréchet-Urysohn spaces}
 \begin{definition}
-A topological space $(X,\mathcal{T})$ is called a \udef{Fréchet–Urysohn space} if for every subset $S\subseteq X$
+A topological space $(X,\mathcal{T})$ is called a \udef{Fréchet-Urysohn space} if for every subset $S\subseteq X$
 \[ \operatorname{SeqCl}(S) = \bar{S}. \]
 \end{definition}
-Clearly every Fréchet–Urysohn space is a sequential space.
+Clearly every Fréchet-Urysohn space is a sequential space.
 
 \begin{proposition} \label{FrechetUrysohn}
 Let $(X,\mathcal{T})$ be a topological space. Then the following are equivalent:
 \begin{enumerate}
-\item $(X,\mathcal{T})$ is a Fréchet–Urysohn space;
+\item $(X,\mathcal{T})$ is a Fréchet-Urysohn space;
 \item every subspace of $X$ is a sequential space;
 \item for every subset $S\subset X$ that is not closed in $X$ and for all $x\in \bar{S}\setminus S$ there exists a sequence in $S$ that converges to $x$.
 \end{enumerate}
@@ -3194,7 +3266,7 @@ If $a\notin A$, we can find for each $x_i\in A$ an $x_{i+1}$ satisfying $x_i < x
 \end{proof}
 In many cases the axiom of dependent choice is superfluous, if the details of the spaces $X,A$ allow for the construction of $x_{i+1}$ from $x_i$.
 
-\subsubsection{Divergence to $\pm\infty$}
+\subsection{Divergence to $\pm\infty$}
 \begin{definition}
 Let $(x_n)$ be a sequence in a totally ordered space $X$. Then
 \begin{itemize}
@@ -3212,8 +3284,8 @@ Let $(x_n)$ be a sequence in a totally ordered space $X$. Then
 \end{enumerate}
 \end{lemma}
 
-\subsection{Sequences in complete ordered space}
-\subsubsection{Monotone convergence}
+\section{Sequences in complete ordered space}
+\subsection{Monotone convergence}
 \begin{proposition}[Monotone convergence] \label{sequenceMonotoneConvergence}
 Let $(X,\leq)$ be a complete totally ordered space and let $(x_n)$ be a sequence in $X$.
 \begin{enumerate}
@@ -3227,7 +3299,7 @@ We prove the first point. The second is analogous.
 Let $V(\sup_n x_n)$ be an open and $]x,y[\subset V$ such that $\sup_n x_n \in ]x,y[$. Now because $x<\sup_n x_n$ it is not an upper bound of the sequence and there exists an $x_{n_0}> x$. Because the sequence is increasing (and $y$ is a a strict upper bound), all $x_n$ where $n\geq n_0$ are in $]x,y[\subset V$.
 \end{proof}
 
-\subsubsection{Limes superior and inferior}
+\subsection{Limes superior and inferior}
 \begin{definition}
 Let $(X,\leq)$ be a complete totally ordered space and let $(x_n)$ be a sequence in $X$. We define
 \begin{itemize}
@@ -3292,9 +3364,6 @@ Let $(a_n)$ and $(b_n)$ be bounded sequences in a totally ordered space such tha
 \begin{lemma} \label{sequencesSupInf}
 There exist sequences converging to supremum and infimum.
 \end{lemma}
-
-\subsection{Completeness}
-
 
 
 
@@ -6244,12 +6313,12 @@ We call the group seminorm
 If $\norm{\cdot}$ is a group (semi)norm for $G$, then we call $\sSet{G, \cdot, 1, \norm{\cdot}}$ a \udef{(semi)normed group}.
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{groupSeminormConvergence}
 Let $\sSet{G, \cdot, 1, \norm{\cdot}}$ be a cyclically permutable seminormed group. Then 
 \begin{enumerate}
 \item $\norm{\cdot}\circ \Delta_r = \norm{\cdot}\circ \Delta_l$ is a pseudometric;
 \item the pseudometric convergence is a group convergence;
-\item the pseudometric uniformity correspond to the group uniformity.
+\item the pseudometric uniformity is equal to the group uniformity.
 \end{enumerate} 
 \end{proposition}
 \begin{proof}
