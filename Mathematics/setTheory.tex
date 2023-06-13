@@ -2189,9 +2189,18 @@ Let $R$ be a homogeneous relation on $A$. Then $R$ is
 \end{enumerate}
 \end{lemma}
 
-\begin{lemma}
-Let $R$ be a homogeneous relation on $A$. If $R$ is transitive / anti-transitive, then $R^\transp$ is too.
+\begin{lemma} \label{transposeTransitive}
+Let $R$ be a homogeneous relation on $A$. Then
+\begin{enumerate}
+\item if $R$ is transitive, then $R^\transp$ is transitive;
+\item if $R$ is anti-transitive, then $R^\transp$ is anti-transitive.
+\end{enumerate}
 \end{lemma}
+\begin{proof}
+(1) Take arbitrary $x,y,z\in A$ such that $xR^\transp y$ and $yR^\transp z$. Then $yRx$ and $zRy$, so $zRx$ by transitivity of $R$. Because $xR^\transp z$, we conclude that $R^\transp$ is transitive.
+
+(2) Take arbitrary $x,y,z\in A$ such that $xR^\transp y$ and $yR^\transp z$. Then $yRx$ and $zRy$, so $z\overline{R}x$ by anti-transitivity of $R$. Because $x\overline{R}^\transp z$ and thus $x\overline{R^\transp} z$, we conclude that $R^\transp$ is transitive.
+\end{proof}
 
 
 \begin{lemma}
@@ -2201,6 +2210,22 @@ Let $R$ be a homogeneous relation on $A$. If $R$ is transitive / anti-transitive
 \item An anti-transitive relation on a class of more than four elements elements is never connex.
 \end{enumerate}
 \end{lemma}
+
+\begin{lemma} \label{transitivityReflexiveRelationLemma}
+Let $A$ be a set and $R$ a reflexive relation on $A$. Then the following are equivalent:
+\begin{enumerate}
+\item $R$ is transitive;
+\item $xRy \implies yR\subseteq xR$ for all $x,y\in A$;
+\item $xRy \iff yR\subseteq xR$ for all $x,y\in A$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Assume $R$ transitive and $xRy$. Take $z\in yR$, so $yRz$. By transitivity, $xRz$ and $z\in xR$.
+
+$(2) \Rightarrow (3)$ Assume $yR \subseteq xR$. By reflexivity, $yRy$, so $y\in yR$. Thus $y\in xR$ and $xRy$.
+
+$(3) \Rightarrow (1)$ Take $x,y,z\in A$ such that $xRy$ and $yRz$. Then, by assumption, $yR \subseteq xR$ and $zR \subseteq yR$. Thus $zR \subseteq xR$ and, by assumption, $xRz$.
+\end{proof}
 
 \subsubsection{Symmetry}
 \begin{definition}
@@ -2883,12 +2908,14 @@ Let $f,g: A\to B$ be functions. Then $f = g$ \textup{if and only if} $\id_A \sub
 
 \subsection{Image and preimage}
 \subsubsection{Functions associated to a relation}
-We can associate to any relation $R$ on $(A,B)$
+We can associate to any relation $R$ on sets $(A,B)$
 \begin{itemize}
 \item an \udef{image function} $R^{\imf}: \powerset(A) \to \powerset(B): X \mapsto X_R$;
 \item a \udef{preimage function} $R^{\preimf}: \powerset(B) \to \powerset(A): X \mapsto {_RX}$;
 \item a \udef{right bounds function} $\powerset(A) \to \powerset(B): X \mapsto X^R$;
-\item a \udef{left bounds function} $\powerset(B) \to \powerset(A): X \mapsto {^RX}$.
+\item a \udef{left bounds function} $\powerset(B) \to \powerset(A): X \mapsto {^RX}$;
+\item a \udef{principal image function} $-R: A\to \powerset(B): x \mapsto xR$;
+\item \udef{principal preimage function} is the function $R-: B\to \powerset(A): y \mapsto Ry$.
 \end{itemize}
 
 Clearly $R^{\preimf} = (R^\transp)^\imf$.
@@ -2909,6 +2936,16 @@ y \in (R;S)^\imf(A) &\iff \exists x\in A:\; x(R;S)y \\
 \begin{corollary}
 For any relation $R$, $\ker(R)^\imf = R^\imf;R^\preimf = R^\preimf\circ R^\imf$.
 \end{corollary}
+
+
+\begin{note}
+Let $A,B$ be sets. Then
+\[ \powerset(A\times B) \cong \big(A\to \powerset(B)\big) \cong \big(B\to \powerset(A)\big), \]
+where relations are mapped to their principal image and preimage functions. See \ref{principalImageEquivalence}.
+\end{note}
+
+
+
 
 \subsubsection{Applying functions inside sets}
 As functions are relations they have images, preimages and associated image and preimage functions.
@@ -3089,8 +3126,8 @@ Let $X,Y,Z$ be classes. Using composition we can view any function $f: X\to Y$ a
 \begin{definition}
 Let $A,B,C$ be sets and $f\in (A\to B)$. Then we define
 \begin{itemize}
-\item the \udef{post-composition function} of $f$ as $f_*: (C\to A) \to (C\to B): g\mapsto f\circ g$.
-\item the \udef{pre-composition function} of $f$ as $f^*: (B\to C) \to (A\to C): g\mapsto g\circ f$.
+\item the \udef{post-composition function} of $f$ as $f_\star: (C\to A) \to (C\to B): g\mapsto f\circ g$.
+\item the \udef{pre-composition function} of $f$ as $f^\star: (B\to C) \to (A\to C): g\mapsto g\circ f$.
 \end{itemize}
 The post-composition function is also known as the \udef{pointwise} application or extension of $f$.
 \end{definition}
@@ -3098,16 +3135,16 @@ The post-composition function is also known as the \udef{pointwise} application 
 \begin{lemma} \label{covarianceContravarianceComposition}
 Let $A,B,C, D$ be sets, $f\in (A\to B)$ and $g\in(B\to C)$. Then
 \begin{enumerate}
-\item $(g\circ f)_* = g_*\circ f_*$;
-\item $(g\circ f)^* = f^*\circ g^*$.
+\item $(g\circ f)_\star = g_\star\circ f_\star$;
+\item $(g\circ f)^\star = f^\star\circ g^\star$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 (1) Let $h\in (D\to A)$. Then
-\[(g\circ f)_*(h) = (g\circ f)\circ h = g\circ(f\circ h) = g_*(f_*(h)) = (g_*\circ f_*)(h). \]
+\[(g\circ f)_\star(h) = (g\circ f)\circ h = g\circ(f\circ h) = g_\star(f_\star(h)) = (g_\star\circ f_\star)(h). \]
 
 (2) Let $h\in (C\to D)$. Then, similarly, 
-\[ (g\circ f)^*(h) = h\circ (g\circ f) = (h\circ g)\circ f = (g^*(h))\circ f = f^*(g^*(h)) = (f^*\circ g^*)(h). \]
+\[ (g\circ f)^\star(h) = h\circ (g\circ f) = (h\circ g)\circ f = (g^\star(h))\circ f = f^\star(g^\star(h)) = (f^\star\circ g^\star)(h). \]
 \end{proof}
 
 \subsubsection{Inverses of functions}
@@ -3393,6 +3430,45 @@ X^{g\circ f}\circ \curry_1(h) &= \curry_1\big(h \circ (\id_Y, g\circ f)\big) \\
 &= X^f\circ X^g \circ \curry_1(h).
 \end{align*}
 \end{proof}
+
+\subsubsection{Currying relations and set-valued functions}
+
+\begin{proposition} \label{principalImageEquivalence}
+Let $A,B$ be sets. Then we have bijections
+\[ \begin{tikzcd}[row sep=0]
+{} & {} & \big(A\to (B\to \{0,1\}) \big) \ar[r, "{(\charFunc{-})^{-1}_\star}"] & (A\to \powerset(B)) \\
+\powerset(A\times B) \ar[r, "{\charFunc{-}}"] & (A\times B \to \{0,1\}) \ar[ur, "\curry_1"] \ar[dr, swap, "\curry_2"] & {} & {} \\
+{} & {} & \big(B\to (A\to \{0,1\}) \big) \ar[r, "{(\charFunc{-})^{-1}_\star}"] & (B\to \powerset(A))
+\end{tikzcd} \]
+which map
+\[ \begin{tikzcd}[row sep=0]
+{} & {} & \charFunc{-R} \ar[r, mapsto] & -R \\
+R \ar[r, mapsto] & \charFunc{R} \ar[ur, mapsto] \ar[dr, mapsto] & {} & {} \\
+{} & {} & \charFunc{R-} \ar[r, mapsto] & R-.
+\end{tikzcd} \]
+\end{proposition}
+\begin{corollary}
+Let $A,B$ be sets. Then
+\begin{enumerate}
+\item every function $f: A\to \powerset(B)$ is the principal image function of a relation on $(A,B)$;
+\item every function $g: B\to \powerset(A)$ is the principal preimage function of a relation on $(A,B)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{definition}
+Let $A,B$ be sets and $f: A\to \powerset(B)$ a set-valued function. Then the \udef{transpose} $f^\transp$ of $f$ is defined by
+\[ f^\transp: B\to \powerset(A): b\mapsto \setbuilder{a\in A}{b\in f(a)}. \]
+\end{definition}
+
+\begin{lemma}
+Let $A,B$ be sets and $R$ a relation on $(A,B)$. Then
+\[ (-R)^\transp = -R^\transp = R- \qquad\text{and}\qquad (R-)^\transp = R^\transp - = -R. \]
+\end{lemma}
+
+\begin{lemma} \label{transpositionSetValuedFunctionLemma}
+Let $A,B$ be sets and $f: A\to \powerset(B)$ a set-valued function. Then, for all $a\in A,b\in B$,
+\[ b\in f(a) \qquad\iff\qquad a\in f^\transp(b). \]
+\end{lemma}
 
 \subsubsection{Partial application}
 \begin{definition}

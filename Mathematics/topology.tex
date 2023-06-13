@@ -116,10 +116,10 @@ A \udef{sequence} is a net with index set $\sSet{\N, \leq}$.
 Note we do \emph{not} require $I$ to be a partial order.
 
 \subsubsection{From nets to filters}
-\begin{lemma}
+\begin{lemma} \label{tailsDownwardsDirected}
 Let $X$ be a set, $I$ a directed index set and $\seq{x_i}_{i\in I}$ a net in $X$. Then
 \[ \Tails(\seq{x_i}_{i\in I}) \defeq \setbuilder[\big]{\setbuilder{x_i}{i \geq j}}{j\in I} \]
-is a downward directed subset of $\powerset(X)$.
+is a downwards directed subset of $\powerset(X)$.
 \end{lemma}
 \begin{proof}
 Take $A,B\in \Tails(\seq{x_i}_{i\in I})$. If $A = \setbuilder{x_i}{i \geq a}$ and $B = \setbuilder{x_i}{i \geq b}$, then we can find some $k\in I$ such that $k \geq a$ and $k\geq b$. Then $\setbuilder{x_i}{i \geq k}$ is a subset of both $A$ and $B$.
@@ -135,6 +135,16 @@ Let $X$ be a set, $I$ a directed index set and $\seq{x_i}_{i\in I}$ a net in $X$
 We have 
 \[ \TailsFilter(\seq{x_i}_{i\in I}) = \upset \Tails(\seq{x_i}_{i\in I}). \]
 \end{definition}
+
+\begin{lemma} \label{imageTailsFilter}
+Let $X$ be a set, $I$ a directed index set, $\seq{x_i}_{i\in I}$ a net in $X$ and $f:X\to Y$ a function. Then
+\[ \upset f^{\imf\imf}\big(\TailsFilter(\seq{x_i})\big) = \TailsFilter\big(\seq{f(x_i)}\big). \]
+\end{lemma}
+\begin{proof}
+Since $f^{\imf\imf}\big(\Tails(\seq{x_i})\big) = \Tails\big(\seq{f(x_i)}\big)$, the result follows from 
+\ref{imageFilterSubbasis} and \ref{tailsDownwardsDirected}.
+\end{proof}
+
 
 \subsubsection{From filters to nets}
 \begin{lemma} \label{filterIndex}
@@ -586,8 +596,7 @@ Let $X$ be a set, $\xi$ a preconvergence on $X$ and $\mathcal{A},\mathcal{B} \su
 Also
 \begin{enumerate} \setcounter{enumi}{3}
 \item $\inh_\xi\big(\powerset(X)\big) = X$;
-\item if $\mathcal{A} \subseteq \mathcal{B}$, then $\inh_\xi \mathcal{A} \subseteq \inh_\xi \mathcal{B}$;
-\item if $\mathcal{A},\mathcal{B}$ are downwards closed, then $\inh_\xi(\mathcal{A}\cap \mathcal{B}) = \inh_\xi(\mathcal{A}) \cap \inh_\xi(\mathcal{B})$.
+\item if $\mathcal{A} \subseteq \mathcal{B}$, then $\inh_\xi \mathcal{A} \subseteq \inh_\xi \mathcal{B}$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -604,14 +613,6 @@ It is enough to prove that either $F\subseteq \mathcal{A}^\mesh$ or $F\subseteq 
 (4) For all non-empty filters $F$, we have $F\mesh \powerset(X)$.
 
 (5) If $\mathcal{A} \subseteq \mathcal{B}$ and $F\mesh \mathcal{A}$, then $F\mesh \mathcal{B}$.
-
-(6) We calculate, using \ref{inherenceComplementAdherence} and noting that $\mathcal{A}$ is downwards closed if and only if $\setbuilder{A^c}{A\in\mathcal{A}}$ is upwards closed.
-\begin{align*}
-\inh_\xi(\mathcal{A}\cap \mathcal{B}) &= \adh_\xi\big(\setbuilder{A^c}{A\in\mathcal{A}}\cap \setbuilder{B^c}{B\in\mathcal{B}}\big)^c \\
-&= \Big(\adh_\xi\big(\setbuilder{A^c}{A\in\mathcal{A}}\big)\cup \adh_\xi\big(\setbuilder{B^c}{B\in\mathcal{B}}\big)\Big)^c \\
-&= \adh_\xi\big(\setbuilder{A^c}{A\in\mathcal{A}}\big)^c\cap \adh_\xi\big(\setbuilder{B^c}{B\in\mathcal{B}}\big)^c \\
-&= \inh_\xi(\mathcal{A})\cap \inh_\xi(\mathcal{B}).
-\end{align*}
 \end{proof}
 \begin{corollary} \label{principalInherenceAdherenceProperties}
 Let $X$ be a set, $\zeta\leq \xi$ preconvergences on $X$ and $A,B \subseteq X$. Then
@@ -631,9 +632,12 @@ Also
 \end{corollary}
 Compare with \ref{discreteTopologyCharacterisation}.
 \begin{proof}
-Most results are immediate using \ref{adherenceInherenceOrderClosure}.
+Most results are immediate using \ref{adherenceInherenceOrderClosure} and \ref{inherenceAdherenceMonotoneInConvergence}.
 
 The inclusions $A \subseteq \adh_\zeta(A)$ and $\inh_\zeta(A) \subseteq A$ follow from \ref{kernelAdherence}.
+
+For point (7), we calculate,
+\[ \inh_\xi(A\cap B) = \adh_\xi\big((A\cap B)^c\big)^c = \adh_\xi(A^c\cup B^c)^c = \big(\adh_\xi(A^c)\cup \adh_\xi(B^c)\big)^c = \adh_\xi(A^c)^c\cap \adh_\xi(B^c)^c = \inh_\xi(A) \cap \inh_\xi(B). \]
 \end{proof}
 
 
@@ -644,6 +648,156 @@ Let $\sSet{X,\xi}$ be a preconvergence space and $A,B\subseteq X$ subsets. If fo
 Assume that for every $a\in A$ there exists a $U_a \in \vicinity_\xi(a)$ such that $U_a \subseteq B$. Then $B\in \vicinity_\xi(a)$ for all $a$ in $A$ and thus $a\in \inh_\xi(B)$ for all $a\in A$.
 \end{proof}
 
+\subsection{Čech closure and interior operators}
+\begin{definition}
+Let $X$ be a set and $f: \powerset(X)\to \powerset(X)$ a function. Then $f$ is called
+\begin{itemize}
+\item a \udef{Čech closure operator} if
+\begin{itemize}
+\item $f(\emptyset) = \emptyset$;
+\item $A\subseteq f(A)$ for all $A\subseteq X$;
+\item $f(A \cup B) = f(A)\cup f(B)$ for all $A,B\subseteq X$;
+\end{itemize}
+\item a \udef{Čech interior operator} if
+\begin{itemize}
+\item $f(X) = X$;
+\item $f(A)\subseteq A$ for all $A\subseteq X$;
+\item $f(A \cap B) = f(A)\cap f(B)$ for all $A,B\subseteq X$.
+\end{itemize}
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a set and $f: \powerset(X)\to \powerset(X)$ either
+\begin{enumerate}
+\item a Čech closure operator on $X$; or
+\item a Čech interior operator on $X$.
+\end{enumerate}
+Then $f$ is isotone, i.e.\ $A\subseteq B\subseteq X$ implies $f(A) \subseteq f(B)$.
+\end{lemma}
+\begin{proof}
+(1) If $A\subseteq B$, then 
+\[ f(A) \subseteq f(A)\cup f(B) = f(A\cup B) = f(B). \]
+
+(2) If $A\subseteq B$, then 
+\[ f(A) = f(A\cap B) = f(A)\cap f(B) \subseteq f(B). \]
+\end{proof}
+
+\begin{lemma}
+Let $X$ be a set and $f: \powerset(X)\to \powerset(X)$ a function. Then
+\begin{enumerate}
+\item $f$ is a Čech closure operator \textup{if and only if} $g: \powerset(X)\to \powerset(X): A\mapsto f(A^c)^c$ is a Čech interior operator;
+\item $f$ is a Čech interior operator \textup{if and only if} $g: \powerset(X)\to \powerset(X): A\mapsto f(A^c)^c$ is a Čech closure operator.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $f$ is a Čech closure operator. Then we verify
+\begin{itemize}
+\item $g(X) = f(X^c)^c = f(\emptyset)^c = \emptyset^c = X$;
+\item $g(A) = f(A^c)^c \subseteq (A^c)^c = A$;
+\item $g(A\cap B) = f\big((A\cap B)^c\big)^c = f(A^c\cup B^c)^c = \big(f(A^c) \cup f(B^c)\big)^c = f(A^c)^c \cap f(B^c)^c = g(A) \cap g(B)$. 
+\end{itemize}
+(2) Similar.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a set. Then
+\begin{enumerate}
+\item for any convergence $\xi$ on $X$, then the adherence and inherence operators are Čech closure and interior operators;
+\item for any Čech interior operator $f$, there exists an unique pretopology $\xi$ on $X$, determined by
+\[ \vicinity_\xi(x) = \setbuilder{A\subseteq X}{x\in f(A)} = f^{\preimf}(\pfilter{x}), \]
+such that $f = \inh_\xi$;
+\item for any Čech closure operator $f$, there exists an unique pretopology $\xi$ on $X$, determined by
+\[ \vicinity_\xi(x) = \big(f^\preimf(\pfilter{x})\big)^\mesh, \]
+such that $f = \adh_\xi$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Immediate from \ref{principalInherenceAdherenceProperties}.
+
+(2) We need to prove that $f^{\preimf}(\pfilter{x})$ is a filter and $f^{\preimf}(\pfilter{x})\subseteq \pfilter{x}$. Then $f = \inh_\xi$ is clear from \ref{principalAdherenceInherence}.
+
+First we show upwards closure of $f^{\preimf}(\pfilter{x})$. Take $A\in f^{\preimf}(\pfilter{x})$ and $A\subseteq B$. Then $x\in f(A)\subseteq f(B)$, so $x\in f(B)$ and thus $B\in f^{\preimf}(\pfilter{x})$.
+
+Now we show downwards directedness. Take $A,B\in f^{\preimf}(\pfilter{x})$. Then $x\in f(A)$ and $x\in f(B)$, so $x\in f(A)\cap f(B) = f(A\cap B)$, so $A\cap B\in f^{\preimf}(\pfilter{x})$.
+
+Finally we show $f^{\preimf}(\pfilter{x})\subseteq \pfilter{x}$. Take $A\in f^{\preimf}(\pfilter{x})$, so $x\in f(A)\subseteq A$, which means that $A\in \pfilter{x}$.
+
+(3) We first show that $f^\preimf(\pfilter{x})$ is a filter-grill using \ref{filterGrillEquivalences}. It upwards closed by the same reasoning as in (2). Now take $A\cup B\in f^\preimf(\pfilter{x})$. Then $x\in f(A\cup B) = f(A) \cup f(B)$, so either $x\in f(A)$ (and thus $A\in f^\preimf(\pfilter{x})$) or $x\in f(B)$ (and thus $B\in f^\preimf(\pfilter{x})$).
+
+Now we show that $f = \adh_\xi$. Take arbitrary $A\subseteq X$ and $x\in X$. Then
+\[ x\in f(A) \quad\iff\quad A\in f^\preimf(\pfilter{x}) = \big(f^\preimf(\pfilter{x})\big)^{\mesh\mesh} = \vicinity_\xi(x)^\mesh \quad\iff\quad x\in \adh_\xi(A). \]
+\end{proof}
+
+\subsection{Topology}
+\subsubsection{Kuratowski closure and interior operators}
+\begin{definition}
+Let $X$ be a set and $f: \powerset(X)\to \powerset(X)$ a function. Then $f$ is called
+\begin{itemize}
+\item a \udef{Kuratowski closure operator} if it is an idempotent Čech closure operator;
+\item a \udef{Kuratowski interior operator} if it is an idempotent Čech interior operator.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a set and $f: \powerset(X)\to \powerset(X)$ a function. Then
+\begin{enumerate}
+\item if $f$ is an idempotent Čech closure operator, then its associated Čech interior operator is also idempotent;
+\item if $f$ is an idempotent Čech interior operator, then its associated Čech closure operator is also idempotent.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Let $g: \powerset(X)\to \powerset(X): A\mapsto f(A^c)^c$ be the associated Čech interior operator. Then, for all $A\subseteq X$,
+\[ g^2(A) = f\Big(\big(f(A^c)^c\big)^c\Big)^c = f\Big(f(A^c)\Big)^c = f^2(A^c)^c = f(A^c)^c = g(A). \]
+
+(2) Similar.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a set and $f: \powerset(X)\to \powerset(X)$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is a Kuratowski closure operator;
+\item $f(\emptyset) = \emptyset$ and $A\cup B\cup f^2(A) \cup f^2(B) = f(A\cup B)$ for all $A,B\subseteq X$;
+\item $f(\emptyset) = \emptyset$ and $A\cup f(A) \cup f^2(B) = f(A\cup B)$ for all $A,B\subseteq X$;
+\item $A\cup f(A) \cup f^2(B) = f(A\cup B) \setminus f(\emptyset)$ for all $A,B\subseteq X$.
+\end{enumerate}
+\end{proposition}
+TODO: replacing equalities by inclusions gives Moore closure.
+\begin{proof}
+$(1) \Rightarrow (2)$ We calculate
+\[ f(A\cup B) = f(A)\cup f(B) = A\cup B \cup f(A)\cup f(B) = A\cup B \cup f^2(A)\cup f^2(B). \]
+
+$(2) \Rightarrow (3)$ Setting $B=\emptyset$ gives $A\cup f^2(A) = f(A) = f(A)\cup A$. In particular $f$ is expansive, so $f^2(B) \subseteq B\cup f^2(B) = f(B) \subseteq f^2(B)$ and thus $B\cup f^2(B) = f^2(B)$.
+
+Now we calculate
+\[ A\cup B\cup f^2(A) \cup f^2(B) = A\cup \big(A\cup f^2(A)\big) \cup \big(B\cup f^2(B)\big) = A\cup f(A) \cup f^2(B). \]
+
+$(3) \Rightarrow (4)$ Immediate, since $f(A\cup B) = f(A\cup B) \setminus \emptyset = f(A\cup B) \setminus f(\emptyset)$.
+
+$(4) \Rightarrow (1)$ We first prove that the empty set is a fixed point: setting $A=\emptyset = B$ give
+\[ \emptyset \cup f(\emptyset) \cup f^2(\emptyset) = f(\emptyset)\setminus f(\emptyset) = \emptyset, \]
+so $f(\emptyset) = \emptyset = f^2(\emptyset)$.
+
+To see that $f$ is expansive, just set $B = \emptyset$. Then $A\cup f(A) = f(A)$, so $A\subseteq f(A)$.
+
+Next we show idempotency: setting $A=\emptyset$ gives $f^2(B)\subseteq f(B)$ and we have just proved the other inequality.
+
+Finally we show that the operator preserves unions: by expansivity and idempotency, we have $f(A\cup B) = A\cup f(A) \cup f^2(B) = f(A) \cup f^2(B) = f(A) \cup f(B)$.
+\end{proof}
+
+\begin{theorem}[Kuratowski closure-complement theorem]
+Let $X$ be a set, $f: \powerset(X)\to\powerset(X)$ a Kuratowski closure operator and $A\subseteq X$. Then
+\begin{enumerate}
+\item at most 14 sets can be obtained from $A$ by taking closures and complements;
+\item at most 7 sets can be obtained from $A$ by taking closures and interiors.
+\end{enumerate}
+The bounds can be reached.
+\end{theorem}
+\begin{proof}
+\url{https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=3b4985d19737d5c00abc5a3ac359734e72291657}
+
+And: \url{https://en.wikipedia.org/wiki/Kuratowski%27s_closure-complement_problem}
+\end{proof}
 
 \subsection{Dense sets}
 \begin{definition}
@@ -838,51 +992,6 @@ First assume $\mathcal{C}$ is a cover of neighbourhoods. Clearly $\mathcal{C} \s
 Next assume $\interior^\imf[\mathcal{C}]$ is an open cover. Then for all $x\in X$ there exists $A\in \mathcal{C}$ such that $x\in \interior(A)$, which implies $A\in \neighbourhood(x)$ by \ref{interiorClosureMembership}.
 \end{proof}
 
-\section{Convergence constructions}
-\subsection{Directional convergence}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space, $D\subseteq X$ and $x\in X$. Then a filter $F\in \powerfilters(X)$ is said to \udef{converge to $x$ in the direction $D$} if $F\overset{\xi}{\longrightarrow} x$ and $D\in F$.
-
-We write $F\overset{\xi, D}{\longrightarrow} x$.
-\end{definition}
-TODO: specify direction at each point?
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space, $D\subseteq X$ and $x\in X$. Then $F$ converges to $x$ in the direction $D$ \textup{if and only if} there exists a net $\seq{x_i}_{i\in I}\subseteq D$ that converges to $x$ such that $F = \TailsFilter(\seq{x_i}_{i\in I})$.
-\end{lemma}
-\begin{proof}
-If there exists such a net, then $F$ converges to $x$ by definition of net convergence. Every tail of $\seq{x_i}$ is a subset of $D$. So $D\in F$ by upward closure.
-
-Now assume $F$ converges to $x$ in the direction $D$. Consider the index set $I_F = \setbuilder{(A,x)\in F\times X}{x\in A}$ as in \ref{filterIndex}. Now define $I_F^D = I_F\setminus\setbuilder{(A,x)\in F\times X}{x\notin D}$. We claim this set if directed and the associated filter of $I_F^D \to X: (A,x) \mapsto x$ is $F$.
-
-Directedness follows because for all $(A,x), (B,y)\in I_F^D$, the set $A\cap B\cap D$ is not empty as all three sets are elements of the filter $F$ and the filter is not trivial.
-
-Finally we show that $F$ is generated by the tails of $I_F^D \to X: (A,x) \mapsto x$. Take $A\in F$. Then $A\cap D\in F$ and by \ref{tailsFilterIndex}
-\[ A\cap D = \setbuilder{y\in X}{(B,y) \geq (A\cap D,x)}. \]
-Then $y\in B\subseteq A\cap D \subseteq D$, so this is also a tail of $I_F^D \to X: (A,x) \mapsto x$.
-\end{proof}
-
-\subsection{Specified sets convergence}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a cover of $X$ (i.e. $\bigcup \mathcal{A} = X$). Then the \udef{specified sets convergence} $\xi_A$ is defined by
-\[ \forall F\in\powerfilters(X), x\in X: \qquad F\overset{\xi_A}{\longrightarrow} x \iff \Big(F \overset{\xi}{\longrightarrow} x\Big) \land (F \mesh \mathcal{A}). \]
-\end{definition}
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a cover of $X$. Then
-\begin{enumerate}
-\item the specified sets convergence $\xi_A$ is a convergence;
-\item if $\mathcal{A}$ is closed under finite unions and $\xi$ is of finite depth, then $\xi_A$ is of finite depth.
-\end{enumerate}
-
-
-If $\xi $
-\end{lemma}
-\begin{proof}
-(1) Upwards closure is immediate. To show $\xi_A$ is centered, take $x\in X$. Then $\bigcup \mathcal{A} = X$ implies there exists an $A\in \mathcal{A}$ such that $x\in A$. Then $A\in \pfilter{x}$, so $\pfilter{x} \overset{\xi_A}{\longrightarrow} x$.
-
-(2) TODO
-\end{proof}
 
 
 
@@ -1048,6 +1157,21 @@ Then $\interior\big(\inh(A)\big) \subseteq \interior(A)$ follows from \ref{princ
 (2) Similar.
 \end{proof}
 
+\begin{lemma} \label{interiorClosureMonotoneInConvergence}
+Let $X$ be a set, $\zeta, \xi$ convergences on $X$ such that $\zeta\leq \xi$ and $A\subseteq X$ a subset. Then
+\begin{enumerate}
+\item $\closure_\zeta(A) \subseteq \closure_
+\xi(A)$;
+\item $\interior_\zeta(A) \supseteq \interior_
+\xi(A)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Every $\xi$-closed set is $\zeta$-closed by \ref{openClosedConvergenceInclusions}, so the least $\zeta$-closed superset of $A$ is smaller that the least $\xi$-closed superset of $A$.
+
+(2) Every $\xi$-open set is $\zeta$-open by \ref{openClosedConvergenceInclusions}, so the greatest $\zeta$-open subset of $A$ is bigger than the greatest $\xi$-open subset of $A$.
+\end{proof}
+
 \begin{proposition}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. We have
 \[ \interior_\xi(A) = \setbuilder{x\in X}{\exists U\in \vicinity_\xi(x): U\subseteq A}. \]
@@ -1143,6 +1267,7 @@ TODO pretopological assumption necessary?
 Let $\sSet{X,\xi}$ be a pretopological convergence space. The following are equivalent:
 \begin{enumerate}
 \item $\xi$ is topological;
+\item $\adh_\xi^2 = \adh_\xi$;
 \item $\inh_\xi^2 = \inh_\xi$;
 \item $\adh_\xi = \closure_\xi$;
 \item $\inh_\xi = \interior_\xi$;
@@ -1189,7 +1314,7 @@ A filter-valued function $\mathcal{F}$ that satisfies the first requirement dete
 This pretopological convergence is topological iff the second point holds, by \ref{pretopologicalSpaceTopological}.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{specifyingTopology}
 Let $X$ be a set and $\mathcal{T}\subseteq \powerset(X)$ a family of subsets. Then $\mathcal{T}$ is the topology of a topological convergence \textup{if and only if}
 \begin{itemize}
 \item $\emptyset\in \mathcal{T}$ and $X\in \mathcal{T}$;
@@ -1199,6 +1324,7 @@ Let $X$ be a set and $\mathcal{T}\subseteq \powerset(X)$ a family of subsets. Th
 Then for all $F\in\powerfilters(X)$ and $x\in X$, we have
 \[ F\to x \quad\iff\quad \forall U\in \mathcal{T}: \; x\in U \implies U\in F. \]
 \end{proposition}
+This implies that the topological convergence with a given topology is unique.
 \begin{proof}
 TODO \ref{propertiesTopology}
 \end{proof}
@@ -1233,6 +1359,98 @@ We supply some examples of topologies:
 \item Let $X$ be a set. Let $\mathcal{T}_f$ be a collection of all subsets $U$ of $X$ such that $X\setminus U$ is finite or $U=\emptyset$. Then $\mathcal{T}_f$ is a topology on $X$ called the \udef{finite complement topology}.
 \end{itemize}
 \end{example}
+
+\section{Convergence constructions}
+\subsection{Directional convergence}
+\begin{definition}
+Let $X$ be a set and $D: X\to \powerset(X)$ a function such that $x\in D(x)$ for all $x\in X$.
+
+Then a filter $F\in \powerfilters(X)$ is said to \udef{converge to $x$ in the direction $D$} if $D(x)\in F$. We call this convergence the \udef{directional convergence}.
+\end{definition}
+
+By \ref{principalImageEquivalence}, specifying a function $D: X\to \powerset(X)$ a function such that $x\in D(x)$ for all $x\in X$ is equivalent to specifying a reflexive relation $R = \setbuilder{(x,y)\in X^2}{x\in D(y)}$.
+
+\begin{lemma} \label{directionalConvergenceLemma}
+Let $X$ be a set and $D: X\to \powerset(X)$ a function such that $x\in D(x)$ for all $x\in X$. Then the directional convergence w.r.t.\ $D$ is a pretopological convergence with
+\begin{enumerate}
+\item $\vicinity_D(x) = \upset \{D(x)\} = \pfilter{x}R_s$ for all $x\in X$;
+\item $\adh_D(A) = \setbuilder{x\in X}{A\mesh D(x)} = \bigcup_{y\in A}D^\transp(y)$ for all $A\subseteq X$;
+\item $\inh_D(A) = \setbuilder{x\in X}{D(x)\subseteq A}$ for all $A\subseteq X$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) The form of the vicinity filter is immediate and this implies upwards closure. The convergence is centered, because $D(x)\in \pfilter{x}$ for all $x\in X$.
+
+(2) We have
+\begin{align*}
+x\in \adh_D(A) &\iff A\in \vicinity_D(x)^\mesh \\
+&\iff A\mesh D(x) \\
+&\iff \exists y\in A: y \in D(x) \\
+&\iff \exists y\in A: x \in D^\transp(y) \\
+&\iff x\in \bigcup_{y\in A}D^\transp(y),
+\end{align*}
+using \ref{principalAdherenceInherence} and \ref{transpositionSetValuedFunctionLemma}.
+
+(3) We have $x\in \inh_D(A) \iff A\in \vicinity_D(x) \iff D(x)\subseteq A$.
+\end{proof}
+
+\begin{proposition} \label{directionalConvergenceTopological}
+Let $X$ be a set and $D: X\to \powerset(X)$ a function such that $x\in D(x)$ for all $x\in X$. Then the following are equivalent:
+\begin{enumerate}
+\item the directional convergence is topological;
+\item $y\in D^\transp(x) \implies D^\transp(y)\subseteq D^\transp(x)$ for all $x,y\in X$;
+\item the relation $R = \setbuilder{(x,y)\in X^2}{x\in D(y)}$ is transitive;
+\item $y\in D(x) \implies D(y)\subseteq D(x)$ for all $x,y\in X$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ If the convergence is topological, then $\adh_D$ is idempotent, by \ref{pretopologicalSpaceTopological}.
+We have
+\begin{align*}
+y\in D^\transp(x) \implies& \{y\} \subseteq \adh_D(\{x\}) \\ \implies& \adh_D(\{y\}) \subseteq \adh_D^2(\{x\}) = \adh_D(\{x\}) \\
+\implies& D^\transp(y)\subseteq D^\transp(x),
+\end{align*}
+for all $x,y\in X$.
+
+$(2) \Rightarrow (3)$ From \ref{transitivityReflexiveRelationLemma}, we have that $R^\transp$ is transitive. By \ref{transposeTransitive}, $R$ is transitive.
+
+$(3) \Rightarrow (4)$ Immediate from \ref{transitivityReflexiveRelationLemma}.
+
+$(4) \Rightarrow (1)$ We use \ref{pretopologicalSpaceTopological} to prove that the convergence is topological. Take arbitrary $U\in \vicinity_D(x)$. Then we can set $V = D(x)\in \vicinity_D(x)$. Now take arbitrary $y\in D(x)$. By assumption, $D(y) \subseteq D(x) \subseteq U$, so $U\in \vicinity_D(y)$.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a set and $D: X\to \powerset(X)$ a function such that $x\in D(x)$ for all $x\in X$. If the directional convergence w.r.t.\ $D$ is topological, then the topology is given by the closure of $\{D(x)\}_{x\in X}$ under arbitrary unions.
+\end{proposition}
+\begin{proof}
+By \ref{directionalConvergenceLemma}, we have that all open sets are of the form $\bigcup_{D(x)\subseteq A}\{x\}$, for some $A$.
+
+Also $\bigcup_{D(x)\subseteq A}\{x\} = \bigcup_{D(x)\subseteq A}D(x)$: suppose $D(x)\subseteq A$ and $y\in D(x)$, then $D(y)\subseteq D(x)\subseteq A$ by \ref{directionalConvergenceTopological}, so $\{y\}\subseteq \bigcup_{D(x)\subseteq A}\{x\}$.
+\end{proof}
+
+\subsection{Specified sets convergence}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a cover of $X$ (i.e. $\bigcup \mathcal{A} = X$). Then the \udef{specified sets convergence} $\xi_{\mathcal{A}}$ is defined by
+\[ \forall F\in\powerfilters(X), x\in X: \qquad F\overset{\xi_{\mathcal{A}}}{\longrightarrow} x \iff \Big(F \overset{\xi}{\longrightarrow} x\Big) \land (F \mesh \mathcal{A}). \]
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{A}\subseteq \powerset(X)$ a cover of $X$. Then
+\begin{enumerate}
+\item the specified sets convergence $\xi_A$ is a convergence;
+\item if $\mathcal{A}$ is closed under finite unions and $\xi$ is of finite depth, then $\xi_A$ is of finite depth.
+\end{enumerate}
+
+
+If $\xi $
+\end{lemma}
+\begin{proof}
+(1) Upwards closure is immediate. To show $\xi_A$ is centered, take $x\in X$. Then $\bigcup \mathcal{A} = X$ implies there exists an $A\in \mathcal{A}$ such that $x\in A$. Then $A\in \pfilter{x}$, so $\pfilter{x} \overset{\xi_A}{\longrightarrow} x$.
+
+(2) TODO
+\end{proof}
+
+
 
 \section{Continuous functions}
 \begin{definition}
@@ -1297,7 +1515,7 @@ We first show that continuity of $f$ implies (1): We have
 &= \bigcap (\upset\circ f^{\imf\imf})^{\imf}\Big[\setbuilder{F\in\powerfilters(X)}{F\to x}\Big] \\
 &= \upset f^{\imf\imf}\Big[\bigcap \setbuilder{F\in\powerfilters(X)}{F\to x}\Big] = \upset f^{\imf\imf}[\vicinity_\xi(x)],
 \end{align*}
-where we have used \ref{imageFiltersPreservesIntersection}.
+where we have used \ref{imageUpsetsPreservesIntersection}.
 
 Now take $B\in \bigcap\setbuilder{\upset f^{\imf\imf}(F)\in\powerfilters(Y)}{F\to x}$. This means that for all $F\in\lim^{-1}_\xi(x)$, there exists an $A_F\in F$ such that $f^\imf[A_F]\subseteq B$. By the upward closure of the filters $F$, the set $A = \bigcup_{F\in \lim^{-1}_\xi(x)}A_F$ is an element of each $F$ and
 \[ f^\imf[A] = \bigcup_{F\in \lim^{-1}_\xi(x)}f^{\imf}[A_F] \subseteq B.  \]
@@ -1553,7 +1771,7 @@ Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset.
 By \ref{allCompactoidLimitsInAdherence}, $x\in \adh(A) = A$.
 
 (2) By \ref{openClosedCriteria}, it is enough to show that $\adh(A)\subseteq A$. Take $x\in \adh(A)$. By \ref{principalAdherenceInherence}, this means that there exists a filter $F\in \powerfilters(X)$ that converges to $x$ and is such that $A\in F$. By the ultrafilter lemma, \ref{ultrafilterLemma}, $\upset \iota^{\preimf\imf}(F)$ is contained in an ultrafilter $G\in \powerfilters(A)$. By
-\ref{filterPreimageImageGaloisConnection}, this implies $F\subseteq \upset\iota^{\imf\imf}(G)$ and so $\upset\iota^{\imf\imf}(G) \to x$.
+\ref{upsetPreimageImageGaloisConnection}, this implies $F\subseteq \upset\iota^{\imf\imf}(G)$ and so $\upset\iota^{\imf\imf}(G) \to x$.
 
 Now $G$ converges to some $a\in A$ by compactness. By continuity of the inclusion, we have that $\upset\iota^{\imf\imf}(G) \overset{\xi}{\longrightarrow} \iota(a) = a$.
 
@@ -1726,257 +1944,7 @@ A preconvergence is a convergence \textup{if and only if} it is coarser than the
 \end{lemma}
 
 
-\subsection{Depth properties}
-\subsubsection{Convergence spaces}
-\begin{lemma}
-Let $X$ be a set. The set of convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
-\end{lemma}
-\begin{proof}
-\ref{completeSubsemilatticeClosure}
-\end{proof}
-
-\begin{definition}
-Let $\sSet{X,\xi}$ be a preconvergence space. Then the \udef{convergence modification} $\convMod(\xi)$ is the closure of $\xi$ into the lattice of convergence spaces.
-\end{definition}
-
-\begin{lemma} \label{convModConstruction}
-Let $\sSet{X,\xi}$ be a preconvergence space. Then $\convMod(\xi) = \xi \cup \setbuilder{(\pfilter{x}, x)}{x\in X}$.
-\end{lemma}
-
-\begin{proposition} \label{vicinitiesConvergenceModification}
-Let $\sSet{X,\xi}$ be a preconvergence space, $x\in X$ and $A\subseteq X$. Then
-\begin{enumerate}
-\item $\vicinity_{\convMod(\xi)}(x) = \vicinity_{\xi}(x)\cap \pfilter{x}$;
-\item $\adh_{\convMod(\xi)}(A) = \adh_\xi(A) \cup A$;
-\item $\inh_{\convMod(\xi)}(A) = \inh_\xi(A) \cap A$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Immediate by \ref{convModConstruction}.
-
-(2) We have, using (1) and \ref{grillIntersectionUnion},
-\begin{align*}
-x\in \adh_{\convMod(\xi)}(A) &\iff A\in \vicinity_{\convMod(\xi)}(x)^\mesh \\
-&\iff A\in \big(\vicinity_{\xi}(x) \cap \pfilter{x}\big)^\mesh \\
-&\iff A\in \vicinity_{\xi}(x)^\mesh \cup \pfilter{x}^\mesh \\
-&\iff \big(A\in \vicinity_{\xi}(x)^\mesh\big) \lor \big(A\in \pfilter{x}^\mesh\big) \\
-&\iff \big(x\in \adh_\xi(A)\big) \lor \big(x\in A\big) \\
-&\iff x \in \adh_\xi(A) \cup A.
-\end{align*}
-
-(3) We calculate, using \ref{principalInherenceComplementAdherence},
-\[ \inh_{\convMod(\xi)}(A) = \adh_{\convMod(\xi)}(A^c)^c = \big(\adh_\xi(A^c)\cup A^c\big)^c = \adh_\xi(A^c)^c \cap A = \inh_\xi(A) \cap A. \]
-\end{proof}
-
-\subsubsection{Kent property}
-\begin{lemma}
-Let $X$ be a set. The set of Kent convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
-\end{lemma}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{Kent modification} $\kentMod(\xi)$ is the closure of $\xi$ into the lattice of Kent spaces.
-\end{definition}
-
-
-\subsubsection{Finite depth spaces}
-\begin{lemma}
-Let $X$ be a set. The set of finite depth preconvergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
-\end{lemma}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{finite depth modification} $\finDepthMod(\xi)$ is the closure of $\xi$ into the lattice of convergences of finite depth.
-\end{definition}
-
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the finite depth modification $\finDepthMod(\xi)$ exists and is given by
-\[ F \overset{\finDepthMod(\xi)}{\longrightarrow} x \quad\iff\quad \exists n\in\N, G_0,\ldots, G_n \in {\lim}^{-1}(x): \; F = \bigcap_{k=0}^n G_k. \]
-\end{proposition}
-
-\subsubsection{Pseudotopological spaces}
-\begin{lemma}
-Let $X$ be a set. The set of pseudotopological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
-\end{lemma}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{pseudotopological modification} $\pseudotopMod(\xi)$ is the closure of $\xi$ into the lattice of pseudotopological convergences.
-\end{definition}
-
-\begin{proposition} \label{pseudotopModConstruction}
-Let $\sSet{X,\xi}$ be a convergence space. Then the pseudotopological modification $\pseudotopMod(\xi)$ exists and is given by
-\[ F \overset{\pseudotopMod(\xi)}{\longrightarrow} x \quad\iff\quad \forall H\in \powerultrafilters(X): (F\subseteq H) \implies \big(H \overset{\xi}{\longrightarrow} x\big). \]
-\end{proposition}
-
-\begin{proposition}
-The following are equivalent:
-\begin{enumerate}
-\item $F \overset{\pseudotopMod(\xi)}{\longrightarrow} x$;
-\item $\forall H\in \powerultrafilters(X): (F\subseteq H) \implies \big(H \overset{\xi}{\longrightarrow} x\big)$;
-\item $x\in \bigcap_{U\in \powerultrafilters(X)\cap \pfilter{F}}\lim_\xi U$;
-\item $x\in \bigcap_{G\mesh F}\adh_\xi(G)$.
-\end{enumerate}
-\end{proposition}
-
-\begin{proposition} \label{pseudotopModFunctorial}
-Let $\sSet{X, \xi}, \sSet{Y,\zeta}$ be convergence spaces and $f: X\to Y$ a function. If $f$ is continuous, then $f: \pseudotopMod(X)\to \pseudotopMod(Y)$ is also continuous.
-\end{proposition}
-\begin{proof}
-Assume $f$ is continuous and let $F$ be a filter that converges to $x$ in $\pseudotopMod(X)$. Take an ultrafilter $U \supseteq f^{\imf\imf}(F)$. Then, by \ref{mappingUltrafiltersLemma}, there exists some ultrafilter $U'\supseteq F$ such that $\upset f^{\imf\imf}(U') = U$. Now $U'$ converges to $x$ in $\xi$ by construction of the pseudotopological modification \ref{pseudotopModConstruction}, so $U$ converges to $f(x)$ by continuity of $f$. We conclude that $f^{\imf\imf}(F)$ converges to $f(x)$ in $\pseudotopMod(Y)$.
-\end{proof}
-
-\begin{proposition} \label{pseudotopologiserCommutesWithInitialStructure}
-Let $Y$ be a set, $\sSet{Z_i, \zeta_i}$ a convergence space for all $i\in I$ and $\{f_i: Y\to Z_i\}_{i\in i}$. Then the pseudotopological modification of the initial convergence w.r.t. $\{f_i: Y\to Z_i\}_{i\in i}$ is equal to the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$.
-\end{proposition}
-\begin{proof}
-Let $\mu$ be the initial convergence w.r.t. $\{f_i: Y\to Z_i\}_{i\in i}$. Then each $f_i: Y\to \pseudotopMod(Z_i)$ is continuous and the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$ is pseudotopological by \ref{pretopologicalInitialConvergence}. Thus $\pseudotopMod(\mu)$ is stronger than the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$.
-
-For the converse, it is enough to note that for each ultrafilter $U\in \powerultrafilters(Y)$, convergence in the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$ implies convergence in $\mu$. Indeed $f_i^{\imf\imf}(U)$ is an ultrafilter (by \ref{imageFilterProperties}) that converges in $\pseudotopMod(Z_i)$ and thus also in $Z_i$.
-\end{proof}
-In particular $\pseudotopMod(A\times B) = \pseudotopMod(A)\times \pseudotopMod(B)$.
-
-\subsubsection{Pretopological spaces}
-\begin{lemma}
-Let $X$ be a set. The set of pretopological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
-\end{lemma}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{pretopological modification} $\pretopMod(\xi)$ is the closure of $\xi$ into the lattice of pretopological convergences.
-\end{definition}
-
-\begin{proposition} \label{pretopologicalModification}
-Let $\sSet{X,\xi}$ be a convergence space. Then the pretopological modification $\pretopMod(\xi)$ exists and is given by
-\[ F \overset{\pretopMod(\xi)}{\longrightarrow} x \quad\iff\quad \vicinity_\xi(x) \subseteq F. \]
-\end{proposition}
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space, $x\in X$ and $A\subseteq X$. Then
-\begin{enumerate}
-\item $\vicinity_{\xi}(x) = \vicinity_{\pretopMod(\xi)}(x)$;
-\item $\adh_\xi(A) = \adh_{\pretopMod(\xi)}(A)$ and $\inh_\xi(A) = \inh_{\pretopMod(\xi)}(A)$;
-\item $\neighbourhood_{\xi}(x) = \neighbourhood_{\pretopMod(\xi)}(x)$;
-\item $\topology_{\xi} = \topology_{\pretopMod(\xi)}$;
-\item $\interior_\xi(A) = \interior_{\pretopMod(\xi)}(A)$ and $\closure_\xi(A) = \closure_{\pretopMod(\xi)}(A)$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) is immediate from \ref{pretopologicalModification}. The rest follows immediately from (1).
-\end{proof}
-
-
-\subsubsection{Topological spaces}
-\begin{lemma}
-Let $X$ be a set. The set of topological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
-\end{lemma}
-\begin{proof}
-Let $\{\xi_i\}_{i\in I}$ be a set of topological convergences on $X$. We need to show that $\bigwedge_{i\in I}\xi_i$ is topological, for which we use \ref{pretopologicalSpaceTopological}.
-
-TODO!!
-\end{proof}
-TODO: easier to verify that closure operator is a closure operator?
-
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{topological modification} $\topMod(\xi)$ is the closure of $\xi$ into the lattice of topological convergences.
-\end{definition}
-
-\begin{proposition} \label{topologicalModificationConstruction}
-Let $\sSet{X,\xi}$ be a convergence space. Then the topological modification $\topMod(\xi)$ exists and is given by
-\[ F \overset{\topMod(\xi)}{\longrightarrow} x \quad\iff\quad \neighbourhood_\xi(x) \subseteq F. \]
-\end{proposition}
-
-\begin{proposition} \label{topologicalModificationPreservation}
-Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $x\in X$. Then
-\begin{enumerate}
-\item $A$ is open (closed) in $\topMod(\xi)$ \textup{if and only if} $A$ is open (closed) in $\xi$;
-\item $\topology_{\topMod(\xi)} = \topology_\xi$;
-\item $\interior_{\topMod(\xi)}(A) = \interior_{\xi}(A)$ and $\closure_{\topMod(\xi)}(A) = \closure_{\xi}(A)$;
-\item $\neighbourhood_{\topMod(\xi)}(x) = \neighbourhood_\xi(x)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) By \ref{openClosedCriteria}, we have that $A$ is open in $\topMod(\xi)$ iff $A\in \vicinity_{\topMod(\xi)}(x)$ for all $x\in A$. Thus
-\begin{align*}
-\text{$A$ is $\topMod(\xi)$-open} &\iff \forall x\in A: \; A\in \vicinity_{\topMod(\xi)}(x) \\
-&\iff \forall x\in A: \; A\in \neighbourhood_\xi(x) \\
-&\iff \forall x\in A: \; x\in \interior_\xi(A) \\
-&\iff A\subseteq \interior_\xi(A) \\
-&\iff \text{$A$ is $\xi$-open}.
-\end{align*}
-The statement for closed sets follows straight from \ref{openClosedComplement}.
-
-(2), (3) Immediate.
-
-(4) From \ref{topologicalModificationConstruction}, $\neighbourhood_\xi(x) = \vicinity_{\topMod(\xi)}(x)$. The result follows because $\topMod(\xi)$ is topological.
-\end{proof}
-
-\subsection{Base properties}
-\begin{lemma}
-Let $X$ be a set and $\mathcal{B}\subseteq \powerfilters(X)$ a set of filters. The set of convergences on $X$ that are based in $\mathcal{B}$ is closed under joins.
-\end{lemma}
-\begin{proof}
-Let $\Xi$ be a set of convergences on $X$ that are all based in $\mathcal{B}$. And suppose $F\in\powerfilters(X)$ conververges to $x\in X$ according to $\bigvee \Xi$. By \ref{latticeConvergences}, there exists $\xi\in \Xi$ such that $F\overset{\xi}{\longrightarrow} x$.
-
-By assumption, there exists $G\in\powerfilters(X)$ such that $G\subseteq F$, $G\overset{\xi}{\longrightarrow} x$ and $G$ is based in $\mathcal{B}$.
-
-Then $G\overset{\Xi}{\longrightarrow} x$. As $F\overset{\xi}{\longrightarrow} x$ was chosed arbitrarily, we have that $\Xi$ is based in $\mathcal{B}$.
-\end{proof}
-
-\begin{definition}
-Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. The \udef{$\mathcal{B}$-based modification} $\basedMod_\mathcal{B}(\xi)$ is the coclosure into the lattice of $\mathcal{B}$-based convergences.
-\end{definition}
-
-\begin{lemma}
-Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. Then
-\[ \basedMod_\mathcal{B}(\xi) = \setbuilder{(F,x)\in \powerfilters(X)\times X}{\exists G\in \powerfilters(X): \; G\subseteq, G\overset{\xi}{\longrightarrow} x, \text{$G$ is based in $\mathcal{B}$}}. \]
-\end{lemma}
-
 \section{Convergences on ordered sets}
-\subsection{Ordering of filters}
-\begin{definition}
-Let $\sSet{X,\leq}$ be a poset and $F,G\in\powerfilters(X)$. We define
-\begin{align*}
-F \leq_w G \qquad&\defequiv\qquad \liminf F \leq \limsup G; \\
-F \leq_s G \qquad&\defequiv\qquad \limsup F \leq \liminf G.
-\end{align*}
-We call $\leq_w$ the \udef{weak ordering} of filters and $\leq_s$ the \udef{strong ordering} of filters.
-\end{definition}
-
-\begin{lemma} \label{filterInequalityCriterion}
-Let $\sSet{X,\leq}$ be a poset and $F,G\in\powerfilters(X)$. Then
-\begin{align*}
-F \leq_w G \qquad &\iff\qquad \forall A\in F, B\in G: \exists x\in A, y\in B: \; x \leq y; \\
-F \leq_s G \qquad &\iff\qquad \exists A\in F, B\in G: \forall x\in A, y\in B: \; x \leq y.
-\end{align*}
-\end{lemma}
-\begin{proof}
-We have the equivalences
-\begin{align*}
-F \leq_w G &\iff \forall A\in F, B\in G: \exists x\in A, y\in B: \; x \leq y \\
-&\iff \forall A\in F, B\in G: \bigwedge A \leq \bigvee B \\
-&\iff \bigvee_{A\in F}\bigwedge A \leq \bigwedge_{B\in G}\bigvee B \\
-&\iff \liminf F \leq \limsup G.
-\end{align*}
-The other equivalence is proved similarly.
-\end{proof}
-
-\begin{lemma}
-Let $\sSet{X,\leq}$ be a poset and $F,G\in\powerfilters(X)$. Then
-\begin{align*}
-F \leq_w G \qquad &\iff\qquad \forall C\in F\otimes G: \exists (x,y) \in A: \; x \leq y; \\
-F \leq_s G \qquad &\iff\qquad \exists C\in F\otimes G: \forall (x,y) \in A: \; x \leq y.
-\end{align*}
-\end{lemma}
-\begin{proof}
-First assume $F\leq_w G$. Take $C\in F\otimes G$. Then there exist $A\in F, B\in G$ such that $A\times B \subseteq C$. By assumption, we can find $x\in A$ and $y\in B$ such that $x\leq y$. In this case $(x,y)\in C$.
-
-For the converse, take $A\in F$ and $B\in G$. Then $A\times B\in F\otimes G$ and by assumption there exists $(x,y)\in A\times B$ such that $x\leq y$.
-
-TODO $\leq_s$
-\end{proof}
-TODO contours for propositions.
-
-\begin{proposition} \label{pointwisefunctionToFilterInequality}
-Let $X$ be a set, $\sSet{Y,\leq}$ a poset and $f,g: X\to Y$. Then $f\leq g$ pointwise \textup{if and only if} $\upset f^{\imf\imf}(F) \leq_w \upset g^{\imf\imf}(F)$ for all proper filters $F\in \powerfilters(X)$.
-\end{proposition}
-\begin{proof}
-First suppose $f\leq g$ pointwise and pick a proper filter $F\in \powerfilters(X)$. We show the weak inequality using \ref{filterInequalityCriterion}. Pick arbitrary $A\in \upset f^{\imf\imf}(F)$ and $B\in \upset g^{\imf\imf}(F)$. Thus there exist $A',B'\in F$ such that $f^{\imf}(A')\subseteq A$ and $g^{\imf}(B')\subseteq B$. Set $C = A'\cap B' \neq \emptyset$. We can pick $x\in C$ and by the pointwise inequality $f(x) \leq g(x)$. Thus the weak inequality holds because $f(x)\in A$ and $g(x)\in B$.
-
-For the converse, it is enough to note that $\upset f^{\imf\imf}(\pfilter{x}) \leq_w \upset g^{\imf\imf}(\pfilter{x})$ implies $f(x)\leq g(x)$.
-\end{proof}
 
 \subsection{Convergence compatible with the order}
 TODO: we assume complete lattice everywhere (?)
@@ -2142,22 +2110,7 @@ if $\powerset(X)$ carries the set-theoretic convergence.
 
 
 
-\chapter{Initial and final}
-
-\section{Mapping filters}
-
-\begin{proposition} \label{preimageFilter}
-Let $X,Y$ be sets, $F\in\powerfilters(X)$, $G\in\powerfilters(Y)$ and $f: X\to Y$ a function.
-\begin{enumerate}
-\item if $\im(f)\in G$, then there exists a $H\in\powerfilters(X)$ such that $G = \upset f^{\imf\imf}[H]$;
-\item if $f^{\imf\imf}[F]\subseteq G$ , then there exists a $H\in\powerfilters(X)$ such that $G = \upset f^{\imf\imf}[H]$;
-\item if $G$ is an ultrafilter, then the $H$ in the previous points may be taken to be an ultrafilter.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
+\chapter{Lattice constructions}
 
 \section{Initial and final convergences}
 \begin{proposition} \label{continuityUnderConvergenceLatticeOperations}
@@ -2364,7 +2317,7 @@ Because $V$ was chosen arbitrarily, all ultrafilters larger than $\upset f_i^{\i
 
 As $i\in I$ was chosen arbitrarily, $F\overset{\mu}{\longrightarrow} y$ by \ref{initialFinalConvergence}.
 
-(2) We have, for all $F\in \powerfilters(Y)$, by \ref{initialFinalConvergence} and \ref{filterPreimageImageGaloisConnection},
+(2) We have, for all $F\in \powerfilters(Y)$, by \ref{initialFinalConvergence} and \ref{upsetPreimageImageGaloisConnection},
 \begin{align*}
 F \overset{\mu}{\longrightarrow} y &\iff \forall i\in I: f_i^{\imf\imf}[F] \overset{\zeta_i}{\longrightarrow} f_i(y) \\
 &\iff \forall i\in I: \vicinity_{\zeta_i}\!\big(f_i(y)\big) \subseteq \upset f_i^{\imf\imf}[F] \\
@@ -2430,7 +2383,7 @@ TODO: can we improve (1)?
 \begin{proof}
 (1) By \ref{adherenceInherenceContinuity} we have $f_i^{\imf}\big(\adh_\mu(A)\big) \subseteq \adh_{\zeta_i}\big(f^{\imf}(A)\big)$, so $(f^{\preimf}_i\circ \adh_{\zeta_i}\circ f^{\imf}_i)(A)$ for all $i\in I$ by \ref{functionImagePreimageGaloisConnection}.
 
-(2) We calculate, using \ref{pretopologicalFinalConvergence}, \ref{grillIntersectionUnion} and \ref{meshConnectionSetsOfSets}, \ref{filterPreimageImageGaloisConnection} (with the fact that $\vicinity_{\xi_i}(x)$ is upwards closed, by \ref{upwardClosureGrill})
+(2) We calculate, using \ref{pretopologicalFinalConvergence}, \ref{grillIntersectionUnion} and \ref{meshConnectionSetsOfSets}, \ref{upsetPreimageImageGaloisConnection} (with the fact that $\vicinity_{\xi_i}(x)$ is upwards closed, by \ref{upwardClosureGrill})
 \begin{align*}
 y\in \adh_\nu(A) &\iff A\in \vicinity_\nu(y)^\mesh \\
 &\iff A\in \Big(\bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}\upset g_i^{\imf\imf}\big(\vicinity_{\xi_i}(x)\big)\Big)^\mesh \\
@@ -2506,7 +2459,7 @@ Let $\sSet{X_i, \xi_i}$ be a (pre)convergence space for all $i\in I$, $F \in \po
 \end{proposition}
 The filter $\bigotimes_{i\in I}F_i$ is called the \udef{product filter} of $\{F_i\}_{i\in I}$.
 \begin{proof}
-First assume $F\to x$, then we have $F_i = \upset p_i^{\imf\imf}(F)$ to be convergent for each $i\in I$, by \ref{initialFinalConvergence}. By \ref{filterPreimageImageGaloisConnection}, this implies $\upset p_i^{\preimf\imf}(F_i) \subseteq F$.
+First assume $F\to x$, then we have $F_i = \upset p_i^{\imf\imf}(F)$ to be convergent for each $i\in I$, by \ref{initialFinalConvergence}. By \ref{upsetPreimageImageGaloisConnection}, this implies $\upset p_i^{\preimf\imf}(F_i) \subseteq F$.
 
 Now $p_i^{\preimf\imf}(F_i)$ consist of the sets $p_i^\preimf(A)$ for all $A\in F_i$ and $p_i^\preimf(A)$ is of the form $\bigtimes_{k\in I}B_k$, where $B_i = A$ and $B_k = X_k$ if $k \neq i$.
 
@@ -2675,7 +2628,7 @@ Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \
 \begin{proof}
 (1) By \ref{initialFinalConvergence}.
 
-(2) Assume $G\overset{\xi}{\longrightarrow} a \in A$. Then $G \subseteq \upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \to a$ by \ref{filterPreimageImageGaloisConnection} and so $\iota^{\preimf\imf}[G] \to a$ by \ref{initialFinalConvergence}.
+(2) Assume $G\overset{\xi}{\longrightarrow} a \in A$. Then $G \subseteq \upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \to a$ by \ref{upsetPreimageImageGaloisConnection} and so $\iota^{\preimf\imf}[G] \to a$ by \ref{initialFinalConvergence}.
 
 (3) We have $\upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \overset{\xi}{\longrightarrow} a$ by continuity of the inclusion. If $A\in G$, then, by \ref{setTraceFilterLemma}, $\upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] = G$, so $G \overset{\xi}{\longrightarrow} a$.
 \end{proof}
@@ -2851,6 +2804,213 @@ Conversely, if $F$ converges in the specified sets convergence, then there exist
 Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{F}$ a $\pi$-system of closed subsets of $X$ such that $\bigcup \mathcal{F} = X$. We call the specified sets convergence on $X$ w.r.t. $\mathcal{F}$, the \udef{inductive strengthening of $X$}.
 \end{definition}
 
+\section{Sublattices of (pre)convergences}
+\subsection{Functoriality}
+
+TODO show that all modiciations are functors: $f:X\to Y$ continuous implies $f: M(X)\to M(Y)$ continuous.
+
+
+\subsection{Depth properties}
+\subsubsection{Convergence spaces}
+\begin{lemma}
+Let $X$ be a set. The set of convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{proof}
+\ref{completeSubsemilatticeClosure}
+\end{proof}
+
+\begin{definition}
+Let $\sSet{X,\xi}$ be a preconvergence space. Then the \udef{convergence modification} $\convMod(\xi)$ is the closure of $\xi$ into the lattice of convergence spaces.
+\end{definition}
+
+\begin{lemma} \label{convModConstruction}
+Let $\sSet{X,\xi}$ be a preconvergence space. Then $\convMod(\xi) = \xi \cup \setbuilder{(\pfilter{x}, x)}{x\in X}$.
+\end{lemma}
+
+\begin{proposition} \label{vicinitiesConvergenceModification}
+Let $\sSet{X,\xi}$ be a preconvergence space, $x\in X$ and $A\subseteq X$. Then
+\begin{enumerate}
+\item $\vicinity_{\convMod(\xi)}(x) = \vicinity_{\xi}(x)\cap \pfilter{x}$;
+\item $\adh_{\convMod(\xi)}(A) = \adh_\xi(A) \cup A$;
+\item $\inh_{\convMod(\xi)}(A) = \inh_\xi(A) \cap A$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Immediate by \ref{convModConstruction}.
+
+(2) We have, using (1) and \ref{grillIntersectionUnion},
+\begin{align*}
+x\in \adh_{\convMod(\xi)}(A) &\iff A\in \vicinity_{\convMod(\xi)}(x)^\mesh \\
+&\iff A\in \big(\vicinity_{\xi}(x) \cap \pfilter{x}\big)^\mesh \\
+&\iff A\in \vicinity_{\xi}(x)^\mesh \cup \pfilter{x}^\mesh \\
+&\iff \big(A\in \vicinity_{\xi}(x)^\mesh\big) \lor \big(A\in \pfilter{x}^\mesh\big) \\
+&\iff \big(x\in \adh_\xi(A)\big) \lor \big(x\in A\big) \\
+&\iff x \in \adh_\xi(A) \cup A.
+\end{align*}
+
+(3) We calculate, using \ref{principalInherenceComplementAdherence},
+\[ \inh_{\convMod(\xi)}(A) = \adh_{\convMod(\xi)}(A^c)^c = \big(\adh_\xi(A^c)\cup A^c\big)^c = \adh_\xi(A^c)^c \cap A = \inh_\xi(A) \cap A. \]
+\end{proof}
+
+\subsubsection{Kent property}
+\begin{lemma}
+Let $X$ be a set. The set of Kent convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{Kent modification} $\kentMod(\xi)$ is the closure of $\xi$ into the lattice of Kent spaces.
+\end{definition}
+
+
+\subsubsection{Finite depth spaces}
+\begin{lemma}
+Let $X$ be a set. The set of finite depth preconvergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{finite depth modification} $\finDepthMod(\xi)$ is the closure of $\xi$ into the lattice of convergences of finite depth.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the finite depth modification $\finDepthMod(\xi)$ exists and is given by
+\[ F \overset{\finDepthMod(\xi)}{\longrightarrow} x \quad\iff\quad \exists n\in\N, G_0,\ldots, G_n \in {\lim}^{-1}(x): \; F = \bigcap_{k=0}^n G_k. \]
+\end{proposition}
+
+\subsubsection{Pseudotopological spaces}
+\begin{lemma}
+Let $X$ be a set. The set of pseudotopological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{pseudotopological modification} $\pseudotopMod(\xi)$ is the closure of $\xi$ into the lattice of pseudotopological convergences.
+\end{definition}
+
+\begin{proposition} \label{pseudotopModConstruction}
+Let $\sSet{X,\xi}$ be a convergence space. Then the pseudotopological modification $\pseudotopMod(\xi)$ exists and is given by
+\[ F \overset{\pseudotopMod(\xi)}{\longrightarrow} x \quad\iff\quad \forall H\in \powerultrafilters(X): (F\subseteq H) \implies \big(H \overset{\xi}{\longrightarrow} x\big). \]
+\end{proposition}
+
+\begin{proposition}
+The following are equivalent:
+\begin{enumerate}
+\item $F \overset{\pseudotopMod(\xi)}{\longrightarrow} x$;
+\item $\forall H\in \powerultrafilters(X): (F\subseteq H) \implies \big(H \overset{\xi}{\longrightarrow} x\big)$;
+\item $x\in \bigcap_{U\in \powerultrafilters(X)\cap \pfilter{F}}\lim_\xi U$;
+\item $x\in \bigcap_{G\mesh F}\adh_\xi(G)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition} \label{pseudotopModFunctorial}
+Let $\sSet{X, \xi}, \sSet{Y,\zeta}$ be convergence spaces and $f: X\to Y$ a function. If $f$ is continuous, then $f: \pseudotopMod(X)\to \pseudotopMod(Y)$ is also continuous.
+\end{proposition}
+\begin{proof}
+Assume $f$ is continuous and let $F$ be a filter that converges to $x$ in $\pseudotopMod(X)$. Take an ultrafilter $U \supseteq f^{\imf\imf}(F)$. Then, by \ref{mappingUltrafiltersLemma}, there exists some ultrafilter $U'\supseteq F$ such that $\upset f^{\imf\imf}(U') = U$. Now $U'$ converges to $x$ in $\xi$ by construction of the pseudotopological modification \ref{pseudotopModConstruction}, so $U$ converges to $f(x)$ by continuity of $f$. We conclude that $f^{\imf\imf}(F)$ converges to $f(x)$ in $\pseudotopMod(Y)$.
+\end{proof}
+
+\begin{proposition} \label{pseudotopologiserCommutesWithInitialStructure}
+Let $Y$ be a set, $\sSet{Z_i, \zeta_i}$ a convergence space for all $i\in I$ and $\{f_i: Y\to Z_i\}_{i\in i}$. Then the pseudotopological modification of the initial convergence w.r.t. $\{f_i: Y\to Z_i\}_{i\in i}$ is equal to the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$.
+\end{proposition}
+\begin{proof}
+Let $\mu$ be the initial convergence w.r.t. $\{f_i: Y\to Z_i\}_{i\in i}$. Then each $f_i: Y\to \pseudotopMod(Z_i)$ is continuous and the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$ is pseudotopological by \ref{pretopologicalInitialConvergence}. Thus $\pseudotopMod(\mu)$ is stronger than the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$.
+
+For the converse, it is enough to note that for each ultrafilter $U\in \powerultrafilters(Y)$, convergence in the initial convergence w.r.t. $\{f_i: Y\to \pseudotopMod(Z_i)\}_{i\in i}$ implies convergence in $\mu$. Indeed $f_i^{\imf\imf}(U)$ is an ultrafilter (by \ref{imageFilterProperties}) that converges in $\pseudotopMod(Z_i)$ and thus also in $Z_i$.
+\end{proof}
+In particular $\pseudotopMod(A\times B) = \pseudotopMod(A)\times \pseudotopMod(B)$.
+
+\subsubsection{Pretopological spaces}
+\begin{lemma}
+Let $X$ be a set. The set of pretopological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{pretopological modification} $\pretopMod(\xi)$ is the closure of $\xi$ into the lattice of pretopological convergences.
+\end{definition}
+
+\begin{proposition} \label{pretopologicalModification}
+Let $\sSet{X,\xi}$ be a convergence space. Then the pretopological modification $\pretopMod(\xi)$ exists and is given by
+\[ F \overset{\pretopMod(\xi)}{\longrightarrow} x \quad\iff\quad \vicinity_\xi(x) \subseteq F. \]
+\end{proposition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space, $x\in X$ and $A\subseteq X$. Then
+\begin{enumerate}
+\item $\vicinity_{\xi}(x) = \vicinity_{\pretopMod(\xi)}(x)$;
+\item $\adh_\xi(A) = \adh_{\pretopMod(\xi)}(A)$ and $\inh_\xi(A) = \inh_{\pretopMod(\xi)}(A)$;
+\item $\neighbourhood_{\xi}(x) = \neighbourhood_{\pretopMod(\xi)}(x)$;
+\item $\topology_{\xi} = \topology_{\pretopMod(\xi)}$;
+\item $\interior_\xi(A) = \interior_{\pretopMod(\xi)}(A)$ and $\closure_\xi(A) = \closure_{\pretopMod(\xi)}(A)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) is immediate from \ref{pretopologicalModification}. The rest follows immediately from (1).
+\end{proof}
+
+
+\subsubsection{Topological spaces}
+\begin{lemma}
+Let $X$ be a set. The set of topological convergences on $X$ is a subset of the lattice of preconvergences that is closed under meets.
+\end{lemma}
+\begin{proof}
+Let $\{\xi_i\}_{i\in I}$ be a set of topological convergences on $X$. We need to show that $\bigwedge_{i\in I}\xi_i$ is topological, for which we use \ref{pretopologicalSpaceTopological}.
+
+TODO!!
+\end{proof}
+TODO: easier to verify that closure operator is a closure operator?
+
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then the \udef{topological modification} $\topMod(\xi)$ is the closure of $\xi$ into the lattice of topological convergences.
+\end{definition}
+
+\begin{proposition} \label{topologicalModificationConstruction}
+Let $\sSet{X,\xi}$ be a convergence space. Then the topological modification $\topMod(\xi)$ exists and is given by
+\[ F \overset{\topMod(\xi)}{\longrightarrow} x \quad\iff\quad \neighbourhood_\xi(x) \subseteq F. \]
+\end{proposition}
+
+\begin{proposition} \label{topologicalModificationPreservation}
+Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $x\in X$. Then
+\begin{enumerate}
+\item $A$ is open (closed) in $\topMod(\xi)$ \textup{if and only if} $A$ is open (closed) in $\xi$;
+\item $\topology_{\topMod(\xi)} = \topology_\xi$;
+\item $\interior_{\topMod(\xi)}(A) = \interior_{\xi}(A)$ and $\closure_{\topMod(\xi)}(A) = \closure_{\xi}(A)$;
+\item $\neighbourhood_{\topMod(\xi)}(x) = \neighbourhood_\xi(x)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{openClosedCriteria}, we have that $A$ is open in $\topMod(\xi)$ iff $A\in \vicinity_{\topMod(\xi)}(x)$ for all $x\in A$. Thus
+\begin{align*}
+\text{$A$ is $\topMod(\xi)$-open} &\iff \forall x\in A: \; A\in \vicinity_{\topMod(\xi)}(x) \\
+&\iff \forall x\in A: \; A\in \neighbourhood_\xi(x) \\
+&\iff \forall x\in A: \; x\in \interior_\xi(A) \\
+&\iff A\subseteq \interior_\xi(A) \\
+&\iff \text{$A$ is $\xi$-open}.
+\end{align*}
+The statement for closed sets follows straight from \ref{openClosedComplement}.
+
+(2), (3) Immediate.
+
+(4) From \ref{topologicalModificationConstruction}, $\neighbourhood_\xi(x) = \vicinity_{\topMod(\xi)}(x)$. The result follows because $\topMod(\xi)$ is topological.
+\end{proof}
+
+\subsection{Base properties}
+\begin{lemma}
+Let $X$ be a set and $\mathcal{B}\subseteq \powerfilters(X)$ a set of filters. The set of convergences on $X$ that are based in $\mathcal{B}$ is closed under joins.
+\end{lemma}
+\begin{proof}
+Let $\Xi$ be a set of convergences on $X$ that are all based in $\mathcal{B}$. And suppose $F\in\powerfilters(X)$ conververges to $x\in X$ according to $\bigvee \Xi$. By \ref{latticeConvergences}, there exists $\xi\in \Xi$ such that $F\overset{\xi}{\longrightarrow} x$.
+
+By assumption, there exists $G\in\powerfilters(X)$ such that $G\subseteq F$, $G\overset{\xi}{\longrightarrow} x$ and $G$ is based in $\mathcal{B}$.
+
+Then $G\overset{\Xi}{\longrightarrow} x$. As $F\overset{\xi}{\longrightarrow} x$ was chosed arbitrarily, we have that $\Xi$ is based in $\mathcal{B}$.
+\end{proof}
+
+\begin{definition}
+Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. The \udef{$\mathcal{B}$-based modification} $\basedMod_\mathcal{B}(\xi)$ is the coclosure into the lattice of $\mathcal{B}$-based convergences.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. Then
+\[ \basedMod_\mathcal{B}(\xi) = \setbuilder{(F,x)\in \powerfilters(X)\times X}{\exists G\in \powerfilters(X): \; G\subseteq, G\overset{\xi}{\longrightarrow} x, \text{$G$ is based in $\mathcal{B}$}}. \]
+\end{lemma}
+
+
+
+
 \chapter{Sequential spaces}
 
 \section{Sequential filters}
@@ -3008,9 +3168,9 @@ Let $(X,\mathcal{T})$ be a topological space and $(a_n)_{n\in\N}$ a sequence in 
 \[ \forall \;\text{open neighbourhood}\; V(L): \exists n_0\in \N: \forall n\geq n_0: a_n\in V(L). \]
 \end{proposition}
 \begin{proof}
-Assume the sequence converges to $L$ and take an arbitrary open neighbourhood $V(L)$. Then there exists an open neighbourhood $U(\infty)$ such that $a[U\setminus\{\infty\}] \subseteq V$. Now by definition of the order topology, there exists an interval $]m, \infty]\subseteq U(\infty)$. Then $a[\;m, \infty[\;] \subseteq V$ and by setting $n_0=m+1$ we get the criterion of the proposition.
+Assume the sequence converges to $L$ and take an arbitrary open neighbourhood $V(L)$. Then there exists an open neighbourhood $U(\infty)$ such that $a^{\imf}(U\setminus\{\infty\}) \subseteq V$. Now by definition of the order topology, there exists an interval $\interval[oc]{m, \infty}\subseteq U(\infty)$. Then $a^{\imf}(\interval[co]{m, \infty}) \subseteq V$ and by setting $n_0=m+1$ we get the criterion of the proposition.
 
-Conversely assume the criterion and fix $V(L)$. Then we can take $U(\infty)=]n_0, \infty]$.
+Conversely assume the criterion and fix $V(L)$. Then we can take $U(\infty)=\interval[co]{n_0, \infty}$.
 \end{proof}
 
 \begin{lemma} \label{subsequencesConverge}
@@ -3024,26 +3184,63 @@ TODO: Bolzano-Weierstrass (sequence version + accumulation point version)
 Let $X$ be a set. A convergence $\xi$  on $x$ is called \udef{sequentially based} if it is based in the set of sequential filters in $X$.
 \end{definition}
 
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a sequentially based convergence space and $D:X\to \powerset{X}$ a function such that $x\in D(x)$. Then the convergence in the direction $D$ is also sequentially based.
+\end{lemma}
+\begin{proof}
+Let $F\in \powerfilters(X)$ converge to $x$ in the directional convergence. Then $D(x)\in F$ and there exists a sequence $\seq{x_n}$ such that $\TailsFilter\seq{x_n}\subseteq F$ and $\seq{x_n}$ converges to $x$ in $\xi$.
+
+We claim there exists a subsequence of $\seq{x_n}$ that lies in $D(x)$, which we can obtain by removing every term that does not lie in $D(x)$. It is enough to see that every tail of $\seq{x_n}$ meshes with $D$, which is true because every tail is an element of $F$ and $D\in F$.
+
+This subsequence $\seq{x'_n}$ clearly converges to $x$. We also have $\TailsFilter\seq{x_n'}\subseteq F$.
+\end{proof}
+
 \subsection{Sequential properties}
 \subsubsection{Sequential continuity}
 \begin{definition}
-Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. Then $f$ is called \udef{sequentially continuous} if $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \zeta}$ is continuous.
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. Then $f$ is called \udef{sequentially continuous} if $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \seqMod(\zeta)}$ is continuous.
 \end{definition}
 
-\begin{lemma}
-Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. Then $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \zeta}$ is continuous \textup{if and only if} $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \seqMod(\zeta)}$.
-\end{lemma}
+\begin{proposition}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is sequentially continuous;
+\item $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \zeta}$ is continuous;
+\item the sequence $\seq{f(x_n)}$ converges to $f(x)$ for all convergent sequences $\seq{x_n}\overset{\xi}{\longrightarrow} x$ in $X$.
+\end{enumerate}
+\end{proposition}
 \begin{proof}
+$(1) \Rightarrow (2)$ Immediate.
 
+$(2) \Rightarrow (3)$ Let $\seq{x_n}$ be a sequence such that $\TailsFilter\seq{x_n}\overset{\xi}{\longrightarrow} x$. Now $\TailsFilter\seq{x_n}$ also converges to $x$ in $\seqMod(\xi)$, so $\upset f^{\imf\imf}\big(\TailsFilter\seq{x_n}\big)$ converges to $f(x)$ in $\zeta$.
+
+By \ref{imageTailsFilter}, $\upset f^{\imf\imf}\big(\TailsFilter\seq{x_n}\big) = \TailsFilter\seq{f(x_n)}$, so $\seq{f(x_n)}$ converges to $f(x)$.
+
+$(3) \Rightarrow (1)$ Take $F\in \powerfilters(X)$ such that $F\overset{\seqMod(\xi)}{\longrightarrow} x$. Then there exists a sequence $\seq{x_n}$ that converges to $x$ such that $\TailsFilter\seq{x_n}\subseteq F$. Now $\seq{f(x_n)}$ converges to $f(x)$. 
+
+By \ref{imageTailsFilter}, $\TailsFilter\seq{f(x_n)} = \upset f^{\imf\imf}\big(\TailsFilter\seq{x_n}\big) \subseteq \upset f^{\imf\imf}(F)$, so $\upset f^{\imf\imf}(F)$ converges to $f(x)$ in $\seqMod(\zeta)$.
 \end{proof}
 
-\begin{proposition}
-Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. Then $f$ is sequentially continuous \textup{if and only if} for all convergent sequences $\seq{x_n}\overset{\xi}{\longrightarrow} x$ in $X$, the sequence $\seq{f(x_n)}$ converges to $f(x)$.
-\end{proposition}
+\subsubsection{Sequential inherence and adherence}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then we call
+\begin{itemize}
+\item $\inh_{\seqMod(\xi)}$ the \udef{sequential inherence} of $A$;
+\item $\inh_{\seqMod(\xi)}$ the \udef{sequential adherence} of $A$.
+\end{itemize}
+\end{definition}
+The sequential inherence is sometimes called the sequential interior and the sequential adherence is sometimes called the sequential closure.
 
 \begin{proposition}
-Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a function. If $f:\sSet{X,\xi}\to \sSet{Y,\zeta}$ is continuous, then $f$ is sequentially continuous.
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then
+\begin{enumerate}
+\item $\inh_{\seqMod(\xi)} = \setbuilder{s\in S}{\text{every sequence in $X$ that converges to $s$ has a tail in $S$}}$;
+\item $\adh_{\seqMod(\xi)} = \setbuilder{x\in X}{\text{$\exists$ a sequence in $S$ that converges to $x$ in $X$}}$.
+\end{enumerate}
 \end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
 \section{Sequential spaces}
 \begin{definition}
@@ -3054,7 +3251,7 @@ Let $\sSet{X,\xi}$ be a convergence space. Then
 \end{itemize} 
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{sequentialLemma}
 Let $\sSet{X,\xi}$ be a convergence space. The following are equivalent
 \begin{enumerate}
 \item $\xi$ is sequential;
@@ -3063,7 +3260,35 @@ Let $\sSet{X,\xi}$ be a convergence space. The following are equivalent
 \end{enumerate}
 \end{lemma}
 \begin{proof}
+$(1) \Rightarrow (2)$ We have $\xi \leq \topMod(\xi) = (\topMod\circ \seqMod)(\xi)$.
 
+$(2) \Rightarrow (3)$  We have $\closure_\xi \leq \closure_{(\topMod\circ \seqMod)(\xi)} = \closure_{\seqMod(\xi)} \leq \closure_\xi$, using \ref{interiorClosureMonotoneInConvergence} and \ref{topologicalModificationPreservation}.
+
+$(3) \Rightarrow (1)$ Since the closure operator uniquely determines the topology (the topology consists of the complement of the sets in the image of the closure operator), the topology uniquely determines a topological convergence (\ref{specifyingTopology}) and the topological modification of a convergence has the same topology as the convergence (\ref{topologicalModificationPreservation}), we have $\topMod(\xi) = (\topMod\circ \seqMod)(\xi)$.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space. The following are equivalent
+\begin{enumerate}
+\item $\xi$ is sequential;
+\item for any function $f: X\to \sSet{Y,\tau}$ to a topological convergence space $\tau$, $f$ is continuous \textup{if and only if} $f$ is sequentially continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ By functoriality of $\seqMod$ (TODO ref), it is enough to prove that in this case sequential continuity implies continuity. Assume $f$ is sequentially continuous, so $f: \sSet{X, \seqMod(\xi)} \to \sSet{Y, \seqMod(\tau)}$ is continous. By functoriality of $\topMod$ (TODO ref), this implies that $f: \sSet{X, (\topMod\circ \seqMod)(\xi)} \to \sSet{Y, (\topMod\circ\seqMod)(\tau)}$ is continous.
+
+Then $f: \sSet{X, (\topMod\circ \seqMod)(\xi)} \to \sSet{Y, \topMod(\tau)} = f: \sSet{X, (\topMod\circ \seqMod)(\xi)} \to \sSet{Y, \tau}$ is continuous and thus $f: \sSet{X, \topMod(\xi)} \to \sSet{Y, \tau}$ is continuous because $\xi$ is sequential. This implies that $f: \sSet{X, \xi} \to \sSet{Y, \tau}$ is continuous.
+
+$(2) \Rightarrow (1)$ Set $\tau = (\topMod\circ \seqMod)(\xi)$ and $f = \id_X$. Now $\id_X: \xi \to \tau$ is sequentially continuous: from $\seqMod(\xi) \leq (\topMod\circ \seqMod)(\xi)$, we get $\seqMod(\xi) = \seqMod^2(\xi) \leq (\seqMod\circ \topMod\circ \seqMod)(\xi) = \seqMod(\tau)$.
+
+By assumption, this means that $\id_X: \xi \to \tau$ is continuous, so $\xi \leq (\topMod\circ \seqMod)(\xi)$, which implies that $\xi$ is sequential by \ref{sequentialLemma}.
+\end{proof}
+
+\begin{theorem}
+A convergence is sequential \textup{if and only if} it is the quotient of a metrisable convergence.
+\end{theorem}
+\begin{proof}
+TODO Dolecki / Mynard p. 159
 \end{proof}
 
 \subsection{The sequential topology}
@@ -4183,7 +4408,7 @@ TODO: $\sSet{Y,\zeta}$ is regular iff for all convergence spaces $X$ all limit f
 \evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big) &= \evalMap^{\imf\imf}\big((H \otimes F) \cap (\pfilter{f} \otimes F)\big) \\
 &= \evalMap^{\imf\imf}(H \otimes F) \cap \evalMap^{\imf\imf}(\pfilter{f} \otimes F),
 \end{align*} 
-using \ref{intersectionProductFilters} and \ref{imageFiltersPreservesIntersection}. By the Kent property, $\evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big)$ converges to $f(x)$. And thus by monotonicity of the convergence,
+using \ref{intersectionProductFilters} and \ref{imageUpsetsPreservesIntersection}. By the Kent property, $\evalMap^{\imf\imf}\big((H\cap \pfilter{f})\otimes F\big)$ converges to $f(x)$. And thus by monotonicity of the convergence,
 \[ \evalMap^{\imf\imf}(\pfilter{f} \otimes F) = f^{\imf\imf}[F] \overset{\zeta}{\longrightarrow} f(x). \]
 Thus $f$ is continuous.
 
@@ -4309,7 +4534,7 @@ Let $G, H\overset{(X\to Y)_c}{\longrightarrow} f$. Then for all $F\to x\in X$, w
 \evalMap^{\imf\imf}\big((G\cap H)\otimes F\big) &= \evalMap^{\imf\imf}\big((G \otimes F) \cap (H \otimes F)\big) \\
 &= \evalMap^{\imf\imf}(G \otimes F) \cap \evalMap^{\imf\imf}(H \otimes F) \; \overset{\zeta}{\longrightarrow} f(x),
 \end{align*}
-using \ref{intersectionProductFilters}, \ref{imageFiltersPreservesIntersection} and the finite depth of $Y$.
+using \ref{intersectionProductFilters}, \ref{imageUpsetsPreservesIntersection} and the finite depth of $Y$.
 \end{proof}
 Note that this does not imply the Kent property, because $(X\to Y)_c$ is only a preconvergence space. The space $\cont_c(X,Y)$ does have the Kent property if $Y$ is of finite depth.
 
@@ -5962,7 +6187,7 @@ Let $\sSet{G, \xi}$ be a convergence group, $H$ a group and $q: \sSet{G, \xi} \t
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Let $F_1, F_2 \to x \in H$. By \ref{initialFinalConvergence} there exist $x_1, x_2\in q^{\preimf}\{x\}$, $F_1' \overset{\xi}{\longrightarrow} x_1$ and $F_2' \overset{\xi}{\longrightarrow} x_2$ such that $q^{\imf\imf}[F'_1] \subseteq F_1$ and $q^{\imf\imf}[F'_2] \subseteq F_2$. By \ref{shiftHomeomorphism}, $F_2'\cdot x_2^{-1}\cdot x_1 \overset{\xi}{\longrightarrow} x_1$. By finite depth of $G$, $F_1'\cap (F_2'\cdot x_2^{-1}\cdot x_1) \overset{\xi}{\longrightarrow} x_1$. Now, using \ref{imageFiltersPreservesIntersection} and the fact that $q(x_2^{-1}\cdot x_1) = q(x_2)^{-1}\cdot q(x_1) = x^{-1}\cdot x = 1$,
+(1) Let $F_1, F_2 \to x \in H$. By \ref{initialFinalConvergence} there exist $x_1, x_2\in q^{\preimf}\{x\}$, $F_1' \overset{\xi}{\longrightarrow} x_1$ and $F_2' \overset{\xi}{\longrightarrow} x_2$ such that $q^{\imf\imf}[F'_1] \subseteq F_1$ and $q^{\imf\imf}[F'_2] \subseteq F_2$. By \ref{shiftHomeomorphism}, $F_2'\cdot x_2^{-1}\cdot x_1 \overset{\xi}{\longrightarrow} x_1$. By finite depth of $G$, $F_1'\cap (F_2'\cdot x_2^{-1}\cdot x_1) \overset{\xi}{\longrightarrow} x_1$. Now, using \ref{imageUpsetsPreservesIntersection} and the fact that $q(x_2^{-1}\cdot x_1) = q(x_2)^{-1}\cdot q(x_1) = x^{-1}\cdot x = 1$,
 \[ q^{\imf\imf}\big(F_1'\cap (F_2'\cdot x_2^{-1}\cdot x_1)\big) = q^{\imf\imf}(F_1')\cap q^{\imf\imf}(F_2'\cdot x_2^{-1}\cdot x_1) = q^{\imf\imf}(F_1')\cap q^{\imf\imf}(F_2') \to x, \]
 so $F_1\cap F_2 \to x$.
 
@@ -6082,7 +6307,7 @@ Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group. Then
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) We calculate, using \ref{filterPreimageImageGaloisConnection}:
+(1) We calculate, using \ref{upsetPreimageImageGaloisConnection}:
 \begin{align*}
 \entourage_G &= \bigcap \mathcal{U}_G \\
 &= \bigcap \setbuilder{H\in \powerfilters(G^2)}{\Delta^{\imf\imf}(H) \to 1} \\
@@ -6091,7 +6316,7 @@ Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group. Then
 &= \Delta^{\preimf\imf}\big(\neighbourhood(1)\big).
 \end{align*}
 
-(2) We calculate, using the fact that $\xi$ is topological and \ref{filterPreimageImageGaloisConnection}:
+(2) We calculate, using the fact that $\xi$ is topological and \ref{upsetPreimageImageGaloisConnection}:
 \begin{align*}
 \mathcal{U}_G &= \setbuilder{H\in \powerfilters(G^2)}{\Delta^{\imf\imf}(H) \to 1} \\
 &= \setbuilder{H\in \powerfilters(G^2)}{\neighbourhood(1) \subseteq \Delta^{\imf\imf}(H)} \\
@@ -6265,7 +6490,7 @@ We apply $[\cdot]_N$ to obtain
 &= \upset[\cdot]_N^{\imf\imf}(F)\cdot [y]_N^{-1} \cdot [x]_N \\
 &= \upset\iota^{\imf\imf}_{[L]_N^{\imf}}(F).
 \end{align*}
-By \ref{filterPreimageImageGaloisConnection}, this implies
+By \ref{upsetPreimageImageGaloisConnection}, this implies
 \[ \upset (\iota^{\preimf}_{[L]_N^\imf} \circ [\cdot]_N^\imf\circ \iota_{L\cdot L^{-1}\cdot L}^\imf)^{\imf}\Big(\vicinity_{L\cdot L^{-1}\cdot L}(x)\Big) \subseteq F. \]
 \end{proof}
 
