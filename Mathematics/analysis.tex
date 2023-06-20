@@ -1962,7 +1962,7 @@ Both $\R_{ll}$ and $\R_{ul}$ are $C1$, Fréchet-Urysohn and sequential.
 \end{corollary}
 
 \begin{lemma}
-Let $\seq{x_n}\subseteq \R_ll$ be a convergent sequence. Then $\seq{x_n}$ has a monotonically decreasing convergent subsequence.
+Let $\seq{x_n}\subseteq \R_{ll}$ be a convergent sequence. Then $\seq{x_n}$ has a monotonically decreasing convergent subsequence.
 \end{lemma}
 \begin{proof}
 Suppose $\seq{x_n} \overset{ll}{\longrightarrow} x$.
@@ -3291,8 +3291,219 @@ We can now apply \ref{5foldCoveringLemma} to this collection of balls (with an i
 
 \end{corollary}
 
+\section{Approximation}
+\subsection{Korovkin approximation}
 
+\begin{theorem}[Korovkin]
+Let $\sSet{X,d}$ be a metric space. Let $\varphi: \interval[co]{0,\infty} \to \R^+$ be a continuous function such that
+\begin{itemize}
+\item $\varphi(t) > 0$ for all $t>0$;
+\item $\exists T>0, \epsilon_0>0: \varphi(t) \geq \epsilon_0$ for all $t\geq T$.
+\end{itemize}
+Let $E$ be a Riesz subspace of $(X\to \R)$ such that $\varphi\circ d(x,-)\in E$ for all $x\in X$ and $\underline{1} \in E$.
 
+Let $\seq{L_n: E\to (X\to \R)}$ be a sequence of positive linear operators such that
+\begin{itemize}
+\item $\lim_{n\to \infty} L_n(\underline{1}) = \underline{1}$ uniformly; and
+\item $\lim_{n\to \infty} x\mapsto L_n(\varphi\circ d(x,-))(x) = \underline{0}$ uniformly for all $x\in X$.
+\end{itemize}
+Then $\lim_{n\to \infty}L_n(f) = f$ uniformly for all uniformly continuous $f\in E$.
+\end{theorem}
+\begin{proof}
+Let $f\in E$ be uniformly continuous. By uniform continuity (\ref{uniformContinuityMetricSpaces}), there exists a $\delta > 0$ such that $d(x,y)\leq \delta \implies |f(x)-f(y)| \leq \epsilon$.
+
+Now we claim that $\inf\varphi^\imf\big(\interval[co]{\delta, +\infty}\big)$ is strictly positive. Indeed,
+\[ \inf\varphi^\imf\big(\interval[co]{\delta, +\infty}\big) = \min \Big(\inf\varphi^\imf\big(\interval{\delta, T}\big), \inf\varphi^\imf\big(\interval[co]{T, +\infty}\big) \Big) \geq \min\Big(\inf\varphi^\imf\big(\interval{\delta, T}\big), \epsilon_0\Big), \]
+and $\varphi$ attains its infimum on $\interval{\delta, T}$ by \ref{extremeValueTheorem}, so $\inf\varphi^\imf\big(\interval{\delta, T}\big) = \min\varphi^\imf\big(\interval{\delta, T}\big) > 0$. We can now set $C = \inf\varphi^\imf\big(\interval[co]{\delta, +\infty}\big)^{-1}$.
+
+For all $x,y\in X$ such that $d(x,y) \geq \delta$, we have
+\[ |f(x) - f(y)| \leq 2\norm{f}_u \leq \frac{2\norm{f}_\infty}{C}(\varphi\circ d)(x,y). \]
+Putting the cases of $d(x,y) \leq \delta$ and $d(x,y) \geq \delta$ together, gives
+\[ |f(x) - f(y)| \leq \epsilon + \frac{2\norm{f}_u}{C}(\varphi\circ d)(x,y) \]
+for all $x,y\in X$. Or, for fixed $x\in X$, $|f - f(x)\underline{1}| \leq \epsilon\underline{1} + \frac{2\norm{f}_u}{C}(\varphi\circ d)(x,-)$.
+
+Thus, for any $x\in X$ and $n\in \N$, we have
+\begin{align*}
+|L_n(f)(x) - f(x)L_n(\underline{1})(x)| &\leq |L_n(f - f(x)\underline{1})(x)| \\
+&\leq L_n(|f - f(x) \underline{1}|)(x) \\
+&\leq \epsilon L_n(\underline{1})(x) + \frac{2\norm{f}_u}{C}L_n\big((\varphi\circ d)(x,-)\big)(x),
+\end{align*}
+where we have used that each $L_n$ preserves to order. Taking the supremum over $x$ and then the limsup $n\to \infty$ gives
+\[ \limsup_{n\to\infty}\norm{L_n(f) - f\cdot L_n(\underline{1})}_u \leq \epsilon \]
+for all $\epsilon >0$. Thus $\limsup_{n\to\infty}\norm{L_n(f) - f\cdot L_n(\underline{1})} = 0$, which means it must equal the liminf and $L_n(f) - f\cdot L_n(\underline{1})$ converges uniformly to $0$ (by \ref{realConvergenceOrderConvergence} and \ref{vectorSpaceUniformNorm}). Since $f\cdot L_n(\underline{1})$ converges uniformly to $f$ by assumption and the uniform convergence is a vector space convergence (\ref{vectorSpaceUniformNorm}), $L_n(f)$ converges uniformly to $f$.
+\end{proof}
+\begin{corollary}[Korovkin's first theorem or Bohman-Korovkin theorem] \label{BohmanKorovkin}
+Let $\seq{L_n: \cont(\interval{0,1})\to (\interval{0,1}\to \R)}$ be a sequence of positive linear operators and consider $(-)^i: \interval[0,1] \to \R: x\mapsto x^i$. If $L_n\big((-)^i\big) \to (-)^i$ uniformly for $i\in\{0,1,2\}$, then $L_n(f) \to f$ uniformly for all $f\in\cont(\interval{0,1})$.
+\end{corollary}
+\begin{proof}
+We set $\varphi = (-)^2$. Then
+\begin{align*}
+(\varphi\circ d)(x,y) &= |x-y|^2 = (x-y)^2 = x^2 -2xy +y^2 \\
+&= \big(x^2\underline{1} - 2x\id_X + (-)^2\big)(y) \\
+&= \big(x^2(-)^0 - 2x(-)^1 + (-)^2\big)(y),
+\end{align*}
+and, since the uniform convergence is a vector space convergence (by \ref{vectorSpaceUniformNorm}), we have
+\begin{align*}
+L_n\big((\varphi\circ d)(x,-)\big)(x) &= \Big(x^2L_n\big((-)^0\big) - 2xL_n\big((-)^1\big) + L_n\big((-)^2\big)\Big)(x) \\
+&\to \Big(x^2(-)^0 - 2x(-)^1 + (-)^2\Big)(x) \\
+&= x^2 - 2x\, x + x^2 = 2x^2 - 2x^2 = 0.
+\end{align*}
+Because every continuous function on $\cont(\interval{0,1})$ is uniformly continuous (by the Heine-Cantor theorem \ref{HeineCantorTheorem}), we may apply the theorem.
+\end{proof}
+\begin{corollary}[Korovkin's second theorem]
+TODO. See Ciarlet and Altomare.
+\end{corollary}
+
+\subsubsection{Bernstein polynomials and Weierstrass approximation}
+\begin{definition}
+The polynomials
+\[ b_{k,n}(x) = \begin{pmatrix}
+n \\ k
+\end{pmatrix}x^k(1-x)^{n-k} \]
+for $k,n\in \N$ and $k\leq n$ are called \udef{Bernstein polynomials}.
+\end{definition}
+
+\begin{lemma} \label{BernsteinPartitionUnity}
+The Bernstein polynomials of degree $n$ form a partition of unity:
+\[ \sum_{k=0}^n b_{k,n}(x) = 1. \]
+\end{lemma}
+\begin{proof}
+The binomial identity \ref{binomialIdentity} gives
+\[ \sum_{k=0}^n b_{k,n}(x) = \sum_{k=0}^n \begin{pmatrix}
+n \\ k
+\end{pmatrix}x^k(1-x)^{n-k} = (x+1-x)^n = 1^n = 1. \]
+\end{proof}
+
+\begin{proposition}
+Let $n,k\in \N$. Then
+\begin{enumerate}
+\item $\displaystyle b_{k,n}(x) = \sum_{m=k}^n \begin{pmatrix}
+n \\ m
+\end{pmatrix}\begin{pmatrix}
+m \\ k
+\end{pmatrix}(-1)^{m-k}x^m$;
+\item $\displaystyle x^m = \begin{pmatrix}
+n \\ m
+\end{pmatrix}^{-1}\sum_{k=m}^n \begin{pmatrix}
+k \\ m
+\end{pmatrix}b_{k,n}(x)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Filling in the binomial identity \ref{binomialIdentity} gives
+\begin{align*}
+b_{k,n}(x) &= \begin{pmatrix}
+n \\ k
+\end{pmatrix}x^k(1-x)^{n-k} \\
+&= \begin{pmatrix}
+n \\ k
+\end{pmatrix}\sum_{m=0}^{n-k}\begin{pmatrix}
+n-k \\ m
+\end{pmatrix}(-1)^{m}x^mx^k \\
+&= \sum_{m=k}^{n}\begin{pmatrix}
+n \\ k
+\end{pmatrix}\begin{pmatrix}
+n-k \\ m-k
+\end{pmatrix}(-1)^{m-k}x^m \\
+&= \sum_{m=k}^{n}\begin{pmatrix}
+n \\ m
+\end{pmatrix}\begin{pmatrix}
+m \\ m-k
+\end{pmatrix}(-1)^{m-k}x^m \\
+&= \sum_{m=k}^{n}\begin{pmatrix}
+n \\ m
+\end{pmatrix}\begin{pmatrix}
+m \\ k
+\end{pmatrix}(-1)^{m-k}x^m,
+\end{align*}
+where we have used \ref{binomialCoefficientMultiplicationLemma} and \ref{binomialCoefficientLemma}.
+
+(2) We calculate
+\begin{align*}
+\sum_{k=m}^n \begin{pmatrix}
+k \\ m
+\end{pmatrix}b_{k,n}(x) &= \sum_{k=m}^n \begin{pmatrix}
+k \\ m
+\end{pmatrix}\begin{pmatrix}
+n \\ k
+\end{pmatrix}x^k(1-x)^{n-k} \\
+&= \begin{pmatrix}
+n \\ m
+\end{pmatrix}\sum_{k=m}^n \begin{pmatrix}
+n-m \\ k-m
+\end{pmatrix}x^k(1-x)^{n-k} \\
+&= \begin{pmatrix}
+n \\ m
+\end{pmatrix}\sum_{k=0}^{n-m} \begin{pmatrix}
+n-m \\ k
+\end{pmatrix}x^mx^k(1-x)^{n-m-k} \\
+&= \begin{pmatrix}
+n \\ m
+\end{pmatrix}x^m(x+1-x)^{n-m} = \begin{pmatrix}
+n \\ m
+\end{pmatrix}x^m,
+\end{align*}
+where we have used \ref{binomialCoefficientMultiplicationLemma} and \ref{binomialIdentity}.
+\end{proof}
+\begin{corollary}
+Let $n\in\N$. Then $\{b_{k,n}\}_{k\leq n}(x)$ is a basis of $\R[x]/(x^{n+1})$.
+\end{corollary}
+
+\begin{proposition}
+Let $f\in\cont(\interval{0,1})$ and consider $B_n: \cont(\interval{0,1}) \to \cont(\interval{0,1})$ defined by
+\[ B_n(f): \interval{0,1} \to \R: x\mapsto \sum_{k=0}^nf\Big(\frac{k}{n}\Big)b_{k,n}(x). \]
+Then $B_n(f) \to f$ uniformly.
+\end{proposition}
+\begin{proof}
+We aim to apply the Bohman-Korovkin theorem \ref{BohmanKorovkin}. To this end we calculate
+\[ B_n\big(\underline{1}\big)(x) = \sum_{k=0}^nb_{k,n}(x) = 1, \]
+by \ref{BernsteinPartitionUnity}. Next
+\begin{align*}
+B_n\big(\id_{\interval{0,1}}\big)(x) &= \sum_{k=0}^n \frac{k}{n}b_{k,n}(x) \\
+&= \sum_{k=0}^n \frac{k}{n} \begin{pmatrix}
+n \\ k
+\end{pmatrix}x^k(1-x)^{n-k} \\
+&= 0 + \sum_{k=1}^{n} \frac{k}{n}\begin{pmatrix}
+n \\ k
+\end{pmatrix}x^k(1-x)^{n-k} \\
+&= \sum_{k=1}^{n} \begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix}x^k(1-x)^{n-k} \\
+&= \sum_{k=0}^{n-1} \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix}xx^{k}(1-x)^{n-1-k} \\
+&= x (x + 1 - x)^{n-1} = x = \id_{\interval{0,1}}(x),
+\end{align*}
+by \ref{binomialCoefficientLemma} and \ref{binomialIdentity} for all $n\in \N$. Thus $B_n\big(\id_{\interval{0,1}}\big)$ converges uniformly to $\id_{\interval{0,1}}$.
+
+Finally we need to calculate $B_n\big((-)^2\big)(x) = \sum_{k=0}^n \frac{k^2}{n^2}b_{k,n}(x)$. Now applying multiple times gives
+\[ k^2 \begin{pmatrix}
+n \\ k
+\end{pmatrix} = \big(k(k-1) + k\big)\begin{pmatrix}
+n \\ k
+\end{pmatrix} = n(n-1) \begin{pmatrix}
+n - 2 \\ k - 2
+\end{pmatrix} + n \begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix}. \]
+The second term, like before, gives a contribution of $\frac{x}{n}$. The first term gives a contribution of $\frac{n(n-1)}{n^2}x^2$. Putting everything together gives $B_n\big((-)^2\big)(x) = x^2 - n^{-1}(x^2-x) = \big((-)^2 - n^{-1}(x\mapsto x^2 - x)\big)(x)$. Since uniform convergence is a vector convergence, this converges uniformly to $(-)^2$. Thus we can apply the Bohman-Korovkin theorem.
+\end{proof}
+\begin{corollary}[Weierstrass approximation theorem]
+The polynomials are dense in $\cont(\interval{0,1})$ w.r.t.\ the uniform norm.
+\end{corollary}
+
+\subsubsection{Kantorovich polynomials}
+\begin{definition}
+Take $n\in \N$ and $f\in L^p(\interval{0,1})$. Then the \udef{Kantorovich polynomial} $K_n(f)(x)$ is defined by
+\[ K_n(f)(x) \defeq \sum_{k=0}^n\left((n+1)\int_{\frac{k}{n+1}}^{\frac{k+1}{n+1}}f(t)\diff{t}\right)b_{k,n}(x). \]
+\end{definition}
+
+\begin{proposition}
+Let $f\in L^p(\interval{0,1})$ and $1\leq p <\infty$. Then $K_n(f) \to f$ in $L^p(\interval{0,1})$.
+\end{proposition}
+\begin{proof}
+TODO, see Korovkin-type Theorems and Approximation by Positive Linear Operators - Altomare.
+\end{proof}
 
 \chapter{Complex analysis}
 \begin{definition}

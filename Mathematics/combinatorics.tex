@@ -18,7 +18,177 @@ n \\ k
 
 $(k,m)$ shuffle
 
-Binomial theorem. Fill in $x=1, y=-1$.
+
+\begin{lemma} \label{binomialCoefficientLemma}
+Let $n,k\in \N$. Then
+\begin{enumerate}
+\item $\begin{pmatrix}
+n \\ k
+\end{pmatrix} = \begin{pmatrix}
+n \\ n-k
+\end{pmatrix}$;
+\item $\begin{pmatrix}
+n \\ k
+\end{pmatrix} = \frac{n}{k}\begin{pmatrix}
+n - 1 \\ k - 1
+\end{pmatrix}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We calculate
+\[ \begin{pmatrix}
+n \\ k
+\end{pmatrix} = \frac{n!}{k!(n-k)!} = \frac{n!}{(n-k)!k!} = \frac{n!}{(n-k)!\big(n-(n-k)\big)!} = \begin{pmatrix}
+n \\ n-k
+\end{pmatrix}. \]
+
+(2) We calculate
+\[ \begin{pmatrix}
+n \\ k
+\end{pmatrix} = \frac{n!}{k!(n-k)!} = \frac{n(n-1)!}{k(k-1)!(n-k)!} = \frac{n}{k}\frac{(n-1)!}{(k-1)!\big((n-1) - (k-1)\big)!} = \frac{n}{k}\begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix}. \]
+\end{proof}
+
+\begin{proposition}[Pascal's formula] \label{PascalsFormula}
+Let $n,k\in \N$. Then
+\[ \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix} + \begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix} = \begin{pmatrix}
+n \\ k
+\end{pmatrix}. \]
+\end{proposition}
+There is an intuitive explanation: if we want to choose $k$ from $n$, then we can first isolate one of the $n$. Now in choosing $k$, we can either choose the isolated one or not. In the first case we need to choose $k-1$ from the remaining $n-1$, in the second case we need to choosed $k$ from the remaining $n-1$.
+\begin{proof}
+We can calculate
+\begin{align*}
+\begin{pmatrix}
+n-1 \\ k
+\end{pmatrix} + \begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix} &= \frac{(n-1)!}{k!(n-1-k)!} + \frac{(n-1)!}{(k-1)!(n-k)!} \\
+&= (n-1)!\left(\frac{n-k}{k!(n-k)!} + \frac{k}{k!(n-k)!}\right) \\
+&= (n-1)! \frac{n}{k!(n-k)!} \\
+&= \frac{n!}{k!(n-k)!} = \begin{pmatrix}
+n \\ k
+\end{pmatrix}.
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Binomial identity] \label{binomialIdentity}
+Let $n\in \N$. Then
+\[ (x+y)^n = \sum_{k=0}^n \begin{pmatrix}
+n \\ k
+\end{pmatrix}x^k y^{n-k}. \]
+\end{theorem}
+\begin{proof}
+We prove this by induction. For the base case $n=0$, we have
+\[ (x+y)^0 = 1 = \begin{pmatrix}
+0 \\ 0
+\end{pmatrix} = \sum_{k=0}^0 \begin{pmatrix}
+0 \\ k
+\end{pmatrix}x^k y^{0-k}. \]
+Now assume the induction hypothesis $(x+y)^{n-1} = \sum_{k=0}^{n-1} \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix}x^k y^{n-1-k}$ holds. Then
+\begin{align*}
+(x+y)^n &= (x+y)^{n-1}(x+y) = (x+y)^{n-1}x + (x+y)^{n-1}y \\
+&= \sum_{k=0}^{n-1} \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix}x^{k+1} y^{n-1-k} + \sum_{k=0}^{n-1} \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix}x^{k} y^{n-k} &\hspace{-22em}\text{(introduce induction hypothesis)}& \\
+&= \sum_{k=1}^{n} \begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix}x^{k} y^{n-k} + \sum_{k=0}^{n-1} \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix}x^{k} y^{n-k} &\hspace{-22em}\text{(relabel $k\to k+1$ in first sum)}& \\
+&= \begin{pmatrix}
+n-1 \\ n-1
+\end{pmatrix}x^ny^{0} + \begin{pmatrix}
+n-1 \\ 0
+\end{pmatrix}x^0y^n + \sum_{k=1}^{n-1} \begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix}x^{k} y^{n-k} + \sum_{k=1}^{n-1} \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix}x^{k} y^{n-k} \\
+&&\hspace{-22em}\text{(isolate $k=n$ in first sum and $k=0$ in the second sum)}& \\
+&= x^ny^{0} + x^0y^n + \sum_{k=1}^{n-1} \left(\begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix}x^{k} y^{n-k} + \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix}x^{k} y^{n-k}\right) \\
+&= x^ny^{0} + x^0y^n + \sum_{k=1}^{n-1} \left(\begin{pmatrix}
+n-1 \\ k-1
+\end{pmatrix} + \begin{pmatrix}
+n-1 \\ k
+\end{pmatrix}\right)x^{k} y^{n-k} &\hspace{-22em}\text{(Pascal's formula \ref{PascalsFormula})}& \\
+&= x^ny^{0} + x^0y^n + \sum_{k=1}^{n-1} \begin{pmatrix}
+n \\ k
+\end{pmatrix}x^{k} y^{n-k} \\
+&= \sum_{k=0}^{n} \begin{pmatrix}
+n \\ k
+\end{pmatrix}x^{k} y^{n-k}.
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $n\in \N$. Then
+\begin{enumerate}
+\item $\sum_{k=0}^n \begin{pmatrix}
+n \\ k
+\end{pmatrix} = 2^n$;
+\item $\sum_{k=0}^n (-1)^k\begin{pmatrix}
+n \\ k
+\end{pmatrix} = 0$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) Set $x = 1 = y$.
+
+(2) Set $x = -1$ and $y = 1$.
+\end{proof}
+
+\begin{lemma} \label{binomialCoefficientMultiplicationLemma}
+Let $k,m,n\in \N$. Then
+\[ \frac{n!}{m!(n-m-k)!} = \begin{pmatrix}
+n \\ m
+\end{pmatrix}\begin{pmatrix}
+n-m \\ k
+\end{pmatrix} = \begin{pmatrix}
+n \\ k
+\end{pmatrix}\begin{pmatrix}
+n-k \\ m
+\end{pmatrix} = \begin{pmatrix}
+n \\ m+k
+\end{pmatrix}\begin{pmatrix}
+m+k \\ m
+\end{pmatrix}. \]
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\frac{n!}{m!k!(n-m-k)!} &= \frac{n!}{m!(n-m)!}\frac{(n-m)!}{k!(n-m-k)!} \\
+&= \begin{pmatrix}
+n \\ m
+\end{pmatrix}\begin{pmatrix}
+n-m \\ k
+\end{pmatrix} \\
+\frac{n!}{m!k!(n-m-k)!} &= \frac{n!}{m!(n-k)!}\frac{(n-k)!}{k!(n-m-k)!} \\
+&= \begin{pmatrix}
+n \\ k
+\end{pmatrix}\begin{pmatrix}
+n-k \\ m
+\end{pmatrix} \\
+\frac{n!}{m!k!(n-m-k)!} &= \frac{n!}{(n-m-k)!(m+k)!}\frac{(m+k)!}{m!k!} \\
+&= \begin{pmatrix}
+n \\ m+k
+\end{pmatrix}\begin{pmatrix}
+m+k \\ m
+\end{pmatrix}.
+\end{align*}
+\end{proof}
 
 \section{Finite sets}
 \begin{definition}
