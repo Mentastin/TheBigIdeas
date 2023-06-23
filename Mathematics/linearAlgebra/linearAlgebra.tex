@@ -1025,8 +1025,8 @@ The closure of a set $X$ into the lattice of affine sets is called the \udef{aff
 Let $V$ be a vector space and $A\subseteq V$ a subset. Then following are equivalent:
 \begin{enumerate}
 \item $A$ is affine;
-\item for all $x\in A$: the set $A-x$ is a vector subspace;
-\item for some $x\in A$: the set $A-x$ is a vector subspace.
+\item for all $x\in A$: the set $A-x$ is a linear subspace;
+\item for some $x\in A$: the set $A-x$ is a linear subspace.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -1038,7 +1038,7 @@ Take $y-x\in A-x$ and $\lambda\in \R$. Then $\lambda(y-x) = \lambda y + (1-\lamb
 
 $(2) \Rightarrow (3)$ Immediate.
 
-$(3) \Rightarrow (1)$ Assume $A-x$ is a vector subspace for some $x\in A$. Take $y,z\in A$ and $\lambda\in \F$. Then $A-x \ni \lambda(y-x)+(1-\lambda)(z-x) = \lambda y + (1-\lambda)z - x$, so $\lambda y + (1-\lambda)z \in A$. 
+$(3) \Rightarrow (1)$ Assume $A-x$ is a linear subspace for some $x\in A$. Take $y,z\in A$ and $\lambda\in \F$. Then $A-x \ni \lambda(y-x)+(1-\lambda)(z-x) = \lambda y + (1-\lambda)z - x$, so $\lambda y + (1-\lambda)z \in A$. 
 \end{proof}
 
 
@@ -1768,7 +1768,7 @@ Let $V$ be a preordered vector space, $S\subseteq V$ a subset, $v\in V$ and $\al
 \item $(S+v)^u = S^u + v$ and $(S+v)^l = S^l + v$.
 \end{enumerate}
 \end{lemma}
-\begin{corollary}
+\begin{corollary} \label{vectorSpaceOperationsOrderHomomorphisms}
 Let $V$ be a preordered vector space, $S\subseteq V$ a subset, $v\in V$ and $\alpha\in \R$. Then
 \begin{enumerate}
 \item $\sup(S+v) = \sup(S)+v$ and $\inf(S+v) = \inf(S)+v$;
@@ -1857,6 +1857,7 @@ Let $V$ be a Riesz space, $u,v,w\in V$ and $\alpha\in \R$, then
 \item $u+(v \wedge w) = (u+v)\wedge (u+w)$ and $u+(v \vee w) = (u+v)\vee (u+w)$.
 \end{enumerate}
 \end{lemma}
+Cfr. also \ref{vectorSpaceOperationsOrderHomomorphisms}.
 \begin{proof}
 We apply \ref{imagePolars} to
 
@@ -1869,9 +1870,9 @@ We apply \ref{imagePolars} to
 (4) the order-embedding $v\mapsto u+v$.
 \end{proof}
 
-\begin{proposition}[Riesz decomposition]
+\begin{theorem}[Riesz decomposition] \label{RieszDecomposition}
 Let $V$ be a Riesz space and $v,w_1,w_2\in V^+$ such that $v \leq w_1 + w_2$. Then $\exists v_1, v_2\in V^+$ such that $v = v_1 + v_2$ and $v_1 \leq w_2, v_2 \leq w_2$.
-\end{proposition}
+\end{theorem}
 \begin{proof}
 Set $v_1 = v\wedge w_1$ and $v_2 = v - v_1$. These satisfy all the properties. We verify the inequality $v_2 \leq w_2$: from $w_2 \geq v - w_1$ we get
 \[ w_2 = 0\vee w_2 \geq 0\vee (v - w_1) = v + (-v)\vee(-w_1) = v - v\wedge w_1 = v-v_1 = v_2. \]
@@ -1911,7 +1912,7 @@ This shows that $\big(\bigvee S\big)\wedge v$ is the least upper bound.
 Riesz spaces are distributive lattices.
 \end{corollary}
 
-\begin{proposition}
+\begin{proposition} \label{additionLatticeOperationsInequalities}
 Let $V$ be a Riesz space, $u,v,w\in V$ and $x,y,z\in V^+$. Then
 \begin{enumerate}
 \item $(u+v)\vee (2w) \leq u\vee w + v\vee w$;
@@ -2042,13 +2043,30 @@ Let $V$ be a Riesz space, $v,w\in V$ and $\alpha\in \R$. Then
 \end{lemma}
 \begin{proof}
 We prove (1):
-\[ |v| = v\vee (-v) = (2v)\vee 0 - v = 2v^+ - v = 2v^+ - (v^+ - v^-) = v^+ - v^- \]
+\[ |v| = v\vee (-v) = (2v)\vee 0 - v = 2v^+ - v = 2v^+ - (v^+ - v^-) = v^+ + v^- \]
 and (6), using the absorption law:
 \[ \big||v|\big| = |v|\vee (-|v|) = v \vee (-v) \vee \big( v\wedge (-v) \big) = v \vee (-v) = |v|. \]
 The rest are immediate consequences, using the results of \ref{PositiveNegativeElements}.
+
+In particualar, for (8) we have that $|v|=0$ implies $v^+ + v^- = 0$, which implies $v^+ = -v^-$. Thus $0\leq v^-$ and $0\leq -v^-$, so $v^- = 0$. Then $v^+ = 0$ and thus so is $v$.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{positiveNegativePartAverage}
+Let $V$ be a Riesz space and $v\in V$. Then
+\begin{enumerate}
+\item $\displaystyle v^+ = \frac{|v|+v}{2}$;
+\item $\displaystyle v^- = \frac{|v|-v}{2}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\frac{|v|+v}{2} &= \frac{(v^+ + v^-) + (v^+ - v^-)}{2} = \frac{2v^+}{2} = v^+ \\
+\frac{|v|-v}{2} &= \frac{(v^+ + v^-) - (v^+ - v^-)}{2} = \frac{2v^-}{2} = v^-.
+\end{align*}
+\end{proof}
+
+\begin{lemma} \label{absoluteValueMeetJoin}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \begin{enumerate}
 \item $(v+w)\vee (v-w) = v + |w|$;
@@ -2088,7 +2106,7 @@ Let $V$ be a Riesz space and $v,w\in V$, then
 Substitute $v\to |v|$ and $w\to |w|$.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{meetJoinAbsoluteValues2}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \begin{enumerate}
 \item $|v|\vee |w| = \frac{1}{2}\Big( |v+w| + |v - w| \Big)$;
@@ -2131,17 +2149,9 @@ This simplifies to the required equation.
 
 (2) Follows from (7) and \ref{meetJoinAbsoluteValues}.
 \end{proof}
-\begin{corollary}
-Let $V$ be a Riesz space and $v,w\in V$, then the following are equivalent:
-\begin{enumerate}
-\item $|v|\wedge |w| = 0$;
-\item $|v+w| = |v-w|$;
-\item $|v|\vee |w| = |v+w|$.
-\end{enumerate}
-\end{corollary}
 
 The absolute value also satisfies the triangle inequality.
-\begin{proposition}[Triangle and reverse triangle inequality in Riesz spaces]
+\begin{proposition}[Triangle and reverse triangle inequality in Riesz spaces] \label{triangleInequalityRieszSpaces}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \[ |v| + |w| \geq \big|v+w\big| \geq \big||v|-|w|\big|. \]
 \end{proposition}
@@ -2179,7 +2189,7 @@ Let $V$ be a Riesz space and $u,v,w\in V$, then
 \[ |0\vee v - 0\vee w| = |v^+ -w^+| \qquad\text{and}\qquad |0\wedge v - 0\wedge w| = |v^- - w^-|. \]
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{offPerpendicularTerms}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \begin{enumerate}
 \item $|v| + |w| - |v+w| = 2(v^+\wedge w^- + v^-\wedge w^+)$;
@@ -2213,9 +2223,6 @@ Adding these gives
 \end{align*}
 where we have used using \ref{birkhoffIdentity}.
 \end{proof}
-\begin{corollary}
-Let $V$ be a Riesz space and $v,w\in V$, then $|v+w| = |v| + |w|$ \textup{if and only if} $v^+\wedge w^- = 0 = v^- \wedge w^+$.
-\end{corollary}
 
 \begin{proposition}
 Let $V$ be a Riesz space and $v,v',w,w'\in V$, then
@@ -2239,26 +2246,56 @@ Let $V$ be a Riesz space. A subset $E$ is called
 \begin{itemize}
 \item a \udef{Riesz subspace} if it is both a subspace and a sublattice;
 \item \udef{solid} if for all $v\in E$ the interval $[-|v|,|v|]$ is a subset of $E$;
-\item a \udef{Riesz ideal} if it is a solid subspace;
+\item a \udef{Riesz ideal} if it is a solid (vector) subspace;
 \item a \udef{band} if it is a Riesz ideal such that for all subsets $S\subseteq E$, we have $\sup(S) \subset E$. 
 \end{itemize}
 \end{definition}
+For the definition of a Riesz ideal we only assume it is a linear subspace, not a Riesz subspace. However it turns out that a Riesz ideal is automatically a Riesz subspace, see \ref{RieszIdealRieszSubspace}. 
 
-\begin{lemma}
+\begin{lemma} \label{RieszSubspaceJoinClosure}
+Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is a Riesz subspace if $E$ is a subspace that is closed under taking joins.
+\end{lemma}
+\begin{proof}
+For all $v,w\in E$, we have $v\wedge w = -\big((-v)\vee (-w)\big)\in E$.
+\end{proof}
+
+\begin{example}
+Consider the Riesz space $\cont(\interval{0,1})$.
+\begin{itemize}
+\item The subset of polynomials is a subspace, but not a Riesz subspace;
+\item The subset of constant functions is a Riesz subspace, but not a Riesz ideal.
+\item The subset $\setbuilder{f\in \cont(\interval{0,1})}{f(0) = 0}$ is a Riesz ideal, but not a band. Consider the set $\{f_n\}_{n\in\N}$ where $f_n(x) = 1 \wedge nx$. Then $\sup f_n$ exists in $\cont(\interval{0,1})$ and equals $\underline{1}$, which is not an element of the set (note that it is not $[x\neq 0]$, because we are working in $\cont(\interval{0,1})$).
+\item The subset $\setbuilder{f\in \cont(\interval{0,1})}{\forall x\in \interval{0,\frac{1}{2}}: f(x) = 0}$ is a band. 
+\end{itemize}
+Consider the Riesz space $\R^\N$ with pointwise ordering.
+\begin{itemize}
+\item the set of bounded sequences $\ell_\infty$ is an ideal;
+\item the set of convergent sequences $c$ is a Riesz subspace of $\ell_\infty$;
+\item the set $c_0$ of sequences that converge to $0$ is an ideal in $c$.
+\end{itemize}
+\end{example}
+
+\subsubsection{Riesz ideals}
+\begin{lemma} \label{RieszIdealRieszSubspace}
+Every Riesz ideal is a Riesz subspace.
+\end{lemma}
+\begin{proof}
+The Riesz ideal is a Riesz subspace if it is closed under lattice operations, i.e.\ under meets and joins. By \ref{RieszSubspaceJoinClosure}, we just need to check closure under joins. This follows from
+\[ v \vee w = \frac{1}{2}\big(v+ w+|v-w|\big) \]
+(\ref{absoluteValueMeetJoin}) and the fact that the Riesz ideal is a linear subspace.
+\end{proof}
+
+\begin{lemma} \label{solidLemma}
 Let $V$ be a Riesz space and $v,w\in V$, then
 \[ |w|\leq |v| \iff -|v| \leq w \leq |v|. \]
 \end{lemma}
 \begin{proof}
-We have $w \leq |w|$ and $|w| \leq |v|$, so $w\leq |v|$. Also $-w \leq |-w| = |w|$, so $-|v| \leq -|w| \leq w$.
+First sssume $|w| \leq |v|$. Since we have $w \leq |w|$, we also have $w\leq |v|$. Also $-w \leq |-w| = |w|$, so $-|v| \leq -|w| \leq w$.
 
-Conversely, $-|v| \leq w$ implies $-w\leq |v|$. So $|w| = w\vee (-w) \leq |v|$.
+Conversely, we have $w\leq |v|$ and $-|v| \leq w$ implies $-w\leq |v|$. So $|w| = w\vee (-w) \leq |v|$.
 \end{proof}
-\begin{corollary}
-Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is solid \textup{if and only if}
-\[ \forall v\in E: \forall w\in V: \; |w|\leq |v| \implies w\in E. \]
-\end{corollary}
 
-\begin{lemma}
+\begin{proposition} \label{RieszSolidEquivalents}
 Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then the following are equivalent:
 \begin{enumerate}
 \item $E$ is solid;
@@ -2274,20 +2311,231 @@ Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then the following are equ
 \item $v\wedge w\in E$ for all $v\in E^+$ and $w\in V^+$.
 \end{enumerate}
 \end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is a Riesz subspace if $E$ is a subspace that is closed under taking joins.
-\end{lemma}
+\end{proposition}
 \begin{proof}
-For all $v,w\in E$, we have $v\wedge w = -\big((-v)\vee (-w)\big)\in E$.
+$(1) \Leftrightarrow (2)$ Immediate from \ref{solidLemma}.
+
+$(2) \Rightarrow (3a)$ First suppose $w\in E$. Since $\big||w|\big| = |w|\leq |w|$, we have $|w|\in E$. Now suppose $|w|\in E$. Since $|w|\leq |w| = \big||w|\big|$, we have $w\in E$.
+
+$(2) \Rightarrow (3b)$ Assume $0 \leq w \leq v$. Since $v = |v|$ and $w = |w|$, we have $|w|\leq |v|$, so $w\in E$.
+
+$(3) \Rightarrow (2)$ Assume $|w| \leq |v|$ for some $v\in E$ and $w\in V$. As $|v|\in E$ by (3a), we have $|w|\in E$ by (3b) and so $w\in E$ by (3a).
+
+$(3b) \Rightarrow (4b)$ We have $0\leq v\wedge w\leq v$, so $v\wedge w\in E$.
+
+$(4b) \Rightarrow (3b)$ 
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $E_1, E_2$ Riesz ideals in $V$. Then
+\begin{enumerate}
+\item $E_1 + E_2$ is a Riesz ideal in $V$;
+\item $(E_1 + E_2)^+ = E_1^+ + E_2^+$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Since $E_1+E_2$ is automatically a linear subspace, we just need to prove that it is solid, for which we use \ref{RieszSolidEquivalents}. To that end, take $v_1+v_2\in E_1+E_2$ and $w\in V$ such that $|w| \leq |v_1 + v_2| \leq |v_1| + |v_2|$.
+
+Since $w^+ \leq |w| \leq |v_1| + |v_2|$, there exist $w_1, w_2\in V^+$ such that $w^+= w_1+w_2$ and $w_1\leq |v_1|, w_2\leq |v_2|$ by the Riesz decomposition theorem \ref{RieszDecomposition}. By \ref{RieszSolidEquivalents}, $w_1\in E_1$ and $w_2\in E_2$, so $w^+\in E_1+E_2$. Similarly $w^-\in E_1+E_2$ and thus $w = w^+-w^-\in E_1+E_2$.
+
+(2) It is clear that $(E_1 + E_2)^+ \supseteq E_1^+ + E_2^+$, since $0\leq v$ and $0\leq w$ implies $0 = 0+0\leq v+w$.
+
+For the converse, take $v\in (E_1+E_2)^+$. Then we can write $v = v_1+v_2$, where $v_1\in E_1$ and $v_2\in E_2$. Now $v = |v| = |v_1 + v_2| \leq |v_1| + |v_2|$. By the Riesz decomposition theorem \ref{RieszDecomposition}, we can find $v_1',v_2'\in V^+$ such that $v = v_1'+v_2'$ and $v_1'\leq |v_1|, v_2'\leq |v_2|$. Then $v_1'\in E_1^+$ and $v_2'\in E_2^+$, so $v\in E_1^+ + E_2^+$.
+\end{proof}
+
+\begin{example}
+The algebraic sum of two bands is not always a band. Take $V = \cont(\interval{-1,1})$ and
+\begin{align*}
+B_1 &= \setbuilder{f\in\cont(\interval{-1,1})}{\forall x\in \interval{-1,0}: f(x) = 0} \\
+B_2 &= \setbuilder{f\in\cont(\interval{-1,1})}{\forall x\in \interval{0,1}: f(x) = 0}.
+\end{align*}
+Then $B_1+B_2 = \setbuilder{f\in\cont(\interval{-1,1})}{f(0) = 0}$, which is not a band. 
+\end{example}
+
+
+\subsubsection{Bands}
+
+\begin{proposition} \label{bandFromIdealByPositiveCone}
+Let $V$ be a Riesz space and $E\subseteq V$ a Riesz ideal. Then $E$ is a band \textup{if and only if} $\sup(S) \subseteq E$ for all $S\subseteq E^+$.
+\end{proposition}
+\begin{proof}
+The direction $\Rightarrow$ is immediate.
+
+For the converse, take $D\subseteq E$ such that the supremum exists in $V$. Call it $v$. We need to show $v\in E$.
+
+Pick $w\in D$. And consider the set $D' \defeq \setbuilder{w\wedge u - w}{u\in D}$. Then $D'\subseteq E^+$ and $\bigvee D' = w\wedge v - w$ by \ref{vectorSpaceOperationsOrderHomomorphisms} and $\bigvee D'\in E$. Since $w\in D$, we have $w\leq v$ and thus $w\wedge v = v$.
+
+Since $v-w,w\in E$, we have $v\in E$.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $E\subseteq V$ a Riesz ideal. Then the band generated by $E$ is
+\[ B = \setbuilder{v\in V}{\exists D\subseteq E^+: \; |v| = \bigvee D}. \]
+\end{proposition}
+\begin{proof}
+It is enough to prove that $B$ is a band.
+
+First we show that $B$ is solid, for which we use \ref{RieszSolidEquivalents}. By construction $w\in B \iff |w| \in B$, so it is enough to prove that $0\leq w \leq v$ for some $v\in B$ implies $w\in B$. We can write $v = \bigvee D$ for some $D\subseteq E^+$. Then there exists $d\in D$ such that $w \leq d$, which implies that $w\in E$ and thus in $B$.
+
+Now we show that $B$ is a linear subspace. Take $v,w\in B$. Then $|v| = \bigvee D_1$ and $|w| = \bigvee D_2$ for some $D_1, D_2\subseteq E^+$. By \ref{vectorSpaceOperationsOrderHomomorphisms}, we have $|v|+|w| = \bigvee (D_1+D_2)$, so $|v|+|w|\in B$. Since $|v+w|\leq |v|+|w|$ and $B$ is solid, we have $v+w\in B$.
+
+Take $\alpha\in \R$ and $v\in B$. Then $|v| = \bigvee D$ for some $D\subseteq E^+$. We have, by \ref{vectorSpaceOperationsOrderHomomorphisms},
+\[ |\alpha v| = |\alpha|\,|v| = |\alpha|\bigvee D = \bigvee |\alpha|D. \]
+Since $|\alpha|D\subseteq E^+$, we have $\alpha v\in B$.
+
+Finally, we use \ref{bandFromIdealByPositiveCone} to see that $B$ is a band.
 \end{proof}
 
 
-
 \subsection{Disjointness}
+\begin{definition}
+Let $V$ be a Riesz space and $v,w\in V$. We call $v$ and $w$ \udef{(Riesz) disjoint} if $|v|\wedge |w| = 0$. We write $v\perp_r w$.
 
-\subsection{Archimedean}
+Let $D\subseteq V$ be a subset. Then $D^{\perp_r}$ is called the \udef{(Riesz) disjoint complement} of $D$.
+
+Two subsets $D_1,D_2\subseteq V$ are called \udef{(Riesz) disjoint} if $D_1 \perp_r D_2$.
+\end{definition}
+We have $v^+\perp_r v^-$ for all $v\in V$ by \ref{PositiveNegativeElements}.
+
+\begin{lemma} \label{vectorDisjointWithItself}
+Let $V$ be a Riesz space, $v\in V$ and $D_1, D_2 \subseteq V$ subsets. Then
+\begin{enumerate}
+\item if $v\perp_r v$, then $v = 0$;
+\item if $D_1\perp_r D_2$, then $D_1\cap D_2 \subseteq \{0\}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Suppose $v\perp_r v$, then $0 = |v|\wedge |v| = |v|$, so $v = 0$ by \ref{absoluteValue}.
+
+(2) Suppose $v\in D_1\cap D_2$ and $D_1\perp_r D_2$. Then $v\perp_r v$, so $v=0$ by (1).
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $v,w\in V$. Then the following are equivalent:
+\begin{enumerate}
+\item $v\perp_r w$;
+\item $|v-w| = |v+w|$;
+\item $|v+w| = |v|+|w|$;
+\item $|v-w| = \big||v|-|w|\big|$;
+\item $|v|\vee |w| = |v|+|w|$;
+\item $|v-w| = |v|+|w|$;
+\end{enumerate}
+which are all also equivalent to any of
+\begin{enumerate} \setcounter{enumi}{6}
+\item $v^+\wedge w^- = 0 = v^- \wedge w^+$;
+\item $v^+\perp_r w^+$ and $v^-\perp_r w^-$ (i.e.\ $v^+\wedge w^+ = 0 = v^- \wedge w^-$);
+\item $(v+w)^+ = v^++w^+$ and $(v+w)^- = v^- + w^-$;
+\item $(v+w)^+ = v^+\vee w^+$ and $(v+w)^- = v^- \vee w^-$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ By \ref{meetJoinAbsoluteValues2}, we have
+\[ \big||v+w| - |v-w|\big| = 2\big(|v|\wedge |w|\big) = 0, \]
+so (2) follows from \ref{absoluteValue}.
+
+$(2) \Leftrightarrow (3)$ By the sixth point of \ref{meetJoinAbsoluteValues2}.
+
+$(3) \Leftrightarrow (4)$ By the fifth point of \ref{meetJoinAbsoluteValues2}.
+
+$(2,3,4) \Rightarrow (5)$ From the first point of \ref{meetJoinAbsoluteValues1}.
+
+$(5) \Rightarrow (1)$ From \ref{sumAsMeetJoin}:
+\[ |v|\vee |w| = |v|+ |w| = |v|\vee |w| + |v|\wedge |w|. \]
+
+$(2,3) \Rightarrow (6)$ Immediate.
+
+$(6) \Rightarrow (1)$ We have $|v+(-w)| = |v|+|w| = |v|+|-w|$, so $v\perp_r (-w)$, which is clearly equivalent to $v\perp_r w$.
+
+$(3) \Leftrightarrow (7)$ From \ref{offPerpendicularTerms}, we have that (3) is equivalent to $v^+\wedge w^- + v^- \wedge w^+ = 0$. Since both terms are positive, this is equivalent to (6).
+
+$(6) \Leftrightarrow (8)$ Similar to the previous point, again using \ref{offPerpendicularTerms} and the fact that all positive and negative parts are positive.
+
+$(3) \Leftrightarrow (9)$ We first calculate, using \ref{positiveNegativePartAverage},
+\[ (v+w)^+ = \frac{|v+w|+v+w}{2} = \frac{|v|+|w|+v+w}{2} = \frac{|v|+v}{2} + \frac{|w|+w}{2} = v^+ + w^+, \]
+and similarly for $(v+w)^- = v^- + w^-$.
+
+Conversely, we have, using \ref{absoluteValue},
+\[ |v+w| = (v+w)^+ + (v+w)^- = (v^+ + w^+) + (v^- + w^-) = (v^+ + v^-) + (w^+ + w^-) = |v| + |w|. \]
+
+(10) Clearly follows from (8), (9) and (5). For the converse, we use \ref{absoluteValue}, \ref{sumAsMeetJoin} and \ref{offPerpendicularTerms} to calculate
+\begin{align*}
+2|v+w| &= 2\big((v+w)^+ + (v+w)^-\big) \\
+&= 2\big(v^+\vee w^+ + v^-\vee w^-\big) \\
+&= 2\big(v^+ + w^+ - v^+\wedge w^+ + v^- + w^-  - v^-\wedge w^-\big) \\
+&= 2\big(|v| + |w| - \frac{1}{2}(|v|+ |w| - |v-w|)\big) \\
+&= |v|+|w| + |v-w|.
+\end{align*}
+Thus $|v|+ |w| - |v+w| = |v+w| - |v-w|$. Since the left-hand side is positive, by the triangle inequality \ref{triangleInequalityRieszSpaces}, we have $|v+w| - |v-w| = \big||v+w| - |v-w|\big|$. Then the sixth point of \ref{meetJoinAbsoluteValues2} simplifies to $|v+w| = |v| + |w|$.
+\end{proof}
+TODO: more elegant proof for (10).
+
+\begin{lemma} \label{disjointComplementBandLemma}
+Let $V$ be a Riesz space, $u,v,w\in V$ and $\alpha \in \R$. Then
+\begin{enumerate}
+\item $u\perp_r v$ and $u\perp_r w$ imply $u\perp_r v+w$;
+\item $u\perp_r v$ implies $u\perp_r \alpha v$;
+\item $u\perp_r v$ and $|w|\leq |v|$ imply $u\perp_r w$;
+\item for all $S\subseteq (u^{\perp_r})^+$, we have $\big(\bigvee S\big) \perp_r u$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have, by the triangle inequality \ref{triangleInequalityRieszSpaces} and \ref{additionLatticeOperationsInequalities},
+\[ 0\leq |v+w|\wedge |u| \leq \big(|v| + |w|\big)\wedge |u| \leq |v|\wedge |u| + |w|\wedge |u| = 0.  \]
+Thus $|v+w|\wedge |u| = 0$.
+
+(2) If $|\alpha|\leq 1$, then $|\alpha v|\leq |v|$, so $0\leq |\alpha v|\wedge |u| \leq |v|\wedge |u| = 0$.
+
+If $|\alpha| > 1$, then
+\[ 0\leq |\alpha v|\wedge |u| \leq |\alpha v|\wedge |\alpha u| = |\alpha|\big(|v|\wedge |u|\big) = 0. \]
+
+(3) We have
+\[ 0\leq |u|\wedge |w| \leq |u|\wedge |v| = 0. \]
+
+(4) For all $x\in S$, we have $x\wedge |u| = |x|\wedge |u| = 0$, so $S\wedge |u| = \{0\}$. Thus, by \ref{vectorSpaceOperationsOrderHomomorphisms}, we have $\big(\bigvee S\big) \wedge |u| = \bigvee S\wedge |u| = \bigvee\{0\} = 0$. 
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $D\subseteq V$ a subset. Then
+\begin{enumerate}
+\item $D^{\perp_r}$ is a band;
+\item $D^{\perp_r} \cap D^{\perp_r\perp_r} = \{0\}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have that $D^{\perp_r}$ is a linear subspace from the first two points of \ref{disjointComplementBandLemma}. It is solid by the third point and a band by the fourth point and \ref{bandFromIdealByPositiveCone}.
+
+(2) By \ref{vectorDisjointWithItself}, we have $D^{\perp_r} \cap D^{\perp_r\perp_r} \subseteq \{0\}$. The other inclusion follows because both $D^{\perp_r}$ and $D^{\perp_r\perp_r}$ are linear subspaces and thus contain $0$.
+\end{proof}
+
+For any subset $D$, the set $D^{\perp_r\perp_r}$ is a band that contains $D$ and thus it contains the band generated by $D$, but in general it may be larger.
+
+\begin{proposition}
+Let $V$ be a Riesz space, $A\subseteq V$ a solid subset and $v\in V\setminus\{0\}$. Then $v\in A^{\perp_r\perp_r}$ \textup{if and only if} there exists $u\in A$ such that $0 < |u| \leq |v|$.
+\end{proposition}
+\begin{proof}
+First suppose $v\in A^{\perp_r\perp_r}$. Then $v\notin A^{\perp_r}$, because $v$ was assumed nonzero and $A^{\perp_r}\cap A^{\perp_r\perp_r} = \{0\}$. Thus there exists $u'\in A$ such that $|v|\wedge |u'| \neq 0$. Since $A$ is solid, we have $|v|\wedge |u'| \in A$, so we can set $u = |v|\wedge |u'|$.
+
+Now suppose there exists $u\in A$ such that $0 < |u| \leq |v|$. Assume, towards a contradiction, that $v\notin A^{\perp_r\perp_r}$. Then there exists $w\in A^{\perp_r}$ such that $|v|\wedge |w| \neq 0$. Since both $A$ and $A^{\perp_r}$ are solid, we have $|v|\wedge |w| \in A\cap A^{\perp_r}$, which by \ref{vectorDisjointWithItself} implies $|v|\wedge |w| = 0$. A contradiction.
+\end{proof}
+
+\subsection{Archimedean spaces}
+\begin{definition}
+A Riesz space $V$ is called \udef{Archimedean} if $\bigwedge_{\epsilon > 0}\epsilon v = 0$ for all $v\in V$.
+\end{definition}
+
+
+\begin{proposition}
+Let $V$ be a Riesz space. Then the following are equivalent:
+\begin{enumerate}
+\item $V$ is Archimedean;
+\item if $v,w\in V$ are such that $0\leq nv\leq w$ for all $n\in \N$, then $v = 0$;
+\item $B \supseteq B^{\perp_r\perp_r}$ for every band $B\subseteq V$;
+\item $B = B^{\perp_r\perp_r}$ for every band $B\subseteq V$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+
+\end{proof}
 
 \chapter{Some results and applications}
 \section{Rotations}
