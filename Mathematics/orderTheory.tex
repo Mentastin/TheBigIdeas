@@ -1238,18 +1238,11 @@ For ordered sets taking the disjoint union or linear sum is associative.
 Let $m,n\in \N$. If $p = m+n$, then $\mathbb{m}\oplus\mathbb{n} = \mathbb{p}$.
 \end{lemma}
 
-\begin{definition}
-Let $P,Q$ be ordered sets. Then
-\begin{itemize}
-\item  the standard order on $P\times Q$ is defined by
-\[ (x_1,x_2) \precsim (y_1,y_2) \iff x_1\precsim y_1 \;\text{and}\; x_2\precsim y_2 \]
-\item the \udef{lexicographic order} on $P\times Q$ is defined by
-\[ (x_1,x_2) \precsim (y_1,y_2) \iff (x_1\precsim y_1) \;\text{or}\; (x_1=y_1 \;\text{and}\; x_2\precsim y_2). \]
-\end{itemize}
-\end{definition}
-
 
 \chapter{Lattices}
+
+TODO: notation: use $\inf, \sup$ for sets and $\bigwedge, \bigvee$ for the singleton unpacking of $\inf,\sup$.
+
 \section{Semilattice}
 \begin{definition}
 A \udef{semilattice} is an algebraic structure $\sSet{S,\star}$ where $\star$ is a binary operation on the set $S$ satisfying
@@ -5250,15 +5243,20 @@ and set $f(u) = \phi(\len(u), u)$. Proving that $f$ satisfies the second equalit
 Like before, a version of the theorem can also be stated for recursion with parameters. Also recursion with multiple strings.
 
 \subsubsection{Ordering string}
+TODO define lexicographic order on sequences.
+
 \begin{definition}
 Let $\sSet{A,R}$ be a relational structure. Then
 \begin{itemize}
 \item the \udef{lexicographic order} $R_l$ on $A^*$ is defined by
-\[ u R_l v \quad\defequiv\quad \text{$\exists k \in \min\setbuilder{n\in\N}{n \leq \len(u), n\leq \len(v), u_n \neq v_n}: \; u_k R v_k$}. \]
+\[ u R_l v \quad\defequiv\quad \big(\len(u) = \len(v)\big) \land \big(u_k R v_k\big), \]
+where $k = \min\big(\setbuilder{n\in\N}{n < \len(u), u_n \neq v_n}\cup\{\len(u)\}\big)$;
+\item the \udef{lexicographic order} $R_{el}$ on $A^*$ is defined by first adjoining a lower bound $\bot$ to $A$ and then
+\[ u R_{el} v \quad\defequiv\quad \exists w,w'\in \{\bot\}^*: (u\concat w) \mathrel{R_l} (v\concat w'); \]
 \item the \udef{shortlex order} or \udef{strong order} $R_{s}$ on $A^*$ is defined by
-\[ u R_s v \qquad\defequiv\qquad \begin{cases}
+\[ u R_{sl} v \qquad\defequiv\qquad \begin{cases}
 \len(u) < \len(v) & \text{or} \\
-\big(\len(u) = \len(v)\big) \land (u R_l v).
+\big(\len(u) = \len(v)\big) \land (u R_l v);
 \end{cases}\]
 \item the \udef{longlex order} or $R_{ll}$ on $A^*$ is defined by
 \[ u R_{ll} v \qquad\defequiv\qquad \begin{cases}
@@ -5269,7 +5267,12 @@ Let $\sSet{A,R}$ be a relational structure. Then
 \end{definition}
 
 \begin{lemma}
-All lexicographic, shortlex and longlex orders are irreflexive.
+Let $\sSet{A,R}$ be a relational structure. Then $R_l, R_{el}, R_{sl}, R_{ll}$ are
+\begin{enumerate}
+\item reflexive;
+\item irreflexive;
+\end{enumerate}
+\textup{if and only if} $R$ is.
 \end{lemma}
 
 \begin{proposition}

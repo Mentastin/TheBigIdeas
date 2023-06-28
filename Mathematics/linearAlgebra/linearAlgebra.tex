@@ -452,10 +452,11 @@ In a vector space $V$, a subspace $W$ is a \udef{complementary subspace} (or a \
 \end{definition}
 
 \begin{proposition}
-Let $V$ be a vector space, then each subspace of $V$ has a complement.
+Let $V$ be a vector space, then each subspace $U$ of $V$ has a complement.
 \end{proposition}
+A subspace may in general have many different complements.
 \begin{proof}
-Let $U$ be a subspace of $V$. Then, by \ref{existenceHamelBasis}, we can find a basis $B$ of $U$ and, by \ref{extensionReductionBasis}, we can extend it to a basis $D$ of $V$. Now $V = U \oplus \Span(D\setminus B)$ by \ref{basisSum} and \ref{directSumCriterion}.
+By \ref{existenceHamelBasis}, we can find a basis $B$ of $U$ and, by \ref{extensionReductionBasis}, we can extend it to a basis $D$ of $V$. Now $V = U \oplus \Span(D\setminus B)$ by \ref{basisSum} and \ref{directSumCriterion}.
 \end{proof}
 Note this requires the axiom of choice, and is in fact equivalent with it.
 \begin{corollary}
@@ -560,9 +561,13 @@ Thus $u-v\in \ker(L)$, meaning $u-v = 0$ and $u=v$.
 Let $L \in \Lin(V,W)$. The \udef{image} or \udef{range} of $L$ is the set of vectors that are of the form $L(v)$ for some $v\in V$:
 \[ \im(L) = \setbuilder{L(v)}{v\in V}. \]
 \end{definition}
-\begin{proposition}
+
+\begin{lemma}
 The range of $L\in \Lin(V,W)$ is a subspace of $W$.
-\end{proposition}
+\end{lemma}
+\begin{proof}
+Immediate from \ref{imageSubalgebra}.
+\end{proof}
 \begin{definition}
 The dimension of the image of a linear map is its \udef{rank}.
 \end{definition}
@@ -754,46 +759,60 @@ Counterexamples to the previous theorem in the infinite-dimensional case are giv
 \begin{definition}
 A linear map $T: V\to V$ is said to be a \udef{finite-rank operator} if it has finite rank.
 \end{definition}
-\subsubsection{Idempotents}
 
-\begin{lemma}
-Let $V$ be a vector space and $U\subseteq V$ a subspace. Then for any complement $W$ of $U$ in $V$,
-\[ P: U\oplus W = V \to V: u+w \mapsto u \]
-is an idempotent such that $\im P = U$.
+\subsubsection{Projectors}
+\begin{definition}
+Let $V$ be a vector space. A function $P: V\to V$ is called a \udef{projector} if it is
+\begin{itemize}
+\item linear; and
+\item idempotent (i.e.\ $P^2 = P$).
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{projectorKernelImageLemma}
+Let $V$ be a vector space and $P:V\to V$ a projector and $v\in V$. Then
+\begin{enumerate}
+\item $v\in \im P$ \textup{if and only if} $v = Pv$;
+\item $\id_V - P$ is a projector;
+\item $\ker(P) = \im(\id_V - P)$.
+\end{enumerate}
 \end{lemma}
+\begin{proof}
+(1) We have that $v\in \im P$ iff $\exists u\in V: Pu = v$. Then we have $v = Pu = P^2u = Pv$.
 
-\begin{proposition} \label{directSumKernelImageIdempotent}
-Let $V$ be a vector space and $P$ an idempotent linear map. Then
-\[ V = \im P \oplus \ker P. \]
+(2) The operator $\id_V - P$ is clearly linear. Idempotency can be calculated as follows:
+\[ (\id_V - P)^2 = \id_V - P -P + P^2 = \id_V - P -P + P = \id_V - P. \]
+
+(3) First take $u\in \ker(P)$. Then $Pu = 0$, so $u = u - Pu = (\id_V - P)u \in \im(\id_V - P)$.
+
+Now take $u\in \im(\id_V - P)$. Then there exists $w\in V$ such that $u = w - Pw$. Applying $P$ gives $Pu = Pw - P^2w = Pw-Pw = 0$, so $u\in \ker(P)$.
+\end{proof}
+
+\begin{proposition} \label{projectorComplementarySubspaces}
+Let $V$ be a vector space and $P: V\to V$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $P$ is a projector;
+\item there exist complementary subspaces $U,W$ such that
+\[ P: U\oplus W = V \to V: u+w \mapsto u \qquad\text{and}\qquad \id_V - P: U\oplus W = V \to V: u+w \mapsto w. \]
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-For any $v\in V$, we can write $v= (v-Pv)+Pv$ where $Pv\in \im P$ and $(v-Pv)\in \ker P$ because
-\[ P(v-Pv) = Pv- P^2v = Pv - Pv = 0. \]
-So we have $V = \im P + \ker P$. To show that the sum is direct, we take $u\in \im P \cap \ker P$. Then $u = Pw$ for some $w\in V$ and applying $P$ gives $0 = Pu = P^2w = Pw = 0$. So the sum is direct by \ref{directSumCriterion}.
-\end{proof}
+$(1) \Rightarrow (2)$ Set $U = \im P$ and $W = \im(\id_V - P)$. Also $W = \ker(P)$ by \ref{projectorKernelImageLemma}. Then
+\[ V = \im\id_V = \im(P + \id_V - P) \subseteq \im P + \im(\id_V - P) = U + W \subseteq V, \]
+so $U+W = V$. Next we show that the sum is direct. Take $v\in U \cap W = \im P \cap \ker P$. Since $v\in \im P$, we have $v= Pv$ by \ref{projectorKernelImageLemma}. Since $v\in \ker P$, we have $v= Pv = 0$. The sum is direct by \ref{directSumCriterion}.
 
-\begin{lemma} \label{idempotentImageEquivalence}
-Let $V$ be a vector space, $P$ an idempotent linear map and $v\in V$. Then $v\in \im P$ \textup{if and only if} $v = Pv$.
-\end{lemma}
+Finally take $u+w\in U\oplus W$. Then $P(u+w) = Pu + Pw = u+0 = u$ and $(\id_V-P)(u+w) = u+w - u = w$.
+
+$(2) \Rightarrow (1)$ To show linearity, take $v_1 = u_1 +w_1 \in U\oplus W$, $v_2 = u_2 +w_2 \in U\oplus W$ and $\lambda \in \F$. Then $v_1 + \lambda v_2 = (u_1 + \lambda u_2) + (w_1 + \lambda w_2)$. Since $(u_1 + \lambda u_2) \in U$ and $(w_1 + \lambda w_2) \in W$, this is the unique decomposition and thus $P(v_1 + \lambda v_2) = u_1 + \lambda u_2 = Pv_1 + \lambda Pv_2$.
+
+Next, for idempotency, note that $0\in W$, so if $u\in U$, then $u+0\in U\oplus W$ is the unique decomposition. Thus $P^2(u+w) = Pu = P(u + 0) = u = P(u+w)$ for all $u\in U,w\in W$.
+\end{proof}
+\begin{corollary} \label{directSumKernelImageIdempotent}
+Let $V$ be a vector space and $P: V\to V$ a projector. Then $V= \im P \oplus \ker P$.
+\end{corollary}
 \begin{proof}
-We have that $v\in \im P$ iff $\exists u\in V: Pu = v$. Then we have $v = Pu = P^2u = Pv$.
+Let $U,W$ be the complementary subspaces of the proposition, so $V = U\oplus W$. It is clear that $U = \im P$ and $W = \im(\id_V - P) = \ker(P)$, by \ref{projectorKernelImageLemma}.
 \end{proof}
-
-\begin{lemma}
-Let $V$ be a vector space and $P$ an idempotent linear map. Then $P' \defeq \id_V - P$ is an idempotent linear map such that
-\[ \im P' = \ker P \qquad\text{and}\qquad \ker P' = \im P. \]
-Consequently, $V = \im P\oplus \im P'$.
-\end{lemma}
-\begin{proof}
-Clearly $\id_V - P$ is idempotent: $(\id_V - P)^2 = \id_V - P - P + P^2 = \id_V - 2P + P = \id_V - P$. It is enough to show that $\im P' = \ker P$, because $P = \id_V - P'$.
-
-Assume $v\in \ker P$. Then $P'v = v - Pv = v-0 = v$, so $v\in \im P'$.
-
-Assume $v\in \im P'$. Then, by \ref{idempotentImageEquivalence}, $v = P'v = v - Pv$, so $Pv = 0$.
-
-The last remark follows from \ref{directSumKernelImageIdempotent}
-\end{proof}
-
 
 
 TODO trace:
@@ -827,9 +846,9 @@ Let $V$ be a vector space, $T$ a linear operator on $V$ and $P$ an idempotent op
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) The invariance of $U$ under $T$ can be stated as $TP[V] \subseteq \im P$. By \ref{idempotentImageEquivalence} this can be restated as $TPv = PTPv$ for all $v\in V$.
+(1) The invariance of $U$ under $T$ can be stated as $TP[V] \subseteq \im P$. By \ref{projectorKernelImageLemma} this can be restated as $TPv = PTPv$ for all $v\in V$.
 
-(2) Points (a) and (b) are equivalent by \ref{idempotentImageEquivalence}.
+(2) Points (a) and (b) are equivalent by \ref{projectorKernelImageLemma}.
 
 Points (b) and (c) are equivalent by point (1) and $(\id_V - P)T(\id_V - P) = T - PT - TP + PTP = T(\id_V - P) + PTP - PT$.
 
@@ -1844,6 +1863,13 @@ Let $V$ be a preordered vector space, $v\in V^+$ and $x\in V$. Then
 (2) Immediate from (1).
 \end{proof}
 
+\begin{lemma} \label{positiveElementsSumToZeroImpliesZero}
+Let $V$ be a partially ordered vector space and $v,w\in V^+$. If $v+w = 0$, then $v = 0$ and $w = 0$.
+\end{lemma}
+\begin{proof}
+We have $v \leq v$ and $0\leq w$, so $0\leq v\leq v+w = 0$. Thus $v = 0$. Similarly $w = 0$.
+\end{proof}
+
 \section{Riesz spaces}
 
 We take the convention that lattice operations bind tighter than addition, so $u\vee v + w = (u\vee v) + w$.
@@ -1869,6 +1895,15 @@ We apply \ref{imagePolars} to
 
 (4) the order-embedding $v\mapsto u+v$.
 \end{proof}
+
+\begin{example}
+Let space $\R^2$ with lexicographic ordering $\leq_l$ is a Riesz space. We have
+\[ (x,y)\vee (u,v) = \begin{cases}
+(x,y) & (x>u) \\ (u,v) & (x<u) \\ \big(x, \max\{v,y\}\big) & (x = u)
+\end{cases} \qquad\text{and}\qquad (x,y)\wedge (u,v) = \begin{cases}
+(x,y) & (x<u) \\ (u,v) & (x>u) \\ \big(x, \min\{v,y\}\big) & (x = u).
+\end{cases} \]
+\end{example}
 
 \begin{theorem}[Riesz decomposition] \label{RieszDecomposition}
 Let $V$ be a Riesz space and $v,w_1,w_2\in V^+$ such that $v \leq w_1 + w_2$. Then $\exists v_1, v_2\in V^+$ such that $v = v_1 + v_2$ and $v_1 \leq w_2, v_2 \leq w_2$.
@@ -2325,8 +2360,44 @@ $(3b) \Rightarrow (4b)$ We have $0\leq v\wedge w\leq v$, so $v\wedge w\in E$.
 
 $(4b) \Rightarrow (3b)$ 
 \end{proof}
+\begin{corollary} \label{RieszIdealEquivalents}
+Let $V$ be a Riesz space and $E\subseteq V$ a subspace. Then the following are equivalent:
+\begin{enumerate}
+\item $E$ is a Riesz ideal;
+\item we have
+\begin{enumerate}
+\item $w \in E \implies |w|\in E$ for all $w\in V$;
+\item $0\leq w \leq v \implies w\in E$ for all $v\in E$ and $w\in V$.
+\end{enumerate}
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+The only point we need to prove is that $(2b)$ implies that $|w|\in E \implies w\in E$. Take $w\in V$ such that $|w|\in E$. Since $w^+ \leq w^+ + w^- = |w|$, we have $w^+\in E$. Similarly $w^-\in E$. Since $E$ is a subspace, $w = w^+ - w^- \in E$.
+\end{proof}
 
-\begin{proposition}
+\begin{lemma} \label{generatedRieszIdeals}
+Let $V$ be a Riesz space and $A\subseteq V$ a subset. The Riesz ideal generated by $A$ is given by
+\[ R = \setbuilder{w\in V}{\exists N\in \N: \exists \seq{\alpha_n}_{n=0}^N \subseteq \R: \exists \seq{v_n}_{n=0}^N \subseteq A: \; |w| \leq \sum_{n=0}^N |\alpha_nv_n|}. \]
+In particular, the principal Riesz ideal generated by $v\in V$ is given by
+\[ R_v = \setbuilder{w\in V}{\exists \alpha\in \R: \; |w|\leq |\alpha v|}. \]
+\end{lemma}
+\begin{proof}
+We first show that any $w\in R$ is an element of each ideal that contains $A$. Take $N\in \N, \seq{\alpha_n}_{n=0}^N \subseteq \R$ and $\seq{v_n}_{n=0}^N \subseteq A$ such that $|w| \leq \sum_{n=0}^N |\alpha_nv_n|$. By the Riesz decomposition theorem \ref{RieszDecomposition}, we can write $|w| = \sum_{n=0}^N v_{n}'$, where $0\leq v_n' \leq |\alpha_nv_n|$.
+
+Let $I$ be a Riesz ideal that contains $A$. Then $\alpha_nv_n \in I$ for all $n\leq N$ since $I$ is a linear subspace and $v_n'\in I$ for all $n\leq N$ by solidity. So $|w|\in I$ because it is a linear subspace and $w\in I$ by solidity. Thus $R$ is contained in any Riesz ideal that contains $A$.
+
+We now straightforward to see that $R$ is indeed a Riesz ideal.
+\end{proof}
+
+\begin{definition}
+Let $V$ be a Riesz space and $v\in V$. If the principal Riesz ideal generated by $v$ is equal to $V$, then $u$ is called a \udef{strong Riesz unit}.
+\end{definition}
+
+\begin{example}
+The function $\underline{1}$ is a strong Riesz unit in $L^\infty(\R)$.
+\end{example}
+
+\begin{proposition} \label{sumRieszIdeals}
 Let $V$ be a Riesz space and $E_1, E_2$ Riesz ideals in $V$. Then
 \begin{enumerate}
 \item $E_1 + E_2$ is a Riesz ideal in $V$;
@@ -2342,6 +2413,9 @@ Since $w^+ \leq |w| \leq |v_1| + |v_2|$, there exist $w_1, w_2\in V^+$ such that
 
 For the converse, take $v\in (E_1+E_2)^+$. Then we can write $v = v_1+v_2$, where $v_1\in E_1$ and $v_2\in E_2$. Now $v = |v| = |v_1 + v_2| \leq |v_1| + |v_2|$. By the Riesz decomposition theorem \ref{RieszDecomposition}, we can find $v_1',v_2'\in V^+$ such that $v = v_1'+v_2'$ and $v_1'\leq |v_1|, v_2'\leq |v_2|$. Then $v_1'\in E_1^+$ and $v_2'\in E_2^+$, so $v\in E_1^+ + E_2^+$.
 \end{proof}
+\begin{corollary} \label{positiveVectorHasPositiveComponents}
+Let $V$ be a Riesz space and $E_1, E_2$ Riesz ideals in $V$ such that the sum $E_1\oplus E_2$ is direct. For all $0\leq v = v_1 + v_2 \in E_1\oplus E_2$, we have $0\leq v_1$ and $0\leq v_2$.
+\end{corollary}
 
 \begin{example}
 The algebraic sum of two bands is not always a band. Take $V = \cont(\interval{-1,1})$ and
@@ -2351,7 +2425,6 @@ B_2 &= \setbuilder{f\in\cont(\interval{-1,1})}{\forall x\in \interval{0,1}: f(x)
 \end{align*}
 Then $B_1+B_2 = \setbuilder{f\in\cont(\interval{-1,1})}{f(0) = 0}$, which is not a band. 
 \end{example}
-
 
 \subsubsection{Bands}
 
@@ -2368,7 +2441,7 @@ Pick $w\in D$. And consider the set $D' \defeq \setbuilder{w\wedge u - w}{u\in D
 Since $v-w,w\in E$, we have $v\in E$.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{bandGeneratedByRieszIdeal}
 Let $V$ be a Riesz space and $E\subseteq V$ a Riesz ideal. Then the band generated by $E$ is
 \[ B = \setbuilder{v\in V}{\exists D\subseteq E^+: \; |v| = \bigvee D}. \]
 \end{proposition}
@@ -2410,7 +2483,7 @@ Let $V$ be a Riesz space, $v\in V$ and $D_1, D_2 \subseteq V$ subsets. Then
 (2) Suppose $v\in D_1\cap D_2$ and $D_1\perp_r D_2$. Then $v\perp_r v$, so $v=0$ by (1).
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{RieszDisjointEquivalents}
 Let $V$ be a Riesz space and $v,w\in V$. Then the following are equivalent:
 \begin{enumerate}
 \item $v\perp_r w$;
@@ -2494,7 +2567,7 @@ If $|\alpha| > 1$, then
 (4) For all $x\in S$, we have $x\wedge |u| = |x|\wedge |u| = 0$, so $S\wedge |u| = \{0\}$. Thus, by \ref{vectorSpaceOperationsOrderHomomorphisms}, we have $\big(\bigvee S\big) \wedge |u| = \bigvee S\wedge |u| = \bigvee\{0\} = 0$. 
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{disjointPolarBand}
 Let $V$ be a Riesz space and $D\subseteq V$ a subset. Then
 \begin{enumerate}
 \item $D^{\perp_r}$ is a band;
@@ -2509,7 +2582,7 @@ Let $V$ be a Riesz space and $D\subseteq V$ a subset. Then
 
 For any subset $D$, the set $D^{\perp_r\perp_r}$ is a band that contains $D$ and thus it contains the band generated by $D$, but in general it may be larger.
 
-\begin{proposition}
+\begin{proposition} \label{disjointDoublePolarConstruction}
 Let $V$ be a Riesz space, $A\subseteq V$ a solid subset and $v\in V\setminus\{0\}$. Then $v\in A^{\perp_r\perp_r}$ \textup{if and only if} there exists $u\in A$ such that $0 < |u| \leq |v|$.
 \end{proposition}
 \begin{proof}
@@ -2520,11 +2593,14 @@ Now suppose there exists $u\in A$ such that $0 < |u| \leq |v|$. Assume, towards 
 
 \subsection{Archimedean spaces}
 \begin{definition}
-A Riesz space $V$ is called \udef{Archimedean} if $\bigwedge_{\epsilon > 0}\epsilon v = 0$ for all $v\in V$.
+A Riesz space $V$ is called \udef{Archimedean} if $\bigwedge_{\epsilon > 0}\epsilon v = 0$ for all $v\in V^+$.
 \end{definition}
 
+\begin{example}
+The space $\R^2$ with the lexicographic ordering $\leq_l$ is not Archimedean. Indeed $(0,1)$ is a lower bound of $n^{-1}(1,1) = (n^{-1}, n^{-1})$, but $(0,1) \neq \vec{0}$.
+\end{example}
 
-\begin{proposition}
+\begin{proposition} \label{ArchimedeanBandEquivalents}
 Let $V$ be a Riesz space. Then the following are equivalent:
 \begin{enumerate}
 \item $V$ is Archimedean;
@@ -2534,8 +2610,180 @@ Let $V$ be a Riesz space. Then the following are equivalent:
 \end{enumerate}
 \end{proposition}
 \begin{proof}
+$(1) \Leftrightarrow (2)$ Suppose $V$ is Archimedean and $v,w\in V$ are such that $0\leq nv\leq w$ for all $n\in \N$. Then $0\leq v\leq n^{-1}w$ for all $n\in \N$, so $\bigwedge_{n\in \N}n^{-1}w \geq v$. Since $V$ was assumed Archimedean, we have $0\leq v \leq \bigwedge_{n\in \N}n^{-1}w = 0$ and thus $v = 0$.
+
+For the converse, take $v\in V$. Then $0$ is a lower bound of $\R^+\cdot v$. For any other lower bound $u\in V$, $u' = 0\vee u$ is also a lower bound. Now $nu'$ is a lower bound of $n\cdot \R^+\cdot v = \R^+\cdot v$ for all $n\in \N$. In particular $nu'\leq v$ for all $n\in \N$. Thus $u'=0$ by assumption. Since $u\vee 0 = u' = 0$, we have $u\leq 0$ and thus $0$ is the greatest lower bound.
+
+$(2) \Rightarrow (3)$ Take arbitrary $u\in B^{\perp_r\perp_r}$ and consider the set $M_u \defeq \setbuilder{v\in B}{0\leq v \leq |u|}$. Clearly $|u|$ is an upper bound of $M_u$. If we can show that it is the supremum, then $|u|$ (and thus also $u$) is an element of $B$, by definition.
+
+Take some other upper bound $w$ of $M_u$. We need to show that $|u|\leq w$. Set $w'\defeq w\wedge |u|$, which is an element of $B^{\perp_r\perp_r}$, since $0\leq w' \leq |u|$, $B^{\perp_r\perp_r}$ is solid and $|u|\in B^{\perp_r\perp_r}$. Also $0\leq |u| - w'$ and $|u|-w'\in B^{\perp_r\perp_r}$. If $|u|- w' = 0$, then $|u| = |u|\wedge w$, so $|u|\leq w$ and we are done.
+
+If $0 < |u|- w'$, then there exists $z\in B$ such that $0< z < |u|-w'$ by \ref{disjointDoublePolarConstruction}. Now, for all $v\in M_u$, we have $0 < z+v \leq z+w' < \big(|u|-w'\big)+w' = |u|$. Thus $z+v\in M_u$.
+
+In particular, $0\in M_u$, so $z+0 = z\in M_u$. Since $z\in M_u$, $z+z = 2z\in M_u$. By induction, we have $nz\in M_u$ for all $n\in\N$. Thus $nz\leq |u|$ for all $n\in \N$, which, by assumption, means that $z=0$. This is a contradiction.
+
+$(3) \Rightarrow (4)$ Immediate.
+
+$(4) \Rightarrow (2)$ Take $v,w\in V$ such that $0\leq nv\leq w$ for all $n\in \N$.
+
+Let $R_v$ be the principal Riesz ideal generated by $v$ and set $A = R_v \oplus R_v^{\perp_r}$. Now
+\[ A^{\perp_r} = (R_v \oplus R_v^{\perp_r})^{\perp_r} \subseteq (R_v \cup R_v^{\perp_r})^{\perp_r} = R_v^{\perp_r} \cap R_v^{\perp_r\perp_r} = \{0\}, \]
+so $V = A^{\perp_r\perp_r}$. Let $B$ be the band generated by $A$. Then $V = A^{\perp_r\perp_r} \subseteq B^{\perp_r\perp_r} = B \subseteq V$, using the assumption. Thus the band generated by $A$ is $V$. 
+
+Since $A$ is a Riesz ideal by \ref{sumRieszIdeals} and \ref{disjointPolarBand}, we have that $w = \bigvee D$ for some $D\subseteq A^+$ by \ref{bandGeneratedByRieszIdeal}.
+
+Take arbitrary $u\in D$. Then we can write $u = u_1 + u_2$, where $u_1\in R_v$ and $u_2\in R_v^{\perp_r}$. By \ref{generatedRieszIdeals}, we have $u_1 \leq |u_1| \leq nv$ for some $n\in \N$. Thus $u_1 + v \leq (n+1)v \leq w$ and $u_1+v\in R_v$. Since $u_2\in R_v^{\perp_r}$, we have $(u_1+v)\perp_r u_2$, so
+\[ u+v = (u_1+v)+u_2 = (u_1+v)\vee u_2 \leq (u_1+v)\vee u \leq w, \]
+by \ref{RieszDisjointEquivalents} and the fact that $u\leq w$. Since the choice of $u\in D$ was arbitrary, we have $\bigvee (D+v) \leq w$. Thus, by \ref{vectorSpaceOperationsOrderHomomorphisms},
+\[ v+w = v+\bigvee D = \bigvee(v+D) \leq w, \]
+so $v\leq 0$. Since, by assumption, $v\geq 0$, we have $v = 0$.
+\end{proof}
+
+\begin{example}
+In the non-Archimedean space $\sSet{\R^2, \leq_l}$, the band $B = \setbuilder{(0,y)}{y\in \R}$ is such that $B \subsetneq B^{\perp_r\perp_r}$.
+
+Indeed, $B^{\perp_r} = \{\vec{0}\}$, so $B^{\perp_r\perp_r} = \R^2$.
+\end{example}
+
+\subsection{Projection bands}
+\begin{definition}
+Let $V$ be a Riesz space and $B\subseteq V$ a band. Then $B$ is called a \udef{projection band} if $B\oplus B^{\perp_r} = V$.
+
+For all $v\in V$ with decomposition $v= v_1 +v_2 \in B\oplus B^{\perp_r}$, the vector $v_1$ is called the \udef{component} of $v$ in $B$.
+\end{definition}
+
+\begin{lemma}
+Let $V$ be a Riesz space and $B\subseteq V$ a band. Then
+\begin{enumerate}
+\item if $B$ is a projection band, then $B^{\perp_r}$ is a projection band;
+\item if $V$ is Archimedean, then the converse also holds.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Assume $B$ is a projection band. We have $V = B\oplus B^{\perp_r} \subseteq B^{\perp_r\perp_r} + B^{\perp_r} \subseteq V$, so $B^{\perp_r} + B^{\perp_r\perp_r} = V$. The sum is direct by \ref{disjointPolarBand}.
+
+(2) If $B^{\perp_r}$ is a projection band, then $B^{\perp_r\perp_r}$ is a projection band by (1). By \ref{ArchimedeanBandEquivalents}, $B = B^{\perp_r\perp_r}$, so $B$ is a projection band.
+\end{proof}
+
+\begin{proposition} \label{complementaryRieszIdealsProjectionBands}
+Let $V$ be a Riesz space and $A,B\subseteq V$ Riesz ideals. If $A \oplus B = V$, then
+\begin{enumerate}
+\item $A = B^{\perp_r}$ and $B = A^{\perp_r}$;
+\item both $A$ and $B$ are projection bands.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) It is enough to prove $A = B^{\perp_r}$. The other equation follows by symmetry of the statement. We prove both inclusions. Take arbitrary $a\in A$ and $b\in B$. Let $c = |a|\wedge |b|$, so $c\leq |a|, c\leq |b|$. By solidity of the ideals, $c\in A$ and $c\in B$. Since the sum is direct, we have $c = 0$. Thus $a\perp_r b$. Since $b$ was taken arbitrarily, $a\in B^{\perp_r}$ and thus $A\subseteq B^{\perp_r}$.
+
+Now take $u\in B^{\perp_r}$. Since $V = A\oplus B$, we can write $|u| = u_1 + u_2$ for some $u_1\in A$ and $u_2\in B$. By \ref{positiveVectorHasPositiveComponents}, $0\leq u_1$ and $0\leq u_2$, so $u_2 \leq |u|$. By solidity, $u_2\in B^{\perp_r}$, so $u_2\in B\cap B^{\perp_r} = \{0\}$. Thus $|u| = u_1\in A$ and $u\in A$ by solidity, so $B^{\perp_r} \subseteq A$.
+
+(2) Immediate from (1).
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $A\subseteq V$ a linear subspace such that $A\oplus A^{\perp_r} = V$. Then $A = A^{\perp_r\perp_r}$.
+\end{proposition}
+\begin{proof}
+We just need to prove that $A^{\perp_r\perp_r} \subseteq A$. Take arbitrary $v\in A^{\perp_r\perp_r}$. We can find a unique decomposition $v= v_1+v_2 \in A\oplus A^{\perp_r}$. Now $A\oplus A^{\perp_r} \subseteq A^{\perp_r\perp_r}+ A^{\perp_r}$ and the sum is direct, by \ref{disjointPolarBand}. Since $v= v_1+v_2$ is a decomposition in $A^{\perp_r\perp_r}\oplus A^{\perp_r}$, it is the unique decomposition, which is also given by $v= v+0$. Thus $v_2 = 0$ and $v_1 = v$, which means that $v\in A$.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $B\subseteq V$ a band. Then $B$ is a projection band \textup{if and only if} $u_1 = \bigvee \setbuilder{v\in B}{0\leq v\leq u}$ exists for all $u\in V^+$.
+
+Then $u_1$ is the component of $u$ in $B$.
+\end{proposition}
+\begin{proof}
+First assume $B$ is a projection band and take $u\in V^+$. Since $B$ is a projection band, there exists a unique decomposition $u = u_1 + u_2$, where $u_1 \in B$ and $u_2 \in B^{\perp_r}$. We claim that $u_1 = \bigvee \setbuilder{v\in B}{0\leq v\leq u}$. Since $u_1 \in \setbuilder{v\in B}{0\leq v\leq u}$ it is less than any upper bound. Thus we just need to prove that it is an upper bound.
+
+To that end, take $v\in B$ such that $0\leq v\leq u$. Then $u-v = (u_1 - v) + u_2 \in B\oplus B^{\perp_r}$. By \ref{positiveVectorHasPositiveComponents}, $0\leq u_1 - v$, so $v\leq u_1$. This shows that $u_1$ is an upper bound.
+
+Now assume $u_1 = \bigvee \setbuilder{v\in B}{0\leq v\leq u}$ exists for all $u\in V^+$. In this case $u_1\in B$ by definition of band. We need to show that $V = B\oplus B^{\perp_r}$. Since $B\oplus B^{\perp_r}$ is solid by \ref{sumRieszIdeals}, it is enough to show that $V^+ = (B\oplus B^{\perp_r})^+$.  Fix arbitrary $u\in V^+$. It is enough to show that $u_2 \defeq u - u_1 \in B^{\perp_r}$. We have $0\leq u - u_1 \leq u$.
+
+To that end, take $b\in B$ and set $c = |b|\wedge |u_2|$. Then $c\leq |b|$, so $c\in B$ by solidity and $0\leq c \leq |u_2| = u-u_1$, so $u_1 + c \leq u_1 + u_2 = u$. This means that $u_1 + c\in \setbuilder{v\in B}{0\leq v\leq u}$ and thus
+\[ u_1 + c \leq \bigvee \setbuilder{v\in B}{0\leq v\leq u} = u_1, \]
+so $c\leq 0$. By construction, $0\leq c$, so $c = 0$. This means that $u_2 \perp_r b$ and thus $u_2\in B^{\perp_r}$.
+\end{proof}
+\begin{corollary}
+Let $V$ be a Riesz space and $P: V\to V$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $P$ maps vectors to their components in some projection band $B$;
+\item $P$ is a projector and $0\leq Pu \leq u$ holds for all $u\in V^+$.
+\end{enumerate}
+\end{corollary}
+Compare with \ref{projectorComplementarySubspaces}.
+\begin{proof}
+$(1) \Rightarrow (2)$ Linearity and idempotency are immediate from \ref{projectorComplementarySubspaces}. Take $u\in V^+$, then $Pu = \bigvee \setbuilder{v\in B}{0\leq v\leq u} \leq u$.
+
+$(2) \Rightarrow (1)$ Set $B = \im(P)$. By \ref{projectorComplementarySubspaces} we have $V = \im(P)\oplus \im(\id_V-P)$. By \ref{complementaryRieszIdealsProjectionBands}, it is enough to show that $B$ and $\im(\id_V-P)$ are Riesz ideals. They are clearly linear subspaces from \ref{imageSubalgebra}, so we just need to show solidity.
+
+If $P$ satisfies the requirements of (2), then so does $\id_V-P$. The fact it is a projector was given by \ref{projectorKernelImageLemma}. For the inequalities, take $u\in V^+$. Then $0\leq Pu$ implies $u\leq Pu + u$, or $(\id_V-P)(u) = u-Pu \leq u$. Also $Pu \leq u$ implies $0\leq u - Pu = (\id_V - P)(u)$. Thus it is enough to show that $\im(P)$ is solid.
+
+Suppose $0\leq w \leq Pv$, where $Pv\in \im(P)$. Then $x\defeq Pv - w \geq 0$, so $Pv = x+w$ and $Pv = P^2v = Px + Pw$. So $x+w = Px+Pw$, or $x-Px + w-Pw = 0$. Since $x-Px\geq 0$ and $w-Pw \geq 0$ by assumption, we have $w-Pw = 0$ by \ref{positiveElementsSumToZeroImpliesZero}. Thus $Pw = w$, or $w\in \im(P)$ by \ref{projectorKernelImageLemma}.
+
+In order to conclude with \ref{RieszIdealEquivalents}, we need to show that for all $w\in V$, $w\in \im(P)$ implies $|w|\in \im(P)$. We have $w^+ - w^- = w =Pw = Pw^+ - Pw^-$, so $w^+ - Pw^+ + w^- - Pw^- = 0$. Since, by assumption, $w^+ - Pw^+ \geq 0$ and $w^- - Pw^- \geq 0$, we have $w^+  = Pw^+$ and $w^- = Pw^-$ by \ref{positiveElementsSumToZeroImpliesZero}. Thus $w^+, w^-\in\im(P)$, so $|w| = w^++w^- \in \im(P)$.
+\end{proof}
+
+\section{Order convergence}
+
+\begin{proposition}
+Let $V$ be a Riesz space. Then the order convergence on $V$ makes it a vector space convergence.
+\end{proposition}
+
+\begin{lemma}
+Let $V$ be a Riesz space, $v\in V$ and $F\in\powerfilters(V)$. Then $F\overset{\mathfrak{o}}{\longrightarrow} v$ \textup{if and only if} $|F - v| \overset{\mathfrak{o}}{\longrightarrow} 0$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+
+\subsection{Riesz order uniformity}
+\begin{definition}
+Let $V$ be a Riesz space, $v\in V^+$ and $\epsilon > 0$. Set $V_\epsilon = \setbuilder{(x,y)\in V^2}{|x-y| \leq \epsilon v}$.
+
+The \udef{$v$-order uniformity} is the topological uniformity with entourage filter $\entourage_v \defeq \upset \{V_\epsilon\}_{\epsilon > 0}$.
+\end{definition}
+
+\begin{lemma}
+Let $V$ be a Riesz space and $v\in V^+$. Then $\entourage_v$ is a topological uniformity.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $V$ be an Archimedean Riesz space and $v\in V$. Then $\entourage_\mathfrak{o} \subseteq \entourage_v$.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\subsection{Riesz order uniform convergence}
+
+\begin{proposition}
+Let $V$ be a Riesz space. Then $V$ is Archimedean \textup{if and only if} for all $v\in V^+$, the $v$-uniform convergence is Hausdorff.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma}
+Let $V$ be an Archimedean Riesz space, $F\in\powerfilters(V)$, $x,y\in V$ and $u,v,w\in V^+$. Suppose that $F$ converges $v$-uniformly to $x$ and $w$-uniformly to $y$. Then
+\begin{enumerate}
+\item $x = y$;
+\item $F$ converges $v \vee w$-uniformly;
+\item $F$ converges $u$-uniformly if $u\leq v$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
 
 \end{proof}
+
+\subsection{Relative order uniform convergence}
+\begin{definition}
+Let $V$ be a Riesz space, $x\in V$ and $F\in\powerfilters(V)$. Then $F$ is said to converge \udef{relatively uniformly} to $x$, denoted $F\overset{un}{\longrightarrow} x$ if there exists $v\in V^+$ such that $F$ converges $v$-uniformly to $x$. This $v$ is called a \udef{regulator} of $F$.
+\end{definition}
+
 
 \chapter{Some results and applications}
 \section{Rotations}
