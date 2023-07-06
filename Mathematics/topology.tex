@@ -1956,7 +1956,7 @@ A preconvergence is a convergence \textup{if and only if} it is coarser than the
 \section{Convergences on ordered sets}
 
 \subsection{Convergence compatible with the order}
-TODO: we assume complete lattice everywhere (?)
+
 \begin{definition}
 Let $\sSet{X,\leq}$ be a poset. A convergence $\xi$ in $X$ is called
 \begin{itemize}
@@ -1964,26 +1964,115 @@ Let $\sSet{X,\leq}$ be a poset. A convergence $\xi$ in $X$ is called
 \item \udef{compatible with the strong order} if $F \leq_s G$, $x\in\lim_\xi F$ and $y\in \lim_\xi G$ imply $x\leq y$.
 \end{itemize}
 \end{definition}
-TODO: following lemma makes sense as definition for posets that are not complete lattices?
 
 \begin{lemma}
-Let $\sSet{X,\leq}$ be a poset and $\xi$ a convergence on $X$. Then
+Let $\sSet{X,\leq}$ be a poset and $\xi$ a convergence compatible with the weak order. Then $\xi$ is Hausdorff.
+\end{lemma}
+\begin{proof}
+Take $F\in\powerfilters(X)$ and $x,y\in \lim_\xi F$. Since $\leq_w$ is reflexive by \ref{reflexivityFilterRelations}, we have $F\leq_w F$, which implies $x\leq y$ and $y\leq x$ by compatibility with the weak order. Thus $x=y$ by antisymmetry.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\leq}$ be a complete lattice and $\xi$ a convergence on $X$. Then
 \begin{enumerate}
 \item $\xi$ is compatible with the weak order \textup{if and only if} $\lim_\xi F\subseteq \{\liminf F\}\cap\{\limsup F\}$ for all $F\in\powerfilters(X)$;
 \item $\xi$ is compatible with the strong order \textup{if and only if} $\lim_\xi F\subseteq \interval{\liminf F, \limsup F}$ for all $F\in\powerfilters(X)$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-We have $F \leq \pfilter{x} \iff \liminf F \leq x$ by \ref{filterInequalityCriterion}. This implies 
-$F \leq \pfilter{\liminf F}$ and thus for all $y\in\lim_\xi F$ we must have $y\leq \liminf F$ by compatability of the order. By a similar argument, we have $\limsup F \leq y$.
+(1) First assume $\xi$ is compatible with the weak order. Set $x = \liminf F$. Then, by \ref{filterInequalityCriterion} and compatibility with the weak order, we have
+\[ \liminf F \leq x \implies \liminf F \leq \limsup\pfilter{x} \implies F\leq_w \pfilter{x} \implies \forall y\in\lim F: \; y\leq x. \]
+With a similar argument for the limsup, we have $\limsup F\leq y \leq \liminf F$ for all $y\in \lim F$. Since $\liminf F \leq \limsup F$, the result follows.
+
+For the converse, take $F,G\in \powerfilters(X)$ such that $F\leq_w G$. Take $x\in \lim F$ and $y\in \lim G$. By assumption, $x = \liminf F$ and $y = \limsup G$. By \ref{filterInequalityCriterion} we have $x\leq y$.
+
+(2) In this case, \ref{filterInequalityCriterion} gives $\liminf F\leq y \leq \limsup F$ for all $y\in \lim F$.
+
+For the converse, take $F,G\in \powerfilters(X)$ such that $F\leq_s G$. Take $x\in \lim F$ and $y\in \lim G$. By assumption, $x \leq \limsup F$ and $y \geq \liminf G$. By \ref{filterInequalityCriterion} we have $\limsup F\leq \liminf G$, so $x\leq \limsup F\leq \liminf G \leq y$.
 \end{proof}
 \begin{corollary}
 The weakest convergence compatible with the weak order is given by $\lim F = \liminf F =\limsup F$, if they exist and coincide, for all $F\in \powerfilters(X)$.
-\end{corollary}\
+\end{corollary}
 
+\subsubsection{Order convergence}
 \begin{definition}
-The weakest convergence compatible with the weak order is called the \udef{order convergence}, denoted $\mathfrak{o}$.
+Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is defined by
+\[ \lim_\mathfrak{o}F = \begin{cases}
+\Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u & \Big(\bigcap_{A\in F}\upset A \neq \emptyset \neq \bigcap_{A\in F}\downset A\Big) \\
+\emptyset & (\text{otherwise}).
+\end{cases} \]
+for all filters $F\in \powerfilters(X)$.
 \end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\leq}$ be a poset. The order convergence on $X$ is a convergence.
+\end{lemma}
+\begin{proof}
+The order convergence is monotone by construction: if $F\subseteq F'$, then $\bigcap_{A\in F}\upset A \supseteq \bigcap_{A\in F'}\upset A$ and thus $\Big(\bigcap_{A\in F}\upset A\Big)^l \subseteq \Big(\bigcap_{A\in F'}\upset A\Big)^l$. A similar inclusion holds for $\Big(\bigcap_{A\in F}\downset A\Big)^u$.
+
+To show that the order convergence is centered, take $x\in X$. Then
+\begin{align*}
+\lim_\mathfrak{o}\pfilter{x} &= \Big(\bigcap_{A\in \pfilter{x}}\upset A\Big)^l \cap \Big(\bigcap_{A\in \pfilter{x}}\downset A\Big)^u \\
+&= \Big(\upset \{x\}\Big)^l \cap \Big(\downset \{x\}\Big)^u \\
+&= \downset \{x\} \cap \upset \{x\} \\
+&= \{x\}.
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\leq}$ be a finitely Dedekind complete poset. Then the order convergence $\mathfrak{o}$ is the weakest convergence compatible with the weak order.
+\end{proposition}
+In particular the proposition holds for all lattices.
+\begin{proof}
+Let $\xi$ be an arbitrary convergence that is compatible with the weak order.
+
+Take arbitrary $y\in \lim_\xi(F)$. Take arbitrary $x\in \bigcap_{A\in F}\upset A$. Then $F \leq_w \pfilter{x}$ by \ref{weakRelationPrincipalFilter}, so $y\leq x$ by compatibility with the weak order. Since this holds for all such $x$, we have $y\in \Big(\bigcap_{A\in F}\upset A\Big)^l$. Similarly $y\in \Big(\bigcap_{A\in F}\downset A\Big)^u$.
+
+Thus $\lim_\xi F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u$, so any convergence compatible with the weak order is stronger than the order convergence.
+
+We now need to show that the convergence is compatible with the weak order. Take $F,G\in\powerfilters(X)$ such that $F\leq_w G$. We have
+\begin{align*}
+F \leq_w G \iff& \forall A\in F, B\in G: \exists x\in A, y\in B: \; x\leq y \\
+\iff& \forall A\in F, B\in G: \exists x\in A, y\in B: \; x\leq y \\
+\end{align*}
+TODO
+\end{proof}
+
+
+\begin{example}
+Consider the ``bug-eyed line'' $\R\uplus \{0'\}$, where ($x< 0'$ iff $x< 0$) and ($0'<x$ iff $0<x$). This poset is clearly not finitely Dedekind complete, since $\{0,0'\}$ is upper bounded by all positive numbers, but does not have a least upper bound.
+
+Set $F \defeq \upset\setbuilder[\big]{\interval[o]{0,\epsilon}}{\epsilon > 0} = \upset\setbuilder[\big]{\interval[o]{0',\epsilon}}{\epsilon > 0'}$. Then
+\begin{align*}
+\lim_\mathfrak{o}F &= \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \\
+&= \Big(\bigcap_{\epsilon > 0}\interval[o]{0,\infty}\Big)^l \cap \Big(\bigcap_{\epsilon > 0}\interval[o]{-\infty, \epsilon}\Big)^u \\
+&= \Big(\interval[o]{0,\infty}\Big)^l \cap \Big(\interval[o]{-\infty, 0}\cup \{0,0'\}\Big)^u \\
+&= \Big(\interval[o]{-\infty, 0} \cup \{0,0'\}\Big) \cap \Big(\interval[o]{0,\infty}\Big) \\
+&= \emptyset.
+\end{align*}
+Set $F \defeq \setbuilder[\big]{\interval[o]{0,\epsilon}}{\epsilon > 0} \cup \setbuilder[\big]{\interval[o]{-\epsilon, 0}}{\epsilon > 0}$. Then
+\begin{align*}
+\lim_\mathfrak{o}F &= \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \\
+&= \Big(\interval[o]{0,\infty}\Big)^l \cap \Big(\interval[o]{-\infty, 0}\Big)^u \\
+&= \Big(\interval[o]{-\infty, 0} \cup \{0,0'\}\Big) \cap \Big(\interval[o]{0,\infty} \cup \{0,0'\}\Big) \\
+&= \{0,0'\}.
+\end{align*}
+So the filter property is important.
+\end{example}
+
+\begin{proposition}
+Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if}
+\begin{itemize}
+\item there exist sets $A,B\subseteq X$ such that $\bigvee A = x = \bigwedge B$ (and these extrema exist); and
+\item $\interval{a,b}\in F$ for all $a\in A$ and $b\in B$.
+\end{itemize}
+If this holds, then $A$ may be chosen to be upwards directed and $B$ downwards directed.
+\end{proposition}
+\begin{proof}
+\ref{weakRelationPrincipalFilter}
+\[ \lim F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \subseteq \Big(\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A\Big)^l \cap \Big(\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A\Big)^u \]
+if $\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A \neq \emptyset$, then $\lim F$ is at most a singleton.
+\end{proof}
 
 \begin{proposition}
 Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if} $F$ is the tails filter of some net $\seq{x_i}_{i\in I}$ and there exist monotone nets $\seq{a_i}_{i\in I}$ and $\seq{b_i}_{i\in I}$ such that
@@ -2009,6 +2098,9 @@ By TODO ref (!), we have
 \[ y = \liminf \upset f^{\imf\imf}(F) \leq \liminf \upset g^{\imf\imf}(F) \quad\text{and}\quad \limsup \upset g^{\imf\imf}(F) \leq \limsup \upset h^{\imf\imf}(F) = y, \]
 so $y\leq \liminf \upset g^{\imf\imf}(F) \leq \limsup \upset g^{\imf\imf}(F) \leq y$ and so $\upset g^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$.
 \end{proof}
+
+\subsubsection{Topologicity of order convergence}
+See ``Birkhoff's order-convergence in partially ordered sets'' and ``On Order-Convergence'' by Wolk.
 
 \subsection{Order closure and order regularity}
 \begin{definition}
