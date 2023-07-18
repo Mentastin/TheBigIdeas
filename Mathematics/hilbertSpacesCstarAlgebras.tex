@@ -299,6 +299,30 @@ If $p\neq 2$ we can find a counterexample to the parallelogram law: let $x=(1,1,
 and the parallelogram law is then not valid if $p\neq 2$.
 \end{proof}
 
+\subsection{Topology of inner product spaces}
+\begin{lemma}[Continuity of inner product]
+Let $V$ be an inner product space. Then the inner product is a continuous function $V\times V \to \mathbb{F}$.
+\end{lemma}
+\begin{proof}
+We show that if $x_n \to x$ and $y_n \to y$, then $\inner{x_n,y_n}\to \inner{x,y}$. By the triangle and Cauchy-Schwarz inequalities
+\begin{align*}
+|\inner{x_n,y_n}-\inner{x,y}| &= |\inner{x_n,y_n}-\inner{x_n,y}+\inner{x_n,y} - \inner{x,y}| \\
+&\leq |\inner{x_n, y_n-y}| + |\inner{x_n-x, y}| \\
+&\leq \norm{x_n}\norm{y_n-y} + \norm{x_n-x}\norm{y}.
+\end{align*}
+Because the right-hand side converges to $0$, the left-hand side must too.
+\end{proof}
+
+\subsubsection{Completion}
+\begin{lemma}
+Let $V$ be an inner product space. The inner product on $V$ can be extended to its completion by continuity. The completion is a Hilbert space.
+\end{lemma}
+\begin{proof}
+\ref{uniformlyContinuousExtensionToCompletion}
+
+The completion of $V$ exists by \ref{existenceMetricCompletion} and the 
+\end{proof}
+
 \section{Orthogonal and orthonormal sets of vectors}
 \subsection{Orthogonal complements}
 \begin{definition}
@@ -659,19 +683,6 @@ Not every inner product space has an orthonormal basis.
 
 \section{Maps on inner product spaces}
 
-\begin{lemma}[Continuity of inner product]
-Let $V$ be an inner product space. Then the inner product is a continuous function $V\times V \to \mathbb{F}$.
-\end{lemma}
-\begin{proof}
-We show that if $x_n \to x$ and $y_n \to y$, then $\inner{x_n,y_n}\to \inner{x,y}$. By the triangle and Cauchy-Schwarz inequalities
-\begin{align*}
-|\inner{x_n,y_n}-\inner{x,y}| &= |\inner{x_n,y_n}-\inner{x_n,y}+\inner{x_n,y} - \inner{x,y}| \\
-&\leq |\inner{x_n, y_n-y}| + |\inner{x_n-x, y}| \\
-&\leq \norm{x_n}\norm{y_n-y} + \norm{x_n-x}\norm{y}.
-\end{align*}
-Because the right-hand side converges to $0$, the left-hand side must too.
-\end{proof}
-
 \begin{lemma} \label{equalityOfMapsInnerProductSpaces}
 Let $V$ be an inner product space and $S,T\in\Hom(V)$. Then $S=T$ \textup{if and only if}
 \[ \forall v,w\in V: \inner{Tv,w} = \inner{Sv,w}. \]
@@ -805,17 +816,17 @@ This is a consequence of \ref{elementaryOrthogonality}.
 \end{proof}
 
 \begin{lemma} \label{energyFormHermitianSymmetric}
-The energy form of an operator $T$ is Hermitian \textup{if and only if} $T$ is symmetric.
+Let $V$ be an inner product space and $T$ an operator on $V$. Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is symmetric;
+\item $\inner{\cdot,\cdot}_T$ is Hermitian;
+\item $Q_T$ is real-valued.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-For all $x,y$: $\inner{x,Ty} = \overline{\inner{y, Tx}}$ iff $\inner{x,Ty} = \inner{Tx, y}$.
-\end{proof}
-\begin{corollary} \label{symmetricRealQuadraticForm}
-If $T$ is symmetric, then $Q_T$ is real-valued.
-\end{corollary}
-\begin{proof}
-Assume $T$ symmetric, then for all $u\in\dom(T)$
-\[ Q_T(u) = \inner{u,Tu} = \inner{Tu,u} = \overline{\inner{u,Tu}} = \overline{Q(u)}. \]
+$(1) \Leftrightarrow (2)$ For all $x,y\in \dom(T)$ we have $\inner{x,Ty} = \inner{Tx, y}$ if and only if $\inner{x,Ty} = \overline{\inner{y, Tx}}$.
+
+$(2) \Leftrightarrow (3)$ Given by \ref{HermitianRealQuadratic}.
 \end{proof}
 
 So the energy form associated to a symmetric operator is Hermitian. We typically would like our energy forms to be pre-inner products. This is exactly the case for positive operators.
@@ -837,7 +848,7 @@ We write $A \geq 0$. We also say
 If $T$ is a positive operator on a complex inner product space, then $T$ is symmetric.
 \end{lemma}
 \begin{proof}
-If $T$ is a positive operator on a complex inner product space $V$, then $Q_T(x)$ is in particular real for all $x\in V$. This is equivalent to $\inner{\cdot,\cdot}_T$ being Hermitian by \ref{HermitianRealQuadratic}, which is in turn equivalent to the symmetry of $T$ by \ref{energyFormHermitianSymmetric}.
+Follows immediately from \ref{energyFormHermitianSymmetric}.
 \end{proof}
 
 On a real inner product space there may exist positive operators that are not symmetric.
@@ -873,7 +884,7 @@ Let $T$ be an operator. The energy form $\inner{\cdot,\cdot}_T$ is positive (and
 \subsubsection{Energy norm}
 \begin{definition}
 Let $T$ be a positive operator. Then
-\[ \norm{\cdot}_T: \dom(T) \to [0,+\infty[: x\mapsto \norm{x}_T = \sqrt{Q_T(x)} \]
+\[ \norm{\cdot}_{\inner{}_T}: \dom(T) \to \interval[co]{0,+\infty}: x\mapsto \norm{x}_{\inner{}_T} = \sqrt{\inner{x,x}_T} = \sqrt{Q_T(x)} \]
 is the \udef{energy norm} associated to $T$.
 \end{definition}
 
@@ -905,33 +916,48 @@ The operator partial order is a partial order on the set of operators on an inne
 \end{lemma}
 
 \subsubsection{Induced topology}
-We consider the topology induced by an energy norm $\norm{\cdot}_T$.
+We consider the topology induced by an energy norm $\norm{\cdot}_{\inner{}_T}$.
 
 \begin{proposition} \label{energyNormTopology}
 Let $V$ be an inner product space and $T$ a positive operator on $V$. Then
 \begin{enumerate}
-\item if $T$ is bounded, then $\norm{\cdot}_T$ is bounded by $\norm{\cdot}$;
-\item $\norm{\cdot}$ is bounded by $\norm{\cdot}_{T+\id}$.
+\item if $T$ is bounded, then $\norm{\cdot}_{\inner{}_T}$ is bounded by $\norm{\cdot}$;
+\item $\norm{\cdot}$ is bounded by $\norm{\cdot}_{\inner{}_{T+\id}}$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
 (1) If $T$ is bounded, then $\forall v\in V$
-\[ \norm{v}_T = \sqrt{\inner{v,Tv}} = \sqrt{|\inner{v,Tv}|} \leq \sqrt{\norm{v}^2\norm{T}} = \sqrt{\norm{T}}\norm{v}, \]
+\[ \norm{v}_{\inner{}_T} = \sqrt{\inner{v,Tv}} = \sqrt{|\inner{v,Tv}|} \leq \sqrt{\norm{v}^2\norm{T}} = \sqrt{\norm{T}}\norm{v}, \]
 where we have used the Cauchy-Schwarz inequality \ref{CauchySchwarz}.
 
 (2) For all $v\in V$ we have
-\[ \norm{v} \leq \norm{v} + \norm{v}_T = \inner{v,v} + \inner{v,Tv} = \inner{v,(T+\id)v} = \norm{v}_{T+\id}. \]
+\[ \norm{v} \leq \norm{v} + \norm{v}_{\inner{}_T} = \inner{v,v} + \inner{v,Tv} = \inner{v,(T+\id)v} = \norm{v}_{\inner{}_{T+\id}}. \]
 \end{proof}
 \begin{corollary}
 Let $V$ be an inner product space and $T$ a positive operator on $V$. Then
 \begin{enumerate}
-\item if $T$ is bounded, then the topology induced by $\norm{\cdot}$ is finer than the topology induced by $\norm{\cdot}_T$;
-\item the topology induced by $\norm{\cdot}_{T+\id}$ is finer than the topology induced by $\norm{\cdot}$.
+\item if $T$ is bounded, then the topology induced by $\norm{\cdot}$ is finer than the topology induced by $\norm{\cdot}_{\inner{}_T}$;
+\item the topology on $\dom(T)$ induced by $\norm{\cdot}_{\inner{}_{T+\id}}$ is finer than the topology induced by $\norm{\cdot}$.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
 This follows straight from \ref{normComparison}.
 \end{proof}
+\begin{corollary}
+Let $H$ be a Hilbert space and $T$ a positive operator on $H$. Then $\inner{\cdot,\cdot}_{T+\id}$ is an inner product on $\dom(T)$.
+\end{corollary}
+\begin{proof}
+We have that $\inner{\cdot,\cdot}_{T+\id}$ is a pre-inner product by \ref{positiveOperatorPositiveEnergyForm}. We just need to check definiteness. This follows because $\norm{\cdot} \leq \norm{\cdot}_{\inner{}_{T+\id}}$ and $\norm{\cdot}$ is definite.
+\end{proof}
+
+
+
+
+\ref{existenceMetricCompletion}
+
+$H_T \defeq \Closure_{\inner{}_{T+\id}}\big(\dom(T)\big)$ is a Hilbert space with inner product
+\[ \inner{x,y}_{H_T} \defeq \lim_{n\to \infty} \inner{x_n,y_n}_{T+\id} \qquad \text{for any $\seq{x_n} \overset{\inner{}_{T+\id}}{\longrightarrow} x$ and $\seq{y_n} \overset{\inner{}_{T+\id}}{\longrightarrow} y$.} \]
+
 
 \subsection{Dissipative operators}
 \begin{definition}
@@ -1046,7 +1072,7 @@ Take arbitrary unit vectors $v,w\in V$ and let $\theta$ be such that $|\inner{w,
 \inner{e^{-i\theta}w,Tv} &= \frac{1}{4}\sum_{k=0}^3i^k \inner{(i^ke^{-i\theta}w + v), T((i^ke^{-i\theta}w + Tv))} \\
 &= \frac{1}{4}\Big( \inner{v+e^{-i\theta}w, T(v+e^{-i\theta}w)} - \inner{v-e^{-i\theta}w, T(v-e^{-i\theta}w)} \Big),
 \end{align*}
-where we have used that the quadratic form is real by \ref{symmetricRealQuadraticForm}.
+where we have used that the quadratic form is real by \ref{energyFormHermitianSymmetric}.
 
 Thus
 \begin{align*}
@@ -1235,7 +1261,11 @@ Let $T$ be an operator on a Hilbert space. Then
 \item $\rspec(T) \subseteq \NumRange(T)$;
 \item $\apspec(T) \subseteq \overline{\NumRange(T)}$.
 \end{enumerate}
-In particular $\cspec(T) \subseteq \overline{\NumRange(T)}$.
+In particular
+\begin{enumerate} \setcounter{enumi}{3}
+\item $\cspec(T) \subseteq \overline{\NumRange(T)}$;
+\item if $T$ is closed, then $\spec(T) \subseteq \overline{\NumRange(T)}$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
 (1) Let $\lambda \in \pspec(T)$. Then $Tx = \lambda x$ for some unit vector $x$ and so
@@ -1251,10 +1281,11 @@ which means that $\lambda \in \NumRange(A)$.
 Thus $\lambda\in\overline{\NumRange(T)}$.
 
 Finally we have $\cspec(T)\subseteq\apspec(T)$ by \ref{approximateSpectrum} and so $\cspec(T)\subseteq\overline{\NumRange(T)}$.
+
+(4) We have $\cspec(T) \subseteq \apspec(T) \subseteq \overline{\NumRange(T)}$ by \ref{approximateSpectrum}.
+
+(5) Immediate from \ref{spectrumDecomposition}.
 \end{proof}
-\begin{corollary}
-If $T$ is a closed operator on a Hilbert space, then $\spec(T)\subseteq \overline{\NumRange(T)}$.
-\end{corollary}
 
 \section{Projectors and minimisation problems}
 Every subspace is a convex, non-empty subset.
@@ -1764,7 +1795,7 @@ Let $S,T: H\not\to K$ be operators between Hilbert spaces such that $S\subseteq 
 \end{corollary}
 \subsubsection{Properties of the adjoint relation}
 
-\begin{proposition}
+\begin{proposition} \label{adjointScalarMultiple}
 Let $T$ be an operator between Hilbert spaces and $\lambda\in\C$. If $\lambda \neq 0$, then
 \[ \begin{pmatrix}
 \id & 0 \\ 0 & \overline{\lambda}\id
@@ -2158,6 +2189,113 @@ For normal elements the spectral radius equals the norm.
 A normal operator on a Hilbert space is invertible \textup{if and only if} it is bounded below.
 \end{lemma}
 
+\begin{theorem}[Fuglede's theorem]
+Let $H$ be a Hilbert space $N$ a normal operator on $H$ and $A\in\Bounded(H)$. Then $AN\subseteq NA$ implies $AN^* \subseteq N^*A$.
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}[Putnam-Fuglede theorem]
+Let $H, K$ be a Hilbert spaces, $A\in\Bounded(K, H)$ and both $N: H\not\to K$ and $M: K\not\to H$ normal operators. Then $AN\subseteq MA$ implies $AN^* \subseteq M^*A$.
+\end{corollary}
+\begin{proof}
+Consider
+\[ L \defeq \begin{pmatrix}
+N & 0 \\ 0 & M
+\end{pmatrix} \qquad\text{and}\qquad A' \defeq \begin{pmatrix}
+0 & A \\ 0 & 0
+\end{pmatrix}. \]
+Then $L$ is normal (TODO) and $A'$ is bounded. Then we can apply Fuglede's theorem (TODO details).
+\end{proof}
+
+\subsubsection{Spectral measures}
+\begin{definition}
+Let $H$ be a Hilbert space and $\sSet{\Omega,\mathcal{A}}$ a measurable space.
+\begin{itemize}
+\item A measure $E$ from $\sSet{\Omega,\mathcal{A}}$ to the lattice of projectors on $H$ is called a \udef{projector-valued measure}.
+\item A projector-valued measure $E$ such that $E(\Omega) = \id_H$ is called a \udef{spectral measure}.
+\end{itemize}
+Let $E$ be a projector-valued measure on $\sSet{\Omega,\mathcal{A}}$. For any measurable function $f: X\to \C$ we define
+\[ \int_\Omega f\diff{E}: \dom\Big(\int_\Omega f\diff{E}\Big) \to H: x\mapsto \int_\Omega f\diff{E_x}, \]
+where the integral is a Bochner integral,
+\[ E_x: \mathcal{A}\to H: A\mapsto E(A)(x) \]
+and
+\[ \dom\Big(\int_\Omega f\diff{E}\Big) = \setbuilder{x\in H}{\text{$f$ if $E_x$-integrable}}. \]
+\end{definition}
+TODO: can we make definition of Bochner integral general enough such that this integral can be  considered as a Bochner integral??
+
+\begin{lemma}
+Let $H$ be a Hilbert space, $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$ and $x\in H$. Then $E_x$ is a vector-valued measure.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma} \label{projectorIntegrableSolid}
+Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions such that $|f|\leq |g|$. Then $\dom\Big(\int_\Omega f \diff{E}\Big) \supseteq \dom\Big(\int_\Omega g \diff{E}\Big)$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{integralProjectorValuedMeasure}
+Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions. Then
+\begin{enumerate}
+\item $\int_\Omega f\diff{E}$ is a normal operator;
+\item $\Big(\int_\Omega f\diff{E}\Big)^* = \int_\Omega \overline{f}\diff{E}$;
+\item $\int_\Omega f\diff{E}\circ \int_\Omega g\diff{E} \subseteq \int_\Omega f\cdot g\diff{E}$ and $\dom\Big(\int_\Omega f\diff{E}\circ\int_\Omega g\diff{E}\Big) = \dom\Big(\int_\Omega f\cdot g\diff{E}\Big)\cap \dom\Big(\int_\Omega g\diff{E}\Big)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions. Then
+\begin{enumerate}
+\item $\Big(\int_\Omega f\diff{E}\Big)^*\circ \int_\Omega f\diff{E} = \int_\Omega |f|^2\diff{E}$;
+\item if $g$ is bounded, then $\int_\Omega f\diff{E}\circ \int_\Omega g\diff{E} = \int_\Omega f\cdot g\diff{E} = \int_\Omega g\diff{E}\circ \int_\Omega f\diff{E}$.
+\end{enumerate}
+\end{corollary}
+
+\subsubsection{Spectral theorem}
+\begin{theorem}[Spectral theorem]
+Let $H$ be a Hilbert space and $N$ a normal operator on $H$. Then there exists a unique spectral measure $E$ on $\C$ such that
+\begin{enumerate}
+\item $N = \int z\diff{E(z)}$;
+\item $E(A) = 0$ for all Borel sets $A$ such that $A\perp \spec(N)$;
+\item if $U\subseteq \C$ is an open set such that $U\mesh \spec(N)$, then $E(U) \neq 0$;
+\item if $T\in \Bounded(H)$ is such that $TN\subseteq NT$, then $A\big(\int_\C f\diff{E}\big) \subseteq \big(\int_\C f\diff{E}\big)A$ for all measurable $f:\C\to \C$.
+\end{enumerate}
+\end{theorem}
+Clearly $\int z\diff{E(z)}$ is shorthand for $\int_\C\id_\C\diff{E}$.
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary} \label{realSpectrumSelfAdjoint}
+Let $H$ be a Hilbert space and $N$ a normal operator on $H$. If $\spec(N) \subseteq \R$, then $N = N^*$.
+\end{corollary}
+\begin{proof}
+We have $\C\setminus\R \perp \spec(N)$, so $N = \int_\C z\diff{E(z)} = \int_\R z\diff{E(z)}$. By \ref{integralProjectorValuedMeasure}, we have
+\[ N = \int_\R z\diff{E(z)} = \int_\R \overline{z}\diff{E(z)} = \Big(\int_\R z\diff{E(z)}\Big)^* = N^*. \]
+\end{proof}
+
+\begin{definition}
+Let $H$ be a Hilbert space, $N$ a normal operator on $H$ and $f: \C\to \C$ a measurable function. Then we define
+\[ f(N) \defeq \int_\C f\diff{E}, \]
+where $E$ is the spectral measure associated to $N$.
+\end{definition}
+
+\begin{theorem} \label{spectralTheoremFunctionalCalculus}
+Let $H$ be a Hilbert space, $N$ a normal operator on $H$ and $f,g: \C\to \C$ measurable functions. Then
+\begin{enumerate}
+\item $(f\circ g)(N) = f\big(g(N)\big)$;
+\item $\spec(f(N)) = f^\imf\big(\spec(N)\big)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+TODO!
+\end{proof}
+
 \begin{proposition}
 Let $T$ be a normal operator on a Hilbert space. If $\lambda$ is an isolated point of the spectrum, then $\lambda$ is an eigenvalue.
 \end{proposition}
@@ -2174,6 +2312,7 @@ Set $P = f(T)$ by continuous functional calculus (TODo ref!!). This is a project
 For all $t\in \spec(T)$, we have $tf(t) = \lambda f(t)$. By functional calculus, this gives $TP = \lambda P$.
 \end{proof}
 
+
 \subsection{Symmetric and self-adjoint operators}
 \begin{definition}
 Let $A$ be an operator on a Hilbert space.
@@ -2184,18 +2323,32 @@ Let $A$ be an operator on a Hilbert space.
 We denote the set of self-adjoint operators on a Hilbert space $H$ by $\SelfAdjoints(H)$.
 \end{definition}
 
-\begin{lemma}
-Every self-adjoint operator is normal.
+\begin{lemma} \label{selfAdjointLemma}
+Let $A$ be a self-adjoint or skew-adjoint operator on a Hilbert space. Then
+\begin{enumerate}
+\item $A$ is densely defined;
+\item $A$ is normal;
+\item $A$ is closed;
+\item $\lambda A$ is self-adjoint (resp.\ skew-adjoint) for all $\lambda\in \R$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-By \ref{normalCriterion}.
+(1) From $A = A^*$ or $-A = A^*$, we have that $A^*$ is a function. This implies that $A$ is densely defined by \ref{maximalAdjointIsOperator}.
+
+(2) Sicne $A$ is densely defined, we can apply \ref{normalCriterion}.
+
+(3) For any self-adjoint operator $A$, we have $A = A^* = A^{**} = \overline{A}$. Alternatively, note that all normal operators are closed (by definition).
+
+(4) Since $A$ is densely defined, we have $(\lambda A)^* = \overline{\lambda}A^* = \lambda A^* = \pm\lambda A^*$, by \ref{adjointScalarMultiple}.
 \end{proof}
 
-\begin{lemma} \label{selfAdjointClosed}
-Every self-adjoint operator is closed.
+\begin{lemma}
+Let $A$ be an operator on a Hilbert space. Then $A$ is self-adjoint \textup{if and only if} $iA$ is skew-adjoint.
 \end{lemma}
 \begin{proof}
-For any self-adjoint operator $A$, we have $A = A^{**} = \overline{A}$. Alternatively, note that all normal operators are closed.
+First suppose $A$ is self-adjoint, then $A$ is densely defined by \ref{selfAdjointLemma}, so $(iA)^* = \overline{i}A^* = -iA^*$ by \ref{adjointScalarMultiple}.
+
+Now suppose $iA$ is skew-adjoint. Then $iA$ is densely defined by \ref{selfAdjointLemma}, so $A^* = \big(-i(iA)\big)^* = \overline{-i}(iA)^* = i(-iA) = A$, by \ref{adjointScalarMultiple}.
 \end{proof}
 
 \subsubsection{Domain related matters}
@@ -2348,13 +2501,20 @@ Let $A$ be a symmetric operator on a Hilbert space $H$. The following are equiva
 \end{enumerate}
 In this case $\spec(A) = \apspec(A)$.
 \end{proposition}
-Notice that in (2) we include $\R$ and in (7) we exclude $\R$.
+Notice that in (2) we include $\R$ and in (6) we exclude $\R$.
 \begin{proof}
 $(1) \Rightarrow (2)$ Trivial.
 
-$(2) \Rightarrow (3)$ From \ref{symmetricOperatorAdjointInclusion}, we have $A\subseteq A^*$ and thus $A+z\id = (A^* + z\id)\cap(A+z\id)$. From point (1) of \ref{equalityAlgebraicPropertiesAdjoint}, we have $A+z\id = (A+\overline{z}\id)^*\cap (A+z\id)$.
+$(2) \Rightarrow (3)$ From \ref{symmetricOperatorAdjointInclusion}, we have $A\subseteq A^*$ and thus $A+z\id = (A^* + z\id)\cap(A+z\id)$. Similarly, $A+\overline{z}\id = (A^* + \overline{z}\id)\cap(A+\overline{z}\id)$.
 
-We then use \ref{adjointRangeCriterion} with $S = A+z\id$ and $T = A+\overline{z}\id$ to obtain $A^* + \overline{z}\id = (A+z\id)^* = A+\overline{z}\id$. Subtracting $\overline{z}\id$ from each side yields the result.
+From point (1) of \ref{equalityAlgebraicPropertiesAdjoint}, we have $(A+z\id)^* = A^* + \overline{z}\id$ and $(A+\overline{z}\id)^* = A^* + z\id$.
+
+We use \ref{adjointRangeCriterion} with $S = A+z\id$ and $T = A+\overline{z}\id$, which is applicable since
+\begin{align*}
+\im(S\cap T^*) &= \im\big((A+z\id)\cap (A+\overline{z}\id)^*\big) = \im\big((A+z\id)\cap (A^*+z\id)\big) = \im(A+z\id) = H \\
+\im(T\cap S^*) &= \im\big((A+\overline{z}\id)\cap (A+z\id)^*\big) = \im\big((A+\overline{z}\id)\cap (A^*+\overline{z}\id)\big) = \im(A+\overline{z}\id) = H.
+\end{align*}
+Thus we have $A^* + \overline{z}\id = (A+z\id)^* = S^* = T = A+\overline{z}\id$. Subtracting $\overline{z}\id$ from each side yields the result.
 
 $(3) \Rightarrow (4)$ Because self-adjoint operators are normal, we can use \ref{equalityKernelAdjointNormal}.
 
@@ -2428,12 +2588,11 @@ Spectrum half plane TODO \url{https://math.stackexchange.com/questions/893899/sp
 \url{https://math.stackexchange.com/questions/925097/spectrum-of-self-adjoint-operator-on-hilbert-space-real}
 \end{example}
 
-\begin{proposition}
+\begin{proposition} \label{symmetryAdjointConstructions}
 Let $T$ be a densely defined operator on a Hilbert space $H$. Then
 \begin{enumerate}
 \item $T+T^*$ is symmetric;
-\item $T^*T$ and $TT^*$ are symmetric
-\item if $T$ is closed, then $T^*T$ and $TT^*$ are self-adjoint.
+\item $T^*T$ and $TT^*$ are symmetric.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -2444,8 +2603,17 @@ We conclude by \ref{symmetricOperatorAdjointInclusion}.
 (2) We use \ref{adjointAlgebraicProperties} to get
 \[ T^*T \subseteq T^*T^{**} \subseteq (T^*T)^* \qquad\text{and}\qquad TT^* \subseteq T^{**}T^* \subseteq (TT^*)^*, \]
 which means that $T^*T$ and $TT^*$ are symmetric by \ref{symmetricOperatorAdjointInclusion}.
+\end{proof}
 
-(3) Because $T^*$ is closed, $\graph(T^*)$ is closed in $H\oplus H$. Thus
+\begin{theorem}[von Neumann] \label{vonNeumannTheoremSquareSelfAdjoint}
+Let $T$ be a densely defined and closed operator on a Hilbert space $H$. Then
+\begin{enumerate}
+\item both $T^*T$ and $TT^*$ are self-adjoint;
+\item both $\dom(T^*T)$ and $\dom(TT^*)$ are essential domains of $T$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) Because $T^*$ is closed, $\graph(T^*)$ is closed in $H\oplus H$. Thus
 \begin{align*}
 H\oplus H &= \graph(T^*) \oplus \graph(T^*)^\perp \\
 &= \graph(T^*) \oplus \left(\begin{pmatrix}
@@ -2471,7 +2639,7 @@ x \\ Tx
 \end{pmatrix} = \begin{pmatrix}
 y - Tx \\ T^*y + x
 \end{pmatrix}. \]
-So $y = Tx$ and $v = T^*y + x = T^*Tx + x = (T^*T +\id)x$, which means that $T^*T +\id$ is surjective. Thus $T^*T$ is self-adjoint by \ref{rangeSelfAdjointCriterion}.
+So $y = Tx$ and $v = T^*y + x = T^*Tx + x = (T^*T +\id)x$, which means that $T^*T +\id$ is surjective. Since $T^*T$ is symmetric, by \ref{symmetryAdjointConstructions}, it is self-adjoint by \ref{rangeSelfAdjointCriterion}.
 
 We can show $TT^* + \id$ is surjective by writing
 \[ \begin{pmatrix}
@@ -2486,6 +2654,8 @@ x \\ Tx
 y - Tx \\ T^*y + x
 \end{pmatrix}, \]
 so $x = -T^*y$ and $v = y - Tx = y+TT^*y = (TT^* + \id)y$.
+
+(2) 
 \end{proof}
 
 \begin{example}
@@ -2497,7 +2667,7 @@ Let $T$ be a densely defined operator. Then $T+T^*$ and $T^*T$ are in general no
 \end{example}
 
 \begin{proposition}
-Let $A$ be a self-adjoint operator on a Hilbert space. Then $A$ is positive \textup{if and only if} $\spec(A)\subseteq [0,\infty[$.
+Let $A$ be a self-adjoint operator on a Hilbert space. Then $A$ is positive \textup{if and only if} $\spec(A)\subseteq \interval[co]{0,\infty}$.
 \end{proposition}
 \begin{proof}
 \ref{closureNumericRangeConvexHullSpectrum}
@@ -2585,13 +2755,30 @@ Cfr. dilation theory through Cayley transform.
 See also Conway.
 
 \subsubsection{Positive self-adjoint extensions of symmetric operators}
+\begin{lemma}
+Let $A$ be a positive operator on a Hilbert space $H$. Consider the operator $B$ defined by
+\begin{align*}
+\dom(B) &\defeq \setbuilder{x\in \Closure_{\inner{}_{A+\id_H}}\big(\dom(A)\big)}{\exists x'\in H: \forall y\in \dom(A): \; \inner{x, y}_{A+\id} = \inner{x', y}} \\
+Bx &= x' - x 
+\end{align*}
+Then
+\begin{enumerate}
+\item $A\subseteq B$;
+\item $B$ is positive;
+\item $\im(B+\id_H) = H$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
 \begin{theorem}[Friedrich's extension]
-Let $A$ be a positive symmetric operator on a Hilbert space $H$. Then $A$ has a unique positive self-adjoint extension $\widetilde{A}$ with domain $\dom(\widetilde{A}) \subseteq \Closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
+Let $A$ be a positive symmetric operator on a Hilbert space $H$. Then $A$ has a unique positive self-adjoint extension $\widetilde{A}$ with domain $\dom(\widetilde{A}) \subseteq \Closure_{\inner{}_{A+\id_H}}(\dom(A))$.
 \end{theorem}
 By \ref{energyNormTopology}, we have
-\[ \dom(\widetilde{A}) \subseteq \Closure_{\norm{\cdot}_{A+\id}}(\dom(A)) \subseteq \Closure_{\norm{\cdot}}(\dom(A)). \]
+\[ \dom(\widetilde{A}) \subseteq \Closure_{\inner{}_{A+\id_H}}(\dom(A)) \subseteq \Closure_{\norm{\cdot}}(\dom(A)). \]
 \begin{proof}
-Set $H_A \defeq \Closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
+Set $H_A \defeq \Closure_{\inner{}_{A+\id_H}}(\dom(A))$.
 
 For \undline{existence}, we can construct the operator $\widetilde{A}$ as follows:
 \begin{align*}
@@ -2602,7 +2789,7 @@ Now $\widetilde{A}$ is an extension of $A$, because for all $x\in \dom(A)$, we c
 
 But $\dom(\widetilde{A})$ may be larger than $\dom(A)$, because we can extended $\inner{y,x}_{A+\id}$ to be defined on all of $H_A$ by continuity.
 
-By construction $\dom(\widetilde{A}) \subseteq \Closure_{\norm{\cdot}_{A+\id}}(\dom(A))$.
+By construction $\dom(\widetilde{A}) \subseteq \Closure_{\norm{\cdot}_{E(A+\id)}}(\dom(A))$.
 
 Now we claim $\im(\widetilde{A} + \id) = H$. Indeed for any $x'\in H$, the functional $H_A \to H_A: y\mapsto \inner{y,x'}$ is bounded. By Riesz representiation \ref{rieszRepresentation}, we can find an $x\in H_A$ such that $\inner{y,x}_{A+\id} = \inner{y,x'}$. Thus $(\widetilde{A} + \id)x = x'$.
 
@@ -3202,20 +3389,23 @@ Let $H$ be a Hilbert space and $P\in\Projections(H)$. If $P$ is compact, then $P
 
 \subsubsection{Polar decomposition}
 \begin{proposition}
-Let $H$ be a Hilbert space and $T\in \Bounded(H)$. There exists a unique partial isometry $V$ such that $T = V|T|$ and $\ker(V) = \supp(T)$.
+Let $H$ be a Hilbert space and $T$ a closed operator on $H$. There exists a unique pair of operators $V,|T|$ on $H$ such that
+\begin{enumerate}
+\item $T = V|T|$
+\item $|T|$ is positive self-adjoint and $V$ is a partial isometry;
+\item $\dom(T) = \dom(|T|)$, $\ker(T) = \ker(|T|)$;
+\item the support projection of $V$ is $\ker(T)^\perp$ and range is $\overline{\im(T)}$.
+\end{enumerate}
 \end{proposition}
-TODO: should this be $\ker(V) = \ker(T)$??
+The unique $|T|$ is given by $\sqrt{T^*T}$.
 \begin{proof}
-TODO
-\end{proof}
-\begin{lemma}
-There is only one positive operator $A$ such that $T = VA$ for some partial isometry.
-\end{lemma}
-\begin{proof}
-TODO uniqueness positive squared root.
+By \ref{vonNeumannTheoremSquareSelfAdjoint}, we have that $T^*T$ is self-adjoint. By \ref{spectralTheoremFunctionalCalculus} we have $\spec(\sqrt{T^*T}) \subseteq \interval[co]{0,+\infty}$ and $\sqrt{T^*T}^2 = T^*T$. By \ref{realSpectrumSelfAdjoint} we have that $\sqrt{T^*T}$ is self-adjoint.
+
+Now, for all $x\in $
+
+\ref{projectorIntegrableSolid}
 \end{proof}
 
-\url{https://encyclopediaofmath.org/wiki/Polar_decomposition}
 
 \subsection{Trace-class operators}
 TODO Simon
@@ -3729,20 +3919,22 @@ Let $A$ be a $*$-algebra. The unitisation $A^\dagger = A\oplus \F$ can also be s
 \[ (a, \lambda)^* = (a^*, \overline{\lambda}) \qquad \forall a\in A, \lambda\in \F.\]
 \end{lemma}
 \begin{lemma} \label{elementaryStarLemma}
-Let $A$ be a unital $*$-algebra. Then
+Let $A$ be a unital $*$-algebra and $x\in A$. Then
 \begin{enumerate}
 \item $\vec{1}^* = \vec{1}$;
-\item if $x$ is invertible, then $x^*$ is invertible with $(x^*)^{-1} = (x^{-1})^*$;
+\item $x$ is invertible \textup{if and only if} $x^*$ is invertible; in this case with $(x^*)^{-1} = (x^{-1})^*$;
 \item $\sigma(x^*) = \setbuilder{\overline{\lambda}}{\lambda \in \sigma(x)}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-Take some $x\in A$.
-\begin{enumerate}
-\item $\vec{1}^* x = (x^*\cdot \vec{1})^* = x^{**} = x$.
-Similarly $x\vec{1}^* = x$.
-\item $x^*\cdot (x^{-1})^* = (x^{-1}x)^* = \vec{1}^* = \vec{1}$. Similarly $(x^{-1})^*\cdot x^* = \vec{1}$.
-\end{enumerate}
+(1) We have $\vec{1}^* x = (x^*\cdot \vec{1})^* = x^{**} = x$.
+Similarly $x\vec{1}^* = x$, so $\vec{1}^*$ is an identity, which is unique by \ref{identityAbsorbingElementUnique}.
+
+(2) First assume $x$ is invertible. We have
+\[ x^*\cdot (x^{-1})^* = (x^{-1}x)^* = \vec{1}^* = \vec{1} \qquad\text{and}\qquad (x^{-1})^*\cdot x^* = (x\cdot x^{-1})^* = \vec{1}^* = \vec{1}. \]
+This means that $x^*$ is invertible with $(x^*)^{-1} = (x^{-1})^*$.
+
+Now assume $x^*$ is invertible. By the previous calculation, we have that $x = x^{**}$ is invertible.
 \end{proof}
 
 \begin{proposition} \label{smallestBanach*Algebra}
@@ -3756,9 +3948,15 @@ Let $A$ be a $*$-algebra and $x\in A$. We say that $x$ is
 \begin{enumerate}
 \item \udef{normal}, if $x^*x = xx^*$;
 \item \udef{self-adjoint}, if $x=x^*$;
-\item \udef{unitary}, if $x^*x = xx^* = \vec{1}$ (assuming $A$ unital);
-\item a \udef{projection}, if $x=x^*=x^2$.
+\item a \udef{projection}, if $x=x^*=x^2$;
+\item a \udef{partial isometry} if $x^*x$ and $xx^*$ are both projections. Then $x^*x$ is called the \udef{support projection} and $xx^*$ is called the \udef{range projection}.
 \end{enumerate}
+If $A$ is unital, we call $x$
+\begin{itemize}
+\item an \udef{isometry}, if $x^*x = \vec{1}$;
+\item a \udef{co-isometry}, if $xx^* = \vec{1}$;
+\item \udef{unitary}, if $x^*x = xx^* = \vec{1}$.
+\end{itemize}
 The set of all
 \begin{enumerate}
 \item normal elements in $A$ is denoted $\Normals(A)$;
@@ -3766,12 +3964,19 @@ The set of all
 \item unitaries in $A$ is denoted $\Unitaries(A)$;
 \item projections in $A$ is denoted $\Projections(A)$.
 \end{enumerate}
-
 \end{definition}
 \begin{lemma}
 We have the following implications:
-\[ \text{projection} \Rightarrow \text{self-adjoint} \Rightarrow \text{normal} \Leftarrow \text{unitary}. \]
+\[ \text{projection} \Rightarrow \text{self-adjoint} \Rightarrow \text{normal} \Leftarrow \text{unitary}, \]
+where the right-most arrow is only valid in unital $*$-algebras.
 \end{lemma}
+
+\begin{lemma}
+Let $A$ be a unital $*$-algebra and $x\in A$. If $x$ is either an isometry or a co-isometry, then $x$ is a partial isometry.
+\end{lemma}
+\begin{proof}
+First assume $x$ is an isometry. Then $x^*x = \vec{1}$ is clearly a projection. We calculate $(xx^*)^* = x^{**}x^* = xx^*$ and $(xx^*)^2 = x(x^*x)x^* = x\vec{1}x^* = xx^*$, which means that $xx^*$ is a projection.
+\end{proof}
 
 \begin{lemma} \label{orthogonalProjection}
 Let $A$ be a unital $*$-algebra and $p\in\Projections(A)$. Then $\vec{1}-p$ is a projection.
@@ -3890,6 +4095,38 @@ It is important to note that the spectral radius is a purely algebraic property 
 \begin{proposition}
 Let $A$ be a $C^*$-algebra and $J \subseteq A$ a two-sided $*$-ideal. Then there exists a net $(e_\lambda)_{\lambda\in\Lambda}$ in $J$ that that is an increasing approximate unit of $\overline{J}$.
 \end{proposition}
+
+\subsection{Properties of elements}
+\subsubsection{Partial isometries}
+\begin{lemma} \label{partialIsometries}
+Let $A$ be a $C^*$-algebra and $v\in A$.
+If either $v^*v$ or $vv^*$ is a projection, then
+\begin{enumerate}
+\item $v=vv^*v$ and $v^* = v^*vv^*$;
+\item the other is also a projection.
+\end{enumerate}
+Thus either condition is sufficient for $v$ to be a partial isometry.
+\end{lemma}
+\begin{proof}
+First assume $v^*v$ is a projection. Put $z = (\vec{1}- vv^*)v$. Then
+\[ z^*z = v^*(\vec{1}-vv^*)(\vec{1}-vv^*)v = v^*v - v^*vv*v -v^*vv^*v + v^*vv^*vv^*vv^*v = v^*v - v^*v - v^*v + v^*v = 0. \]
+Now by the $C^*$-identity $\norm{z} = \sqrt{\norm{z^*z}} = 0$, so $0=z= v - vv^*v$. Multiplying this on the right by $v^*$ gives $vv^* = (vv^*)^2$. Because $vv^*$ is self-adjoint, this shows us it is a projection.
+
+If we assume $vv^*$ is a projection, we put $z = (\vec{1}- v^*v)v^*$ instead and again $z^*z = 0$.
+\end{proof}
+
+\begin{lemma}
+Let $v\in\Bounded(\mathcal{H})$ be a partial isometry. Then
+\[\ker v = (I - v^*v)\mathcal{H} \qquad \ker v^* = (I - vv^*)\mathcal{H}\]
+and
+\[ v\mathcal{H} = vv^*\mathcal{H} \qquad v^*\mathcal{H} = v^*v\mathcal{H}. \]
+\end{lemma}
+\begin{proof}
+First assume $x\in\ker v$. Then $(I-vv^*)x = Ix = x$, so $x\in (I - vv^*)\mathcal{H}$. Conversely, $v(I-v^*v)\mathcal{H} = (v-vv^*v)\mathcal{H} = 0\mathcal{H} = \{0\}$ by \ref{partialIsometries}.
+
+Also by \ref{partialIsometries}, we have
+\[ v\mathcal{H} \subseteq vv^*\mathcal{H} \subseteq vv^*v\mathcal{H} = v\mathcal{H}. \]
+\end{proof}
 
 
 \subsection{$C^*$-homomorphisms}
@@ -4021,7 +4258,7 @@ Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. Then the map
 is a homeomorphism.
 \end{proposition}
 \begin{proof}
-By \ref{spectrumIndependentOfSurroundingAlgebra} the map is independent of the surrounding algebra (TODO: $C^*(x,\vec{1})$ also independent?). So without WLOG we take $A = C^*(x,\vec{1})$. Because $x$ is normal, $C^*(x,\vec{1})$ is commutative (TODO:ref). By \ref{spectrumFromSpectrum} the map is surjective and well-defined, in that it maps into the codomain $\sigma(x)$. It is also continuous by definition of the weak-$*$ topology.
+By \ref{spectrumIndependentOfSurroundingAlgebra} the map is independent of the surrounding algebra (TODO: $C^*(x,\vec{1})$ also independent?). So WLOG we take $A = C^*(x,\vec{1})$. Because $x$ is normal, $C^*(x,\vec{1})$ is commutative (TODO:ref). By \ref{spectrumFromSpectrum} the map is surjective and well-defined, in that it maps into the codomain $\sigma(x)$. It is also continuous by definition of the weak-$*$ topology.
 
 To show injectivity, suppose $\varphi(x) = \psi(x)$ for some $\varphi,\psi\in\hat{A}$. Because (TODO ref)
 \[ A = \overline{\Span}\setbuilder{x^n(x^*)^m}{n,m\geq 0} \]
@@ -4283,7 +4520,13 @@ $(4.\Rightarrow 1.)$ By \ref{normNormalElement}, $\sigma(r\vec{1} - a / \norm{a}
 \begin{proposition}\label{existenceSquareRoot}
 Let $A$ be a $C^*$-algebra and $a\in A$. Then $a$ is positive \textup{if and only if} $a = b^*b$ for some $b\in A$.
 \end{proposition}
+\begin{proof}
+TODO!!!!
+\end{proof}
 TODO: link with $\sqrt{a}$?
+\begin{corollary}
+Every positive element is self-adjoint (and, in particular, normal).
+\end{corollary}
 \begin{corollary}
 Let $A$ be a concrete $C^*$-algebra of bounded operators on some Hilbert space $\mathcal{H}$ and $a\in A$. Then $a$ is positive as an element of the $C^*$ algebra \textup{if and only if} $a$ is positive as an operator on $\mathcal{H}$. for all $x\in \mathcal{H}: \inner{x,ax}\geq 0$.
 \end{corollary}
@@ -4398,17 +4641,20 @@ The square root is well defined using functional calculus on the self-adjoint el
 \begin{lemma} \label{propertiesAbsoluteValue}
 Let $A$ be a unital $C^*$-algebra.
 \begin{enumerate}
-\item Let $u\in\Unitaries$, then $|u| = 1$.
+\item Let $u\in\Unitaries$, then $|u| = \vec{1}$.
 \item Let $a\in A$, then $|a|$ is positive and thus self-adjoint.
 \item The map $a\mapsto |a|$ is continuous.
+\item If $b\in \GL(A)$, then $|b|\in \GL(A)$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-For the first point, $|u| = (u^*u)^{1/2} = \vec{1}^{1/2} = \vec{1}$.
+(1) We have $|u| = (u^*u)^{1/2} = \vec{1}^{1/2} = \vec{1}$.
 
-The second point follows from spectral mapping \ref{propertiesContinuousFunctionalCalculus} using the fact that $z\mapsto \overline{z}z$ has positive image in $\C$.
+(2) This follows from spectral mapping \ref{propertiesContinuousFunctionalCalculus} using the fact that $z\mapsto \overline{z}z$ has positive image in $\C$.
 
-For the third point, $a\mapsto a^*a$ is continuous by \ref{multiplicationContinuous} and \ref{consequencesC*}. Then $a\mapsto |a|$ is continuous by \ref{continuityContinuousFunctionalCalculus}.
+(3) We have that $a\mapsto a^*a$ is continuous by \ref{multiplicationContinuous} and \ref{consequencesC*}. Then $a\mapsto |a|$ is continuous by \ref{continuityContinuousFunctionalCalculus}.
+
+(4) Suppose $b\in \GL(A)$. Then $b^*\in \GL(A)$ by \ref{elementaryStarLemma}, so $b^*b$ is invertible. Thus $0\notin \spec(b^*b)$, which implies $0\notin \spec(\sqrt{b^*b}) = \spec(|b|)$ by spectral mapping \ref{propertiesContinuousFunctionalCalculus}. Thus $|b|$ is invertible.
 \end{proof}
 
 \begin{lemma}
@@ -4463,18 +4709,32 @@ Finally $|A| + |B| - |A+B| = \begin{pmatrix}
 \end{example}
 
 \subsubsection{Polar decomposition}
-\begin{proposition}[Polar decomposition]
+\begin{proposition}[Polar decomposition for invertible elements]
 Let $A$ be a unital $C^*$-algebra and $a\in \GL(A)$ an invertible element. Then there exists a unique decomposition
 \[ a = u(a) |a| \]
 such that $u(a)$ is unitary. The map $u: \GL(A) \to \Unitaries(A)$ is continuous.
 \end{proposition}
 \begin{proof}
-If $a$ is invertible, then so are $a^*$ and $|a|$ by spectral mapping \ref{propertiesContinuousFunctionalCalculus} ($0\notin \sigma(a^*)$ and $0\notin \sigma(|a|)$). Put $u(a) = a|a|^{-1}$. Clearly $a = u(a)|a|$ and $u(a)$ is unitary because it is invertible and
+If $a$ is invertible, then $|a|$ is invertible by \ref{propertiesAbsoluteValue}. Put $u(a) = a|a|^{-1}$. Clearly $a = u(a)|a|$ and $u(a)$ is unitary because it is invertible and
 \[ u(a)^*u(a) = |a|^{-1}a^*a|a|^{-1} = |a|^{-1}|a|^2|a|^{-1} = \vec{1}. \]
 
 The continuity of u: $a\mapsto a|a|^{-1}$ follows from the continuity of multiplication, \ref{multiplicationContinuous}, the continuity of the absolute value, \ref{propertiesAbsoluteValue} and the continuity of the inverse, \ref{inverseMapContinuous}.
 \end{proof}
-TODO: polar decomposition for non-invertible elements. Then $u$ is a partial isometry.
+
+In some cases we can find a polar decomposition for non-invertible elements.
+\begin{definition}
+A $C^*$ algebra $A$ is said to have the \udef{polar decomposition property} if for each $a\in A$ there exists a \emph{unique} pair $(v,p)$ of elements in $A$ such that
+\begin{enumerate}
+\item $a = vb$;
+\item $v$ is a partial isometry and $b$ is positive;
+\item $a^*a = b^2$;
+\item $ap = 0$ implies $vp = 0$ for all projections $p\in\Projections(A)$.
+\end{enumerate}
+\end{definition}
+Von Neumann algebras have the polar decomposition property. (TODO ref).
+
+TODO: Rickart $C^*$ algebras have the polar decomposition property.
+
 
 \subsection{Positive maps}
 \begin{definition}

@@ -28,6 +28,70 @@ An \udef{effect} on a Hilbert space is a bounded operator in $[0,\id]$.
 
 \chapter{Quantum theory}
 \section{Quantum statistics}
+\begin{definition}
+Let $\hilbert$ be a Hilbert space, $A$ a symmetric operator on $\hilbert$ and $\psi$ a unit vector in $\dom(A)$. Then we define
+\begin{itemize}
+\item the \udef{expectation value} of $A$ at $\psi$ is defined as $\expval{A}_\psi \defeq Q_A(\psi) = \braket[A]{\psi}{\psi}$;
+\item the \udef{uncertainty} or \udef{standard deviation} of $A$ at $\psi$ is defined as
+\[ \var_\psi A \defeq \norm{\big(A - \expval{A}_\psi\id\big)\psi}. \]
+\end{itemize}
+\end{definition}
+The expectation value $\expval{A}_\psi$ is always real (by \zref{m-symmetricRealQuadraticForm}).
+
+\begin{lemma}
+$\expval{A}_\psi = \braket[A]{\psi}{\psi} = \Tr\big(A\ketbra{\psi}{\psi}\big)$.
+\end{lemma}
+
+\begin{lemma}
+Let $\hilbert$ be a Hilbert space, $A$ a symmetric operator on $\hilbert$ and $\psi$ a unit vector in $\dom(A)$. Then $\var_\psi A = 0$ \textup{if and only if} $\psi$ is an eigenvalue of $A$.
+
+In this case the eigenvalue of $\psi$ is $\expval{A}_\psi$.
+\end{lemma}
+\begin{proof}
+Assume $\var_\psi A = \norm{\big(A - \expval{A}_\psi\id\big)\psi} = 0$. Then $\big(A - \expval{A}_\psi\id\big)\psi = 0$, or $A\psi = \expval{A}_\psi\psi$, which means that $\psi$ is an eigenvector with eigenvalue $\expval{A}_\psi$.
+
+Conversely, suppose $\psi$ is an eigenvector of $A$ with eigenvalue $\lambda$, i.e.\ $A\psi = \lambda \psi$. Then
+\[ \expval{A}_\psi = \inner{\psi, A\psi} = \inner{\psi, \lambda\psi} = \lambda\inner{\psi,\psi} = \lambda. \]
+Thus $A\psi = \expval{A}_\psi\psi$ and $\var_\psi A = 0$.
+\end{proof}
+
+\begin{lemma}
+Let $\hilbert$ be a Hilbert space, $A$ a symmetric operator on $\hilbert$ and $\psi$ a unit vector in $\dom(A)$. Then
+\[ \big(\var_\psi A\big)^2 = \inner{\big(A - \expval{A}_\psi\id\big)\psi, \big(A - \expval{A}_\psi\id\big)\psi} = \inner{A\psi,A\psi} - \expval{A}_\psi^2. \]
+If $\psi$ is also in $\dom(A^2)$, then
+\[ \big(\var_\psi A\big)^2 = \expval{(A - \expval{A}_\psi\id)^2}_\psi = \expval{A^2}_\psi - \expval{A}_\psi^2. \]
+\end{lemma}
+\begin{proof}
+We calculate (using symmetry, the fact that $\expval{A}_\psi$ is real and the fact that $\psi$ is a unit vector)
+\begin{align*}
+\big(\var_\psi A\big)^2 &= \inner{\big(A - \expval{A}_\psi\id\big)\psi, \big(A - \expval{A}_\psi\id\big)\psi} \\
+&= \inner{A\psi,A\psi} - \inner{A\psi, \expval{A}_\psi\psi} - \inner{\expval{A}_\psi\psi, A\psi} + \inner{\expval{A}_\psi\psi, \expval{A}_\psi\psi} \\
+&= \inner{A\psi,A\psi} - \expval{A}_\psi\inner{\psi, A\psi} - \expval{A}_\psi\inner{\psi, A\psi} + \expval{A}_\psi^2\cancel{\inner{\psi, \psi}} \\
+&= \inner{A\psi,A\psi} - \expval{A}_\psi^2 - \expval{A}_\psi^2 + \expval{A}_\psi^2 \\
+&= \inner{A\psi,A\psi} - \expval{A}_\psi^2.
+\end{align*}
+
+Now assume $\psi\in \dom(A^2)$. Then $\psi\in \dom\big((A- \expval{A}_\psi\id)^2\big)$ and thus $(A- \expval{A}_\psi\id)\psi \in \dom\big(A- \expval{A}_\psi\id\big)$. The first equality follows by symmetry. For the second equality we have a similar reasoning starting from the equation above.
+\end{proof}
+
+\subsection{Uncertainty relations}
+\begin{theorem}[Heisenberg's uncertainty principle]
+Let $\hilbert$ be a Hilbert space and $A,B$ symmetric operators on $\hilbert$. Let $\psi$ be a unit vector in $\dom(AB)\cap \dom(BA)$. Then
+\[ (\var_\psi A)(\var_\psi B) \geq \frac{1}{2}\big|\expval{\commutator{A,B}}_\psi\big|. \]
+\end{theorem}
+\begin{proof}
+By the Cauchy-Schwarz inequality, \zref{m-CauchySchwarz}, we have
+\begin{align*}
+(\var_\psi A)(\var_\psi B) &= \norm{\big(A - \expval{A}_\psi\id\big)\psi}\;\norm{\big(B - \expval{B}_\psi\id\big)\psi} \\
+&\geq |\inner{\big(A - \expval{A}_\psi\id\big)\psi, \big(B - \expval{B}_\psi\id\big)\psi}| \\
+&\geq |\Im\inner{\big(A - \expval{A}_\psi\id\big)\psi, \big(B - \expval{B}_\psi\id\big)\psi}| \\
+&= |\Im\Big(\inner{A\psi, B\psi} - \inner{A\psi, \expval{B}_\psi\psi} - \inner{\expval{A}_\psi\psi, B\psi} + \inner{\expval{A}_\psi\psi, \expval{B}_\psi\psi}\Big)| \\
+&= |\Im\Big(\inner{A\psi, B\psi} - \cancel{\expval{A}_\psi\expval{B}_\psi}\Big)| \\
+&= \frac{1}{2}|\inner{A\psi, B\psi} - \overline{\inner{A\psi, B\psi}}| = \frac{1}{2}|\inner{A\psi, B\psi} - \inner{B\psi, A\psi}|.
+\end{align*}
+Since $\psi \in \dom(AB)$, we have $B\psi\in \dom(A)$. Similarly $A\psi\in \dom(B)$. Thus, by symmetry, we have 
+\[ \frac{1}{2}|\inner{A\psi, B\psi} - \inner{B\psi, A\psi}| = \frac{1}{2}|\inner{\psi, AB\psi} - \inner{\psi, BA\psi}| = \frac{1}{2}|\inner{\psi, \commutator{A,B}\psi}| = \frac{1}{2}\big|\expval{\commutator{A,B}}_\psi\big|. \]
+\end{proof}
 
 \section{Time evolution}
 \subsection{The Schrödinger equation}

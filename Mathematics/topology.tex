@@ -729,8 +729,7 @@ Now we show that $f = \adh_\xi$. Take arbitrary $A\subseteq X$ and $x\in X$. The
 \[ x\in f(A) \quad\iff\quad A\in f^\preimf(\pfilter{x}) = \big(f^\preimf(\pfilter{x})\big)^{\mesh\mesh} = \vicinity_\xi(x)^\mesh \quad\iff\quad x\in \adh_\xi(A). \]
 \end{proof}
 
-\subsection{Topology}
-\subsubsection{Kuratowski closure and interior operators}
+\subsection{Kuratowski closure and interior operators}
 \begin{definition}
 Let $X$ be a set and $f: \powerset(X)\to \powerset(X)$ a function. Then $f$ is called
 \begin{itemize}
@@ -803,6 +802,19 @@ And: \url{https://en.wikipedia.org/wiki/Kuratowski%27s_closure-complement_proble
 \begin{definition}
 Let $\sSet{X, \xi}$ be a convergence space and $A$ a subset. The subset $A$ is called \udef{dense} in $X$ if $\adh_\xi(A) = X$.
 \end{definition}
+
+\begin{lemma} \label{denseIffMeshesWithAllVicinities}
+Let $\sSet{X, \xi}$ be a convergence space and $A$ a subset. Then $A$ is dense in $X$ \textup{if and only if} $A\mesh V$ for all $V\in \vicinity(x)$ for all $x\in X$.
+\end{lemma}
+In other words, $A$ is dense in $X$ iff each vicinity contains at least one point in $A$.
+\begin{proof}
+We calculate, using \ref{principalAdherenceInherence},
+\begin{align*}
+X = \adh_\xi(A) &\iff \forall x\in X: \; x\in \adh_\xi(A) \\
+&\iff \forall x\in X: \; A \in \vicinity_\xi(x)^\mesh \\
+&\iff \forall x\in X: \forall V\in\vicinity_\xi(x): \; A \mesh V.
+\end{align*}
+\end{proof}
 
 \subsubsection{Strict density}
 TODO strict density (Colebunders)
@@ -2005,6 +2017,27 @@ for all filters $F\in \powerfilters(X)$.
 \end{definition}
 
 \begin{lemma}
+Let $\sSet{X,\leq}$ be a poset and $F\in \powerfilters(X)$ a filter. Then
+\[ \bigcup_{A\in F}\bigcap_{a\in A}\upset\{a\} \subseteq \bigcap_{A\in F}\bigcup_{a\in A}\upset\{a\} \qquad\text{and}\qquad \bigcup_{A\in F}\bigcap_{a\in A}\downset\{a\} \subseteq \bigcap_{A\in F}\bigcup_{a\in A}\downset\{a\}. \]
+\end{lemma}
+\begin{proof}
+Take arbitrary $A,B\in F$. Then $A\cap B$ is non-empty and we have
+\[ \bigcap_{a\in A}\upset \{a\} \subseteq \bigcap_{a\in A\cap B}\upset \{a\} \subseteq \bigcup_{a\in A\cap B}\upset \{a\} \subseteq \bigcup_{a\in B}\upset \{a\}. \]
+Since this inclusion is valid for all $A,B\in F$, it is equivalent to $\bigcup_{A\in F}\bigcap_{a\in A}\upset\{a\} \subseteq \bigcap_{A\in F}\bigcup_{a\in A}\upset\{a\}$.
+
+The other statement is dual.
+\end{proof}
+
+We can calculate
+\begin{align*}
+\bigcup_{A\in F}A^l &\subseteq \Big(\bigcap_{A\in F} \upset A\Big)^l \\
+&= \Big(\bigcap_{A\in F} \bigcup_{a\in A} \upset \{a\}\Big)^l \\
+&\subseteq \Big(\bigcup_{A\in F} \bigcap_{a\in A} \upset \{a\}\Big)^l \\
+&= \Big(\bigcup_{A\in F} A^u\Big)^l \\
+&= \bigcap_{A\in F}A^{ul} = \bigcap_{A\in F}\big(\downset A\big)^{ul} \overset{!}{\supseteq} \Big(\bigcap_{A\in F}\downset A\Big)^{ul}.
+\end{align*}
+
+\begin{lemma}
 Let $\sSet{X,\leq}$ be a poset. The order convergence on $X$ is a convergence.
 \end{lemma}
 \begin{proof}
@@ -2058,6 +2091,14 @@ Set $F \defeq \setbuilder[\big]{\interval[o]{0,\epsilon}}{\epsilon > 0} \cup \se
 &= \{0,0'\}.
 \end{align*}
 So the filter property is important.
+
+Set $F \defeq \setbuilder[\big]{\interval[o]{-\epsilon,\epsilon}}{\epsilon > 0}$. Then
+\begin{align*}
+\lim_\mathfrak{o}F &= \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \\
+&= \Big(\interval[o]{0,\infty} \cup \{0,0'\}\Big)^l \cap \Big(\interval[o]{-\infty, 0} \cup \{0,0'\}\Big)^u \\
+&= \Big(\interval[o]{-\infty, 0}\Big) \cap \Big(\interval[o]{0,\infty}\Big) \\
+&= \emptyset.
+\end{align*}
 \end{example}
 
 \begin{proposition}
@@ -2072,6 +2113,8 @@ If this holds, then $A$ may be chosen to be upwards directed and $B$ downwards d
 \ref{weakRelationPrincipalFilter}
 \[ \lim F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \subseteq \Big(\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A\Big)^l \cap \Big(\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A\Big)^u \]
 if $\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A \neq \emptyset$, then $\lim F$ is at most a singleton.
+
+Suppose $\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A = \emptyset$, then $\bigcap \upset A \subseteq \bigcup (\downset A)^c$.
 \end{proof}
 
 \begin{proposition}
@@ -3105,6 +3148,7 @@ The statement for closed sets follows straight from \ref{openClosedComplement}.
 \end{proof}
 
 \subsection{Base properties}
+\label{baseModificationConvergence}
 \begin{lemma}
 Let $X$ be a set and $\mathcal{B}\subseteq \powerfilters(X)$ a set of filters. The set of convergences on $X$ that are based in $\mathcal{B}$ is closed under joins.
 \end{lemma}
@@ -3227,7 +3271,7 @@ Let $X$ be a set and $F\in\powerfilters(X)$. We call $F$ a \udef{Fréchet filter
 \[ F = \bigwedge_{G\in \mathcal{G}}G \]
 for some set $\mathcal{G}$ of sequential filters.
 \end{definition}
-This terminology is fairly non-standard. Often a Fréchet filter means a cofinite filter.
+This terminology is fairly non-standard. Often ``Fréchet filter'' is used to mean ``cofinite filter''.
 
 \begin{lemma}
 Let $X$ be a set and $F\in\powerfilters(X)$. Then $F$ is Fréchet \textup{if and only if}
@@ -3299,10 +3343,13 @@ TODO: Bolzano-Weierstrass (sequence version + accumulation point version)
 \section{Sequentially based spaces and the sequential modification}
 \begin{definition}
 Let $X$ be a set. A convergence $\xi$  on $x$ is called \udef{sequentially based} if it is based in the set of sequential filters in $X$.
+
+The \udef{sequentially based modification} of $\xi$ is denoted $\seqMod(\xi)$.
 \end{definition}
+See \ref{baseModificationConvergence} for details about $\seqMod$.
 
 \begin{lemma}
-Let $\sSet{X, \xi}$ be a sequentially based convergence space and $D:X\to \powerset{X}$ a function such that $x\in D(x)$. Then the convergence in the direction $D$ is also sequentially based.
+Let $\sSet{X, \xi}$ be a sequentially based convergence space and $D:X\to \powerset(X)$ a function such that $x\in D(x)$. Then the convergence in the direction $D$ is also sequentially based.
 \end{lemma}
 \begin{proof}
 Let $F\in \powerfilters(X)$ converge to $x$ in the directional convergence. Then $D(x)\in F$ and there exists a sequence $\seq{x_n}$ such that $\TailsFilter\seq{x_n}\subseteq F$ and $\seq{x_n}$ converges to $x$ in $\xi$.
@@ -3343,12 +3390,12 @@ By \ref{imageTailsFilter}, $\TailsFilter\seq{f(x_n)} = \upset f^{\imf\imf}\big(\
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then we call
 \begin{itemize}
 \item $\inh_{\seqMod(\xi)}$ the \udef{sequential inherence} of $A$;
-\item $\inh_{\seqMod(\xi)}$ the \udef{sequential adherence} of $A$.
+\item $\adh_{\seqMod(\xi)}$ the \udef{sequential adherence} of $A$.
 \end{itemize}
 \end{definition}
 The sequential inherence is sometimes called the sequential interior and the sequential adherence is sometimes called the sequential closure.
 
-\begin{proposition}
+\begin{proposition} \label{sequentialInherenceAdherence}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then
 \begin{enumerate}
 \item $\inh_{\seqMod(\xi)} = \setbuilder{s\in S}{\text{every sequence in $X$ that converges to $s$ has a tail in $S$}}$;
@@ -5950,91 +5997,6 @@ Take $K\subset X$ closed and $y\in\overline{f[K]}$. Then there exists a sequence
 So $\overline{f[K]} = f[K]$ and $f$ is closed.
 \end{proof}
 
-\subsection{Cauchy sequences and completeness}
-\begin{definition}
-Let $(X,d)$ be a metric space and $(x_n)$ a sequence in $X$. Then $(x_n)$ is called a \udef{Cauchy sequence} if
-\[ \forall 0 < \epsilon \in \R: \exists n_0\in \N: \forall m,n \geq n_0: d(x_m,x_n) < \epsilon.  \]
-\end{definition}
-
-\begin{lemma}
-Let $(X,d)$ be a metric space and $\seq{x_n}$ a Cauchy sequence. Then there exists $x_0\in X$ and $R\geq 0$ such that $\seq{x_n}\subseteq \cball(x_0, R)$.
-\end{lemma}
-In other words, Cauchy sequences are bounded.
-
-\begin{proposition}
-Let $(X,d)$ be a metric space. Convergent sequences in $X$ are Cauchy.
-\end{proposition}
-Spaces in which the converse holds are special.
-\begin{definition}
-Let $(X,d)$ be a metric space, then $X$ is called \udef{(Cauchy) complete} if all Cauchy sequences converge.
-\end{definition}
-
-\begin{proposition} \label{CauchyCriterion}
-Let $(X,d)$ be a metric space and $(a_n), (b_n)$ sequences in $X$. If $(b_n)$ is Cauchy and there exists some $A\in\R$ such that
-\[ \forall m,n\in\N: d(a_n,a_m) \leq A d(b_n,b_m), \]
-then $(a_n)$ is also Cauchy.
-\end{proposition}
-
-\begin{proposition}[Completeness criterion] \label{completenessCriterion}
-Let $(X,d)$ be a metric space and $S\subset X$ a dense subset. If every Cauchy sequence in $S$ converges in $X$, then $X$ is complete.
-\end{proposition}
-This proposition depends on the axiom of countable choice.
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{lemma}
-The real numbers with the standard topology are complete.
-\end{lemma}
-
-\subsubsection{Completion}
-\begin{proposition}
-Let $(X,d_X)$ be a metric space. There exists a complete metric space $(Y,d_Y)$ and an isometry $\pi:X\hookrightarrow Y$ such that $\pi[X]$ is a dense subspace of $Y$.
-\end{proposition}
-We view $X$ as a subspace of $Y$ through $\pi$ and call $Y$ the \udef{completion} of $X$.
-\begin{proof}
-Let $Y'$ be the space of Cauchy sequences in $X$. Introduce the equivalence relation on $\seq{x_i},\seq{y_j}\in Y'$:
-\[ \seq{x_i} \sim \seq{y_i} \qquad \iff\qquad \lim_{i\to\infty} d_X(x_i,y_i) = 0. \]
-Let $Y$ be the set of equivalence classes in $Y'$ under this equivalence relation. Define
-\[ d_Y: Y\times Y\to \R: ([\seq{x_i}],[\seq{y_i}]) \mapsto \lim_{i\to\infty}d_X(x_i,y_i) \qquad\text{and}\qquad \pi: X\to Y: x\mapsto \seq{x}_i. \]
-We need to show that $d_Y$ is well-defined, that it is a metric on $Y$, that $\pi[X]$ is dense in $Y$ and that $(Y,d_Y)$ is complete:
-\begin{itemize}
-\item Let $[\seq{x_i'}] = [\seq{x_i}]$. Then
-\begin{align*}
-d_Y([\seq{x_i'}],[\seq{y_i}]) &= \lim_{i\to\infty}d_X(x'_i,y_i) = \lim_{i\to\infty}d_X(x'_i,y_i) + \lim_{i\to\infty}d_X(x_i,x'_i) \\
-&= \lim_{i\to\infty}d_X(x_i,x_i')+d_X(x'_i,y_i) \\
-&\geq \lim_{i\to\infty}d_X(x_i,y_i) = d_Y([\seq{x_i}],[\seq{y_i}]).
-\end{align*}
-Similarly we can show $d_Y([\seq{x_i'}],[\seq{y_i}])\leq d_Y([\seq{x_i}],[\seq{y_i}])$, so $d_Y([\seq{x'_i}],[\seq{y_i}]) = d_Y([\seq{x_i}],[\seq{y_i}])$.
-
-We must also show that the domain and codomain of $d_Y$ make sense, i.e.\ the limit exists and does not diverge. It is enough to show that $(d_X(x_i,y_i))$ is a Cauchy sequence, due to the completeness of $\R$. To this end, let $\epsilon>0$. As $\seq{x_i}$ and $\seq{y_i}$ are Cauchy, we can find $N_x,N_y\in\N$ such that $d_X(x_m,x_n)< \epsilon/2$ and $d_X(y_m,y_n) < \epsilon/2$ for all $m,n \geq N_x,N_y$. Then $\forall m,n \geq \max\{N_x,N_y\}$:
-\begin{align*}
-|d_X(x_m,y_m) - d_X(x_n,y_n)| &\leq |d_X(x_m,x_n)+d_X(x_n,y_m) - d_X(x_n,y_n)| \\
-&\leq |d_X(x_m,x_n)+d_X(y_m,y_n)+ d_X(y_n,x_n) - d_X(x_n,y_n)| \\
-&= |d_X(x_m,x_n)+d_X(y_m,y_n)| \\
-&< \epsilon/2 + \epsilon/2= \epsilon.
-\end{align*}
-So $(d_X(x_i,y_i))$ is Cauchy and thus converges in $\R$.
-\item That $d_Y$ is a metric is easy to check.
-\item To prove $\pi[X]$ is dense in $Y$, we just need to show that every element $y = [\seq{x_i}]\in Y$ is the limit of a sequence in $\pi[X]$, because all metric spaces are sequential. We claim $\seq{\pi(x_j)}_j$ converges to $y$.
-
-Let $\epsilon>0$. Because $\seq{x_i}$ is Cauchy, we can find an $N\in\N$ such that $\forall m,n>N: d_X(x_m,x_n) < \epsilon/2$. Take $j\geq N$ arbitrary. Then
-\[ \forall i\geq N: d_X(x_i,x_j) < \epsilon/2 \quad \implies\quad \lim_{i\to\infty} d_X(x_i,x_j) = d_Y([\seq{x_i}],\seq{\pi(x_j)}_j) \leq \epsilon/2  < \epsilon. \]
-\item For completeness, it is enough, by \ref{completenessCriterion}, to show that Cauchy sequences in $\pi[X]$ converge in $Y$.
-
-Let $\seq{\pi(x_j)}_j$ be a Cauchy sequence in $\pi[X]$, then $\seq{x_i}$ is Cauchy in $X$ because $\pi$ is isometric. So $\seq{\pi(x_j)}_j$ converges to $\seq{x_i}$ by the previous point.
-Let $\seq{\pi(x_j)}_j$ be a Cauchy sequence in $\pi[X]$, then $\seq{x_i}$ is Cauchy in $X$ because $\pi$ is isometric. So $\seq{\pi(x_j)}_j$ converges to $\seq{x_i}$ by the previous point.
-\end{itemize}
-\end{proof}
-
-\begin{proposition}
-Let $(X,d)$ be a metric space. The completion $(Y,\pi)$ of $X$ is unique in the following sense: for any other such completion $(Y',\pi')$, there exists a unique isometric isomorphism $\theta:Y\to Y'$ satisfying $\theta\circ \pi = \pi'$.
-\end{proposition}
-\begin{proof}
-Since $\pi$ is an isometry, it is injective, so $\pi^{-1}:\pi[X]\to X$ is a surjective isometry and so $\pi'\circ\pi^{-1}:\pi[X]\to\pi'[X]$ is too. Now we must have $\theta|_{\pi[X]} = \pi'\circ\pi^{-1}:\pi[X]\to\pi'[X]$ 
-
-TODO universal property!!
-\end{proof}
 
 
 
