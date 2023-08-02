@@ -524,9 +524,11 @@ Let $\sSet{P, \Yleft}$ be an ordered set. Then the closure function $\Closure_{\
 \begin{definition}
 Let $\sSet{P, \Yleft}$ be an ordered set and $Q\subseteq P$. We denote
 \begin{itemize}
-\item the \udef{upward closure} of $Q$ as $\upset Q \defeq \Closure_{\Yleft}(Q) = Q_{\Yleft} \cup Q$;
-\item the \udef{downward closure} of $Q$ as $\downset Q \defeq \Closure_{\Yleft^\transp}(Q) = Q_{\Yleft^\transp} \cup Q$.
+\item the \udef{upward closure} of $Q$ as $\upset_P Q \defeq \Closure_{\Yleft}(Q) = Q_{\Yleft} \cup Q$;
+\item the \udef{downward closure} of $Q$ as $\downset_P Q \defeq \Closure_{\Yleft^\transp}(Q) = Q_{\Yleft^\transp} \cup Q$.
 \end{itemize}
+We usually write $\upset$ and $\downset$ instead of $\upset_P$ and $\downset_P$ if the ambient ordered set is clear.
+
 We call $Q$
 \begin{itemize}
 \item \udef{upwards closed} or an \udef{up set} if $\upset Q = Q$;
@@ -2561,22 +2563,126 @@ We have
 \[ A\amesh B \iff A\subseteq B^\mesh \iff \upset A\subseteq B^\mesh \iff (\upset A)\amesh B. \]
 \end{proof}
 
-\subsection{Heyting algebras}
-\subsubsection{Pseudocomplementation}
+\subsection{Pseudocomplementation}
 \begin{definition}
 Let $S$ be a bounded $\wedge$-semilattice and $x\in S$. A \udef{pseudocomplement} of $x$ in $S$ is an element $x^*\in S$ such that
 \[ y \perp x \quad\iff\quad y\leq x^* \qquad \forall y\in S. \]
-If a pseudocomplement $x^*$ exists for all $x\in S$, we say $S$ is \udef{pseudocomplemented}.
+If a pseudocomplement $x^*$ exists for all $x\in S$, we say $S$ is a \udef{pseudocomplemented} semilattice.
 \end{definition}
 Note that any $x\in S$ has at most one pseudocomplement.
-
-\[ x^* \defeq \max\setbuilder{y\in S}{x\wedge y = \bot}, \]
+We have
+\[ x^* = \max\setbuilder{y\in S}{x\wedge y = \bot}, \]
 if the maximum exists.
 
+\begin{lemma}
+Let $S$ be a pseudocomplemented semilattice and $x,y\in S$. Then
+\begin{enumerate}
+\item $x^* \perp x$;
+\item $x \leq x^{**}$;
+\item $x \leq y$ implies $y^* \leq x^*$;
+\item $x^{***} = x^*$
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By reflexivity, we have $x^*\leq x^*$, so $x\perp x^*$.
+
+(2) From (1) we get $x^*\perp x$. This implies $x\leq x^{**}$.
+
+(3)  Assume $x\leq y$. Since $y\perp y^*$, by (1), we have $\bot \leq x\wedge y^* \leq y\wedge y^* = \bot$, so $x\perp y^*$ and thus $y^* \leq x^*$.
+
+(4) Combining (2) and (3) gives $x^{***} \leq x^*$. For the converse, note that (1) gives $x^*\perp x^{**}$, so $x^* \leq x^{***}$.
+\end{proof}
+
+\begin{proposition} \label{weakDeMorganPseudocomplement}
+Let $L$ be a pseudocomplemented lattice and $x,y\in L$. Then
+\begin{enumerate}
+\item $(x\vee y)^* = x^* \wedge y^*$;
+\item $(x\wedge y)^* = (x^* \wedge y^*)^{**}$
+\end{enumerate}
+\end{proposition}
+The dual of the first statement is not true in general. The lattices in which it is true are called Stone lattices.
+\begin{proof}
+(1) TODO Blyth.
+
+(2) TODO Is this correct outside a Heyting algebra?
+\end{proof}
+
+\subsubsection{Skeleton}
+Forms a Boolean lattice (see Blyth)
+
+\subsubsection{Stone lattices}
+\begin{definition}
+A pseudocomplemented distributive lattice $L$ that satisfies
+\[ \forall x,y\in L: \; (x\wedge y)^* = x^* \vee y^* \]
+is called a \udef{Stone lattice}.
+\end{definition}
+See also \ref{weakDeMorganPseudocomplement}.
+
+\section{Residuation in lattices}
+\subsection{Heyting algebras}
+\begin{definition}
+A \udef{Heyting algebra} is a lattice $H$ in which the function $x\wedge -: H\to H: y\mapsto x\wedge y$ is residuated.
+
+The residual is denoted $x \imp -$. We call the function
+\[ \imp\;: H\times H \to H: \; (x,y) \; \mapsto \; x\imp y = (x\imp -)(y) \]
+the \udef{implication}.
+\end{definition}
+TODO: do we require a Heyting algebra to be bounded??
+
+\begin{lemma}
+Every finite distributive lattice is a Heyting algebra.
+\end{lemma}
 
 
+\begin{proposition}
+A lattice $H$ is a Heyting algebra \textup{if and only if} the sublattice $\interval{a,b}$ is pseudocomplemented for all $a,b\in H$.
+\end{proposition}
+The pseudocomplement of $x$ in $\interval{a,b}$ is given by $(x\imp a)\wedge b$.
+\begin{proof}
+TODO see Blyth.
+\end{proof}
 
-\section{Residuated lattices}
+\begin{lemma}
+Let $H$ be a Heyting algebra and $x,y,z\in H$. Then
+\begin{enumerate}
+\item the implication $\imp$ is antitone in the first argument and isotone in the second argument;
+\item \textbf{Modus ponens} $x\wedge (x\imp y) \leq y$;
+\item $y\leq x \imp (x\wedge y)$;
+\item \textbf{Transitivity} $(x\imp y)\wedge (y\imp z) \leq (x\imp z)$;
+\item \textbf{Currying} $(x\wedge y) \imp z = x \imp (y\imp z)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) TODO
+
+(2, 3) Immediate by closure properties of Galois connection.
+
+(4) Applying modus ponens twice gives
+\[ x \wedge (x\imp y) \wedge (y\imp z) \;\leq\; y \wedge (y\imp z) \;\leq\; z. \]
+Using the Galois connection gives $\big((x\imp y) \wedge (y\imp z)\big) \leq (x\imp z)$.
+
+(5) First by modus ponens, and then using the Galois connection, we have
+\begin{align*}
+(x\wedge y) \wedge \big((x\wedge y)\imp z\big) \leq z &\iff x\wedge (x\wedge y)\imp z \leq (y\imp z) \\
+&\iff (x\wedge y)\imp z \leq \big(x\imp (y\imp z)\big)
+\end{align*}
+Now, by modus ponens, we have
+\[ x\wedge y\wedge \big(x \imp (y\imp z)\big) \quad\leq\quad y\wedge (y\imp z) \quad\leq\quad z. \]
+Using the Galois connection gives $\big(x \imp (y\imp z)\big) \leq \big((x\wedge y)\imp z\big)$. Combining the two inequalities gives the result.
+\end{proof}
+
+\subsubsection{Negation}
+
+\subsection{Frames and locales}
+\begin{definition}
+A \udef{frame} is a complete Heyting algebra.
+\end{definition}
+
+\subsection{Quantales}
+Complete lattice such that $x\cdot -$ is residuated.
+
+\subsection{Residuated lattices}
+Both $x \cdot -$ and $-\cdot x$ residuated.
 
 
 \section{Completions}
@@ -2805,13 +2911,16 @@ To see that $b$ is a base, first note that each $b_n$ is in $F$ (as $F$ is a $\w
 \end{proof}
 
 \section{Ordering filters and ideals}
+\url{https://ncatlab.org/nlab/show/filter}
 
 \begin{proposition}[The lattices of filters and ideals] \label{latticeFiltersIdeals}
 Let $P$ be an ordered set and $I$ an index set.
 \begin{enumerate}
 \item If $P$ is a $\wedge$-semilattice, the set $\filters(P)$ of filters on $P$ is a complete bounded sublattice of $\sSet{\powerset(P), \subseteq}$, with top $P$ and bottom $\{\top\}$. Let $\{F_i\}_{i\in I} \in \filters(L)^I$ be a set of filters. Then
-\[ \bigwedge \{F_i\}_{i\in I} = \bigcap_{i\in I}F_i \qquad\text{and}\qquad
-\bigvee \{F_i\}_{i\in I} = \upset \Closure_\wedge\left(\bigcup_{i\in I}F_i\right). \]
+\begin{align*}
+\bigwedge \{F_i\}_{i\in I} &= \bigcap_{i\in I}F_i & &\hspace{-3em}= \setbuilder{\bigcup_{i\in I}A_i}{\forall i\in I: A_i\in F_i} \\
+\bigvee \{F_i\}_{i\in I} &= \upset \Closure_\wedge\left(\bigcup_{i\in I}F_i\right) & &\hspace{-3em}= \setbuilder{\bigcap_{j\in J}A_j}{\forall J\subseteq I \text{finite}: \forall j\in J: A_j\in F_j}.
+\end{align*}
 \item If $P$ is a $\vee$-semilattice, the set $\ideals(P)$ of ideals on $P$ is a complete bounded sublattice of $\sSet{\powerset(P), \subseteq}$, with top $P$ and bottom $\{\bot\}$. Let $\{J_i\}_{i\in I} \in \filters(L)^I$ be a set of ideals. Then
 \[ \bigwedge \{J_i\}_{i\in I} = \bigcap_{i\in I}J_i \qquad\text{and}\qquad
 \bigvee \{J_i\}_{i\in I} = \downset \Closure_\vee\left(\bigcup_{i\in I}J_i\right). \]
@@ -2820,7 +2929,10 @@ Let $P$ be an ordered set and $I$ an index set.
 \begin{proof}
 This is an application of \ref{completeSublattice} to \ref{filterGenerationSemilattice} (TODO show this is the correct residual). We just need to prove that $\upset\Closure_\wedge \left(\bigcup_{i\in I}F_i\right) = \Closure_\wedge \left(\bigcup_{i\in I}F_i\right)$ TODO is distributive
 \end{proof}
-\url{https://ncatlab.org/nlab/show/filter}
+\begin{corollary} \label{joinProperFilter}
+Let $S$ be a $\wedge$-semilattice and $\{F_i\}_{i\in I} \in \filters(S)^I$ be set of filters. Then $\bigvee \{F_i\}_{i\in I}$ is a proper filter \textup{if and only if} $\Big(\bigcup_{i\in I}F_i\Big)\amesh \Big(\bigcup_{i\in I}F_i\Big)$.
+\end{corollary}
+In particular, for $F, G\in\filters(L)$, we have that $F\vee G$ is a proper filter if and only if $F\amesh G$.
 
 \begin{lemma} \label{baseMeetJoinFilters}
 Let $L$ be a lattice and $F,G$ filters in $\filters(L)$. If $\mathcal{A}$ is a base of $F$ and $\mathcal{B}$ a base of $G$, then
@@ -2831,15 +2943,7 @@ Let $L$ be a lattice and $F,G$ filters in $\filters(L)$. If $\mathcal{A}$ is a b
 \end{lemma}
 Note that the analogue result does \emph{not} hold for infinite meets and joins of filters.
 
-\begin{proposition} \label{joinProperFilter}
-Let $S$ be a $\wedge$-semilattice and $\{F_i\}_{i\in I} \in \filters(S)^I$ be set of filters. Then $\bigvee \{F_i\}_{i\in I}$ is a proper filter \textup{if and only if} $\Big(\bigcup_{i\in I}F_i\Big)\amesh \Big(\bigcup_{i\in I}F_i\Big)$.
-\end{proposition}
-\begin{proof}
-TODO.
 
-Use \ref{properSubsemilatticeLemma}????
-\end{proof}
-In particular, for $F, G\in\filters(L)$, we have that $F\vee G$ is a proper filter if and only if $F\amesh G$.
 
 \begin{lemma}
 Let $L$ be a lattice and $a,b\in L$. Then
@@ -3024,6 +3128,16 @@ a \vee b\in F^\mesh \iff& \overline{a\vee b} = \overline{a}\wedge\overline{b} \n
 \implies& \big(\overline{a} \notin F\big)\lor \big(\overline{b} \notin F\big) \\
 \iff& \big(a \in F^\mesh\big)\lor \big(b \in F^\mesh\big).
 \end{align*}
+\end{proof}
+
+\begin{lemma} \label{subsetsFilterGrillIntersectionPrime}
+Let $L$ be a Boolean lattice, $F,G\subseteq L$ upwards closed and $H\in \filters(L)$. Then $(F\cap G)\amesh H$ \textup{if and only if} $F\amesh H$ or $G \amesh H$.
+\end{lemma}
+\begin{proof}
+The direction $\Leftarrow$ is straightforward: suppose $F\amesh H$, so $F\subseteq H^\mesh$, then $(F\cap G) \subseteq F \subseteq H^\mesh$ and thus $(F\cap G)\amesh H$. If $G\amesh H$, then the argument is similar.
+
+For the other direction we prove the contrapositive. Suppose
+$\neg(F\amesh H)$ and $\neg(G \amesh H)$. Then there exists $a\in F \setminus H^\mesh$ and $b\in G \setminus H^\mesh$. Thus $a\vee b\in (F\cap G)$ by upwards closure, but $a\vee b\notin H^\mesh$ by \ref{filterGrillIsPrime} and modus tollens. This means that $\neg\big((F\cap G)\subset H^\mesh\big)$ or $\neg\big((F\cap G)\amesh H\big)$.
 \end{proof}
 
 \subsection{Filter dualities}
