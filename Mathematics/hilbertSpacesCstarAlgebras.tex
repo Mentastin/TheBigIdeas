@@ -251,7 +251,7 @@ We can also prove the direction $\Leftarrow$ by a direct calculation using the p
 \end{align*}
 \end{proof}
 Not all norms on vector spaces can be obtained from an inner product. If a norm can be obtained from an inner product, we can use polarisation to recover the inner product. If a norm cannot be obtained from an inner product, the putative inner product suggested by polarisation will turn out not to be an inner product.
-\begin{theorem}[Jordan-von Neumann]
+\begin{theorem}[Jordan-von Neumann] \label{JordanVonNeumann}
 Let $\sSet{V,\norm{\cdot}}$ be a real or complex normed space. The following are equivalent:
 \begin{enumerate}
 \item the polarisation yields an inner product;
@@ -563,7 +563,7 @@ is an orthonormal basis, but not a Hamel basis (consider $(1,1,1,\ldots)$).
 
 \begin{proposition} \label{exitenceMaximalOrthonormalSet}
 \begin{itemize}
-\item Every vector space has a maximal orthonormal set.
+\item Every vector inner product space has a maximal orthonormal set.
 \item Every orthonormal set can be extended to a maximal orthonormal set.
 \end{itemize}
 \end{proposition}
@@ -1114,138 +1114,6 @@ Let $(V_i)_{i\in I}$ be a family of Hilbert spaces. The $\ell^2$-direct sum is a
 \end{proposition}
 This gives the conventional interpretation of the \udef{Hilbert space direct sum}: it is the $\ell^2$-direct sum of the summands as Banach spaces.
 
-\section{Strong and weak convergence}
-\subsection{Weak convergence of vectors}
-\begin{definition}
-Let $\mathcal{H}$ be a Hilbert space. The \udef{weak convergence} on $\mathcal{H}$ is the initial convergence w.r.t.
-\[ \setbuilder{\inner{x,-}: \mathcal{H}\to \F}{x\in\mathcal{H}}. \]
-Thus $F \overset{w}{\longrightarrow} v$ \textup{if and only if} $\inner{x, F} \longrightarrow \inner{x,v}$ for all $x\in\mathcal{H}$.
-
-We denote the weak convergence $\overset{w}{\longrightarrow}$ or $\lim^w$ and write $\mathcal{H}^w$ to denote the convergence space $\sSet{\mathcal{H},\lim^w}$.
-\end{definition}
-By \ref{initialVectorSpaceConvergence} we have that the weak convergence is a vector space convergence.
-
-\begin{lemma} \label{normConvergenceFinerThenWeakConvergence}
-Norm convergence is finer than weak convergence.
-\end{lemma}
-\begin{proof}
-The functions in $\setbuilder{\inner{x,-}: \mathcal{H}\to \F}{x\in\mathcal{H}}$ are also continuous in the norm convergence.
-\end{proof}
-
-\begin{example}
-Let $\seq{e_n}$ be an orthonormal basis. Then the Riemann-Lebesgue lemma, \ref{RiemannLebesgueLemma}, gives $e_n \overset{w}{\longrightarrow} 0$, even though clearly $e_n \not\to 0$.
-\end{example}
-
-So norm convergence is strictly finer.
-
-\begin{proposition}
-Let $\mathcal{H}$ be a Hilbert space, $x\in \mathcal{H}$ and $\seq{x_n}\subseteq \mathcal{H}$. Then
-\begin{enumerate}
-\item $x_n \overset{w}{\longrightarrow} x$ implies $\norm{x} \leq \liminf \norm{x_n}$;
-\item $x_n \longrightarrow x$ \textup{if and only if} $x_n \overset{w}{\longrightarrow} x$ and $\norm{x_n}\to \norm{x}$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) We have
-\[ \norm{x}^2 = \inner{x,x} = \lim \inner{x,x_n} = \liminf\inner{x,x_n} \leq \norm{x}\liminf\norm{x_n}, \]
-where the limit is in $\R$. We use that for convergent sequences, $\lim = \liminf$.
-
-(2) The direction $\Rightarrow$ is clear form \ref{normConvergenceFinerThenWeakConvergence} and the continuity of the norm.
-
-For the converse, we have
-\[ \norm{x-x_n}^2 = \norm{x}-2\Re(\inner{x,x_n}) + \norm{x_n} \to 0, \]
-because $\norm{x_n} \to \norm{x}$ and $\inner{x,x_n} \to \inner{x,x} = \norm{x}^2$.
-\end{proof}
-
-\url{https://math.stackexchange.com/questions/1461363/closed-unit-ball-of-hilbert-space-sequentially-compact-in-weak-topology}
-
-\subsubsection{Weak Cauchy filters}
-\begin{definition}
-Cauchy filters in $\mathcal{H}^w$ are called \udef{weak Cauchy filters}.
-\end{definition}
-
-
-\begin{proposition}
-Let $\mathcal{H}$ be a real or complex Hilbert space.
-A filter $F$ in $\powerfilters(\mathcal{H})$ is a weak Cauchy filter \textup{if and only if} $\inner{x,F}$ converges in $\F$ for all $x$.
-\end{proposition}
-\begin{proof}
-The following steps are equivalent:
-\begin{itemize}
-\item $F$ is weak Cauchy;
-\item $F-F \overset{w}{\longrightarrow} 0$;
-\item $\inner{x, F} - \inner{x,F} \to 0$ for all $x\in \mathcal{H}$;
-\item $\inner{x, F}$ is Cauchy in the scalar field for all $x\in\mathcal{H}$;
-\item $\inner{x, F}$ converges for all $x\in\mathcal{H}$.
-\end{itemize}
-The last equivalence follows because $\R$ and $\C$ are complete.
-\end{proof}
-\begin{corollary}
-Every weak Cauchy filter is bounded in norm.
-\end{corollary}
-\begin{proof}
-Consider the family of bounded linear operator $\inner{F,-}$. Then $\inner{F,-}$ converges pointwise, by the proposition. By Banach-Steinhaus, \ref{BanachSteinhaus}, we have $\sup_{y\in F}\norm{\inner{y,-}} = \sup_{y\in F}\norm{y} <\infty$.
-\end{proof}
-
-Note that the previous proposition does not mean a weak Cauchy filter is necessarily weakly convergent, as there may not exist a vector $v$ such that $\inner{x,F}$ converges to $\inner{x,v}$ for all $x\in\mathcal{H}$. However, we have the following proposition:
-
-\begin{proposition}
-Let $\mathcal{H}$ be a Hilbert space. Then $\mathcal{H}^w$ is Cauchy complete.
-\end{proposition}
-\begin{proof}
-Let $F$ be a weak Cauchy filter. Let $\seq{e_i}_{i\in I}$ be an orthonormal basis of $\mathcal{H}$. Let $c_i = \lim \inner{e_i, F}$. Then $F \overset{w}{\longrightarrow} \sum_{i\in I}c_i e_i$.
-
-First we check this sum is well-defined. TODO!!
-\end{proof}
-
-TODO: $\inner{F,F}$ weak convergent?????
-
-
-\subsection{Strong and weak convergence of operators}
-\begin{definition}
-Let $\mathcal{H}$ be a Hilbert space. Then the
-\begin{itemize}
-\item \udef{strong operator topology} is the topology of pointwise convergence on $\Lin(\mathcal{H})$;
-\item \udef{weak operator topology} is the topology of pointwise convergence on $\Lin(\mathcal{H}^w)$.
-\end{itemize}
-We write $F \overset{SOT}{\longrightarrow}A$ and $F \overset{WOT}{\longrightarrow}A$ for the convergence of $F$ to $A$ in the strong and weak operator topologies.
-\end{definition}
-
-
-TODO introduce shifts earlier.
-\begin{example}
-Consider the left and right shifts $S_l$ and $S_r$ on $\ell^2(\N)$. Then
-\begin{itemize}
-\item $S_l \overset{SOT}{\longrightarrow} 0$, but $S_l \overset{norm}{\not\longrightarrow} 0$;
-\item $S_r \overset{WOT}{\longrightarrow} 0$, but $S_r \overset{SOT}{\not\longrightarrow} 0$.
-\end{itemize}
-In general taking adjoints is not continuous w.r.t. strong operator convergence, because $S_l \overset{SOT}{\longrightarrow} 0$, but $S_r = S_l^* \overset{SOT}{\not\longrightarrow} 0$.
-\end{example}
-
-\url{https://math.stackexchange.com/questions/1054288/the-set-of-all-normal-operators-on-a-hilbert-space-is-not-strongly-closed}
-
-
-Note normal operators not $SOT$-closed!
-\begin{proposition}
-If $\seq{A_n}$ is a sequence of normal operators that converges to a normal operator $A$ in the strong operator topology, then $A_n^* \overset{SOT}{\longrightarrow} A^*$.
-\end{proposition}
-
-\begin{proposition}
-Let $\seq{A_n}$ be a sequence of bounded operators on a Hilbert space and $A\in\Lin(\mathcal{H})$. Then
-\begin{enumerate}
-\item if $A_n \overset{SOT}{\longrightarrow} A$, then $\norm{A}\leq \liminf\norm{A_n}$;
-\item If $A_nx \longrightarrow Ax$ for all $x$ in a dense subset of $\mathcal{A}$ and $\seq{A_n}$ is a bounded sequence, then $A_n \overset{SOT}{\longrightarrow} A$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) For all unit vectors $x$ we have
-\[ \norm{Ax} = \norm{\lim_{SOT}A_nx} = \lim_{n\to\infty}\norm{A_nx} \leq  \]
-\end{proof}
-TODO: same for WOT.
-
-TODO: Cauchy sequences are bounded. Does this follow form general Banach theory?
-
-
 \section{Tools to study operators}
 \subsection{Spectrum}
 \subsection{Numerical range}
@@ -1407,7 +1275,7 @@ Every inner product space has a maximal orthonormal set by \ref{exitenceMaximalO
 An orthonormal subset of a Hilbert space is an orthonormal basis \textup{if and only if} it is maximal.
 \end{corollary}
 
-\begin{lemma}
+\begin{lemma} \label{sumExpansionOrthogonalProjector}
 Let $\mathcal{H}$ be a Hilbert space and $K$ a closed subspace. Let $\{e_i\}_{i\in I}$ be an orthonormal basis of $K$. Then
 \[ P_K(x) = \sum_{i\in I} \inner{e_i,x}e_i. \]
 \end{lemma}
@@ -1565,67 +1433,6 @@ We regard $\vec{x}_0$ as the ``best approximate solution'' to the (not necessari
 TODO
 \end{proof}
 
-\subsection{Riesz representation}
-\begin{theorem}[Riesz-Fréchet representation theorem] \label{rieszRepresentation}
-Let $\mathcal{H}$ be a Hilbert space. For every continuous linear functional $\omega\in \mathcal{H}'$, there exists a unique $v_\omega\in\mathcal{H}$ such that
-\[ \omega(x) = \inner{v_\omega, x} \qquad \forall x\in\mathcal{H}. \]
-Moreover, $\norm{v_\omega}_\mathcal{H} = \norm{\omega}_{\mathcal{H}'}$.
-\end{theorem}  
-
-The idea of the proof is as follows: consider $\mathcal{H} \cong \ker\omega \oplus \im\omega$. So we can find a subspace $U\subseteq \mathcal{H}$ such that $\mathcal{H} = \ker\omega\oplus U$. Clearly $\dim U = \dim\im\omega = \dim\F = 1$. Between $1$-dimensional spaces there can only be one linear map, up to rescaling. This map is given by $x\mapsto \inner{v,x}$ for some $v\in U$, where the scaling determines the $v$. So we choose $v$ such that $\omega|_U = x\mapsto \inner{v,x}$.
-
-Now we want extend this form of $\omega|_U$ to the whole of $\mathcal{H}$. This works exactly if $v\in(\ker\omega)^\perp$. So we need $U=(\ker\omega)^\perp$ which is true if and only if $\mathcal{H} = \ker\omega\oplus U = \ker\omega\oplus (\ker\omega)^\perp$, which only works in general if $\ker\omega$ is closed and $\mathcal{H}$ is a Hilbert space. Now $\ker\omega$ is closed if and only if it is continuous, by \ref{continuousMapCriterion}.
-
-With this idea we give a full proof:
-\begin{proof}
-If $\ker\omega = \mathcal{H}$, we can take $v_\omega = 0$.
-
-Assume $\ker\omega\neq \mathcal{H}$, then $(\ker\omega)^\perp\neq \{0\}$ by \ref{denseZeroComplement}, because $\ker\omega$ is closed (\ref{continuousMapCriterion}). So we can take a non-zero $u\in (\ker\omega)^\perp$. We can choose it such that $\omega(u) = 1$, by rescaling. Now let $h\in\mathcal{H}$. We can write $h = (h - \omega(h)u)+\omega(h)u\in\ker\omega\oplus (\ker\omega)^\perp$, because $\omega(h - \omega(h)u) = 0$. So
-\[ 0 = \inner{u,h - \omega(h)u} = \inner{u,h} - \omega(u)\norm{u}^2. \]
-If $v_\omega = \norm{u}^{-2}u$, then $\omega(h) = \inner{v_\omega, h}$ for all $h\in\mathcal{H}$.
-
-For uniqueness: assume we can find two vectors $v_\omega,v_\omega'$ such that for all $h\in\mathcal{H}$ we have $\omega(h) = \inner{v_\omega, h} = \inner{v_\omega', h}$. Then $v_\omega - v_\omega'\perp \mathcal{H}$, so $v_\omega - v_\omega'= 0$.
-\end{proof}
-Together with lemma \ref{innerBoundedFunctionals} this gives:
-\begin{corollary} \label{RieszIsometry}
-The map $C_\mathcal{H}:\mathcal{H}\to \tdual{\mathcal{H}}: v\mapsto \inner{v,\cdot}$ is a bijective anti-linear isometry.
-\end{corollary}
-\begin{corollary}
-Every Hilbert space is reflexive.
-\end{corollary}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-Every bounded functional defined on a closed subspace of $\mathcal{H}$ can be extended to a functional on $\mathcal{H}$ with the same norm.
-\end{corollary}
-\begin{proof}
-The functional on the closed subspace, say $K$, can be represented as $x\mapsto \inner{v,x}_K$ for some $v\in K$. The extended functional is then simply given by $x\mapsto \inner{v,x}_\mathcal{H}$.
-\end{proof}
-
-\begin{proposition}[Representation of sesquilinear forms] \label{sesquilinearRepresentation}
-Let $\mathcal{H}_1,\mathcal{H}_2$ be Hilbert spaces over $\mathbb{F}$ and $h:\mathcal{H}_1,\mathcal{H}_2\to\mathbb{F}$ a bounded sesquilinear form. Then there exists a unique bounded operator $S:\mathcal{H}_1 \to \mathcal{H}_2$ such that
-\[ h(x,y) = \inner{Sx,y}. \]
-This operator has the property $\norm{S} = \norm{h}$.
-\end{proposition}
-\begin{proof}
-For fixed $x$, $y\mapsto h(x,y)$ is a bounded linear functional, so by the Riesz representation theorem \ref{rieszRepresentation} this can be represented by a unique $v_x$. Let $S$ be the function $x\mapsto v_x$. Then $h(x,y) = \inner{Sx,y}$.
-
-To prove this function $S$ is linear, take arbitrary $x_1,x_2\in \mathcal{H}_1;y\in \mathcal{H}_2$ and $\lambda \in \mathbb{F}$. Then
-\begin{align*}
-\inner{S(\lambda x_1+ x_2),y} &= h(\lambda x_1+ x_2, y) = \overline{\lambda} h(x_1,y)+h(v,y_2) \\
-&= \overline{\lambda} \inner{Sx_1, y} + \inner{Sx_2, y} = \inner{\lambda Sx_1 + Sx_2,y},
-\end{align*}
-so $S$ is linear by lemma \ref{elementaryOrthogonality}.
-
-The equality of norms follows from
-\begin{align*}
-\norm{h} = \sup_{\substack{x\neq 0 \\ y\neq 0}}\frac{|\inner{Sx,y}|}{\norm{x}\norm{y}} &\geq \sup_{\substack{x\neq 0 \\ Sx\neq 0}}\frac{|\inner{Sx,Sx}|}{\norm{x}\norm{Sx}} = \sup_{x\neq 0}\frac{\norm{Sx}}{\norm{x}} = \norm{S} \\
-&\leq \sup_{\substack{x\neq 0 \\ y\neq 0}}\frac{\norm{Sx}\norm{y}}{\norm{x}\norm{y}} = \sup_{x\neq 0}\frac{\norm{Sx}}{\norm{x}} = \norm{S}
-\end{align*}
-where the second inequality is Cauchy-Schwarz.
-\end{proof}
-
 \section{Orthonormal bases}
 
 Hamel basis / Schauder basis / Hilbert basis
@@ -1690,6 +1497,196 @@ For $x\notin E$, we have $\int_\Lambda f(x,y)\overline{\psi_m(y)}\diff{\nu(y)} =
 Now $|f|^2$ is integrable and
 \[ \iint_{\Omega\times \Lambda}|f(x,y)|^2\diff{\mu(x)}\diff{\nu(y)} = \int_{\Omega\setminus E}\int_\Lambda |f(x,y)|^2\diff{\mu(x)}\diff{\nu(y)} = 0, \]
 so $f=0$ in $L^2(\Omega\times\Lambda, \mu\times\nu)$.
+\end{proof}
+
+\section{Self-duality of Hilbert spaces}
+\subsection{Riesz representation}
+\begin{theorem}[Riesz-Fréchet representation theorem] \label{rieszRepresentation}
+Let $\mathcal{H}$ be a Hilbert space. For every continuous linear functional $\omega\in \dual{\mathcal{H}}$, there exists a unique $v_\omega\in\mathcal{H}$ such that
+\[ \omega(x) = \inner{v_\omega, x} \qquad \forall x\in\mathcal{H}. \]
+Moreover, $\norm{v_\omega}_\mathcal{H} = \norm{\omega}_{\dual{\mathcal{H}}}$.
+\end{theorem}  
+
+The idea of the proof is as follows: consider $\mathcal{H} \cong \ker\omega \oplus \im\omega$. So we can find a subspace $U\subseteq \mathcal{H}$ such that $\mathcal{H} = \ker\omega\oplus U$. Clearly $\dim U = \dim\im\omega = \dim\F = 1$. Between $1$-dimensional spaces there can only be one linear map, up to rescaling. This map is given by $x\mapsto \inner{v,x}$ for some $v\in U$, where the scaling determines the $v$. So we choose $v$ such that $\omega|_U = x\mapsto \inner{v,x}$.
+
+Now we want extend this form of $\omega|_U$ to the whole of $\mathcal{H}$. This works exactly if $v\in(\ker\omega)^\perp$. So we need $U=(\ker\omega)^\perp$ which is true if and only if $\mathcal{H} = \ker\omega\oplus U = \ker\omega\oplus (\ker\omega)^\perp$, which only works in general if $\ker\omega$ is closed and $\mathcal{H}$ is a Hilbert space. Now $\ker\omega$ is closed if and only if it is continuous, by \ref{continuousMapCriterion}.
+
+With this idea we give a full proof:
+\begin{proof}
+If $\ker\omega = \mathcal{H}$, we can take $v_\omega = 0$.
+
+Assume $\ker\omega\neq \mathcal{H}$, then $(\ker\omega)^\perp\neq \{0\}$ by \ref{denseZeroComplement}, because $\ker\omega$ is closed (\ref{continuousMapCriterion}). So we can take a non-zero $u\in (\ker\omega)^\perp$. We can choose it such that $\omega(u) = 1$, by rescaling. Now let $h\in\mathcal{H}$. We can write $h = (h - \omega(h)u)+\omega(h)u\in\ker\omega\oplus (\ker\omega)^\perp$, because $\omega(h - \omega(h)u) = 0$. So
+\[ 0 = \inner{u,h - \omega(h)u} = \inner{u,h} - \omega(u)\norm{u}^2. \]
+If $v_\omega = \norm{u}^{-2}u$, then $\omega(h) = \inner{v_\omega, h}$ for all $h\in\mathcal{H}$.
+
+For uniqueness: assume we can find two vectors $v_\omega,v_\omega'$ such that for all $h\in\mathcal{H}$ we have $\omega(h) = \inner{v_\omega, h} = \inner{v_\omega', h}$. Then $v_\omega - v_\omega'\perp \mathcal{H}$, so $v_\omega - v_\omega'= 0$.
+\end{proof}
+Together with lemma \ref{innerBoundedFunctionals} this gives:
+\begin{corollary} \label{RieszIsometry}
+Let $\mathcal{H}$ be a Hilbert space, $x, y\in \mathcal{H}$ and $f,g\in\dual{\mathcal{H}}$. Then
+\begin{enumerate}
+\item the map $C_\mathcal{H}:\mathcal{H}\to \dual{\mathcal{H}}: v\mapsto \inner{v,\cdot}$ is a bijective anti-linear isometry;
+\item $C_\mathcal{H}(x)(y) = \inner{x,y}$ and $\inner{C_\mathcal{H}^{-1}(f), x} = f(x)$;
+\item $\dual{\mathcal{H}}$ is a Hilbert space with $\inner{f,g}_{\dual{H}} = \inner{C_\mathcal{H}^{-1}(g), C_\mathcal{H}^{-1}(f)}$;
+\item $C_{\dual{\mathcal{H}}}\circ C_{\mathcal{H}} = \evalMap$;
+\item $\mathcal{H}$ is reflexive.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) Restatement of the theorem.
+
+(2) The first equation is a restatement of the definition of $C_\mathcal{H}$. For the second, we use the first and calculate
+\[ \inner{C_\mathcal{H}^{-1}(f), x} = C_\mathcal{H}\big(C_\mathcal{H}^{-1}(f)\big)(x) = \big((C_\mathcal{H}\circ C_\mathcal{H}^{-1})(f)\big)(x) = f(x). \]
+
+(3) Since $C_\mathcal{H}$ is an isometry, the parallelogram law holds in $\im(C_{\mathcal{H}}) = \dual{H}$. Then the Jordan-von Neumann theorem \ref{JordanVonNeumann} implies that the norm of $\dual{H}$ comes from an inner product. The inner product can be recovered from the norm by the polarisation identity \ref{polarisationIdentities}.
+
+We can then calculate
+\begin{align*}
+\inner{f,g}_{\dual{\mathcal{H}}} &= \frac{1}{4}\sum_{k=0}^3 i^k\norm{i^kf+ g}^2_{\dual{\mathcal{H}}} \\
+&= \frac{1}{4}\sum_{k=0}^3 i^k\norm{i^k(C_\mathcal{H}\circ C_\mathcal{H}^{-1})(f)+ (C_\mathcal{H}\circ C_\mathcal{H}^{-1})(g)}^2_{\dual{\mathcal{H}}} \\
+&= \frac{1}{4}\sum_{k=0}^3 i^k\norm{C_\mathcal{H}\Big((-i)^kC_\mathcal{H}^{-1}(f)+ C_\mathcal{H}^{-1}(g)\Big)}^2_{\dual{\mathcal{H}}} \\
+&= \frac{1}{4}\sum_{k=0}^3 i^k\norm{(-i)^kC_\mathcal{H}^{-1}(f)+ C_\mathcal{H}^{-1}(g)}^2_{\mathcal{H}} \\
+&= \frac{1}{4}\sum_{k=0}^3 i^k\norm{i^{k+2}C_\mathcal{H}^{-1}(f)+ C_\mathcal{H}^{-1}(g)}^2_{\mathcal{H}} \\
+&= \frac{1}{4}\sum_{k=0}^3 i^{k-2}\norm{i^{k}C_\mathcal{H}^{-1}(f)+ C_\mathcal{H}^{-1}(g)}^2_{\mathcal{H}} \\
+&= \frac{1}{4}\sum_{k=0}^3 (-i)^{k}\norm{i^{k}C_\mathcal{H}^{-1}(f)+ C_\mathcal{H}^{-1}(g)}^2_{\mathcal{H}} \\
+&= \overline{\frac{1}{4}\sum_{k=0}^3 i^{k}\norm{i^{k}C_\mathcal{H}^{-1}(f)+ C_\mathcal{H}^{-1}(g)}^2_{\mathcal{H}}} \\
+&= \overline{\inner{C_\mathcal{H}^{-1}(f), C_\mathcal{H}^{-1}(g)}_{\mathcal{H}}} \\
+&= \inner{C_\mathcal{H}^{-1}(g), C_\mathcal{H}^{-1}(f)}_{\mathcal{H}}.
+\end{align*}
+
+(4) We use (2) and (3) to calculate, for arbitrary $x\in \mathcal{H}$ and $f\in\dual{\mathcal{H}}$,
+\[ \big((C_{\dual{\mathcal{H}}}\circ C_\mathcal{H})(x)\big)(f) = \inner{C_\mathcal{H}(x), f}_{\dual{\mathcal{H}}} = \inner{C^{-1}_{\mathcal{H}}(f), x} = f(x). \]
+Thus $(C_{\dual{\mathcal{H}}}\circ C_\mathcal{H})(x) = \evalMap_x|_{\dual{\mathcal{H}}}$ and $C_{\dual{\mathcal{H}}}\circ C_\mathcal{H} = \evalMap$.
+
+(5) Let $H$ be a Hilbert space. By \ref{normedReflexiveIFFSemireflexive}, it is enough to show that $\evalMap: H\to \bidual{H}$ is surjective.
+
+Since both $C_{\dual{\mathcal{H}}}$ and $C_\mathcal{H}$ are surjective and $\evalMap = C_{\dual{\mathcal{H}}}\circ C_\mathcal{H}$, we have that $\evalMap$ is surjective.
+\end{proof}
+\begin{corollary}
+Every bounded functional defined on a closed subspace of $\mathcal{H}$ can be extended to a functional on $\mathcal{H}$ with the same norm.
+\end{corollary}
+\begin{proof}
+The functional on the closed subspace, say $K$, can be represented as $x\mapsto \inner{v,x}_K$ for some $v\in K$. The extended functional is then simply given by $x\mapsto \inner{v,x}_\mathcal{H}$.
+\end{proof}
+
+\begin{proposition}[Representation of sesquilinear forms] \label{sesquilinearRepresentation}
+Let $\mathcal{H}_1,\mathcal{H}_2$ be Hilbert spaces over $\mathbb{F}$ and $h:\mathcal{H}_1,\mathcal{H}_2\to\mathbb{F}$ a bounded sesquilinear form. Then there exists a unique bounded operator $S:\mathcal{H}_1 \to \mathcal{H}_2$ such that
+\[ h(x,y) = \inner{Sx,y}. \]
+This operator has the property $\norm{S} = \norm{h}$.
+\end{proposition}
+\begin{proof}
+For fixed $x$, $y\mapsto h(x,y)$ is a bounded linear functional, so by the Riesz representation theorem \ref{rieszRepresentation} this can be represented by a unique $v_x$. Let $S$ be the function $x\mapsto v_x$. Then $h(x,y) = \inner{Sx,y}$.
+
+To prove this function $S$ is linear, take arbitrary $x_1,x_2\in \mathcal{H}_1;y\in \mathcal{H}_2$ and $\lambda \in \mathbb{F}$. Then
+\begin{align*}
+\inner{S(\lambda x_1+ x_2),y} &= h(\lambda x_1+ x_2, y) = \overline{\lambda} h(x_1,y)+h(v,y_2) \\
+&= \overline{\lambda} \inner{Sx_1, y} + \inner{Sx_2, y} = \inner{\lambda Sx_1 + Sx_2,y},
+\end{align*}
+so $S$ is linear by lemma \ref{elementaryOrthogonality}.
+
+The equality of norms follows from
+\begin{align*}
+\norm{h} = \sup_{\substack{x\neq 0 \\ y\neq 0}}\frac{|\inner{Sx,y}|}{\norm{x}\norm{y}} &\geq \sup_{\substack{x\neq 0 \\ Sx\neq 0}}\frac{|\inner{Sx,Sx}|}{\norm{x}\norm{Sx}} = \sup_{x\neq 0}\frac{\norm{Sx}}{\norm{x}} = \norm{S} \\
+&\leq \sup_{\substack{x\neq 0 \\ y\neq 0}}\frac{\norm{Sx}\norm{y}}{\norm{x}\norm{y}} = \sup_{x\neq 0}\frac{\norm{Sx}}{\norm{x}} = \norm{S}
+\end{align*}
+where the second inequality is Cauchy-Schwarz.
+\end{proof}
+
+\subsection{Hilbert space adjoints}
+
+\subsection{Weak convergence of vectors}
+\begin{lemma}
+Let $\mathcal{H}$ be a Hilbert space. The weak convergence $\sSet{\mathcal{H}, \sigma(\dual{\mathcal{H}}, \mathcal{H})}$ on $\mathcal{H}$ is the initial convergence w.r.t.
+\[ \setbuilder{\inner{x,-}: \mathcal{H}\to \F}{x\in\mathcal{H}}. \]
+\end{lemma}
+\begin{proof}
+By Riesz representation \ref{rieszRepresentation} every $f\in \dual{H}$ is of the form $\inner{v_f, -}$ for some $v_f\in \mathcal{H}$. Conversely, $\inner{x,-}\in \dual{\mathcal{H}}$, for all $x\in \mathcal{H}$.
+\end{proof}
+\begin{definition}
+Let $\mathcal{H}$ be a Hilbert space. We call the weak convergence $\sSet{\mathcal{H}, \sigma(\dual{\mathcal{H}}, \mathcal{H})}$ on $\mathcal{H}$ simply the \udef{weak convergence} and abbreviate $\sigma(\dual{\mathcal{H}}, \mathcal{H})$ by $\sigma$.
+\end{definition}
+
+\begin{example}
+Let $\seq{e_n}$ be an orthonormal basis. Then the Riemann-Lebesgue lemma, \ref{RiemannLebesgueLemma}, gives $e_n \overset{\sigma}{\longrightarrow} 0$, even though clearly $e_n \not\to 0$.
+\end{example}
+
+So norm convergence is strictly stronger than weak convergence.
+
+\begin{proposition}
+Let $\mathcal{H}$ be a Hilbert space, $x\in \mathcal{H}$ and $\seq{x_n}\subseteq \mathcal{H}$. Then
+\begin{enumerate}
+\item $x_n \overset{\sigma}{\longrightarrow} x$ implies $\norm{x} \leq \liminf \norm{x_n}$;
+\item $x_n \longrightarrow x$ \textup{if and only if} $x_n \overset{\sigma}{\longrightarrow} x$ and $\norm{x_n}\to \norm{x}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have, using the CSB inequality \ref{CauchySchwarz},
+\[ \norm{x}^2 = |\inner{x,x}| = \lim_n |\inner{x,x_n}| = \liminf_n|\inner{x,x_n}| \leq \norm{x}\liminf_n\norm{x_n}. \]
+We use that for convergent sequences, $\lim = \liminf$.
+
+(2) The direction $\Rightarrow$ is clear, using the continuity of the norm.
+
+For the converse, we have
+\[ \norm{x-x_n}^2 = \norm{x}-2\Re(\inner{x,x_n}) + \norm{x_n} \to 0, \]
+because $\norm{x_n} \to \norm{x}$ and $\inner{x,x_n} \to \inner{x,x} = \norm{x}^2$.
+\end{proof}
+
+
+\subsection{Strong and weak convergence of operators}
+\begin{lemma}
+Let $V_1,V_2$ be inner product spaces. Then the weak operator topology on $\Bounded(H_1,H_2)$ is the initial topology w.r.t.\ $\big\{\inner{y, (-)x}: T\mapsto \inner{y,Tx}\big\}_{x\in H_1, y\in H_2}$.
+\end{lemma}
+
+TODO introduce shifts earlier. \label{adjointMapNotSOTContinuous}
+\begin{example}
+Consider the left and right shifts $S_l$ and $S_r$ on $\ell^2(\N)$. Then
+\begin{itemize}
+\item $S_l^n \overset{SOT}{\longrightarrow} 0$, but $S_l^n \overset{norm}{\not\longrightarrow} 0$;
+\item $S_r^n \overset{WOT}{\longrightarrow} 0$, but $S_r^n \overset{SOT}{\not\longrightarrow} 0$.
+\end{itemize}
+\end{example}
+
+\begin{example}
+The adjoint map is not continuous w.r.t. the strong operator convergence.
+\begin{itemize}
+\item Consider the left and right shifts $S_l$ and $S_r$ on $\ell^2(\N)$. Then $S_l^n \overset{SOT}{\longrightarrow} 0$, but $S_r^n = (S_l^*)^n \overset{SOT}{\not\longrightarrow} 0$.
+\item In any infinite-dimensional Hilbert space, take some orthonormal set $\{e_n\}_{n\in \N}$. And consider the sequence of operators $\seq{\ketbra{e_1}{e_n}}$. This converges strongly to $0$, indeed
+\[ \lim_n\norm{\ketbra{e_1}{e_n}\ket{x}} = \lim_n\norm{\ket{e_1}\inner{e_n, x}} = \norm{\ket{e_1}}\lim_n\inner{e_n, x} = \lim_n\inner{e_n, x} = 0, \]
+for all vectors $x$ by the Bessel inequality \ref{BesselInequality}. The sequence of adjoints $\seq{\big(\ketbra{e_1}{e_n}\big)^*} = \seq{\ketbra{e_n}{e_1}}$ does not converge strongly to $0$:
+\[ \lim_n\norm{\ketbra{e_n}{e_1}\ket{x}} = \lim_n\norm{\ket{e_n}\inner{e_1, x}} = \lim_n\norm{\ket{e_n}}\inner{e_1, x} = \lim_n\inner{e_1, x} = \inner{e_1, x} \neq 0. \]
+\end{itemize}
+\end{example}
+
+\url{https://math.stackexchange.com/questions/1054288/the-set-of-all-normal-operators-on-a-hilbert-space-is-not-strongly-closed}
+
+
+Note normal operators not $SOT$-closed!
+\begin{proposition}
+If $\seq{A_n}$ is a sequence of normal operators that converges to a normal operator $A$ in the strong operator topology, then $A_n^* \overset{SOT}{\longrightarrow} A^*$.
+\end{proposition}
+
+\begin{proposition}
+Let $\seq{A_n}$ be a sequence of bounded operators on a Hilbert space and $A\in\Lin(\mathcal{H})$. Then
+\begin{enumerate}
+\item if $A_n \overset{SOT}{\longrightarrow} A$, then $\norm{A}\leq \liminf\norm{A_n}$;
+\item If $A_nx \longrightarrow Ax$ for all $x$ in a dense subset of $\mathcal{A}$ and $\seq{A_n}$ is a bounded sequence, then $A_n \overset{SOT}{\longrightarrow} A$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) For all unit vectors $x$ we have
+\[ \norm{Ax} = \norm{\lim_{SOT}A_nx} = \lim_{n\to\infty}\norm{A_nx} \leq  \]
+\end{proof}
+TODO: same for WOT.
+
+TODO: Cauchy sequences are bounded. Does this follow form general Banach theory?
+
+\begin{proposition}
+Let $H_1, H_2$ be Hilbert spaces, then the adjoint map $*: \Bounded(H_1, H_2) \to \Bounded(H_2, H_1)$ is continuous in the norm and weak operator topologies.
+\end{proposition}
+\begin{proof}
+Continuity in norm is follows from the fact that the adjoint map is isometric \ref{adjointMapIsometric}.
+
+
 \end{proof}
 
 
@@ -5119,6 +5116,28 @@ Let $A$ be a unital $C^*$-algebra and $a\in A$. Then $\norm{a}\leq 1$ \textup{if
 Let $A,B$ be $C^*$-algebras and $f:A\to B$ a linear function. We call $f$ \udef{completely positive} if for all $n\in\N$ the pointwise extension of $f$ in $(A^{n\times n}\to B^{n\times n})$ is positive.
 \end{definition}
 
+\begin{lemma}
+Let $A,B$ be $C^*$-algebras and $\phi:A\to B$ a $*$-homomorphism. Then
+\begin{enumerate}
+\item $\phi_n$ is a $*$-homomorphism;
+\item $\phi$ is completely positive.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $X,Y\in A^{n\times n}$. Then we calculate
+\begin{align*}
+\big[\phi_n(XY)\big]_{i,j} &= \phi\big([XY]_{i,j}\big) \\
+&= \phi\Big(\sum_{k=1}^n[X]_{i,k}[Y]_{k,j}\Big) \\
+&= \sum_{k=1}^n\phi\big([X]_{i,k}\big)\phi\big([Y]_{k,j}\big) \\
+&= \sum_{k=1}^n[\phi_n(X)]_{i,k}[\phi_n(Y)]_{k,j} \\
+&= \big[\phi_n(X)\phi_n(Y)\big]_{i,j}.
+\end{align*}
+We also have
+\[ \big[\phi_n(X^*)\big]_{i,j} = \phi\big([X^*]_{i,j}\big) = \phi\big([X]_{j,i}^*\big) = \phi\big([X]_{j,i}\big)^* = [\phi_n(X)]_{j,i}^* = [\phi_n(X)^*]_{i,j}. \]
+
+(2) Immediate from \ref{starHomomorphismPositive} and point (1).
+\end{proof}
+
 \subsection{Completely bounded maps}
 \begin{definition}
 Let $A,B$ be $C^*$-algebras and $f:A\to B$ a linear function. We call $f$ \udef{completely bounded} if for all $n\in\N$ the pointwise extension of $f$ in $(A^{n\times n}\to B^{n\times n})$ is bounded.
@@ -5482,8 +5501,15 @@ Let $A$ be a $C^*$-algebra. Then $A$ is isomorphic to a norm-closed self-adjoint
 
 \subsection{Stinespring's dilation theorem}
 \begin{theorem}[Stinespring's dilation theorem]
-Let $A$ be a unital $C^*$-algebra and $\phi: A\to \Bounded(H)$ a completely positive map. Then there exits a Hilbert space $H'$, a unital representation $\pi: A\to $
+Let $A$ be a unital $C^*$-algebra and $\phi: A\to \Bounded(H)$ a completely positive map. Then there exits a Hilbert space $H'$, a unital representation $\pi: A\to \Bounded(H')$ and a $V\in \Bounded(H,H')$ such that
+\[ \forall a\in A: \quad \phi(a) = V^*\pi(a)V. \]
+If $\phi$ is unital, then $V$ is an isometry. Then we can identify $H$ with a subspace of $H'$ and have
+\[ \forall a\in A: \quad \phi(a) = P_H\pi(a)|_H. \]
 \end{theorem}
+
+\begin{proposition}
+All Stinespring dilations such that $\big(\pi^\imf(A)V\big)^\imf(H)$ is dense in $H'$ are unitarily equivalent.
+\end{proposition}
 
 \section{Multiplier algebras}
 \subsection{Essential ideals}
@@ -5619,6 +5645,13 @@ TODO
 \subsection{Algebraic tensor product}
 \subsection{Spatial tensor product}
 
+\chapter{Hilbert-Schmidt space}
+\begin{proposition}
+\begin{enumerate}
+\item $\phi$ unital iff $\phi^*$ trace-preserving
+\item
+\end{enumerate}
+\end{proposition}
 
 \chapter{Harmonic analysis}
 \section{Functions on locally compact groups}

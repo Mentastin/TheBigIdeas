@@ -36,7 +36,7 @@ A vector with norm 1 is called a \udef{unit vector}. Unit vectors are often writ
 \begin{lemma} \label{vectorSpaceUniformNorm}
 Let $\sSet{V,\norm{\cdot}}$ be a normed vector space and $\sSet{X,d}$ a metric space. The uniform norm on $(X\to V)$ is a norm.
 \end{lemma}
-By \ref{groupUniformNorm}, the norm convergence of this norm is the uniform convergence.
+By \ref{groupUniformNorm}, the norm convergence of this norm is the uniform convergence. Note that this norm is \emph{not} the operator norm.
 \begin{proof}
 It is a group norm by \ref{groupUniformNorm}. We just need to show that it is positively homogeneous:
 \[ \norm{\lambda f}_u = \sup_{x\in X}\norm{\lambda f(x)} = \sup_{x\in X}|\lambda|\norm{f(x)} = |\lambda|\sup_{x\in X}\norm{f(x)} = |\lambda|\norm{f}_u. \]
@@ -77,19 +77,19 @@ Let $\sSet{V,\norm{\cdot}}$ be a normed space. The initial vector space converge
 \end{definition}
 The norm convergence is topological TODO ref(!). Its topology is called the \udef{norm topology}.
 
-\begin{lemma}
+\begin{example}
 The norm convergence is \emph{not} the initial convergence w.r.t. to the norm.
-\end{lemma}
-\begin{proof}
+
 In the initial convergence w.r.t. to the norm, all vectors of the same norm are indistinguishable, so this convergence space is not $T_0$.
 
 On the other hand, $\{0\}$ is closed in $\R$ and thus its preimage $\{0\} \subset V$ is closed in the norm topology (TODO ref preimage closed is closed). By \ref{HausdorffCriterionConvergenceGroup}, we have that the norm convergence must be Hausdorff, or $T_2$.
-\end{proof}
+\end{example}
+
 
 \begin{proposition}
 The norm convergence is topological and metric.
 
-Every normed space can be viewed as a metric space with the metric $d:V\times V \to [0,\infty[$ given by
+Every normed space can be viewed as a metric space with the metric $d:V\times V \to \interval[co]{0,\infty}$ given by
 \[ d(x,y) = \norm{x-y}. \]
 This metric has the properties of
 \begin{itemize}[leftmargin=6cm]
@@ -116,6 +116,46 @@ Let $V$ be a normed vector space, then the norm $\norm{\cdot}:V\to \R$ is a cont
 \end{proposition}
 \begin{proof}
 The reverse triangle inequality, $|\norm{v}-\norm{w}| \leq \norm{v-w}$, implies that the norm is Lipschitz continuous with Lipschitz constant $1$, so we can use \ref{LipschitzcontinuousContinuous}.
+\end{proof}
+
+\subsubsection{Subsets of normed spaces}
+
+\begin{lemma}
+Every proper subspace $U$ of a normed vector space $V$ has empty interior.
+\end{lemma}
+\begin{proof}
+Suppose $U$ has a non-empty interior. Then it contains some ball $B(u,\epsilon)$. Now every vector in $V$ can be translated and rescaled to fit inside the ball $B(u,\epsilon)$. Indeed let $v\in V$ and set $u' = u+ \frac{\epsilon}{2\norm{v}}v \in B(u,\epsilon)$. Then, since $U$ is a subspace $v = \frac{2\norm{v}}{\epsilon}(u'-u)\in U$. So $U=V$.
+\end{proof}
+
+\begin{lemma}[Riesz's lemma] \label{RieszsLemma}
+Let $V$ be a normed vector space. Given a non-dense subspace $X$ and a number $\theta<1$, there exists a unit vector $v\in V$ such that
+\[ \theta \leq d(X,v) = \inf_{x\in X}\norm{x-v}. \]
+\end{lemma}
+\begin{proof}
+Take a vector $v_1$ not in the closure of $X$ and put $a = \inf_{x\in X}\norm{x-v_1}$. Then $a>0$ by lemma \ref{sequencesSupInf}. For $\epsilon > 0$, let $x_1\in X$ be such that $\norm{x_1+v_1}<a+\epsilon$. Then take
+\[ v = \frac{v_1 - x_1}{\norm{v_1-x_1}} \qquad \text{so} \qquad \norm{v}=1. \]
+And
+\[ \inf_{x\in X}\norm{x-v} = \inf_{x\in X}\norm{x-\frac{v_1 - x_1}{\norm{v_1-x_1}}} = \inf_{x\in X}\norm{\frac{x-v_1 + x_1}{\norm{v_1-x_1}}} = \frac{\inf_{x\in X}\norm{x-v_1}}{\norm{v_1-x_1}} \geq \frac{a}{a+\epsilon}. \]
+By choosing $\epsilon >0$ small, $a/(a+\epsilon)$ can be made arbitrarily close to $1$.
+\end{proof}
+For finite-dimensional spaces we can even take $\theta=1$.
+
+\begin{lemma} \label{boundedSetNormedSpace}
+Let $V$ be a normed space and $B\subseteq V$ a subset. Then the following are equivalent:
+\begin{enumerate}
+\item $B$ is bounded;
+\item $B$ is vN bounded;
+\item $B\subseteq \cball(0, M)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Points (1) and (2) are equivalent by \ref{boundednessTVS}. To show the equivalence of (2) and (3) using \ref{vonNeumannBoundednessAbsorption}.
+
+First assume $B$ is vN bounded. Then $B$ is absorbed by $\cball(0,1)$, so there exists $\epsilon > 0$ such that $\cball(0,\epsilon)\cdot B \subseteq \cball{0,1}$. This implies $B\subseteq \cball(0,1)\cdot B \subseteq \cball(0,\epsilon^{-1})$. Setting $M\defeq \epsilon^{-1}$ gives point (3).
+
+Finally assume $B\subseteq \cball(0, M)$, so $M^{-1}B \subseteq \cball(0,1)$. Take an arbitrary neighbourhood $U$ of $0$. Then $\cball(0,\epsilon) \subseteq U$ for some $\epsilon > 0$. We have
+\[ \cball(0, \epsilon M^{-1})\cdot B = \cball(0, \epsilon)\cdot M^{-1}B \subseteq \cball(0, \epsilon)\cdot \cball(0, 1) = \cball(0, \epsilon) \subseteq U. \]
+Thus $B$ is absorbed by $U$.
 \end{proof}
 
 \subsubsection{Continuous operators}
@@ -157,9 +197,21 @@ An anti-linear map $A:V\to W$ is an $\R$-linear map $A:V_\R\to W_\R$. Now $V_\R,
 
 \subsubsection{Equicontinuity}
 \begin{proposition}
-Let $\mathcal{F}$ be a set of linear operators in $(V\to W)$. Then $\mathcal{F}$ is equicontinuous at $x_0\in V$ \textup{if and only if} there exists $C>0$ such that
-\[ \forall f\in\mathcal{F}:\qquad \norm{f(x_0)} \leq C\norm{x_0}. \]
+Let $X,Y$ be normed space and $K\subseteq \contLin(X,Y)$. Then $K$ is equicontinuous \textup{if and only if} $\sup_{T\in K}\norm{T} < \infty$.
 \end{proposition}
+\begin{proof}
+By \ref{equicontinuityGroupHomomorphisms} we have that the equicontinuity of $K$ is equivalent to
+\begin{align*}
+\upset \evalMap^{\imf\imf}\big(\{K\}\otimes \neighbourhood_{X}(0)\big) \to 0 &\iff \upset \evalMap^{\imf\imf}\big(\{K\}\otimes \{\cball_X(0,\epsilon)\}_{\epsilon > 0}\big) \to 0 \\
+&\iff \upset \evalMap^{\imf\imf}\big(\{K\}\otimes \{\cball_X(0,1)\}\big)\cdot \{\cball_{\R}(0,\epsilon)\}_{\epsilon > 0} \to 0 \\
+&\iff \text{$\evalMap^{\imf}\big(K\times \cball_X(0,1)\big)$ is vN bounded} \\
+&\iff \exists M\geq 0: \; \sup_{\substack{T\in K \\ x\in \cball_X(0,1)}} \norm{Tx} \leq M \\
+&\iff \exists M\geq 0: \; \sup_{T\in K} \norm{T} \leq M \\
+&\iff \sup_{T\in K} \norm{T} < \infty,
+\end{align*}
+where we have used \ref{boundedSetNormedSpace}.
+\end{proof}
+
 
 \subsubsection{Comparison of norm topologies}
 \begin{definition}
@@ -193,27 +245,8 @@ $(2) \Leftrightarrow (3)$ Follows straight from \ref{identityContinuity}.
 Equivalent norms induce the same topology.
 \end{corollary}
 
-\subsubsection{Subspaces of normed spaces}
 
-\begin{lemma}
-Every proper subspace $U$ of a normed vector space $V$ has empty interior.
-\end{lemma}
-\begin{proof}
-Suppose $U$ has a non-empty interior. Then it contains some ball $B(u,\epsilon)$. Now every vector in $V$ can be translated and rescaled to fit inside the ball $B(u,\epsilon)$. Indeed let $v\in V$ and set $u' = u+ \frac{\epsilon}{2\norm{v}}v \in B(u,\epsilon)$. Then, since $U$ is a subspace $v = \frac{2\norm{v}}{\epsilon}(u'-u)\in U$. So $U=V$.
-\end{proof}
 
-\begin{lemma}[Riesz's lemma] \label{RieszsLemma}
-Let $V$ be a normed vector space. Given a non-dense subspace $X$ and a number $\theta<1$, there exists a unit vector $v\in V$ such that
-\[ \theta \leq d(X,v) = \inf_{x\in X}\norm{x-v}. \]
-\end{lemma}
-\begin{proof}
-Take a vector $v_1$ not in the closure of $X$ and put $a = \inf_{x\in X}\norm{x-v_1}$. Then $a>0$ by lemma \ref{sequencesSupInf}. For $\epsilon > 0$, let $x_1\in X$ be such that $\norm{x_1+v_1}<a+\epsilon$. Then take
-\[ v = \frac{v_1 - x_1}{\norm{v_1-x_1}} \qquad \text{so} \qquad \norm{v}=1. \]
-And
-\[ \inf_{x\in X}\norm{x-v} = \inf_{x\in X}\norm{x-\frac{v_1 - x_1}{\norm{v_1-x_1}}} = \inf_{x\in X}\norm{\frac{x-v_1 + x_1}{\norm{v_1-x_1}}} = \frac{\inf_{x\in X}\norm{x-v_1}}{\norm{v_1-x_1}} \geq \frac{a}{a+\epsilon}. \]
-By choosing $\epsilon >0$ small, $a/(a+\epsilon)$ can be made arbitrarily close to $1$.
-\end{proof}
-For finite-dimensional spaces we can even take $\theta=1$.
 
 \subsection{Linear independence and bases in normed spaces}
 \url{https://math.stackexchange.com/questions/1518029/are-uncountable-schauder-like-bases-studied-used}
@@ -389,30 +422,42 @@ The proposition also immediately gives that the operator norm is a seminorm.
 To show that it is in fact a norm, we just need to show that it is point-separating. Assume $S\in\Bounded(V,W)$ is such that $\norm{S} = 0$. Then $\sup_{\norm{x}=1}\norm{Sx} = 0$, which implies that $\norm{Sx} = 0$ for all unit vectors. Because the norm on $W$ is point-separating, this means that $Sx = 0$ for all unit vectors. Now for arbitrary $v\in V$, we have $Sv = \norm{v}\cdot S\left(\frac{v}{\norm{v}}\right) =\norm{v} \cdot 0 = 0$. Thus $S = 0$.
 \end{proof}
 
-\begin{proposition} \label{boundedOperatorsFormBanachSpace}
-Let $(V,\norm{\cdot}_V)$ and $(W,\norm{\cdot}_W)$ be normed spaces. Then $\Bounded(V,W)$ is a Banach space \textup{if and only if} $W$ is a Banach space.
-\end{proposition}
+\begin{lemma} \label{normCauchyPointwiseConvergentImpliesNormConvergent}
+Let $V,W$ be normed spaces and $\seq{T_n}\in\Bounded(V,W)^\N$. If $\seq{T_n}$ is norm-Cauchy and pointwise convergent, then $\seq{T_n}$ is norm-convergent.
+\end{lemma}
 \begin{proof}
-$\boxed{\Leftarrow}$ Assume $W$ is a Banach space and take an arbitrary Cauchy sequence $\seq{T_n}$ in $\Bounded(V,W)$. For all $v\in V$, we have
-\[ \norm{T_mv - T_nv} \leq \norm{T_m-T_n}\;\norm{v} \to 0, \]
-so $\seq{T_nv}$ is a Cauchy sequence in $W$. It has a limit that we denote $Tv$. It is clear that $T$ is linear (by continuity of addition and scalar multiplication).
-
-Fix $\epsilon >0$. Then there exists $N\in\N$ such that $\norm{T_m-T_n}\leq \epsilon$ for all $m,n\geq N$. Take arbitrary $v\in V$ with $\norm{v} = 1$ and $n\geq N$. Then (by continuity of the norm)
-\[ \norm{(T-T_n)(v)} = \lim_{m\to\infty}\norm{(T_m-T_n)(v)} \leq \lim_{m\to\infty}\norm{T_m - T_n} \leq \epsilon. \]
-As $v$ was chosen arbitrarily, we have $\sup_{\norm{v} = 1}\norm{(T-T_n)(v)} \leq \epsilon$, so $\norm{T-T_n} \leq \epsilon$. Thus $\seq{T_n}$ converges to $T$ in norm.
-
-This also immediately shows that $T$ is bounded:
-\[ \sup_{\norm{v}=1}\norm{T(v)}\leq \sup_{\norm{v}=1}\norm{T(v)}\norm{T-T_n} + \sup_{\norm{v}=1}\norm{T(v)}\norm{T_n} = \norm{T-T_n} + \norm{T_n}. \]
-
-$\boxed{\Rightarrow}$ TODO
+Let $T_n\overset{\text{ptwise}}{\longrightarrow} T$. Fix $\epsilon > 0$. Then there exists $N$ such that $\norm{T_m-T_n}\leq \epsilon$ for all $m,n\geq N$. Take arbitrary $v\in \cball_V(0,1)$. Then
+\begin{align*}
+\norm{(T-T_n)(v)} &= \norm{Tv - T_nv} \\
+&= \lim_{m\to\infty}\norm{T_mv-T_nv} \\
+&= \lim_{m\to\infty}\norm{(T_m-T_n)v} \\
+&= \limsup_{m\to\infty}\norm{(T_m-T_n)v} \\
+&\leq \sup_{m\geq N}\norm{(T_m-T_n)v} \\
+&\leq \sup_{m\geq N}\norm{T_m-T_n} \\
+&\leq \epsilon.
+\end{align*}
+Since $v\in \cball_V(0,1)$ was taken arbitrarily, we have $\norm{T-T_n} \leq \epsilon$. We conclude that $\seq{T_n}$ converges to $T$ is norm.
 \end{proof}
-Also: TODO make the first part nicer.
-\begin{corollary}
-Let $V$ be a normed space. The continuous dual $X'$ is a Banach space.
-\end{corollary}
-\begin{corollary}
-Topologically reflexive spaces are Banach spaces.
-\end{corollary}
+
+\begin{proposition} \label{boundedOperatorsFormBanachSpace}
+Let $X$ be a Banach space and $Y$ a normed space. Then
+\begin{enumerate}
+\item if $Y$ is complete, then $\Bounded(X,Y)$ is complete;
+\item if $X\neq \{0\}$ and $\Bounded(X,Y)$ is complete, then $Y$ is complete.
+\end{enumerate}
+\end{proposition}
+Thus, supposing $V$ is non-trivial, $\Bounded(V,W)$ is a Banach space \textup{if and only if} $W$ is a Banach space.
+\begin{proof}
+(1) Since $(X,Y)$ is a Banach-Steinhaus pair and $Y$ is complete (and thus quasi-complete), we can use \ref{quasiCompletenessFunctionSpaces} to conclude that $\contLin_p(X,Y)$ is quasi-complete and thus sequentially compelete by \ref{quasiCompleteImpliesSequentiallyComplete}.
+
+Since $\Bounded(X,Y)$ is sequential, it is enough to show that it is sequentially complete, by (TODO ref!).
+
+Now let $\seq{T_n}$ be a Cauchy sequence in $\Bounded(X,Y)$. Then it is a Cauchy sequence in  $\contLin_p(X,Y)$, which means it has a pointwise limit by sequential completeness. By \ref{normCauchyPointwiseConvergentImpliesNormConvergent} this pointwise limit is also a norm-limit.
+
+(2) TODO ???
+\end{proof}
+
+
 
 \begin{proposition}[Bounded linear extension] \label{BLT}
 Let $T:\dom(T)\subseteq X\to Y$ be a bounded operator between normed spaces. Then $T$ has a unique extension
@@ -427,26 +472,107 @@ Clearly $\norm*{\tilde{T}} \geq \norm{T}$. For the converse take any $x\in X$. A
 \end{proof}
 
 
-\begin{proposition}
-Let $T\in\Bounded(V,W)$. Then the adjoint $T^*$ is a bounded operator in $\Bounded(W,V)$ with $\norm{T^*} = \norm{T}$.
-\end{proposition}
-TODO: clean up proof.
+\subsubsection{The dual space}
+\begin{lemma}
+Let $X$ be a normed space and $Z\subset X$ a subspace. Any bounded linear functional in $\dual{Z}$ can be extended to a bounded linear functional in $\dual{X}$ with the same norm.
+\end{lemma}
 \begin{proof}
-The operator $T^t$ is linear since $\forall f_1,f_2\in \tdual{W}, \forall a\in\mathbb{F}, \forall x\in V:$
-\[ (T^t(af_1 + f_2))(x) = (af_1 + f_2)(Tx) = af_1(Tx) + f_2(Tx) = a(T^tf_1)(x) + (T^tf_2)(x). \]
-For the equality of norms, we prove two inequalities. First $\forall x\in V, f\in \tdual{W}$
-\[ |f(Tx)|\leq \norm{f}\norm{Tx}\leq \norm{f}\norm{x}\norm{T} \implies \frac{|f(Tx)|}{\norm{x}} \leq \norm{f}\norm{T}. \]
-taking the supremum over $x\in V$, we get $\norm{T^tf} = \norm{f\circ T}\leq \norm{f}\norm{T}$ and taking the supremum over $f\in \tdual{W}$ gives $\norm{T^t}\leq \norm{T}$. This shows that $T^t$ is bounded.
-
-For the other inequality, we use corollary \ref{existenceBoundedFunctionalOfSameNorm} to the Hahn-Banach theorem: for every $x\in V$, there exists a bounded functional $\omega_x$ such that $\norm{\omega_x}=1$ and $\omega_x(x) = \norm{x}$. Then we can calculate:
-\begin{align*}
-\norm{Tx} = \omega_{Tx}(Tx) = (T^t\omega_{Tx})(x) \leq \norm{T^t\omega_{Tx}}\norm{x} \leq \norm{T^t}\norm{\omega_{Tx}}\norm{x} = \norm{T^t}\norm{x}
-\end{align*}
-So $\norm{T}\leq\norm{T^t}$. Combining gives $\norm{T^t}=\norm{T}$.
+Let $f:Z\to \mathbb{F}$ be such a functional. Extend $f$ with the Hahn-Banach theorem \ref{seminormHahnBanach}, using $p(x) = \norm{f}_Z\norm{x}$.
 \end{proof}
-\begin{corollary}
-The map $T\mapsto T^*$ is an isometric isomorphism in $(\Bounded(X,Y)\to \Bounded(\dual{Y}, \dual{X}))$.
+\begin{corollary} \label{existenceBoundedFunctionalOfSameNorm}
+Let $X$ be a normed space and $x_0\neq 0$ an element of $X$. Then there exists a bounded linear functional $\omega_{x_0}$ such that
+\[ \norm{\omega_{x_0}} = 1 \qquad \text{and} \qquad \omega_{x_0}(x_0)=\norm{x_0}. \]
 \end{corollary}
+\begin{proof}
+Extend the functional $f: \Span\{x_0\}\to \mathbb{F}$ defined by
+\[ f(x) = f(ax_0) = a\norm{x_0}. \]
+\end{proof}
+\begin{corollary} \label{normFromContinuousFunctionals}
+Let $X$ be a normed space. Then $\forall x\in X:$
+\[ \norm{x} = \sup_{\substack{f\in \dual{X} \\ f\neq 0}}\frac{|f(x)|}{\norm{f}} = \sup_{\substack{f\in \dual{X} \\ \norm{f} = 1}}|f(x)| = \sup_{\substack{f\in \dual{X} \\ 0< \norm{f} \leq 1}}|f(x)|. \]
+\end{corollary}
+\begin{proof}
+We calculate
+\[ \norm{x} \geq \sup_{\substack{f\in X' \\ f\neq 0}}\frac{|f(x)|}{\norm{f}} \geq \frac{|\omega_{x}(x)|}{\norm{\omega_{x}}} = \frac{\norm{x}}{1} = \norm{x} \]
+where the first inequality follows from $|f(x)|\leq \norm{f}\norm{x}$ for all $f\in \dual{X}, x\in X$. The other two equalities follow because a maximum is reached by a norm-one functional.
+\end{proof}
+\begin{corollary} \label{uniformConvergenceWeakTopologyGivesNormTopology}
+Let $X$ be a normed space, $\seq{x_i}_{i\in I} \in X^I$ and $x \in X$. Then $f(x_i) \to f(x)$ uniformly for $f\in\dual{X}$ with $\norm{f} = 1$ \textup{if and only if} $x_i \to x$ in the norm topology.
+\end{corollary}
+\begin{proof}
+We have that
+\[ \forall \epsilon > 0: \exists I_0\in I: \forall i\geq I_0: \forall \norm{f} = 1: \; |f(x_i-x)| \leq \epsilon \]
+is equivalent to
+\[ \forall \epsilon > 0: \exists I_0\in I: \forall i\geq I_0: \; \norm{x_i-x} = \sup_{\norm{f}=1} |f(x_i-x)| \leq \epsilon. \]
+\end{proof}
+
+\begin{lemma} \label{dualNormedSpaceBanach}
+Let $X$ be a normed space. Then $\dual{X}$ is a Banach space.
+\end{lemma}
+\begin{proof}
+The completeness of $\dual{X}$ follows from the completeness of $\F$ by \ref{boundedOperatorsFormBanachSpace}.
+\end{proof}
+
+\subsubsection{The bidual}
+
+\begin{proposition} \label{canonicalIsometryIsometry}
+Let $X$ be a normed space. Then function
+\[ \evalMap_-: X\mapsto \bidual{X}: x\mapsto \evalMap_x|_{\dual{X}} \]
+is an isometry.
+\end{proposition}
+\begin{proof}
+We calculate
+\[ \norm{\evalMap_x} = \sup_{f\in \dual{X}\setminus\{0\}} \frac{\norm{\evalMap_x(f)}}{\norm{f}} = \sup_{f\in \dual{X}\setminus\{0\}} \frac{\norm{f(x)}}{\norm{f}} = \norm{x}, \]
+where we have used the definition of the norm in $\bidual{X}$ and \ref{normFromContinuousFunctionals}.
+\end{proof}
+\begin{corollary} \label{normedReflexiveIFFSemireflexive}
+A normed space is reflexive \textup{if and only if} it is semi-reflexive.
+\end{corollary}
+\begin{proof}
+The direction $\Rightarrow$ is immediate, for the direction $\Leftarrow$, we just need to observe that $\evalMap_-: X\mapsto \bidual{X}$ is an embedding, since it is an isometry (\ref{isometryLemma}).
+\end{proof}
+
+\subsubsection{Reflexive normed space}
+\begin{proposition}
+Let $X$ be a reflexive normed space. Then $X$ is a Banach space.
+\end{proposition}
+\begin{proof}
+This follows from $X\cong \bidual{X}$ and \ref{dualNormedSpaceBanach}.
+\end{proof}
+
+\begin{lemma}
+Let $X$ be a reflexive Banach space. Then $\evalMap_-: \sSet{X,\sigma} \to \contLin(\dual{X}, \F)_p$ is a homeomorphism.
+\end{lemma}
+\begin{proof}
+TODO immediate from $f = \evalMap_f\circ \evalMap_-$ for all $f\in \dual{X}$ and the fact that $\evalMap_-$ is a linear homeomorphism.
+\end{proof}
+\begin{corollary} \label{ReflexiveBanachSpaceWeaklyQuasiComplete}
+Let $X$ be a reflexive Banach space. Then $\sSet{X,\sigma}$ is quasi-complete.
+\end{corollary}
+\begin{proof}
+Since $\evalMap_-$ is linear, it is also uniformly continuous. TODO
+\end{proof}
+
+\begin{example}
+Banach space that is not weakly sequentially complete: \url{https://math.stackexchange.com/questions/866650/c0-1-is-not-weakly-sequentially-complete}. See also \url{https://arxiv.org/pdf/1602.04718.pdf}.
+\end{example}
+
+\subsubsection{Adjoints}
+\begin{proposition} \label{adjointMapIsometric}
+Let $X,Y$ be normed spaces and $T\in \Bounded(X,Y)$ a bounded operator. Then $T$ has a unique adjoint $T^*: \dual{Y}\to \dual{X}$ and $\norm{T} = \norm{T^*}$.
+\end{proposition}
+\begin{proof}
+The existence and uniqueness of the adjoint is given by \ref{existenceAdjointWeaklyContinuousFunction}. We just need to show that $\norm{T} = \norm{T^*}$. We calculate
+\begin{align*}
+\norm{T^*} &= \sup_{f\in \dual{Y}\setminus\{0\}}\frac{\norm{T^*(f)}}{\norm{f}} \\
+&= \sup_{f\in \dual{Y}\setminus\{0\}}\frac{\norm{f\circ T}}{\norm{f}} \\
+&= \sup_{f\in \dual{Y}\setminus\{0\}}\sup_{x\in X\setminus\{0\}}\frac{\norm{(f\circ T)(x)}}{\norm{f}\,\norm{x}} \\
+&= \sup_{x\in X\setminus\{0\}}\sup_{f\in \dual{Y}\setminus\{0\}}\frac{\norm{f(Tx)}}{\norm{f}\,\norm{x}} \\
+&= \sup_{x\in X\setminus\{0\}}\frac{\norm{Tx}}{\norm{x}} \\
+&= \norm{T},
+\end{align*}
+where we have repeatedly used the definition of the operator norm, as well as \ref{normFromContinuousFunctionals}.
+\end{proof}
 
 \subsection{The uniform boundedness principle}
 TODO: \url{https://arxiv.org/pdf/1005.1585.pdf}
@@ -476,6 +602,35 @@ For all $x\in X$ we have $\norm{T_nx} \to \norm{Tx}$, so $\seq{\norm{T_nx}}$ is 
 Now for all $x\in X$ we have $\norm{T_nx} \leq M$ for all $n\in\N$ and thus $\norm{Tx}\leq M$. This means that $T$ is bounded and $\norm{T} \leq M$.
 \end{proof}
 This does not imply that $\seq{T_n}$ converges to $T$ in norm!
+
+\begin{proposition} \label{weaklyConvergentSequenceNormBounded}
+Let $X$ be a normed space and $\seq{x_n}$ a weakly convergent sequence. Then $\{x_n\}_{n\in \N}$ is norm-bounded.
+\end{proposition}
+\begin{proof}
+Take arbitrary $f\in \dual{X}$. Since $\seq{x_n}$ is weakly convergent to some $x\in X$, we have
+\[ |\evalMap_{x_n}(f)| = |f(x_n)| \to |f(x)| = |evalMap_x(f)|, \]
+so the sequence $\seq{\evalMap_{x_n}}$ is pointwise convergent in $\bidual{X}$. By \ref{imageCauchySequenceTotallyBounded}, this implies that the set $\{\evalMap_{x_n}\}$ is pointwise bounded. Since $\bidual{X}$ is a Banach space (by \ref{dualNormedSpaceBanach}), $(\bidual{X}, \dual{X})$ is a Banach-Steinhaus pair and thus $\{\evalMap_{x_n}\}$ is uniformly bounded, so
+\[ \sup_{n\in \N}\norm{evalMap_{x_n}} = \sup_{n\in \N}\norm{x_n} < \infty, \]
+using the fact that $\evalMap_-$ is an isometry \ref{canonicalIsometryIsometry}. Thus $\seq{x_n}$ is a bounded sequence.
+\end{proof}
+
+\begin{proposition}
+Let $X,Y$ be normed spaces and $T\in \Lin(X,Y)$. Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is norm continuous;
+\item $T$ is weakly continuous;
+\item $T$ is weakly sequentially continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Immediate by \ref{continuityImpliesWeakContinuity}.
+
+$(2) \Rightarrow (3)$ Immediate by \ref{continuityImpliesSequentialContinuity}.
+
+$(3) \Rightarrow (1)$ The proof is by contraposition. Suppose $T$ is not bounded. Then for all $M\geq 0$ there exists a unit vector $x\in X$ such that $\norm{Tx} \geq M$. In particular, for all $n^2$, there exists a unit vector $x_n$ such that $\norm{Tx_n} \geq n^2$.
+
+Set $y_n \defeq n^{-1}x_n$, so $\norm{y_n} = n^{-1}$. This implies that $\seq{y_n}$ converges to $0$ in norm, and thus also weakly. This implies that $\seq{Ty_n} \to 0$ weakly. Now $\norm{Ty_n} = n^{-1}Tx_n \leq n^{-1}n^2 = n$, so $\{Ty_n\}_{n\in\N}$ is not bounded, which implies $T$ is not weakly sequentially continuous by \ref{weaklyConvergentSequenceNormBounded}.
+\end{proof}
 
 \subsection{Open mapping and closed graph theorems}
 
@@ -544,6 +699,79 @@ so $(Tx_n)$ is Cauchy by \ref{CauchyCriterion} and thus by completeness has a li
 \end{proof}
 
 For closed graph theorem, see TVS.
+
+\subsection{Convergences on sets of bounded operators}
+\begin{example}
+Let $X, Y$ be normed spaces. The norm function $\norm{\cdot}: \Bounded(X,Y)\to \R^+: T\mapsto \norm{T}$ may be discontinuous when $\Bounded(X,Y)$ is equipped with the strong operator topology (and thus also when it is equipped with the weak operator topology).
+
+TODO: consider $\Bounded(H)$, where $H$ is an infinite-dimensional Hilbert space. Let $\{e_n\}_{n\in\N}$ be an orthonormal set of vectors. Let $P_n$ be the orthogonal projector on $\overline{\Span}\{e_k\}_{k\geq n}$. Now $\seq{P_n}$ converges strongly to $0$:
+take arbitrary $v = x+y \in \overline{\Span}\{e_k\}_{k\geq 0} \oplus \overline{\Span}\{e_k\}_{k\geq 0}^\perp$.
+
+Then, by \ref{sumExpansionOrthogonalProjector}, $P_nv = P_nx = \sum_{k\geq n}\inner{e_k, x}e_k = x - \sum_{k\leq n}\inner{e_k, x}e_k$, so, by the Plancherel formula \ref{plancherel},
+\[ \norm{P_n} = \norm{x - \sum_{k\leq n}\inner{e_k, x}e_k} = \norm{x - \sum_{k=0}^n\inner{e_k, x}e_k} \to 0. \]
+
+Since $\norm{P_n} = 1$ for all $n\in\N$, the sequence $\seq{\norm{P_n}}$ does not converge to $\norm{0} = 0$.
+\end{example}
+
+\begin{example}
+Multiplication is not continuous in the weak or strong operator topology.
+
+Counterexample: nilpotent operators of order 2 are strongly dense (TODO?). Take some operator $T$ that is not nilpotent and a net $\seq{T_i}$ of of nilpotent operators that converges strongly to $T$. Then $T_i\cdot T_i = T_i^2 = 0$, so $T_i^2 \to 0 \neq T^2$.
+\end{example}
+
+\begin{lemma}
+Let $X, Y$ be normed spaces, $\seq{T_i}_{i\in I} \in \Bounded(X, Y)^I$ and $T \in \Bounded(X, Y)$. Then
+\begin{enumerate}
+\item $T_i \to T$ in the strong operator topology \textup{if and only if} $f(T_ix) \to f(Tx)$ uniformly for $f\in\dual{X}$ with $\norm{f} = 1$;
+\item $T_i \to T$ in the norm topology \textup{if and only if} $T_ix\to Tx$ uniformly for $x\in X$ with $\norm{x} = 1$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Immediate from \ref{uniformConvergenceWeakTopologyGivesNormTopology}.
+
+(2) By a similar argument to \ref{uniformConvergenceWeakTopologyGivesNormTopology}.
+\end{proof}
+
+\begin{proposition}
+Let $X,Y$ be normed spaces, then
+\begin{enumerate}
+\item the adjoint map $*: \Bounded(X, Y) \to \Bounded(\dual{Y}, \dual{X})$ is norm-norm continuous;
+\item if $X$ is reflexive, then the adjoint map $*: \Bounded(X, Y) \to \Bounded(\dual{Y}, \dual{X})$ is WOT-WOT continuous.
+\end{enumerate}
+\end{proposition}
+In general the adjoint map is not SOT-SOT continuous, even for Hilbert spaces. See \ref{adjointMapNotSOTContinuous}.
+\begin{proof}
+(1) Continuity in norm is follows from the fact that the adjoint map is isometric \ref{adjointMapIsometric}.
+
+(2) Since $X$ is reflexive, we have $\dual{X}= \{\evalMap_x\}_{x\in X}$. Now we calculate, for $x\in X, f\in \dual{Y}, T\in \Bounded(X,Y)$,
+\[ \pair{\evalMap_x\otimes f, T^*} = \evalMap_x\big(T^*f\big) = \evalMap_x(f\circ T) = f\big(Tx\big) = \pair{f\otimes v, T}. \]
+Thus $\pair{\evalMap_x\otimes f, -}\circ (-)^* = \pair{\evalMap_x\otimes f, (-)^*} = \pair{f\otimes x, -}$, which means that $(-)^*$ is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+\end{proof}
+
+\begin{example}
+If $X$ is not reflexive, then the adjoint map may not be continuous in the weak operator topology.
+
+Consider the Banach space $c_0$. Then $\dual{(c_0)} = \ell^1$ and $\dual{\dual{(c_0)}} = \ell^\infty$. Consider $S_l^n: c_0 \to c_0$, the left-shift by $n$. Then $(S_l^n: c_0 \to c_0)^* = S_r^n: \ell^1 \to \ell^1$. Then, for all $\seq{x_k} \in c_0$ and $\seq{y_k}\in \ell^1$, we have
+\[ |\pair{S_l^n\seq{x_k}, \seq{y_k}}| = \left|\sum_{k=1}^\infty x_{k+n}y_k \right| \leq \sup_{k\geq n}|x_k|\left|\sum_{k=1}^\infty y_k \right| = \sup_{k\geq n}|x_k|\,\norm{\seq{y_n}}_1 \to 0, \]
+so $S_l^n \overset{WOT}{\longrightarrow} 0$.
+
+But $(S_l^n)^* = S_r^n: \ell^1\to \ell^1$ does not converge to $0$ in the WOT for $\Bounded(\ell^1)$. Indeed, take non-zero $\seq{y_k}\in \ell^1$ and $\seq{z_k} = \underline{1} \in \ell^\infty$.
+Then
+\[ |\pair{S_r^n\seq{y_k}, \seq{z_k}}| = \left|\sum_{k=1+n}^\infty y_{k+n}\cdot z_k \right| = \left|\sum_{k=1+n}^\infty y_{k+n}\cdot 1 \right| = \left|\sum_{k=1}^\infty y_{k} \right| = \norm{\seq{y_k}}_1 \neq 0. \]
+\end{example}
+
+\begin{proposition}
+Let $X, Y$ be a Banach spaces. Then
+\begin{enumerate}
+\item $\Bounded_{\text{SOT}}(X,Y)$ is quasi-complete;
+\item if $Y$ is reflexive, then $\Bounded_{\text{WOT}}(X,Y)$ is quasi-complete.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Since $Y$ is complete, it is also quasi-complete. By (TODO ref), $(X,Y)$ is a Banach-Steinhaus pair. By \ref{quasiCompletenessFunctionSpaces}, $\Bounded(X,Y)_\text{SOT} = \contLin_p(X,Y)$ is quasi-complete.
+
+(2) We have $\Bounded(X,Y)_\text{SOT} = \contLin_p(X,\sSet{Y,\sigma})$ and $\sSet{Y,\sigma}$ is quasi-complete by \ref{ReflexiveBanachSpaceWeaklyQuasiComplete}. Then $\Bounded(X,Y)_\text{SOT}$ is quasi-complete by \ref{quasiCompletenessFunctionSpaces}.
+\end{proof}
 
 
 
