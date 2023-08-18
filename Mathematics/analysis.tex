@@ -298,8 +298,21 @@ Let $\sSet{\Omega, \mathcal{A}}$ be a measurable space and $\seq{f_n: \Omega \to
 \end{corollary}
 
 \subsubsection{Measurable complex-valued functions}
+
+\begin{lemma} \label{modulusMeasurable}
+We have $|\cdot| \in \meas(\C,\R)$.
+\end{lemma}
+
 \begin{proposition}
-Let $\sSet{\Omega,\mathcal{A}}$ be a measurable space. Then $\meas(\Omega, \R)$ is a complex vector space.
+Let $\sSet{\Omega,\mathcal{A}}$ be a measurable space and $f: \Omega \to \C$. Then $f$ is measurable \textup{if and only if} both $\Re\circ f$ and $\Im\circ f$ are measurable.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+
+\begin{proposition}
+Let $\sSet{\Omega,\mathcal{A}}$ be a measurable space. Then $\meas(\Omega, \C)$ is a complex vector space.
 \end{proposition}
 \begin{proof}
 TODO. Cfr. \ref{operationsOnRealMeasurableFunctions}.
@@ -525,7 +538,8 @@ A \udef{measure} is a pre-measure that is defined on a $\sigma$-algebra.
 If $\mu$ is a measure on a $\sigma$-algebra $\mathcal{A}$with universe $\Omega$, then we call $\sSet{\Omega, \mathcal{A}, \mu}$ a \udef{measure space}. The measure space is called
 \begin{itemize}
 \item \udef{finite} if $\mu(\Omega) < \infty$;
-\item \udef{$\sigma$-finite} if there exists a sequence $\seq{A_n}\in \mathcal{A}^\N$ such that $\Omega = \bigcup_{n\in\N}A_n$ and $\mu(A_n)<\infty$ for all $n\in\N$.
+\item \udef{$\sigma$-finite} if there exists a sequence $\seq{A_n}\in \mathcal{A}^\N$ such that $\Omega = \bigcup_{n\in\N}A_n$ and $\mu(A_n)<\infty$ for all $n\in\N$;
+\item \udef{semi-finite} if for all $A\in \mathcal{A}$ such that $\mu(A) \neq 0$, there exists $B\in \mathcal{A}$ such that $B\subseteq A$ and $0< \mu(B) \subseteq \infty$.
 \end{itemize}
 \end{definition}
 
@@ -546,6 +560,39 @@ $(2) \Rightarrow (3)$ We set $C_n \defeq B_n\setminus B_{n-1}$, (with $C_0 = B_0
 
 $(3) \Rightarrow (1)$ Immediate.
 \end{proof}
+
+\begin{lemma}
+Every $\sigma$-finite measure is semi-finite.
+\end{lemma}
+\begin{proof}
+Let $\mu$ be a $\sigma$-finite measure on a measurable space $\sSet{\Omega,\mathcal{A}}$. Let $A\in\mathcal{A}$ be such that $\mu(A) \neq 0$. We need to find a $B\in \mathcal{A}$ such that $B\subseteq A$ and $0<\mu(B)<\infty$.
+
+By \ref{sigmaFiniteSequences}, there exists a disjoint sequence $\seq{C_n}_{n\in \N}\in\mathcal{A}^\N$ such that $\biguplus_{n\in\N}C_n = \Omega$ and $\mu(C_n) < \infty$ for all $n\in\N$. Then $A = A\cap \biguplus_{n\in\N}C_n = \biguplus_{n\in \N}A\cap C_n$. Since
+\[ 0\neq \mu(A) = \mu\Big(\biguplus_{n\in \N}A\cap C_n\Big) = \sum_{n\in\N}\mu(A\cap C_n), \]
+and $\mu(A\cap C_n) \geq 0$ for all $n\in \N$, there must exist some $k\in \N$ such that $0< \mu(A\cap C_k)$. We also have $\mu(A\cap C_k) \subseteq \mu(C_k) < \infty$. Thus we can take $B = A\cap C_k$. 
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a semi-finite measure space and $A\in\mathcal{A}$ such that $\mu(A) = \infty$. Then
+\begin{enumerate}
+\item $\sup\setbuilder{\mu(B)}{B\in \mathcal{A}, B\subseteq A, \mu(B)<\infty} = \infty$;
+\item for all $C\geq 0$ there exists $B\in \mathcal{A}$ such that $B\subseteq A$ and $\mu(B) \geq C$.
+\end{enumerate} 
+\end{lemma}
+\begin{proof}
+(1) Set $\mathcal{B} \defeq \setbuilder{B\in \mathcal{A}}{B\subseteq A, \mu(B)<\infty}$ and $s \defeq \sup\setbuilder{\mu(B)}{B\in \mathcal{B}}$. Then there exists a sequence $\seq{B_n}$ in $\mathcal{B}$ such that $\mu(B_n) \to s$. Now $\seq{\bigcup_{k=0}^n B_k}$ is a monotonically increasing sequence in $\mathcal{B}$ and
+\[ s = \lim_n \mu(B_n) \leq \lim_n \mu\Big(\bigcup_{k=0}^n B_k\Big) \leq s. \]
+Now suppose, towards a contradiction, that $s < \infty$. Then
+\[ \mu\Big(\bigcup_{k=0}^\infty B_k\Big) = \lim_n \mu\Big(\bigcup_{k=0}^n B_k\Big) = s <\infty, \]
+so $\bigcup_{k=0}^\infty B_k\in \mathcal{B}$. Since
+\[ \infty = \mu(A) = \mu\bigg(\Big(\bigcup_{k=0}^\infty B_k\Big)\uplus \Big(A\setminus \bigcup_{k=0}^\infty B_k\Big)\bigg) = s + \mu\Big(A\setminus\bigcup_{k=0}^\infty B_k\Big), \]
+we need to have that $\mu\Big(A\setminus\bigcup_{k=0}^\infty B_k\Big) = \infty$. Then we can find $C \subseteq A\setminus\bigcup_{k=0}^\infty B_k$ such that $C\in\mathcal{A}$ and $0<\mu(C)\subseteq \infty$. Thus $C\uplus \bigcup_{k=0}^\infty B_k \in \mathcal{B}$ and
+\[ \mu\Big(C\uplus \bigcup_{k=0}^\infty B_k\Big) = \mu(C) + \mu\Big(\bigcup_{k=0}^\infty B_k\Big) = \mu(C) + s > s, \]
+which is a contradiction.
+
+(2) Immediate from (1).
+\end{proof}
+
 
 \subsubsection{Restrictions of measures}
 \begin{lemma} \label{submeasurespace}
@@ -2748,6 +2795,18 @@ TODO every equivalence class contains exactly one continuous functions (for Bore
 \subsubsection{$L^0(\Omega, \mu)$}
 TODO: $\norm{f}_0 = \mu\{f\neq 0\}$ (?)
 
+\subsubsection{Essential supremum}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(\Omega, \C)$. The \udef{essential supremum} of $f$ is
+\[ \essup(f) \defeq \inf\setbuilder{\sup_{\omega\in E}|f(\omega)|}{E\in \mathcal{A}, \mu(E^c) = 0}. \]
+We call $f$ \udef{essentially bounded} if $\essup(f)<\infty$.
+\end{definition}
+
+\begin{lemma}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(\Omega, \C)$. Then
+\[ \essup(f) = \sup D_{|f|}^{\preimf}\big(\interval[o]{0,\infty}\big). \]
+\end{lemma}
+
 \subsubsection{Convergence in measure}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $F\in \powerfilters\big(\meas(\Omega, \C)\big)$ and $f\in \meas(\Omega, \C)$. Then $F$ is said to \udef{converge in measure} to $f$ if
@@ -2836,6 +2895,50 @@ Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. T
 
 \end{proof}
 
+\subsubsection{Multiplication operators}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f\in \meas(\Omega, \C)$ and $1\leq p \leq \infty$. Then
+\[ M_f: L^p(X, \diff{\mu}) \to L^p(X, \diff{\mu}): g\mapsto f\cdot g \]
+with domain
+\[ \dom(M_f) = \setbuilder{g\in L^p(X, \diff{\mu})}{f\cdot g \in L^p(X, \diff{\mu})} \]
+is called a \udef{multiplication operator}.
+\end{definition}
+
+\begin{proposition} \label{boundedMultiplicationOperator}
+Let $(\Omega, \mathcal{A}, \mu)$ be a semi-finite measure space, $f\in \meas(\Omega, \C)$ and $1\leq p < \infty$. Then $M_f$ is bounded \textup{if and only if} $f$ is essentially bounded.
+
+In this case $\norm{M_f} = \essup(f)$.
+\end{proposition}
+TODO also holds for $p = \infty$.
+\begin{proof}
+$\boxed{\Rightarrow}$ We prove the contraposition. Assume $f$ is not essentially bounded. For all $n$, consider $A_n = \{|f| \geq n\}$, which is in $\mathcal{A}$ by \ref{measurablesSetsRealMeasurableFunction}. Then $\mu(A_n) > 0$. By semi-finiteness, we can find $B_n\subseteq A_n$ such that $B_n\in \mathcal{A}$ and $0 < \mu(B_n)< \infty$. Then $\norm{\charFunc{B_n}}_p = \mu(B_n)^{1/p}$, which means $\charFunc{B_n}\in L^p(X, \diff{\mu})$. We have
+\begin{align*}
+\norm{M_f\charFunc{B_n}}_p^p &= \int_\Omega |f\cdot \charFunc{B_n}|^{p}\diff{\mu} \\
+&= \int_\Omega \charFunc{B_n}\cdot|f|^p\diff{\mu} \\
+&= \int_{B_n}|f|^p\diff{\mu} \\
+&\geq n^p\int_{B_n}\diff{\mu} \\
+&= n^p\mu(B_n) = n^p\norm{\charFunc{B_n}}^p,
+\end{align*}
+which implies $\norm{M_f\charFunc{B_n}}_p \geq n\norm{\charFunc{B_n}}_p$ for all $n\in \N$. Thus $M_f$ is not bounded.
+
+$\boxed{\Leftarrow}$ Set $f' = |f| \wedge \underline{\essup(f)}$, which is measurable by \ref{modulusMeasurable} and \ref{limitOperationsOnRealMeasurableFunctions}. Also $|f| = f'$ almost everywhere. Then, for $g\in L^p(X, \diff{\mu})$, we have
+\begin{align*}
+\norm{M_fg}_p^p &= \int_\Omega |f\cdot g|^p \diff{\mu} \\
+&= \int_\Omega f'^p\cdot |g|^p \diff{\mu} \\
+&\leq \essup(f)^p\int_\Omega |g|^p \diff{\mu} = \essup(f)^p\norm{g}_p^p.
+\end{align*}
+Thus $M_f$ is bounded and $\norm{M_f} \leq \essup(f)$.
+
+Finally, we need to prove $\norm{M_f} \geq \essup(f)$. Take arbitrary $\epsilon > 0$. Consider $A_\epsilon = \{|f| \geq \essup(f)-\epsilon\}$, which is in $\mathcal{A}$ by \ref{measurablesSetsRealMeasurableFunction}. By construciton, $\mu(A_\epsilon) > 0$. By semi-finiteness, we can find $B_\epsilon\subseteq A_\epsilon$ such that $B_\epsilon\in \mathcal{A}$ and $0 < \mu(B_\epsilon)< \infty$. Then $\norm{\charFunc{B_\epsilon}}_p = \mu(B_\epsilon)^{1/p}$, which means $\charFunc{B_\epsilon}\in L^p(X, \diff{\mu})$. We have
+\begin{align*}
+\norm{M_f\charFunc{B_\epsilon}}_p^p &= \int_\Omega |f\cdot \charFunc{B_\epsilon}|^{p}\diff{\mu} \\
+&= \int_\Omega \charFunc{B_\epsilon}\cdot|f|^p\diff{\mu} \\
+&= \int_{B_\epsilon}|f|^p\diff{\mu} \\
+&\geq (\essup(f)-\epsilon)^p\int_{B_\epsilon}\diff{\mu} \\
+&= \big(\essup(f)-\epsilon\big)^p\mu(B_\epsilon) = \big(\essup(f)-\epsilon\big)^p\norm{B_\epsilon}^p,
+\end{align*}
+which implies $\norm{M_f\charFunc{B_\epsilon}}_p \geq \big(\essup(f)-\epsilon\big)\norm{B_\epsilon}$, and so $\norm{M_f} \geq \essup(f)-\epsilon$ for all $\epsilon >0$. Thus $\norm{M_f} \geq \essup(f)$.
+\end{proof}
 
 \subsection{Weak $L^p(X,\diff{\mu})$ spaces}
 \begin{definition}

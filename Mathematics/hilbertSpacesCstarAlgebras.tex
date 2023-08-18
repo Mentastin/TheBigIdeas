@@ -219,6 +219,16 @@ Polarisation identities allow us to recover the inner product from the norm.
 \[ S(x,y) = \frac{1}{4}\sum_{k=0}^3 i^k S(i^k x+y, i^k x+y). \]
 \end{enumerate}
 \end{theorem}
+\begin{proof}
+We prove (3):
+\begin{align*}
+\sum_{k=0}^3 i^k S(i^k x+y, i^k x+y) &= \sum_{k=0}^3 i^ki^k(-1)^k S(x, x) + i^k(-i)^kS(x,y) + i^ki^kS(y,x) + i^kS(y,y) \\
+&= \sum_{k=0}^3 i^k S(x, x) + S(x,y) + (-1)^kS(y,x) + i^kS(y,y) \\
+&= \sum_{k=0}^3 S(x,y) \\
+&= 4 S(x,y),
+\end{align*}
+where we have used that $\sum_{k=0}^3 i^k = 0$ and $\sum_{k=0}^3 (-1)^k = 0$.
+\end{proof}
 
 \begin{proposition} \label{HermitianRealQuadratic}
 A sesquilinear form $S$ is Hermitian (i.e.\ conjugate symmetric) \textup{if and only if} $S(v,v)$ is real for all $v\in V$.
@@ -1103,17 +1113,6 @@ If $T$ is symmetric and bounded, then
 
 \chapter{Hilbert spaces}
 
-\section{Examples of Hilbert spaces}
-\subsection{The $\ell^2$ spaces}
-Sequence spaces $\ell^p$ Hilbert iff $p=2$. (TODO: other sequence spaces?)
-
-\subsection{Direct sum}
-Let $(V_i)_{i\in I}$ be a family of Hilbert spaces. By considering them as Banach spaces we can take the $\ell^2$-direct sum. (TODO: other sequence spaces?)
-\begin{proposition}
-Let $(V_i)_{i\in I}$ be a family of Hilbert spaces. The $\ell^2$-direct sum is a Hilbert space.
-\end{proposition}
-This gives the conventional interpretation of the \udef{Hilbert space direct sum}: it is the $\ell^2$-direct sum of the summands as Banach spaces.
-
 \section{Tools to study operators}
 \subsection{Spectrum}
 \subsection{Numerical range}
@@ -1612,7 +1611,7 @@ Let $\seq{e_n}$ be an orthonormal basis. Then the Riemann-Lebesgue lemma, \ref{R
 
 So norm convergence is strictly stronger than weak convergence.
 
-\begin{proposition}
+\begin{proposition} \label{weakHilbertSpaceConvergence}
 Let $\mathcal{H}$ be a Hilbert space, $x\in \mathcal{H}$ and $\seq{x_n}\subseteq \mathcal{H}$. Then
 \begin{enumerate}
 \item $x_n \overset{\sigma}{\longrightarrow} x$ implies $\norm{x} \leq \liminf \norm{x_n}$;
@@ -1666,27 +1665,21 @@ If $\seq{A_n}$ is a sequence of normal operators that converges to a normal oper
 \end{proposition}
 
 \begin{proposition}
-Let $\seq{A_n}$ be a sequence of bounded operators on a Hilbert space and $A\in\Lin(\mathcal{H})$. Then
+Let $\seq{A_n}$ be a sequence of bounded operators on a Hilbert space and $A\in\Bounded(\mathcal{H})$. Then
 \begin{enumerate}
-\item if $A_n \overset{SOT}{\longrightarrow} A$, then $\norm{A}\leq \liminf\norm{A_n}$;
-\item If $A_nx \longrightarrow Ax$ for all $x$ in a dense subset of $\mathcal{A}$ and $\seq{A_n}$ is a bounded sequence, then $A_n \overset{SOT}{\longrightarrow} A$.
+\item if $A_n \overset{WOT}{\longrightarrow} A$, then $\norm{A}\leq \liminf\norm{A_n}$;
+\item if $A_nx \longrightarrow Ax$ for all $x$ in a dense subset of $\mathcal{A}$ and $\seq{A_n}$ is a bounded sequence, then $A_n \overset{SOT}{\longrightarrow} A$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) For all unit vectors $x$ we have
-\[ \norm{Ax} = \norm{\lim_{SOT}A_nx} = \lim_{n\to\infty}\norm{A_nx} \leq  \]
-\end{proof}
-TODO: same for WOT.
+(1) For all unit vectors $x$ we have $A_nx \overset{\sigma}{\longrightarrow} Ax$, so, by \ref{weakHilbertSpaceConvergence}, $\norm{Ax} \leq \liminf_n\norm{A_nx}$. Then
+\begin{align*}
+\norm{A} = \sup_{\norm{x}=1}\norm{Ax} &\leq \sup_{\norm{x}=1}\liminf_n\norm{A_nx} \\
+&= \sup_{\norm{x}=1}\sup_{k\in \N}\inf_{n\geq k}\norm{A_nx} \\
+&\leq \sup_{k\in \N}\inf_{n\geq k}\sup_{\norm{x}=1}\norm{A_nx} = \liminf{n}\norm{A_n}.
+\end{align*}
 
-TODO: Cauchy sequences are bounded. Does this follow form general Banach theory?
-
-\begin{proposition}
-Let $H_1, H_2$ be Hilbert spaces, then the adjoint map $*: \Bounded(H_1, H_2) \to \Bounded(H_2, H_1)$ is continuous in the norm and weak operator topologies.
-\end{proposition}
-\begin{proof}
-Continuity in norm is follows from the fact that the adjoint map is isometric \ref{adjointMapIsometric}.
-
-
+(2) TODO!!
 \end{proof}
 
 
@@ -2038,8 +2031,7 @@ TODO ref closed range theorem for Banach spaces. This is, e.g., the case when $T
 Let $T: H\not\to K$ be a densely defined operator between Hilbert spaces. Then
 \begin{enumerate}
 \item $\im(T)$ is dense in $K$ \textup{if and only if} $T^*$ is injective;
-\item if $T$ and $T^*$ are injective, then $(T^*)^{-1} = (T^{-1})^*$;
-\item if $T$ is closable and $\overline{T}$ is injective, then $\overline{T}^{\,-1} = \overline{T^{-1}}$.
+\item if $T$ and $T^*$ are injective, then $(T^*)^{-1} = (T^{-1})^*$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -2138,14 +2130,11 @@ A densely defined linear operator $T$ on a Hilbert space $H$ is \udef{normal} if
 \end{definition}
 Self-adjoint and unitary operators are normal.
 
-TODO 3.10 Self-Adjoint, Unitary and Normal Operators from Kreyszig.
-
-
 \begin{proposition} \label{normalCriterion}
-Let $T: H\not\to H$ be a densely defined operator. Then $T$ is normal \textup{if and only if} $\dom(T) = \dom(T^*)$ and $\forall x\in H: \norm{Tx} = \norm{T^*x}$.
+Let $T: H\not\to H$ be a densely defined operator. Then $T$ is normal \textup{if and only if} $\dom(T) = \dom(T^*)$ and $\forall x\in \dom(T): \norm{Tx} = \norm{T^*x}$.
 \end{proposition}
 \begin{proof}
-First, assume $T$ normal. Then
+First, assume $T$ normal. Then, for all $x\in \dom(T^*T) = \dom(TT^*)$, we have $x\in \dom(T)$ and $x\in \dom(T^*)$ and
 \[ \norm{Tx}^2 = |\inner{Tx,Tx}| = |\inner{T^*Tx,x}| = |\inner{TT^*x,x}| = |\inner{T^*x,T^*x}| = \norm{T^*x}^2. \]
 
 For the converse, we have $\inner{Tx, Ty} = \inner{T^*x, T^* y}$ for all $x,y\in H$ by polarisation. From this we have $\inner{T^*Tx, y} = \inner{TT^*x, y}$ and normality follows from \ref{equalityOfMapsInnerProductSpaces}.
@@ -2654,7 +2643,9 @@ y - Tx \\ T^*y + x
 \end{pmatrix}, \]
 so $x = -T^*y$ and $v = y - Tx = y+TT^*y = (TT^* + \id)y$.
 
-(2) 
+(2) We need to show that $\dom(T^*T)$ is dense in $\dom(T)$ w.r.t. the graph norm. Consider the inner product $\inner{}_{\norm{\cdot}_T}$ associated to the graph norm (TODO: yields norm equivalent to graph norm). Suppose $h\in \dom(T)$ is in the orthogonal complement of $\dom(T^*T)$ w.r.t.\ this inner product. Then, for all $x\in \dom(T^*T)$, we have
+\[ 0 = \inner{x,h}_{\norm{\cdot}_T} = \inner{x,h} + \inner{Tx,Th} = \inner{x,h} + \inner{T^*Tx,h} = \inner{(\id + T^*T)x,h}. \]
+Thus $h\in \im(\id+T^*T)^\perp$ and thus $h=0$ by the calculations in (1). So the orthogonal complement of $\dom(T^*T)$ w.r.t.\ the graph inner product is $\{0\}$, which shows density.
 \end{proof}
 
 \begin{example}
@@ -3458,8 +3449,8 @@ Now, for all $x\in $
 \end{proof}
 
 
-\subsection{Trace-class operators}
-TODO Simon
+\subsubsection{Trace-class operators}
+
 
 
 \begin{proposition} \label{traceCommutatorCompactSA}
@@ -3626,8 +3617,31 @@ Let $\mathcal{H} \subseteq \ell^2(\N)\otimes\mathcal{H}$ be Hilbert spaces. Ever
 
 \section{Constructions}
 \subsection{Direct sum}
+
+Let $(V_i)_{i\in I}$ be a family of Hilbert spaces. By considering them as Banach spaces we can take the $\ell^2$-direct sum. (TODO: other sequence spaces?)
+\begin{proposition}
+Let $(V_i)_{i\in I}$ be a family of Hilbert spaces. The $\ell^2$-direct sum is a Hilbert space.
+\end{proposition}
+This gives the conventional interpretation of the \udef{Hilbert space direct sum}: it is the $\ell^2$-direct sum of the summands as Banach spaces.
+
+
 \subsection{Tensor product}
 \url{https://web.ma.utexas.edu/mp_arc/c/14/14-2.pdf}
+
+TODO: tensor product of operators defined on algebraic tensor product of their domains!
+
+\begin{proposition}
+If $S,T$ are closable operators, then $S\otimes_a T$ is closable.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+For closable operators, we define $S\otimes T \defeq \overline{S\otimes_a T}$.
+
+\begin{proposition}
+For bounded operators $S,T$, we have $\norm{S\otimes T} = \norm{S}\,\norm{T}$.
+\end{proposition}
 
 \section{Spectral properties of operators on Hilbert spaces}
 \begin{lemma}
@@ -3726,6 +3740,48 @@ Let $x$ be an eigenvector with eigenvalue $\lambda$, then
 \begin{proposition}
 If $U$ is unitary, then $\spec(U)\subset \mathbb{T}$.
 \end{proposition}
+
+\section{Examples of Hilbert spaces}
+
+\subsection{The $L^2$ spaces}
+
+\subsubsection{Multiplication operators}
+\begin{lemma} \label{multiplicationOperatorDenselyDefined}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(\Omega, \C)$. Then $M_f: L^2(\Omega,\diff\mu)\to L^2(\Omega,\diff\mu)$ is densely defined.
+\end{lemma}
+\begin{proof}
+Suppose $g\in \dom(M_f)^\perp$. Now $\underline{0}\leq (|f|+1)^2 = |f|^2 + 2|f| + 1$, so $|f|\leq \frac{1}{2}(|f|^2 + 1)$ and thus $\frac{2|f|}{|f|^2 + 1} \leq \underline{1}$. Now $\frac{2f}{|f|^2 + 1}g\in L^2(\Omega,\diff\mu)$ by \ref{propertiesIntegralPositiveFunctions}, using
+\[ \Big|\frac{2f}{|f|^2 + 1}g\Big| = \frac{2|f|}{|f|^2 + 1}|g| \leq \underline{1}|g| = |g|. \]
+Thus $\frac{2g}{|f|^2+1} \in \dom(M_f)$. Then
+\[ 0 = \inner{g, \frac{2g}{|f|^2+1}} = \int_\Omega |g|^2 \frac{2}{|f|^2+1}\diff{\mu}, \]
+which, by \ref{functionPropertiesFromIntegral}, implies $|g|^2 \frac{2}{|f|^2+1} = 0$ a.e. and thus $g = 0$ a.e.
+
+We have shown that $\dom(M_f)^\perp = \{0\}$, which means that $\dom(M_f)$ is dense in $L^2(\Omega,\diff\mu)$.
+\end{proof}
+
+\begin{proposition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(\Omega, \C)$. Consider the multiplication operator $M_f: L^2(\Omega,\diff\mu)\to L^2(\Omega,\diff\mu)$. Then $M_f^* = M_{\overline{f}}$ and $\dom(M_f*) = \dom(M_f)$.
+\end{proposition}
+\begin{proof}
+For any $g\in \dom(M_{\overline{f}})$ and $h\in \dom(M_f)$, we have
+\[ \inner{g, M_fh} = \int_\Omega \overline{g}fh \diff\mu = \int_\Omega \overline{\overline{f}g}h \diff\mu = \inner{M_{\overline{f}}g, h}, \]
+so $M_{\overline{f}}$ is an adjoint of $M_f$ and thus $M_{\overline{f}}\subseteq M_f^*$.
+
+Now take $g\in \dom(M_f^*)$. Then, for all $h\in \dom(M_f)$, we have
+\[ \int_\Omega \overline{M_f^*g}h \diff\mu = \inner{M_f^*g,h} = \inner{g,M_f h} = \int_\Omega \overline{g}fh\diff\mu, \]
+so $\int_\Omega \overline{(M_f^*g - g\overline{f})}h\diff\mu = 0$. Set $A_n \defeq \{|f| \leq n\}$. Then $\charFunc{A_n}h'\in \dom(M_f)$ for all $h\in L^2(\Omega,\diff\mu)$. Thus $\int_\Omega \overline{(M_f^*g - g\overline{f})}\charFunc{A_n}h\diff\mu = 0$, which implies $\overline{(M_f^*g - g\overline{f})}\charFunc{A_n} = 0$ a.e. Since this holds for all $n\in \N$, we have $\overline{M_f^*g - g\overline{f}} = 0$. Thus $g\in \dom(M_{\overline{f}})$.
+
+It is clear that $\dom(M_f) = \dom(M_{\overline{f}}) = \dom(M_f^*)$.
+\end{proof}
+\begin{corollary}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(\Omega, \C)$. Then $M_f$ is a closed operator.
+\end{corollary}
+\begin{proof}
+Since $M_{f} = M_{\overline{f}}^*$, the closedness of $M_f$ follows from \ref{adjointGraph}.
+\end{proof}
+
+\subsection{The $\ell^2$ spaces}
+Sequence spaces $\ell^p$ Hilbert iff $p=2$. (TODO: other sequence spaces?)
 
 \chapter{Types of operators}
 \section{Fredholm operators}
