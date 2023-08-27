@@ -698,7 +698,12 @@ Now assume $T$ has closed graph and $Y$ is complete. Take $x\in\overline{\dom(T)
 so $(Tx_n)$ is Cauchy by \ref{CauchyCriterion} and thus by completeness has a limit, say $y$. Then $Tx=y$ by continuity. Since $T$ has closed graph, $x\in\dom(T)$. So $\overline{\dom(T)}\subseteq \dom(T)$ and $\dom(T)$ is closed. 
 \end{proof}
 
-For closed graph theorem, see TVS.
+\begin{theorem}[Closed graph theorem] \label{BanachClosedGraphTheorem}
+Let $X,Y$ be Banach spaces and $T:X\to Y$ a linear operator with $\dom(T) = X$. Then $T$ is continuous \textup{if and only if} $T$ is a closed operator.
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
 
 \subsection{Convergences on sets of bounded operators}
 \begin{example}
@@ -955,6 +960,22 @@ Let $V$ be a Banach space over $\F$, $I$ an arbitrary index set and $\ell(I,\F)$
 \[ \bigoplus_{i\in I}^\ell V \cong \ell\otimes V \]
 \end{proposition}
 
+\subsubsection{Internal direct sums}
+\begin{proposition} \label{directSumClosedSubspacesBanachSpace}
+Let $X$ be a Banach space and $A,B\subseteq X$ subspaces such that $A\cap B = \{0\}$ and $A\oplus^i B$ is closed in $X$. Then $A\oplus^i B$ is a convergence direct sum \textup{if and only if} $A$ and $B$ are closed subspaces of $X$.
+\end{proposition}
+TODO criteria for $A\oplus^i B$ being closed in $X$: \url{https://arxiv.org/abs/1509.06445}.
+\begin{proof}
+The direction $\Rightarrow$ follows from \ref{convergenceDirectSumsClosedSubspaces} and the fact that $\closure_X(A) = \closure_{A\oplus^i B}(A)$ by \ref{subspaceAdherence}.
+
+Now assume $A,B$ closed. By \ref{internalConvergenceDirectSumEquivalents} it is enough to show that $P_A: A\oplus^i B \to A: x+y \mapsto x$ is continuous. We first show that $P_A$ is a closed operator, using \ref{closedGraphEquivalence}.
+
+Suppose $\seq{a_n+b_n} \in (A\oplus^i B)^\N$ is a convergent sequence with limit $c\in X$ and $P_A(a_n+b_n) = a_n \to a$. Since $A$ is closed, we have $a\in A$. Then $b_n = (a_n+b_n)- a_n \to c-a$ and $c-a\in B$ because $B$ is closed. Now we have, $P_A(c) = P_A(a+c-a) = a$, so $P_A$ is closed.
+
+Since $A\oplus^i B$ is closed, it is a Banach space and we can apply the closed graph theorem \ref{BanachClosedGraphTheorem}.
+\end{proof}
+
+
 
 \subsection{Quotients of normed spaces}
 \begin{proposition}
@@ -1105,53 +1126,6 @@ Let $T: X\not\to Y$ be an operator between normed spaces. Then the topology indu
 \end{corollary}
 
 \subsubsection{Closed operators}
-
-The most important property of closed operators is given by the following proposition. It is sometimes taken as the definition.
-\begin{proposition} \label{closedGraphEquivalence}
-Let $X,Y$ be normed spaces and $T: \dom(T)\subset X \to Y$ be a linear operator. Then
-the following are equivalent:
-\begin{enumerate}
-\item $T$ is a closed operator;
-\item if $(x_n)_{n\in\N}\subset \dom(T)$ converges to $x\in X$ and $(Tx_n)_{n\in\N}$ converges to $y$, then $x\in\dom(T)$ and $Tx = y$;
-\item $\dom(T)$ is complete w.r.t. the graph norm.
-\end{enumerate}
-\end{proposition}
-TODO:  (? If domain is closed?) I.e. does this work outside the realm of Banach operators??
-\begin{corollary}
-All bounded operators have closed graph. (? If domain is closed?)
-\end{corollary}
-The converse is not true in general.
-
-\url{https://en.wikipedia.org/wiki/Unbounded_operator#Closed_linear_operators}
-\url{https://en.wikipedia.org/wiki/Closed_graph_theorem_(functional_analysis)}
-
-\begin{proposition} \label{algebraClosedOperators}
-Let $T$ be a closed and $S$ a bounded operator, then
-\begin{enumerate}
-\item $S+T$ is closed;
-\item $TS$ is closed;
-\item if $T$ is injective, then $T^{-1}: \im(T) \to \dom(T)$ is closed.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) TODO
-
-(2) TODO
-
-(3) We use \ref{closedGraphEquivalence}. Take $\seq{y_n}\subset \dom(T^{-1})$ such that $y_n\to y$ and $T^{-1}y_n\to x$. Set $x_n = T^{-1}y_n$, so then $Tx_n = TT^{-1}y_n = y_n\to y$. Because $T$ is closed it follows that $Tx = y$, so $T^{-1}y = x$, meaning $T^{-1}$ is closed.
-\end{proof}
-TODO example $ST$ need not be closed.
-
-\begin{lemma} \label{closedOperatorKernelClosed}
-Let $T$ be a closed operator, then $\ker(T)$ is closed.
-\end{lemma}
-\begin{proof}
-Let $\seq{x_n}\subset\ker(T)$ be a convergent sequence. Then $\seq{Tx_n}$ is identically zero and thus converges to $0$. By closedness of $T$, $Tx = 0$ and thus $x\in\ker(T)$. 
-\end{proof}
-\begin{proof}[Alternate proof.]
-Let $T: X\to Y$. Then $\ker(T)\times\{0\} = \graph(T)\cap X\times\{0\}$. As $\graph(T)$ is closed and $X\times\{0\}$ is closed by \ref{productOpenClosed}, we have that $\ker(T)$ is closed by \ref{productOpenClosed}.
-\end{proof}
-We have already proven this for bounded operators, see \ref{kerClosed}.
 
 \begin{proposition} \label{boundedBelowClosedRange}
 Let $T\in \Lin(X, Y)$ be a closed operator between Banach spaces that is bounded below. Then $\im(T)$ is closed.
@@ -2049,7 +2023,7 @@ TODO
 \subsection{Resolvents and pseudoresolvents}
 
 \begin{proposition} \label{secondNeumannSeries}
-Let $A$ be a Banach algebra, $x\in A$ and $|\lambda| > \liminf_{n\to \infty}\norm{x^n}^{1/n}$, then
+Let $A$ be a Banach algebra, $x\in A$ and $|\lambda| > \inf_{n\to \infty}\norm{x^n}^{1/n}$, then
 \begin{enumerate}
 \item $\lambda\in\res(x)$;
 \item $R_x(\lambda) = \sum_{n=0}^\infty\frac{x^n}{\lambda^{n+1}}$;
@@ -2204,7 +2178,7 @@ Let $A$ be a Banach algebra and $x\in A$. Then
 \[ \spr(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = \inf_{n\in\N}\norm{x^n}^{1/n}. \]
 \end{proposition}
 \begin{proof}
-The contraposition of (1) in \ref{secondNeumannSeries} gives that $\lambda\in\spec(x)$ implies $|\lambda| \leq \liminf_{n\to \infty}\norm{x^n}^{1/n}$. Thus $\spr(x) \leq \liminf_{n\to \infty}\norm{x^n}^{1/n}$.
+The contraposition of (1) in \ref{secondNeumannSeries} gives that $\lambda\in\spec(x)$ implies $|\lambda| \leq \inf_{n\to \infty}\norm{x^n}^{1/n}$. Thus $\spr(x) \leq \inf_{n\to \infty}\norm{x^n}^{1/n}$.
 
 If we can now prove $\limsup_{n\to\infty}\norm{x^n}^{1/n}\leq \spr(x)$, then
 \[ \spr(x) \leq \inf_{n\in\N}\norm{x^n}^{1/n} \leq \liminf_{n\in\N}\norm{x^n}^{1/n} \leq \limsup_{n\in\N}\norm{x^n}^{1/n} \leq \spr(x), \]

@@ -615,7 +615,6 @@ The inequality $\subseteq$ is given by \ref{orderPreservingFunctionLatticeOperat
 For the other inequality, take $A\in \bigcap (\upset\circ f^{\imf\imf})^{\imf}[\mathcal{F}]$. Then, for all $F\in\mathcal{F}$, there exists $B_F\in F$ such that $f^{\imf}[B_F] \subseteq A$. Now $f^{\imf}\left[\bigcup_{F\in\mathcal{F}}B_F\right] = \bigcup_{F\in\mathcal{F}}f^{\imf}[B_F] \subseteq A$. Also $\bigcup_{F\in\mathcal{F}}B_F \in \bigcap \mathcal{F}$ by upwards closure of each filter. Thus $A\in \upset f^{\imf\imf}[\bigcap \mathcal{F}]$.
 \end{proof}
 
-
 \subsection{Upper and lower bounds}
 
 \begin{lemma} \label{upperBoundUpsetLowerBoundDownset}
@@ -3212,6 +3211,21 @@ By \ref{idealFromUltrafilter}, this is equivalent to requiring that there are no
 \subsection{Image filters and ideals}
 Cfr. \ref{imageFilter}.
 
+\begin{lemma} \label{filterInImageIsImageFilter}
+Let $X, Y$ be sets, $f: X\to Y$ and $F\in \powerfilters(Y)$. If $\im(f)\in F$, then 
+\begin{enumerate}
+\item $\upset f^{\preimf\imf}(F)$ is proper;
+\item $\upset f^{\imf\imf}\circ f^{\preimf\imf}(F) = F$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Point (1) follows from point (2).
+
+From \ref{upsetPreimageImageGaloisConnection}, we have that $F\subseteq \upset f^{\imf\imf}\circ f^{\preimf\imf}(F)$. For the other inclusion, take $A\in f^{\imf\imf}\circ f^{\preimf\imf}(F)$. Then there exists $B\in F$ such that $A = (f^\imf\circ f^\preimf)(B)$. Now $B\cap \im(f)\in F$ and there exists $C\subseteq X$ such that $B\cap \im(f) = f^\imf(C)$. Thus
+\[ B\cap \im(f) = f^\imf(C) = (f^\imf\circ f^\preimf\circ f^\imf)(C) = (f^\imf\circ f^\preimf)\big(B\cap \im(f)\big) \subseteq (f^\imf\circ f^\preimf)(B) = A. \]
+This implies that $A\in F$.
+\end{proof}
+
 \begin{proposition} \label{imageFilterProperties}
 Let $X, Y$ be sets, $f: X\to Y$ a function, $F\in\powerfilters(X)$ and $G\in\powerfilters(Y)$. Then
 \begin{enumerate}
@@ -3251,13 +3265,15 @@ As $\im(f)\in G$, we have $B\cap \im(f)\in G$ and thus $f^{\imf}(A)\in G$ by upw
 \begin{lemma} \label{mappingUltrafiltersLemma}
 Let $X,Y$ be sets, $f: X\to Y$ a function, $F\in\powerfilters(X)$, $V\in \powerultrafilters(Y)$ and $A\subseteq X$. Then
 \begin{enumerate}
-\item $V = \upset f^{\imf\imf}\big(f^{\preimf\imf}(V)\big)$;
+\item if $\im(f)\in V^\mesh$, then $V = \upset f^{\imf\imf}\big(f^{\preimf\imf}(V)\big)$;
 \item if $\upset f^{\imf\imf}(F)\subseteq V$, then there exists $U\in \powerultrafilters(X)$ such that $\upset f^{\imf\imf}(U) = V$ and $F\subseteq U$;
 \item if $f^{\imf}(A)\in V$, then there exists $U\in \powerultrafilters(X)$ such that $\upset f^{\imf\imf}(U) = V$ and $A\in U$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) We have that $V \subseteq \upset f^{\imf\imf}\big(f^{\preimf\imf}V\big)$ by \ref{upsetPreimageImageGaloisConnection} and $\upset f^{\imf\imf}\big(f^{\preimf\imf}V\big)$ is proper, so the equality follows because $V$ is ultra.
+(1) We have that $V \subseteq \upset f^{\imf\imf}\big(f^{\preimf\imf}(V)\big)$ by \ref{upsetPreimageImageGaloisConnection} and $\upset f^{\imf\imf}\big(f^{\preimf\imf}(V)\big)$ is proper (since $\im(f)\in V^\mesh$), so the equality follows because $V$ is ultra.
+
+Alternatively, we can observe that $V = V^\mesh$, by \ref{ultrafilterCriteria}. Then $V = \upset f^{\imf\imf}\big(f^{\preimf\imf}(V)\big)$ follows from \ref{filterInImageIsImageFilter}.
 
 (2) By \ref{ultrafilterCriteria}, we have $\upset f^{\imf\imf}(F)\subseteq V = V^\mesh$, so by \ref{meshConnectionSetsOfSets}
 \[ f^{\imf\imf}(F) \amesh V \iff F\amesh f^{\preimf\imf}(V). \]
@@ -4003,19 +4019,27 @@ Let $X,Y$ be sets and $R$ a relation on $(X,Y)$. Then
 \begin{lemma} \label{filterInequalityCriterion}
 Let $\sSet{X,\leq}$ be a complete lattice and $F,G\in\powerfilters(X)$. Then
 \begin{align*}
-F \leq_w G \qquad &\iff\qquad \liminf F \leq \limsup G; \\
-F \leq_s G \qquad &\iff\qquad \limsup F \leq \liminf G.
+F \leq_w G \qquad &\implies\qquad \liminf F \leq \limsup G; \\
+F \leq_s G \qquad &\implies\qquad \limsup F \leq \liminf G.
 \end{align*}
 \end{lemma}
 \begin{proof}
-We have the equivalences
+(1) We have
 \begin{align*}
 F \leq_w G &\iff \forall A\in F, B\in G: \exists x\in A, y\in B: \; x \leq y \\
-&\iff \forall A\in F, B\in G: \bigwedge A \leq \bigvee B \\
+&\implies \forall A\in F, B\in G: \bigwedge A \leq \bigvee B \\
 &\iff \bigvee_{A\in F}\bigwedge A \leq \bigwedge_{B\in G}\bigvee B \\
 &\iff \liminf F \leq \limsup G.
 \end{align*}
-The other equivalence is proved similarly.
+
+(2) We have
+\begin{align*}
+F \leq_s G &\iff \exists A\in F, B\in G: \forall x\in A, y\in B: \; x \leq y \\
+&\iff \exists A\in F, B\in G: \forall x\in A: x \leq \bigwedge B \\
+&\iff \exists A\in F, B\in G: \bigvee A \leq \bigwedge B \\
+&\implies \bigvee_{A\in F}\bigwedge A \leq \bigwedge_{B\in G}\bigvee B \\
+&\iff \liminf F \leq \limsup G.
+\end{align*}
 \end{proof}
 
 \begin{lemma} \label{weakRelationPrincipalFilter}

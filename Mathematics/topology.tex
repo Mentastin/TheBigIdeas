@@ -1752,13 +1752,20 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be a convergence space.
 
 \subsection{Open and closed maps}
 \begin{definition}
-Let $\sSet{X, \xi}, \sSet{Y, \zeta}$ be topological spaces and $f: X\to Y$ a function. Then
+Let $\sSet{X, \xi}, \sSet{Y, \zeta}$ be convergence spaces and $f: X\to Y$ a function. Then
 \begin{itemize}
 \item $f$ is called an \udef{open function} if $f^\imf(A)$ is open for all open $A\subseteq X$;
 \item $f$ is called a \udef{closed function} if $f^\imf(A)$ is closed for all closed $A\subseteq X$.
 \end{itemize}
 \end{definition}
 
+TODO: we need compactness higher than this.
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a compact convergence space, $\sSet{Y,\zeta}$ a Hausdorff space and $f: X\to Y$ a continuous function, then $f$ is closed.
+\end{lemma}
+\begin{proof}
+Let $A\subseteq X$ be a closed set. Suppose $F\in\powerfilters(Y)$ contains $f^\imf(A)$ and converges to $y\in Y$. Then $F\subseteq V$ for some $V\in\powerultrafilters(Y)$ by \ref{ultrafilterLemma} and $V\to y$ by monotonicity. By \ref{mappingUltrafiltersLemma}, there exists $U\in \powerultrafilters(X)$ such that $\upset f^{\imf\imf}(U) = V$. By compactness, $U$ converges to some $x\in X$. Since $A$ is closed, $x\in A$. By continuity, $V = \upset f^{\imf\imf}(U) \to f(x)\in f^\imf(A)$. By Hausdorff, $f(x) = y$, so $y\in f^\imf(A)$. This proves that $f^\imf(A)$ is closed.
+\end{proof}
 
 \subsection{Homeomorphisms and embeddings}
 \begin{definition}
@@ -2111,34 +2118,47 @@ Take $F\in\powerfilters(X)$ and $x,y\in \lim_\xi F$. Since $\leq_w$ is reflexive
 \begin{lemma}
 Let $\sSet{X,\leq}$ be a complete lattice and $\xi$ a convergence on $X$. Then
 \begin{enumerate}
-\item $\xi$ is compatible with the weak order \textup{if and only if} $\lim_\xi F\subseteq \{\liminf F\}\cap\{\limsup F\}$ for all $F\in\powerfilters(X)$;
-\item $\xi$ is compatible with the strong order \textup{if and only if} $\lim_\xi F\subseteq \interval{\liminf F, \limsup F}$ for all $F\in\powerfilters(X)$.
+\item if $\lim_\xi F\subseteq \{\liminf F\}\cap\{\limsup F\}$ for all $F\in\powerfilters(X)$, then $\xi$ is compatible with the weak order;
+\item if $\lim_\xi F\subseteq \interval{\liminf F, \limsup F}$ for all $F\in\powerfilters(X)$, then $\xi$ is compatible with the strong order.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) First assume $\xi$ is compatible with the weak order. Set $x = \liminf F$. Then, by \ref{filterInequalityCriterion} and compatibility with the weak order, we have
-\[ \liminf F \leq x \implies \liminf F \leq \limsup\pfilter{x} \implies F\leq_w \pfilter{x} \implies \forall y\in\lim F: \; y\leq x. \]
-With a similar argument for the limsup, we have $\limsup F\leq y \leq \liminf F$ for all $y\in \lim F$. Since $\liminf F \leq \limsup F$, the result follows.
+(1) Take $F,G\in \powerfilters(X)$ such that $F\leq_w G$. Take $x\in \lim F$ and $y\in \lim G$. By assumption, $x = \liminf F$ and $y = \limsup G$. By \ref{filterInequalityCriterion} we have $x\leq y$.
 
-For the converse, take $F,G\in \powerfilters(X)$ such that $F\leq_w G$. Take $x\in \lim F$ and $y\in \lim G$. By assumption, $x = \liminf F$ and $y = \limsup G$. By \ref{filterInequalityCriterion} we have $x\leq y$.
-
-(2) In this case, \ref{filterInequalityCriterion} gives $\liminf F\leq y \leq \limsup F$ for all $y\in \lim F$.
-
-For the converse, take $F,G\in \powerfilters(X)$ such that $F\leq_s G$. Take $x\in \lim F$ and $y\in \lim G$. By assumption, $x \leq \limsup F$ and $y \geq \liminf G$. By \ref{filterInequalityCriterion} we have $\limsup F\leq \liminf G$, so $x\leq \limsup F\leq \liminf G \leq y$.
+(2) Take $F,G\in \powerfilters(X)$ such that $F\leq_s G$. Take $x\in \lim F$ and $y\in \lim G$. By assumption, $x \leq \limsup F$ and $y \geq \liminf G$. By \ref{filterInequalityCriterion} we have $\limsup F\leq \liminf G$, so $x\leq \limsup F\leq \liminf G \leq y$.
 \end{proof}
-\begin{corollary}
-The weakest convergence compatible with the weak order is given by $\lim F = \liminf F =\limsup F$, if they exist and coincide, for all $F\in \powerfilters(X)$.
-\end{corollary}
 
-\subsubsection{Order convergence}
+\subsubsection{Convergence potentially compatible with weak order}
 \begin{definition}
-Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is defined by
-\[ \lim_\mathfrak{o}F = \begin{cases}
+Let $\sSet{X,\leq}$ be a poset. Consider
+\[ F \mapsto \begin{cases}
 \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u & \Big(\bigcap_{A\in F}\upset A \neq \emptyset \neq \bigcap_{A\in F}\downset A\Big) \\
 \emptyset & (\text{otherwise}).
 \end{cases} \]
 for all filters $F\in \powerfilters(X)$.
 \end{definition}
+\begin{lemma}
+Let $\sSet{X,\leq}$ be a poset. The convergence defined above on $X$ is a convergence.
+\end{lemma}
+\begin{proof}
+It is monotone by construction: if $F\subseteq F'$, then $\bigcap_{A\in F}\upset A \supseteq \bigcap_{A\in F'}\upset A$ and thus $\Big(\bigcap_{A\in F}\upset A\Big)^l \subseteq \Big(\bigcap_{A\in F'}\upset A\Big)^l$. A similar inclusion holds for $\Big(\bigcap_{A\in F}\downset A\Big)^u$.
+
+To show that it is centered, take $x\in X$. Then
+\begin{align*}
+\lim_\mathfrak{o}\pfilter{x} &= \Big(\bigcap_{A\in \pfilter{x}}\upset A\Big)^l \cap \Big(\bigcap_{A\in \pfilter{x}}\downset A\Big)^u \\
+&= \Big(\upset \{x\}\Big)^l \cap \Big(\downset \{x\}\Big)^u \\
+&= \downset \{x\} \cap \upset \{x\} \\
+&= \{x\}.
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $X$ be a set and $A,B\subseteq X$ such that $A\mesh B$. Then
+\begin{enumerate}
+\item $A^u \subseteq \upset B$;
+\item $A^l \subseteq \downset B$.
+\end{enumerate}
+\end{lemma}
 
 \begin{lemma}
 Let $\sSet{X,\leq}$ be a poset and $F\in \powerfilters(X)$ a filter. Then
@@ -2161,69 +2181,65 @@ We can calculate
 &= \bigcap_{A\in F}A^{ul} = \bigcap_{A\in F}\big(\downset A\big)^{ul} \overset{!}{\supseteq} \Big(\bigcap_{A\in F}\downset A\Big)^{ul}.
 \end{align*}
 
-\begin{lemma}
-Let $\sSet{X,\leq}$ be a poset. The order convergence on $X$ is a convergence.
-\end{lemma}
-\begin{proof}
-The order convergence is monotone by construction: if $F\subseteq F'$, then $\bigcap_{A\in F}\upset A \supseteq \bigcap_{A\in F'}\upset A$ and thus $\Big(\bigcap_{A\in F}\upset A\Big)^l \subseteq \Big(\bigcap_{A\in F'}\upset A\Big)^l$. A similar inclusion holds for $\Big(\bigcap_{A\in F}\downset A\Big)^u$.
-
-To show that the order convergence is centered, take $x\in X$. Then
-\begin{align*}
-\lim_\mathfrak{o}\pfilter{x} &= \Big(\bigcap_{A\in \pfilter{x}}\upset A\Big)^l \cap \Big(\bigcap_{A\in \pfilter{x}}\downset A\Big)^u \\
-&= \Big(\upset \{x\}\Big)^l \cap \Big(\downset \{x\}\Big)^u \\
-&= \downset \{x\} \cap \upset \{x\} \\
-&= \{x\}.
-\end{align*}
-\end{proof}
-
 \begin{proposition}
-Let $\sSet{X,\leq}$ be a finitely Dedekind complete poset. Then the order convergence $\mathfrak{o}$ is the weakest convergence compatible with the weak order.
+Let $\sSet{X,\leq}$ be a poset. Then any convergence that is compatible with the weak order is stronger than this convergence.
 \end{proposition}
-In particular the proposition holds for all lattices.
 \begin{proof}
 Let $\xi$ be an arbitrary convergence that is compatible with the weak order.
 
 Take arbitrary $y\in \lim_\xi(F)$. Take arbitrary $x\in \bigcap_{A\in F}\upset A$. Then $F \leq_w \pfilter{x}$ by \ref{weakRelationPrincipalFilter}, so $y\leq x$ by compatibility with the weak order. Since this holds for all such $x$, we have $y\in \Big(\bigcap_{A\in F}\upset A\Big)^l$. Similarly $y\in \Big(\bigcap_{A\in F}\downset A\Big)^u$.
 
-Thus $\lim_\xi F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u$, so any convergence compatible with the weak order is stronger than the order convergence.
-
-We now need to show that the convergence is compatible with the weak order. Take $F,G\in\powerfilters(X)$ such that $F\leq_w G$. We have
-\begin{align*}
-F \leq_w G \iff& \forall A\in F, B\in G: \exists x\in A, y\in B: \; x\leq y \\
-\iff& \forall A\in F, B\in G: \exists x\in A, y\in B: \; x\leq y \\
-\end{align*}
-TODO
+Thus $\lim_\xi F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u$, so any convergence compatible with the weak order is stronger than this convergence.
 \end{proof}
 
+\begin{example}
+Consider $P \defeq \setbuilder{(a,b)\in \R^2}{(a=0)\lor (b=0)}$ with ordering
+\[ (a,b) \leq (c,d) \;\defequiv\; \begin{cases}
+b \leq c & (a = 0 = c) \\
+b < c & \big((a\neq 0)\lor (c \neq 0)\big).
+\end{cases} \]
+Now set $A_\epsilon = \setbuilder{(x, 0)}{-\epsilon \leq x\leq \epsilon} \setminus\{(0,0)\}$. Then
+\begin{itemize}
+\item $F \defeq \upset \{A_\epsilon\}_{\epsilon > 0}$ is a filter;
+\item $\bigcap_{\epsilon > 0}\upset A_\epsilon = \setbuilder{(0,y)}{y > 0}$ and $\bigcap_{\epsilon > 0}\downset A_\epsilon = \setbuilder{(0,y)}{y < 0}$;
+\item $\Big(\bigcap_{\epsilon > 0}\upset A_\epsilon\Big)^l = \setbuilder{(0,y)}{y > 0}\cup \R\times\{0\}$ and $\Big(\bigcap_{\epsilon > 0}\downset A_\epsilon\Big)^u = \setbuilder{(0,y)}{y < 0}\cup \R\times\{0\}$;
+\item $\Big(\bigcap_{\epsilon > 0}\upset A_\epsilon\Big)^l \cap\Big(\bigcap_{\epsilon > 0}\downset A_\epsilon\Big)^u = \R\times\{0\}$.
+\end{itemize}
+Thus $P$ has no weakest convergence compatible with weak ordering.
+\end{example}
 
 \begin{example}
-Consider the ``bug-eyed line'' $\R\uplus \{0'\}$, where ($x< 0'$ iff $x< 0$) and ($0'<x$ iff $0<x$). This poset is clearly not finitely Dedekind complete, since $\{0,0'\}$ is upper bounded by all positive numbers, but does not have a least upper bound.
+Let $X$ be an infinite set. Consider $P = \{\top, \bot\}\uplus X$ with the following order: $x\leq y$ if and only if either $x = \bot$ or $y = \top$.
 
-Set $F \defeq \upset\setbuilder[\big]{\interval[o]{0,\epsilon}}{\epsilon > 0} = \upset\setbuilder[\big]{\interval[o]{0',\epsilon}}{\epsilon > 0'}$. Then
-\begin{align*}
-\lim_\mathfrak{o}F &= \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \\
-&= \Big(\bigcap_{\epsilon > 0}\interval[o]{0,\infty}\Big)^l \cap \Big(\bigcap_{\epsilon > 0}\interval[o]{-\infty, \epsilon}\Big)^u \\
-&= \Big(\interval[o]{0,\infty}\Big)^l \cap \Big(\interval[o]{-\infty, 0}\cup \{0,0'\}\Big)^u \\
-&= \Big(\interval[o]{-\infty, 0} \cup \{0,0'\}\Big) \cap \Big(\interval[o]{0,\infty}\Big) \\
-&= \emptyset.
-\end{align*}
-Set $F \defeq \setbuilder[\big]{\interval[o]{0,\epsilon}}{\epsilon > 0} \cup \setbuilder[\big]{\interval[o]{-\epsilon, 0}}{\epsilon > 0}$. Then
-\begin{align*}
-\lim_\mathfrak{o}F &= \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \\
-&= \Big(\interval[o]{0,\infty}\Big)^l \cap \Big(\interval[o]{-\infty, 0}\Big)^u \\
-&= \Big(\interval[o]{-\infty, 0} \cup \{0,0'\}\Big) \cap \Big(\interval[o]{0,\infty} \cup \{0,0'\}\Big) \\
-&= \{0,0'\}.
-\end{align*}
-So the filter property is important.
-
-Set $F \defeq \setbuilder[\big]{\interval[o]{-\epsilon,\epsilon}}{\epsilon > 0}$. Then
-\begin{align*}
-\lim_\mathfrak{o}F &= \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \\
-&= \Big(\interval[o]{0,\infty} \cup \{0,0'\}\Big)^l \cap \Big(\interval[o]{-\infty, 0} \cup \{0,0'\}\Big)^u \\
-&= \Big(\interval[o]{-\infty, 0}\Big) \cap \Big(\interval[o]{0,\infty}\Big) \\
-&= \emptyset.
-\end{align*}
+Consider any free filter $F$ on $X$. Then
+\[ \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u = X. \]
 \end{example}
+
+\subsection{Order convergence}
+\begin{definition}
+Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is defined by
+\[ x\in \lim_\mathfrak{o}F \;\defequiv\;  \bigcap_{A\in F} A^{ul} \cap A^{lu}.
+\]
+for all filters $F\in \powerfilters(X)$.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\leq}$ be a poset. The order convergence is a convergence that is compatible with the weak order.
+\end{lemma}
+\begin{proof}
+Suppose $F, G\in \powerfilters(X)$ and $x\in \lim_\mathfrak{o} F$. 
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if} there exist $M,N\subseteq X$ such that
+\begin{itemize}
+\item $\bigvee M = x = \bigwedge N$;
+\item $\upset \setbuilder{\interval[c]{m,n}}{m\in M, n\in N} \subseteq F$
+\end{itemize} 
+\end{proposition}
+\begin{proof}
+
+\end{proof}
 
 \begin{proposition}
 Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if}
@@ -2693,6 +2709,88 @@ TODO:
 
 
 \section{Constructions}
+\subsection{Subspace convergence}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. The \udef{subspace convergence} $\xi|_A$ on $A$ is the initial convergence w.r.t. $\{\iota: A \hookrightarrow X: a\mapsto a\}$. The convergence space $\sSet{A,\xi|_A}$ is called a \udef{convergence subspace} of $X$.
+\end{definition}
+
+\begin{lemma} \label{setTraceFilterLemma}
+Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $F\in\powerfilters(X)$ a filter. Then
+\begin{enumerate}
+\item $F|_A = \upset \setbuilder{B\cap A}{B\in F} = (\upset_X\circ \iota^{\preimf\imf})(F)$;
+\item $F = (\upset_X\circ \iota^{\preimf\imf})(F)$ \textup{if and only if} $A\in F$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have $\iota^{\preimf}(B) = B\cap A$ for all $B\subseteq X$.
+
+(2) By 1. and \ref{traceFilterLemma}.
+\end{proof}
+
+\begin{lemma} \label{subspaceConvergence}
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \powerfilters(A)$, $G\in \powerfilters(X)$ and $a\in A$. Then
+\begin{enumerate}
+\item $F \overset{\xi|_A}{\longrightarrow} a$ if and only if $\upset_X F \overset{\xi}{\longrightarrow} a$;
+\item if $G\overset{\xi}{\longrightarrow} a$, then $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$;
+\item if $A\in G$ and $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$, then $G\overset{\xi}{\longrightarrow} a$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By \ref{initialFinalConvergence}, since $\upset_X F = \upset \iota^{\imf\imf}(F)$
+
+(2) Assume $G\overset{\xi}{\longrightarrow} a \in A$. Then $G \subseteq \upset\iota^{\imf\imf}\big(\iota^{\preimf\imf}(G)\big) \to a$ by \ref{upsetPreimageImageGaloisConnection} and so $\iota^{\preimf\imf}(G) \to a$ by \ref{initialFinalConvergence}.
+
+(3) We have $\upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \overset{\xi}{\longrightarrow} a$ by continuity of the inclusion $\iota$. If $A\in G$, then, by \ref{setTraceFilterLemma}, $\upset\iota^{\imf\imf}\big(\iota^{\preimf\imf}(G)\big) = (\upset_X\circ \iota^{\preimf\imf})(G) = G$, so $G \overset{\xi}{\longrightarrow} a$.
+\end{proof}
+
+\begin{proposition} \label{subspaceAdherence}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Let $B\subseteq A$ and $x\in A$. Then
+\begin{enumerate}
+\item $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A$;
+\item if $A$ is closed, then $\adh_{\xi|_A}(B) = \adh_\xi(B)$;
+\item if $B$ is $\xi$-closed, then it is $\xi|_A$-closed.
+\end{enumerate}
+\end{proposition}
+TODO does this hold for closures as well??
+\begin{proof}
+(1) We have $\iota^\imf(B) = B$ and $\iota^\imf\big(\adh_{\xi|_A}(B)\big)$, so $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B)$ by \ref{adherenceInherenceContinuity}. Then we immediately have $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B) \cap A$.
+
+Now take $x\in \adh_\xi(B) \cap A$. Then, by \ref{principalAdherenceInherence}, there exists a proper filter $F\overset{\xi}{\longrightarrow} x$ such that $B\in F$. Then also $A\in F$ and so $\upset \iota^{\preimf\imf}(F)\overset{\xi|_A}{\longrightarrow} x$ by \ref{subspaceConvergence} (where we have used that $x\in A$). Because $B\in \upset \iota^{\preimf\imf}(F)$, we have $x\in \adh_{\xi|_A}(B)$.
+
+(2) If $A$ is closed, then $\adh_\xi(B)\subseteq \adh_\xi(A) = A$ by \ref{principalInherenceAdherenceProperties} and so $\adh_\xi(B)\cap A = \adh_\xi(B)$.
+
+(3) Assume $B$ is $\xi$-closed. From (1) we have $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A = B\cap A = B$.
+\end{proof}
+
+\begin{proposition} \label{subspaceVicinityFilter}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. If $A$ is open, then
+\[ \upset\iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big) = \vicinity_\xi(a) \]
+for all $a\in A$.
+\end{proposition}
+\begin{proof}
+We have $\vicinity_\xi(a) \subseteq \upset\iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big)$ by continuity of $\iota$.
+
+For the other inclusion, we have $A\in \vicinity_\xi(a)$ by \ref{openClosedCriteria}, so $A$ is an element of each filter that converges to $a$ in $\xi$. Now take arbitrary $F\overset{\xi}{\longrightarrow} a$. By \ref{subspaceConvergence} we have $\vicinity_{\xi|_A}(a) \subseteq \upset \iota^{\preimf\imf}(F)$, which implies
+\[ \upset \iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big) \subseteq \upset (\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F) = F, \]
+by \ref{setTraceFilterLemma}. Taking the intersection over all such $F$ gives the result.
+\end{proof}
+
+\begin{proposition} \label{continuityRestrictionExpansion}
+Let $\sSet{X,\xi}$, $\sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergence spaces.
+\begin{enumerate}
+\item \textup{(Restricting the domain)} If $f:X\to Y$ is continuous and $A$ is a subspace of $X$, then the restricted function $f|_{A}:A\to Y$ is continuous.
+\item \textup{(Restricting the range)} Let $f:X\to Y$ be continuous. If $Z$ is a subspace of $Y$ containing the image set $f[X]$, then $f:X\to Z$ is continuous.
+\item \textup{(Expanding the range)} Let $f:X\to Y$ be continuous. If $Y$ is a subspace of $Z$, then $f:X\to Z$ is continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Composition of continuous maps: $f|_{A} = f\circ\iota$.
+
+(2) Composition of continuous maps: $f:X\to Z = \iota \circ (f: X\to Y)$.
+
+(3) Characteristic property \ref{characteristicPropertyInitialFinalConvergence}: if $f:X\to Y = \iota \circ (f:X\to Z)$ is continuous, then $f:X\to Z$ is too.
+\end{proof}
+
 \subsection{Product convergence}
 \begin{definition}
 Let $\sSet{X_i, \xi_i}$ be a convergence space for all $i\in I$. The \udef{product convergence space} $\prod_{i\in I}X_i$ is the initial convergence on $\bigtimes_{i\in I}X_i$ w.r.t. the set of projections $p_i: \bigtimes_{i\in I}X_i \to X_i$.
@@ -2712,27 +2810,42 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\sigma}$ be convergence spaces. Then for all $y\
 The functions $\id_X$ and $\underline{y}$ are continuous.
 \end{proof}
 
-\begin{proposition}
+\begin{lemma}
 Let $\sSet{X,\xi}$ and $\sSet{Y,\sigma}$ be convergence spaces. Then $\proj_X: X\times Y\to X$ and $\proj_Y: X\times Y\to Y$ are open maps.
-\end{proposition}
+\end{lemma}
 \begin{proof}
 TODO (only for topological spaces?)
+\end{proof}
+
+\begin{lemma} \label{projectionClosedFunction}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\sigma}$ a compact convergence space. Then $\proj_X: X\times Y\to X$ is a closed function.
+\end{lemma}
+\begin{proof}
+Let $A\subseteq X\times Y$ be a closed set. Suppose $F\in \powerfilters(X)$ contains $\proj_X^\imf(A)$ and $F\to x$. Consider $\upset(\proj_X|_A)^{\preimf\imf}(F)$, which is proper by \ref{filterInImageIsImageFilter}. It is contained in an ultrafilter $U\in\powerultrafilters(X\times Y)$ by \ref{ultrafilterLemma}. Now $\upset\proj_Y^{\imf\imf}(U)$ is an ultrafilter by \ref{imageFilterProperties} and thus convergent to some limit $y\in Y$ by compactness of $Y$. By \ref{filterInImageIsImageFilter}, we also have
+\[ F = \upset(\proj_X|_A)^{\imf\imf}\circ(\proj_X|_A)^{\preimf\imf}(F) = \upset(\proj_X)^{\imf\imf}\circ(\proj_X|_A)^{\preimf\imf}(F) \subseteq \upset\proj_X^{\imf\imf}(U), \]
+so $\upset\proj_X^{\imf\imf}(U)$ converges to $x$. This means $U\to (x,y)$ and so $(x,y)\in A$. Thus $x\in \proj_X^\imf(A)$ and so $\proj_X^\imf(A)$ is closed.
 \end{proof}
 
 \begin{lemma} \label{initialConvergenceWrtOneFunction}
 Let $Y$ be a set, $F\in \powerfilters(Y)$ and $y\in Y$. Let $\{f_i: Y\to \sSet{Z_i, \zeta_i}\}_{i\in I}$ be set of functions to convergence spaces and $\mu$ the initial convergence on $Y$ w.r.t. this set.
 
-Then $\mu$ is also the initial convergence w.r.t. the function $f: Y\to \prod_{i\in I}Z_i$ where $f$ is defined by $p_i(f(y)) = f_i(y)$ for all $y\in Y$.
+Then $\mu$ is also the initial convergence w.r.t. the function $f: Y\to \prod_{i\in I}Z_i$ where $f$ is defined by $\proj_i(f(y)) = f_i(y)$ for all $y\in Y$.
 \end{lemma}
 The definition of $f$ uses the universal property of the product. (TODO ref).
 \begin{proof}
 Let $F\in \powerfilters(Y)$ be a filter and $x\in X$. Then
 \begin{align*}
 F \overset{\mu}{\longrightarrow} x &\iff \forall i\in I:  \upset f_i^{\imf\imf}(F) \overset{\zeta_i}{\longrightarrow} f_i(x) \\
-&\iff \forall i\in I: \upset (p_i\circ f)^{\imf\imf}(F) \overset{\zeta_i}{\longrightarrow} (p_i\circ f)(x) \\
+&\iff \forall i\in I: \upset (\proj_i\circ f)^{\imf\imf}(F) \overset{\zeta_i}{\longrightarrow} (\proj_i\circ f)(x) \\
 &\iff  \upset f^{\imf\imf}(F) \overset{\bigotimes_{i\in I}\zeta_i}{\longrightarrow} f(x),
 \end{align*}
 where we have used \ref{initialFinalConvergence} twice. A third application proves the lemma.
+\end{proof}
+\begin{corollary} \label{productAndSubspaceConvergencesCommute}
+Let $\sSet{X_i,\xi_i}_{i\in I}$ be a set of convergence spaces and $A_i \subseteq X_i$ a subset for all $i\in I$. Then the subspace convergence on $\bigtimes_{i\in I}A_i$ as a subspace of $\bigtimes_{i\in I}X_i$ equals the product convergence where each $A_i$ individually carries the subspace convergence as a subspace of $X_i$.
+\end{corollary}
+\begin{proof}
+If we set $f_i = \iota_{A_i}\circ \proj_{i}$, then $f = \iota_{\bigtimes_{i\in I}A_i}$.
 \end{proof}
 
 \subsubsection{Characterising the product convergence}
@@ -2908,88 +3021,59 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces, $F\in \powerfilte
 Point (1) is a restatement of \ref{initialFinalConvergence}. Point (2) follows from point (1) because $p_1^{\imf\imf}(F\otimes G) = F$ and $p_2^{\imf\imf}(F\otimes G) = G$ by \ref{projectionsOfProductFilter}.
 \end{proof}
 
-
-\subsection{Subspace convergence}
+\subsubsection{Functions with closed graphs}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. The \udef{subspace convergence} $\xi|_A$ on $A$ is the initial convergence w.r.t. $\{\iota: A \hookrightarrow X: a\mapsto a\}$. The convergence space $\sSet{A,\xi|_A}$ is called a \udef{convergence subspace} of $X$.
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence space and $f: X\not\to Y$ a partial function. We say $f$ has \udef{closed graph} if $\graph(f)$ is closed in $X\times Y$.
 \end{definition}
+This is not the same as a closed map!
 
-\begin{lemma} \label{setTraceFilterLemma}
-Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $F\in\powerfilters(X)$ a filter. Then
+\label{secFunctionsClosedGraph}
+
+\begin{proposition} \label{closedGraphEquivalence}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence space and $f: X\not\to Y$ a partial function. Then
+the following are equivalent:
 \begin{enumerate}
-\item $F|_A = \upset \setbuilder{B\cap A}{B\in F} = (\upset_X\circ \iota^{\preimf\imf})(F)$;
-\item $F = (\upset_X\circ \iota^{\preimf\imf})(F)$ \textup{if and only if} $A\in F$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) We have $\iota^{\preimf}(B) = B\cap A$ for all $B\subseteq X$.
-
-(2) By 1. and \ref{traceFilterLemma}.
-\end{proof}
-
-\begin{lemma} \label{subspaceConvergence}
-Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \powerfilters(A)$, $G\in \powerfilters(X)$ and $a\in A$. Then
-\begin{enumerate}
-\item $F \overset{\xi|_A}{\longrightarrow} a$ if and only if $\upset_X F \overset{\xi}{\longrightarrow} a$;
-\item if $G\overset{\xi}{\longrightarrow} a$, then $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$;
-\item if $A\in G$ and $\iota^{\preimf\imf}[G]\overset{\xi|_A}{\longrightarrow} a$, then $G\overset{\xi}{\longrightarrow} a$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) By \ref{initialFinalConvergence}, since $\upset_X F = \upset \iota^{\imf\imf}(F)$
-
-(2) Assume $G\overset{\xi}{\longrightarrow} a \in A$. Then $G \subseteq \upset\iota^{\imf\imf}\big(\iota^{\preimf\imf}(G)\big) \to a$ by \ref{upsetPreimageImageGaloisConnection} and so $\iota^{\preimf\imf}(G) \to a$ by \ref{initialFinalConvergence}.
-
-(3) We have $\upset\iota^{\imf\imf}\big[\iota^{\preimf\imf}[G]\big] \overset{\xi}{\longrightarrow} a$ by continuity of the inclusion $\iota$. If $A\in G$, then, by \ref{setTraceFilterLemma}, $\upset\iota^{\imf\imf}\big(\iota^{\preimf\imf}(G)\big) = (\upset_X\circ \iota^{\preimf\imf})(G) = G$, so $G \overset{\xi}{\longrightarrow} a$.
-\end{proof}
-
-\begin{proposition} \label{subspaceAdherence}
-Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Let $B\subseteq A$ and $x\in A$. Then
-\begin{enumerate}
-\item $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A$;
-\item if $A$ is closed, then $\adh_{\xi|_A}(B) = \adh_\xi(B)$;
-\item if $B$ is $\xi$-closed, then it is $\xi|_A$-closed.
-\end{enumerate}
-\end{proposition}
-TODO does this hold for closures as well??
-\begin{proof}
-(1) We have $\iota^\imf(B) = B$ and $\iota^\imf\big(\adh_{\xi|_A}(B)\big)$, so $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B)$ by \ref{adherenceInherenceContinuity}. Then we immediately have $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B) \cap A$.
-
-Now take $x\in \adh_\xi(B) \cap A$. Then, by \ref{principalAdherenceInherence}, there exists a proper filter $F\overset{\xi}{\longrightarrow} x$ such that $B\in F$. Then also $A\in F$ and so $\upset \iota^{\preimf\imf}(F)\overset{\xi|_A}{\longrightarrow} x$ by \ref{subspaceConvergence} (where we have used that $x\in A$). Because $B\in \upset \iota^{\preimf\imf}(F)$, we have $x\in \adh_{\xi|_A}(B)$.
-
-(2) If $A$ is closed, then $\adh_\xi(B)\subseteq \adh_\xi(A) = A$ by \ref{principalInherenceAdherenceProperties} and so $\adh_\xi(B)\cap A = \adh_\xi(B)$.
-
-(3) Assume $B$ is $\xi$-closed. From (1) we have $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A = B\cap A = B$.
-\end{proof}
-
-\begin{proposition} \label{subspaceVicinityFilter}
-Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. If $A$ is open, then
-\[ \upset\iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big) = \vicinity_\xi(a) \]
-for all $a\in A$.
-\end{proposition}
-\begin{proof}
-We have $\vicinity_\xi(a) \subseteq \upset\iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big)$ by continuity of $\iota$.
-
-For the other inclusion, we have $A\in \vicinity_\xi(a)$ by \ref{openClosedCriteria}, so $A$ is an element of each filter that converges to $a$ in $\xi$. Now take arbitrary $F\overset{\xi}{\longrightarrow} a$. By \ref{subspaceConvergence} we have $\vicinity_{\xi|_A}(a) \subseteq \upset \iota^{\preimf\imf}(F)$, which implies
-\[ \upset \iota^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big) \subseteq \upset (\iota^{\imf\imf}\circ \iota^{\preimf\imf})(F) = F, \]
-by \ref{setTraceFilterLemma}. Taking the intersection over all such $F$ gives the result.
-\end{proof}
-
-\begin{proposition} \label{continuityRestrictionExpansion}
-Let $\sSet{X,\xi}$, $\sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergence spaces.
-\begin{enumerate}
-\item \textup{(Restricting the domain)} If $f:X\to Y$ is continuous and $A$ is a subspace of $X$, then the restricted function $f|_{A}:A\to Y$ is continuous.
-\item \textup{(Restricting the range)} Let $f:X\to Y$ be continuous. If $Z$ is a subspace of $Y$ containing the image set $f[X]$, then $f:X\to Z$ is continuous.
-\item \textup{(Expanding the range)} Let $f:X\to Y$ be continuous. If $Y$ is a subspace of $Z$, then $f:X\to Z$ is continuous.
+\item $f$ has closed graph;
+\item if $F\in \powerfilters\big(\dom(f)\big)$ converges to $x\in X$ and $\upset f^{\imf\imf}(F)$ converges to $y\in Y$, then $x\in\dom(f)$ and $f(x) = y$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Composition of continuous maps: $f|_{A} = f\circ\iota$.
+$(1) \Rightarrow (2)$ Suppose $F\in \powerfilters\big(\dom(f)\big)$ converges to $x\in X$ and $\upset f^{\imf\imf}(F)$ converges to $y\in Y$. Then $F\otimes f^{\imf\imf}(F) \to (x, y)$, so $(x, y) \in \adh\big(\graph(f)\big)$. Since $\graph(f)$ is closed, we have $(x, y) \in \graph(f)$, so $x\in dom(f)$ and $y= f(x)$.
 
-(2) Composition of continuous maps: $f:X\to Z = \iota \circ (f: X\to Y)$.
+$(2) \Rightarrow (1)$ Take $(x, y) \in \adh\big(\graph(f)\big)$. Then there exists $H\in \powerfilters(X\times Y)$ such that $H\to (x,y)$ and $\graph(f)\in H$. Now $\upset\proj_1^{\imf\imf}(H) \to x$ and $\upset\proj_2^{\imf\imf}(H) \to y$. By construction, $\upset\proj_2^{\imf\imf}(H) = \upset f^{\imf\imf}\big(\proj_1^{\imf\imf}(H)\big)$, so $x\in \dom(f)$ and $f(x) = y$. This means that $(x,y) = \big(x,f(x)\big) \in \graph(f)$.
 
-(3) Characteristic property \ref{characteristicPropertyInitialFinalConvergence}: if $f:X\to Y = \iota \circ (f:X\to Z)$ is continuous, then $f:X\to Z$ is too.
+Thus $\adh\big(\graph(f)\big) \subseteq \graph(f)$, which means that the graph of $f$ is closed.
 \end{proof}
+
+\begin{proposition} \label{closedGraphFunctionConstructions}
+Let $\sSet{X,\xi}, \sSet{Y,\sigma}, \sSet{Z,\zeta}$ be convergences space, $f: X\to Y$ a continuous function and $g:Y\not\to Z$ a partial function with closed graph. Then
+\begin{enumerate}
+\item $g\circ f$ has closed graph;
+\item if $g$ is injective, then $g^{-1}: \im(g)\subseteq Y\to \dom(g)$ has closed graph.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Suppose $F\in \powerfilters\big(\dom(g\circ f)\big)$ converges to $x\in X$ and $\upset (g\circ f)^{\imf\imf}(F)$ converges to $z\in Z$. Then $\upset f^{\imf\imf}(F)$ converges to $f(x)$ by continuity and then $f(x)\in\dom(f)$ and $z= (g\circ f)(x)$ by \ref{closedGraphEquivalence}, since $g$ has closed graph. Since this means that $x\in \dom(g\circ f)$, $g\circ f$ has closed graph by \ref{closedGraphEquivalence}.
+
+(2) Suppose $F\in \powerfilters(Y)$, with $\im(f)\in F$, converges to $y\in Y$ and $\upset f^{\preimf\imf}(F)$ converges to $x\in X$. Then $\upset(f^{\imf\imf}\circ f^{\preimf\imf})(F) = F \to y$ by \ref{filterInImageIsImageFilter}. Then $y = f(x)$ by \ref{closedGraphEquivalence}, since $f$ has closed graph, so $y\in \dom(f^{-1})$ and $f^{-1}(y) = x$. We conclude that $f^{-1}$ has closed graph by \ref{closedGraphEquivalence}.
+\end{proof}
+
+TODO: example $f\circ g$ not closed.
+
+\begin{proposition} \label{continuousFunctionClosedGraph}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence space with $Y$ Hausdorff and $f: X\not\to Y$ a partial function. Then
+\begin{enumerate}
+\item if $f$ is continuous and has closed domain, then $f$ has closed graph;
+\item if $X,Y$ are topological, $Y$ is compact and $f$ has closed graph, then $f$ is continuous.
+\end{enumerate}
+\end{proposition}
+TODO: can we extend (2) to non-topological settings??
+\begin{proof}
+(1) We use \ref{closedGraphEquivalence}. Suppose $F\in \powerfilters\big(\dom(f)\big)$ converges to $x\in X$ and $\upset f^{\imf\imf}(F)$ converges to $y\in Y$. By closure of the domain, $x\in \dom(f)$. By continuity $\upset f^{\imf\imf}(F)$ converges to $f(x)$. By Hausdorff, we have $y = f(x)$.
+
+(2) Take $B\subseteq Y$ closed. Then $(X\times B)\cap \im(f)$ is closed and so $f^\preimf(A) = \proj_1^\imf\big((X\times B)\cap \im(f)\big)$ is closed by \ref{projectionClosedFunction}. This implies that $f$ is continuous by (TODO ref).
+\end{proof}
+
 
 \subsection{Disjoint union or coproduct convergence}
 \begin{definition}

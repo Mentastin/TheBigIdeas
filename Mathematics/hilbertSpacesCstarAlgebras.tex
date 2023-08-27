@@ -1114,7 +1114,6 @@ If $T$ is symmetric and bounded, then
 \chapter{Hilbert spaces}
 
 \section{Tools to study operators}
-\subsection{Spectrum}
 \subsection{Numerical range}
 \begin{lemma}
 Let $T$ be an operator on a Hilbert space. If $\lambda\in\cspec(T)$, then there exists a Weyl sequence for $\lambda$. 
@@ -1155,6 +1154,14 @@ Finally we have $\cspec(T)\subseteq\apspec(T)$ by \ref{approximateSpectrum} and 
 
 (5) Immediate from \ref{spectrumDecomposition}.
 \end{proof}
+
+\subsection{Graph norm and inner product}
+Let $T: H\not\to H'$ be a linear map between Hilbert spaces. Then $\graph(T)\subseteq H\oplus H'$. If we want to $H\oplus H'$ to be a Hilbert space, we set
+\[ \inner{x\oplus x', y\oplus y'}_{H\oplus H'} = \inner{x,y}_H + \inner{x',y'}_{H'}, \]
+then $\norm{x\oplus y}_{H\oplus H'} = \sqrt{\norm{x}_H^2 + \norm{y}_{H'}}$.
+
+We define, for $x,y\in \dom(T)$,
+\[ \inner{x,y}_{\graph(T)} = \inner{x,y}_H + \inner{Tx,Ty}_{H'}. \]
 
 \section{Projectors and minimisation problems}
 Every subspace is a convex, non-empty subset.
@@ -1875,7 +1882,7 @@ Let $T: H\to K$ be a densely defined operator between Hilbert spaces. Then $\dom
 \begin{proof}
 The direction $\Leftarrow$ is given by \ref{adjointDomain}.
 
-For the other direction, note that $T^*$ is closed by \ref{adjointGraph}. Then $T^*$ is bounded by the closed graph theorem \ref{closedGraphTheorem}. We use the direction $\Leftarrow$ to see that $\dom(T^{**}) = H$. Similarly, $T^{**}$ is closed by \ref{adjointGraph} and bounded by the closed graph theorem \ref{closedGraphTheorem}. Thus $T\subseteq \overline{T} = T^{**}$ is bounded.
+For the other direction, note that $T^*$ is closed by \ref{adjointGraph}. Then $T^*$ is bounded by the closed graph theorem \ref{BanachClosedGraphTheorem}. We use the direction $\Leftarrow$ to see that $\dom(T^{**}) = H$. Similarly, $T^{**}$ is closed by \ref{adjointGraph} and bounded by the closed graph theorem \ref{BanachClosedGraphTheorem}. Thus $T\subseteq \overline{T} = T^{**}$ is bounded.
 \end{proof}
 
 An important application of this proposition is the Hellinger-Toeplitz theorem \ref{HellingerToeplitz}.
@@ -2081,7 +2088,7 @@ Assume $T\in\Bounded(H,K)$. Then
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Assume $T\in\Bounded(H,K)$. Then $u\mapsto \inner{x,Tu}$ is a bounded functional for all $x\in K$, so $\dom(T^*) = K$ by \ref{adjointDomain}. Also $T^*$ is closed by \ref{adjointGraph}, so it is bounded by the closed graph theorem \ref{closedGraphTheorem}.
+(1) Assume $T\in\Bounded(H,K)$. Then $u\mapsto \inner{x,Tu}$ is a bounded functional for all $x\in K$, so $\dom(T^*) = K$ by \ref{adjointDomain}. Also $T^*$ is closed by \ref{adjointGraph}, so it is bounded by the closed graph theorem \ref{BanachClosedGraphTheorem}.
 
 (2) Assume $T^*\in\Bounded(K,H)$. By the previous argument $T \subseteq \overline{T} = T^{**}\in\Bounded(H,K)$.
 
@@ -2123,183 +2130,6 @@ Conversely, $\forall x\in H$:
 \[ \norm{T(x)}^2 = \inner{Tx,Tx} = \inner{T^*Tx,x} \leq \norm{T^*Tx}\cdot \norm{x} \leq \norm{T^*T}\cdot\norm{x}^2. \]
 The other equality follows by applying the first to $T^*$ and using $\norm{T^*}=\norm{T}$.
 \end{proof}
-
-\subsection{Normal operators}
-\begin{definition}
-A densely defined linear operator $T$ on a Hilbert space $H$ is \udef{normal} if it is closed and $TT^* = T^*T$.
-\end{definition}
-Self-adjoint and unitary operators are normal.
-
-\begin{proposition} \label{normalCriterion}
-Let $T: H\not\to H$ be a densely defined operator. Then $T$ is normal \textup{if and only if} $\dom(T) = \dom(T^*)$ and $\forall x\in \dom(T): \norm{Tx} = \norm{T^*x}$.
-\end{proposition}
-\begin{proof}
-First, assume $T$ normal. Then, for all $x\in \dom(T^*T) = \dom(TT^*)$, we have $x\in \dom(T)$ and $x\in \dom(T^*)$ and
-\[ \norm{Tx}^2 = |\inner{Tx,Tx}| = |\inner{T^*Tx,x}| = |\inner{TT^*x,x}| = |\inner{T^*x,T^*x}| = \norm{T^*x}^2. \]
-
-For the converse, we have $\inner{Tx, Ty} = \inner{T^*x, T^* y}$ for all $x,y\in H$ by polarisation. From this we have $\inner{T^*Tx, y} = \inner{TT^*x, y}$ and normality follows from \ref{equalityOfMapsInnerProductSpaces}.
-
-TODO question of domain.
-\url{https://www.math.drexel.edu/faculty/mjz55/wp-content/uploads/sites/8/2017/01/normalnotes.pdf}.
-\end{proof}
-\begin{corollary} \label{equalityKernelAdjointNormal}
-If $T$ is a normal operator, then $\ker T = \ker T^*$.
-\end{corollary}
-\begin{proof}
-We have $x\in\ker(T) \iff \norm{Tx} = 0 \iff \norm{T^*x} = 0 \iff x\in\ker(T^*)$. 
-\end{proof}
-\begin{corollary}
-If $T$ is a normal operator then
-\begin{enumerate}
-\item $\rspec(T) = \emptyset$;
-\item $\spec(T) = \apspec(T)$.
-\end{enumerate} 
-\end{corollary}
-\begin{proof}
-If $T$ is normal, then so is $\lambda\id-T$. Now $\lambda\in\rspec(T)$ iff $\ker(\lambda\id - T) = \{0\}$ and $\im(\lambda\id-T)^\perp \neq \{0\}$, but $\im(\lambda\id-T)^\perp = \ker(\lambda\id-T)^* = \ker(\lambda\id-T)$. By \ref{kernelImageAdjoint} and the previous corollary. This is a contradiction.
-
-(2) then follows straight from (1).
-\end{proof}
-
-\begin{theorem} \label{closureNumericRangeConvexHullSpectrum}
-The closure of the numerical range of a normal operator is the
-convex hull of its spectrum.
-\end{theorem}
-\begin{proof}
-Normal operators $T$ are by definition closed, so $\spec(T)\subseteq \overline{\NumRange(T)}$ by \ref{spectralInclusionNumericalRange}. TODO
-\end{proof}
-
-\begin{lemma} \label{normalSpectralRadiusEqualsNorm}
-For normal elements the spectral radius equals the norm.
-\end{lemma}
-
-\begin{lemma}
-A normal operator on a Hilbert space is invertible \textup{if and only if} it is bounded below.
-\end{lemma}
-
-\begin{theorem}[Fuglede's theorem]
-Let $H$ be a Hilbert space $N$ a normal operator on $H$ and $A\in\Bounded(H)$. Then $AN\subseteq NA$ implies $AN^* \subseteq N^*A$.
-\end{theorem}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}[Putnam-Fuglede theorem]
-Let $H, K$ be a Hilbert spaces, $A\in\Bounded(K, H)$ and both $N: H\not\to K$ and $M: K\not\to H$ normal operators. Then $AN\subseteq MA$ implies $AN^* \subseteq M^*A$.
-\end{corollary}
-\begin{proof}
-Consider
-\[ L \defeq \begin{pmatrix}
-N & 0 \\ 0 & M
-\end{pmatrix} \qquad\text{and}\qquad A' \defeq \begin{pmatrix}
-0 & A \\ 0 & 0
-\end{pmatrix}. \]
-Then $L$ is normal (TODO) and $A'$ is bounded. Then we can apply Fuglede's theorem (TODO details).
-\end{proof}
-
-\subsubsection{Spectral measures}
-\begin{definition}
-Let $H$ be a Hilbert space and $\sSet{\Omega,\mathcal{A}}$ a measurable space.
-\begin{itemize}
-\item A measure $E$ from $\sSet{\Omega,\mathcal{A}}$ to the lattice of projectors on $H$ is called a \udef{projector-valued measure}.
-\item A projector-valued measure $E$ such that $E(\Omega) = \id_H$ is called a \udef{spectral measure}.
-\end{itemize}
-Let $E$ be a projector-valued measure on $\sSet{\Omega,\mathcal{A}}$. For any measurable function $f: X\to \C$ we define
-\[ \int_\Omega f\diff{E}: \dom\Big(\int_\Omega f\diff{E}\Big) \to H: x\mapsto \int_\Omega f\diff{E_x}, \]
-where the integral is a Bochner integral,
-\[ E_x: \mathcal{A}\to H: A\mapsto E(A)(x) \]
-and
-\[ \dom\Big(\int_\Omega f\diff{E}\Big) = \setbuilder{x\in H}{\text{$f$ if $E_x$-integrable}}. \]
-\end{definition}
-TODO: can we make definition of Bochner integral general enough such that this integral can be  considered as a Bochner integral??
-
-\begin{lemma}
-Let $H$ be a Hilbert space, $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$ and $x\in H$. Then $E_x$ is a vector-valued measure.
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{lemma} \label{projectorIntegrableSolid}
-Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions such that $|f|\leq |g|$. Then $\dom\Big(\int_\Omega f \diff{E}\Big) \supseteq \dom\Big(\int_\Omega g \diff{E}\Big)$.
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{proposition} \label{integralProjectorValuedMeasure}
-Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions. Then
-\begin{enumerate}
-\item $\int_\Omega f\diff{E}$ is a normal operator;
-\item $\Big(\int_\Omega f\diff{E}\Big)^* = \int_\Omega \overline{f}\diff{E}$;
-\item $\int_\Omega f\diff{E}\circ \int_\Omega g\diff{E} \subseteq \int_\Omega f\cdot g\diff{E}$ and $\dom\Big(\int_\Omega f\diff{E}\circ\int_\Omega g\diff{E}\Big) = \dom\Big(\int_\Omega f\cdot g\diff{E}\Big)\cap \dom\Big(\int_\Omega g\diff{E}\Big)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions. Then
-\begin{enumerate}
-\item $\Big(\int_\Omega f\diff{E}\Big)^*\circ \int_\Omega f\diff{E} = \int_\Omega |f|^2\diff{E}$;
-\item if $g$ is bounded, then $\int_\Omega f\diff{E}\circ \int_\Omega g\diff{E} = \int_\Omega f\cdot g\diff{E} = \int_\Omega g\diff{E}\circ \int_\Omega f\diff{E}$.
-\end{enumerate}
-\end{corollary}
-
-\subsubsection{Spectral theorem}
-\begin{theorem}[Spectral theorem]
-Let $H$ be a Hilbert space and $N$ a normal operator on $H$. Then there exists a unique spectral measure $E$ on $\C$ such that
-\begin{enumerate}
-\item $N = \int z\diff{E(z)}$;
-\item $E(A) = 0$ for all Borel sets $A$ such that $A\perp \spec(N)$;
-\item if $U\subseteq \C$ is an open set such that $U\mesh \spec(N)$, then $E(U) \neq 0$;
-\item if $T\in \Bounded(H)$ is such that $TN\subseteq NT$, then $A\big(\int_\C f\diff{E}\big) \subseteq \big(\int_\C f\diff{E}\big)A$ for all measurable $f:\C\to \C$.
-\end{enumerate}
-\end{theorem}
-Clearly $\int z\diff{E(z)}$ is shorthand for $\int_\C\id_\C\diff{E}$.
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary} \label{realSpectrumSelfAdjoint}
-Let $H$ be a Hilbert space and $N$ a normal operator on $H$. If $\spec(N) \subseteq \R$, then $N = N^*$.
-\end{corollary}
-\begin{proof}
-We have $\C\setminus\R \perp \spec(N)$, so $N = \int_\C z\diff{E(z)} = \int_\R z\diff{E(z)}$. By \ref{integralProjectorValuedMeasure}, we have
-\[ N = \int_\R z\diff{E(z)} = \int_\R \overline{z}\diff{E(z)} = \Big(\int_\R z\diff{E(z)}\Big)^* = N^*. \]
-\end{proof}
-
-\begin{definition}
-Let $H$ be a Hilbert space, $N$ a normal operator on $H$ and $f: \C\to \C$ a measurable function. Then we define
-\[ f(N) \defeq \int_\C f\diff{E}, \]
-where $E$ is the spectral measure associated to $N$.
-\end{definition}
-
-\begin{theorem} \label{spectralTheoremFunctionalCalculus}
-Let $H$ be a Hilbert space, $N$ a normal operator on $H$ and $f,g: \C\to \C$ measurable functions. Then
-\begin{enumerate}
-\item $(f\circ g)(N) = f\big(g(N)\big)$;
-\item $\spec(f(N)) = f^\imf\big(\spec(N)\big)$.
-\end{enumerate}
-\end{theorem}
-\begin{proof}
-TODO!
-\end{proof}
-
-\begin{proposition}
-Let $T$ be a normal operator on a Hilbert space. If $\lambda$ is an isolated point of the spectrum, then $\lambda$ is an eigenvalue.
-\end{proposition}
-\begin{proof}
-Because $\lambda$ is isolated, the function
-\[ f: \spec(T)\to \C: x\mapsto \begin{cases}
-1 & (x=\lambda) \\
-0 & (x\neq \lambda)
-\end{cases} \]
-is continuous.
-
-Set $P = f(T)$ by continuous functional calculus (TODo ref!!). This is a projector by (TODO ref).
-
-For all $t\in \spec(T)$, we have $tf(t) = \lambda f(t)$. By functional calculus, this gives $TP = \lambda P$.
-\end{proof}
-
 
 \subsection{Symmetric and self-adjoint operators}
 \begin{definition}
@@ -2643,9 +2473,11 @@ y - Tx \\ T^*y + x
 \end{pmatrix}, \]
 so $x = -T^*y$ and $v = y - Tx = y+TT^*y = (TT^* + \id)y$.
 
-(2) We need to show that $\dom(T^*T)$ is dense in $\dom(T)$ w.r.t. the graph norm. Consider the inner product $\inner{}_{\norm{\cdot}_T}$ associated to the graph norm (TODO: yields norm equivalent to graph norm). Suppose $h\in \dom(T)$ is in the orthogonal complement of $\dom(T^*T)$ w.r.t.\ this inner product. Then, for all $x\in \dom(T^*T)$, we have
-\[ 0 = \inner{x,h}_{\norm{\cdot}_T} = \inner{x,h} + \inner{Tx,Th} = \inner{x,h} + \inner{T^*Tx,h} = \inner{(\id + T^*T)x,h}. \]
-Thus $h\in \im(\id+T^*T)^\perp$ and thus $h=0$ by the calculations in (1). So the orthogonal complement of $\dom(T^*T)$ w.r.t.\ the graph inner product is $\{0\}$, which shows density.
+(2) We need to show that $\dom(T^*T)$ is dense in $\dom(T)$ w.r.t. the graph norm. Take $h\in \dom(T^*T)^{\perp_{\graph(T)}}$. Then, for all $x\in \dom(T^*T)$, we have
+\[ 0 = \inner{x,h}_{\graph(T)} = \inner{x,h} + \inner{Tx,Th} = \inner{x,h} + \inner{T^*Tx,h} = \inner{(\id + T^*T)x,h}. \]
+Thus $h\in \im(\id+T^*T)^\perp = H^\perp = \{0\}$ and thus $h=0$ by the calculations in (1). So the orthogonal complement of $\dom(T^*T)$ w.r.t.\ the graph inner product is $\{0\}$, which shows density.
+
+The argument for $\dom(TT^*)$ is similar.
 \end{proof}
 
 \begin{example}
@@ -2849,6 +2681,207 @@ The set of bounded self-adjoint operators forms an anti-lattice.
 \begin{proof}
 TODO + generalised to self-adjoint operators??
 \end{proof}
+
+\subsection{Normal operators}
+\begin{definition}
+A densely defined linear operator $T$ on a Hilbert space $H$ is \udef{normal} if it is closed and $TT^* = T^*T$.
+\end{definition}
+Self-adjoint and unitary operators are normal.
+
+\begin{proposition} \label{normalCriterion}
+Let $T: H\not\to H$ be a densely defined operator. Then $T$ is normal \textup{if and only if} $\dom(T) = \dom(T^*)$ and $\forall x\in \dom(T): \norm{Tx} = \norm{T^*x}$.
+\end{proposition}
+\begin{proof}
+First, assume $T$ normal. Then, for all $x\in \dom(T^*T) = \dom(TT^*)$, we have $x\in \dom(T)$ and $x\in \dom(T^*)$ and
+\[ \norm{Tx}^2 = |\inner{Tx,Tx}| = |\inner{T^*Tx,x}| = |\inner{TT^*x,x}| = |\inner{T^*x,T^*x}| = \norm{T^*x}^2. \]
+By \ref{vonNeumannTheoremSquareSelfAdjoint}, $\dom(T^*T)$ is $\graph(T)$-dense in $\dom(T)$. Thus, for all $x\in \dom(T)$, there exists a sequence $\seq{x_n}\in \dom(T^*T)^\N$ such that $x_n \overset{\graph(T)}{\longrightarrow} x$.
+
+In particular, $Tx_n \to Tx$, which means $\seq{Tx_n}$ is a Cauchy sequence. Since $x_n,x_m\in \dom(T^*T)$, we have shown that $\norm{Tx_n - Tx_m} = \norm{T^*x_n - T^*x_m}$ and thus $\seq{T^*x_n}$ is Cauchy by \ref{CauchyCriterion}. It converges to some $y\in H$ by completeness and so $x\in \dom(T^*)$ and $T^*x = y$ by \ref{closedGraphEquivalence}, since $T^*$ is closed \ref{adjointGraph}. 
+
+This shows that $\dom(T) \subseteq \dom(T^*)$. The same reasoning with $T^*$ gives the opposite inclusion.
+
+Finally, we calculate
+\[ \norm{Tx} = \lim_n\norm{Tx_n} = \lim_n \norm{T^*x_n} = \norm{T^*x}. \]
+
+For the converse, we first prove that $T$ is closed, using \ref{closedGraphEquivalence}. Suppose $\seq{x_n}\in \dom(T)^\N$ converges to $x$ and $\seq{Tx_n}$ also converges. Then $\seq{Tx_n}$ is Cauchy and, since $\norm{Tx_n - Tx_m} = \norm{T^*x_n - T^*x_m}$, the sequence $\seq{T^*x_n}$ is also Cauchy and thus convergent. Since $T^*$ is closed \ref{adjointGraph}, we have $x\in \dom(T^*) = \dom(T)$ and $T^*x_n \to T^*x$ by \ref{closedGraphEquivalence}. Thus
+\[ \norm{Tx_n - Tx} = \norm{T^*x_n - T^*x} \to 0, \]
+so $Tx_n \to Tx$.
+
+For all $x,y\in\dom(T) = \dom(T^*)$, we have
+\[ \inner{Tx,Ty} = \frac{1}{4}\sum_{k=0}^3\norm{i^kTx+ i^kTy}^2 = \frac{1}{4}\sum_{k=0}^3\norm{i^kT^*x+ i^kT^*y}^2 = \inner{T^*x, T^*y} \]
+by the polarisation identity \ref{polarisationIdentities}.
+Using \ref{adjointDomain}, we have
+\begin{align*}
+x\in \dom(T^*T) &\iff Tx \in \dom(T^*) \\
+&\iff \text{$y\mapsto \inner{Tx, Ty}$ is a bounded functional} \\
+&\iff \text{$y\mapsto \inner{T^*x, T^*y}$ is a bounded functional} \\ 
+&\iff T^*x \in \dom(T^{**}) = \dom(T) \\
+&\iff x\in \dom(TT^*), 
+\end{align*}
+where we have used $T^{**} = T$ by \ref{adjointDenselyDefinedClosable}.
+
+Finally, take $x\in \dom(T^*T) = \dom(TT^*)$ and $y\in \dom(T) = \dom(T^*)$. Then
+\[ \inner{Tx,Ty} = \inner{T^*x, T^*y} \implies \inner{T^*Tx,y} = \inner{TT^*x, y} \implies \inner{(T^*Tx - TT^*)x, y} = 0, \]
+so $(T^*Tx - TT^*)x \in \dom(T)^\perp = \{0\}$, so $T^*Tx = TT^*x$.
+\end{proof}
+\begin{corollary} \label{equalityKernelAdjointNormal}
+If $T$ is a normal operator, then $\ker T = \ker T^*$.
+\end{corollary}
+\begin{proof}
+We have $x\in\ker(T) \iff \norm{Tx} = 0 \iff \norm{T^*x} = 0 \iff x\in\ker(T^*)$. 
+\end{proof}
+\begin{corollary}
+If $T$ is a normal operator then
+\begin{enumerate}
+\item $\rspec(T) = \emptyset$;
+\item $\spec(T) = \apspec(T)$.
+\end{enumerate} 
+\end{corollary}
+\begin{proof}
+If $T$ is normal, then so is $\lambda\id-T$. Now $\lambda\in\rspec(T)$ iff $\ker(\lambda\id - T) = \{0\}$ and $\im(\lambda\id-T)^\perp \neq \{0\}$, but $\im(\lambda\id-T)^\perp = \ker(\lambda\id-T)^* = \ker(\lambda\id-T)$. By \ref{kernelImageAdjoint} and the previous corollary. This is a contradiction.
+
+(2) then follows straight from (1).
+\end{proof}
+
+\begin{theorem} \label{closureNumericRangeConvexHullSpectrum}
+The closure of the numerical range of a normal operator is the
+convex hull of its spectrum.
+\end{theorem}
+\begin{proof}
+Normal operators $T$ are by definition closed, so $\spec(T)\subseteq \overline{\NumRange(T)}$ by \ref{spectralInclusionNumericalRange}. TODO
+\end{proof}
+
+\begin{lemma} \label{normalSpectralRadiusEqualsNorm}
+For normal elements the spectral radius equals the norm.
+\end{lemma}
+
+\begin{lemma}
+A normal operator on a Hilbert space is invertible \textup{if and only if} it is bounded below.
+\end{lemma}
+
+\begin{theorem}[Fuglede's theorem]
+Let $H$ be a Hilbert space $N$ a normal operator on $H$ and $A\in\Bounded(H)$. Then $AN\subseteq NA$ implies $AN^* \subseteq N^*A$.
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}[Putnam-Fuglede theorem]
+Let $H, K$ be a Hilbert spaces, $A\in\Bounded(K, H)$ and both $N: H\not\to K$ and $M: K\not\to H$ normal operators. Then $AN\subseteq MA$ implies $AN^* \subseteq M^*A$.
+\end{corollary}
+\begin{proof}
+Consider
+\[ L \defeq \begin{pmatrix}
+N & 0 \\ 0 & M
+\end{pmatrix} \qquad\text{and}\qquad A' \defeq \begin{pmatrix}
+0 & A \\ 0 & 0
+\end{pmatrix}. \]
+Then $L$ is normal (TODO) and $A'$ is bounded. Then we can apply Fuglede's theorem (TODO details).
+\end{proof}
+
+\subsubsection{Spectral measures}
+\begin{definition}
+Let $H$ be a Hilbert space and $\sSet{\Omega,\mathcal{A}}$ a measurable space.
+\begin{itemize}
+\item A measure $E$ from $\sSet{\Omega,\mathcal{A}}$ to the lattice of projectors on $H$ is called a \udef{projector-valued measure}.
+\item A projector-valued measure $E$ such that $E(\Omega) = \id_H$ is called a \udef{spectral measure}.
+\end{itemize}
+Let $E$ be a projector-valued measure on $\sSet{\Omega,\mathcal{A}}$. For any measurable function $f: X\to \C$ we define
+\[ \int_\Omega f\diff{E}: \dom\Big(\int_\Omega f\diff{E}\Big) \to H: x\mapsto \int_\Omega f\diff{E_x}, \]
+where the integral is a Bochner integral,
+\[ E_x: \mathcal{A}\to H: A\mapsto E(A)(x) \]
+and
+\[ \dom\Big(\int_\Omega f\diff{E}\Big) = \setbuilder{x\in H}{\text{$f$ if $E_x$-integrable}}. \]
+\end{definition}
+TODO: can we make definition of Bochner integral general enough such that this integral can be  considered as a Bochner integral??
+
+\begin{lemma}
+Let $H$ be a Hilbert space, $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$ and $x\in H$. Then $E_x$ is a vector-valued measure.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma} \label{projectorIntegrableSolid}
+Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions such that $|f|\leq |g|$. Then $\dom\Big(\int_\Omega f \diff{E}\Big) \supseteq \dom\Big(\int_\Omega g \diff{E}\Big)$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{integralProjectorValuedMeasure}
+Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions. Then
+\begin{enumerate}
+\item $\int_\Omega f\diff{E}$ is a normal operator;
+\item $\Big(\int_\Omega f\diff{E}\Big)^* = \int_\Omega \overline{f}\diff{E}$;
+\item $\int_\Omega f\diff{E}\circ \int_\Omega g\diff{E} \subseteq \int_\Omega f\cdot g\diff{E}$ and $\dom\Big(\int_\Omega f\diff{E}\circ\int_\Omega g\diff{E}\Big) = \dom\Big(\int_\Omega f\cdot g\diff{E}\Big)\cap \dom\Big(\int_\Omega g\diff{E}\Big)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Let $H$ be a Hilbert space and $E$ a projector-valued measure on the measurable space $\sSet{\Omega,\mathcal{A}}$. Let $f,g: \Omega\to \C$ be measurable functions. Then
+\begin{enumerate}
+\item $\Big(\int_\Omega f\diff{E}\Big)^*\circ \int_\Omega f\diff{E} = \int_\Omega |f|^2\diff{E}$;
+\item if $g$ is bounded, then $\int_\Omega f\diff{E}\circ \int_\Omega g\diff{E} = \int_\Omega f\cdot g\diff{E} = \int_\Omega g\diff{E}\circ \int_\Omega f\diff{E}$.
+\end{enumerate}
+\end{corollary}
+
+\subsubsection{Spectral theorem}
+\begin{theorem}[Spectral theorem]
+Let $H$ be a Hilbert space and $N$ a normal operator on $H$. Then there exists a unique spectral measure $E$ on $\C$ such that
+\begin{enumerate}
+\item $N = \int z\diff{E(z)}$;
+\item $E(A) = 0$ for all Borel sets $A$ such that $A\perp \spec(N)$;
+\item if $U\subseteq \C$ is an open set such that $U\mesh \spec(N)$, then $E(U) \neq 0$;
+\item if $T\in \Bounded(H)$ is such that $TN\subseteq NT$, then $A\big(\int_\C f\diff{E}\big) \subseteq \big(\int_\C f\diff{E}\big)A$ for all measurable $f:\C\to \C$.
+\end{enumerate}
+\end{theorem}
+Clearly $\int z\diff{E(z)}$ is shorthand for $\int_\C\id_\C\diff{E}$.
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary} \label{realSpectrumSelfAdjoint}
+Let $H$ be a Hilbert space and $N$ a normal operator on $H$. If $\spec(N) \subseteq \R$, then $N = N^*$.
+\end{corollary}
+\begin{proof}
+We have $\C\setminus\R \perp \spec(N)$, so $N = \int_\C z\diff{E(z)} = \int_\R z\diff{E(z)}$. By \ref{integralProjectorValuedMeasure}, we have
+\[ N = \int_\R z\diff{E(z)} = \int_\R \overline{z}\diff{E(z)} = \Big(\int_\R z\diff{E(z)}\Big)^* = N^*. \]
+\end{proof}
+
+\begin{definition}
+Let $H$ be a Hilbert space, $N$ a normal operator on $H$ and $f: \C\to \C$ a measurable function. Then we define
+\[ f(N) \defeq \int_\C f\diff{E}, \]
+where $E$ is the spectral measure associated to $N$.
+\end{definition}
+
+\begin{theorem} \label{spectralTheoremFunctionalCalculus}
+Let $H$ be a Hilbert space, $N$ a normal operator on $H$ and $f,g: \C\to \C$ measurable functions. Then
+\begin{enumerate}
+\item $(f\circ g)(N) = f\big(g(N)\big)$;
+\item $\spec(f(N)) = f^\imf\big(\spec(N)\big)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+TODO!
+\end{proof}
+
+\begin{proposition}
+Let $T$ be a normal operator on a Hilbert space. If $\lambda$ is an isolated point of the spectrum, then $\lambda$ is an eigenvalue.
+\end{proposition}
+\begin{proof}
+Because $\lambda$ is isolated, the function
+\[ f: \spec(T)\to \C: x\mapsto \begin{cases}
+1 & (x=\lambda) \\
+0 & (x\neq \lambda)
+\end{cases} \]
+is continuous.
+
+Set $P = f(T)$ by continuous functional calculus (TODo ref!!). This is a projector by (TODO ref).
+
+For all $t\in \spec(T)$, we have $tf(t) = \lambda f(t)$. By functional calculus, this gives $TP = \lambda P$.
+\end{proof}
+
 
 \subsection{Orthogonal projections}
 \url{https://planetmath.org/latticeofprojections}
