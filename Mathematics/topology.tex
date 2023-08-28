@@ -1150,6 +1150,17 @@ Now assume (5) and, towards a contradiction, that not all subsets are closed. We
 which is a contradiction.
 \end{proof}
 
+\begin{lemma} \label{openClosedSetLemma}
+Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ a subset and $O\subseteq X$ an open subset. Then
+\begin{enumerate}
+\item $\adh_\xi(A)\cap O = \adh_\xi(A\cap O)\cap O$;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have $\adh_\xi(A) = \adh_\xi\big((A\cap O) \cup (A\cap O^c)\big) = \adh_\xi(A\cap O) \cup \adh_\xi(A\cap O^c)$ by \ref{principalAdherenceInherence}. Now, since $O^c$ is closed (\ref{openClosedComplement}), we have $\adh_\xi(A\cap O^c) \subseteq \adh_\xi(O^c) = O^c$. So
+\[ \adh_\xi(A)\cap O = \big(\adh_\xi(A\cap O)\cap O\big) \cup \cancel{\big(\adh_\xi(A\cap O^c)\cap O\big)} = \adh_\xi(A\cap O)\cap O. \]
+\end{proof}
+
 \subsubsection{Interior, closure and boundary}
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space.
@@ -1284,9 +1295,93 @@ Let $\sSet{X,\xi}$ be a convergence space, $A\subseteq X$ and $x\in X$. Then
 We clearly have $\mathcal{A} \preceq \interior^{\imf}(\mathcal{A})$ because $\interior(A) \subseteq A$. For the opposite inequality, we need to show that for all $A\in \mathcal{A}$, $\interior(A)$ is a neighbourhood of $x$. This is point (1).
 \end{proof}
 
+\subsubsection{Locally closed sets}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then $A$ is called \udef{locally closed} if for all $x\in A$ there exists a vicinity $V_x\in\vicinity_\xi(x)$ such that $A\cap V_x$ is closed in $V_x$.
+\end{definition}
+
+\begin{proposition} \label{locallyClosedEquivalents}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then the following are equivalent:
+\begin{enumerate}
+\item $A$ is the intersection of an open set and a closed set;
+\item $A$ is the difference between two open sets;
+\item $A$ is the difference between two closed sets;
+\item $\closure(A)\setminus A$ is closed;
+\item $A$ is open in $\closure(A)$;
+\item $A \subseteq \inh_\xi\big(A\cup \closure(A)^c\big)$.
+\end{enumerate}
+Any of these statements implies that $A$ is locally closed.
+
+If $X$ is topological, then local closure implies these statements.
+\end{proposition}
+TODO show either that locally closed is always equivalent, or give counterexample.
+\begin{proof}
+$(1) \Leftrightarrow (2) \Leftrightarrow (3)$ If $A = O\cap C$ for some open set $O$ and closed set $C$, so $A= O\cap C^{cc} = O\setminus C^c$ is a difference of open sets by \ref{openClosedComplement}. Similarly $A = C\cap O^{cc} = C\setminus O^c$ is a difference of closed sets.
+
+If $A = O_1\setminus O_2$ is a difference of open sets, then $A = O_1 \cap O_2^c$ is the intersection of an open and a closed set by \ref{openClosedComplement}.
+
+If $A = C_1\setminus C_2$ is a difference of closed sets, then $A = C_1 \cap C_2^c$ is the intersection of an open and a closed set by \ref{openClosedComplement}.
+
+$(3) \Rightarrow (4)$ Suppose $A = C_1 \setminus C_2$ for some closed sets $C_1,C_2$. Then $A \subseteq C_1$, so $\closure(A) \subseteq \closure(C_1) = C_1$ and so
+\begin{align*}
+\closure(A)\setminus A &= \closure(A)\setminus (C_1\setminus C_2) \\
+&= \closure(A)\cap \big(C_1\cap C_2^c\big)^c \\
+&= \cancel{\big(\closure(A)\cap C_1^c\big)} \cup \big(\closure(A)\cap C_2\big) \\
+&= \closure(A) \cap C_2,
+\end{align*}
+which is closed by \ref{propertiesTopology}.
+
+$(4) \Rightarrow (3)$ We have
+\begin{align*}
+\closure(A)\setminus \big(\closure(A)\setminus A\big) &= \closure(A)\cap \big(\closure(A)\cap A^c\big)^c \\
+&= \big(\closure(A)\cap \closure(A)^c\big) \cup \big(\closure(A)\cap A\big) \\
+&= A,
+\end{align*}
+so $A$ is the difference between two closed sets.
+
+$(4) \Rightarrow (5)$ Since $\adh_\xi\big(\closure(A)\setminus A\big) = \closure(A)\setminus A$, we have, by \ref{subspaceAdherence},
+\begin{align*}
+\inh_{\xi|_{\closure(A)}}(A) &= \closure(A)\setminus \adh_\xi\big(\closure(A)\setminus A\big) \\
+&= \closure(A)\setminus \big(\closure(A)\setminus A\big) \\
+&= \closure(A)\cap \big(\closure(A)\cap A^c\big)^c \\
+&= \cancel{\big(\closure(A)\cap \closure(A)^c\big)} \cup \big(\closure(A)\cap A\big) \\
+&= \closure(A)\cap A = A,
+\end{align*}
+so $A$ is open in $\closure(A)$.
+
+$(5) \Rightarrow (6)$ By \ref{subspaceAdherence} we have $A = \inh_{\xi|_{\closure(A)}}(A) = \inh_\xi\big(A \cup \closure(A)^c\big) \cap \closure(A)$, so, in particular, $A \subseteq \inh_\xi\big(A \cup \closure(A)^c\big)$.
+
+$(6) \Rightarrow (4)$ This implies
+\[ \adh_\xi\big(\closure(A)\setminus A\big) = \inh_\xi\big(A \cup \closure(A)^c\big)^c \subseteq A^c. \]
+Now $\closure(A)\setminus A \subseteq \closure(A)$, so $\adh_\xi\big(\closure(A)\setminus A\big) \subseteq \adh_\xi\big(\closure(A)\big) = \closure(A)$ and thus
+\[ \adh_\xi\big(\closure(A)\setminus A\big) = \adh_\xi\big(\closure(A)\setminus A\big) \cap \closure(A) \subseteq \closure(A) \cap A^c = \closure(A)\setminus A. \]
+This implies that $\closure(A) \setminus A$ is closed by \ref{openClosedCriteria}.
 
 
+$(6) \Rightarrow (\text{Locally closed})$ Take arbitrary $x\in A$. Then $x\in \inh_\xi\big(A \cup \closure(A)^c\big)$, so $A\cup \closure(A)^c \in \vicinity_\xi(x)$. We set $V_x \defeq A\cup \closure(A)^c$. Then, since $A\subseteq \closure(A)$,
+\[ A\cap V_x = A\cap \big(A \cup \closure(A)^c\big) = A \cup \big(A \cap \closure(A)^c\big) = A \cup \cancel{\big(A \setminus \closure(A)\big)} = A. \]
+Similarly, since $A\subseteq \adh_\xi(A)\subseteq \closure(A)$,
+\begin{align*}
+\adh_\xi(A)\cap V_x &= \adh_\xi(A)\cap \big(A \cup \closure(A)^c\big) \\
+&= \big(\adh_\xi(A) \cap A\big) \cup \big(\adh_\xi(A) \cap \closure(A)^c\big) \\
+&= A \cup \cancel{\big(\adh_\xi(A) \setminus \closure(A)\big)} = A.
+\end{align*}
+So, we have, by \ref{subspaceAdherence},
+\[ A\cap V_x = A = \adh_\xi(A)\cap V_x = \adh_\xi\big(A\cap V_x\big)\cap V_x = \adh_{V_x}\big(A\cap V_x\big), \]
+which means that $A\cap V_x$ is closed in $V_x$.
 
+$(\text{Locally closed}) \Rightarrow (1)$. Assume $\xi$ topological and $A$ locally closed. For all $x\in A$, take some vicinity $V_x$ such that $A\cap V_x$ is closed in $V_x$. Since $\xi$ is topological, we can find an open $U_x$ such that $x\in U_x\subseteq V_x$. Then $A\cap U_x$ is closed in $U_x$: using \ref{subspaceAdherence}, we have
+\begin{align*}
+\closure_{U_x}(A\cap U_x) &= \closure(A\cap U_x) \cap U_x \\
+&\subseteq \closure(A\cap V_x) \cap U_x \\
+&= \closure(A\cap V_x) \cap V_x \cap U_x \\
+&= \closure_{V_x}(A\cap V_x) \cap U_x \\
+&= A\cap V_x \cap U_x = A \cap U_x.
+\end{align*}
+Now, using \ref{openClosedSetLemma}, we have $A \cap U_x = \closure(A\cap U_x) \cap U_x = \closure(A) \cap U_x$. Now $A\subseteq \bigcup_{x\in A}U_x$ and $\bigcup_{x\in A}U_x$ is open by \ref{propertiesTopology}. So
+\[ A = A\cap \bigcup_{x\in A}U_x = \bigcup_{x\in A}A\cap U_x = \bigcup_{x\in A}\closure(A)\cap U_x = \closure(A) \cap \bigcup_{x\in A}U_x, \]
+which is the intersection of an open set and a closed set.
+\end{proof}
 
 \subsection{Topological convergence}
 \begin{definition}
@@ -2029,6 +2124,17 @@ which is a closed subset of a compact space and thus compact by \ref{compactClos
 A convergence space $\sSet{X, \xi}$ is called \udef{locally compact} if every point has a compact vicinity.
 \end{definition}
 
+\begin{proposition} \label{locallyCompactSubspace}
+Let $\sSet{X,\xi}$ be a locally compact space and $A\subseteq X$ a subset. Then
+\begin{enumerate}
+\item if $A$ is locally closed, then $A$ is locally compact;
+\item if $X$ is Hausdorff and $A$ is locally compact, then $A$ is locally closed.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO!! Is this even correct?? Do we need topologicity (in this case show that both open and closed subsets of locally compact space are locally compact and use the a locally closed set is the intersection of these two cases)??
+\end{proof}
+
 \subsection{Countable compactness}
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space. We call $X$ \udef{countably compact} if the tails filter of every sequence in $X$ is compactoid.
@@ -2747,19 +2853,41 @@ Let $\sSet{X,\xi}$ be a convergence space, $\sSet{A,\xi|_A}$ a subspace, $F\in \
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Let $B\subseteq A$ and $x\in A$. Then
 \begin{enumerate}
 \item $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A$;
+\item $\inh_{\xi|_A}(B) = A\setminus \adh(A\setminus B) = \inh_\xi(B\cup A^c) \cap A$;
 \item if $A$ is closed, then $\adh_{\xi|_A}(B) = \adh_\xi(B)$;
-\item if $B$ is $\xi$-closed, then it is $\xi|_A$-closed.
+\item if $A$ is open, then $\inh_{\xi|_A}(B) = \inh_\xi(B)$;
+\item if $B$ is $\xi$-closed, then it is $\xi|_A$-closed;
+\item if $B$ is $\xi$-open, then it is $\xi|_A$-open.
 \end{enumerate}
 \end{proposition}
-TODO does this hold for closures as well??
 \begin{proof}
 (1) We have $\iota^\imf(B) = B$ and $\iota^\imf\big(\adh_{\xi|_A}(B)\big)$, so $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B)$ by \ref{adherenceInherenceContinuity}. Then we immediately have $\adh_{\xi|_A}(B) \subseteq \adh_\xi(B) \cap A$.
 
 Now take $x\in \adh_\xi(B) \cap A$. Then, by \ref{principalAdherenceInherence}, there exists a proper filter $F\overset{\xi}{\longrightarrow} x$ such that $B\in F$. Then also $A\in F$ and so $\upset \iota^{\preimf\imf}(F)\overset{\xi|_A}{\longrightarrow} x$ by \ref{subspaceConvergence} (where we have used that $x\in A$). Because $B\in \upset \iota^{\preimf\imf}(F)$, we have $x\in \adh_{\xi|_A}(B)$.
 
-(2) If $A$ is closed, then $\adh_\xi(B)\subseteq \adh_\xi(A) = A$ by \ref{principalInherenceAdherenceProperties} and so $\adh_\xi(B)\cap A = \adh_\xi(B)$.
+(2) We calculate
+\begin{align*}
+\inh_{\xi|_A}(B) &= A\setminus \adh_{\xi|_A}(A\setminus B) \\
+&= A\setminus \big(\adh(A\setminus B)\cap A\big) \\
+&= A\setminus \adh(A\setminus B) \\
+&= A\cap \adh(A\cap B^c)^c \\
+&= A\cap \inh(A^c\cup B).
+\end{align*}
 
-(3) Assume $B$ is $\xi$-closed. From (1) we have $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A = B\cap A = B$.
+(3) If $A$ is closed, then $\adh_\xi(B)\subseteq \adh_\xi(A) = A$ by \ref{principalInherenceAdherenceProperties} and so $\adh_\xi(B)\cap A = \adh_\xi(B)$.
+
+(4) If $A$ is open, then $A = \inh_\xi(A)$, so
+\begin{align*}
+\inh_{\xi|_A}(B) &= \inh_\xi(B\cup A^c) \cap A \\
+&= \inh_\xi(B\cup A^c) \cap \inh_\xi(A) \\
+&= \inh_\xi\big((B\cup A^c)\cap A\big) \\
+&= \inh_\xi(B),
+\end{align*}
+where we have used \ref{principalInherenceAdherenceProperties}.
+
+(5) Assume $B$ is $\xi$-closed. From (1) we have $\adh_{\xi|_A}(B) = \adh_\xi(B) \cap A = B\cap A = B$.
+
+(6) Assume $B$ is $\xi$-open. We have $B \subseteq \inh_\xi(B) \subseteq \inh_\xi(B\cup A^c) \cap A = \inh_{\xi|_A}(B)$, so $B$ is $\xi|_A$-open.
 \end{proof}
 
 \begin{proposition} \label{subspaceVicinityFilter}
