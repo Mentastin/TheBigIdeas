@@ -472,6 +472,7 @@ Let $V, W$ be vector spaces over the same field $\F$. Let $f: V\to W$ be a funct
 \begin{itemize}
 \item $f$ is \udef{homogeneous} if $\forall x\in V,\lambda\in \F: f(\lambda x) = \lambda f(x)$;
 \item $f$ is \udef{positively homogeneous} if $\forall x\in V,\lambda\geq 0: f(\lambda x) = \lambda f(x)$;
+\item $f$ is \udef{strictly positively homogeneous} if $\forall x\in V,\lambda > 0: f(\lambda x) = \lambda f(x)$;
 \item $f$ is \udef{absolutely homogeneous} if $\forall x\in V,\lambda\in\F: f(\lambda x) = |\lambda| f(x)$.
 \end{itemize}
 \end{definition}
@@ -1253,7 +1254,7 @@ Assume $A$ closed under multiplication by $2$. We need to show that $A$ is close
 
 \subsubsection{Absolutely convex sets}
 \begin{definition}
-A subset $B$ of a vector space $V$ over a field $\F$ with valuation $|\cdot|$ is called \udef{absolutely convex} or \udef{disked} if for all $x,y\in C$ and $|r| \leq 1$, $rx + (1-r)y\in C$.
+A subset $B$ of a vector space $V$ over a field $\F$ with valuation $|\cdot|$ is called \udef{absolutely convex} or \udef{disked} if for all $x,y\in B$ and $r,r'\in \R$ such that $|r| + |r'| \leq 1$, $rx + r'y\in B$.
 
 The closure of a set $X\subseteq V$ into the lattice of absolutely convex sets is called the \udef{absolute convex hull} or \udef{disked hull} of $X$ and is denoted $\disked(X)$.
 \end{definition}
@@ -1273,17 +1274,45 @@ $\balancedCore(B) = \begin{cases}
 Let $V$ be a vector space and $X\subseteq V$ a subset. Then the following are equivalent:
 \begin{enumerate}
 \item $X$ is absolutely convex;
-\item $X$ is convex and balanced;
-\item for all $x,y\in X$ and $|r| \leq 1$:  $rx + (1-r)y\in X$;
 \item for all $|a|+|b| \leq 1$, $aX +bX \subseteq X$;
-\item for all $|a|+|b| \leq |c|$, $aX +bX \subseteq cX$.
+\item $X$ is convex and balanced.
 \end{enumerate}
 \end{lemma}
+\begin{proof}
+TODO
+\end{proof}
 
 \begin{lemma} \label{diskedIsCoBal}
-Let $V$ be a vector space and $X\subseteq V$ a subset. Then $\disked(X) = \convex(\balanced(X))$.
+Let $V$ be a vector space and $X\subseteq V$ a subset. Then
+\begin{enumerate}
+\item $\disked(X) \supseteq \balanced(\convex(X))$;
+\item $\disked(X) = \convex(\balanced(X))$.
+\end{enumerate}
 \end{lemma}
+\begin{proof}
+(1) Clearly $\convex(X) \subseteq \disked(X)$, so $\balanced\big(\convex(X)\big) \subseteq \balanced\big(\disked(X)\big) = \disked(X)$.
+
+(2) As in (1), we immediately have $\disked(X) \supseteq \convex\big(\balanced(X)\big)$. For the other inclusion, it is enough to show that $\convex\big(\balanced(X)\big)$ is balanced.
+
+Take arbitrary vector in $\convex\big(\balanced(X)\big)$, which can be written as $rv + (1-r)w$ for some $v,w\in \balanced(X)$ and $0\leq r\leq 1$ by \ref{convexHullLemma}. Take arbitrary $r'\in \R$ such that $|r'|\leq 1$. Then
+\[ r'\big(rv + (1-r)w\big) = r(r'v) + (1-r)(r'w) \in \convex\big(\balanced(X)\big), \]
+since $r'v$ and $r'w$ are elements of $\balanced(X)$.
+\end{proof}
+
+\begin{example}
 In general $\disked(X) \neq \balanced(\convex(X))$.
+
+Consider $X= \{(1,0), (0,1)\}\subseteq \R^2$. Then
+\begin{itemize}
+\item $\balanced(X) = \{(a,0)\}_{-1\leq a\leq 1} \cup \{(0,b)\}_{-1\leq b\leq 1}$;
+\item $\convex(X) = \{\big(r,(1-r)\big)\}_{0\leq r\leq 1}$;
+\item $\convex\big(\balanced(X)\big) = \setbuilder{(a,b)}{-1\leq a\leq 1, |a|-1 \leq b\leq 1-|a|}$;
+\item $\balanced\big(\convex(X)\big) = \setbuilder{(a,b)}{-1\leq a\leq 1, |a|-1 \leq b\leq 1-|a|, a\cdot b\geq 0}$.
+\end{itemize}
+It is clear that $\balanced\big(\convex(X)\big) \subsetneq \convex\big(\balanced(X)\big)$.
+
+TODO picture.
+\end{example}
 
 \begin{lemma} \label{linearFunctionsPreserveDiskedHull}
 Let $V$ be a vector space, $X\subseteq V$ a subset and $f: V\to W$ a linear function to another vector space. Then $f^\imf\big(\disked(X)\big) = \disked\big(f^\imf(X)\big)$. 
@@ -1305,11 +1334,13 @@ A subset $C$ of a real or complex vector space $V$ is called a \udef{cone} if fo
 \item \udef{pointed} if it contains the origin and \udef{blunt} if not;
 \item \udef{flat} if $\exists x\neq 0: x\in C \land -x\in C$, and \udef{salient} if not.
 \end{itemize}
-The closure of a set $X$ into the lattice of cones is called the \udef{conic hull} of $X$ and is denoted $\conic(X)$.
+The closure of a set $X$ into the lattice of cones is called the \udef{conic hull} of $X$ and is denoted $\cone(X)$.
+
+The closure of a set $X$ into the lattice of convex cones is called the \udef{convex conic hull} of $X$ and is denoted $\convCone(X)$.
 \end{definition}
 
 \begin{lemma}
-Let $V$ be a vector space and $X\subseteq V$ a subset. Then $\conic(X) = \R^{> 0}\cdot X$.
+Let $V$ be a vector space and $X\subseteq V$ a subset. Then $\cone(X) = \R^{> 0}\cdot X = \interval[o]{0,+\infty}$.
 \end{lemma}
 
 The closure of a set $X\subseteq V$ into the lattice of cones is given by $\R\cdot X$.
@@ -1327,6 +1358,51 @@ Assume $C$ convex. Take $v,w\in C$, then $v/2 + w/2\in C$ by convexity and so $v
 Assume $C$ closed under addition. Take $v,w\in C$ and $\lambda\in[0,1]$. Then $(1-\lambda)v$ and $\lambda w$ are elements of $C$ and so the convex combination $(1-\lambda)v + \lambda w$ is too.
 \end{proof}
 
+\begin{lemma}
+Let $V$ be a vector space and $X\subseteq V$ a subset. Then
+\begin{enumerate}
+\item $\convCone(X) = \convex\big(\cone(X)\big)$;
+\item $\convCone(X) = \cone\big(\convex(X)\big)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Clearly we have $\cone(X) \subseteq \convCone(X)$, so $\convex\big(\cone(X)\big) \subseteq \convex\big(\convCone(X)\big) = \convCone(X)$.
+
+It is then enough to show that $\convex\big(\cone(X)\big)$ is a cone. To that end, take an arbitrary vector in $\convex\big(\cone(X)\big)$, which can be written as $r v + (1-r)w$ for some $v,w\in \cone(X)$ by \ref{convexHullLemma}, and arbitrary $\lambda \in \R^+$. Then
+\[ \lambda \big(r v + (1-r)w\big) = r (\lambda v) + (1-r)(\lambda w) \in \convex\big(\cone(X)\big)
+\]
+by \ref{convexHullLemma} and the fact that $\cone(X)$ is a cone.
+
+(2) The argument for $\cone\big(\convex(X)\big) \subseteq \convCone(X)$ is similar to the one in (1).
+
+It is then enough to show that $\cone\big(\convex(X)\big)$ is convex. To that end, take arbitrary $0\leq r\leq 1$ and two arbitrary vectors in $\cone\big(\convex(X)\big)$, which can be written as $\lambda v$ and $\mu w$ for some $\lambda,\mu\in \R^+$ and $v,w\in \convex{X}$. Then
+\begin{align*}
+r\lambda v + (1-r)\mu w &= \big(r\lambda + (1-r)\mu\big)\Big(\frac{r\lambda}{r\lambda + (1-r)\mu}v + \frac{(1-r)\mu}{r\lambda + (1-r)\mu}w\Big) \\
+&= \big(r\lambda + (1-r)\mu\big)\bigg(\frac{r\lambda}{r\lambda + (1-r)\mu}v + \Big(1 - \frac{r\lambda}{r\lambda + (1-r)\mu}\Big)w\bigg).
+\end{align*}
+This is an element of $\cone\big(\convex(X)\big)$ since $\frac{r\lambda}{r\lambda + (1-r)\mu}v + \Big(1 - \frac{r\lambda}{r\lambda + (1-r)\mu}\Big)w\in \convex(X)$. Thus $\cone\big(\convex(X)\big)$ is closed under arbitrary convex combinations, which makes it convex.
+\end{proof}
+
+\begin{lemma} \label{mappingConeToCone}
+Let $V,W$ be vector spaces, $A\subseteq V$, $B\subseteq W$ subsets and $f:V\to W$ a positively homogeneous function. Then
+\begin{enumerate}
+\item if $A$ is a cone, then $f^\imf(A)$ is a cone;
+\item if $B$ is a cone, then $f^\preimf(B)$ is a cone;
+\item if $A$ is a pointed cone, then $f^\imf(A)$ is a pointed cone;
+\item if $B$ is a pointed cone, then $f^\preimf(B)$ is a pointed cone.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We calculate
+\[ \interval[o]{0,\infty}\cdot f^\imf(A) = \bigcup_{r>0}r\cdot f^\imf(A) = \bigcup_{r>0}f^\imf(r\cdot A) \subseteq \bigcup_{r>0}f^\imf(A) = f^\imf(A). \]
+
+(2) We calculate
+\[ \interval[o]{0,\infty}\cdot f^\preimf(B) = \bigcup_{r>0}r\cdot f^\preimf(B) = \bigcup_{r>0}f^\preimf(r\cdot B) \subseteq \bigcup_{r>0}f^\preimf(B) = f^\preimf(B). \]
+
+(3) Assume $0\in A$, then $0 = f(0)\in f^\imf(A)$ by \ref{homogeneousFunctionLemma}.
+
+(4) Assume $0\in B$, then $f(0) = 0\in B$ by \ref{homogeneousFunctionLemma}, so $0\in \preimf(B)$.
+\end{proof}
 
 \subsection{Absorbing and absorbent sets}
 \begin{definition}
@@ -1362,6 +1438,136 @@ Let $V$ be a vector space and $A_1, A_2, B\subseteq V$ subsets. Then
 (2) If $A_1$ and $A_2$ absorb $B$, then there exist $\epsilon_1, \epsilon_2 >0$ such that $\ball(0,\epsilon_1)\cdot B\subseteq A_1$ and $\ball(0,\epsilon_2)\cdot B\subseteq A_2$, so $A_2$ absorbs $B$. Then, by \ref{orderPreservingFunctionLatticeOperations},
 \[ \ball(0,\min\{\epsilon_1, \epsilon_2\})\cdot B = \big(\ball(0,\epsilon_1) \cap \ball(0,\epsilon_2)\big) \subseteq \ball(0,\epsilon_1)\cdot B \cap \ball(0,\epsilon_2)\cdot B \subseteq A_1 \cap A_2. \]
 \end{proof}
+
+\subsection{Relative interior}
+\begin{definition}
+Let $V$ be a vector space and $A\subseteq V$ a subset. We define the \udef{relative interior} of $A$ as
+\[ \relint(A) \defeq \setbuilder{x\in A}{\forall y\in \affine(A): \exists \epsilon >0: \forall \lambda \in \cball_\F(0,\epsilon):\; \lambda y + (1-\lambda) x \in A}. \]
+We call $A$ \udef{relatively open} if $A = \relint(A)$. 
+\end{definition}
+
+\begin{example}
+If we define the relative interior of $A$ as
+\[\setbuilder{x\in A}{\forall y\in A: \exists \epsilon >0: \forall \lambda \in \cball_\F(0,\epsilon):\; \lambda y + (1-\lambda) x \in A}, \]
+then the cross $\setbuilder{(x,y)\in \R^2}{(x=0)\lor (y=0)}$ is relatively open.
+\end{example}
+
+\begin{lemma} \label{relativeInteriorEquivalent}
+Let $V$ be a vector space and $A\subseteq V$ a subset. Then
+\[ \relint(A) = \setbuilder{x\in A}{\forall y,z\in A: \exists \epsilon >0: \forall \lambda \in \cball_\F(0,\epsilon):\; x + \lambda (y-z) \in A}. \]
+\end{lemma}
+\begin{proof}
+For the inclusion $\subseteq$, we just need to note that, for all $x,y,z\in A$ we have $x + \lambda (y-z) = \lambda (y-z+x) + (1-\lambda)x$ and $y-z+x\in \affine(A)$.
+
+For the other inclusion, let $x$ be an element of the right-hand set. We need to show $\exists \epsilon >0: \forall \lambda \in \cball_\F(0,\epsilon):\; \lambda y + (1-\lambda) x \in A$ for arbitrary $y\in \affine(A)$.
+
+We can write $y = \mu z + (1-\mu) z'$ for some $\mu\in \F$. By assumption, there exist $\delta, \delta'>0$ such that $\forall \nu\in \cball_\F(0,\delta): x+ \nu(x-z)\in A$ and $\forall \nu'\in \cball_\F(0,\delta'): x+ \nu'(x-z')\in A$. In particular set $\eta \defeq \min\{\frac{\delta}{|\mu|}, \frac{\delta'}{|1-\mu|}\}$, so $x+ \eta \mu(x-z)\in A$, since $|\eta\mu| \leq \frac{\delta}{|\mu|}|\mu| = \delta$ and $x+ \eta (1-\mu)(x-z')\in A$, since $|\eta(1-\mu)| \leq \frac{\delta'}{|1-\mu|}|1-\mu| = \delta'$.
+By assumption, there exists $\epsilon'> 0$ such that
+\[ \forall \lambda'\in\cball_F(0,\epsilon'):\; x + \lambda'\Big(\big(x + \eta\mu(z-x)\big) - \big(x + \eta(1-\mu)(z'- x)\big)\Big)\in A. \]
+
+Now set $\epsilon = \epsilon'\cdot \eta$ and take arbitrary $\lambda\in \cball_\F(0,\epsilon)$. Then
+\begin{align*}
+\lambda y + (1-\lambda) x &= \lambda\big(\mu z + (1-\mu) z'\big) + (1-\lambda)x \\
+&= x + \lambda\big(\mu z + (1-\mu) z' - x\big) \\
+&= x + \lambda\big(\mu z + (1-\mu) z' - \mu x - (1-\mu)x\big) \\
+&= x + \lambda\big(\mu(z-x) - (1-\mu)(z'- x)\big) \\
+&= x + \frac{\lambda}{\eta}\big(\eta\mu(z-x) - \eta(1-\mu)(z'- x)\big) \\
+&= x + \frac{\lambda}{\eta}\Big(\big(x + \eta\mu(z-x)\big) - \big(x + \eta(1-\mu)(z'- x)\big)\Big),
+\end{align*}
+which is an element of $A$ because $\big|\frac{\lambda}{\eta}\big| \leq \frac{\epsilon}{\eta} = \epsilon'$.
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a vector space and $A\subseteq V$ a convex subset. Then
+\begin{enumerate}
+\item $\relint(A) = \setbuilder{x\in A}{\forall y\in A: \exists r > 1: \; rx + (1-r)y \in A}$;
+\item $\relint(A) = \setbuilder{x\in A}{\forall y\in A: \exists z\in A, 0 < r < 1:\; x = ry + (1-r)z}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a vector space and $A, B\subseteq V$ subsets.
+\begin{enumerate}
+\item $\relint(A)+\relint(B) \subseteq \relint(A+B)$;
+\item $\relint(A)+\relint(B) = \relint(A+B)$ if $A$ and $B$ are both convex;
+\item $\cone\big(\relint(A)\big) \subseteq \relint\big(\cone(A)\big)$;
+\item $\cone\big(\relint(A)\big) = \relint\big(\cone(A)\big)$ if $A$ is convex;
+\item if $A$ and $B$ are relatively open, then $A+B$ is relatively open.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
+\begin{example}
+Let $V$ be a vector space and $A\subseteq V$ a subset. At one point I thought that $A$ is relatively open \textup{if and only if}
+\[ A = \setbuilder{x\in A}{\forall y\in A: \exists \epsilon >0: \forall \lambda \in \cball_\F(0,\epsilon):\; \lambda y + (1-\lambda)x \in A}. \]
+This is not true. Consider the following subset of $\R^2$:
+\[ A = \{0\} \cup \setbuilder{(x,y)\in \R^2}{x<0, y<0} \cup \setbuilder{(x,y)\in \R^2}{x>0, y>0}. \]
+It is not relatively open (consider the origin), but it does satisfy the equality.
+\end{example}
+
+\begin{lemma}
+Let $V$ be a vector space and $A\subseteq V$ a subset. Then $A$ is relatively open \textup{if and only if}
+\[ A = \setbuilder{x\in A}{\forall y\in A: \exists \epsilon >0: \forall \lambda \in \cball_\F(0,\epsilon):\; \lambda y + (1-\lambda)x \in A}. \]
+\end{lemma}
+\begin{proof}
+First assume $A$ is relatively open. Then
+\begin{align*}
+A &= \relint(A) \\
+&= \setbuilder{x\in A}{\forall y\in \affine(A): \exists \epsilon >0: \forall \lambda \in \cball_\F(0,\epsilon):\; \lambda y + (1-\lambda) x \in A} \\
+&\subseteq \setbuilder{x\in A}{\forall y\in A: \exists \epsilon >0: \forall \lambda \in \cball_\F(0,\epsilon):\; \lambda y + (1-\lambda) x \in A} \\
+&\subseteq A,
+\end{align*}
+since $A \subseteq \affine(A)$. Thus all the inclusions are equalities and the first implication is proved.
+
+Now assume the relation holds. We need to show that $A\subseteq \relint(A)$. For this we use \ref{relativeInteriorEquivalent}.
+
+Take arbitrary $y,z\in A$. By assumption, there exists $\epsilon > 0$ such that $x+\lambda(y-x)\in A$ for all $\lambda \in \cball_\F(0,\epsilon)$. 
+
+Since $x+\lambda(y-x)\in A$ for all such $\lambda$, we can find $\epsilon' > 0$ such that
+\[ \lambda' z + (1-\lambda')\big(x+\lambda(y-x)\big) \in A \]
+for all $\lambda'\in \cball_F(0,\epsilon')$.
+
+
+
+
+
+
+
+WLOG we may take $\epsilon < 1$. Set $\epsilon' \defeq \frac{\epsilon}{1+\epsilon}$. We claim that for all $\lambda'\in \cball_\F(0,\epsilon')$, we have $x + \lambda' (y-z) \in A$.
+
+To see this, we first note that $\frac{\lambda'}{\lambda'-1} \in \cball_\F(0,\epsilon)$. Indeed, we have
+\begin{align*}
+|\lambda'|\leq \frac{\epsilon}{\epsilon +1} \iff& (1+\epsilon)|\lambda'| \leq \epsilon \\
+\implies& |\lambda'|\leq (1-|\lambda'|)\epsilon \leq \big|1-\lambda'|\epsilon \\
+\implies& \left|\frac{\lambda'}{\lambda' - 1}\right| \leq \epsilon, 
+\end{align*}
+where we have used the reverse triangle inequality (\ref{metricReverseTriangleInequality}, with $a = 0$) to get $|\lambda' - 1|\geq \big||\lambda'| - 1 \big|$. Thus $x+ \frac{\lambda'}{\lambda' - 1}(y-x)\in A$. 
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a vector space and $A\subseteq V$. Then
+\begin{enumerate}
+\item $\relint(A)\subseteq A$;
+\item $\relint^2(A) = \relint(A)$.
+\end{enumerate}
+\end{lemma}
+In particular, $\relint(A)$ is relatively open.
+\begin{proof}
+(1) Clear.
+
+(2) TODO.
+\end{proof}
+
+\begin{example}
+The function $\relint: \powerset(V)\to \powerset(V)$ is not a dual Moore closure because it is not monotone.
+
+Consider $A = \{(x,0)\}_{0<x<1}$. Then $A$ is relatively open. We also have $\relint\big(A\cup \{(0,1)\}\big) = \emptyset$, so $\relint(A) \nsubseteq \relint\big(A\cup \{(0,1)\}\big)$ even though $A\subseteq A\cup \{(0,1)\}$.
+\end{example}
 
 \subsection{Translation invariance}
 In this section we will frequently use the function $\Delta_V: V\oplus V\to V: (x,y) \mapsto y-x$, for some vector space $V$. We will also write simply $\Delta$ if the space $V$ is clear.

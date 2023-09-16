@@ -46,7 +46,7 @@ Aliprantis / Border p.287
 \section{Subgradients and subdifferentials}
 \begin{definition}
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing, $f: C\subseteq Y\to \R$ a convex function and $y\in Y$. An element $x\in X$ such that
-\[ \forall y'\in C: \qquad f(y') \geq f(y) + \pair{x, y'-y}  \]
+\[ \forall y'\in C: \qquad f(y') - f(y) \geq \pair{x, y'-y}  \]
 is called a \udef{subgradient} of $f$ at $y$. The set of all subgradients at $y$ is called the \udef{subdifferential} of $f$ at $y$ and is denoted $\subdiff{f}(y)$.
 \end{definition}
 
@@ -69,6 +69,7 @@ Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing, $C\subseteq Y$ a convex set an
 then there exists $x\in X$ such that $\pair{x,\cdot} = g(\cdot,0)$ and $g(0,-1)^{-1}x$ is a subgradient of $f$ at $y$. 
 \end{enumerate}
 \end{lemma}
+TODO: replace $\inh_\mathfrak{a}$ by relative interior??
 \begin{proof}
 (1) Pick arbitrary $y'\in C$. Then
 \begin{align*}
@@ -182,6 +183,165 @@ f(\lambda x + (1-\lambda)z) &= f(y) \\
 \section{Extreme points of convex sets}
 \begin{theorem}[Krein-Milman]
 Aliprantis / Border p. 297
+\end{theorem}
+
+\section{Conic programming}
+\subsection{Cones and alignment}
+\begin{definition}
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ be a real pairing. For $u\in U$ and $v\in V$, we say $u$ and $v$ are \udef{aligned} if $\pair{u,v}\geq 0$. We write $u \pairingAligned v$.
+\end{definition}
+
+\begin{lemma} \label{dualConeProperties}
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ be a real pairing and $A\subseteq V$ a subset. Then
+\begin{enumerate}
+\item $A^\pairingAligned$ is a cone;
+\item $A^\pairingAligned$ is convex;
+\item $A^\pairingAligned$ is pointed;
+\item $A^\pairingAligned$ is weak-$*$ closed.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $u\in A^\pairingAligned$ and arbitrary $\lambda\in\R^+$. Then $\pair{\lambda u, a} = \lambda \pair{u, a} \geq 0$ for all $a\in A$.
+
+(2) Take $u,u'\in A^\pairingAligned$, arbitrary $r\in \interval{0,1}$ and arbitrary $a\in A$. Then $\pair{ru+ (1-r)u', a} = r\pair{u, a}+ (1-r)\pair{u', a} \geq 0$, so $ru+(1-r)u'\in A^\pairingAligned$.
+
+(3) For all $a\in A$ we have $\pair{0, a} = 0 \geq 0$.
+
+(4) We have, using \ref{polarOfUnion},
+\begin{align*}
+A^\pairingAligned &= \left(\bigcup_{a\in A}\{a\}\right)^\pairingAligned \\
+&= \bigcap_{a\in A} \{a\}^\pairingAligned \\
+&= \bigcap_{a\in A}\setbuilder{u\in U}{\pair{u,a}\geq 0} \\
+&= \bigcap{a\in A}\pair{\cdot, a}^{\preimf}\big(\interval[co]{0,+\infty}\big),
+\end{align*}
+which is an intersection of closed sets (as each $\pair{\cdot, a}$ is continuous in the $\sigma^*(U,V)$ topology) and thus closed.
+\end{proof}
+
+\begin{definition}
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ be a real pairing and $A\subseteq V$ a subset. Then we call $A^\pairingAligned$ the \udef{dual cone} of $A$.
+\end{definition}
+
+\begin{proposition}[Conic bipolar theorem]
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ be a real pairing and $A\subseteq V$ a subset. Then
+\[ A^{\pairingAligned\pairingAligned} = \overline{\convCone(A)}^{\sigma(U,V)}. \]
+\end{proposition}
+\begin{proof}
+We have $A \subseteq A^{\pairingAligned\pairingAligned}$ by \ref{reflexiveGaloisCorollary}. Then $\convCone(A) \subseteq A^{\pairingAligned\pairingAligned}$ because $A^{\pairingAligned\pairingAligned}$ is a convex cone by \ref{dualConeProperties}. Similarly $\overline{\convCone(A)}^{\sigma(X,Y)} \subseteq A^{\pairingAligned\pairingAligned}$, because $A^{\pairingAligned\pairingAligned}$ is $\sigma(X,Y)$-closed by \ref{dualConeProperties}.
+
+The other inclusion is proved by contradiction. Assume, to this end, that $a\in A^{\pairingAligned\pairingAligned} \setminus \overline{\convCone(A)}^{\sigma(U,V)}$. Since $\overline{\convCone(A)}^{\sigma(U,V)}$ is closed and convex by \ref{inherenceAdherenceConvex}, we can apply Hahn-Banach separation \ref{locallyConvexHahnBanachSeparationClosedSet} to obtain a continuous functional $f$ such that $f^\imf\left(\overline{\convCone(A)}\right)$ is disjoint from some open neighbourhood $U$ of $f(a)$.
+
+Since $\overline{\convCone(A)}$ is a pointed cone, \ref{inherenceAdherenceCone}, $f^\imf\left(\overline{\convCone(A)}\right)$ is a pointed cone, by \ref{mappingConeToCone}.
+
+Now, there are only three possible pointed cones in $\R$ that $f^\imf\left(\overline{\convCone(A)}\right)$ can be: $\interval[co]{0, +\infty}, \interval[oc]{-\infty, 0}$ and $\interval[o]{-\infty, +\infty}$. In the third case, $f(a)$ cannot be disjoint, so this is impossible. We can reduce the second to the first by replacing $f$ by $-f$. So, WLOG, we may assume $f^\imf\left(\overline{\convCone(A)}\right) = \interval[co]{0, +\infty}$. Then $f(a) < 0$, since it is disjoint.
+
+If $f(a) < 0$, then $f^\imf\left(\overline{\convCone(A)}\right)\subseteq \interval[co]{0,+\infty}$ and if $f(a) > 0$, then $f^\imf\left(\overline{\convCone(A)}\right)\subseteq \interval[co]{-\infty, 0}$.
+
+By \ref{functionalContinuityWeakTopology}, we can find some $x\in U$ such that $f = \pair{x,\cdot}$. Since
+\[ \pair{x,\cdot}^\imf\left(\overline{\convCone(A)}\right) = f^\imf\left(\overline{\convCone(A)}\right) = \interval[co]{0, +\infty}, \]
+we have $x\in \overline{\convCone(A)}^\pairingAligned \subseteq A^\pairingAligned$. But $\pair{x, a} = f(a) < 0$, so $a\notin A^{\pairingAligned\pairingAligned}$. This is a contradiction.
+\end{proof}
+\begin{corollary}
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ be a real pairing and $K\subseteq V$ a weakly closed convex cone. Then $K^{\pairingAligned\pairingAligned} = K$.
+\end{corollary}
+
+
+\subsection{Conic programming}
+\begin{definition}
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ and $\sSet{U',V',\pair{\cdot,\cdot}'}$ be real pairings such that $U'$ separates $V'$. Let $\Phi: V\to V'$ be a weakly continuous linear map. We define the associated \udef{Lagrangian} $\mathcal{L}: U\times V\times U'\times V'\to \R$ by
+\[ \mathcal{L}(a,b,x,y) \defeq \pair{a,x} + \pair{y,b}' - \pair{y,\Phi(x)}'. \]
+\end{definition}
+
+\begin{lemma} \label{weakDualityLemma}
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ and $\sSet{U',V',\pair{\cdot,\cdot}'}$ be real pairings such that $U'$ separates $V'$, $\Phi: V\to V'$ a weakly continuous linear map and $K\subseteq V$ a cone. Then
+\begin{align*}
+\inf_{x\in K}\sup_{y\in U'} \mathcal{L}(a,b,x,y) \quad&=\quad \begin{aligned}[t]
+\inf_{x\in K} \quad & \pair{a,x} \\
+\text{subject to} \quad & \Phi(x) = b
+\end{aligned} \\
+\sup_{y\in U'}\inf_{x\in K} \mathcal{L}(a,b,x,y) \quad&=\quad \begin{aligned}[t]
+\sup_{y\in U'} \quad & \pair{y,b}' \\
+\text{subject to} \quad & \Phi^*(y) - a \in K^\pairingAligned
+\end{aligned}
+\end{align*}
+\end{lemma}
+\begin{proof}
+(1) We have
+\[ \sup_{y\in U'} \mathcal{L}(a,b,x,y) = \sup_{y\in U'} \pair{a,x} + \pair{y,b - \Phi(x)}' = \begin{cases}
++\infty & (b - \Phi(x) \neq 0) \\
+\pair{a,x} & (b - \Phi(x) = 0)
+\end{cases} \]
+Then
+\begin{align*}
+\inf_{x\in K}\sup_{y\in U'} \mathcal{L}(a,b,x,y) &= \inf\setbuilder{\pair{a,x}}{x\in K, \Phi(x) = b} \cup\{+\infty\} \\
+&= \inf\setbuilder{\pair{a,x}}{x\in K, \Phi(x) = b}.
+\end{align*}
+(2) We have
+\begin{align*}
+\inf_{x\in K} \mathcal{L}(a,b,x,y) = \inf_{x\in K} \pair{y,b}' + \pair{a-\Phi^*(y), x} &= \begin{cases}
+- \infty & (\exists x\in K: \pair{a-\Phi^*(y), x} < 0) \\
+\pair{y,b}' & (\forall x\in K: \pair{a-\Phi^*(y), x} \geq 0) \\
+\end{cases} \\
+&= \begin{cases}
+- \infty & (\exists x\in K: \pair{a-\Phi^*(y), x} < 0) \\
+\pair{y,b}' & (a-\Phi^*(y)\in K^\pairingAligned) \\
+\end{cases}
+\end{align*}
+Then
+\begin{align*}
+\sup_{y\in U'}\inf_{x\in K} \mathcal{L}(a,b,x,y) &= \sup_{y\in U'} \setbuilder{\pair{y,b}'}{a-\Phi^*(y) \in K^\pairingAligned} \cup \{-\infty\} \\
+&= \sup_{y\in U'} \setbuilder{\pair{y,b}'}{a-\Phi^*(y) \in K^\pairingAligned}
+\end{align*}
+\end{proof}
+
+\begin{proposition}[Weak duality]
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ and $\sSet{U',V',\pair{\cdot,\cdot}'}$ be real pairings such that $U'$ separates $V'$, $\Phi: V\to V'$ a weakly continuous linear map and $K\subseteq V$ a cone.
+Set
+\[ \alpha \quad=\quad \begin{aligned}[t]
+&\inf_{x\in K} \quad  \pair{a,x} \\
+&\text{subject to} \quad  \Phi(x) = b
+\end{aligned}\qquad \text{and}\qquad \beta \quad=\quad \begin{aligned}[t]
+&\sup_{y\in U'} \quad  \pair{y,b}' \\
+&\text{subject to} \quad  \Phi^*(y) - a \in K^\pairingAligned
+\end{aligned} \]
+Then $\alpha \geq \beta$.
+\end{proposition}
+\begin{proof}
+By \ref{weakDualityLemma} and the distributive inequality (TODO ref).
+\end{proof}
+
+\begin{definition}
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ and $\sSet{U',V',\pair{\cdot,\cdot}'}$ be real pairings such that $U'$ separates $V'$, $\Phi: V\to V'$ a weakly continuous linear map and $K\subseteq V$ a cone. We call
+\begin{itemize}
+\item finding $\alpha$ for $\begin{aligned}[t]
+\alpha = &\inf_{x\in K} \quad  \pair{a,x} \\
+&\text{subject to} \quad  \Phi(x) = b
+\end{aligned}$ the \udef{primal problem};
+\item finding $\beta$ for $\begin{aligned}[t]
+\beta = &\sup_{y\in U'} \quad  \pair{y,b}' \\
+&\text{subject to} \quad  \Phi^*(y) - a \in K^\pairingAligned
+\end{aligned}$ the \udef{dual problem}.
+\end{itemize}
+\end{definition}
+
+\subsubsection{Feasibility}
+\begin{definition}
+Let $\sSet{U,V,\pair{\cdot,\cdot}}$ and $\sSet{U',V',\pair{\cdot,\cdot}'}$ be real pairings such that $U'$ separates $V'$, $\Phi: V\to V'$ a weakly continuous linear map and $K\subseteq V$ a cone. We call
+\begin{itemize}
+\item $\mathcal{A} = \setbuilder{x\in K}{\Phi(x) = b} = \Phi^{\preimf}(\{b\})\cap K$ the \udef{primal feasible set};
+\item $\mathcal{A} = \setbuilder{x\in \relint(K)}{\Phi(x) = b} = \Phi^{\preimf}(\{b\})\cap \relint(K)$ the \udef{primal strictly feasible set};
+\item $\mathcal{B} = \setbuilder{y\in V'}{\Phi^*(y) -a\in K^\pairingAligned} = (\Phi^*)^{\preimf}(a+K^\pairingAligned)$ the \udef{dual feasible set};
+\item $\mathcal{B} = \setbuilder{y\in V'}{\Phi^*(y) -a\in \relint(K^\pairingAligned)} = (\Phi^*)^{\preimf}\big(a+\relint(K^\pairingAligned)\big)$ the \udef{dual strictly feasible set}.
+\end{itemize}
+We say
+\begin{itemize}
+\item the primal problem is \udef{feasible} if the primal feasible set is non-empty;
+\item the dual problem is \udef{feasible} if the dual feasible set is non-empty.
+\end{itemize}
+\end{definition}
+
+\subsubsection{Strong duality}
+\begin{theorem}[Slater's condition]
+
 \end{theorem}
 
 \chapter{Spectral theory and functional calculus}

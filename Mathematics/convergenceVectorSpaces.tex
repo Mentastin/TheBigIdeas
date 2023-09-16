@@ -583,9 +583,32 @@ Let $\sSet{V,\xi}$ be a vector space convergence and $A\subseteq V$. Then
 is a union of open sets and thus open by \ref{propertiesTopology}.
 \end{proof}
 \begin{proof}[Alternative proof of (1)]
-Take $|\lambda|\leq 1$ and $v\in \adh_\xi(A)$, then we need to show that $\lambda v \in \adh_\xi(A)$. We have $A\in \vicinity_\xi(v)^{\mesh}$ and $A\subseteq \lambda^{-1}A$. So for all $B\in \vicinity_\xi(v)$:
+Take $|\lambda|\leq 1$ and $v\in \adh_\xi(A)$, then we need to show that $\lambda v \in \adh_\xi(A)$. We have $A\in \vicinity_\xi(v)^{\mesh}$ and $A\subseteq \lambda^{-1}A$ (TODO: why, is this correct??). So for all $B\in \vicinity_\xi(v)$:
 \[ A\mesh B \quad\implies\quad \lambda^{-1}A\mesh B \quad\implies\quad A\mesh \lambda B. \]
 Thus $A\in \vicinity_\xi(\lambda v)^{\mesh}$, which is what we needed to show by \ref{principalAdherenceInherence}.
+\end{proof}
+
+\begin{proposition} \label{inherenceAdherenceCone}
+Let $\sSet{V,\xi}$ be a vector space convergence and $K\subseteq V$ a cone. Then
+\begin{enumerate}
+\item $\adh(K)$ is a cone;
+\item $\inh(K)$ is a cone;
+\item if $K\neq \emptyset$, then $0\in \adh(K)$;
+\item if $K$ is salient, then $0\notin \inh(K)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) For all $r\in \interval[o]{0,+\infty}$, multiplying by $r$ is a homeomorphism. Then
+\[ \interval[o]{0,+\infty}\cdot \adh(K) = \bigcup_{r> 0}r\cdot \adh(K) = \bigcup_{r>0}\adh(r\cdot K) \subseteq \bigcup_{r>0}\adh(K) = \adh(K). \]
+
+(2) For all $r\in \interval[o]{0,+\infty}$, multiplying by $r$ is a homeomorphism. Then
+\[ \interval[o]{0,+\infty}\cdot \inh(K) = \bigcup_{r> 0}r\cdot \inh(K) = \bigcup_{r>0}\inh(r\cdot K) \subseteq \bigcup_{r>0}\inh(K) = \inh(K). \]
+
+(3) Assume $K\neq \emptyset$. Then we can take $v\in K$. Now $\seq{n^{-1}v}$ is a sequence in $K$ that converges to $0$ by \ref{continuityLemmaVectorConvergence}. So $0\in \adh(K)$.
+
+(4) Assume $K$ is salient. Suppose, towards a contradiction, that $0\in \inh(K)$. Then $K\in \vicinity(0)$ and so $K$ is absorbent by \ref{vicinityFilterAtOrigin}.
+
+Take $v\in V$. By absorption, we have $\ball(0,\epsilon)\cdot\{v\} \subseteq K$ for some $\epsilon > 0$. In particular both $\epsilon v\in K$ and $-\epsilon v\in K$. Thus $K$ is flat, not salient.
 \end{proof}
 
 \begin{proposition} \label{inherenceAdherenceConvex}
@@ -2730,11 +2753,11 @@ x\in (\lambda B)^{\pol} &\iff \forall y\in B:\; \abspair{x,\lambda y} \leq 1 \\
 &\iff x\in \lambda^{-1}B^\pol.
 \end{align*}
 
-(2) We use \ref{absolutelyConvexCriteria}, so we take $x,y\in B^\pol$ and $|r|\leq 1$. We need to show that $rx + (1-r)y\in B^\pol$. Indeed, for arbitrary $z\in B$ we have
+(2) Take $x,y\in B^\pol$ and $r,r'\in \R$ such that $|r| + |r'|\leq 1$. We need to show that $rx + r'y\in B^\pol$. Indeed, for arbitrary $z\in B$ we have
 \begin{align*}
-\abspair{rx + (1-r)y, z} &= |r\pair{x,z} + (1-r)\pair{y,z}| \\
-&\leq |r|\;\abspair{x,z} + |1-r|\;\abspair{y,z} \\
-&\leq |r| + |1-r| \\
+\abspair{rx + r'y, z} &= |r\pair{x,z} + r'\pair{y,z}| \\
+&\leq |r|\;\abspair{x,z} + |r'|\;\abspair{y,z} \\
+&\leq |r| + |r'| \\
 &\leq 1,
 \end{align*}
 where the last inequality follows from $1 = |1 - r + r| \leq |1-r| + |r|$. Since $z\in B$ was chosen arbitrarily, we have $rx + (1-r)y\in B^\pol$.
@@ -2753,10 +2776,11 @@ which is an intersection of closed sets (as each $\abspair{\cdot, y}$ is continu
 Let $\sSet{X,Y,\pair{\cdot,\cdot}}$ be a pairing and $B\subseteq Y$ a subset. Then
 \[ B^{\pol\pol} = \overline{\disked(B)}^{\sigma(X,Y)}. \]
 \end{proposition}
+TODO: clean up proof.
 \begin{proof}
 We have $B\subseteq B^{\pol\pol}$ by \ref{reflexiveGaloisCorollary}. Then $\disked(B) \subseteq B^{\pol\pol}$ because $B^{\pol\pol}$ is absolutely convex by \ref{polarPropertiesLemma}. Similarly $\overline{\disked(B)}^{\sigma(X,Y)} \subseteq B^{\pol\pol}$, because $B^{\pol\pol}$ is $\sigma(X,Y)$-closed.
 
-The other inclusion is proved by contradiction. Assume, to this end, that $y_0\in B^{\pol\pol} \setminus \overline{\disked(B)}^{\sigma(X,Y)}$. Then we can apply Hahn-Banach separation \ref{locallyConvexHahnBanachSeparationClosedSet} to obtain a continuous functional $f$ such that $f^\imf\left[\overline{\disked(B)}\right]$ is disjoint from some open neighbourhood $U$ of $f(y_0)$.
+The other inclusion is proved by contradiction. Assume, to this end, that $y_0\in B^{\pol\pol} \setminus \overline{\disked(B)}^{\sigma(X,Y)}$. Since $\overline{\disked(B)}^{\sigma(X,Y)}$ is closed and convex by \ref{inherenceAdherenceConvex}, we can apply Hahn-Banach separation \ref{locallyConvexHahnBanachSeparationClosedSet} to obtain a continuous functional $f$ such that $f^\imf\left[\overline{\disked(B)}\right]$ is disjoint from some open neighbourhood $U$ of $f(y_0)$.
 
 Now $\overline{\disked(B)}$ is absolutely convex by \ref{inherenceAdherenceBalanced} and \ref{inherenceAdherenceConvex}, so $f^\imf\left[\overline{\disked(B)}\right]$ is also absolutely convex by linearity. Then, because $|U|$ is open, there exists $t\in |U|$ such that $|f(b)| < t < |f(y_0)|$ for all $b\in \overline{\disked(B)}$. Thus $\sup_{b\in \overline{\disked(B)}}|f(b)| < |f(y_0)|$. By rescaling $f$ we can take $\sup_{b\in \overline{\disked(B)}}|f(b)| \leq 1 < |f(y_0)|$.
 
@@ -2945,7 +2969,7 @@ Let $\sSet{V, \xi}$ be a topological convergence space. A subset $H\subseteq \du
 The polar is taken in either $\sSet{\Lin(V,\F), V,\evalMap}$ or
 $\sSet{\dual{V}, V,\evalMap}$.
 \begin{proof}
-By \ref{equicontinuityGroupHomomorphisms}, the equicontinuity of $H$ is equivalent to
+By \ref{equicontinuityGroupHomomorphisms}, the equicontinuity of $H$ is equivalent to (using pretopologicity, it is enough to consider $\neighbourhood_\xi(0)$)
 \begin{align*}
 \upset\evalMap^{\imf\imf}\big(\{H\}\otimes \neighbourhood_\xi(0)\big) \overset{\F}{\longrightarrow} 0 &\iff \forall \epsilon >0: \exists U\in \neighbourhood_\xi(0): \; \evalMap^\imf(H\times U) \subseteq \cball(0,\epsilon) \\
 &\iff \forall \epsilon >0: \exists U\in \neighbourhood_\xi(0): \forall f\in H: \forall x\in U: \; \abspair{f,x}\leq \epsilon \\
