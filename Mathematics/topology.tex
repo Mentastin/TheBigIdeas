@@ -1804,6 +1804,7 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces and $f: X\to Y$ a 
 \item if $O\subseteq Y$ is open, then $f^\preimf(O)$ is open;
 \item if $C\subseteq Y$ is closed, then $f^\preimf(C)$ is closed.
 \end{enumerate}
+If $\zeta$ is topological, then either (1) or (2) implies that $f$ is continuous.
 \end{corollary}
 \begin{proof}
 (1) We have
@@ -1817,6 +1818,10 @@ which implies $f^\preimf(C) = \adh\big(f^\preimf(C)\big)$ and thus that $f^\prei
 (2 bis) Alternatively, we can prove (2) from (1) by using the fact that $C^c$ is open and \ref{imagePreimageUniqueness} to calculate
 \[ f^\preimf(C) = f^\preimf(Y\setminus C^c) = f^\preimf(Y)\setminus f^\preimf(C^c) = X\setminus f^\preimf(C^c) = f^\preimf(C^c)^c. \]
 This is closed because $f^\preimf(C^c)$ is open by (1).
+
+(If $\zeta$ is topological) then, for all $x\in X$,
+\[ f^{\preimf\imf}\Big(\vicinity\big(f(x)\big)\Big) = f^{\preimf\imf}\Big(\neighbourhood\big(f(x)\big)\Big) \subseteq \neighbourhood(x) \subseteq \vicinity(x). \]
+This implies that $f$ is continuous by \ref{pretopologicalContinuityVicinities}.
 \end{proof}
 
 
@@ -2160,9 +2165,178 @@ Sequentially compact space that is not compact.
 
 
 \subsection{(Generalised) compactness}
-TODO Cech-stone, alexandroff
-
 Lindelöf.
+
+\subsection{Compactification}
+\subsubsection{One-point compactification}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $\infty$ some point not in $X$. Then the \udef{one-point comapctification} or \udef{Alexandroff compactification} of $X$ is the set $X^\dagger \defeq X\uplus \{\infty\}$ with the convergence
+\[ F\to x \quad\iff\quad \begin{cases}
+\text{$X\in F$ and $F|_X \to x\in X$} \\
+\text{$x=\infty$, $F$ is an ultrafilter and $F$ does not converge due to the above}
+\end{cases} \]
+for all $F\in\powerfilters(X^\dagger)$.
+
+We call $\topMod(X^\dagger)$ the \udef{topological one-point compactification}.
+\end{definition}
+Note that $X^\dagger$ is compact by construction and $X$ carries the subspace convergence as a subset of $X^\dagger$.
+
+The Alexandroff compactification is the strongest convergence on $X\uplus \{\infty\}$ such that
+\begin{itemize}
+\item the original convergence on $X$ is given by the subspace convergence;
+\item $X\uplus \{\infty\}$ is compact.
+\end{itemize}
+The weakest such convergence is given by the open extension (TODO ref), which lets all filters converge to $\infty$.
+
+\begin{proposition} \label{topologyOnePointCompactification}
+Let $\sSet{X, \xi}$ be a convergence space. Then
+\[ \topology_{X^\dagger} = \topology_X \cup \setbuilder{X^\dagger \setminus K}{\text{$K\subseteq X$ closed and compact}}. \]
+\end{proposition}
+Note that $X^\dagger \setminus K = (X\setminus K)\cup \{\infty\}$. Also note that $X$ is open in $X^\dagger$.
+\begin{proof}
+We first prove the inclusion $\boxed{\subseteq}$. Take arbitrary $O\in \topology_{X^\dagger}$. First assume $\infty\notin O$, so $O\subseteq X$. Then $O$ is open by \ref{subspaceAdherence}.
+Now assume $\infty\in O$. Then we need to show that $X^\dagger \setminus O = X\setminus O \subseteq X$ is closed and compact in $X$. Since $X^\dagger \setminus O$ is closed in $X^\dagger$, it is closed in $X$ by \ref{subspaceAdherence}. Since is compact in $X^\dagger$ by \ref{compactClosedSets}, it is compact in $X$.
+
+Now we prove the inclusion $\boxed{\supseteq}$. First take $O\in \topology_X$. We show that $O$ is open using \ref{openClosedCriteria}. Take $x\in O$ and $F\in \powerfilters(X^\dagger)$. Since $x\neq \infty$, we must have that $X\in F$ and $F|_X\to x$. Since $O$ is open in $X$, we have $O\in F|_X$ and thus $O\in F$. This shows that $O$ is open in $X^\dagger$.
+
+Finally take $K\subseteq X$ closed and compact. We show that $X^\dagger \setminus K$ is open using \ref{openClosedCriteria}. Take arbitrary $x\in X^\dagger \setminus K$ and $F\to x$. First take the case $x = \infty$. Then $F$ must be an ultrafilter and we must have $K\notin F$ (if $K\in F$, then $X\in F$ and $F|_X$ is an ultrafilter by \ref{imageFilterUltraIffUltra}, so $F|_X$ must converge to some element of $K$ and $F$ cannot converge to $\infty$ by definition). Since $F$ is an ultrafilter, this implies $X^\dagger \setminus K\in F$ by \ref{booleanMaximalFiltersIdeals}.
+
+Finally consider the case $x\neq \infty$. Then $X\in F$ and $F|_X \to x$. Since $K$ is closed in $X$, $X\setminus K$ is open by \ref{openClosedComplement} and so $X\setminus K \in F|_X \subseteq F$. By upwards closure $X^\dagger \setminus K\in F$.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a convergence space. Then the following are equivalent:
+\begin{enumerate}
+\item $X$ is not compact;
+\item $X$ is dense in $X^\dagger$;
+\item $X$ is dense in $\topMod(X^\dagger)$;
+\item $\closure_\xi(X) = X^\dagger$;
+\end{enumerate}
+and the following are also equivalent:
+\begin{enumerate} \setcounter{enumi}{4}
+\item $X$ is compact;
+\item $\infty$ is an isolated point in $X^\dagger$;
+\item $\{\infty\}$ is clopen in $X^\dagger$;
+\item $X$ is closed in $X^\dagger$;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We show $(1) \Rightarrow (2) \Rightarrow (3) \Rightarrow (4)$ and $(5) \Rightarrow (6) \Rightarrow (7) \Rightarrow (8)$. Then $(1) \Leftrightarrow \neg(5)$ and $(4) \Leftrightarrow \neq (8)$, so the claimed equivalences hold.
+
+$(1) \Rightarrow (2)$ Suppose $X$ is not compact, then there exists some ultrafilter in $X$ that does not converge. This ultrafilter converges to $\infty$ in $X^\dagger$, so $\infty\in \adh(X)$ and so $X$ is dense in $X^\dagger$.
+
+$(2) \Rightarrow (3)$ The convergence $\topMod(\xi)$ is weaker that $\xi$, so $X^\dagger = \adh_\xi(X) \subseteq \adh_{\topMod(\xi)}(X) \subseteq X^\dagger$ and thus $\adh_{\topMod(\xi)}(X) = X^\dagger$.
+
+$(3) \Rightarrow (4)$ Using \ref{topologicalModificationPreservation}, we have $\closure_\xi(X) = \closure_{\topMod(\xi)}(X) = \adh_{\topMod(\xi)}(X) = X^\dagger$.
+
+$(5) \Rightarrow (6)$ Suppose $X$ is compact. We show that $\{\infty\}$ is open using \ref{openClosedCriteria}. Let $F \to \infty$ in $X^\dagger$. Then $F$ is an ultrafilter and $X\notin F$. Thus $\{\infty\}\in F$ by \ref{booleanMaximalFiltersIdeals} and so $\{\infty\}$ is open, which makes it an isolated point.
+
+$(6) \Leftrightarrow (7)$ Since $X$ is open in $X^\dagger$ by \ref{topologyOnePointCompactification}, we have that $\{\infty\}$ is both open and closed iff it is open.
+
+$(7) \Rightarrow (8)$ Immediate by \ref{openClosedComplement}.
+\end{proof}
+
+\begin{proposition} \label{onePointCompactificationHausdorff}
+Let $\sSet{X, \xi}$ be a convergence space. Then
+\begin{enumerate}
+\item $X^\dagger$ is Hausdorff \textup{if and only if} $X$ is Hausdorff;
+\item $\topMod(X^\dagger)$ is Hausdorff \textup{if and only if} $\topMod(X)$ is Hausdorff and locally compact.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By construction: only filters that do not already converge, converge to $\infty$.
+
+(2) First suppose $\topMod(X^\dagger)$ is Hausdorff. Then $\topMod(X^\dagger)|_X$ is Hausdorff by \ref{HausdorffSubspace}. Since this convergence is weaker than $\topMod(X^\dagger|_X) = \topMod(X)$ by \ref{subspaceTopologicalModificationInclusion}, we have that $\topMod(X)$ is Hausdorff.
+
+Now we show that $\topMod(X)$ is locally compact. Take arbitrary $x\in X$. Since $\topMod(X^\dagger)$ is Hausdorff and $x\neq \infty$, we can find disjoint open neighbourhoods $U$ and $V$ of $x$ and $\infty$ in $X^\dagger$ by \ref{pretopologicalHausdorff}.
+
+By \ref{topologyOnePointCompactification}, $V$ is of the form $X^\dagger \setminus K$ for some $K\subseteq X$ which is closed and compact in $X$. Now we must have $U\subseteq K$, since $U\perp V$. Thus $K$ is a compact neighbourhood of $x$.
+
+Finally, suppose $\topMod(X)$ is Hausdorff and locally compact. We will show that $\topMod(X^\dagger)$ is Hausdorff using \ref{pretopologicalHausdorff}. To that end, take $x\neq y$ in $X^\dagger$. If $x,y\in X$, then there exist disjoint open neighbourhoods of $x$ and $y$ in $\topMod(X)$. By \ref{topologyOnePointCompactification}, these disjoint sets are also disjoint open neighbourhoods in $\topMod(X^\dagger)$.
+
+Now suppose $y = \infty$ and $x\in X$. As $\topMod(X)$ is locally compact, $x$ has a compact neighbourhood $K$. Now $K$ is also compact in $X$, since this convergence is weaker. Since $\topMod(X)$ is Hausdorff, $K$ is closed in $\topMod(X)$ by \ref{compactClosedSets} and so also in $X$.
+
+We have that $K$ and $V = X^\dagger \setminus K$ are disjoint neighbourhoods of $x$ and $\infty$ by \ref{topologyOnePointCompactification}, so $\topMod(X^\dagger)$ is Hausdorff by \ref{pretopologicalHausdorff}. 
+\end{proof}
+\begin{corollary}
+The inclusion $\incl_X: X \hookrightarrow X^\dagger$ is an open embedding.
+\end{corollary}
+(Embeddings are rarely open)
+
+
+\begin{proposition}[Universal property of the one-point compactification] \label{universalPropertyAlexandroffCompactification}
+Let $\sSet{X, \xi}$ be a convergence space, $\sSet{Y,\topology_\zeta, y_0}$ a pointed topological space and $f: X\to Y$ a continuous function such that $f^\preimf(C)$ is compact for all closed $C\subseteq Y\setminus\{y_0\}$. Then there exists a unique continuous function $f^\dagger$ such that
+\[ \begin{tikzcd}
+X^\dagger \ar[r, "{f^\dagger}"] & Y \\
+X \ar[u, hook] \ar[ur, swap, "f"]
+\end{tikzcd} \qquad \text{commutes} \]
+and $f^\dagger(\infty) = y_0$.
+\end{proposition}
+We have $f^\dagger = \left(\begin{smallmatrix}
+f \\ \constant{y_0}
+\end{smallmatrix}\right): X\uplus \{\infty\} = X^\dagger \to Y$.
+\begin{proof}
+This function is clearly unique, since the diagram fixes its image on $X$, and $f^\dagger(\infty) = y_0$ fixes its image on $X^\dagger \setminus X$. We just need to show that $f^\dagger$ is continuous, which we show using \ref{preimageOpenClosed}.
+
+Take an arbitrary open $U\subseteq Y$. First suppose $y_0\notin U$. Then $(f^\dagger)^\preimf(U) = f^\preimf(U)$, which is open in $X$ by continuity and \ref{preimageOpenClosed}, and thus open in $X^\dagger$ by \ref{topologyOnePointCompactification}.
+
+Now suppose $y_0\in U$. Then, since $U^c$ is closed, $(f^\dagger)^{\preimf}(U^c) = f^\preimf(U^c)$ is closed and compact by \ref{preimageOpenClosed} and assumption.
+
+By \ref{imagePreimageUniqueness}, we have $(f^\dagger)^\preimf(U) = X^\dagger \setminus (f^\dagger)^\preimf(U^c)$, which is open by \ref{topologyOnePointCompactification}.
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,\topology_\xi}$ be a compact Hausdorff topological space and $x_0\in X$. Then $\incl_{X\setminus\{x_0\}}^\dagger: (X\setminus\{x_0\})^\dagger\to X$ is a homeomorphism.
+\end{corollary}
+\begin{proof}
+We have that $\incl_{X\setminus\{x_0\}}$ is continuous by definition of the subspace convergence. Take some closed $C\subseteq X\setminus\{x_0\}$. Then $\incl_{X\setminus\{x_0\}}^{\preimf}(C) = C$, which is compact in $X\setminus\{x_0\}$ by \ref{compactClosedSets} and thus compact in $X$ by \ref{compactSetCompactSubspace}. Thus $\incl_{X\setminus\{x_0\}}^\dagger$ is continuous.
+
+Since $\incl_{X\setminus\{x_0\}}^\dagger$ is clearly bijective, it is a homeomorphism by \ref{compactToHausdorffHomeomorphism} (it is here that we use that $X$ is Hausdorff).
+\end{proof}
+
+\subsubsection{Basepoint extensions of functions}
+The definition of $f^\dagger$ makes sense even if $f$ is not continuous.
+
+In $\R$ and $\C$ the basepoint is always $0$.
+
+\begin{lemma} \label{basepointExtensionToRingLemma}
+Let $\sSet{X,\xi}$ be a convergence space. Then, for all $f,g\in (X\to \F)$ and $\lambda\in \F$, we have
+\begin{enumerate}
+\item $(f+\lambda g)^\dagger = f^\dagger + \lambda g^\dagger$;
+\item $(f\cdot g)^\dagger = f^\dagger\cdot g^\dagger$;
+\item $\overline{f}^\dagger = \overline{f^\dagger}$;
+\item $\big(\constant{0}|_X\big)^\dagger = \constant{0}_{X^\dagger}$.
+\end{enumerate}
+\end{lemma}
+
+
+
+\subsubsection{Functions that vanish at $\infty$}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta, y_0}$ a pointed convergence space. A function $f: X\to Y$ is said to \udef{vanish at $\infty$} if
+\[ \forall A\in \vicinity(y_0): \exists\, \text{compact $K\subseteq X$}: \; f^\imf(K^c) \subseteq A. \]
+We denote the set of all such functions by $\cont_0(X,Y)$.
+
+By $\cont_0(X)$ we mean $\cont_0(X,\C)$ (and sometimes $\cont_0(X,\R)$), where $0$ is the basepoint of $\C$ (and $\R$). 
+\end{definition}
+
+\begin{proposition} \label{vanishesAtInfinityIffBasepointExtensionContinuous}
+Let $\sSet{X,\xi}$ be a convergence space, $\sSet{Y,\zeta, y_0}$ a pointed topological space and $f:X\to Y$ a function. Then $f$ vanishes at infinity \textup{if and only if} $f^\dagger: X^\dagger \to Y$ is continuous.
+\end{proposition}
+\begin{proof}
+First assume $f$ vanishes at infinity. Then we use \ref{universalPropertyAlexandroffCompactification} to prove continuity. Suppose $C\subseteq Y\setminus\{y_0\}$ is closed. Then $C^c \in \neighbourhood(y_0)$ and so there exists a compact $K\subseteq X$ such that $f^\imf(K^c)\subseteq C^c$, which implies $K^c \subseteq f^\preimf(C^c) = f^\preimf(C)^c$ and thus also $f^\preimf(C)\subseteq K$. This makes $f^\preimf(C)$ compact by \ref{compactClosedSets}.
+
+Now assume $f^\dagger$ is continuous and let $A$ be an open neighbourhood of $y_0$. Then $(f^\dagger)^\preimf(A)$ is an open neighbourhood of $\infty$ by \ref{preimageOpenClosed}. Thus there exists a closed and compact $K\subseteq X$ such that $X^\dagger\setminus K = (f^\dagger)^\preimf(A)$ by \ref{topologyOnePointCompactification}. We then have
+\[ f^\imf(K^c) = (f^\dagger)^\imf(K^c) \subseteq (f^\dagger)^\imf(X^\dagger \setminus K) \subseteq A, \]
+which means that $f$ vanishes at $\infty$.
+\end{proof}
+\begin{corollary} \label{functionVanishingAtInftyIffRestrictionOfContinuousBasepointPreservingFunction}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta, y_0}$ a pointed topological space. Then
+\[ \setbuilder{f\in \cont(X^\dagger, Y)}{f(\infty) = y_0} \to \cont_0(X,Y): f\mapsto f|_X \]
+is a bijection.
+\end{corollary}
+\begin{proof}
+This function is clearly injective. Now take arbitrary $f\in \cont_0(X,Y)$. Then $f = f^\dagger|_X$. Since $f^\dagger\in \setbuilder{f\in \cont(X^\dagger, Y)}{f(\infty) = y_0}$ the function is surjective.
+\end{proof}
 
 \section{Lattices of preconvergences and convergences}
 \begin{definition}
@@ -2174,7 +2348,7 @@ We can think of strength as the ability to stop a filter converging. So $\xi$ is
 Let $X$ be a set and $\xi$ a preconvergence on $X$. Then
 \begin{enumerate}
 \item $E_{\powerfilters(X), X} \leq \xi \leq U_{\powerfilters(X), X}$;
-\item $\xi$ is a convergence \textup{if and only if} $\iota_X \leq \xi$.
+\item $\xi$ is a convergence \textup{if and only if} $\incl_X \leq \xi$.
 \end{enumerate}
 \end{lemma}
 
@@ -2907,8 +3081,8 @@ by \ref{setTraceFilterLemma}. Taking the intersection over all such $F$ gives th
 Let $\sSet{X,\xi}$, $\sSet{Y,\sigma}$ and $\sSet{Z,\zeta}$ be convergence spaces.
 \begin{enumerate}
 \item \textup{(Restricting the domain)} If $f:X\to Y$ is continuous and $A$ is a subspace of $X$, then the restricted function $f|_{A}:A\to Y$ is continuous.
-\item \textup{(Restricting the range)} Let $f:X\to Y$ be continuous. If $Z$ is a subspace of $Y$ containing the image set $f[X]$, then $f:X\to Z$ is continuous.
-\item \textup{(Expanding the range)} Let $f:X\to Y$ be continuous. If $Y$ is a subspace of $Z$, then $f:X\to Z$ is continuous.
+\item \textup{(Restricting the codomain)} Let $f:X\to Y$ be continuous. If $Z$ is a subspace of $Y$ containing the image set $f[X]$, then $f:X\to Z$ is continuous.
+\item \textup{(Expanding the codomain)} Let $f:X\to Y$ be continuous. If $Y$ is a subspace of $Z$, then $f:X\to Z$ is continuous.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -3328,9 +3502,16 @@ Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{F}$ a $\pi$-system of cl
 
 \section{Sublattices of (pre)convergences}
 \subsection{Functoriality}
+\begin{proposition} \label{convergenceModificationFunctoriality}
+All modiciations are functors: $f:X\to Y$ continuous implies $f: M(X)\to M(Y)$ continuous.
+\end{proposition}
 
-TODO show that all modiciations are functors: $f:X\to Y$ continuous implies $f: M(X)\to M(Y)$ continuous.
-
+TODO universal properties: given $f: X\to M(Y)$, there exists unique extension $M(f)$ such that
+\[ \begin{tikzcd}
+M(X) \ar[r, "M(f)"] & M(Y) \\
+X \ar[u, "\id_X"] \ar[ur, swap, "f"] & {}
+\end{tikzcd} \qquad \text{commutes.} \]
++ Dual for dual closures.
 
 \subsection{Depth properties}
 \subsubsection{Convergence spaces}
@@ -3507,6 +3688,15 @@ The statement for closed sets follows straight from \ref{openClosedComplement}.
 (2), (3) Immediate.
 
 (4) From \ref{topologicalModificationConstruction}, $\neighbourhood_\xi(x) = \vicinity_{\topMod(\xi)}(x)$. The result follows because $\topMod(\xi)$ is topological.
+\end{proof}
+
+
+\begin{lemma} \label{subspaceTopologicalModificationInclusion}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then $\topMod(\xi|_A)\subseteq \topMod(\xi)|_A$.
+\end{lemma}
+TODO: generalise and strengthen??
+\begin{proof}
+We have that $\iota_A: \xi|_A \to \xi$ is continuous by definition. Then $\topMod(\iota_A): \topMod(\xi|_A) \to \topMod(\xi)$ is continuous by \ref{convergenceModificationFunctoriality}. This implies that $\topMod(\xi|_A) \subseteq \topMod(\xi)|_A$.
 \end{proof}
 
 \subsection{Base properties}
@@ -4532,6 +4722,20 @@ $(2) \Leftrightarrow (3)$ Clear.
 $(3) \Leftrightarrow (4)$ $R_1$ implies $R_0$ and $R_0+T_0$ is equivalent with $T_1$.
 \end{proof}
 
+\begin{proposition} \label{pretopologicalHausdorff}
+Let $\sSet{X,\xi}$ be a pretopological convergence space. Then the following are equivalent:
+\begin{enumerate}
+\item $X$ is Hausdorff;
+\item $\neg\big(\vicinity(x) \amesh \vicinity(y)\big)$ for all $x\neq y$ in $X$;
+\item there exist disjoint $A\in \vicinity(x)$ and $B\in \vicinity(y)$ for all $x\neq y$ in $X$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Leftrightarrow (2)$ We have $F\in {\lim_\xi}^{-1}(x)\cap {\lim_\xi}^{-1}(y)$ iff $F\in \upset \{\vicinity(x)\} \cap \upset \{\vicinity(y)\}$ iff $F \supseteq \vicinity(x)\vee \vicinity(y)$. We can find such a proper filter $F$ iff $\vicinity(x) \amesh \vicinity(y)$, by \ref{joinProperFilter}.
+
+$(2) \Leftrightarrow (3)$ Immediate.
+\end{proof}
+
 \begin{proposition}
 Every $T_2$ convergence is also $T_1$. If the space is finite, the converse also holds.
 \end{proposition}
@@ -4558,9 +4762,6 @@ Take $x\neq y\in Y$ and suppose, towards a contradiction, that $F\overset{Y}{\lo
 Any subspace of a Hausdorff space is Hausdorff.
 \end{corollary}
 
-\begin{proposition}
-TODO: move: topological Hausdorff implies regular. This does not hold for non-topological convergence in general.
-\end{proposition}
 
 \subsection{$R_2$ or regular}
 \begin{definition}
@@ -4620,7 +4821,7 @@ Let $\sSet{X,\xi}$ be a topological space. Then the following are equivalent:
 \begin{enumerate}
 \item $\xi$ is regular;
 \item for any $x\in X$ and any base $\mathcal{B}$ of $\neighbourhood_\xi(x)$, $\closure^\imf(\mathcal{B})$ is also a base of $\neighbourhood_\xi(x)$;
-\item for any closed set $C$ there exist disjoint open sets $U,V$ such that $x\in U$ and $C\subseteq V$;
+\item for any closed set $C$ and $x\in C^c$ there exist disjoint open sets $U,V$ such that $x\in U$ and $C\subseteq V$;
 \item for any open set $O\subseteq X$ and $x\in O$ there exists an open set $U$ such that $x\subseteq U\subseteq \overline{U} \subseteq O$.
 \end{enumerate}
 \end{proposition}
@@ -4691,6 +4892,16 @@ Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivale
 \end{enumerate}
 \end{proposition}
 
+\begin{lemma} \label{compactHausdorffSpacesRegular}
+Let $\sSet{X,\xi}$ be a compact Hausdorff topological space. Then $X$ is regular.
+\end{lemma}
+This is really a lemma for the fact that compact Hausdorff spaces are normal \ref{compactHausdorffSpacesNormal}.
+\begin{proof}
+We use \ref{topologicalRegularity}. Take a closed subset $C\subseteq X$ and $x\in C^c$. For all $y\in C$, there exist disjoint open neighbourhoods $U_y \in \neighbourhood(x)$ and $V_y\in \neighbourhood(y)$ by \ref{pretopologicalHausdorff}.
+
+Now $\{V_y\}_{y\in C}$ is an open cover of $C$, which is compact by \ref{compactClosedSets}. So there is a finite subcover $\{V_y\}_{y\in F}$ by \ref{topologyCompactnessOpenCover}. Now set $V \defeq \bigcup_{y\in F}V_y$ and $U = \defeq \bigcap_{y\in F}U_y$. These sets are both open by \ref{propertiesTopology}. By construction $C\subseteq V$, $x\in U$ and $U\perp V$.
+\end{proof}
+
 \subsection{$R_3$ or normal}
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{normal} or \udef{$R_3$} if all disjoint closed sets are separated by convergent filters.
@@ -4698,6 +4909,11 @@ Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{normal} or
 
 \begin{proposition}
 Let $\sSet{X,\xi}$ be a pretopological convergence space and $A,B\subseteq X$. Then $\lim^{-1}(\adh_\xi(A)) \perp \lim^{-1}(\adh_\xi(B))$ \textup{if and only if} there exist disjoint vicinities of $\adh_\xi(A)$ and $\adh_\xi(B)$.
+\end{proposition}
+
+
+\begin{proposition} \label{topologicalNormal}
+Let $\sSet{X,\xi}$ be a topological convergence space. Then $X$ is normal \textup{if and only if} for all disjoint closed sets $C_1, C_2$ there exist disjoint open sets $O_1,O_2$ such that $C_1\subseteq O_1$ and $C_2\subseteq O_2$.
 \end{proposition}
 
 \begin{proposition}
@@ -4720,6 +4936,14 @@ Let $X$ be a set and $\xi$ a convergence on $X$. Then the following are equivale
 \end{proposition}
 
 
+\begin{proposition} \label{compactHausdorffSpacesNormal}
+Let $\sSet{X,\xi}$ be a compact Hausdorff topological space. Then $X$ is normal.
+\end{proposition}
+\begin{proof}
+We use \ref{topologicalNormal}. Take closed disjoint sets $C_1,C_2$. For all $x\in C_1$, there exist disjoint open sets $U_x, V_x$ such that $x\in U_x$ and $C_2\subseteq V_x$, by regularity \ref{compactHausdorffSpacesRegular}.
+
+Now $\{U_x\}_{x\in C_1}$ is an open cover of $C_1$, which is compact by \ref{compactClosedSets}. So there is a finite subcover $\{U_x\}_{x\in F}$ by \ref{topologyCompactnessOpenCover}. Now set $O_1 \defeq \bigcup_{x\in F} U_x$ and $O_2 = \defeq \bigcap_{x\in F} V_x$. These sets are both open by \ref{propertiesTopology}. By construction $C_1\subseteq O_1$, $C_2\subseteq O_2$ and $O_1\perp O_2$.
+\end{proof}
 
 \section{Comparison with reals and metrisability}
 \subsection{Functional convergence properties}
@@ -4780,7 +5004,7 @@ Next we show $x\in V$. Indeed, from $f(x) < t$, we get that there exists $f(x) \
 Finally note that if $y\in V \subseteq U_t$, then $f(y) \leq t$ and if $y\notin \overline{U_d}$, then $f(y) > s$ for all $s< d$. Thus $d \leq f(y)$ and $f[V]\subseteq [d,t]$.
 \end{proof}
 
-\begin{theorem}[Urysohn's lemma]
+\begin{theorem}[Urysohn's lemma] \label{UrysohnLemma}
 Let $\sSet{X,\xi}$ be a normal topological space. If $C_1,C_2$ are disjoint closed sets, then they are functionally separated.
 \end{theorem}
 \begin{proof}
@@ -4813,10 +5037,20 @@ Let $\sSet{X, \xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. We call $\xi$ \u
 In particular we call $\xi$ \udef{completely regular} if it is $\R$-functionally regular.
 \end{definition}
 
-\subsubsection{Tietze extension}
+\subsubsection{Tietze extension theorem}
 TODO!
 
 \url{https://math.stackexchange.com/questions/47360/urysohns-function-on-a-metric-space#comment276726_47360}
+
+\begin{theorem}[Tietze-Urysohn-Brouwer extension theorem] \label{TietzeExtension}
+Let $\sSet{X,\xi}$ be a normal space, $A\subseteq X$ a closed subset and $f:A\to \R$ a continuous function. Then there exists a continuous extension $\hat{f}: X\to \R$ of $f$ such that
+\[ \sup_{x\in A}|f(x)| = \sup_{x\in X}|\hat{f}(x)|. \]
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+
+
 
 \chapter{Compactness and connectedness}
 
