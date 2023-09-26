@@ -746,10 +746,10 @@ As this is true for arbitrary ultrafilter $I$, we have $(f|f)^{\imf\imf}[H]\in\m
 \begin{definition}
 Let $Y$ be a set.
 \begin{itemize}
-\item Given a set of uniform spaces $\{\sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ and a set of functions $\{f_i: Y\to Z_i\}_{i\in I}$, we define the \udef{initial uniformity} $\mathcal{X}$ on $Y$ as
-\[ \mathcal{X} = \bigvee \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}. \]
-\item Given a set of uniform spaces $\{\sSet{X_i, \mathcal{U}_i}\}_{i\in I}$ and a set of functions $\{g_i: X_i\to Y\}_{i\in I}$, we define the \udef{final uniformity} $\mathcal{Y}$ on $Y$ as
-\[ \mathcal{Y} = \bigwedge \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; g_i\in \ucont(\mathcal{U}_i, \mathcal{V})}. \]
+\item Given a set of uniform spaces $\{\sSet{Z_i, \mathcal{W}_i}\}_{i\in I}$ and a set of functions $\{f_i: Y\to Z_i\}_{i\in I}$, we define the \udef{initial uniformity} $\initialUniformity\{f_i: Y\to Z_i\}_{i\in I}$ on $Y$ as
+\[ \initialUniformity\{f_i: Y\to Z_i\}_{i\in I} \defeq \bigvee \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; f_i\in \ucont(\mathcal{V}, \mathcal{W}_i)}. \]
+\item Given a set of uniform spaces $\{\sSet{X_i, \mathcal{U}_i}\}_{i\in I}$ and a set of functions $\{g_i: X_i\to Y\}_{i\in I}$, we define the \udef{final uniformity} $\finalUniformity\{g_i: X_i\to Y\}_{i\in I}$ on $Y$ as
+\[ \finalUniformity\{g_i: X_i\to Y\}_{i\in I} \defeq \bigwedge \setbuilder{\text{$\mathcal{V}$ a uniformity on $Y$}}{\forall i\in I:\; g_i\in \ucont(\mathcal{U}_i, \mathcal{V})}. \]
 \end{itemize}
 \end{definition}
 
@@ -1974,6 +1974,23 @@ The standard metric on $\R$ is the metric
 \[ d_\R: \R\times \R\to\overline{\R^+}: (x,y) \mapsto |x-y|. \]
 \end{definition}
 
+\begin{lemma} \label{partialApplicationMetricUniformlyContinuous}
+Let $\sSet{X,d}$ be a pseudometric space and $a\in X$. Then $d(a, -): X\to \R$ is uniformly continuous.
+\end{lemma}
+\begin{proof}
+By \ref{uniformContinuityEntourages}, it is enough to prove that $\entourage_\R \subseteq \upset \big(d(a, -)|d(a,-)\big)^{\imf\imf}(\entourage_d)$.
+
+Take arbitrary $\epsilon>0$. Then it is enough to prove thave there exists $A\in \entourage_d$ such that $\big(d(a, -), d(a,-)\big)^{\imf}(A) \subseteq V_\epsilon$. Now there exists $A\in \entourage_d$ such that $d^{\imf}(A)\subseteq \cball(0,\epsilon)$. We claim this is the set we want, indeed
+\begin{align*}
+d^{\imf}(A)\subseteq \cball(0,\epsilon) \iff& \forall (x,y)\in A: \; d(x,y) \leq \epsilon \\
+\implies& \forall (x,y)\in A: \; |d(x,a) - d(a,y)| \leq \epsilon \\
+\iff& \forall (x,y)\in A: \; \big(d(-,a)|d(a,-)\big)(x,y) \in V_\epsilon \\
+\iff& \big(d(-,a), d(a,-)\big)^\imf(A) = \big(d(a,-)|d(a,-)\big)^\imf(A) \subseteq V_\epsilon,
+\end{align*}
+where we have used the reverse triangle inequality, \ref{metricReverseTriangleInequality}.
+\end{proof}
+
+
 \begin{proposition} \label{imagePseudometricConvergesToZero}
 Let $\sSet{X,d}$ be a pseudometric space. The pseudometric uniformity $\mathcal{U}_d$ is given by
 \[ \mathcal{U}_d = \setbuilder{H\in \powerfilters(X^2)}{\upset d^{\imf\imf}(H) \overset{\overline{\R^+}}{\longrightarrow} 0}.  \]
@@ -1987,7 +2004,13 @@ H \in \mathcal{U}_d &\iff H \supseteq \upset \{V_\epsilon\}_{\epsilon > 0} \\
 &\iff \upset d^{\imf\imf}(H)\overset{\overline{\R^+}}{\longrightarrow} 0.
 \end{align*}
 \end{proof}
-\begin{corollary} \label{metricConvergenceInitial}
+\begin{corollary} \label{metricUniformlyContinuous}
+Let $\sSet{X,d}$ be a metric space. Then $d: X\times X\to \overline{\R^+}$ is uniformly continuous.
+\end{corollary}
+\begin{proof}
+Take $F,G\in \uniformity_d$. Then $d^{\imf\imf}(F)\otimes \pfilter{0}, d^{\imf\imf}(G)\otimes \pfilter{0}\in \uniformity_{\overline{\R^+}}$, so $(d|d)^{\imf\imf}(F\otimes G) = d^{\imf\imf}(F)\otimes d^{\imf\imf}(G)\in \uniformity_{\overline{\R^+}}$.
+\end{proof}
+\begin{corollary} \label{metricConvergence}
 Let $\sSet{X,d}$ be a pseudometric space. The pseudometric convergence is given by
 \[ F \overset{d}{\longrightarrow} x \qquad\iff\qquad \upset d^{\imf\imf}(F\otimes \pfilter{x}) \overset{\overline{\R^+}}{\longrightarrow} 0 \]
 for all $F\in \powerfilters(X)$ and $x\in X$.
@@ -1995,12 +2018,15 @@ for all $F\in \powerfilters(X)$ and $x\in X$.
 \begin{proof}
 We have that $F \overset{d}{\longrightarrow} x$ iff $F\otimes \pfilter{x}\in \mathcal{U}_d$ iff $\upset d^{\imf\imf}(F\otimes \pfilter{x}) \overset{\overline{\R^+}}{\longrightarrow} 0$.
 \end{proof}
-\begin{corollary} \label{metricUniformlyContinuous}
-Let $\sSet{X,d}$ be a metric space. Then $d: X\times X\to \overline{\R^+}$ is uniformly continuous.
+\begin{corollary} \label{metricConvergenceInitial}
+Let $\sSet{X,d}$ be a pseudometric space and $x_0\in X, r\in \R$. Then the pseudometric convergence is equal to the initial convergence w.r.t.\ $\{d(a,-)\}_{a\in X}$.
 \end{corollary}
 \begin{proof}
-Take $F,G\in \uniformity_d$. Then $d^{\imf\imf}(F)\otimes \pfilter{0}, d^{\imf\imf}(G)\otimes \pfilter{0}\in \uniformity_{\overline{\R^+}}$, so $(d|d)^{\imf\imf}(F\otimes G) = d^{\imf\imf}(F)\otimes d^{\imf\imf}(G)\in \uniformity_{\overline{\R^+}}$.
+Due to \ref{partialApplicationMetricUniformlyContinuous}, we have that the pseudometric convergence $\subseteq$ the initial convergence.
+
+Now suppose $F\in \powerfilters(X)$ converges to $x\in X$ in the initial convergence. Then $\upset d^{\imf\imf}(\pfilter{x}\otimes F) = \upset d(x,-)^{\imf\imf}(F) \to d(x,x) = 0$ by \ref{initialFinalConvergence} and so $F\to x$ in the pseudometric convergence.
 \end{proof}
+
 
 \begin{proposition} \label{realConvergenceOrderConvergence}
 The standard convergence on $\R$ is equal to the order convergence on $\R$.
@@ -2168,6 +2194,43 @@ We clearly have
 For the other inclusion, it is enough to prove $\entourage_\mathcal{U} \subseteq \entourage_{\bigwedge \mathcal{U}_d}$. Take $V\in \entourage_\mathcal{U}$ and define $\seq{B_n}$ recursively by $B_0 = X^2$, $B_1 = V$ and $B_{n+1}$ is any symmetric set in $\entourage_\mathcal{U}$ such that $B_{n+1};B_{n+1};B_{n+1} \subseteq B_n$. Construct a pseudometric $d'$ as in \ref{metrisationLemma}. Then $d^{\prime\preimf}(\interval[co]{0,1/2})\subseteq V$, so
 \[ V \in \entourage_{d'} \subseteq \entourage_{\bigwedge \mathcal{U}_d}. \]
 \end{proof}
+\begin{corollary}
+Let $\sSet{X,\xi}$ be a convergence space. Then the following are equivalent:
+\begin{enumerate}
+\item $\xi$ is the convergence of a topological uniformity;
+\item $\xi$ is the meet of a set of pseudometric convergences;
+\item $\xi$ is the initial convergence w.r.t. $\cont(X,\R)$;
+\item for all $r\in \R$ and $x_0\in X$, $\xi$ is the initial convergence w.r.t. $\sSet{f \in \cont(X,\R)}{f(x_0) = r}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+$(1) \Leftrightarrow (2)$  We have
+\begin{align*}
+(1) &\iff \xi = (\Gamma \circ \Xi)\Big(\bigwedge \setbuilder{\mathcal{U}_d}{\text{$d$ is a pseudometric on $X$ and $(\Theta\circ \Phi)(\xi)\subseteq \mathcal{U}_d$}}\Big) \\
+&\iff \xi = \bigwedge\setbuilder[\big]{(\Gamma \circ \Xi)(\mathcal{U}_d)}{\text{$d$ is a pseudometric on $X$ and $\xi\subseteq (\Gamma\circ \Xi)(\mathcal{U}_d)$}} \\
+&\iff (2),
+\end{align*}
+where we have used \ref{completeUniformGaloisConnection}.
+
+$(2) \Rightarrow (3)$ Suppose there exists a set $D$ of pseudometrics on $X$ such that $\xi = \bigwedge_{d\in D}(\Gamma\circ \Xi)(\mathcal{U}_d)$. Then, by \ref{metricConvergenceInitial} and \ref{initialFinalPreconvergenceUnion}, we have that $\xi$ is the initial convergence w.r.t.  $\setbuilder{d(a,-)}{a\in X, d\in D}$. Then $(3)$ follows by \ref{initialFinalConvergencesSubsetFunctions}. 
+
+$(3) \Rightarrow (1)$ The initial uniformity w.r.t. $\cont(X,\R)$ is topological by \ref{topologicalInitialUniformity} and, by \ref{initialUniformConvergenceIsInitialConvergence}, the initial convergence w.r.t. $\cont(X,\R)$ is the the convergence associated to the initial uniformity.
+
+$(3) \Leftrightarrow (4)$ Using \ref{initialFinalConvergencesSubsetFunctions}, we need to show that each $f\in \cont(X,\R)$ is continuous w.r.t.\ the the initial convergence w.r.t. $\sSet{f \in \cont(X,\R)}{f(x_0) = r}$. Take arbitrary $f\in \cont(X, \R)$. Set $g \defeq f - \constant{f(x_0)}+\constant{r}$. Now $g(x_0) = f(x_0) - f(x_0) + r$, so $g\in \setbuilder{f\in \cont(X,\C)}{f(x_0) = r}$ and $g$ is continuous. Then $f = g + \constant{f(x_0)}-\constant{r}$ is also continuous.
+\end{proof}
+
+\begin{lemma} \label{LCTopologicalHausdorffInitialConvergence}
+Let $\sSet{X,\xi}$ be a Hausdorff topological locally compact convergence space. Then $\xi = \initialConv\big(\cont_0(X)\big)$.
+\end{lemma}
+\begin{proof}
+We have that $X^\dagger$ is compact, topological, Hausdorff and thus normal by \ref{compactHausdorffSpacesNormal} and, in particular is topologically uniformisable by (TODO ref). So $X^\dagger = \initialConv\big(\cont(X^\dagger)\big)$. Since $X$ has the subspace convergence, we have
+\begin{align*}
+X &= \initialConv\big(\setbuilder{f|_X}{f\in \cont(X^\dagger)}\big) \\
+&= \initialConv\big(\cont_0(X)\big),
+\end{align*}
+by \ref{functionVanishingAtInftyIffRestrictionOfContinuousBasepointPreservingFunction}.
+\end{proof}
+
 
 \begin{definition}
 Let $\sSet{X, \mathcal{U}}$ be a uniform space and $d: X\times X\to \R^+$ a pseudometric on $X$. Then we call $d$ a \udef{continuous pseudometric} on $X$ if $\mathcal{U}\subseteq \mathcal{U}_d$.
@@ -2175,24 +2238,10 @@ Let $\sSet{X, \mathcal{U}}$ be a uniform space and $d: X\times X\to \R^+$ a pseu
 
 \begin{proposition} \label{continuousPseudometricFunctionLemma}
 Let $\sSet{X, \mathcal{U}}$ be a uniform space, $a\in X$, $d: X^2\to \R^+$ a pseudometric and $f: X\to \R$ a function.
-\begin{enumerate}
-\item if $d$ is a continuous pseudometric, then $d(a, -): X\to \R$ is uniformly continuous;
-\item if $f$ is uniformly continuous, then $d_\R\circ (f|f): X^2\to \R^+: (x,y)\mapsto |f(x)- f(y)|$ is a continuous pseudometric.
-\end{enumerate}
+If $f$ is uniformly continuous, then $d_\R\circ (f|f): X^2\to \R^+: (x,y)\mapsto |f(x)- f(y)|$ is a continuous pseudometric.
 \end{proposition}
 \begin{proof}
-(1) By \ref{uniformContinuityEntourages}, it is enough to prove that $\entourage_\R \subseteq \upset \big(d(a, -), d(a,-)\big)^{\imf\imf}(\entourage_\mathcal{U})$ and by continuity of the pseudometric, we have $\entourage_d \subseteq \entourage_{\mathcal{U}}$, so we need to prove that
-\[ \entourage_\R \subseteq \upset \big(d(a, -), d(a,-)\big)^{\imf\imf}(\entourage_d). \]
-Take arbitrary $\epsilon>0$. Then it is enough to prove thave there exists $A\in \entourage_d$ such that $\big(d(a, -), d(a,-)\big)^{\imf}(A) \subseteq V_\epsilon$. Now there exists $A\in \entourage_d$ such that $d^{\imf}(A)\subseteq \cball(0,\epsilon)$. We claim this is the set we want, indeed
-\begin{align*}
-d^{\imf}(A)\subseteq \cball(0,\epsilon) \iff& \forall (x,y)\in A: \; d(x,y) \leq \epsilon \\
-\implies& \forall (x,y)\in A: \; |d(x,a), d(a,y)| \leq \epsilon \\
-\iff& \forall (x,y)\in A: \; \big(d(-,a), d(a,-)\big)(x,y) \in V_\epsilon \\
-\iff& \big(d(-,a), d(a,-)\big)^\imf(A) = \big(d(a,-), d(a,-)\big)^\imf(A) \subseteq V_\epsilon,
-\end{align*}
-where we have used the reverse triangle inequality, \ref{metricReverseTriangleInequality}.
-
-(2) Set $d_f \defeq d_\R\circ(f|f)$. It is enough to prove that $\entourage_{d_f}\subseteq \entourage_\mathcal{U}$. Indeed we have
+Set $d_f \defeq d_\R\circ(f|f)$. It is enough to prove that $\entourage_{d_f}\subseteq \entourage_\mathcal{U}$. Indeed we have
 \[ \entourage_{d_f} = \upset \big(d_\R\circ (f|f)\big)^{\preimf\imf}\big(\neighbourhood_\R(0)\big) = \upset (f|f)^{\preimf\imf}\Big(d_\R^{\preimf\imf}\big(\neighbourhood_\R(0)\big)\Big) = \upset (f|f)^{\preimf\imf}(\entourage_\R) \subseteq \entourage_\mathcal{U}, \]
 where the last inclusion follows by \ref{upsetPreimageImageGaloisConnection} from $\entourage_\R \subseteq \upset (f|f)^{\imf\imf}(\entourage_\mathcal{U})$, which in turn is the expression of uniform continuity of $f$, by \ref{uniformContinuityEntourages}.
 \end{proof}
@@ -2210,7 +2259,7 @@ Let $\sSet{X, \mathcal{U}}$ be a topological uniform space and $B\subseteq X$. T
 \begin{proof}
 $(1) \Rightarrow (2)$ Follows from \ref{imageBoundedSet}.
 
-$(2) \Rightarrow (3)$ Let $d$ be a continuous pseudometric on $X$ and take $a\in X$. Then $f_a \defeq d(a,-)$ is uniformly continuous by \ref{continuousPseudometricFunctionLemma}. Now $\diam(B)\leq 2\sup_{x\in B}f_a(x)$ by \ref{diameterBoundedByTwiceRadius} and $f_a^\imf(B)$ is bounded by assumption, so $\sup_{x\in B}f_a(x) < \infty $ by \ref{boundedSubsetsRealNumbers}. Thus $\diam(B)$ is also finite.
+$(2) \Rightarrow (3)$ Let $d$ be a continuous pseudometric on $X$ and take $a\in X$. Then $f_a \defeq d(a,-)$ is uniformly continuous by \ref{partialApplicationMetricUniformlyContinuous}. Now $\diam(B)\leq 2\sup_{x\in B}f_a(x)$ by \ref{diameterBoundedByTwiceRadius} and $f_a^\imf(B)$ is bounded by assumption, so $\sup_{x\in B}f_a(x) < \infty $ by \ref{boundedSubsetsRealNumbers}. Thus $\diam(B)$ is also finite.
 
 $(3) \Rightarrow (1)$ We use \ref{topologicalBoundednessLemma}. Take an arbitrary symmetric $V\in \entourage_\mathcal{U}$ and let $W$ be the transitive closure of $V$, which is an equivalence relation. Let $\seq{A_n}$ be a sequence of distinct $W$-equivalence classes and define
 \[ f: X\to \N: x\mapsto \begin{cases}

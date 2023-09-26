@@ -1726,6 +1726,21 @@ Let $A$ be a Banach algebra. We have the split exact sequence
 \end{tikzcd} \]
 \end{lemma}
 
+\begin{lemma} \label{unitalProjectionsAlgebraHomomorphisms}
+Let $A$ be a Banach algebra. Then
+\begin{enumerate}
+\item $\proj_2: A^\dagger \to \F$ is a unital algebra homomorphism;
+\item $\proj_1: \setbuilder{(a,0)}{a\in A}\subseteq A^\dagger \to A$ is an algebra homomorphism.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Linearity and unitality are immediate. For multiplicativity, take $(a,\lambda), (b, \mu)\in A^\dagger$. Then
+\[ \proj_2\big((a,\lambda)(b, \mu)\big) = \proj_2\big(ab+\lambda b + \mu a, \lambda\mu\big) = \lambda\mu = \proj_2(a,\lambda)\proj_2(b,\mu). \]
+
+(2) Linearity and unitality are immediate. For multiplicativity, take $(a,0), (b, 0)\in A^\dagger$. Then
+\[ \proj_1\big((a,0)(b, 0)\big) = \proj_1\big(ab+0 b + 0 a, 0\big) = ab = \proj_1(a,0)\proj_2(b,0). \]
+\end{proof}
+
 \begin{lemma}
 Let $A,B$ be Banach algebras. Every algebra homomorphism $\Psi:A\to B$ extends uniquely to a unital homomorphism $\Psi^\dagger: A^\dagger \to B^\dagger$:
 \[ \Psi^\dagger: A^\dagger \to B^\dagger: (a,\lambda) \mapsto (\Psi(a),\lambda). \]
@@ -2315,6 +2330,10 @@ The \udef{character space} (or \udef{(Gelfand) spectrum}) $\hat{A}$ is the set o
 In other words, a character on $A$ is a non-zero multiplicative linear functional $A\to \C$.
 In particular, if $A$ is a real algebra, a character is still complex valued, but now  an $\R$-linear functional on $A$. 
 
+\begin{lemma} \label{unitalCharacterExtension}
+Let $A$ be a Banach algebra and $\varphi\in \hat{A}$. Set $\tilde{\varphi}: A^\dagger \to \C: (a,\lambda) \mapsto \varphi(a)+\lambda$. Then $\tilde{\varphi} \in \widehat{A^\dagger}$.
+\end{lemma}
+
 If $A$ is a real algebra, then we set
 \[ \hat{A} = \setbuilder{\varphi|_A}{\varphi\in \widehat{A_\C}}. \]
 
@@ -2394,8 +2413,42 @@ By \ref{commutativeBanachAlgebraIdeals}, $A/\mathcal{J}\cong \C$, so the quotien
 \end{proof}
 
 \begin{example}
-We know that $A$ is a maximal ideal in $A^\dagger$ by \ref{algebraIdealInUnitisation}. It is the kernel of the character $\proj_2: A^\dagger \to \C: (x,\lambda) \mapsto \lambda$.
+We know that $A$ is a maximal ideal in $A^\dagger$ by \ref{algebraIdealInUnitisation}. It is the kernel of the character $\proj_2: A^\dagger \to \C: (x,\lambda) \mapsto \lambda$. We take this character as the basepoint of $\widehat{A^\dagger}$.
 \end{example}
+
+\begin{lemma} \label{compactificationOfCharacterSpaceIsCharacterSpaceOfUnitisation}
+Let $A$ be a complex commutative Banach algebra. Then
+\[ \left(\begin{smallmatrix}
+\widetilde{(-)} \\ \proj_2
+\end{smallmatrix}\right): \hat{A}^\dagger \to \widehat{A^\dagger}: \varphi \mapsto \begin{cases}
+\tilde{\varphi} & (\varphi \in \hat{A}) \\
+\proj_2 & (\varphi = \infty)
+\end{cases} \]
+is a homeomorphism.
+\end{lemma}
+TODO: clean up proof
+\begin{proof}
+The function $\widetilde{(-)}: \hat{A} \to \widehat{A^\dagger}: \varphi \to \varphi^\dagger$ is well-defined by \ref{unitalCharacterExtension}.
+
+We first show that $\left(\begin{smallmatrix}
+\widetilde{(-)} \\ \proj_2
+\end{smallmatrix}\right)$ is a bijection. For injectivity, take $\varphi_1 \neq \varphi_2\in \hat{A}^\dagger$. Suppose $\varphi_1, \varphi_2\in \hat{A}$, then clearly $\widetilde{\varphi_1} \neq \widetilde{\varphi_2}$. Now suppose $\varphi_2 = \infty$, then $\left(\begin{smallmatrix}
+\widetilde{(-)} \\ \proj_2
+\end{smallmatrix}\right)(\varphi_2) = \widetilde{\constant{0}} \neq \widetilde{\varphi_1}$, since $\constant{0}\notin \hat{A}$.
+
+For surjectivity, take $\varphi\in \widehat{A^\dagger}$. Then $\ker(\varphi)$ is a maximal ideal in $A^\dagger$ by \ref{characterMaximalIdealsComplex}. Suppose $\varphi \neq \proj_2$, then $\ker(\varphi) \neq A$, so $\varphi|_A$ is a non-zero algebra homomorphism and thus $\varphi|_A\in \hat{A}$.
+
+Finally it is enough to show continuity of $\left(\begin{smallmatrix}
+\widetilde{(-)} \\ \proj_2
+\end{smallmatrix}\right)$ by \ref{compactToHausdorffHomeomorphism}. We start by showing the continuity of $\widetilde{(-)}: \hat{A} \to \widehat{A^\dagger}: \varphi \to \varphi^\dagger$. Take arbitrary $(a,\lambda)\in A^\dagger$. Then \[ \evalMap_{(a,\lambda)}|_{\widehat{A^\dagger}}\circ \widetilde{(-)} = \evalMap_a|_{\hat{A}} + \lambda, \]
+which is clearly continuous, so $\widetilde{(-)}: \hat{A} \to \widehat{A^\dagger}$ is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+
+We use \ref{universalPropertyAlexandroffCompactification} to show the continuity of $\left(\begin{smallmatrix}
+\widetilde{(-)} \\ \proj_2
+\end{smallmatrix}\right)$. Take a closed subset $C\subseteq \widehat{A^\dagger}\setminus \{\proj_2\}$, then $\widetilde{(-)}^{\preimf}(C)$ is a closed subset of $\hat{A}$. It is also a closed subset of $\hat{A}\cup\{\constant{0}\}$. Indeed suppose, towards a contradiction, that $F\in \powerfilters(\hat{A}\cup\{\constant{0}\})$ converges pointwise to $\varphi \notin \widetilde{(-)}^{\preimf}(C)$. Then $\varphi = \constant{0}$, since $\widetilde{(-)}^{\preimf}(C)$ is a closed subset of $\hat{A}$, and for all $a\in A$ we have $\upset\evalMap_a^{\imf\imf}(F) \to 0$. Then, for all $\lambda \in \C$, we have $\evalMap_{(a,\lambda)}\Big(\widetilde{(-)}^{\imf\imf}(F)\Big) \to \lambda$ and thus $\widetilde{(-)}^{\imf\imf}(F) \to \proj_2$. Since $\widetilde{(-)}^\imf\Big(\widetilde{(-)}^\preimf(C)\Big)\subseteq C$, this means $\proj_2\in C$, which is a contradiction.
+
+Thus $\widetilde{(-)}^{\preimf}(C)$ is compact in $\hat{A}\cup \{\constant{0}\}$ by \ref{compactClosedSets} and so compact in $\hat{A}$ by \ref{compactSetCompactSubspace}.
+\end{proof}
 
 TODO characters in real Banach algebra.
 
