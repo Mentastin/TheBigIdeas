@@ -1692,7 +1692,7 @@ By the corollary $g(x)<+\infty$ a.e.\ and so also $g-h_n<+\infty$ a.e. Applying 
 \[ \int\liminf g-h_n \leq \liminf\int g-h_n\]
 \end{proof}
 
-\begin{theorem}[Dominated convergence]
+\begin{theorem}[Dominated convergence] \label{dominatedConvergence}
 Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $\seq{f_n}$ any sequence of real measurable functions in $(\Omega\to\R)$ that converges pointwise to a function $f$.
 
 If there exists a positive integrable function $g$ such that $|f_n| \leq g$ for all $n\in \N$, then $f$ is integrable and
@@ -2447,6 +2447,133 @@ So the domain of convergence of a Laurent series is an annulus around $z_0$.
 
 
 \chapter{Function spaces}
+\section{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
+\begin{definition}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $0<p<\infty \in \R$. The we define
+\begin{itemize}
+\item $\mathcal{L}^p(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $|f|^p$ is integrable w.r.t.\ $\mu$.
+\item $\mathcal{L}^\infty(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $\sup_x|f(x)|<\infty$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+Let $0< p<q \leq \infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then
+\begin{enumerate}
+\item $\mathcal{L}^p(X,\mu) \supseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of finite but arbitrary large measure;
+\item $\mathcal{L}^p(X,\mu) \subseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of non-zero but arbitrary small measure.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO \url{https://en.wikipedia.org/wiki/Lp_space#Embeddings}
+\end{proof}
+\begin{corollary}
+For all $0< p<q \leq \infty$ and $a,b\in\R$, we have $\mathcal{L}^p([a,b],\lambda) \supseteq \mathcal{L}^q([a,b],\lambda)$.
+\end{corollary}
+
+\begin{definition}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then we define the real functional
+\[ \norm{\cdot}_{p}: \mathcal{L}^p(X,\mu)\to \R: f\mapsto \left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
+\end{definition}
+We will prove that this functional is a seminorm.
+
+\begin{lemma} \label{pNormAbsolutelyHomogeneous}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_p$ is absolutely homogeneous.
+\end{lemma}
+\begin{proof}
+For all $\lambda\in \R$, we have
+\[ \norm{\lambda f}_{p} = \left(\int_X |\lambda f|^p\diff{\mu}\right)^{1/p} = \left(|\lambda|^p\int_X |f|^p\diff{\mu}\right)^{1/p} = |\lambda|\left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
+\end{proof}
+
+\begin{lemma} \label{pnormLemma}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $k,l\in\interval[o]{1,+\infty}$ and $f\in \mathcal{L}^{kl}(X,\mu)$. Then
+\[ \norm{|f|^k}_l = \left(\norm{f}_{kl}\right)^k. \]
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\left(\norm{f}_{kl}\right)^k &= \left(\left(\int_X|f|^{kl}\diff{\mu}\right)^{1/(kl)}\right)^{k} \\
+&= \left(\int_X\big||f|^{k}\big|^l\diff{\mu}\right)^{1/l} \\
+&= \norm{|f|^k}_l.
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Hölder's inequality] \label{HoeldersInequality}
+Let $p,q\in \R^+$ be Hölder conjugate and $\sSet{X,\mathcal{A},\mu}$ a measure space. Then for all $f\in \mathcal{L}^p(X,\mu), g\in \mathcal{L}^q(X,\mu)$:
+\begin{enumerate}
+\item $fg\in \mathcal{L}^1(X,\mu)$;
+\item $\norm{fg}_1 \leq \norm{f}_p\norm{g}_q$.
+\end{enumerate}
+We have equality \textup{if and only if} $\exists K\in \R$ such that $|f|^p = K|g|^q$ a.e.
+\end{theorem}
+\begin{proof}
+If either $\norm{f}_p = 0$ or $\norm{g}_q = 0$, then either $|f|^p$ or $|g|^q$ is $0$ a.e. by \ref{functionPropertiesFromIntegral}. Then $fg = 0$ a.e., so $\norm{fg}_1 = 0$.
+
+Now, assuming $\norm{f}_p \neq 0$ and $\norm{g}_q \neq 0$, we can write $f' = \norm{f}_p^{-1}f$ and $g' = \norm{g}_q^{-1}g$.
+These functions satisfy $\norm{f'}_p = 1$ and $\norm{g'}_q = 1$, because of \ref{pNormAbsolutelyHomogeneous}.
+
+Now we can apply Young's inequality \ref{YoungsInequality} pointwise to obtain
+\[ |f'(x)g'(x)| \leq \frac{|f'|^p}{p} + \frac{|g'|^q}{q} \qquad \forall x\in X. \]
+Integrating both sides (and using \ref{pNormAbsolutelyHomogeneous}), gives
+\begin{align*}
+\frac{\norm{fg}_1}{\norm{f}_p\norm{g}_q} = \norm{f'g'}_1 = \int_X|f'g'|\diff{\mu} &\leq \int_X\frac{|f'|^p}{p}\diff{\mu} + \int_X\frac{|g'|^q}{q}\diff{\mu} \\
+&= \frac{\norm{f'}_p^p}{p} + \frac{\norm{g'}_q^q}{q} = \frac{1}{p} + \frac{1}{q} = 1.
+\end{align*}
+The Hölder inequality follows.
+
+Now assume $\norm{fg}_1 = \norm{f}_p\norm{g}_q$. Then we must have the inequality is in fact an equality, i.e.\ 
+\[ \int_X|f'g'|\diff{\mu} = \int_X\left(\frac{|f'|^p}{p} + \frac{|g'|^q}{q}\right)\diff{\mu}. \]
+Then $|f'g'| = \frac{|f'|^p}{p} + \frac{|g'|^q}{q}$ a.e.\ by \ref{functionPropertiesFromIntegral}. By \ref{YoungsInequality} the equality $|f'(x)g'(x)| = \frac{|f'(x)|^p}{p} + \frac{|g'(x)|^q}{q}$ only holds if $|f'(x)|^p = |g'(x)|^q$. We conclude that
+\[ 1 = \frac{|g'|^q}{|f'|^p} = \frac{\norm{f}_p^p |g|^q}{\norm{g}_q^q |f|^p} = K \frac{|g|^q}{|f|^p} \]
+almost everywhere, for some $K\in \R^+$.
+\end{proof}
+\begin{proof}[Alternative proof]
+Using Jensen's inequality \url{https://en.wikipedia.org/wiki/H%C3%B6lder%27s_inequality}
+\end{proof}
+
+
+\begin{theorem}[Minkowski's inequality] \label{MinkowskisInequality}
+Let $1< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Let $f,g\in\mathcal{L}^p(X,\mu)$ be functions. Then
+\[ \norm{f+g}_p \leq \norm{f}_p + \norm{g}_p. \]
+\end{theorem}
+TODO invert inequality if $p<1$! TODO also inverse Hölder inequality.
+\begin{proof}
+First we show that $\norm{f+g}_p$ is finite. We show this using the convexity of $\R^+\to \R^+: x\mapsto |x|^p$:
+\begin{align*}
+|f+g|^p &= 2^p\left|\frac{1}{2}f+ \frac{1}{2}g\right|^p \\
+&\leq 2^p\left|\frac{1}{2}|f|+ \frac{1}{2}|g|\right|^p \\
+&\leq 2^p\left(\frac{1}{2}|f|^p + \frac{1}{2}|g|^p\right) = 2^{p-1}\left(|f|^p + |g|^p\right) < \infty.
+\end{align*}
+Then $\norm{f+g}_p^p < \infty$ by \ref{propertiesIntegralPositiveFunctions}, so $\norm{f+g}_p < \infty$.
+
+Now we can calculate (setting $q = \frac{p}{p-1}$, i.e.\ the Hölder conjugate of $p$)
+\begin{align*}
+\norm{f+g}_p^p &= \int_X|f+g|^p\diff{\mu} \\
+&= \int_X|f+g|\cdot |f+g|^{p-1}\diff{\mu} \\
+&\leq \int_X\big(|f|+|g|\big)\cdot |f+g|^{p-1}\diff{\mu} \\
+&= \norm{|f|\cdot |f+g|^{p-1}}_1 + \norm{|g|\cdot |f+g|^{p-1}}_1 \\
+&\leq \norm{f}_p\cdot \norm{|f+g|^{p-1}}_q + \norm{g}_p\cdot \norm{|f+g|^{p-1}}_q \\
+&= \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{|f+g|^{p-1}}_q
+\end{align*}
+using first the triangle inequality and then Hölder's inequality, \ref{HoeldersInequality}.
+
+Next we calculate
+\begin{align*}
+\norm{|f+g|^{p-1}}_q &= \left(\norm{f+g}_{(p-1)q}\right)^{p-1} = \left(\norm{f+g}_{(p-1)\frac{p}{p-1}}\right)^{p-1} = \norm{f+g}_{p}^{p-1},
+\end{align*}
+using \ref{pnormLemma} and \ref{HoelderConjugateEquivalents}.
+
+Putting these two calculations together gives
+\[ \norm{f+g}_p^p \leq \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{f+g}_{p}^{p-1}, \]
+or $\norm{f+g}_p \leq \norm{f}_p + \norm{g}_p$.
+\end{proof}
+\begin{corollary}
+Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_{p}$ is a seminorm.
+\end{corollary}
+\begin{proof}
+We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. Subadditivity is given by the Minkowski inequality and absolute homogeneity by \ref{pNormAbsolutelyHomogeneous}.
+\end{proof}
+
+
 \section{Classification by support}
 \begin{definition}
 Let $\sSet{\Omega, \xi}$ be a convergence space, $\sSet{V,\zeta}$ a convergence vector space and $f\in (\Omega\to V)$.
@@ -2598,35 +2725,73 @@ Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ 
 \subsection{Distribution inequalities}
 \begin{proposition}[Markov's inequality]
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\C$ a measurable function and $\alpha>0$. Then
-\[ D_f(\alpha) + \mu\{f = \alpha\} = \mu\{f\geq \alpha\} \leq \frac{1}{\alpha}\int_\Omega f\diff{\mu}. \]
+\[ D_f(\alpha) + \mu\{f = \alpha\} = \mu\{f\geq \alpha\} \leq \frac{1}{\alpha}\int_{\{f\geq \alpha\}}f\diff{\mu} \leq \frac{1}{\alpha}\int_\Omega f\diff{\mu}. \]
 \end{proposition}
 Also called Chebyshev's inequality or Chebyshev's first inequality. The next inequality would then be Chebyshev's second inequality. 
 \begin{proof}
 We have $\alpha\cdot \big[f(\omega)\geq \alpha\big]\leq f(\omega)$ for all $\omega\in\Omega$, so
-\[ \alpha\cdot \mu\{f\geq \alpha\} = \alpha \int_{\Omega}\big[f(\omega)\geq \alpha\big]\diff{\mu(\omega)} = \int_{\Omega}\alpha\big[f(\omega)\geq \alpha\big]\diff{\mu(\omega)} \leq \int_\Omega f\diff{\mu}, \]
-using \ref{measureFromIntegralCharacteristicFunctions} and \ref{propertiesIntegralPositiveFunctions}. This implies Markov's inequality.
+\[ \alpha\cdot \mu\{f\geq \alpha\} = \alpha \int_{\{f\geq \alpha\}}\constant{1}\diff{\mu} = \int_{\{f\geq \alpha\}}\constant{\alpha}\diff{\mu} \leq \int_{\{f\geq \alpha\}}f\diff{\mu} \leq \int_\Omega f\diff{\mu}, \]
+using \ref{measureFromIntegralCharacteristicFunctions}, \ref{simpleIntegralOverSubset} and \ref{propertiesIntegralPositiveFunctions}. This implies Markov's inequality.
 \end{proof}
 \begin{corollary}[Chebyshev's inequality]
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R$ a measurable function, $\varphi:\im(f) \to \R^+$ a monotone measurable function and $\alpha>0$. Then
-\[ \mu\{f\geq \alpha\} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
+\[ \mu\{f\geq \alpha\} \leq \frac{1}{\varphi(\alpha)}\int_{\{\varphi\circ f \geq \varphi(\alpha)\}} \varphi\circ f\diff{\mu} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}. \]
 \end{corollary}
 \begin{proof}
 Since $\varphi$ is monotone, we have $\{f\geq \alpha\} \subseteq \{\varphi\circ f\geq \varphi(\alpha)\}$, so
-\[ \mu\{f\geq \alpha\} \leq \mu\{\varphi\circ f\geq \varphi(\alpha)\} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}, \]
+\[ \mu\{f\geq \alpha\} \leq \mu\{\varphi\circ f\geq \varphi(\alpha)\} \leq \frac{1}{\varphi(\alpha)}\int_{\{\varphi\circ f \geq \varphi(\alpha)\}} \varphi\circ f\diff{\mu} \leq \frac{1}{\varphi(\alpha)}\int_\Omega \varphi\circ f\diff{\mu}, \]
 using \ref{semiringPositiveContent}.
 \end{proof}
 By choosing specific functions $\varphi$, we obtain the following forms of Chebyshev's inequality:
 \begin{corollary} \label{ChebyshevInequalityCorollary}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\R^+$ a positive measurable function, $g: \Omega\to \C$ a measurable function, $\alpha>0$ and $0<p$. Then
 \begin{enumerate}
-\item $\mu\{f\geq \alpha\} \leq \frac{1}{\alpha^p}\int_\Omega f(\omega)^p\diff{\mu(\omega)}$;
+\item $D_f(\alpha) \leq \mu\{f\geq \alpha\} \leq \frac{1}{\alpha^p}\int_{\{f \geq \alpha\}} f^p\diff{\mu} \leq \frac{1}{\alpha^p}\int_\Omega f^p\diff{\mu}$;
 \item $\alpha D_{|g|}(\alpha)^{1/p}\leq \norm{g}_p$.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-(1) The function $x\mapsto x^p$ is monotone.
+(1) The function $x\mapsto x^p$ is monotone. It is also an order similarity, so $\{f \geq \alpha\} = \{f^p \geq \alpha^p\}$.
 
 (2) We use (1) to obtain $D_{|g|}(\alpha) \leq D_{|g|}(\alpha) + \mu\{|g| = \alpha\} \leq \frac{1}{\alpha^p}\int_\Omega |f|^p\diff{\mu} = \left(\frac{\norm{f}_p}{\alpha}\right)^p$.
+\end{proof}
+\begin{corollary}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $\alpha>0$, $0<p$ and $f:\Omega\to\R^+$ a positive measurable function such that $\norm{f}_p < \infty$. Then
+\begin{enumerate}
+\item $\lim_{\alpha \to +\infty}\alpha^p D_f(\alpha) = 0$;
+\item $\lim_{\alpha \to 0}\alpha^p D_f(\alpha) = 0$.
+\end{enumerate}
+\end{corollary}
+TODO: Hao requires $p\geq 1$ for (2). Why?
+\begin{proof}
+(1) We have
+\begin{align*}
+0 \leq \lim_{\alpha \to +\infty}\alpha^p D_f(\alpha) &\leq \lim_{\alpha \to +\infty}\int_{\{f \geq \alpha\}} f^p\diff{\mu} \\
+&= \lim_{\alpha \to +\infty}\int_\Omega [f \geq \alpha] f^p\diff{\mu} \\
+&= \int_\Omega \lim^p_{\alpha \to +\infty}[f \geq \alpha] f^p\diff{\mu} \\
+&= \int_\Omega \constant{0}\diff{\mu} = 0,
+\end{align*}
+where we have used \ref{functionPropertiesFromIntegral} and the dominated convergence theorem \ref{dominatedConvergence}, since $[f \geq \alpha]\cdot f^p$ is dominated by $f^p$, which is integrable by assumption.
+
+(2) Fix $\alpha > 0$. For all $\beta > \alpha$ we have
+\begin{align*}
+\alpha^p\big(D_f(\alpha) - D_f(\beta)\big) &= \alpha^p\big(\mu\{f > \alpha\} - \mu\{f >\beta\}\big) \\
+&= \alpha^p\mu\big(\{f > \alpha\} \setminus \{f >\beta\}\big) \\
+&= \alpha^p\mu\{\alpha < f \leq \beta\} \\
+&= \alpha^p\int_\Omega[\alpha < f \leq \beta]\diff{\mu} \\
+&\leq \int_\Omega[\alpha < f \leq \beta]f^p\diff{\mu} \\
+&\leq \int_\Omega[f \leq \beta]f^p\diff{\mu},
+\end{align*}
+using \ref{ringPositiveContent}, \ref{measureFromIntegralCharacteristicFunctions} and \ref{propertiesIntegralPositiveFunctions}. Now
+\begin{align*}
+\lim_{\alpha\to 0}\alpha^p D_f(\alpha) &= \lim_{\alpha\to 0}\alpha^p D_f(\alpha) - \alpha^p D_f(\beta) \\
+&= \lim_{\alpha\to 0}\alpha^p \big(D_f(\alpha) - D_f(\beta)\big) \\
+&\leq \lim_{\alpha\to 0} \int_\Omega[f \leq \beta]f^p\diff{\mu} \\
+&= \int_\Omega[f \leq \beta]f^p\diff{\mu}.
+\end{align*}
+We have
+\[ \lim_{\beta\to 0}\int_\Omega[f \leq \beta]f^p\diff{\mu} = \int_\Omega\lim_{\beta\to 0}[f \leq \beta]f^p\diff{\mu} = \int_\Omega \constant{0}\diff{\mu} = 0 \]
+by \ref{functionPropertiesFromIntegral} and the dominated convergence theorem \ref{dominatedConvergence}. Since we are considering the limit $\alpha \to 0$, we can take $\beta$ arbitrarily small, and thus $\int_\Omega[f \leq \beta]f^p\diff{\mu}$ becomes arbitrarily small and we have $\lim_{\alpha \to 0}\alpha^p D_f(\alpha) = 0$.
 \end{proof}
 
 \subsection{Decreasing rearrangements}
@@ -2660,134 +2825,8 @@ where we have used the fact that $D_f^{\preimf}\big(\interval{0,t}\big)$ is upwa
 
 
 \section{The $L^p(X,\diff{\mu})$ spaces}
-\subsection{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
-\begin{definition}
-Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $0<p<\infty \in \R$. The we define
-\begin{itemize}
-\item $\mathcal{L}^p(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $|f|^p$ is integrable w.r.t.\ $\mu$.
-\item $\mathcal{L}^\infty(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $\sup_x|f(x)|<\infty$.
-\end{itemize}
-\end{definition}
 
-\begin{proposition}
-Let $0< p<q \leq \infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then
-\begin{enumerate}
-\item $\mathcal{L}^p(X,\mu) \supseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of finite but arbitrary large measure;
-\item $\mathcal{L}^p(X,\mu) \subseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of non-zero but arbitrary small measure.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO \url{https://en.wikipedia.org/wiki/Lp_space#Embeddings}
-\end{proof}
-\begin{corollary}
-For all $0< p<q \leq \infty$ and $a,b\in\R$, we have $\mathcal{L}^p([a,b],\lambda) \supseteq \mathcal{L}^q([a,b],\lambda)$.
-\end{corollary}
-
-\begin{definition}
-Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then we define the real functional
-\[ \norm{\cdot}_{p}: \mathcal{L}^p(X,\mu)\to \R: f\mapsto \left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
-\end{definition}
-We will prove that this functional is a seminorm.
-
-\begin{lemma} \label{pNormAbsolutelyHomogeneous}
-Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_p$ is absolutely homogeneous.
-\end{lemma}
-\begin{proof}
-For all $\lambda\in \R$, we have
-\[ \norm{\lambda f}_{p} = \left(\int_X |\lambda f|^p\diff{\mu}\right)^{1/p} = \left(|\lambda|^p\int_X |f|^p\diff{\mu}\right)^{1/p} = |\lambda|\left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
-\end{proof}
-
-\begin{lemma} \label{pnormLemma}
-Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $k,l\in\interval[o]{1,+\infty}$ and $f\in \mathcal{L}^{kl}(X,\mu)$. Then
-\[ \norm{|f|^k}_l = \left(\norm{f}_{kl}\right)^k. \]
-\end{lemma}
-\begin{proof}
-We calculate
-\begin{align*}
-\left(\norm{f}_{kl}\right)^k &= \left(\left(\int_X|f|^{kl}\diff{\mu}\right)^{1/(kl)}\right)^{k} \\
-&= \left(\int_X\big||f|^{k}\big|^l\diff{\mu}\right)^{1/l} \\
-&= \norm{|f|^k}_l.
-\end{align*}
-\end{proof}
-
-\begin{theorem}[Hölder's inequality] \label{HoeldersInequality}
-Let $p,q\in \R^+$ be Hölder conjugate and $\sSet{X,\mathcal{A},\mu}$ a measure space. Then for all $f\in \mathcal{L}^p(X,\mu), g\in \mathcal{L}^q(X,\mu)$:
-\begin{enumerate}
-\item $fg\in \mathcal{L}^1(X,\mu)$;
-\item $\norm{fg}_1 \leq \norm{f}_p\norm{g}_q$.
-\end{enumerate}
-We have equality \textup{if and only if} $\exists K\in \R$ such that $|f|^p = K|g|^q$ a.e.
-\end{theorem}
-\begin{proof}
-If either $\norm{f}_p = 0$ or $\norm{g}_q = 0$, then either $|f|^p$ or $|g|^q$ is $0$ a.e. by \ref{functionPropertiesFromIntegral}. Then $fg = 0$ a.e., so $\norm{fg}_1 = 0$.
-
-Now, assuming $\norm{f}_p \neq 0$ and $\norm{g}_q \neq 0$, we can write $f' = \norm{f}_p^{-1}f$ and $g' = \norm{g}_q^{-1}g$.
-These functions satisfy $\norm{f'}_p = 1$ and $\norm{g'}_q = 1$, because of \ref{pNormAbsolutelyHomogeneous}.
-
-Now we can apply Young's inequality \ref{YoungsInequality} pointwise to obtain
-\[ |f'(x)g'(x)| \leq \frac{|f'|^p}{p} + \frac{|g'|^q}{q} \qquad \forall x\in X. \]
-Integrating both sides (and using \ref{pNormAbsolutelyHomogeneous}), gives
-\begin{align*}
-\frac{\norm{fg}_1}{\norm{f}_p\norm{g}_q} = \norm{f'g'}_1 = \int_X|f'g'|\diff{\mu} &\leq \int_X\frac{|f'|^p}{p}\diff{\mu} + \int_X\frac{|g'|^q}{q}\diff{\mu} \\
-&= \frac{\norm{f'}_p^p}{p} + \frac{\norm{g'}_q^q}{q} = \frac{1}{p} + \frac{1}{q} = 1.
-\end{align*}
-The Hölder inequality follows.
-
-Now assume $\norm{fg}_1 = \norm{f}_p\norm{g}_q$. Then we must have the inequality is in fact an equality, i.e.\ 
-\[ \int_X|f'g'|\diff{\mu} = \int_X\left(\frac{|f'|^p}{p} + \frac{|g'|^q}{q}\right)\diff{\mu}. \]
-Then $|f'g'| = \frac{|f'|^p}{p} + \frac{|g'|^q}{q}$ a.e.\ by \ref{functionPropertiesFromIntegral}. By \ref{YoungsInequality} the equality $|f'(x)g'(x)| = \frac{|f'(x)|^p}{p} + \frac{|g'(x)|^q}{q}$ only holds if $|f'(x)|^p = |g'(x)|^q$. We conclude that
-\[ 1 = \frac{|g'|^q}{|f'|^p} = \frac{\norm{f}_p^p |g|^q}{\norm{g}_q^q |f|^p} = K \frac{|g|^q}{|f|^p} \]
-almost everywhere, for some $K\in \R^+$.
-\end{proof}
-\begin{proof}[Alternative proof]
-Using Jensen's inequality \url{https://en.wikipedia.org/wiki/H%C3%B6lder%27s_inequality}
-\end{proof}
-
-
-\begin{theorem}[Minkowski's inequality] \label{MinkowskisInequality}
-Let $1< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Let $f,g\in\mathcal{L}^p(X,\mu)$ be functions. Then
-\[ \norm{f+g}_p \leq \norm{f}_p + \norm{g}_p. \]
-\end{theorem}
-TODO invert inequality if $p<1$! TODO also inverse Hölder inequality.
-\begin{proof}
-First we show that $\norm{f+g}_p$ is finite. We show this using the convexity of $\R^+\to \R^+: x\mapsto |x|^p$:
-\begin{align*}
-|f+g|^p &= 2^p\left|\frac{1}{2}f+ \frac{1}{2}g\right|^p \\
-&\leq 2^p\left|\frac{1}{2}|f|+ \frac{1}{2}|g|\right|^p \\
-&\leq 2^p\left(\frac{1}{2}|f|^p + \frac{1}{2}|g|^p\right) = 2^{p-1}\left(|f|^p + |g|^p\right) < \infty.
-\end{align*}
-Then $\norm{f+g}_p^p < \infty$ by \ref{propertiesIntegralPositiveFunctions}, so $\norm{f+g}_p < \infty$.
-
-Now we can calculate (setting $q = \frac{p}{p-1}$, i.e.\ the Hölder conjugate of $p$)
-\begin{align*}
-\norm{f+g}_p^p &= \int_X|f+g|^p\diff{\mu} \\
-&= \int_X|f+g|\cdot |f+g|^{p-1}\diff{\mu} \\
-&\leq \int_X\big(|f|+|g|\big)\cdot |f+g|^{p-1}\diff{\mu} \\
-&= \norm{|f|\cdot |f+g|^{p-1}}_1 + \norm{|g|\cdot |f+g|^{p-1}}_1 \\
-&\leq \norm{f}_p\cdot \norm{|f+g|^{p-1}}_q + \norm{g}_p\cdot \norm{|f+g|^{p-1}}_q \\
-&= \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{|f+g|^{p-1}}_q
-\end{align*}
-using first the triangle inequality and then Hölder's inequality, \ref{HoeldersInequality}.
-
-Next we calculate
-\begin{align*}
-\norm{|f+g|^{p-1}}_q &= \left(\norm{f+g}_{(p-1)q}\right)^{p-1} = \left(\norm{f+g}_{(p-1)\frac{p}{p-1}}\right)^{p-1} = \norm{f+g}_{p}^{p-1},
-\end{align*}
-using \ref{pnormLemma} and \ref{HoelderConjugateEquivalents}.
-
-Putting these two calculations together gives
-\[ \norm{f+g}_p^p \leq \big(\norm{f}_p + \norm{g}_p\big)\cdot \norm{f+g}_{p}^{p-1}, \]
-or $\norm{f+g}_p \leq \norm{f}_p + \norm{g}_p$.
-\end{proof}
-\begin{corollary}
-Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_{p}$ is a seminorm.
-\end{corollary}
-\begin{proof}
-We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. Subadditivity is given by the Minkowski inequality and absolute homogeneity by \ref{pNormAbsolutelyHomogeneous}.
-\end{proof}
-
-\subsection{The $L^p(\Omega,\mu)$ spaces}
-\subsubsection{Indentifying functions that are equal a.e.}
+\subsection{Indentifying functions that are equal a.e.}
 
 TODO: identification of a.e.\ equal functions is compatible with algebraic operations by \ref{equalAECongruence}.
 
@@ -2799,7 +2838,7 @@ TODO every equivalence class contains exactly one continuous functions (for Bore
 \end{proposition}
 
 
-\subsubsection{$L^0(\Omega, \mu)$}
+\subsection{$L^0(\Omega, \mu)$}
 TODO: $\norm{f}_0 = \mu\{f\neq 0\}$ (?)
 
 \subsubsection{Essential supremum}
@@ -2883,7 +2922,7 @@ We are now ready to verify the conditions in \ref{TVSconstruction}. Take arbitra
 Take arbitrary $\lambda\in \C$. \ref{distributionOfFunctionLemma}
 \end{proof}
 
-\subsubsection{Completeness and density}
+\subsection{Completeness and density}
 \begin{theorem}[Riesz-Fisher]
 The space $L^p(X,\diff{\mu})$ is complete.
 \end{theorem}
@@ -2902,6 +2941,7 @@ Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. T
 
 \end{proof}
 
+\subsection{Operators on $L^p$ spaces}
 \subsubsection{Multiplication operators}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f\in \meas(\Omega, \C)$ and $1\leq p \leq \infty$. Then
@@ -2950,13 +2990,13 @@ which implies $\norm{M_f\charFunc{B_\epsilon}}_p \geq \big(\essup(f)-\epsilon\bi
 \subsection{Weak $L^p(X,\diff{\mu})$ spaces}
 \begin{definition}
 Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then we define the extended real functional
-\[ \norm{\cdot}_{p,\infty}: \meas(X, \C)\to \overline{\R}^+: f\mapsto \sup\setbuilder{\alpha d_f(\alpha)^{1/p}}{\alpha > 0}. \]
+\[ \norm{\cdot}_{p,\infty}: \meas(X, \C)\to \overline{\R}^+: f\mapsto \sup\setbuilder{\alpha D_f(\alpha)^{1/p}}{\alpha > 0}. \]
 The \udef{weak $L^p(X,\diff{\mu})$ space}, denoted $L^{p,\infty}(X,\diff{\mu})$, is the subset of functions $f$ in $\meas(X, \C)$ for which $\norm{f}_{p,\infty}$ is finite.
 \end{definition}
 
 \begin{lemma}
 Let $0<p<\infty$, let $\sSet{X,\mathcal{A}, \mu}$ be a measure space and $f\in \meas(X, \C)$. Then
-\[ \norm{f}_{p,\infty} = \inf\setbuilder{C\in \R^+}{\forall \alpha>0: \; d_f(\alpha) \leq \frac{C^p}{\alpha^p}}. \]
+\[ \norm{f}_{p,\infty} = \inf\setbuilder{C\in \R^+}{\forall \alpha>0: \; D_f(\alpha) \leq \frac{C^p}{\alpha^p}}. \]
 \end{lemma}
 
 
@@ -2969,11 +3009,11 @@ Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) If $f = g$ a.e.\ then $d_f = d_g$ by \ref{distributionOfFunctionLemma}.
+(1) If $f = g$ a.e.\ then $D_f = D_g$ by \ref{distributionOfFunctionLemma}.
 
 (2) TODO
 
-(3) By \ref{ChebyshevInequalityCorollary}, we have $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha d_f(\alpha)^{1/p} \leq \norm{f}_p$.
+(3) By \ref{ChebyshevInequalityCorollary}, we have $\alpha D_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha D_f(\alpha)^{1/p} \leq \norm{f}_p$.
 \end{proof}
 \begin{corollary}
 Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\diff{\mu})$ is a subspace of $L^{p}(X,\diff{\mu})$.
@@ -2983,7 +3023,14 @@ TODO \ref{realPartExtendedRealFunctional}
 \end{proof}
 
 \begin{example}
-The inclusion $L^{p,\infty}(X,\diff{\mu}) \subseteq L^{p}(X,\diff{\mu})$ is strict in general. TODO
+The inclusion $L^{p,\infty}(X,\diff{\mu}) \subseteq L^{p}(X,\diff{\mu})$ is strict in general.
+
+Take $h: \R\to \R: x\mapsto |x|^{-1/p}$. Then
+\[ \norm{h}_p^p = \int_\R |x|^{-1} \diff{x} = 2\int_0^\infty x^{-1}\diff{x} = \infty. \]
+We also have
+\[ D_h(\alpha) = \mu\big\{|x|^{-1/p} > \alpha\big\} = \mu\big\{|x| < \alpha^{-p}\big\} = 2\alpha^{-p}, \]
+so
+\[ \norm{h}_{p,\infty} = \sup_{\alpha > 0}\alpha\cdot (2\alpha^{-p})^{1/p} = \sup_{\alpha > 0}2^{1/p}\alpha\cdot \alpha^{-1} = 2^{1/p} < \infty. \]
 \end{example}
 
 \subsection{Interpolation}
@@ -2995,13 +3042,13 @@ Let $0<p<q<\infty$ and $f\in L^{p,\infty(X,\diff{\mu})} \cap L^{q,\infty(X,\diff
 with the interpretation $\infty^{-1} = 0$.
 \end{proposition}
 \begin{proof}
-We know that $\alpha d_f(\alpha)^{1/p} \leq \norm{f}_{p,\infty}$, so $\alpha^p d_f(\alpha) \leq \norm{f}_{p,\infty}^p$. Similarly $\alpha^q d_f(\alpha) \leq \norm{f}_{q,\infty}^q$. Thus
-\[ d_f(\alpha) \leq \min\left(\frac{\norm{f}^p_p}{\alpha^p}, \frac{\norm{f}^q_q}{\alpha^q}\right). \]
+We know that $\alpha D_f(\alpha)^{1/p} \leq \norm{f}_{p,\infty}$, so $\alpha^p D_f(\alpha) \leq \norm{f}_{p,\infty}^p$. Similarly $\alpha^q D_f(\alpha) \leq \norm{f}_{q,\infty}^q$. Thus
+\[ D_f(\alpha) \leq \min\left(\frac{\norm{f}^p_p}{\alpha^p}, \frac{\norm{f}^q_q}{\alpha^q}\right). \]
 Now we have
 \[ \frac{\norm{f}^p_{p,\infty}}{\alpha^p} \leq \frac{\norm{f}^q_{q,\infty}}{\alpha^q} \iff \alpha \leq \left(\frac{\norm{f}_{q,\infty}^q}{\norm{f}_{p,\infty}^p}\right)^{\frac{1}{q-p}} \eqdef B. \]
 We calculate, using \ref{LpNormFromDistribution},
 \begin{align*}
-\norm{f}_r^r &= r \int_0^\infty\alpha^{r-1}d_f(\alpha)\diff{\alpha} \\
+\norm{f}_r^r &= r \int_0^\infty\alpha^{r-1}D_f(\alpha)\diff{\alpha} \\
 &\leq r \int_0^\infty\alpha^{r-1}\min\left(\frac{\norm{f}^p_{p,\infty}}{\alpha^p}, \frac{\norm{f}^q_{q,\infty}}{\alpha^q}\right)\diff{\alpha} \\
 &= r \int_0^B\alpha^{r-1}\frac{\norm{f}^{p,\infty}}{\alpha^p}\diff{\alpha} + r \int_B^\infty\alpha^{r-1}\frac{\norm{f}^q_{q,\infty}}{\alpha^q}\diff{\alpha} \\
 &= r \norm{f}^p_{p,\infty} \int_0^B\alpha^{r-p-1}\diff{\alpha} + r \norm{f}^q_{q,\infty} \int_B^\infty\alpha^{r-q-1}\diff{\alpha} \\
@@ -3014,7 +3061,11 @@ Observe that the integrals converge because $p<r<q$, so $r-p>0$ and $r-q<0$.
 \subsubsection{The Marcinkiewicz interpolation theorem}
 TODO
 \subsubsection{The Riesz-Thorin Interpolation Theorem}
-TODO
+The scalars are complex.
+
+\begin{theorem}
+
+\end{theorem}
 
 \subsection{Locally integrable spaces}
 \begin{definition}
@@ -3629,6 +3680,8 @@ TODO, see Korovkin-type Theorems and Approximation by Positive Linear Operators 
 \chapter{Complex analysis}
 \begin{definition}
 A \udef{complex function} is a function in $(U\subseteq \C \to \C)$.
+
+A \udef{region} of $\C$ is an open, connected subset of $\C$.
 \end{definition}
 \section{The complex numbers as a real algebra}
 The set of complex numbers $\C$ is isomorphic to the algebra $\R^2$ where multiplication is defined by
@@ -3802,17 +3855,23 @@ TODO uniqueness ??? \url{https://en.wikipedia.org/wiki/Laurent_series#Uniqueness
 
 \subsection{Analytic continuation}
 \begin{proposition}
-Let $f:\Omega\subseteq \C\to \C$ be a holomorphic function on a connected open set $\Omega$. Suppose there exists a sequence of distinct points with limit point in $\Omega$ on which $f$ vanishes. Then $f = \underline{0}$.
+Let $f:U\subseteq \C\to \C$ be a holomorphic function defined on a region. Suppose there exists a sequence of distinct points with limit point in $U$ on which $f$ vanishes. Then $f = \underline{0}$.
 \end{proposition}
 \begin{proof}
 TODO
 \end{proof}
-\begin{corollary}
-Let $f,g:\Omega\subseteq \C\to \C$ be holomorphic functions on a connected open set $\Omega$. Suppose there exists a sequence of distinct points $\seq{z_n}$ with limit point in $\Omega$ such that $f(z_n) = g(z_n)$ for all $n$. Then $f = g$.
+\begin{corollary} \label{zerosHolomorphicFunctionIsolated}
+Let $f:U\subseteq \C\to \C$ be a holomorphic function defined on a region. Then the zeros of $f$ are isolated.
 \end{corollary}
-In particular this holds if $f$ and $g$ agree on some non-empty open subset of $\Omega$.
+\begin{proof}
+TODO
+\end{proof}
 \begin{corollary}
-Let $f:\Omega\subseteq \C\to \C$ be a holomorphic function on an open set $\Omega$ and $\Omega'\supseteq \Omega$ a connected open subset of $\C$. Then there exists at most one holomorphic function $f'$ on $\Omega'$ such that $f'|_\Omega = f$.
+Let $f,g:U\subseteq \C\to \C$ be holomorphic functions defined on a common region. Suppose there exists a sequence of distinct points $\seq{z_n}$ with limit point in $U$ such that $f(z_n) = g(z_n)$ for all $n$. Then $f = g$.
+\end{corollary}
+In particular this holds if $f$ and $g$ agree on some non-empty open subset of $U$.
+\begin{corollary}
+Let $U\subseteq U' \subseteq \C$ be regions and $f:U\subseteq\to \C$ a holomorphic function. Then there exists at most one holomorphic function $f'$ on $U'$ such that $f'|_U = f$.
 \end{corollary}
 
 \begin{definition}
@@ -4013,7 +4072,7 @@ where the poles and zeros are counted with their multiplicities.
 TODO
 \end{proof}
 
-\begin{theorem}[Rouché's theorem]
+\begin{theorem}[Rouché's theorem] \label{RoucheTheorem}
 Let $f$ and $g$ be holomorphic functions on an open set that contains a closed simple curve $\gamma$ and its interior. If
 \[ |f(z)| > |g(z)| \qquad \forall z\in \gamma, \]
 then $f$ and $f+g$ have the same number of zeros inside $\gamma$.
@@ -4025,28 +4084,116 @@ This means $f_0 = f$ and $f_1 = f+g$. The condition $|f(z)| > |g(z)|$ ensures th
 \[ n_t = \frac{1}{2\pi i}\oint_\gamma \frac{f_t'(z)}{f_t(z)}\diff{z}. \]
 It is then enough to observe that $n_t$ is continuous as a real function of $t$.
 \end{proof}
-\begin{corollary}[Open mapping theorem]
-If $f$ is holomorphic and non-constant, then it is an open map.
-\end{corollary}
+
+\begin{theorem}[Open mapping theorem] \label{openMappingTheorem}
+Let $f: U\subseteq \C\to \C$ a holomorphic function defined on a region. Then either $f$ is constant or an open map.
+\end{theorem}
 \begin{proof}
-TODO
+Suppose $f$ is not constant. We then need to prove that $f$ is open. Take some open subset $W\subseteq U$ and $w\in W$. We show that there exists an open neighbourhood of $f(w)$ that is a subset of $f^\imf(W)$.
+
+Consider the function $f - \constant{f(w)}$, which is holomorphic.
+By \ref{zerosHolomorphicFunctionIsolated}, we can find an open ball $\ball(w, \delta)$ such that $w$ is the only root of $f - \constant{f(w)}$ in $\cball(w, \delta)$. We can take $\delta$ small enough that $\cball(w, \delta) \subseteq W$.
+
+Now $\sphere(w,\delta)$ is closed and bounded, and thus compact by Heine-Borel (TODO ref), so $|f - \constant{f(w)}|$ attains a minimum $\epsilon \geq 0$ on $\sphere(w,\delta)$ by the extreme value theorem \ref{extremeValueTheorem}. This minimum is not zero by construction, so $\epsilon > 0$.
+
+Finally we claim $\ball\big(f(w), \epsilon\big) \subseteq f^\imf(W)$. Take $w'\in \ball\big(f(w), \epsilon\big)$ and consider the function
+\[ f - \constant{w'} = \big(f - \constant{f(w)}\big) + \big(\constant{f(w)} - \constant{w'}\big) \]
+defined on $\cball(w, \delta)$.
+
+Since $\big|f(z) - w\big| \geq \epsilon > \big|f(w) - w'\big|$, we can apply Rouché's theorem \ref{RoucheTheorem}: $f - \constant{w'}$ has one zero inside $\cball(w,\delta)$ since $f - \constant{f(w)}$ does, and thus $w'\in f^\imf(W)$.
 \end{proof}
 
-\begin{proposition}[Maximum modulus principle]
-If $f$ is a non-constant holomorphic function in a simply connected region $\Omega$, then $|f(z)|$ cannot attain a maximum in $\Omega$.
+
+\subsubsection{Maximum modulus results}
+\begin{proposition}[Maximum modulus principle] \label{maximumModulusPrinciple}
+Let $f: U\subseteq \C\to \C$ a holomorphic function defined on a region. If $|f|$ attains a maximum on $U$ \textup{if and only if} $f$ is constant.
 \end{proposition}
 \begin{proof}
-TODO
+If $f$ is a constant, then $|f|$ clearly attains a maximum.
+
+Now suppose $|f|$ attains a maximum at $z_0$. By the open mapping theorem, \ref{openMappingTheorem}, either $f$ is constant or open. Assume, towards a contradiction, that $f$ is open. Then $\im(f)$ contains a ball around $f(z_0)$ and so $|f(z_0)|$ is not a maximum of $|f|$.
 \end{proof}
 \begin{corollary}
-Let $\Omega$ be a simply connected open set with compact closure $\overline{\Omega}$. If $f$ is holomorphic on $\Omega$ and continuous on $\overline{\Omega}$, then
-\[ \sup_{z\in \Omega}|f(z)| \leq \sup_{z\in \overline{\Omega}\setminus\Omega}|f(z)|. \]
+Let $U$ be a region with compact closure $\overline{U}$. If $f$ is holomorphic on $U$ and continuous on $\overline{U}$, then
+\[ \sup_{z\in U}|f(z)| \leq \max_{z\in \overline{U}\setminus U}|f(z)|. \]
 \end{corollary}
+\begin{proof}
+Since $\overline{U}$ is compact, $|f|$ attains a maximum on $\overline{U}$ by the extreme value theorem \ref{extremeValueTheorem}. This maximum cannot lie in $U$ by the maximum modulus principle, so it lies on $\overline{U}\setminus U$.
+\end{proof}
+
+\begin{proposition}[Phragmén-Lindelöf principle]
+Let $S'_\epsilon\subseteq S\subseteq \C$ be regions for all $\epsilon > 0$ with each $S'_\epsilon$ bounded, $M\geq 0$ and $f$ a function that is holomorphic on $S$ and continuous on $\overline{S'}$. Let $\{h_\epsilon\}_{\epsilon > 0}$ be set of functions such that
+\begin{itemize}
+\item $h_\epsilon \to \constant{1}_{\overline{S}}$ pointwise as $\epsilon \to 0$;
+\item $\sup_{z\in \partial S'_\epsilon}\big|fh_\epsilon(z)\big| \leq M$ for all $\epsilon > 0$;
+\item $\sup_{z\in S\setminus \overline{S'_\epsilon}}\big|fh_\epsilon(z)\big| \leq M$  for all $\epsilon > 0$.
+\end{itemize}
+Then $\sup_{z\in S}\big|f(z)\big| \leq M$.
+\end{proposition}
+The last two points are implied by $\sup_{z\in \overline{S}\setminus S'_\epsilon}\big|fh_\epsilon(z)\big| \leq M$ for all $\epsilon > 0$.
+\begin{proof}
+Take $\epsilon >0$. Then $fh_\epsilon$ is bounded by $M$ on $\overline{S'_\epsilon}$ by the maximum modulus principle \ref{maximumModulusPrinciple}. It is bounded by $M$ on $S\setminus \overline{S'_\epsilon}$ by assumption.
+
+Since, for all $z\in S$, $|h_\epsilon f(z)| \leq M$ and $|h_\epsilon f(z)| \to |f(z)|$ as $\epsilon \to 0$, we have $|f(z)|\leq M$.
+\end{proof}
+\begin{corollary}
+Let $0< \alpha < \pi$. Let $f$ be a function that is holomorphic on the open sector $S = \setbuilder{z}{-\alpha < \arg(z) < \alpha}$ and continuous on its boundary. If
+\begin{itemize}
+\item $|f(z)|\leq 1$ for all $z\in \partial S$;
+\item $|f(z)| \leq Ce^{c|z|^\rho}$ for some $c, C > 0$ and $\rho \in \interval[co]{0, \frac{\pi}{2\alpha}}$;
+\end{itemize}
+then $|f(z)| \leq 1$ for all $z\in S$.
+\end{corollary}
+\begin{proof}
+Take $\rho'\in \interval[o]{\rho, \frac{\pi}{2\alpha}}$ and set $h_\epsilon(z) = e^{-\epsilon z^{\rho'}}$, where we take $\big(re^{i\theta}\big)^{\rho'} = r^{\rho'}e^{i\rho'\theta}$ for $-\pi < \theta <\pi$.
+
+Now $|h_\epsilon(z)| = e^{-\epsilon r^{\rho'}\cos(\theta\rho')}$. If $z = re^{i\theta}\in S$, then $-\alpha < \theta < \alpha$ and $0 < \rho' < \frac{\pi}{2\alpha}$ imply 
+\[ \frac{-\pi}{2} = -\alpha\frac{\pi}{2\alpha} < -\alpha\rho' < \theta\rho' < \alpha\rho' < \alpha\frac{\pi}{2\alpha} = \frac{\pi}{2}, \]
+so $0< \cos(\alpha\rho') < \cos(\theta\rho')$. Then we calculate (using $\rho'-\rho > 0$)
+\begin{align*}
+\left(\frac{c+1}{\epsilon\cos(\rho'\alpha)}\right)^{\frac{1}{\rho'-\rho}} \leq r &\implies \frac{c+1}{\epsilon\cos(\rho'\alpha)} \leq r^{\rho' -\rho} \\
+&\implies \frac{c+1}{\epsilon\cos(\rho'\theta)} \leq r^{\rho' -\rho} \\
+&\implies c+1 \leq \epsilon\cos(\rho'\theta)r^{\rho' -\rho} \\
+&\implies c - \epsilon\cos(\rho'\theta)r^{\rho' -\rho} \leq -1.
+\end{align*}
+Thus for all $r\geq \left(\frac{c+1}{\epsilon\cos(\rho'\alpha)}\right)^{\frac{1}{\rho'-\rho}}$ we have
+\[ |fh_\epsilon(re^{i\theta})| \leq Ce^{cr^\rho} \cdot e^{-\epsilon r^{\rho'}\cos(\theta\rho')} = Ce^{cr^\rho - \epsilon \cos(\theta\rho') r^{\rho'}} = Ce^{\big(c - \epsilon\cos(\rho'\theta)r^{\rho' -\rho}\big)r^\rho} \leq Ce^{-r^\rho}. \]
+So, if $r \geq \max\left\{\left(\frac{c+1}{\epsilon\cos(\rho'\alpha)}\right)^{\frac{1}{\rho'-\rho}}, \big(\ln C\big)^{1/\rho}\right\}$, then 
+\[ |fh_\epsilon(re^{i\theta})| \leq Ce^{-r^\rho} \leq Ce^{-\big((\ln C)^{1/\rho}\big)^\rho} = Ce^{-\ln C} = CC^{-1} = 1. \]
+Now set $S'_\epsilon \defeq \setbuilder{z\in \C}{-\alpha < \arg(z) < \alpha, |z| < \max\left\{\left(\frac{c+1}{\epsilon\cos(\rho'\alpha)}\right)^{\frac{1}{\rho'-\rho}}, \big(\ln C\big)^{1/\rho}\right\}}$. This satisfies the requirements for the Phragmèn-Lindelöf principle.
+\end{proof}
+\begin{corollary}[Hadamard three-lines lemma]
+Let $f$ be a function that is holomorphic and bounded on the open strip $S = \setbuilder{z}{0 < \Im(z) < 1}$ and continuous on its boundary. Set $M_0 = \sup_{x\in \R}|f(x)|$ and $M_1 = \sup_{x\in \R}|f(x+i)|$. Then
+\[ \sup_{x\in \R}|f(x+iy)| \leq M_0^{1-y}M_1^y \]
+for all $0\leq y\leq 1$.
+\end{corollary}
+\begin{proof}
+Let $M \defeq \sup_{z\in S}|f(z)|$. We apply the Phragmèn-Lindelöf principle to the function $F(z) \defeq M_0^{-1-iz}M_1^{iz}f(z)$, with $h_\epsilon(z) \defeq e^{-\epsilon z^2}$, to obtain that $\sup_{z\in S}|F(z)| \leq 1$.
+
+For all $x\in \R$, we have
+\[ |M_0^{-1-ix}M_1^{ix}f(x)h_\epsilon(x)| \leq |M_0^{-1-ix}M_1^{ix}|M_0 e^{-\epsilon x^2} \leq M_0M_0^{-1} = 1 \]
+and
+\[ |M_0^{-1-i(x+i)}M_1^{i(x+i)}f(x+i)h_\epsilon(x+i)| \leq |M_0^{-ix}M_1^{ix -1}|M_1 e^{-\epsilon |x+i|^2} \leq M_1^{-1}M_1 =  1. \]
+Now set $S'_\epsilon \defeq \setbuilder{z\in \C}{0<\Im(z)< 1; -\sqrt{\frac{\ln M + \epsilon}{\epsilon}} < x < \sqrt{\frac{\ln M + \epsilon}{\epsilon}}}$. To see that this satisfies the Phragmèn-Lindelöf principle, take $z = x+iy \in S\setminus S_\epsilon'$.
+Then we have the implications
+\[ \frac{\ln M + \epsilon}{\epsilon} \leq x^2 \quad\implies\quad Me^{\epsilon} \leq e^{\epsilon x^2} \quad\implies\quad Me^{-\epsilon x^2 + \epsilon} \leq 1 \]
+and so
+\begin{align*}
+\big|M_0^{-1-iz}M_1^{iz}f(z)h_\epsilon(z)\big| &= \big|M_0^{-1-ix +y}M_1^{ix - y}f(z)e^{-\epsilon (x^2 + 2ixy - y^2)}\big| \\
+&= M_0^{-1 +y}M_1^{- y}\big|f(z)\big|e^{-\epsilon x^2 + \epsilon y^2} \\
+&\leq M_0^{-1 +1}M_1^{0}Me^{-\epsilon x^2 + 1} \\
+&= Me^{-\epsilon x^2 + 1} \leq 1.
+\end{align*}
+We conclude that $1 \geq \sup_{z\in S}|F(z)|$, so for all $y\in \interval{0,1}$, we have
+\[ 1 \geq \sup_{x \in \R}|F(x+iy)| = \sup_{x \in \R}|M_0^{-1-ix+y}M_1^{ix-y}f(x+iy)| = M_0^{y-1}M_1^{-y}\sup_{x \in \R}|f(x+iy)| \]
+and so $|f(x+iy)| \leq M_0^{1-y}M_1^{y}$.
+\end{proof}
+
 
 \subsection{The ring of polynomials over $\meromorphic_\Omega$}
 
 \begin{definition}
-Let $\Omega\subseteq \C$ be an open set. Let $\meromorphic_\Omega$ be the set of meromorphic functions in $(Omega \to \C)$.
+Let $\Omega\subseteq \C$ be an open set. Let $\meromorphic_\Omega$ be the set of meromorphic functions in $(\Omega \to \C)$.
 \end{definition}
 
 \begin{proposition}
