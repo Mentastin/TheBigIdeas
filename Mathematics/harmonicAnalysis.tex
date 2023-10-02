@@ -1,100 +1,186 @@
-\chapter{Functions on measure spaces}
-
-\subsubsection{Operators on sequence spaces}
-TODO Gribanov's theorems
-
-3.7.1, 3.7.2 of Hanson / Yakovlev.
-
-\subsubsection{Series in Banach spaces}
-TODO
-\url{https://link.springer.com/content/pdf/10.1007%2F978-0-8176-4687-5_3.pdf}
-\begin{definition}
-Let $\seq{x_n}$ be a sequence in a Banach space $X$. As for series of scalars, we say a series $\sum_{n=1}^\infty x_n$ is
-\begin{itemize}
-\item \udef{unconditionally convergent} if $\sum_{n=1}^\infty x_{\sigma(n)}$ converges for every permutation $\sigma$ of $\N$;
-\item \udef{absolutely convergent} if $\sum_{n=1}^\infty \norm{x_n} < \infty$.
-\end{itemize}
-\end{definition}
-
-\begin{proposition} \label{absoluteUnconditionalConvergenceBanach}
-Let $\seq{x_n}$ be a sequence in a Banach space $X$. If $\sum_{n=1}^\infty$ converges absolutely, then it converges unconditionally.
-\end{proposition}
-\begin{proof}
-Assume absolute convergence, so $\sum\norm{x_i}<\infty$. Then (for $m< n$)
-\[ \norm{\sum_{i=1}^n x_i - \sum_{i=1}^m x_i} = \norm{\sum_{i=m+1}^n x_i} \leq \sum_{i=m+1}^n\norm{x_i} = \sum_{i=1}^n \norm{x_i} - \sum_{i=1}^m \norm{x_i}, \]
-and because $\sum\norm{x_i}$ converges, it is a Cauchy sequence and by the inequality so is $\sum x_i$. By completeness this sequence is convergent.
-
-By (TODO ref) $\sum\norm{x_{\sigma(i)}}$ converges for any permutation $\sigma$ of $\N$. We can then repeat the argument to show $\sum x_{\sigma(i)}$ is also convergent and thus unconditionally convergent.
-\end{proof}
-
-
-
-
-
-\section{Bochner integration}
-
-TODO: the Bochner integral is the unique extension of the integral of simple functions to the set of Bochner measurable functions???? (i.e.\ simple functions dense in Bochner space, with $L^1$ metric)
-\begin{definition}
-Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space. Then a Bochner measurable function $f:\Omega\to Y$ is called \udef{Bochner integrable} if there exists a sequence of integrable simple functions $\seq{s_n}\subset\SF(\Omega,Y)$ such that
-\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0. \]
-Take such a sequence $\seq{s_n}$. The \udef{Bochner integral} of $f$ on $\Omega$ w.r.t. $\mu$ is defined as
-\[ \int_\Omega f\diff{\mu} \defeq \lim_{n\to\infty}\int_\Omega s_n\diff{\mu}. \]
-\end{definition}
-
-\begin{lemma}
-The Bochner integral is well-defined: let $\seq{s_n},\seq{t_n}\in \prescript{\N}{}{\SF(\Omega,Y)}$ be sequences such that
-\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0 = \lim_{n\to\infty}\int_\Omega \norm{f-t_n}\diff{\mu}.  \]
-Then
-\begin{enumerate}
-\item the limits $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu}$ and $\lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$ exist;
-\item $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu} = \lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{proposition}[Bochner integrability criterion] \label{BochnerIntegrabilityCondition}
-Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space.
-
-A Bochner measurable function $f$ is Bochner integrable \textup{if and only if}
-\[ \int_\Omega \norm{f} \diff{\mu} < \infty. \]
-\end{proposition}
+\section{Functions on locally compact groups}
 
 \begin{proposition}
-Linearity and monotonicity.
+Let $G$ be a locally compact group. Then any function $f\in \cont_c(G)$ is uniformly continuous.
 \end{proposition}
 
-\begin{theorem}[Hille's theorem] \label{HilleTheorem}
-Let $(\Omega, \mathcal{A},\mu)$ be a measure space, $X,Y$ normed vector spaces and $T: X\not\to Y$ a closed operator. If $T\circ f$ is integrable, then
-\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\begin{proposition} \label{integralCompactSupportContinuous}
+Let $G$ be a locally compact group, $\mu$ a Borel measure on $G$ and $f\in \cont_c(G)$.
+Then the function $g\mapsto \int_G f(xg)\diff{\mu(x)}$ is continuous on $G$.
+\end{proposition}
+
+\section{Haar integration}
+
+\begin{lemma}
+Let $G$ be a topological group and $\mathcal{B}$ the Borel $\sigma$-algebra of $G$. Then $x\cdot A$ and $A\cdot x$ are measurable for all $A\in \mathcal{B}$ and $x\in G$.
+\end{lemma}
+
+\begin{definition}
+Let $G$ be a group. A measure $\mu$ on $G$ such that $\mu(x\cdot A) = \mu(A)$ for all measureable sets $A$ and $x\in G$,
+is called \udef{left-invariant}.
+\end{definition}
+
+\begin{theorem}[Haar measure]
+Let $G$ be a locally compact group. There exists a non-zero left-invariant Radon measure $\mu$ $G$.
+It is uniquely determined up to scalar multiples.
 \end{theorem}
 \begin{proof}
 TODO
 \end{proof}
-\begin{corollary} \label{boundedOperatorUnderIntegral}
-If $T$ is bounded, then $T\circ f$ is integrable and
-\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
-\end{corollary}
-\begin{proof}
-TODO: show that $T\circ f$ is integrable!
-\end{proof}
 
-TODO Dominated convergence.
+\begin{definition}
+This measure is called the \udef{Haar measure} of $G$. Let $\mu$ be the Haar measure of $G$. We abbreviate $L^p(G,\mu)$ by $L^p(G)$.
+\end{definition}
 
-\subsection{Integration of bounded operators}
-\begin{lemma} \label{integralBoundedOperator}
-Let $X$ be a normed space and $(\Omega, \mathcal{A},\mu)$ a measure space. Let $T: \Omega \to \Bounded(X)$ be a function. If $T$ is integrable, then for all $x\in X$, $Tx$ is integrable and
-\[ \left(\int_\Omega T\diff{\mu}\right)x = \int_\Omega Tx\diff{\mu}. \]
+\begin{lemma}
+Let $\mu$ be the Haar measure on a locally compact group $G$. For any non-empty open $U\subseteq G$ and compact $K\subseteq G$ there exists an $n\in \N$ such that $\mu(K)\leq n\mu(U)$.
 \end{lemma}
 \begin{proof}
-The evaluation map $\evalMap_x$ is linear and bounded by $\norm{x}$ for all $x\in X$, so we can use \ref{boundedOperatorUnderIntegral}.
+Because $\bigcup_{x\in G} x\cdot U = G$, the family $\setbuilder{x\cdot U}{x\in G}$ is an open cover of $G$. For any compact $K\subseteq G$, $\setbuilder{x\cdot U \cap K}{x\in G}$ is an open cover of $K$, which has a finite subcover $\setbuilder{x_i\cdot U \cap K}{x_1,\ldots, x_n \in G}$ by \ref{topologyCompactnessOpenCover}. Then
+\[ \mu(K) = \mu\left(\bigcup_{i=1}^n x_i\cdot U \cap K\right) \leq \sum_{i=1}^n \mu(x_i\cdot U \cap K) \leq \sum_{i=1}^n \mu(x_i\cdot U) = \sum_{i=1}^n \mu(U) = n\mu(U). \]
+\end{proof}
+\begin{corollary} \label{HaarConsequences}
+Let $\mu$ be the Haar measure on a locally compact group $G$.
+\begin{enumerate}
+\item Let $U\subseteq G$ be an open set, then $\mu(U) =0 \iff U = \emptyset$.
+\item Let $f: G\to \R^{\geq 0}$ be a positive continuous function, then $\int_G f \diff{\mu} = 0 \iff f= 0$.
+\item Every compact set has finite measure.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) If $U = \emptyset$, then $\mu(U) = 0$ by definition. Assume, towards a contradiction, $\mu(U) = 0$ but $U \neq \emptyset$. Then for any compact $K\subseteq G$ we have $\mu(K) \leq n\mu(U) = 0$ by the lemma.
+
+By weak inner regularity all open sets are null sets. By outer regularity all sets are null sets and thus $\mu$ is the zero measure, which is not the Haar measure.
+
+(2) By \ref{functionPropertiesFromIntegral} the open set $f^\preimf\big(\,]0, \infty[\,\big)$ has measure zero and so must be empty by (1).
+
+(3) By local finiteness, there exists an open set $U$ of finite measure. Take $K$ a compact set. Then $\mu(K) \leq n\mu(U)$, which is finite.
 \end{proof}
 
-\chapter{Orthogonal polynomials and random matrices}
-TODO: not harmonic analysis, but just parked
+\begin{proposition}
+Let G be a locally compact group. The following are equivalent:
+\begin{enumerate}
+\item there exist $x\in G$ such that $\{x\}$ has non-zero Haar measure;
+\item the counting measure is a Haar measure;
+\item $G$ is a discrete group.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Let $\mu$ be a Haar measure and let $\{x\}$ have non-zero Haar measure. Then $\mu(\{x\})^{-1}\mu$ is also a Haar measure. For all $y\in G$ we have
+\[ mu(\{x\})^{-1}\mu(\{y\}) = mu(\{x\})^{-1}\mu(xy^{-1}\cdot\{y\}) = mu(\{x\})^{-1}\mu(\{x\}) = 1, \]
+so $\mu(\{x\})^{-1}\mu$ is the counting measure by \ref{countingMeasureCriterion}.
 
-\section{Orthogonal polynomials}
+$(2) \Rightarrow (3)$ Every point (in particular $1$) has a compact neighbourhood. By \ref{HaarConsequences} this compact neighbourhood has finite measure and thus is a finite set. The neighbourhood contains an open set of finite measure. TODO use Hausdorff!
+
+$(3) \Rightarrow (1)$ If $G$ is discrete, then $\{x\}$ is open and has non-vanishing Haar measure by \ref{HaarConsequences}.
+\end{proof}
+
+\begin{proposition}
+Let $G$ be a locally compact group. Then $G$ has finite Haar measure \textup{if and only if} $G$ is compact.
+\end{proposition}
+\begin{proof}
+If $G$ is compact, then it has finite Haar measure by \ref{HaarConsequences}.
+
+Now assume $G$ has finite Haar measure. Let $U$ be a compact neighbourhood of $1$. By \ref{HaarConsequences}, $\mu(U) \neq 0$. Consider the set
+\[ \setbuilder{x_1\cdot U\cup \ldots \cup x_n\cdot U}{n\in \N, \forall i < j \leq n: x_i\cdot U \perp x_j\cdot U} \]
+as a subset of the poset $\sSet{\powerset(G), \subseteq}$. Every chain in this set is finite as $n = \mu(U)^{-1}\mu(x_1\cdot U\cup \ldots \cup x_n\cdot U) \leq \mu(G)$. Take a maximal chain with maximum $K = y_1\cdot U\cup \ldots \cup y_n\cdot U$. Now $K$ is compact (TODO ref) and for all $z\in G$ we have $K\mesh z\cdot K$, because otherwise the chain would not have been maximal. Thus $G = K\cdot K^{-1}$, which is a compact set by (TODO ref).
+\end{proof}
+
+\subsection{The modular function}
 \begin{definition}
+Let $G$ be a locally compact group and $\mu$ a Haar measure on $G$. Then $\mu_x$ defined by
+\[ \mu_x(A) \defeq \mu(A \cdot x) \]
+is also a Haar measure. There exists a unique function $\Delta: G \to \R^{> 0}$ such that
+\[ \mu_x = \Delta(x)\mu. \]
+This function is called the \udef{modular function} of $G$.
 
+If $\Delta = \underline{1}$, then $G$ is called \udef{unimodular}.
+\end{definition}
+The modular function is independent of the choice of Haar measure. Clearly every commutative group is unimodular.
+
+\begin{lemma} \label{rightShiftHaarIntegral}
+Let $G$ be a locally compact group, $f\in L^1(G)$ and $y\in G$. Then
+\begin{enumerate}
+\item $\int_G f(yx)\diff{x} = \int_G f(x)\diff{x}$;
+\item $\int_G f(xy)\diff{x} = \Delta(y^{-1})\int_G f(x)\diff{x}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO 
+\end{proof}
+
+\begin{proposition}
+Let $G$ be a locally compact group. The modular function $\Delta: G \to \sSet{\R^{> 0},\cdot}$ is a continuous group homomorphism.
+\end{proposition}
+\begin{proof}
+Let $\mu$ be a Haar measure.
+
+To show $\Delta$ is a group homomorphism, take $x,y\in G$. Let $A$ be a measurable set with finite and non-zero measure. Then
+\[ \Delta(xy)\mu(A) = \mu(A \cdot xy) = \mu\big((A\cdot x)\cdot y\big) = \Delta(y)\mu(A\cdot x) = \Delta(y)\Delta(x)\mu(A). \]
+
+For continuity, take some $f\in\cont_c(G)$ with non-zero integral (TODO show existence). Set $c = \int_G f\diff{\mu} \neq 0$. Then by \ref{rightShiftHaarIntegral} we have
+\[ \Delta(y) = c^{-1}\int_G f(xy^{-1})\diff{x} = \int_G f\circ \rho_{y^{-1}}(x)\diff{x}, \]
+which is continuous by \ref{integralCompactSupportContinuous} because $f\circ \rho_{y^{-1}} \in \cont_c(G)$ (TODO ref).
+\end{proof}
+\begin{corollary}
+Every compact group is unimodular.
+\end{corollary}
+\begin{proof}
+The image $f^{\imf}[G]$ is a compact subgroup of $\sSet{\R^{> 0},\cdot}$ by \ref{compactConstructions}. The only compact subgroup of $\sSet{\R^{> 0},\cdot}$ is $\{1\}$ (TODO ref).
+\end{proof}
+
+\subsection{The character group}
+\begin{definition}
+Let $A$ be a locally compact abelian group. A \udef{character} of $A$ is a continuous group homomorphism $\chi: A\to \T$.
+
+The set of all characters forms a group under pointwise multiplication, called the \udef{character group}. It is denoted $\widehat{A}$.
+\end{definition}
+
+\subsection{Convolution}
+\begin{definition}
+Let $G$ be a locally compact group that is a countable union of compact subsets and $f,g\in L^1(G)$. The \udef{convolution} $f*g$ is defined by
+\begin{align*}
+(f*g)(x) &= \int_Gf(y)g(y^{-1}x)\diff{\mu(y)} \\
+&= \int_Gf(xz)g(z^{-1})\diff{\mu(z)}.
+\end{align*}
+\end{definition}
+TODO: show that the above equality is an equality (using translation invariance of Haar measure).
+
+\begin{lemma}
+Let $G$ be a locally compact group that is a countable union of compact subsets and $f,g\in L^1(G)$.
+The convolution $f*g$ is defined a.e., is a function in $L^1(G)$ and satisfies
+\[ \norm{f*g}_1 \leq \norm{f}_1\norm{g}_1. \]
+\end{lemma}
+\begin{proof}
+We calculate,
+\begin{align*}
+\int_G\int_G |f(y)g(y^{-1}x)| \diff{\mu(y)}\diff{\mu(x)} &= \int_G\int_G |f(y)g(y^{-1}x)| \diff{\mu(x)}\diff{\mu(y)} \\
+&= \int_G |f(y)| \int_G |g(y^{-1}x)| \diff{\mu(x)}\diff{\mu(y)} \\
+&= \int_G |f(y)| \int_G |g(x)| \diff{\mu(x)}\diff{\mu(y)} \\
+&= \int_G |f(y)| \;\norm{g}_1\diff{\mu(y)} \\
+&= \norm{f}_1\norm{g}_1 <\infty,
+\end{align*}
+where we have used Tonelli's theorem \ref{tonellisTheorem} and left-translation-invariance. By \ref{functionPropertiesFromIntegral}, we have that $\int_G |f(y)g(y^{-1}x)| \diff{\mu(y)}<\infty$ a.e.\ and thus $(f*g)(x) = \int_G f(y)g(y^{-1}x) \diff{\mu(y)}$ is defined a.e.
+
+Using (TODO ref inequality int abs value), we have
+\begin{align*}
+\norm{f*g}_1 = \int_G|f*g|\diff{\mu} &= \int_G\left|\int_G f(y)g(y^{-1}x) \diff{\mu(y)}\right|\diff{\mu(x)} \\
+&\leq \int_G\int_G |f(y)g(y^{-1}x)| \diff{\mu(y)}\diff{\mu(x)} \\
+&= \norm{f}_1\norm{g}_1 <\infty.
+\end{align*}
+This shows $f*g\in L^1(G)$ and the inequality.
+\end{proof}
+
+\begin{proposition}
+Let $G$ be a locally compact group that is a countable union of compact subsets. Then $L^1(G)$ is a Banach algebra under the convolution product.
+\end{proposition}
+\begin{proof}
+We need to show associativity and distributivity. TODO.
+\end{proof}
+
+
+\subsection{The Fourier transform}
+\begin{definition}
+Let $A$ be a locally compact abelian group and $f\in L^1(A)$. The \udef{Fourier transform} of $f$ is the function
+\[ \hat{f}: \widehat{A} \to \C: \chi \mapsto \hat{f}(\chi) = \int_A f(x)\overline{\chi(x)}\diff{x}. \]
 \end{definition}

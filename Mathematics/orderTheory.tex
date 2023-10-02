@@ -150,7 +150,7 @@ Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be ordered sets and $f: P\to Q$ a functi
 \item $f$ is \udef{order-reversing}, \udef{antitone}, \udef{monotonically decreasing} or just \udef{decreasing} if $f: P\to Q^o$ is relation-preserving;
 \item $f$ is \udef{monotone} or \udef{monotonic} if $f$ is relation-preserving as either a function $P\to Q$ or $P\to Q^o$.
 \end{itemize}
-Similarly we say $f$ is (reverse) order-reflecting or a (reverse) order embedding if $f$ is relation-reflecting or a relation embedding as a function $P\to Q$ (resp. $P\to Q^o$).
+Similarly we say $f$ is \udef{(reverse) order-reflecting} or a \udef{(reverse) order embedding} if $f$ is relation-reflecting or a relation embedding as a function $P\to Q$ (resp. $P\to Q^o$).
 
 The adjectives ``strict'' and ``weak'' can be added to any of these cases to identify whether the (weak, i.e.\ reflexive) order or the associated strict order is meant.
 \end{definition}
@@ -571,6 +571,24 @@ Let $\sSet{P, \precsim}$ be a preordered space and $A,B\subseteq P$. Then $\upse
 Take $x\in \upset(\upset A \cap \upset B)$. Then there exists $a\in \upset A$ and $b\in \upset B$ such that $a\precsim x$ and $b\precsim x$. Then $x\in \upset A$ and $x\in \upset B$, so $x\in \upset A \cap \upset B$.
 \end{proof}
 
+\begin{lemma} \label{principalDownSetEmbedding}
+Let $\sSet{P,\precsim}$ be a preordered set and $x,y\in P$. Then the following are equivalent:
+\begin{enumerate}
+\item $x \precsim y$;
+\item $\downset \{x\} \subseteq \downset \{y\}$;
+\item $\upset \{y\} \subseteq \upset \{x\}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Take $z\in \downset\{x\}$. Then $z \precsim x\precsim y$, so $z\precsim y$ by transitivity and so $z\in \downset\{y\}$.
+
+$(2) \Rightarrow (1)$ By reflexivity, $x\in \downset\{x\}$, so $x\in \downset\{y\}$, which implies $x\precsim y$.
+
+$(1) \Rightarrow (3)$ Take $z\in \upset\{y\}$. Then $x\precsim y \precsim z$, so $x\precsim z$ by transitivity and so $z\in \upset\{x\}$.
+
+$(3) \Rightarrow (1)$ By reflexivity, $y\in \upset\{y\}$, so $y\in \upset\{x\}$, which implies $x\precsim y$.
+\end{proof}
+
 \subsubsection{Galois connections}
 \begin{lemma} \label{GaloisConnectionOrderClosure}
 Let $\sSet{P, \Yleft}$ be an ordered set and $A,B \subset P$. Then
@@ -815,7 +833,7 @@ Every set is bounded (by the least and greatest elements).
 \end{proof}
 
 \begin{proposition} \label{existenceSupremaInfima}
-Let $(P,\precsim)$ be an ordered set. Then the following are equivalent:
+Let $(P,\Yleft)$ be an ordered set. Then the following are equivalent:
 \begin{enumerate}
 \item $P$ is order complete;
 \item each subset of $P$ has a supremum;
@@ -833,14 +851,13 @@ The following are also equivalent:
 \begin{proof}
 We show that (2) and (3) are equivalent. The other assertions then follow simply.
 
-Suppose each subset has a supremum and let $S$ be a subset. Then in particular $S^l$ has a supremum. This supremum of $S^l$ is an infimum of $S$:
-\[ \sup(S^l) = (S^l)^u\cap((S^l)^u)^l = (S^l)^u\cap S^l = \inf(S).  \]
+Suppose each subset has a supremum and let $S$ be a subset. Then in particular $S^\Yright$ has a supremum. This supremum of $S^\Yright$ is an infimum of $S$, since $\sup(S^\Yright) = \inf(S)$ by \ref{supInfConnection}.
 
 The converse is similar.
 
 For equivalence with (3) and (4), we just need to remark that $\sup(\emptyset) = \min(P)$ and $\inf(\emptyset) = \max(P)$.
 
-For Dedekind completeness the argument is similar, we just need to remark that if $S$ is non-empty and bounded below, then $S^l$ is non-empty and bounded above.
+For Dedekind completeness the argument is similar, we just need to remark that if $S$ is non-empty and bounded below, then $S^\Yright$ is non-empty and bounded above.
 \end{proof}
 \begin{corollary}
 Every complete ordered set has a greatest and least element.
@@ -1514,7 +1531,7 @@ Now assume $D\subseteq E \subseteq D^\mesh$. We need to prove that $\bot\notin E
 
 \subsubsection{Complete subsemilattices}
 
-\begin{lemma}
+\begin{lemma} \label{completeSubsemilattices}
 Let $L$ be a lattice and $A\subseteq L$ a subposet that is a complete lattice. Then
 \begin{enumerate}
 \item the following are equivalent:
@@ -1546,8 +1563,11 @@ We have that $(b)$ and $(c)$ are equivalent by \ref{GaloisConnectionLatticePrese
 (2) Dual.
 \end{proof}
 
+\[ \bigvee A = \bigvee (\Closure\circ \incl)^\imf(A) = \Closure\Big(\bigcup \incl^{\imf}(A)\Big) = \Closure\Big(\bigcup A\Big). \]
+Using $\Closure\circ\incl = \id$.
+
 \begin{definition}
-Let $P$ be a poset and $f: P\to P$ a function. We call $f$
+Let $P$ be a poset and $f: P\to \im(f) \subseteq P$ a function. We call $f$
 \begin{itemize}
 \item a \udef{Moore closure operator} if
 \begin{itemize}
@@ -1564,8 +1584,8 @@ Let $P$ be a poset and $f: P\to P$ a function. We call $f$
 \end{itemize}
 \end{definition}
 
-\begin{proposition}
-Let $P$ be a poset and $f: P\to P$ a function. Then
+\begin{proposition} \label{MooreClosureGaloisConnection}
+Let $P$ be a poset and $f: P\to \im(f)\subseteq P$ a function. Then
 \begin{enumerate}
 \item $f$ is a Moore closure operator \textup{if and only if}
 $\big(f|^{\im(f)}:P\to \im(f),\, \incl_{\im(f)}: \im(f)\to P\big)$ is a Galois connection;
@@ -1587,6 +1607,80 @@ Finally we have $f|^{\im(f)}\circ \iota_{\im(f)}\circ f|^{\im(f)} = f|^{\im(f)}$
 (2) Dual.
 \end{proof}
 
+\begin{proposition} \label{meetJoinCompleteSubsemilattice}
+Let $P$ be a poset, $f: P\to \im(f)\subseteq P$ a function and $A\subseteq \im(f)$. Then
+\begin{enumerate}
+\item if $f$ is a Moore closure, then
+\[ \bigvee_{\im(f)}A = f\Big(\bigvee_P A\Big) \qquad\text{and}\qquad \bigwedge_{\im(f)} A = \bigwedge_P A; \]
+\item if $f$ is a dual Moore closure, then
+\[ \bigvee_{\im(f)}A = \bigvee_P A \qquad\text{and}\qquad \bigwedge_{\im(f)} A = f\Big(\bigwedge_P A\Big). \]
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have that $f$ preserves joins by \ref{MooreClosureGaloisConnection}. Since $A\subseteq \im(f)$, we have $A = f^\imf(A)$, so
+\[ \bigvee_{\im(f)}A = \bigvee_{\im(f)}f^{\imf}(A) = f\Big(\bigvee_P A\Big). \]
+We have that $\incl_{\im(f)}$ preserves meets by \ref{MooreClosureGaloisConnection}, so
+\[ \bigwedge_{\im(f)} A = \incl_{\im(f)}\Big(\bigwedge_{\im(f)} A\Big) = \bigwedge_P \incl_{\im(f)}^\imf(A) = \bigwedge_P A. \]
+
+(2) Dual.
+\end{proof}
+
+\subsubsection{Dedekind-MacNeille completion}
+TODO minimal / maximal completions: see Schroder book notes.
+
+\begin{definition}
+Let $\sSet{P, \leq}$ be a poset. Then the set $\DM(P) = \setbuilder{B^\geq}{B\subseteq P}$ together with the order embedding
+\[ m: P \to \DM(P): x\mapsto \downset\{x\} \]
+is called the \udef{Dedekind-MacNeille completion} of $P$.
+\end{definition}
+Note that $m$ is an order embedding by \ref{principalDownSetEmbedding}.
+
+\begin{proposition} \label{DedekindMacNeilleCompletionComplete}
+Let $\sSet{P, \leq}$ be a poset. Then
+\begin{enumerate}
+\item $\DM(P)$ is a complete $\wedge$-subsemilattice of $\sSet{\powerset(P), \subseteq}$;
+\item the associated Moore closure is $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+By \ref{MooreClosureGaloisConnection} and \ref{completeSubsemilattices}, we need to show that $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$ is a surjective Moore closure operator.
+
+From \ref{polarsGaloisConnection} and \ref{preorderGaloisCondition}, we get that $(-)^{\leq\geq}$ is a Moore closure operator. For surjectivity, note that $B^\geq = B^{\geq\leq\geq} = (B^{\geq})^{\leq\geq}$.
+\end{proof}
+We can also prove that $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$ is adjoint to the inclusion by noting that every set in $\DM(P)$ is of the form $B^\geq$ and $\incl_{\DM(P)}(B^\geq) = B^\geq$, so
+\[ A\subseteq \incl_{\DM(P)}(B^\geq) \iff A\subseteq B^\geq \iff B\subseteq A^\leq \iff B \subseteq A^{\leq\geq\leq} \iff A^{\leq\geq} \subseteq B^\geq \iff A^{\leq\geq} \subseteq \incl_{\DM(P)}(B^\geq). \]
+
+\begin{proposition}
+Let $\sSet{P, \leq}$ be a poset. Then $m: P \to \DM(P)$ preserves arbitrary meets and joins.
+\end{proposition}
+\begin{proof}
+Let $A\subseteq P$ be a subset such that the meet $\bigwedge A$ exists. Then, by \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{boundsFromPrincipalImages} and \ref{DedekindMacNeilleCompletionComplete},
+\[ m\Big(\bigwedge A\Big) = \downset\Big\{\bigwedge A\Big\} = A^\geq = \bigcap_{a\in A}\downset\{a\} = \bigcap_{a\in A}m(a) = \bigcap m^\imf(A) = \bigwedge_{\DM(P)}m^\imf(A). \]
+
+Now let $B\subseteq P$ be a subset such that the meet $\bigvee B$ exists. Then we calculate, using \ref{supInfConnection}, \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{imagesFromPrincipalImages}, \ref{meetJoinCompleteSubsemilattice} and \ref{DedekindMacNeilleCompletionComplete},
+\begin{align*}
+m\Big(\bigvee A\Big) &= \downset\Big\{\bigvee A\Big\} \\
+&= \downset \sup(A) \\
+&= \downset \inf(A^\leq) \\
+&= A^{\leq\geq} \\
+&= (\downset A)^{\leq\geq} \\
+&= \Big(\bigcup_{x\in A} \downset\{x\}\Big)^{\leq\geq} \\
+&= \Big(\bigcup m^\imf(A)\Big)^{\leq\geq} \\
+&= \bigvee_{\DM(P)} m^{\imf}(A).
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $L$ be a complete lattice. Then $m: L\to \DM(L)$ is an order similarity.
+\end{lemma}
+
+\begin{proposition}
+$\im(P)$ is join-dense and meet-dense in $\DM(P)$.
+\end{proposition}
+
+\begin{proposition}[Universal property of the Dedekind-MacNeille completion]
+See Schröder, p.212.
+\end{proposition}
 
 \subsection{Generalised inverse of inf}
 \begin{proposition}

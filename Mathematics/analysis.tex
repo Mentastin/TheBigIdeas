@@ -1721,13 +1721,62 @@ TODO!
 
 TODO Fubini for complex- (and vector-)valued functions.
 
-\subsection{Integration of vector-valued functions}
+\subsection{Bochner integration}
 TODO: define integration by
 \[ \inner{u, \int T(t)\diff{t} v} \defeq \int\inner{u,T(t)v}\diff{t} \]
 ??
 This case Riemann?? Or only finite dim??
 
-TODO: move
+
+
+TODO: the Bochner integral is the unique extension of the integral of simple functions to the set of Bochner measurable functions???? (i.e.\ simple functions dense in Bochner space, with $L^1$ metric)
+\begin{definition}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space. Then a Bochner measurable function $f:\Omega\to Y$ is called \udef{Bochner integrable} if there exists a sequence of integrable simple functions $\seq{s_n}\subset\SF(\Omega,Y)$ such that
+\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0. \]
+Take such a sequence $\seq{s_n}$. The \udef{Bochner integral} of $f$ on $\Omega$ w.r.t. $\mu$ is defined as
+\[ \int_\Omega f\diff{\mu} \defeq \lim_{n\to\infty}\int_\Omega s_n\diff{\mu}. \]
+\end{definition}
+
+\begin{lemma}
+The Bochner integral is well-defined: let $\seq{s_n},\seq{t_n}\in \prescript{\N}{}{\SF(\Omega,Y)}$ be sequences such that
+\[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0 = \lim_{n\to\infty}\int_\Omega \norm{f-t_n}\diff{\mu}.  \]
+Then
+\begin{enumerate}
+\item the limits $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu}$ and $\lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$ exist;
+\item $\lim_{n\to\infty}\int_\Omega s_n\diff{\mu} = \lim_{n\to\infty}\int_\Omega t_n\diff{\mu}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}[Bochner integrability criterion] \label{BochnerIntegrabilityCondition}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space.
+
+A Bochner measurable function $f$ is Bochner integrable \textup{if and only if}
+\[ \int_\Omega \norm{f} \diff{\mu} < \infty. \]
+\end{proposition}
+
+\begin{proposition}
+Linearity and monotonicity.
+\end{proposition}
+
+\begin{theorem}[Hille's theorem] \label{HilleTheorem}
+Let $(\Omega, \mathcal{A},\mu)$ be a measure space, $X,Y$ normed vector spaces and $T: X\not\to Y$ a closed operator. If $T\circ f$ is integrable, then
+\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary} \label{boundedOperatorUnderIntegral}
+If $T$ is bounded, then $T\circ f$ is integrable and
+\[ \int_\Omega (T\circ f)\diff{\mu} = T\left(\int_\Omega f\diff{\mu}\right). \]
+\end{corollary}
+\begin{proof}
+TODO: show that $T\circ f$ is integrable!
+\end{proof}
+
+TODO Dominated convergence.
 
 \subsubsection{Weak and strong measurability}
 TODO is Bochner measurable measurable with $Y$ given Borel $\sigma$-algebra?
@@ -1738,9 +1787,15 @@ A function $f:X\to B$ is called Bochner-measurable if it is equal $\mu$-almost e
 Let $(\Omega, \mathcal{A},\mu)$ be a measure space and $Y$ a normed vector space. Then $f$ is strongly measurable \textup{if and only if} $f$ is weakly measurable and almost surely separably valued.
 \end{theorem}
 
+\subsubsection{Integration of bounded operators}
+\begin{lemma} \label{integralBoundedOperator}
+Let $X$ be a normed space and $(\Omega, \mathcal{A},\mu)$ a measure space. Let $T: \Omega \to \Bounded(X)$ be a function. If $T$ is integrable, then for all $x\in X$, $Tx$ is integrable and
+\[ \left(\int_\Omega T\diff{\mu}\right)x = \int_\Omega Tx\diff{\mu}. \]
+\end{lemma}
+\begin{proof}
+The evaluation map $\evalMap_x$ is linear and bounded by $\norm{x}$ for all $x\in X$, so we can use \ref{boundedOperatorUnderIntegral}.
+\end{proof}
 
-
-\subsubsection{Pettis integration}
 
 
 \section{Further topics}
@@ -2445,6 +2500,8 @@ So the domain of convergence of a Laurent series is an annulus around $z_0$.
 \section{Puiseux series}
 \url{https://en.wikipedia.org/wiki/Puiseux_series}
 
+\chapter{Complex analysis}
+\input{complexAnalysis}
 
 \chapter{Function spaces}
 \section{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
@@ -3063,9 +3120,25 @@ TODO
 \subsubsection{The Riesz-Thorin Interpolation Theorem}
 The scalars are complex.
 
-\begin{theorem}
-
+\begin{theorem}[Riesz-Thorin interpolation theorem]
+Let $\sSet{X,\mu}$ and $\sSet{Y,\nu}$ be $\sigma$-finite measure spaces. Let $p_0,p_1,q_0,q_1\in \interval{1,\infty}$ and let $T: L^{p_0}(X) + L^{p_1}(X) \to L^{q_0}(Y) + L^{q_1}(Y)$ be a linear operator such that there exist $A_0,A_1 \geq 0$ with 
+\begin{align*}
+\forall f\in L^{p_0}(X): \quad &\norm{Tf}_{q_0} \leq A_0 \norm{f}_{p_0} \\
+\forall f\in L^{p_1}(X): \quad &\norm{Tf}_{q_1} \leq A_1 \norm{f}_{p_1}.
+\end{align*}
+For all $0<\theta <1$, set
+\[ p \defeq \frac{p_0p_1}{\theta p_0 + (1-\theta)p_1} \qquad\text{and}\qquad q \defeq \frac{q_0q_1}{\theta q_0 + (1-\theta)q_1}. \]
+Then, for all $f\in L^p(X)$, we have
+\[ \norm{Tf}_{q} \leq A_\theta \norm{f}_p, \]
+with $A_\theta \leq A_0^{1-\theta}A_1^\theta$.
 \end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}[Young's convolution inequality]
+
+\end{proposition}
 
 \subsection{Locally integrable spaces}
 \begin{definition}
@@ -3337,7 +3410,8 @@ Let $X$ be an open subset of a normed vector space, $1\leq p < \infty$ and $k\in
 \end{definition}
 
 
-
+\chapter{Harmonic analysis}
+\input{harmonicAnalysis}
 
 
 
@@ -3677,743 +3751,6 @@ Let $f\in L^p(\interval{0,1})$ and $1\leq p <\infty$. Then $K_n(f) \to f$ in $L^
 TODO, see Korovkin-type Theorems and Approximation by Positive Linear Operators - Altomare.
 \end{proof}
 
-\chapter{Complex analysis}
-\begin{definition}
-A \udef{complex function} is a function in $(U\subseteq \C \to \C)$.
-
-A \udef{region} of $\C$ is an open, connected subset of $\C$.
-\end{definition}
-\section{The complex numbers as a real algebra}
-The set of complex numbers $\C$ is isomorphic to the algebra $\R^2$ where multiplication is defined by
-\[ (a, b)\cdot (x, y) \defeq (ax-by, ay+bx). \]
-Thus the regular representation $\rho_{(a,b)}$ has matrix
-\[ \begin{pmatrix}
-a & -b \\ b & a
-\end{pmatrix}. \]
-
-\section{Holomorphic functions}
-\begin{definition}
-Let $f:U\subseteq \C \to \C$ be a complex function. We say
-\begin{enumerate}
-\item $f$ is \udef{holomorphic  at $z\in U$} if the limit $\lim_{h\to 0} \dfrac{f(z+h) - f(z)}{h}$
-exists;
-\item $f$ is \udef{holomorphic in $S\subset U$} if it is holomorphic at every point in $S$;
-\item $f$ is \udef{holomorphic} if it is holomorphic at every point in $U$;
-\item $f$ is \udef{entire} if $U=\C$ and it is holomorphic at every point in $\C$.
-\end{enumerate}
-\end{definition}
-
-\begin{lemma}
-Holomorphic functions are continuous.
-\end{lemma}
-\begin{lemma}
-Let $f,g$ be holomorphic. Then
-\begin{enumerate}
-\item $f+g$ is holomorphic and $(f+g)' = f'+g'$;
-\item $fg$ is holomorphic and $(fg)' = f'g+fg'$;
-\item if $g(z_0)\neq 0$, then $f/g$ is holomorphic at $z_0$ and
-\[ (f/g)' = \frac{f'g - fg'}{g^2}; \]
-\item the chain rule holds.
-\end{enumerate}
-\end{lemma}
-
-\subsection{Cauchy-Riemann equations}
-The space of complex numbers $\C$ is a real $2$-dimensional vector space.
-
-\begin{lemma}
-Let $f: U\subseteq \C \to C$ be a complex function. Then $f$ is holomorphic \textup{if and only if} it is Fréchet differentiable as a function $F: V\subseteq \R^2 \to \R^2$ and $\diff F$ is the regular representation of some $z\in \C$.
-\end{lemma}
-\begin{corollary}[Cauchy-Riemann equations]
-Let $f: U\subseteq \C \to C$ be a complex function. Then $f$ is complex differentiable at $z_0 = a+bi$ \textup{if and only if} the real derivatives
-\[ \pd{\Re(f(a + ib))}{a},\; \pd{\Re(f(a + ib))}{b},\;
-\pd{\Im(f(a + ib))}{a} \;\;\text{and}\;\; \pd{\Im(f(a + ib))}{b}. \]
-exist, are continuous and the equations
-\[
-\pd{\Re(f(a + ib))}{a} = \pd{\Im(f(a + ib))}{b} \quad\text{and}\quad \pd{\Re(f(a + ib))}{b} = -\pd{\Im(f(a + ib))}{a} \]
-hold. In particular
-\[ |f'(z_0)|^2 = \det J_f(a,b) \]
-where $\det J_f(a,b)$ is the Jacobian determinant of $f$ as a function $V\subseteq \R^2 \to \R^2$.
-\end{corollary}
-\begin{proof}
-We need the Jacobian
-\[ \begin{pmatrix}
-\pd{\Re(f(a + ib))}{a} & \pd{\Re(f(a + ib))}{b} \\
-\pd{\Im(f(a + ib))}{a} & \pd{\Im(f(a + ib))}{b}
-\end{pmatrix} \]
-to be of the form $\begin{pmatrix}
-x & -y \\ y & x
-\end{pmatrix}$ in order for it to be a regular representation of some $f' =\pd{\Re(f(a + ib))}{a} + i\pd{\Im(f(a + ib))}{a} \in \C$. TODO ref requirement continuously differentiable.
-
-The Jacobian determinant is a simple calculation:
-\begin{align*}
-\det J_f(a,b) &= \pd{\Re(f(a + ib))}{a}\pd{\Im(f(a + ib))}{b} - \pd{\Im(f(a + ib))}{a}\pd{\Re(f(a + ib))}{b} \\
-&= \pd{\Re(f(a + ib))}{a}^2 + \pd{\Im(f(a + ib))}{a}^2 = |f'|^2.
-\end{align*}
-\end{proof}
-
-\subsection{Cauchy's theorem, Morera's theorem and the integral formula}
-
-\begin{theorem}[Cauchy's theorem] \label{CauchyTheorem}
-Let $f: U\subseteq \C \to \C$ be a holomorphic complex function and $\gamma$ a simple closed Jordan curve whose interior lies in $U$. Then
-\[ \oint_\gamma f(z)\diff{z} = 0. \]
-\end{theorem}
-TODO: looser requirements for $\gamma$
-\begin{proof}
-TODO: generalised Stokes + Cauchy-Riemann!
-\end{proof}
-\begin{corollary}
-Let $f: U\subseteq \C \to \C$ be a holomorphic complex function. Then there exists a primitive $F: U\to \C$ such that $\od{F}{z} = f$.
-\end{corollary}
-\begin{proof}
-The integral $\int_\gamma f(z)\diff{z}$ depends only on the endpoints of $\gamma$.
-\end{proof}
-
-\begin{theorem}[Morera's theorem]
-Let $f: U\subseteq \C \to \C$ be a complex function on an open set $U$ such that
-\[ \oint_\gamma f(z) \diff{z} = 0 \]
-for every closed, piecewise $C^1$ curve $\gamma$ in $U$, then $f$ is holomorphic.
-\end{theorem}
-\begin{proof}
-$\int f(z)\diff{z}$ is a primitive, so $f$ is complex differentiable.
-\end{proof}
-TODO: triangles enough!
-
-\begin{theorem}[Cauchy's integral formula]
-Let $f: U\subseteq \C \to \C$ be a holomorphic complex function and $\gamma$ a simple closed Jordan curve whose interior lies in $U$. Then
-\[ f(z) = \frac{1}{2\pi i}\oint_\gamma \frac{f(\zeta)}{\zeta - z}\diff{\zeta} \]
-for any point $z$ in the interior of $\gamma$.
-\end{theorem}
-\begin{proof}
-Let $C_{z,\epsilon}$ be a small circle inside $\gamma$ around $z$ of radius $\epsilon$ and opposite orientation (TODO explicate!). Then $\frac{f(\zeta)}{\zeta - z}$ is holomorphic in the region between $\gamma$ and $C_{z,\epsilon}$, so
-\begin{align}
-\oint_\gamma \frac{f(\zeta)}{\zeta - z}\diff{\zeta} &= -\oint_{C_{z,\epsilon}} \frac{f(\zeta)}{\zeta - z}\diff{\zeta} \\
-&= -\oint_{C_{z,\epsilon}} \frac{f(\zeta)-f(z)}{\zeta - z} + \frac{f(z)}{\zeta - z}\diff{\zeta} \\
-&= -\oint_{C_{z,\epsilon}} \frac{f(\zeta)-f(z)}{\zeta - z}\diff{\zeta} -\oint_{C_{z,\epsilon}}\frac{f(z)}{\zeta - z}\diff{\zeta}.
-\end{align}
-In the limit $\epsilon \to 0$, the first part is bounded by
-\[ |\oint_{C_{z,\epsilon}} \frac{f(\zeta)-f(z)}{\zeta - z}\diff{\zeta}| \leq \sup_\zeta\left|\frac{f(\zeta)-f(z)}{\zeta - z}\right| \cdot |2\pi\epsilon| \to 0 \]
-because $\frac{f(\zeta)-f(z)}{\zeta - z}$ remains bounded. For the second part, we have
-\begin{align*}
--\oint_{C_{z,\epsilon}} \frac{f(z)}{\zeta - z}\diff{\zeta} &= f(z)\oint_{C_{z,\epsilon}} \frac{\diff{\zeta}}{\zeta - z} \\
-&= f(z)\int_0^{2\pi}\frac{\epsilon ie^{-it}}{\epsilon e^{-it}}\diff{t} \\
-&= f(z)2\pi i.
-\end{align*}
-\end{proof}
-\begin{corollary}
-Let $f: U\subseteq \C \to \C$ be a holomorphic complex function. Then $f$ has infinitely many complex derivatives and
-\[ f^{(n)}(z) = \frac{n!}{2\pi i}\oint_\gamma \frac{f(\zeta)}{(\zeta-z)^{n+1}}\diff{\zeta} \]
-for all $z$ in the interior of $\gamma$.
-\end{corollary}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{proposition}
-Let $f$ be holomorphic in an open set $\Omega$ and $D$ a
-disc centered at $z_0$ whose closure is contained in $\Omega$. Then $f$ has a power series expansion at $z_0$
-\[ f(z) = \sum_{n=0}^\infty a_n(z-z_0)^n \]
-for all $z\in D$. The coefficients are given by
-\[ a_n = \frac{f^{(n)}(z_0)}{n!} \qquad \text{for all $n\geq 0$}. \]
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-Let $f: \Omega\subseteq \C \to \C$ be a function and $\Omega$ an open set. Then $f$ is holomorphic \textup{if and only if} $f$ is analytic.
-\end{corollary}
-\begin{corollary}
-If $f$ is holomorphic in an open
-set that contains the closure of a disc $D$ centered at $z_0$ and of radius $R$,
-then
-\[  |f^{(n)}(z_0)| \leq \frac{n!\norm{f}_C}{R^n}, \]
-where $\norm{f}_C = \sup_{z\in C}|f(z)|$.
-\end{corollary}
-\begin{proof}
-TODO
-\end{proof}
-Thus the distance from $z_0$ to the nearest singular point is the radius of convergence of the power series.
-\begin{corollary}[Liouville's theorem] \label{liouvilleTheoremAnalysis}
-If $f$ is entire and bounded, then $f$ is contant.
-\end{corollary}
-\begin{proof}
-It suffices to show that $f'(z_0) = 0$. This can be seen by taking $R\to\infty$ in the previous inequality.
-\end{proof}
-\begin{corollary}[Fundamental theorem of algebra]
-Let $P(z) = a_nz^n + \ldots + a_0$ be a polynomial of degree $n\geq 1$ with complex coefficients. Then $P(z)$ has precisely $n$ roots. If these roots are denoted $w_1, \ldots, w_n$, then we can write
-\[ P(z = a_n(z-w_1)(z-w_2)\ldots(z-w_n). \]
-\end{corollary}
-
-\begin{proposition}
-Let $f: \Omega\subseteq \C\to \C$ be a complex function that is holomorphic in a region $U\subseteq \Omega$ that contains a closed annulus $\setbuilder{z\in \C}{r\leq|z-z_0|\leq R}$ for some $z_0\in \C$ and $r,R\in \R$. Then $f$ has a Laurent series expansion that converges in the interior of the annulus:
-\[ f(z) = \sum_{i=-\infty}^\infty a_i(z-z_0)^i \]
-for all $z\in \setbuilder{z\in \C}{r < |z-z_0| < R}$.
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-TODO uniqueness ??? \url{https://en.wikipedia.org/wiki/Laurent_series#Uniqueness}
-
-\subsection{Analytic continuation}
-\begin{proposition}
-Let $f:U\subseteq \C\to \C$ be a holomorphic function defined on a region. Suppose there exists a sequence of distinct points with limit point in $U$ on which $f$ vanishes. Then $f = \underline{0}$.
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary} \label{zerosHolomorphicFunctionIsolated}
-Let $f:U\subseteq \C\to \C$ be a holomorphic function defined on a region. Then the zeros of $f$ are isolated.
-\end{corollary}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-Let $f,g:U\subseteq \C\to \C$ be holomorphic functions defined on a common region. Suppose there exists a sequence of distinct points $\seq{z_n}$ with limit point in $U$ such that $f(z_n) = g(z_n)$ for all $n$. Then $f = g$.
-\end{corollary}
-In particular this holds if $f$ and $g$ agree on some non-empty open subset of $U$.
-\begin{corollary}
-Let $U\subseteq U' \subseteq \C$ be regions and $f:U\subseteq\to \C$ a holomorphic function. Then there exists at most one holomorphic function $f'$ on $U'$ such that $f'|_U = f$.
-\end{corollary}
-
-\begin{definition}
-In this case the function $f'$ is called an \udef{analytic continuation} of $f$ into $\Omega'$.
-\end{definition}
-
-\begin{proposition}[Symmetry principle] \label{symmetryPrinciple}
-Let $\Omega$ be an open subset of $\C$ such that $\overline{\Omega} = \Omega$. Denote by $\Omega^+$ the part of $\Omega$ that lies in the upper half plane and by $\Omega^-$ the part lying in the lower half plane. Set $I = \R \cap \Omega$.
-
-Let $f^+: \Omega^+ \to \C$ and $f^-: \Omega^- \to \C$ be holomorphic functions that extend continuously to $I$ and
-\[ \forall x\in I: \; f^+(x) = f^-(x). \]
-Then the compound function
-\[ f: \Omega \to \C: z\mapsto f(z) = \begin{cases}
-f^+(z) & z\in \Omega^+ \\
-f^+(z) = f^-(z) & z\in I \\
-f^-(z) & z\in \Omega^-
-\end{cases} \]
-is holomorphic on all of $\Omega$.
-\end{proposition}
-
-\begin{proposition}[Schwarz reflection principle]
-Let $\Omega, \Omega^+, \Omega^-$ and $I$ be as in \ref{symmetryPrinciple} and $f: \Omega^+ \to \C$ a holomorphic function that extends continuously to $I$. Then there exists a holomorphic function $g: \Omega\to \C$ such that $g|_{\Omega^+} = f$.
-\end{proposition}
-\begin{proof}
-Idea: define $g|_{\Omega^-}(z) = \overline{f(\overline{z})}$. TODO details.
-\end{proof}
-
-\subsubsection{Analytic continuation along a curve}
-\begin{theorem}[Monodromy theorem]
-Let $f:D\subseteq \C \to \C$ be a holomorphic function and $\Omega$ the set of all points that admit an analytic continuation.
-
-If two curves are homotopic in $\Omega$, then they give the same analytic continuation.
-\end{theorem}
-
-\subsection{Limits and holomorphic functions}
-\begin{proposition}
-Let $\seq{f_n}$ be a sequence of holomorphic functions on $\Omega$ that converges uniformly to a function $f$ in every compact subset of $\Omega$. Then
-\begin{enumerate}
-\item $f$ is holomorphic in $\Omega$;
-\item $\seq{f_n'}$ converges uniformly to $f'$ on every compact subset of $\Omega$;
-\item for all $k\in \N$, the sequence $\seq{f_n^{(k)}}$ converges uniformly to $f^{(k)}$ on every compact subset of $\Omega$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) TODO (+ \url{https://www.math.wustl.edu/~sk/limits.pdf})
-
-(2) TODO
-
-(3) By induction on $k$.
-\end{proof}
-TODO: this is part of the motivation for the compact-open topology (use this terminology?).
-
-\begin{proposition}
-Let $\Omega$ be a open set in $\C$ and $F: \Omega\times[0,1]\to \C$ a function such that
-\begin{itemize}
-\item $F(\cdot,s)$ is holomorphic (in the first variable) for all $s\in [0,1]$;
-\item $F$ is continuous.
-\end{itemize}
-Then the function
-\[ f: \Omega \to \C: z\mapsto f(z) = \int_0^1F(z,s)\diff{s} \]
-is holomorphic.
-\end{proposition}
-
-\begin{proposition}[Runge's approximation theorem]
-Let $K\subseteq \C$ be compact.
-\begin{enumerate}
-\item Any function holomorphic in a neighbourhood of $K$ can be approximated uniformly on $K$ by rational functions whose singularities are in $K^c$.
-\item If $K^c$ is connected, then the approximating functions can be taken to be polynomials.
-\item If $K^c$ is not connected, then there exists a function $f$ holomorphic on a neighbourhood of $K$ that cannot be approximated uniformly by polynomials on $K$.
-\end{enumerate}
-\end{proposition}
-If inner and outer part of annulus then Laurent series (i.e.\ particular form of approximating rationals)
-
-\section{Singularities}
-\subsection{Laurent series}
-\begin{proposition}
-Let $f:\Omega \to \C$ be a holomorphic function and let $\Omega$ contain two concentric circles with center $z_0$ and radii $0<r< R$. Then $f$ has a Laurent expansion
-\[ f(z) = \sum_{n=-\infty}^{\infty}a_n(z-z_0)^n \]
-that converges on the annulus between the concentric circles.
-\end{proposition}
-\begin{proof}
-Call the outer circle $C_1$ and the inner $C_2$. Then we can use the integral formula to write
-\[ f(z) = \frac{1}{2\pi i}\oint_{C_1}\frac{f(\zeta)}{\zeta - z}\diff{\zeta} - \frac{1}{2\pi i}\oint_{C_2}\frac{f(\zeta)}{\zeta - z}\diff{\zeta} \]
-TODO
-\end{proof}
-
-\subsection{Isolated singularities}
-
-\subsection{Non-isolated singularities}
-
-\section{Meromorphic functions}
-\subsection{Zeros and poles}
-\begin{lemma} \label{holomorphicZeroLemma}
-Let $f:\Omega\to \C$ be a holomorphic function on an open set $\Omega$ that has a zero at $z_0\in \Omega$ and does not vanish identically on $\Omega$. Then there exists an open neighbourhood $U\subseteq \Omega$ of $z_0$ such that
-\[ f|_U(z) = (z-z_0)^ng(z) \]
-for all $z\in U$, some holomorphic $g:U\to \C\setminus\{0\}$ and $n\in \N$.
-
-Additionally, the $n$ is uniquely determined by $f$ and $z_0$; it is independent of $U$.
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{definition}
-Let $f:\Omega\to \C$ be a function on an open set $\Omega$.
-\begin{itemize}
-\item If $f$ is holomorphic with a zero at $z_0$, the $n$ in \ref{holomorphicZeroLemma} is called the \udef{multiplicity} or \udef{order} of the zero $z_0$.
-\item If $\lim_{z\to z_0} 1/f(z) = 0$ and is $1/f$ holomorphic in a neighbourhood of $z_0$, then $z_0$ is called a \udef{pole} of $f$. The $n$ in the expansion \ref{holomorphicZeroLemma} of $1/f$ is called the \udef{multiplicity} or \udef{order} of the pole $z_0$.
-\end{itemize}
-If $n = 1$, we call the zero or pole \udef{simple}. 
-\end{definition}
-
-Poles lie in $\overline{\Omega}\setminus\Omega$. TODO sort out definition meromorphic function.
-
-\begin{lemma}
-Let $f:\Omega\to \C$ be a function on an open set $\Omega$ that has a pole at $z_0\in \overline{\Omega}$. Then there exists a neighbourhood $U$ of $z_0$ such that $f$ is holomorphic on $U\setminus\{z_0\}$.
-\end{lemma}
-This means a pole in necessarily an isolated singularity (TODO ref later)
-
-\begin{definition}
-Let $f: \Omega\subseteq \C \to \C$ be a function. We call $f$ \udef{meromorphic} if either $f$ or $1/f$ is holomorphic at each point $z\in \Omega$.
-\end{definition}
-
-\begin{lemma}
-Let $f: \Omega\subseteq \C \to \C$ be a function. Then $f$ is meromorphic \textup{if and only if} for each point $z\in \Omega$, either $f$ is holomorphic or $z$ is a pole.
-\end{lemma}
-
-\subsection{Laurent series and residues}
-\begin{proposition}
-Let $f:\Omega\to \C$ be a function on an open set $\Omega$ that has a pole of order $n$ at $z_0$, then the Laurent series of $f$ at $z_0$ is of the form
-\[  f(z) = \sum_{i=-n}^\infty a_i(z-z_0)^i \]
-and converges on a punctured disk $B(z_0, \epsilon)\setminus\{z_0\}$.
-\end{proposition}
-\begin{proof}
-By \ref{holomorphicZeroLemma} we have that 
-\[ (1/f)|_{B(z_0,\epsilon)}(z) = (z-z_0)^ng(z) \]
-for some holomorphic, non-vanishing $g$. Thus $f|_{B(z_0,\epsilon)}(z) = (z-z_0)^{-n}1/g(z)$. Now $1/g$ is holomorphic, so we can expand it as a power series. This makes the product a Laurent series starting at $-n$.
-
-To conclude, we remark that the inner radius of the annulus on which the Laurent series converges is zero: by \ref{LaurentSeriesConvergence}
-\[ r = \limsup_{i\to\infty}\left(|a_{-i}|^{1/i}\right) = 0. \]
-\end{proof}
-TODO: pole iff Laurent series has finite principal part!
-
-\subsubsection{Partial fraction decomposition}
-\begin{proposition}[Partial fraction decomposition] \label{partialFractionDecomposition}
-Let $f: \Omega\subseteq \C \to \C$ be a meromorphic function with finitely many poles $z_0, \ldots z_n$. Let $P_{z_k}(z)$ be the principal part of the Laurent expansion around $z_k$. Then we have the decomposition
-\[ f(z) = \sum_{k=0}^nP_k(z) + F(z) \]
-where $F(z)$ is a holomorphic function.
-\end{proposition}
-\begin{proof}
-The function $F(z) = f(z) - \sum_{k=0}^nP_k(z)$ has no poles and thus is holomorphic. Indeed, for all $z\in\Omega \setminus \{z_0, \ldots z_n\}$, both $f(z)$ and $\sum_{k=0}^nP_k(z)$ are holomorphic, meaning that $F(z)$ is too.
-
-Take some pole $z_k$. Then the Laurent series of $F(z)$ around $z_k$ is of the form
-\[ F(z) = P_k(z) + \sum_{i=0}^\infty a_{k,i}(z-z_k)^i - \sum_{j=0}^n P_j(z) = \sum_{i=0}^\infty a_{k,i}(z-z_k)^i - \sum_{\substack{j=0\\ j\neq k}}^n P_j(z), \]
-which has no singularity at $z_k$.
-\end{proof}
-
-TODO link with integrals of fractional functions.
-
-\subsubsection{Residues}
-\begin{definition}
-Let $f: \Omega\subseteq \C \to \C$ have a pole at $z_0$. Given the Laurent series expansion
-\[  f(z) = \sum_{i=-n}^\infty a_i(z-z_0)^i, \]
-the coefficient $a_{-1}$ is called the \udef{residue} at the pole $z_0$. We write $\Res_{z_0}f \defeq a_{-1}$.
-\end{definition}
-
-\begin{proposition}
-Let $f$ have a pole of order $n$ at $z_0$, then
-\[ \Res_{z_0}f = \lim_{z\to z_0}\frac{1}{(n-1)!}\left(\od{}{z}\right)^{n-1}(z-z_0)^nf(z). \]
-\end{proposition}
-\begin{proof}
-This follows straight from the series expansion
-\[ (z-z_0)^nf(z) = a_{-n} + a_{-n+1}(z-z_0) + \ldots + a_{-1}(z-z_0)^{n-1} + a_0(z-z_0)^n + \ldots \]
-\end{proof}
-\begin{corollary}
-If $f$ has a simple pole at $z_0$, then $\Res_{z_0} f = \lim_{z\to z_0}(z-z_0)f(z)$.
-\end{corollary}
-
-\begin{proposition}
-Let $f: \Omega\subseteq \C\to \C$ be a meromorphic function that has one pole at $z_0$. Let $\gamma$ be a simple curve such that $z_0\in \int\gamma \subseteq \Omega$. Then
-\[ \oint_\gamma f(z) \diff{z} = 2\pi i \Res_{z_0}f. \]
-\end{proposition}
-\begin{proof}
-By truncated Laurent expansion. TODO
-\end{proof}
-\begin{corollary}[Residue formula]
-Let $f: \Omega\subseteq \C\to \C$ be a meromorphic function and $\gamma$ a simple curve that encompasses $N$ poles $z_1, \ldots, z_N$. Then
-\[ \oint_{\gamma} f(z)\diff{z} = 2\pi i \sum_{k=1}^N\Res_{z_k}f. \]
-\end{corollary}
-
-\subsection{The argument principle}
-\begin{proposition}[Argument principle]
-Let $f$ be a meromorphic function in an open set containing a simple curve $\gamma$ and its interior. Assume $f$ has no poles or zeros on $\gamma$. Then
-\[ \frac{1}{2\pi i}\oint_\gamma \frac{f'(z)}{f(z)}\diff{z} = \text{number of zeros of $f$ inside $\gamma$} \;-\; \text{number of poles of $f$ inside $\gamma$} \]
-where the poles and zeros are counted with their multiplicities.
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{theorem}[Rouché's theorem] \label{RoucheTheorem}
-Let $f$ and $g$ be holomorphic functions on an open set that contains a closed simple curve $\gamma$ and its interior. If
-\[ |f(z)| > |g(z)| \qquad \forall z\in \gamma, \]
-then $f$ and $f+g$ have the same number of zeros inside $\gamma$.
-\end{theorem}
-\begin{proof}
-For $t\in [0, 1]$ we define
-\[ f_t(z) = f(z) + tg(z). \]
-This means $f_0 = f$ and $f_1 = f+g$. The condition $|f(z)| > |g(z)|$ ensures that $f_t$ has no zeros on $\gamma$. Also $f_t$ is holomorphic and thus has no poles. So the number of zeros $n_t$ of $f_t$ inside $\gamma$ is given by
-\[ n_t = \frac{1}{2\pi i}\oint_\gamma \frac{f_t'(z)}{f_t(z)}\diff{z}. \]
-It is then enough to observe that $n_t$ is continuous as a real function of $t$.
-\end{proof}
-
-\begin{theorem}[Open mapping theorem] \label{openMappingTheorem}
-Let $f: U\subseteq \C\to \C$ a holomorphic function defined on a region. Then either $f$ is constant or an open map.
-\end{theorem}
-\begin{proof}
-Suppose $f$ is not constant. We then need to prove that $f$ is open. Take some open subset $W\subseteq U$ and $w\in W$. We show that there exists an open neighbourhood of $f(w)$ that is a subset of $f^\imf(W)$.
-
-Consider the function $f - \constant{f(w)}$, which is holomorphic.
-By \ref{zerosHolomorphicFunctionIsolated}, we can find an open ball $\ball(w, \delta)$ such that $w$ is the only root of $f - \constant{f(w)}$ in $\cball(w, \delta)$. We can take $\delta$ small enough that $\cball(w, \delta) \subseteq W$.
-
-Now $\sphere(w,\delta)$ is closed and bounded, and thus compact by Heine-Borel (TODO ref), so $|f - \constant{f(w)}|$ attains a minimum $\epsilon \geq 0$ on $\sphere(w,\delta)$ by the extreme value theorem \ref{extremeValueTheorem}. This minimum is not zero by construction, so $\epsilon > 0$.
-
-Finally we claim $\ball\big(f(w), \epsilon\big) \subseteq f^\imf(W)$. Take $w'\in \ball\big(f(w), \epsilon\big)$ and consider the function
-\[ f - \constant{w'} = \big(f - \constant{f(w)}\big) + \big(\constant{f(w)} - \constant{w'}\big) \]
-defined on $\cball(w, \delta)$.
-
-Since $\big|f(z) - w\big| \geq \epsilon > \big|f(w) - w'\big|$, we can apply Rouché's theorem \ref{RoucheTheorem}: $f - \constant{w'}$ has one zero inside $\cball(w,\delta)$ since $f - \constant{f(w)}$ does, and thus $w'\in f^\imf(W)$.
-\end{proof}
-
-
-\subsubsection{Maximum modulus results}
-\begin{proposition}[Maximum modulus principle] \label{maximumModulusPrinciple}
-Let $f: U\subseteq \C\to \C$ a holomorphic function defined on a region. If $|f|$ attains a maximum on $U$ \textup{if and only if} $f$ is constant.
-\end{proposition}
-\begin{proof}
-If $f$ is a constant, then $|f|$ clearly attains a maximum.
-
-Now suppose $|f|$ attains a maximum at $z_0$. By the open mapping theorem, \ref{openMappingTheorem}, either $f$ is constant or open. Assume, towards a contradiction, that $f$ is open. Then $\im(f)$ contains a ball around $f(z_0)$ and so $|f(z_0)|$ is not a maximum of $|f|$.
-\end{proof}
-\begin{corollary}
-Let $U$ be a region with compact closure $\overline{U}$. If $f$ is holomorphic on $U$ and continuous on $\overline{U}$, then
-\[ \sup_{z\in U}|f(z)| \leq \max_{z\in \overline{U}\setminus U}|f(z)|. \]
-\end{corollary}
-\begin{proof}
-Since $\overline{U}$ is compact, $|f|$ attains a maximum on $\overline{U}$ by the extreme value theorem \ref{extremeValueTheorem}. This maximum cannot lie in $U$ by the maximum modulus principle, so it lies on $\overline{U}\setminus U$.
-\end{proof}
-
-\begin{proposition}[Phragmén-Lindelöf principle]
-Let $S'_\epsilon\subseteq S\subseteq \C$ be regions for all $\epsilon > 0$ with each $S'_\epsilon$ bounded, $M\geq 0$ and $f$ a function that is holomorphic on $S$ and continuous on $\overline{S'}$. Let $\{h_\epsilon\}_{\epsilon > 0}$ be set of functions such that
-\begin{itemize}
-\item $h_\epsilon \to \constant{1}_{\overline{S}}$ pointwise as $\epsilon \to 0$;
-\item $\sup_{z\in \partial S'_\epsilon}\big|fh_\epsilon(z)\big| \leq M$ for all $\epsilon > 0$;
-\item $\sup_{z\in S\setminus \overline{S'_\epsilon}}\big|fh_\epsilon(z)\big| \leq M$  for all $\epsilon > 0$.
-\end{itemize}
-Then $\sup_{z\in S}\big|f(z)\big| \leq M$.
-\end{proposition}
-The last two points are implied by $\sup_{z\in \overline{S}\setminus S'_\epsilon}\big|fh_\epsilon(z)\big| \leq M$ for all $\epsilon > 0$.
-\begin{proof}
-Take $\epsilon >0$. Then $fh_\epsilon$ is bounded by $M$ on $\overline{S'_\epsilon}$ by the maximum modulus principle \ref{maximumModulusPrinciple}. It is bounded by $M$ on $S\setminus \overline{S'_\epsilon}$ by assumption.
-
-Since, for all $z\in S$, $|h_\epsilon f(z)| \leq M$ and $|h_\epsilon f(z)| \to |f(z)|$ as $\epsilon \to 0$, we have $|f(z)|\leq M$.
-\end{proof}
-\begin{corollary}
-Let $0< \alpha < \pi$. Let $f$ be a function that is holomorphic on the open sector $S = \setbuilder{z}{-\alpha < \arg(z) < \alpha}$ and continuous on its boundary. If
-\begin{itemize}
-\item $|f(z)|\leq 1$ for all $z\in \partial S$;
-\item $|f(z)| \leq Ce^{c|z|^\rho}$ for some $c, C > 0$ and $\rho \in \interval[co]{0, \frac{\pi}{2\alpha}}$;
-\end{itemize}
-then $|f(z)| \leq 1$ for all $z\in S$.
-\end{corollary}
-\begin{proof}
-Take $\rho'\in \interval[o]{\rho, \frac{\pi}{2\alpha}}$ and set $h_\epsilon(z) = e^{-\epsilon z^{\rho'}}$, where we take $\big(re^{i\theta}\big)^{\rho'} = r^{\rho'}e^{i\rho'\theta}$ for $-\pi < \theta <\pi$.
-
-Now $|h_\epsilon(z)| = e^{-\epsilon r^{\rho'}\cos(\theta\rho')}$. If $z = re^{i\theta}\in S$, then $-\alpha < \theta < \alpha$ and $0 < \rho' < \frac{\pi}{2\alpha}$ imply 
-\[ \frac{-\pi}{2} = -\alpha\frac{\pi}{2\alpha} < -\alpha\rho' < \theta\rho' < \alpha\rho' < \alpha\frac{\pi}{2\alpha} = \frac{\pi}{2}, \]
-so $0< \cos(\alpha\rho') < \cos(\theta\rho')$. Then we calculate (using $\rho'-\rho > 0$)
-\begin{align*}
-\left(\frac{c+1}{\epsilon\cos(\rho'\alpha)}\right)^{\frac{1}{\rho'-\rho}} \leq r &\implies \frac{c+1}{\epsilon\cos(\rho'\alpha)} \leq r^{\rho' -\rho} \\
-&\implies \frac{c+1}{\epsilon\cos(\rho'\theta)} \leq r^{\rho' -\rho} \\
-&\implies c+1 \leq \epsilon\cos(\rho'\theta)r^{\rho' -\rho} \\
-&\implies c - \epsilon\cos(\rho'\theta)r^{\rho' -\rho} \leq -1.
-\end{align*}
-Thus for all $r\geq \left(\frac{c+1}{\epsilon\cos(\rho'\alpha)}\right)^{\frac{1}{\rho'-\rho}}$ we have
-\[ |fh_\epsilon(re^{i\theta})| \leq Ce^{cr^\rho} \cdot e^{-\epsilon r^{\rho'}\cos(\theta\rho')} = Ce^{cr^\rho - \epsilon \cos(\theta\rho') r^{\rho'}} = Ce^{\big(c - \epsilon\cos(\rho'\theta)r^{\rho' -\rho}\big)r^\rho} \leq Ce^{-r^\rho}. \]
-So, if $r \geq \max\left\{\left(\frac{c+1}{\epsilon\cos(\rho'\alpha)}\right)^{\frac{1}{\rho'-\rho}}, \big(\ln C\big)^{1/\rho}\right\}$, then 
-\[ |fh_\epsilon(re^{i\theta})| \leq Ce^{-r^\rho} \leq Ce^{-\big((\ln C)^{1/\rho}\big)^\rho} = Ce^{-\ln C} = CC^{-1} = 1. \]
-Now set $S'_\epsilon \defeq \setbuilder{z\in \C}{-\alpha < \arg(z) < \alpha, |z| < \max\left\{\left(\frac{c+1}{\epsilon\cos(\rho'\alpha)}\right)^{\frac{1}{\rho'-\rho}}, \big(\ln C\big)^{1/\rho}\right\}}$. This satisfies the requirements for the Phragmèn-Lindelöf principle.
-\end{proof}
-\begin{corollary}[Hadamard three-lines lemma]
-Let $f$ be a function that is holomorphic and bounded on the open strip $S = \setbuilder{z}{0 < \Im(z) < 1}$ and continuous on its boundary. Set $M_0 = \sup_{x\in \R}|f(x)|$ and $M_1 = \sup_{x\in \R}|f(x+i)|$. Then
-\[ \sup_{x\in \R}|f(x+iy)| \leq M_0^{1-y}M_1^y \]
-for all $0\leq y\leq 1$.
-\end{corollary}
-\begin{proof}
-Let $M \defeq \sup_{z\in S}|f(z)|$. We apply the Phragmèn-Lindelöf principle to the function $F(z) \defeq M_0^{-1-iz}M_1^{iz}f(z)$, with $h_\epsilon(z) \defeq e^{-\epsilon z^2}$, to obtain that $\sup_{z\in S}|F(z)| \leq 1$.
-
-For all $x\in \R$, we have
-\[ |M_0^{-1-ix}M_1^{ix}f(x)h_\epsilon(x)| \leq |M_0^{-1-ix}M_1^{ix}|M_0 e^{-\epsilon x^2} \leq M_0M_0^{-1} = 1 \]
-and
-\[ |M_0^{-1-i(x+i)}M_1^{i(x+i)}f(x+i)h_\epsilon(x+i)| \leq |M_0^{-ix}M_1^{ix -1}|M_1 e^{-\epsilon |x+i|^2} \leq M_1^{-1}M_1 =  1. \]
-Now set $S'_\epsilon \defeq \setbuilder{z\in \C}{0<\Im(z)< 1; -\sqrt{\frac{\ln M + \epsilon}{\epsilon}} < x < \sqrt{\frac{\ln M + \epsilon}{\epsilon}}}$. To see that this satisfies the Phragmèn-Lindelöf principle, take $z = x+iy \in S\setminus S_\epsilon'$.
-Then we have the implications
-\[ \frac{\ln M + \epsilon}{\epsilon} \leq x^2 \quad\implies\quad Me^{\epsilon} \leq e^{\epsilon x^2} \quad\implies\quad Me^{-\epsilon x^2 + \epsilon} \leq 1 \]
-and so
-\begin{align*}
-\big|M_0^{-1-iz}M_1^{iz}f(z)h_\epsilon(z)\big| &= \big|M_0^{-1-ix +y}M_1^{ix - y}f(z)e^{-\epsilon (x^2 + 2ixy - y^2)}\big| \\
-&= M_0^{-1 +y}M_1^{- y}\big|f(z)\big|e^{-\epsilon x^2 + \epsilon y^2} \\
-&\leq M_0^{-1 +1}M_1^{0}Me^{-\epsilon x^2 + 1} \\
-&= Me^{-\epsilon x^2 + 1} \leq 1.
-\end{align*}
-We conclude that $1 \geq \sup_{z\in S}|F(z)|$, so for all $y\in \interval{0,1}$, we have
-\[ 1 \geq \sup_{x \in \R}|F(x+iy)| = \sup_{x \in \R}|M_0^{-1-ix+y}M_1^{ix-y}f(x+iy)| = M_0^{y-1}M_1^{-y}\sup_{x \in \R}|f(x+iy)| \]
-and so $|f(x+iy)| \leq M_0^{1-y}M_1^{y}$.
-\end{proof}
-
-
-\subsection{The ring of polynomials over $\meromorphic_\Omega$}
-
-\begin{definition}
-Let $\Omega\subseteq \C$ be an open set. Let $\meromorphic_\Omega$ be the set of meromorphic functions in $(\Omega \to \C)$.
-\end{definition}
-
-\begin{proposition}
-For any $\Omega \subseteq \C$, the set $\meromorphic_\Omega$ is a field. With
-\begin{itemize}
-\item as zero the constant function $\underline{0}$;
-\item as identity the constant function $\underline{1}$.
-\end{itemize}
-\end{proposition}
-
-\subsubsection{Poles and roots}
-\begin{definition}
-We say a polynomial in $\meromorphic_\Omega[X]$ has a pole at $z\in \Omega$, if one of its coefficients has a pole at $z$.
-\end{definition}
-
-\begin{lemma} \label{polesProductPolynomial}
-Let $p,q\in \meromorphic_\Omega[X]$ be monic and $r = pq$. If either $p$ or $q$ has a pole at $z_0\in \Omega$, then $r$ has a pole at $z_0$ as well.
-\end{lemma}
-\begin{proof}
-Let $h$ be the maximal order of $z_0$ as a pole among the coefficients of $p$ and $k$ the maximal order of $z_0$ as a pole among the coefficients of $q$. Then both $\lim_{z\to z_0}(z-z_0)^h p(z)$ and $\lim_{z\to z_0}(z-z_0)^k q(z)$ are non-zero polynomials (due to being monic) with constant coefficients and $h+k \geq 1$. 
-
-Now assume $r(z)$ is holomorphic at $z_0$, then
-\[ 0 = \lim_{z\to z_0}(z-z_0)^{h+k}r(z) = \Big(\lim_{z\to z_0}(z-z_0)^h p(z)\Big)\Big(\lim_{z\to z_0}(z-z_0)^k q(z)\Big) \neq 0, \]
-which is a contradiction.
-\end{proof}
-\begin{corollary}
-Let $p \in \meromorphic_\Omega[x]$ be monic and have a prime decomposition $p = \prod_{k=1}^nq_k^{m_k}$. Then $z_0\in \Omega$ is a pole of $p(z)$ \textup{if and only if} it is a pole of one of the $q_k(z)$.
-\end{corollary}
-
-\begin{proposition}
-Let $p,q\in \meromorphic_\Omega[x]$ be monic and relatively prime, then $p(z)$ and $q(z)$ are relatively prime as polynomials in $\C[X]$ for all $z\in \Omega \setminus (S_p \cup S_q \cup H)$, where
-\begin{itemize}
-    \item $S_p$ is the set of poles of $p$;
-    \item $S_q$ is the set of poles of $q$;
-    \item $H$ is isolated and closed in $\Omega$.
-\end{itemize}
-\end{proposition}
-\begin{proof}
-By Bézout's identity, we can write $\alpha[x](z)p[x](z) + \beta[x](z)q[x](z) = f(z)$ for some monic $\alpha,\beta\in \meromorphic_\Omega[x]$. Let $H$ be the set of poles and zeros of $f(z)$ (which contains $S_p \cup S_q$ by \ref{polesProductPolynomial}). For all $z_0\notin H$ we have
-\[ \left(\frac{\alpha[x](z_0)}{f(z_0)}\right)p[x](z_0) + \left(\frac{\beta[x](z_0)}{f(z_0)}\right)q[x](z_0) = 1, \]
-meaning $p[x](z_0)$ and $q[x](z_0)$ are relatively prime (TODO ref).
-\end{proof}
-\begin{corollary}
-Let $p\in \meromorphic_\Omega[x]$ be monic and irreducible. Then $p(z)$ has simple roots for all $z\in\Omega\setminus H$ for some isolated and closed set $H\subseteq \Omega$.
-\end{corollary}
-\begin{proof}
-If the degree of $p$ is $1$, then the result is immediate. Assume the degree of $p$ is greater than $1$.
-
-For any $z\in \Omega$, any non simple root of $p[x](z)$ must also be a root of $\pd{p[x](z)}{x}$. As $p[x]$ is irreducible, $p[x]$ and $\pd{p[x]}{x}$ are relatively prime. By the proposition $p[x](z_0)$ and $\pd{p[x](z_0)}{x}$ are relatively prime for all $z_0\in \Omega\setminus H$, which means they do not share roots.
-\end{proof}
-
-\subsubsection{Algebroid functions}
-
-\subsubsection{Puiseux series}
-
-\section{Conformal mappings}
-
-\section{Banach $*$-algebras of complex-valued functions}
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space. Then
-\begin{enumerate}
-\item $\sup_{x\in X}|f| <\infty$ for all $f\in \cont_0(X)$;
-\item if $X$ is compact, then $\sup_{x\in X}|f| <\infty$ for all $f\in \cont(X)$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Take arbitrary $f\in \cont_0(X)$. Take $\cball_\C(1,0)$, which is a neighbourhood of $0$. Then there exists a compact $K\subseteq X$ such that $f^{\imf}(K^c) \subseteq \cball_\C(0,1)$, so $\sup |f^{\imf}(K^c)| \leq 1$.
-
-Now $\sup_{x\in X}|f| = \max\big\{\sup |f^{\imf}(K^c)|, \sup |f^{\imf}(K)|\big\}$ and $\sup |f^{\imf}(K)| = \max |f^\imf(K)| < \infty$ by the extreme value theorem \ref{extremeValueTheorem}.
-
-(2) Follows immediately from the extreme value theorem \ref{extremeValueTheorem}.
-\end{proof}
-
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. Then
-\begin{itemize}
-\item we equip $\cont_0(X)$ with the supremum norm, which makes it a Banach-$*$-algebra;
-\item if $X$ is compact, then we equip $\cont(X)$ with the supremum norm, which makes it a Banach-$*$-algebra.
-\end{itemize} 
-\end{definition}
-
-\begin{proposition} \label{unitisationOnePointCompactificationIsomorphism}
-Let $\sSet{X,\xi}$ be a convergence space. Then the function
-\[ \Phi: \proj_1(-)^\dagger + \constant{\proj_2(-)}_{X^\dagger}: \cont_0(X)^\dagger \to \cont(X^\dagger): (f, \lambda) \mapsto f^\dagger + \constant{\lambda}_{X^\dagger}. \]
-is a unital $*$-algebra isomorphism.
-\end{proposition}
-\begin{proof}
-The function is well-defined, since $f^\dagger$ is continuous by \ref{vanishesAtInfinityIffBasepointExtensionContinuous}. It is a bijection, since its inverse is given by
-\[ \cont(X^\dagger) \to \cont_0(X)^\dagger: f\mapsto \big(f|_X - \constant{f(\infty)}_X, f(\infty)\big). \]
-The fact that it is a $*$-algebra homomorphism follows from \ref{basepointExtensionToRingLemma}.
-
-Unitality follows from $\big(\constant{0}|_X\big)^\dagger = \constant{0}_{X^\dagger}$ (\ref{basepointExtensionToRingLemma}).
-\end{proof}
-
-\begin{lemma} \label{compactCharactersLemma}
-Let $X$ be a compact topological space. Set
-\begin{itemize}
-\item $I_x \defeq \setbuilder{f\in \cont(X)}{f(x) = 0}$ for all $x\in X$;
-\item $N(I)\defeq \setbuilder{x\in X}{\forall f\in I: \; f(x) = 0}$ for all ideals $I\subseteq \cont(X)$.
-\end{itemize}
-Then we have
-\begin{enumerate}
-\item $N(I) = \emptyset$ \textup{if and only if} $I = \cont(X)$;
-\item if $I\subseteq \cont(X)$ is a maximal ideal, then $I = I_x$ for some $x\in X$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) First assume $N(I) = \emptyset$. Then $\big\{f^{\preimf}(\C\setminus\{0\})\big\}_{f\in I}$ is an open cover of $X$. We can take a finite subcover $C$ by \ref{topologyCompactnessOpenCover}. Now set
-\[ g \defeq \sum_{f^{\preimf}(\C\setminus\{0\})\in C} f^2. \]
-By construction, $g\in I$ (since $I$ is an ideal) and $g$ is invertible (since it is nowhere $0$), thus $I = \cont(X)$ by \ref{properIdealNoUnit}.
-
-Now suppose $I = \cont(X)$. Then $\constant{1}\in I$ and $\constant{1}(x) \neq 0$ for all $x\in X$, so $N(I)=\emptyset$.
-
-(2) Let $I\subseteq \cont(X)$ be a maximal (proper) ideal. Then $N(I) \neq \emptyset$, so there exists $x\in N(I)$. It is clear that $I\subseteq I_x$. By maximality, we have $I = I_x$.
-\end{proof}
-
-See also \url{https://math.stackexchange.com/questions/87277/proof-that-ideals-in-c0-1-are-of-the-form-m-c-that-should-not-involve-zorn}.
-
-
-\begin{proposition}  \label{charactersFunctionAlgebraCompactSpace}
-Let $X$ be a Hausdorff topological space. Then
-\begin{enumerate}
-\item if $X$ is compact, then $\evalMap_{-}|_{\cont(X)}: X \to \widehat{\cont(X)}$ is a homeomorphism;
-\item if $X$ is locally compact, then $\evalMap_{-}|_{\cont_0(X)}: X \to \widehat{\cont_0(X)}$ is a homeomorphism.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) For all $x\in X$, we clearly have $\evalMap_x\in \widehat{\cont(X)}$. 
-
-We first show that $\evalMap_{-}|_{\cont(X)}$ is injective. Suppose $x\neq y \in X$. Since $X$ is Hausdorff, $\{x\}$ and $\{y\}$ are disjoint closed sets by \ref{FrechetCharacterisation}. Since $X$ is compact Hausdorff, it is normal by \ref{compactHausdorffSpacesNormal}, so we can find $f\in \cont(X, \R)$ such that $f(x) = 0$ and $f(y) = 1$ by Urysohn's lemma \ref{UrysohnLemma}. This function is still continuous if we extend the codomain to $\C$ by \ref{continuityRestrictionExpansion}.  Then
-\[ \evalMap_x(f) = f(x) = 0 \neq 1 = f(y) = \evalMap_y(f), \]
-so $\evalMap_x|_{\cont(X)} \neq \evalMap_y|_{\cont(X)}$.
-
-To show surjectivity, take $\varphi\in\widehat{\cont(X)}$. Then $\ker(\varphi)$ is a maximal ideal, see \ref{characterMaximalIdealsComplex}. Thus it is equal to $I_x = \ker\big(\evalMap_x|_{\cont(X)}\big)$ for some $x\in X$ by \ref{compactCharactersLemma}. This means that $\varphi = \lambda \evalMap_x$ for some $\lambda\in C$. Since, by \ref{charactersUnital}, $1 = \varphi(\constant{1}) = \lambda\evalMap_x(\constant{1}) = \lambda$, we have $\lambda = 1$ and $\varphi = \evalMap_x|_{\cont(X)}$.
-
-Now $\evalMap_{-}|_{\cont(X)}$ is continuous by \ref{characteristicPropertyInitialFinalConvergence}, since, for all $f\in \cont(X)$,
-\[ \begin{tikzcd}
-\widehat{\cont(X)} \ar[r, "\evalMap_f"] & \C \\ X \ar[u, "{\evalMap_{-}|_{\cont(X)}}"] \ar[ur, swap, "f"]
-\end{tikzcd} \qquad\text{commutes,} \]
-which is true because, for all $x\in X$,
-\[ (\evalMap_f\circ \evalMap_{-}|_{\cont(X)})(x) = \evalMap_f\big(\evalMap_x\big) = \evalMap_x(f) = f(x). \]
-Since $\widehat{\cont(X)}$ is Hausdorff, by \ref{weakTopologyLCTVS}, we have that $\evalMap_{-}|_{\cont(X)}$ is a homeomorphism by \ref{compactToHausdorffHomeomorphism}.
-
-(2) We first show that $\evalMap_{-}|_{\cont_0(X)}$ is injective. Suppose $x\neq y \in X$. Now $\topMod(X^\dagger)$ is compact and Hausdorff by \ref{onePointCompactificationHausdorff}, and thus normal by \ref{compactHausdorffSpacesNormal}. The sets $\{x\}$, $\{y\}$ and $\{\infty\}$ are disjoint closed sets by \ref{FrechetCharacterisation}.
-
-By the Tietze extension theorem \ref{TietzeExtension}, we can extend the function
-\[ \{x, y, \infty\}\to \R: z\mapsto \begin{cases}
-1 & (z = x) \\ 2 & (z = y) \\ 0 & (z = \infty)
-\end{cases} \]
-to a continuous function. This extension is still continuous if we extend the codomain to $\C$ by \ref{continuityRestrictionExpansion}. Call this function $f$. It is also continuous as a function $f: X^\dagger \to \C$, since $X^\dagger$ is stronger than $\topMod(X^\dagger)$. Now $f|_X$ is continuous by \ref{functionVanishingAtInftyIffRestrictionOfContinuousBasepointPreservingFunction}, so 
-\[ \evalMap_x|_{\cont_0(X)}\big(f|_X\big) = f(x) = 1 \neq 2 = f(y) = \evalMap_y|_{\cont_0(X)}\big(f|_X\big), \]
-so $\evalMap_x|_{\cont_0(X)} \neq \evalMap_y|_{\cont_0(X)}$.
-
-To show that $\evalMap_{-}|_{\cont_0(X)}$ is surjective, take arbitrary $\varphi\in\widehat{\cont_0(X)}$. Then we have a unital extension $\varphi^\dagger\in \widehat{\cont_0(X)^\dagger}$. Take the isomorphism $\Phi: \cont_0(X)^\dagger \to \cont(X^\dagger)$ of \ref{unitisationOnePointCompactificationIsomorphism} and consider $\varphi^\dagger\circ \Phi^{-1}: \cont(X^\dagger)\to \C$, which is an algebra homomorphism by construction and nonzero because it is unital. So $\varphi^\dagger\circ \Phi^{-1}\in \widehat{\cont(X^\dagger)}$ and $\varphi^\dagger\circ \Phi^{-1} = \evalMap_a|_{\cont_0(X)}$ for some $a\in X^\dagger$ by (1).
-
-Take arbitrary $f\in \cont_0(X)$. Then $f^\dagger \in \cont(X^\dagger)$ by \ref{vanishesAtInfinityIffBasepointExtensionContinuous} and we calculate
-\begin{align*}
-(\varphi^\dagger\circ \Phi^{-1})(f^\dagger) &= \varphi^\dagger\big(f^\dagger|_X - \constant{f^\dagger(\infty)}, f^\dagger(\infty)\big) \\
-&= \varphi^\dagger\big(f^\dagger|_X, 0\big) \\
-&= \varphi^\dagger(f, 0) = \varphi(f) + 0 = \varphi(f).
-\end{align*}
-
-Now suppose, towards a contradiction, that $a = \infty$. Then, for all $f\in \cont_0(X)$ we have
-\[ \varphi(f) = (\varphi^\dagger\circ \Phi^{-1})(f^\dagger) = \evalMap_\infty(f^\dagger) = 0, \]
-which is a contradiction since $\varphi \neq \constant{0}$. So $a\in X$ and we have
-\[ \varphi(f) = (\varphi^\dagger\circ \Phi^{-1})(f^\dagger) = \evalMap_a(f^\dagger) = \evalMap_a(f) \]
-for all $f\in \cont_0(X)$, which shows that $\evalMap_{-}|_{\cont_0(X)}$ is surjective.
-
-Finally we need to show that $\evalMap_{-}|_{\cont_0(X)}$ and its inverse is continuous. By \ref{LCTopologicalHausdorffInitialConvergence}, $X$ has the initial convergence w.r.t. $\cont_0(X)$, so, for all $x\in X$ and $F\in \powerfilters(X)$, we have
-\begin{align*}
-F \overset{X}{\longrightarrow} x &\iff \forall f\in \cont_0(X): \; \upset f^{\imf\imf}(F)\to f(x) \\
-&\iff \forall f\in \cont_0(X): \; \upset \big(\evalMap_{-}|_{\cont_0(X)}\big)^{\imf\imf}(F)(f) \to \big(\evalMap_{-}|_{\cont_0(X)}\big)(f)(x) \\
-&\iff \upset \big(\evalMap_{-}|_{\cont_0(X)}\big)^{\imf\imf}(F) \overset{\widehat{\cont_0(X)}}{\longrightarrow} \big(\evalMap_{-}|_{\cont_0(X)}\big)(f),
-\end{align*}
-which concludes the proof that $\evalMap_{-}|_{\cont_0(X)}$ is a homeomorphism.
-\end{proof}
-
-
-\begin{proposition}[Gelfand-Kolmogorov]
-Let $X,Y$ be compact topological spaces and $h: \cont(X)\to \cont(Y)$ a unital algebra homomorphism. Then
-\begin{enumerate}
-\item there exists a function $g: Y\to X$ such that $h$ equals the pre-composition $g^\star$;
-\begin{enumerate}
-\item this $g$ is continuous;
-\item this $g$ is unique if $X$ is Hausdorff;
-\end{enumerate}
-\item if $h$ is an isomorphism, then $g$ is a homeomorphism.
-\end{enumerate}
-\end{proposition}
-Note that we do not assume $h$ to be continuous w.r.t. any convergence.
-
-TODO: clean up calculations.
-\begin{proof}
-(1) Let both $\cont(X)$ and $\cont(Y)$ have the algebraic convergence, then $h: \cont(X)\to \cont(Y)$ is continuous. By  \ref{adjointContinuousFunction}, $h$ has a unique adjoint $h^\star: \dual{\cont(Y)} \to \dual{\cont(X)}$. We claim that $\im\big(h^\star|_{\widehat{\cont(Y)}}\big) \subseteq \widehat{\cont(X)}$, so we can consider the function $h^\star: \widehat{\cont(Y)}\to \widehat{\cont(X)}$. Indeed, for all $\varphi\in \widehat{\cont(Y)}$, we have that $h^\star(\varphi) = \varphi \circ h$ is an algebra homomorphism. It is also non-zero because $h^\star(\varphi)(\constant{1}) = \varphi\big(h(\constant{1})\big) = \varphi(\constant{1}) = 1$, by \ref{charactersUnital}.
-
-For all $f\in \cont(X)$, consider the diagram
-\[ \begin{tikzcd}
-\widehat{\cont(X)} \ar[r, "\evalMap_f"] & \C \\
-\widehat{\cont(Y)} \ar[u, "h^\star"] & {} \\
-Y \ar[u, "{\evalMap_{-}|_{\cont(Y)}}"] \ar[uur, swap, "h(f)"]
-\end{tikzcd}, \]
-which commutes, because, for all $y\in Y$, we have
-\[ \big(\evalMap_f \circ h^\star \circ \evalMap_{-}|_{\cont(Y)}\big)(y) = \evalMap_f\big(h^\star (\evalMap_y)\big) = \evalMap_f(\evalMap_y \circ h) = (\evalMap_y\circ h)(f) = h(f)(y). \]
-Since $h(f)$ is a character and thus continuous by \ref{charactersUnital}, we have that $h^\star \circ \evalMap_{-}|_{\cont(Y)}$ is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
-
-Then, since $\evalMap_{-}|_{\cont(X)}$ is invertible by \ref{charactersFunctionAlgebraCompactSpace}, we can set $g \defeq \big(\evalMap_{-}|_{\cont(X)}\big)^{-1} \circ h^\star \circ \evalMap_{-}|_{\cont(Y)}: Y\to X$. This is also continuous by \ref{charactersFunctionAlgebraCompactSpace}.
-
-We now show that $h = g^\star$. First observe that for arbitrary $f\in \cont(X)$, we have $f\circ \big(\evalMap_{-}|_{\cont(X)}\big)^{-1} = \evalMap_f$. Indeed, each character in $\widehat{\cont(X)}$ is of the form $\evalMap_x$ for some $x\in X$ by \ref{charactersFunctionAlgebraCompactSpace}, so
-\[ \Big(f\circ \big(\evalMap_{-}|_{\cont(X)}\big)^{-1}\Big)(\evalMap_x) = \Big(f\circ \big(\evalMap_{-}|_{\cont(X)}\big)^{-1} \circ \evalMap_{-}|_{\cont(X)}\Big)(x) = f(x) = \evalMap_x(f) = \evalMap_f\big(\evalMap_x\big). \]
-
-By a previous calculation, we have
-\[ g^\star(f) = f\circ g = f\circ (\evalMap_{-}|_{\cont(X)})^{-1} \circ h^\star \circ \evalMap_{-}|_{\cont(Y)} = \evalMap_f \circ h^\star \circ \evalMap_{-}|_{\cont(Y)} = h(f). \]
-
-Finally, suppose, towards a contradiction, that $g_1^\star = h = g_2^\star$ but $g_1 \neq g_2$. Then there exists $y\in Y$ such that $g_1(y)\neq g_2(y)$. Since $X$ is Hausdorff, $\{g_1(y)\}$ and $\{g_2(y)\}$ are disjoint closed sets by \ref{FrechetCharacterisation}. Since $X$ is compact Hausdorff, it is normal by \ref{compactHausdorffSpacesNormal}, so we can find $f\in \cont(X, \R)$ such that $f\big(g_1(y)\big) = 0$ and $f\big(g_2(y)\big) = 1$ by Urysohn's lemma \ref{UrysohnLemma}. This function is still continuous if we extend the codomain to $\C$ by \ref{continuityRestrictionExpansion}.
-Now
-\[ g_1^\star(f)(y) = (f\circ g_1)(y) = f\big(g_1(y)\big) = 0 \neq 1 = f\big(g_2(y)\big) = (f\circ g_2)(y) = g_2^\star(f)(y), \]
-so $g_1^\star(f) \neq g_2^\star(f)$ and thus $g_1^\star \neq g_2^\star$, which is a contradiction.
-
-(2) If $h$ is an isomorphism, then $g^{-1} = \big(\evalMap_{-}|_{\cont(Y)}\big)^{-1} \circ (h^{-1})^\star \circ \evalMap_{-}|_{\cont(X)}$, which is continuous.
-\end{proof}
 
 
 \chapter{Calculus}
