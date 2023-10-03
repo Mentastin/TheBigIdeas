@@ -3,9 +3,7 @@
 \url{https://zr9558.files.wordpress.com/2014/08/a-guide-to-distribution-theory-and-fourier-transforms.pdf}
 \url{file:///C:/Users/user/Downloads/978-0-8176-4675-2.pdf}
 
-TODO: Hölder, Minkowski, Lyapounov
-
-TODO: Moore-Osgood
+TODO: Moore-Osgood, Lyapounov
 
 \chapter{Measure theory}
 TODO (bounded) finitely additive signed measures form Riesz spaces.
@@ -2174,6 +2172,15 @@ g(a) = f(a) - a\frac{f(b)-f(a)}{b-a} = \frac{bf(a) - af(a)}{b-a} - a\frac{f(b)-f
 \end{multline*}
 so we can apply Rolle's theorem \ref{RollesTheorem} to $g$. Thus there exists $c\in \interval[o]{a,b}$ such that $0 = g'(c) = f'(c) - \frac{f(b)-f(a)}{b-a}$. Thus $f'(c) = \frac{f(b)-f(a)}{b-a}$.
 \end{proof}
+\begin{corollary}[Mean value theorem for vector-valued functions] \label{meanValueTheoremVectorFunctions}
+Let $\mathcal{H}$ be a real Hilbert space. Let $a<b\in \R$ and $f: \interval{a,b}\to \mathcal{H}$ be a continuous real function that is differentiable on $\interval[o]{a,b}$. Then there exists $c\in \interval[o]{a,b}$ such that
+\[ \norm{f'(c)} \geq \frac{\norm{f(b)-f(a)}}{b-a}. \]
+\end{corollary}
+\begin{proof}
+Consider the function $g(t) \defeq \inner{f(b)-f(a), f(t)}$. Since $g$ is real-valued, there exists $c\in \interval[o]{a,b}$ such that $g'(c) = \frac{g(b)-g(a)}{b-a}$. Then $g(b)-g(a) = \norm{f(b)-f(a)}^2$ and $g'(c) = \inner{f(b)-f(a), f'(t)}$. By the Cauchy-Schwarz inequality \ref{CauchySchwarz}, we have
+\[ \frac{\norm{f(b)-f(a)}^2}{b-a} = \left|\frac{\norm{f(b)-f(a)}^2}{b-a}\right| = \left|\frac{g(b)-g(a)}{b-a}\right| = |g'(c)| = |\inner{f(b)-f(a), f'(t)}| \leq \norm{f(b)-f(a)} \norm{f'(t)}. \]
+Dividing by $\norm{f(b)-f(a)}$ yields the result.
+\end{proof}
 
 \begin{proposition}[Intermediate value theorem]
 Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ a real function. For all $y\in \interval{f(a), f(b)}$ there exists $c\in \interval{a,b}$ such that $f(c) = y$.
@@ -2186,6 +2193,34 @@ Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ a real function. For all $y\in \int
 \end{corollary}
 \begin{proof}
 Both $\inf\im(f)$ and $\sup\im(f)$ are attained on the interval by \ref{extremeValueTheorem}, say at points $b,c\in \interval{a,b}$. We can then apply the intermediate value theorem 
+\end{proof}
+
+\section{Differentiation}
+
+\begin{proposition} \label{differentiationUnderIntegral}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $a,b\in \R$ and $f: X\times \interval{a,b}\to \C$ a function such that
+\begin{itemize}
+\item $f(-,t): X\to \C$ is integrable for all $t\in \interval{a,b}$;
+\item $\pd{f(x,t)}{t}$ exists for almost all $x\in X$;
+\item there exists an integrable function $g: X\to \overline{\R^+}$ such that $\left|\pd{f(x,t)}{t}\right| \leq g(x)$ for all $t\in \interval{a,b}$ and almost all $x\in X$.
+\end{itemize}
+Then $t\mapsto \int_X f(x,t)\diff{\mu}(x)$ is differentiable and
+\[ \od{}{t}\int_X f(x,t)\diff{\mu}(x) = \int_X \pd{f(x,t)}{t}\diff{\mu}(x). \]
+\end{proposition}
+\begin{proof}
+To show that $t\mapsto \int_X f(x,t)\diff{\mu}(x)$ is differentiable at $t_0\in \interval{a,b}$, consider the Newton quotient
+\[ h(x,t) \defeq \frac{\int_X f(x,t)\diff{\mu}(x) - \int_X f(x,t_0)\diff{\mu}(x)}{t-t_0} = \int_X \frac{f(x,t) - f(x,t_0)}{t-t_0}\diff{\mu}(x). \]
+We need to show that the limit $\lim_{t\to t_0} h(x,t)$ exists. By \ref{FrechetUrysohnSequentialContinuityAtAPoint} it is enough to verify that $\lim_{n\to \infty} h(x,t_n)$ exists for every sequence $\seq{t_n}$ that converges to $t$. Fix such a sequence arbitrarily.
+
+By the mean value theorem for vector-valued functions, \ref{meanValueTheoremVectorFunctions}, $\left|\frac{f(x,t_n) - f(x,t_0)}{t_n-t_0}\right| \leq \Big|\left.\pd{f(x,t)}{t}\right|_{t_1}\Big|$ for some $t_1\in \interval{t_0,t_n}\cup \interval{t_n,t_0}$. Thus
+\[ \left|\frac{f(x,t_n)-f(x,t_0)}{t_n-t_0}\right| \leq \sup_{t\in \interval{a,b}}\left|\pd{f(x,t)}{t}\right| \leq g(x). \]
+By the dominated convergence theorem, \ref{dominatedConvergence}, we have that $\lim_{n\to \infty} h(x,t_n)$ exists and
+\begin{align*}
+\od{}{t}\int_X f(x,t)\diff{\mu}(x)\Big|_{t_0} &= \lim_{n\to \infty} h(x,t_n) \\
+&= \lim_{n\to \infty}\int_X \frac{f(x,t_n) - f(x,t_0)}{t_n-t_0}\diff{\mu}(x) \\
+&= \int_X \lim_{n\to \infty}\frac{f(x,t_n) - f(x,t_0)}{t_n-t_0}\diff{\mu}(x) \\
+&= \int_X \pd{f(x,t)}{t}\diff{\mu}(x)\Big|_{t_0}.
+\end{align*}
 \end{proof}
 
 \section{Integration}
@@ -2504,34 +2539,15 @@ So the domain of convergence of a Laurent series is an annulus around $z_0$.
 \input{complexAnalysis}
 
 \chapter{Function spaces}
-\section{The $\mathcal{L}^p(X,\diff{\mu})$ spaces}
+\section{The $\mathcal{L}^p(X,\mu)$ spaces}
 \begin{definition}
-Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $0<p<\infty \in \R$. The we define
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $0<p<\infty \in \R$. We define
 \begin{itemize}
-\item $\mathcal{L}^p(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $|f|^p$ is integrable w.r.t.\ $\mu$.
-\item $\mathcal{L}^\infty(X,\mu)$ to be the set of measureable functions $f$ in $(X\to \C)$ such that $\sup_x|f(x)|<\infty$.
+\item the set $\mathcal{L}^p(X,\mu) \defeq \setbuilder{f\in \meas(X,\C)}{\int_X |f|^p\diff{\mu} <\infty}$;
+\item the real functional $\norm{\cdot}_{p}: \mathcal{L}^p(X,\mu)\to \R: f\mapsto \left(\int_X |f|^p\diff{\mu}\right)^{1/p}$.
 \end{itemize}
 \end{definition}
-
-\begin{proposition}
-Let $0< p<q \leq \infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then
-\begin{enumerate}
-\item $\mathcal{L}^p(X,\mu) \supseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of finite but arbitrary large measure;
-\item $\mathcal{L}^p(X,\mu) \subseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of non-zero but arbitrary small measure.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-TODO \url{https://en.wikipedia.org/wiki/Lp_space#Embeddings}
-\end{proof}
-\begin{corollary}
-For all $0< p<q \leq \infty$ and $a,b\in\R$, we have $\mathcal{L}^p([a,b],\lambda) \supseteq \mathcal{L}^q([a,b],\lambda)$.
-\end{corollary}
-
-\begin{definition}
-Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then we define the real functional
-\[ \norm{\cdot}_{p}: \mathcal{L}^p(X,\mu)\to \R: f\mapsto \left(\int_X |f|^p\diff{\mu}\right)^{1/p}. \]
-\end{definition}
-We will prove that this functional is a seminorm.
+We will prove that the functional $\norm{\cdot}_{p}$ is a seminorm.
 
 \begin{lemma} \label{pNormAbsolutelyHomogeneous}
 Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm{\cdot}_p$ is absolutely homogeneous.
@@ -2588,11 +2604,13 @@ Using Jensen's inequality \url{https://en.wikipedia.org/wiki/H%C3%B6lder%27s_ine
 \end{proof}
 
 
-\begin{theorem}[Minkowski's inequality] \label{MinkowskisInequality}
+\begin{theorem}[Minkowski's sum inequality] \label{MinkowskisInequality}
 Let $1< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Let $f,g\in\mathcal{L}^p(X,\mu)$ be functions. Then
 \[ \norm{f+g}_p \leq \norm{f}_p + \norm{g}_p. \]
 \end{theorem}
 TODO invert inequality if $p<1$! TODO also inverse Hölder inequality.
+
+See also Minkowski's integral inequality \ref{MinkowskisIntegralInequality}.
 \begin{proof}
 First we show that $\norm{f+g}_p$ is finite. We show this using the convexity of $\R^+\to \R^+: x\mapsto |x|^p$:
 \begin{align*}
@@ -2629,6 +2647,284 @@ Let $0< p<\infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then $\norm
 \begin{proof}
 We need to prove that $\norm{f}_{p}$ is subadditive and absolutely homogeneous. Subadditivity is given by the Minkowski inequality and absolute homogeneity by \ref{pNormAbsolutelyHomogeneous}.
 \end{proof}
+
+\begin{theorem}[Minkowski's integral inequality] \label{MinkowskisIntegralInequality}
+Let $\sSet{X,\mathcal{A},\mu}, \sSet{Y,\mathcal{B},\nu}$ be $\sigma$-finite measure space, $1\leq p < \infty$ and $f: X\times Y\to \overline{\R^+}$ a $\mathcal{A}\otimes\mathcal{B}$-measurable function. Then
+\[ \bigg(\int_X\Big(\int_Y f(x,y)\diff{\nu}(y)\Big)^p\diff{\mu}(x)\bigg)^{1/p} \leq \int_Y\Big(\int_X f(x,y)^p\diff{\mu}(x)\Big)^{1/p}\diff{\nu}(y). \]
+\end{theorem}
+\begin{proof}
+If $p=1$, then the inequality is in fact an equality by Tonelli's theorem \ref{tonellisTheorem}.
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,\mathcal{A},\mu}, \sSet{Y,\mathcal{B},\nu}$ be $\sigma$-finite measure space, $1\leq p \leq \infty$ and $f: X\times Y\to \C$ a $\mathcal{A}\otimes\mathcal{B}$-measurable function. If $f(-,y)\in \mathcal{L}^p(X,\mu)$ for a.e. $y\in Y$ and $\big(y\mapsto \norm{f(-,y)}_p\big)$ is in $\mathcal{L}^1(Y,\nu)$, then
+\begin{enumerate}
+\item $f(x,-)\in \mathcal{L}^1(Y,\nu)$ for a.e. $x\in X$;
+\item $\Big(x\mapsto \int_Y f(x,y)\diff{\nu}(y)\Big)\in \mathcal{L}^p(X,\mu)$;
+\item $\norm{\int_Yf(-,y)\diff{\nu}(y)}_p \leq \int_Y\norm{f(-,y)}_p\diff{\nu}(y)$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+
+\end{proof}
+
+\subsection{The essential supremum and $\mathcal{L}^\infty(X,\mu)$}
+\begin{definition}
+Let $(X, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(X, \overline{\R^+})$.
+\begin{itemize}
+\item The \udef{essential supremum} of $f$ is
+\[ \essup(f) \defeq \inf\setbuilder{\sup_{\omega\in E}|f(\omega)|}{E\in \mathcal{A}, \mu(E^c) = 0}. \]
+\item We call $f$ \udef{essentially bounded} if $\essup(f)<\infty$.
+\item We define
+\[ \mathcal{L}^\infty(X,\mu) \defeq \setbuilder{f\in \meas(X, \C)}{\essup(|f|) < \infty}. \]
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $(X, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(X, \C)$. Then
+\[ \essup(f) = \sup D_{|f|}^{\preimf}\big(\interval[o]{0,\infty}\big) = \inf D_{|f|}^{\preimf}\big(\{0\}\big). \]
+\end{lemma}
+
+\subsection{Embeddings and inclusions}
+
+\begin{proposition}
+Let $0<p<q<r \leq \infty$, $f\in \mathcal{L}^p(X,\mu) \cap \mathcal{L}^r(X,\mu)$ and $g\in \mathcal{L}^q(X,\mu)$. Then
+\begin{enumerate}
+\item $\norm{f}_q \leq \norm{f}_p^{\lambda}\norm{f}_r^{1-\lambda}$, where
+\[ \lambda = \frac{q^{-1} - r^{-1}}{p^{-1} - r^{-1}} \in \interval[o]{0,1} \]
+i.e.\ $q^{-1} = \lambda p^{-1} + (1-\lambda)r^{-1}$;
+\item $\mathcal{L}^p(X,\mu)\cap \mathcal{L}^r(X,\mu) \subseteq \mathcal{L}^q(X,\mu) \subseteq \mathcal{L}^p(X,\mu) + \mathcal{L}^r(X,\mu)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) First note that
+\[ \lambda = \frac{q^{-1} - r^{-1}}{p^{-1} - r^{-1}} \iff \lambda p^{-1} - \lambda r^{-1} = q^{-1} - r^{-1} \iff q^{-1} = \lambda p^{-1} + (1-\lambda)r^{-1}. \]
+ 
+First suppose $r = \infty$, then $|f(x)|^{q-p} \leq \norm{f}_\infty^{q-p}$ a.e., so $|f(x)|^q \leq |f(x)|^p\norm{f}_\infty^{q-p}$ a.e. and
+\[ \norm{f}_q \leq \Big(\int |f|^p\norm{f}_\infty^{q-p} \diff\mu\Big)^{1/q} = \norm{f}_p^{p/q}\norm{f}_\infty^{1-p/q} = \norm{f}_p^{\lambda}\norm{f}_\infty^{1-\lambda}, \]
+because $\lambda = \frac{q^{-1} - \infty^{-1}}{p^{-1} - \infty^{-1}} = \frac{q^{-1}}{p^{-1}} = p/q$.
+
+Now suppose $r < \infty$. Since $q<\infty$, we have
+\[ q^{-1} = \lambda p^{-1} + (1-\lambda)r^{-1} \iff 1 = \frac{\lambda q}{p} + \frac{(1-\lambda) q}{r}, \]
+so $p/\lambda q$ and $r/(1-\lambda)q$ are Hölder conjugate and we can use the Hölder's inequality \ref{HoeldersInequality} to calculate
+\begin{align*}
+\int_X |f|^q \diff{\mu} &= \int_X |f|^{\lambda q}|f|^{(1-\lambda)q} \diff{\mu} \\
+&\leq \Big(\int_X \big(|f|^{\lambda q}\big)^{p/\lambda q}\diff{\mu}\Big)^{\lambda q /p} \Big(\int_X \big(|f|^{(1 -\lambda) q}\big)^{r/(1-\lambda)q}\diff{\mu}\Big)^{(1 - \lambda) q /r} \\
+&= \Big(\int_X |f|^{p}\diff{\mu}\Big)^{\lambda q /p} \Big(\int_X |f|^{r}\diff{\mu}\Big)^{(1 - \lambda) q /r} \\
+&= \norm{f}_p^{\lambda q}\norm{f}_r^{(1-\lambda) q}.
+\end{align*}
+Taking the $q^\text{th}$ root gives $\norm{f}_q \leq \norm{f}_p^{\lambda}\norm{f}_r^{1-\lambda}$.
+
+(2) The first inclusion follows straight from (1).
+
+For the second inclusion, take $g\in \mathcal{L}^q(X,\mu)$. Set $E \defeq \setbuilder{x\in X}{|f(x)| > 1}$, $g_1 \defeq g\cdot \charFunc{E}$ and $g_2 = g\cdot \charFunc{E^c}$.
+
+Then
+\begin{align*}
+|g_1|^p &= |g|^p\charFunc{E} \leq |g|^q\charFunc{E} \leq |g|^q < \infty \\
+|g_2|^r &= |g|^r\charFunc{E^c} \leq |g|^q\charFunc{E^c} \leq |g|^q < \infty,
+\end{align*}
+so $g = g_1 + g_2 \in \mathcal{L}^p(X,\mu) + \mathcal{L}^r(X,\mu)$.
+\end{proof}
+
+
+\begin{proposition}
+Let $0<p<q \leq \infty$ and $f\in \mathcal{L}^q(X,\mu)$. Then
+\begin{enumerate}
+\item if $\mu(X)<\infty$, then $\mathcal{L}^p(X,\mu) \supseteq \mathcal{L}^q(X,\mu)$ and $\norm{f}_p \leq \norm{f}_q\cdot\mu(X)^{p^{-1}-q^{-1}}$;
+\item if there exists $\epsilon > 0$ such that $\mu(A) > \epsilon$ for all $A\in \mathcal{A}$, then TODO.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) First suppose $q = \infty$. Then
+\[ \norm{f}_p^p = \int_X |f|^p\diff\mu \leq \norm{f}_\infty^p\int_X \constant{1}\diff\mu = \norm{f}_\infty^p\mu(X), \]
+so $\norm{f}_p \leq \norm{f}_\infty\mu(X)^{1/p} = \norm{f}_\infty\mu(X)^{p^{-1} - \infty^{-1}}$.
+
+Now suppose $q < \infty$. Then $\frac{p}{q} + \frac{q-p}{q} = \frac{q}{q} = 1$ implies that $\frac{q}{p}$ and $\frac{q}{q-p}$ are Hölder conjugate. We use Hölder's inequality \ref{HoeldersInequality} and \ref{pnormLemma} to get
+\[ \norm{f}^p_p = \int_X |f|^p \cdot \constant{1}\diff\mu \leq \norm{|f|^p}_{\frac{q}{p}}\norm{\constant{1}}_{\frac{q}{q-p}} = \norm{f}_q^p \mu(X)^{\frac{q-p}{q}}. \]
+Taking the $p^\text{th}$ root gives $\norm{f}_p \leq \norm{f}_q\cdot\mu(X)^{p^{-1}-q^{-1}}$.
+
+(2) TODO
+\end{proof}
+
+
+\begin{proposition}
+Let $0< p<q \leq \infty$ and $\sSet{X,\mathcal{A},\mu}$ be a measure space. Then
+\begin{enumerate}
+\item $\mathcal{L}^p(X,\mu) \supseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of finite but arbitrary large measure;
+\item $\mathcal{L}^p(X,\mu) \subseteq \mathcal{L}^q(X,\mu)$ \textup{if and only if} $X$ does not contain sets of non-zero but arbitrary small measure.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO \url{https://en.wikipedia.org/wiki/Lp_space#Embeddings}
+\end{proof}
+\begin{corollary}
+For all $0< p<q \leq \infty$ and $a,b\in\R$, we have $\mathcal{L}^p([a,b],\lambda) \supseteq \mathcal{L}^q([a,b],\lambda)$.
+\end{corollary}
+
+\subsection{The $L^p(X,\mu)$ spaces}
+TODO: identification of a.e.\ equal functions + this is compatible with algebraic operations by \ref{equalAECongruence}.
+
+TODO: allow functions that are only defined a.e.
+
+\begin{proposition}
+TODO every equivalence class contains exactly one continuous functions (for Borel measures?)
+\end{proposition}
+
+\subsubsection{Completeness and density}
+
+\begin{theorem}[Riesz-Fisher]
+The space $L^p(X,\diff{\mu})$ is complete.
+\end{theorem}
+TODO $\mathcal{L}^p(X,\diff{\mu})$ is complete?
+
+For $L^\infty$: essential supremum.
+
+\begin{proposition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $1\leq p \leq \infty$. Then $L^p(X,\mu)$ is a Banach space.
+\end{proposition}
+
+\begin{proposition}
+Let $X$ be a set. For all $1\leq p < \infty$, the set of $p$-integrable simple functions is dense in $L^p(\diff{\mu})$.
+\end{proposition}
+
+
+\begin{proposition}
+Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. Then $\cont_c(X)$ is dense in $L^p(\diff{\mu})$ for all $1\leq p < \infty$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+
+
+
+
+\subsubsection{$L^0(\Omega, \mu)$}
+TODO: $\norm{f}_0 = \mu\{f\neq 0\}$ (?)
+
+
+\subsubsection{The dual system $\pair{f,g} = \int_X fg \diff\mu$}
+
+\begin{lemma}
+Let $\sSet{X, \mathcal{A}, \mu}$ be a measure space and $0<p,q\leq \infty$ Hölder conjugate exponents. Then $\sSet{\mathcal{L}^p(X,\mu), \mathcal{L}^q(X,\mu), \pair{\cdot, \cdot}}$ is a pairing, where
+\[ \pair{\cdot, \cdot}: \mathcal{L}^p(X,\mu)\times \mathcal{L}^q(X,\mu) \to \C: (f,g) \mapsto \pair{f,g} \defeq \int_X f\cdot g \diff\mu. \]
+\end{lemma}
+\begin{proof}
+The pairing is bilinear by linearity of the integral. We just need to observe that the function is well-defined. This follows from Hölder's inequality \ref{HoeldersInequality}.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X, \mathcal{A}, \mu}$ be a measure space and $1 \leq p,q\leq \infty$ Hölder conjugate exponents. The function $L^q(X,\mu)\to \dual{L^p(X,\mu)}: f \mapsto \pair{f,-}$ is an isometry if either
+\begin{enumerate}
+\item $q<\infty$; or
+\item $\mu$ is semi-finite.
+\end{enumerate}
+\end{proposition}
+TODO: can we learn anything by considering polar topologies?
+\begin{proof}
+TODO Folland p.188
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X, \mathcal{A}, \mu}$ be a measure space and $1\leq p,q \leq \infty$ Hölder conjugate exponents. The function $L^q(X,\mu)\to \dual{L^p(X,\mu)}: f \mapsto \pair{f,-}$ is an isometry if either
+\begin{enumerate}
+\item $1<p<\infty$; or
+\item $p=1$ and $\mu$ is $\sigma$-finite.
+\end{enumerate}
+\end{proposition}
+
+\begin{example}
+TODO: counterexamples. See Folland p. 191.
+\end{example}
+
+\subsection{Operators on $L^p$ spaces}
+\subsubsection{Multiplication operators}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f\in \meas(\Omega, \C)$ and $1\leq p \leq \infty$. Then
+\[ M_f: L^p(X, \diff{\mu}) \to L^p(X, \diff{\mu}): g\mapsto f\cdot g \]
+with domain
+\[ \dom(M_f) = \setbuilder{g\in L^p(X, \diff{\mu})}{f\cdot g \in L^p(X, \diff{\mu})} \]
+is called a \udef{multiplication operator}.
+\end{definition}
+
+\begin{proposition} \label{boundedMultiplicationOperator}
+Let $(\Omega, \mathcal{A}, \mu)$ be a semi-finite measure space, $f\in \meas(\Omega, \C)$ and $1\leq p < \infty$. Then $M_f$ is bounded \textup{if and only if} $f$ is essentially bounded.
+
+In this case $\norm{M_f} = \essup(f)$.
+\end{proposition}
+TODO also holds for $p = \infty$.
+\begin{proof}
+$\boxed{\Rightarrow}$ We prove the contraposition. Assume $f$ is not essentially bounded. For all $n$, consider $A_n = \{|f| \geq n\}$, which is in $\mathcal{A}$ by \ref{measurablesSetsRealMeasurableFunction}. Then $\mu(A_n) > 0$. By semi-finiteness, we can find $B_n\subseteq A_n$ such that $B_n\in \mathcal{A}$ and $0 < \mu(B_n)< \infty$. Then $\norm{\charFunc{B_n}}_p = \mu(B_n)^{1/p}$, which means $\charFunc{B_n}\in L^p(X, \diff{\mu})$. We have
+\begin{align*}
+\norm{M_f\charFunc{B_n}}_p^p &= \int_\Omega |f\cdot \charFunc{B_n}|^{p}\diff{\mu} \\
+&= \int_\Omega \charFunc{B_n}\cdot|f|^p\diff{\mu} \\
+&= \int_{B_n}|f|^p\diff{\mu} \\
+&\geq n^p\int_{B_n}\diff{\mu} \\
+&= n^p\mu(B_n) = n^p\norm{\charFunc{B_n}}^p,
+\end{align*}
+which implies $\norm{M_f\charFunc{B_n}}_p \geq n\norm{\charFunc{B_n}}_p$ for all $n\in \N$. Thus $M_f$ is not bounded.
+
+$\boxed{\Leftarrow}$ Set $f' = |f| \wedge \underline{\essup(f)}$, which is measurable by \ref{modulusMeasurable} and \ref{limitOperationsOnRealMeasurableFunctions}. Also $|f| = f'$ almost everywhere. Then, for $g\in L^p(X, \diff{\mu})$, we have
+\begin{align*}
+\norm{M_fg}_p^p &= \int_\Omega |f\cdot g|^p \diff{\mu} \\
+&= \int_\Omega f'^p\cdot |g|^p \diff{\mu} \\
+&\leq \essup(f)^p\int_\Omega |g|^p \diff{\mu} = \essup(f)^p\norm{g}_p^p.
+\end{align*}
+Thus $M_f$ is bounded and $\norm{M_f} \leq \essup(f)$.
+
+Finally, we need to prove $\norm{M_f} \geq \essup(f)$. Take arbitrary $\epsilon > 0$. Consider $A_\epsilon = \{|f| \geq \essup(f)-\epsilon\}$, which is in $\mathcal{A}$ by \ref{measurablesSetsRealMeasurableFunction}. By construciton, $\mu(A_\epsilon) > 0$. By semi-finiteness, we can find $B_\epsilon\subseteq A_\epsilon$ such that $B_\epsilon\in \mathcal{A}$ and $0 < \mu(B_\epsilon)< \infty$. Then $\norm{\charFunc{B_\epsilon}}_p = \mu(B_\epsilon)^{1/p}$, which means $\charFunc{B_\epsilon}\in L^p(X, \diff{\mu})$. We have
+\begin{align*}
+\norm{M_f\charFunc{B_\epsilon}}_p^p &= \int_\Omega |f\cdot \charFunc{B_\epsilon}|^{p}\diff{\mu} \\
+&= \int_\Omega \charFunc{B_\epsilon}\cdot|f|^p\diff{\mu} \\
+&= \int_{B_\epsilon}|f|^p\diff{\mu} \\
+&\geq (\essup(f)-\epsilon)^p\int_{B_\epsilon}\diff{\mu} \\
+&= \big(\essup(f)-\epsilon\big)^p\mu(B_\epsilon) = \big(\essup(f)-\epsilon\big)^p\norm{B_\epsilon}^p,
+\end{align*}
+which implies $\norm{M_f\charFunc{B_\epsilon}}_p \geq \big(\essup(f)-\epsilon\big)\norm{B_\epsilon}$, and so $\norm{M_f} \geq \essup(f)-\epsilon$ for all $\epsilon >0$. Thus $\norm{M_f} \geq \essup(f)$.
+\end{proof}
+
+\subsection{Locally integrable spaces}
+\begin{definition}
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The \udef{locally $L^p$} space is the space
+\[ L^p_\text{loc}(\Omega) \defeq \setbuilder{f \in (\Omega\to\C)}{\text{$f\in L^p(K)$ for all compact $K\subset \Omega$}}. \]
+The functions in $L^1_\text{loc}(\Omega)$ are called \udef{locally integrable} on $\Omega$.
+\end{definition}
+TODO: deal with equivalence classes??
+
+
+\subsection{Sequence spaces}
+TODO:  $L^p(A,\mu)$ with $\mu$ counting measure.
+
+Let $J$ be a countable index set and $x:J\to \mathbb{F}$ a sequence indexed by $J$. We define
+\[ \norm{x}_p := \left(\sum_{j\in J}|x(j)|^p\right)^{1/p} \qquad\text{and}\qquad \norm{x}_\infty = \sup_{j\in J}|x(j)|. \]
+So $\norm{\cdot}_1$ is the standard norm on $\mathbb{F}^n$. For general sequences there is no guarantee that these norms do not diverge.
+\begin{definition}
+Let $J$ be an index set, $D$ a directed set and $p\geq 1$,
+\begin{align*}
+\ell^p(J) &= \setbuilder{x:J\to \F}{\norm{x}_p < +\infty},\\
+\ell^\infty(J) &= \setbuilder{x:J\to \F}{\norm{x}_\infty < +\infty},\\
+c_0(D) &= \setbuilder{x:D\to \F}{\lim_{n\to\infty}|x(n)| = 0}, \\
+c_{00}(D) &= \setbuilder{x:D\to \F}{\setbuilder{n\in D}{x(n)\neq 0}\;\text{has finite cardinality}}.
+\end{align*}
+unless specified we equip $c_0$ and $c_{00}$ with the norm $\norm{\cdot}_\infty$.
+\end{definition}
+
+\begin{lemma}
+$c_{00}$ is dense in $\ell^p$ if it is equipped with the norm $\norm{\cdot}_p$ and dense in $c_0$ if it is equipped with the norm $\norm{\cdot}_\infty$.
+\end{lemma}
+
+Let $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$. We have the inequalities
+\begin{align*}
+\norm{xy}_1 &\leq \norm{x}_p\norm{y}_q\qquad\text{(Hölder inequality)} \\
+\norm{x+y}_p &\leq \norm{x}_p+\norm{y}_p\qquad\text{(Minkowski inequality)}
+\end{align*}
+which follow from the general cases (TODO ref) by applying the counting measure.
+
+\begin{proposition}
+The continuous dual of $l^p(J)$ is $l^q(J)$ where $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$.
+Also, the continuous dual of $l^1$ is $l^\infty$.
+\end{proposition}
+
 
 
 \section{Classification by support}
@@ -2881,36 +3177,7 @@ where we have used the fact that $D_f^{\preimf}\big(\interval{0,t}\big)$ is upwa
 \end{proof}
 
 
-\section{The $L^p(X,\diff{\mu})$ spaces}
-
-\subsection{Indentifying functions that are equal a.e.}
-
-TODO: identification of a.e.\ equal functions is compatible with algebraic operations by \ref{equalAECongruence}.
-
-TODO: allow functions that are only defined a.e.
-
-
-\begin{proposition}
-TODO every equivalence class contains exactly one continuous functions (for Borel measures?)
-\end{proposition}
-
-
-\subsection{$L^0(\Omega, \mu)$}
-TODO: $\norm{f}_0 = \mu\{f\neq 0\}$ (?)
-
-\subsubsection{Essential supremum}
-\begin{definition}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(\Omega, \C)$. The \udef{essential supremum} of $f$ is
-\[ \essup(f) \defeq \inf\setbuilder{\sup_{\omega\in E}|f(\omega)|}{E\in \mathcal{A}, \mu(E^c) = 0}. \]
-We call $f$ \udef{essentially bounded} if $\essup(f)<\infty$.
-\end{definition}
-
-\begin{lemma}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(\Omega, \C)$. Then
-\[ \essup(f) = \sup D_{|f|}^{\preimf}\big(\interval[o]{0,\infty}\big) = \inf D_{|f|}^{\preimf}\big(\{0\}\big). \]
-\end{lemma}
-
-\subsubsection{Convergence in measure}
+\subsection{Convergence in measure}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $F\in \powerfilters\big(\meas(\Omega, \C)\big)$ and $f\in \meas(\Omega, \C)$. Then $F$ is said to \udef{converge in measure} to $f$ if
 \[ \upset D_{|-|}(\epsilon)^{\imf\imf}(F-f) \overset{\overline{\R^+}}{\longrightarrow} 0 \]
@@ -2979,70 +3246,6 @@ We are now ready to verify the conditions in \ref{TVSconstruction}. Take arbitra
 Take arbitrary $\lambda\in \C$. \ref{distributionOfFunctionLemma}
 \end{proof}
 
-\subsection{Completeness and density}
-\begin{theorem}[Riesz-Fisher]
-The space $L^p(X,\diff{\mu})$ is complete.
-\end{theorem}
-
-For $L^\infty$: essential supremum.
-
-\begin{proposition}
-Let $X$ be a set. For all $1\leq p < \infty$, the set of $p$-integrable simple functions is dense in $L^p(\diff{\mu})$.
-\end{proposition}
-
-
-\begin{proposition}
-Let $X$ be a locally compact Hausdorff space and $\mu$ a Radon measure on $X$. Then $\cont_c(X)$ is dense in $L^p(\diff{\mu})$ for all $1\leq p < \infty$.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-
-\subsection{Operators on $L^p$ spaces}
-\subsubsection{Multiplication operators}
-\begin{definition}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f\in \meas(\Omega, \C)$ and $1\leq p \leq \infty$. Then
-\[ M_f: L^p(X, \diff{\mu}) \to L^p(X, \diff{\mu}): g\mapsto f\cdot g \]
-with domain
-\[ \dom(M_f) = \setbuilder{g\in L^p(X, \diff{\mu})}{f\cdot g \in L^p(X, \diff{\mu})} \]
-is called a \udef{multiplication operator}.
-\end{definition}
-
-\begin{proposition} \label{boundedMultiplicationOperator}
-Let $(\Omega, \mathcal{A}, \mu)$ be a semi-finite measure space, $f\in \meas(\Omega, \C)$ and $1\leq p < \infty$. Then $M_f$ is bounded \textup{if and only if} $f$ is essentially bounded.
-
-In this case $\norm{M_f} = \essup(f)$.
-\end{proposition}
-TODO also holds for $p = \infty$.
-\begin{proof}
-$\boxed{\Rightarrow}$ We prove the contraposition. Assume $f$ is not essentially bounded. For all $n$, consider $A_n = \{|f| \geq n\}$, which is in $\mathcal{A}$ by \ref{measurablesSetsRealMeasurableFunction}. Then $\mu(A_n) > 0$. By semi-finiteness, we can find $B_n\subseteq A_n$ such that $B_n\in \mathcal{A}$ and $0 < \mu(B_n)< \infty$. Then $\norm{\charFunc{B_n}}_p = \mu(B_n)^{1/p}$, which means $\charFunc{B_n}\in L^p(X, \diff{\mu})$. We have
-\begin{align*}
-\norm{M_f\charFunc{B_n}}_p^p &= \int_\Omega |f\cdot \charFunc{B_n}|^{p}\diff{\mu} \\
-&= \int_\Omega \charFunc{B_n}\cdot|f|^p\diff{\mu} \\
-&= \int_{B_n}|f|^p\diff{\mu} \\
-&\geq n^p\int_{B_n}\diff{\mu} \\
-&= n^p\mu(B_n) = n^p\norm{\charFunc{B_n}}^p,
-\end{align*}
-which implies $\norm{M_f\charFunc{B_n}}_p \geq n\norm{\charFunc{B_n}}_p$ for all $n\in \N$. Thus $M_f$ is not bounded.
-
-$\boxed{\Leftarrow}$ Set $f' = |f| \wedge \underline{\essup(f)}$, which is measurable by \ref{modulusMeasurable} and \ref{limitOperationsOnRealMeasurableFunctions}. Also $|f| = f'$ almost everywhere. Then, for $g\in L^p(X, \diff{\mu})$, we have
-\begin{align*}
-\norm{M_fg}_p^p &= \int_\Omega |f\cdot g|^p \diff{\mu} \\
-&= \int_\Omega f'^p\cdot |g|^p \diff{\mu} \\
-&\leq \essup(f)^p\int_\Omega |g|^p \diff{\mu} = \essup(f)^p\norm{g}_p^p.
-\end{align*}
-Thus $M_f$ is bounded and $\norm{M_f} \leq \essup(f)$.
-
-Finally, we need to prove $\norm{M_f} \geq \essup(f)$. Take arbitrary $\epsilon > 0$. Consider $A_\epsilon = \{|f| \geq \essup(f)-\epsilon\}$, which is in $\mathcal{A}$ by \ref{measurablesSetsRealMeasurableFunction}. By construciton, $\mu(A_\epsilon) > 0$. By semi-finiteness, we can find $B_\epsilon\subseteq A_\epsilon$ such that $B_\epsilon\in \mathcal{A}$ and $0 < \mu(B_\epsilon)< \infty$. Then $\norm{\charFunc{B_\epsilon}}_p = \mu(B_\epsilon)^{1/p}$, which means $\charFunc{B_\epsilon}\in L^p(X, \diff{\mu})$. We have
-\begin{align*}
-\norm{M_f\charFunc{B_\epsilon}}_p^p &= \int_\Omega |f\cdot \charFunc{B_\epsilon}|^{p}\diff{\mu} \\
-&= \int_\Omega \charFunc{B_\epsilon}\cdot|f|^p\diff{\mu} \\
-&= \int_{B_\epsilon}|f|^p\diff{\mu} \\
-&\geq (\essup(f)-\epsilon)^p\int_{B_\epsilon}\diff{\mu} \\
-&= \big(\essup(f)-\epsilon\big)^p\mu(B_\epsilon) = \big(\essup(f)-\epsilon\big)^p\norm{B_\epsilon}^p,
-\end{align*}
-which implies $\norm{M_f\charFunc{B_\epsilon}}_p \geq \big(\essup(f)-\epsilon\big)\norm{B_\epsilon}$, and so $\norm{M_f} \geq \essup(f)-\epsilon$ for all $\epsilon >0$. Thus $\norm{M_f} \geq \essup(f)$.
-\end{proof}
 
 \subsection{Weak $L^p(X,\diff{\mu})$ spaces}
 \begin{definition}
@@ -3090,7 +3293,7 @@ so
 \[ \norm{h}_{p,\infty} = \sup_{\alpha > 0}\alpha\cdot (2\alpha^{-p})^{1/p} = \sup_{\alpha > 0}2^{1/p}\alpha\cdot \alpha^{-1} = 2^{1/p} < \infty. \]
 \end{example}
 
-\subsection{Interpolation}
+\section{Interpolation}
 
 \begin{proposition}
 Let $\sSet{X,\Omega, \mu}$ be a $\sigma$-finite measure space.
@@ -3115,9 +3318,9 @@ We calculate, using \ref{LpNormFromDistribution},
 Observe that the integrals converge because $p<r<q$, so $r-p>0$ and $r-q<0$.
 \end{proof}
 
-\subsubsection{The Marcinkiewicz interpolation theorem}
+\subsection{The Marcinkiewicz interpolation theorem}
 TODO
-\subsubsection{The Riesz-Thorin Interpolation Theorem}
+\subsection{The Riesz-Thorin Interpolation Theorem}
 The scalars are complex.
 
 \begin{theorem}[Riesz-Thorin interpolation theorem]
@@ -3136,54 +3339,6 @@ with $A_\theta \leq A_0^{1-\theta}A_1^\theta$.
 TODO
 \end{proof}
 
-\begin{proposition}[Young's convolution inequality]
-
-\end{proposition}
-
-\subsection{Locally integrable spaces}
-\begin{definition}
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space. The \udef{locally $L^p$} space is the space
-\[ L^p_\text{loc}(\Omega) \defeq \setbuilder{f \in (\Omega\to\C)}{\text{$f\in L^p(K)$ for all compact $K\subset \Omega$}}. \]
-The functions in $L^1_\text{loc}(\Omega)$ are called \udef{locally integrable} on $\Omega$.
-\end{definition}
-TODO: deal with equivalence classes??
-
-\begin{lemma}
-
-\end{lemma}
-
-\subsection{Sequence spaces}
-TODO:  $L^p(A,\mu)$ with $\mu$ counting measure.
-
-Let $J$ be a countable index set and $x:J\to \mathbb{F}$ a sequence indexed by $J$. We define
-\[ \norm{x}_p := \left(\sum_{j\in J}|x(j)|^p\right)^{1/p} \qquad\text{and}\qquad \norm{x}_\infty = \sup_{j\in J}|x(j)|. \]
-So $\norm{\cdot}_1$ is the standard norm on $\mathbb{F}^n$. For general sequences there is no guarantee that these norms do not diverge.
-\begin{definition}
-Let $J$ be an index set, $D$ a directed set and $p\geq 1$,
-\begin{align*}
-\ell^p(J) &= \setbuilder{x:J\to \F}{\norm{x}_p < +\infty},\\
-\ell^\infty(J) &= \setbuilder{x:J\to \F}{\norm{x}_\infty < +\infty},\\
-c_0(D) &= \setbuilder{x:D\to \F}{\lim_{n\to\infty}|x(n)| = 0}, \\
-c_{00}(D) &= \setbuilder{x:D\to \F}{\setbuilder{n\in D}{x(n)\neq 0}\;\text{has finite cardinality}}.
-\end{align*}
-unless specified we equip $c_0$ and $c_{00}$ with the norm $\norm{\cdot}_\infty$.
-\end{definition}
-
-\begin{lemma}
-$c_{00}$ is dense in $\ell^p$ if it is equipped with the norm $\norm{\cdot}_p$ and dense in $c_0$ if it is equipped with the norm $\norm{\cdot}_\infty$.
-\end{lemma}
-
-Let $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$. We have the inequalities
-\begin{align*}
-\norm{xy}_1 &\leq \norm{x}_p\norm{y}_q\qquad\text{(Hölder inequality)} \\
-\norm{x+y}_p &\leq \norm{x}_p+\norm{y}_p\qquad\text{(Minkowski inequality)}
-\end{align*}
-which follow from the general cases (TODO ref) by applying the counting measure.
-
-\begin{proposition}
-The continuous dual of $l^p(J)$ is $l^q(J)$ where $1<p,q<\infty$ satisfy $\frac{1}{p}+\frac{1}{q}$.
-Also, the continuous dual of $l^1$ is $l^\infty$.
-\end{proposition}
 
 
 \section{Spaces of test functions}
@@ -3751,7 +3906,126 @@ Let $f\in L^p(\interval{0,1})$ and $1\leq p <\infty$. Then $K_n(f) \to f$ in $L^
 TODO, see Korovkin-type Theorems and Approximation by Positive Linear Operators - Altomare.
 \end{proof}
 
+\chapter{Analysis on Euclidean spaces}
+\section{Derivatives}
+\begin{definition}
+We write $\partial_j \defeq \pd{}{x_j}$.
+\end{definition}
 
+\subsection{Multi-indices}
+
+\begin{definition}
+For all $n\in \N$, we define $\multiIndex(n) \defeq \N^n$. An element of $\multiIndex(n)$ is called a \udef{multi-index} of length $n\in \N$. If $\alpha, \beta$ are multi-indices of length $n$, then we define
+\begin{itemize}
+\item $|\alpha| \defeq \sum_{j=1}^n\alpha_j$;
+\item $\alpha! \defeq \prod_{j=1}^n\alpha_j!$;
+\item $\displaystyle\begin{pmatrix}
+\alpha \\ \beta
+\end{pmatrix} \defeq \frac{\alpha!}{\beta!(\beta - \alpha)!} = \begin{pmatrix}
+\alpha_1 \\ \beta_1
+\end{pmatrix}\hdots \begin{pmatrix}
+\alpha_n \\ \beta_n
+\end{pmatrix}$;
+\item $\partial^\alpha = \Big(\pd{}{x_1}\Big)^{\alpha_1}\hdots\Big(\pd{}{x_n}\Big)^{\alpha_n}$;
+\item $x^\alpha = \prod_{j=1}^n x_j^{\alpha_j}$ for all $x\in \R^n$.
+\end{itemize}
+We also have pointwise addition and order.
+\end{definition}
+
+TODO: notation for the all zero multi-index and Dirac delta multi-index.
+
+\begin{proposition}[Taylor's formula]
+Let $f\in \cont^k(\R^n)$ be a function and $x_0\in \R^n$. Then
+\[ f(x) = \sum_{|\alpha|\leq k}(\partial^\alpha f)(x_0)\frac{(x-x_0)^\alpha}{\alpha!} + R_k(x), \]
+where $\lim_{x\to x_0}\frac{|R_k(x)|}{\norm{x-x_0}^k} = 0$.
+\end{proposition}
+TODO the sum is only over multi-indices of length $n$.
+
+\begin{proposition}
+Let $k\in \N$, $\alpha$ be a multi-index with $|\alpha| \leq k$ and $f,g\in \cont^k(\R^n)$. Then
+\[ \partial^\alpha(fg) = \sum_{\beta\leq \alpha}\begin{pmatrix}
+\alpha \\ \beta
+\end{pmatrix}\big(\partial^\beta f\big)\big(\partial^{\alpha - \gamma} g\big). \]
+\end{proposition}
+
+\begin{proposition}
+Let $x,y\in \R^n$ and $\alpha\in\multiIndex(n)$, then
+\[ (x+y)^\alpha = \sum_{\beta \leq \alpha}\begin{pmatrix}
+\alpha \\ \beta
+\end{pmatrix}x^\beta y^{\alpha - \beta}. \]
+\end{proposition}
+
+\subsection{The Schwartz space}
+\begin{definition}
+Let $n\in \N$. For all $\alpha, \beta\in \multiIndex(n)$, we define
+\[ \norm{\cdot}_{\alpha, \beta}: \cont^\infty(\R^n)\to \overline{\R^+}: f\mapsto \sup_{x\in \R^n}\big|x^\alpha\partial^\beta f(x)\big|. \]
+We call
+\[ \Schwartz(\R^n) \defeq \setbuilder{f\in \cont^\infty(\R^n)}{\forall \alpha,\beta\in\multiIndex(n):\;\norm{f}_{\alpha,\beta}<\infty} \]
+the \udef{Schwartz space}. We equip it with the initial convergence w.r.t. $\big\{\norm{\cdot}_{\alpha, \beta}\big\}_{\alpha,\beta\in \multiIndex(n)}$.
+\end{definition}
+
+\begin{lemma}
+Let $x\in \R^n$, $\alpha\in\multiIndex(n)$ and $N\in \N$. Then
+\begin{enumerate}
+\item $|x^\alpha| \leq \norm{x}^{|\alpha|}$;
+\item $(1+\norm{x})^N \leq 2^N n^{\frac{N-2}{2}}\sum_{|\beta|\leq N}|x^\beta|$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) For all $1\leq j\leq n$ we have $|x_j| \leq |x|$. We calculate
+\[ |x^\alpha| = \Big|\prod_{j=1}^n x_j^{\alpha_j}\Big| = \prod_{j=1}^n |x_j|^{\beta_j} \leq \prod_{j=1}^n \norm{x}^{\beta_j} = \norm{x}^{\sum_{j=1}^n\beta_j} = \norm{x}^{|\beta|}. \]
+
+(2) First we calculate
+\begin{align*}
+\norm{x}^N &= \Big(\sum_{j=1}^n x_j^2\Big)^{N/2} \\
+&\leq \Big(\sum_{j=1}^n \big(\max_{1\leq k\leq n}|x_k|\big)^2\Big)^{N/2} = \Big(n\big(\max_{1\leq k\leq n}|x_k|\big)^2\Big)^{N/2} = n^{N/2}\max_{1\leq k\leq n}|x_k|^N \\
+&\leq n^{N/2}\sum_{k=1}^n |x_k|^N.
+\end{align*}
+Then we have, using \ref{consequencesBinomialIdentity},
+\[ \big(1+\norm{x}\big)^N  = \sum_{k=0}^N \begin{pmatrix}
+N \\ k
+\end{pmatrix}1^k\norm{x}^{N-k} \leq \sum_{k=0}^N \begin{pmatrix}
+N \\ k
+\end{pmatrix}(1 + \norm{x}^N) = 2^N\big(1+\norm{x}^N\big), \]
+because either $\norm{x}\leq 1$, so $\norm{x}^{N-k} \leq \norm{x}\leq 1 \leq 1+\norm{x}^N$, or $\norm{x} > 1$, so $\norm{x}^{N-k} \leq \norm{x}^N \leq 1+\norm{x}^N$.
+
+Then we calculate
+\begin{align*}
+2^N\big(1+\norm{x}^N\big) &\leq 2^N\Big(1+n^{N/2}\sum_{k=1}^n |x_k|^N\Big) \\
+&\leq 2^N\Big(n^{N/2}n+n^{N/2}\sum_{k=1}^n |x_k|^N\Big) \\
+&= 2^N\Big(n^{N/2}\sum_{k=1}^n|x_j|^0+n^{N/2}\sum_{k=1}^n |x_k|^N\Big) \\
+&\leq 2^Nn^{N/2}\sum_{|\beta|\leq N}|x^\beta|.
+\end{align*}
+The last inequality is because if $\beta$ is the all zero multi-index, then $|\beta| = 0 \leq N$, and if $\beta$ is such that all components are zero, except for one that is equal to $N$, then $|\beta| = N$.
+\end{proof}
+
+\subsection{Convolution}
+
+\begin{proposition}
+Let $f\in L^1(\R^n)$, $g\in \cont^k(\R^n)$ such that $\partial^\alpha g$ is bounded for all $|\alpha|\leq k$ and $\beta\in \multiIndex(n)$. Then
+\begin{enumerate}
+\item $f* g \in \cont^k(\R^n)$;
+\item $\partial^\beta(f*g) = f*(\partial^\beta g)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We have $\partial^\beta\big(f(y)g(x-y)\big) = f(y)\big(\partial^\beta g\big)(x-y)$, which is integrable since
+\[ \int_{\R^n}\big|f(y)\big(\partial^\beta g\big)(x-y)\big|\diff{y} \leq \sup_{x\in \R^n}\big|\big(\partial^\beta g\big)(x)\big|\int_{\R^n}\big|f(y)|\big|\diff{y} < \infty. \]
+Thus, by \ref{differentiationUnderIntegral},
+\[ \partial^\beta(f*g) = \partial^\beta \int_{\R^n}f(y)g(x-y)\diff{y} = \int_{\R^n}\partial^\beta \big(f(y)g(x-y)\big)\diff{y} = \int_{\R^n}f(y)\big(\partial^\beta g\big)(x-y)\diff{y} = f*(\partial^\beta g).  \]
+\end{proof}
+
+\begin{proposition}
+Let $f,g\in \Schwartz(\R^n)$. Then $f*g \in \Schwartz(\R^n)$.
+\end{proposition}
+\begin{proof}
+TODO.
+\end{proof}
+
+\section{The Fourier transform}
+\begin{definition}
+Let
+\end{definition}
 
 \chapter{Calculus}
 \input{calculus}
