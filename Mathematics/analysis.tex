@@ -1705,6 +1705,22 @@ Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a finite measure space and $\seq{f_n}$ 
 \end{corollary}
 TODO: \url{http://mathonline.wikidot.com/summary-of-convergence-theorems-for-lebesgue-integration}
 
+\begin{lemma} \label{continuityIntegralTwoParameterFunction}
+$\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space, $\sSet{X,\xi}$ a sequential convergence space and $f: \Omega\times X \to \R$ a measurable function.
+
+Suppose
+\begin{itemize}
+\item there exists an integrable $g\in\meas(\Omega, \overline{\R^+})$ such that $|f(\omega,t)| \leq g(\omega)$ for all $t$ and all $\omega\in \Omega$;
+\item $f(\omega, -)$ is continuous for all $\omega\in\Omega$.
+\end{itemize}
+Then $x\mapsto \int_\Omega f(\omega, x)\diff{\mu}(\omega)$ is continuous.
+\end{lemma}
+\begin{proof}
+Since $X$ is sequential, it is enough to show that $x\mapsto \int_\Omega f(\omega, x)\diff{\mu}(\omega)$ is sequentially continuous, by \ref{sequentialSpaceSequentialContinuity}. To that end, take a convergent sequence $\seq{x_n}\to x\in X$. Then $f(-, x_n)$ converges pointwise to $f(-,x)$ by assumption. Thus
+\[ \lim_{n\to \infty} \int_\Omega f(\omega, x_n)\diff{\mu}(\omega) = \int_\Omega f(\omega, x)\diff{\mu}(\omega) \]
+by the dominated convergence theorem \ref{dominatedConvergence}. This shows the sequential continuity of $x\mapsto \int_\Omega f(\omega, x)\diff{\mu}(\omega)$.
+\end{proof}
+
 \subsubsection{Fubini's theorem}
 \begin{theorem}[Fubini's theorem]
 Let $\sSet{\Omega_1, \mathcal{A}_1, \mu_1}$, $\sSet{\Omega_2, \mathcal{A}_2, \mu_2}$ be $\sigma$-finite measure spaces and $f: \Omega_1\times\Omega_2 \to \overline{\R}$ a measurable and integrable function. Then the functions
@@ -1883,6 +1899,10 @@ Let $(X,\mathcal{T})$ be a topological space. Let $x_0 \in X$ and $f,g: X\setmin
 \end{definition}
 
 \begin{lemma}
+Let $(X,\mathcal{T})$ be a topological space. Let $x_0 \in X$ and $f,g: X\setminus\{x_0\}\to \R^+$ be functions. Then $f = o(g)$ implies $f = O(g)$.
+\end{lemma}
+
+\begin{lemma}
 Let $(X,\mathcal{T})$ be a topological space. Let $x_0 \in X$ and $f,g: X\setminus\{x_0\}\to \R^+$ be functions.
 
 Then $f = o(g)$ \textup{if and only if} $g = \omega(f)$ as $x\to x_0$.
@@ -1897,12 +1917,13 @@ Let $(X,\mathcal{T})$ be a topological space. Let $x_0 \in X$ and $f,g: X\setmin
 \end{enumerate}
 \end{lemma}
 
-\begin{lemma}
+\begin{lemma} \label{asymptoticTransitivity}
 Let $(X,\mathcal{T})$ be a topological space. Let $x_0 \in X$ and $f,g, h,k: X\setminus\{x_0\}\to \R^+$ be functions. Then
 \begin{enumerate}
 \item if $f = o(h)$ and $g = O(k)$, then $fg = o(hk)$ as $x\to x_0$;
 \item if $f = O(h)$ and $g = O(k)$, then $fg = O(hk)$ as $x\to x_0$;
-\item if $f = o(h)$ and $h = O(k)$, then $f = o(k)$ as $x\to x_0$.
+\item if $f = O(h)$ and $h = o(k)$, then $f = o(k)$ as $x\to x_0$;
+\item if $f = o(h)$ and $h = o(k)$, then $f = o(k)$ as $x\to x_0$.
 \end{enumerate}
 \end{lemma}
 
@@ -1999,6 +2020,25 @@ Suppose $\seq{x_n} \overset{ll}{\longrightarrow} x$. By \ref{monotoneSubsequence
 Let $\seq{x'_n}$ be a monotonically increasing subsequence. We must have that $\seq{x'_n} \overset{ll}{\longrightarrow} x$. Then $\seq{x'_n}$ has a tail $\setbuilder{x'_k}{k \geq k_0}\subseteq \interval[co]{x,\infty}$. We claim that $\setbuilder{x'_k}{k \geq k_0} = \{x\}$. Indeed, suppose there exists $x'_m \in \setbuilder{x'_k}{k \geq k_0}$ such that $x'_m \neq x$, then $\setbuilder{x'_k}{k \geq m} \perp \interval[co]{x, (x'_m-x)/2}$ and $\seq{x'_n}$ does not converge.
 
 We have shown that $\seq{x'_k}_{k\geq k_0}$ is the constant sequence $\underline{x}$.
+\end{proof}
+
+\section{Sequences}
+
+\begin{proposition}[Fekete's subadditive lemma] \label{FeketesLemma}
+Let $\seq{a_n}_{n\in \N}$ be a sequence of real numbers such that
+\[ \forall n,m\in \N: \qquad a_{n+m} \leq a_n+a_m. \]
+Then $\lim_{n\to \infty} \frac{a_n}{n} = \inf_{n\in\N}\frac{a_n}{n} \in \R\cup\{-\infty\}$.
+\end{proposition}
+\begin{proof}
+Since
+\[ \inf_{n\in\N}\frac{a_n}{n} \leq \liminf_{n\to\infty}\frac{a_n}{n} \leq \limsup_{n\to\infty}\frac{a_n}{n} \]
+and $\lim_{n\to \infty} \frac{a_n}{n}$ exists if $\liminf_{n\to\infty}\frac{a_n}{n} = \limsup_{n\to\infty}\frac{a_n}{n}$, it is enough to prove that $\limsup_{n\to\infty}\frac{a_n}{n} \leq \inf_{n\in\N}\frac{a_n}{n}$.
+
+Take arbitrary $d > \inf_{n\in\N}\frac{a_n}{n}$. Then there exists $m\in\N$ such that $\frac{a_m}{m} < d$. Each $n\in \N$ can be written as $n = km+l$ with $k\in \N$ and $0\leq l < m$ (thus $k = \frac{n-l}{m}$). Then
+\[ a_n = a_{km+l} \leq ka_m + a_l \leq \frac{n-l}{m}a_m + a_l \leq n\frac{a_m}{m} + \Big|\frac{l}{m}a_m\Big| + a_l \leq n\frac{a_m}{m} + |a_m| + \max_{0\leq l < m}a_l, \]
+so $\frac{a_n}{n}\leq \frac{a_m}{m} + \frac{|a_m| + \max_{0\leq l < m}a_l}{n}$. If we take $n \geq \frac{|a_m| + \max_{0\leq l < m}a_l}{d - \frac{a_m}{m}}$, then
+\[ \frac{a_n}{n}\leq \frac{a_m}{m} + \frac{|a_m| + \max_{0\leq l < m}a_l}{n} \leq \frac{a_m}{m} + \Big(d - \frac{a_m}{m}\Big) = d. \]
+Thus $\limsup_{n\to\infty}\frac{a_n}{n} \leq d$ for all $d> \inf_{n\in\N}\frac{a_n}{n}$ and so $\limsup_{n\to\infty}\frac{a_n}{n} \leq \inf_{n\in\N}\frac{a_n}{n}$.
 \end{proof}
 
 \section{Series}
@@ -3934,6 +3974,14 @@ We also have pointwise addition and order.
 
 TODO: notation for the all zero multi-index and Dirac delta multi-index.
 
+\begin{lemma}
+Let $n\in\N$ and $\alpha \in \multiIndex(n)$. Then $|()^\alpha|$ is subadditive: $|(x+y)^\alpha| \leq |x^\alpha| + |y^\alpha|$ for all $x,y\in \R^n$.
+\end{lemma}
+\begin{proof}
+We have
+\[ |(x+y)^\alpha| = \Big|\prod_{j=1}^n(x_j+ y_j)^{\alpha_j}\Big| =  \]
+\end{proof}
+
 \begin{proposition}[Taylor's formula]
 Let $f\in \cont^k(\R^n)$ be a function and $x_0\in \R^n$. Then
 \[ f(x) = \sum_{|\alpha|\leq k}(\partial^\alpha f)(x_0)\frac{(x-x_0)^\alpha}{\alpha!} + R_k(x), \]
@@ -3964,7 +4012,7 @@ We call
 the \udef{Schwartz space}. We equip it with the initial convergence w.r.t. $\big\{\norm{\cdot}_{\alpha, \beta}\big\}_{\alpha,\beta\in \multiIndex(n)}$.
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{SchwartzBoundedLemma}
 Let $x\in \R^n$, $\alpha\in\multiIndex(n)$ and $N\in \N$. Then
 \begin{enumerate}
 \item $|x^\alpha| \leq \norm{x}^{|\alpha|}$;
@@ -3999,9 +4047,20 @@ Then we calculate
 The last inequality is because if $\beta$ is the all zero multi-index, then $|\beta| = 0 \leq N$, and if $\beta$ is such that all components are zero, except for one that is equal to $N$, then $|\beta| = N$.
 \end{proof}
 
+\begin{proposition} \label{SchwartzAlternateDefinition}
+For all $N\in \N$ and $\beta\in\multiIndex(n)$, define
+\[ n_{N,\beta}: \cont^{\infty}(\R^n) \to \overline{R^+}: f \mapsto \sup_{x\in\R^n}\big(1+ \norm{x}\big)^N\big|\partial^\beta f(x)\big|. \]
+Then
+\[ \Schwartz(\R^n) = \setbuilder{f\in \cont^\infty(\R^n)}{\forall N\in \N,\beta\in\multiIndex(n):\;n_{N,\beta}(f)<\infty} \]
+and the topology on $\Schwartz(\R^n)$ is the initial topology w.r.t.\ the functions $n_{N,\beta}$.
+\end{proposition}
+\begin{proof}
+Immediate from \ref{SchwartzBoundedLemma}.
+\end{proof}
+
 \subsection{Convolution}
 
-\begin{proposition}
+\begin{proposition} \label{derivativeConvolution}
 Let $f\in L^1(\R^n)$, $g\in \cont^k(\R^n)$ such that $\partial^\alpha g$ is bounded for all $|\alpha|\leq k$ and $\beta\in \multiIndex(n)$. Then
 \begin{enumerate}
 \item $f* g \in \cont^k(\R^n)$;
@@ -4019,13 +4078,40 @@ Thus, by \ref{differentiationUnderIntegral},
 Let $f,g\in \Schwartz(\R^n)$. Then $f*g \in \Schwartz(\R^n)$.
 \end{proposition}
 \begin{proof}
-TODO.
+By \ref{derivativeConvolution}, we have $f*g\in \cont^\infty(\R^n)$. By \ref{SchwartzAlternateDefinition}, it is enough to show that $n_{N,\beta}\big(f*g\big) < \infty$ for all $N\in\N$ and $\beta\in\multiIndex(n)$. Take arbitrary such $N,\beta$. First we calculate
+\begin{align*}
+1+\norm{x} = 1+\norm{(x-y)+y} &\leq 1+\norm{x-y} + \norm{y} \\
+&\leq 1+\norm{x-y} + \norm{y} + \norm{x-y}\;\norm{y} = (1+\norm{x-y})(1+\norm{y}).
+\end{align*}
+Then, for all $x\in \R^n$, we have, by \ref{derivativeConvolution},
+\begin{align*}
+\big(1+\norm{x}\big)^N\big|\partial^\beta(f*g)(x)\big| &= \big(1+\norm{x}\big)^N\big|(\partial^\beta(f)*g)(x)\big| \\
+&= \big(1+\norm{x}\big)^N\int_{\R^n}\big|\partial^\beta f(x-y)\big|\, \big|g(y)\big|\diff{y} \\
+&\leq \int_{\R^n}(1+\norm{x-y})^N\big|\partial^\beta f(x-y)\big|\, \big(1+\norm{y}\big)^N\big|g(y)\big|\diff{y} \\
+&= \int_{\R^n}(1+\norm{x-y})^N\big|\partial^\beta f(x-y)\big|\big(1+\norm{y}\big)^{N+n+1}\big|g(y)\big|\big(1+\norm{y}\big)^{-n-1}\diff{y} \\
+&\leq n_{N,\beta}(f)n_{N+n+1, 0}(g)\int_{\R^n}\big(1+\norm{y}\big)^{-n-1}\diff{y}.
+\end{align*}
+Thus $n_{N,\beta}\big(f*g\big) \leq n_{N,\beta}(f)n_{N+n+1, 0}(g)\int_{\R^n}\big(1+\norm{y}\big)^{-n-1}\diff{y}$, which is finite, since $\big(1+\norm{y}\big)^{-n-1}$ is integrable (TODO ref).
 \end{proof}
 
 \section{The Fourier transform}
 \begin{definition}
-Let
+Let $n\in \N$ then the \udef{Fourier transform} is the function
+\[ \Fourier: L^1(\R^n) \to L^\infty(\R^n): f\mapsto \Big( \xi \mapsto \int_{\R^n}f(x)e^{-2\pi \xi\cdot x}\diff{x} \Big). \]
 \end{definition}
+
+\begin{lemma}
+Let $n\in \N$. Then $\im(\Fourier) \subseteq L^\infty(\R^n)\cap \cont(\R^n)$.
+\end{lemma}
+Thus $\Fourier$ is well-defined.
+\begin{proof}
+Let $f\in L^1(\R^n)$. Then
+\[ \sup_{\xi}\big|\Fourier(f)(\xi)\big| \leq \int_{\R^n}|f(x)e^{-2\pi \xi\cdot x}|\diff{x} = \int_{\R^n}|f(x)|\diff{x} = \norm{f}_1 < \infty, \]
+so $\Fourier(f) \in L^\infty(\R^n)$.
+
+Continuity follows from \ref{continuityIntegralTwoParameterFunction}, because $|f(x)e^{-2\pi \xi\cdot x}| \leq |f(x)|\in L^1(\R^n)$ and $f(x)e^{-2\pi \xi\cdot x}$ is a continuous function of $\xi$.
+\end{proof}
+
 
 \chapter{Calculus}
 \input{calculus}

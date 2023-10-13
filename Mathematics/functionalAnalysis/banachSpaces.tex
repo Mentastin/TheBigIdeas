@@ -1495,7 +1495,7 @@ Let $A$ be an algebra and $p\in A$ such that $p^2 = p$ and $p'$ exists. Then
 
 (4) Take derivative of (1).
 
-(5) Multiply (3) by $p$ on the left and right.
+(5) Multiply (4) by $p$ on the left and right.
 \end{proof}
 \begin{corollary}
 Let $\Tr$ be a trace functional on $A$ and $p\in A$ as before. Then $\Tr(p') = 0$.
@@ -2284,14 +2284,23 @@ In other words, $\C$ is the only normed complex division algebra.
 Let $A$ be a Banach algebra and $x\in A$. Then
 \[ \spr(x) = \lim_{n\to\infty}\norm{x^n}^{1/n} = \inf_{n\in\N}\norm{x^n}^{1/n}. \]
 \end{proposition}
+TODO: sometimes Fekete's lemma \ref{FeketesLemma} is used in the proof. Does this help us?
+
+TODO: fill out references!!
 \begin{proof}
-The contraposition of (1) in \ref{secondNeumannSeries} gives that $\lambda\in\spec(x)$ implies $|\lambda| \leq \inf_{n\to \infty}\norm{x^n}^{1/n}$. Thus $\spr(x) \leq \inf_{n\to \infty}\norm{x^n}^{1/n}$.
+The contraposition of (1) in \ref{secondNeumannSeries} gives that $\lambda\in\spec(x)$ implies $|\lambda| \leq \inf_{n\to \infty}\norm{x^n}^{1/n}$. Thus
+\[ \spr(x) \leq \inf_{n\in\N}\norm{x^n}^{1/n} \leq \liminf_{n\in\N}\norm{x^n}^{1/n} \leq \limsup_{n\in\N}\norm{x^n}^{1/n}. \]
+The result follows if we can prove $\limsup_{n\to\infty}\norm{x^n}^{1/n}\leq \spr(x)$.
 
-If we can now prove $\limsup_{n\to\infty}\norm{x^n}^{1/n}\leq \spr(x)$, then
-\[ \spr(x) \leq \inf_{n\in\N}\norm{x^n}^{1/n} \leq \liminf_{n\in\N}\norm{x^n}^{1/n} \leq \limsup_{n\in\N}\norm{x^n}^{1/n} \leq \spr(x), \]
-which means all terms in the inequality are equal. As the liminf and limsup are equal, they are equal to the limit.
+Consider the function $zR_x\big(z^{-1}\big)$, which is holomorphic on $\ball(0,\spr(x)^{-1})\setminus\{0\}$ by \ref{derivativePseudoresolvent}. Take an arbitrary continuous linear functional $f\in \dual{A}$. Then $f\big(zR_x(z^{-1})\big)$ is holomorphic (TODO ref).
 
-TODO prove $\limsup_{n\to\infty}\norm{x^n}^{1/n}\leq \spr(x)$.
+For all $z\in \ball(0,\norm{x}^{-1})\setminus\{0\}\subseteq \ball(0,\spr(x)^{-1})\setminus\{0\}$, we have the series expansion
+\[ f\big(zR_x(z^{-1})\big) = f\Big(z\sum_{n=0}^\infty \frac{x^n}{z^{-n-1}}\Big) = f\Big(\sum_{n = 0}^\infty (zx)^n\Big) = \sum_{n = 0}^\infty f\big((zx)^n\big), \]
+by \ref{secondNeumannSeries}. By TODO ref, this series expansion must also hold on the larger disk $\ball(0,\spr(x)^{-1})$, which means that $f\big((zx)^n\big) \to 0$ by TODO ref.
+
+Since $f\in A^*$ was arbitrary, the sequence $\seq{(zx)^n}$ is weakly convergent and so norm-bounded (with, say, bound $C$) by \ref{weaklyConvergentSequenceNormBounded} for all $z\in \ball(0,\spr(x)^{-1})$. Thus
+\[ |z|\limsup_{n\to\infty}\norm{x^n}^{1/n} = \limsup_{n\to\infty}\norm{(zx)^n}^{1/n} \leq \limsup_{n\to\infty}C^{1/n} = \lim_{n\to\infty} C^{1/n} = 1, \]
+and so $\limsup_{n\to\infty}\norm{x^n}^{1/n} \leq |z|^{-1}$. Since $z\in \ball(0,\spr(x)^{-1})$ was picked arbitrarily, we have $\limsup_{n\to\infty}\norm{x^n}^{1/n} \spr(x)$.
 \end{proof}
 
 
@@ -2500,6 +2509,15 @@ Algebra homomorphism is given by \ref{GelfandTransformHomomorphism}. Norm-contra
 To see that $\evalMap_{-}$ is unital, note that $\evalMap_{\vec{1}}(\varphi) = 1$ by for all $x\in A$ and $\varphi\in \hat{A}$ by \ref{charactersUnital}. Thus $\evalMap_{\vec{1}} = \constant{1}$, which is the unit of $\cont(\hat{A})$.
 \end{proof}
 
+\subsection{Holomorphic functional calculus}
+ISem.
+
+\url{https://noncommutativeanalysis.wordpress.com/2014/01/02/advanced-analysis-notes-18-the-holomorphic-functional-calculus-i/}.
+
+\url{https://noncommutativeanalysis.wordpress.com/2014/01/05/advanced-analysis-notes-19-the-holomorphic-functional-calculus-ii-definition-and-basic-properties/#more-2773}.
+
+Works for all elements, not just normal ones.
+
 
 \section{Tensor products}
 \subsection{Algebraic tensor product}
@@ -2509,7 +2527,7 @@ Let $A$ be a Banach algebra, $a\in A$ and $p\in A$ an idempotent. Then
 \item $e^{p\otimes a} = (\vec{1}-p)\otimes \vec{1} + p\otimes e^a$;
 \item $e^{a\otimes p} = \vec{1}\otimes (\vec{1}-p) + e^a\otimes p$.
 \end{enumerate}
-In particular, $e^{\vec{1}\otimes a} = \vec{1}\otimes a$ and $e^{a\otimes \vec{1}} = e^a\otimes a$.
+In particular, $e^{\vec{1}\otimes a} = \vec{1}\otimes e^a$ and $e^{a\otimes \vec{1}} = e^a\otimes \vec{1}$.
 \end{proposition}
 \begin{proof}
 We calculate

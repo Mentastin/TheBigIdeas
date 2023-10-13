@@ -255,7 +255,7 @@ For any $x\in X$ we can find a sequence $\seq{x_n}$ in $\dom(A)$ that converges 
 This is a sequence in $\dom(A)$ by \ref{integralOperatorSemigroupGenerator} and converges to $x$ by TODO ref. Thus $\dom(A)$ is dense in $X$ by TODO ref.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{generatorSemigroupUnique}
 An operator is the generator of at most one operator semigroup.
 \end{proposition}
 \begin{proof}
@@ -271,20 +271,20 @@ by (TODO ref!!!). TODO rest.
 \begin{proposition} \label{boundedGenerator}
 Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. Then the following are equivalent:
 \begin{enumerate}
-\item $A$ is bounded;
 \item $A$ is defined everywhere;
-\item $T$ is uniformly continuous;
+\item $A$ is bounded;
+\item $T$ is norm continuous;
 \item $T(t) = e^{tA}$ for all $t\in\R ^+$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ Because $A$ is closed, $\dom(A)$ is closed by (TODO ref). As $\dom(A)$ is dense in $X$, this means $\dom(A) = X$.
+$(1) \Rightarrow (2)$ Since $A$ is closed, by \ref{generatorClosedDenselyDefined}, it is bounded, by the closed graph theorem \ref{BanachClosedGraphTheorem}.
 
-$(2) \Rightarrow (1)$ TODO also closed graph.
+$(2) \Rightarrow (3)$ TODO holomorphic functional calc.
 
-$(3)$ TODO
+$(3) \Rightarrow (4)$ $e^{tA}$ is a semigroup with generator $A$. TODO ref. Thus $T(t) = e^{tA}$ by \ref{generatorSemigroupUnique}.
 
-$(4)$ $e^{tA}$ is a semigroup with generator $A$. TODO
+$(4) \Rightarrow (1)$ TODO
 \end{proof}
 
 \subsection{Cores of the generator}
@@ -1275,6 +1275,103 @@ $(4) \Rightarrow (5)$ That $A$ is densely defined is immediate because it genera
 TODO
 \end{proof}
 
+\chapter{Evolution families}
+\begin{definition}
+A function $U: \setbuilder{(t,s)\in \R^2}\{t\geq s\}\to \Bounded(X)$ is called a \udef{(strongly continuous) evolution family} if
+\begin{itemize}
+\item $U(t,s) = U(t,r)U(r,s)$ and $U(s,s) = \id_X$;
+\item it is a strongly continuous function.
+\end{itemize}
+Evolution families are also called \udef{evolution systems}, \udef{evolution operators},
+\udef{evolution processes}, \udef{propagators} or \udef{fundamental solutions}.
+\end{definition}
+We need $U$ to be jointly strongly continuous, which is stronger than just requiring strong continuity in each parameter separately.
+
+\section{Growth bounds}
+\begin{definition}
+Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on $X$. We call $U$ \udef{exponentially bounded} if there exist $w\in\R$ and $M\geq 1$ such that
+\[ \forall t\geq s:\quad \norm{U(t,s)} \leq M e^{w(t-s)}. \]
+We call
+\[ w_0 = \inf\setbuilder{w\in \R}{\exists M_w \geq 1: \forall t\geq s:\; \norm{U(t,s)} \leq M_w e^{w(t-s)} } \]
+the \udef{growth bound} of the evolution family.
+\end{definition}
+Clearly $U$ is exponentially bounded if and only if $w_0 < \infty$.
+
+\begin{example}
+There exist evolution families that are not exponentially bounded. Take $X = \C$ and $U(t,s) = e^{t^2 - s^2}$. This is an evolution family because, for $t\geq r\geq s$,
+\[ U(t,s) = e^{t^2 - s^2} = e^{t^2 - r^2 + r^2 - s^2} = e^{t^2 - r^2}e^{r^2 - s^2} = U(t,r)U(r,s). \]
+It is also clearly not exponentially bounded because $e^{t^2 - s^2} = e^{(t+s)(t-s)}$.
+\end{example}
+
+\begin{proposition}
+Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on $X$ with growth bound $w_0$. Then
+\begin{enumerate}
+\item if there exist $M\geq 0, t_0>0$ such that
+\[ \forall s\in\R: \forall 0\leq t \leq t_0: \quad \norm{U(s+t, s)}\leq M, \]
+then $w_0\leq \frac{\ln(M_1)}{t_1}$;
+\item if $U$ is exponentially bounded, it is enough to check $\norm{U(s+t_0, s)}\leq M$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Pick $s\leq t \in \R$. We can find $n\in \N$ and $u\leq t_0$ such that $t-s = nt_0 + u$. Then $n\leq \frac{t-s}{t_0}$. WLOG we may assume $M\geq 1$. We calculate
+\begin{align*}
+\norm{U(t,s)} &= \norm{U(s+(t-s), s)} \\
+&= \norm{U(s+nt_0 + u, s)} \\
+&\leq \norm{U(s+nt_0 + u, s+nt_0)}\;\norm{U(s+nt_0, s)} \\
+&\leq M\;M^n \\
+&\leq M\;M^{\frac{t-s}{t_0}} \\
+&= M\;e^{\ln(M)t_0^{-1}(t-s)}.
+\end{align*}
+
+(2) Assume $\norm{U(t,s)} \leq M' e^{w'(t-s)}$ and cosider the proof in (1). We just need to be able to estimate $\norm{U(s+nt_0 + u, s+nt_0)}$ by some constant. We may take $M' e^{w't_0}$.
+\end{proof}
+
+\section{The generator}
+\begin{definition}
+\[ A(t)U(t,s) = \Big(\od{}{t}U(t,s)\Big) \]
+with domain where this makes sense in the strong sense.
+\end{definition}
+Note that $t\mapsto U(t,s)$ is not a semigroup, so we cannot immediately see the generator as a generator of a semigroup.
+
+\begin{proposition}
+
+\end{proposition}
+
+\section{Evolution semigroups}
+\begin{definition}
+Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on a Banach space $X$. The associated \udef{evolution semigroup} is a semigroup
+\[ T: \R^{\geq 0} \to \sSet{\cont(\R, X), \norm{\cdot}_\infty} \]
+defined by
+\[ \big(T(t)f\big)(s) \defeq U(s,s-t)f(s-t), \]
+for all $s\in R$, $t\in\R^{\geq 0}$ and $f\in \sSet{\cont(\R, X), \norm{\cdot}_\infty}$.
+\end{definition}
+
+Note that the mapping of evolution families to evolution semigroups is injective.
+
+\begin{lemma}
+Evolution semigroups are semigroups. If the evolution family is exponentially bounded, then the evolution semigroup is strongly continuous.
+\end{lemma}
+\begin{proof}
+The semigroup property is immediate: we have $\big(T(0)f\big)(s) = U(s,s)f(s) = f(s)$, so $T(0) = \id_{\cont(\R,X)}$. Also
+\begin{align*}
+\big(T(t_1+t_2)f\big)(s) &= U(s,s-t_1-t_2)f(s-t_1-t_2) \\
+&= U(s,s-t_1)U(s-t_1,s-t_1-t_2)f(s-t_1-t_2) \\
+&= U(s,s-t_1)\big(T(t_2)f\big)(s-t_1) \\
+&= \Big(T(t_1)\big(T(t_2)f\big)\Big)(s).
+\end{align*}
+
+
+For strong continuity TODO pointwise continuity implies uniform continuity on compact sets ???
+\end{proof}
+
+\begin{proposition}
+Let $T$ be a strongly continuous semigroup on $E = cont(\R,X)$ with generator $G$. Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is an evolution semigroup;
+\item TODO
+\end{enumerate}
+\end{proposition}
+
 
 
 \chapter{Operator equations}
@@ -1455,92 +1552,7 @@ for all $t\in I$.
 
 \url{https://www.math.kit.edu/iana3/~schnaubelt/media/isem16-skript.pdf}
 
-\subsection{Evolution equations}
-\begin{definition}
-A function $U: \{t\geq s\}\to \Bounded(X)$ is called a \udef{(strongly continuous) evolution family} if
-\begin{itemize}
-\item $U(t,s) = U(t,r)U(r,s)$ and $U(s,s) = \id_X$;
-\item it is strongly continuous.
-\end{itemize}
-Evolution families are also called \udef{evolution systems}, \udef{evolution operators},
-\udef{evolution processes}, \udef{propagators} or \udef{fundamental solutions}.
-\end{definition}
-
-\subsubsection{Growth bounds}
-\begin{definition}
-Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on $X$. We call $U$ \udef{exponentially bounded} if there exist $w\in\R$ and $M\geq 1$ such that
-\[ \forall t\geq s:\quad \norm{U(t,s)} \leq M e^{w(t-s)}. \]
-We call
-\[ w_0 = \inf\setbuilder{w\in \R}{\exists M_w \geq 1: \forall t\geq s:\; \norm{U(t,s)} \leq M_w e^{w(t-s)} } \]
-the \udef{growth bound} of the evolution family.
-\end{definition}
-Clearly $U$ is exponentially bounded if and only if $w_0 < \infty$.
-
-\begin{example}
-There exist evolution families that are not exponentially bounded. Take $X = \C$ and $U(t,s) = e^{t^2 - s^2}$. This is an evolution family because, for $t\geq r\geq s$,
-\[ U(t,s) = e^{t^2 - s^2} = e^{t^2 - r^2 + r^2 - s^2} = e^{t^2 - r^2}e^{r^2 - s^2} = U(t,r)U(r,s). \]
-It is also clearly not exponentially bounded because $e^{t^2 - s^2} = e^{(t+s)(t-s)}$.
-\end{example}
-
-\begin{proposition}
-Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on $X$ with growth bound $w_0$. Then
-\begin{enumerate}
-\item if there exist $M\geq 0, t_0>0$ such that
-\[ \forall s\in\R: \forall 0\leq t \leq t_0: \quad \norm{U(s+t, s)}\leq M, \]
-then $w_0\leq \frac{\ln(M_1)}{t_1}$;
-\item if $U$ is exponentially bounded, it is enough to check $\norm{U(s+t_0, s)}\leq M$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Pick $s\leq t \in \R$. We can find $n\in \N$ and $u\leq t_0$ such that $t-s = nt_0 + u$. Then $n\leq \frac{t-s}{t_0}$. WLOG we may assume $M\geq 1$. We calculate
-\begin{align*}
-\norm{U(t,s)} &= \norm{U(s+(t-s), s)} \\
-&= \norm{U(s+nt_0 + u, s)} \\
-&\leq \norm{U(s+nt_0 + u, s+nt_0)}\;\norm{U(s+nt_0, s)} \\
-&\leq M\;M^n \\
-&\leq M\;M^{\frac{t-s}{t_0}} \\
-&= M\;e^{\ln(M)t_0^{-1}(t-s)}.
-\end{align*}
-
-(2) Assume $\norm{U(t,s)} \leq M' e^{w'(t-s)}$ and cosider the proof in (1). We just need to be able to estimate $\norm{U(s+nt_0 + u, s+nt_0)}$ by some constant. We may take $M' e^{w't_0}$.
-\end{proof}
-
-\subsubsection{Evolution semigroups}
-\begin{definition}
-Let $U: \{t\geq s\}\to \Bounded(X)$ be an evolution family on a Banach space $X$. The associated \udef{evolution semigroup} is a semigroup
-\[ T: \R^{\geq 0} \to \sSet{\cont(\R, X), \norm{\cdot}_\infty} \]
-defined by
-\[ \big(T(t)f\big)(s) \defeq U(s,s-t)f(s-t), \]
-for all $s\in R$, $t\in\R^{\geq 0}$ and $f\in \sSet{\cont(\R, X), \norm{\cdot}_\infty}$.
-\end{definition}
-
-Note that the mapping of evolution families to evolution semigroups is injective.
-
-\begin{lemma}
-Evolution semigroups are semigroups. If the evolution family is exponentially bounded, then the evolution semigroup is strongly continuous.
-\end{lemma}
-\begin{proof}
-The semigroup property is immediate: we have $\big(T(0)f\big)(s) = U(s,s)f(s) = f(s)$, so $T(0) = \id_{\cont(\R,X)}$. Also
-\begin{align*}
-\big(T(t_1+t_2)f\big)(s) &= U(s,s-t_1-t_2)f(s-t_1-t_2) \\
-&= U(s,s-t_1)U(s-t_1,s-t_1-t_2)f(s-t_1-t_2) \\
-&= U(s,s-t_1)\big(T(t_2)f\big)(s-t_1) \\
-&= \Big(T(t_1)\big(T(t_2)f\big)\Big)(s).
-\end{align*}
-
-
-For strong continuity TODO pointwise continuity implies uniform continuity on compact sets ???
-\end{proof}
-
-\begin{proposition}
-Let $T$ be a strongly continuous semigroup on $E = cont(\R,X)$ with generator $G$. Then the following are equivalent:
-\begin{enumerate}
-\item $T$ is an evolution semigroup;
-\item TODO
-\end{enumerate}
-\end{proposition}
-
-\subsubsection{Solving non-autonomous Cauchy problems}
+\subsection{Non-autonomous Cauchy problems}
 \begin{proposition}
 Let $X$ be a Banach space and $A: \R\to \Bounded(X)$ a continuous function. Consider
 \[ U: \R\to \Bounded(X): t\mapsto \lim_{n\to\infty}\prod_{k=1}^ne^{\frac{t}{n}A\left(\frac{kt}{n}\right)}, \]
@@ -1555,6 +1567,216 @@ where the limit is taken in the strong operator topology and is uniform for $t$ 
 \section{Regularising problems}
 \subsection{Regularising ill-posed problems}
 \subsection{Regularised approximation methods}
+
+\section{Perturbation theory}
+
+\begin{definition}
+A problem in perturbation theory consists of a family of operators $\{T_\epsilon: X\to Y\}_{\epsilon\in \Omega}$, where $\Omega\subseteq \R^n$ is an open set containing $0$, and $y\in Y$.
+
+Then we want to find a function $x: U\subseteq \Omega \to X$ such that
+\[ \lim_{\epsilon \to 0} T_\epsilon\big(x(\epsilon)\big) = y. \]
+\end{definition}
+Ideally we want the convergence to be as quick as possible.
+
+\subsection{Expansion method}
+\begin{definition}
+Let $A$ be an algebra and $\{T_\epsilon: A\to A\}$ a family of operators.
+
+
+The \udef{expansion method} is applicable if we can find a common series expansion of $T_\epsilon$, i.e.\ for all $k\in \N$ there exist
+
+We then assume the existence of an analytic solution $x(\epsilon)$ to the perturbation problem.
+\end{definition}
+
+Let $A$ be an algebra and $\{T_\epsilon: A\to A\}$ a family of operators.
+Suppose
+\begin{itemize}
+\item $x_0$ is a solution of $T_0(x_0) = y$;
+\item there exist functions $a_k: U \to A$ for all $k\leq n\in \N$ and $r_n: A\to A$ such that
+\[ T_\epsilon(z) = \sum_{k=0}^n a_k(\epsilon)(z-x_0)^k + r_n(z)(z-x_0)^{n+1} \]
+for all $z\in A$.
+\item $x$ has an asymptotic expansion $x = \sum_{l=0}^m x_l\epsilon^l + O(\epsilon^{m+1})$.
+\end{itemize}
+
+
+By \ref{multinomialIdentity}, we have
+\[ \bigg(\sum_{k=0}^n\sum_{k_1+\ldots +k_m = k}a_k(\epsilon)\begin{pmatrix}
+k \\ k_1, \ldots, k_m
+\end{pmatrix}\big(x_1^{k_1}\ldots x_m^{k_m}\big)\epsilon^{m\cdot k}\bigg) + r_n\big(x(\epsilon) - x_0\big)\big(x(\epsilon) - x_0\big)^{n+1} = y \]
+Then use uniqueness asymptotic expansion.
+
+TODO: $n$-fold root at $\epsilon = 0$, then expansion in $\delta = \epsilon^{1/n}$.
+
+\begin{lemma}
+We have
+\begin{align*}
+x(\epsilon)\, &= x_0 + x_1\epsilon + x_2\epsilon^2 + x_3\epsilon^3 + x_4\epsilon^4 + O(\epsilon^5) \\
+x(\epsilon)^2 &= x_0^2 + 2x_0x_1\epsilon + \big(x_1^2 + 2x_0x_2\big)\epsilon^2 + \big(2x_1x_0 + 2x_0x_3\big)\epsilon^3 + \big(x_2^2 + 2x_1x_3 + 2x_0x_4\big)\epsilon^4 + O(\epsilon^5) \\
+x(\epsilon)^3 &= \begin{aligned}[t]x_0^3 + 3x_0^2x_1\epsilon + 3\big(x_0x_1^2 + x_0^2x_2&\big)\epsilon^2 + \big(x_1^3 + 6x_0x_1x_2 + 3x_0^2x_3\big)\epsilon^3 + \\
+&3\big(x_1^2x_2 + 2x_0x_1x_3 + x_0x_2^2 + x_0^2x_4\big)\epsilon^4 + O(\epsilon^5)\end{aligned} \\
+x(\epsilon)^4 &= \begin{aligned}[t] x_0^4 + 4x_0^3x_1\epsilon + 2\big(3x_0^2x_1^2 + 2x_0^3&x_2\big)\epsilon^2 + 4\big(x_0x_1^3 + 3x_0^2x_1x_2 + x_0^3x_3\big)\epsilon^3 + \\
+&\big(x_1^4 + 12x_0x_1^2x_2 + 6x_0^2x_2^2 + 12x_0^2x_1x_3 + 4x_0^3x_4\big)\epsilon^4 + O(\epsilon^5)\end{aligned}
+\end{align*}
+\end{lemma}
+
+
+\subsection{Iteration method}
+We want to solve $T_\epsilon(x) = x$.
+
+\subsection{Examples}
+\begin{example}
+Consider
+\begin{equation}
+x^2 + \epsilon x - 1 = 0,
+\end{equation}
+which has exact solutions $x = -\frac{1}{2} \pm \sqrt{1+\frac{1}{4}\epsilon^2}$.
+
+We can perform an asymptotic expansion by noting $\big(\sqrt{1+\epsilon}\big)' = \frac{1}{2}(1+\epsilon)^{-1/2}$ and $\big(\sqrt{1+\epsilon}\big)^{\prime\prime} = -\frac{1}{4}(1+\epsilon)^{-3/2}$, so
+\[ \sqrt{1+\epsilon} = 1 +\frac{1}{2}\epsilon - \frac{1}{8}\epsilon^2 + O(\epsilon^3). \]
+Then we have
+\[ x = \begin{cases}
++1 - \frac{1}{2}\epsilon +\frac{1}{8}\epsilon^2 - \frac{1}{128}\epsilon^4 + O(\epsilon^6) \\
+-1 - \frac{1}{2}\epsilon -\frac{1}{8}\epsilon^2 + \frac{1}{128}\epsilon^4 + O(\epsilon^6)
+\end{cases} \]
+
+\begin{itemize}
+\item \textbf{Expansion method}. Equating orders gives
+\begin{align*}
+1 &= x_0^2 \\
+0 &= 2x_0x_1 + x_0 \\
+0 &= x_1^2 + 2x_0x_2 \\
+0 &= 2x_0x_1 + 2x_0x_3 + x_3.
+\end{align*}
+\end{itemize}
+The first equation has two solutions: $x_0 = \pm 1$. 
+\end{example}
+
+\section{Asymptotic analysis}
+\begin{definition}
+A sequence of functions $\seq{\phi_n}_{n\in\N}$ is a \udef{gauge sequence} or \udef{asymptotic scale} for $x\to x_0$ if, for all $n\in \N$,
+\[ \phi_{n+1}(x) = o\big(\phi_n(x)\big) \qquad\text{as $x\to x_0$.} \]
+\end{definition}
+
+\begin{example}
+The following are gauge sequences:
+\begin{itemize}
+\item $\seq{(x-x_0)^n}_{n\in \N}$ as $x\to x_0$;
+\item $\seq{x^{-n}}_{n\in \N}$ as $x\to \infty$;
+\item $\sin^n(x)$ as $x\to 0$.
+\end{itemize}
+TODO: $\seq{(x-x_0)^{n-k}}_{n\in \N}$ as $x\to x_0$?
+\end{example}
+
+\begin{definition}
+Let $f$ be a function and $\seq{\phi_n}_{n\in \N}$ an asymptotic scale as $x\to x_0$. An \udef{asymptotic expansion} of $f$, w.r.t. $\seq{\phi_n}_{n\in \N}$, is a sequence $\seq{a_n}$ of numbers such that
+\[ f(x) = \sum_{n=0}^N a_n\phi_n(x) + o(\phi_{N}) \]
+for all $N\in\N$.
+
+We denote the asymptotic expansion
+\[ f(x) \sim \sum_{n = 0}^\infty a_n\phi_n(x). \]
+\end{definition}
+
+\begin{lemma}
+Let $f$ be a function and $\seq{\phi_n}_{n\in \N}$ an asymptotic scale as $x\to x_0$. Suppose $\seq{a_n}$ is a sequence of numbers such that
+\[ f(x) = \sum_{n=0}^N a_n\phi_n(x) + O(\phi_{N+1}) \]
+as $x\to x_n$ for all $N\in\N$, then $\seq{a_n}$ is an asymptotic expansion.
+\end{lemma}
+\begin{proof}
+Since $f(x) - \sum_{n=0}^N a_n\phi_n(x) = O(\phi_{N+1})$ and $\phi_{N+1} = o(\phi_N)$, we have $f(x) - \sum_{n=0}^N a_n\phi_n(x) = o(\phi_{N})$ by \ref{asymptoticTransitivity}.
+\end{proof}
+
+\begin{lemma}
+Let $f$ be a function and $\seq{\phi_n}_{n\in \N}$ an asymptotic scale as $x\to x_0$. If $f$ has an asymptotic expansion w.r.t. this asymptotic scale, then it is unique and given by
+\[ a_k = \lim_{x\to x_0}\frac{f(x) - \sum_{n=0}^{k-1}a_n\phi_n(x)}{\phi_k} \]
+for all $k\in \N$.
+\end{lemma}
+\begin{proof}
+By definition, we have
+\[ f(x) = a_k\phi_{k}(x) + h(x) + \sum_{n=0}^{k-1}a_n\phi_n(x), \]
+for some $h \in o(\phi_k)$. Then
+\[ \lim_{x\to x_0}\frac{f(x) - \sum_{n=0}^{k-1}a_n\phi_n(x)}{\phi_k} = \lim_{x\to x_0} a_k + \frac{h(x)}{\phi_k(x)} = a_k. \]
+\end{proof}
+
+\begin{lemma}
+Let $\seq{\phi_n}_{n\in \N}$ be an asymptotic scale as $x\to x_0$. Let $f \sim \sum_{n=0}^\infty a_n\phi_n$ and $g \sim \sum_{n=0}^\infty b_n\phi_n$ be asymptotic expansions of functions and $\alpha,\beta\in \F$. Then
+\[ \alpha f+\beta g \sim \sum_{n=0}^\infty \big(\alpha a_n + \beta b_n\big)\phi_n. \]
+\end{lemma}
+
+
+\begin{lemma}
+Let $\seq{\phi_n}_{n\in \N}$ be an asymptotic scale as $x\to x_0$. If $f \sim \sum_{n = 0}^\infty a_n\phi_n(x)$ and $g = f+o(\phi_n)$ for all $n\in \N$, then $g \sim \sum_{n = 1}^\infty a_n\phi_n(x)$.
+\end{lemma}
+Thus many different functions may share the same asymptotic expansion.
+\begin{proof}
+We have $g = f+ h$ and $h\in o(\phi_n)$ for all $n\in \N$. Then, for all $N\in \N$, we have 
+\[ g(x) = h(x) + \sum_{n=0}^N a_n\phi_n(x) + o(\phi_{N}) = \sum_{n=0}^N a_n\phi_n(x) + o(\phi_{N}). \]
+\end{proof}
+
+
+\begin{definition}
+Let $\seq{\phi_n}_{n\in \N}$ be an asymptotic scale as $x\to x_0$. A function $f \sim \sum_{n=0}^\infty 0\cdot \phi_n$ is called \udef{subdominant}.
+\end{definition}
+Two functions have the same asymptotic expansion if and only if their difference is subdominant.
+
+\begin{example}
+The function $e^{-x}$ is subdominant to $\seq{x^{-n}}_{n\in \N}$ as $x\to \infty$.
+\end{example}
+
+\subsection{Power series expansions}
+\subsubsection{The scale $(x-x_0)^n$}
+\begin{lemma}
+Let $f \sim \sum_{n=0}^\infty a_n(x-x_0)^n$ and $g \sim \sum_{n=0}^\infty b_n(x-x_0)^n$ be asymptotic power series expansions of functions.
+\begin{itemize}
+\item $f\cdot g \sim \sum_{n=0}^\infty c_n(x-x_0)^n$, where $c_n = \sum_{m=0}^n a_mb_{n-m}$;
+\item if $b_0 \neq 0$, then $\frac{f}{g} \sim \sum_{n=0}^\infty d_n(x-x_0)^n$, where $d_0 = \frac{a_0}{b_0}$ and
+\[ d_n = \frac{a_n - \sum_{m=0}^{n-1}d_mb_{n-m}}{d_0} \]
+recursively defines the rest of the expansion.
+\end{itemize}
+\end{lemma}
+
+\begin{proposition}
+Let $f$ be a function that is continuous on some neighbourhood of $x_0$ and $f \sim \sum_{n=0}^\infty a_n(x-x_0)^n$ an asymptotic power series expansion as $x\to x_0$. Then
+\[ \int_{x_0}^x f(t) \diff{t} \sim \sum_{n=0}^\infty \frac{a_n}{n+1}(x-x_0)^{n+1}. \]
+\end{proposition}
+\begin{proof}
+For any $N\in \N$, there exists $h\in o\big((x-x_0)^N\big)$ such that
+\[ f(x) = \sum_{n=0}^N a_n(x-x_0)^n + h(x). \]
+Then
+\[ \int_{x_0}^x f(t)\diff{t} = \sum_{n=0}^N a_n \int_{x_0}^x (t-x_0)^n\diff{t} + \int_{x_0}^xh(t)\diff{t} = \sum_{n=0}^N \frac{a_n}{n+1} (t-x_0)^{n+1} + \int_{x_0}^xh(t)\diff{t}, \]
+so it is enough to show that $\int_{x_0}^xh(t)\diff{t}\in o\big((x-x_0)^{N+1}\big)$. 
+
+By \ref{FrechetUrysohnSequentialContinuityAtAPoint}, it is enough to consider the sequential limit. Let $\seq{x_n}$ be a sequence that converges to $x_0$. Let $U$ be a neighbourhood of $x_0$ on which $f$ is continuous. Then $h$ is also continuous on $U$. Since $\seq{x_n}$ eventually lies in $U$, we may WLOG assume $\seq{x_n}$ to lie in $U$.
+
+Then, by \ref{meanValueTheoremIntegrals}, for each $x_n$, there exists a $c_n\in \interval[o]{\big.x_0 - |x_n-x_0|, x_0 + |x_n-x_0|}$ such that $\int_{x_0}^{x_n}h(t)\diff{t} = h(c_n)(x_n - x_0)$. Clearly $c_n \to x_0$, so $\lim_{n\to \infty} \frac{h(c_n)}{(x_n-x_0)^N} = 0$ by assumption. Thus
+\[ \frac{\int_{x_0}^{x_n}h(t)\diff{t}}{(x_n-x_0)^{N+1}} = \frac{h(c_n)(x_n - x_0)}{(x_n-x_0)^{N+1}} = \frac{h(c_n)}{(x_n-x_0)^N} \to 0. \]
+\end{proof}
+
+\begin{example}
+Taking the derivative of an asymptotic series is more tricky. Since the function $e^{-x}$ is subdominant to $\seq{x^{-n}}$ as $x\to \infty$, and $\sin(e^x) \in O(1)$, we have $e^{-x}\sin(e^x)\sim 0$. Taking the derivative gives
+\[ \od{}{x}\big(e^{-x}\sin(e^x)\big) = -e^{-x}\sin(e^x)+ e^{-x}e^x\cos(e^x) = -e^{-x}\sin(e^x)+ \cos(e^x) \nsim 0 = \od{}{x}(0). \]
+\end{example}
+
+\subsubsection{The scale $x^{-n}$}
+
+\begin{proposition}
+Let $f$ be a continuous function and $f \sim \sum_{n=0}^N a_nx^{-n} + O(x^{-N-1})$ an asymptotic power series expansion as $x\to \infty$. Then
+\[ \int_{x}^N \Big(f(t) - a_0 - \frac{a_1}{t}\Big) \diff{t} = \sum_{n=2}^N \frac{a_n}{n-1}x^{-n + 1} + O(x^{-N}). \]
+\end{proposition}
+\begin{proof}
+For any $N\in \N$, there exists $h(x)\in O(x^{-N-1})$ such that
+\[ f(x) = \sum_{n=0}^N a_nx^{-n} + h(x). \]
+Then
+\begin{align*}
+\int_{x}^\infty \Big(f(t) - a_0 - \frac{a_1}{t}\Big) \diff{t} &= \sum_{n=2}^N a_n \int_{x}^\infty t^{-n}\diff{t} + \int_{x}^\infty h(t)\diff{t} \\
+&= \sum_{n=2}^N \Big[\frac{a_n}{-n+1} t^{-n+1}\Big]_{x}^\infty + \int_{x}^\infty h(t)\diff{t} \\
+&= \sum_{n=2}^N \frac{a_n}{n-1} x^{-n+1} + \int_{x}^\infty h(t)\diff{t},
+\end{align*}
+so it is enough to show that $\int_{x}^\infty h(t)\diff{t}\in O(x^{-N})$. Indeed, we calculate
+\begin{align*}
+\int_{x}^\infty h(t)\diff{t} &\leq K\int_x^\infty t^{-N-1} \diff{t} \\
+&= K\Big[\frac{t^{-N}}{-N}\Big]^\infty_x = \frac{K}{N}x^{-N}.
+\end{align*}
+\end{proof}
 
 
 \chapter{Ordinary differential equations}
