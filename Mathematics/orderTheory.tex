@@ -1075,9 +1075,82 @@ Let $\sSet{X,\Yleft}$ be an ordered set. Then $x\mapsto \downset\{x\}$ is an ord
 If $P$ is a partial order, then the map is bijective and thus an order isomorphism.
 \end{proposition}
 
+\section{Combining ordered sets}
+\begin{definition}
+Let $P,Q$ be ordered sets. Then
+\begin{itemize}
+\item the \udef{disjoint union} $P\sqcup Q$ is ordered by
+\[ x\precsim y \iff \begin{cases}
+x,y\in P \;\text{and}\; x\precsim y \\
+x,y\in Q \;\text{and}\; x\precsim y
+\end{cases} \]
+\item the \udef{linear sum} $P\oplus Q$ is the disjoint union ordered by
+\[ x\precsim y \iff \begin{cases}
+x,y\in P \;\text{and}\; x\precsim y \\
+x,y\in Q \;\text{and}\; x\precsim y \\
+x\in P \;\text{and}\; y\in Q
+\end{cases} \]
+\end{itemize}
+\end{definition}
 
-\section{Atoms, density and irreducibility}
-\subsection{Join- and meet-density}
+\begin{example}
+We define $\mathbf{M}_n \defeq \mathbb{1}\oplus \overline{\mathbb{n}} \oplus \mathbb{1}$:
+\[ \mathbf{M}_1: \begin{tikzcd}
+\circ \ar[d, dash] \\ \circ \ar[d, dash] \\ \circ
+\end{tikzcd} \qquad \mathbf{M}_2: \begin{tikzcd}
+&\circ \ar[ld, dash] \ar[rd, dash] & \\ \circ \ar[rd, dash] && \circ \ar[ld, dash] \\ &\circ &
+\end{tikzcd} \qquad \mathbf{M}_3: \begin{tikzcd}
+&\circ \ar[ld, dash] \ar[d,dash] \ar[rd, dash] &\\ \circ \ar[rd, dash]& \circ \ar[d, dash] & \circ \ar[ld, dash] \\ &\circ &
+\end{tikzcd} \qquad \hdots \]
+\end{example}
+
+\begin{lemma}
+For ordered sets taking the disjoint union or linear sum is associative.
+\end{lemma}
+
+\begin{lemma}
+Let $m,n\in \N$. If $p = m+n$, then $\mathbb{m}\oplus\mathbb{n} = \mathbb{p}$.
+\end{lemma}
+
+
+\chapter{Posets}
+TODO: notation: use $\inf, \sup$ for sets and $\bigwedge, \bigvee$ for the singleton unpacking of $\inf,\sup$.
+
+\section{Posets}
+\subsection{Order-preserving functions}
+
+\begin{proposition} \label{mappingJoinsMeets}
+Let $P,Q$ be posets, $f:P\to Q$ an order-preserving function and $A\subseteq P$. Then
+\begin{enumerate}
+\item if $\bigwedge_P A$ exists, then $f\Big(\bigwedge_P A\Big)$ is a lower bound of $f^\imf(A)$;
+\item if $\bigwedge_P A$ and $\bigwedge_Q f^\imf(A)$ exist, then $f\Big(\bigwedge_P A\Big)\leq \bigwedge_Q f^\imf(A)$;
+\item if $\bigwedge_P A$ exists, then $f\Big(\bigwedge_P A\Big)$ is a lower bound of $f^\imf(A)$;
+\item if $\bigvee_P A$ and $\bigvee_Q f^\imf(A)$ exist, then $\bigvee_Q f^\imf(A) \leq f\Big(\bigvee_P A\Big)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Straightforward application of \ref{imagePolars}. We can also prove the statement from scratch: take arbitrary $y\in f^\imf(A)$. Then $y = f(x)$ for some $x\in A$. We have $\bigwedge_P A \leq x$, so $f\Big(\bigwedge_P A\Big) \leq f(x) = y$.
+
+(2) Immediate from (1).
+
+(3,4) Dual to (1) and (2).
+\end{proof}
+
+\begin{lemma} \label{orderSimilarityPreservesJoinsMeets}
+Let $P,Q$ be posets and $f:P\to Q$ an order similarity. Then $f$ preserves all meets and joins, i.e.\ $\forall A\subseteq P$:
+\begin{enumerate}
+\item if $\bigwedge A$ exists, then $\bigwedge f^\imf(A)$ exists and $f(\bigwedge A) = \bigwedge f^\imf(A)$;
+\item if $\bigvee A$ exists, then $\bigvee f^\imf(A)$ exists and $f(\bigvee A) = \bigvee f^\imf(A)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Follows from \ref{relationIsomorphismSamePolars}.
+\end{proof}
+
+
+
+\subsection{Atoms, density and irreducibility}
+\subsubsection{Join- and meet-density}
 \begin{definition}
 Let $P$ be a poset and let $Q\subset P$ be a subset. Then $Q$ is called \udef{join-dense} in $P$ if for every $x\in P$, there exists a subset $S\subset Q$ such that $x= \bigvee_P S$.
 
@@ -1097,7 +1170,7 @@ Let $P$ be a poset, $Q\subset P$ a subset and $x\in P$. Then
 (2) Dual.
 \end{proof}
 
-\subsection{Join- and meet-irreducible elements}
+\subsubsection{Join- and meet-irreducible elements}
 \begin{definition}
 Let $P$ be a poset. We call $x\in P$ \udef{join-irreducible} if
 \begin{itemize}
@@ -1142,7 +1215,6 @@ link with boundary
 \url{https://link.springer.com/content/pdf/10.1007/BF01349957.pdf}
 
 
-\subsection{Atoms}
 \subsubsection{Atomic elements}
 \begin{definition}
 Let $\sSet{P,\leq}$ be a poset.
@@ -1166,7 +1238,6 @@ Let $\sSet{P,\leq}$ be a poset. Then
 
 (2) Dual.
 \end{proof}
-
 
 \subsubsection{Atomic and atomistic posets}
 \begin{definition}
@@ -1221,47 +1292,7 @@ An atomistic poset is not necessarily strongly atomic. Consider
 such that there is no element immediately above $x$. Then $\interval{x,\top}$ is not atomic, even though the poset is atomistic.
 \end{example}
 
-\section{Combining ordered sets}
-\begin{definition}
-Let $P,Q$ be ordered sets. Then
-\begin{itemize}
-\item the \udef{disjoint union} $P\sqcup Q$ is ordered by
-\[ x\precsim y \iff \begin{cases}
-x,y\in P \;\text{and}\; x\precsim y \\
-x,y\in Q \;\text{and}\; x\precsim y
-\end{cases} \]
-\item the \udef{linear sum} $P\oplus Q$ is the disjoint union ordered by
-\[ x\precsim y \iff \begin{cases}
-x,y\in P \;\text{and}\; x\precsim y \\
-x,y\in Q \;\text{and}\; x\precsim y \\
-x\in P \;\text{and}\; y\in Q
-\end{cases} \]
-\end{itemize}
-\end{definition}
 
-\begin{example}
-We define $\mathbf{M}_n \defeq \mathbb{1}\oplus \overline{\mathbb{n}} \oplus \mathbb{1}$:
-\[ \mathbf{M}_1: \begin{tikzcd}
-\circ \ar[d, dash] \\ \circ \ar[d, dash] \\ \circ
-\end{tikzcd} \qquad \mathbf{M}_2: \begin{tikzcd}
-&\circ \ar[ld, dash] \ar[rd, dash] & \\ \circ \ar[rd, dash] && \circ \ar[ld, dash] \\ &\circ &
-\end{tikzcd} \qquad \mathbf{M}_3: \begin{tikzcd}
-&\circ \ar[ld, dash] \ar[d,dash] \ar[rd, dash] &\\ \circ \ar[rd, dash]& \circ \ar[d, dash] & \circ \ar[ld, dash] \\ &\circ &
-\end{tikzcd} \qquad \hdots \]
-\end{example}
-
-\begin{lemma}
-For ordered sets taking the disjoint union or linear sum is associative.
-\end{lemma}
-
-\begin{lemma}
-Let $m,n\in \N$. If $p = m+n$, then $\mathbb{m}\oplus\mathbb{n} = \mathbb{p}$.
-\end{lemma}
-
-
-\chapter{Lattices}
-
-TODO: notation: use $\inf, \sup$ for sets and $\bigwedge, \bigvee$ for the singleton unpacking of $\inf,\sup$.
 
 \section{Semilattice}
 \begin{definition}
@@ -1367,6 +1398,7 @@ Let $\sSet{P,\leq}$, $\sSet{Q,\leq}$ be posets and $f: P\to Q$ an order-preservi
 \[  \forall D\subseteq P: f(\bigvee D) \geq \bigvee f[D] \quad\iff\quad \text{$f$ is order-preserving}. \]
 \end{enumerate} 
 \end{proposition}
+TODO: cfr. \ref{mappingJoinsMeets}.
 \begin{proof}
 (1) Assume $f(x\wedge y) \leq f(x)\wedge f(y)$. Then $x\leq y$ implies $x = x\wedge y$, which implies $f(x) = f(x\wedge y) \leq f(x)\wedge f(y) \leq f(y)$.
 
@@ -1383,23 +1415,6 @@ Let $\sSet{S,\wedge}, \sSet{T, \wedge}$ be a semilattices and $f: S\to T$ a func
 We just need to show the converse does not hold. TODO
 \end{proof}
 
-\begin{lemma}
-Let $\sSet{P,\leq}$, $\sSet{Q,\leq}$ be posets and $f: P\to Q$ a bijective order-embedding.
-Then $f$ preserves all meets and joins, i.e.\ $\forall D\subseteq P$:
-\[ f(\bigwedge D) = \bigwedge f[D] \qquad\text{and}\qquad f(\bigvee D) = \bigvee f[D] \]
-if the relevant meets and joins exist.
-\end{lemma}
-TODO does existence of one side of an equals mean existence of the other???
-\begin{proof}
-We have already proved an inequality in both cases. By bijectivity we can find a $c\in P$ such that $f(c) = \bigwedge f[D]$. By order-reflection, we have that $c$ is a lower bound of $D$, so $c\leq \bigwedge D$. By order-preservation we have $\bigwedge f[D] = f(c) \leq f(\bigwedge D)$.
-
-The other equality is dual.
-\end{proof}
-\begin{corollary} \label{orderReversingSimilarityLatticeOperations}
-Let $\sSet{P,\leq}$, $\sSet{Q,\leq}$ be posets and $f: P\to Q$ a reverse bijective order-embedding. Then $\forall D\subseteq P$
-\[ f(\bigwedge D) = \bigvee f[D] \qquad\text{and}\qquad f(\bigvee D) = \bigwedge f[D] \]
-if the relevant meets and joins exist.
-\end{corollary}
 
 \begin{proposition}
 Let $\sSet{S,\wedge}$ be a semilattice and $X$ a set. Then the pointwise ordering of $(X\to S)$ makes it a semilattice. For all $f,g\in (X\to S)$, the function $f\wedge g$ is defined by
@@ -1425,9 +1440,9 @@ TODO link universal algebra.
 Let $\sSet{S,\wedge}$ be a semilattice. For every finite set $D\subset S$, $\inf(D)$ exists.
 \end{lemma}
 \begin{definition}
-Let $\sSet{S,\wedge}$ be a semilattice. We call $S$ a \udef{complete semilattice} if each subset $D\subseteq S$ has a supremum. We write
-\[ \sup(D) = \bigvee D. \]
-If we want to emphasise that the supremum of $D$ is taken as a subset of $S$, we write $\bigvee_S D$.
+Let $\sSet{S,\wedge}$ be a semilattice. We call $S$ a \udef{complete semilattice} if each subset $D\subseteq S$ has an infimum. We write
+\[ \inf(D) = \bigwedge D. \]
+If we want to emphasise that the infimum of $D$ is taken as a subset of $S$, we write $\bigwedge_S D$.
 \end{definition}
 
 We of course have dual definitions for $\vee$-semilattices. In this case we consider suprema and write $\sup(D) = \bigvee D$.
@@ -1529,158 +1544,6 @@ First assume $D \lhd E$. Then $E\subseteq E^\mesh$ by \ref{properSubsemilatticeL
 Now assume $D\subseteq E \subseteq D^\mesh$. We need to prove that $\bot\notin E$. It is enough to prove that $\bot \notin D^\mesh$. This is given by \ref{properGrills}.
 \end{proof}
 
-\subsubsection{Complete subsemilattices}
-
-\begin{lemma} \label{completeSubsemilattices}
-Let $L$ be a lattice and $A\subseteq L$ a subposet that is a complete lattice. Then
-\begin{enumerate}
-\item the following are equivalent:
-\begin{enumerate}
-\item $A$ is a complete $\wedge$-subsemilattice;
-\item $\incl_A: A\hookrightarrow L$ preserves arbitrary meets;
-\item the inclusion function $\incl_A: A\hookrightarrow L$ has a lower adjoint;
-\end{enumerate}
-\item the following are equivalent:
-\begin{enumerate}
-\item $A$ is a complete $\vee$-subsemilattice;
-\item $\incl_A: A\hookrightarrow L$ preserves arbitrary joins;
-\item the inclusion function $\incl_A: A\hookrightarrow L$ has an upper adjoint.
-\end{enumerate}
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Take $B\subseteq A$. We have $\bigwedge_A B = \incl_A\Big(\bigwedge_A B\Big)$ and $\bigwedge_L B = \bigwedge_L \incl_A^{\imf}(B)$. Consider
-\[ \begin{tikzcd}
-\bigwedge_A B \ar[r, equal, "{?}"] \ar[d, equal] & \bigwedge_L B \ar[d, equal] \\
-\incl_A\Big(\bigwedge_A B\Big) \ar[r, equal, "{?}"] & \bigwedge_L \incl_A^{\imf}(B)
-\end{tikzcd}. \]
-It is clear that the top equality holds if and only if the bottom equality holds.
-
-The top equality holding for all $B\subseteq A$ is equivalent to $A$ being a comlete $\vee$-subsemilattice. The botting equality holding for all $B\subseteq A$ is equivalent to $\incl_A: A\hookrightarrow L$ preserving arbitrary meets. Thus $(a)$ and $(b)$ are equivalent.
-
-We have that $(b)$ and $(c)$ are equivalent by \ref{GaloisConnectionLatticePreservation}.
-
-(2) Dual.
-\end{proof}
-
-\[ \bigvee A = \bigvee (\Closure\circ \incl)^\imf(A) = \Closure\Big(\bigcup \incl^{\imf}(A)\Big) = \Closure\Big(\bigcup A\Big). \]
-Using $\Closure\circ\incl = \id$.
-
-\begin{definition}
-Let $P$ be a poset and $f: P\to \im(f) \subseteq P$ a function. We call $f$
-\begin{itemize}
-\item a \udef{Moore closure operator} if
-\begin{itemize}
-\item $f$ is order-preserving;
-\item $x \leq f(x)$ for all $x\in P$;
-\item $f = f^2$;
-\end{itemize}
-\item \udef{Moore dual closure operator} if
-\begin{itemize}
-\item $f$ is order-preserving;
-\item $f(x) \leq x$ for all $x\in P$;
-\item $f = f^2$;
-\end{itemize}
-\end{itemize}
-\end{definition}
-
-\begin{proposition} \label{MooreClosureGaloisConnection}
-Let $P$ be a poset and $f: P\to \im(f)\subseteq P$ a function. Then
-\begin{enumerate}
-\item $f$ is a Moore closure operator \textup{if and only if}
-$\big(f|^{\im(f)}:P\to \im(f),\, \incl_{\im(f)}: \im(f)\to P\big)$ is a Galois connection;
-\item $f$ is a Moore dual closure operator \textup{if and only if} $\big(\incl_{\im(f)}: \im(f)\to P,\, f|^{\im(f)}:P\to \im(f)\big)$ is a Galois connection.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Suppose $f$ is a Moore closure operator. Take $x\in P$ and $y\in P\im(f)$. Then there exists $y'\in P$ such that $y = f(y')$, so $f(y) = f^2(y') = f(y') = y$. Now
-\[ x\leq y \implies f(x)\leq f(y) \implies f(x) \leq y \implies x\leq f(x)\leq y \implies x\leq y. \]
-Since $x\leq y \iff x\leq \iota_{\im(f)}(y)$, this implies $x\leq \iota_{\im(f)}(y) \iff f(x) \leq y$.
-
-Now suppose $\big(f|^{\im(f)}, \incl_{\im(f)}\big)$ is a Galois connection. Then $f$ is order-preserving by definition.
-
-We have $f(x) = (\iota_{\im(f)}\circ f)(x) \leq x$ for all $x\in P$ by \ref{preorderGaloisCondition}.
-
-Finally we have $f|^{\im(f)}\circ \iota_{\im(f)}\circ f|^{\im(f)} = f|^{\im(f)}$ by \ref{preorderGaloisCondition}, so, for all $x\in P$, we have
-\[ f(x) = f|^{\im(f)}(x) = \big(f|^{\im(f)}\circ \iota_{\im(f)}\circ f|^{\im(f)}\big)(x) = f^2(x). \]
-
-(2) Dual.
-\end{proof}
-
-\begin{proposition} \label{meetJoinCompleteSubsemilattice}
-Let $P$ be a poset, $f: P\to \im(f)\subseteq P$ a function and $A\subseteq \im(f)$. Then
-\begin{enumerate}
-\item if $f$ is a Moore closure, then
-\[ \bigvee_{\im(f)}A = f\Big(\bigvee_P A\Big) \qquad\text{and}\qquad \bigwedge_{\im(f)} A = \bigwedge_P A; \]
-\item if $f$ is a dual Moore closure, then
-\[ \bigvee_{\im(f)}A = \bigvee_P A \qquad\text{and}\qquad \bigwedge_{\im(f)} A = f\Big(\bigwedge_P A\Big). \]
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) We have that $f$ preserves joins by \ref{MooreClosureGaloisConnection}. Since $A\subseteq \im(f)$, we have $A = f^\imf(A)$, so
-\[ \bigvee_{\im(f)}A = \bigvee_{\im(f)}f^{\imf}(A) = f\Big(\bigvee_P A\Big). \]
-We have that $\incl_{\im(f)}$ preserves meets by \ref{MooreClosureGaloisConnection}, so
-\[ \bigwedge_{\im(f)} A = \incl_{\im(f)}\Big(\bigwedge_{\im(f)} A\Big) = \bigwedge_P \incl_{\im(f)}^\imf(A) = \bigwedge_P A. \]
-
-(2) Dual.
-\end{proof}
-
-\subsubsection{Dedekind-MacNeille completion}
-TODO minimal / maximal completions: see Schroder book notes.
-
-\begin{definition}
-Let $\sSet{P, \leq}$ be a poset. Then the set $\DM(P) = \setbuilder{B^\geq}{B\subseteq P}$ together with the order embedding
-\[ m: P \to \DM(P): x\mapsto \downset\{x\} \]
-is called the \udef{Dedekind-MacNeille completion} of $P$.
-\end{definition}
-Note that $m$ is an order embedding by \ref{principalDownSetEmbedding}.
-
-\begin{proposition} \label{DedekindMacNeilleCompletionComplete}
-Let $\sSet{P, \leq}$ be a poset. Then
-\begin{enumerate}
-\item $\DM(P)$ is a complete $\wedge$-subsemilattice of $\sSet{\powerset(P), \subseteq}$;
-\item the associated Moore closure is $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-By \ref{MooreClosureGaloisConnection} and \ref{completeSubsemilattices}, we need to show that $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$ is a surjective Moore closure operator.
-
-From \ref{polarsGaloisConnection} and \ref{preorderGaloisCondition}, we get that $(-)^{\leq\geq}$ is a Moore closure operator. For surjectivity, note that $B^\geq = B^{\geq\leq\geq} = (B^{\geq})^{\leq\geq}$.
-\end{proof}
-We can also prove that $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$ is adjoint to the inclusion by noting that every set in $\DM(P)$ is of the form $B^\geq$ and $\incl_{\DM(P)}(B^\geq) = B^\geq$, so
-\[ A\subseteq \incl_{\DM(P)}(B^\geq) \iff A\subseteq B^\geq \iff B\subseteq A^\leq \iff B \subseteq A^{\leq\geq\leq} \iff A^{\leq\geq} \subseteq B^\geq \iff A^{\leq\geq} \subseteq \incl_{\DM(P)}(B^\geq). \]
-
-\begin{proposition}
-Let $\sSet{P, \leq}$ be a poset. Then $m: P \to \DM(P)$ preserves arbitrary meets and joins.
-\end{proposition}
-\begin{proof}
-Let $A\subseteq P$ be a subset such that the meet $\bigwedge A$ exists. Then, by \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{boundsFromPrincipalImages} and \ref{DedekindMacNeilleCompletionComplete},
-\[ m\Big(\bigwedge A\Big) = \downset\Big\{\bigwedge A\Big\} = A^\geq = \bigcap_{a\in A}\downset\{a\} = \bigcap_{a\in A}m(a) = \bigcap m^\imf(A) = \bigwedge_{\DM(P)}m^\imf(A). \]
-
-Now let $B\subseteq P$ be a subset such that the meet $\bigvee B$ exists. Then we calculate, using \ref{supInfConnection}, \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{imagesFromPrincipalImages}, \ref{meetJoinCompleteSubsemilattice} and \ref{DedekindMacNeilleCompletionComplete},
-\begin{align*}
-m\Big(\bigvee A\Big) &= \downset\Big\{\bigvee A\Big\} \\
-&= \downset \sup(A) \\
-&= \downset \inf(A^\leq) \\
-&= A^{\leq\geq} \\
-&= (\downset A)^{\leq\geq} \\
-&= \Big(\bigcup_{x\in A} \downset\{x\}\Big)^{\leq\geq} \\
-&= \Big(\bigcup m^\imf(A)\Big)^{\leq\geq} \\
-&= \bigvee_{\DM(P)} m^{\imf}(A).
-\end{align*}
-\end{proof}
-
-\begin{lemma}
-Let $L$ be a complete lattice. Then $m: L\to \DM(L)$ is an order similarity.
-\end{lemma}
-
-\begin{proposition}
-$\im(P)$ is join-dense and meet-dense in $\DM(P)$.
-\end{proposition}
-
-\begin{proposition}[Universal property of the Dedekind-MacNeille completion]
-See Schröder, p.212.
-\end{proposition}
 
 \subsection{Generalised inverse of inf}
 \begin{proposition}
@@ -2117,6 +1980,190 @@ If $L$ has no finite chains, then it satisfies the ascending and descending chai
 Only the $\Rightarrow$ direction of (2) is not immediately obvious. Assume $Q$ is join-dense and let $x\in \joinIr(L)$. By the proposition there exists a finite $F\subseteq Q$ such that $x = \bigvee F$. Since $x$ is join-irreducible, we have $x \in F$ and hence $x \in Q$. Thus, $\joinIr(L) \subseteq Q$.
 \end{proof}
 
+\subsection{Moore closures and dual closures}
+
+\begin{lemma} \label{completeSubsemilattices}
+Let $L$ be a lattice and $A\subseteq L$ a subposet that is a complete lattice. Then
+\begin{enumerate}
+\item the following are equivalent:
+\begin{enumerate}
+\item $A$ is a complete $\wedge$-subsemilattice;
+\item $\incl_A: A\hookrightarrow L$ preserves arbitrary meets;
+\item the inclusion function $\incl_A: A\hookrightarrow L$ has a lower adjoint;
+\end{enumerate}
+\item the following are equivalent:
+\begin{enumerate}
+\item $A$ is a complete $\vee$-subsemilattice;
+\item $\incl_A: A\hookrightarrow L$ preserves arbitrary joins;
+\item the inclusion function $\incl_A: A\hookrightarrow L$ has an upper adjoint.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $B\subseteq A$. We have $\bigwedge_A B = \incl_A\Big(\bigwedge_A B\Big)$ and $\bigwedge_L B = \bigwedge_L \incl_A^{\imf}(B)$. Consider
+\[ \begin{tikzcd}
+\bigwedge_A B \ar[r, equal, "{?}"] \ar[d, equal] & \bigwedge_L B \ar[d, equal] \\
+\incl_A\Big(\bigwedge_A B\Big) \ar[r, equal, "{?}"] & \bigwedge_L \incl_A^{\imf}(B)
+\end{tikzcd}. \]
+It is clear that the top equality holds if and only if the bottom equality holds.
+
+The top equality holding for all $B\subseteq A$ is equivalent to $A$ being a comlete $\vee$-subsemilattice. The botting equality holding for all $B\subseteq A$ is equivalent to $\incl_A: A\hookrightarrow L$ preserving arbitrary meets. Thus $(a)$ and $(b)$ are equivalent.
+
+We have that $(b)$ and $(c)$ are equivalent by \ref{GaloisConnectionLatticePreservation}.
+
+(2) Dual.
+\end{proof}
+
+\[ \bigvee A = \bigvee (\Closure\circ \incl)^\imf(A) = \Closure\Big(\bigcup \incl^{\imf}(A)\Big) = \Closure\Big(\bigcup A\Big). \]
+Using $\Closure\circ\incl = \id$.
+
+\begin{definition}
+Let $P$ be a poset and $f: P\to \im(f) \subseteq P$ a function. We call $f$
+\begin{itemize}
+\item a \udef{Moore closure operator} if
+\begin{itemize}
+\item $f$ is order-preserving;
+\item $x \leq f(x)$ for all $x\in P$;
+\item $f = f^2$;
+\end{itemize}
+\item \udef{Moore dual closure operator} if
+\begin{itemize}
+\item $f$ is order-preserving;
+\item $f(x) \leq x$ for all $x\in P$;
+\item $f = f^2$;
+\end{itemize}
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{MooreClosureGaloisConnection}
+Let $P$ be a poset and $f: P\to \im(f)\subseteq P$ a function. Then
+\begin{enumerate}
+\item $f$ is a Moore closure operator \textup{if and only if}
+$\big(f|^{\im(f)}:P\to \im(f),\, \incl_{\im(f)}: \im(f)\to P\big)$ is a Galois connection;
+\item $f$ is a Moore dual closure operator \textup{if and only if} $\big(\incl_{\im(f)}: \im(f)\to P,\, f|^{\im(f)}:P\to \im(f)\big)$ is a Galois connection.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Suppose $f$ is a Moore closure operator. Take $x\in P$ and $y\in P\im(f)$. Then there exists $y'\in P$ such that $y = f(y')$, so $f(y) = f^2(y') = f(y') = y$. Now
+\[ x\leq y \implies f(x)\leq f(y) \implies f(x) \leq y \implies x\leq f(x)\leq y \implies x\leq y. \]
+Since $x\leq y \iff x\leq \iota_{\im(f)}(y)$, this implies $x\leq \iota_{\im(f)}(y) \iff f(x) \leq y$.
+
+Now suppose $\big(f|^{\im(f)}, \incl_{\im(f)}\big)$ is a Galois connection. Then $f$ is order-preserving by definition.
+
+We have $f(x) = (\iota_{\im(f)}\circ f)(x) \leq x$ for all $x\in P$ by \ref{preorderGaloisCondition}.
+
+Finally we have $f|^{\im(f)}\circ \iota_{\im(f)}\circ f|^{\im(f)} = f|^{\im(f)}$ by \ref{preorderGaloisCondition}, so, for all $x\in P$, we have
+\[ f(x) = f|^{\im(f)}(x) = \big(f|^{\im(f)}\circ \iota_{\im(f)}\circ f|^{\im(f)}\big)(x) = f^2(x). \]
+
+(2) Dual.
+\end{proof}
+
+\begin{proposition} \label{meetJoinImageMooreClosure}
+Let $P$ be a poset, $f: P\to \im(f)\subseteq P$ a function and $A\subseteq \im(f)$. Then
+\begin{enumerate}
+\item if $f$ is a Moore closure, then
+\begin{enumerate}
+\item if $\bigvee_P A$ exists, then $\bigvee_{\im(f)}A$ exists and $\bigvee_{\im(f)}A = f\Big(\bigvee_P A\Big)$;
+\item $\bigwedge_P A$ exists \textup{if and only if} $\bigwedge_{\im(f)} A$ exists, and in this case $\bigwedge_{\im(f)} A = \bigwedge_P A$;
+\end{enumerate}
+\item if $f$ is a dual Moore closure, then
+\begin{enumerate}
+\item $\bigvee_P A$ exists \textup{if and only if} $\bigvee_{\im(f)}A$ exists, and in this case $\bigvee_{\im(f)}A = \bigvee_P A$;
+\item if $\bigwedge_P A$ exists, then $\bigwedge_{\im(f)} A$ exists and $\bigwedge_{\im(f)} A = f\Big(\bigwedge_P A\Big)$.
+\end{enumerate}
+\end{enumerate}
+In both cases,
+\begin{enumerate} \setcounter{enumi}{2}
+\item if $P$ is a lattice, then $\im(f)$ is a lattice;
+\item if $P$ is a complete lattice, then $\im(f)$ is a complete lattice.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We have that $f$ preserves joins by \ref{MooreClosureGaloisConnection}. Thus, if $\bigvee_P A$ exists, we have that $\bigvee_{\im(f)}f^{\imf}(A)$ exists and
+\[ f\Big(\bigvee_P A\Big) = \bigvee_{\im(f)}f^{\imf}(A) = \bigvee_{\im(f)}A. \]
+The last equality follows since $A\subseteq \im(f)$, and thus $A = f^\imf(A)$.
+
+Now assume $\bigwedge_P A$ exists. Since $A = f^\imf(A)$, we have that $\bigwedge_P f^{\imf}(A)$ exists. Then, by \ref{mappingJoinsMeets}, we have
+\[ \bigwedge_P A \leq f^\imf\Big(\bigwedge_P A\Big) \leq \bigwedge_P f^{\imf}(A) = \bigwedge_P A. \]
+This implies that $\bigwedge_P A\in\im(f)$. We claim that $\bigwedge_P A$ is the meet of $A$ in $\im(f)$. Indeed, it is clearly a lower bound. Let $x$ be some other lower bound of $A$ in $\im(f)$, then it is a lower bound of $A$ in $P$ and so $x\leq \bigwedge_P A$. So $\bigwedge_{\im(f)} A = \bigwedge_P A$.
+
+Finally, assume $\bigwedge_{\im(f)} A$ exists. We have that $\incl_{\im(f)}$ preserves meets by \ref{MooreClosureGaloisConnection}, so if $\bigwedge_{\im(f)} A$ exists, then
+\[ \bigwedge_{\im(f)} A = \incl_{\im(f)}\Big(\bigwedge_{\im(f)} A\Big) = \bigwedge_P \incl_{\im(f)}^\imf(A) = \bigwedge_P A. \]
+
+(2) Dual.
+
+(3) Immediate. 
+\end{proof}
+
+
+\begin{example}
+In point (1a) of \ref{meetJoinImageMooreClosure}, we do not have that the existence of $\bigvee_{\im(f)}A$ implies the existence of $\bigvee_P A$.
+
+Let $P = \R\setminus\{0\}$ and
+\[ f: \R\setminus\{0\} \to \interval[o]{-\infty, 0}\cup \interval[co]{1,+\infty}: x\mapsto \begin{cases}
+x & \big(x\in \interval[o]{-\infty, 0}\cup \interval[co]{1,+\infty}\big) \\
+1 & \big(x\in \interval[o]{0,1}\big).
+\end{cases} \]
+Then $f$ is a Moore closure and $\bigvee_{\im(f)}\interval[o]{-\infty, 0}$ exists and is equal to $1$. Clearly $\bigvee_{\R\setminus\{0\}}\interval[o]{-\infty, 0}$ does not exist.
+\end{example}
+
+\subsubsection{Dedekind-MacNeille completion}
+TODO minimal / maximal completions: see Schroder book notes.
+
+\begin{definition}
+Let $\sSet{P, \leq}$ be a poset. Then the set $\DM(P) = \setbuilder{B^\geq}{B\subseteq P}$ together with the order embedding
+\[ m: P \to \DM(P): x\mapsto \downset\{x\} \]
+is called the \udef{Dedekind-MacNeille completion} of $P$.
+\end{definition}
+Note that $m$ is an order embedding by \ref{principalDownSetEmbedding}.
+
+\begin{proposition} \label{DedekindMacNeilleCompletionComplete}
+Let $\sSet{P, \leq}$ be a poset. Then
+\begin{enumerate}
+\item $\DM(P)$ is a complete $\wedge$-subsemilattice of $\sSet{\powerset(P), \subseteq}$;
+\item the associated Moore closure is $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+By \ref{MooreClosureGaloisConnection} and \ref{completeSubsemilattices}, we need to show that $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$ is a surjective Moore closure operator.
+
+From \ref{polarsGaloisConnection} and \ref{preorderGaloisCondition}, we get that $(-)^{\leq\geq}$ is a Moore closure operator. For surjectivity, note that $B^\geq = B^{\geq\leq\geq} = (B^{\geq})^{\leq\geq}$.
+\end{proof}
+We can also prove that $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$ is adjoint to the inclusion by noting that every set in $\DM(P)$ is of the form $B^\geq$ and $\incl_{\DM(P)}(B^\geq) = B^\geq$, so
+\[ A\subseteq \incl_{\DM(P)}(B^\geq) \iff A\subseteq B^\geq \iff B\subseteq A^\leq \iff B \subseteq A^{\leq\geq\leq} \iff A^{\leq\geq} \subseteq B^\geq \iff A^{\leq\geq} \subseteq \incl_{\DM(P)}(B^\geq). \]
+
+\begin{proposition}
+Let $\sSet{P, \leq}$ be a poset. Then $m: P \to \DM(P)$ preserves arbitrary meets and joins.
+\end{proposition}
+\begin{proof}
+Let $A\subseteq P$ be a subset such that the meet $\bigwedge A$ exists. Then, by \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{boundsFromPrincipalImages} and \ref{DedekindMacNeilleCompletionComplete},
+\[ m\Big(\bigwedge A\Big) = \downset\Big\{\bigwedge A\Big\} = A^\geq = \bigcap_{a\in A}\downset\{a\} = \bigcap_{a\in A}m(a) = \bigcap m^\imf(A) = \bigwedge_{\DM(P)}m^\imf(A). \]
+
+Now let $B\subseteq P$ be a subset such that the meet $\bigvee B$ exists. Then we calculate, using \ref{supInfConnection}, \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{imagesFromPrincipalImages}, \ref{meetJoinImageMooreClosure} and \ref{DedekindMacNeilleCompletionComplete},
+\begin{align*}
+m\Big(\bigvee A\Big) &= \downset\Big\{\bigvee A\Big\} \\
+&= \downset \sup(A) \\
+&= \downset \inf(A^\leq) \\
+&= A^{\leq\geq} \\
+&= (\downset A)^{\leq\geq} \\
+&= \Big(\bigcup_{x\in A} \downset\{x\}\Big)^{\leq\geq} \\
+&= \Big(\bigcup m^\imf(A)\Big)^{\leq\geq} \\
+&= \bigvee_{\DM(P)} m^{\imf}(A).
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $L$ be a complete lattice. Then $m: L\to \DM(L)$ is an order similarity.
+\end{lemma}
+
+\begin{proposition}
+$\im(P)$ is join-dense and meet-dense in $\DM(P)$.
+\end{proposition}
+
+\begin{proposition}[Universal property of the Dedekind-MacNeille completion]
+See Schröder, p.212.
+\end{proposition}
+
 
 \subsection{Distributive and modular lattices}
 \subsubsection{Distributive lattices}
@@ -2421,7 +2468,7 @@ Let $A\subseteq L$. Then
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-See \ref{orderReversingSimilarityLatticeOperations}.
+See \ref{orderSimilarityPreservesJoinsMeets}.
 \end{proof}
 
 \begin{proposition}
@@ -3810,7 +3857,7 @@ In other words, for all $x,y,z\in P$,
 \[ \downset(\ddownset A) = (A \cup A_\gg)_{\geq} \subseteq (A \cup A_\gg)_{\geq} \subseteq (A_{\gg})_\geq = A_{(\gg;\geq)} \subseteq A_\gg \subseteq A\cup A_\gg = \ddownset A. \]
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{joinWayBelow}
 Let $P$ be a poset and $x,y,z\in P$ such that $x\vee y$ exists. If $x\ll z$ and $y \ll z$, then $x\vee y \ll z$.
 \end{lemma}
 \begin{proof}
@@ -3849,6 +3896,36 @@ Consider the interval $\interval{0,1}$ with the usual order and $x,y\in \interva
 Thus the only finite element is $0$.
 \end{example}
 
+\begin{lemma} \label{downsetCompactElement}
+Let $P$ be a poset, $x\in \compacts(P)$ a compact element and $y\in P$. Then
+\begin{enumerate}
+\item $\ddownset\{x\} = \downset\{x\}$;
+\item $\ddownset\{y\} \cap \compacts(P) = \downset\{y\} \cap \compacts(P)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) First suppose $y\in \ddownset\{x\}$, so $y \ll x$. Then $y\leq x$ by \ref{wayBelowImpliesLessThan}, so $y\in \downset\{x\}$.
+
+Now suppose $y\in \downset\{x\}$. Then $y \leq x \ll x$, so $y \ll x$ by \ref{wayBelowAbsorbsLessThan} and $y\in \ddownset\{x\}$.
+
+(2) We have $\ddownset\{y\} \cap \compacts(P) \subseteq \downset\{y\} \cap \compacts(P)$ by \ref{wayBelowImpliesLessThan}.
+
+Now take $a\in \downset\{y\} \cap \compacts(P)$. Then $a \ll a \leq y$, so $a\ll y$ by \ref{wayBelowImpliesLessThan} and $a\in \ddownset\{y\} \cap \compacts(P)$.
+\end{proof}
+
+\begin{proposition} \label{compactsDirected}
+Let $S$ be a $\vee$-semilattice. The set $\compacts(S)$ of compact elements is directed.
+\end{proposition}
+\begin{proof}
+Take $x,y\in \compacts(S)$. Since $x \ll x \leq x \vee y$, we have $x \ll x\vee y$ by \ref{wayBelowAbsorbsLessThan}. Similarly $y \ll x\vee y$, so $x\vee y \ll x\vee y$ by \ref{joinWayBelow}. Thus $x\vee y\in \compacts(S)$.
+\end{proof}
+
+\begin{example}
+The set of compact elements is not generally downwards closed, even in a lattice, and so not an order ideal.
+
+Let $\sSet{X,\mathcal{T}}$ be a compact topological space. Then $X \ll X$ in $\mathcal{T}$, but it is not true that all open sets are finite.
+\end{example}
+
 \subsection{Continuous and algebraic posets}
 \begin{definition}
 Let $P$ be a poset. Then $P$ is called a \udef{continuous poset} if, for all $x\in P$,
@@ -3862,7 +3939,7 @@ A \udef{continuous lattice} is a \emph{complete} lattice that is a continuous po
 \end{definition}
 Note that the first point is automatically satisfied in $\vee$-semilattices, see \ref{ddownsetOrderIdealInJoinSemilattice}. In a general poset $\ddownset \{x\}$ is downwards closed, so we only need to verify that it is directed.
 
-\begin{lemma}
+\begin{lemma} \label{downsetEmbeddingContinuousPosets}
 Let $P$ be a poset and $x,y\in P$. Then 
 \begin{enumerate}
 \item $x\leq y$ implies $\ddownset \{x\} \subseteq \ddownset \{y\}$;
@@ -3915,7 +3992,7 @@ Let $P$ be a poset. A \udef{base} of the poset is a subset $B\subseteq P$ such t
 \end{itemize}
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{posetBaseInclusionLemma}
 Let $P$ be a poset with base $B$ and $B'\subseteq P$. If $B\subseteq B'$, then $B'$ is a base.
 \end{lemma}
 \begin{proof}
@@ -3941,25 +4018,46 @@ Cfr. \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}. This implies $\dirvee A = 
 Let $P$ be a poset. Then the following are equivalent:
 \begin{enumerate}
 \item $P$ is continuous;
+\item for all $x\in P$ there exists a directed $D\subseteq \ddownset\{x\}$ such that $x = \dirvee D$;
 \item $P$ is a base of itself;
 \item $P$ has a base.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1) \Rightarrow (2)$ Take $x\in P$. Then we can set $D = \ddownset \{x\}$.
+$(1) \Rightarrow (2)$ For all $x\in P$ we can set $D = \ddownset \{x\}$.
 
-$(2) \Rightarrow (3)$ Immediate.
+$(2) \Rightarrow (3) \Rightarrow (4)$ Immediate.
 
-$(3) \Rightarrow (1)$ Suppose $B$ is a base of $P$. Take arbitrary $x\in P$. Then there exists a directed subset $D\subseteq B$ such that $D\subseteq \ddownset\{x\}$ and $x = \dirvee D$.
+$(4) \Rightarrow (1)$ Suppose $B$ is a base of $P$. Take arbitrary $x\in P$. Then there exists a directed subset $D\subseteq B$ such that $D\subseteq \ddownset\{x\}$ and $x = \dirvee D$.
 
 First we observe that $\ddownset\{x\}$ is an ideal. Directedness is given by \ref{approximatingSetDirected}. We have that $\ddownset\{x\}$ is downwards closed by \ref{wayBelowAbsorbsLessThan}. The approximation property also follows from \ref{approximatingSetDirected}.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{compactsInPosetBase}
 Let $P$ be a poset with a base $B$. Then $\compacts(P)\subseteq B$.
 \end{lemma}
 \begin{proof}
 Take $x\in \compacts(P)$, so $x\ll x$. Suppose $D$ is a directed subset of both $B$ and $\ddownset\{x\}$ such that $x = \dirvee D$. Then $x\in \downset D$, so there exists $d\in D$ such that $x\leq d$. Since $d\ll x$, we also have $d\leq x$, which implies $d = x$. Thus $x\in D\subseteq B$.
+\end{proof}
+
+\begin{proposition} \label{finiteRemovalNonCompactElementsFromBase}
+Let $P$ be a poset with base $B$ and $b\in B$. If $b$ is not compact, then $P\setminus\{b\}$ is a base of $P$.
+\end{proposition}
+\begin{proof}
+By definition of a base, there exists $D\subseteq B$ such that $D\subseteq \ddownset\{b\}$ and $b = \dirvee D$. Since $b$ is not compact, we have $b \notin \ddownset\{b\}$ and so $b\notin D$. Thus $D\subseteq B\setminus\{b\}$.
+
+Now take arbitrary $x\in P\setminus\{b\}$. Then take $D_x \subseteq B$ such that $D_x\subseteq \ddownset\{x\}$ and $x = \dirvee D_x$. If $b\notin D_x$, then $D_x\subseteq B\setminus \{b\}$.
+
+Suppose $b\in D_x$, then consider $D_x'\defeq \big(D_x\setminus \{b\}\big)\cup D \subseteq B\setminus \{b\}$. We claim this satisfies the requirements.
+
+Since $\dirvee D_x = x \neq b$, $b$ is not maximal in $D_x$ and there exists $c\in D_x$ such that $c\nleq b$. Then $D_x$ contains a $d$ that upper bounds $\{b,c\}$ by directedness and $d\neq b$ by construction.
+To show $D_x'$ is directed, take $\{y,z\}\subseteq D_x'$. If either $y\in D$ or $z\in D$, then they are less than $d$ and it is enough to find an upper bound of $\{y,z,d\}\cap D_x$ in $D_x$. This can be found since $D_x$ is directed and this upper bound is not $b$, so it is in $D_x'$.
+
+Since $b\in D_x$, we have $b \ll x$, so $D\subseteq \ddownset\{b\} \subseteq \ddownset\{x\}$ by the transitivity of $\ll$, \ref{wayBelowAbsorbsLessThan}. Since also $\big(D_x\setminus \{b\}\big) \subseteq \ddownset\{x\}$, we have $D_x'\subseteq \ddownset\{x\}$.
+
+We also calculate
+\[ x = \dirvee D_x = b \vee \bigvee \big(D_x\setminus b\big) = \bigvee D \vee \bigvee \big(D_x\setminus b\big) = \bigvee \Big(D \cup \big(D_x\setminus b\big)\Big), \]
+using \ref{joinMeetUnion}.
 \end{proof}
 
 
@@ -3970,13 +4068,18 @@ A poset $P$ is called an \udef{algebraic poset} if it has a base of compact elem
 An \udef{algebraic lattice} is a \emph{complete} lattice that is an algebraic poset.
 \end{definition}
 
-\begin{lemma}
+\begin{example}
+Let $X$ be a set. Then $\sSet{\powerset(X), \subseteq}$ is an algebraic lattice.
+\end{example}
+
+\begin{lemma} \label{algebraicPosetLemma}
 Let $P$ be a poset. Then $P$ is algebraic \textup{if and only if} for all $x\in P$,
 \begin{itemize}
 \item $\ddownset \{x\}\cap \compacts(P)$ is directed;
 \item $x = \dirvee\big(\ddownset \{x\}\cap \compacts(P)\big)$.
 \end{itemize}
 \end{lemma}
+Note that $\ddownset \{x\}\cap \compacts(P) = \downset \{x\}\cap \compacts(P)$ by \ref{downsetCompactElement}.
 \begin{proof}
 First, suppose $P$ is algebraic and take arbitrary $x\in P$. Then there exists a directed set $D$ such that $D\subseteq \compacts(P)$. By definition of base, we have $D\subseteq \ddownset\{x\}$, so $D\subseteq \big(\ddownset \{x\}\cap \compacts(P)\big)\subseteq \ddownset\{x\}$. Then both points follow from \ref{approximatingSetDirected}.
 
@@ -3994,9 +4097,118 @@ Let $P$ be a poset. Then the following are equivalent:
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-TODO
+$(1) \Rightarrow (2)$ Immediate from \ref{posetBaseInclusionLemma}.
+
+$(2) \Rightarrow (3)$ Immediate from \ref{compactsInPosetBase}.
+
+$(3) \Rightarrow (4)$ Immediate.
+
+$(4) \Rightarrow (1)$ Let $B$ be the smallest base of $P$. By \ref{finiteRemovalNonCompactElementsFromBase} it must consist solely of compact elements.
 \end{proof}
 
+\begin{proposition} \label{algebraicJoinSemilattice}
+Let $S$ be a $\vee$-semilattice. Then the following are equivalent:
+\begin{enumerate}
+\item $S$ is algebraic;
+\item $x = \dirvee\big(\ddownset \{x\}\cap \compacts(P)\big)$ for all $x\in S$;
+\item every element is the supremum of a set of compact elements.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ By \ref{algebraicPosetLemma}.
+
+$(2) \Rightarrow (3)$ Immediate.
+
+$(3) \Rightarrow (1)$ Take arbitrary $x\in S$. Then $x = \bigvee A$ for some $A\subseteq \compacts(S)$. Consider $D\defeq \Closure_\vee(A)$. Clearly $D$ is directed.
+
+We claim that $x = \dirvee D$. Indeed it is an upper bound: any $y\in D$ is a finite join of elements in $A$, which must be less than the join of $A$, i.e.\ $x$. So $y\leq x$. Now let $z$ be another upper bound of $D$. It is also an upper bound of $A$ and so $x\leq z$.
+
+Finally, $D\subseteq \downset\{x\}$ and $\downset\{x\} = \ddownset\{x\}$ by \ref{downsetCompactElement}, so $x\in D^\ll$.
+\end{proof}
+
+\subsubsection{Continuous and algebraic closure}
+\begin{definition}
+Let $P$ be a poset and $f: P\to \im(f) \subseteq P$ a function. We call $f$
+\begin{itemize}
+\item a \udef{continuous closure operator} if
+\begin{itemize}
+\item $x \leq f(x)$ for all $x\in P$;
+\item $f = f^2$;
+\item $\bigvee_{P} f^\imf\big(\ddownset\{x\}\big)$ exists and $f(x) \leq \bigvee_{P} f^\imf\big(\ddownset\{x\}\big)$ for all $x\in P$;
+\end{itemize}
+\item an \udef{algebraic closure operator} if
+\begin{itemize}
+\item $x \leq f(x)$ for all $x\in P$;
+\item $f = f^2$;
+\item $\bigvee_{P} f^\imf\big(\ddownset\{x\}\cap \compacts(P)\big)$ exists and $f(x) \leq \bigvee_{P} f^\imf\big(\ddownset\{x\}\cap \compacts(P)\big)$ for all $x\in P$.
+\end{itemize}
+\end{itemize}
+\end{definition}
+TODO: dual closure operators. Note that $\ddownset \{x\}\cap \compacts(P) = \downset \{x\}\cap \compacts(P)$ by \ref{downsetCompactElement}.
+
+\begin{lemma}
+Let $P$ be a poset and $f: P\to \im(f) \subseteq P$ a function.
+\begin{enumerate}
+\item if $f$ is a continuous closure operator, then $f(x) = \bigvee_{P} f^\imf\big(\ddownset\{x\}\big)$ for all $x\in P$;
+\item if $f$ is an algebraic closure operator, then $f(x) = \bigvee_{P} f^\imf\big(\ddownset\{x\}\cap \compacts(P)\big)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) One inequality is given by the definition. For the other, note that
+\[ \downset f^\imf\big(\ddownset \{x\}\big) \subseteq \downset f^\imf\big(\downset \{x\}\big) = \downset \{f(x)\}, \]
+so $\bigvee_Pf^\imf\big(\ddownset \{x\}\big) \leq \bigvee \downset\{f(x)\} = f(x)$.
+
+(2) One inequality is given by the definition. For the other, note that
+\[ \downset f^\imf\big(\ddownset \{x\}\cap \compacts(P)\big) \subseteq \downset f^\imf\big(\ddownset \{x\}\big) \subseteq \downset f^\imf\big(\downset \{x\}\big) = \downset \{f(x)\}, \]
+so $\bigvee_P f^\imf\big(\ddownset \{x\}\cap \compacts(P)\big) \leq \bigvee \downset\{f(x)\} = f(x)$.
+\end{proof}
+
+\begin{lemma} \label{continuousClosurePreservesOrder}
+Let $P$ be a poset and $f: P\to \im(f) \subseteq P$ a continuous closure operator. Then $f$ preserves order, so $f$ is a Moore closure operator.
+\end{lemma}
+\begin{proof}
+Let $x \leq y$ in $P$. Then $\ddownset\{x\}\subseteq \ddownset\{y\}$ by \ref{downsetEmbeddingContinuousPosets} and so $f^\imf\big(\ddownset\{x\}\big)\subseteq f^\imf\big(\ddownset\{y\}\big)$. This implies
+\[ f(x) = \bigvee_P f^\imf\big(\ddownset\{x\}\big)\leq \bigvee_P f^\imf\big(\ddownset\{y\}\big) = f(y). \]
+\end{proof}
+
+\begin{proposition} \label{continuousClosurePreservesWayBelow}
+Let $L$ be a continuous lattice and $f: L\to \im(f) \subseteq L$ a continuous closure operator. Then $f$ preserves the way-below relation.
+\end{proposition}
+\begin{proof}
+Let $x \ll y$ in $L$. We want to prove that $f(x) \ll f(y)$. To that end, let $D\subseteq \im(f)$ be a non-empty directed set with supremum such that $f(y) \leq \dirvee_{\im(f)}D$. Using the fact that $f$ is a continuous closure operator and \ref{meetJoinImageMooreClosure} (because $f$ is also a Moore closure operator, \ref{continuousClosurePreservesOrder}, and $L$ is complete, so $\dirvee_L D$ exists), we have
+\[ y \leq f(y) \leq \dirvee_{\im(f)}D = f\Big(\dirvee_L D\Big) = \bigvee_L f^\imf\Big(\ddownset\big\{\dirvee_L D\big\}\Big). \]
+Since $x\ll y$ and $f^\imf\Big(\ddownset\big\{\dirvee_L D\big\}\Big)$ is directed (using \ref{imageDirectedSet} and the fact that $L$ is continuous), this implies
+\[ x\in \downset f^\imf\Big(\ddownset\big\{\dirvee_L D\big\}\Big) \subseteq \downset f^\imf\Big(\downset\big\{\dirvee_L D\big\}\Big) \subseteq \downset f\Big(\dirvee_L D\Big) = \downset \dirvee_{\im(f)}D. \]
+This implies $f(x) \in \downset \dirvee_{\im(f)}D$ and so $f(x) \ll f(y)$.
+\end{proof}
+\begin{corollary}
+Let $L$ be a continuous lattice and $f: L\to \im(f) \subseteq L$ a continuous closure operator. Then $\im(f)$ is a continuous lattice.
+\end{corollary}
+\begin{proof}
+By \ref{meetJoinImageMooreClosure}, $\im(f)$ is a complete lattice.
+
+For all $x\in \im(f)$, we have
+\[ x = f(x) = f^2(x) = f\Big(\bigvee_{L} f^\imf\big(\ddownset\{x\}\big)\Big) = \bigvee_{\im(f)} f^\imf\big(\ddownset\{x\}\big). \]
+Since $f$ preserves the way-below relation, we have $f^\imf\big(\ddownset\{x\}\big) \subseteq \ddownset\{f(x)\} = \ddownset\{x\}$. Also, $f^\imf\big(\ddownset\{x\}\big)$ is directed by \ref{imageDirectedSet}, so $\im(f)$ continuous by \ref{posetContinuousIffHasBase}.
+\end{proof}
+
+\begin{lemma} \label{algebraicClosureIsContinuous}
+Every algebraic closure operator is a continuous closure operator.
+\end{lemma}
+\begin{proof}
+Let $f: P\to \im(f)\subseteq P$ be an algebraic closure operator. Since
+\[ f^\imf\big(\ddownset\{x\}\cap \compacts(P)\big) \subseteq f^\imf\big(\ddownset\{x\}\big) \subseteq f^\imf\big(\downset\{x\}\big) \subseteq \downset\{f(x)\}, \]
+$f^\imf\big(\ddownset\{x\}\cap \compacts(P)\big)^\leq = \upset\{f(x)\}$ and $\big(\downset\{f(x)\}\big)^\leq = \upset\{f(x)\}$, we have
+\[ \Big(f^\imf\big(\ddownset\{x\}\big)\Big)^\leq = \upset\{f(x)\}, \]
+so $\bigvee_P f^\imf\big(\ddownset\{x\}\big) = f(x)$.
+\end{proof}
+
+\begin{proposition} \label{imageAlgebraicClosureAlgebraicLattice}
+Let $L$ be a continuous lattice and $f: L\to \im(f)\subseteq L$ an algebraic closure operator. Then $\im(f)$ is an algebraic lattice.
+\end{proposition}
+\begin{proof}
+Since $f$ preserves the way-below relation, \ref{continuousClosurePreservesWayBelow} and \ref{algebraicClosureIsContinuous}, $f^\imf\big(\ddownset\{x\}\cap \compacts(L)\big)$ is a set of compact elements. Thus $\im(f)$ is algebraic by \ref{algebraicJoinSemilattice}.
+\end{proof}
 
 \section{Domains}
 \begin{definition}
@@ -4296,16 +4508,32 @@ For the converse, the isomorphism is given by $x\mapsto \downset x$, as in \ref{
 For the other inclusion we just note that a lattice order is in particular a  preorder and so we can use \ref{TODO}.
 \end{proof}
 
+\section{Moore families}
 \begin{definition}
 A family of sets $\mathcal{F}$ satisfying the hypothesis of \ref{MooreFamily}, i.e.\
 \begin{itemize}
 \item $\mathcal{F}$ is closed under arbitrary intersections; and
 \item $U \in \mathcal{F}$;
 \end{itemize}
-is called a \udef{Moore family} or \udef{topped intersection structure}.
+is called a \udef{Moore family} or \udef{closure system}.
 \end{definition}
 
 TODO: join is given by union if directed?? (+CPO)??
+
+\subsection{Closure rules}
+\begin{definition}
+Let $X$ be a set. A set $\Gamma \subseteq \powerset(X)\times X$ is called a set of \udef{closure rules}.
+\end{definition}
+
+Let $f: \powerset(X) \to \powerset(X)$ be a Moore closure. Then
+\[ \setbuilder{(A,x) \in \powerset(X)\times X}{x\in f(A)} \]
+is the set of associated closure rules.
+
+Let $\Gamma$ be a set of closure rules. Then
+\[ \setbuilder{B\subseteq X}{\big(A\subseteq B \land (A,x)\in \Gamma\big) \implies x\in B} \]
+is the associated Moore family.
+
+The Moore family is algebraic iff it is generated by a (possibly infinite) set of finitary rules.
 
 \section{The complete Boolean lattice of subsets}
 \begin{lemma}
@@ -5449,7 +5677,7 @@ Let $x\in X$. We call
 
 If $\sSet{X,\Yleft}$ is an ordered set, we can always add a point on top of all the rest: We can take, e.g.\ the set
 \[ t_X = \setbuilder{x\in X}{x\notin x}. \]
-This is guaranteed, by proposition \ref{russelParadox}, not to be in $X$.
+This is guaranteed, by proposition \ref{russellParadox}, not to be in $X$.
 The poset $X\cup t_X$ is called the \udef{successor} $\operatorname{Succ}(X)$ of $X$.
 
 \begin{proposition}

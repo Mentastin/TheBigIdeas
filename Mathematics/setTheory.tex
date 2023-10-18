@@ -189,6 +189,7 @@ TODO: emptyset is not class or set?
 \begin{enumerate}[(A)]
 \item \textbf{Axiom of extensionality}: For any two classes $A,B$:
 \[ A=B \;\iff\; \left[\forall x:x\in A\iff x\in B\right]. \]
+TODO: compare this equality with definitional equality (see $\setbuilder{x\in A}{ x\notin x } = r(A)$ in proof of \ref{russellParadox} for example of definitional equality).
 \item \textbf{Axiom of class existence}: Let $\phi(x)$ be a proposition with free variable $x$. Then there exists a class $\setbuilder{x}{\phi(x)}$ such that
 \[ \forall y: \;\; \Element(y) \;\implies\; \Big( y\in \setbuilder{x}{\phi(x)} \iff \phi(y) \Big). \]
 \end{enumerate}
@@ -196,23 +197,6 @@ This is for MK. In NBG the quantifiers in $\phi$ must be bound to elements.
 
 Let $A$ be a class and $\phi(x)$ a proposition with free variable $x$. We often abbreviate $\setbuilder{x}{x\in A \land \phi(x)}$ by $\setbuilder{x\in A}{\phi(x)}$.
 
-
-\begin{proposition}[Russel's paradox] \label{russelParadox}
-Let $A$ be a set. The set
-\[ r(A) \defeq \setbuilder{x\in A}{ x\notin x } \]
-is not a member of $A$.
-\end{proposition}
-\begin{corollary} \label{setOfSets}
-The class of sets, $\setbuilder{x}{\Set(x)}$, is not a set.
-\end{corollary}
-\begin{corollary} \label{properClassExistence}
-There exists a proper class.
-\end{corollary}
-
-
-\begin{proposition}
-There exists a proper
-\end{proposition}
 
 \subsubsection{Subclasses}
 \begin{definition}
@@ -235,6 +219,30 @@ Let $A,B,C$ be classes. Then
 TODO: consequence of replacement.
 
 In particular, for any set $A$ and proposition $\phi(x)$, the class $\setbuilder{x\in A}{\phi(x)}$ is a set.
+
+\begin{proposition}[Russell's paradox] \label{russellParadox}
+Let $A$ be a set. The class
+\[ r(A) \defeq \setbuilder{x\in A}{ x\notin x } \]
+is a set and not a member of $A$.
+\end{proposition}
+\begin{proof}
+The class $r(A)$ is a set by the axiom of separation.
+
+Suppose $r(A)\in A$. First suppose $r(A)\notin r(A)$, then, since $\Element\big(r(A)\big)$, we have $r(A)\in \setbuilder{x\in A}{ x\notin x } = r(A)$ by the axiom of class existence. This is a contradiction.
+
+Now suppose $r(A)\in r(A)$. Again, since $\Element\big(r(A)\big)$, the axiom of class existence gives $r(A)\notin r(A)$. Again a contradiction.
+
+We conclude that $r(A)\notin A$.
+\end{proof}
+\begin{corollary} \label{setOfSets}
+The class of sets, $\setbuilder{x}{\Set(x)}$, is not a set.
+\end{corollary}
+\begin{proof}
+Suppose $\setbuilder{x}{\Set(x)}$ were a set, then $r(A)$ would be both a set, so $\Element\big(\setbuilder{x}{\Set(x)}\big)$, and not an element of $\setbuilder{x}{\Set(x)}$. This would contradict the axiom of class existence.
+\end{proof}
+\begin{corollary} \label{properClassExistence}
+There exists a proper class.
+\end{corollary}
 
 \subsubsection{Class construction}
 We can use the axiom of class construction to build some basic classes.
@@ -2952,6 +2960,13 @@ We can associate to any relation $R$ on sets $(A,B)$
 
 Clearly $R^{\preimf} = (R^\transp)^\imf$.
 
+\begin{lemma}
+Let $R$ be a relation on sets $(A,B)$ and $X, Y \subseteq A$ subsets. Then $X\subseteq Y$ implies $R^\imf(X) \subseteq R^\imf(Y)$.
+\end{lemma}
+\begin{proof}
+Restatement of \ref{monotonicityImage}.
+\end{proof}
+
 \begin{lemma} \label{functorialityImageFunction}
 Let $R,S$ be composable relations. Then $(R;S)^\imf = R^\imf;S^\imf$.
 \end{lemma}
@@ -3286,7 +3301,7 @@ Let $f: A \not\to B$ be a partial function. Then we can construct a total functi
 where $B^+ = B\cup \{e\}$ for some $e\notin B$, such that $\widehat{f}|_{\preim(f)}^B = f|_{\preim(f)}$.
 \end{lemma}
 \begin{proof}
-We can always find an element $e$ by \ref{russelParadox}. Then we let $\widehat{f}$ map all elements in $A\setminus\preim(f)$ to $e$.
+We can always find an element $e$ by \ref{russellParadox}. Then we let $\widehat{f}$ map all elements in $A\setminus\preim(f)$ to $e$.
 \end{proof}
 
 \begin{proposition} \label{partialFunctionSubset}
