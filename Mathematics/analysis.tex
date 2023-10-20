@@ -1207,46 +1207,113 @@ TODO Tannery
 
 \subsubsection{The Lebesgue measure}
 \begin{definition}
-Define $\mathfrak{I}$ as the subset of sequences $\seq{(a_n,b_n)}$ in $(\overline{\R}\times\overline{\R})^\N$ such that
-\[ \ldots < b_{n-1}< a_n < b_n < a_{n+1} < \ldots \]
+Define $\mathfrak{I} \defeq \setbuilder{\seq{(a_n, b_n)} \in (\R \times \R)^\N}{\forall n\in \N: \; a_n \leq b_n}$. Let $A\subseteq \R$. We say $\seq{(a_n, b_n)} \in \mathfrak{I}$ \udef{covers} $A$ if $A \subseteq \bigcup_{n\in\N} \interval[o]{a_n, b_n}$.
 
 The \udef{Lebesgue outer measure} on $\R$, denoted by $\lambda^*$ is defined by
-\[ \lambda^*(A) = \inf\setbuilder{\sum_{n\in \N}(b_n-a_n)}{\text{$\seq{(a_n,b_n)}\in \mathfrak{I}$ such that $A \subseteq \bigcup_{n\in\N} \interval[o]{a_n, b_n}$}}. \]
+\[ \lambda^*(A) = \inf\setbuilder{\sum_{n\in \N}(b_n-a_n)}{\text{$\seq{(a_n, b_n)} \in \mathfrak{I}$ covers $A$}}. \]
+
 
 The set of $\lambda^*$-measurable sets is called the \udef{Lebesgue $\sigma$-algebra} and the associated measure $\lambda$ is called the \udef{Lebegue measure}.
 \end{definition}
-We say $\seq{(a_n,b_n)}\in \mathfrak{I}$ covers $A$ if $A \subseteq \bigcup_{n\in\N} \interval[o]{a_n, b_n}$.
 
-\begin{lemma}
-The Lebesgue outer measure on $\R$ is an outer measure on $\R$ and for all $a
-\leq b$
-\[ \lambda^*([a,b]) = \lambda^*(]a,b]) = \lambda^*([a,b[) = \lambda^*(]a,b[) = b-a. \]
-The Lebesgue outer measure of any unbounded interval is $+\infty$.
+\begin{lemma} \label{LebesgueOuterMeasureOuterMeasure}
+The Lebesgue outer measure on $\R$ is an outer measure on $\R$.
 \end{lemma}
 \begin{proof}
 We verify the three points in the definition of an outer measure:
 \begin{itemize}
-\item We have that $\emptyset \subseteq ]0,\epsilon[$ for all $\epsilon > 0$, so  $0 = \inf\setbuilder{\epsilon}{\epsilon > 0} \geq \lambda^*(\emptyset) \geq 0$.
+\item We have that $\emptyset \subseteq \interval[o]{0,\epsilon}$ for all $\epsilon > 0$, so  $0 = \inf\setbuilder{\epsilon}{\epsilon > 0} \geq \lambda^*(\emptyset) \geq 0$.
 \item If $A\subseteq B$, then any cover of $B$ is a cover of $A$.
 \item Let $\seq{A_n}$ be an arbitrary sequence in $\powerset(\Omega)$. If $\sum_{n\in\N}\lambda^*(A_n) = +\infty$, then subadditivity is necessarily satisfied. Now assume $\sum_{n\in\N}\lambda^*(A_n)$ is finite, then each $\lambda^*(A_n)$ is finite. Fix an arbitrary constant $\epsilon > 0$. We can find a $\seq{(a_{n,k},b_{n,k})}_{k\in\N}\in \mathfrak{I}$ that covers $A_n$ and is such that
 \[ \sum_{k=0}^\infty(b_{n,k} - a_{n,k}) < \lambda^*(A_n) + \epsilon/2^n. \]
 Now $\bigcup_{n\in \N}A_n$ is covered by $\seq{(a_{n,k},b_{n,k})}_{n,k\in\N}$ and
 \[ \sum_{n,k \in\N} (b_{n,k} - a_{n,k}) < \sum_{n\in \N}(\lambda^*(A_n) + \epsilon/2^n) = \sum_{n\in \N}\lambda^*(A_n) + \epsilon. \]
-Thus $\lambda^*\left(\bigcup_{n\in \N}A_n\right) \leq \sum_{n,k \in\N} (b_{n,k} - a_{n,k}) < \sum_{n\in \N}\lambda^*(A_n) + \epsilon$ for all $\epsilon > 0$. Thus $\lambda^*\left(\bigcup_{n\in \N}A_n\right) \leq \sum_{n\in \N}\lambda^*(A_n)$.
+Thus $\lambda^*\left(\bigcup_{n\in \N}A_n\right) \leq \sum_{n,k \in\N} (b_{n,k} - a_{n,k}) < \sum_{n\in \N}\lambda^*(A_n) + \epsilon$. Since $\epsilon > 0$ was taken arbitrarily, we have  $\lambda^*\left(\bigcup_{n\in \N}A_n\right) \leq \sum_{n\in \N}\lambda^*(A_n)$.
 \end{itemize}
-It is clear that $\lambda^*(]a,b[) \leq b-a$. For the converse, it is enough to notice that any sequence covering $]a,b[$ must contain a term $(c,d)$ with $c\leq a$ and $d\geq b$. 
-
-We now show $\lambda^*([a,b]) = b-a$. Considering covers of the form $(a-\epsilon, b+\epsilon)$ for arbitrary $\epsilon > 0$, gives $\lambda^*([a,b]) \leq b-a$. For the reverse inequality, we have $b-a = \lambda^*(]a,b[) \leq \lambda^*([a,b])$.
-
-The results for the halfopen intervals follow because 
-\[ b-a = \lambda^*([a,b]) \geq \lambda^*(]a,b]) \leq \lambda^*(]a,b[) = b-a \]
-and similarly for $\lambda^*([a,b[)$.
-
-The reasoning for unbounded intervals is similar.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{LebesgueMesaureIsMeasure}
 The Lebesgue measure is a measure.
 \end{corollary}
+
+\begin{lemma}
+Let $A\subseteq \R$ and $\seq{(a_n, b_n)}\in \mathfrak{I}$ such that $\seq{(a_n, b_n)}$ covers $A$. Then there exists $\seq{(a'_n, b'_n)}\in \mathfrak{I}$ such that
+\begin{itemize}
+\item for all $n\in \N$ there exists at most one $a_k$ such that $a_n < a_k < b_n$ and at most one $b_l$ such that $a_n < b_l < b_n$;
+\item $\sum_{n\in \N}b'_n - a'_n \leq \sum_{n\in \N}b_n - a_n$;
+\item $\seq{(a'_n, b'_n)}$ covers $A$.
+\end{itemize}
+\end{lemma}
+TODO: improve tooling for this.
+\begin{proof}
+By induction first on the size of $\setbuilder{k\in \N}{a_n < a_k < b_n}$ and then on $n\in\N$. This can then be repeated for the $b_l$.
+
+Sketch: suppose $a_n < a_{k_1}, a_{k_2} < b_n$. If $b_{k_1} \leq b_{n}$, then discard $(a_{k_1}, b_{k_1})$. If $b_n < b_{k_1}$, then replace $a_{k_2}$ by some point
+\end{proof}
+
+\begin{lemma} \label{intervalsLebesgueMeasurable}
+Take $a\leq b\in \R$. Then the intervals
+\begin{enumerate}
+\item $\interval[c]{a,b}, \interval[o]{a,b}, \interval[co]{a,b}, \interval[oc]{a,b}$;
+\item $\interval[co]{a,+\infty}, \interval[o]{a,+\infty}$;
+\item $\interval[oc]{-\infty,b}, \interval[o]{-\infty,b}$
+\end{enumerate}
+are all Lebesgue measurable.
+\end{lemma}
+\begin{proof}
+Since the set of Lebesgue measurable sets is a $\sigma$-algebra, by \ref{caratheodoryMeasurableAlgebra} and \ref{LebesgueOuterMeasureOuterMeasure}, it is enough to prove that $\interval[o]{a,+\infty}$ and $\interval[o]{-\infty,b}$ are Lebesgue measurable. We prove the first. The second is analogous.
+
+Take arbitrary $A\subseteq \R$. By \ref{CaratheodoryMeasurableInequality}, it is enough to show that $\lambda^*(A) \geq \lambda^*\big(A \cap \interval[o]{a,+\infty}\big) + \lambda^*\big(A \cap \interval[oc]{-\infty, a}\big)$. If $\lambda^*(A) = \infty$, then we are done.
+
+Now suppose $\lambda^*(A) < \infty$ and take arbitrary $\epsilon > 0$. We can find $\seq{(a_n,b_n)}\in\mathfrak{I}$ that covers $A$ and is such that $\sum_{n\in\N}b_n-a_n \leq \lambda^*(A)+ \epsilon$.
+
+Now consider
+\begin{align*}
+C_1 &\defeq \setbuilder{(a_n, b_n)}{b_n \leq a}, \\
+C_2 &\defeq \setbuilder{(a_n, b_n)}{a \leq a_n}, \\
+C_3 &\defeq \setbuilder{(a_n, a+ \frac{\epsilon}{2^{n+1}})}{a_n < a < b_n} \\
+C_4 &\defeq \setbuilder{(a, b_n)}{a_n < a < b_n}
+\end{align*}
+The $C_1\cup C_2\cup C_3\cup C_4$ is still countable and covers $A$. Also $C_1\cup C_3$ covers $A \cap \interval[o]{a,+\infty}^c$ and $C_2\cup C_4$ covers $A\cap \interval[o]{a,+\infty}$. So
+\begin{align*}
+\lambda^*\big(A \cap \interval[o]{a,+\infty}\big) + \lambda^*\big(A \cap \interval[oc]{-\infty, a}\big) &\leq \Big(\sum_{b_n\leq a}b_n - a_n + \sum_{a_n < a < b_n} a+ \frac{\epsilon}{2^{n+1}} - a_n\Big) + \Big(\sum_{a\leq a_n}b_n-a_n + \sum_{a_n < a < b_n}b_n - a\Big) \\
+&= \sum_{n\in \N}b_n - a_n + \sum_{a_n < a < b_n} \frac{\epsilon}{2^{n+1}} \\
+&\leq \sum_{n\in \N}b_n - a_n + \sum_{n\in \N} \frac{\epsilon}{2^{n+1}} \\
+&= \sum_{n\in \N}b_n - a_n + \epsilon \\
+&\leq \lambda^*(A) +2\epsilon.
+\end{align*}
+Since $\epsilon>0$ was taken arbitrarily, we have the necessary inequality.
+\end{proof}
+
+\begin{lemma}
+Take $a\leq b\in \R$. Then
+\[ \lambda^*\big(\interval[c]{a,b}\big) = \lambda^*\big(\interval[co]{a,b}\big) = \lambda^*\big(\interval[oc]{a,b}\big) = \lambda^*\big(\interval[o]{a,b}\big) = b-a. \]
+The Lebesgue outer measure of any unbounded interval is $+\infty$.
+\end{lemma}
+\begin{proof}
+For all $\epsilon > 0$, we have $\interval{a,b} \subseteq \interval[o]{a-\epsilon, b+\epsilon}$, so $\lambda^*\big(\interval{a,b}\big)\leq b-a + 2\epsilon$. Since $\epsilon > 0$ was taken arbitrarly, we have $\lambda^*\big(\interval[c]{a,b}\big) \leq b-a$.
+
+Since $\lambda^*$ is an outer measure, \ref{LebesgueOuterMeasureOuterMeasure}, we have
+\[ \lambda^*\big(\interval[o]{a,b}\big) \leq \lambda^*\big(\interval[co]{a,b}\big) \leq \lambda^*\big(\interval[c]{a,b}\big) \leq b-a. \]
+To conclude, we need to prove $b-a \leq \lambda^*\big(\interval[o]{a,b}\big)$. This follows from the following lemma.
+\begin{lemma*}
+Let $\seq{(a_n, b_n)}\in \mathfrak{I}$. If $a\leq b \in \R$ are such that $\seq{(a_n, b_n)}$ covers $\interval[o]{a,b}$. Then $b-a \leq \sum_{n\in\N}b_n - a_n$.
+\end{lemma*}
+\begin{proof}\renewcommand{\qedsymbol}{$\vdash$}
+We prove this by induction on the number $k$ of $n\in\N$ such that $b_n > a_n$.
+
+For the base case, suppose $k=1$. Then the unique pair $(a_n, b_n)$ such that $a_n\neq b_n$ must be such that $a_n \leq a$ and $b_n \geq b$. Thus $b-a \leq \sum_{n\in\N}b_n - a_n$.
+
+Now suppose the lemma holds for $k$ and $\seq{(a_n, b_n)}\in \mathfrak{I}$ has $k+1$ distinct pairs. There exists $(a_m, b_m)$ among the distinct pairs such that $a_m\leq a$. Now the other $k$ distinct pairs cover $\interval[o]{b_m, b}$, so, using the induction hypothesis, we have
+\begin{align*}
+\sum_{n\in\N}b_n - a_n &= b_m - a_n + \sum_{n\in\N\setminus\{m\}}b_n - a_n \\
+&\geq b_m - a + \sum_{n\in\N\setminus\{m\}}b_n - a_n \\
+&\geq b_m - a + b - b_m = b-a.
+\end{align*}
+\end{proof}
+In the previous, we can replace $\lambda^*\big(\interval[co]{a,b}\big)$ by $\lambda^*\big(\interval[oc]{a,b}\big)$, which also proves the equality for $\lambda^*\big(\interval[oc]{a,b}\big)$.
+
+For the unbounded intervals, we can consider them as monotonic limits of bounded intergrals (which are measurable sets by \ref{intervalsLebesgueMeasurable}) and use \ref{premeasureChainContinuous}.
+\end{proof}
 
 \begin{proposition}
 Let $\mathcal{B}$ be the Borel $\sigma$-algebra on $\R$ and $\mathcal{A}_{\lambda^*}$ the Lebesgue $\sigma$-algebra.
@@ -2308,7 +2375,7 @@ Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a differentiable real function s
 \[ f(x) = f(a) + \int_a^xf'(t)\diff{t}. \]
 In particular $\int_a^bf'(t)\diff{t} = f(b)-f(a)$.
 \end{corollary}
-TODO: We can drop the hypothesis that $f'$ is continuous, so long as it is (Riemann) integrable. This strengthening is the second fundamental theorem of calculus.
+We can drop the hypothesis that $f'$ is continuous if we use the Kurzweil-Henstock integral. This strengthening is the second fundamental theorem of calculus \ref{secondFundamentalTheoremCalculus}.
 \begin{proof}
 The function $f'$ is integrable by \ref{continuousRealFunctionIntegrable}.
 Set $g: \interval{a,b}\to \R: x\mapsto \int_a^xf'(t)\diff{t}$, which is differentiable by the first fundamental theorem and $g'(x) = f'(x)$ for all $x\in \interval[o]{a,b}$. Thus we can apply the means value theorem \ref{meanValueTheorem} to $f-g$, restricted to $\interval{a,x}$: there exists $c\in \interval[o]{a,x}$ such that
@@ -2316,15 +2383,154 @@ Set $g: \interval{a,b}\to \R: x\mapsto \int_a^xf'(t)\diff{t}$, which is differen
 This implies that $f-g$ is a constant function. In order to fix this constant, note that $g(a) = 0$, so $f(x) = f(a) + g(x) = f(a) + \int_a^xf'(t)\diff{t}$ and, in particular, $f(b) = f(a) + \int_a^bf'(t)\diff{t}$.
 \end{proof}
 
-\subsection{Henstock-Kurzweil integral}
+\subsection{Henstock-Kurzweil integration}
+\subsubsection{Tagged partitions and gauges}
+\begin{definition}
+Let $a <  b\in \R$. A \udef{tagged partition} $P$ of $\interval{a,b}$ is a pair of sequences $(u,t)$, where $u\in \interval{a,b}^{n+1}$ and $t\in \interval{a,b}^{n}$ such that
+\begin{itemize}
+\item $u_0 = a$ and $u_{n} = b$;
+\item $u_{k} < t_k < u_{k+1}$ for all $k\in 0:n$.
+\end{itemize}
+Let $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ be a function, which we call a \udef{gauge}. We say the tagged partition $P = (u,t)$ is \udef{$\delta$-fine} if
+\[ \forall k\in (0:n): \quad \interval{u_k, u_{k+1}} \subseteq \interval[o]{t_k-\delta(t_k), t_k+\delta(t_k)}. \]
+\end{definition}
 
-\subsection{Riemann integration}
-\begin{lemma}
-Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous real function. Then $f$ is Riemann integrable.
+\begin{lemma} \label{smallerGaugeFunctionFinerPartition}
+Let $a <  b\in \R$, $\delta_1, \delta_2: \interval{a,b}\to \interval[o]{0,+\infty}$ and $P = (u,t)$ a tagged partition. If $\delta_1 \leq \delta_2$ pointwise and $P$ is $\delta_1$-fine, then $P$ is $\delta_2$-fine.
 \end{lemma}
 \begin{proof}
-
+With the assumptions, we have
+\[ \forall k\in (0:n): \quad \interval{u_k, u_{k+1}} \subseteq \interval[o]{t_k-\delta_1(t_k), t_k+\delta_1(t_k)} \subseteq \interval[o]{t_k-\delta_2(t_k), t_k+\delta_2(t_k)}, \]
+so $P$ is $\delta_2$-fine.
 \end{proof}
+
+\begin{lemma} \label{deltaFinePartitionWidthBound}
+Let $a <  b\in \R$, $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ and $P = (u,t)$ a tagged partition. If $P$ is $\delta$-fine, then $0< u_{k+1}-u_k < 2\delta(t_k)$ for all $k\in 0:n$.
+\end{lemma}
+
+\begin{lemma}[Cousin's lemma] \label{cousinsLemma}
+Let $a <  b\in \R$ and $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ be a function. Then there exists a $\delta$-fine tagged partition of $\interval{a,b}$.
+\end{lemma}
+\begin{proof}
+Consider the set $\setbuilder{\interval[o]{p-\delta(p), p+\delta(p)}}{p\in \interval[o]{a,b}}$. This is an open cover of $\interval{a,b}$. Since $\interval{a,b}$ is compact by \ref{HeineBorel}, there exists a finite subcover $C$, by \ref{topologyCompactnessOpenCover}. Let the tag sequence $t$ by the sequence obtained by ordering $\setbuilder[\big]{p\in\interval[o]{a,b}}{\interval[o]{p-\delta(p), p+\delta(p)}\in C}$. Let $n$ be the length of this tag sequence.
+
+
+For all $k\in (1:n)$, we have $t_{k+1}-\delta(t_{k+1}) < t_k + \delta(t_k)$, so we can take $u_{k} \in \interval[o]{t_{k+1}-\delta(t_{k+1}), t_k + \delta(t_k)}$. Setting $u_0 = a$ and $u_{n} = b$, we have that $(u,t)$ is a $\delta$-fine partition.
+\end{proof}
+
+\subsubsection{The Henstock-Kurzweil integral}
+\begin{definition}
+Let $f: \interval[o]{a,b}\to X$ be a function to a Banach space $X$ and $P = (u,t)$ a tagged partition. Then the \udef{Riemann sum} $\sum_P f$ is defined as
+\[ \sum_P f \defeq \sum_{k = 0}^{\len(t)}f(t)\big(u_{k+1} - u_{k}\big). \]
+A vector $I\in X$ is called the \udef{Henstock-Kurzweil integral} of $f$ if
+\[ \forall \epsilon >0: \exists \delta\in \big(\interval{a,b}\to \interval[o]{0,\infty}\big): \forall \,\text{$\delta$-fine partitions}: \quad \norm{I - \sum_P f} < \epsilon. \]
+We call $f$ \udef{Henstock-Kurzweil integrable} if it has a Henstock-Kurzweil integral and we denote the Henstock-Kurzweil integral $\int_a^b f \diff{x}$.
+\end{definition}
+
+\begin{lemma}
+Let $f: \interval[o]{a,b}\to X$ be a function to a Banach space. Then $f$ has at most one Henstock-Kurzweil integral.
+\end{lemma}
+\begin{proof}
+Suppose $I_1,I_2$ are both Henstock-Kurzweil intergrals of $f$. Take arbitrary $\epsilon > 0$. Then there exist $\delta_1,\delta_2 \in \big(\interval{a,b}\to \interval[o]{0,\infty}\big)$ such that $\norm{I_1 - \sum_P f} < \epsilon$ for all $\delta_1$-fine partitions $P$ and $\norm{I_2 - \sum_Q f} < \epsilon/2$ for all $\delta_2$-fine partitions $Q$.
+
+Take a tagged partition $P$ that is $\delta_1\wedge \delta_2$-fine. By \ref{smallerGaugeFunctionFinerPartition}, $P$ is both $\delta_1$-fine and $\delta_2$-fine. We then have
+\[ \norm{I_1 - I_2} \leq \norm{I_1 - \sum_P f} + \norm{I_2 - \sum_P f} < \epsilon /2 + \epsilon /2 = \epsilon. \]
+Since $\epsilon > 0$ was taken arbitrarily, we have $\norm{I_1 - I_2} = 0$ and so $I_1 = I_2$.
+\end{proof}
+
+\begin{lemma}
+Let $A\subseteq \interval{a,b}$ be a measurable set. Then $\int_a^b \charFunc{A}(x)\diff{x} = \lambda(A)$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition}
+Let $f: \interval[o]{a,b}\to X$ be a function to a Banach space. Suppose $f = 0$ a.e. Then $f$ is Henstock-Kurzweil integrable and $\int_a^b f\diff{x} = 0$.
+\end{proposition}
+TODO: make corollary of Bochner / Lebesgue integrable $\implies$ Henstock-Kurzweil integrable.
+\begin{proof}
+Let $E \defeq \setbuilder{x\in \interval[o]{a,b}}{f(x) \neq 0}$ and $E_n \defeq \setbuilder{x\in E}{n-1 \leq |f(x)| < n}$ for all $n \geq 1$. The sets $E_n$ are disjoint and have measure zero.
+
+Take arbitrary $\epsilon > 0$. For each $n\geq 1$, choose an open set $O_n$ such that $E_n \subseteq O_n$ and $\mu(O_n) < \frac{\epsilon}{n2^n}$. Define a gauge function $\delta$ by
+\[ \delta(x) = \begin{cases}
+1 & (x\notin E) \\ \inf\big|x - O_n^c\big| & (x\in E_n).
+\end{cases} \]
+TODO (??)
+\end{proof}
+
+\begin{proposition}[Second fundamental theorem of calculus] \label{secondFundamentalTheoremCalculus}
+Let $f: \interval[o]{a,b}\to X$ be a function to a Banach space. Suppose $f$ is differentiable a.e. Then $f'$ is Henstock-Kurzweil integrable and, for all $x\in \interval{a,b}$,
+\[ \int_a^x f' \diff{x} = f(x) - f(a). \]
+\end{proposition}
+The conclusion also holds for the Lebesgue or Riemann integral, if we additionally assume that $f'$ is Lebesgue / Riemann integrable. These results are also somtimes called the ``Second fundamental theorem of calculus''.
+\begin{proof}
+TODO
+\end{proof}
+
+\subsubsection{Riemann integration}
+\begin{definition}
+Let $f: \interval[o]{a,b}\to X$ be a function to a Banach space $X$ and $P = (u,t)$ a tagged partition. Then the \udef{Riemann sum} $\sum_P f$ is defined as
+\[ \sum_P f \defeq \sum_{k = 0}^{\len(t)}f(t)\big(u_{k+1} - u_{k}\big). \]
+A number $I\in \R$ is called the \udef{Riemann integral} of $f$ if
+\[ \forall \epsilon >0: \exists \delta>0: \forall \,\text{$\constant{\delta}$-fine partitions}: \quad \norm{I - \sum_P f} < \epsilon. \]
+We call $f$ \udef{Riemann integrable} if it has a Riemann integral.
+\end{definition}
+TODO: Compare with Darboux integral (with upper and lower sums)
+
+
+Since the Riemann integral is the Henstock-Kurzweil integral, where we only consider constant gauges, we have
+\begin{lemma}
+Every Riemann integral is a Henstock-Kurzweil integral.
+\end{lemma}
+
+
+\begin{proposition}
+Let $a,b\in \R$ and $f:\interval{a,b}\to X$ be a continuous function to a Banach space $X$. Then $f$ is Riemann integrable.
+\end{proposition}
+\begin{proof}
+We have the $f$ is uniformly continuous by the Heine-Cantor theorem, \ref{HeineCantorTheorem}. TODO: proof naturally uses Darboux intergral. OR: with Cauchy net?
+
+
+
+Consider the set $\big(\interval{a,b}\to \interval[o]{0,+\infty}\big)$, ordered pointwise. By Cousin's lemma \ref{cousinsLemma} (using choice), we can find a function $p$ that maps every $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ to a $\delta$-fine tagged partition $p(\delta)$. Let $s$ be the function that maps a tagged partition $P$ to the Riemann sum $\sum_P f$. Then we claim $s\circ p$ is a Cauchy net.
+\end{proof}
+
+
+
+\begin{example}
+Let $f: \interval{0,1}\to \{0,1\}$ be the function that maps rational numbers to $0$ and irrational numbers to $1$. Then
+\begin{itemize}
+\item $f$ is not Riemann integrable. Suppose there were some value $I\in \R$ for the integral.
+
+Take $\epsilon = 1/3$. Take arbitrary $\delta > 0$. Consider first the tagged partition $P = (u,t)$, where $u_k = k\delta$ for $k\in 0:\ceil{\delta^{-1}}$ and $t_k \in \interval[o]{u_k, u_{k+1}}\setminus \Q$.
+Consider next the partition $Q = (u,t')$ with the same $u$ and $t'_k \in \interval[o]{u_k, u_{k+1}}\cap \Q$. 
+
+Both $P$ and $A$ are $\constant{\delta}$-fine. We have $\sum_P f = 1$ and $\sum_Q f = 0$. Then
+\[ 1 = \Big|\sum_P f - \sum_Q f\Big| \leq \Big|I - \sum_P f\Big| + \Big|I - \sum_Q f\Big|, \]
+so either $\Big|I - \sum_P f\Big| > \epsilon$ or $\Big|I - \sum_Q f\Big| > \epsilon$. This implies that $I$ is not the value of the Riemann integral.
+\item $f$ is Henstock-Kurzweil integrable with integral $1$. To prove this, take arbitrary $\epsilon > 0$. Let $n: \Q\to \N$ be an enumeration of $\Q$ and set $\delta: \interval{0,1}\to \R: x \mapsto \begin{cases}
+1 & (x\notin \Q) \\ \frac{\epsilon}{2^{n(x)+2}} & (x\in \Q)
+\end{cases}$. Let $P$ be a $\delta$-fine tagged partition. Then 
+\begin{align*}
+1 - \sum_P f &= \sum_{k=0}^{\len(t)}\big(1 - f(t_k)\big)(u_{k+1} - u_k) \\
+&= \sum_{\substack{k\in 0:\len(u) \\ t_k\in \Q}}\big(1 - f(t_k)\big)(u_{k+1} - u_k) \\
+&= \sum_{\substack{k\in 0:\len(u) \\ t_k\in \Q}}(u_{k+1} - u_k) \\
+&\leq \sum_{\substack{k\in 0:\len(u) \\ t_k\in \Q}}2\delta(t_k) \\
+&= \sum_{\substack{k\in 0:\len(u) \\ t_k\in \Q}}2\frac{\epsilon}{2^{n(t_k)+2}} \leq \sum_{n\in \N}\frac{\epsilon}{2^{n+1}} = \epsilon,
+\end{align*}
+where we have used \ref{deltaFinePartitionWidthBound}.
+\end{itemize}
+\end{example}
+
+\begin{proposition}
+Let $a<b\in \R$ and $f: \interval[o]{a,b}\to \R$ a bounded function. Then $f$ is Riemann integrable \textup{if and only if} the set of points at which $f$ is discontinuous has Lebesgue measure zero.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+
 \subsubsection{Riemann-Stieltjes}
 
 \begin{lemma} \label{rectanglePartitionedByMonotonicFunction}
