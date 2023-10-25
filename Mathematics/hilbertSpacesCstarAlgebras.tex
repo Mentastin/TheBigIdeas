@@ -104,11 +104,12 @@ Let $V$ be an inner product space. Then
 \[ \norm{v+w}^2 = \norm{v}^2+\norm{w}^2+2\Re\inner{v,w} \]
 \end{lemma}
 \begin{lemma} \label{orthogonalDecomposition}
-Let $v,w\in V$, with $w\neq 0$. We can decompose $v$ as a multiple of $w$ and a vector $u$ orthogonal to $w$:
-\[ v = cw+u = \left(\frac{\inner{v,w}}{\norm{w}^2}\right)w + \left( v- \frac{\inner{v,w}w}{\norm{w}^2} \right). \]
+Let $V$ be a pre-inner product space and $v,w\in V$, with $w\neq 0$. We can decompose $v$ as a multiple of $w$ and a vector $u$ orthogonal to $w$:
+\[ v = cw+u = \left(\frac{\inner{v,w}}{\norm{w}^2}\right)w + \left( v- \frac{\inner{w, v}w}{\norm{w}^2} \right). \]
 \end{lemma}
 \begin{proof}
-The only thing to check is $\inner{w, v- \frac{\inner{v,w}w}{\norm{w}^2}} = 0$, which is a simple calculation.
+The only thing to check is $\inner{w, v- \frac{\inner{w,v}w}{\norm{w}^2}} = 0$, which is immediate:
+\[ \inner{w, v- \frac{\inner{w,v}w}{\norm{w}^2}} = \inner{w,v} - \frac{\inner{w,v}}{\norm{w}^2}\inner{w,w} = \inner{w,v} - \inner{w,v} = 0. \]
 \end{proof}
 
 \subsection{Pythagoras and Cauchy-Schwarz}
@@ -127,6 +128,12 @@ this is an equality \textup{if and only if} $v$ and $w$ are scalar multiples.
 \end{theorem}
 This result is also known as the Cauchy-Schwarz inequality, or the CSB inequality.
 \begin{proof}
+Take the decomposition from lemma \ref{orthogonalDecomposition} and apply the Pythagorean theorem to obtain
+\[ \norm{v}^2 = \frac{|\inner{v,w}|^2}{\norm{w}^4}\norm{w}^2 + \norm{u}^2 \geq \frac{|\inner{v,w}|^2}{\norm{w}^2}. \]
+We have equality if and only if $\norm{u} = 0$. If $V$ is an inner product space, then this implies $u = 0$, so $v = \frac{\inner{w,v}}{\norm{w}^2}w$ and thus $v$ is a scalar multiple of $w$.
+\end{proof}
+The following is an alternate proof that does not show the claim about scalar multiples.
+\begin{proof}[Alternate proof]
 Consider 
 \[ \inner{v-\lambda w, v-\lambda w} = \inner{v,v}-\lambda\inner{v,w}-\overline{\lambda}\inner{w,v} + |\lambda|^2 \inner{w,w} \geq 0. \]
 Suppose $\inner{v,w}=re^{i\theta}$ (if $\mathbb{F} = \R$, then $\theta=0$ or $\theta = \pi$). The inequality must still hold for all $\lambda$ of the form $te^{-i\theta}$ for some $t\in \R$. The inequality thus becomes
@@ -134,12 +141,8 @@ Suppose $\inner{v,w}=re^{i\theta}$ (if $\mathbb{F} = \R$, then $\theta=0$ or $\t
 On the right we have a quadratic formula in $t$. This may never be negative and the discriminant may therefore not be positive. Calculating the discriminant gives $(2r)^2 - 4\inner{v,v}\inner{w,w}$. Thus
 \[ 0\geq r^2 - \inner{v,v}\inner{w,w} = |\inner{v,w}|^2 - \inner{v,v}\inner{w,w}. \]
 \end{proof}
-In the case of an inner product, there is a simpler proof:
-\begin{proof}
-Take the decomposition from lemma \ref{orthogonalDecomposition} and apply the Pythagorean theorem to obtain
-\[ \norm{v}^2 = \frac{|\inner{v,w}|^2}{\norm{w}^2} + \norm{u}^2 \geq \frac{|\inner{v,w}|^2}{\norm{w}^2}. \]
-This also shows the claim about scalar multiples.
-\end{proof}
+
+
 \begin{corollary} \label{innerBoundedFunctionals}
 Let $V$ be an inner product space. The functions
 \[\inner{v,\cdot}: V\to \mathbb{F}: x\mapsto \inner{v,x} \]
@@ -1598,6 +1601,27 @@ The equality of norms follows from
 where the second inequality is Cauchy-Schwarz.
 \end{proof}
 
+\subsection{Bras and kets}
+\begin{definition}
+Let $\mathcal{H}$ be a Hilbert space. We define the
+\begin{itemize}
+\item \udef{bra} function $\bra{\cdot}: \mathcal{H}\to \dual{\mathcal{H}}: x\mapsto \inner{x, \cdot}$;
+\item \udef{ket} function $\ket{\cdot}: \mathcal{H}\to \mathcal{H}: x\mapsto x$.
+\end{itemize}
+Since $\dual{\mathcal{H}} = \im(\bra{\cdot})$ and $\mathcal{H} = \im(\ket{\cdot})$, we can define the standard pairing
+\[ \dual{\mathcal{H}}\times\mathcal{H} \to \C: \big(\bra{x}, \ket{y}\big) \mapsto \inner{x,y}. \]
+\end{definition}
+We have $\ket{\cdot} = \id_\mathcal{H}$.
+
+\begin{lemma} \label{dualitySetHilbertSpace}
+Let $\mathcal{H}$ be a Hilbert space and $x\in \mathcal{H}$. Then $\dualitySet(x) = \{\bra{x}\}$.
+\end{lemma}
+\begin{proof}
+We have $\bra{x}\in \dualitySet(x)$ because
+\[ \norm{\bra{x}}^2 = \inner[\big]{\bra{x}, \bra{x}}_{\dual{H}} = \inner{x,x} = \norm{x}^2. \]
+Now take $\bra{y}\in \dualitySet(x)$. Then $\inner{y,y} = \inner{y,x} = \inner{x,x}$, so $|\inner{x,y}|^2 = \inner{x} \inner{y}$. By \ref{CauchySchwarz} this implies that $x = \lambda y$ for some $\lambda\in\F$. Thus $\inner{y,y} = \inner{y,\lambda y} = \lambda \inner{y,y}$ and so $\lambda = 1$.
+\end{proof}
+
 \subsection{Hilbert space adjoints}
 
 \subsection{Weak convergence of vectors}
@@ -2578,6 +2602,13 @@ See also Conway.
 
 \subsubsection{Positive operators}
 All positive operators are symmetric, \ref{positiveOperatorSymmetric}. They are not all self-adjoint (as in the bounded case), but can always be extended to a self-adjoint operator (which is not true in general for symmetric operators).
+
+\begin{lemma} 
+Let $A$ be a positive operaotr on a Hilbert space $H$. Then $-A$ is dissipative.
+\end{lemma}
+\begin{proof}
+For all $x\in H$, we have $\Re\inner{x,-Ax} = -\inner{x,Ax} \leq 0$. Since $\bra{x} \in \dualitySet(x)$, by \ref{dualitySetHilbertSpace}, we have that $A$ is dissipative by \ref{dissipativeNegativeRealPart}.
+\end{proof}
 
 \begin{definition}
 Let $A$ be a positive operator on a Hilbert space $H$. We call

@@ -1677,7 +1677,7 @@ Let $\sSet{V, \norm{\cdot}}$ be a normed space. Suppose $u,v\in V$ are unit vect
 
 In fact the seminorm convergence is the initial convergence iff $S = \{\underline{0}\}$.
 
-\begin{lemma}
+\begin{lemma} \label{seminormPseudometricLemma}
 Let $V$ be a vector space and $p:V\to \R$ a seminorm. Then
 \begin{enumerate}
 \item $p\circ \Delta$ is a pseudometric;
@@ -1707,9 +1707,10 @@ Finally suppose $F$ converges to $v$ in some other vector space convergence that
 \end{proof}
 
 \begin{proposition} \label{initialSeminormConvergence}
-Let $V$ be a vector space and $S$ a set of seminorms on $V$.
+Let $V$ be a vector space, $S$ a set of seminorms on $V$, $F\in\powerfilters{V}$ and $v\in V$.
 \begin{enumerate}
-\item the seminormed convergence w.r.t. $S$ is topological and given by the join of the seminorm convergences determined by each $p\in S$;
+\item the seminormed convergence w.r.t.\ $S$ is topological and given by the join of the seminorm convergences determined by each $p\in S$;
+\item $F\to v$ in the seminormed convergence w.r.t.\ $S$ \textup{if and only if} $p^{\imf}\big(F-v\big)\overset{\F}{\longrightarrow} 0$ for all $p\in S$;
 \item the neighbourhood filter of the origin in the seminormed convergence is
 \begin{align*}
 \neighbourhood_\xi(0) &= \mathfrak{F}\setbuilder{p^\preimf[\ball(0,\epsilon)]}{p\in S, \epsilon > 0} \\
@@ -1719,7 +1720,11 @@ Let $V$ be a vector space and $S$ a set of seminorms on $V$.
 \end{proposition}
 Note that $\neighbourhood_\xi(0)$ is the same as the neighbourhood filter at $0$ in the initial (not necessarily vector space) convergence w.r.t. $S$.
 \begin{proof}
-The seminormed convergence w.r.t.\ $S$ is clearly smaller than the initial convergenc w.r.t.\ $\{\id_V: V\to \sSet{V,p}\}_{p\in S}$. This is a vector space convergence by \ref{initialVectorSpaceConvergence} and thus exactly the seminorm convergence. This is topological by \ref{pretopologicalInitialConvergence}, which also gives the form of the neighbourhood filter of the origin.
+The seminormed convergence w.r.t.\ $S$ is clearly smaller than the initial convergenc w.r.t.\ $\{\id_V: V\to \sSet{V,p}\}_{p\in S}$. This is a vector space convergence by \ref{initialVectorSpaceConvergence} and thus exactly the seminorm convergence. 
+
+Point (2) then follows from \ref{seminormPseudometricLemma} and \ref{metricConvergence}.
+
+The convergence is topological by \ref{pretopologicalInitialConvergence}, which also gives the form of the neighbourhood filter of the origin.
 \end{proof}
 
 \begin{proposition} \label{dualSeminormedConvergence}
@@ -2283,13 +2288,13 @@ For the converse, assume $f$ continuous at $0$, then $\ball\big(0,1\big)\in \nei
 Let $V$ be a vector space and $B\subseteq V$.
 \begin{enumerate}
 \item Let $L = \{f_i:V\to \sSet{Y_i,\zeta_i}\}_{i\in I}$ be a set of linear functions to topological vector spaces, then $B$ is von Neumann bounded in the initial convergence w.r.t. $L$ iff $f_i^\imf(B)$ is von Neumann bounded for all $f_i\in L$.
-\item Let $S$ be a set of seminorms on $V$, then $B$ is von Neumann bounded in the initial topology w.r.t. $S$ \textup{if and only if} $p^\imf(B)$ is von Neumann bounded for all $p\in S$.
+\item Let $S$ be a set of seminorms on $V$, then $B$ is von Neumann bounded in the seminorm topology w.r.t. $S$ \textup{if and only if} $p^\imf(B)$ is von Neumann bounded for all $p\in S$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
 (1) We have, by \ref{initialFinalConvergence}, that $\neighbourhood_\F(0)\cdot\upset \{B\}$ converges to $0$ in the initial convergence if and only if $f_i^{\imf\imf}\big(\neighbourhood_\F(0)\cdot\upset \{B\}\big) = \neighbourhood_\F(0)\cdot\upset \big\{f_i^{\imf}(B)\big\} \overset{\xi_i}{\longrightarrow} 0$. I.e\ $f_i^\imf(B)$ is bounded for each $i\in I$.
 
-(2) Since the vector space convergence on $V$ is topological in this case (by \ref{initialSeminormConvergence}), we have that $B$ is von Neumann bounded if and only if $\upset \{\interval{0,\epsilon}\}_{\epsilon > 0}\cdot\upset\{B\}$ converges to $0$, which, by \ref{initialFinalConvergence}, is equivalent to $\upset p^{\imf\imf}\big(\{\interval{0,\epsilon}\}_{\epsilon > 0}\cdot\upset\{B\}\big) = \upset \{\interval{0,\epsilon}\}_{\epsilon > 0}\cdot\upset\big\{p^{\imf}(B)\big\} \overset{\R}{\longrightarrow} 0$ for all $p\in S$. I.e.\ $p^{\imf}(B)$ is bounded for all $p\in S$.
+(2) Since the vector space convergence on $V$ is topological in this case (by \ref{initialSeminormConvergence}), we have that $B$ is von Neumann bounded if and only if $\upset \{\interval{0,\epsilon}\}_{\epsilon > 0}\cdot\upset\{B\}$ converges to $0$, which, by \ref{initialSeminormConvergence}, is equivalent to $\upset p^{\imf\imf}\big(\{\interval{0,\epsilon}\}_{\epsilon > 0}\cdot\upset\{B\}\big) = \upset \{\interval{0,\epsilon}\}_{\epsilon > 0}\cdot\upset\big\{p^{\imf}(B)\big\} \overset{\R}{\longrightarrow} 0$ for all $p\in S$. I.e.\ $p^{\imf}(B)$ is bounded for all $p\in S$.
 \end{proof}
 
 \subsection{Uniform and von Neumann boundedness}
@@ -3756,21 +3761,6 @@ For $\norm{T^*T}= \norm{T}^2$ first observe that
 Conversely, $\forall x\in H$:
 \[ \norm{T(x)}^2 = \inner{Tx,Tx} = \inner{T^*Tx,x} \leq \norm{T^*Tx}\cdot \norm{x} \leq \norm{T^*T}\cdot\norm{x}^2. \]
 The other equality follows by applying the first to $T^*$ and using $\norm{T^*}=\norm{T}$.
-\end{proof}
-
-\section{Duality sets for normed spaces}
-\begin{definition}
-Consider a dual system $\sSet{V, W, \pair{\cdot,\cdot}}$ where $V,W$ are normed spaces. For all $v\in V$ we have the \udef{duality set} of $v$
-\[ \mathfrak{d}(v) \defeq \setbuilder{w\in W}{\norm{v}^2 = \pair{v,w} = \norm{w}^2}. \]
-Similarly the duality set of $w\in W$ is
-\[ \mathfrak{d}(w) \defeq \setbuilder{v\in V}{\norm{v}^2 = \pair{v,w} = \norm{w}^2}. \]
-\end{definition}
-
-\begin{proposition}
-Consider the dual pair $\sSet{V^*, V}$ for some normed space $V$. Then for all $v\in V$, $\mathfrak{d}(v)$ is not empty.
-\end{proposition}
-\begin{proof}
-We have $\norm{v}\cdot \omega_v\in \mathfrak{d}(v)$, where $\omega_v$ is defined in Corollary \ref{existenceBoundedFunctionalOfSameNorm} of the Hahn-Banach extension theorem.
 \end{proof}
 
 \chapter{Operators on convergence vector spaces}

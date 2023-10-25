@@ -911,12 +911,35 @@ Taking the limit $n\to\infty$ gives $\norm{(\lambda\id-\overline{T})x} \geq \lam
 (3) By \ref{domImClosureOperator}, $\im(\lambda\id - T)$ is dense in $\im(\lambda\id-\overline{T})$ and by \ref{closureDissipativeOperator}, $\im(\lambda\id-\overline{T})$ is closed.
 \end{proof}
 
-\begin{proposition}
-Let $T\in\Lin(V,W)$ be an operator between Banach spaces. Then $T$ is dissipative \textup{if and only if} for all $x\in V$, there exists an $x'\in \mathfrak{d}(x)$ such that
+\subsubsection{Duality sets for normed spaces}
+\begin{definition}
+Consider a dual system $\sSet{V, W, \pair{\cdot,\cdot}}$ where $V,W$ are normed spaces. For all $v\in V$ we have the \udef{duality set} of $v$
+\[ \dualitySet(v) \defeq \setbuilder{w\in W}{\norm{v}^2 = \pair{v,w} = \norm{w}^2}. \]
+Similarly the duality set of $w\in W$ is
+\[ \dualitySet(w) \defeq \setbuilder{v\in V}{\norm{v}^2 = \pair{v,w} = \norm{w}^2}. \]
+\end{definition}
+
+\begin{lemma} \label{dualitySetRealMultiple}
+Let $\sSet{V, W, \pair{\cdot,\cdot}}$ be a dual system of normed spaces. Let $v\in V$ and $c \in \R$. If $w\in\dualitySet(v)$, then $cw\in \dualitySet(cv)$.
+\end{lemma}
+\begin{proof}
+We have
+\[ \norm{cv}^2 = c^2\norm{v} = c^2\pair{v,w} = \pair{cv,cw} = c^2 \pair{v,w} = c^2\norm{w}^2 = \norm{cw}^2. \]
+\end{proof}
+
+\begin{proposition} \label{dualitySetNonEmpty}
+Consider the dual pair $\sSet{V^*, V}$ for some normed space $V$. Then for all $v\in V$, $\dualitySet(v)$ is not empty.
+\end{proposition}
+\begin{proof}
+We have $\norm{v}\cdot \omega_v\in \dualitySet(v)$, where $\omega_v$ is defined in Corollary \ref{existenceBoundedFunctionalOfSameNorm} of the Hahn-Banach extension theorem.
+\end{proof}
+
+\begin{proposition} \label{dissipativeNegativeRealPart}
+Let $T\in\Lin(V,W)$ be an operator between Banach spaces. Then $T$ is dissipative \textup{if and only if} for all $x\in V$, there exists an $x'\in \dualitySet(x)$ such that
 \[ \Re\pair{x', Tx} \leq 0. \]
 \end{proposition}
 \begin{proof}
-$\boxed{\Leftarrow}$ Take $x\in V$ and fix some $x'\in \mathfrak{d}(x)$ for which the inequality holds. By definition of the duality set, we have $\norm{x}^2 = x'(x) = \norm{x'}^2$. To verify dissipativity, we calculate
+$\boxed{\Leftarrow}$ Take $x\in V$ and fix some $x'\in \dualitySet(x)$ for which the inequality holds. By definition of the duality set, we have $\norm{x}^2 = x'(x) = \norm{x'}^2$. To verify dissipativity, we calculate
 \begin{align*}
 \norm{(\lambda\id-T)x}\,\norm{x'} &\geq |x'\big((\lambda\id-T)x\big)| \\
 &\geq \Re x'\big((\lambda\id-T)x\big) = \Re x'(\lambda x) - \Re x'(Tx) \\
@@ -924,7 +947,19 @@ $\boxed{\Leftarrow}$ Take $x\in V$ and fix some $x'\in \mathfrak{d}(x)$ for whic
 \end{align*}
 Noting $\norm{x'} = \norm{x}$ and dividing both sides by $\norm{x}$ yields dissipativity.
 
-$\boxed{\Rightarrow}$ TODO
+$\boxed{\Rightarrow}$ Take arbitrary $x\in \dom(T)$ and set $x'\defeq \frac{x}{\norm{x}}$. Take arbitrary $\lambda >0$ and, by \ref{dualitySetNonEmpty}, we can choose $y_\lambda \in \dualitySet(\lambda x'-Tx')$. Set $z\defeq \frac{y_\lambda}{\norm{y_\lambda}}$. By assumption we have
+\begin{align*}
+\lambda = \lambda\norm{x'} &\leq \norm{\lambda x' - Tx'} \\
+&= \norm{\lambda x' - Tx'}\cdot \frac{\norm{y_\lambda}}{\norm{y_\lambda}} = \pair{y_\lambda, \lambda x' - Tx'}\frac{1}{\norm{y_\lambda}} \\
+&= \pair{z_\lambda, \lambda x' - Tx'} = \lambda\Re\pair{z_\lambda, x'} - \Re\pair{z_\lambda, Tx'}.
+\end{align*}
+Since $\Re\pair{z_\lambda, x'} \leq \abspair{z_\lambda, x'} \leq \norm{z_\lambda}\,\norm{x'} = 1$, we have $\lambda \leq \lambda - \Re\pair{z_\lambda, Tx'}$ and thus $\Re\pair{z_\lambda, Tx'} \leq 0$.
+
+Since $-\Re\pair{z_\lambda, Tx'} \leq \abspair{z_\lambda, Tx'} \leq \norm{z_\lambda}\,\norm{Tx'} = \norm{Tx'}$, we have $\lambda \leq \lambda \Re\pair{z_\lambda, x'} + \norm{Tx'}$ and thus $1 - \frac{\norm{Tx'}}{\lambda} \leq \Re\pair{z_\lambda, x'}$.
+
+By Banach-Alaoglu, \ref{alaogluTheorem}, the net $\seq{z_\lambda}$ has a weak-$*$-convergent subnet as $\lambda\to\infty$. Let $z$ be the limit of this subnet. Then $\Re\pair{z,Tx'}\leq 0$ and $1\leq \Re\pair{z,x'}\leq \abspair{z, x'} \leq \norm{z}\, \norm{x'} = 1$. Thus $z\in\dualitySet(x')$ and $\norm{x}z \in \dualitySet(x)$ by \ref{dualitySetRealMultiple}.
+
+Finally, we have $\Re\pair{\norm{x}z, Tx} = \frac{\norm{x}}{\norm{x}}\Re\pair{z, Tx'} \leq 0$.
 \end{proof}
 
 \section{The spectral theorem}
@@ -936,232 +971,3 @@ $\boxed{\Rightarrow}$ TODO
 \url{https://web.ma.utexas.edu/mp_arc/c/09/09-32.pdf}
 
 
-\section{Functional calculus}
-\subsection{Holomorphic functional calculus}
-
-\begin{theorem}[Holomorphic functional calculus] 
-\label{holomorphicFunctionalCalculus} \label{holomorphicSpectralMapping}
-Let $A$ be a Banach algebra and $x\in A$. Consider the function
-\[ \Phi_x: \cont^\infty(\spec(x),\C) \to A: f\mapsto f(x)\defeq \oint_\Gamma f(z)R_x(z)\diff{z}. \]
-Here $\Gamma$ is any simple Jordan curve that contains $\spec(x)$ such that $f$ is holomorphic in a region that contains $\Gamma$ and its interior. Then
-\begin{enumerate}
-\item $\Phi_x$ is well-defined: it does not depend on the particular curve $\Gamma$;
-\item $\Phi_x$ is a homomorphism;
-\item for any polynomial $p\in \C[X]$, we have $\Phi_x(p) = p(x)$; \\
-in particular $\Phi_x(\id_\C) = x$ and $\Phi_x(\underline{1}) = \id_A$;
-\item $\spec(\Phi_x(f)) = f[\spec(x)]$;
-\item $\Phi_x$ is continuous if $\cont^\infty(\spec(x),\C)$ is equipped with continuous convergence (?).
-\end{enumerate}
-\end{theorem}
-TODO: $\cont^\infty(\spec(x))$ should be the space of functions that are analytic in some neighbourhood of $\spec(x)$. Is it??
-\begin{proof}
-TODO
-\end{proof}
-
-TODO unbounded operators
-
-\subsubsection{Riesz eigenprojections}
-Holomorphic functional calculus applied to
-\[ \chi_{S,\delta}: A\to \{0,1\}: x\mapsto \begin{cases}
-1 & d(x,S) \leq \delta \\
-0 & \text{otherwise}.
-\end{cases} \]
-
-TODO: spectral measure with only disconnected parts in $\sigma$-algebra??
-
-TODO: $P_\Delta$ and $E_\Delta \defeq \im P_\Delta$.
-
-\begin{lemma}
-$\spec(T|_{E_\Delta}) = \spec(T)\cap\Delta$.
-\end{lemma}
-
-\begin{definition}
-We call $\dim E_\lambda$ the \udef{algebraic multiplicity} of $\lambda$.
-\end{definition}
-
-\subsubsection{Frobenius covariants}
-TODO $P_\lambda$ is a Frobenius covariant. \url{https://en.wikipedia.org/wiki/Frobenius_covariant}
-
-TODO cfr. Lagrange polynomial??
-
-\section{Jordan decomposition}
-\subsection{Eigennilpotent}
-\begin{definition}
-Let $a$ be a finite element in a semisimple Banach algebra and $\lambda\in \spec(a)$. The \udef{eigennilpotent operator} of $a$ at $\lambda$ is defined as
-\[ D_{\lambda} \defeq (a-\lambda)P_{\lambda}. \]
-\end{definition}
-This definition works because we can find a $\delta < d(\lambda, \spec(a)\setminus\{\lambda\})$.
-
-\begin{lemma}
-Let $a$ be a finite element in a semisimple Banach algebra and $\lambda\in \spec(a)$. The eigennilpotent operator $D_\lambda$ is nilpotent.
-\end{lemma}
-\begin{proof}
-By spectral mapping \ref{holomorphicSpectralMapping}, $D_\lambda$ is quasinilpotent. Because $a$ is finite, it is nilpotent by \ref{nilpotentQuasinilpotent}.
-\end{proof}
-
-
-
-\subsection{Jordan vectors}
-\begin{definition}
-Let $V$ be a finite dimensional vector space and $T$ an operator on $V$. A \udef{Jordan vector} of $T$ belonging to the eigenvalue $\lambda$ is a vector $x\in V$ such that
-\[ (\lambda\id_V - T)^kx = 0 \]
-for some $k\in \N$. The least such $k$ is called the \udef{degree} of $x$ and is denoted $\deg_J(x)$.
-\end{definition}
-Eigenvectors are Jordan vectors of degree $1$.
-
-\begin{proposition}
-Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ $\lambda\in\spec(T)$ and $x\in V$. Then $x$ is a Jordan vector of $T$ belonging to the eigenvalue $\lambda$ \textup{if and only if} $x\in E_\lambda$.
-\end{proposition}
-\begin{proof}
-Let $x\in E_\lambda$. Then $x = P_\lambda x$ and thus
-\[ (\lambda\id_V - T)^kx = (\lambda\id_V - T)^kP_\lambda x = \big((\lambda\id_V - T)P_\lambda\big)^k x = D_\lambda^k x, \]
-which is zero for some $k$ because $D_\lambda$ is nilpotent.
-
-Conversely, assume $x$ is a Jordan vector of $T$ belonging to the eigenvalue $\lambda$. We can write $x = x_1+x_2 \in E_{\lambda}\oplus E_{\C\setminus\{\lambda\}}$.
-Then (because $E_\lambda$ is reducing for $T-\lambda\id_V$)
-\[ 0 = (\lambda\id_V - T)^kx = (\lambda\id_V - T)^kx_1 + (\lambda\id_V - T)^kx_2 \in E_{\lambda}\oplus E_{\C\setminus\{\lambda\}} \]
-Thus we have $(\lambda\id_V - T)^kx_1 = 0$ and $(\lambda\id_V - T)^kx_2 = 0$ separately.
-Now $T-\lambda\id_V$ is invertible on $E_{\C\setminus\{\lambda\}}$, so $x_2 = 0$ (TODO ref). This means that $x = x_1 \in E_\lambda$.
-\end{proof}
-
-\begin{definition}
-Let $m = \deg_N(D_\lambda)$. Then we have
-\[ \{0\} \subsetneq \ker(\lambda\id_V - T) \subsetneq \ker(\lambda\id_V - T)^2 \subsetneq \ldots \subsetneq \ker(\lambda\id_V - T)^{m-1} \subsetneq \ker(\lambda\id_V - T)^m = V. \]
-We define $E^k_\lambda \defeq \ker(\lambda\id_V - T)^k$. In particular
-\begin{itemize}
-\item $E^1_\lambda$ is the \udef{geometric eigenspace};
-\item $E^{m-1}_\lambda$ is the \udef{algebraic eigenspace}.
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-Let $V$ be a finite dimensional vector space, $T$ an operator on $V$, $\lambda\in\spec(T)$ and $x\in E_\lambda$. Then
-\begin{enumerate}
-\item $1 \leq \dim\ker(\lambda\id_V - T) \leq \dim E_\lambda$;
-\item $1 \leq \deg_J(x) \leq \dim_E\lambda$.
-\end{enumerate}
-\end{lemma}
-The lemma says the geometric multiplicity is smaller than the algebraic multiplicity.
-\begin{proof}
-Every eigenvector is a Jordan vector, so $\ker(\lambda\id_V - T) \subseteq E_\lambda$.
-
-For all $k\in\N$ smaller then the degree of $x$, $(\lambda\id_V - T)^kx$ is a Jordan vector and thus in $E_\lambda$. TODO all $(\lambda\id_V - T)^kx$ are linearly independent (like in \ref{nilpotentQuasinilpotent})
-\end{proof}
-
-\begin{definition}
-Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ and $\lambda\in\spec(T)$. The eigenvalue $\lambda$ is called
-\begin{itemize}
-    \item \udef{simple} if the algebraic multiplicity is $1$;
-    \item \udef{semisimple} if every Jordan vector in $E_\lambda$ has degree $1$;
-    \item \udef{prime} if the geometric multiplicity is $1$.
-\end{itemize}
-If all eigenvalues of $T$ are semisimple, then $T$ is called a \udef{diagonal operator}.
-\end{definition}
-
-\begin{lemma}
-An operator $T$ is diagonal iff $T$ is of the form $\sum_j a_jP_j$, where $a_j\in \F$ and $P_j$ are projectors that commute pairwise.
-\end{lemma}
-
-\subsection{Characteristic polynomial and equation}
-\begin{definition}
-Let $V$ be a finite dimensional vector space and $T$ an operator on $V$. The \udef{characteristic polynomial} $p_T(x)$ of $T$ is the polynomial
-\[ p_T(x) \defeq \det(x\id_V - T). \]
-\end{definition}
-
-\begin{proposition}
-Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ and $\spec(T) = \{\lambda_j\}_{j=1}^r$. Then
-\[ p_T(x) = \prod_{j=1}^r(x - \lambda_j)^{\dim E_{\lambda_j}}. \]
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-A number $\lambda\in \C$ is an eigenvalue of $T$ \textup{if and only if} it is a root of $p_T(x)$.
-\end{corollary}
-
-\begin{definition}
-The equation $p_T(x) = 0$ is the \udef{characteristic equation} of $T$.
-\end{definition}
-
-\subsection{Spectral representation}
-\begin{proposition}
-Let $V$ be a finite dimensional complex vector space and $T$ an operator on $V$. There exists a unique decomposition $T = S + D$ such that
-\begin{itemize}
-\item $S$ is diagonal;
-\item $D$ is nilpotent;
-\item $SD = DS$.
-\end{itemize}
-If $\spec(T) = \{\lambda_j\}_{j=1}^r$, this decomposition is given by
-\[ T = \sum_{j=1}^r \lambda_r P_{\lambda_r} + \sum_{j=1}^r D_{\lambda_r}. \]
-\end{proposition}
-
-\subsection{Partial fraction decomposition of the resolvent}
-For any operator $T$ on a vector space $V$ with eigenvalue $\lambda_0$, the resolvent $R_T(\lambda)$ has a pole at $\lambda_0$.
-
-\begin{proposition}
-Let $T$ be an operator on a finite dimensional vector space $V$ and $\lambda_0\in\spec(T)$. Then the Laurent expansion of $R_T(\lambda)$ around $\lambda_0$ is of the form
-\[ R_T(\lambda) = \frac{P_0}{\lambda-\lambda_0} + \sum_{n=1}^{\deg_N(D_0)-1}\frac{D_0^{n}}{(\lambda - \lambda_0)^{n+1}} + \sum_{n=0}^\infty(-1)^n S_0^{n+1}(\lambda - \lambda_0)^n, \]
-where $P_0\defeq P_{\lambda_0}, D_0\defeq D_{\lambda_0}$ and $S_0$ is some fixed operator.
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{definition}
-The holomorphic part of the Laurent expansion of $R_T(\lambda)$ at $\lambda_0$ is called the \udef{reduced resolvent} of $T$ w.r.t. $\lambda_0$:
-\[ S_{T,\lambda_0}(\lambda) \defeq \sum_{n=0}^\infty(-1)^n S_0^{n+1}(\lambda - \lambda_0)^n = R_T(\lambda) - \left(\frac{P_0}{\lambda-\lambda_0} + \sum_{n=1}^{\deg_N(D_0)-1}\frac{D_0^{n}}{(\lambda - \lambda_0)^{n+1}}\right). \]
-\end{definition}
-
-\begin{proposition}
-Let $T$ be an operator on a finite dimensional vector space $V$ and $\lambda_0\in\spec(T)$. Then
-\[ R_{T|_{(\id_V-P_0)}}(\lambda) = S_{T,\lambda_0}|_{\id_V-P_0}(\lambda). \]
-\end{proposition}
-
-\begin{proposition}
-Let $T$ be an operator on a finite dimensional vector space $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$. The partial fraction decomposition of $R_T(\lambda)$ is given by
-\[ R_T(\lambda) = \sum_{j=1}^r\left(\frac{P_{\lambda_j}}{\lambda - \lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{D_{\lambda_j}^n}{(\lambda - \lambda_j)^{n+1}}\right). \]
-The partial fraction decomposition of $S_{T,\lambda_k}(\lambda)$ is given by
-\[ S_{T,\lambda_k}(\lambda) = \sum_{\substack{j=1 \\ j\neq k}}^r\left(\frac{P_{\lambda_j}}{\lambda - \lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{D_{\lambda_j}^n}{(\lambda - \lambda_j)^{n+1}}\right). \]
-\end{proposition}
-\begin{proof}
-The poles of $R_T(\lambda)$ are exactly the eigenvalues of $T$. There are finitely many of them, so we can use partial fraction decomposition, \ref{partialFractionDecomposition}. We just need to show that the holomorphic part is zero. For that we note that $\lim_{\lambda \to \infty} R_T(\lambda) = 0$ and all principal parts tend to $0$ at infinity as well. Thus the holomorphic part also tends to $0$, making it bounded. By Liouville's theorem, \ref{liouvilleTheoremAnalysis}, we get that it is identically zero.
-\end{proof}
-\begin{corollary}[Sylvester-Lagrange formula]
-Let $f$ be a holomorphic function on an open set that contains $\spec(T)$. Then
-\[ f(T) = \sum_{j=1}^r\left(f(\lambda_j)P_{\lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{f^{(n)}(\lambda_j)D_{\lambda_j}^n}{n!}\right). \] 
-\end{corollary}
-\begin{proof}
-We have
-\[ f(T) = \oint_\Gamma f(\lambda)R_T(\lambda)\diff{\lambda} = 2\pi i\sum_{j=1}^r \Res_{\lambda_j}f(\lambda)R_T(\lambda) \]
-by the residue theorem (TODO ref for operators).
-\end{proof}
-\begin{corollary}[Cayley-Hamilton]
-Let $p_T(x)$ be the characteristic polynomial of $T$. Then $p_T(T) = 0$.
-\end{corollary}
-\begin{proof}
-Since $p_T(x) = \prod_{j=1}^r(x - \lambda_j)^{\dim E_{\lambda_j}}$ and $\dim E_{\lambda_j} \geq \deg_N(D_{\lambda_j})$, we see that $p_T(\lambda)R_T(\lambda)$ has no poles and is holomorphic, meaning that $oint_\Gamma f(\lambda)R_T(\lambda)\diff{\lambda} = 0$ by Cauchy's theorem (TODO ref for operators).
-\end{proof}
-
-\subsection{Normal operators}
-
-
-\begin{proposition}
-If $T$ is a normal operator, then $P_\lambda = P^*_\lambda$ and $D_\lambda = D^*_\lambda = 0$.
-\end{proposition}
-This means normal operators are diagonalisable.
-\begin{proof}
-TODO
-\end{proof}
-\begin{corollary}
-Let $V$ be a finite dimensional complex vector space and $T$ a normal operator
-on $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$.
-\begin{enumerate}
-\item We have the spectral decompositions
-\[ T = \sum_{j=1}^r \lambda_r P_{\lambda_r} \qquad\text{and}\qquad T^* = \sum_{j=1}^r \overline{\lambda_r} P_{\lambda_r}. \]
-\item We have
-\[ R_T(\lambda) = \sum_{j = 1}^r \frac{P_{\lambda_j}}{\lambda - \lambda_j} \qquad \text{and} \qquad S_{T,\lambda_k}(\lambda) = \sum_{\substack{j = 1 \\ j\neq k}}^r \frac{P_{\lambda_j}}{\lambda - \lambda_j} \]
-\end{enumerate}
-\end{corollary}
-
-\subsection{Jordan decomposition}
-TODO matrix representation + matrix representation of Lagrange-Sylvester. See Baumgärtel

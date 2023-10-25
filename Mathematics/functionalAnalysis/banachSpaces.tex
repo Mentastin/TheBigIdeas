@@ -606,6 +606,7 @@ This does not imply that $\seq{T_n}$ converges to $T$ in norm!
 \begin{proposition} \label{weaklyConvergentSequenceNormBounded}
 Let $X$ be a normed space and $\seq{x_n}$ a weakly convergent sequence. Then $\{x_n\}_{n\in \N}$ is norm-bounded.
 \end{proposition}
+Note that not every weakly convergent \emph{net} is norm-bounded. TODO: compare \ref{weaklyBoundedIffBounded}
 \begin{proof}
 Take arbitrary $f\in \dual{X}$. Since $\seq{x_n}$ is weakly convergent to some $x\in X$, we have
 \[ |\evalMap_{x_n}(f)| = |f(x_n)| \to |f(x)| = |\evalMap_x(f)|, \]
@@ -2449,22 +2450,185 @@ ISem.
 
 Works for all elements, not just normal ones.
 
+\begin{example}
+Power series are not satisfactory, since a holomorphic function may have different power series expansions at different points and an element of a Banach algebras, in some sense, comprises the whole of its spectrum.
+
+For example, take $a = \begin{pmatrix}
+2 & 0 \\ 0 & 0
+\end{pmatrix}$ and $f(z) = (1-z)^{-1}$. Then $f(z)$ is holomorphic and
+\begin{itemize}
+\item $f(z) = \sum_{n\in\N}z^n$ around $0$;
+\item $f(z) = \sum_{n\in\N}-(2 - z)^n$ around $2$.
+\end{itemize}
+Since $\spec(a) = \{0,2\}$, we somehow need to combine these two series. Plugging $a$ into either yields a non-convergent series.
+\end{example}
+
 \subsubsection{Analyticity}
 \begin{definition}
 Let $U\subseteq \C$ be an open set, $X$ a Banach space and $f: U\to X$ a function. Then
 \begin{itemize}
 \item $f$ is called \udef{weakly analytic} if $\rho\circ f: U\to \C$ is analytic for all $\rho\in \dual{X}$;
 \item $f$ is called \udef{strongly analytic} if, for all $z_0 \in U$, the limit
-\[ \lim_{z\to z_0} \frac{f(z) - f(z_0)}{z-z_0} \]
+\[ \od{f}{z}\Big|_{z_0} = \lim_{z\to z_0} \frac{f(z) - f(z_0)}{z-z_0} \]
 exists in the norm convergence.
 \end{itemize}
 \end{definition}
 
 \begin{lemma}
-Let $U\subseteq \C$ be an open set, $X$ a Banach space and $f: U\to X$ a function. If $f$ is strongly analytic, then 
+Let $U\subseteq \C$ be an open set, $X$ a Banach space and $f: U\to X$ a function. If $f$ is strongly analytic, then $f$ is continuous and weakly analytic.
+\end{lemma}
+TODO: compare with general theory.
+\begin{proof}
+Suppose $f$ is strongly analytic. Then
+\[ \lim_{z\to z_0} f(z) - f(z_0) =  \lim_{z\to z_0}\frac{f(z) - f(z_0)}{z-z_0}\cdot (z-z_0) = \od{f}{z}\Big|_{z_0} \big(\lim_{z\to z_0}z-z_0\big) = \od{f}{z}\Big|_{z_0}\cdot 0 = 0, \]
+so $\lim_{z\to z_0} f(z) = f(z_0)$, which means that $f$ is continuous.
+
+Take $\rho\in \dual{X}$. Then
+\begin{align*}
+\od{\rho\circ f}{z}\Big|_{z_0} &= \lim_{z\to z_0} \frac{(\rho \circ f)(z) - (\rho \circ f)(z_0)}{z-z_0} \\
+&= \lim_{z\to z_0} \rho\Big(\frac{f(z) - f(z_0)}{z-z_0}\Big) \\
+&= \rho\Big(\lim_{z\to z_0}\frac{f(z) - f(z_0)}{z-z_0}\Big) \\
+&= \rho\Big(\od{f}{z}\Big|_{z_0}\Big).
+\end{align*}.
+\end{proof}
+
+\begin{proposition} \label{weakAnalyticityConsequences}
+Let $U\subseteq \C$ be an open set, $X$ a Banach space, $f: U\to X$ a weakly analytic function and $\Gamma$ a closed Jordan curve in $U$ whose interior is also in $U$. Then
+\begin{enumerate}
+\item $f$ is continuous;
+\item $\oint_{\Gamma}f(z)\diff{z} = 0$ and $f(w) = \frac{1}{2\pi i}\oint_{\Gamma}\frac{f(z)}{z-w}\diff{z}$ for all $w$ in the interior of $\Gamma$;
+\item $f$ is strongly analytic.
+\end{enumerate}
+\end{proposition}
+TODO integrals well-defined because $f$ is uniformly continuous on $\Gamma$.
+\begin{proof}
+(1) Pick $z_0\in U$ and $r>0$ small enough such that $\ball(z_0, r)\subseteq U$. Take arbitrary $\rho\in\dual{X}$. Since $\rho\circ f$ is analytic, the function
+\[ z\mapsto \frac{(\rho\circ f)(z) - (\rho\circ f)(z_0)}{z-z_0} = \rho\Big(\frac{f(z) - f(z_0)}{z-z_0}\Big) \]
+is continuous on $\ball{z_0, r}$ and thus bounded on $\ball{z_0, r}$ by the extreme value theorem \ref{extremeValueTheorem}. 
+
+This means that the set
+\[ \setbuilder[\Big]{\frac{f(z) - f(z_0)}{z-z_0}}{z\in\ball(z_0, r)} \]
+is weakly bounded, and thus bounded by \ref{weaklyBoundedIffBounded}. Thus there exists $M \geq 0$ such that
+\[ \norm{f(z) - f(z_0)} \leq M(z-z_0) \]
+for all $z\in\ball(z_0,r)$. This implies that $f$ is continuous at $z_0$.
+
+(2) For all $\rho\in\dual{X}$, we have
+\[ \rho\Big(\oint_{\Gamma}f\diff{z}\Big) = \oint_\Gamma \rho\circ f \diff{z} = 0, \]
+by \ref{boundedOperatorUnderIntegral} and \ref{CauchyTheorem}. By the Hahn-Banach theorem, \ref{locallyConvexDualPair}, we have $\oint_{\Gamma}f\diff{z} = 0$.
+
+Again, take arbitrary $\rho\in\dual{X}$. Then
+\begin{align*}
+\rho\Big(f(w) - \frac{1}{2\pi i}\oint_{\Gamma}\frac{f(z)}{z-w}\diff{z}\Big) &= (\rho\circ f)(w) - \frac{1}{2\pi i}\oint_{\Gamma}\frac{(\rho \circ f)(z)}{z-w}\diff{z} \\
+&= \frac{1}{2\pi i}\oint_{\Gamma}\frac{(\rho \circ f)(z)}{z-w}\diff{z} - \frac{1}{2\pi i}\oint_{\Gamma}\frac{(\rho \circ f)(z)}{z-w}\diff{z} = 0,
+\end{align*}
+by \ref{boundedOperatorUnderIntegral} and \ref{CauchyIntergralFormula}. By the Hahn-Banach theorem, \ref{locallyConvexDualPair}, we have $f(w) = \frac{1}{2\pi i}\oint_{\Gamma}\frac{f(z)}{z-w}\diff{z}$.
+
+(3) Take $z_0\in U$ and $r>0$ such that $\cball(z_0, r)\subseteq U$. By \ref{continuityExpandedDomain}, we can restict our attention to $\ball(z_0, r)$. Take $z\in \ball(z_0, r)$. Then, using point (2) and the resolvent identity \ref{firstResolventIdentity}, we have
+\begin{align*}
+\frac{f(z)- f(z_0)}{z-z_0} &= \frac{1}{2\pi i (z-z_0)}\Big(\oint_{|z'- z_0| = r}\frac{f(z')}{z'-z}\diff{z'} - \oint_{|z'- z_0| = r}\frac{f(z')}{z'-z_0}\diff{z'}\Big) \\
+&= \frac{1}{2\pi i (z-z_0)}\oint_{|z'- z_0| = r}f(z')\Big(\frac{(z'-z)^{-1} - (z'-z_0)^{-1}}{z-z_0}\Big)\diff{z'} \\
+&= \frac{1}{2\pi i (z-z_0)}\oint_{|z'- z_0| = r}f(z')(z'-z)^{-1}(z'-z_0)^{-1}\diff{z'} \\
+&= \frac{1}{2\pi i}\oint_{|z'- z_0| = r}f(z')\Big(\frac{1}{(z'-z_0)^2} - \frac{1}{(z'-z_0)^2} + \frac{1}{(z'-z)(z'-z_0)}\Big)\diff{z'} \\
+&= \frac{1}{2\pi i}\oint_{|z'- z_0| = r}f(z')\Big(\frac{1}{(z'-z_0)^2} + \frac{(z'-z_0)-(z'-z)}{(z'-z_0)^2(z'-z)}\Big)\diff{z'} \\
+&= \frac{1}{2\pi i}\oint_{|z'- z_0| = r}f(z')\Big(\frac{1}{(z'-z_0)^2} + \frac{z-z_0}{(z'-z_0)^2(z'-z)}\Big)\diff{z'} \\
+&= \frac{1}{2\pi i}\oint_{|z'- z_0| = r}\frac{f(z')}{(z'-z_0)^2}\diff{z'} + \frac{z-z_0}{2\pi i}\oint_{|z'- z_0| = r}\frac{f(z')}{(z'-z_0)^2(z'-z)}\diff{z'}.
+\end{align*}
+The first part is independent of $z$. For the second part, the integral is bounded as $z\to z_0$ (since $z'$ stays $r$ away from $z_0$ and $z$ goes to $z_0$). Since the prefactor goes to $0$, this means that the second term goes to zero. Thus the limit $\lim_{z\to z_0}\frac{f(z)-f(z_0)}{z-z_0}$ exists and is equal to $\frac{1}{2\pi i}\oint_{|z'- z_0| = r}\frac{f(z')}{(z'-z_0)^2}\diff{z'}$.
+\end{proof}
+
+\subsubsection{Holomorphic functional calculus}
+
+\begin{lemma}
+Let $K\subseteq \C$ be a compact set and $U$ an open set containing $K$. Then $K$ lies in the union of interiors of a finite set of simple Jordan curves.
+\end{lemma}
+\begin{proof}
+Essentially by compactness. TODO smooth interpolation of curves.
+\end{proof}
+
+\begin{theorem}[Holomorphic functional calculus] 
+\label{holomorphicFunctionalCalculus} \label{holomorphicSpectralMapping}
+Let $A$ be a Banach algebra and $x\in A$. Consider the function
+\[ \Phi_x: \holomorphic(\spec(x),\C) \to A: f\mapsto f(x)\defeq \frac{1}{2\pi i}\oint_\Gamma f(z)R_x(z)\diff{z}. \]
+Here $\Gamma$ is any finite union of simple Jordan curves that contains $\spec(x)$ such that $f$ is holomorphic in a region that contains $\Gamma$ and its interior. Then
+\begin{enumerate}
+\item $\Phi_x$ is well-defined: it does not depend on the particular curve $\Gamma$;
+\item $\Phi_x$ is an algebra homomorphism;
+\item $\Phi_x$ is continuous if $\holomorphic(\spec(x),\C)$ is equipped with continuous convergence;
+\item $\Phi_x(\id_\C) = x$ and, if $A$ is unital, $\Phi_x(\underline{1}) = \vec{1}$;
+\item if $A$ is unital, then $\spec(\Phi_x(f)) = f^\imf\big(\spec(x)\big)$.
+\end{enumerate}
+\end{theorem}
+TODO: check everything works in non-unital case.
+
+From points (2) and (3), it follows that $\Phi_x(p) = p(x)$ for any polynomial $p\in \C[X]$.
+
+Note that equipping $\holomorphic(\spec(x),\C)$ with continuous convergence is not the same as uniform convergence, because functions in $\holomorphic(\spec(x),\C)$ may have unbounded domain, even though $\spec(x)$ is compact.
+\begin{proof}
+(1) TODO: from \ref{weakAnalyticityConsequences}.
+
+(2) Take $f,g \in \holomorphic(\spec(x),\C)$ and $\lambda\in \C$. Then $\spec(x) \subseteq \dom(f)\cap \dom(g)$ and we can find a curve $\Gamma$ in $\dom(f)\cap \dom(g)$. By linearity of the integral, we have
+\begin{align*}
+\Phi_x\big(f+\lambda g\big) &= \frac{1}{2\pi i}\oint_\Gamma \big(f(z)+\lambda g(z)\big)R_x(z)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma f(z)R_x(z)\diff{z} + \frac{\lambda}{2\pi i} \oint_\Gamma g(z)R_x(z)\diff{z} \\
+&= \Phi_x(f) + \lambda \Phi_x(g).
+\end{align*}
+To show multiplicativity, take two curves $\Gamma_1, \Gamma_2$ in $\dom(f)\cap \dom(g)$ such that $\Gamma_2$ is in the interior of $\Gamma_1$ and $\spec(x)$ is in the interior of $\Gamma_2$. Then, using the first resolvent identity \ref{firstResolventIdentity}, we have
+\begin{align*}
+\Phi_x(f)\Phi_x(g) &= \Big(\frac{1}{2\pi i}\Big)^2\oint_{\Gamma_1}f(z)R_x(z)\diff{z}\oint_{\Gamma_2}g(z')R_x(z')\diff{z'} \\
+&= \Big(\frac{1}{2\pi i}\Big)^2\oint_{\Gamma_1}\oint_{\Gamma_2}f(z)g(z')R_x(z)R_x(z')\diff{z'}\diff{z} \\
+&= \Big(\frac{1}{2\pi i}\Big)^2\oint_{\Gamma_1}\oint_{\Gamma_2}f(z)g(z')\Big(\frac{R_x(z) - R_x(z')}{z'- z}\Big)\diff{z'}\diff{z} \\
+&= \Big(\frac{1}{2\pi i}\Big)^2\oint_{\Gamma_1}\oint_{\Gamma_2}f(z)g(z')\frac{R_x(z)}{z'- z}\diff{z'}\diff{z} + \oint_{\Gamma_1}\oint_{\Gamma_2}f(z)g(z')\frac{R_x(z')}{z- z'}\diff{z'}\diff{z} \\
+&= \frac{1}{2\pi i}\oint_{\Gamma_2}\Big(\frac{1}{2\pi i}\oint_{\Gamma_1}\frac{f(z)}{z- z'}\diff{z}\Big)g(z')R_x(z')\diff{z'} + \frac{1}{2\pi i}\oint_{\Gamma_1}f(z)R_x(z)\Big(\frac{1}{2\pi i}\oint_{\Gamma_2}\frac{g(z')}{z'- z}\diff{z'}\Big)\diff{z},
+\end{align*}
+where the order of integration has been swapped in the second integral using Fubini's theorem (TODO ref for vector-valued functions).
+
+We have $\frac{1}{2\pi i}\oint_{\Gamma_1}\frac{f(z)}{z- z'}\diff{z} = f(z')$ for all $z'\in \Gamma_2$ by Cauchy's integral formula \ref{CauchyIntergralFormula}, since all these $z'$ lie inside $\Gamma_1$. We have $\oint_{\Gamma_2}\frac{g(z')}{z'- z}\diff{z'} = 0$ for all $z\in \Gamma_1$ by Cauchy's theorem \ref{CauchyTheorem}, since all these $z$ lie outside $\Gamma_2$.
+Thus
+\[ \Phi_x(f)\Phi_x(g) = \frac{1}{2\pi i}\oint_{\Gamma_2}f(z')g(z')R_x(z')\diff{z'} = \frac{1}{2\pi i}\oint_{\Gamma_2}(f\cdot g)(z')R_x(z')\diff{z'} = \Phi_x(f\cdot g). \]
+
+(3) By \ref{continuousConvergenceCompactOpen}, \ref{spectrumCompact}, (TODO ref: compact open convergence = uniform on compact subsets) and \ref{metricUniformConvergence}, the continuous convergence is metric and thus sequential (TODO ref), so it is enough to check sequential convergence (TODO: is there an easier way to see that it is sequential??).
+
+TODO: Using uniform metric we can see that the sequence is uniformly bounded and so we can use the bounded convergence theorem (TODO ref).
+
+(4) Take $x\in A$ and let $\Gamma$ be a circle centred at $0$ with radius larger than $\norm{x}$. Then, using the Neumann series \ref{NeumannSeries} and (3), we have
+\begin{align*}
+\Phi_x(\id_{\spec(x)}) &= \frac{1}{2\pi i}\oint_\Gamma zR_x(z)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma \frac{1}{\vec{1} - x/z}\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma \sum_{n=0}^\infty z^{-n}x^n\diff{z} \\
+&= \sum_{n=0}^\infty x^n \frac{1}{2\pi i}\oint_\Gamma  z^{-n}\diff{z} = a,
+\end{align*}
+where we have used that $\oint_\Gamma  z^{-n}\diff{z} = 2\pi i$ if $n = 1$ and is zero otherwise, by the residue formula \ref{residueFormula}.
+
+TODO: $\Phi_x(\constant{1}) = \vec{1}$
+
+(5) TODO: \url{https://noncommutativeanalysis.wordpress.com/2014/01/05/advanced-analysis-notes-19-the-holomorphic-functional-calculus-ii-definition-and-basic-properties/}
+\end{proof}
+
+\subsubsection{Riesz eigenprojections}
+Holomorphic functional calculus applied to
+\[ \chi_{S,\delta}: A\to \{0,1\}: x\mapsto \begin{cases}
+1 & d(x,S) \leq \delta \\
+0 & \text{otherwise}.
+\end{cases} \]
+
+TODO: spectral measure with only disconnected parts in $\sigma$-algebra??
+
+TODO: $P_\Delta$ and $E_\Delta \defeq \im P_\Delta$.
+
+\begin{lemma}
+$\spec(T|_{E_\Delta}) = \spec(T)\cap\Delta$.
 \end{lemma}
 
-\subsection{The exponential}
+\begin{definition}
+We call $\dim E_\lambda$ the \udef{algebraic multiplicity} of $\lambda$.
+\end{definition}
+
+\subsubsection{Frobenius covariants}
+TODO $P_\lambda$ is a Frobenius covariant. \url{https://en.wikipedia.org/wiki/Frobenius_covariant}
+
+TODO cfr. Lagrange polynomial??
+
+\subsubsection{The exponential}
 \begin{proposition}
 Let $A$ be a Banach algebra and $a\in A$. Then the series
 \[ \sum_{i=1}^\infty \frac{a^i}{i!} \]
@@ -2530,6 +2694,190 @@ TODO: correct setting for this:
 \begin{proposition}
 $\det(e^a) = e^{\Tr(a)}$.
 \end{proposition}
+
+
+\subsection{Jordan decomposition}
+\subsubsection{Eigennilpotent}
+\begin{definition}
+Let $a$ be a finite element in a semisimple Banach algebra and $\lambda\in \spec(a)$. The \udef{eigennilpotent operator} of $a$ at $\lambda$ is defined as
+\[ D_{\lambda} \defeq (a-\lambda)P_{\lambda}. \]
+\end{definition}
+This definition works because we can find a $\delta < d(\lambda, \spec(a)\setminus\{\lambda\})$.
+
+\begin{lemma}
+Let $a$ be a finite element in a semisimple Banach algebra and $\lambda\in \spec(a)$. The eigennilpotent operator $D_\lambda$ is nilpotent.
+\end{lemma}
+\begin{proof}
+By spectral mapping \ref{holomorphicSpectralMapping}, $D_\lambda$ is quasinilpotent. Because $a$ is finite, it is nilpotent by \ref{nilpotentQuasinilpotent}.
+\end{proof}
+
+
+
+\subsubsection{Jordan vectors}
+\begin{definition}
+Let $V$ be a finite dimensional vector space and $T$ an operator on $V$. A \udef{Jordan vector} of $T$ belonging to the eigenvalue $\lambda$ is a vector $x\in V$ such that
+\[ (\lambda\id_V - T)^kx = 0 \]
+for some $k\in \N$. The least such $k$ is called the \udef{degree} of $x$ and is denoted $\deg_J(x)$.
+\end{definition}
+Eigenvectors are Jordan vectors of degree $1$.
+
+\begin{proposition}
+Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ $\lambda\in\spec(T)$ and $x\in V$. Then $x$ is a Jordan vector of $T$ belonging to the eigenvalue $\lambda$ \textup{if and only if} $x\in E_\lambda$.
+\end{proposition}
+\begin{proof}
+Let $x\in E_\lambda$. Then $x = P_\lambda x$ and thus
+\[ (\lambda\id_V - T)^kx = (\lambda\id_V - T)^kP_\lambda x = \big((\lambda\id_V - T)P_\lambda\big)^k x = D_\lambda^k x, \]
+which is zero for some $k$ because $D_\lambda$ is nilpotent.
+
+Conversely, assume $x$ is a Jordan vector of $T$ belonging to the eigenvalue $\lambda$. We can write $x = x_1+x_2 \in E_{\lambda}\oplus E_{\C\setminus\{\lambda\}}$.
+Then (because $E_\lambda$ is reducing for $T-\lambda\id_V$)
+\[ 0 = (\lambda\id_V - T)^kx = (\lambda\id_V - T)^kx_1 + (\lambda\id_V - T)^kx_2 \in E_{\lambda}\oplus E_{\C\setminus\{\lambda\}} \]
+Thus we have $(\lambda\id_V - T)^kx_1 = 0$ and $(\lambda\id_V - T)^kx_2 = 0$ separately.
+Now $T-\lambda\id_V$ is invertible on $E_{\C\setminus\{\lambda\}}$, so $x_2 = 0$ (TODO ref). This means that $x = x_1 \in E_\lambda$.
+\end{proof}
+
+\begin{definition}
+Let $m = \deg_N(D_\lambda)$. Then we have
+\[ \{0\} \subsetneq \ker(\lambda\id_V - T) \subsetneq \ker(\lambda\id_V - T)^2 \subsetneq \ldots \subsetneq \ker(\lambda\id_V - T)^{m-1} \subsetneq \ker(\lambda\id_V - T)^m = V. \]
+We define $E^k_\lambda \defeq \ker(\lambda\id_V - T)^k$. In particular
+\begin{itemize}
+\item $E^1_\lambda$ is the \udef{geometric eigenspace};
+\item $E^{m-1}_\lambda$ is the \udef{algebraic eigenspace}.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $V$ be a finite dimensional vector space, $T$ an operator on $V$, $\lambda\in\spec(T)$ and $x\in E_\lambda$. Then
+\begin{enumerate}
+\item $1 \leq \dim\ker(\lambda\id_V - T) \leq \dim E_\lambda$;
+\item $1 \leq \deg_J(x) \leq \dim_E\lambda$.
+\end{enumerate}
+\end{lemma}
+The lemma says the geometric multiplicity is smaller than the algebraic multiplicity.
+\begin{proof}
+Every eigenvector is a Jordan vector, so $\ker(\lambda\id_V - T) \subseteq E_\lambda$.
+
+For all $k\in\N$ smaller then the degree of $x$, $(\lambda\id_V - T)^kx$ is a Jordan vector and thus in $E_\lambda$. TODO all $(\lambda\id_V - T)^kx$ are linearly independent (like in \ref{nilpotentQuasinilpotent})
+\end{proof}
+
+\begin{definition}
+Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ and $\lambda\in\spec(T)$. The eigenvalue $\lambda$ is called
+\begin{itemize}
+    \item \udef{simple} if the algebraic multiplicity is $1$;
+    \item \udef{semisimple} if every Jordan vector in $E_\lambda$ has degree $1$;
+    \item \udef{prime} if the geometric multiplicity is $1$.
+\end{itemize}
+If all eigenvalues of $T$ are semisimple, then $T$ is called a \udef{diagonal operator}.
+\end{definition}
+
+\begin{lemma}
+An operator $T$ is diagonal iff $T$ is of the form $\sum_j a_jP_j$, where $a_j\in \F$ and $P_j$ are projectors that commute pairwise.
+\end{lemma}
+
+\subsubsection{Characteristic polynomial and equation}
+\begin{definition}
+Let $V$ be a finite dimensional vector space and $T$ an operator on $V$. The \udef{characteristic polynomial} $p_T(x)$ of $T$ is the polynomial
+\[ p_T(x) \defeq \det(x\id_V - T). \]
+\end{definition}
+
+\begin{proposition}
+Let $V$ be a finite dimensional vector space, $T$ an operator on $V$ and $\spec(T) = \{\lambda_j\}_{j=1}^r$. Then
+\[ p_T(x) = \prod_{j=1}^r(x - \lambda_j)^{\dim E_{\lambda_j}}. \]
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+A number $\lambda\in \C$ is an eigenvalue of $T$ \textup{if and only if} it is a root of $p_T(x)$.
+\end{corollary}
+
+\begin{definition}
+The equation $p_T(x) = 0$ is the \udef{characteristic equation} of $T$.
+\end{definition}
+
+\subsubsection{Spectral representation}
+\begin{proposition}
+Let $V$ be a finite dimensional complex vector space and $T$ an operator on $V$. There exists a unique decomposition $T = S + D$ such that
+\begin{itemize}
+\item $S$ is diagonal;
+\item $D$ is nilpotent;
+\item $SD = DS$.
+\end{itemize}
+If $\spec(T) = \{\lambda_j\}_{j=1}^r$, this decomposition is given by
+\[ T = \sum_{j=1}^r \lambda_r P_{\lambda_r} + \sum_{j=1}^r D_{\lambda_r}. \]
+\end{proposition}
+
+\subsubsection{Partial fraction decomposition of the resolvent}
+For any operator $T$ on a vector space $V$ with eigenvalue $\lambda_0$, the resolvent $R_T(\lambda)$ has a pole at $\lambda_0$.
+
+\begin{proposition}
+Let $T$ be an operator on a finite dimensional vector space $V$ and $\lambda_0\in\spec(T)$. Then the Laurent expansion of $R_T(\lambda)$ around $\lambda_0$ is of the form
+\[ R_T(\lambda) = \frac{P_0}{\lambda-\lambda_0} + \sum_{n=1}^{\deg_N(D_0)-1}\frac{D_0^{n}}{(\lambda - \lambda_0)^{n+1}} + \sum_{n=0}^\infty(-1)^n S_0^{n+1}(\lambda - \lambda_0)^n, \]
+where $P_0\defeq P_{\lambda_0}, D_0\defeq D_{\lambda_0}$ and $S_0$ is some fixed operator.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{definition}
+The holomorphic part of the Laurent expansion of $R_T(\lambda)$ at $\lambda_0$ is called the \udef{reduced resolvent} of $T$ w.r.t. $\lambda_0$:
+\[ S_{T,\lambda_0}(\lambda) \defeq \sum_{n=0}^\infty(-1)^n S_0^{n+1}(\lambda - \lambda_0)^n = R_T(\lambda) - \left(\frac{P_0}{\lambda-\lambda_0} + \sum_{n=1}^{\deg_N(D_0)-1}\frac{D_0^{n}}{(\lambda - \lambda_0)^{n+1}}\right). \]
+\end{definition}
+
+\begin{proposition}
+Let $T$ be an operator on a finite dimensional vector space $V$ and $\lambda_0\in\spec(T)$. Then
+\[ R_{T|_{(\id_V-P_0)}}(\lambda) = S_{T,\lambda_0}|_{\id_V-P_0}(\lambda). \]
+\end{proposition}
+
+\begin{proposition}
+Let $T$ be an operator on a finite dimensional vector space $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$. The partial fraction decomposition of $R_T(\lambda)$ is given by
+\[ R_T(\lambda) = \sum_{j=1}^r\left(\frac{P_{\lambda_j}}{\lambda - \lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{D_{\lambda_j}^n}{(\lambda - \lambda_j)^{n+1}}\right). \]
+The partial fraction decomposition of $S_{T,\lambda_k}(\lambda)$ is given by
+\[ S_{T,\lambda_k}(\lambda) = \sum_{\substack{j=1 \\ j\neq k}}^r\left(\frac{P_{\lambda_j}}{\lambda - \lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{D_{\lambda_j}^n}{(\lambda - \lambda_j)^{n+1}}\right). \]
+\end{proposition}
+\begin{proof}
+The poles of $R_T(\lambda)$ are exactly the eigenvalues of $T$. There are finitely many of them, so we can use partial fraction decomposition, \ref{partialFractionDecomposition}. We just need to show that the holomorphic part is zero. For that we note that $\lim_{\lambda \to \infty} R_T(\lambda) = 0$ and all principal parts tend to $0$ at infinity as well. Thus the holomorphic part also tends to $0$, making it bounded. By Liouville's theorem, \ref{liouvilleTheoremAnalysis}, we get that it is identically zero.
+\end{proof}
+\begin{corollary}[Sylvester-Lagrange formula]
+Let $f$ be a holomorphic function on an open set that contains $\spec(T)$. Then
+\[ f(T) = \sum_{j=1}^r\left(f(\lambda_j)P_{\lambda_j} +\sum_{n=1}^{\deg_N(D_{\lambda_j})-1}\frac{f^{(n)}(\lambda_j)D_{\lambda_j}^n}{n!}\right). \] 
+\end{corollary}
+\begin{proof}
+We have
+\[ f(T) = \oint_\Gamma f(\lambda)R_T(\lambda)\diff{\lambda} = 2\pi i\sum_{j=1}^r \Res_{\lambda_j}f(\lambda)R_T(\lambda) \]
+by the residue theorem (TODO ref for operators).
+\end{proof}
+\begin{corollary}[Cayley-Hamilton]
+Let $p_T(x)$ be the characteristic polynomial of $T$. Then $p_T(T) = 0$.
+\end{corollary}
+\begin{proof}
+Since $p_T(x) = \prod_{j=1}^r(x - \lambda_j)^{\dim E_{\lambda_j}}$ and $\dim E_{\lambda_j} \geq \deg_N(D_{\lambda_j})$, we see that $p_T(\lambda)R_T(\lambda)$ has no poles and is holomorphic, meaning that $oint_\Gamma f(\lambda)R_T(\lambda)\diff{\lambda} = 0$ by Cauchy's theorem (TODO ref for operators).
+\end{proof}
+
+\subsubsection{Normal operators}
+
+
+\begin{proposition}
+If $T$ is a normal operator, then $P_\lambda = P^*_\lambda$ and $D_\lambda = D^*_\lambda = 0$.
+\end{proposition}
+This means normal operators are diagonalisable.
+\begin{proof}
+TODO
+\end{proof}
+\begin{corollary}
+Let $V$ be a finite dimensional complex vector space and $T$ a normal operator
+on $V$ with $\spec(T) = \{\lambda_j\}_{j=1}^r$.
+\begin{enumerate}
+\item We have the spectral decompositions
+\[ T = \sum_{j=1}^r \lambda_r P_{\lambda_r} \qquad\text{and}\qquad T^* = \sum_{j=1}^r \overline{\lambda_r} P_{\lambda_r}. \]
+\item We have
+\[ R_T(\lambda) = \sum_{j = 1}^r \frac{P_{\lambda_j}}{\lambda - \lambda_j} \qquad \text{and} \qquad S_{T,\lambda_k}(\lambda) = \sum_{\substack{j = 1 \\ j\neq k}}^r \frac{P_{\lambda_j}}{\lambda - \lambda_j} \]
+\end{enumerate}
+\end{corollary}
+
+\subsubsection{Jordan decomposition}
+TODO matrix representation + matrix representation of Lagrange-Sylvester. See Baumgärtel
+
 
 
 \section{Tensor products}

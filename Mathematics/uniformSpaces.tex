@@ -43,14 +43,34 @@ Thus $F;G \neq \powerset(X^2)$ is equivalent to $p_2^{\imf}[A]\mesh p_1^{\imf}[B
 \end{proof}
 
 \begin{proposition} \label{meetsJoinsAdjoiningProduct}
-Let $X$ be a set and $F\in\powerfilters(X)$ a filter. Then the function $F\otimes -$ preserves joins and meets (intersections).
+Let $X$ be a set and $F\in\powerfilters(X)$ a filter. Then the function $F\otimes -$ preserves arbitrary joins and finite meets (intersections).
 \end{proposition}
 \begin{proof}
-Consider the bases using \ref{baseMeetJoinFilters} and \ref{productUnionIntersection}.
+For finite joins and meets, consider the bases using \ref{baseMeetJoinFilters} and \ref{productUnionIntersection}.
+
+For arbitrary joins, we have $F\otimes G = \bigvee_{A\in F}\{A\}\times^{\imf}G$. The result follows from \ref{joinResiduatedMaps} and \ref{upsetResiduatedImageGaloisConnection}. 
+
+
+Let $F,G_i \in \powerfilters(X)$ for all $i\in I$. Then
+\begin{align*}
+A\in F\otimes \Big(\bigvee_{i\in I}G_i\Big) \iff& \exists B\in F: \exists C\in \Big(\bigvee_{i\in I}G_i\Big): B\times C \subseteq A \\
+\iff& \exists B\in F: \exists \,\text{finite $\mathcal{C}\subseteq \bigcup_{i\in I}G_i$}: B\times \Big(\bigcap_{C\in\mathcal{C}} C\Big) \subseteq A \\
+\iff& \exists \,\text{finite $\mathcal{C}\subseteq \bigcup_{i\in I}G_i$}: \exists B\in F:  \bigcap_{C\in\mathcal{C}} B\times C \subseteq A \\
+\implies& A\in \bigvee_{i\in I}F\otimes G_i,
+\end{align*}
+so $F\otimes \Big(\bigvee_{i\in I}G_i\Big) \subseteq \bigvee_{i\in I}F\otimes G_i$. The other inclusion follows by monotonicity of $F\otimes -$.
 \end{proof}
-\begin{proof}[Alternative proof for the preservation of joins]
-We have $F\otimes G = \bigvee_{A\in F}\{A\}\times^{\imf}G$. The result follows from \ref{joinResiduatedMaps} and \ref{upsetResiduatedImageGaloisConnection}. 
-\end{proof}
+
+\begin{example}
+The result \ref{meetsJoinsAdjoiningProduct} does not hold for arbitrary meets. Let $F,G_i \in \powerfilters(X)$ for all $i\in I$. Then
+\begin{align*}
+A\in F\otimes \Big(\bigcap_{i\in I}G_i\Big) &\iff \exists B\in F: \exists C\in \Big(\bigcap_{i\in I}G_i\Big): B\times C \subseteq A \\
+&\iff \exists B\in F: \exists C\subseteq X: \big(\forall i\in I: C\in G_i\big) \land \big(B\times C \subseteq A\big) \\
+&\iff \exists B\in F: \forall i\in I: \exists C_i\in G_i: \; B\times C_i \subseteq A \\
+A\in \bigcap_{i\in I}F\otimes G_i &\iff \forall i\in I: \exists B_i\in F: \exists C_i\in G_i: \; B_i\times C_i \subseteq A.
+\end{align*}
+In particular, set $G_x \defeq \pfilter{x}$ for all $x\in \interval{0,1}$ and $F = \upset \setbuilder{\interval{0,\epsilon}}{0 < \epsilon \leq 1}$. Consider $A\defeq \setbuilder{(x,y)\subseteq \interval{0,1}^2}{x\leq y}$. Then, for all $x\in \interval{0,1}$, we have $\interval{0,x}\times \{x\}\subseteq A$, so $A\in \bigcap_{x\in \interval{0,1}}F\otimes G_x$, but $A\notin A\otimes \Big(\bigcap_{x\in\interval{0,1}}G_x\Big)$, since $\bigcap_{x\in\interval{0,1}}G_x = \big\{\interval{0,1}\big\}$.
+\end{example}
 
 \begin{proposition} \label{filterCompositionResidual}
 Let $X$ be a set and $H\in\powerfilters(X^2)$ a filter. Then the function $H;-: \powerfilters(X^2) \to \powerfilters(X^2)$ preserves finite intersections.
@@ -519,7 +539,7 @@ by \ref{relationCompositionResiduated}. For all $x,y\in U$, $Ux$ is a neighbourh
 
 By \ref{subsetWithVicinitiesInInherence}, we have that $U\subseteq \interior_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(V)$ and thus the proposition follows by upwards closure.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{entourageOpenBase}
 Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, then $\entourage_\mathcal{U}$ has a base of sets open in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$.
 \end{corollary}
 
@@ -1557,7 +1577,8 @@ Consider the evaluation map $\evalMap: (X\to Y)\times X \to \sSet{Y,\mathcal{V}}
 \end{itemize}
 Now suppose $\xi$ is a convergence on $X$. Then
 \begin{itemize}
-\item the \udef{uniformity of continuous convergence} $\mathcal{U}_c$ is given by \\ $\setbuilder{F\otimes F}{\text{$F$ converges in $\xi$}}^{\uRelEv^\transp}$.
+\item the \udef{uniformity of continuous convergence} $\mathcal{U}_c$ is given by \\ $\setbuilder{F\otimes F}{\text{$F$ converges in $\xi$}}^{\uRelEv^\transp}$;
+\item the \udef{uniformity of uniform convergence on compact subsets} $\mathcal{U}_\text{comp}$ is given by $\setbuilder{\id_K}{\text{$K\subseteq X$ compact}}^{\uRelEv^\transp}$.
 \end{itemize}
 \end{definition}
 
@@ -1607,6 +1628,55 @@ For all convergent $F\in\powerfilters(X)$ we have
 \[ \mathcal{V} \ni \upset\big((\evalMap|\evalMap)\circ t\big)^{\imf\imf}\big((\pfilter{f}\otimes \pfilter{f})\otimes(F\otimes F)\big) = \evalMap^{\imf\imf}(\pfilter{f}\otimes F)\otimes \evalMap^{\imf\imf}(\pfilter{f}\otimes F) = f^{\imf\imf}(F)\otimes f^{\imf\imf}(F), \]
 so $\upset f^{\imf\imf}(F)$ is a Cauchy filter.
 \end{proof}
+
+\begin{proposition} \label{uniformConvergenceOnCompactsImpliesCompactOpenConvergence}
+Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{V}}$ a topological uniform space. Let $H$ be a filter in $\powerfilters(X\to Y)$ and $f\in \cont(X, Y)$. 
+If $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$, then $H$ converges to $f$ in the compact open topology.
+\end{proposition}
+TODO: if $\xi$ is locally compact, we relax the requirement that $f\in \cont(X,Y)$?
+\begin{proof}
+We have
+\begin{align*}
+H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f &\iff \forall \text{compact $K\subseteq X$}:\; H\otimes \pfilter{f} \in \setbuilder{\id_K}{\text{$K\subseteq X$ compact}}^{\uRelEv^\transp} \\
+&\iff \forall \text{compact $K\subseteq X$}:\; \upset\big((\evalMap | \evalMap)\circ t\big)^{\imf\imf}\big((H\otimes\pfilter{f})\otimes \upset\{\id_K\}\big) \in \mathcal{V} \\
+&\iff \forall \text{compact $K\subseteq X$}:\; \entourage_\mathcal{V} \subseteq \upset\big((\evalMap | \evalMap)\circ t\big)^{\imf\imf}\big((H\otimes\pfilter{f})\otimes \upset\{\id_K\}\big) \\
+&\iff \forall \text{compact $K\subseteq X$}: \forall V\in \entourage_{\mathcal{V}}: \exists A\in H: \; \big((\evalMap | \evalMap)\circ t\big)^{\imf}\big((A\times\{f\})\times \{\id_K\}\big) \subseteq V \\
+&\iff \forall \text{compact $K\subseteq X$}: \forall V\in \entourage_{\mathcal{V}}: \exists A\in H: \forall k\in K: \; \big((\evalMap | \evalMap)\circ t\big)^{\imf}\big((A\times\{f\})\times \{(k,k)\}\big) \subseteq V \\
+&\iff \forall \text{compact $K\subseteq X$}: \forall V\in \entourage_{\mathcal{V}}: \exists A\in H: \forall k\in K: \; \evalMap^\imf(A\times \{k\})\times \{f(k)\} \subseteq V \\
+&\iff \forall \text{compact $K\subseteq X$}: \forall V\in \entourage_{\mathcal{V}}: \exists A\in H: \forall k\in K: \; \evalMap^\imf(A\times \{k\}) \subseteq Vf(k),
+\end{align*}
+and
+\begin{multline*}
+H \overset{\text{compact-open}}{\longrightarrow} f \iff \\
+\forall \,\text{compact $K\subseteq X$}: \forall \,\text{open $O\subseteq X$}: \; f^\imf(K)\subseteq O \implies \Big(\exists A\in H: \evalMap^\imf(A\times K)\subseteq O\Big).
+\end{multline*}
+Assume $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$ and take arbitrary $K\subseteq X$ compact and $O\subseteq X$ open. Assume $f^\imf(K)\subseteq O = \interior(O)$. Then, for all $k\in K$, $O\in \vicinity\big(f(k)\big)$, so there exists $V_k\in\entourage_{\mathcal{V}}$ such that $V_kf(k)\subseteq O$, by \ref{topologicalInducedUniformConvergence}.
+
+Since $f^\imf(K) \subseteq \bigcup_{k\in K}V_kf(k)$, $f^\imf(K)$ is compact by \ref{compactConstructions} and $\{V_kf(k)\}_{k\in K}$ is a convergence cover, there exists a finite $K'\subseteq K$ such that $f^\imf(K)\subseteq \bigcup_{k\in K'}V_kf(k)$ by \ref{compactFiniteSubcover}.
+
+
+By the assumption $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$, we have that there exists $A_k\in H$ such that $\evalMap^\imf(A_k\times \{k\}) \times \{f(k)\} \subseteq V_k$, so $\evalMap^\imf(A_k\times \{k\}) \subseteq V_kf(k)$. Set $A = \bigcup_{k\in K}A_k \in H$, so
+\[ \evalMap^\imf(A\times K) = \bigcup_{k\in K}\evalMap^\imf(A\times \{k\}) \subseteq \bigcup_{k\in K}V_kf(k) \subseteq O. \]
+This means that $H\to f$ in the compact open topology.
+
+TODO!!!
+\end{proof}
+
+\begin{note}
+Old attempts at a proof for some converse of \ref{uniformConvergenceOnCompactsImpliesCompactOpenConvergence}: 
+
+First assume $H\to f$ in the compact open topology. Take arbitrary compact $K\subseteq X$ and $V\in \entourage_{\mathcal{V}}$. Then we can find $V'\in \entourage_{\mathcal{V}}$ such that $V'\subseteq V$ and $V'$ is open in $Y\times Y$ by \ref{entourageOpenBase}. Then $V'f(k)$ is open, for all $k\in K$, by TODO ref, so $\bigcup_{k\in K}V'f(k)$ is open and $f^\imf(K)\subseteq \bigcup_{k'\in K}V'f(k')$.
+
+Since $f^\imf(K)$ is compact by \ref{compactConstructions}, there exists finite $K'\subseteq K$ such that $f^\imf(K)\subseteq \bigcup_{k\in K'}V'f(k)$. By assumption, there exists $A\in H$ such that $\evalMap^\imf(A\times K) \subseteq \bigcup_{k\in K'}V'f(k)$.
+
+Since $\{k\}$ is compact, for all $k\in K'$, by assumption, there exists $A_k\in H$ such that $\evalMap^\imf(A_k\times \{k\}) \subseteq V'f(k)$.
+
+Now set $A' \defeq A\cap \bigcap_{k\in K'}A_k \in H$ and take arbitrary $k\in K$. Then, since $f^\imf(K)\subseteq \bigcup_{k'\in K}V'f(k')$, there exists $k'\in K'$ such that $f(k) \in V'f(k')$
+
+
+
+
+\end{note}
 
 \subsection{Equicontinuity}
 \begin{definition}
