@@ -543,13 +543,14 @@ By \ref{subsetWithVicinitiesInInherence}, we have that $U\subseteq \interior_{\G
 Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, then $\entourage_\mathcal{U}$ has a base of sets open in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$.
 \end{corollary}
 
-\begin{proposition}
+\begin{proposition} \label{closureTopologicalUniformSpace}
 Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, $A\subseteq X$ and $M\subseteq X^2$. Then
 \begin{enumerate}
 \item $\closure_{\Gamma(\mathcal{U})}(A) = \bigcap\setbuilder{A_U}{U\in \entourage_\mathcal{U}}$;
 \item $\closure_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(M) = \bigcap\setbuilder{V;M;V}{V\in\entourage_\mathcal{U}}$.
 \end{enumerate}
 \end{proposition}
+In particular, $\closure_{\Gamma(\mathcal{U})}(A) \subseteq V^\imf(A)$ for all $V\in \entourage_\mathcal{U}$.
 \begin{proof}
 (1) By \ref{principalAdherenceInherence} and \ref{topologicalInducedUniformConvergence}, we have
 \begin{align*}
@@ -1631,9 +1632,9 @@ so $\upset f^{\imf\imf}(F)$ is a Cauchy filter.
 
 \begin{proposition} \label{uniformConvergenceOnCompactsImpliesCompactOpenConvergence}
 Let $\sSet{X, \xi}$ be a convergence space and $\sSet{Y, \mathcal{V}}$ a topological uniform space. Let $H$ be a filter in $\powerfilters(X\to Y)$ and $f\in \cont(X, Y)$. 
-If $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$, then $H$ converges to $f$ in the compact open topology.
+Then $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$ \textup{if and only if} $H$ converges to $f$ in the compact open topology.
 \end{proposition}
-TODO: if $\xi$ is locally compact, we relax the requirement that $f\in \cont(X,Y)$?
+TODO: if $\xi$ is locally compact, then $f\in \cont(X,Y)$ automatically?
 \begin{proof}
 We have
 \begin{align*}
@@ -1650,33 +1651,36 @@ and
 H \overset{\text{compact-open}}{\longrightarrow} f \iff \\
 \forall \,\text{compact $K\subseteq X$}: \forall \,\text{open $O\subseteq X$}: \; f^\imf(K)\subseteq O \implies \Big(\exists A\in H: \evalMap^\imf(A\times K)\subseteq O\Big).
 \end{multline*}
-Assume $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$ and take arbitrary $K\subseteq X$ compact and $O\subseteq X$ open. Assume $f^\imf(K)\subseteq O = \interior(O)$. Then, for all $k\in K$, $O\in \vicinity\big(f(k)\big)$, so there exists $V_k\in\entourage_{\mathcal{V}}$ such that $V_kf(k)\subseteq O$, by \ref{topologicalInducedUniformConvergence}.
+First assume $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$. Take arbitrary $K\subseteq X$ compact and $O\subseteq X$ open such that $f^\imf(K)\subseteq O$. Then, for all $k\in K$, $O\in \vicinity\big(f(k)\big)$, so there exists $V_k\in\entourage_{\mathcal{V}}$ such that $V_kf(k)\subseteq O$, by \ref{topologicalInducedUniformConvergence}. By \ref{entourageLemma}, we can find $V'_k\in\entourage_\mathcal{V}$ such that $V'_k;V'_k \subseteq V_k$.
 
-Since $f^\imf(K) \subseteq \bigcup_{k\in K}V_kf(k)$, $f^\imf(K)$ is compact by \ref{compactConstructions} and $\{V_kf(k)\}_{k\in K}$ is a convergence cover, there exists a finite $K'\subseteq K$ such that $f^\imf(K)\subseteq \bigcup_{k\in K'}V_kf(k)$ by \ref{compactFiniteSubcover}.
+Since $f$ is continuous, $f^\imf(K)$ is compact by \ref{compactConstructions}. Since $f^\imf(K) \subseteq \bigcup_{k\in K}V'_kf(k)$ and $\{V'_kf(k)\}_{k\in K}$ is a convergence cover, there exists a finite $K'\subseteq K$ such that $f^\imf(K)\subseteq \bigcup_{k\in K'}V'_kf(k)$ by \ref{compactFiniteSubcover}. Set $V\defeq \bigcap_{k\in K'}V'_k \in \entourage_{\mathcal{V}}$.
 
+We claim that $(V;f)^\imf(K) \subseteq O$. Indeed, take $a\in (V;f)^\imf(K)$. Then there exists $k\in K$ such that $(a, f(k))\in V$. There exists $k'\in K'$ such that $\big(f(k), f(k')\big)\in V'_{k'}$, so
+\[ a \in Vf(k) \subseteq V'_{k'}f(k) = V'_{k'};\{\big(f(k), f(k')\big)\}f(k') \subseteq (V'_{k'};V'_{k'})f(k') \subseteq V_{k'}f(k')\subseteq O. \]
 
-By the assumption $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$, we have that there exists $A_k\in H$ such that $\evalMap^\imf(A_k\times \{k\}) \times \{f(k)\} \subseteq V_k$, so $\evalMap^\imf(A_k\times \{k\}) \subseteq V_kf(k)$. Set $A = \bigcup_{k\in K}A_k \in H$, so
-\[ \evalMap^\imf(A\times K) = \bigcup_{k\in K}\evalMap^\imf(A\times \{k\}) \subseteq \bigcup_{k\in K}V_kf(k) \subseteq O. \]
-This means that $H\to f$ in the compact open topology.
+By the assumption $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$, we have that there exists $A\in H$ such that $\evalMap^\imf(A\times \{k\}) \subseteq Vf(k)$ for all $k\in K$. Thus
+\[ \evalMap^\imf(A\times K) = \bigcup_{k\in K}\evalMap^\imf(A\times \{k\}) \subseteq \bigcup_{k\in K}Vf(k) = (V;f)^\imf(K) \subseteq O. \]
+This means that $H\to f$ in the compact-open topology.
 
-TODO!!!
+Now assume $H\to f$ in the compact-open topology. Take arbitrary compact $K\subseteq X$ and $V\in \entourage_{\mathcal{V}}$. Then there exists $V'\in \entourage_{\mathcal{V}}$ such that $V';V' \subseteq V$ by \ref{entourageLemma}. By \ref{entourageOpenBase}, we can find $V^{\prime\prime} \in \entourage_\mathcal{V}$ such that $V^{\prime\prime} \subseteq V'$ and $V^{\prime\prime}$ is open. By \ref{entourageLemma}, we can find $V^{\prime\prime\prime} \in \entourage_\mathcal{V}$ such that $V^{\prime\prime\prime};V^{\prime\prime\prime} \subseteq V^{\prime\prime}$.
+
+Since $f$ is continuous, $f^\imf(K)$ is compact by \ref{compactConstructions}. Since $f^\imf(K) \subseteq \bigcup_{k\in K}V^{\prime\prime\prime}f(k)$ and $\{V^{\prime\prime\prime}f(k)\}_{k\in K}$ is a convergence cover, there exists a finite $K'\subseteq K$ such that $f^\imf(K)\subseteq \bigcup_{k\in K'}V^{\prime\prime\prime}f(k)$ by \ref{compactFiniteSubcover}.
+
+For all $k\in K'$, set $K_k \defeq f^\preimf\Big(\closure_{\Gamma(\mathcal{V})}\big(V^{\prime\prime\prime}f(k)\big)\Big)\cap K$. By \ref{closureTopologicalUniformSpace}, we have
+\[ K_k = f^\preimf\Big(\closure_{\Gamma(\mathcal{V})}\big(V^{\prime\prime\prime}f(k)\big)\Big)\cap K \subseteq f^\preimf\Big(\big(V^{\prime\prime\prime};V^{\prime\prime\prime}\big)f(k)\Big) \subseteq f^\preimf\big(V^{\prime\prime}f(k)\big),  \]
+so $f^\imf(K_k) \subseteq (f^\imf\circ f^\preimf)\big(V^{\prime\prime}f(k)\big) \subseteq V^{\prime\prime}f(k)$. Since $K_k$ is compact by \ref{compactClosedIntersectionCompact} and \ref{preimageOpenClosed}, and $V^{\prime\prime}f(k)$ is open by \ref{sliceOpenSetOpen}, we have, by assumption, that there exists $A_k\in H$ such that $\evalMap^\imf(A_k\times K_k)\subseteq V^{\prime\prime}f(k)$. Take $A \defeq \bigcap_{k\in K'}A_k \in H$.
+
+We claim this $A$ satisfies the requirements. Since $f^\imf(K)\subseteq \bigcup_{k\in K'}V^{\prime\prime\prime}f(k)$, for all $k\in K$ there exists $k'\in K$ such that $\big(f(k), f(k')\big)\in V^{\prime\prime\prime}$. Thus $f(k) \in V^{\prime\prime\prime}f(k')$ and
+\[ k\in f^\preimf\big(V^{\prime\prime\prime}f(k')\big)\cap K \subseteq f^\preimf\Big(\closure_{\Gamma(\mathcal{V})}\big(V^{\prime\prime\prime}f(k)\big)\Big)\cap K = K_{k'}. \]
+This means that, using $\big(f(k), f(k')\big)\subseteq V^{\prime\prime}\subseteq V'$,
+\begin{align*}
+\evalMap^\imf(A\times \{k\}) &\subseteq \evalMap^\imf(A_{k'}\times \{k\}) \\
+&\subseteq \evalMap^\imf(A_{k'}\times K_{k'}) \\
+&\subseteq V'f(k') = \Big(V';\big\{(f(k'), f(k))\big\}\Big)f(k) \\
+&\subseteq (V';V')f(k) \subseteq Vf(k),
+\end{align*}
+which is what we needed to prove.
 \end{proof}
-
-\begin{note}
-Old attempts at a proof for some converse of \ref{uniformConvergenceOnCompactsImpliesCompactOpenConvergence}: 
-
-First assume $H\to f$ in the compact open topology. Take arbitrary compact $K\subseteq X$ and $V\in \entourage_{\mathcal{V}}$. Then we can find $V'\in \entourage_{\mathcal{V}}$ such that $V'\subseteq V$ and $V'$ is open in $Y\times Y$ by \ref{entourageOpenBase}. Then $V'f(k)$ is open, for all $k\in K$, by TODO ref, so $\bigcup_{k\in K}V'f(k)$ is open and $f^\imf(K)\subseteq \bigcup_{k'\in K}V'f(k')$.
-
-Since $f^\imf(K)$ is compact by \ref{compactConstructions}, there exists finite $K'\subseteq K$ such that $f^\imf(K)\subseteq \bigcup_{k\in K'}V'f(k)$. By assumption, there exists $A\in H$ such that $\evalMap^\imf(A\times K) \subseteq \bigcup_{k\in K'}V'f(k)$.
-
-Since $\{k\}$ is compact, for all $k\in K'$, by assumption, there exists $A_k\in H$ such that $\evalMap^\imf(A_k\times \{k\}) \subseteq V'f(k)$.
-
-Now set $A' \defeq A\cap \bigcap_{k\in K'}A_k \in H$ and take arbitrary $k\in K$. Then, since $f^\imf(K)\subseteq \bigcup_{k'\in K}V'f(k')$, there exists $k'\in K'$ such that $f(k) \in V'f(k')$
-
-
-
-
-\end{note}
 
 \subsection{Equicontinuity}
 \begin{definition}
