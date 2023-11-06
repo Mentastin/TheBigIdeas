@@ -1307,6 +1307,19 @@ Let $A$ be an $\Omega$-algebra. We denote by $\alg_A: \powerset(A)\to \subalgebr
 For $X\subseteq A$, we say that $X$ \udef{generates} $A$ if $\alg_A(X) = A$. We say that $A$ is \udef{finitely generated} if there exists a finite set that generates $A$.
 \end{definition}
 
+\begin{lemma} \label{DedekindAlgebraicClosure}
+Let $A$ be an $\Omega$-algebra and $X\subseteq A$ a subset. Consider the function
+\[ E:\powerset(A)\to \powerset(A): X\mapsto X\cup \bigcup_{\omega\in \Omega}\omega_A^\imf\big(X^{\alpha(\omega)}\big). \]
+Then $\alg_A(X) = \bigcup_{n\in\N}E^n(X)$.
+\end{lemma}
+\begin{proof}
+Set $Y \defeq \bigcup_{n\in\N}E^n(X)$. We claim that $Y$ is a subalgebra of $A$. Indeed, take $\omega\in \Omega$ and $\vec{y} \in Y^{\alpha(\omega)}$. Then, for all $k\in \big(0:\alpha(\omega)\big)$, we have $\vec{y}(k)\in E^{n_k}(X)$ for some $n_k\in \N$. Take $n = \max\setbuilder{n_k}{k\in 0:\alpha(\omega)}$. We have $\vec{y}\in \big(E^n(X)\big)^{\alpha(\omega)}$ and $\omega_A(\vec{y}) \in E^{n+1}(X) \subseteq Y$. Since $\omega\in \Omega$ and $\vec{y} \in Y^{\alpha(\omega)}$ were taken arbitrarily, we have that $Y\in\subalgebras(A)$ and so $\alg_A(X)\subseteq Y$.
+
+Conversely, we have
+\[ E(X) \subseteq E\big(\alg_A(X)\big) \subseteq \alg_A(X), \]
+so $Y\subseteq \alg_A(X)$.
+\end{proof}
+
 \begin{proposition}
 Let $A$ be an $\Omega$-algebra. Then
 \begin{enumerate}
@@ -1315,15 +1328,32 @@ Let $A$ be an $\Omega$-algebra. Then
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Take some subset $X\subseteq A$. Consider the function
-\[ E:\powerset(A)\to \powerset(A): X\mapsto X\cup \bigcup_{\omega\in \Omega}\omega_A^\imf\big(X^{\alpha(\omega)}\big) \]
-and the set $Y \defeq \bigcup_{n\in\N}E^n(X)$. We claim that $Y$ is a subalgebra of $A$. Indeed, take $\omega\in \Omega$ and $\vec{y} \in Y^{\alpha(\omega)}$. Then, for all $k\in \big(0:\alpha(\omega)\big)$, we have $\vec{y}(k)\in E^{n_k}(X)$ for some $n_k\in \N$. Take $n = \max\setbuilder{n_k}{k\in 0:\alpha(\omega)}$. We have $\vec{y}\in \big(E^n(X)\big)^{\alpha(\omega)}$ and $\omega_A(\vec{y}) \in E^{n+1}(X) \subseteq Y$. Since $\omega\in \Omega$ and $\vec{y} \in Y^{\alpha(\omega)}$ were taken arbitrarily, we have that $Y\in\subalgebras(A)$ and so $\alg_A(X)\subseteq Y$.
+(1) By \ref{DedekindAlgebraicClosure} we have $\alg_A(X) = \bigcup_{n\in\N}E^n(X)$.
 
 By induction it is straightforward to prove that $E^n(X) \subseteq \bigcup \setbuilder{\alg_A(Z)}{Z\subseteq X\; \text{finite}}$ for all $n\in \N$. Thus we have
-\[ \alg_A(X) \subseteq Y \subseteq \bigcup \setbuilder{\alg_A(Z)}{Z\subseteq X\; \text{finite}}, \]
+\[ \alg_A(X) = \bigcup_{n\in\N}E^n(X) \subseteq \bigcup \setbuilder{\alg_A(Z)}{Z\subseteq X\; \text{finite}}, \]
 which means that $\alg_A$ is an algebraic closure operator.
 
 (2) Immediate from \ref{imageAlgebraicClosureAlgebraicLattice}.
+\end{proof}
+
+\begin{proposition}
+Let $A$ be an $\Omega$-algebra and $X\subseteq A$. Then $|\alg_A(X)| \leq |X| + |\Omega| + \aleph_0$.
+\end{proposition}
+This proposition requires choice.
+\begin{proof}
+By \ref{DedekindAlgebraicClosure}, we have $\alg_A(X) = \bigcup_{n\in\N}E^n(X)$.
+
+For all $Y\in\powerset(A)$, we have, by \ref{injectiveSurjectiveMappingCardinality}, \ref{cardinalityStringsFiniteSubsets} and \ref{repeatedAdditionMultiplicationCardinals},
+\begin{align*}
+|E(Y)| &\leq |Y| + \sum_{\omega\in\Omega}\big|\omega_A^\imf\big(Y^{\alpha(\omega)}\big)\big| \\
+&\leq |Y| + \sum_{\omega\in\Omega}\big|Y^{\alpha(\omega)}\big| \\
+&\leq |Y| + \sum_{\omega\in\Omega}|Y^{*}| = |Y| + \sum_{\omega\in\Omega}|Y| = |Y| + |\Omega|\cdot |Y|
+\end{align*}
+By \ref{productInfiniteCardinals}, this gives $|E(Y)| \leq |Y| + |\Omega| + \aleph_0$.
+
+By induction on $n$, we have $|E^n(X)| \leq |X| + |\Omega| + \aleph_0$. Thus
+\[ |\alg_A(X)| \leq \sum_{n\in\N}|E^n(X)| \leq \sum_{n\in\N}\big(|X| + |\Omega| + \aleph_0\big) = \aleph_0\cdot\big(|X| + |\Omega| + \aleph_0\big) \leq |X| + |\Omega| + \aleph_0. \]
 \end{proof}
 
 \begin{theorem}[Birkhoff and Frink]
@@ -1356,7 +1386,50 @@ Then
 Since $B$ is a subalgebra, we have $a\in B$.
 \end{proof}
 
+\subsubsection{Irredundant bases}
+\begin{definition}
+Let $A$ be an $\Omega$-algebra and $X\subseteq A$ a subset. Then $X$ is called
+\begin{itemize}
+\item a \udef{basis} of $A$ if $\alg_A(X) = A$;
+\item an \udef{irredundant basis} of $A$ if $X$ is a minimal basis of $A$.
+\end{itemize}
+\end{definition}
 
+\begin{example}
+Not every algebra has an irredundant basis. Consider the integers $\Z$ with the successor operation $S: \Z\to \Z: n\mapsto n+1$. A subset $B$ is a basis so long as for all $k\in \Z$, there exists $b\in B$ such that $b\leq k$. Clearly there can never be an irredundant basis.
+\end{example}
+
+\begin{lemma}
+Let $A$ be an $\Omega$-algebra and $X\subseteq A$ a finite subset. If $X$ is a basis, then it contains an irredundant basis.
+\end{lemma}
+\begin{proof}
+Straightforward by induction on the cardinality of $X$.
+\end{proof}
+
+\begin{proposition}[Irredundant basis theorem]
+Let $A$ be an $\Omega$-algebra. Suppose all elements of the signature have arity less than or equal to $n\in \N$.
+
+Suppose there exist finite irredundant bases $B_1, B_2$ of $A$ such that $\#(B_2) - \#(B_1)\geq n$
+then there exists an irredundant basis $B_3$ such that
+\[ \#(B_1) < \#(B_3) < \#(B_2). \]
+\end{proposition}
+\begin{proof}
+Assume $n \geq 1$. Set $K \defeq \setbuilder{B\subseteq A}{\text{$B$ is an irredundant basis and $\#(B)\leq \#(B_1)$}}$ and $K_k \defeq K \cap \powerset\Big(\bigcup_{n=0}^k E^n(B_2)\Big)$.
+
+Since $K = \bigcup_{k=0}^\infty K_k$ and $K$ is not empty, there exists a minimal $k$ such that $K_k$ is not empty. Also $k\neq 0$ since $B_2$ is an irredundant basis with cardinality larger than $\#(B_1)$. Take $B\in K_k$. By minimality of $k$, there exists $b\in B$ such that $b\in E^k(B_2)\setminus E^{k-1}(B_2)$. This means that there exists $\omega\in \Omega$ and $x_0,\ldots , x_{\alpha(\omega)-1}\in E^{k-1}(B_2)$ such that $b = \omega_A(x_0,\ldots , x_{\alpha(\omega)-1})$.
+Consider
+\[ B' \defeq \big(B\setminus \{b\}\big) \cup \{x_0,\ldots , x_{\alpha(\omega)-1}\}. \]
+Now $B'$ contains an irredundant basis $B_3$. By minimality of $k$, we have $B_3\notin K$, so $\#(B_3) > \#(B_1)$.
+Also, since $\alpha(\omega) \leq n$, we have
+\[ \#(B_3) \leq \#(B') \leq \#(B)-1+n \leq \#(B_1) + n -1 \leq \#(B_2) -1 < \#(B_2). \]
+\end{proof}
+\begin{corollary}
+In particular:
+\begin{enumerate}
+\item if $n=1$, then all finite irreduncdant bases have the same cardinality;
+\item if $n=2$, then the cardinalities of the finite irredundant bases form a convex set.
+\end{enumerate}
+\end{corollary}
 
 \subsection{Homomorphisms}
 \begin{definition}
@@ -1365,6 +1438,19 @@ Let $A,B$ be $\Omega$-algebras. A \udef{homomorphism} of $\Omega$-algebras is a 
 If $f$ is bijective and both $f$ and $f^{-1}$ are homomorphisms, then $f$ is an \udef{isomorphism}.
 \end{definition}
 Note that $f^{2}$ means $(f|f)$, not $(f,f)$.
+
+\begin{lemma}
+Let $A,B, C$ be $\Omega$-algebras and $f:A\to B, g: B\to C$ homomorphisms. Then $g\circ f$ is a homomorphism.
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+(g\circ f)\circ \omega_A &= g\circ f\circ \omega_A \\
+&= g\circ \omega_A \circ f^{\alpha(\omega)} \\
+&= \omega_A \circ g^{\alpha(\omega)} \circ f^{\alpha(\omega)} \\
+&= \omega_A \circ (g \circ f)^{\alpha(\omega)}.
+\end{align*}
+\end{proof}
 
 \begin{lemma} \label{inverseHomomorphism}
 Let $A,B$ be $\Omega$-algebras and $f:A\to B$ a bijective homomorphism. Then $f$ is an isomorphism.
@@ -1388,25 +1474,39 @@ The set $\setbuilder{x\in A}{f(x) = g(x)}$ is a subalgebra of $A$. By hypothesis
 \end{proof}
 
 \begin{proposition} \label{imageSubalgebra}
-Let $f:A\to B$ be a homomorphism of $\Omega$-algebras and $X\subseteq A$ a subalgebra. Then $f^{\imf}(X)$ is a subalgebra of $B$.
+Let $f:A\to B$ be a homomorphism of $\Omega$-algebras, $X\subseteq A$ a subalgebra and $Y\subseteq B$ a subalgebra. Then
+\begin{enumerate}
+\item $f^{\imf}(X)$ is a subalgebra of $B$;
+\item $f^\preimf(Y)$ is a subalgebra of $A$.
+\end{enumerate}
 \end{proposition}
 In particular $\im f$ is a subalgebra of $B$.
 \begin{proof}
-Take some arbitrary $\omega\in\Omega$. Let $b\in f^{\imf}(X)^{\alpha(\omega)}$. Then there exists an $x\in X^{\alpha(\omega)}$ such that $b = f^{\alpha(\omega)}(x)$. So we have $\omega_B(b) = \omega_B(f^{\alpha(\omega)}(x)) = f(\omega_A(x)) \in f^\imf(X)$, since $\omega_A(x)\ in X$.
+(1) Take some arbitrary $\omega\in\Omega$. Let $b\in f^{\imf}(X)^{\alpha(\omega)}$. Then there exists an $x\in X^{\alpha(\omega)}$ such that $b = f^{\alpha(\omega)}(x)$. So we have $\omega_B(b) = \omega_B(f^{\alpha(\omega)}(x)) = f(\omega_A(x)) \in f^\imf(X)$, since $\omega_A(x) \in X$.
+
+(2) Take some arbitrary $\omega\in\Omega$. Let $a\in f^{\preimf}(Y)^{\alpha(\omega)}$. Then $f^{\alpha(\omega)}(a) \in Y^{\alpha(\omega)}$, so $f\big(\omega_A(a)\big) = \omega_B(f^{\alpha(\omega)}(a)) \in Y$, since $Y$ is a subalgebra. Thus $\omega_A(a)\in f^\preimf(Y)$.
+\end{proof}
+
+\begin{proposition}
+Let $A,B$ be $\Omega$-algebras, $X\subseteq A$ a subset and $f: A\to B$ a homomorphism. Then $f^\imf\big(\alg_A(X)\big) = \alg_B\big(f^\imf(X)\big)$.
+\end{proposition}
+\begin{proof}
+Using \ref{DedekindAlgebraicClosure} and \ref{functionImagePreimageGaloisConnection}, we have
+\[ f^\imf\big(\alg_A(X)\big) = f^\imf\Big(\bigcup_{n\in\N} E^n(X)\Big) = \bigcup_{n\in\N}f^\imf\big( E^n(X)\big). \]
+Now, for all $Y\subseteq A$ we have
+\begin{align*}
+f^\imf\big(E(Y)\big) &= f^\imf\Big(Y \cup \bigcup_{\Omega\in\Omega}\omega_A^\imf(Y^{\alpha(\omega)})\Big) \\
+&= f^\imf(Y) \cup \bigcup_{\Omega\in\Omega}f^\imf\big(\omega_A^\imf(Y^{\alpha(\omega)})\big) \\
+&= f^\imf(Y) \cup \bigcup_{\Omega\in\Omega}\omega_A^\imf\big((f^{\alpha(\omega)})^\imf (Y^{\alpha(\omega)})\big) \\
+&= f^\imf(Y) \cup \bigcup_{\Omega\in\Omega}\omega_A^\imf\big(\big(f^\imf(Y)\big)^{\alpha(\omega)}\big) = E\big(f^\imf(Y)\big).
+\end{align*}
+So we conclude that $f^\imf\big(\alg_A(X)\big) = \bigcup_{n\in\N}E^n\big( f^\imf(X)\big) = \alg_B\big(f^\imf(X)\big)$.
 \end{proof}
 
 \begin{proposition}
 Let $(\Omega,\alpha)$ be a signature. Then the $\Omega$-algebras form a category with homomorphisms as arrows.
 \end{proposition}
 Consequently we have the concepts of isomorphism, endomorphism and automorphism.
-
-\begin{proposition} \label{bijectiveHomomorphism}
-Let $f:A\to B$ be a bijective homomorphism. Then $f^{-1}$ is also a homomorphism and thus $f$ is an isomorphism.
-\end{proposition}
-\begin{proof}
-Take arbitrary $\omega\in\Omega$. Then we compute, using \ref{covarianceContravarianceComposition},
-\[ \omega_A (f^{-1})^{\alpha(\omega)} = f^{-1} f\omega_A (f^{-1})^{\alpha(\omega)} = f^{-1}\omega_B f^{\alpha(\omega)} (f^{-1})^{\alpha(\omega)} = f^{-1}\omega_B (f f^{-1})^{\alpha(\omega)} = f^{-1}\omega_B. \]
-\end{proof}
 
 \subsubsection{Embeddings}
 \begin{definition}
@@ -1436,12 +1536,29 @@ Similarly a \udef{direct power} of $A$ is a Cartesian power of $A$ with operatio
 
 The direct product of $\{A,B\}$ is simply written $A\times B$.
 
+TODO: make the following the definition of product: $\omega_{A\times B} = (\omega_A|\omega_B)$. With $B^{\alpha(\omega)} = (B|\ldots |B)$!
+
+\begin{lemma}
+Let $f: A\to B$ and $g: C\to D$ be homomorphisms between $\Omega$-algebras. Then $(f|g): A\times C\to B\times D$ is also a homomorphism.
+\end{lemma}
+
 \subsection{Relations as algebras}
 \begin{definition}
-Let $A,B$ be $\Omega$-algebras and $R$ a relation on $(A,B)$ is called \udef{$\Omega$-compatible} (or just \udef{compatible}) if $R$ is a subalgebra of $A\times B$.
+Let $A,B$ be $\Omega$-algebras and $R$ a relation on $(A,B)$. Then $R$ is called \udef{$\Omega$-compatible} (or just \udef{compatible}) if $R$ is a subalgebra of $A\times B$.
 \end{definition}
-The requirement that $R$ be a subalgebra just means it is closed under the operations of $\Omega$. So $R$ is $\Omega$-compatible if
-\[ \forall \omega\in\Omega: \qquad \omega_{A\times B}^\imf(R^{\alpha(\omega)}) \subseteq R. \]
+
+
+\begin{lemma}
+Let $A,B$ be $\Omega$-algebras and $R$ a relation on $(A,B)$. Then following are equivalent:
+\begin{enumerate}
+\item $R$ is $\Omega$-compatible;
+\item $\omega_{A\times B}^\imf(R^{\alpha(\omega)}) \subseteq R$ for all $\omega\in \Omega$;
+\item $\omega_A^\transp;R^{\alpha(\omega)};\omega_B \subseteq R$
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The equivalence of (1) and (2) is immediate by definition. The equivalence of (2) and (3) follows from \ref{parallelFunctionOnRelationGraph}.
+\end{proof}
 
 \begin{lemma}
 Let $A,B,C$ be $\Omega$-algebras and $\Gamma, \Delta$ $\Omega$-compatible relations on $(A, B)$ and $(B, C)$, respectively. Then
@@ -1452,6 +1569,20 @@ Let $A,B,C$ be $\Omega$-algebras and $\Gamma, \Delta$ $\Omega$-compatible relati
 \item for any subalgebra $B'$ of $B$, $\Gamma B' \subset A$ is an $\Omega$-algebra.
 \end{enumerate}
 \end{lemma}
+
+TODO: $(R|S)$ is $\Omega$-compatible.
+\begin{lemma}
+Let $A,B,C,D$ be $\Omega$-algebras, $R$ be an $\Omega$-compatible relation on $(A,B)$ and $R$ an $\Omega$-compatible relation on $(C,D)$. Then $(R|S)$ is an $\Omega$-compatible relation on $\big((A\times C), (B\times D)\big)$.
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+\omega_{A\times C}^\transp;(R|S)^{\alpha(\omega)};\omega_{B\times D} &= \big(\omega_A|\omega_C\big)^\transp;(R|S)^{\alpha(\omega)};\big(\omega_B|\omega_D\big) \\
+&= \big(\omega_A^\transp|\omega_C^\transp\big);(R^{\alpha(\omega)}|S^{\alpha(\omega)});\big(\omega_B|\omega_D\big) \\
+&= \big(\omega_A^\transp;R^{\alpha(\omega)};\omega_B\big)|\big(\omega_C^\transp;S^{\alpha(\omega)};\omega_D\big) \\
+&\subseteq (R|S).
+\end{align*}
+\end{proof}
 
 \subsection{Congruences}
 \begin{definition}
@@ -1483,12 +1614,16 @@ For simplicity we may write $B/\mathfrak{q}$ instead of $B/(\mathfrak{q}|_B^B)$.
 \begin{proposition} \label{kernelCongruence}
 Let $f:A\to B$ be a homomorphism. Then $\ker f$ is a congruence on $A$.
 \end{proposition}
+\begin{proof}
+We have that $\ker f$ is an equivalence relation by \ref{kernelEquivalenceProperties}. We just need to show that it is $\Omega$-compatible. Take arbitrary $\omega\in \Omega$. By \ref{kernelSubrelationLemma}, we have
+\begin{align*}
+(f|f)^\imf\circ \omega_{A\times A}^\imf(\ker(f)^{\alpha(\omega)}) &= \omega_{B\times B}^\imf\circ \big((f|f)^{\alpha(\omega)}\big)^\imf(\ker(f)^{\alpha(\omega)}) \\
+&= \omega_{B\times B}^\imf \big((f|f)^\imf(\ker(f))\big)^{\alpha(\omega)} \\
+&\subseteq \omega_{B\times B}^\imf \big(\id_B^{\alpha(\omega)}\big) \subseteq  \id_B.
+\end{align*}
+We conclude, again by \ref{kernelSubrelationLemma}, that $\omega_{A\times A}^\imf(\ker(f)^{\alpha(\omega)})\subseteq \ker(f)$ and so that $\ker(f)$ is $\Omega$-compatible. 
+\end{proof}
 
-\subsubsection{Lattice of congruences}
-
-Congruences closed under intersection, so complete sublattice.
-
-TODO universal property.
 
 \subsubsection{Quotient algebras}
 TODO: index free notation
@@ -1550,7 +1685,7 @@ Let $f:A\to B$ be a homomorphism of $\Omega$-algebras. Then we have the isomorph
 \[ A/\ker f \cong \im f. \]
 \end{theorem}
 \begin{proof}
-From the factor theorem \ref{factorTheorem} we get an injective homomorphism $f': A/\ker f \to B$ which is made surjective by restricting the codomain to $\im f$. By \ref{bijectiveHomomorphism} this is an isomorphism.
+From the factor theorem \ref{factorTheorem} we get an injective homomorphism $f': A/\ker f \to B$ which is made surjective by restricting the codomain to $\im f$. By \ref{inverseHomomorphism} this is an isomorphism.
 \end{proof}
 
 \begin{theorem}[Second isomorphism theorem]
@@ -1568,6 +1703,7 @@ Let $A$ be an $\Omega$-algebra and $\mathfrak{q},\mathfrak{r}$ congruences on $A
 \end{theorem}
 This is a slight abuse of notation: clearly $\mathfrak{q}$ is a congruence on $A$, but $\mathfrak{r}\subseteq A^2$. What we mean is that we take the quotient ``pointwise'':
 \[ \mathfrak{r}/\mathfrak{q} = \setbuilder{([x]_\mathfrak{q}, [y]_\mathfrak{q})}{(x,y)\in \mathfrak{r}}. \]
+TODO $(\mathfrak{q}|\mathfrak{q})$.
 \begin{proof}
 Applying the factor theorem \ref{factorTheorem} to the homomorphism $A\to A/\mathfrak{r}$ from \ref{quotientAlgebra}. We get a surjective homomorphism
 \[ f: A/\mathfrak{q} \to A/\mathfrak{r}: [a]_\mathfrak{q} \mapsto [a]_{\mathfrak{r}}. \]
@@ -2159,6 +2295,20 @@ The relational structure \udef{dual} to $\sSet{A,R}$ is $\sSet{A, R}^o \defeq \s
 
 
 \section{Functions on relational structures}
+
+\begin{lemma} \label{parallelFunctionOnRelationGraph}
+Let $f: A\to B, g: C\to D$ be functions and $R$ a relation on $(B, C)$. Then $(f|g)^\imf(R) = f^\transp;R;g$.
+\end{lemma}
+\begin{proof}
+We have
+\[ (f|g)^\imf(R) = \setbuilder{\big(f(x),g(y)\big)\in A\times D}{(x,y)\in R}. \]
+Then
+\begin{align*}
+(a,b) \in (f|g)^\imf(R) &\iff \exists (x,y)\in R: \; \big(f(x) = a\big)\land \big(g(y) = b\big) \\
+&\iff \exists (x,y)\in R: \; \big(af^\transp x\big) \land \big(ygb\big) \\
+&\iff (a,b) \in f^\transp;R;g.
+\end{align*}
+\end{proof}
 
 \begin{lemma} \label{functionSubsetRelation}
 Let $f: A\to A$ be a function on a relational structure $\sSet{A,R}$. Then

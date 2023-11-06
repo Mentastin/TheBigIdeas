@@ -343,6 +343,8 @@ Many textbooks state results using dimensions only for the finite-dimensional ca
 
 \begin{note}
 The inverse of this theorem (i.e.\ the infinite-dimensional analogue of proposition \ref{vectorSpaceEquality}) does not hold: infinite-dimensional vector spaces always have proper subspaces with a basis of the same cardinality. This is obvious because dropping one vector in the Hamel basis of an infinite-dimensional vector space will not change the cardinality, but will make it a proper subspace.
+
+What does hold is that any two vector spaces with bases of the same cardinality are isomorphic, see \ref{isomorphicDimension}.
 \end{note}
 
  \begin{corollary}
@@ -507,10 +509,21 @@ Let $L\in \Lin(V,W)$.
 \begin{enumerate}
 \item $L(0) = 0$ and $L(-v) = -L(v)$
 \item $L\left(\sum^n_{i=1}\lambda_i v_i\right) = \sum_{i=1}^n\lambda_i L(v_i)$.
-\item A linear map is completely determined by the images of a basis of $V$.
 \item Let $D$ be a set of vectors. Then $L^\imf[D]$ is linearly independent \textup{if and only if} $D$ is linearly independent.
 \end{enumerate}
 \end{lemma}
+
+\begin{proposition} \label{linearMapsDeterminedByBasis}
+Let $V,W$ be vector spaces and $\beta$ a basis of $V$. Then
+\begin{enumerate}
+\item A linear map $L$ is completely determined by $L^\imf(\beta)$.
+\item Let $\beta$ be a basis of $V$. Any function $f: \beta \to W$ can be extended by linearity to a linear map in $\Lin(V,W)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Let $v\in V$. Then there exists a unique $\{x_0, \ldots, x_{n-1}\}\subseteq \beta$ such that $v = \sum_{i=0}^{n-1} a_ix_i$. Then
+\[ L(v) = L\Big(\sum_{i=0}^{n-1} a_ix_i\Big) = \sum_{i=0}^{n-1}a_i L(x_i). \]
+\end{proof}
 
 \begin{example}
 \begin{enumerate}
@@ -582,7 +595,7 @@ Let
 0 \rar & U \rar{S} & V \rar{T} & W \rar & 0
 \end{tikzcd} \]
 be a short exact sequence of vector spaces.
-By the splitting lemma TODO ref, it is enough to find a left inverse of $S$. Pick a basis $\beta$ of $U$. Because $S$ is injective, $S[\beta]$ is linearly independent and we can extend it to a basis $\beta'$. We can now define the left inverse by specifying how the basis elements are mapped, by \ref{linearMaps}. To wit: $\beta'\setminus S[\beta]$ is mapped to $0$ and each element $S[\beta]$ has exactly one origin be injectivity and it is to this origin that it is now mapped.
+By the splitting lemma TODO ref, it is enough to find a left inverse of $S$. Pick a basis $\beta$ of $U$. Because $S$ is injective, $S[\beta]$ is linearly independent and we can extend it to a basis $\beta'$. We can now define the left inverse by specifying how the basis elements are mapped, by \ref{linearMapsDeterminedByBasis}. To wit: $\beta'\setminus S[\beta]$ is mapped to $0$ and each element $S[\beta]$ has exactly one origin be injectivity and it is to this origin that it is now mapped.
 \end{proof}
 \begin{corollary} \label{directSumKernelImage}
 Let $L \in \Lin(V,W)$. Then
@@ -865,6 +878,63 @@ Let $V$ be a vector space and $T$ an operator on $V$. Then $T$ is called \udef{i
 \end{definition}
 
 \section{Constructions of vector spaces}
+\subsection{Free vector space}
+Given any set, we can construct a vector space by viewing each element in the set as a (linearly) independent (basis) vector. The vector space then consists of formal linear combinations of these vectors.
+
+To be more precise:
+\begin{definition}
+Let $S$ be a set and $K$ a field. Then define
+\[ F_K(S) \defeq \setbuilder{f\in(S\to K)}{f^{\preimf}\big(K\setminus\{0\}\big)\;\text{is finite}}, \]
+as a subspace of $(S\to K)$ with pointwise operations.
+
+Then $F_K(S)$ is called the \udef{free vector space} over $S$.
+\end{definition}
+
+\begin{proposition} \label{basisFreeVectorSpace}
+Let $S$ be a set and $K$ a field. Then we can identify $S$ with a subset of $F_K(S)$ by
+\[ S\hookrightarrow F(S): x\mapsto \charFunc{\{x\}}. \]
+With this identification $S$ forms a basis for $F_K(S)$.
+\end{proposition}
+\begin{proof}
+For all $f\in F_K(S)$, we can write
+\[ f = \sum_{s\in f^{\preimf}\big(K\setminus\{0\}\big)}f(s)\charFunc{\{s\}}, \]
+so $S$, under this identification, spans $F_K(S)$.
+
+In order to show linear independence, take some linear combination
+\[ f = \sum_{i=0}^n a_i \charFunc{\{s_i\}}, \]
+where all $s_i$ are distinct.
+Now, if $f = 0$, then $f(s_i) = 0$ for all $s_i$ and $f(s_i) = a_i$, so all $a_i$ are zero.
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a vector space over $K$ and $\beta$ a basis for $V$. Then $V\cong  F_K(\beta)$.
+\end{lemma}
+\begin{proof}
+We have that $\beta$ is a basis of $V$. By \ref{basisFreeVectorSpace}, there is also a bijection between $\beta$ and a basis of $F_K(\beta)$. Thus the isomorphism follows from \ref{isomorphicDimension}.
+\end{proof}
+
+\subsubsection{The free functor}
+\begin{proposition}
+The operation $F$ of finding the free vector space over a set can be extended to an contravariant functor
+\[ F: \cat{Set} \to \cat{Vect}. \]
+\end{proposition}
+\begin{proof}
+Let $f:X\to Y$ be a function between sets.
+\end{proof}
+TODO: just specific instance up to isomorphism?? covariant?? isomorphism class of all vector spaces with basis $S$?? Is this why tensor product only up to isomorphism??
+
+\subsubsection{Universal property}
+\begin{proposition} \label{universalPropertyFreeVectorSpace}
+Let $\phi$ be an arbitrary function from $S$ to a vector space $W$ over a field $K$, then there exists a unique linear map $\overline{\phi}: F(S)\to W$ such that the diagram
+\[ \begin{tikzcd}
+S \ar[r,"\charFunc{\{-\}}"] \ar[dr,"\phi"] & F(S) \ar[d,dashed,"\overline{\phi}"] \\
+& W
+\end{tikzcd} \qquad \text{commutes.} \]
+Furthermore, $F(S)$ is the unique $K$-vector space with this property.
+\end{proposition}
+\begin{proof}
+Immediate from \ref{linearMapsDeterminedByBasis}.
+\end{proof}
 
 \subsection{External direct sum}
 \begin{definition}
