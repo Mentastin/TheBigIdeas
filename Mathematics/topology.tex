@@ -2459,14 +2459,24 @@ Let $\sSet{X,\leq}$ be a poset. A convergence $\xi$ in $X$ is called
 \end{itemize}
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{compatibleWeakOrderHausdorff}
 Let $\sSet{X,\leq}$ be a poset and $\xi$ a convergence compatible with the weak order. Then $\xi$ is Hausdorff.
 \end{lemma}
 \begin{proof}
 Take $F\in\powerfilters(X)$ and $x,y\in \lim_\xi F$. Since $\leq_w$ is reflexive by \ref{reflexivityFilterRelations}, we have $F\leq_w F$, which implies $x\leq y$ and $y\leq x$ by compatibility with the weak order. Thus $x=y$ by antisymmetry.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} \label{limsupLiminfInequality}
+Let $\sSet{X,\leq}$ be a complete lattice and $F\in \powerfilters(X)$ a proper filter. Then
+\[ \liminf F = \bigvee_{A\in F}\bigwedge A \leq \bigwedge_{A\in F}\bigvee A = \limsup F. \]
+\end{lemma}
+\begin{proof}
+For all $A,B\in F$, we have $A\cap B\neq \emptyset$, so
+\[ \bigwedge A \leq \bigwedge A\cap B \leq \bigvee A\cap B \leq \bigvee B. \]
+This implies $\bigvee_{A\in F}\bigwedge A \leq \bigwedge_{A\in F}\bigvee A$.
+\end{proof}
+
+\begin{lemma} \label{completePosetConvergenceCompatibleWithWeakOrder}
 Let $\sSet{X,\leq}$ be a complete lattice and $\xi$ a convergence on $X$. Then
 \begin{enumerate}
 \item if $\lim_\xi F\subseteq \{\liminf F\}\cap\{\limsup F\}$ for all $F\in\powerfilters(X)$, then $\xi$ is compatible with the weak order;
@@ -2479,6 +2489,7 @@ Let $\sSet{X,\leq}$ be a complete lattice and $\xi$ a convergence on $X$. Then
 (2) Take $F,G\in \powerfilters(X)$ such that $F\leq_s G$. Take $x\in \lim F$ and $y\in \lim G$. By assumption, $x \leq \limsup F$ and $y \geq \liminf G$. By \ref{filterInequalityCriterion} we have $\limsup F\leq \liminf G$, so $x\leq \limsup F\leq \liminf G \leq y$.
 \end{proof}
 
+
 \subsubsection{Convergence potentially compatible with weak order}
 \begin{definition}
 Let $\sSet{X,\leq}$ be a poset. Consider
@@ -2488,28 +2499,83 @@ Let $\sSet{X,\leq}$ be a poset. Consider
 \end{cases} \]
 for all filters $F\in \powerfilters(X)$.
 \end{definition}
-\begin{lemma}
-Let $\sSet{X,\leq}$ be a poset. The convergence defined above on $X$ is a convergence.
+
+\begin{proposition} \label{necessityWeakOrderConvergence}
+Let $\sSet{X,\leq}$ be a poset, $\xi$ a convergence on $X$ that is compatible with the weak order and $F\in \powerfilters(X)$. Then
+\[ \lim_\xi F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^\geq \cap \Big(\bigcap_{A\in F}\downset A\Big)^\leq. \]
+\end{proposition}
+\begin{proof}
+Let $\xi$ be an arbitrary convergence that is compatible with the weak order.
+
+Take $y\in \lim_\xi(F)$. Take arbitrary $x\in \bigcap_{A\in F}\upset A$. Then $F \leq_w \pfilter{x}$ by \ref{weakRelationPrincipalFilter}, so $y\leq x$ by compatibility with the weak order. Since this holds for all such $x$, we have $y\in \Big(\bigcap_{A\in F}\upset A\Big)^l$. Similarly $y\in \Big(\bigcap_{A\in F}\downset A\Big)^u$.
+\end{proof}
+
+
+\begin{lemma} \label{potentialWeakOrderConvergence}
+Let $\sSet{X,\leq}$ be a poset and $F\in \powerfilters(X)$. Then
+\[ \lim(F) \defeq \Big(\bigcap_{A\in F}\upset A\Big)^\geq \cap \Big(\bigcap_{A\in F}\downset A\Big)^\leq \]
+defines a convergence.
 \end{lemma}
 \begin{proof}
-It is monotone by construction: if $F\subseteq F'$, then $\bigcap_{A\in F}\upset A \supseteq \bigcap_{A\in F'}\upset A$ and thus $\Big(\bigcap_{A\in F}\upset A\Big)^l \subseteq \Big(\bigcap_{A\in F'}\upset A\Big)^l$. A similar inclusion holds for $\Big(\bigcap_{A\in F}\downset A\Big)^u$.
+It is monotone by construction: if $F\subseteq F'$, then $\bigcap_{A\in F}\upset A \supseteq \bigcap_{A\in F'}\upset A$ and thus $\Big(\bigcap_{A\in F}\upset A\Big)^\geq \subseteq \Big(\bigcap_{A\in F'}\upset A\Big)^\geq$. A similar inclusion holds for $\Big(\bigcap_{A\in F}\downset A\Big)^\leq$.
 
 To show that it is centered, take $x\in X$. Then
 \begin{align*}
-\lim_\mathfrak{o}\pfilter{x} &= \Big(\bigcap_{A\in \pfilter{x}}\upset A\Big)^l \cap \Big(\bigcap_{A\in \pfilter{x}}\downset A\Big)^u \\
-&= \Big(\upset \{x\}\Big)^l \cap \Big(\downset \{x\}\Big)^u \\
+\lim_\mathfrak{o}\pfilter{x} &= \Big(\bigcap_{A\in \pfilter{x}}\upset A\Big)^\geq \cap \Big(\bigcap_{A\in \pfilter{x}}\downset A\Big)^\leq \\
+&= \Big(\upset \{x\}\Big)^\geq \cap \Big(\downset \{x\}\Big)^\leq \\
 &= \downset \{x\} \cap \upset \{x\} \\
 &= \{x\}.
 \end{align*}
 \end{proof}
 
-\begin{lemma}
-Let $X$ be a set and $A,B\subseteq X$ such that $A\mesh B$. Then
+\begin{proposition}
+Let $\sSet{X,\leq}$ be a poset and let $\xi$ be the convergence defined in \ref{potentialWeakOrderConvergence}. Then the following are equivalent:
 \begin{enumerate}
-\item $A^u \subseteq \upset B$;
-\item $A^l \subseteq \downset B$.
+\item $X$ has a weakest convergence compatible with weak order;
+\item $\xi$ is Hausdorff;
+\item $\xi$ is compatible with the weak order.
 \end{enumerate}
-\end{lemma}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ We prove this by contraposition. Assume the convergence in \ref{potentialWeakOrderConvergence} is not Hausdorff. Then there exists $F\in \powerfilters(X)$ and $x\neq y \in X$ such that $\{x,y\}\subseteq \lim_\xi(F)$. Consider the convergence $\zeta_x$ and $\zeta_y$ on $X$ defined by
+\begin{align*}
+G\overset{\zeta_x}{\longrightarrow} a \quad&\defequiv\quad \big(G = \pfilter{a}\big) \lor \Big( (F\subseteq G)\land (a = x) \Big) \\
+G\overset{\zeta_y}{\longrightarrow} a \quad&\defequiv\quad \big(G = \pfilter{a}\big) \lor \Big( (F\subseteq G)\land (a = y) \Big).
+\end{align*}
+It is enough to show that both $\zeta_x$ and $\zeta_y$ are compatible with the weak order, since in this case $\zeta_x \vee \zeta_y$ is not Hausdorff and thus not compatible with the weak order by \ref{compatibleWeakOrderHausdorff}.
+
+For $\zeta_x$, take $G, H\in \powerfilters(X)$ such that $G,H$ are convergent and $G\leq_w H$. If $G,H$ are both principal ultrafilters, then weak compatibility follows from \ref{weakRelationPrincipalFilter}. If neither is a principal ultrafilter, then both converge to $x$ and we weak compatibility.
+If $H = \pfilter{a}$ and $G\supseteq F$. Then $F\leq_w \pfilter{a}$ by \ref{upDownClosureWeakStrongRelation}, so $a \in \bigcap_{A\in F}\upset A$ by \ref{weakRelationPrincipalFilter} and $x\leq a$ by assumption. The case $G = \pfilter{a}$ is similar.
+
+The convergence $\zeta_y$ is compatible with weak order by a similar argument.
+
+$(2) \Rightarrow (3)$ TODO!
+
+$(3) \Rightarrow (1)$ Immediate by \ref{necessityWeakOrderConvergence}.
+\end{proof}
+
+
+\begin{example}
+Consider $P \defeq \setbuilder{(a,b)\in \R^2}{(a=0)\lor (b=0)}$ with ordering
+\[ (a,b) \leq (c,d) \;\defequiv\; (b<d) \lor \big((a,b) = (c,d)\big). \]
+Now set $A_\epsilon = \setbuilder{(x, 0)}{-\epsilon \leq x\leq \epsilon} \setminus\{(0,0)\}$. Then
+\begin{itemize}
+\item $F \defeq \upset \{A_\epsilon\}_{\epsilon > 0}$ is a filter;
+\item $\bigcap_{\epsilon > 0}\upset A_\epsilon = \setbuilder{(0,y)}{y > 0}$ and $\bigcap_{\epsilon > 0}\downset A_\epsilon = \setbuilder{(0,y)}{y < 0}$;
+\item $\Big(\bigcap_{\epsilon > 0}\upset A_\epsilon\Big)^\geq = \setbuilder{(0,y)}{y < 0}\cup \R\times\{0\}$ and $\Big(\bigcap_{\epsilon > 0}\downset A_\epsilon\Big)^\leq = \setbuilder{(0,y)}{y > 0}\cup \R\times\{0\}$;
+\item $\Big(\bigcap_{\epsilon > 0}\upset A_\epsilon\Big)^\geq \cap\Big(\bigcap_{\epsilon > 0}\downset A_\epsilon\Big)^\leq = \R\times\{0\}$.
+\end{itemize}
+Thus $P$ has no weakest convergence compatible with weak ordering.
+\end{example}
+
+ 
+
+\begin{example}
+Let $X$ be an infinite set. Consider $P = \{\top, \bot\}\uplus X$ with the following order: $x\leq y$ if and only if either $x = \bot$, $y = \top$ or $x = y$.
+
+Consider any free filter $F$ on $X$. Then
+\[ \Big(\bigcap_{A\in F}\upset A\Big)^\geq \cap \Big(\bigcap_{A\in F}\downset A\Big)^\leq = X. \]
+\end{example}
 
 \begin{lemma}
 Let $\sSet{X,\leq}$ be a poset and $F\in \powerfilters(X)$ a filter. Then
@@ -2532,106 +2598,119 @@ We can calculate
 &= \bigcap_{A\in F}A^{ul} = \bigcap_{A\in F}\big(\downset A\big)^{ul} \overset{!}{\supseteq} \Big(\bigcap_{A\in F}\downset A\Big)^{ul}.
 \end{align*}
 
-\begin{proposition}
-Let $\sSet{X,\leq}$ be a poset. Then any convergence that is compatible with the weak order is stronger than this convergence.
+\subsection{Order convergence}
+\begin{definition}
+Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is the initial convergence w.r.t. $m: X \to \DM(X)$, the embedding of $X$ into the Dedekind-MacNeille completion.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\leq}$ be a poset. The order convergence on $X$ is compatible with the weak order.
+\end{lemma}
+\begin{proof}
+Suppose $F\overset{\mathfrak{o}}{\longrightarrow} x$, $G\overset{\mathfrak{o}}{\longrightarrow} y$ and $F\leq_w G$. Then $\upset m^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} m(x)$ and $\upset m^{\imf\imf}(G) \overset{\mathfrak{o}}{\longrightarrow} m(y)$ by definition and $\upset m^{\imf\imf}(F) \leq_w \upset m^{\imf\imf}(G)$ by \ref{relationPreservingfunctionToFilterInequality}. So $m(x)\leq m(y)$ by \ref{completePosetConvergenceCompatibleWithWeakOrder} and thus $x\leq y$. 
+\end{proof}
+
+\begin{proposition} \label{orderConvergenceEquivalents}
+Let $\sSet{X,\leq}$ be a poset and $F\in\powerfilters(X)$. Then
+the following are equivalent:
+\begin{enumerate}
+\item $F\overset{\mathfrak{o}}{\longrightarrow} x$;
+\item $\bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A) = \downset\{x\} = \bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf(A)$;
+\item $\bigcap_{A\in F}A^{\leq \geq} = \downset \{x\}$ and $\bigcap_{A\in F}A^{\geq\leq} = \upset\{x\}$;
+\item $\bigcap_{A\in F}A^{\leq \geq} \cap \bigcap_{A\in F}A^{\geq\leq} = \{x\}$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-Let $\xi$ be an arbitrary convergence that is compatible with the weak order.
+The equivalence $(1) \Leftrightarrow (2)$ is a restatement of the definition.
 
-Take arbitrary $y\in \lim_\xi(F)$. Take arbitrary $x\in \bigcap_{A\in F}\upset A$. Then $F \leq_w \pfilter{x}$ by \ref{weakRelationPrincipalFilter}, so $y\leq x$ by compatibility with the weak order. Since this holds for all such $x$, we have $y\in \Big(\bigcap_{A\in F}\upset A\Big)^l$. Similarly $y\in \Big(\bigcap_{A\in F}\downset A\Big)^u$.
+$(2) \Leftrightarrow (3)$ First note that
+\[ \bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A) = \bigwedge_{A\in F}A^{\leq\geq} = \bigcap_{A\in F}A^{\leq\geq}, \]
+by \ref{joinMeetDMImage}. Also
+\[ \bigcap_{A\in F}A^{\geq\leq} = \Big(\bigcup_{A\in F}A^\geq\Big)^\leq. \]
+Then, because the polars form a Galois connection and thus are generalised inverses, as well as by \ref{polarOfUnion}, \ref{joinMeetDMImage} and \ref{DedekindMacNeilleCompletionComplete}, we have
+\begin{align*}
+\upset\{x\} = \Big(\bigcup_{A\in F}A^\geq\Big)^\leq \iff \downset\{x\} &= \Big(\bigcup_{A\in F}A^\geq\Big)^{\leq\geq} \\
+&= \Big(\bigcup_{A\in F}\bigwedge_{\DM(P)}m^\imf(A)\Big)^{\leq\geq} \\
+&= \bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf(A).
+\end{align*}
+\end{proof}
 
-Thus $\lim_\xi F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u$, so any convergence compatible with the weak order is stronger than this convergence.
+\begin{proposition} \label{orderConvergenceIntervalBase}
+Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if}
+\begin{itemize}
+\item there exist sets $M,N\subseteq X$ such that $\bigvee M = x = \bigwedge N$ (and these extrema exist); and
+\item $\interval{a,b}\in F$ for all $a\in M$ and $b\in N$.
+\end{itemize}
+If $X$ is a lattice, then $M$ may be taken to be upwards directed and $N$ may be taken to be downwards directed.
+\end{proposition}
+\begin{proof}
+First assume $F\overset{\mathfrak{o}}{\longrightarrow} x$. Then set $M \defeq \bigcup_{A\in F}A^\geq$ and $N \defeq \bigcup_{A\in F}A^\leq$. Then, by \ref{orderConvergenceEquivalents} and \ref{polarOfUnion},
+\[ M^\leq = \bigcap_{A\in F}A^{\geq\leq} = \upset\{x\}, \]
+so $\bigvee M = x$ and
+\[ N^\geq = \bigcap_{A\in F}A^{\leq\geq} = \downset\{x\}, \]
+so $\bigwedge N = x$. Now take $a\in M$ and $b\in N$. Then there exists $A,B\in F$ such that $a\in A^\geq$ and $b\in B^\leq$. This implies $A\cap B \subseteq \interval{a,b}$. Since $A\cap B\in F$, we have $\interval{a,b}\in F$.
+
+Now assume the second part. Then we have
+\begin{align*}
+\bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A) &\subseteq \bigwedge_{a\in M, b\in N}\bigvee_{\DM(P)} m^\imf\big(\interval{a,b}\big) \\
+&= \bigwedge_{a\in M, b\in N} m\Big(\bigvee_{P}\interval{a,b}\Big) \\
+&= \bigwedge_{a\in M, b\in N} m(b) = \bigwedge_{\DM(P)} m^\imf(N) = m\Big(\bigwedge_P N\Big) \\
+&= m(x) \\
+&= m\Big(\bigvee_P M\Big) = \bigvee_{\DM(P)} m^\imf(M) = \bigvee_{a\in M, b\in N} m(a) \\
+&= \bigvee_{a\in M, b\in N} m\Big(\bigwedge_{P}\interval{a,b}\Big) \\
+&= \bigvee_{a\in M, b\in N}\bigwedge_{\DM(P)} m^\imf\big(\interval{a,b}\big) \\
+&\subseteq \bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf\big(A\big).
+\end{align*}
+By \ref{limsupLiminfInequality}, we also have $\bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf\big(A\big) \subseteq \bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A)$, so the inclusions are in fact equalities. We have $F\overset{\mathfrak{o}}{\longrightarrow} x$ by \ref{orderConvergenceEquivalents}.
+
+Finally the claim about the directedness of $M$ and $N$ follows from \ref{latticeIntervalIntersection}.
+\end{proof}
+
+\begin{proposition}[Squeeze theorem] \label{squeezeTheorem}
+Let $\sSet{X,\leq}$ be a poset. Let $\seq{x_i}_{i\in I}, \seq{y_i}_{i\in I},\seq{z_i}_{i\in I}$ be nets in $X$ and $y\in X$.
+Suppose
+\begin{itemize}
+\item $\seq{x_i}_{i\in I}$ is monotonically increasing and $\bigvee_{i\in I}x_i = y$;
+\item $\seq{z_i}_{i\in I}$ is monotonically decreasing and $\bigwedge_{i\in I}z_i = y$;
+\item there exists $i_0\in I$ such that $x_i \leq y_i \leq z_i$ for all $i\geq i_0$.
+\end{itemize}
+Then $y_i \overset{\mathfrak{o}}{\longrightarrow} y$.
+\end{proposition}
+\begin{proof}
+We use \ref{orderConvergenceIntervalBase}. Set $M = \setbuilder{x_i}{i\in I}$ and $N = \setbuilder{z_i}{i\in I}$. Now take $x_i\in M$ and $z_j\in N$. Then, since $I$ is directed, there exists $k\in I$ such that $i,j\leq k$. Now for all $k'\geq k$, we have
+\[ x_i \;\leq\; x_k \;\leq\; x_{k'} \;\leq\; y_{k'} \;\leq\; z_{k'} \;\leq\; z_k \;\leq\; z_j, \]
+so $\setbuilder{y_{k'}}{k'\geq k} \subseteq \interval{x_i, z_j}$ and thus $\interval{x_i, z_j}\in\TailsFilter\seq{y_i}_{i\in I}$.
 \end{proof}
 
 \begin{example}
-Consider $P \defeq \setbuilder{(a,b)\in \R^2}{(a=0)\lor (b=0)}$ with ordering
-\[ (a,b) \leq (c,d) \;\defequiv\; \begin{cases}
-b \leq c & (a = 0 = c) \\
-b < c & \big((a\neq 0)\lor (c \neq 0)\big).
-\end{cases} \]
-Now set $A_\epsilon = \setbuilder{(x, 0)}{-\epsilon \leq x\leq \epsilon} \setminus\{(0,0)\}$. Then
-\begin{itemize}
-\item $F \defeq \upset \{A_\epsilon\}_{\epsilon > 0}$ is a filter;
-\item $\bigcap_{\epsilon > 0}\upset A_\epsilon = \setbuilder{(0,y)}{y > 0}$ and $\bigcap_{\epsilon > 0}\downset A_\epsilon = \setbuilder{(0,y)}{y < 0}$;
-\item $\Big(\bigcap_{\epsilon > 0}\upset A_\epsilon\Big)^l = \setbuilder{(0,y)}{y > 0}\cup \R\times\{0\}$ and $\Big(\bigcap_{\epsilon > 0}\downset A_\epsilon\Big)^u = \setbuilder{(0,y)}{y < 0}\cup \R\times\{0\}$;
-\item $\Big(\bigcap_{\epsilon > 0}\upset A_\epsilon\Big)^l \cap\Big(\bigcap_{\epsilon > 0}\downset A_\epsilon\Big)^u = \R\times\{0\}$.
-\end{itemize}
-Thus $P$ has no weakest convergence compatible with weak ordering.
+The converse of \ref{squeezeTheorem} does not always hold.
+
+Let $X$ be an uncountable set and let $Y = \setbuilder{A\subseteq X}{\text{$A$ is finite of $X\setminus A$ is finite}}$ be ordered by inclusion. Let $\seq{y_n}_{n\in\N}$ be a sequence of distinct singletons.
+
+Then $y_n \overset{\mathfrak{o}}{\longrightarrow} \emptyset$ by \ref{orderConvergenceIntervalBase}, since the meet of the cofinite sets is the empty set and every cofinite set contains a tail of $\seq{y_n}$.
+
+There is, however, no monotonically decreasing sequence $\seq{x_n}$ such that $\bigwedge_{n\in\N}x_n = \emptyset$. Suppose, towards a contradiction, that there were such a sequence. Then $X\setminus \Big(\bigcap_{n\in \N}x_n\Big) = \bigcup_{n\in \N}X\setminus x_n$ is countable. Since $X$ is uncountable, we can take $x\in \bigcap_{n\in \N}x_n$. Thus $\{x\}\subseteq x_n$ for all $n\in \N$. Now suppose $\bigwedge_{n\in \N}x_n$ exists. Then $\{x\}\subseteq \bigwedge_{n\in \N}x_n \neq \emptyset$.
 \end{example}
 
 \begin{example}
-Let $X$ be an infinite set. Consider $P = \{\top, \bot\}\uplus X$ with the following order: $x\leq y$ if and only if either $x = \bot$ or $y = \top$.
+If we modify the third point of \ref{squeezeTheorem} to read ``$x_i \leq y_i \leq z_i$ for all $i\in I$'', then it catches even fewer convergent nets.
 
-Consider any free filter $F$ on $X$. Then
-\[ \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u = X. \]
+Consider $I = \{0,1\}\times\N$ with lexicographical ordering. Consider the net $\seq{y_i}_{i\in I}$ determined by
+\[ y_{(i,k)} = \begin{cases}
+-k & (i=0) \\
+0 & (i=1)
+\end{cases} \]
+Clearly $y_i \to 0$, but there exists no monotonically increasing net less than $y_i$ for all $i\in I$.
 \end{example}
 
-\subsection{Order convergence}
+
+
 \begin{definition}
 Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is defined by
 \[ x\in \lim_\mathfrak{o}F \;\defequiv\;  \bigcap_{A\in F} A^{ul} \cap A^{lu}.
 \]
 for all filters $F\in \powerfilters(X)$.
 \end{definition}
-
-\begin{lemma}
-Let $\sSet{X,\leq}$ be a poset. The order convergence is a convergence that is compatible with the weak order.
-\end{lemma}
-\begin{proof}
-Suppose $F, G\in \powerfilters(X)$ and $x\in \lim_\mathfrak{o} F$. 
-\end{proof}
-
-\begin{proposition}
-Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if} there exist $M,N\subseteq X$ such that
-\begin{itemize}
-\item $\bigvee M = x = \bigwedge N$;
-\item $\upset \setbuilder{\interval[c]{m,n}}{m\in M, n\in N} \subseteq F$
-\end{itemize} 
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-
-\begin{proposition}
-Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if}
-\begin{itemize}
-\item there exist sets $A,B\subseteq X$ such that $\bigvee A = x = \bigwedge B$ (and these extrema exist); and
-\item $\interval{a,b}\in F$ for all $a\in A$ and $b\in B$.
-\end{itemize}
-If this holds, then $A$ may be chosen to be upwards directed and $B$ downwards directed.
-\end{proposition}
-\begin{proof}
-\ref{weakRelationPrincipalFilter}
-\[ \lim F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^l \cap \Big(\bigcap_{A\in F}\downset A\Big)^u \subseteq \Big(\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A\Big)^l \cap \Big(\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A\Big)^u \]
-if $\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A \neq \emptyset$, then $\lim F$ is at most a singleton.
-
-Suppose $\bigcap_{A\in F}\upset A \cap \bigcap_{A\in F}\downset A = \emptyset$, then $\bigcap \upset A \subseteq \bigcup (\downset A)^c$.
-\end{proof}
-
-\begin{proposition}
-Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if} $F$ is the tails filter of some net $\seq{x_i}_{i\in I}$ and there exist monotone nets $\seq{a_i}_{i\in I}$ and $\seq{b_i}_{i\in I}$ such that
-\begin{itemize}
-\item $a_i \leq x_i \leq b_i$;
-\item $\sup_{i\in I}a_i = x$;
-\item $\inf_{i\in I}b_i = x$.
-\end{itemize}
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{proposition}
-In a lattice, $\vee, \wedge$ are continuous (?)
-\end{proposition}
-
-\begin{proposition}[Squeeze theorem] \label{squeezeTheorem}
-Let $X$ be a set, $\sSet{Y,\leq}$ a complete lattice, $F\in \powerfilters(X)$ and $f,g,h: X\to Y$ such that $f\leq g\leq h$ pointwise. If $\upset f^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$ and $\upset h^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$, then $\upset g^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$.
-\end{proposition}
-\begin{proof}
-By TODO ref (!), we have
-\[ y = \liminf \upset f^{\imf\imf}(F) \leq \liminf \upset g^{\imf\imf}(F) \quad\text{and}\quad \limsup \upset g^{\imf\imf}(F) \leq \limsup \upset h^{\imf\imf}(F) = y, \]
-so $y\leq \liminf \upset g^{\imf\imf}(F) \leq \limsup \upset g^{\imf\imf}(F) \leq y$ and so $\upset g^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} y$.
-\end{proof}
 
 \subsubsection{Topologicity of order convergence}
 See ``Birkhoff's order-convergence in partially ordered sets'' and ``On Order-Convergence'' by Wolk.

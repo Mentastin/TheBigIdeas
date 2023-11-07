@@ -2138,22 +2138,34 @@ From \ref{polarsGaloisConnection} and \ref{preorderGaloisCondition}, we get that
 We can also prove that $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$ is adjoint to the inclusion by noting that every set in $\DM(P)$ is of the form $B^\geq$ and $\incl_{\DM(P)}(B^\geq) = B^\geq$, so
 \[ A\subseteq \incl_{\DM(P)}(B^\geq) \iff A\subseteq B^\geq \iff B\subseteq A^\leq \iff B \subseteq A^{\leq\geq\leq} \iff A^{\leq\geq} \subseteq B^\geq \iff A^{\leq\geq} \subseteq \incl_{\DM(P)}(B^\geq). \]
 
+\begin{lemma} \label{joinMeetDMImage}
+Let $\sSet{P, \leq}$ be a poset and $A\subseteq P$ a subset. Then
+\begin{enumerate}
+\item $\bigwedge_{\DM(P)} m^\imf(A) = A^\geq$;
+\item $\bigvee_{\DM(P)} m^\imf(A) = A^{\leq\geq}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have, by \ref{boundsFromPrincipalImages},
+\[ \bigwedge_{\DM(P)}m^\imf(A) = \bigcap m^\imf(A) = \bigcap_{a\in A}m(a) = \bigcap_{a\in A}\downset\{a\} = A^\geq. \]
+
+(2) We have, by \ref{imagesFromPrincipalImages}, \ref{meetJoinImageMooreClosure} and \ref{DedekindMacNeilleCompletionComplete},
+\[ \bigvee_{\DM(P)} m^{\imf}(A) = \Big(\bigcup m^\imf(A)\Big)^{\leq\geq} = \Big(\bigcup_{x\in A} \downset\{x\}\Big)^{\leq\geq} = (\downset A)^{\leq\geq} = A^{\leq\geq}. \]
+\end{proof}
+
 \begin{proposition}
 Let $\sSet{P, \leq}$ be a poset. Then $m: P \to \DM(P)$ preserves arbitrary meets and joins.
 \end{proposition}
 \begin{proof}
-Let $A\subseteq P$ be a subset such that the meet $\bigwedge A$ exists. Then, by \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{boundsFromPrincipalImages} and \ref{DedekindMacNeilleCompletionComplete},
-\[ m\Big(\bigwedge A\Big) = \downset\Big\{\bigwedge A\Big\} = A^\geq = \bigcap_{a\in A}\downset\{a\} = \bigcap_{a\in A}m(a) = \bigcap m^\imf(A) = \bigwedge_{\DM(P)}m^\imf(A). \]
+Let $A\subseteq P$ be a subset such that the meet $\bigwedge A$ exists. Then, by \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{joinMeetDMImage} and \ref{DedekindMacNeilleCompletionComplete},
+\[ m\Big(\bigwedge A\Big) = \downset\Big\{\bigwedge A\Big\} = A^\geq = \bigwedge_{\DM(P)}m^\imf(A). \]
 
-Now let $B\subseteq P$ be a subset such that the meet $\bigvee B$ exists. Then we calculate, using \ref{supInfConnection}, \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal}, \ref{imagesFromPrincipalImages}, \ref{meetJoinImageMooreClosure} and \ref{DedekindMacNeilleCompletionComplete},
+Now let $B\subseteq P$ be a subset such that the meet $\bigvee B$ exists. Then we calculate, using \ref{supInfConnection}, \ref{boundsOnSetWithLeastBoundIsPrincipalIdeal} and \ref{joinMeetDMImage},
 \begin{align*}
 m\Big(\bigvee A\Big) &= \downset\Big\{\bigvee A\Big\} \\
 &= \downset \sup(A) \\
 &= \downset \inf(A^\leq) \\
 &= A^{\leq\geq} \\
-&= (\downset A)^{\leq\geq} \\
-&= \Big(\bigcup_{x\in A} \downset\{x\}\Big)^{\leq\geq} \\
-&= \Big(\bigcup m^\imf(A)\Big)^{\leq\geq} \\
 &= \bigvee_{\DM(P)} m^{\imf}(A).
 \end{align*}
 \end{proof}
@@ -4877,6 +4889,7 @@ Let $\sSet{X,\leq}$ be a poset, $x\in X$ and $F\in\powerfilters(X)$. Then
 \item $F\leq_w \pfilter{x}$ \textup{if and only if} $x\in \bigcap_{A\in F}\upset A$;
 \item $\pfilter{x} \leq_w F$ \textup{if and only if} $x\in \bigcap_{A\in F}\downset A$.
 \end{enumerate}
+In particular $\pfilter{x}\leq_w \pfilter{y}$ \textup{if and only if} $x\leq y$.
 \end{lemma}
 \begin{proof}
 (1) We have
@@ -4892,8 +4905,8 @@ F\leq_w \pfilter{x} &\iff \forall A\in F: \exists y\in A: \; y\leq x \\
 \begin{lemma}
 Let $\sSet{X,\leq}$ be a poset and $F,G\in\powerfilters(X)$. Then
 \begin{align*}
-F \leq_w G \qquad &\iff\qquad \forall C\in F\otimes G: \exists (x,y) \in A: \; x \leq y; \\
-F \leq_s G \qquad &\iff\qquad \exists C\in F\otimes G: \forall (x,y) \in A: \; x \leq y.
+F \leq_w G \qquad &\iff\qquad \forall C\in F\otimes G: \exists (x,y) \in C: \; x \leq y; \\
+F \leq_s G \qquad &\iff\qquad \exists C\in F\otimes G: \forall (x,y) \in C: \; x \leq y.
 \end{align*}
 \end{lemma}
 \begin{proof}
@@ -4914,7 +4927,17 @@ First suppose $f\mathrel{R} g$ pointwise and pick a proper filter $F\in \powerfi
 For the converse, it is enough to note that $\upset f^{\imf\imf}(\pfilter{x}) \mathrel{R_w} \upset g^{\imf\imf}(\pfilter{x})$ implies $f(x)\mathrel{R} g(x)$.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{relationPreservingfunctionToFilterInequality}
+Let $\sSet{X, R},\sSet{Y, S}$ be relational structures and $f: X\to Y$ a function. Then $f$ is relation preserving \textup{if and only if} $F\mathrel{R_w}G$ implies $\upset f^{\imf\imf}(F) \mathrel{R_w} \upset f^{\imf\imf}(G)$ for all proper filters $F, G\in \powerfilters(X)$.
+\end{proposition}
+\begin{proof}
+First suppose $f$ is relation preserving and pick proper filters $F,G\in \powerfilters(X)$ such that $F\mathrel{R_w}G$. Take arbitrary $A\in \upset f^{\imf\imf}(F)$ and $B\in \upset f^{\imf\imf}(G)$. Thus there exist $A'\in F$ and $B'\in G$ such that $f^{\imf}(A')\subseteq A$ and $f^{\imf}(B')\subseteq B$. 
+By assumption there exist $x\in A', y\in B'$ such that $xRy$. Since $f$ is relation-preserving, we have $f(x)Rf(y)$. Also $f(x)\in A$ and $f(y)\in B$. Thus $\upset f^{\imf\imf}(F) \mathrel{R_w} \upset f^{\imf\imf}(G)$.
+
+For the converse, it is enough to note that $\upset f^{\imf\imf}(\pfilter{x}) \mathrel{R_w} \upset f^{\imf\imf}(\pfilter{y})$ implies $f(x)Rf(y)$.
+\end{proof}
+
+\begin{proposition} \label{upDownClosureWeakStrongRelation}
 Let $X,Y$ be sets and $R$ a relation on $(X,Y)$. Then
 \begin{enumerate}
 \item $F\mathrel{R_w} \subseteq \powerfilters(Y)$ is downwards closed for all $F\in\powerfilters(X)$;
