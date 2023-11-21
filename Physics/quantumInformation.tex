@@ -131,16 +131,34 @@ Each of the Pauli matrices determines an operation on $\C^2$. In this context we
 The Pauli gates are their own inverses: $X^2 = Y^2 = Z^2 = \mathbb{1}$.
 \end{lemma}
 
-
-
 \subsection{Controlled gates}
 \begin{definition}
 Let $H_1, H_2$ be two Hilbert spaces. Let $P$ be a projector on $H_1$ and $L$ an operator on $H_2$. The operation of $L$ \udef{controlled by} $P$ is the operation $P\otimes L + (\id_{H_1} - P)\otimes \id_{H_2}$ in $H_1\otimes H_2 \to H_1\otimes H_2$. 
 \end{definition}
 
-\section{Algorithms}
-\subsection{Quantum phase estimation}
-Needs large number of ancillas.
+\subsection{Two-qubit gates}
+\subsubsection{Swap}
+
+\begin{definition}
+\[ \begin{quantikz}
+&\swap{1}& \\ &\targX{}&
+\end{quantikz} \defeq \begin{quantikz}
+&\permute{2,1} & \\
+& & 
+\end{quantikz} \]
+
+$\begin{pmatrix}1&0&0&0\\0&0&1&0\\0&1&0&0\\0&0&0&1\end{pmatrix}$
+\end{definition}
+
+\begin{proposition} \label{swapFromCNOT}
+\[ \begin{quantikz}
+&\swap{1}& \\ &\targX{}&
+\end{quantikz} = \begin{quantikz}
+&\ctrl{1} & \targ{} & \ctrl{1}& \\
+&\targ{} & \ctrl{-1} & \targ{}&
+\end{quantikz} \]
+\end{proposition}
+
 
 \chapter{Eigenpath traversal}
 \section{Quantum Zeno effect}
@@ -178,6 +196,22 @@ Consider the Hilbert space $\hilbert_{\F_2^k}$. We can generate a uniform superp
 
 Projection on the $n$-dimensional uniform superposition is given by $\frac{1}{n}\mathbb{J}_{n\times n}$.
 \subsection{Quantum Fourier transform}
+Set $R_k \defeq \begin{pmatrix}
+1 & 0 \\ 0 & e^{2\pi i / 2^k}
+\end{pmatrix}$.
+
+TODO: produces swapped result!
+
+Requires $n$ Hadamard gates and $\frac{n(n-1)}{2}$ controlled $R$-gates. At most $n/2$ swaps. Each with three CNOTs (\ref{swapFromCNOT}).
+
+\subsection{Quantum phase estimation}
+Needs large number of ancillas.
+
+\begin{proposition}
+Let $U$ be a unitary operator and $\ket{\psi}$ an eigenvector of $U$. acting on an $m$-qubit register and . 
+\end{proposition}
+
+
 
 \section{Quantum oracle querying}
 \subsection{Oracle set-up}
@@ -191,10 +225,10 @@ We call $O_f$ the \udef{quantum oracle} of $f$.
 
 \begin{lemma} \label{phaseUnitaryFromOracle}
 We can convert an oracle $O_f$ to a unitary operator $U_f: \hilbert_A\to\hilbert_A: \ket{k}\mapsto (-1)^{f(k)}\ket{k}$ using only a constant number of Hadamard and NOT gates:
-%\begin{quantikz}
-%\lstick{$\ket{k}$} \qw & \qw & \qw & \qw & \gate[wires=2]{$O_f$} & \qw & \qw & \qw & \qw \rstick{$U_f \ket{k}$} \\
-%{} & \lstick{$\ket{0}$} & \gate{X} & \gate{W} & {} & \gate{W} & \gate{X} & \trash{$\ket{0}$} & {}
-%\end{quantikz}
+\[\begin{quantikz}
+\lstick{$\ket{k}$} \qw &  \qw & \qw & \gate[wires=2]{O_f} & \qw & \qw & \qw & \qw \rstick{$U_f \ket{k}$} \\
+\lstick{$\ket{0}$} & \gate{X} & \gate{W} & {} & \gate{W} & \gate{X} & \trash{\ket{0}} 
+\end{quantikz} \]
 If $A$ is finite, then $U_f = \id - 2 \sum_{k\in f^{\preimf}(1)}\ketbra{k}{k}$, which is a Householder matrix.
 \end{lemma}
 \begin{proof}

@@ -2029,6 +2029,7 @@ Since $\seq{x_{n_k}}$ is strictly decreasing, each $n_k$ is distinct and we can 
 \begin{proposition} \label{monotoneSubsequenceRealSequence}
 Every sequence in $\R$ has a monotone subsequence.
 \end{proposition}
+TODO: replace by \ref{existenceMonotoneSubsequenceConnexRelation}.
 \begin{proof}
 Let $\seq{x_n}$ be a sequence in $\R$. We need to show that $\seq{x_n}$ has either a monotonically inceasing or monotonically decreasing subsequence.
 
@@ -2042,6 +2043,7 @@ Now the subsequence $\seq{x_{n_k}}_{k\in \N}$ is increasing.
 \begin{corollary}[Bolzano-Weierstrass]
 Every bounded sequence in $\R$ has a convergent subsequence. 
 \end{corollary}
+
 
 \begin{proposition} \label{sequencesToExtrema}
 Let $A\subseteq \R$. Then
@@ -2091,6 +2093,17 @@ Suppose $\seq{x_n} \overset{ll}{\longrightarrow} x$. By \ref{monotoneSubsequence
 Let $\seq{x'_n}$ be a monotonically increasing subsequence. We must have that $\seq{x'_n} \overset{ll}{\longrightarrow} x$. Then $\seq{x'_n}$ has a tail $\setbuilder{x'_k}{k \geq k_0}\subseteq \interval[co]{x,\infty}$. We claim that $\setbuilder{x'_k}{k \geq k_0} = \{x\}$. Indeed, suppose there exists $x'_m \in \setbuilder{x'_k}{k \geq k_0}$ such that $x'_m \neq x$, then $\setbuilder{x'_k}{k \geq m} \perp \interval[co]{x, (x'_m-x)/2}$ and $\seq{x'_n}$ does not converge.
 
 We have shown that $\seq{x'_k}_{k\geq k_0}$ is the constant sequence $\underline{x}$.
+\end{proof}
+
+\begin{lemma} \label{monotoneContinuityImpliesContinuityRealDomain}
+Let $\sSet{Y,\zeta}$ be a pretopological convergence space, $f: \R\to Y$ a function and $x\in \R$. Then $f$ is continuous at $x$ \textup{if and only if} for every monotone sequence $x_n\to x$ in $\R$, $f(x_n) \to f(x)$ in $Y$.
+\end{lemma}
+\begin{proof}
+The direction $\Rightarrow$ is immediate.
+
+For the other direction, it is enough to show that $f$ is sequentially continuous by \ref{FrechetUrysohnSequentialContinuity}. Take an arbitrary sequence $x_n\to x$ in $\R$. We use \ref{pretopologicalConvergenceDeterminedBySubsubsequence} to show $f(x_n) \to f(x)$. To that end, take an arbitrary subsequence $y = f\circ x\circ \varphi$, where $\varphi:\N\to \N$ is strictly increasing.
+
+Now $x\circ \varphi$ has a monotone subsequence $x\circ \varphi\circ \varphi'$ by \ref{existenceMonotoneSubsequenceConnexRelation}. Then $f\circ x\circ \varphi\circ \varphi' \to f(x)$ by assumption and this is a subsequence of $y$. We conclude that $f(x_n) \to f(x)$.
 \end{proof}
 
 \section{Sequences}
@@ -2293,8 +2306,8 @@ Consider the function $g(t) \defeq \inner{f(b)-f(a), f(t)}$. Since $g$ is real-v
 Dividing by $\norm{f(b)-f(a)}$ yields the result.
 \end{proof}
 
-\begin{proposition}[Intermediate value theorem]
-Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ a real function. For all $y\in \interval{f(a), f(b)}$ there exists $c\in \interval{a,b}$ such that $f(c) = y$.
+\begin{proposition}[Intermediate value theorem] \label{intermediateValueTheorem}
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ a continuous real function. For all $y\in \interval{f(a), f(b)}$ there exists $c\in \interval{a,b}$ such that $f(c) = y$.
 \end{proposition}
 \begin{proof}
 Follows from \ref{generalisedIntermediateValueTheorem} and \ref{connectedSubsetReals}.
@@ -2385,6 +2398,22 @@ The function $f'$ is integrable by \ref{continuousRealFunctionIntegrable}.
 Set $g: \interval{a,b}\to \R: x\mapsto \int_a^xf'(t)\diff{t}$, which is differentiable by the first fundamental theorem and $g'(x) = f'(x)$ for all $x\in \interval[o]{a,b}$. Thus we can apply the means value theorem \ref{meanValueTheorem} to $f-g$, restricted to $\interval{a,x}$: there exists $c\in \interval[o]{a,x}$ such that
 \[ \frac{(f-g)(x) - (f-g)(a)}{x-a} = (f-g)'(c) = 0. \]
 This implies that $f-g$ is a constant function. In order to fix this constant, note that $g(a) = 0$, so $f(x) = f(a) + g(x) = f(a) + \int_a^xf'(t)\diff{t}$ and, in particular, $f(b) = f(a) + \int_a^bf'(t)\diff{t}$.
+\end{proof}
+
+\begin{proposition} \label{integralPositiveFunctionContinuous}
+Let $a,b\in \R$ and $f: \interval{a,b}\to \R^+$ be a positive integrable function. Then the function
+\[ F: \interval{a,b} \to \R^+: x\mapsto \int_a^x f(t)\diff{t} \]
+continuous.
+\end{proposition}
+We do not assume $f$ continuous.
+\begin{proof}
+By \ref{monotoneContinuityImpliesContinuityRealDomain} it is enough to consider monotone sequences $\seq{x_n}$ in $\interval{a,b}$. First suppose $x_n\to x$ is an increasing sequence. Then $f\cdot \charFunc{\interval{a,x_n}}$ is an increasing sequence of positive functions that converges pointwise to $f\cdot \charFunc{\interval{a,x}}$. So, by \ref{integralOverSubset} and Beppo Levi's lemma \ref{propertiesIntegralPositiveFunctions},
+\[ \lim_{n\to\infty} F(x_n) = \lim_{n\to\infty}\int_a^{x_n}f\diff{t} = \lim_{n\to\infty}\int_a^{b}f\cdot \charFunc{\interval{a,x_n}}\diff{t} = \int_a^{b}f\cdot \charFunc{\interval{a,x}}\diff{t} = \int_a^{x}f\diff{t} = F(x). \]
+
+Now suppose $x_n\to x$ is a decreasing sequence, then $f\cdot\charFunc{\interval{x_n,b}}$ is an increasing sequence of positive functions. So, again by \ref{integralOverSubset} and Beppo Levi's lemma \ref{propertiesIntegralPositiveFunctions},
+\[ \lim_{n\to\infty}\int_{x_n}^b f\diff{t} = \lim_{n\to\infty}\int_{a}^b f\cdot\charFunc{\interval{x_n, b}}\diff{t} = \int_a^b f\cdot \charFunc{\interval{x,b}}\diff{t} = \int_x^b f\diff{t} \]
+and thus
+\[ \lim_{n\to\infty} F(x_n) = \lim_{n\to\infty}\int_a^{x_n}f\diff{t} = \int_a^b f \diff{t} - \lim_{n\to\infty}\int_{x_n}^b f\diff{t} = \int_a^b f \diff{t} - \int_x^b f\diff{t} = \int_a^x f \diff{t} = F(x). \]
 \end{proof}
 
 \subsection{Henstock-Kurzweil integration}
@@ -2557,7 +2586,24 @@ ab = \iint_{(x,y)\in S_1}\diff{x}\diff{y} + \iint_{(x,y)\in S_2}\diff{x}\diff{y}
 \end{align*}
 \end{proof}
 
+\subsection{Integrating rational functions}
+We can integrate any fraction of polynomials. The integral can be simplified using the partial fraction decomposition \ref{partialFractionDecomposition}.
 
+Quadratic polynomials can be rewritten by completing the square:
+\[ ax^2 + bx+c = a\bigg(\Big(x+ \frac{b}{2a}\Big)^2 + \frac{4ac - b^2}{4a^2}\bigg). \]
+If the quadratic polynomial is irreducible, then $\frac{4ac - b^2}{4a^2}$ is positive.
+Then we only need to know the following integrals:
+\begin{proposition}
+Let $a,b\in \R$ and $k\geq 2$. Then
+\begin{enumerate}
+\item $\int \frac{1}{ax+b}\diff{x} = \ln|ax+ b|$;
+\item $\int \frac{1}{(ax+b)^k}\diff{x} = \frac{1}{a(1-k)(ax+b)^{k-1}}$;
+\item $\int\frac{1}{x^2 + a^2}\diff{x} = \frac{1}{a}\arctan\big(\frac{x}{a}\big)$;
+\item $\int \frac{x}{x^2 + a^2}\diff{x} = \frac{1}{2}\ln(x^2 + a^2)$;
+\item $\int \frac{1}{(x^2 + a^2)^k} \diff{x} = \frac{x}{2a^2(k-1)(x^2+a^2)^{k-1}}+\frac{2k-3}{2a^2(k-1)}\int \frac{1}{(x^2+ a^2)^{k-1}}\diff{x}$;
+\item $\int \frac{x}{(x^2 + a^2)^k}\diff{x} = \frac{1}{2(1-k)(x^2+a^2)^{k-1}}$.
+\end{enumerate}
+\end{proposition}
 
 \section{Inequalities}
 \subsection{Based on mean value theorems}

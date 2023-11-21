@@ -156,19 +156,6 @@ The adjectives ``strict'' and ``weak'' can be added to any of these cases to ide
 \end{definition}
 The concept of order isomorphism (or \udef{similarity}) is similarly inherited. Let $U,V$ be ordered sets. We write $U =_o V$ if $U$ and $V$ are order isomorphic and $U \neq_o V$ if not.
 
-\begin{lemma} \label{antisymmetricOrderPreservationInjective}
-Let $P,Q$ be antisymmetric ordered sets and $f: P\to Q$. The following are sufficient conditions for $f$ to be injective:
-\begin{enumerate}
-\item $f$ is order-reflecting;
-\item $f$ is order-preserving, $P$ is semi-connex and $Q$ irreflexive.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) If $f(x) = f(y)$, then $x\preceq y$ and $y\preceq x$, so $x=y$ by anti-symmetry.
-
-(2) Let $f$ be the strict order-preserving function and $x,y\in P$. Assume $f(x)=f(y)$. Assume, towards a contradiction, that $x\neq y$, then either (by semi-connexity) $x<y$ and $f(x) < f(y)$ or $y < x$ and $f(y)<f(x)$. Both cases contradict $f(x)=f(y)$ by irreflexivity.
-\end{proof}
-
 \begin{lemma}
 Let $f:P\to Q$ be a function between posets. Then
 \begin{enumerate}
@@ -185,7 +172,7 @@ Let $f: P\to Q$ be a function between posets.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-Use \ref{antisymmetricOrderPreservationInjective}.
+Use \ref{relationPreservingFunctionFromSemiConnexStructure}.
 \end{proof}
 
 The converse does not hold in general if $P$ is a poset because a strict order embedding between posets is not necessarily injective. A counterexample is
@@ -2858,10 +2845,11 @@ To show $A = A^{\mesh\mesh}$, we observe the equivalences
 Let $L$ be a Boolean lattice and $A \subseteq L$ a subset. Then
 \begin{enumerate}
 \item $A^\mesh$ is upwards closed;
-\item $A^{\mesh\mesh} = \upset A$.
+\item $A^{\mesh\mesh} = \upset A$;
+\item if $B,C$ are upwards closed, then $B\subseteq C \iff C^\mesh \subseteq B^\mesh$.
 \end{enumerate}
-In particular, $A^\mesh = A^{\mesh\mesh\mesh} = (\upset A)^\mesh$.
 \end{lemma}
+In particular, $A^\mesh = A^{\mesh\mesh\mesh} = (\upset A)^\mesh$.
 \begin{proof}
 (1) Take $b\in A^\mesh$ and $c\geq b$. Then for all $a\in A$, $a\wedge c \geq a\wedge b > \bot$. So $c\in A^\mesh$, which means that $A^\mesh$ is upwards closed.
 
@@ -2869,6 +2857,10 @@ In particular, $A^\mesh = A^{\mesh\mesh\mesh} = (\upset A)^\mesh$.
 
 Now we use the fact that $(-)^{\mesh\mesh}$ is monotone to observe $A^{\mesh\mesh} \subseteq (\upset A)^{\mesh\mesh}$. Also $(\upset A)^{\mesh\mesh} = \upset A$ by
 \ref{complementInIsotoneGrill}. So $A^{\mesh\mesh} \subseteq \upset A$.
+
+(3) Since $B^{\mesh\mesh} = B$ and $C^{\mesh\mesh} = C$, we have
+\[B\subseteq C \implies C^\mesh \subseteq B^\mesh \implies B^{\mesh\mesh} \subseteq C^{\mesh\mesh} \implies B\subseteq C, \]
+and the result follows.
 \end{proof}
 \begin{corollary} \label{grillUpsetOrderSimilarity}
 Let $L$ be a Boolean lattice.
@@ -3291,8 +3283,8 @@ Let $P$ be an ordered set and $I$ an index set.
 \begin{enumerate}
 \item If $P$ is a $\wedge$-semilattice, the set $\filters(P)$ of filters on $P$ is a complete bounded sublattice of $\sSet{\powerset(P), \subseteq}$, with top $P$ and bottom $\{\top\}$. Let $\{F_i\}_{i\in I} \in \filters(L)^I$ be a set of filters. Then
 \begin{align*}
-\bigwedge \{F_i\}_{i\in I} &= \bigcap_{i\in I}F_i & &\hspace{-3em}= \setbuilder{\bigcup_{i\in I}A_i}{\forall i\in I: A_i\in F_i} \\
-\bigvee \{F_i\}_{i\in I} &= \upset \Closure_\wedge\left(\bigcup_{i\in I}F_i\right) & &\hspace{-3em}= \setbuilder{\bigcap_{j\in J}A_j}{\forall J\subseteq I \text{finite}: \forall j\in J: A_j\in F_j}.
+\bigwedge \{F_i\}_{i\in I} &= \bigcap_{i\in I}F_i \\
+\bigvee \{F_i\}_{i\in I} &= \upset \Closure_\wedge\left(\bigcup_{i\in I}F_i\right) = \setbuilder{\bigwedge_{j\in J}A_j}{\forall J\subseteq I \text{finite}: \forall j\in J: A_j\in F_j}.
 \end{align*}
 \item If $P$ is a $\vee$-semilattice, the set $\ideals(P)$ of ideals on $P$ is a complete bounded sublattice of $\sSet{\powerset(P), \subseteq}$, with top $P$ and bottom $\{\bot\}$. Let $\{J_i\}_{i\in I} \in \filters(L)^I$ be a set of ideals. Then
 \[ \bigwedge \{J_i\}_{i\in I} = \bigcap_{i\in I}J_i \qquad\text{and}\qquad
@@ -3310,8 +3302,8 @@ In particular, for $F, G\in\filters(L)$, we have that $F\vee G$ is a proper filt
 \begin{lemma} \label{baseMeetJoinFilters}
 Let $L$ be a lattice and $F,G$ filters in $\filters(L)$. If $\mathcal{A}$ is a base of $F$ and $\mathcal{B}$ a base of $G$, then
 \begin{enumerate}
-\item $\setbuilder{A\vee B}{A\in \mathcal{A}, B\in \mathcal{B}}$ is a base of $F\wedge G$;
-\item $\setbuilder{A\wedge B}{A\in \mathcal{A}, B\in \mathcal{B}}$ is a base of $F\vee G$.
+\item $\setbuilder{a\vee b}{a\in \mathcal{A}, b\in \mathcal{B}}$ is a base of $F\wedge G$;
+\item $\setbuilder{a\wedge b}{a\in \mathcal{A}, b\in \mathcal{B}}$ is a base of $F\vee G$.
 \end{enumerate}
 \end{lemma}
 Note that the analogue result does \emph{not} hold for infinite meets and joins of filters.
@@ -4661,6 +4653,7 @@ Let $f:X \to Y$ be a function between sets, $F \subseteq \powerset(X)$, $A\subse
 \begin{enumerate}
 \item $f^{\imf\imf}(F) \amesh G \iff F \amesh f^{\preimf\imf}(G)$;
 \item $f^{\imf\imf}(F)^\mesh = \upset f^{\imf\imf}(F^\mesh)$;
+\item $f^\imf(A)\in G^\mesh \iff A \in f^{\preimf\imf}(G)^\mesh$;
 \item if $G$ is a filter, then $f^\imf(A)\in G \implies A \in f^{\preimf\imf}(G)^\mesh$;
 \item if $G$ is an ultrafilter, then $f^\imf(A)\in G \iff A \in f^{\preimf\imf}(G)^\mesh$.
 \end{enumerate}
@@ -4683,13 +4676,15 @@ G\subseteq f^{\imf\imf}(F)^\mesh &\iff G \amesh f^{\imf\imf}(F) \\
 \end{align*}
 where we have used point (1), the fact that $F^\mesh$ is upwards closed (\ref{upwardClosureGrill}) and the Galois connection in \ref{upsetPreimageImageGaloisConnection}.
 
-(3) By \ref{properFiltersSelfMesh} and point (1), we have
+(3) By point (1), we have
 \begin{align*}
-f^\imf(A)\in G \implies& f^\imf(A)\in G^\mesh \\
-\iff& f^{\imf\imf}\big(\{A\}\big)\amesh G \\
-\iff& \{A\} \mesh f^{\preimf\imf}(G) \\
+f^\imf(A)\in G^\mesh \iff& f^{\imf\imf}\big(\{A\}\big)\amesh G \\
+\iff& \{A\} \amesh f^{\preimf\imf}(G) \\
 \iff& A \in f^{\preimf\imf}(G)^\mesh.
 \end{align*}
+
+(3) By \ref{properFiltersSelfMesh} and point (3), we have
+\[ f^\imf(A)\in G \quad\implies\quad  f^\imf(A)\in G^\mesh \quad\implies\quad  A \in f^{\preimf\imf}(G)^\mesh. \]
 
 (4) In the previous proof the implication becomes an equivalence by \ref{ultrafilterCriteria}.
 \end{proof}
@@ -6177,6 +6172,13 @@ But also $[Y]\in \aleph(X)$, because $Y\subseteq X$, and by lemma \ref{HartogsNu
 So $\aleph(X)$ would seem to be similar to a proper initial segment, but this contradicts the expansiveness of order embeddings on well-ordered sets, see corollary \ref{properInitialSegmentNotIsomorphic}.
 \end{proof}
 
+\begin{proposition}[Bourbaki-Witt theorem] \label{BourbakiWitt}
+Let $P$ be a non-empty chain-complete poset. Let $f: P \to P$ be a function such that $x\leq f(x)$ for all $x\in P$. Then $f$ has a fixed point.
+\end{proposition}
+\begin{proof}
+TODO \url{https://en.wikipedia.org/wiki/Bourbaki%E2%80%93Witt_theorem}
+\end{proof}
+
 
 \begin{proposition} \label{proposition:HartogsLeast}
 Let $X$ be a set. The Hartogs number $\aleph(X)$ is the $\leq_o$-least well-ordered set not smaller than or equal to $X$ in size. i.e.\
@@ -6656,6 +6658,8 @@ Take $v \in \tailsOf(t, T)$ and $u\in A^*$ such that $u\sqsubseteq v$. Then we n
 We have $t\concat v \in T$ and $t\concat u \sqsubseteq t\concat v$ by 
 \end{proof}
 
+
+
 \section{Choice}
 TODO: Ultrafilter lemma, Szpilrajn extension theorem
 
@@ -6716,6 +6720,7 @@ The following results are equivalent to the axiom of choice:
 \item \undline{Well-ordering theorem}: every set is well-orderable.
 \end{enumerate}
 \end{theorem}
+TODO: rewrite the first point of the proof using \ref{BourbakiWitt}.
 \begin{proof}
 We proceed round-robin-style:
 \begin{itemize}[leftmargin=2cm]
@@ -6840,7 +6845,7 @@ Over NBG, the following are equivalent:
 \begin{proof}
 $(1) \Rightarrow (2)$ We prove the contrapositive: if $\sSet{P, \leq}$ is a poset without a maximal element, then $P$ contains an infinite chain.
 
-Assume DC and that $P$ has no maximal element. Define ${<} \defeq {\leq} \setminus\id_P$, which is antisymmetric and irreflexive, and thus asymmetric by \ref{asymmetricIrreflexive}. Then $<$ is left total by \ref{maximalElementNotLeftTotal}, and we can find a choice sequence by DC. The choice sequence is injective by \ref{choiceSequenceMonotone} and \ref{antisymmetricOrderPreservationInjective}. Thus the image of the choice sequence is an infinite chain.
+Assume DC and that $P$ has no maximal element. Define ${<} \defeq {\leq} \setminus\id_P$, which is antisymmetric and irreflexive, and thus asymmetric by \ref{asymmetricIrreflexive}. Then $<$ is left total by \ref{maximalElementNotLeftTotal}, and we can find a choice sequence by DC. The choice sequence is injective by \ref{choiceSequenceMonotone} and \ref{relationPreservingFunctionFromSemiConnexStructure}. Thus the image of the choice sequence is an infinite chain.
 
 $(2) \Rightarrow (3)$ Let $T$ be a non-empty pruned tree. Then (2) gives that $T$ contains an infinite chain $C$ by modus tollens. Then closure of $C$ under $\sqsubseteq$ is an infinite branch by \ref{treeOrderingLemma}.
 
@@ -6866,6 +6871,391 @@ Over NBG, the following are equivalent:
 \end{proposition}
 
 
+\section{Nets and sequences}
+\begin{definition}
+Let $(I,\leq)$ be a directed set and $X$ a set. Then a \udef{net} in $X$ is a function $I\to X$. The directed set $I$ is called the \udef{index set}.
+
+A \udef{sequence} is a net with index set $\sSet{\N, \leq}$.
+\end{definition}
+Note we do \emph{not} require $I$ to be a partial order.
+
+\subsection{Filters and nets}
+\subsubsection{From nets to filters}
+\begin{lemma} \label{tailsDownwardsDirected}
+Let $X$ be a set, $I$ a directed index set and $\seq{x_i}_{i\in I}$ a net in $X$. Then
+\[ \Tails(\seq{x_i}_{i\in I}) \defeq \setbuilder[\big]{\setbuilder{x_i}{i \Yright j}}{j\in I} \]
+is a downwards directed subset of $\powerset(X)$.
+\end{lemma}
+\begin{proof}
+Take $A,B\in \Tails(\seq{x_i}_{i\in I})$. If $A = \setbuilder{x_i}{i \Yright a}$ and $B = \setbuilder{x_i}{i \Yright b}$, then we can find some $k\in I$ such that $k \Yright a$ and $k\Yright b$. Then $\setbuilder{x_i}{i \Yright k}$ is a subset of both $A$ and $B$ by transitivity.
+\end{proof}
+
+\begin{definition}
+Let $X$ be a set, $I$ a directed index set and $\seq{x_i}_{i\in I}$ a net in $X$. We call
+\begin{itemize}
+\item $\Tails(\seq{x_i}_{i\in I})$ the \udef{filter base} of $\seq{x_i}_{i\in I}$;
+\item the filter generated by $\Tails(\seq{x_i}_{i\in I})$ in $\powerset(X)$ the \udef{associated filter} of $\seq{x_i}_{i\in I}$, which we denote $\TailsFilter(\seq{x_i}_{i\in I})$;
+\item the \udef{kernel} of the net the kernel of the associated filter.
+\end{itemize}
+We have 
+\[ \TailsFilter(\seq{x_i}_{i\in I}) = \upset \Tails(\seq{x_i}_{i\in I}). \]
+Let $\seq{x_i}_{i\in I}$ and $\seq{y_j}_{j\in J}$ be nets. Then we say that $\seq{x_i}$ and $\seq{y_j}$ are \udef{equivalent nets} if $\TailsFilter\seq{x_i} = \TailsFilter\seq{y_j}$.
+\end{definition}
+
+\begin{lemma} \label{imageTailsFilter}
+Let $X$ be a set, $I$ a directed index set, $\seq{x_i}_{i\in I}$ a net in $X$ and $f:X\to Y$ a function. Then
+\[ \upset f^{\imf\imf}\big(\TailsFilter(\seq{x_i})\big) = \TailsFilter\big(\seq{f(x_i)}\big). \]
+\end{lemma}
+\begin{proof}
+Since $f^{\imf\imf}\big(\Tails(\seq{x_i})\big) = \Tails\big(\seq{f(x_i)}\big)$, the result follows from 
+\ref{imageFilterSubbasis} and \ref{tailsDownwardsDirected}.
+\end{proof}
+
+\begin{lemma} \label{directednessEquivalentToDownsetsFilter}
+Let $I$ be an ordered set and $x: I\to X$ a function. Then
+\begin{enumerate}
+\item $I$ is directed \textup{if and only if} $\upset\setbuilder[\big]{\upset\{i\}}{i\in I}$ is a filter;
+\item if $I$ is directed, then $\id_I$ is a net and $\TailsFilter(\id_I) = \upset\setbuilder[\big]{\upset\{i\}}{i\in I}$;
+\item $\TailsFilter(x) = \upset x^{\imf\imf}\Big(\setbuilder[\big]{\upset\{i\}}{i\in I}\Big)$.
+\end{enumerate}
+\end{lemma}
+If $I$ is a proset, (1) follows from \ref{principalDownSetEmbedding}.
+\begin{proof}
+(1) First assume $I$ is directed. Now take $i,i'\in I$. Then there exists $i^{\prime\prime}\Yright i,i'$, so $i^{\prime\prime} \in \upset\{i\}\cap \upset \{i'\}$ and $\upset\{i^{\prime\prime}\} \subseteq \upset\{i\}\cap \upset \{i'\}$ by transitivity.
+
+Now assume $\upset\setbuilder[\big]{\upset\{i\}}{i\in I}$ is a filter. Take $i,i'\in I$. Then there exists $i^{\prime\prime}$ such that $\upset\{i^{\prime\prime}\} \subseteq \upset\{i\}\cap \upset\{i'\}$. Thus $i^{\prime\prime} \in \upset\{i\}$ and $i^{\prime\prime} \in \upset\{i'\}$, so $i^{\prime\prime} \Yright i,i'$.
+
+(2,3) This follows form the calculation
+\begin{align*}
+\Tails\seq{x_i} &= \setbuilder[\big]{\setbuilder{\varphi(j')}{j' \Yright j}}{j\in J} \\
+&= \setbuilder[\big]{\varphi^\imf\setbuilder{j'}{j \Yright j}}{j\in J} \\
+&= \setbuilder[\big]{\varphi^\imf\big(\upset\{j\}\big)}{j\in J} \\
+&= \varphi^{\imf\imf}\setbuilder[\big]{\upset\{j\}}{j\in J},
+\end{align*}
+\end{proof}
+
+\subsubsection{From filters to nets}
+\begin{lemma} \label{filterIndex}
+Let $X$ be a set and $F\in\powerfilters(X)$ a proper filter. Then
+\begin{enumerate}
+\item $I_F \defeq \setbuilder{(A,x)\in F\times X}{x\in A}$
+is a directed proset when ordered by $(A,x)\precsim (B,y) \iff B\subseteq A$;
+\item $I_{A,F} \defeq I_F \times \N$ is a directed poset when ordered by $\big((A,x), k\big) < \big((B,y), l\big) \iff (B\subsetneq A)\lor \Big((B = A) \land (k < l)\Big)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Transitivity and reflexivity follow from the properties of $\subseteq$.
+
+Take $(A,x)$ and $(B,y)$ in $I_F$. Then $A\cap B\in F$ and $A\cap B \neq \emptyset$ because $F$ is proper. So we can find $z\in A\cap B$. Then $(A,x) \precsim (A\cap B,z)$ and $(B,y) \precsim (A\cap B, z)$.
+
+(2) Since $<$ is asymmetric, $\leq$ is antisymmetric and reflexive by construction. Transitivity is straightforward.
+
+Take $\big((A,x), k\big)$ and $\big((B,y), l\big)$ in $I_{A,F}$.
+First suppose $A\neq B$. Then $A\cap B\in F$, $A\cap B \neq \emptyset$ because $F$ is proper and $A\cap B \subsetneq A, B$. So we can find $z\in A\cap B$. Then $\big((A,x), k\big) \leq \big((A\cap B,z), 0 \big)$ and $\big((B,y), l\big) \leq \big((A\cap B,z), 0 \big)$.
+
+Now suppose $A = B$. Then set $m \defeq \max\{k,l\}+1$ and we have $\big((A,x), k\big) \geq \big((A,x), m \big)$ and $\big((B,y), l\big) \geq \big((A,x), m \big)$.
+\end{proof}
+
+\begin{definition}
+Let $X$ be a set, $F\in\powerfilters(X)\setminus\powerset(X)$ and $I_F$ the directed set of $F$ as in \ref{filterIndex}. Then
+\begin{itemize}
+\item $I_F \to X: (A,x) \mapsto x$ is the \udef{associated net} of $F$;
+\item $I_{A,F} \to X: \big((A,x),m\big) \mapsto x$ is the \udef{associated antisymmetric net} of $F$.
+\end{itemize}
+\end{definition}
+We usually opt to work with the associated net, not the associated antisymmetric net, since the construction is easier.
+
+\begin{lemma} \label{tailsFilterIndex}
+Let $X$ be a set, $F\in\powerfilters(X)\setminus\powerset(X)$ and $I_F, I_{A,F}$ the directed sets of $F$ as in \ref{filterIndex}. Then
+\begin{enumerate}
+\item $A = \setbuilder{y}{(B,y) \succsim (A,x)}$ for any $(A,x)\in I_F$;
+\item $A = \setbuilder{y}{\big((B,y), n\big) \geq \big((A,x), m\big)}$ for any $\big((A,x), m\big)\in I_{A,F}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) $\boxed{\subseteq}$ For all $a\in A$ we have $(A,a)\succsim (A,x)$.
+
+$\boxed{\supseteq}$ For any $(B,y) \succsim (A,x)$, we have $y\in B\subseteq A$, so $y\in A$.
+
+(2) $\boxed{\subseteq}$ For all $a\in A$ we have $\big((A,a), m+1\big) \geq \big((A,x), m\big)$.
+
+$\boxed{\supseteq}$ Suppose $\big((A,y), n\big) \geq \big((A,x), m\big)$. If $A = B$, then $y\in A$ since $y\in B$. If $A\neq B$, then $B\subsetneq A$, so $y\in B \subsetneq A$.
+\end{proof}
+\begin{corollary}
+Let $X$ be a set and $F\in\powerfilters(X)$. Then $F$ equals
+\begin{enumerate}
+\item the filter associated to its associated net;
+\item the filter associated to its associated antisymmetric net.
+\end{enumerate}
+\end{corollary}
+
+
+\subsection{Subnets}
+\subsubsection{Frequent and eventual sets}
+\begin{definition}
+Let $\seq{x_i}_{i\in I}$ be a net in a set $X$. Let $S\subseteq X$ be a subset. We say that $S$ is
+\begin{itemize}
+\item \udef{$\seq{x_i}$-eventual} if $S$ contains some tail set of $\seq{x_i}$;
+\item \udef{$\seq{x_i}$-frequent} if $S$ meshes with every tail set of $\seq{x_i}$.
+\end{itemize}
+Let $K\subseteq I$ be a subset. We call
+\begin{itemize}
+\item $K$ \udef{eventual} if it is $\id_I$-eventual;
+\item $K$ \udef{frequent} if it is $\id_I$-frequent.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{eventualFrequentInTermsOfFilters}
+Let $\seq{x_i}_{i\in I}$ be a net in a set $X$, $S\subseteq X$ a subset and $K\subseteq I$ a subset. Then
+\begin{enumerate}
+\item $S$ is $\seq{x_i}$-eventual \textup{if and only if} $S\in \TailsFilter\big(\seq{x_i}\big)$;
+\item $S$ is $\seq{x_i}$-frequent \textup{if and only if} $S\in \TailsFilter\big(\seq{x_i}\big)^\mesh$;
+\item $K$ is eventual \textup{if and only if} $\upset\{i\}\subseteq K$ for some $i\in I$;
+\item $K$ is frequent \textup{if and only if} $K\mesh \upset\{i\}$ for all $i\in I$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+This follows from the definitions and \ref{directednessEquivalentToDownsetsFilter}.
+\end{proof}
+
+\begin{lemma} \label{frequentImpliesDirected}
+Let $I$ be a directed set and $K\subseteq I$ a subset. If $K$ is frequent, then it is directed. 
+\end{lemma}
+\begin{proof}
+Suppose $K$ is frequent. Take $i,j\in K$. Then there exists $k \Yright i,j$ in $I$. Since $K$ is frequent, we have $K\mesh \upset\{k\}$, so we can find $k'\in K \cap \upset\{k\}$. By transitivity, $k'$ is an upper bound of $i,j$.
+\end{proof}
+
+\begin{lemma} \label{eventualComplementNotFrequent}
+Let $\seq{x_i}_{i\in I}$ be a net in a set $X$ and $S\subseteq X$ a subset. Then $S$ is $\seq{x_i}$-eventual \textup{if and only if} $S^c$ is not $\seq{x_i}$-frequent.
+\end{lemma}
+\begin{proof}
+Restatement of \ref{complementInIsotoneGrill}, by \ref{eventualFrequentInTermsOfFilters}.
+\end{proof}
+
+\subsubsection{AA subnets}
+\begin{definition}
+Let $\seq{x_i}_{i\in I}$ and $\seq{y_j}_{j\in J}$ be nets. We say $\seq{y_j}$ is an \udef{Aarnes-Andenæs subnet} or \udef{AA subnet} if $\TailsFilter\seq{x_i} \subseteq \TailsFilter\seq{y_j}$.
+\end{definition}
+
+\begin{lemma} \label{AAsubnetEquivalents}
+Let $\seq{x_i}_{i\in I}$ and $\seq{y_j}_{j\in J}$ be nets. The following are equivalent:
+\begin{enumerate}
+\item $\seq{y_j}$ is an AA subnet of $\seq{x_i}$;
+\item $\upset x^{\imf\imf}\Big(\upset\setbuilder[\big]{\upset\{i\}}{i\in I}\Big) \subseteq \upset y^{\imf\imf}\Big(\setbuilder[\big]{\upset\{j\}}{j\in J}\Big)$;
+\item every $\seq{y_j}$-frequent subset of $X$ is also $\seq{x_i}$-frequent;
+\item every $\seq{x_i}$-eventual subset of $X$ is also $\seq{y_j}$-eventual;
+\item $y^{\preimf}\big(x^\imf(K)\big)$ is eventual in $J$ for all eventual $K\subseteq I$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Leftrightarrow (2)$ Immediate from \ref{directednessEquivalentToDownsetsFilter}.
+
+$(1) \Leftrightarrow (3)$ Immediate from \ref{eventualFrequentInTermsOfFilters}.
+
+$(3) \Leftrightarrow (4)$  Immediate from \ref{eventualFrequentInTermsOfFilters} and \ref{upwardClosureGrill}.
+
+$(2) \Leftrightarrow (5)$ Immediate from \ref{eventualFrequentInTermsOfFilters} and \ref{upsetPreimageImageGaloisConnection}.
+\end{proof}
+
+\subsubsection{Kelley, Willard and frequent subnets}
+\begin{definition}
+Let $X$ be a set, $\seq{x_i}_{i\in I}$ a net and $J$ a directed set. Let $\varphi: J\to I$ be a function and set $\seq{y_j}_{j\in J} \defeq \seq{(x\circ \varphi)(j)}_{j\in J}$. Then we call $\seq{y_j}_{j\in J}$
+\begin{itemize}
+\item a \udef{frequent subnet} if $\varphi$ is an embedding and $\varphi$ is an AA subnet of $\id_I$;
+\item a \udef{Willard subnet} if $\varphi$ is order-preserving and $\varphi$ is an AA subnet of $\id_I$;
+\item a \udef{Kelley subnet} if $\varphi$ is an AA subnet of $\id_I$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{indexMappingSubnet}
+Let $I,J$ be directed sets and $\varphi: J\to I$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $\varphi$ is an AA subnet of $\id_I$;
+\item $\upset\setbuilder[\big]{\upset\{i\}}{i\in I} \subseteq \upset \varphi^{\imf\imf}\Big(\setbuilder[\big]{\upset\{j\}}{j\in J}\Big)$;
+\item $\upset\varphi^{\preimf\imf}\Big(\setbuilder[\big]{\upset\{i\}}{i\in I}\Big) \subseteq \upset \setbuilder[\big]{\upset\{j\}}{j\in J}$;
+\item $\varphi^\preimf(K)$ is eventual for all eventual $K\subseteq I$.
+\end{enumerate}
+Any of these implies that $\im(\varphi)$ is frequent. If $\varphi$ is order-preserving, then the converse also holds.
+\end{lemma}
+In all these cases $\im(\varphi)$ is directed, by \ref{frequentImpliesDirected}.
+\begin{proof}
+(1-4) Straightforward application of \ref{AAsubnetEquivalents} (with \ref{upsetPreimageImageGaloisConnection} for (3)).
+
+(Frequency of $\im(\varphi)$) Since $\im(\varphi) \in \upset \varphi^{\imf\imf}\Big(\setbuilder[\big]{\upset\{j\}}{j\in J}\Big)$, we have $\im(\varphi) \in \setbuilder[\big]{\upset\{i\}}{i\in I}$ from (2). This implies $\im(\varphi)$ is frequent, by \ref{eventualFrequentInTermsOfFilters}.
+
+Now assume $\varphi$ is order-preserving. We will prove point (2). To that end, take $i\in I$. Since $\im(\varphi)$ is frequent, we can take $i'\in \im(\varphi)\cap \upset\{i\}$. Then there exists $j\in J$ such that $\varphi(j) = i'$. Since $\varphi$ is order-preserving, we have
+\[ \varphi\big(\upset \{j\}\big) \subseteq \upset \big\{\varphi(j)\big\} = \upset \big\{i'\big\} \subseteq \upset \big\{i\big\}. \]
+This proves (2).
+\end{proof}
+
+
+\begin{lemma} \label{subnetImplications}
+Let $X$ be a set and $\seq{x_i}_{i\in I}, \seq{y_j}_{j\in J}$ nets. Then each of the following statements implies the next:
+\begin{enumerate}
+\item $\seq{y_j}$ is a frequent subnet of $\seq{x_i}$;
+\item $\seq{y_j}$ is a Willard subnet of $\seq{x_i}$;
+\item $\seq{y_j}$ is a Kelley subnet of $\seq{x_i}$;
+\item $\seq{y_j}$ is an AA subnet of $\seq{x_i}$.
+\end{enumerate} 
+\end{lemma}
+\begin{proof}
+The only implication that requires proof is the last one. Suppose $\seq{y_j}$ is a Kelley subnet of $\seq{x_i}$. Then we can find an AA subnet $\varphi: J\to I$ of $\id_I$. Using \ref{directednessEquivalentToDownsetsFilter}, we calculate
+\begin{align*}
+\upset\setbuilder[\big]{\upset\{i\}}{i\in I} \subseteq \upset \varphi^{\imf\imf}\Big(\setbuilder[\big]{\upset\{j\}}{j\in J}\Big) \implies& \upset x \Big(\upset\setbuilder[\big]{\upset\{i\}}{i\in I}\Big) \subseteq \upset (x\circ \varphi)^{\imf\imf}\Big(\setbuilder[\big]{\upset\{j\}}{j\in J}\Big) \\
+\iff& \upset x \Big(\upset\setbuilder[\big]{\upset\{i\}}{i\in I}\Big) \subseteq \upset y^{\imf\imf}\Big(\setbuilder[\big]{\upset\{j\}}{j\in J}\Big) \\
+\iff& \TailsFilter\seq{x_i} \subseteq \TailsFilter\seq{y_j}.
+\end{align*}
+\end{proof}
+
+
+\begin{example}
+All these notions of subnet are distinct, even with tame index sets:
+\begin{itemize}
+\item $1,1,2,2,3,3,4,4,\ldots$ is a Willard subnet of $1,2,3,4,\ldots$, but not a frequent subnet;
+\item $1,2,3,4,\ldots$ and $2,1,3,4,\ldots$ are Kelley subnets of each other, but neither is a Willard subnet of the other;
+\item $1,2,3,4,\ldots$ and $0,2,3,4,\ldots$ are AA subnets of each other, but neither is a Kelley subnet of the other.
+\end{itemize}
+\end{example}
+
+\begin{example}
+The cardinality of the index set of a subnet may be larger than the cardinality of the original index set. For instance, $\R\to \N: x\mapsto \floor{x}$ is a Willard subnet of $\id_\N$.
+\end{example}
+
+\begin{proposition} \label{WillardSubnetMeshingNets}
+Let $\seq{x_i}_{i\in I}$ and $\seq{y_j}_{j\in J}$ be on a set $X$. If $\TailsFilter\seq{x_i} \amesh \TailsFilter\seq{y_j}$, then there exists a net $\seq{z_k}_{k\in K}$ such that
+\begin{enumerate}
+\item $\seq{z_k}_{k\in K}$ is a Willard subnet of both $\seq{x_i}_{i\in I}$ and $\seq{y_j}_{j\in J}$;
+\item $\TailsFilter\seq{z_k} = \TailsFilter\seq{x_i}\vee \TailsFilter\seq{y_k}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Let $I\times J$ have the pointwise ordering (i.e.\ $(i,j) \Yleft (i', j')$ iff $i\Yleft i'$ and $j \Yleft j'$). Consider the subset $K = \setbuilder{(i,j)}{x_i = y_j}$ and the function $z: K\to X: (i,j) \mapsto x_i = y_j$. We claim that $\seq{z_k}_{k\in K}$ is a common Willard subnet of $\seq{x_i}$ and $\seq{y_j}$.
+
+First we observe that $K$ is frequent and thus directed by \ref{frequentImpliesDirected}. Indeed, take $(i,j)\in I\times J$. Then there exists $z\in \setbuilder{x_{i'}}{i'\Yright i} \cap \setbuilder{y_{j'}}{j'\Yright j}$. Then there exist $i'\Yright i$ and $j'\Yright j$ such that $x_{i'} = z = y_{j'}$, so $(i',j')\in K \cap \upset\{(i,j)\}$.
+
+To show that $\seq{z_k}$ is a Willard subnet of $\seq{x_i}$, we need to find a suitable $\varphi$. We claim we can take $\proj_1$. Indeed, $z(i,j) = x(i) = (x\circ \proj_1)(i,j)$ and $\proj_1$ is relation preserving. Finally we show that $\proj_1$ is an AA subnet of $\id_I$. By \ref{indexMappingSubnet}, it is enough to prove that $\proj_1^{\imf}(K)$ is frequent, for which we use \ref{eventualFrequentInTermsOfFilters}. Take arbitrary $i\in I$. Now take arbitrary $j\in J$. Since $K$ is frequent, there exists $(i',j')\Yright (i,j)$ in $K$. Then $i'\in \proj_1^\imf(K)\cap \upset \{i\}$.
+
+Showing that $\seq{z_k}$ is a Willard subnet of $\seq{y_j}$ is similar.
+
+(2) By \ref{subnetImplications}, $\seq{z_k}$ is an AA subnet of both $\seq{x_i}$ and $\seq{y_j}$, so $\TailsFilter\seq{x_i} \subseteq \TailsFilter\seq{z_k}$, $\TailsFilter\seq{y_j} = \TailsFilter\seq{z_k}$ and thus $\TailsFilter\seq{x_i}\vee \TailsFilter\seq{y_k}\subseteq \TailsFilter\seq{z_k}$.
+
+Conversely, take arbitrary $(i,j)\in K$ and consider $\setbuilder{x_{i'}}{(i',j')\Yright (i,j)}\in \Tails\seq{z_k}$. Then
+\[ \setbuilder{x_{i'}}{i'\Yright i}\cap \setbuilder{y_{j'}}{j'\Yright j} = \setbuilder{x_{i'}}{(i',j')\Yright (i,j)}, \]
+so the other inclusion follows from \ref{baseMeetJoinFilters}.
+\end{proof}
+
+\begin{proposition} \label{commonSubnetExistence}
+Let $\seq{x_i}_{i\in I}$ and $\seq{y_j}_{j\in J}$ be on a set $X$. The following are equivalent:
+\begin{enumerate}
+\item $\TailsFilter\seq{x_i} \amesh \TailsFilter\seq{y_j}$;
+\item $\seq{x_i}$ and $\seq{y_j}$ have a common Willard subnet;
+\item $\seq{x_i}$ and $\seq{y_j}$ have a common Kelley subnet;
+\item $\seq{x_i}$ and $\seq{y_j}$ have a common AA subnet;
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ By \ref{WillardSubnetMeshingNets}.
+
+$(2) \Rightarrow (3) \Rightarrow (4)$ Immediate from \ref{subnetImplications}.
+
+$(4) \Rightarrow (1)$ Let $\seq{z_k}_{k\in K}$ be an AA subnet of both $\seq{x_i}$ and $\seq{y_j}$. Then $\TailsFilter\seq{x_i} \subseteq \TailsFilter\seq{z_k}$ and $\TailsFilter\seq{y_j} \subseteq \TailsFilter\seq{z_k}$. Thus $\TailsFilter\seq{x_i}\vee \TailsFilter\seq{y_j} \subseteq \TailsFilter\seq{z_k} \subsetneq \powerset(X)$, so $\TailsFilter\seq{x_i} \amesh \TailsFilter\seq{y_j}$ by \ref{joinProperFilter}.
+\end{proof}
+
+\begin{proposition}
+Let $\seq{x_i}_{i\in I}$ be a net and $\seq{y_j}_{j\in J}$ an AA subnet of $\seq{x_i}$. Then $\seq{y_j}_{j\in J}$ is equivalent to a Willard subnet of $\seq{x_i}$.
+\end{proposition}
+\begin{proof}
+By \ref{commonSubnetExistence} we have $\TailsFilter\seq{x_i} \amesh \TailsFilter\seq{y_j}$, so we can use \ref{WillardSubnetMeshingNets} to construct a Willard subnet $\seq{z_k}_{k\in K}$ of $\seq{x_i}$ with tails filter $\TailsFilter\seq{x_i}\vee \TailsFilter\seq{y_k}$. Since $\TailsFilter\seq{x_i}\subseteq \TailsFilter\seq{y_k}$, we have that $\TailsFilter\seq{z_k} = \TailsFilter\seq{y_k}$ and thus that it is equivalent to $\seq{y_j}$.
+\end{proof}
+
+\subsubsection{Subsequences}
+\begin{definition}
+Let $\seq{x_n}_{n\in \N}$ and $\seq{y_n}_{n\in \N}$ be sequences then $\seq{y_n}$ is called a \udef{subsequence} of $\seq{x_n}$ if it is a frequent subnet. 
+\end{definition}
+
+\begin{lemma}
+Let $\seq{x_n}_{n\in \N}$ and $\seq{y_n}_{n\in \N}$ be sequences. Then $\seq{y_n}$ is a subsequence \textup{if and only if} there exists a strictly increasing function $\varphi: \N\to \N$ such that $y = x\circ \varphi$.
+\end{lemma}
+\begin{proof}
+By \ref{relationPreservingFunctionFromSemiConnexStructure}, $\varphi$ is strictly increasing iff it is an embedding.
+\end{proof}
+
+\begin{lemma} \label{sequenceAAsubnet}
+Let $\seq{x_n}_{n\in \N}$ and $\seq{y_n}_{n\in \N}$ be sequences then $\seq{y_n}$ is an AA subnet of $\seq{x_n}$ \textup{if and only if}
+\begin{enumerate}
+\item $\im(y)\setminus \im(x)$ is finite; and
+\item for all $a\in X$, if $x^\preimf(\{a\})$ is finite, then $y^\preimf(\{a\})$ is finite.
+\end{enumerate}
+\end{lemma}
+TODO: extract some lemmas from the proof.
+\begin{proof}
+$\boxed{\Rightarrow}$ We have $\im(x)\in \TailsFilter\seq{x_n} \subseteq \TailsFilter\seq{y_n}$. Thus there exists $k\in \N$ such that $\setbuilder{y_n}{n\geq k} \subseteq \im(x)$. Then
+\begin{align*}
+\im(y)\setminus \im(x) &= \big(\setbuilder{y_n}{n < k}\cup\setbuilder{y_n}{n\geq k}\big)\setminus\im(x) \\
+&= \big(\setbuilder{y_n}{n < k}\setminus\im(x)\big)\cup\big(\setbuilder{y_n}{n\geq k}\setminus\im(x)\big) \\
+&= \setbuilder{y_n}{n\geq k}\setminus\im(x) \\
+&\subseteq \setbuilder{y_n}{n\geq k},
+\end{align*}
+which is finite.
+
+Now suppose $x^\preimf(\{a\})$ is finite. Then we can set $k\defeq \max\big(x^\preimf(\{a\})\big)$ if $x^\preimf(\{a\})$ is non-empty and $k = 0$ otherwise. We have $a\notin \setbuilder{x_n}{n>k}$, so $X\setminus \{a\} \in \TailsFilter\seq{x_n}\subseteq \TailsFilter\seq{y_n}$. Then there exists $k'\in \N$ such that $y^\imf\big(\upset \{k\}\big) = \setbuilder{y_n}{n\geq k'}\subseteq X\setminus \{a\}$, so, by \ref{imagePreimageUniqueness},
+\[ \upset\{k\} \subseteq y^\preimf\big(X\setminus \{a\}\big) = \N \setminus y^\preimf(\{a\}). \]
+Taking complements yields $y^\preimf(\{a\}) \subseteq \big(\upset\{k\}\big)^c = \setbuilder{n\in \N}{n < k'}$, which is finite.
+
+$\boxed{\Leftarrow}$ Take arbitrary $k\in \N$. We need to show that $\setbuilder{x_n}{n\geq k}\in \TailsFilter\seq{y_n}$. By \ref{differenceProperties}, we have
+\begin{align*}
+\im(y)\setminus \setbuilder{x_n}{n\geq k} &= \Big(\big(\im(y)\cap \im(x)\big)\setminus \setbuilder{x_n}{n\geq k}\Big) \cup \Big(\im(y)\setminus \big(\im(x) \cup \setbuilder{x_n}{n\geq k}\big)\Big) \\
+&\subseteq \big(\im(x)\setminus \setbuilder{x_n}{n\geq k}\big) \cup \big(\im(y)\setminus \im(x)\big),
+\end{align*}
+which is finite.
+
+For all $a\in \im(x)\setminus \setbuilder{x_n}{n\geq k} \subseteq X\setminus \setbuilder{x_n}{n\geq k}$, we have $\setbuilder{x_n}{n\geq k} \subseteq X\setminus \{a\}$. Thus $\upset\{k\} \subseteq x^\preimf(X\setminus \{a\}) = \N\setminus x^\preimf(\{a\})$ and so $x^\preimf(\{a\}) \subseteq \big(\upset\{k\}\big) = \downset\{k-1\}$, which is finite.
+
+For all $a\in \im(y)\setminus \im(x)$, we have $a\in \im(x)^c$ and so $x^\preimf(\{a\}) = \emptyset$, which is finite. Thus
+\begin{align*}
+y^\preimf\big(\im(y)\setminus \setbuilder{x_n}{n\geq k}\big) &= \bigcup_{a\in \im(y)\setminus \setbuilder{x_n}{n\geq k}}y^{\preimf}(\{a\}) \\
+&\subseteq \bigcup_{a\in \big(\im(x)\setminus \setbuilder{x_n}{n\geq k}\big) \cup \big(\im(y)\setminus \im(x)\big)}y^{\preimf}(\{a\})
+\end{align*}
+is finite.
+Set $k'\defeq \max\Big(y^\preimf\big(\im(y)\setminus \setbuilder{x_n}{n\geq k}\big)\Big)$. Then $\upset \{k'+1\} \subseteq y^\preimf\big(\im(y)\setminus \setbuilder{x_n}{n\geq k}\big)^c$, so
+\[ \setbuilder{y_n}{n>k'} = y^\imf\big(\upset\{k+1\}\big) \subseteq \im(y)^c \cup \setbuilder{x_n}{n\geq k}. \]
+Since $\setbuilder{y_n}{n>k'} \subseteq \im(y)$, we have $\setbuilder{y_n}{n>k'} \subseteq \setbuilder{x_n}{n\geq k}$ and thus $\setbuilder{x_n}{n\geq k} \in \TailsFilter\seq{y_n}$.
+\end{proof}
+
+\begin{proposition} \label{sequenceAAsubnetEquivalentToSubsequence}
+Let $\seq{x_n}_{n\in \N}$ and $\seq{y_n}_{n\in \N}$ be sequences such that $\seq{y_n}$ is an AA subnet of $\seq{x_n}$. Then $\seq{y_n}$ is equivalent to some subsequence $\seq{z_n}$ of $\seq{x_n}$.
+\end{proposition}
+\begin{proof}
+By \ref{sequenceAAsubnet}, $\im(y)\setminus \im(x)$ is finite and. Since $x^\preimf\big(\im(y)\setminus \im(x)\big) = \emptyset$, we have that $y^\preimf(\{a\})$ is finite for all $a\in \im(y)\setminus \im(x)$. Thus
+\[ y^{\preimf}\big(\im(y)\setminus \im(x)\big) = \bigcup_{a\in \im(y)\setminus \im(x)} y^\preimf(\{a\}) \]
+is finite. Set $k \defeq \max\Big(y^{\preimf}\big(\im(y)\setminus \im(x)\big)\Big) + 1$ if $y^{\preimf}\big(\im(y)\setminus \im(x)\big)$ is non-empty and $k\defeq 0$ otherwise.
+
+For all $a\in \setbuilder{y_n}{n\geq k}$, we construct $S_a\subseteq \N$ as follows:
+\begin{itemize}
+\item if $y^\preimf(\{a\})$ is infinite, then $x^\preimf(\{a\})$ is infinite by \ref{sequenceAAsubnet} and set $S_a \defeq x^\preimf(\{a\})$;
+\item if $y^\preimf(\{a\})$ is finite, then $x^\preimf(\{a\})$ is non-empty and we can set $S_a = \big\{\min\big(x^\preimf(\{a\})\big)\big\}$.
+\end{itemize}
+Now set $S \defeq \bigcup_{a\in \setbuilder{y_n}{n\geq k}}S_a$. We have that $S$ is infinite: suppose, towards a contradiction that $S$ is finite. Then $y^\preimf(\{a\})$ cannot be infinite for any $a\in \setbuilder{y_n}{n\geq k}$. Since no $S_a$ is empty and all $S_a$ are disjoint, we must have that $\setbuilder{y_n}{n\geq k}$ is finite. Set $N \defeq \max_{a\in \setbuilder{y_n}{n\geq k}}\#(y^\preimf(\{a\}))$. Then $\upset\{k\} \subseteq y^\preimf\big(\setbuilder{y_n}{n\geq k}\big)$, so
+\[ \upset\{k\} \leq_c y^\preimf\big(\setbuilder{y_n}{n\geq k}\big) = \bigcup_{a\in \setbuilder{y_n}{n\geq k}}y^\preimf(\{a\}) \leq_c \#\big(\setbuilder{y_n}{n\geq k}\big)\cdot N <_c \infty, \]
+which is a contradiction. By \ref{increasingEnumeration} we have a strictly increasing enumeration $\varphi: \N\to S$ of $S$. Then $z \defeq x\circ\varphi$ is a subsequence of $\seq{x_n}$. Since $\im(z) = \setbuilder{y_n}{n\geq k}$ and $y^\preimf(\{a\})$ is infinite iff $z^\preimf(\{a\})$ is infinite, we have that $\seq{y_n}$ and $\seq{z_n}$ are AA subnets of each other by 
+\ref{sequenceAAsubnet}.
+\end{proof}
+
+\begin{proposition} \label{existenceMonotoneSubsequenceConnexRelation}
+Let $\sSet{X,R}$ be a connex ordered set. Every sequence $\seq{x_n}$ in $X$ has a monotone subsequence.
+\end{proposition}
+TODO: we may remove the ordered requirement. Monotone sequence then becomes ``choice sequence'' of $R$ or $R^\transp$.
+
+TODO: clean up proof.
+\begin{proof}
+Consider the set $S\defeq \setbuilder{n\in \N}{\forall m > n: \; x_n \Yleft x_m}$.
+
+First suppose $S$ is infinite. Then, by \ref{increasingEnumeration}, there exists an order similarity $\varphi: \N \to S \subseteq \N$. Then $x\circ \varphi$ is a monotone subsequence of $\seq{x_n}$.
+
+Now suppose $S$ is finite. Then $S$ has a maximal element $n_0$. By construction, for all $n>n_0$, we have $\exists m > n: x_n \overline{\Yleft} x_m$. By connexity, this implies $\forall n>n_0: \exists m > n: x_n \Yright x_m$.
+
+Define the function $\varphi$ recursively by $\varphi(0) = n_0$ and $\varphi(n+1) = \min\setbuilder{m>n}{x_n \Yright x_m}$, which exists since $\N$ is well-founded. This $\varphi$ determines a monotone subsequence.
+\end{proof}
 
 
 \chapter{Fixed points}

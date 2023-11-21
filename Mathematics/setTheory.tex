@@ -667,14 +667,31 @@ and
 \begin{enumerate} \setcounter{enumi}{2}
 \item $(A\setminus B)\cap C = (A\cap C)\setminus B = A\cap (C\setminus B)$;
 \item $(A\setminus B)\cup C = (A\cup C)\setminus (B\setminus C)$;
+\item $A\setminus(B\cap C) = (A\setminus B)\cup (A\setminus C)$;
 \end{enumerate}
 and
-\begin{enumerate} \setcounter{enumi}{4}
+\begin{enumerate} \setcounter{enumi}{5}
+\item $A\setminus B = \big(A\setminus (B\cap C)\big) \cup \big((A\cap C)\setminus B\big)$;
+\end{enumerate}
+and
+\begin{enumerate} \setcounter{enumi}{6}
 \item $A\setminus A = \emptyset$;
 \item $\emptyset\setminus A = \emptyset$;
 \item $A\setminus \emptyset = A$.
 \end{enumerate}
 \end{lemma}
+TODO rest of proof.
+\begin{proof}
+(5) We calculate
+\[ A\setminus(B\cap C) = A\cap (B^c\cup C^c) = (A\cap B^c)\cup (A\cap C^c) = (A\setminus B)\cup (A\setminus C). \]
+
+(6) We calculate
+\begin{align*}
+A\setminus B &= A\cap B^c \cap (C\cup C^c) = (A\cap B^c \cap C^c) \cup (A\cap B^c \cap C) \\
+&= \big(A\cap (B\cup C)^c\big)\cup \big((A\cap C)\cap B^c\big) \\
+&= \big(A\setminus (B\cap C)\big) \cup \big((A\cap C)\setminus B\big).
+\end{align*}
+\end{proof}
 
 \subsubsection{Symmetric difference}
 \begin{definition}
@@ -1624,8 +1641,12 @@ Let $R,S$ be composable relations. Then for all $x,y$
 \begin{proof}
 TODO
 \end{proof}
-\begin{corollary}
-Let $R,S$ be composable relations. If $R$ is right unique, then $\overline{R;\overline{S}} = R;S$.
+\begin{corollary} \label{complementCompositionUniqueness}
+Let $R,S$ be composable relations. Then
+\begin{enumerate}
+\item if $R$ is right unique, then $\overline{R;S} = R;\overline{S}$;
+\item if $S$ is left unique, then $\overline{R;S} = \overline{R};S$.
+\end{enumerate}
 \end{corollary}
 
 
@@ -2288,6 +2309,7 @@ Let $R$ be a homogeneous relation on $A$. Then $R$ is
 \end{aligned}$
 \item antisymmetric $\begin{aligned}[t]
 &\text{\textup{if and only if}}\; R\cap R^\transp \subseteq \id_A \\
+&\text{\textup{if and only if}}\; R\setminus \id_A \subseteq  \overline{R}^\transp \\
 &\text{\textup{if and only if}}\; R^\transp\subseteq \overline{R}\cup \id_A.
 \end{aligned}$
 \end{enumerate}
@@ -2296,6 +2318,8 @@ Let $R$ be a homogeneous relation on $A$. Then $R$ is
 (1) The inclusion $R\subseteq R^\transp$ follows straight from the definition. The other inclusion is obtained by taking the converse.
 
 (2) The third equation is a consequence of \ref{setPerpInequality}.
+
+(3) By \ref{residuationSetBooleanLattice} and taking complements.
 
 (3) For the second equivalence we calculate using \ref{setPerpInequality}:
 \[ R\cap R^\transp \subseteq \id_A \iff R\cap R^\transp \cap\overline{\id_A} = E_A \iff R^\transp \subseteq \overline{R \cap \overline{\id_A}} = \overline{R} \cup \id_A. \]
@@ -2383,7 +2407,7 @@ Let $R$ be a homogeneous binary relation on a class $A$. We say
 \end{itemize}
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{connexityEquivalents}
 Let $R$ be a homogeneous relation on $A$. Then
 \begin{enumerate}
 \item $\begin{aligned}[t]
@@ -3388,18 +3412,18 @@ is a proper class by replacement (TODO ref! + necesary?) and thus an element. Ho
 \subsection{Input permutation}
 
 Let $A,B$ be classes. Then we can define a swap function as follows:
-\[ \swap_{A,B}: A\times B \to B\times A: (a,b) \mapsto (b,a). \]
-We may write $\swap$ instead of $\swap_{A,B}$ is the classes are clear from the context.
+\[ \pairSwap_{A,B}: A\times B \to B\times A: (a,b) \mapsto (b,a). \]
+We may write $\pairSwap$ instead of $\pairSwap_{A,B}$ is the classes are clear from the context.
 
 \begin{lemma}
-Let $A, B$ be classes. Then $\swap_{B,A}\circ \swap_{A,B} = \id_{A\times B}$.
+Let $A, B$ be classes. Then $\pairSwap_{B,A}\circ \pairSwap_{A,B} = \id_{A\times B}$.
 \end{lemma}
 
 \begin{definition}
-Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. We define the \udef{dual} function $f^d: B\times A \to C$ of $f$ as $f^d \defeq f\circ \swap$. 
+Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. We define the \udef{dual} function $f^d: B\times A \to C$ of $f$ as $f^d \defeq f\circ \pairSwap$. 
 \end{definition}
 
-If we restrict ourselves to the class of binary functions between sets, then $\swap$ can be considered a function.
+If we restrict ourselves to the class of binary functions between sets, then $\pairSwap$ can be considered a function.
 
 \begin{lemma}
 Let $A, B, C$ be classes and $f: A\times B \to C$ a binary function. Then $(f^d)^d = f$.
@@ -3974,6 +3998,7 @@ For all $n\in \N$, the function $\N\to \N: s\mapsto n+s$ is 1-1, so
 \[n+s = n+t \implies s=t.\]
 \end{lemma}
 
+\subsection{Ordering the natural numbers}
 \begin{definition}
 The binary relation $\leq$ defined by
 \[ n \leq m \defequiv \exists s\in \N: n+s = m \]
@@ -4031,7 +4056,15 @@ By \ref{orderingInitialSegments}. TODO superfluous?
 \end{proof}
 TODO: this is Dedekind / Yoneda principle??
 
-\subsection{Intervals}
+\begin{lemma} \label{increasingEnumeration}
+Let $S\subseteq \N$ be an infinite subset. Then there exists a unique increasing bijection $f: \N\to S$.
+\end{lemma}
+\begin{proof}
+TODO. Use recursion: $f(0) = \min(S)$ and $f(n+1) = \min\big(S\cap \upset\{f(n)+1\}\big)$.
+\end{proof}
+
+
+\subsubsection{Intervals}
 \begin{definition}
 Let $n,m\in \N$. Then
 \begin{itemize}

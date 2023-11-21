@@ -2326,8 +2326,8 @@ Let $(A, R)$ and $(B, S)$ be relational structures and $f: A\to B$ a function. W
 \[ \forall x,y\in A: xRy \implies f(x)Sf(y); \]
 \item $f$ is \udef{relation-reflecting} if
 \[ \forall x,y\in A: f(x)Sf(y) \implies xRy; \]
-\item $f$ is a \udef{relation embedding} if it is relation-preserving and -reflecting:
-\[ \forall x,y\in A: xRy \iff f(x)Sf(y). \]
+\item $f$ is a \udef{relation embedding} if it is injective, relation-preserving and -reflecting;
+\item $f$ is a \udef{relation isomorphism} if it is bijective, relation-preserving and -reflecting.
 \end{itemize}
 \end{definition}
 
@@ -2348,7 +2348,7 @@ $(2) \Rightarrow (3)$ We calculate
 $(3) \Rightarrow (2)$ We calculate
 \[ R \subseteq R;(f;f^\transp) = (R;f);f^\transp \subseteq f;S;f^\transp. \]
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{relationPreservingTranspose}
 Let $\sSet{X, R}$ and $\sSet{Y, S}$ be relational structures and $f: X\to Y$ a function. Then the following are also equivalent to $f$ being relation-preserving:
 \begin{enumerate}
 \item $f: X^o \to Y^o$ is relation preserving;
@@ -2383,9 +2383,9 @@ $(2 \Leftrightarrow 3)$ This is the particular case of principal images. A relat
 
 $(4, 5)$ Here we are taking images of $f^\transp;R \subseteq S;f^\transp$.
 \end{proof}
-\begin{corollary} \label{closurePreimageRelationPreservingFunctions}
+\begin{lemma} \label{closurePreimageRelationPreservingFunctions}
 Let $\sSet{A,R}$ and $\sSet{B, S}$ be relational structures and $f: A\to B$ a relation-preserving function. Then the preimage of an $S$-closed set is $R$-closed.
-\end{corollary}
+\end{lemma}
 \begin{proof}
 Suppose $Y\subseteq B$ is an $S$-closed set, i.e.\ $Y_S\subseteq Y$. Then $f^\preimf(Y)_R \subseteq f^\preimf(Y_S)\subseteq f^\preimf(Y)$, so $f^\preimf(Y)$ is $R$-closed.
 \end{proof}
@@ -2401,11 +2401,61 @@ x\in f^{-1}[\{y\}]_R &\iff \exists z:\; f(z) = y \;\land\; zRx \\
 \end{align*}
 \end{note}
 
+\begin{lemma} \label{relationPreservingComplement}
+Let $\sSet{A,R}$ and $\sSet{B, S}$ be relational structures and $f: A\to B$ a function. Then
+\begin{enumerate}
+\item $f;\overline{S};f^\transp = \overline{f;S;f^\transp}$;
+\item the following are equivalent:
+\begin{enumerate}
+\item $f$ is relation-preserving;
+\item $f;\overline{S};f^\transp \subseteq \overline{R}$;
+\item $f;\overline{S}^\transp;f^\transp \subseteq \overline{R}$.
+\end{enumerate}
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Immediate by \ref{complementCompositionUniqueness}.
+\end{proof}
+
+\begin{lemma} \label{relationPreservingFunctionFromSemiConnexStructure}
+Let $\sSet{A, R}$ be a semi-connex relational structure and $\sSet{B, S}$ a relational structure. Let $f:A\to B$ be a relation-preserving function. Then
+\begin{enumerate}
+\item if $S$ is irreflexive, then $f$ is injective;
+\item if $S$ is asymmetric, then $f$ is an embedding.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Irreflexivity of $S$ means $\id_B\subseteq \overline{S}$. Taking the transpose gives $\id_B \subseteq \overline{S}^\transp$ and thus $\id_B\subseteq \overline{S}\cap \overline{S}^\transp$. By \ref{connexityEquivalents} and \ref{relationalSymmetryEquivalents}, we have $\overline{R} \cap \overline{R}^\transp \subseteq \id_A$. So
+\[ f;f^\transp \subseteq f;\big(\overline{S}\cap\overline{S}^\transp\big);f^\transp \subseteq f;\overline{S};f^\transp \cap f;\overline{S}^\transp;f^\transp \subseteq \overline{R} \cap \overline{R}^\transp \subseteq \id_A, \]
+where we have used \ref{relationalComposition}, \ref{relationPreservingComplement} and \ref{relationPreservingTranspose}. This means that $f$ is injective by \ref{relationTimesTransposeSubsetIdentity}.
+
+(2) Since $S$ is irreflexive, by \ref{asymmetricIrreflexive}, we have that $f$ is injective by (1). We now need to prove that $f$ is relation-reflecting. Since $S$ is irreflexive, we have $\id_B\subseteq \overline{S}$, so $S\subseteq \overline{\id}_B$ and thus $S= S\cap \overline{\id}_B$. Also $S\subseteq \overline{S}^\transp$ by \ref{relationalSymmetryEquivalents}.
+We then calculate
+\begin{align*}
+f;S;f^\transp &= f;(S\cap \overline{\id_B});f^\transp \\
+&\subseteq f;S;f^\transp \cap f;\overline{\id_B};f^\transp \\
+&\subseteq f;\overline{S}^\transp;f^\transp \cap \overline{f;\id_B;f^\transp} \\
+&\subseteq \overline{R}^\transp \cap \overline{f;f^\transp} \\
+&\subseteq \big(R\cup\id_A\big) \cap \overline{\id}_A = \big(R\cap \overline{\id}_A\big) \cup \big(\id_A\cap \overline{\id}_A\big) = R\cap \overline{\id}_A \\
+&\subseteq R,
+\end{align*}
+where we have used \ref{relationalComposition}, \ref{relationPreservingComplement} and \ref{totalityEquivalences}.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{A, R}$ be an anti-symmetric relational structure and $\sSet{B, S}$ a reflexive relational structure. Let $f:A\to B$ be a relation-reflecting function. Then $f$ is injective.
+\end{lemma}
+\begin{proof}
+We have
+\[ f;f^\transp = f;\id_B;f^\transp \cap f;\id_B;f^\transp \subseteq f;S;f^\transp \cap f;S^\transp;f^\transp \subseteq R\cap R^\transp \subseteq \id_A, \]
+by \ref{relationalSymmetryEquivalents} and since $\big(f;S;f^\transp\big)^\transp = f;S;f^\transp$. Thus $f$ is injecitve by \ref{relationTimesTransposeSubsetIdentity}.
+\end{proof}
+
 \begin{lemma}
 Let $(A, R)$ and $(B, S)$ be relational structures and $f: A\to B$ a function. Then
 \begin{enumerate}
 \item $f$ is relation-reflecting \textup{if and only if} $R \supseteq f;S;f^\transp$;
-\item $f$ is a relation embedding \textup{if and only if} $R = f;S;f^\transp$.
+\item $f$ is a relation embedding \textup{if and only if} $f$ is injective and $R = f;S;f^\transp$.
 \end{enumerate}
 \end{lemma}
 
