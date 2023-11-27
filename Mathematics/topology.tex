@@ -476,7 +476,7 @@ where we have used \ref{complementInIsotoneGrill}.
 \end{proof}
 \begin{corollary} \label{principalInherenceComplementAdherence}
 Let $X$ be a set, $\xi$ a preconvergence on $X$ and $A \subseteq X$. Then
-\[ (\inh_\xi A)^c = (\adh_\xi A^c). \]
+\[ (\inh_\xi A)^c = \adh_\xi (A^c). \]
 \end{corollary}
 
 \begin{proposition} \label{principalAdherenceInherence}
@@ -630,6 +630,18 @@ For point (7), we calculate,
 \inh_\xi(A\cap B) &= \adh_\xi\big((A\cap B)^c\big)^c = \adh_\xi(A^c\cup B^c)^c = \big(\adh_\xi(A^c)\cup \adh_\xi(B^c)\big)^c \\
 &= \adh_\xi(A^c)^c\cap \adh_\xi(B^c)^c = \inh_\xi(A) \cap \inh_\xi(B).
 \end{align*}
+\end{proof}
+\begin{corollary} \label{interleavedAdherenceInherenceInclusion}
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then
+\begin{enumerate}
+\item $\adh\big(\inh(A)\big)\subseteq \adh(A)$;
+\item $\inh(A) \subseteq \inh\big(\adh(A)\big)$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) We have $\inh(A)\subseteq A$, so $\adh\big(\inh(A)\big)\subseteq \adh(A)$.
+
+(2) We have $A\subseteq \adh(A)$, so $\inh(A) \subseteq \inh\big(\adh(A)\big)$.
 \end{proof}
 
 
@@ -808,6 +820,21 @@ X = \adh_\xi(A) &\iff \forall x\in X: \; x\in \adh_\xi(A) \\
 \end{align*}
 \end{proof}
 
+\begin{lemma} \label{convergentFiltersInDenseSet}
+Let $\sSet{X, \xi}$ be a convergence space and $A$ a subset. Then $A$ is dense in $X$ \textup{if and only if} for all $x\in X$, there exists a filter $F\to x$ with $A\in F$.
+\end{lemma}
+\begin{proof}
+We have $A$ dense in $X$ iff $x\in \adh(A)$ for all $x\in X$. This is equivalent to the existence of such a filter by \ref{principalAdherenceInherence}.
+\end{proof}
+
+\begin{lemma} \label{openDensityLemma}
+Let $\sSet{X, \xi}$ be a convergence space and $A$ a subset.
+If $A^c$ contains a non-empty open set, then $A$ is not dense,
+\end{lemma}
+\begin{proof}
+If $A$ is dense, then $\adh(A) = \inh(A^c)^c = X$, so $\inh(A^c) = \emptyset$. If $A^c$ contains an open set $B$, then $\inh(A^c) \supseteq \inh(B) = B$. This means that $\inh(A^c) \neq \emptyset$ and thus that $A$ is not dense.
+\end{proof}
+
 \subsubsection{Strict density}
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then $A$ is called \udef{strictly dense} in $X$ if for all $F\to x\in X$, there exists $G\in \powerfilters(X)$ such that
@@ -827,13 +854,6 @@ We need to show that $\adh_\xi(A) = X$. It is enough to show that $x\in \adh_\xi
 Take arbitrary $x\in X$. Then $\pfilter{x}\to x$ and take a $G_x$ such that $A\in G_x$. Since $\adh_\xi^\imf(G_x)\subseteq \pfilter{x}$, we have $\adh_\xi(A) \in \pfilter{x}$. This means that $x\in \adh_\xi(A)$. 
 \end{proof}
 
-\begin{lemma} \label{openDensityLemma}
-Let $\sSet{X, \xi}$ be a convergence space and $A$ a subset.
-If $A^c$ contains a non-empty open set, then $A$ is not dense,
-\end{lemma}
-\begin{proof}
-If $A$ is dense, then $\adh(A) = \inh(A^c)^c = X$, so $\inh(A^c) = \emptyset$. If $A^c$ contains an open set $B$, then $\inh(A^c) \supseteq \inh(B) = B$. This means that $\inh(A^c) \neq \emptyset$ and thus that $A$ is not dense.
-\end{proof}
 
 \subsection{Accumulation points}
 \begin{definition}
@@ -3233,6 +3253,24 @@ The implication $\Rightarrow$ is given by \ref{continuityRestrictionExpansion}.
 For the converse, it is enough, by \ref{pretopologicalContinuityVicinities}, to prove that $\vicinity_Y\big(f(a)\big) \subseteq \upset f^{\imf\imf}\big(\vicinity_{X}(a)\big)$.
 By \ref{continuityVicinityFilter} and \ref{subspaceVicinityFilter}, we have
 \[ \vicinity_Y\big(f(a)\big) \subseteq \upset (f|_A)^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big) = \upset (f\circ \iota)^{\imf\imf}\big(\vicinity_{\xi|_A}(a)\big) = \upset f^{\imf\imf}\big(\vicinity_{X}(a)\big). \]
+\end{proof}
+
+\begin{lemma} \label{denseSetDeterminesContinuousFunction}
+Let $\sSet{X,\xi}$ and $\sSet{Y, \zeta}$ be convergence spaces, $f,g\in \cont(X,Y)$ continuous functions and $A\subseteq X$ a dense subset. If $f|_A = g|_A$, then $f = g$.
+\end{lemma}
+\begin{proof}
+Take arbitrary $x \in X$. By \ref{convergentFiltersInDenseSet}, there exists $F\to x$ such that $A\in F$. We then calculate
+\begin{align*}
+f(x) &= \lim f^{\imf\imf}(F) \\
+&= \lim f^{\imf\imf}(F|_A) \\
+&= \lim \upset \setbuilder{f^\imf(A\cap B)}{B\in F} \\
+&= \lim \upset \setbuilder{f|_A^\imf(A\cap B)}{B\in F} \\
+&= \lim \upset \setbuilder{g|_A^\imf(A\cap B)}{B\in F} \\
+&= \lim \upset \setbuilder{g^\imf(A\cap B)}{B\in F} \\
+&= \lim g^{\imf\imf}(F|_A) \\
+&= \lim g^{\imf\imf}(F) \\
+&= g(x).
+\end{align*}
 \end{proof}
 
 \subsection{Product convergence}
