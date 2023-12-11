@@ -988,12 +988,13 @@ We denote the space of Fredholm operators from $X$ to $Y$ as $\Fred(X,Y)$. If $X
 \begin{example}
 \begin{enumerate}
 \item If $X=Y$ is finite-dimensional, then all operators are Fredholm with index $0$.
+\item A self-adjoint operator on a Hilbert space with finite kernel is Fredholm with Fredholm index $0$.
 \item The left shift $S_l:\ell^2(\N)\to\ell^2(\N): (x_n)_n\mapsto (x_{n+1})_n$ has index $1$.
 \item The right shift $S_r = S_l^*$ has index $-1$.
 \end{enumerate}
 \end{example}
 
-\begin{lemma}
+\begin{lemma} \label{FredholmOperatorClosedRange}
 A Fredholm operator has closed range.
 \end{lemma}
 
@@ -1018,8 +1019,7 @@ Let $T\in\Fred(H)$ for some Hilbert space $H$. Then
 \item $\Index(T^*) = -\Index(T)$.
 \end{enumerate}
 \end{proposition}
-TODO: integrate with corollary??
-
+TODO: prove using next lemma:
 \begin{lemma}
 Let the commutative diagram
 \[ \begin{tikzcd}
@@ -1531,9 +1531,9 @@ TODO notation $D^\alpha$ for multiindex $\alpha$. Also $|\alpha| = \sum_i \alpha
 
 \subsubsection{Gateaux derivative}
 \begin{definition}
-Partial application of the directional derivative in the second argument gives a function
+Let $f:V\to W$ be a function between normed spaces. If $\partial_u f|_a$ exists for all $u\in V$, then we call the partial application of the directional derivative in the second argument
 \[ \diff{_af}: V\not\to W: u\mapsto \diff{_af}(u) \defeq \partial_u f|_a = \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
-that is referred to as the \udef{Gateaux differential} of $f$ at the point $a$.
+the \udef{Gateaux differential} of $f$ at the point $a$.
 
 If $\diff{_af}: V\not\to W$ is a bounded linear map, we will refer to it as the \udef{Gateaux derivative}.
 \end{definition}
@@ -1548,6 +1548,25 @@ $\partial_{\lambda u}f(a) = \lim_{t\to 0} \frac{f(a+t\lambda u) - f(a)}{t} = \li
 
 TODO mean value theorem?
 
+\begin{example}
+The function
+\[ f: \R^2\to \R: (x,y) \mapsto \begin{cases}
+\frac{x^2y}{x^2+y^2} & (x,y)\neq (0,0) \\0 & (x,y) = (0,0)
+\end{cases} \]
+has a Gateaux differential that is defined everywhere, but is non-linear.
+
+TODO??
+\end{example}
+
+\begin{proposition}[Chain rule for Gateaux differential]
+Let $U,V,W$ be normed spaces and $f: U\to V$, $g: V\to W$ be functions. Suppose the Gateaux differential of $f$ at $u\in U$ exists and the Gateaux differential of $g$ at $f(u)$ exists, then the Gateaux differential of $g\circ f$ at $u$ exists and
+\[ \diff_{u}\big(g\circ f\big) = \big(\diff{_{f(u)}}g\big) \circ \big(\diff{_u}f\big). \]
+If both $\diff{_u}f$ and $\diff{_{f(u)}}g$ are Gateaux derivatives, then $\diff_{u}\big(g\circ f\big)$ is a Gateaux derivative.
+\end{proposition}
+\begin{proof}
+TODO!
+\end{proof}
+
 \subsection{Hadamard derivative}
 
 \subsection{Fréchet derivative}
@@ -1559,11 +1578,11 @@ is uniform in all $u$ on the $S(\vec{0},1)$, then we say the function is \udef{(
 We may also write $\diff{f}$, leaving the $a$ implicit.
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{FrechetDerivativeAsymptotics}
 Let $V,W$ be normed vector spaces and $f:U\subseteq V\to W$ a function defined on an open subset $U$. Let $a\in V$.
 
 Then $f$ is Fréchet differentiable at $a$ \textup{if and only if} there exists a bounded linear map $A: V\to W$ such that $f(a+x)$ can be written as
-\[ f(a+x) = f(a) + A(x) + o(x) \qquad \text{as} \qquad x\to 0. \]
+\[ f(a+x) = f(a) + A(x) + o\big(\norm{x}\big) \qquad \text{as} \qquad x\to 0. \]
 In this case $A = \diff{_af}$.
 \end{proposition}
 \begin{proof}
@@ -1590,6 +1609,20 @@ Assume $f$ is has Fréchet derivative $A$. Then
 \begin{lemma}
 The Fréchet derivative is the same for equivalent norms.
 \end{lemma}
+
+\begin{proposition}[Chain rule for Fréchet derivative] \label{FrechetChainRule}
+Let $U,V,W$ be normed spaces and $f: U\to V$, $g: V\to W$ be functions. Suppose $f$ is Fréchet differentiable at $u\in U$ and $g$ is Fréchet differentiable at $f(u)$, then $g\circ f$ is Fréchet differentiable at $u$ and
+\[ \diff_{u}\big(g\circ f\big) = \big(\diff{_{f(u)}}g\big) \circ \big(\diff{_u}f\big). \]
+\end{proposition}
+\begin{proof}
+Take $x\in U$. Then
+\begin{align*}
+(g\circ f)(u+x) &= g\Big(f(u) + \big(\diff{_uf}\big)(x) + o\big(\norm{x}\big)\Big) \\
+&= (g\circ f)(u) + \big(\diff{_f(u)}\big)\Big(\big(\diff{_uf}\big)(x) + o\big(\norm{x}\big)\Big) + o\big(\norm{x}\big) \\
+&= (g\circ f)(u) + \Big(\big(\diff{_f(u)}\big)\circ \big(\diff{_uf}\big)\Big)(x) + \big(\diff{_f(u)}\big)\big(o\big(\norm{x}\big)\big) + o\big(\norm{x}\big).
+\end{align*}
+We just need to observe that $\big(\diff{_f(u)}\big)\big(o\big(\norm{x}\big)\big)$ is $o\big(\norm{x}\big)$ as $x\to 0$, which is immediate since $\diff{_f(u)}$ is a bounded linear function.
+\end{proof}
 
 \subsubsection{Link with Gateaux derivative}
 \url{https://link.springer.com/content/pdf/bbm%3A978-3-642-16286-2%2F1.pdf}
@@ -1749,6 +1782,56 @@ We have
 &= -a(t)^{-1}\left(\lim_{h\to 0}\frac{\big(a(t+h) - a(t)\big)a(t+h)^{-1}}{h}\right)\Big(\lim_{h\to 0}a(t+h)^{-1}\Big) \\
 &= -a(t)^{-1}a'a^{-1}.
 \end{align*}
+\end{proof}
+
+\subsubsection{Derivative of determinant}
+\begin{proposition} \label{DerivativeDeterminantAtIdentity}
+Let $\F$ be a field and $A\in \F^{n\times n}$. Then $\diff{_{\mathbb{1}_n}\det} = \Tr$, where the derivative is a Fréchet derivative.
+\end{proposition}
+In other words, the Fréchet derivative of the determinant function $\det: \F^{n\times n}\to \F$ at $\mathbb{1}_{n}$ is the trace function $\Tr:\F^{n\times n}\to \F$.
+\begin{proof}
+We use \ref{FrechetDerivativeAsymptotics} to show that it is the Fréchet derivative. To that end, we expand using \ref{expansionDeterminantAroundIdentity}:
+\begin{align*}
+\det(\mathbb{1}_n + X) &= \det(\mathbb{1}_n + \frac{\norm{X}}{\norm{X}}X) \\
+&= 1 + \norm{X}\Tr\Big(\frac{X}{\norm{X}}\Big) + {\norm{X}}^2 P({\norm{X}}) \\
+&= \det(\mathbb{1}_n) + \Tr(X) + {\norm{X}}^2 P({\norm{X}}),
+\end{align*}
+so we just need to show that ${\norm{X}}^2 P({\norm{X}})$ is $o(X)$ as $X\to 0$. For $X$ such that $\norm{X} \leq 1$, we use the bound in \ref{expansionDeterminantAroundIdentity} (and the fact that $\norm{X/\norm{X}} = 1$) to calculate
+\begin{align*}
+0\leq \frac{{\norm{X}}^2 P({\norm{X}})}{\norm{X}} &= {\norm{X}} P({\norm{X}}) \\
+&\leq {\norm{X}} P(1) \\
+&\leq \norm{X}\big(1 + n + n!2^n\big).
+\end{align*}
+The last term converges to $0$ as $X\to 0$, so ${\norm{X}}^2 P({\norm{X}})$ is $o(X)$ as $X\to 0$ by the squeeze theorem \ref{squeezeTheorem}.
+\end{proof}
+
+\begin{proposition}[Jacobi's formula] \label{JacobisFormula}
+Let $U\subseteq \R$ be an open set and $A: U\to \F^{n\times n}$ a differentiable function. Then
+\[ \od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) = \Tr\Big(\adj\big(A(t_0)\big)A'(t_0)\Big). \]
+If $A(t_0)$ is invertible, then
+\[ \od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) = \det\big(A(t_0)\big)\Tr\Big(A^{-1}(t_0)A'(t_0)\Big). \]
+\end{proposition}
+\begin{proof}
+We first prove the second assertion, assuming $A(t_0)$ is invertible. Using \ref{DerivativeDeterminantAtIdentity} and the chain rule \ref{FrechetChainRule}, we calculate
+\begin{align*}
+\dod{}{t}\Big|_{t=t_0}\det\big(A(t)\big) &= \dod{}{t}\Big|_{t=t_0}\det\big(A(t_0)A(t_0)^{-1}A(t)\big) \\
+&= \det\big(A(t_0)\big)\dod{}{t}\Big|_{t=t_0}\det\big(A(t_0)^{-1}A(t)\big) \\
+&= \det\big(A(t_0)\big)\big(\diff{_{\mathbb{1}_n}\det}\big)\Big(A(t_0)^{-1}\dod{}{t}\Big|_{t=t_0}A'(t)\Big) \\
+&= \det\big(A(t_0)\big)\Tr\Big(A(t_0)^{-1}A'(t_0)\Big).
+\end{align*}
+For the first assertion, first assume $A(t_0)$ is invertible. Then, by \ref{inverseAdjunctDeterminant},
+\begin{align*}
+\od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) &= \det\big(A(t_0)\big)\Tr\big(A^{-1}(t_0)A'(t_0)\big) \\
+&= \Tr\Big(\det\big(A(t_0)\big)A^{-1}(t_0)A'(t_0)\Big) \\
+&= \Tr\Big(\adj\big(A(t_0)\big)A'(t_0)\Big).
+\end{align*}
+Now suppose $A(t_0)$ is not invertible. Since the invertible elements are dense in the space of all matrices, by \ref{finiteDimensionsInvertiblesDense}, we can find a sequence $\seq{B_n}$ of invertible matrices that converges to $A(t_0)$ by \ref{existenceConvergentSequenceDenseSubset}. TODO: finish argument!
+\end{proof}
+\begin{corollary}
+Let $B\in \F^{n\times n}$. Then $\det(e^{B}) = e^{\Tr(B)}$.
+\end{corollary}
+\begin{proof}
+Setting $A(t) = e^(t B)$ in the Jacobi formula gives $\od{}{t}\det(e^{tB}) = \det(e^{tB})Tr(e^{-tB}Be^{tB}) = \det(e^{tB})Tr(B)$. Solving this differential equation yields $\det(e^{tB}) = e^{t\Tr(B)}$.
 \end{proof}
 
 \section{Analytic functions}
@@ -2029,6 +2112,7 @@ ab+b &\mapsto a^2b + ab + b \\
 \end{proof}
 This gives an alternate proof of the convergence of the Neumann series.
 
+\subsection{The set of invertible elements}
 \begin{proposition} \label{openSetInvertibles}
 Let $x\in\GL(A)$ and $y\in A$ such that $\norm{y} < \norm{x^{-1}}^{-1}$, then
 \begin{enumerate}
@@ -2066,6 +2150,12 @@ We calculate, using the inequalities to apply the Neumann series formula and geo
 As the right-hand side converges to $0$, so must the left-hand side. Thus $(x_n^{-1})$ converges to $x^{-1}$.
 \end{proof}
 
+\begin{lemma} \label{finiteDimensionsInvertiblesDense}
+Let $A$ be a finite-dimensional unital Banach algebra. Then $\GL(A)$ is dense in $A$.
+\end{lemma}
+\begin{proof}
+TODO: any set of eigenvectors with different eigenvalues is linearly independent. Since there are only finitely many linearly independent vectors, there are only finitely many eigenvalues. Let $\epsilon$ be the lowest absolute value of an eigenvalue of $a$, excluding $0$. Then $\mu \vec{1} - a$ is invertible for all $\mu\in ball_\F(0,\epsilon)$.
+\end{proof}
 
 \section{Quotient algebras}
 \begin{proposition}

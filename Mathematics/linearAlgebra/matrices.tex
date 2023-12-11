@@ -600,6 +600,26 @@ Using \ref{standardBasisFromIdentityMatrix} and \ref{submatrixMultiplication}, w
 &= [\mathbb{1}_n\cdot A]_{i,-}\cdot [\mathbb{1}_m]_{-,j} \\
 &= [\mathbb{1}_n\cdot A\cdot\mathbb{1}_m]_{i,j} = [A]_{i,j}.
 \end{align*}
+We also use that $\overline{\vec{e}_i} = \vec{e}_i$.
+\end{proof}
+
+\subsubsection{The norm}
+The identification $\F^n \cong \F^{n\times 1}$ gives $\F^n$ an operator norm in addition to the norm derived from the inner product. These norms coincide since, for any unit vector $\lambda\in \F$, we have
+\[ \norm{\vec{v}\lambda} = |\lambda| \norm{\vec{v}} = \vec{v}. \]
+
+\begin{lemma}
+Let $\vec{v}\in\F^n$. Then $\norm{\vec{v}^\transp} = \norm{\vec{v}}$.
+\end{lemma}
+\begin{proof}
+Restratement of \ref{normVectorSupUnitvectors}.
+\end{proof}
+
+\begin{lemma} \label{matrixElementsBoundedByNorm}
+Let  $\{\vec{e}_i\}_{i=1}^n$ be the standard basis of $\F^n$ and $\{\vec{f}_i\}_{i=1}^m$ the standard basis of $\F^m$. Let $A\in\F^{n\times m}$. Then $\big|[A]_{i,j}\big| \leq \norm{A}$.
+\end{lemma}
+\begin{proof}
+We have, by \ref{componentsFromStandardInnerProduct} and \ref{operatorNormInnerProduct},
+\[ \big|[A]_{i,j}\big| = \big|[A]_{i,j}\big| = |\inner{\vec{e}_i, A\vec{f}_j}| \leq \norm{A}. \]
 \end{proof}
 
 \subsubsection{The adjoint}
@@ -1591,7 +1611,7 @@ We will show that there exists one and only one determinant map. We are therefor
 
 The determinant of $A$ is often denoted $\det(A)$ or $|A|$.
 
-\begin{lemma}
+\begin{lemma} \label{determinantProperties}
 Let $f: \mathbb{F}^{n\times n}\to \mathbb{F}$ be a determinant map.
 \begin{enumerate}
 \item $f$ is linear in each row;
@@ -1605,7 +1625,7 @@ Let $f: \mathbb{F}^{n\times n}\to \mathbb{F}$ be a determinant map.
 \end{lemma}
 
 \subsubsection{Leibniz formula}
-\begin{proposition}[Liebniz formula]
+\begin{proposition}[Liebniz formula] \label{LiebnizFormula}
 There is one and only one determinant map. It is given by
 \[ \det: \F^{n\times n}\to \F: A\mapsto \sum_{\sigma\in S^n}\sgn(\sigma)\prod_{i=1}^n[A]_{i,\sigma(i)}. \]
 \end{proposition}
@@ -1654,6 +1674,64 @@ a_{31} & a_{32}
 \draw (A.north west) ++(4em,0) --  ++(7.5em,-4em) ++(.2,-.1) node {+};
 \end{tikzpicture} \]
 \end{corollary}
+\begin{corollary} \label{determinantBound}
+Let $A\in \F^{n\times n}$. Then $|\det(A)| \leq n! \norm{A}^n$.
+\end{corollary}
+\begin{proof}
+We calculate using the Liebniz formula, \ref{matrixElementsBoundedByNorm} and the fact that $\#(S^n) = n!$ (TODO ref),
+\begin{align*}
+|\det(A)| &= \Big|\sum_{\sigma\in S^n}\sgn(\sigma)\prod_{i=1}^n[A]_{i,\sigma(i)}\Big| \\
+&\leq \sum_{\sigma\in S^n}\Big|\prod_{i=1}^n[A]_{i,\sigma(i)}\Big| \\
+&= \sum_{\sigma\in S^n}\prod_{i=1}^n\big|[A]_{i,\sigma(i)}\big| \\
+&\leq \sum_{\sigma\in S^n}\prod_{i=1}^n\norm{A} \\
+&= \sum_{\sigma\in S^n}\norm{A}^n \\
+&= n!\norm{A}^n.
+\end{align*}
+\end{proof}
+\begin{corollary}
+The determinant function $\det: \F^{n\times n}\to \F$ is continuous.
+\end{corollary}
+
+\begin{proposition} \label{expansionDeterminantAroundIdentity}
+Let $A\in \F^{n\times n}$ and $\lambda \in \F$. Then
+\[ \det(\mathbb{1}_n + \lambda A) = 1 + \lambda \Tr(A) + \lambda^2P(\lambda), \]
+where $P(\lambda)$ is a polynomial in $\lambda$ such that $|P(0)|\leq n(n-1)\norm{A}^2$ and $|P(1)| \leq 1 + n\norm{A} + n!\big(1 + \norm{A}\big)^n$.
+\end{proposition}
+\begin{proof}
+We expand $\det(\mathbb{1}_n + \lambda A)$ using the Liebniz formula \ref{LiebnizFormula}:
+\begin{align*}
+\det(\mathbb{1}_n + \lambda A) &= \sum_{\sigma\in S^n}\sgn(\sigma)\prod_{i=1}^n[\mathbb{1}_n + \lambda A]_{i,\sigma(i)} \\
+&= \sum_{\sigma\in S^n}\sgn(\sigma)\prod_{i=1}^n\big(\delta_{i,\sigma(i)} + \lambda [A]_{i,\sigma(i)}\big) \\
+&= \prod_{i=1}^n\big(\delta_{i,i} + \lambda [A]_{i,i}\big) + \sum_{\sigma\in S^n\setminus\{\id\}}\sgn(\sigma)\prod_{i=1}^n\big(\delta_{i,\sigma(i)} + \lambda [A]_{i,\sigma(i)}\big).
+\end{align*}
+Now we expand the first part using \ref{productOfSum}:
+\begin{align*}
+\prod_{i=1}^n\big(\delta_{i,i} + \lambda [A]_{i,i}\big) &= \prod_{i=1}^n\big(1 + \lambda [A]_{i,i}\big)\\
+&= \sum_{\seq{s_i}\in \{0,1\}^n}\prod_{i=0}^{n-1}\bigg(k\mapsto \begin{cases}
+1 & (k=0) \\ \lambda[A]_{i,i} & (k=1)
+\end{cases}\bigg)(s_i) \\
+&= 1 + \lambda \sum_{i=0}^{n-1}[A]_{i,i} + \sum_{\seq{s_i}\in C}\prod_{i=0}^{n-1}\bigg(k\mapsto \begin{cases}
+1 & (k=0) \\ \lambda [A]_{i,i} & (k=1)
+\end{cases}\bigg)(s_i) \\
+&= 1 + \lambda \Tr(A) + Q(\lambda),
+\end{align*}
+where $C$ is the subset of $\{0,1\}^n$ of strings that contains at least two ones and $Q(\lambda) \defeq \sum_{\seq{s_i}\in C}\prod_{i=0}^{n-1}\Big(k\mapsto \begin{cases}
+1 & (k=0) \\ \lambda[A]_{i,i} & (k=1)
+\end{cases}\Big)(s_i)$. Thus, by construction, every term of $Q(\lambda)$ is divisible by $\lambda^2$, so $Q(\lambda) = \lambda^2P'(\lambda)$ for some polynomial $P'(\lambda)$.
+
+Now returning to $\sum_{\sigma\in S^n\setminus\{\id\}}\sgn(\sigma)\prod_{i=1}^n\big(\delta_{i,\sigma(i)} + \lambda [A]_{i,\sigma(i)}\big)$, note for every $\sigma\in S^n\setminus\{\id\}$ there must exist at least two distinct $i,j\in \interval[co]{0,n}$ such that $i\neq \sigma(i)$ and $j\neq \sigma(j)$ (TODO ref). The corresponding factors in $\prod_{i=1}^n\big(\delta_{i,\sigma(i)} + \lambda [A]_{i,\sigma(i)}\big)$ are divisible by $\lambda$, so the sum is a polynomial divisible by $\lambda^2$. We write $\lambda^2P^{\prime\prime}(\lambda) = \sum_{\sigma\in S^n\setminus\{\id\}}\sgn(\sigma)\prod_{i=1}^n\big(\delta_{i,\sigma(i)} + \lambda [A]_{i,\sigma(i)}\big)$. Now we define $P(\lambda) \defeq P'(\lambda) + P^{\prime\prime}(\lambda)$.
+
+Finally, we compute the bounds of $P(0)$ and $P(1)$. For $P(0)$, if $\sigma\in S^n$ changes the place of more than two elements, then $\prod_{i=1}^n\big(\delta_{i,\sigma(i)} + \lambda [A]_{i,\sigma(i)}\big)$ contains at least three factors of $\lambda$. Even dividing out two, the contribution to $P^{\prime\prime}(0)$ is zero. If it changes the place of only two elements $i,j$ (i.e.\ it is a transposition), then it is equal to $\big|[A]_{i,j}[A]_{j,i}\big| \leq \norm{A}^2$ by \ref{matrixElementsBoundedByNorm}. Since there are $\frac{n(n-1)}{2}$ transpositions, there are $\frac{n(n-1)}{2}$ such terms. By a similar reasoning, we bound $\prod_{i=0}^{n-1}\Big(k\mapsto \begin{cases}
+1 & (k=0) \\ \lambda[A]_{i,i} & (k=1)
+\end{cases}\Big)(s_i)$ by $\big|[A]_{i,i}[A]_{j,j}\big|$ if $s$ has ones only at locations $i,j$. Otherwise the corresponding term is zero. Thus for $P'(0)$ we also get a bound of $\frac{n(n-1)}{2}\norm{A}^2$. Adding these together gives $n(n-1)\norm{A}^2$.
+
+For $P(1)$, we have $P(1) = \det(\mathbb{1}_n + A) - 1 - \Tr(A)$, so using \ref{matrixElementsBoundedByNorm} and \ref{determinantBound}, we have
+\begin{align*}
+\big|P(1)\big| &\leq 1 + \big|\Tr(A)\big| + \big|\det(\mathbb{1}_n + A)\big| \\
+&\leq 1 + n\norm{A} + n!\norm{\mathbb{1}_n + A}^n \\
+&\leq 1 + n\norm{A} + n!\big(1 + \norm{A}\big)^n.
+\end{align*}
+\end{proof}
 
 \subsubsection{Laplace expansion}
 \begin{definition}
@@ -1871,7 +1949,7 @@ Let $A\in\F^{n\times n}$. Then
 \[ [\adj(A)\cdot A]_{ij} = \sum_k [A]_{ik}C_{jk} \]
 Clearly if $i=j$, we have the Laplace expansion \ref{LaplaceExpansion} and the expression equals $\det(A)$. If $i\neq j$, then the $j^\text{th}$ row does not enter into the expression (it is left out of the $(i,j)-$minor) and thus may just as well be replaced by a copy of the $i^\text{th}$ row. In this case we get the expression for the determinant of a matrix with two identical rows. This must be $0$.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{inverseAdjunctDeterminant}
 Let $A\in\F^{n\times n}$ be invertible. Then
 \[ A^{-1} = \frac{1}{\det(A)}\adj(A). \]
 \end{corollary}

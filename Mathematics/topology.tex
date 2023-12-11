@@ -898,6 +898,7 @@ Let $\sSet{X,\xi}$ be a convergence space.
 \[ \lambda = \sup\setbuilder{\kappa}{\text{$\kappa$ is the paving number of $\xi$ at $x$ for some $x\in X$}}. \]
 We say $\xi$ is \udef{$\kappa$-paved} if $\lambda \leq \kappa$.
 \item We call the convergence $\xi$ \udef{pretopological} if it is $1$-paved.
+\item Let $\mathcal{F} \subseteq \powerfilters(X)$ be a set of filters. The convergence $\xi$ is said to be \udef{paved in} $\mathcal{F}$ if, at each point $x\in X$, $\xi$ has a pavement that is a subset of $\mathcal{F}$.
 \end{itemize}
 \end{definition}
 Note that
@@ -2416,10 +2417,9 @@ This function is clearly injective. Now take arbitrary $f\in \cont_0(X,Y)$. Then
 \end{proof}
 
 
-
-\section{Convergences on ordered sets}
-
-\subsection{Convergence compatible with the order}
+\section{Convergences on structured sets}
+\subsection{Convergences on ordered sets}
+\subsubsection{Convergence compatible with the order}
 
 \begin{definition}
 Let $\sSet{X,\leq}$ be a poset. A convergence $\xi$ in $X$ is called
@@ -2568,7 +2568,7 @@ We can calculate
 &= \bigcap_{A\in F}A^{ul} = \bigcap_{A\in F}\big(\downset A\big)^{ul} \overset{!}{\supseteq} \Big(\bigcap_{A\in F}\downset A\Big)^{ul}.
 \end{align*}
 
-\subsection{Order convergence}
+\subsubsection{Order convergence}
 \begin{definition}
 Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is the initial convergence w.r.t. $m: X \to \DM(X)$, the embedding of $X$ into the Dedekind-MacNeille completion.
 \end{definition}
@@ -2685,64 +2685,73 @@ for all filters $F\in \powerfilters(X)$.
 \subsubsection{Topologicity of order convergence}
 See ``Birkhoff's order-convergence in partially ordered sets'' and ``On Order-Convergence'' by Wolk.
 
-\subsection{Order closure and order regularity}
-\begin{definition}
-Let $\sSet{X, \leq}$ be a poset and $A\subseteq X$ a subset. The \udef{order closure} of $A$ is the set
-\[ \closure_o(A) \defeq \setbuilder{x\in X}{\exists a,b\in A: a\leq x\leq b}. \]
-We call a convergence $\xi$ on $X$ \udef{order-regular} if for all $F\in \powerfilters(X)$, the filter
-\[ \setbuilder{\closure_o(A)}{A\in F} \]
-converges to the same points as $F$.
-\end{definition}
-Order closure is closure into the lattice of (closed) intervals TODO. $\interval{a,b}\vee \interval{c,d} = \interval{(a\wedge c), (b\vee d)}$ and $\interval{a,b}\wedge \interval{c,d} = \interval{(a\vee c), (b\wedge d)}$.
+\subsubsection{Convergence on $\overline{\N}$}
+In this section we consider $\overline{\N} = \N \cup \{\infty\}$, the Dedekind-MacNeille completion of $\N$ with the order convergence.
 
-
-\begin{lemma}
-A convergence is order-regular \textup{if and only if} it is based in the closed intervals.
+\begin{lemma} \label{extendedNaturalsOrderConvergenceVicinities}
+Let $n\in\overline{\N}$. Then the order convergence on $\overline{\N}$ is pretopological, with
+\[ \vicinity_{\overline{\N}}(n) = \begin{cases}
+\pfilter{n} & (n\in \N) \\
+\upset \setbuilder{\interval{k, \infty}}{k\in \N} & (n = \infty)
+\end{cases} \]
 \end{lemma}
-
-\begin{proposition}
-Let $\sSet{X,\leq}$ be a poset with order-regular convergence $\xi$ and $F,G,H\in \powerfilters(X)$. If $F,G\overset{\xi}{\longrightarrow} x\in X$ and
-\[ \forall A\in F,B\in G: \exists C\in H: \;\exists a\in A, b\in B:\; C\subseteq \interval{a,b},  \]
-then $H\overset{\xi}{\longrightarrow} x$.
-\end{proposition}
+TODO: clean up proof.
 \begin{proof}
-TODO
+First we note that that vicinity filter converges everywhere.
+
+Take an arbitrary proper filter $F\in\powerfilters(\overline{\N})$. First suppose $F\overset{\mathfrak{o}}{\longrightarrow} n$ with $n\in \N$. Then $\bigvee_{A\in F}\bigwedge A = n = \bigwedge_{B\in F}\bigvee B$. This implies $n\in \setbuilder{\bigwedge A}{A\in F}$ and $n\in \setbuilder{\bigvee B}{B\in F}$ by (TODO ref!!). Pick $A,B\in F$ such that $\bigwedge A = n = \bigvee B$. Then $A\cap B = \{n\}$, so $F = \pfilter{n}$.
+
+Now suppose $F\overset{\mathfrak{o}}{\longrightarrow} \infty$. We need to show that $\vicinity_{\overline{\N}}(\infty) \subseteq F$. To that end, take arbitrary $k\in \N$. Since $\bigvee_{A\in F} \bigwedge A = \infty > k$, there exists $A\in F$ such that $\bigwedge A \geq k$. Then $A\subseteq \upset\{k\} = \interval{k,\infty}$.
 \end{proof}
-\begin{corollary}[Squeeze theorem]
-Let $\seq{x_n}, \seq{y_n}$ and $\seq{z_n}$ be sequences in $X$ such that $\seq{x_n}, \seq{y_n}\overset{\xi}{\longrightarrow} x\in X$ and
-\[ \forall n\in \N: \quad x_n \leq z_n \leq y_n, \]
-then $\seq{y_n} \overset{\xi}{\longrightarrow} x$.
-\end{corollary}
 
-\subsection{Order convergence}
-\url{https://core.ac.uk/download/pdf/82382859.pdf}
-TODO move down!
+\begin{lemma} \label{extendedNaturalsTopological}
+The function
+\[ d_{\overline{\N}}: \overline{\N}\times \overline{\N} \to \R^+: (m,n) \mapsto \begin{cases}
+\Big|\frac{1}{m} - \frac{1}{n}\Big| & (m,n\in \N) \\
+\Big|\frac{1}{m}\Big| & (m\in \N, n=\infty) \\
+\Big|\frac{1}{n}\Big| & (m=\infty, n\in \N) \\
+0 & (m= \infty = n){extendedNaturalsTopological}
+\end{cases} \]
+is a metric and the metric convergence on $\overline{\N}$ coincides with the order convergence. In particular,
+\begin{enumerate}
+\item the order convergence on $\overline{\N}$ is topological;
+\item the set $\setbuilder{\{n\}}{n\in \N} \cup \setbuilder{\interval{k,\infty}}{k\in \N}$ forms a basis of the topology;
+\item the convergence space $\overline{\N}$ is compact.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+This function clearly satisfies the requirements of symmetry, definiteness and the triangle inequality.
 
-\begin{definition}
-Let $\sSet{P,\leq}$ be a poset and $F\in\powerfilters(P)$. Then $F$ converges to $x$ in the \udef{order convergence} on $P$ if there exist nets $\seq{l_i}_{i\in I}$ and $\seq{u_i}_{i\in I}$ in $P$ such that
-\begin{itemize}
-    \item $\seq{l_i}_{i\in I}$ is increasing and $\sup_{i\in I} l_i = x$;
-    \item $\seq{u_i}_{i\in I}$ is decreasing and $\inf_{i\in I} u_i = x$;
-    \item $\setbuilder{[l_i, u_i]}{i\in I} \subseteq F$.
-\end{itemize}
-We say $F$ is \udef{bounded by} $\seq{l_i}_{i\in I}$ and $\seq{u_i}_{i\in I}$.
-\end{definition}
+Follows by comparison of \ref{extendedNaturalsOrderConvergenceVicinities} and \ref{metricConvergenceNeighbourhood}.
 
-TODO: initial or final??
+(1), (2) From \ref{metricConvergenceNeighbourhood}.
 
-\begin{example}
-Order convergence not necessarily topological.
-\end{example}
+(3) By \ref{topologyCompactnessOpenCover}, we need to show that every open cover of $\overline{\N}$ has a finite subset that covers $\overline{\N}$. Take any open cover $C$ of $\overline{\N}$. Then $C$ must contain a set $A$ that contains $\infty$. By (2) there exists $k\in \N$ such that $\interval{k,\infty}$ is contained in $A$. For each $l\leq k$, there exists a $B_l\in C$ such that $l\in B_l$. Then $\{A\}\cup \setbuilder{B_l}{l\leq k}$ is a finite subcover.
+\end{proof}
+
+\begin{lemma} \label{continuitySequenceAsFunction}
+Let $\sSet{X,\xi}$ be a convergence space, $\seq{x_n}_{n\in \N}$ a sequence in $X$ and $x\in X$. If the function
+\[ \overline{\N} \to X: n \mapsto \begin{cases}
+x_n & (n\in \N) \\
+x & (n = \infty)
+\end{cases} \]
+is continuous, then $x_n \overset{\xi}{\longrightarrow} x$.
+
+If $X$ is a Kent space, then the converse also holds.
+\end{lemma}
+\begin{proof}
+Call this function $f$. By \ref{pretopologicalContinuityVicinities}, the continuity of $f$ is equivalent to the convergence of $f^\imf\big(\vicinity_{\overline{\N}}(n)\big)$ to $f(n)$ for all $n\in \overline{\N}$. For all $n\in \N$ this is trivial, since then $f^\imf\big(\vicinity_{\overline{\N}}(n)\big) = \pfilter{f}(n)$.
+Thus the continuity of $f$ is equivalent to the convergence of $f^\imf\big(\vicinity_{\overline{\N}}(\infty)\big)$ to $f(\infty) = x$.
+Now, by \ref{extendedNaturalsOrderConvergenceVicinities},
+\[ \upset f^\imf\big(\vicinity_{\overline{\N}}(\infty)\big) = \upset \setbuilder[\big]{\setbuilder{x_n}{n\geq k}\cup x}{k\in \N} = \TailsFilter\seq{x_n}\cap \pfilter{x}. \]
+
+Thus the continuity of $f$ implies the convergence of $\TailsFilter\seq{x_n}$.
+
+The converse immediately follows from the Kent property.
+\end{proof}
 
 
-\begin{definition}
-Let $\sSet{P,\leq}$ be a poset equipped with order convergence, $\sSet{X,\xi}$ a convergence space, $x_0\in P$ and $f: P\to X$ a function. Then
-\begin{itemize}
-\item $f$ is called \udef{left continuous} at $x_0$ if $f|_{\downset x_0}$ is continous at $x_0$;
-\item $f$ is called \udef{right continuous} at $x_0$ if $f|_{\upset x_0}$ is continous at $x_0$.
-\end{itemize}
-\end{definition}
-
+\subsubsection{TODO: remove}
 \begin{proposition} \label{leftRightConvergence}
 Let $\sSet{P,\leq}$ be a poset equipped with order convergence, $\sSet{X,\xi}$ a convergence space of finite depth and $f: P\to X$ a function. Then $f$ is continuous at $x_0\in P$ \textup{if and only if} it is left and right continuous at $x_0$.
 \end{proposition}
@@ -2762,42 +2771,9 @@ Then there exist $i,j\in I$ such that $[l_i,x_0]\subseteq A_1$ and $[x_0, u_j]\s
 Now $f\Big[[l_k,u_k]\Big] = f\Big[[l_k,x_0]\Big] \cup f\Big[[x_0,u_k]\Big]\subseteq f[A_1]\cup f[A_2] = A$ and also $f\Big[[l_k,u_k]\Big]\in F$ by order convergence.
 \end{proof}
 
-\subsection{Scott convergence}
 
-\begin{definition}
-Let $L$ be a complete lattice.
-\begin{itemize}
-\item The \udef{Scott convergence}, or \udef{lower convergence}, $S_*$ on $L$ is defined by
-\[ x \in \lim_{S_*} F \iff x \leq \bigvee_{A\in F}\bigwedge_{a\in A}a = \liminf F. \]
-
-\item The \udef{upper convergence}, $S^*$ on $L$ is the Scott convergence on the dual $L^o$. This means it is defined by
-\[ x \in \lim_{S^*} F \iff x \geq \bigwedge_{A\in F}\bigvee_{a\in A}a = \limsup F. \]
-\item The convergence $S_* \wedge S^*$ is called \udef{convergence in order}.
-\end{itemize}
-\end{definition}
-Note that $F$ is a filter in $\powerfilters(L)$, not a filter in $\filters(L)$.
-
-\begin{proposition}
-Convergence in order is Hausdorff.
-\end{proposition}
-\begin{proof}
-This is due to the distributive inequality TODO ref.
-\end{proof}
-
-\begin{proposition}
-Let $L, M$ be complete lattices and $f: L\to M$ a function. Then
-\begin{enumerate}
-\item $f$ preserves (arbitrary) meets \textup{if and only if} $f$ is in $\cont\big(\sSet{L, S_*}, \sSet{M, S_*}\big)$;
-\item $f$ preserves (arbitrary) joins \textup{if and only if} $f$ is in $\cont\big(\sSet{L, S^*}, \sSet{M, S^*}\big)$;
-\item $f$ preserves countable meets \textup{if and only if} $f$ is in $\cont\big(\seqMod\sSet{L, S_*}, \seqMod\sSet{M, S_*}\big)$;
-\item $f$ preserves countable joins \textup{if and only if} $f$ is in $\cont\big(\seqMod\sSet{L, S^*}, \seqMod\sSet{M, S^*}\big)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) First assume $f$ preserves (arbitrary) meets and take $F\overset{\longrightarrow}{S_*}x\in L$
-\end{proof}
-
-\subsection{Set-theoretic convergence}
+\subsection{Convergences on powersets}
+\subsubsection{Set-theoretic convergence}
 \begin{definition}
 Let $X$ be a set. The \udef{set-theoretic convergence} on $\powerset(X)$ is the order convergence determined by $\subseteq$.
 \end{definition}
@@ -3890,13 +3866,13 @@ TODO: generalise and strengthen??
 We have that $\iota_A: \xi|_A \to \xi$ is continuous by definition. Then $\topMod(\iota_A): \topMod(\xi|_A) \to \topMod(\xi)$ is continuous by \ref{convergenceModificationFunctoriality}. This implies that $\topMod(\xi|_A) \subseteq \topMod(\xi)|_A$.
 \end{proof}
 
-\subsection{Base properties}
-\label{baseModificationConvergence}
+\subsection{Pavement properties}
+\label{pavementModificationConvergence}
 \begin{lemma}
-Let $X$ be a set and $\mathcal{B}\subseteq \powerfilters(X)$ a set of filters. The set of convergences on $X$ that are based in $\mathcal{B}$ is closed under joins.
+Let $X$ be a set and $\mathcal{B}\subseteq \powerfilters(X)$ a set of filters. The set of convergences on $X$ that are paved in $\mathcal{B}$ is closed under joins.
 \end{lemma}
 \begin{proof}
-Let $\Xi$ be a set of convergences on $X$ that are all based in $\mathcal{B}$. And suppose $F\in\powerfilters(X)$ conververges to $x\in X$ according to $\bigvee \Xi$. By \ref{latticeConvergences}, there exists $\xi\in \Xi$ such that $F\overset{\xi}{\longrightarrow} x$.
+Let $\Xi$ be a set of convergences on $X$ that are all paved in $\mathcal{B}$. And suppose $F\in\powerfilters(X)$ conververges to $x\in X$ according to $\bigvee \Xi$. By \ref{latticeConvergences}, there exists $\xi\in \Xi$ such that $F\overset{\xi}{\longrightarrow} x$.
 
 By assumption, there exists $G\in\powerfilters(X)$ such that $G\subseteq F$, $G\overset{\xi}{\longrightarrow} x$ and $G$ is based in $\mathcal{B}$.
 
@@ -3904,12 +3880,12 @@ Then $G\overset{\Xi}{\longrightarrow} x$. As $F\overset{\xi}{\longrightarrow} x$
 \end{proof}
 
 \begin{definition}
-Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. The \udef{$\mathcal{B}$-based modification} $\basedMod_\mathcal{B}(\xi)$ is the coclosure into the lattice of $\mathcal{B}$-based convergences.
+Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. The \udef{$\mathcal{B}$-paved modification} $\pavedMod_\mathcal{B}(\xi)$ is the coclosure into the lattice of $\mathcal{B}$-paved convergences.
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{pavedModificationConstruction}
 Let $\sSet{X, \xi}$ be a convergence space and $\mathcal{B}$ a set of filters. Then
-\[ \basedMod_\mathcal{B}(\xi) = \setbuilder{(F,x)\in \powerfilters(X)\times X}{\exists G\in \powerfilters(X): \; G\subseteq, G\overset{\xi}{\longrightarrow} x, \text{$G$ is based in $\mathcal{B}$}}. \]
+\[ \pavedMod_\mathcal{B}(\xi) = \setbuilder{(F,x)\in \powerfilters(X)\times X}{\exists G\in \powerfilters(X): \; G\subseteq F, G\overset{\xi}{\longrightarrow} x, \text{$G$ is based in $\mathcal{B}$}}. \]
 \end{lemma}
 
 
@@ -4104,16 +4080,16 @@ Let $(X,\mathcal{T})$ be a topological space and $(a_n)_{n\in\N}$ a sequence in 
 
 TODO: Bolzano-Weierstrass (sequence version + accumulation point version)
 
-\section{Sequentially based spaces and the sequential modification}
+\section{Sequentially paved spaces and the sequential modification}
 \begin{definition}
-Let $X$ be a set. A convergence $\xi$  on $x$ is called \udef{sequentially based} if it is based in the set of sequential filters in $X$.
+Let $X$ be a set. A convergence $\xi$  on $x$ is called \udef{sequentially paved} if it is paved in the set of sequential filters in $X$.
 
-The \udef{sequentially based modification} of $\xi$ is denoted $\seqMod(\xi)$.
+The \udef{sequentially paved modification} of $\xi$ is denoted $\seqMod(\xi)$.
 \end{definition}
-See \ref{baseModificationConvergence} for details about $\seqMod$.
+See \ref{pavementModificationConvergence} for details about $\seqMod$.
 
 \begin{lemma}
-Let $\sSet{X, \xi}$ be a sequentially based convergence space and $D:X\to \powerset(X)$ a function such that $x\in D(x)$. Then the convergence in the direction $D$ is also sequentially based.
+Let $\sSet{X, \xi}$ be a sequentially paved convergence space and $D:X\to \powerset(X)$ a function such that $x\in D(x)$. Then the convergence in the direction $D$ is also sequentially paved.
 \end{lemma}
 \begin{proof}
 Let $F\in \powerfilters(X)$ converge to $x$ in the directional convergence. Then $D(x)\in F$ and there exists a sequence $\seq{x_n}$ such that $\TailsFilter\seq{x_n}\subseteq F$ and $\seq{x_n}$ converges to $x$ in $\xi$.
@@ -4319,6 +4295,16 @@ Let $\sSet{X,\xi}$ be a Fréchet-Urysohn convergence space, $\sSet{Y,\zeta}$ a p
 By \ref{specifiedPointsModificationVicinity} and \ref{FrechetUrysohnVicinityCharacterisation}, we see that $\xi_{\{x\}}$ is Fréchet-Urysohn.
 
 Thus sequential continuity at $x$ implies continuity at $x$ by \ref{FrechetUrysohnSequentialContinuity} and \ref{continuityAtPointConvergenceLemma}.
+\end{proof}
+
+\begin{lemma} \label{existenceConvergentSequenceDenseSubset}
+Let $\sSet{X,\xi}$ be a Fréchet-Urysohn space and $S\subseteq X$ a subset. Then $S$ is dense in $X$ \textup{if and only if} for all $x\in X$ there exists a sequence in $S$ that converges to $x$.
+\end{lemma}
+\begin{proof}
+We immediately have the implication $\Leftarrow$ by \ref{convergentFiltersInDenseSet}.
+
+Now suppose $S$ is $\xi$-dense in $X$. Then, by \ref{FrechetUrysohnVicinityCharacterisation}, it is $\seqMod(\xi)$-dense in $X$. By \ref{convergentFiltersInDenseSet}, this implies, for all $x\in X$, the existence of a filter $F$ that contains $S$ and $\seqMod(\xi)$-converges to $x$.
+By \ref{pavedModificationConstruction}, there exists a sequential filter $G\in \powerfilters(X)$ such that $G\subseteq F$ and $G\to x$. Now, by \ref{properFiltersSelfMesh} and \ref{antitonicityPolars}, $A \in F \subseteq F^\mesh \subseteq G^\mesh$, so $G|_A$ is proper. It is also sequential by \ref{traceOfSequentialFilterSequential} and converges to $x$.
 \end{proof}
 
 \subsection{The sequential topology}
@@ -5423,6 +5409,26 @@ The map $(X\to Y)_p \to \prod_{x\in X}Y$ is exactly the one constructed in \ref{
 \end{proof}
 
 
+\begin{lemma} \label{interchangeLimitsWithContinuousLimitFunction}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces. Let $\seq{x_n}_{n\in \N}$ be a sequence that converges to $x\in X$ and $\seq{f_k}_{k\in \N}$ a sequence of continuous functions that converges pointwise to some continuous function $f$. Then
+\[ \lim_{n\to \infty}\lim_{k\to\infty}f_n(x_k) = f(x) = \lim_{k\to \infty}\lim_{n\to\infty}f_n(x_k) \]
+and all limits exist.
+\end{lemma}
+\begin{proof}
+We first calculate, using the fact that each $f_n$ is continuous,
+\begin{align*}
+f(x) &= \lim_{n\to \infty}f_n(x) \\
+&= \lim_{n\to \infty}f_n\big(\lim_{k\to\infty} x_k\big) \\
+&= \lim_{n\to \infty}\lim_{k\to\infty}f_n(x_k).
+\end{align*}
+Next we calculate, using the fact that $f$ is continuous,
+\begin{align*}
+f(x) &= f\big(\lim_{k\to\infty} x_k\big) \\
+&= \lim_{k\to\infty} f(x_k) \\
+&= \lim_{k\to\infty} \lim_{n\to \infty} f_n(x_k).
+\end{align*}
+\end{proof}
+
 
 \subsection{Continuous convergence}
 \begin{definition}
@@ -5555,6 +5561,31 @@ a\mapsto 1 \\ b\mapsto 1
 
 Then it is straightforward to verify that $\pfilter{g} \overset{(X\to Y)_c}{\longrightarrow} f$, but $f$ is not continuous. Indeed $\pfilter{b} \to a$, but $f^{\imf\imf}[\pfilter{b}] = \pfilter{2} \not\to f(a) = 1$.
 \end{example}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta}$ a regular convergence space. Let $H\in\powerfilters(\cont(X,Y))$ be a filter that converges to $f$ in the continuous convergence. Let $F\in \powerfilters(X)$ be a filter that converges to $x\in X$. Then the following limits exist and are equal to each other:
+\begin{align*}
+f(x) &= \lim_\zeta \evalMap^{\imf\imf}\big(H\otimes F\big) \\
+&= \lim_\zeta \evalMap^{\imf\imf}(\pfilter{f}\otimes F) \\
+&= \lim_\zeta \evalMap_x^{\imf\imf}(H).
+\end{align*}
+\end{proposition}
+\begin{proof}
+We have $\lim_\zeta \evalMap^{\imf\imf}\big(H\otimes F\big)$ exists and is equal to $f(x)$ by definition of the continuous convergence.
+
+By \ref{continuousLimitsContinuous}, $f$ is continuous. So $\pfilter{f}$ converges to $f$ in the continuous convergence by \ref{continuousConvergenceIffContinuousPrincipalUltrafilter}. The definition of the continuous convergence again gives the existence of the limit $\lim_\zeta \evalMap^{\imf\imf}(\pfilter{f}\otimes F)$.
+
+Finally we have $\evalMap_x^{\imf\imf}(H) = \evalMap^{\imf\imf}\big(H\otimes \pfilter{x}\big)$. The existence of the limit follows as before.
+\end{proof}
+
+\begin{lemma} \label{exchangeSequenceLimitsContinuousConvergence}
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta}$ a regular convergence space. Suppose that $\seq{x_n}_{n\in \N}$ a sequence that converges to $x\in X$ and $\seq{f_k}_{k\in \N}$ a sequence of continuous functions that converges to $f$ in the continuous convergence. Then
+\[ \lim_{n\to \infty}\lim_{k\to\infty}f_n(x_k) = f(x) = \lim_{k\to \infty}\lim_{n\to\infty}f_n(x_k) \]
+and all limits exist.
+\end{lemma}
+\begin{proof}
+We can use \ref{interchangeLimitsWithContinuousLimitFunction}, since $f$ is continuous, by \ref{continuousLimitsContinuous}, and the continuous convergence is stronger than the pointwise convergence, \ref{strengthContinuousPointwiseConvergence}.
+\end{proof}
 
 \subsubsection{Universal property of the continuous convergence}
 \begin{proposition}[Universal property of the continuous convergence] \label{universalPropertyContinuousConvergence}
@@ -7633,6 +7664,12 @@ so $\Delta_r(F\otimes F')\to \Delta_r(x,y)$, which means that $\Delta_r$ is cont
 
 Since $\Delta_r\big(\Delta_r(H)\otimes\pfilter{1}\big) = \Delta_r(H)$, these conditions are the same.
 \end{proof}
+\begin{corollary} \label{normUniformlyContinuous}
+Let $\sSet{G, \cdot, 1, \norm{\cdot}}$ be a cyclically permutable seminormed group. Then the norm is uniformly continuous.
+\end{corollary}
+\begin{proof}
+Immediate from \ref{partialApplicationMetricUniformlyContinuous}.
+\end{proof}
 
 \begin{lemma} \label{groupUniformNorm}
 Let $\sSet{X,d}$ be a metric space and $\sSet{G,\cdot, 1,\norm{\cdot}}$ a seminormed group with cyclically permutable seminorm. Then
@@ -7675,10 +7712,6 @@ Let $\sSet{G,\xi}$ be an abelian group and $\seq{a_i}_{i\in I}$ a net. Then $\su
 The limit set of this net is denoted $\sum_{i\in I} a_i$.
 \end{definition}
 
-\begin{lemma}
-TODO: $\sum_{n\in\N}a_n = \sum_{n=0}^\infty a_n$.
-\end{lemma}
-
 \begin{proposition} \label{finiteSumsAreCountable}
 Let $I$ be an index set and $a: I\to \R^+$ a positive function. If $\sum_{i\in I}a_i < \infty$, then $a_i\neq 0$ for at most countably many $i\in I$.
 \end{proposition}
@@ -7694,12 +7727,18 @@ Define $A_n = \setbuilder{i\in I}{a_i \geq n^{-1}}$ and $A = \bigcup_{n\in \N}A_
 
 \subsection{Series in normed abelian groups}
 \begin{definition}
-Let $\sum_{i=0}^\infty a_i$ be a convergent series. We call the series
+Let $\seq{a_n}_{n\in \N}$ be a sequence in a normed abelian group. We write $\sum_{n=0}^\infty a_n$ to mean $\lim_{k\to \infty} \sum_{n=0}^k a_n$. If this limit exists, we call this construct a \udef{convergent series}.
+
+We call the series
 \begin{itemize}
 \item \udef{absolutely convergent} if the series $\sum_{i=0}^\infty \norm{a_i}$ is convergent;
 \item \udef{unconditionally convergent} if for all bijections $\sigma: \N\to \N$, the series $\sum_{i=0}^\infty a_{\sigma(i)}$ is convergent and \udef{conditionally convergent} otherwise.
 \end{itemize}
 \end{definition}
+
+\begin{lemma}
+TODO: $\sum_{n\in\N}a_n$ converges iff $\sum_{n=0}^\infty a_n$ converges unconditionally.
+\end{lemma}
 
 \begin{proposition} \label{absoluteConvergenceImpliesConvergence}
 Let $\sum_{i=0}^\infty a_i$ be a series in a complete abelian normed group. If $\sum_{i=0}^\infty a_i$ is absolutely convergent, it is unconditionally convergent.
@@ -7729,17 +7768,68 @@ A convergent series is unconditionally convergent \textup{if and only if} it is 
 
 
 
-\subsection{Tannery's theorem}
-TODO: what is the best setting for Tannery's theorem.
-\begin{theorem}[Tannery's theorem] \label{tannery}
-Let $s_n = \sum_{k=0}^\infty a_{n,k}$ be the limit of a convergent series for each $n$ such that $\lim_{n\to \infty}a_{n,k}$ converges to $a_k$ for all $n$. If there exists a sequence $M_k$ such that $|a_{n,k}|\leq M_k$ for all $n,k$ and $\sum_{k=0}^\infty M_k<\infty$, then
-\[ \lim_{n\to\infty} s_n = \lim_{n\to\infty}\sum_{k=0}^\infty a_{n,k} = \sum_{k=0}^\infty\lim_{n\to\infty} a_{n,k} = \sum_{k=0}^\infty a_k.   \]
-\end{theorem}
+\subsection{Uniform convergence}
+
+\begin{lemma}
+Let $G$ be a complete normed abelian group, $X$ a set and $\seq{f_n: X\to G}_{n\in\N}$ a sequence of functions. If $\sum_{n=0}^\infty \norm{f_n}$ converges uniformly, then $\sum_{n=0}^\infty f_n$ converges uniformly.
+\end{lemma}
+Here $\norm{f_n}$ is the pointwise application of the norm! I.e.\ $\norm{f_n} = x\mapsto \norm{f_n(x)}$.
 \begin{proof}
+Assume $\sum_{n=0}^\infty \norm{f_n}$ converges uniformly. Then it converges pointwise and $\sum_{n=0}^\infty f_n$ converges pointwise by \ref{absoluteConvergenceImpliesConvergence}, so the function $\sum_{n=0}^\infty f_n$ is well-defined.
+
+Then we calculate
+\begin{align*}
+\sup_{x\in X}\norm{\sum_{n=0}^\infty f_n(x) - \sum_{n=0}^k f_n(x)} &= \sup_{x\in X}\norm{\sum_{n=k+1}^\infty f_n(x)} \\
+&\leq \sup_{x\in X}\sum_{n=k+1}^\infty \norm{f_n(x)} \\
+&= \sup_{x\in X}\sum_{n=0}^\infty \norm{f_n(x)} - \sum_{n=0}^k \norm{f_n(x)} \\
+&= \sup_{x\in X}\Big|\sum_{n=0}^\infty \norm{f_n(x)} - \sum_{n=0}^k \norm{f_n(x)}\Big| \overset{k\to \infty}{\longrightarrow} 0.
+\end{align*}
+where we can apply the triangle inequality to $\norm{\sum_{n=k+1}^\infty f_n(x)}$ since $\sum_{n=k+1}^\infty \norm{f_n(x)}$ converges and we have used \ref{metricUniformConvergence} with the uniform convergence of $\sum_{n=0}^\infty \norm{f_n}$.
+
+Then the squeeze theorem \ref{squeezeTheorem} and \ref{metricUniformConvergence} imply the uniform convergence of $\sum_{n=0}^\infty f_n$.
+\end{proof}
+\begin{corollary}[Weierstrass $M$-test] \label{WeierstrassMTest}
+Let $G$ be a complete normed abelian group, $X$ a set and $\seq{f_n: X\to G}_{n\in\N}$ a sequence of functions. Suppose there exists a sequence $\seq{M_n}_{n\in\N}$ of positive real numbers such that
+\begin{itemize}
+\item $\sup_{x\in X}\norm{f_n(x)} \leq M_n$;
+\item $\sum_{n=0}^\infty M_n$ converges;
+\end{itemize}
+then $\sum_{n=0}^\infty \norm{f_n}$ and $\sum_{n=0}^\infty f_n$ converge uniformly.
+\end{corollary}
+\begin{proof}
+By the proposition, it is enough to show that $\sum_{n=0}^\infty \norm{f_n}$ converges uniformly. We calculate
+\begin{align*}
+0\leq \sup_{x\in X}\Big|\sum_{n=0}^\infty \norm{f_n(x)} - \sum_{n=0}^k \norm{f_n(x)}\Big| &= \sup_{x\in X}\sum_{n=k+1}^\infty \norm{f_n(x)} \\
+&\leq \sum_{n=k+1}^\infty \sup_{x\in X}\norm{f_n(x)} \\
+&\leq \sum_{n=k+1}^\infty M_n \\
+&= \sum_{n=0}^\infty M_n - \sum_{n=0}^k M_n \overset{k\to \infty}{\longrightarrow} 0. 
+\end{align*}
+Then the squeeze theorem \ref{squeezeTheorem} and \ref{metricUniformConvergence} imply the uniform convergence of $\sum_{n=0}^\infty \norm{f_n}$.
+\end{proof}
+\begin{corollary}[Tannery's theorem] \label{tannery}
+Let $G$ be a complete normed abelian group and $a_{n,k}$ an element of $G$ for all $n,k\in \N$. Suppose
+\begin{itemize}
+\item the series $s(n) = \sum_{k=0}^\infty a_{n,k}$ is convergent for all $k\in \N$;
+\item the limit $a_k = \lim_{n\to\infty}a_{n,k}$ exists for all $k\in \N$;
+\item there exists a real sequence $\seq{M_k}$ such that $\norm{a_{n,k}} \leq M_k$ for all $n,k\in \N$ and $\sum_{k=0}^\infty M_k$ converges, then
+\end{itemize}
+\[ \lim_{n\to\infty} s_n = \lim_{n\to\infty}\sum_{k=0}^\infty a_{n,k} = \sum_{k=0}^\infty\lim_{n\to\infty} a_{n,k} = \sum_{k=0}^\infty a_k.   \]
+\end{corollary}
+\begin{proof}
+For each $k \in \N$, we can extend the function $\N\to G: n\mapsto a_{n,k}$ continuously to $\overline{\N}$ by setting $a_{\infty, k}  \defeq a_k$, as in \ref{continuitySequenceAsFunction}, since $G$ is a Kent space.
+
+We now show that the functions $s_K: \overline{\N} \to G: n\mapsto \sum_{k=0}^K a_{n,k}$ converge uniformly to $s$ using the Weierstrass M-test \ref{WeierstrassMTest}. By assumption, $\sup_{n\in \overline{\N}\setminus\{\infty\}}\norm{s_K(n)} \leq M_K$ for all $K\in \N$. To apply the test, we just need to observe that $\norm{a_{n,\infty}} = \norm{\lim_{k\to \infty}a_{n,k}} = \lim_{k\to \infty}\norm{a_{n,k}} \leq M_k$, by the continuity of the norm, \ref{normUniformlyContinuous}, and the compatibility of the convergence of the reals with the order.
+
+Since $\overline{\N}$ is compact, by \ref{extendedNaturalsTopological}, the series $s$ converges in the continuous convergence by (TODO ref, \ref{uniformImpliesContinuousConvergence} is \emph{not} enough!!).
+
+Since $G$ is regular, by \ref{topologicalUniformSpaceRegular}, we can exchange the limits by \ref{exchangeSequenceLimitsContinuousConvergence}.
+\end{proof}
+TODO: recheck the following is correct:
+\begin{proof}[Alternate, elementary, proof]
 Choose an arbitrary $\varepsilon>0$. For any $n,N\in\N$ we can write
-\[ \left|s_n - \sum_{k=0}^\infty a_k\right| \leq \sum_{k=0}^\infty\left|a_{n,k} -  a_k\right|\leq \sum_{k=0}^N\left|a_{n,k} -  a_k\right| + 2\sum_{k>N}M_k \leq N\max_{k<N}\left|a_{n,k} -  a_k\right| + 2\sum_{k>N}M_k. \]
-So we aim to find some $N_0$ such that $2\sum_{k>N}M_k \leq \varepsilon/2$ for all $N\geq N_0$, which of course we can. Then we choose an $n_0$, in function of this $N_0$ and $\varepsilon$, such that $\max_{k<N_0}\left|a_{n,k} -  a_k\right|\leq \varepsilon/(2N_0)$ for all $n\geq n_0$. It is clear we can do so for each $k$ separately, but there are only finitely many $k$s so we take the largest $n_0$. Then
-\[ \left|s_n - \sum_{k=0}^\infty a_k\right| \leq \varepsilon \qquad \text{for all $n\geq n_0$, implying the limit is zero.} \]
+\[ \norm{s(n) - \sum_{k=0}^\infty a_k} \leq \sum_{k=0}^\infty\norm{a_{n,k} -  a_k}\leq \sum_{k=0}^N\norm{a_{n,k} -  a_k} + 2\sum_{k>N}M_k \leq N\max_{k<N}\norm{a_{n,k} -  a_k} + 2\sum_{k>N}M_k. \]
+So we aim to find some $N_0$ such that $2\sum_{k>N}M_k \leq \varepsilon/2$ for all $N\geq N_0$, which of course we can. Then we choose an $n_0$, in function of this $N_0$ and $\varepsilon$, such that $\max_{k<N_0}\norm{a_{n,k} -  a_k}\leq \varepsilon/(2N_0)$ for all $n\geq n_0$. It is clear we can do so for each $k$ separately, but there are only finitely many $k$s so we take the largest $n_0$. Then
+\[ \norm{s(n) - \sum_{k=0}^\infty a_k} \leq \varepsilon \qquad \text{for all $n\geq n_0$, implying the limit is zero.} \]
 \end{proof}
 \url{https://www.coloradomesa.edu/math-stat/documents/JohnGillresearchnoteTanneryTheorem.pdf}
 

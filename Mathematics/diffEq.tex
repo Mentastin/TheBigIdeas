@@ -111,6 +111,7 @@ Let $X$ be a Banach space and $T: \R^+ \to \Bounded(X)$ a uniformly continuous s
 \end{proof}
 
 \subsection{Matrix semigroups}
+\subsubsection{Explicit 2D solutions}
 \begin{proposition}
 Let $A = \begin{pmatrix}
 a & b \\ c & d
@@ -1462,7 +1463,37 @@ Linear Operator Equations: Approximation and Regularization
 Let $T: X\not\to Y$ be a (non-)linear operator between normed spaces. An \udef{operator equation} is an equation of the form
 \[ T(u) = f \qquad f\in Y\; \text{$u$ unknown.} \]
 A \udef{solution} to is operator equation is a vector $a\in X$ such that $T(a) = f$.
+
+\begin{itemize}
+\item An operator equation of the form $T(u) = f$ is said to be of the \udef{first kind}
+\item An operator equation of the form $\lambda u - T(u) = f$ for some non-zero scalar $\lambda$ is said to be of the \udef{second kind}.
+\end{itemize}
 \end{definition}
+
+\begin{proposition}[Fredholm alternative for operator equations]
+Let $T(u) = f$ be an operator equation, where $T$ is a Fredholm operator between Banach space. Then either
+\begin{itemize}
+\item $T(u) = f$ has a unique solution; or
+\item $T(u) = 0$ has at least one nontrivial solution.
+\end{itemize}
+In the second case $T(u) = f$ has either zero or infinitely many solutions.
+\end{proposition}
+TODO: more general spaces?
+\begin{proof}
+This is a restatement of \ref{FredholmAlternative}: either $T$ is bijective (the first case) or $T$ is not injective (the second case), so $\ker(T) \neq \{0\}$ by \ref{injectivityKernelTriviality}.
+\end{proof}
+\begin{corollary}
+Let $T(u) = f$ be an operator equation, where $T$ is a self-adjoint operator between Hilbert spaces. Then either
+\begin{itemize}
+\item $T(u) = f$ has a unique solution; or
+\item $T(u) = 0$ has at least one nontrivial solution.
+\end{itemize}
+In the second case $T(u) = f$ has either zero or infinitely many solutions. It has solutions \textup{if and only if} $f\in \ker(T)^\perp$.
+\end{corollary}
+\begin{proof}
+TODO: for the last part do we need to assume $\ker(T)$ finite dimensional? Then we can use \ref{FredholmOperatorClosedRange} and \ref{kernelImageAdjoint} to get $\im(T) = \overline{\im(T)} = \ker(T)^\perp$.
+\end{proof}
+
 \subsection{Well- and ill-posed problems}
 Some natural questions associated to such problems are:
 \begin{enumerate}
@@ -1492,13 +1523,6 @@ In particular,
 \end{enumerate}
 \end{proposition}
 
-\subsection{Equations of the first and second kind}
-\begin{definition}
-\begin{itemize}
-\item An operator equation of the form $T(u) = f$ is said to be of the \udef{first kind}
-\item An operator equation of the form $\lambda u - T(u) = f$ for some non-zero scalar $\lambda$ is said to be of the \udef{second kind}.
-\end{itemize}
-\end{definition}
 
 \section{Equations on function spaces}
 \subsection{Relevant spaces}
@@ -1868,32 +1892,42 @@ so it is enough to show that $\int_{x}^\infty h(t)\diff{t}\in O(x^{-N})$. Indeed
 \section{Classification}
 \begin{definition}
 An \udef{$n^\text{th}$ order (ordinary) differential equation} (or ODE) is an equation of the form
-\[ F(t, u, u', u^{\prime\prime}, \ldots, u^{(n)}) \equiv 0. \]
-We call a real function $u: [a,b] \to \R$ a \udef{solution} of this differential equation on $[a,b]$
+\[ F(t, u, u', u^{\prime\prime}, \ldots, u^{(n)}) = \constant{0}. \]
+We call a real function $u: [a,b] \to \F$ a \udef{solution} of this differential equation on $[a,b]$
 if it has at least $n$ continuous derivatives such that $F(t, u(t), u'(t), u^{\prime\prime}(t), \ldots, u^{(n)}(t))$ is zero for all $t\in [a,b]$. The set of all solutions is called the \udef{general solution}.
 
 We call the differential equation
 \begin{enumerate}
 \item \udef{linear} if $\md{F}{2}{u^{(i)}}{}{u^{(j)}}{} \equiv 0$ for all $i,j\in [0,n]$;
-\item \udef{homogenous} if $F(t, 0,\ldots, 0) = 0$.
+\item \udef{homogenous} if $F(t, \lambda u, \lambda u', \lambda u^{\prime\prime}, \ldots, \lambda u^{(n)}) = \lambda F(t, u, u', u^{\prime\prime}, \ldots, u^{(n)})$.
 \end{enumerate}
 Unless explicitly stated, we will always assume that $F$ can be solved for the highest derivative, such that the ODE can be written as
-\[ u^{(n)} \equiv f(t,u,u',\ldots, u^{(n-1)}). \]
+\[ u^{(n)} = f(t,u,u',\ldots, u^{(n-1)}). \]
 \end{definition}
 
+\begin{lemma}
 A linear $n^\text{th}$ order differential equation can be written in the form
-\[ \sum_{i=0}^n a_{i}(t)u^{(i)}(t) - g(t) = 0 \]
-where $a_i, g \in (]a,b[\to\R)$.
+\[ \sum_{i=0}^n a_{i}(t)u^{(i)}(t)  =  g(t), \]
+where $a_i, g \in (\interval{a,b}\to\F)$.
+
+A linear and homogenous differential equation can be written in the form 
+\[ \sum_{i=0}^n a_{i}(t)u^{(i)}(t) = \constant{0}. \]
+\end{lemma}
 
 \begin{definition}
-Let $\sum_{i=0}^n a_{i}(t)u^{(i)}(t) \equiv g(t)$ be a linear differential equation. We call the functions $a_i$ the \udef{coefficients} and we say the ODE has \udef{constant coefficients} if all the $a_i$ are constants.
+Let $\sum_{i=0}^n a_{i}(t)u^{(i)}(t) = g(t)$ be a linear differential equation. 
+\begin{itemize}
+\item We call the functions $a_i$ the \udef{coefficients} of the differential equation.
+\item We call $L \defeq \sum_{i=0}^n a_{i} \big(\od{}{t}\big)^i$ the \udef{linear operator} associated to the differential equation. The differential equation can be written as $Lu = g$.
+\item We say the ODE has \udef{constant coefficients} if all the $a_i$ are constants.
+\end{itemize}
 \end{definition}
 
-In the linear case we can introduce the linear operator
-\[ L \defeq \sum_{i=0}^n a_{i} \left(\dod{}{t}\right). \]
-Then the differential equation can be written as $Lu = g$.
+\begin{proposition}
+Let $L \defeq \sum_{i=0}^n a_{i} \big(\od{}{t}\big)^i$ be a linear differential operator. TODO: when do we have a Fredholm alternative? Also solution if $g\in \ker(L)^\perp$?
+\end{proposition}
 
-The differential equation is homogenous if and only if $g = 0$.
+TODO \url{https://www.mathematik.hu-berlin.de/~wendl/Winter2020/FunkAna/notes_Fredholm2.pdf}
 
 \subsection{Differential problems}
 \subsubsection{Initial value problems}
@@ -1945,6 +1979,7 @@ has infinitely many solutions.
 
 
 \subsection{Systems of differential equations}
+
 
 \section{Existence and uniqueness}
 \subsection{Existence}
@@ -1999,13 +2034,90 @@ TODO
 \subsubsection{Homogeneous equations}
 \subsubsection{Bernoulli equations}
 
-\section{Systems of equations and higher order equations}
+\section{Systems of equations and higher order linear equations}
 \subsection{Problem statement and notation}
 Equivalence systems and higher order
 \subsection{Existence and uniqueness}
-\subsection{Second order equations}
 \subsection{Higher order linear equations}
-\subsection{Systems of first order equations}
+
+\begin{lemma} \label{higherOrderDifferentialEquationAsSystem}
+Let $\sum_{i=0}^n a_i(t)u^{(i)}(t) = 0$ be a linear homogenous $n^\text{th}$-order differential equation with $a_n = \constant{1}$. Then $u(t)$ is a solution of this differential equation \textup{if and only if} it is the $0^{\text{t}}$ component of a solution to the following matrix differential equation
+\[ \od{}{t}x(t) = \begin{pmatrix}
+\mathbb{0}_{(n-1)\times 1} & \mathbb{1}_{n-1} \\
+-a_{0} & \begin{pmatrix}
+-a_{1} & \hdots & -a_{n-1}
+\end{pmatrix}
+\end{pmatrix}x(t). \]
+\end{lemma}
+\begin{proof}
+We identify the $i^\text{th}$ component of $x$ as the $i^\text{th}$ derivative of $u$.
+\end{proof}
+
+\subsubsection{Constant coefficients}
+TODO, see Teschl p. 74. Link with Jordan blocks.
+
+\subsection{Fundamental matrices}
+\begin{lemma}
+Let $A, \Psi: \interval{a,b}\to \F^{n\times n}: t\mapsto A(t)$ be matrix-valued functions.
+
+Then $\od{}{t}\Psi(t) = A(t)\Psi(t)$ \textup{if and only if} $\od{}{t}[\Psi(t)]_{-,i} = A(t)[\Psi(t)]_{-,i}$ for all $0\leq i< n$.
+\end{lemma}
+\begin{proof}
+This follows from \ref{multiplicationBlockMatrices} by partitioning $\Psi(t)$ into columns.
+\end{proof}
+
+\begin{definition}
+Let $A, \Psi: \interval{a,b}\to \F^{n\times n}: t\mapsto A(t)$ be matrix-valued functions. If
+\begin{itemize}
+\item $\od{}{t}\Psi(t) = A(t)\Psi(t)$;
+\item $\Psi(t)$ is invertible some $t_0\in \interval{a,b}$;
+\end{itemize}
+then we call $\Psi(t)$ a \udef{fundamental matrix}. Its determinant is called the \udef{Wronskian}.
+\end{definition}
+
+Let $\sum_{i=0}^n a_i(t)u^{(i)}(t) = 0$ be a linear homogenous $n^\text{th}$-order differential equation with $a_n = \constant{1}$. Suppose $u_0, \ldots u_{n-1}$ are $n$ linearly independent solutions of the differential equation. Then the associated fundamental matrix is
+\[ \begin{pmatrix}
+u_0 & u_1 & \hdots & u_{n-1} \\
+u_0' & u_1' & \hdots & u_{n-1}' \\
+u_0^{(2)} & u_1^{(2)} & \hdots & u_{n-1}^{(2)} \\
+u_0^{(n-1)} & u_1^{(n-1)} & \hdots & u_{n-1}^{(n-1)}
+\end{pmatrix} \]
+and the Wronskian is the determinant of this matrix.
+
+
+\begin{proposition}[Liouville's formula]
+Let $A, \Psi: \interval{a,b}\to \F^{n\times n}: t\mapsto A(t)$ be matrix-valued function and $\Psi(t)$ a fundamental matrix. Then
+\begin{enumerate}
+\item $\od{}{t}\det\big(\Psi(t)\big) = \det\big(\Psi(t)\big)\Tr\big(A(t)\big)$;
+\item $\det\big(\Psi(t)\big) = \det\big(\Psi(t_0)\big) \exp\Big(\int_{t_0}^t\Tr\big(A(s)\big)\diff{s}\Big)$ for all $t_0\in \interval{a,b}$;
+\item $\Psi(t)$ is invertible for all $t\in \interval{a,b}$.
+\end{enumerate}
+
+\end{proposition}
+\begin{proof}
+(1) Since $\Psi(t)$ is invertible for some $t\in\interval{a,b}$, we can use Jacobi's formula \ref{JacobisFormula} to calculate
+\begin{align*}
+\od{}{t}\det\big(\Psi(t)\big) &= \det\big(\Psi(t)\big)\Tr\big(\od{}{t}\Psi(t)\Psi(t)^{-1}\big) \\
+&= \det\big(\Psi(t)\big)\Tr\big(A(t)\Psi(t)\Psi(t)^{-1}\big) \\
+&= \det\big(\Psi(t)\big)\Tr\big(A(t)\big).
+\end{align*} 
+
+(2) The differential equation in (1) is separable and thus can be solved (TODO ref).
+
+(3) By (2) we have that $\det\big(\Psi(t)\big)$ is zero iff $\det\big(\Psi(t_0)\big)$ is zero. Thus $\Psi(t)$ is invertible iff $\Psi(t_0)$ is invertible,  by \ref{determinantProperties}.
+\end{proof}
+\begin{corollary}[Abel's formula]
+Let $\sum_{i=0}^n a_i(t)u^{(i)}(t) = 0$ be a linear homogenous $n^\text{th}$-order differential equation with $a_n = \constant{1}$. Suppose $u_0, \ldots u_{n-1}$ are $n$ linearly independent solutions of the differential equation and let $W(t)$ be the Wronskian.
+Then
+\[ W(t) = W(t_0)\exp\Big(\int_{t_0}^t a_{n-1}(s) \diff{s}\Big). \]
+\end{corollary}
+In particular, a set $u_0, \ldots u_{n-1}$ of \emph{functions} that solve the differential equation are linearly independent iff the associated Wronskian, evaluated \emph{at some point}, is non-zero.
+\begin{proof}
+This is an application of Liouville's formula to the setting of \ref{higherOrderDifferentialEquationAsSystem}.
+\end{proof}
+
+
+
 
 \section{Qualitative analysis}
 
