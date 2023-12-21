@@ -157,8 +157,8 @@ Let $\sSet{X,\xi}$ be a convergence space $\seq{x_i}_{i\in I}$ a net on $X$ and 
 \begin{definition}
 Let $\sSet{X,\xi}$ be a preconvergence space. Take arbitrary $F,G \in \powerfilters(X)$, $\mathcal{F}\subseteq \powerfilters(X)$ and $x\in X$. The preconvergence space is called
 \begin{itemize}
-\item a \udef{Kent space} if $F \to x \implies F\cap \pfilter{x} \to x$;
-\item \udef{finitely deep} or a \udef{limit space} if $\lim_\xi(F\cap G) = \lim_\xi F \cap \lim_\xi G$;
+\item a \udef{Kent space} or \udef{localised convergence space} if $F \to x \implies F\cap \pfilter{x} \to x$;
+\item \udef{finitely deep}, a \udef{limit space}  or a \udef{limitierung} if $\lim_\xi(F\cap G) = \lim_\xi F \cap \lim_\xi G$;
 \item a \udef{Choquet space} or a \udef{pseudotopological space} if
 \[ F\overset{\xi}{\longrightarrow} x \qquad\iff\qquad \text{$U\overset{\xi}{\longrightarrow} x$ for all ultrafilters $U$ such that $F\subseteq U$.} \]
 \item a \udef{pretopological space} if 
@@ -1112,6 +1112,7 @@ as are the following:
 \item for all $x\in X$: $C\in \vicinity_\xi(x)^\mesh \iff x\in C$.
 \end{enumerate}
 \end{lemma}
+Note ``for all $x\in O$: $F\to x \implies O\in F$'' seems to be the most important.
 \begin{proof}
 TODO \ref{subsetWithVicinitiesInInherence}
 \end{proof}
@@ -2417,8 +2418,9 @@ This function is clearly injective. Now take arbitrary $f\in \cont_0(X,Y)$. Then
 \end{proof}
 
 
-\section{Convergences on structured sets}
-\subsection{Convergences on ordered sets}
+
+\section{Convergences on ordered sets}
+\subsection{Order convergence}
 \subsubsection{Convergence compatible with the order}
 
 \begin{definition}
@@ -2547,7 +2549,7 @@ Consider any free filter $F$ on $X$. Then
 \[ \Big(\bigcap_{A\in F}\upset A\Big)^\geq \cap \Big(\bigcap_{A\in F}\downset A\Big)^\leq = X. \]
 \end{example}
 
-\begin{lemma}
+\begin{lemma} \label{cupCapInversionFilters}
 Let $\sSet{X,\leq}$ be a poset and $F\in \powerfilters(X)$ a filter. Then
 \[ \bigcup_{A\in F}\bigcap_{a\in A}\upset\{a\} \subseteq \bigcap_{A\in F}\bigcup_{a\in A}\upset\{a\} \qquad\text{and}\qquad \bigcup_{A\in F}\bigcap_{a\in A}\downset\{a\} \subseteq \bigcap_{A\in F}\bigcup_{a\in A}\downset\{a\}. \]
 \end{lemma}
@@ -2558,15 +2560,35 @@ Since this inclusion is valid for all $A,B\in F$, it is equivalent to $\bigcup_{
 
 The other statement is dual.
 \end{proof}
-
-We can calculate
+\begin{corollary} \label{boundsInFilterInclusion}
+Let $\sSet{X,\leq}$ be a poset and $F\in \powerfilters(X)$ a filter. Then
+\begin{enumerate}
+\item $\bigcup_{A\in F}A^\geq \subseteq \bigcap_{A\in F}A^{\leq\geq}$;
+\item $\bigcup_{A\in F}A^\leq \subseteq \bigcap_{A\in F}A^{\geq\leq}$;
+\item $\Big(\bigcap_{A\in F}A^{\geq\leq}\Big)^\geq \subseteq \bigcap_{A\in F}A^{\leq\geq}$;
+\item $\Big(\bigcap_{A\in F}A^{\leq\geq}\Big)^\leq \subseteq \bigcap_{A\in F}A^{\geq\leq}$;
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) Since $(-)^\geq$ is order-reversing, we calculate
 \begin{align*}
-\bigcup_{A\in F}A^l &\subseteq \Big(\bigcap_{A\in F} \upset A\Big)^l \\
-&= \Big(\bigcap_{A\in F} \bigcup_{a\in A} \upset \{a\}\Big)^l \\
-&\subseteq \Big(\bigcup_{A\in F} \bigcap_{a\in A} \upset \{a\}\Big)^l \\
-&= \Big(\bigcup_{A\in F} A^u\Big)^l \\
-&= \bigcap_{A\in F}A^{ul} = \bigcap_{A\in F}\big(\downset A\big)^{ul} \overset{!}{\supseteq} \Big(\bigcap_{A\in F}\downset A\Big)^{ul}.
+\bigcup_{A\in F}A^\geq &= \bigcup_{A\in F}(\upset A)^\geq \\
+&\subseteq \Big(\bigcap_{A\in F} \upset A\Big)^\geq \\
+&= \Big(\bigcap_{A\in F} \bigcup_{a\in A} \upset \{a\}\Big)^\geq \\
+&\subseteq \Big(\bigcup_{A\in F} \bigcap_{a\in A} \upset \{a\}\Big)^\geq \\
+&= \Big(\bigcup_{A\in F} A^\leq\Big)^\geq \\
+&= \bigcap_{A\in F}A^{\leq\geq},
 \end{align*}
+using \ref{cupCapInversionFilters}, \ref{boundsFromPrincipalImages} and \ref{polarOfUnion}.
+
+(2) Dual.
+
+(3) We calculate
+\[ \Big(\bigcap_{A\in F}A^{\geq\leq}\Big)^\geq \subseteq \Big(\bigcup_{A\in F}A^{\leq}\Big)^\geq = \bigcap_{A\in F}A^{\leq\geq}, \]
+using \ref{polarOfUnion}.
+
+(4) Dual.
+\end{proof}
 
 \subsubsection{Order convergence}
 \begin{definition}
@@ -2587,9 +2609,18 @@ the following are equivalent:
 \item $F\overset{\mathfrak{o}}{\longrightarrow} x$;
 \item $\bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A) = \downset\{x\} = \bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf(A)$;
 \item $\bigcap_{A\in F}A^{\leq \geq} = \downset \{x\}$ and $\bigcap_{A\in F}A^{\geq\leq} = \upset\{x\}$;
-\item $\bigcap_{A\in F}A^{\leq \geq} \cap \bigcap_{A\in F}A^{\geq\leq} = \{x\}$.
+\item $\bigcap_{A\in F}A^{\leq \geq} \subseteq \downset \{x\}$ and $\bigcap_{A\in F}A^{\geq\leq} \subseteq \upset\{x\}$;
+\item $\upset\{x\} \subseteq \bigcup_{A\in F}A^{\leq}$ and $\downset\{x\} \subseteq \bigcup_{A\in F}A^{\geq}$;
+\item $\{x\} = \Big(\bigcap_{A\in F}A^{\leq \geq}\Big)^\leq \cap \Big(\bigcap_{A\in F}A^{\geq\leq}\Big)^\geq$;
+\item $x\in \Big(\bigcap_{A\in F}A^{\leq \geq}\Big)^\leq \cap \Big(\bigcap_{A\in F}A^{\geq\leq}\Big)^\geq$.
+\end{enumerate}
+If $X$ is a lattice, then these are equivalent to
+\begin{enumerate} \setcounter{enumi}{7}
+\item $x\in \bigcap_{A\in F}A^{\leq \geq} \cap \bigcap_{A\in F}A^{\geq\leq}$;
+\item $\{x\} = \bigcap_{A\in F}A^{\leq \geq} \cap \bigcap_{A\in F}A^{\geq\leq}$.
 \end{enumerate}
 \end{proposition}
+TODO: reorganise proof!
 \begin{proof}
 The equivalence $(1) \Leftrightarrow (2)$ is a restatement of the definition.
 
@@ -2603,7 +2634,60 @@ Then, because the polars form a Galois connection and thus are generalised inver
 &= \Big(\bigcup_{A\in F}\bigwedge_{\DM(P)}m^\imf(A)\Big)^{\leq\geq} \\
 &= \bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf(A).
 \end{align*}
+
+$(3) \Leftrightarrow (4)$ The direction $\Rightarrow$ is immediate. For the converse, we first prove $\downset \{x\}\subseteq \bigcap_{A\in F}A^{\leq \geq}$.
+
+From the second part, we calculate
+\[ \downset\{x\} = \big(\upset\{x\}\big)^\geq \subseteq \Big(\bigcap_{A\in F}A^{\geq\leq}\Big)^\geq \subseteq \bigcap_{A\in F}A^{\leq\geq}, \]
+using \ref{boundsInFilterInclusion}.
+
+$(4) \Leftrightarrow (5)$ By \ref{polarOfUnion}, we have $\bigcap_{A\in F}A^{\leq \geq} = \Big(\bigcup_{A\in F}A^{\leq}\Big)^\geq$ and $\bigcap_{A\in F}A^{\geq \leq} = \Big(\bigcup_{A\in F}A^{\geq}\Big)^\leq$. The result then follows from the polar Galois connection \ref{polarsGaloisConnection}.
+
+$(5) \Rightarrow (6) \Rightarrow (7)$ Immediate.
+
+$(7) \Rightarrow (4)$ Take $y\in \bigcap_{A\in F} A^{\leq \geq}$. Then $y\leq x$ by assumption, so $y\in \downset\{x\}$. The other assertion is similar.
+
+$(7) \Rightarrow (8)$ Immediate by \ref{boundsInFilterInclusion}.
+
+$(8) \Rightarrow (9)$ By \ref{boundsInFilterInclusion}, we have
+\[ \bigcap_{A\in F}A^{\leq \geq} \cap \bigcap_{A\in F}A^{\geq\leq} \supseteq \bigcap_{A\in F}A^{\leq \geq} \cap \Big(\bigcap_{A\in F}A^{\leq\geq}\Big)^{\leq} = \sup\Big(\bigcap_{A\in F}A^{\leq\geq}\Big), \]
+which is a singleton for posets.
+
+$(9) \Rightarrow (4)$ Take $y\in \bigcap_{A\in F}A^{\leq \geq}$. Then $x\vee y\in \bigcap_{A\in F}A^{\leq \geq}$, by \ref{boundsSetsClosedUnderLatticeOperations} since $\bigcap_{A\in F}A^{\leq \geq} = \Big(\bigcup_{A\in F}A^{\leq}\Big)^\geq$ by \ref{polarOfUnion}. We also have $x\vee y \in \bigcap_{A\in F}A^{\geq\leq}$ by upwards closure.
+
+By assumption $x\vee y = x$, so $y\leq x$ and $y\in \downset\{x\}$.
+
+The other assertion is dual.
 \end{proof}
+
+\begin{example}
+TODO: example to show that (7), (8) are not equivalent to the rest in general.
+\end{example}
+
+\begin{proposition}
+Let $\sSet{X,\leq}$ be a poset. Then the order convergence on $X$ makes it a Kent space.
+\end{proposition}
+\begin{proof}
+Take arbitrary $F \overset{\mathfrak{o}}{\longrightarrow} x$.
+To show that $F\cap \pfilter{x}\overset{\mathfrak{o}}{\longrightarrow} x$, we can, by \ref{orderConvergenceEquivalents}, show that
+\[ \bigcap_{A\in F}\big(A\cup \{x\}\big)^{\leq\geq} \subseteq \downset\{x\} \quad\text{and}\quad \bigcap_{A\in F}\big(A\cup \{x\}\big)^{\geq\leq} \subseteq \upset\{x\}. \]
+For the first claim, we calculate using \ref{polarOfUnion},
+\begin{align*}
+\bigcap_{A\in F}\big(A\cup \{x\}\big)^{\leq\geq} &= \bigcap_{A\in F}\big(A^\leq \cap \{x\}^\leq\big)^{\geq} \\
+&= \Big(\bigcup_{A\in F}\big(A^\leq \cap \{x\}^\leq\big)\Big)^{\geq} \\
+&= \Big(\upset \{x\} \cap \bigcup_{A\in F}A^\leq \Big)^{\geq},
+\end{align*}
+so the first claim is equivalent to $\upset \{x\} \subseteq \upset \{x\} \cap \bigcup_{A\in F}A^\leq$ by the polar Galois connection \ref{polarsGaloisConnection}. This inclusion holds since $\upset \{x\} \subseteq \bigcup_{A\in F}A^\leq$ by \ref{orderConvergenceEquivalents}.
+
+The second claim is dual.
+\end{proof}
+
+TODO: Erné and Weck, Order convergence in lattices
+
+\begin{example}
+The order convergence on a poset is in general not of finite depth.
+\end{example}
+
 
 \begin{proposition} \label{orderConvergenceIntervalBase}
 Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if}
@@ -2635,6 +2719,13 @@ By \ref{limsupLiminfInequality}, we also have $\bigvee_{A\in F}\bigwedge_{\DM(P)
 
 Finally the claim about the directedness of $M$ and $N$ follows from \ref{latticeIntervalIntersection}.
 \end{proof}
+
+\subsection{Squeeze convergence}
+\begin{definition}
+Let $\sSet{X,\leq}$ be a poset.
+\end{definition}
+
+
 
 \begin{proposition}[Squeeze theorem] \label{squeezeTheorem}
 Let $\sSet{X,\leq}$ be a poset. Let $\seq{x_i}_{i\in I}, \seq{y_i}_{i\in I},\seq{z_i}_{i\in I}$ be nets in $X$ and $y\in X$.
@@ -2685,7 +2776,9 @@ for all filters $F\in \powerfilters(X)$.
 \subsubsection{Topologicity of order convergence}
 See ``Birkhoff's order-convergence in partially ordered sets'' and ``On Order-Convergence'' by Wolk.
 
-\subsubsection{Convergence on $\overline{\N}$}
+
+
+\subsection{Convergence on $\overline{\N}$}
 In this section we consider $\overline{\N} = \N \cup \{\infty\}$, the Dedekind-MacNeille completion of $\N$ with the order convergence.
 
 \begin{lemma} \label{extendedNaturalsOrderConvergenceVicinities}
@@ -2751,7 +2844,7 @@ The converse immediately follows from the Kent property.
 \end{proof}
 
 
-\subsubsection{TODO: remove}
+\subsection{TODO: remove}
 \begin{proposition} \label{leftRightConvergence}
 Let $\sSet{P,\leq}$ be a poset equipped with order convergence, $\sSet{X,\xi}$ a convergence space of finite depth and $f: P\to X$ a function. Then $f$ is continuous at $x_0\in P$ \textup{if and only if} it is left and right continuous at $x_0$.
 \end{proposition}
@@ -2773,7 +2866,6 @@ Now $f\Big[[l_k,u_k]\Big] = f\Big[[l_k,x_0]\Big] \cup f\Big[[x_0,u_k]\Big]\subse
 
 
 \subsection{Convergences on powersets}
-\subsubsection{Set-theoretic convergence}
 \begin{definition}
 Let $X$ be a set. The \udef{set-theoretic convergence} on $\powerset(X)$ is the order convergence determined by $\subseteq$.
 \end{definition}
@@ -4281,7 +4373,7 @@ Now assume $\vicinity_\xi(x)$ is a Fréchet filter. Then there exists a set $\ma
 \[ \vicinity_\xi(x) = \bigcap \mathcal{G} \supseteq \bigcap {\lim_{\seqMod(\xi)}}^{-1}(x) = \vicinity_{\seqMod(\xi)}(x) \supseteq \vicinity_{\xi}(x), \]
 which means that $\vicinity_{\seqMod(\xi)}(x) = \vicinity_{\xi}(x)$ and $\xi$ is Fréchet-Urysohn.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{C1ImpliesFrechetUrysohn}
 Each $C1$ pretopological convergence space is Fréchet-Urysohn and thus sequential.
 \end{corollary}
 \begin{proof}

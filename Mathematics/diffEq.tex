@@ -79,36 +79,92 @@ Let $T: I^+ \to \Lin(X)$ be a semigroup of linear operators. We say $T$ is \udef
 \section{Uniformly continuous semigroups}
 
 \begin{proposition}
-Let $X$ be a Banach space and $A\in \Bounded(X)$. Then $T: \R^+ \to \Bounded(X): t\mapsto e^{tA}$ is a uniformly continuous and differentiable semigroup that satisfies $\od{T(t)}{t} = AT(t)$.
+Let $X$ be a Banach space and $T: \R^+\to \Bounded(X)$ a uniformly continuous semigroup. Then $T$ is differentiable and there exists $A\in \Bounded(X)$ such that $\dod{T(t)}{t} = AT(t)$.
 \end{proposition}
 \begin{proof}
+Since $T$ is continuous, the function $V: \R^+ \to \Bounded(X): t\mapsto \int_0^t T(s)\diff{s}$ is differentiable with $\od{V}{t} = T$ (TODO vector version of fundamental theorem of calculus). Then
+\[ \lim_{t\to 0}\frac{V(t)}{t} = \dod{V}{t}\Big|_{t=0} = T(0) = \id_X. \]
+Now $\id_X$ is invertible and the set of invertible elements of $\Bounded(X)$ is open by \ref{openSetInvertibles}, so there exists an interval $\interval{0,t_0}$ such that $V(t)$ is invertible for all $t\in \interval{0,t_0}$ (using the fact that such intervals form a basis of the vicinity filter of $\R^+$, the vicinity filter converges and \ref{openClosedCriteria}).
 
+Now, using \ref{boundedOperatorUnderIntegral}, the fact that $T$ is a semigroup and (TODO change of variables), we calculate, for all $t\in \R^+$,
+\begin{align*}
+T(t) &= V(t_0)^{-1}V(t_0)T(t) \\
+&= V(t_0)^{-1}\int_0^{t_0}T(t+s)\diff{s} \\
+&= V(t_0)^{-1}\int_t^{t+t_0}T(s)\diff{s} \\
+&= V(t_0)^{-1}\Big(\int_0^{t+t_0}T(s)\diff{s} - \int_0^{t}T(s)\diff{s}\Big) \\
+&= V(t_0)^{-1}\Big(V(t+t_0) - V(t)\Big).
+\end{align*}
+Thus the differentiability of $T$ follows from the differentiability of $V$ (TODO ref product and shift differentiable). Now that we know that $T$ is differentiable (in particular that $T$ is differentiable at $0$), we can calculate
+\begin{align*}
+\dod{}{t}T(t) &= \lim{h\to 0} \frac{T(t+h) - T(t)}{h} \\
+&= \lim{h\to 0} \frac{T(h) - T(0)}{h}T(t) \\
+&= \Big(\dod{}{t}\Big|_t=0 T(t)\Big)T(t).
+\end{align*}
+We set $A\defeq \dod{}{t}\Big|_t=0 T(t)$.
+\end{proof}
+
+\begin{proposition} \label{exponentialDifferentiableSemigroup}
+Let $X$ be a Banach space and $A\in\Bounded(X)$ a bounded operator. Then $e^{tA}$ is a differentiable semigroup and $\dod{e^{tA}}{t} = Ae^{tA}$.
+\end{proposition}
+By \ref{differentiabilityImpliesContinuity}, we have that $e^{tA}$ is a uniformly continuous semigroup.
+\begin{proof}
+We observe that $e^{tA}$ is a semigroup by (TODO ref $e^{A+B} = e^Ae^B$ is $A,B$ commute).
+
+We show that $e^{tA} = \sum_{n=0}^\infty \frac{t^nA^n}{n!}$ is differentiable using \ref{derivativeOfUniformLimit}. First we need to show that the convergence of
+\[ \sum_{n=1}^\infty \frac{nt^{n-1}A^n}{n!} = \sum_{n=1}^\infty \frac{t^{n-1}A^n}{(n-1)!} = \sum_{n=0}^\infty A\frac{t^{n}A^n}{n!} = Ae^{tA} \]
+is uniform on $\interval{0,1}$. This follows from the Weierstrass $M$-test \ref{WeierstrassMTest}, by observing $\sup_{t\in \interval{0,1}}\norm{A\frac{t^{n}A^n}{n!}} \leq \norm{A}\frac{\norm{A}^n}{n!}$ and $\sum_{n=0} \norm{A}\frac{\norm{A}^n}{n!} = \norm{A}e^{\norm{A}}$.
+
+By \ref{derivativeOfUniformLimit}, $e^{tA}$ is differentiable on $\interval{0,1}$, with $\dod{e^{tA}}{t} = Ae^{tA}$. This result extends to the whole of $\R^+$ by shifting using the semigroup property.
+\end{proof}
+\begin{proof}[Alternate proof by holomorphic functional calculus]
+Let $\Gamma$ be a counterclockwise path such that $\spec(A)$ lies in the interior of $\Gamma$. We calculate
+\begin{align*}
+\od{}{t}e^{tA} &= \od{}{t}\frac{1}{2\pi i}\oint_\Gamma e^{tz}R_{A}(z)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma \od{}{t}e^{tz}R_{A}(z)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}zR_{A}(z)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}\big(AR_A(z) + \id_X\big)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}AR_A(z)\diff{z} \\
+&= Ae^{tA},
+\end{align*}
+where we have used \ref{pathIntegralContinuousOperator} and \ref{derivativeOfConstructions} to move the derivative inside the integral. Then we have used the indentity \ref{BanachAlgebraResolventMultiplication}, \ref{weakAnalyticityConsequences} to see that the second term is zero and \ref{derivativeOfConstructions} again to move the $A$ outside.
 \end{proof}
 
 \begin{proposition}
-Let $X$ be a Banach space and $T: \R^+ \to \Bounded(X)$ a uniformly continuous and differentiable \emph{function} such that 
+Let $X$ be a Banach space and $A\in \Bounded(X)$ a bounded operator. Then there exists a unique function $T: \R^+\to \Bounded(X)$ such that
 \[ \begin{cases}
-\od{T(t)}{t} = AT(t) \\
+\dod{T(t)}{t} = AT(t) \\
+T(0) = \id_X.
+\end{cases} \]
+\end{proposition}
+Note that $T$ is unique even among all such functions, not just the semigroups.
+\begin{proof}
+By \ref{exponentialDifferentiableSemigroup} the semigroup $t\mapsto e^{tA}$ satisfies the criteria.
+
+Now suppose, towards a contradiction, that there was another function $T: \R^+ \to \Bounded(X)$ that fits the criteria. Then, for fixed $t\in \R^+$, define
+\[ Q: \interval{0,t}\to \Bounded(X): s\mapsto e^{sA}T(t-s). \]
+Now, using \ref{FrechetChainRule} and \ref{LeibnizRuleDerivativeAlgebra},
+\[ \dod{Q}{s} = Ae^{sA}T(t-s) - e^{sA}AT(t-s) = 0. \]
+It follows from the vector mean value theorem \ref{meanValueTheoremVectorFunctions} that $Q$ is constant, so $T(t) = Q(0) = Q(t) = e^{tA}$.
+\end{proof}
+
+
+\begin{corollary}
+Let $X$ be a Banach space and $T: \R^+\to \Bounded(X)$ a function.
+Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is a uniformly continuous semigroup;
+\item $T$ is differentiable and
+\[ \begin{cases}
+\dod{T(t)}{t} = AT(t) \\
 T(0) = \id_X,
 \end{cases} \]
-for some $A\in \Bounded(X)$. Then $T(t) = e^{tA}$.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-
-\begin{proposition}
-Let $X$ be a Banach space and $T: \R^+ \to \Bounded(X)$ a uniformly continuous semigroup. Then $T$ is differentiable and $\od{T(t)}{t} = AT(t)$ for some $A\in\Bounded(X)$.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-\begin{corollary}
-Let $X$ be a Banach space and $T: \R^+ \to \Bounded(X)$ a uniformly continuous semigroup. Then $T(t) = e^{tA}$ for some $A\in\Bounded(X)$.
+for some $A\in \Bounded(X)$;
+\item there exists an $A\in \Bounded(X)$ such that $T(t) = e^{tA}$ for all $t\in \R^+$.
+\end{enumerate}
 \end{corollary}
-\begin{proof}
+In cases (2) and (3) the operator $A$ is the same.
 
-\end{proof}
+
 
 \subsection{Matrix semigroups}
 \subsubsection{Explicit 2D solutions}
@@ -1584,7 +1640,7 @@ TODO
 \begin{definition}
 Let $X$ be a Banach space, $A$ an operator on $X$ and $x\in X$. The operator equation
 \[ \begin{cases}
-\od{u(t)}{t} = Au(t) \\ u(0) = x
+\dod{u(t)}{t} = Au(t) \\ u(0) = x
 \end{cases} \]
 is called the \udef{abstract Cauchy problem} associated to $A$ with \udef{initial value} $x$.
 
@@ -1605,19 +1661,20 @@ Assume $u$ is a classical solution with $\od{u(t)}{t} = Au(t)$ and $u(0) = x$. T
 \begin{proposition}
 Let $A$ be the generator of a strongly continuous semigroup $T: \R^+\to \Bounded(X)$ on a Banach space $X$. Then, for all initial values $x\in X$, the abstract Cauchy problem
 \[ \begin{cases}
-\od{u(t)}{t} = Au(t) \\ u(0) = x
+\dod{u(t)}{t} = Au(t) \\ u(0) = x
 \end{cases} \]
 has a unique mild solution given by the orbit map
 \[ u: t\mapsto T(t)x. \]
+If $x\in \dom(A)$, then the mild solution is a classical solution.
 \end{proposition}
 \begin{proof}
-The fact that the orbit maps are mild solutions is given by \ref{integralOperatorSemigroupGenerator}.
+The fact that the orbit maps are mild solutions is given by \ref{integralOperatorSemigroupGenerator}. The fact that the orbit maps are classical solutions if $x\in \dom(A)$ is given by \ref{differentialOperatorSemigroupGenerator}.
 
 We now show that the mild solutions are unique. By linearity, it is enough to consider the initial value $x=0$ and show that the only mild solution is $u(t) = 0$.
 
-Take a mild solution $u$ and fix $t >0$. Using \ref{differentialOperatorSemigroupGenerator}, we obtain, $\forall s\in\interval[o]{0,t}$,
+Take a mild solution $u$ and fix $t >0$. Using \ref{differentialOperatorSemigroupGenerator} (since $0\in\dom(A)$) and (TODO: ref), we obtain, $\forall s\in\interval[o]{0,t}$,
 \begin{align*}
-\od{}{s}\left(T(t-s)\int_0^su(r)\diff{r}\right) &= T(t-s)u(s) - T(t-s)A\int_0^su(r)\diff{r} \\
+\dod{}{s}\left(T(t-s)\int_0^su(r)\diff{r}\right) &= T(t-s)u(s) - T(t-s)A\int_0^su(r)\diff{r} \\
 &= T(t-s)\left(u(s) - A\int_0^su(r)\diff{r}\right) \\
 &= T(t-s)0 = 0.
 \end{align*}
@@ -1644,7 +1701,7 @@ TODO: existence and uniqueness enough for strongly continuous semigroup generate
 \begin{definition}
 Let $X$ be a Banach space, $A$ an operator on $X$, $f\in \cont(I\subseteq \R^+, X)$ and $x\in X$. An operator equation
 \[ \begin{cases}
-\od{u(t)}{t} = Au(t) + f(t) \\ u(0) = x
+\dod{u(t)}{t} = Au(t) + f(t) \\ u(0) = x
 \end{cases} \]
 is called an \udef{abstract inhomogeneous Cauchy problem}.
 \end{definition}
@@ -1758,8 +1815,8 @@ The first equation has two solutions: $x_0 = \pm 1$.
 
 \section{Asymptotic analysis}
 \begin{definition}
-A sequence of functions $\seq{\phi_n}_{n\in\N}$ is a \udef{gauge sequence} or \udef{asymptotic scale} for $x\to x_0$ if, for all $n\in \N$,
-\[ \phi_{n+1}(x) = o\big(\phi_n(x)\big) \qquad\text{as $x\to x_0$.} \]
+A sequence of functions $\seq{\phi_n:\R\to\R}_{n\in\N}$ is a \udef{gauge sequence} or \udef{asymptotic scale} for $x\to x_0$ if, for all $n\in \N$,
+\[ \big|\phi_{n+1}(x)\big| = o\big(\big|\phi_n(x)\big|\big) \qquad\text{as $x\to x_0$.} \]
 \end{definition}
 
 \begin{example}
@@ -1827,6 +1884,25 @@ Two functions have the same asymptotic expansion if and only if their difference
 The function $e^{-x}$ is subdominant to $\seq{x^{-n}}_{n\in \N}$ as $x\to \infty$.
 \end{example}
 
+\begin{proposition}
+Let $\seq{\phi_n}_{n\in \N}$ be an asymptotic scale as $x\to x_0$. Let $\seq{a_n}_{n\in \N}$ be a sequence of real numbers. Then there exists a function $f: \R\to\R$ such that $f \sim \sum_{n=0}^\infty a_n\phi_n$.
+\end{proposition}
+\begin{proof}
+For all $n\in \N$, construct the set $U_n$ recursively as follows: set $U_0 = \R$ and
+\[ U_{n} \defeq \setbuilder{x\in U_{n-1}}{\Big|\frac{\phi_{n+1}(x)}{\phi_{n}(x)}\Big|\leq \Big|\frac{a_n}{2a_{n+1}}\Big|}. \]
+We set $f(x) \defeq \sum_{n=0}^\infty \charFunc{U_n}(x)a_n\phi_n(x)$. Now we have
+\[  \big|\charFunc{U_{n+1}}(x)a_{n+1}\phi_{n+1}(x)\big| \leq \frac{1}{2}\big|\charFunc{U_{n}}(x)a_{n}\phi_{n}(x)\big|, \]
+so
+\[ \Big|\frac{\charFunc{U_{n+1}}(x)a_{n+1}\phi_{n+1}(x)}{\charFunc{U_{n}}(x)a_{n}\phi_{n}(x)}\Big| \leq \frac{1}{2} < 1, \]
+so the series defining $f$ converges everywhere by the ratio test (TODO ref). To show that $f \sim \sum_{n=0}^\infty a_n\phi_n$, we need to show that $f(x) - \sum_{n=0}^N a_n\phi_n(x)$ is $o\big(\phi_{N}\big)$. If $x\notin U_n$, then this difference is zero, so we may restrict our attention to $x\in U_{N}$ and calculate
+\begin{align*}
+\Big|f(x) - \sum_{n=0}^N a_n\phi_n(x)\Big| &= \Big|\sum_{n=N+1}^N \charFunc{U_{n}}(x)a_n\phi_n(x)\Big| \\
+&\leq \sum_{n=N+1}^N \big|\charFunc{U_{n}}(x)a_n\phi_n(x)\big| \\
+&\leq |a_{N+1}\phi_{N+1}(x)|\sum_{n=N+1}^N 2^{N+1-n} \\
+&= 2|a_{N+1}|\,|\phi_{N+1}(x)| = o(\phi_{N}).
+\end{align*}
+\end{proof}
+
 \subsection{Power series expansions}
 \subsubsection{The scale $(x-x_0)^n$}
 \begin{lemma}
@@ -1883,6 +1959,44 @@ so it is enough to show that $\int_{x}^\infty h(t)\diff{t}\in O(x^{-N})$. Indeed
 \end{align*}
 \end{proof}
 
+\subsection{Improving power series convergence}
+\subsubsection{Shanks transformation}
+\begin{definition}
+Let $\seq{a_n}_{n\in \N}$ be a sequence of complex numbers. Consider the partial sums $A_n \defeq \sum_{k=0}^n a_k$. The \udef{Shanks transformation} of the series is the sequence
+\[ S_n \defeq {\frac {A_{n+1}\,A_{n-1}\,-\,A_{n}^{2}}{A_{n+1}-2A_{n}+A_{n-1}}}=A_{n+1}-{\frac {(A_{n+1}-A_{n})^{2}}{(A_{n+1}-A_{n})-(A_{n}-A_{n-1})}}. \]
+\end{definition}
+
+To motivate the Shanks transformation, we assume the distance from $A_n$ to the limit $A$ is of the form $at^n$, with $a,t\in \C$ (we want $|t| < 1$, so this transient term goes to zero). Then we have
+\[ A_{n-1} = A + at^{n-1}, \quad A_{n} = A + at^{n} \quad\text{and}\quad A_{n+1} = A + at^{n+1}. \]
+These are three equations with three unknowns: $A,a$ and $t$. Solving for $A$ yields
+\[ A = {\frac {A_{n+1}\,A_{n-1}\,-\,A_{n}^{2}}{A_{n+1}-2A_{n}+A_{n-1}}}. \]
+
+\begin{lemma}
+Let $\seq{a_n}_{n\in \N}$ be a sequence of complex numbers. If the series converges, then the Shanks transform also converges.
+\end{lemma}
+\begin{proof}
+TODO!
+\end{proof}
+
+\begin{example}
+\begin{itemize}
+\item The Shanks transform may converge even if the series diverges.
+\item Repeated application of the Shanks transform may improve the convergence.
+\end{itemize}
+\end{example}
+
+\subsubsection{Euler summation}
+\begin{definition}
+Let $\seq{a_n}_{n\in \N}$ be a sequence. The \udef{Euler sum} of the series $\sum_{n=0}^\infty a_n$ is defined as
+\[ \lim_{z\to 1}\sum_{n=0}^{\infty}a_nz^n. \]
+\end{definition}
+
+\subsubsection{Borel summation}
+\begin{definition}
+Let $\seq{a_n}_{n\in \N}$ be a sequence. The \udef{Borel sum} of the series $\sum_{n=0}^\infty a_nz^n$ is defined as
+\[ \int_0^\infty e^{-t}\Big(\sum_{n=0}^\infty \frac{a_nt^nz^n}{n!}\Big)\diff{t}, \]
+if the integral exists.
+\end{definition}
 
 \chapter{Ordinary differential equations}
 \url{https://www.mat.univie.ac.at/~gerald/ftp/book-ode/ode.pdf}
@@ -2055,6 +2169,20 @@ We identify the $i^\text{th}$ component of $x$ as the $i^\text{th}$ derivative o
 
 \subsubsection{Constant coefficients}
 TODO, see Teschl p. 74. Link with Jordan blocks.
+
+\subsubsection{Ordinary and singular points}
+\begin{definition}
+Let $\sum_{i=0}^n a_i(t)u^{(i)}(t) = 0$ be a linear homogenous $n^\text{th}$-order differential equation with $a_n = \constant{1}$. Let $t_0\in \R$.
+\begin{itemize}
+\item If all the functions $a_i(t)$ are analytic at $t_0$, then $t_0$ is called an \udef{ordinary point} of the differential equation.
+\item If all the functions $(t-t_0)^{n-i}a_i(t)$ are analytic at $t_0$ and $t_0$ is not an ordinary point, then $t_0$ is called a \udef{regular singular point} of the differential equation.
+\item If $t_0$ is neither an ordinary point nor a regular singular point, then it is called an \udef{irregular singular point}.
+\end{itemize}
+\end{definition}
+
+\begin{example}
+The differential equation $t^3u^{\prime\prime} = u$ has an irregular singular point at $t=0$.
+\end{example}
 
 \subsection{Fundamental matrices}
 \begin{lemma}

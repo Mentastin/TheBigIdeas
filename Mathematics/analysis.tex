@@ -1834,6 +1834,8 @@ Take such a sequence $\seq{s_n}$. The \udef{Bochner integral} of $f$ on $\Omega$
 \[ \int_\Omega f\diff{\mu} \defeq \lim_{n\to\infty}\int_\Omega s_n\diff{\mu}. \]
 \end{definition}
 
+TODO: show Riemann implies Bochner with same integral.
+
 \begin{lemma}
 The Bochner integral is well-defined: let $\seq{s_n},\seq{t_n}\in \prescript{\N}{}{\SF(\Omega,Y)}$ be sequences such that
 \[ \lim_{n\to\infty}\int_\Omega \norm{f-s_n}\diff{\mu} = 0 = \lim_{n\to\infty}\int_\Omega \norm{f-t_n}\diff{\mu}.  \]
@@ -1878,6 +1880,13 @@ TODO: show that $T\circ f$ is integrable!
 \end{proof}
 
 TODO Dominated convergence.
+
+\begin{lemma} \label{pathIntegralContinuousOperator}
+Let $X$ be a Banach space and $\Gamma$ a bounded Jordan curve in $\C$. Then $\oint_\Gamma\diff{z}: \Bounded(X)^\Gamma \to \Bounded(X)$ is a continuous linear operator (when $\Bounded(X)^\Gamma$ is equipped with the pointwise convergence).
+\end{lemma}
+\begin{proof}
+TODO Bounded convergence theorem.
+\end{proof}
 
 \subsubsection{Weak and strong measurability}
 TODO is Bochner measurable measurable with $Y$ given Borel $\sigma$-algebra?
@@ -2343,18 +2352,11 @@ g(a) = f(a) - a\frac{f(b)-f(a)}{b-a} = \frac{bf(a) - af(a)}{b-a} - a\frac{f(b)-f
 \end{multline*}
 so we can apply Rolle's theorem \ref{RollesTheorem} to $g$. Thus there exists $c\in \interval[o]{a,b}$ such that $0 = g'(c) = f'(c) - \frac{f(b)-f(a)}{b-a}$. Thus $f'(c) = \frac{f(b)-f(a)}{b-a}$.
 \end{proof}
-\begin{corollary}[Mean value theorem for vector-valued functions] \label{meanValueTheoremVectorFunctions}
-Let $\mathcal{H}$ be a real Hilbert space. Let $a<b\in \R$ and $f: \interval{a,b}\to \mathcal{H}$ be a continuous real function that is differentiable on $\interval[o]{a,b}$. Then there exists $c\in \interval[o]{a,b}$ such that
-\[ \norm{f'(c)} \geq \frac{\norm{f(b)-f(a)}}{b-a}. \]
-\end{corollary}
-\begin{proof}
-Consider the function $g(t) \defeq \inner{f(b)-f(a), f(t)}$. Since $g$ is real-valued, there exists $c\in \interval[o]{a,b}$ such that $g'(c) = \frac{g(b)-g(a)}{b-a}$. Then $g(b)-g(a) = \norm{f(b)-f(a)}^2$ and $g'(c) = \inner{f(b)-f(a), f'(t)}$. By the Cauchy-Schwarz inequality \ref{CauchySchwarz}, we have
-\[ \frac{\norm{f(b)-f(a)}^2}{b-a} = \left|\frac{\norm{f(b)-f(a)}^2}{b-a}\right| = \left|\frac{g(b)-g(a)}{b-a}\right| = |g'(c)| = |\inner{f(b)-f(a), f'(t)}| \leq \norm{f(b)-f(a)} \norm{f'(t)}. \]
-Dividing by $\norm{f(b)-f(a)}$ yields the result.
-\end{proof}
 \begin{corollary}
 Let $a,b, M\in \R$ and $f:\interval{a,b}\to \R$ a function differentiable on $\interval[o]{a,b}$. If $|f'(x)| \leq M$ for all $x\in \interval[o]{a,b}$, then $f$ is Lipschitz continuous with Lipschitz constant $M$.
 \end{corollary}
+
+TODO: \url{https://ejde.math.txstate.edu/Volumes/2012/34/cakmak.pdf}
 
 \begin{lemma} \label{boundDerivativeAndFixedPointGivesRange}
 Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous function that is differentiable on $\interval[o]{a,b}$. If $f$ has a fixed point and $0\leq f' \leq 1$ everywhere, then $\im(f)\subseteq \interval{a,b}$. 
@@ -2396,19 +2398,19 @@ and thus $(b-a)^{-1}\int_a^bf(x)\diff{x}$ lies between the extrema. By \ref{extr
 
 \subsection{Fundamental theorems of calculus}
 \begin{theorem}[First fundamental theorem of calculus] \label{firstFundamentalTheoremCalculus}
-Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous real function. Set
+Let $a\in \R,b\in \R\cup\{\infty\}$ and $f:\interval{a,b}\to \R$ be a continuous real function. Set
 \[ F: \interval{a,b} \to \R: x\mapsto \int_a^x f(t) \diff{t}. \]
 Then
 \begin{enumerate}
 \item $F$ is continuous on $\interval{a,b}$;
-\item $F$ is differentiable on $\interval[o]{a,b}$;
-\item $F'(x) = f(x)$ for all $x\in \interval[o]{a,b}$.
+\item $F$ is differentiable on $\interval{a,b}$;
+\item $F'(x) = f(x)$ for all $x\in \interval{a,b}$.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 For any $x,h\in \R$ such that $x, x+h\in \interval{a,b}$, we have
 \[ F(x+h) - F(x) = \int_a^{x+h}f(t)\diff{t} - \int_a^{x}f(t)\diff{t} = \int_x^{x+h}f(t)\diff{t}. \]
-By the mean value theorem for integrals, \ref{meanValueTheoremIntegrals}, we have $F(x+h) - F(x) = f(c_h)\cdot h$ for some $c_h\in \interval{x,x+h}$. In the limit $h\to 0$, we have $c_h\to x$ be the squeeze theorem and thus $f(c_h)\to f(x)$ by continuity of $f$. Thus
+By the mean value theorem for integrals, \ref{meanValueTheoremIntegrals}, we have $F(x+h) - F(x) = f(c_h)\cdot h$ for some $c_h\in \interval{x,x+h}$. In the limit $h\to 0$, we have $c_h\to x$ by the squeeze theorem and thus $f(c_h)\to f(x)$ by continuity of $f$. Thus
 \[ \lim_{h\to 0}F(x+h) - F(x) = \lim_{h\to 0}f(c_h)\cdot h = f(x)\lim_{h\to 0}h = 0, \]
 which implies that $F$ is continuous on $\interval{a,b}$.
 Also
@@ -2659,43 +2661,6 @@ By the dominated convergence theorem, \ref{dominatedConvergence}, we have that $
 \end{align*}
 \end{proof}
 
-\begin{proposition}
-Let $a,b\in \R$, $\seq{f_n: \interval{a,b} \to \R}_{n\in\N}$ a sequence of continuously differentiable functions and $f:\interval{a,b}\to \R$ a function. Suppose
-\begin{itemize}
-\item $\seq{f_n'}$ converges uniformly to some function $g: \interval{a,b}\to \R$;
-\item there exists $c\in \interval{a,b}$ such that $f_n(c) \to f(c)$;
-\end{itemize}
-then $\seq{f_n}$ converges uniformly to a continuously differentiable function $f: \interval{a,b}\to \R$ and $f' = g$.
-\end{proposition}
-TODO: we can drop the assumption that the $f'_n$ are continuous!!. See Rudin, principles of analysis 7.17 (p.152).
-\begin{proof}
-By \ref{weakSecondTheoremCalculus}, we have
-\[ f_n(x) = f_n(c) + \int_c^x f'_n(t)\diff{t}. \]
-Now set
-\begin{align*}
-f(x) \defeq& \lim_{n\to \infty} \Big(f_n(c) + \int_c^x f'_n(t)\diff{t}\Big) \\
-=& f(c) + \lim_{n\to \infty}\int_c^x f'_n(t)\diff{t} \\
-=& f(c) + \int_c^x g(t)\diff{t},
-\end{align*}
-where the existence of the limit and its value follow from \ref{interchangeLimitIntegralUniformLimit}.
-
-Since $g$ is continuous (TODO ref), we have $f' = g$ by \ref{firstFundamentalTheoremCalculus}.
-
-Finally, we just need to show that the convergence of $f_n\to f$ is uniform. We use \ref{metricUniformConvergence}. Take arbitrary $\epsilon >0$. Let $N\in \N$ be such that $|f(c) - f_n(c)| \leq \epsilon / 2$ and $|g(x) - f'_n(x)| \leq \frac{\epsilon}{2(b-a)}$ for all $x\in \interval{a,b}$ and $n\geq N$. Then take arbitrary $x\in \interval{a,b}$ and calculate
-\begin{align*}
-|f(x) - f_n(x)| = \bigg|\Big(f(c)+\int_c^x g(t) \diff{t}\Big) - \Big(f_n(c)+\int_c^x f_n'(t) \diff{t}\Big)\bigg| \\
-\leq \big|f(c) - f_n(c)\big| + \Big|\int_c^x \big(g(t)- f_n'(t)\big)\diff{t}\Big| \\
-&\leq \frac{\epsilon}{2} + \frac{\epsilon}{2(b-a)}\int_a^b\diff{t} \\
-&= \frac{\epsilon}{2} + \frac{\epsilon}{2(b-a)}(b-a) = \frac{\epsilon}{2} + \frac{\epsilon}{2} = \epsilon.
-\end{align*}
-By \ref{metricUniformConvergence} this concludes the proof. 
-\end{proof}
-
-
-
-\begin{example}
-Let $f_n: \interval{0,2\pi} \to \R: x\mapsto \frac{\sin(nx)}{n}$. Then $\seq{f_n}$ converges uniformly to $0$, but $f_n'(x) = \cos(nx)$, which does not converge, even pointwise.
-\end{example}
 
 \section{Inequalities}
 \subsection{Based on mean value theorems}
@@ -3901,12 +3866,17 @@ Let $\theta$ be the Heaviside function. Then
 \end{proposition}
 
 \begin{proposition}
-Let $\Omega\subseteq \R^n$ be an open set that cont and $f\in L^1_\text{loc}(\Omega)\cap \cont^1(\Omega)$ (TODO is this a Sobolev space?) with countable many zeros $\seq{x_j}$ and $a\in \Omega$. Then
-\[ \delta_a \circ T_f = \sum_{j} \frac{1}{f'(x_j)}\delta_{x_j - a} \]
+Let $\Omega\subseteq \R^n$ be an open set that cont and $g\in L^1_\text{loc}(\Omega)\cap \cont^1(\Omega)$ (TODO is this a Sobolev space?) with countable many zeros $\seq{x_j}$ and $a\in \Omega$. Then
+\[ \delta_a \circ T_g = \sum_{j} \frac{1}{f'(x_j)}\delta_{x_j - a} \]
 \end{proposition}
 TODO: check assumptions. $x_j - a \in \Omega$?
 \begin{proof}
-TODO
+TODO:
+Composition of the Dirac $\delta$ with a smooth, continuously differentiable function $g$ follows from the following relation
+\[ \int_\R \delta(g(x))f(g(x))|g'(x)|\diff{x} = \int_{g(\R)} \delta(u)f(u)\diff{u} \]
+Thus we say that
+\[ \delta(g(x)) = \sum_i \frac{\delta(x-x_i)}{|g'(x_i)|}\]
+Where $x_i$ are the simple roots of $g$.
 \end{proof}
 
 \begin{proposition}

@@ -2048,6 +2048,23 @@ Then $d(x,y) \leq d(x,z) + d(z,y) \leq \epsilon + \delta$. Since this holds for 
 Let $\sSet{X,d}$ be a pseudometric space and $\seq{x_n}$ a sequence in $X$. Then $\seq{x_n}$ converges to $x\in X$ \textup{if and only if}
 \[ \forall \epsilon>0: \exists N\in\N: \forall n\geq N: \quad d(x_n,x)\leq \epsilon. \]
 \end{corollary}
+\begin{corollary} \label{pseudometricSpaceFrechetUrysohn}
+Every pseudometrisable uniform space is Fréchet-Urysohn.
+\end{corollary}
+In particular, every pseudometrisable uniform space is sequential.
+\begin{proof}
+We have $\neighbourhood_d(x) = \upset\setbuilder{\cball_d(x,n^{-1})}{n\in \N}$, so the result follows from \ref{C1ImpliesFrechetUrysohn}.
+\end{proof}
+
+\begin{lemma} \label{continuityMetricSpaces}
+Let $\sSet{X, d_X}$ and $\sSet{Y, d_Y}$ be metric spaces, $x\in X$ and $f:X\to Y$ a function. Then $f$ is continuous at $x$ \textup{if and only if}
+\[ \forall \epsilon >0: \exists \delta >0: \forall y\in X: \quad d_X(x,y) \leq \delta \implies d_Y(f(x), f(y)) \leq \epsilon. \]
+\end{lemma}
+\begin{proof}
+Since $Y$ is topological, by \ref{metricConvergenceNeighbourhood}, we have that $f$ is continuous at $x$ iff $\neighbourhood_{Y}\big(f(x)\big) \subseteq \upset f^{\imf\imf}\big(\neighbourhood_X(x)\big)$ by \ref{pretopologicalContinuityVicinities}. 
+
+Given the form of the neighbourhood filter of a metric space given in \ref{metricConvergenceNeighbourhood}, the result is immediate.
+\end{proof}
 
 \begin{proposition} \label{metricConvergenceHausdorff}
 Let $\sSet{X,d}$ be a pseudometric space. Then the pseudometric convergence is Hausdorff \textup{if and only if} $d$ is a metric.
@@ -2404,210 +2421,6 @@ It is important in \ref{metricBoundedness} to check that $B$ has finite diameter
 For example, consider $d_\R$ and $d' \defeq d_\R \wedge \underline{1}$. Then both metrics define the same uniformity, but $\sup d^{\prime\imf}(A) \leq 1$ for all subsets $A\subseteq \R$ and thus all subsets of $\R$ have finite diameter w.r.t. $d'$. 
 \end{example}
 
-\subsection{Functions on metric spaces}
-\subsubsection{Isometries}
-\begin{definition}
-Let $\sSet{X,d_X}$, $\sSet{Y,d_Y}$ be metric spaces and $f: X\to Y$ a function such that $d_X(a,b) = d_Y\big(f(a), f(b)\big)$ for all $a,b\in X$. Then $f$ is called \udef{isometric} or an \udef{isometry}.
-\end{definition}
-
-\begin{lemma} \label{isometryLemma} \label{isometriesUniformlyContinuous}
-Let $\sSet{X, d_X}$ and $\sSet{Y, d_Y}$ be metric spaces and $f:X\to Y$ an isometry. Then
-\begin{enumerate}
-\item $f$ is injective;
-\item $f^{-1}: \im(f) \to X$ is an isometry;
-\item $f$ is uniformly continuous;
-\item $f$ is a uniform embedding;
-\item $f$ is closed.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Take $x,y\in X$ and suppose $f(x) = f(y)$. Then $0 = d_Y\big(f(x), f(y)\big) = d_X(x,y)$, so $x = y$.
-
-(2) Take $f(x),f(y)\in \im(f)$. Then
-\[ d_X\big((f^{-1}\circ f)(x), (f^{-1}\circ f)(y)\big) = d_X(x,y) = d_Y\big(f(x), f(y)\big). \]
-
-(3) We can set $\delta = \epsilon$ in \ref{uniformContinuityMetricSpaces}.
-
-(4) Immediate from (2) and (3).
-
-(5) Immediate from (2) and \ref{preimageOpenClosed}.
-\end{proof}
-
-\subsubsection{Hölder and Lipschitz continuity}
-\begin{definition}
-Let $f: X\to Y$ be a map between metric spaces, then $f$ is called \udef{$\alpha$-Hölder continuous}, where $0 < \alpha \leq 1$, if there exists a constant $M$ such that
-\[ d_Y(f(x), f(y)) \leq M d_X(x,y)^\alpha \qquad \forall x,y\in X. \]
-
-If $\alpha = 1$, then $f$ is called \udef{Lipschitz continuous}.
-
-The set of $\alpha$-Hölder continuous functions $X\to Y$ is denoted $\cont^{0,\alpha}(X,Y)$.
-\end{definition}
-The $0$ in $\cont^{0,\alpha}(X,Y)$ appears because we are not considering any derivatives.
-
-\begin{lemma} \label{HolderLipschitzContinuity}
-Let $f: X\to Y$ be a map between metric spaces and $0<\alpha \leq \beta \leq 1$.
-
-If $f$ is $\beta$-Hölder continuous, then it is $\alpha$-Hölder continuous.
-\end{lemma}
-TODO consolidate lemmas + uniform continuity.
-\begin{lemma} \label{LipschitzcontinuousContinuous}
-A Lipschitz continuous function between metric spaces is uniformly continuous.
-\end{lemma}
-\begin{proof}
-Let $f:X\to Y$ be a Lipschitz continuous function with Lipschitz constant $M$.
-
-Take $\epsilon >0$. Set $\delta = \epsilon / M$. Take $x,y\in X$ such that $d_X(x,y)\leq \delta = \epsilon / M$. Then
-\[ d_Y\big(f(x), f(y)\big) \leq Md_X(x,y) \leq M\frac{\epsilon}{M} = \epsilon. \]
-Uniform continuity follows from \ref{uniformContinuityMetricSpaces}.
-\end{proof}
-
-\begin{example}
-The function $\interval{0,1} \to \interval{0,1}: x\mapsto \sqrt{x}$ is uniformly continuous, but not Lipschitz continuous.
-\end{example}
-
-\subsubsection{Contractions}
-\begin{definition}
-Let $f: X\to Y$ be a map between metric spaces, then $f$ is called a \udef{contraction} if it is Lipschitz continuous with Lipschitz constant $M < 1$.
-\end{definition}
-
-\begin{proposition}[Banach fixed point theorem] \label{contractionFixedPoint}
-Let $f: X\to X$ be a contraction. If $X$ is a complete metric space, then $f$ has a unique fixed point.
-\end{proposition}
-\begin{proof}
-Uniqueness is easy: assume that $f$ has two fixed points $x_1, x_2$. Then $d(x_1,x_2) = d(fx_1, fx_2) \leq M d(x_1,x_2)$. Since $M < 1$ this is only possible if $d(x_1,x_2) = 0$, meaning $x_1  x_2$.
-
-For existence: take some $x_0\in X$. Then define the sequence $\seq{T^n(x_0)}_n$. This is a Cauchy sequence because, for $m>n>1$
-\[ d(x_m,x_n) \leq \sum_{i=n}^{m-1}d(x_{i+1}, x_i) \leq \sum^{m-1}_{i=n}M^{i-1}d(x_2,x_1) = \frac{M^{n-1}(1-M^{m-n+1})}{1-M}d(x_2,x_1) \leq \frac{M^{n-1}}{1-M}. \]
-By completeness it has a limit. Now $T$ is continuous by \ref{LipschitzcontinuousContinuous}. Then
-\[ T\left(\lim_{n\to \infty} T^n(x_0)\right) = \lim_{n\to \infty}T(T^n(x_0)) = \lim_{n\to \infty}T^{n+1}(x_0) = \lim_{n\to \infty} T^n(x_0),  \]
-so the limit is a fixed point.
-\end{proof}
-
-The construction of the sequence $\seq{T^n(x_0)}_n$ is called \udef{fixed point iteration}. Following the proof of the proposition it is clear we can obtain the fixed point starting the iteration from any point in $X$.
-
-\begin{example}
-In \ref{contractionFixedPoint} it is important that $f$ is a contraction, i.e.\ there exists $M<1$ such that, for all $x,y\in X$, $d\big(f(x), f(y)\big)\leq Md(x,y)$. It is not enough to have
-$d\big(f(x), f(y)\big) < d(x,y)$ for all $x\neq y$.
-
-Consider $f: \interval[co]{1,+\infty} \to \interval[co]{1,+\infty}: x\mapsto x+ \frac{1}{x}$. This satisfies
-\[ \big|f(x) - f(y) \big| = \Big|x-y + \frac{1}{x} - \frac{1}{y}\Big| \leq |x-y|+\Big|\frac{1}{x} - \frac{1}{y}\Big| < |x-y|, \]
-but has no fixed point.
-\end{example}
-
-\begin{corollary}
-Let $f: X\to X$ be a function on a complete metric space such that $f^n$ is a contration for some $n\in \N$. Then $f$ has a unique fixed point.
-\end{corollary}
-\begin{proof}
-By the proposition we know that $f^n$ has a unique fixed point: $f^n(x) = x$. Applying $f$ to both sides gives
-\[ f(f^n(x)) = f^n(f(x)) = f(x), \]
-so $f(x)$ is also a fixed point of $f^n$. By uniqueness $f(x) = x$. This shows $f$ has a fixed point.
-
-For uniqueness it is enough to note that any fixed point of $f$ is a fixed point of $f^n$, \ref{fixedPointsMultipleComposition}.
-\end{proof}
-
-
-\subsubsection{Uniform convergence}
-\begin{proposition} \label{metricUniformConvergence}
-Let $X$ be a set, $\sSet{Y,d}$ a metric space and $\seq{f_n}$ a sequence in $(X\to Y)$. The following are equivalent:
-\begin{enumerate}
-\item  $\seq{f_n}$ converges uniformly to $f: X\to Y$;
-\item $\forall \epsilon > 0: \exists N\in \N: \forall n \geq N: \forall x\in X:  d(f_n(x), f(x)) \leq \epsilon$;
-\item $\seq{f_n}$ converges to $f$ w.r.t. the metric $d_s(f,g) = \sup_{x\in X}d\big(f(x), g(x)\big)$;
-\item $\displaystyle\lim_{n\to \infty} \sup_{x\in X}d\big(f(x), f_n(x)\big)\overset{\R}{\longrightarrow} 0$;
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-The equivalence of (2) and (3) is clear because they are both equivalent to
-\[ \forall \epsilon > 0: \exists N\in \N: \forall n \geq N: \sup_{x\in X} d(f_n(x), f(x)) \leq \epsilon, \]
-using \ref{metricConvergenceSequence}.
-
-The equivalence of (3) and (4) is given by \ref{metricConvergence}.
-
-We prove $(1) \Leftrightarrow (2)$.
-\begin{align*}
-\seq{f_n} \overset{\text{unif.}}{\longrightarrow} f &\iff \TailsFilter\seq{f_n} \otimes \pfilter{f} \in \mathcal{U}_{(X\to Y)} \\
-&\iff (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\id_X\}\big)^\ttransp \in \mathcal{U}_d \\
-&\iff \{V_\epsilon\}_\epsilon \subseteq (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\id_X\}\big)^\ttransp \\
-&\iff \forall \epsilon>0: \exists N\in \N: \; (\evalMap, \evalMap)^{\imf}\big((\setbuilder{f_n}{n\geq N} \times \{f\})\times \id_X\big)^\ttransp \subseteq V_\epsilon \\
-&\iff \forall \epsilon>0: \exists N\in \N: \; \bigcup_{n\geq N}\bigcup_{x\in X}(\evalMap, \evalMap)^{\imf}\big((\{f_n\} \times \{f\})\times \{(x,x)\}\big)^\ttransp \subseteq V_\epsilon \\
-&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \;(\evalMap, \evalMap)^{\imf}\big((\{f_n\} \times \{f\})\times \{(x,x)\}\big)^\ttransp \in V_\epsilon \\
-&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (\evalMap, \evalMap)^{\imf}\big(\{((f_n, f), (x,x))^\ttransp\}\big) \in V_\epsilon \\
-&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (\evalMap, \evalMap)\big((f_n,x),(f,x)\big) \in V_\epsilon \\
-&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (f_n(x), f(x)) \in V_\epsilon \\
-&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; d(f_n(x), f(x)) \leq \epsilon.
-\end{align*}
-\end{proof}
-
-
-\begin{definition}
-Let $X$ be a set and $\sSet{Y,d}$ a metric space then the metric $d_s$ on $(X\to Y)$ defined by
-\[ d_s: (X\to Y)\times (X\to Y) \to \overline{\R^+}: (f,g) \mapsto \sup_{x\in X}d\big(f(x), g(x)\big) \]
-is called the \udef{supremum metric} or \udef{uniform metric} on $(X\to Y)$.
-\end{definition}
-
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a pretopological space, $\sSet{Y,d}$ a metric space and $H\subseteq (X\to Y)$. Then $H$ is equicontinuous at $x$ \textup{if and only if}
-\[ \forall \epsilon >0: \exists U \in \vicinity(x): \forall y\in U: \forall f\in H: \quad d\big(f(y), f(x)\big) < \epsilon. \] 
-\end{proposition}
-\begin{proof}
-By \ref{equicontinuityUnionLemma}, the equicontinuity of $H$ is equivalent to $\upset k^{\imf\imf}(\{H\}\otimes \vicinity(x)) \in \uniformity_d$. We calculate
-\begin{align*}
-\upset k^{\imf\imf}(\{H\}\otimes \vicinity(x)) \in \uniformity_d &\iff \{V_\epsilon\}_{\epsilon >0} \subseteq \upset k^{\imf\imf}(\{H\}\otimes \vicinity(x)) \\
-&\iff \forall \epsilon >0: \exists U\in \vicinity(x): k^{\imf}(H\times U) \subseteq V_\epsilon \\
-&\iff \forall \epsilon >0: \exists U\in \vicinity(x): \forall y\in U: \forall f\in H: k(f, y) \in V_\epsilon \\
-&\iff \forall \epsilon >0: \exists U\in \vicinity(x): \forall y\in U: \forall f\in H: \big(f(y), f(x)\big) \in V_\epsilon \\
-&\iff \forall \epsilon >0: \exists U\in \vicinity(x): \forall y\in U: \forall f\in H: d\big(f(y), f(x)\big) \leq \epsilon.
-\end{align*}
-\end{proof}
-
-\begin{lemma} \label{continuousPseudometricPreservesUniformConvergence}
-Let $X$ be a set, $\sSet{Y}$ a metric space, $f: X\to Y$ a function and $\seq{f_n: X\to Y}$ a sequence that converges uniformly to $f$. Let $d'$ be a continuous pseudometric on $Y$. Then $\seq{f_n}$ converges uniformly to $f$ when $Y$ is equipped with $d'$.
-\end{lemma}
-This also follows from
-\[ (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\id_X\}\big)^\ttransp \in \mathcal{U}_d \subseteq \mathcal{U}_{d'}, \]
-as seen in the proof of \ref{metricUniformConvergence}.
-\begin{proof}
-Take arbitrary $\epsilon > 0$. Then take the $\delta$ from \ref{continuousPseudometricOnMetricSpace}. By assumption (and \ref{metricUniformConvergence}), there exists $N\in \N$ such that for all $n\geq N$ and $x\in X$, we have $d\big(f_n(x), f(x)\big) \leq \delta$. Then, by \ref{continuousPseudometricOnMetricSpace}, we have $d'\big(f_n(x), f(x)\big) \leq \epsilon$ and the conclusion follows from \ref{metricUniformConvergence}.
-\end{proof}
-
-\subsubsection{Continuous convergence structure}
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a compact convergence space and $\sSet{Y,d}$ a metric space. The continuous convergence on $\cont(X,Y)$ is given by
-\[ \forall H\in\powerset(\cont(X,Y)_c): \qquad H\to f \iff \sup_{x\in X}d(H(x), f(x)) \to 0. \]
-\end{proposition}
-\begin{proof}
-First assume $\sup_{x\in X}d(H(x), f(x)) \to 0$. 
-
-Now assume $\sup_{x\in X}d(H(x), f(x)) \not\to 0$. Then there exists $A\in \neighbourhood(0)$ such that $A \notin \sup_{x\in X}d(H(x), f(x))$ we can construct the set
-\[ \setbuilder{\setbuilder{x\in X}{d(h(x), f(x)) \notin A \forall h\in S}}{S\in H}. \]
-We claim this is a proper filter in $X$. It is contained in an ultrafilter by the ultrafilter lemma \ref{ultrafilterLemma} and this ultrafilter $F$ converges by compactness. Thus $d(H[F], f[F]) \not\to 0$ and so $H\not\to f$.
-\end{proof}
-
-\subsubsection{Bounded functions}
-\begin{definition}
-Let $X$ be a set, $\sSet{Y,d}$ a metric space and $f: X\to Y$ a function. Then we call $f$ \udef{bounded} if $\im(f)$ is bounded.
-\end{definition}
-
-\begin{lemma} \label{uniformLimitBoundedFunctionsIsBounded}
-Let $X$ be a set, $\sSet{Y,d}$ a metric space and $\seq{f_n: X\to Y}$ a sequence of bounded functions that converges uniformly to $f$. Then $f$ is bounded.
-\end{lemma}
-TODO: conditions under which the set of bounded functions with supremum metric is complete.
-\begin{proof}
-We use \ref{metricBoundedness} to show boundedness of $\im(f)$. To that end, take some continuous pseudometric $d'$ on $Y$.
-
-Since the convergence is uniform w.r.t. $d'$ by \ref{continuousPseudometricPreservesUniformConvergence}, there exists $N\in \N$ such that $d'\big(f_N(x), f(x)\big) \leq 1$ for all $x\in X$.
-
-Take arbitrary $x,y\in X$. Since $f_N$ is bounded, using \ref{metricBoundedness},
-\[ \sup \setbuilder{d'\big(f_N(x), f_N(y)\big)}{(x,y)\in X} = M < \infty. \]
-Then
-\begin{align*}
-d'\big(f(x), f(y)\big) &\leq d'\big(f(x), f_N(x)\big) + d'\big(f_N(x), f_N(y)\big) + d'\big(f_N(y), f(y)\big) \\
-&\leq M+2.
-\end{align*}
-So $\im(f)$ has a $d'$-diameter less than $M+2$. We conclude that $\im(f)$ is bounded by \ref{metricBoundedness}.
-\end{proof}
-
-
 \subsection{Cauchy structure}
 
 \begin{lemma} \label{metricCauchySequence}
@@ -2775,6 +2588,293 @@ Since $Y$ was not assumed complete, by $\hat{f}$ we mean the extension of the ex
 \begin{proof}
 Since $\hat{g}\circ \hat{f}$ extends $g\circ f$ and is continuous, the equality is immediate by uniqueness, \ref{uniformlyContinuousExtensionToCompletion}.
 \end{proof}
+
+
+\subsection{Functions on metric spaces}
+\subsubsection{Isometries}
+\begin{definition}
+Let $\sSet{X,d_X}$, $\sSet{Y,d_Y}$ be metric spaces and $f: X\to Y$ a function such that $d_X(a,b) = d_Y\big(f(a), f(b)\big)$ for all $a,b\in X$. Then $f$ is called \udef{isometric} or an \udef{isometry}.
+\end{definition}
+
+\begin{lemma} \label{isometryLemma} \label{isometriesUniformlyContinuous}
+Let $\sSet{X, d_X}$ and $\sSet{Y, d_Y}$ be metric spaces and $f:X\to Y$ an isometry. Then
+\begin{enumerate}
+\item $f$ is injective;
+\item $f^{-1}: \im(f) \to X$ is an isometry;
+\item $f$ is uniformly continuous;
+\item $f$ is a uniform embedding;
+\item $f$ is closed.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $x,y\in X$ and suppose $f(x) = f(y)$. Then $0 = d_Y\big(f(x), f(y)\big) = d_X(x,y)$, so $x = y$.
+
+(2) Take $f(x),f(y)\in \im(f)$. Then
+\[ d_X\big((f^{-1}\circ f)(x), (f^{-1}\circ f)(y)\big) = d_X(x,y) = d_Y\big(f(x), f(y)\big). \]
+
+(3) We can set $\delta = \epsilon$ in \ref{uniformContinuityMetricSpaces}.
+
+(4) Immediate from (2) and (3).
+
+(5) Immediate from (2) and \ref{preimageOpenClosed}.
+\end{proof}
+
+\subsubsection{Hölder and Lipschitz continuity}
+\begin{definition}
+Let $f: X\to Y$ be a map between metric spaces, then $f$ is called \udef{$\alpha$-Hölder continuous}, where $0 < \alpha \leq 1$, if there exists a constant $M$ such that
+\[ d_Y(f(x), f(y)) \leq M d_X(x,y)^\alpha \qquad \forall x,y\in X. \]
+
+If $\alpha = 1$, then $f$ is called \udef{Lipschitz continuous}.
+
+The set of $\alpha$-Hölder continuous functions $X\to Y$ is denoted $\cont^{0,\alpha}(X,Y)$.
+\end{definition}
+The $0$ in $\cont^{0,\alpha}(X,Y)$ appears because we are not considering any derivatives.
+
+\begin{lemma} \label{HolderLipschitzContinuity}
+Let $f: X\to Y$ be a map between metric spaces and $0<\alpha \leq \beta \leq 1$.
+
+If $f$ is $\beta$-Hölder continuous, then it is $\alpha$-Hölder continuous.
+\end{lemma}
+TODO consolidate lemmas + uniform continuity.
+\begin{lemma} \label{LipschitzcontinuousContinuous}
+A Lipschitz continuous function between metric spaces is uniformly continuous.
+\end{lemma}
+\begin{proof}
+Let $f:X\to Y$ be a Lipschitz continuous function with Lipschitz constant $M$.
+
+Take $\epsilon >0$. Set $\delta = \epsilon / M$. Take $x,y\in X$ such that $d_X(x,y)\leq \delta = \epsilon / M$. Then
+\[ d_Y\big(f(x), f(y)\big) \leq Md_X(x,y) \leq M\frac{\epsilon}{M} = \epsilon. \]
+Uniform continuity follows from \ref{uniformContinuityMetricSpaces}.
+\end{proof}
+
+\begin{example}
+The function $\interval{0,1} \to \interval{0,1}: x\mapsto \sqrt{x}$ is uniformly continuous, but not Lipschitz continuous.
+\end{example}
+
+\subsubsection{Contractions}
+\begin{definition}
+Let $f: X\to Y$ be a map between metric spaces, then $f$ is called a \udef{contraction} if it is Lipschitz continuous with Lipschitz constant $M < 1$.
+\end{definition}
+
+\begin{proposition}[Banach fixed point theorem] \label{contractionFixedPoint}
+Let $f: X\to X$ be a contraction. If $X$ is a complete metric space, then $f$ has a unique fixed point.
+\end{proposition}
+\begin{proof}
+Uniqueness is easy: assume that $f$ has two fixed points $x_1, x_2$. Then $d(x_1,x_2) = d(fx_1, fx_2) \leq M d(x_1,x_2)$. Since $M < 1$ this is only possible if $d(x_1,x_2) = 0$, meaning $x_1  x_2$.
+
+For existence: take some $x_0\in X$. Then define the sequence $\seq{T^n(x_0)}_n$. This is a Cauchy sequence because, for $m>n>1$
+\[ d(x_m,x_n) \leq \sum_{i=n}^{m-1}d(x_{i+1}, x_i) \leq \sum^{m-1}_{i=n}M^{i-1}d(x_2,x_1) = \frac{M^{n-1}(1-M^{m-n+1})}{1-M}d(x_2,x_1) \leq \frac{M^{n-1}}{1-M}. \]
+By completeness it has a limit. Now $T$ is continuous by \ref{LipschitzcontinuousContinuous}. Then
+\[ T\left(\lim_{n\to \infty} T^n(x_0)\right) = \lim_{n\to \infty}T(T^n(x_0)) = \lim_{n\to \infty}T^{n+1}(x_0) = \lim_{n\to \infty} T^n(x_0),  \]
+so the limit is a fixed point.
+\end{proof}
+
+The construction of the sequence $\seq{T^n(x_0)}_n$ is called \udef{fixed point iteration}. Following the proof of the proposition it is clear we can obtain the fixed point starting the iteration from any point in $X$.
+
+\begin{example}
+In \ref{contractionFixedPoint} it is important that $f$ is a contraction, i.e.\ there exists $M<1$ such that, for all $x,y\in X$, $d\big(f(x), f(y)\big)\leq Md(x,y)$. It is not enough to have
+$d\big(f(x), f(y)\big) < d(x,y)$ for all $x\neq y$.
+
+Consider $f: \interval[co]{1,+\infty} \to \interval[co]{1,+\infty}: x\mapsto x+ \frac{1}{x}$. This satisfies
+\[ \big|f(x) - f(y) \big| = \Big|x-y + \frac{1}{x} - \frac{1}{y}\Big| \leq |x-y|+\Big|\frac{1}{x} - \frac{1}{y}\Big| < |x-y|, \]
+but has no fixed point.
+\end{example}
+
+\begin{corollary}
+Let $f: X\to X$ be a function on a complete metric space such that $f^n$ is a contration for some $n\in \N$. Then $f$ has a unique fixed point.
+\end{corollary}
+\begin{proof}
+By the proposition we know that $f^n$ has a unique fixed point: $f^n(x) = x$. Applying $f$ to both sides gives
+\[ f(f^n(x)) = f^n(f(x)) = f(x), \]
+so $f(x)$ is also a fixed point of $f^n$. By uniqueness $f(x) = x$. This shows $f$ has a fixed point.
+
+For uniqueness it is enough to note that any fixed point of $f$ is a fixed point of $f^n$, \ref{fixedPointsMultipleComposition}.
+\end{proof}
+
+
+\subsubsection{Uniform convergence}
+\begin{proposition} \label{metricUniformConvergence}
+Let $X$ be a set, $\sSet{Y,d}$ a metric space and $\seq{f_n}$ a sequence in $(X\to Y)$. The following are equivalent:
+\begin{enumerate}
+\item  $\seq{f_n}$ converges uniformly to $f: X\to Y$;
+\item $\forall \epsilon > 0: \exists N\in \N: \forall n \geq N: \forall x\in X:  d(f_n(x), f(x)) \leq \epsilon$;
+\item $\seq{f_n}$ converges to $f$ w.r.t. the metric $d_s(f,g) = \sup_{x\in X}d\big(f(x), g(x)\big)$;
+\item $\displaystyle\lim_{n\to \infty} \sup_{x\in X}d\big(f(x), f_n(x)\big)\overset{\R}{\longrightarrow} 0$;
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The equivalence of (2) and (3) is clear because they are both equivalent to
+\[ \forall \epsilon > 0: \exists N\in \N: \forall n \geq N: \sup_{x\in X} d(f_n(x), f(x)) \leq \epsilon, \]
+using \ref{metricConvergenceSequence}.
+
+The equivalence of (3) and (4) is given by \ref{metricConvergence}.
+
+We prove $(1) \Leftrightarrow (2)$.
+\begin{align*}
+\seq{f_n} \overset{\text{unif.}}{\longrightarrow} f &\iff \TailsFilter\seq{f_n} \otimes \pfilter{f} \in \mathcal{U}_{(X\to Y)} \\
+&\iff (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\id_X\}\big)^\ttransp \in \mathcal{U}_d \\
+&\iff \{V_\epsilon\}_\epsilon \subseteq (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\id_X\}\big)^\ttransp \\
+&\iff \forall \epsilon>0: \exists N\in \N: \; (\evalMap, \evalMap)^{\imf}\big((\setbuilder{f_n}{n\geq N} \times \{f\})\times \id_X\big)^\ttransp \subseteq V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \; \bigcup_{n\geq N}\bigcup_{x\in X}(\evalMap, \evalMap)^{\imf}\big((\{f_n\} \times \{f\})\times \{(x,x)\}\big)^\ttransp \subseteq V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \;(\evalMap, \evalMap)^{\imf}\big((\{f_n\} \times \{f\})\times \{(x,x)\}\big)^\ttransp \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (\evalMap, \evalMap)^{\imf}\big(\{((f_n, f), (x,x))^\ttransp\}\big) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (\evalMap, \evalMap)\big((f_n,x),(f,x)\big) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; (f_n(x), f(x)) \in V_\epsilon \\
+&\iff \forall \epsilon>0: \exists N\in \N: \forall n\geq N: \forall x\in X: \; d(f_n(x), f(x)) \leq \epsilon.
+\end{align*}
+\end{proof}
+
+
+\begin{definition}
+Let $X$ be a set and $\sSet{Y,d}$ a metric space then the metric $d_s$ on $(X\to Y)$ defined by
+\[ d_s: (X\to Y)\times (X\to Y) \to \overline{\R^+}: (f,g) \mapsto \sup_{x\in X}d\big(f(x), g(x)\big) \]
+is called the \udef{supremum metric} or \udef{uniform metric} on $(X\to Y)$.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a pretopological space, $\sSet{Y,d}$ a metric space and $H\subseteq (X\to Y)$. Then $H$ is equicontinuous at $x$ \textup{if and only if}
+\[ \forall \epsilon >0: \exists U \in \vicinity(x): \forall y\in U: \forall f\in H: \quad d\big(f(y), f(x)\big) < \epsilon. \] 
+\end{proposition}
+\begin{proof}
+By \ref{equicontinuityUnionLemma}, the equicontinuity of $H$ is equivalent to $\upset k^{\imf\imf}(\{H\}\otimes \vicinity(x)) \in \uniformity_d$. We calculate
+\begin{align*}
+\upset k^{\imf\imf}(\{H\}\otimes \vicinity(x)) \in \uniformity_d &\iff \{V_\epsilon\}_{\epsilon >0} \subseteq \upset k^{\imf\imf}(\{H\}\otimes \vicinity(x)) \\
+&\iff \forall \epsilon >0: \exists U\in \vicinity(x): k^{\imf}(H\times U) \subseteq V_\epsilon \\
+&\iff \forall \epsilon >0: \exists U\in \vicinity(x): \forall y\in U: \forall f\in H: k(f, y) \in V_\epsilon \\
+&\iff \forall \epsilon >0: \exists U\in \vicinity(x): \forall y\in U: \forall f\in H: \big(f(y), f(x)\big) \in V_\epsilon \\
+&\iff \forall \epsilon >0: \exists U\in \vicinity(x): \forall y\in U: \forall f\in H: d\big(f(y), f(x)\big) \leq \epsilon.
+\end{align*}
+\end{proof}
+
+\begin{lemma} \label{continuousPseudometricPreservesUniformConvergence}
+Let $X$ be a set, $\sSet{Y}$ a metric space, $f: X\to Y$ a function and $\seq{f_n: X\to Y}$ a sequence that converges uniformly to $f$. Let $d'$ be a continuous pseudometric on $Y$. Then $\seq{f_n}$ converges uniformly to $f$ when $Y$ is equipped with $d'$.
+\end{lemma}
+This also follows from
+\[ (\evalMap, \evalMap)^{\imf\imf}\big((\TailsFilter\seq{f_n} \otimes \pfilter{f})\otimes \{\id_X\}\big)^\ttransp \in \mathcal{U}_d \subseteq \mathcal{U}_{d'}, \]
+as seen in the proof of \ref{metricUniformConvergence}.
+\begin{proof}
+Take arbitrary $\epsilon > 0$. Then take the $\delta$ from \ref{continuousPseudometricOnMetricSpace}. By assumption (and \ref{metricUniformConvergence}), there exists $N\in \N$ such that for all $n\geq N$ and $x\in X$, we have $d\big(f_n(x), f(x)\big) \leq \delta$. Then, by \ref{continuousPseudometricOnMetricSpace}, we have $d'\big(f_n(x), f(x)\big) \leq \epsilon$ and the conclusion follows from \ref{metricUniformConvergence}.
+\end{proof}
+
+\begin{lemma} \label{uniformCauchyPointwiseConvergentUniformConvergent}
+Let $X$ be a set, $\sSet{Y,d}$ a metric space, $\seq{f_n:X\to Y}_{n\in \N}$ a sequence of functions. Suppose $\seq{f_n}$ is Cauchy w.r.t. the uniform metric and pointwise convergent to a limit $f: X\to Y$, then $\seq{f_n}$ converges uniformly to $f$.
+\end{lemma}
+\begin{proof}
+Take arbitrary $\epsilon >0$.
+
+By \ref{metricCauchySequence}, there exists $N\in \N$ such that, for all $m,n \geq N$, $\sup_{x\in X} d\big(f_n(x), f_m(x)\big) \leq \epsilon / 2$.
+
+Take arbitrary $n \geq N$ and $x\in X$. Because $\seq{f_n}$ is pointwise convergent and \ref{metricConvergenceSequence}, we can find $M_x \in \N$ such that $d\big(f_{m}(x), f(x)\big) \leq \epsilon / 2$ for all $m \geq M_x$. Set $N_x \defeq \max\{N, M_x\}$.
+Now we have
+\begin{align*}
+d\big(f_n(x), f(x)\big) &\leq d\big(f_n(x), f_{N_x}(x)\big) + d\big(f_{N_x}(x), f(x)\big) \\
+&\leq \epsilon /2 + \epsilon / 2 = \epsilon.
+\end{align*}
+We conclude that $\seq{f_n}$ converges uniformly to $f$ by \ref{metricUniformConvergence}.
+\end{proof}
+
+\begin{proposition} \label{uniformLimitTheorem}
+Let $\sSet{X, d_X}$ and $\sSet{Y,d_Y}$ be metric spaces. Let $x\in X$. Let $\seq{f_n: X\to Y}$ be a sequence of functions such that $f_n \to f$ uniformly. Then
+\begin{enumerate}
+\item if the $f_n$ are all continuous at $x$, then $f$ is continuous at $x$;
+\item if the $f_n$ are all continuous, then $f$ is continuous;
+\item if the $f_n$ are all uniformly continuous, then $f$ is uniformly continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Suppose the $f_n$ are all continuous at $x$.
+
+Take arbitrary $\epsilon > 0$. Then there exists $N\in \N$ such that for all $n\geq N$ and $y\in X$, we have $d_Y\big(f_n(y), f(y)\big) \leq \epsilon/3$, by \ref{metricUniformConvergence}.
+
+By continuity of $f_N$, there exists $\delta > 0$ such that for all $y\in X$, we have that $d_X(x,y) \leq \delta$ implies $d_Y\big(f_N(x), f_N(y)\big) \leq \epsilon/3$, by \ref{continuityMetricSpaces}.
+
+Now take arbitrary $y\in X$ and suppose $d_X(x,y) \leq \delta$. Then
+\begin{align*}
+d_Y\big(f(x), f(y)\big) &\leq d_Y\big(f(x), f_N(x)\big) + d_Y\big(f_N(x), f_N(y)\big) + d_Y\big(f_N(y), f(y)\big) \\
+&\leq \epsilon / 3 + \epsilon / 3 + \epsilon / 3 = \epsilon.
+\end{align*}
+We conclude that $f$ is continuous at $x$ by \ref{continuityMetricSpaces}.
+
+(2) Immediate.
+
+(3) Suppose the $f_n$ are all uniformly continuous.
+
+Take arbitrary $\epsilon > 0$. Then there exists $N\in \N$ such that for all $n\geq N$ and $y\in X$, we have $d_Y\big(f_n(y), f(y)\big) \leq \epsilon/3$, by \ref{metricUniformConvergence}.
+
+By the uniform continuity of $f_N$, there exists $\delta > 0$ such that for all $y,z\in X$, we have that $d_X(y, z) \leq \delta$ implies $d_Y\big(f_N(y), f_N(z)\big) \leq \epsilon/3$, by \ref{uniformContinuityMetricSpaces}.
+
+Now take arbitrary $y,z\in X$ and suppose $d_X(y,z) \leq \delta$. Then
+\begin{align*}
+d_Y\big(f(y), f(z)\big) &\leq d_Y\big(f(y), f_N(y)\big) + d_Y\big(f_N(y), f_N(z)\big) + d_Y\big(f_N(z), f(z)\big) \\
+&\leq \epsilon / 3 + \epsilon / 3 + \epsilon / 3 = \epsilon.
+\end{align*}
+We conclude that $f$ is uniformly continuous by \ref{uniformContinuityMetricSpaces}
+\end{proof}
+\begin{corollary} \label{swapLimitsUniformConvergenceMetricSpaces}
+Let $\sSet{X, d_X}$ and $\sSet{Y,d_Y}$ be metric spaces. Let  $\seq{x_m}$ be a sequence that converges to $x\in X$ and $\seq{f_n: X\to Y}$ a sequence of functions that are continuous at $x$ that converges to $f$ uniformly. Then
+\[ \lim_{n\to \infty}\lim_{m\to \infty} f_n(x_m) = \lim_{m\to \infty}\lim_{n\to \infty} f_n(x_m). \]
+\end{corollary}
+\begin{proof}
+We calculate, using the fact that $f$ is continuous at $x$ by the proposition,
+\begin{align*}
+\lim_{n\to \infty}\lim_{m\to \infty} f_n(x_m) &= \lim_{n\to \infty} f_n\big( \lim_{m\to \infty} x_m\big) \\
+&= \lim_{n\to \infty} f_n(x) \\
+&= f(x) \\
+&= f\big(\lim_{m\to \infty}x_m\big) \\
+&= \lim_{m\to \infty}f(x_m) \\
+&= \lim_{m\to \infty}\lim_{n\to \infty} f_n(x_m).
+\end{align*}
+\end{proof}
+
+
+\begin{lemma} \label{supmetricComplete}
+Let $X$ be a set and $\sSet{Y,d}$ a complete metric space. Then $\sSet{(X\to Y), d_s}$ is complete.
+\end{lemma}
+\begin{proof}
+By \ref{completenessCriterion} it is enough to check that all Cauchy sequences in $\sSet{(X\to Y), d_s}$ converge. Take an arbitrary such sequence $\seq{f_n}$. Now take arbitrary $x_0\in X$. By \ref{metricCauchySequence}, for all $\epsilon > 0$ there exists $N \in \N$ such that $\forall m,n\geq N$ we have $\sup_{x\in X}d\big(f_n(x), f_m(x)\big) \leq \epsilon$. In particular $d\big(f_n(x_0), f_m(x_0)\big) \leq \epsilon$. This implies that $\seq{f_n(x_0)}$ is a Cauchy sequence in $Y$. By completeness it converges to some $f(x_0)$.
+
+By \ref{uniformCauchyPointwiseConvergentUniformConvergent}, $\seq{f_n}$ converges uniformly to $f$.
+\end{proof}
+
+
+\subsubsection{Continuous convergence structure}
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a compact convergence space and $\sSet{Y,d}$ a metric space. The continuous convergence on $\cont(X,Y)$ is given by
+\[ \forall H\in\powerset(\cont(X,Y)_c): \qquad H\to f \iff \sup_{x\in X}d(H(x), f(x)) \to 0. \]
+\end{proposition}
+\begin{proof}
+First assume $\sup_{x\in X}d(H(x), f(x)) \to 0$. 
+
+Now assume $\sup_{x\in X}d(H(x), f(x)) \not\to 0$. Then there exists $A\in \neighbourhood(0)$ such that $A \notin \sup_{x\in X}d(H(x), f(x))$ we can construct the set
+\[ \setbuilder{\setbuilder{x\in X}{d(h(x), f(x)) \notin A \forall h\in S}}{S\in H}. \]
+We claim this is a proper filter in $X$. It is contained in an ultrafilter by the ultrafilter lemma \ref{ultrafilterLemma} and this ultrafilter $F$ converges by compactness. Thus $d(H[F], f[F]) \not\to 0$ and so $H\not\to f$.
+\end{proof}
+
+\subsubsection{Bounded functions}
+\begin{definition}
+Let $X$ be a set, $\sSet{Y,d}$ a metric space and $f: X\to Y$ a function. Then we call $f$ \udef{bounded} if $\im(f)$ is bounded.
+\end{definition}
+
+\begin{lemma} \label{uniformLimitBoundedFunctionsIsBounded}
+Let $X$ be a set, $\sSet{Y,d}$ a metric space and $\seq{f_n: X\to Y}$ a sequence of bounded functions that converges uniformly to $f$. Then $f$ is bounded.
+\end{lemma}
+TODO: conditions under which the set of bounded functions with supremum metric is complete.
+\begin{proof}
+We use \ref{metricBoundedness} to show boundedness of $\im(f)$. To that end, take some continuous pseudometric $d'$ on $Y$.
+
+Since the convergence is uniform w.r.t. $d'$ by \ref{continuousPseudometricPreservesUniformConvergence}, there exists $N\in \N$ such that $d'\big(f_N(x), f(x)\big) \leq 1$ for all $x\in X$.
+
+Take arbitrary $x,y\in X$. Since $f_N$ is bounded, using \ref{metricBoundedness},
+\[ \sup \setbuilder{d'\big(f_N(x), f_N(y)\big)}{(x,y)\in X} = M < \infty. \]
+Then
+\begin{align*}
+d'\big(f(x), f(y)\big) &\leq d'\big(f(x), f_N(x)\big) + d'\big(f_N(x), f_N(y)\big) + d'\big(f_N(y), f(y)\big) \\
+&\leq M+2.
+\end{align*}
+So $\im(f)$ has a $d'$-diameter less than $M+2$. We conclude that $\im(f)$ is bounded by \ref{metricBoundedness}.
+\end{proof}
+
+
 
 
 \subsection{Subsets of metric spaces}

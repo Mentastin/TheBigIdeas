@@ -1465,6 +1465,157 @@ Immediate by \ref{graphNormConvergenceLemma}.
 \url{file:///C:/Users/user/Downloads/978-1-4614-3894-6.pdf}
 \url{file:///C:/Users/user/Downloads/2011_Bookmatter_TheRicciFlowInRiemannianGeomet.pdf}
 
+\section{Functions with real domain}
+\begin{definition}
+Let $\sSet{V,\xi}$ be a topological vector space, $f: U\subseteq \R \to V$ a function and $x\in U$. We call $f$ \udef{differentiable} at $x$ if the function
+\[ (U - x)\to V: h \mapsto \frac{f(x+h) - f(x)}{h} \]
+is continuous at $0$. This limit is called the \udef{derivative} of $f$ at $x$ and is denoted by $f'(x)$. The partial function $f': U\not\to V: x\mapsto f'(x)$ is called the \udef{derivative} of $f$. It is also denoted $\od{f(x)}{x}$.
+\end{definition}
+
+\begin{lemma} \label{differentiabilityImpliesContinuity}
+Let $\sSet{V,\xi}$ be a convergence vector space, $f: U\subseteq \R \to V$ a function and $x\in U$. If $f$ is differentiable at $x$, then it is continuous at $x$.
+\end{lemma}
+\begin{proof}
+Let $\seq{x_i}_{i\in I}$ be a net in $U$ that converges to $x$. Then $\seq{x_i - x}_{i\in I}$ is a net in $U-x$ that converges to $0$. Then
+\[ \frac{f\big(x + (x_i - x)\big) - f(x)}{x_i - x} = \frac{f(x_i) - f(x)}{x_i - x} \to f'(x). \]
+By continuity of the scalar multiplication, we have
+\[ f(x_i) - f(x) = \frac{f(x_i) - f(x)}{x_i - x}(x_i - x) \to f'(x)\cdot 0 = 0. \]
+By continuity of the addition, this implies $f(x_i) \to f(x)$.
+\end{proof}
+
+\begin{lemma} \label{derivativeOfConstructions}
+Let $\sSet{V,\xi}, \sSet{W,\zeta}$ be convergence vector spaces, $T\in \contLin(V, W)$ a continuous linear function $f,g: U\subseteq \R \to V$ functions and $x\in U$. Suppose $f$ and $g$ are differentiable at $x$, then
+\begin{enumerate}
+\item $f+g$ is differentiable at $x$ and $(f+ g)'(x) = f'(x)+ g'(x)$;
+\item $T\circ f$ is differentiable at $x$ and $(T\circ f)'(x) = T\big(f'(x)\big)$.
+\end{enumerate}
+\end{lemma}
+In particular, combining (1) and (2) gives $(f+\lambda g)' = f'+\lambda g'$.
+\begin{proof}
+(1) We calculate
+\begin{align*}
+\lim_{h\to 0} \frac{(f+g)(x+h) - (f+g)(x)}{h} &= \lim_{h\to 0} \frac{f(x+h) - f(x)}{h} + \frac{g(x+h) - g(x)}{h} \\
+&= \lim_{h\to 0} \frac{f(x+h) - f(x)}{h} + \lim_{h\to 0}\frac{g(x+h) - g(x)}{h} \\
+&= f'(x) + g'(x).
+\end{align*}
+
+(2) We calculate
+\begin{align*}
+\lim_{h\to 0} \frac{(T\circ f)(x+h) - (T\circ f)(x)}{h} &= \lim_{h\to 0} T\Big(\frac{f(x+h)-f(x)}{h}\Big) \\
+&= T\Big(\lim_{h\to 0} \frac{f(x+h)-f(x)}{h}\Big) \\
+&= T\big(f'(x)\big).
+\end{align*}
+\end{proof}
+
+
+\begin{proposition}[Mean value theorem for vector-valued functions] \label{meanValueTheoremVectorFunctions}
+Let $X$ be a normed space. Let $a<b\in \R$ and $f: \interval{a,b}\to X$ be a continuous real function that is differentiable on $\interval[o]{a,b}$. Then there exists $c\in \interval[o]{a,b}$ such that
+\[ \frac{\norm{f(b)-f(a)}}{b-a} \leq \norm{f'(c)}. \]
+\end{proposition}
+TODO: straightforward generalisation to seminorms of the form $|h|$, where $h$ is a linear functions. Is this worthwhile?
+\begin{proof}
+The claim is trivially true if $f(b) = f(a)$. We now assume $f(b) \neq f(a)$.
+
+Let $\omega: X\to \F$ be the functional $\omega_{f(b)-f(a)}$ defined in \ref{existenceBoundedFunctionalOfSameNorm} which sends $f(b)-f(a)$ to $\norm{f(b)-f(a)}$ and has norm $1$. 
+Set $g \defeq \omega \circ f: \interval{a,b}\to \F$.
+Now we calculate, applying the scalar mean value theorem \ref{meanValueTheorem} to $g$ (from which we obtain $c$) and using \ref{derivativeOfConstructions},
+\begin{align*}
+\frac{\norm{f(b)-f(a)}}{b-a} &= \Big|\frac{\norm{f(b)-f(a)}}{b-a}\Big| \\
+&= \Big|\frac{\omega\big(f(b)-f(a)\big)}{b-a}\Big| \\
+&= \Big|\frac{(\omega\circ f)(b)-(\omega \circ f)(a)}{b-a}\Big| \\
+&= \Big|\frac{g(b)- g(a)}{b-a}\Big| \\
+&\leq \big|g'(c)\big| \\
+&= \big|(\omega \circ f)'(c)\big| \\
+&= \big|\omega\big(f'(c)\big)\big| \\
+&\leq \norm{\omega}\,\norm{f'(c)} \\
+&= \norm{f'(c)}.
+\end{align*}
+\end{proof}
+TODO: we have used the mean value theorem for scalared-valued functions $g: \interval{a,b}\to \F$, not the real mean valued theorem. We need to prove this version first, mayby like in the following proof, although it's very redundant. Or some generalised version?
+
+TODO: in the special case of Hilbert spaces we have the following:
+\begin{proof}
+The claim is trivially true if $f(b) = f(a)$. We now assume $f(b) \neq f(a)$.
+
+Consider the function $g(t) \defeq \inner{f(b)-f(a), f(t)}$. Since $g$ is real-valued, there exists $c\in \interval[o]{a,b}$ such that $g'(c) = \frac{g(b)-g(a)}{b-a}$. Then $g(b)-g(a) = \norm{f(b)-f(a)}^2$ and $g'(c) = \inner{f(b)-f(a), f'(t)}$ (TODO ref). By the Cauchy-Schwarz inequality \ref{CauchySchwarz}, we have
+\[ \frac{\norm{f(b)-f(a)}^2}{b-a} = \left|\frac{\norm{f(b)-f(a)}^2}{b-a}\right| = \left|\frac{g(b)-g(a)}{b-a}\right| = |g'(c)| = |\inner{f(b)-f(a), f'(t)}| \leq \norm{f(b)-f(a)} \norm{f'(t)}. \]
+Dividing by $\norm{f(b)-f(a)}$ yields the result.
+\end{proof}
+
+\begin{proposition} \label{derivativeOfUniformLimit}
+Let $X$ be a Banach space, $a,b\in \R$ and $\seq{f_n: \interval{a,b} \to X}_{n\in\N}$ a sequence of differentiable functions. Suppose
+\begin{itemize}
+\item $\seq{f_n'}$ is a uniform Cauchy sequence;
+\item there exists $c\in \interval{a,b}$ such that $\seq{f_n(c)}$ is a Cauchy sequence;
+\end{itemize}
+then $\seq{f_n}$ converges uniformly to a differentiable function $f: \interval{a,b}\to X$ and $f' = g$.
+\end{proposition}
+\begin{proof}
+Define the functions
+\[ g_{x,n}: \R\to X: h\mapsto \frac{f_n(x+h) - f_n(x)}{h}. \]
+We first show that $\seq{g_{x,n}}_{n\in \N}$ is a uniform Cauchy sequence. Take arbitrary $\epsilon > 0$. Since $\seq{f_n'}$ is uniform Cauchy, there exists $N\in \N$ such that for all $m,n\geq N$ and all $t\in \interval{a,b}$, we have $\norm{f_n'(t) - f_m'(t)} \leq \epsilon$, by \ref{metricCauchySequence}. By \ref{derivativeOfConstructions}, the function $f_n - f_m$ is differentiable with $(f_n - f_m)' = f_n' - f_m'$, so we can use the mean value theorem \ref{meanValueTheoremVectorFunctions} to calculate, for arbitrary $t\in \interval{a,b}$,
+\begin{align*}
+\norm{g_{x,n}(h) - g_{x,m}(h)} &= \frac{\norm{f_n(x+h) - f_n(x) - \big(f_m(x+h) - f_m(x)\big)}}{|h|} \\
+&= \frac{\norm{\big(f_n - f_m\big)(x) - \big(f_n - f_m\big)(x+h)}}{|h|} \\
+&\leq \norm{(f_n - f_m)'(t)} \\
+&= \norm{f_n'(t) - f_m'(t)} \leq \epsilon.
+\end{align*}
+This implies that $\seq{g_{x,n}}_{n\in \N}$ is a uniform Cauchy sequence by \ref{metricCauchySequence}.
+
+Next we show that $\seq{f_n}$ is a uniform Cauchy sequence. Take arbitrary $\epsilon > 0$. Now we can find $N_1\in \N$ such that $\norm{g_{x,n}(t) - g_{x,m}(t)} \leq \frac{\epsilon}{2(b-a)}$ for all $m,n\geq N_1$ and $t\in \interval{a,b}$, by \ref{metricCauchySequence}. We can also find $N_2 \in \N$ such that $\norm{f_n(c) - f_m(c)} \leq \frac{\epsilon}{2}$, also by \ref{metricCauchySequence}. Set $N\defeq \max\{N_1, N_2\}$.
+Take arbitrary $m,n\geq N$ and $x\in \interval{a,b}$. We calculate
+\begin{align*}
+\norm{f_n(x) - f_m(x)} &\leq \norm{f_n(x) - f_n(c) - f_m(x) + f_m(c)} + \norm{f_n(c) - f_m(c)} \\
+&\leq \norm{f_n(x) - f_n\big(x + (c-x)\big) - f_m(x) + f_m\big(x + (c-x)\big)} + \frac{\epsilon}{2} \\
+&\leq \norm{(c-x)g_{x,n}(c-x) - (c-x)g_{x,m}(c-x)} + \frac{\epsilon}{2} \\
+&= |c-x|\norm{g_{x,n}(c-x) - g_{x,m}(c-x)} + \frac{\epsilon}{2} \\
+&\leq |c-x|\frac{\epsilon}{2(b-a)} + \frac{\epsilon}{2} \leq \frac{\epsilon}{2}  + \frac{\epsilon}{2}  = \epsilon.
+\end{align*}
+We conclude that $\seq{f_n}$ is a uniform Cauchy sequence by \ref{metricCauchySequence}.
+
+By \ref{supmetricComplete} and the fact that $X$ is complete, there exists a function $f: \interval{a,b}\to X$ such that $f_n \to f$.
+
+By continuity of addition and scalar multiplication (and the fact that $f_n\to f$), we have $g_{x,n}(h) \to \frac{f(x+h) - f(x)}{h}$ as $n\to \infty$. Set $g_{x}: \R\to X: h\mapsto \frac{f(x+h) - f(x)}{h}$, so $g_{x,n} \to g_x$ pointwise. By \ref{uniformCauchyPointwiseConvergentUniformConvergent}, $g_{x,n} \to g_x$ uniformly.
+
+By definition of the derivative, we have $g_{x,n}(h) \to f_n'(x)$ as $h\to 0$. If $f$ is differentiable, then its derivative at $x$ is given by $\lim_{h\to 0}g_x(h)$.
+
+Thus, using \ref{swapLimitsUniformConvergenceMetricSpaces}, we calculate,
+\begin{align*}
+\lim_{n\to \infty} f_n'(x) &= \lim_{n\to \infty} \lim_{h\to 0}g_{x,n}(h) \\
+&= \lim_{h\to 0} \lim_{n\to \infty} g_{x,n}(h) \\
+&= \lim_{h\to 0} g_{x}(h) \\
+&= f'(x).
+\end{align*}
+\end{proof}
+TODO: if we add the assumption that the $f'_n$ are continuous, then we have the following proof (TODO: extend to vector case)
+\begin{proof}
+By \ref{weakSecondTheoremCalculus}, we have
+\[ f_n(x) = f_n(c) + \int_c^x f'_n(t)\diff{t}. \]
+Now set
+\begin{align*}
+f(x) \defeq& \lim_{n\to \infty} \Big(f_n(c) + \int_c^x f'_n(t)\diff{t}\Big) \\
+=& f(c) + \lim_{n\to \infty}\int_c^x f'_n(t)\diff{t} \\
+=& f(c) + \int_c^x g(t)\diff{t},
+\end{align*}
+where the existence of the limit and its value follow from \ref{interchangeLimitIntegralUniformLimit}.
+
+Since $g$ is continuous (TODO ref), we have $f' = g$ by \ref{firstFundamentalTheoremCalculus}.
+
+Finally, we just need to show that the convergence of $f_n\to f$ is uniform. We use \ref{metricUniformConvergence}. Take arbitrary $\epsilon >0$. Let $N\in \N$ be such that $|f(c) - f_n(c)| \leq \epsilon / 2$ and $|g(x) - f'_n(x)| \leq \frac{\epsilon}{2(b-a)}$ for all $x\in \interval{a,b}$ and $n\geq N$. Then take arbitrary $x\in \interval{a,b}$ and calculate
+\begin{align*}
+|f(x) - f_n(x)| &= \bigg|\Big(f(c)+\int_c^x g(t) \diff{t}\Big) - \Big(f_n(c)+\int_c^x f_n'(t) \diff{t}\Big)\bigg| \\
+&\leq \big|f(c) - f_n(c)\big| + \Big|\int_c^x \big(g(t)- f_n'(t)\big)\diff{t}\Big| \\
+&\leq \frac{\epsilon}{2} + \frac{\epsilon}{2(b-a)}\int_a^b\diff{t} \\
+&= \frac{\epsilon}{2} + \frac{\epsilon}{2(b-a)}(b-a) = \frac{\epsilon}{2} + \frac{\epsilon}{2} = \epsilon.
+\end{align*}
+By \ref{metricUniformConvergence} this concludes the proof. 
+\end{proof}
+
+\begin{example}
+Let $f_n: \interval{0,2\pi} \to \R: x\mapsto \frac{\sin(nx)}{n}$. Then $\seq{f_n}$ converges uniformly to $0$, but $f_n'(x) = \cos(nx)$, which does not converge, even pointwise.
+\end{example}
+
+
 \section{Derivatives of functions between normed groups}
 \begin{definition}
 Let $G, H$ be normed groups, $f:G\to H$ a function and $x_0\in G$. We call $f$ \udef{differentiable} if there exists a continuous homomorphism $A_{x_0}$ such that
@@ -1478,8 +1629,6 @@ Let $G, H$ be normed groups, $f:G\to H$ a function and $x_0\in G$. There exists 
 \begin{proof}
 TODO
 \end{proof}
-
-\subsection{Fréchet derivatives on normed vector spaces}
 
 \section{Directional derivatives}
 
@@ -1674,7 +1823,7 @@ This matrix is called the \udef{Jacobian} $J_f$.
 
 \subsection{Differentiation in a convergence algebra}
 
-\begin{proposition}[Leibniz rule]
+\begin{proposition}[Leibniz rule] \label{LeibnizRuleDerivativeAlgebra}
 Let $A$ be a normed algebra and $a,b\in (\R \to A)$ elements that have derivatives. Then
 \[ (ab)' = a'b + ab'. \]
 \end{proposition}
@@ -2344,6 +2493,14 @@ Take arbitrary $\epsilon > 0$. We can find an $n\in\N$ such that $|\lambda| > \n
 Finally $\norm{R_x(\lambda)} \leq \sum_{n=0}^\infty\frac{\norm{x}^n}{|\lambda|^{n+1}} = \frac{1}{|\lambda|(1-\frac{\norm{x}}{\lambda})} = \frac{1}{|\lambda|-\norm{x}}$.
 \end{proof}
 
+\begin{lemma} \label{BanachAlgebraResolventMultiplication}
+Let $A$ be a unital Banach algebra, $a\in A$ and $\lambda\in\\res(a)$. Then
+\[ aR_a(\lambda) = \lambda R_a(\lambda) - \vec{1}. \]
+\end{lemma}
+\begin{proof}
+We have $\id_X = (\lambda \id_X - T)R_T(\lambda) = \lambda R_T(\lambda) - TR_T(\lambda)$.
+\end{proof}
+
 \subsubsection{Pseudoresolvents and first resolvent identity}
 \begin{definition}
 Let $A$ be a Banach algebra. A function $\mathcal{R}:\Lambda \subseteq \C \to A$ is called a \udef{pseudoresolvent} if, for all $\lambda,\mu\in\Lambda$
@@ -2720,7 +2877,7 @@ ISem.
 Works for all elements, not just normal ones.
 
 \begin{example}
-Power series are not satisfactory, since a holomorphic function may have different power series expansions at different points and an element of a Banach algebras, in some sense, comprises the whole of its spectrum.
+Power series are not satisfactory, since a holomorphic function may have different power series expansions at different points. When defining a functional calculus, we need to take the wole of the spectrum of each element into account. We cannot join together different power series at different points in the spectrum.
 
 For example, take $a = \begin{pmatrix}
 2 & 0 \\ 0 & 0
@@ -2746,7 +2903,6 @@ exists in the norm convergence.
 \begin{lemma}
 Let $U\subseteq \C$ be an open set, $X$ a Banach space and $f: U\to X$ a function. If $f$ is strongly analytic, then $f$ is continuous and weakly analytic.
 \end{lemma}
-TODO: compare with general theory.
 \begin{proof}
 Suppose $f$ is strongly analytic. Then
 \[ \lim_{z\to z_0} f(z) - f(z_0) =  \lim_{z\to z_0}\frac{f(z) - f(z_0)}{z-z_0}\cdot (z-z_0) = \od{f}{z}\Big|_{z_0} \big(\lim_{z\to z_0}z-z_0\big) = \od{f}{z}\Big|_{z_0}\cdot 0 = 0, \]
@@ -2754,10 +2910,10 @@ so $\lim_{z\to z_0} f(z) = f(z_0)$, which means that $f$ is continuous.
 
 Take $\rho\in \dual{X}$. Then
 \begin{align*}
-\od{\rho\circ f}{z}\Big|_{z_0} &= \lim_{z\to z_0} \frac{(\rho \circ f)(z) - (\rho \circ f)(z_0)}{z-z_0} \\
+\dod{\rho\circ f}{z}\Big|_{z_0} &= \lim_{z\to z_0} \frac{(\rho \circ f)(z) - (\rho \circ f)(z_0)}{z-z_0} \\
 &= \lim_{z\to z_0} \rho\Big(\frac{f(z) - f(z_0)}{z-z_0}\Big) \\
 &= \rho\Big(\lim_{z\to z_0}\frac{f(z) - f(z_0)}{z-z_0}\Big) \\
-&= \rho\Big(\od{f}{z}\Big|_{z_0}\Big).
+&= \rho\Big(\dod{f}{z}\Big|_{z_0}\Big).
 \end{align*}.
 \end{proof}
 
@@ -2853,7 +3009,7 @@ We have $\frac{1}{2\pi i}\oint_{\Gamma_1}\frac{f(z)}{z- z'}\diff{z} = f(z')$ for
 Thus
 \[ \Phi_x(f)\Phi_x(g) = \frac{1}{2\pi i}\oint_{\Gamma_2}f(z')g(z')R_x(z')\diff{z'} = \frac{1}{2\pi i}\oint_{\Gamma_2}(f\cdot g)(z')R_x(z')\diff{z'} = \Phi_x(f\cdot g). \]
 
-(3) By \ref{continuousConvergenceCompactOpen}, \ref{spectrumCompact}, (TODO ref: compact open convergence = uniform on compact subsets) and \ref{metricUniformConvergence}, the continuous convergence is metric and thus sequential (TODO ref), so it is enough to check sequential convergence (TODO: is there an easier way to see that it is sequential??).
+(3) By \ref{continuousConvergenceCompactOpen}, \ref{uniformConvergenceOnCompactsIsCompactOpenConvergence}, \ref{spectrumCompact} and \ref{metricUniformConvergence}, the continuous convergence is metric and thus sequential, by \ref{pseudometricSpaceFrechetUrysohn}, so it is enough to check sequential convergence.
 
 TODO: Using uniform metric we can see that the sequence is uniformly bounded and so we can use the bounded convergence theorem (TODO ref).
 
@@ -2904,18 +3060,21 @@ TODO $P_\lambda$ is a Frobenius covariant. \url{https://en.wikipedia.org/wiki/Fr
 TODO cfr. Lagrange polynomial??
 
 \subsubsection{The exponential}
+\begin{definition}
+Let $A$ be a Banach algebra and $a\in A$. We define the \udef{exponential} of $a$ by holomorphic functional calculus:
+\[ e^a \defeq \Phi_a(\exp) = \frac{1}{2\pi i}\oint_\Gamma e^zR_a(z)\diff{z}. \]
+We also denote the exponential by $\exp(a)$.
+
+We call the function $\exp: A\to A: a\mapsto e^a$ the \udef{exponential mapping}.
+\end{definition}
+
 \begin{proposition}
-Let $A$ be a Banach algebra and $a\in A$. Then the series
-\[ \sum_{i=1}^\infty \frac{a^i}{i!} \]
-converges. We denote its limit $\exp(a)-1$ or $e^a-1$.
+Let $A$ be a Banach algebra and $a\in A$. Then
+\[ e^a = \sum_{i=0}^\infty \frac{a^i}{i!}. \]
 \end{proposition}
 \begin{proof}
-By
-\[ \norm{\sum_{i=1}^N \frac{a^i}{i!}} \leq \sum_{i=1}^N \frac{\norm{a}^i}{i!} \]
-it is absolutely convergent and thus convergent, by \ref{absoluteConvergenceImpliesConvergence}.
+TODO
 \end{proof}
-The function $a\mapsto \exp(a) = \vec{1} + \sum_{i=1}^\infty \frac{a^i}{i!}$ is the \udef{exponential mapping}.
-
 Note that $\exp(0) = \vec{1}$.
 
 \begin{lemma} \label{continuityExp}
