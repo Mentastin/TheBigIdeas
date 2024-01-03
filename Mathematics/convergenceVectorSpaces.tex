@@ -23,7 +23,8 @@ We just need to show that $v\mapsto -v$ is continuous, but this scalar multiplic
 If $\sSet{\F,V,+, \xi}$ is a convergence vector space, then
 \begin{enumerate}
 \item the function $V \to V: v \mapsto \lambda\cdot v$ is a homeomorphism for all $\lambda\in \F\setminus\{0\}$;
-\item the function $\F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is continuous and invertible for all $v\in V\setminus\{0\}$. It is a homeomorphism \textup{if and only if} $\Span\{v\}$ is Hausdorff.
+\item the function $\F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is continuous and invertible for all $v\in V\setminus\{0\}$;
+\item the function $\F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is a homeomorphism \textup{if and only if} $\Span\{v\}$ is Hausdorff.
 \end{enumerate}
 \end{lemma}
 TODO picture!
@@ -32,7 +33,7 @@ The functions $\lambda \mapsto (\lambda, v)$ and $v \mapsto (\lambda, v)$ are co
 
 They are both clearly invertible. (For the second, note that the kernel is $\{0\}$. We can also argue using \ref{scalarMultiplicationBijection}). The inverse of the first is of the same form and thus immediately continuous.
 
-If $u: \F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is a homeomorphism, then $\Span\{v\}$ is Hausdorff, because $\F$ is.
+(3) If $u: \F \to \Span\{v\}: \lambda \mapsto \lambda\cdot v$ is a homeomorphism, then $\Span\{v\}$ is Hausdorff, because $\F$ is.
 
 Now assume $\Span\{v\}$ Hausdorff. We need to show that $u^{-1}$ is continuous. It is enough to show continuity at $0$. We use \ref{pretopologicalContinuityVicinities}, so take $\Gamma \in \vicinity_\F(0)$ and we need to show that $\Gamma \in (u^{-1})^{\imf\imf}\big[\vicinity_{\Span\{v\}}(0)\big]$. WLOG we may take $\Gamma = \ball(0, \epsilon)$.
 
@@ -45,7 +46,19 @@ Now assume $\delta_F \leq 1$. Then $\cball(0, \epsilon\cdot\delta_F^{-1})\setmin
 As $\ball(0,\epsilon)\cdot v \in F$ for all $F$ that converge to $0$, we have $\ball(0,\epsilon)\cdot v\in \vicinity_{\Span\{v\}}$, so $\ball(0,\epsilon) = \Gamma \in (u^{-1})^{\imf\imf}\big[\vicinity_{\Span\{v\}}(0)\big]$, which is what we had to prove.
 \end{proof}
 
+TODO: rewrite proof of (3) using balanced neighbourhoods. \url{https://proofwiki.org/wiki/Isomorphism_from_Cartesian_Space_to_Finite-Dimensional_Subspace_of_Hausdorff_Topological_Vector_Space_is_Homeomorphism}.
+
 Alternate proof in Beattie / Butzmann 3.3.19.
+
+\begin{lemma} \label{continuityLinearCombination}
+Let $V$ be a convergence vector space over a field $\F$. Let $x_0, \ldots, x_n$ be $n$ vectors in $V$. Then the function
+\[ \F^n \to V: (\lambda_0, \ldots, \lambda_{n-1}) \mapsto \sum_{k=0}^{n-1} \lambda_kx_k \]
+is continuous.
+\end{lemma}
+\begin{proof}
+Call this function $g$.
+For all $k\in \interval{1,n}$, the function $g_k: \F\to V: \lambda \mapsto \lambda x_k$ is continuous by \ref{continuityLemmaVectorConvergence}, so $g = (+)\circ (g_1|\ldots|g_n)$ is continuous by \ref{continuityParallelComposition} and the continuity of the sum.
+\end{proof}
 
 \begin{proposition} \label{vectorSpaceConvergenceConstruction}
 Let $V$ be a vector space over a field $\F$. And $\mathcal{F} \subseteq \powerfilters(V)$ a family of filters. There exists a vector space convergence $\xi$ on $V$ such that $\mathcal{F} = \lim^{-1}_\xi(0)$ \textup{if and only if}
@@ -162,7 +175,7 @@ We have
 Now take some $A\in \vicinity_\xi(0)$. As each $\neighbourhood_\F(0)\cdot F$ has a balanced base and $A\in\neighbourhood_\F(0)\cdot F$, we can find a balanced $B_F \in \neighbourhood_\F(0)\cdot F$ that is contained in $A$. Now $B = \bigcup_{F\in\lim^{-1}(0)}B_F$ is balanced by \ref{balancedLemma} and a subset of $A$. Since $B\in \neighbourhood_\F(0)\cdot F$ for all $F$ by upwards closure, we have $B\in \vicinity_\xi(0)$.
 \end{proof}
 
-\section{Continuity}
+\section{Spaces of functions}
 
 \begin{lemma} \label{linearFunctionsClosedSubset}
 Let $\sSet{V, \xi}$ be a convergence vector space and $\sSet{W, \zeta}$ a Hausdorff convergence vector space over the same field. Then $\Lin(V,W)$ is a closed subset of $(V\to W)_p$ and $(V\to W)_c$.
@@ -202,60 +215,6 @@ Let $\sSet{X,\xi}$ be a convergence space. Then $\contLin_c(X,\F)$ is a complete
 \end{proposition}
 \begin{proof}
 TODO Beattie Butzmann p.84
-\end{proof}
-
-\subsection{Finite dimensional spaces}
-\begin{proposition} \label{finiteDimensionalLinearMapContinuous}
-Let $\sSet{V,\xi}$ and $\sSet{W,\zeta}$ be convergence vector spaces and $f: V\to W$ a linear map. If $V$ is finite-dimensional and Hausdroff, then $f$ is continuous.
-\end{proposition}
-\begin{proof}
-We prove this by induction on the dimension $n$ of $V$. For the base step $n=1$, we take some non-zero vector $v\in V$ such that $V = \Span\{v\}$. The for all $x\in V$, we have $x= \lambda v$ and thus
-\[ f(x) = f(\lambda v) = \lambda f(v). \]
-So we have that $f$ is given by
-\[ \begin{tikzcd}
-V = \Span\{v\} \arrow[rr, "\lambda\cdot v\mapsto \lambda"] && \F \arrow[rr, "\lambda\mapsto \lambda \cdot f(v)"] && \Span\{f(v)\} \arrow[r, hook] & W
-\end{tikzcd} \]
-which are all continuous functions (in particular by \ref{continuityLemmaVectorConvergence}, using Hausdorffness of $V$).
-
-For the induction step, assume all linear functions $f: V\to W$, where $V$ is Hausdorff and has dimension $\dim(V)\leq n$ are continuous.
-
-Pick some basis $\{v_0, \ldots, v_n\}$ of $V$ 
-
-TODO!
-\end{proof}
-\begin{corollary} \label{finiteDimensionalHausdorffLinearBijectionIsHomeomorphism}
-Every bijective linear map between finite-dimensional Hausdorff convergence vector spaces is a homeomorphism.
-\end{corollary}
-\begin{corollary}
-Every finite-dimensional vector space has a unique convergence that makes it a Hausdorff CVS.
-\end{corollary}
-\begin{proof}
-Unicity is immediate. For existence, every $n$-dimensional vector space is linearly isomorphic to $\F^n$ by \ref{isomorphicDimension} and the Euclidean norm on $\F^n$ gives it a Hausdroff vector convergence. 
-\end{proof}
-
-
-\begin{proposition}
-A Hausdorff topological vector space is locally compact if and only if it is finite dimensional.
-\end{proposition}
-TODO generalise to convergence space?
-\begin{proof}
-Aliprantis / Border p.180
-\end{proof}
-
-\subsection{Hamel coordinate functions}
-\begin{lemma} \label{finiteNonZeroHamelCoordinateFunctions}
-Let $V$ be a vector space and $\seq{e_i}_{i\in I}$ a Hamel basis of $V$. Let $\seq{\varphi_i}_{i\in I}$ be the associated coordinate functions. Then for all $v\in V$, at most finitely many $\varphi_i(v)$ are non-zero.
-\end{lemma}
-\begin{proof}
-By definition of a Hamel basis, we have $v = \sum_{i\in I}\lambda_i e_i = \sum_{i\in I}\varphi_i(v) e_i$ and the sum must be finite.
-\end{proof}
-TODO: compare existence dual basis.
-
-\begin{proposition}
-Let $\sSet{V,\norm{\cdot}}$ be a Banach space and $\seq{e_i}_{i\in I}$ a Hamel basis of $V$. Let $\seq{\varphi_i}_{i\in I}$ be the associated coordinate functions. At most finitely many $\varphi_i$ are continuous.
-\end{proposition}
-\begin{proof}
-Suppose there existed a countable sequence $\seq{e_i}_{i\in I}$ of basis elements, each with a continuous coordinate function $\varphi_n$. Consider the vector $v = \sum_{n=0}^\infty 2^{-n}e_i/\norm{e_i}$. Then, by continuity, each $\varphi_n(v)$ is non-zero. This is impossible by \ref{finiteNonZeroHamelCoordinateFunctions}.
 \end{proof}
 
 
@@ -493,6 +452,116 @@ TODO Beattie / Butzmann p. 101.
 Let $\{\sSet{V_i, \xi_i}\}_{i\in I}$ be a set of complete convergence vector spaces. Then $\bigoplus_{i\in I}V_i$ is complete.
 \end{corollary}
 
+\section{Dimension, coordinates and bases}
+\subsection{Finite dimensional spaces}
+
+\begin{proposition} \label{finiteDimensionalHausdorffEuclidean}
+Let $\sSet{V,\xi}$ be a finite-dimensional Hausdorff convergence vector space over a complete field $\F$. Then
+\begin{enumerate}
+\item every linear functional $f\in \Lin(V,\F)$ is continuous;
+\item for every basis $\{x_1, \ldots, x_n\}$, the function $\F^n \to V: (\lambda_1, \ldots, \lambda_n)\mapsto \sum_{k=1}^n \lambda_k x_k$ is a homeomorphism.
+\end{enumerate}
+\end{proposition}
+In particular, $V$ is homeomorphic to $\F^{\dim(V)}$.
+\begin{proof}
+We prove (1) and (2) simultaneously by induction on the dimension $n$ of $V$. First we show the base step $n=1$.
+
+Take some linear functional $f\in \Lin(V,\F)$. If $f = \constant{0}$, then it is continuous by \ref{continuityConstructions}. If not, then there exists $v\in V$ such that $f(v) \neq 0$. Now set $w \defeq \frac{v}{f(v)}$, so $f(w) = 1$. For all $\lambda\cdot w\in \Span\{w\} = V$, we have $f(\lambda w) = \lambda f(w) = 1$.
+Since $V$ is Hausdorff, $f$ is a homeomorphism by \ref{continuityLemmaVectorConvergence}. This implies that $V$ is homeomorphic to $\F$ and, in particular, that $f$ is continuous.
+
+Now suppose (1) and (2) hold for $n-1$. First take some linear functional $f\in \Lin(V,\F)$. If $f = \constant{0}$, then it is continuous by \ref{continuityConstructions}. If not, then $\dim\big(\ker(f)\big) = n-1$, by the dimension theorem \ref{dimensionLinearMaps}. Since $\ker(f)$ is Hausdorff by \ref{HausdorffSubspace}, it is homeomorphic to $\F^{n-1}$ by the induction hypothesis. Now $\F^{n-1}$ is complete by \ref{productCompleteSpacesComplete}.
+
+Since $V$ is Hausdorff, $\ker(f)$ is a closed subset of $V$ by \ref{closedComplete}. This implies that $f$ is continuous by \ref{continuityLinearFunctionals}.
+
+To show $V \cong \F^n$, take a basis $\{x_1, \ldots, x_n\}$. Then the function $g: \F^n \to V: (\lambda_1, \ldots, \lambda_n)\mapsto \sum_{k=1}^n \lambda_k x_k$ is a bijection by \ref{finiteBasisUniqueDecomposition}. It is continuous by \ref{continuityLinearCombination}.  
+
+For the continuity of $g^{-1}$, note that $\proj_k\circ g^{-1}$ is a functional, and thus continuous, for all $k\in \interval{1,n}$. Thus $g^{-1}$ is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+\end{proof}
+\begin{corollary} \label{finiteDimensionalLinearMapContinuous}
+Let $\sSet{V,\xi}$ and $\sSet{W,\zeta}$ be convergence vector spaces over a complete field and $f: V\to W$ a linear map. If $V$ is finite-dimensional and Hausdorff, then $f$ is continuous.
+\end{corollary}
+\begin{proof}
+Let $\{x_0,. \ldots, x_{n-1}\}$ be a basis of $V$. The function $f$ can be decomposed as
+\[ \begin{tikzcd}
+\sum_{k=0}^{n-1}\lambda_kx_k \ar[r, mapsto] & (\lambda_0, \ldots, \lambda_{k-1}) \ar[r, mapsto] & \sum_{k=0}^{n-1}\lambda_kf(x_k).
+\end{tikzcd} \]
+The first part is continuous by \ref{finiteDimensionalHausdorffEuclidean} and the second part by \ref{continuityLinearCombination}.
+\end{proof}
+\begin{corollary} \label{finiteDimensionalHausdorffLinearBijectionIsHomeomorphism}
+Every bijective linear map between finite-dimensional Hausdorff convergence vector spaces is a homeomorphism.
+\end{corollary}
+
+
+\begin{example}
+\url{https://terrytao.wordpress.com/2011/05/24/locally-compact-topological-vector-spaces/}
+
+discusses some almost counterexamples to \ref{finiteDimensionalHausdorffEuclidean}
+\end{example}
+
+
+\begin{lemma} \label{finiteDimSubspaceClosed}
+Let $\sSet{V,\xi}$ be a Hausdorff CVS over a complete field. Then any finite dimensional subspace $U$ of $V$ is closed.
+\end{lemma}
+\begin{proof}
+Let $W$ be a finite dimensional subspace of $V$. Then $U$ equipped with the subspace convergence is a convergence vector space by \ref{initialVectorSpaceConvergence}. It is complete by \ref{finiteDimensionalHausdorffEuclidean} and \ref{productCompleteSpacesComplete}.
+
+Since $V$ is complete, $U$ is closed by \ref{closedComplete}.
+\end{proof}
+
+\begin{lemma} \label{compactHCVSZeroDim}
+Let $V$ be a compact Hausdorff vector space over $\F$. Then $V = \{0\}$.
+\end{lemma}
+\begin{proof}
+Suppose $v\in V$ and $v\neq 0$. Then $\Span\{v\}$ is a subspace that is not compact, by \ref{continuityLemmaVectorConvergence} and the fact that $\F$ is not compact. 
+
+Since $\Span\{v\}$ is finite-dimensional, it is closed, by \ref{finiteDimSubspaceClosed}. Thus it should be compact by \ref{compactClosedSets}. This is a contradiction.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{V,\xi}$ be a Hausdorff convergence vector space over a complete and locally compact field $\F$. Then
+\begin{enumerate}
+\item if $V$ is finite-dimensional, then $V$ is locally compact;
+\item if $V$ is locally compact and topological, then $V$ is finite-dimensional.
+\end{enumerate}
+\end{proposition}
+In particular, this proposition applies if $\F = \R$ or $\F = \C$, by \ref{realsLocallyCompact} and \ref{propertiesRealNumbers}.
+
+TODO generalise to convergence space?
+
+TODO: Aliprantis / Border p.180
+
+TODO: There exist infinite-dimensional locally compact CVS! See Beattie / Butzmann p. 133.
+\begin{proof}
+(1) If $V$ is finite-dimensional, then $V\cong \F^{\dim(V)}$ by \ref{finiteDimensionalHausdorffEuclidean}. Since $\F$ is locally compact, we have that $\F^{\dim(V)}$ is locally compact by \ref{productLocallyCompact}.
+
+(2) If $V$ is locally compact and topological, then there exists a compact neighbourhood $K$ of $0$. The set $\frac{1}{2}K$ is also a neighbourhood of $0$ by \ref{vicinityFilterAtOrigin}, so $\frac{1}{2}K$ contains an open set $O$ that contains the origin. Now $k+O$ is open for all $k\in K$ by \ref{shiftHomeomorphism} and $K\subseteq \bigcup_{k\in K}k+O$. Thus the sets $k+O$ form an open cover of $K$. By compactness and \ref{topologyCompactnessOpenCover}, there exists a finite set $S\subseteq K$ such that $K\subseteq \bigcup_{k\in S}k+O$.
+
+Set $M \defeq \Span(S)$, which is a finite-dimensional subspace and thus closed by \ref{finiteDimSubspaceClosed}. The quotient space $V/M$ is then Hausdorff by \ref{quotientConvergenceGroupProperties}. We have $K\subseteq \bigcup_{k\in S}k+O \subseteq M+O \subseteq M+\frac{1}{2}K$. Then $[K]_{M}^\imf \subseteq [\frac{1}{2}K]_{M}^\imf$, so $2[K]_M^\imf \subseteq [K]_M^\imf$.
+
+For all $n\in \N$, we have
+\[ 2^n[K]_M^\imf = 2^{n-1}\big(2[K]_M^\imf\big) \subseteq 2^{n-1}[K]_M^\imf \subseteq \ldots \subseteq [K]_M^\imf. \]
+Since $K$ is absorbent (by \ref{vicinityFilterAtOrigin}), we have $V = \bigcup_{n\in \N} 2^nK$. By \ref{functionImagePreimageGaloisConnection},
+\[ [K]_M \subseteq V/M = [V]_M^\imf = \Big[\bigcup_{n\in \N} 2^nK\Big]^\imf_M = \bigcup_{n\in \N}[2^nK]_{M}^\imf = \bigcup_{n\in \N}2^n[K]_{M}^\imf \subseteq [K]_M, \]
+so $V/M = [K]_M$, which is compact by \ref{compactConstructions} (and the fact that $[\cdot]_M$ is continuous, i.e. the definition of the quotient convergence).
+
+Since $V/M$ is compact, it is zero-dimensional by \ref{compactHCVSZeroDim}. By the dimension theorem \ref{dimensionTheoremQuotientSpace}, we have $\dim V = \dim M$. So $V$ is finite-dimensional.
+\end{proof}
+
+\subsection{Hamel coordinate functions}
+\begin{lemma} \label{finiteNonZeroHamelCoordinateFunctions}
+Let $V$ be a vector space and $\seq{e_i}_{i\in I}$ a Hamel basis of $V$. Let $\seq{\varphi_i}_{i\in I}$ be the associated coordinate functions. Then for all $v\in V$, at most finitely many $\varphi_i(v)$ are non-zero.
+\end{lemma}
+\begin{proof}
+By definition of a Hamel basis, we have $v = \sum_{i\in I}\lambda_i e_i = \sum_{i\in I}\varphi_i(v) e_i$ and the sum must be finite.
+\end{proof}
+TODO: compare existence dual basis.
+
+\begin{proposition}
+Let $\sSet{V,\norm{\cdot}}$ be a Banach space and $\seq{e_i}_{i\in I}$ a Hamel basis of $V$. Let $\seq{\varphi_i}_{i\in I}$ be the associated coordinate functions. At most finitely many $\varphi_i$ are continuous.
+\end{proposition}
+\begin{proof}
+Suppose there existed a countable sequence $\seq{e_i}_{i\in I}$ of basis elements, each with a continuous coordinate function $\varphi_n$. Consider the vector $v = \sum_{n=0}^\infty 2^{-n}e_i/\norm{e_i}$. Then, by continuity, each $\varphi_n(v)$ is non-zero. This is impossible by \ref{finiteNonZeroHamelCoordinateFunctions}.
+\end{proof}
 
 
 
@@ -676,16 +745,7 @@ Let $H$ be a hyperplane in a vector space $V$. Then $H \subseteq \adh(H)$ and $\
 
 If the hyperplane were both closed and dense, then $H = \adh(H) = V$, which is a contradiction.
 \end{proof}
-\begin{corollary}
-Let $\sSet{V,\xi}$ be a complete Hausdorff CVS. Then any finite dimensional subspace $U$ of $V$ is closed.
-\end{corollary}
-\begin{proof}
-Consider $\adh(U)$. This is a vector space by the proposition. If $\adh(U)$ has the same dimension as $U$, then $\adh(U) = U$ by \ref{vectorSpaceEquality} (as $U \subseteq \adh(U)$). In this case $U$ is closed.
 
-Now assume $\adh(U)$ has a strictly larger dimension than $U$. Then pick a basis $\beta$ of $U$ and enlarge it to a basis $\beta'$ of $\adh(U)$, which is possible by \ref{extensionReductionBasisFiniteDimensions}. Take $w\in \beta'\setminus \beta$.
-
-As $w\in\adh(U)$, there exists $F\to w$ such that $U\in F$
-\end{proof}
 
 
 \chapter{Algebraic convergence}

@@ -1145,6 +1145,7 @@ Let $\sSet{X,\xi}$ be a convergence space. The following are equivalent:
 \item $\adh_\xi(A\cap B) = \adh_\xi A \cap \adh_\xi B$ for all $A,B\subseteq X$.
 \end{enumerate}
 \end{proposition}
+In particular, the discrete convergence is topological because, for all sets $A\subseteq X$ we have $A = \interior(A) \subseteq \inh(A) \subseteq A$.
 \begin{proof}
 $(1) \Rightarrow (2)$ By \ref{principalAdherenceInherence}, we have, for arbitrary $A\subseteq X$
 \[ x\in \inh(A) \iff A\in \vicinity(x) = \pfilter{x} \iff x\in A, \]
@@ -2048,13 +2049,27 @@ Now $G$ is convergent, so $\mathcal{C}\mesh G$, i.e.\ there exists a $C\in \math
 $\boxed{\Leftarrow}$ Assume, towards a contradiction, that $X$ is not compact. Then there exists an ultrafilter $G$ that does not converge. This means that $F \not\subseteq G$ for all convergent $F\in\powerfilters(X)$. Let $\mathcal{C}$ consist of one set from $F\setminus G$ for all convergent $F\in\powerfilters(X)$. Now $\mathcal{C}$ is a cover because $\pfilter{x}$ converges for all $x\in X$. There exists a finite subset $\{C_1, \ldots, C_n\}\subseteq \mathcal{C}$ that covers $X$, so $C_1\cup \ldots \cup C_n = X \in G$. Now $G$ is prime by \ref{booleanMaximalFiltersIdeals} and thus at least one $C_1, \ldots, C_n$ is an element of $G$, which is a contradiction.
 \end{proof}
 \begin{corollary} \label{topologyCompactnessOpenCover}
-Let $\sSet{X,\xi}$ be a topological convergence space. Then $X$ is compact \textup{if and only if} every open cover has a finite subset that covers $X$.
+Let $\sSet{X,\xi}$ be a topological convergence space. Then the following are equivalent:
+\begin{enumerate}
+\item $X$ is compact;
+\item every open cover has a finite subset that covers $X$;
+\item every cover of neighbourhoods has a finite subset that covers $X$.
+\end{enumerate}
 \end{corollary}
 \begin{corollary}
 Let $A$ be a compact subset of a topological convergence space and $\mathcal{C}$ a chain of closed subsets of $A$. Then $\bigcap \mathcal{C} \neq \emptyset$.
 \end{corollary}
 \begin{proof}
 TODO+ generalise???
+\end{proof}
+
+\begin{lemma} \label{discreteCompactIffFinite}
+Let $X$ be a set. Then the discrete convergence $\sSet{X,\iota_X}$ is compact \textup{if and only if} $X$ is a finite set.
+\end{lemma}
+\begin{proof}
+First suppose the discrete convergence $\sSet{X,\iota_X}$ is compact. The discrete convergence is topological and the set of all singletons is an open cover, by \ref{discreteTopologyCharacterisation}. The only subcover of the set of singletons is the set itself. Thus it must be finite by \ref{topologyCompactnessOpenCover}.
+
+Now suppose $X$ is finite. Then every cover is finite, so we conclude with \ref{compactFiniteSubcover}.
 \end{proof}
 
 \begin{lemma} \label{compactSetCompactSubspace}
@@ -2112,6 +2127,7 @@ Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be convergence spaces. Let $A,B\subseteq X$ b
 \item If $A$ and $B$ are compact, then $A\cup B$ is compact.
 \end{enumerate}
 \end{proposition}
+In particular, if $A$ is compact, then $f^\imf(A)$ is compact.
 \begin{proof}
 (1) Take an ultrafilter $G$ such that $f^{\imf}(A)\in G$. Then $\{A\}\amesh f^{\preimf\imf}(G)$ by \ref{meshConnectionSetsOfSets}, so $G' \defeq \upset\{A\}\vee f^{\preimf\imf}(G)$ is proper by \ref{joinProperFilter}. It is contained in an ultrafilter $U$ by \ref{ultrafilterLemma}, which converges to some $x\in B$ by assumption. Then $\upset f^{\imf\imf}(U) \to f(x)\in f^\imf(B)$ and
 \[ G \subseteq \upset f^{\imf\imf}\big(f^{\preimf\imf}(G)\big) \subseteq \upset f^{\imf\imf}(U), \]
@@ -2207,6 +2223,13 @@ which is a closed subset of a compact space and thus compact by \ref{compactClos
 \begin{definition}
 A convergence space $\sSet{X, \xi}$ is called \udef{locally compact} if every point has a compact vicinity.
 \end{definition}
+
+\begin{lemma} \label{productLocallyCompact}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$ be locally compact convergence spaces. Then $X\times Y$ is locally compact.
+\end{lemma}
+\begin{proof}
+Take arbitrary $(x,y)\in X\times Y$. By assumption there exists a compact $K\in \vicinity_{\xi}(x)$ and a compact $L\in \vicinity_\zeta(y)$. Then $K\times L$ is compact by Tychonoff's theorem \ref{TychonoffsTheorem} and $K\times L\in \vicinity_{\xi\otimes \zeta}(x,y) = \vicinity_\xi(x)\otimes \vicinity_\zeta(y)$ by \ref{productVicinity}. 
+\end{proof}
 
 \begin{proposition} \label{locallyCompactSubspace}
 Let $\sSet{X,\xi}$ be a locally compact space and $A\subseteq X$ a subset. Then
@@ -3360,6 +3383,15 @@ Let $\sSet{X,\xi}$ and $\sSet{Y,\sigma}$ be convergence spaces. Then for all $y\
 The functions $\id_X$ and $\underline{y}$ are continuous.
 \end{proof}
 
+\begin{lemma} \label{continuityParallelComposition}
+Let $\sSet{X,\xi}, \sSet{Y,\zeta}$, $\sSet{U,\sigma}$ and $\sSet{V,\tau}$ be convergence spaces, $f: X\to Y$ and $g: X\to Z$. Then $(f|g): X\times Y \to U\times V$ is continuous \textup{if and only if} $f$ and $g$ are continuous.
+\end{lemma}
+\begin{proof}
+For the direction $\Rightarrow$, we may assume $X$ and $Y$ non-empty (since otherwise $X\times Y$ is empty and any function on it is continuous). Then there exists $x_0\in X$ and $y_0\in Y$. We have $f = \proj_1\circ (f|g) \circ \big(x\mapsto (x,y_0)\big)$ and $g = \proj_2\circ (f|g) \circ \big(y\mapsto (x_0, y)\big)$, which are continuous by assumption and \ref{continuousEmbeddingProduct}.
+
+For the converse, it is enough to note the definition $(f|g) = (f\circ \proj_1, g\circ \proj_2)$ and use \ref{continuityFunctionTuple}.
+\end{proof}
+
 \begin{lemma}
 Let $\sSet{X,\xi}$ and $\sSet{Y,\sigma}$ be convergence spaces. Then $\proj_X: X\times Y\to X$ and $\proj_Y: X\times Y\to Y$ are open maps.
 \end{lemma}
@@ -3496,13 +3528,16 @@ Now the right-hand side is only empty if there exists $i\in I$ such that $A_i\ca
 \begin{lemma} \label{projectionsOfProductFilter}
 Let $X,Y$ be sets, $F\in \powerfilters(X)$ and $G\in \powerfilters(Y)$. Then
 \begin{enumerate}
-\item $p_1^{\imf\imf}[F\otimes G] = F$;
-\item $p_2^{\imf\imf}[F\otimes G] = G$.
+\item $\proj_1^{\imf\imf}[F\otimes G] = F$;
+\item $\proj_2^{\imf\imf}[F\otimes G] = G$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 The elements of $F$ form a basis of $p_1^{\imf\imf}[F\otimes G]$. Similarly the elements of $G$ form a basis of $p_2^{\imf\imf}[F\otimes G]$.
 \end{proof}
+\begin{lemma} \label{parallelFunctionProductFilter}
+Let $X,Y,V,W$ be sets, $F\in \powerfilters(X)$, $G\in \powerfilters(Y)$, $f: X\to U$ and $g: Y\to W$. Then $(f|g)^{\imf\imf}(F\otimes G) = f^{\imf\imf}(F)\otimes g^{\imf\imf}(G)$.
+\end{lemma}
 
 \begin{lemma} \label{filterFactorisationInequality}
 Let $X,Y$ be sets and $H \in \powerfilters(X\times Y)$. Then $p_1^{\imf\imf}(H)\otimes p_2^{\imf\imf}(H) \subseteq H$.
@@ -6426,15 +6461,17 @@ COMPLETION
 
 \section{Bornological spaces}
 \begin{definition}
-Let $X$ be a s. A set $\mathcal{B}\subseteq \powerset(X)$ of subsets of $X$ is called a \udef{bornology} if
+Let $X$ be a set. A set $\mathcal{B}\subseteq \powerset(X)$ of subsets of $X$ is called a \udef{bornology} if
 \begin{itemize}
 \item it is an ideal;
 \item it covers $V$.
 \end{itemize}
 A pair $\sSet{X,\mathcal{B}}$, where $X$ is a set and $\mathcal{B}$ is a bornology on $X$ is called a \udef{bornological space}.
+
+The set $c\mathcal{B}\defeq \setbuilder{A^c}{A\in\mathcal{B}}$ is called the \udef{cobornology}.
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{bornologyCoveringLemma}
 Let $X$ be a set and $\mathcal{B}\subseteq \powerset(X)$ an ideal of subsets of $X$. Then $\mathcal{B}$ covers $X$ \textup{if and only if} $\{x\}\in \mathcal{B}$ for all $x\in X$.
 \end{lemma}
 
@@ -6442,6 +6479,18 @@ Let $X$ be a set and $\mathcal{B}\subseteq \powerset(X)$ an ideal of subsets of 
 Let $\sSet{X,\xi}$ be a convergence space. The set of compactoid subsets forms a bornology.
 \end{example}
 
+\begin{lemma}
+Let $X$ be a set. A set $c\mathcal{B}\subseteq \powerset(X)$ of subsets of $X$ is a cobornology \textup{if and only if}
+\begin{itemize}
+\item $c\mathcal{B}$ is a filter;
+\item $(X)_0 \subseteq c\mathcal{B}$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+The set $c\mathcal{B}$ is a filter iff $\mathcal{B}\defeq \setbuilder{A^c}{A\in c\mathcal{B}}$ is an ideal by \ref{filterIdealDuality}.
+
+TODO link with cofinite filter using \ref{bornologyCoveringLemma}.
+\end{proof}
 
 
 \subsection{Bounded maps}
@@ -7271,6 +7320,12 @@ The direction $\Rightarrow$ is clear, since every Hausdorff convergence is $T_1$
 
 Conversely, assume $F\to x,y$ in $G$. Then $FF^{-1} \to xy^{-1}$. Now $FF^{-1} \subseteq \pfilter{1}$, so $\pfilter{1} \to xy^{-1}$ and thus $xy^{-1}\in \adh_\xi(\pfilter{1}) = \adh_\xi(\{1\}) = \{1\}$, meaning $x = y$.
 \end{proof}
+\begin{corollary} \label{kernelClosed}
+Let $G$ be a convergence group, $H$ a Hausdorff convergence group and $f: G\to H$ be a continuous group homomorphism. Then $\ker(f)$ is closed.
+\end{corollary}
+\begin{proof}
+Since $\ker(f) = f^{\preimf}\big(\{1_H\}\big)$ and $\{1_H\}$ is closed by the proposition, we have that $\ker(f)$ is closed by \ref{preimageOpenClosed}.
+\end{proof}
 
 \begin{lemma} \label{symmetricBase}
 Let $\sSet{G,\cdot, 1, \xi}$ be a convergence group, then $\vicinity_\xi(1)$ is based in the symmetric subsets.
@@ -7290,7 +7345,7 @@ Consider the function $f: G\times G \to G: (x,y)\mapsto xy$. Then by \ref{pretop
 \[ \vicinity_\xi(xy) \subseteq \upset f[\vicinity_{\xi\otimes\xi}((x,y))] = \upset f[\upset \vicinity_\xi(x)\otimes \vicinity_\xi(y)] = \upset f[\vicinity_\xi(x)\otimes \vicinity_\xi(y)] = \upset (\vicinity_\xi(x)\cdot \vicinity_\xi(y)) \]
 This implies the first result.
 
-If $x=1=y$, then consider $V\cap W$. This is still a neighbourhood of $x=y$ and $(V\cap W)\cdot(V\cap W) \subseteq V\cdot W \subseteq U$.
+Pick $V,W$ as before and consider $V\cap W$, which is a neighbourhood of $x=y$. Also $(V\cap W)\cdot(V\cap W) \subseteq V\cdot W \subseteq U$.
 \end{proof}
 
 \begin{proposition} \label{pretopologicalGroupConvergence}
@@ -7413,7 +7468,7 @@ Let $\sSet{G, \xi}$ be a convergence group and $N \lhd G$ a normal subgroup. The
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Assume $G/N$ Hausdorff. Then $\{[1]_N\}$ is closed in $G/N$ by \ref{HausdorffCriterionConvergenceGroup}, so $[\cdot]_N^{-1}\{[1]_N\} = N$ is closed by continuity (\ref{preimageOpenClosed}).
+(1) Assume $G/N$ Hausdorff. Then $N = \ker\big([\cdot]_N\big)$ is closed by \ref{kernelClosed}.
 
 Now assume $N$ closed. Then $[\cdot]^{\imf}_N(G\setminus N)$ is open because $[\cdot]_N$ is open by \ref{groupHomomorphismQuotient}. As $[\cdot]^{\imf}_N(G\setminus N) = \{[1]_N\}^c$, we have that $[1]_N$ is closed.
 
@@ -7947,3 +8002,64 @@ Let $\seq{x_n}$ be a sequence. We define
 \item the \udef{backward difference operator} $\Delta^-: \R^\N \to \R^\N$ by $\Delta^- x_n \defeq (\Delta^-x)_n \defeq x_{n} - x_{n-1}$.
 \end{itemize}
 \end{definition}
+
+
+\chapter{Convergence rings}
+\begin{definition}
+A \udef{convergence rng} is a rng $\sSet{R, +, \cdot, 0}$ with convergence $\xi$ such that
+\begin{itemize}
+\item $\sSet{R,+,0}$ is a convergence group;
+\item the multiplication $\cdot: R\times R\to R$ is continuous.
+\end{itemize}
+If the rng is a (unital) ring, then we call it a convergence ring.
+\end{definition}
+
+\begin{lemma} \label{ringVicinityFactorisation}
+Let $\sSet{R, +,\cdot, 0, \xi}$ be a topological convergence rng and $x,y\in R$. If $U\in \neighbourhood_\xi(xy)$, then there exist $V\in \neighbourhood_\xi(x)$ and $W\in \neighbourhood_\xi(y)$ such that $V\cdot W\subseteq U$.
+
+If $x=y$, then we can take $V = W$.
+\end{lemma}
+\begin{proof}
+Consider the function $f: R\times R \to R: (x,y)\mapsto xy$. Then by \ref{pretopologicalContinuityVicinities} and \ref{productVicinity} we have
+\[ \neighbourhood_\xi(xy) \subseteq \upset f^{\imf\imf}\big[\neighbourhood_{\xi\otimes\xi}((x,y))\big] = \upset f^{\imf\imf}\big[\upset \vicinity_\xi(x)\otimes \vicinity_\xi(y)\big] = \upset f^{\imf\imf}\big[\vicinity_\xi(x)\otimes \vicinity_\xi(y)\big] = \upset \big(\vicinity_\xi(x)\cdot \vicinity_\xi(y)\big) \]
+This implies the first result.
+
+If $x=y$, then pick $V,W$ as before. Consider $V\cap W$, which is still a neighbourhood of $x=y$ and $(V\cap W)\cdot(V\cap W) \subseteq V\cdot W \subseteq U$.
+\end{proof}
+
+\section{Convergence fields}
+\begin{definition}
+A \udef{convergence field} is a field $\sSet{F, +, \cdot, 0,1}$ such that
+\begin{itemize}
+\item $\sSet{F,+,0}$ is a convergence group;
+\item $\sSet{F,\cdot, 1}$ is a convergence group.
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{compactT2TopologicalFieldFinite}
+Every compact Hausdorff topological convergence field $\sSet{F,+,\cdot, 0,1}$ is finite.
+\end{proposition}
+We don't need continuity of ${}^{-1}$.
+\begin{proof}
+Since $F$ is Hausdorff, we have $\neighbourhood(1)\not\to 0$ and so $\neighbourhood(0) \nsubseteq \neighbourhood(1)$. We can then pick an open $V\in \neighbourhood(0) \setminus \neighbourhood(1)$.
+
+For all $x\in F$, we can find $U_x\in \neighbourhood(0)$ and $W_x\in \neighbourhood(x)$ such that $U_x\cdot W_x \subseteq V$ by \ref{ringVicinityFactorisation}.
+
+Now $\setbuilder{W_x}{x\in F}$ is a neighbourhood cover of $F$. By compactness, we can find a finite subcover. Thus there exists a finite set $S\subseteq F$ such that $\bigcup_{x\in S}W_x = F$.
+
+Consider $U = \bigcap_{x\in S}U_x$, which is still a neighbourhood off $0$. We calculate
+\begin{align*}
+U\cdot F = U\cdot \Big(\bigcup_{x\in S}W_x\Big) &= \bigcup_{x\in S} U\cdot W_x \\
+&\subseteq \bigcup_{x\in S} U_x\cdot W_x \subseteq V.
+\end{align*}
+
+We now show, by contradiction, that the convergence is discrete. By \ref{discreteCompactIffFinite} we can then conclude that the field is finite.
+
+Assuming that the convergence is not discrete, we have $U \neq \{0\}$, so we can take $x\in U\setminus\{0\}$. Now
+\[ 1 = v\cdot v^{-1} \in U\cdot F \subseteq V. \]
+Since $V$ was taken to be open, we have $V\in \neighbourhood(1)$, which is a contradiction.
+\end{proof}
+
+\subsection{Locally compact fields}
+
+\url{http://alpha.math.uga.edu/~pete/8410Chapter5.pdf}.

@@ -227,6 +227,10 @@ Let $V$ be a vector space and $\norm{\cdot}_1$, $\norm{\cdot}_2$ two norms on $V
 \[ \frac{1}{C}\norm{\cdot}_1 \leq \norm{\cdot}_2 \leq C\norm{\cdot}_1. \]
 \end{lemma}
 
+\begin{lemma}
+Let $V$ be a finite dimensional vector space and $\norm{\cdot}_1, \norm{\cdot}_2$ norms on $V$. 
+\end{lemma}
+
 \begin{proposition} \label{normComparison}
 Let $V$ be a vector space and $\norm{\cdot}_1$, $\norm{\cdot}_2$ two norms on $V$. Then the following are equivalent:
 \begin{enumerate}
@@ -341,12 +345,31 @@ and so $\norm{v+w} <2$ for all $v\neq w \in \cball(0,1)$.
 
 \begin{lemma} \label{coordinateContinuity}
 Let $V$ be a normed vector space and $\{x_1, \ldots, x_n\}$ a linearly independent set of vectors. There exists a $c>0$ such that $\forall \alpha_1,\ldots, \alpha_n \in \mathbb{F}$:
-\[ \norm{\alpha_1x_1 + \ldots + \alpha_nx_n} \geq c(|\alpha_1|+\ldots+|\alpha_n|) . \]
+\[ c(|\alpha_1|+\ldots+|\alpha_n|) \leq \norm{\alpha_1x_1 + \ldots + \alpha_nx_n}. \]
 \end{lemma}
 \begin{proof}
-TODO ref locally convex spaces? Local compactness?
+First note that the function
+\[ (+)\circ \big(|\cdot|\circ \proj_1 \big| \ldots \big| |\cdot|\circ \proj_n\big): \F^n \to \F: (\alpha_1,\ldots, \alpha_n)\mapsto |\alpha_1|+\ldots + |\alpha_n| \]
+is continuous by construction and \ref{normUniformlyContinuous}. Thus
+\[ S \defeq \setbuilder{(\alpha_1, \ldots, \alpha_n)\in \F^n}{|\alpha_1|+\ldots + |\alpha_n| = 1} = \Big((+)\circ \big(|\cdot|\circ \proj_1 \big| \ldots \big| |\cdot|\circ \proj_n\big)\Big)^{\preimf}\big(\{1\}\big) \]
+is closed by \ref{preimageOpenClosed} and \ref{FrechetCharacterisation}.
+
+Now $S \subseteq \cball(0,1)^n$, which is compact by (TODO ref $\cball(0,1)$ compact) and \ref{TychonoffsTheorem}. So $S$ is compact by \ref{compactClosedSets}.
+
+Now consider the function
+\[ f = \norm{\cdot}\circ (+) \circ \big((\cdot)\circ (\proj_1,\constant{x_1})\big|\ldots\big|(\cdot)\circ (\proj_n,\constant{x_n})\big): \F^n \to \R^+: (\alpha_1,\ldots, \alpha_n)\mapsto \norm{\alpha_1 x_1 + \ldots + \alpha_n x_n}, \]
+which is continuous by construction and \ref{normUniformlyContinuous}.
+
+Thus $f^{\imf}(S)$ attains a minimum $c$ by the extreme value theorem \ref{extremeValueTheorem}. This minimum is not $0$ since $\norm{\alpha_1 x_1 + \ldots + \alpha_n x_n} = 0$ implies $\alpha_1 x_1 + \ldots + \alpha_n x_n = 0$ and thus that $\{x_1, \ldots, x_n\}$ is linearly dependent.
+
+Now take arbitrary $\alpha_1,\ldots, \alpha_n \in \mathbb{F}$. Set $\alpha_1' \defeq \frac{\alpha_1}{|\alpha_1|+\ldots + |\alpha_n|}, \ldots, \alpha_n' \defeq \frac{\alpha_n}{|\alpha_1|+\ldots + |\alpha_n|}$. Then
+\begin{align*}
+c &\leq \norm{\alpha'_1 x_1 + \ldots + \alpha'_n x_n} \\
+&= \norm{\frac{\alpha_1}{|\alpha_1|+\ldots + |\alpha_n|} x_1 + \ldots + \frac{\alpha_n}{|\alpha_1|+\ldots + |\alpha_n|} x_n} \\
+&= \frac{1}{|\alpha_1|+\ldots + |\alpha_n|}\norm{\alpha_1 x_1 + \ldots + \alpha_n x_n},
+\end{align*}
+which implies the result.
 \end{proof}
-TODO This is equivalent with continuity of coordinate functions.
 
 \begin{proposition} \label{finiteDimComplete}
 Every finite-dimensional subspace of a normed vector space is complete.
@@ -1197,22 +1220,34 @@ TODO Ryan
 \url{https://math.stackexchange.com/questions/35191/operator-norm-and-tensor-norms?noredirect=1&lq=1}
 
 \subsection{Direct sums}
-\subsubsection{Algebraic direct sum}
 
-\subsubsection{Topological direct sum}
 For arbitrary direct sums we can generalise: now that we have a concept of limits, we can relax the requirement that all but finitely many terms be zero. Instead we require that the sequence of norms is bounded in some way. This gives a whole family of related concepts of direct sum, named for which sequence space the sequence of norms belongs to.
 \begin{definition}
-Let $\{V_i\}_{i\in I}$ be an arbitrary family of Banach spaces over a field $\F$ and let $\ell(I,\F)$ be a space of sequences in $\F$ indexed by $I$. Then the \udef{$\ell$-direct sum} is the vector space with as field
+Let $\{V_i\}_{i\in I}$ be an arbitrary family of normed spaces over a field $\F$ and let $\ell(I,\R)$ be a normed space of sequences in $\R$ indexed by $I$. Then the \udef{$\ell$-direct sum} is the vector space with as field
 \[ \bigoplus_{i\in I}^\ell V_i = \setbuilder{(v_i)_{i\in I}}{\forall i\in I: v_i\in V_i \quad\text{and}\quad (\norm{v_i}_{V_i})_{i\in I}\in \ell(I,\F) }. \]
+The vector operations are defined pointwise and the norm is given by the $\ell$-norm $\norm{\big. \seq{\norm{v_i}_{V_i}}_{i\in I}}_\ell$.
+
 In particular we have, for all $1\leq p<\infty$, the \udef{$\ell^p$-direct sum}
 \[ \bigoplus_{i\in I}^p V_i \defeq \setbuilder{(v_i)_{i\in I}}{\forall i\in I: v_i\in V_i \quad\text{and}\quad \sqrt[p]{\sum_{i\in I}\norm{v_i}_{V_i}^p}<\infty} \]
 and the \udef{$\ell^\infty$-direct sum}
 \[ \bigoplus_{i\in I}^\infty V_i \defeq \setbuilder{(v_i)_{i\in I}}{\forall i\in I: v_i\in V_i \quad\text{and}\quad \sup_{i\in I}\norm{v_i}_{V_i}<\infty}. \]
 \end{definition}
 
+TODO: Relation to convergence vector space direct sum.
+
+TODO: in general these direct sums are not complete (not Banach spaces), even if each $V_i$ is a Banach space.
+
 \begin{proposition}
 For any sequence space that is a Banach space the direct sum is a Banach space. TODO: in particular algebraic direct sum as $c_{00}$? (one possible norm)? and finite direct sums?
 \end{proposition}
+
+\subsubsection{Finite direct sums}
+
+\begin{proposition}
+Let $V,W$ be normed spaces. Let $\norm{\cdot}_1, \norm{\cdot}_2$ be norms on $\R^2$. Then the norms
+\end{proposition}
+
+
 
 \subsubsection{Direct sum of identical spaces}
 \begin{proposition}
