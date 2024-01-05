@@ -182,12 +182,67 @@ f(\lambda x + (1-\lambda)z) &= f(y) \\
 
 \section{Extreme points of convex sets}
 
-\begin{theorem}[Krein-Milman]
-Let $\sSet{V,\xi}$ be a locally convex topological vector space.
-\end{theorem}
-Aliprantis / Border p. 297
+\begin{lemma} \label{extremePointsConvexFunctionExtremePointsDomain}
+Let $V$ be a vector space, $C\subseteq V$ a convex subset, $D\subseteq C$ a set and $f: C\to \R$ be a convex functional.
+The set of points in $D$ that maximise $f|_D$ is an extreme set in $D$.
+\end{lemma}
+The set of maximisers may be empty. The empty set is an extreme set in $D$.
 \begin{proof}
+Suppose $f|_D$ attains a maximum. Set $M \defeq \max_{x\in D}f(x)$ and $E \defeq f|_D^{\preimf}\big(\{M\}\big)$. Take $x,y\in D$ and $r\in \interval[o]{0,1}$. Suppose $rx + (1-r)y\in E$ and, towards a contradiction, that either $x \notin E$ or $y \notin E$, so $f(x)<M$ or $f(y)<M$. Then
+\[ M = f\big(rx + (1-r)y\big) \leq rf(x) + (1-r)f(y) < rM + (1-r)M = M, \]
+a contradiction.
+\end{proof}
 
+\begin{lemma}
+Let $\sSet{V,\xi}$ be a Hausdorff locally convex topological vector space, $C\subseteq V$ a convex subset and $K\subseteq C$ a compact extreme set in $C$. Let $f: V\to \R$ be a 
+\end{lemma}
+
+\begin{lemma} \label{compactExtremeSetContainsExtremePoint}
+Let $\sSet{V,\xi}$ be a real Hausdorff locally convex topological vector space, $A\subseteq V$ a subset and $K\subseteq A$ a compact extreme set in $A$. Then $K \mesh \ext(A)$.
+\end{lemma}
+This uses choice.
+\begin{proof}
+Consider the set $\mathcal{K}$ of compact, non-empty, extreme sets in $A$, that are subsets of $K$, ordered by inclusion. By the existence of $K$ we know that $\mathcal{K}$ is not empty. We claim that the intersection of every chain in $\mathcal{K}$ is in $\mathcal{K}$.
+
+Let $\mathcal{C}$ be a chain in $\mathcal{K}$. Then every element of $\mathcal{C}$ is closed by \ref{compactClosedSets} and so the intersection is non-empty by \ref{intersectionClosedChainCompactSet}. The intersection is closed, by \ref{propertiesTopology}, and thus compact by \ref{compactClosedSets}. Finally the intersection is extreme by \ref{extremeSetsClosedUnderUnionIntersection}.
+
+We can apply the dual of Zorn's lemma \ref{choiceEquivalents} to show that $\mathcal{K}$ has a minimal element $L$. We claim $L$ is a singleton. Suppose, towards a contradiction, that there exist $a\neq b$ in $L$. Then there exists a continuous linear functional $f$ such that $f(a) - f(b) = f(a - b) \neq 0$ by \ref{locallyConvexDualPair}. WLOG we may take $f(a) > f(b)$. Now $f$ attains a maximum on $L$ by the extreme value theorem \ref{extremeValueTheorem}. The set of points in $L$ that maximise $f$, i.e. $f^{\preimf}\big(\{M\}\big)\cap L$, is thus non-empty. It is also an extreme set of $L$ by \ref{extremePointsConvexFunctionExtremePointsDomain}. It is closed by construction and thus compact by \ref{compactClosedSets}. It is strictly smaller than $L$ since $f(b) < f(a)$, and an extreme set in $A$ by \ref{extremeSetOfExtremeSetIsExtreme}. Thus $f^{\preimf}\big(\{M\}\big)\cap L \in \mathcal{K}$, which contradicts minimality of $L$. Thus $L$ is a singleton. Its contents is an extreme point of $A$ that is in $K$.
+\end{proof}
+\begin{corollary}
+Every non-empty compact subset of a real locally convex Hausdorff
+TVS has an extreme point.
+\end{corollary}
+\begin{proof}
+This follows since every set is extreme in itself.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{V,\xi}$ be a real Hausdorff locally convex topological vector space and $K\subseteq V$ a compact subset. Then $K\subseteq \overline{\convex}\big(\ext(K)\big)$.
+\end{proposition}
+The set $\overline{\convex}\big(\ext(K)\big)$ is the closed convex hull of the extreme points of $K$.
+\begin{proof}
+If $K = \emptyset$, then the result is clear. Now suppose $K$ is non-empty. Suppose, towards a contradiction, that the inclusion does not hold. So there exists $a\in K$, but $a\notin \overline{\convex}\big(\ext(K)\big)$.
+
+By \ref{locallyConvexHahnBanachSeparationClosedSet} there exists a continuous linear functional $f: V\to \R$ such that $f(a) \notin \overline{f^\imf\big(\overline{\convex}\big(\ext(K)\big)\big)}$. By \ref{inherenceAdherenceConvex} and \ref{imagePreimageConvexSet} $\overline{f^\imf\big(\overline{\convex}\big(\ext(K)\big)\big)}$ is convex. Thus $f(a)$ is either a strict upper bound or a lower bound of $\overline{f^\imf\big(\overline{\convex}\big(\ext(K)\big)\big)}$. WLOG (replacing $f$ by $-f$ if necessary) we may take it to be an upper bound.
+
+Let $E = f^{\preimf}\big(\{\max_{x\in K} f(x)\}\big)$ be the set of maximisers of $f$ over $K$, which is non-empty by the extreme value theorem \ref{extremeValueTheorem}. It is extreme in $K$ by \ref{extremePointsConvexFunctionExtremePointsDomain}. Closed by \ref{preimageOpenClosed} and compact by \ref{compactClosedSets}.
+
+By \ref{compactExtremeSetContainsExtremePoint}, $E$ contains an extreme point $p$. Thus $f(p) = f(a)$. This means that $f(p) \notin \overline{f^\imf\big(\overline{\convex}\big(\ext(K)\big)\big)}$ and thus $p \notin \ext(K)$. This is a contradiction.
+\end{proof}
+\begin{corollary}[Krein-Milman]
+Let $\sSet{V,\xi}$ be a Hausdorff locally convex topological vector space and $K\subseteq V$ a non-empty compact convex subset. Then $\ext(K)\neq \emptyset$ and $K = \overline{\convex}\big(\ext(K)\big)$.
+\end{corollary}
+\begin{proof}
+One inclusion is given by the proposition. For the other, note that $\ext(K) \subseteq K$, $K$ is convex and $K$ is closed by \ref{compactClosedSets}.
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{V,\xi}$ be a finite-dimensional Hausdorff locally convex topological vector space and $K\subseteq V$ a non-empty compact convex subset. Then $\ext(K)\neq \emptyset$ and $K = \convex\big(\ext(K)\big)$.
+\end{proposition}
+\begin{proof}
+Aliprantis / Border p. 298
+
+See \url{https://math.stackexchange.com/questions/749797/is-convex-hull-of-a-finite-set-of-points-in-mathbb-r2-closed}.
 \end{proof}
 
 
