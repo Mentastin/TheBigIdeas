@@ -86,17 +86,22 @@ Let $\mathcal{F}\subseteq \powerfilters(X^2)$ be a finite set of filters. Then w
 \end{align*}
 \end{proof}
 
-\begin{lemma} \label{principalImageProductFilter}
-Let $X$ be a set and $F,G\in\powerfilters(X)$. Then
-\[ (F\otimes G)x = \begin{cases}
+\begin{lemma} \label{principalImageFilterLemma}
+Let $X$ be a set, $x\in X$, $F,G\in\powerfilters(X)$ and $H\in powerfilters(X^2)$. Then
+\begin{enumerate}
+\item $(F\otimes G)x = \begin{cases}
 F & \big(x\in\ker(G)\big) \\
 \powerset(X) & (\text{otherwise}).
-\end{cases} \]
+\end{cases}$;
+\item $Hx \otimes \pfilter{x} = H; \big(\pfilter{x}\otimes\pfilter{x}\big)$.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-If $x\notin\ker(F)$, then there exists $A\in G$ such that $(X\times A)x = \emptyset$. Thus $(F\otimes G)x = \powerset(X)$.
+(1) If $x\notin\ker(F)$, then there exists $A\in G$ such that $(X\times A)x = \emptyset$. Thus $(F\otimes G)x = \powerset(X)$.
 
 Now suppose $x\in\ker(G)$. Take $B\in F\otimes G$, so there exist $C\in F, D\in G$ such that $C\times D \subseteq B$. Now $x\in D$, so $(C\times D)x = C$. Thus $(F\otimes G)x \subseteq F$. For the other inclusion, note that $A\times X\in F\otimes G$ and $(A\times X)x = A$ for all $A\in F$.
+
+(2) The set $\setbuilder{A;\big\{(x,x)\big\}}{A\in H} = \setbuilder{Ax\times\{x\}}{A\in H}$ is a base of both filters.
 \end{proof}
 
 \begin{lemma} \label{compositionProductFilters}
@@ -292,6 +297,7 @@ Let $\sSet{X, \mathcal{U}}$ be a uniform space. Then $\entourage_\mathcal{U} \de
 
 We call the uniform space \udef{topological} if $\mathcal{U} = \upset\{\entourage_\mathcal{U}\}$.
 \end{definition}
+The use of the term ``topological'', rather that ``pretopological'', is justified in \ref{vicinityUniformConvergence}.
 
 \begin{lemma} \label{entourageLemma}
 Let $\sSet{X,\mathcal{U}}$ be a uniform space with entourage filter $\entourage$. Then
@@ -493,24 +499,34 @@ We prove reciprocity of $\Gamma(R)$ using point (5). of \ref{R1Conditions}. Assu
 and so $\lim_{\Gamma(R)}^{-1}(x) = \lim_{\Gamma(R)}^{-1}(y)$.
 \end{proof}
 
-\begin{proposition} \label{topologicalInducedUniformConvergence}
+\begin{lemma} \label{uniformConvergencePavement}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space and $x\in X$. Then $\lim^{-1}_{\Gamma(\mathcal{U})}(x) = \setbuilder{Hx}{H\in \mathcal{U}}$.
+\end{lemma}
+In particular, $\setbuilder{Hx}{H\in \mathcal{U}}$ is a pavement of $\Gamma(\mathcal{U})$ at $x$.
+\begin{proof}
+For the first inclusion, we show that $Hx$ converges to $x$ in $\Gamma(\mathcal{U})$ for all $H\in\mathcal{U}$. Take arbitrary $H\in\mathcal{U}$. Then $Hx \otimes \pfilter{x} = H;\pfilter{x}\otimes\pfilter{x}$ by \ref{principalImageFilterLemma}. By definition, $H;\pfilter{x}\otimes\pfilter{x}\in \mathcal{U}$, so $Hx$ converges to $x$ by definition of $\Gamma(\mathcal{U})$.
+
+Now, for the other inclusion, let $F\in\powerfilters(X)$ be a filter that $\Gamma(\mathcal{U})$-converges to $x$, so $F\otimes\pfilter{x} \in \mathcal{U}$. Then $F = (F\otimes \pfilter{x})x$ by \ref{principalImageFilterLemma}, so $F\in \setbuilder{Hx}{H\in \mathcal{U}}$.
+\end{proof}
+
+\begin{proposition} \label{vicinityUniformConvergence}
 Let $\sSet{X,\mathcal{U}}$ be a uniform space and $x\in X$. Then
 \begin{enumerate}
-\item $\entourage_\mathcal{U}x \subseteq \vicinity_{\Gamma(\mathcal{U})}(x)$;
-\item if $\mathcal{U}$ is topological, then $\Gamma(\mathcal{U})$ is topological and
-\[ \neighbourhood_{\Gamma(\mathcal{U})}(x) = \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}. \]
+\item $\vicinity_{\Gamma(\mathcal{U})}(x) = \entourage_\mathcal{U}x$;
+\item if $\mathcal{U}$ is topological, then $\Gamma(\mathcal{U})$ is topological.
 \end{enumerate}
 \end{proposition}
+This justifies our use of the term ``topological uniform space'' (rather than ``pretopological uniform space'').
 \begin{proof}
-(1) We show that if $F\overset{\Gamma(\mathcal{U})}{\longrightarrow} x$, then $\entourage_\mathcal{U}x = \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}\subseteq F$. Indeed we have
+(1) We calculate, using \ref{uniformConvergencePavement}, \ref{upsetResiduatedImageGaloisConnection} and \ref{productGaloisConnections},
 \begin{align*}
-F\otimes \pfilter{x}\in \mathcal{U} \implies& \entourage_\mathcal{U}\subseteq F\otimes \pfilter{x} \\
-\implies& \forall V\in \entourage_\mathcal{U}: \exists A\in F: \; A\times \{x\} \subseteq V \\
-\implies& \forall  V\in \entourage_\mathcal{U}: \exists A\in F: \; A \subseteq V x \\
-\implies& \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}\subseteq F.
+\vicinity_{\Gamma(\mathcal{U})}(x) &= \bigcap \lim^{-1}_{\Gamma(\mathcal{U})}(x) \\
+&= \bigcap_{H\in\mathcal{U}} Hx \\
+&= \Big(\bigcap_{H\in\mathcal{U}} H\Big)x \\
+&= \entourage_{\mathcal{U}}x.
 \end{align*}
 
-(2) We first show that $\Gamma(\mathcal{U})$ is pretopological with vicinity filter $\entourage_\mathcal{U}x = \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}$. By (1), it is enough to prove that $\entourage_\mathcal{U}x \to x$.
+(2) We first show that $\Gamma(\mathcal{U})$ is pretopological. By (1), it is enough to prove that $\entourage_\mathcal{U}x \to x$.
 Because $\entourage_\mathcal{U}$ is a topological entourage filter, we have
 \begin{align*}
 \entourage_\mathcal{U} &= \entourage_\mathcal{U};\entourage_\mathcal{U} \\
@@ -524,7 +540,6 @@ Thus $\entourage_\mathcal{U}x \overset{\Gamma(\mathcal{U})}{\longrightarrow} x$.
 Finally to show that $\Gamma(\mathcal{U})$ is topological, we use \ref{pretopologicalSpaceTopological}: Take $Vx\in \upset \setbuilder{V x}{V\in \entourage_\mathcal{U}}$. Then because $\entourage_\mathcal{U} = \entourage_\mathcal{U};\entourage_\mathcal{U}$, we can find $U,U'\in \entourage_\mathcal{U}$ such that $V = U;U'$. Consider $U'x$. For all $y\in U'x$, we have that $zUy \implies zU;U'x \iff zVx$, so $Uy \subseteq Vx$. Thus $Vx \in \upset \setbuilder{V y}{V\in \entourage_\mathcal{U}}$.
 \end{proof}
 
-TODO: is there a way to have a notion of ``pretopological uniform space''?
 
 \begin{proposition}
 Let $\sSet{X,\mathcal{U}}$ be a topological uniform space and $V\in \entourage_\mathcal{U}$.
@@ -535,7 +550,7 @@ Then $\interior_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(V) \in \entoura
 By \ref{entourageLemma}, we have $\entourage_\mathcal{U} = \entourage_\mathcal{U};\entourage_\mathcal{U};\entourage_\mathcal{U}$, so can find $U_1,U_2,U_3$ such that $U_1;U_2;U_3 \subseteq V$. Let $U = U_1\cap U_1^\transp \cap U_2 \cap U_2^\transp \cap U_3\cap U_3^\transp$, so $U$ is symmetric and $U;U;U\subseteq V$.
 Now
 \[ U;U;U = \bigcup_{(x,y)\in U}U;\{(x, y)\};U = \bigcup_{(x,y)\in U}Ux \times Uy, \]
-by \ref{relationCompositionResiduated}. For all $x,y\in U$, $Ux$ is a neighbourhood of $x$ in $\Gamma(\mathcal{U})$ and $Uy$ is a neighbourhood of $y$ in $\Gamma(\mathcal{U})$, by \ref{topologicalInducedUniformConvergence}.  Thus $Ux \times Uy$ is a neighbourhood of $(x,y)$ in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$, as this is a vicinity by \ref{productVicinity} and the product convergence is topological by \ref{pretopologicalInitialConvergence}.
+by \ref{relationCompositionResiduated}. For all $x,y\in U$, $Ux$ is a neighbourhood of $x$ in $\Gamma(\mathcal{U})$ and $Uy$ is a neighbourhood of $y$ in $\Gamma(\mathcal{U})$, by \ref{vicinityUniformConvergence}.  Thus $Ux \times Uy$ is a neighbourhood of $(x,y)$ in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$, as this is a vicinity by \ref{productVicinity} and the product convergence is topological by \ref{pretopologicalInitialConvergence}.
 
 By \ref{subsetWithVicinitiesInInherence}, we have that $U\subseteq \interior_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(V)$ and thus the proposition follows by upwards closure.
 \end{proof}
@@ -543,34 +558,35 @@ By \ref{subsetWithVicinitiesInInherence}, we have that $U\subseteq \interior_{\G
 Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, then $\entourage_\mathcal{U}$ has a base of sets open in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$.
 \end{corollary}
 
-\begin{proposition} \label{closureTopologicalUniformSpace}
-Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, $A\subseteq X$ and $M\subseteq X^2$. Then
+
+\begin{proposition} \label{adherenceUniformSpace}
+Let $\sSet{X,\mathcal{U}}$ be a uniform space, $A\subseteq X$ and $M\subseteq X^2$. Then
 \begin{enumerate}
-\item $\closure_{\Gamma(\mathcal{U})}(A) = \bigcap\setbuilder{A_U}{U\in \entourage_\mathcal{U}}$;
-\item $\closure_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(M) = \bigcap\setbuilder{V;M;V}{V\in\entourage_\mathcal{U}}$.
+\item $\adh_{\Gamma(\mathcal{U})}(A) = \bigcap\setbuilder{U^\imf(A)}{U\in \entourage_\mathcal{U}}$;
+\item $\adh_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(M) = \bigcap\setbuilder{V;M;V}{V\in\entourage_\mathcal{U}}$.
 \end{enumerate}
 \end{proposition}
-In particular, $\closure_{\Gamma(\mathcal{U})}(A) \subseteq V^\imf(A)$ for all $V\in \entourage_\mathcal{U}$.
+In particular, $\adh_{\Gamma(\mathcal{U})}(A) \subseteq V^\imf(A)$ for all $V\in \entourage_\mathcal{U}$.
 \begin{proof}
-(1) By \ref{principalAdherenceInherence} and \ref{topologicalInducedUniformConvergence}, we have
+(1) By \ref{principalAdherenceInherence}, \ref{vicinityUniformConvergence} and \ref{meshConnection}, we have
 \begin{align*}
-x\in \closure_{\Gamma(\mathcal{U})}(A) &\iff \forall U\in \entourage_\mathcal{U}: xU \mesh A \\
-&\iff \forall U\in \entourage_\mathcal{U}: \exists y\in A: xUy \\
-&\iff \forall U\in \entourage_\mathcal{U}: x\in {_U}A = A_{U^\transp} \\
-&\iff x\in\bigcap\setbuilder{A_{U^\transp}}{U\in \entourage_\mathcal{U}} \\
-&\iff x\in\bigcap\setbuilder{A_U}{U\in \entourage_\mathcal{U}}.
+x\in \adh_{\Gamma(\mathcal{U})}(A) &\iff A\in\vicinity_{\Gamma(\mathcal{U})}(x)^\mesh \\
+&\iff \forall U\in \entourage_\mathcal{U}: Ux \mesh A \\
+&\iff \forall U\in \entourage_\mathcal{U}: U^\preimf\big(\{x\}\big) \mesh A \\
+&\iff \forall U\in \entourage_\mathcal{U}: \{x\} \mesh U^\imf(A) \\
+&\iff \forall U\in \entourage_\mathcal{U}: x \in U^\imf(A) \\
+&\iff x\in\bigcap_{U\in \entourage_\mathcal{U}} U^\imf(A).
 \end{align*}
-For the last step, we have used the symmetry of $\entourage_\mathcal{U}$, \ref{entourageLemma}.
 
-(2) By \ref{principalAdherenceInherence}, \ref{topologicalInducedUniformConvergence} and \ref{productVicinity}, we have
+(2) By \ref{principalAdherenceInherence}, \ref{vicinityUniformConvergence} and \ref{productVicinity}, we have
 \begin{align*}
-(x,y) \in \closure_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(M) &\iff \forall U,V\in \entourage_\mathcal{U}: xU \times yV \mesh M \\
-&\iff \forall U,V\in \entourage_\mathcal{U}:\exists (a,b)\in M: xUa \land yVb \\
-&\iff \forall U,V\in \entourage_\mathcal{U}:(x,y) \in U;M;V^\transp \\
-&\iff (x,y) \in \bigcap\setbuilder{U;M;V^\transp}{U,V\in\entourage_\mathcal{U}} \\
+(x,y) \in \adh_{\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})}(M) &\iff \forall U,V\in \entourage_\mathcal{U}: Ux \times Vy \mesh M \\
+&\iff \forall U,V\in \entourage_\mathcal{U}:\exists (a,b)\in M: aUx \land bVy \\
+&\iff \forall U,V\in \entourage_\mathcal{U}:(x,y) \in U^\transp;M;V \\
+&\iff (x,y) \in \bigcap\setbuilder{U^\transp;M;V}{U,V\in\entourage_\mathcal{U}} \\
 &\iff (x,y) \in \bigcap\setbuilder{V;M;V}{V\in\entourage_\mathcal{U}}.
 \end{align*}
-For the last step, we have used the symmetry of $\entourage_\mathcal{U}$, \ref{entourageLemma}, and the fact that it is a filter. We have also used \ref{relationCompositionResiduated}.
+For the last step, we have used the symmetry of $\entourage_\mathcal{U}$, \ref{entourageLemma}, and the fact that it is a filter.
 \end{proof}
 \begin{corollary} \label{topologicalEntourageFilterBaseClosedSets}
 Let $\sSet{X,\mathcal{U}}$ be a topological uniform space, then $\entourage_\mathcal{U}$ has a base of sets closed in $\Gamma(\mathcal{U})\otimes \Gamma(\mathcal{U})$.
@@ -961,7 +977,7 @@ Let $\sSet{X,\mathcal{U}}$ be a uniform space. We call $\mathcal{D} \subseteq \p
 \[ \forall H\in \mathcal{U}:\quad \mathcal{D}\mesh H. \]
 \begin{itemize}
 \item We say $B\subseteq X$ is \udef{totally bounded} if for all uniform covers $\mathcal{D}$, there exists a \emph{finite} $\mathcal{C} \subseteq \setbuilder{Ax}{A\in \mathcal{D}, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
-\item We say $B\subseteq X$ is \udef{bounded} if for all uniform covers $\mathcal{D}$, there exists a \emph{finite} $\mathcal{C} \subseteq \setbuilder{A^nx}{A\in \mathcal{D}, n\in \N, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
+\item We say $B\subseteq X$ is \udef{bounded} if for all uniform covers $\mathcal{D}$, there exists a \emph{finite} $\mathcal{C} \subseteq \setbuilder{\big(A_0;\ldots;A_{n-1}\big)x}{n\in \N, \seq{A_k}\in \mathcal{D}^n, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
 \end{itemize}
 \end{definition}
 
@@ -1008,7 +1024,7 @@ Now let both $B$ and $C$ be bounded sets and let $\mathcal{D}$ be a uniform cove
 
 (2) Every $x\in X$ is an element of a totally bounded set as $x\in \{x\}$, which is bounded by \ref{singletonsTotallyBounded}.
 
-(Bounded) We can repeat the arguments using $\setbuilder{A^nx}{A\in \mathcal{D}, n\in\N, x\in X}$ instead of $\setbuilder{Ax}{A\in \mathcal{D}, x\in X}$.
+(Bounded) We can repeat the arguments using $\setbuilder{\big(A_0;\ldots;A_{n-1}\big)x}{n\in \N, \seq{A_k}\in \mathcal{D}^n, x\in X}$ instead of $\setbuilder{Ax}{A\in \mathcal{D}, x\in X}$.
 \end{proof}
 \begin{corollary}
 Every finite subset of a uniform space is totally bounded.
@@ -1016,21 +1032,26 @@ Every finite subset of a uniform space is totally bounded.
 
 TODO: closure of bounded set is bounded.
 \begin{proposition} \label{adherenceBoundedSet}
-Let $\sSet{X, \mathcal{U}}$ be a topological uniform space and $B\subseteq X$ a bounded set. Then $\adh_{\Gamma(\mathcal{U})}(B)$ is also bounded.
+Let $\sSet{X, \mathcal{U}}$ be a symmetric uniform space and $B\subseteq X$ a bounded set. Then $\closure_{\Gamma(\mathcal{U})}(B)$ is also bounded.
 \end{proposition}
-TODO: also for nontopological uniform spaces?
+TODO: can does this hold for adherences in non-topological uniform spaces??
 \begin{proof}
-Take an arbitrary symmetric $A\in \entourage_\mathcal{U}$. We can find a finite set $F\subseteq X$ and $n\in \N$ such that $\bigcup_{x\in F}A^nx \supseteq B$. Now $\entourage_\mathcal{U}x \subseteq \vicinity_{\Gamma(\mathcal{U})}$ by \ref{uniformContinuityEntourages}, so we have (using \ref{filterGrillIsPrime})
+We show boundedness using \ref{topologicalBoundednessLemma}.
+Take an arbitrary symmetric $A\in \entourage_\mathcal{U}$. We can find a finite set $F\subseteq X$ and $n\in \N$ such that $\bigcup_{x\in F}A^nx \supseteq B$. Now $\entourage_\mathcal{U}x = \neighbourhood_{\Gamma(\mathcal{U})}$ by \ref{adherenceUniformSpace}, so we have (using \ref{principalAdherenceInherence})
 \begin{align*}
-x\in \adh_{\Gamma(\mathcal{U})}(B) \iff& B\in \vicinity(x)^\mesh \\
-\implies& B \in (\entourage x)^\mesh \\
+x\in \adh_{\Gamma(\mathcal{U})}(B) \iff& B\in \neighbourhood(x)^\mesh \\
+\iff& B \in (\entourage x)^\mesh \\
 \implies& \bigcup_{y\in F}A^ny \in (\entourage x)^\mesh \\
 \implies& \exists y\in F: A^ny \in (\entourage x)^\mesh \\
 \implies& \exists y\in F: A^ny \mesh Ax \\
 \implies& \exists y\in F: x\in A^{n+1}y.
 \end{align*}
-Thus $\bigcup_{x\in F}A^{n+1}x \supseteq \adh_{\Gamma(\mathcal{U})}(B)$.
+Thus $\bigcup_{x\in F}A^{n+1}x \supseteq \closure_{\Gamma(\mathcal{U})}(B)$.
 \end{proof}
+
+\begin{example}
+TODO example where adherence is not totally bounded. There should exist metric counterexamples.
+\end{example}
 
 \begin{proposition} \label{imageBoundedSet}
 Let $f: \sSet{X,\mathcal{U}}\to \sSet{Y, \mathcal{V}}$ be a unifromly continuous function between uniform spaces and $B\subseteq X$ a subset.
@@ -1045,14 +1066,18 @@ Then there exists $(f|f)^\imf(A')\in (f|f)^{\imf\imf}(H)$ such that $(f|f)^\imf(
 
 (2) We prove the statement for boundedness. For total boundedness the proof is similar, fixing $n=1$.
 
-Now take an arbitrary uniform cover $\mathcal{D}'$ of $\mathcal{V}$. As $(f|f)^{\preimf\imf}(\mathcal{D})$ is a uniform cover of $\mathcal{U}$, by point (1), we can find some finite $\mathcal{C} \subseteq \setbuilder{(f|f)^\preimf(A)^nx}{A\in \mathcal{D}', n\in\N, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
+Now take an arbitrary uniform cover $\mathcal{D}'$ of $\mathcal{V}$. As $(f|f)^{\preimf\imf}(\mathcal{D})$ is a uniform cover of $\mathcal{U}$, by point (1), we can find some finite $\mathcal{C} \subseteq \setbuilder{(f|f)^\preimf(A_0);\ldots;(f|f)^\preimf(A_{n-1}) x}{n\in\N, \seq{A_k}\in \mathcal{D}^{\prime n}, x\in X}$ such that $B\subseteq \bigcup \mathcal{C}$.
 
 Now by \ref{imageFilterComposition} and \ref{principalImageUnderRelationMapping}, we have
-\[ (f|f)^\preimf(A)^nx \subseteq (f|f)^\preimf(A^n)x \subseteq f^\preimf\big(A^nf(x)\big). \]
-Set $\mathcal{C}' \defeq \setbuilder{A^nf(x)}{(f|f)^\preimf(A^n)x \in \mathcal{C}}$. Thus
-\[ B \subseteq \bigcup_{(f|f)^\preimf(A)^nx \in \mathcal{C}}(f|f)^\preimf(A)^nx \subseteq \bigcup_{A^nf(x) \in \mathcal{C}'}f^\preimf\big(A^nf(x)\big) = f^\preimf\Big(\bigcup_{A^nf(x) \in \mathcal{C}'}A^nf(x)\Big), \]
+\[ (f|f)^\preimf(A_0);\ldots;(f|f)^\preimf(A_{n-1}) x \subseteq (f|f)^\preimf(A_0;\ldots; A_{n-1})x \subseteq f^\preimf\big((A_0;\ldots; A_{n-1})f(x)\big). \]
+Set $\mathcal{C}' \defeq \setbuilder{(A_0;\ldots; A_{n-1})f(x)}{(f|f)^\preimf(A_0);\ldots;(f|f)^\preimf(A_{n-1}) x \in \mathcal{C}}$. Thus
+\begin{align*}
+B &\subseteq \bigcup_{(f|f)^\preimf(A_0);\ldots;(f|f)^\preimf(A_{n-1}) x \in \mathcal{C}}(f|f)^\preimf(A_0);\ldots;(f|f)^\preimf(A_{n-1}) x \\
+&\subseteq \bigcup_{(A_0;\ldots; A_{n-1})f(x) \in \mathcal{C}'}f^\preimf\big((A_0;\ldots; A_{n-1})f(x)\big) \\
+&= f^\preimf\Big(\bigcup_{(A_0;\ldots; A_{n-1})f(x) \in \mathcal{C}'}(A_0;\ldots; A_{n-1})f(x)\Big),
+\end{align*}
 and so also
-\[ f^\imf(B) \subseteq \bigcup_{A^nf(x) \in \mathcal{C}'}A^nf(x) = \bigcup \mathcal{C}'. \]
+\[ f^\imf(B) \subseteq \bigcup_{(A_0;\ldots; A_{n-1})f(x) \in \mathcal{C}'}(A_0;\ldots; A_{n-1})f(x) = \bigcup \mathcal{C}'. \]
 \end{proof}
 
 \begin{proposition} \label{boundednessUniformityInclusion}
@@ -1429,7 +1454,7 @@ Now take $x,y\in X$. We have
 Thus, for all symmetric $V\in \entourage_\mathcal{U}$, we have $(f|f)^{\imf}(V) = V^* \cap \im(f)^2$. Since $\entourage_\mathcal{U}$ has a symmetric base, this implies $\upset(f|f)^{\imf\imf}(\entourage_\mathcal{U}) = \entourage_{\mathcal{V}}|_{\im(f)^2}$. Thus we conclude that $f$ is an embedding, by \ref{embeddingTopologicalUniformity}.
 
 \item Now we show that $\im(f)$ is dense in $\hat{X}$.
-For this we use \ref{denseIffMeshesWithAllVicinities}. By \ref{topologicalInducedUniformConvergence}, every vicinity in $\hat{X}$ contains a set of the form $V^*(F)$, for some $V\in \entourage_\mathcal{U}$ and $F\in\hat{X}$. Since $F$ is a Cauchy filter, there exists a (non-empty) $B\in F$ such that $B\times B\subseteq V$. Pick any $x\in B$. Since $B\in \pfilter{x}$, we have $(F, \pfilter{x})\in V^*$ and thus $f(x) = \pfilter{x} \in V^*(F)$.
+For this we use \ref{denseIffMeshesWithAllVicinities}. By \ref{vicinityUniformConvergence}, every vicinity in $\hat{X}$ contains a set of the form $V^*(F)$, for some $V\in \entourage_\mathcal{U}$ and $F\in\hat{X}$. Since $F$ is a Cauchy filter, there exists a (non-empty) $B\in F$ such that $B\times B\subseteq V$. Pick any $x\in B$. Since $B\in \pfilter{x}$, we have $(F, \pfilter{x})\in V^*$ and thus $f(x) = \pfilter{x} \in V^*(F)$.
 
 \item Finally we show that $\hat{X}$ is complete.
 \end{itemize}
@@ -1481,16 +1506,31 @@ Let $\sSet{X,\mathcal{U}}$ be a uniform space and $A\subseteq X$. If $A$ is comp
 
 \subsubsection{The Heine-Borel property}
 \begin{definition}
-Let $\sSet{X,\mathcal{U}}$ be a uniform space. We say $X$ has the \udef{Heine-Borel property} if every closed and bounded set is compact.
+Let $\sSet{X,\mathcal{U}}$ be a uniform space. We say $X$ has the \udef{Heine-Borel property} if every bounded set is totally bounded.
 \end{definition}
 
-TODO??
+\begin{lemma}
+Let $\sSet{X,\mathcal{U}}$ be a complete, symmetric uniform space. Then
+\begin{enumerate}
+\item if $X$ has the Heine-Borel property, then every closed and bounded set is compact;
+\item if $X$ is a topological uniform space, then the converse also holds.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Suppose $X$ has the Heine-Borel property. Let $A$ be an arbitrary closed and bounded subset of $X$. By the Heine-Borel property, $A$ is totally bounded and thus precompact by \ref{precompactTotallyBounded}. By \ref{closedComplete}, $A$ is complete. Thus $A$ is compact by \ref{compactPrecompactComplete}.
+
+(2) Let $X$ be topological. Suppose every closed and bounded subset of $X$ is compact. Let $A\subseteq X$ be an arbitrary bounded subset. Then $\closure(A)$ is bounded by \ref{adherenceBoundedSet}, so $\closure(A)$ is compact by assumption. Finally $\closure(A)$ is totally bounded by \ref{compactImpliesBounded} and $A$ is totally bounded by \ref{boundedSetsIdeal}.
+\end{proof}
+
+
 \begin{proposition} \label{DedekindCompleteHeineBorel}
 Every Dedekind complete preordered vector space has the Heine-Borel property.
 \end{proposition}
 \begin{proof}
-TODO
+TODO ??
 \end{proof}
+
+TODO: Link with Bolzano-Weierstrass. Link with local compactness.
 
 \section{Uniformities from binary functions}
 \begin{definition}
@@ -1680,7 +1720,7 @@ and
 H \overset{\text{compact-open}}{\longrightarrow} f \iff \\
 \forall \,\text{compact $K\subseteq X$}: \forall \,\text{open $O\subseteq X$}: \; f^\imf(K)\subseteq O \implies \Big(\exists A\in H: \evalMap^\imf(A\times K)\subseteq O\Big).
 \end{multline*}
-First assume $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$. Take arbitrary $K\subseteq X$ compact and $O\subseteq X$ open such that $f^\imf(K)\subseteq O$. Then, for all $k\in K$, $O\in \vicinity\big(f(k)\big)$, so there exists $V_k\in\entourage_{\mathcal{V}}$ such that $V_kf(k)\subseteq O$, by \ref{topologicalInducedUniformConvergence}. By \ref{entourageLemma}, we can find $V'_k\in\entourage_\mathcal{V}$ such that $V'_k;V'_k \subseteq V_k$.
+First assume $H \overset{\mathcal{U}_\text{comp}}{\longrightarrow} f$. Take arbitrary $K\subseteq X$ compact and $O\subseteq X$ open such that $f^\imf(K)\subseteq O$. Then, for all $k\in K$, $O\in \vicinity\big(f(k)\big)$, so there exists $V_k\in\entourage_{\mathcal{V}}$ such that $V_kf(k)\subseteq O$, by \ref{vicinityUniformConvergence}. By \ref{entourageLemma}, we can find $V'_k\in\entourage_\mathcal{V}$ such that $V'_k;V'_k \subseteq V_k$.
 
 Since $f$ is continuous, $f^\imf(K)$ is compact by \ref{compactConstructions}. Since $f^\imf(K) \subseteq \bigcup_{k\in K}V'_kf(k)$ and $\{V'_kf(k)\}_{k\in K}$ is a convergence cover, there exists a finite $K'\subseteq K$ such that $f^\imf(K)\subseteq \bigcup_{k\in K'}V'_kf(k)$ by \ref{compactFiniteSubcover}. Set $V\defeq \bigcap_{k\in K'}V'_k \in \entourage_{\mathcal{V}}$.
 
@@ -1695,7 +1735,7 @@ Now assume $H\to f$ in the compact-open topology. Take arbitrary compact $K\subs
 
 Since $f$ is continuous, $f^\imf(K)$ is compact by \ref{compactConstructions}. Since $f^\imf(K) \subseteq \bigcup_{k\in K}V^{\prime\prime\prime}f(k)$ and $\{V^{\prime\prime\prime}f(k)\}_{k\in K}$ is a convergence cover, there exists a finite $K'\subseteq K$ such that $f^\imf(K)\subseteq \bigcup_{k\in K'}V^{\prime\prime\prime}f(k)$ by \ref{compactFiniteSubcover}.
 
-For all $k\in K'$, set $K_k \defeq f^\preimf\Big(\closure_{\Gamma(\mathcal{V})}\big(V^{\prime\prime\prime}f(k)\big)\Big)\cap K$. By \ref{closureTopologicalUniformSpace}, we have
+For all $k\in K'$, set $K_k \defeq f^\preimf\Big(\closure_{\Gamma(\mathcal{V})}\big(V^{\prime\prime\prime}f(k)\big)\Big)\cap K$. By \ref{adherenceUniformSpace}, we have
 \[ K_k = f^\preimf\Big(\closure_{\Gamma(\mathcal{V})}\big(V^{\prime\prime\prime}f(k)\big)\Big)\cap K \subseteq f^\preimf\Big(\big(V^{\prime\prime\prime};V^{\prime\prime\prime}\big)f(k)\Big) \subseteq f^\preimf\big(V^{\prime\prime}f(k)\big),  \]
 so $f^\imf(K_k) \subseteq (f^\imf\circ f^\preimf)\big(V^{\prime\prime}f(k)\big) \subseteq V^{\prime\prime}f(k)$. Since $K_k$ is compact by \ref{compactClosedIntersectionCompact} and \ref{preimageOpenClosed}, and $V^{\prime\prime}f(k)$ is open by \ref{sliceOpenSetOpen}, we have, by assumption, that there exists $A_k\in H$ such that $\evalMap^\imf(A_k\times K_k)\subseteq V^{\prime\prime}f(k)$. Take $A \defeq \bigcap_{k\in K'}A_k \in H$.
 
@@ -2044,9 +2084,9 @@ Let $\sSet{X,d}$ be a pseudometric space and $x\in X$. Then
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) Immediate by \ref{topologicalInducedUniformConvergence}.
+(1) Immediate by \ref{vicinityUniformConvergence}.
 
-(2) The first equality follows from \ref{topologicalInducedUniformConvergence} and \ref{ballSphereLemma}.
+(2) The first equality follows from \ref{vicinityUniformConvergence} and \ref{ballSphereLemma}.
 
 For the second equality, it is clear that $\upset\setbuilder{\cball_d(x,\epsilon)}{\epsilon >0} \subseteq \upset\setbuilder{\ball_d(x,\epsilon)}{\epsilon >0}$. For the other inclusion, take arbitrary $\epsilon$. Then $\cball_d(x,\epsilon/2)\subseteq \ball_d(x,\epsilon)$.
 
@@ -2992,7 +3032,7 @@ Let $X$ be a set, $\mathcal{F} \subseteq \powerfilters(X)$ a set of filters on $
 (1) We have $F\in \setbuilder{G\in \mathcal{F}}{G \amesh F}$ by \ref{properFiltersSelfMesh}, so
 \[ F \;\supseteq\; \bigcap \setbuilder{G\in \mathcal{F}}{G \amesh F} \;=\; \starFilter(F,\mathcal{F}). \]
 
-(2) By \ref{upsetResiduatedImageGaloisConnection} and \ref{principalImageProductFilter}, we have
+(2) By \ref{upsetResiduatedImageGaloisConnection} and \ref{principalImageFilterLemma}, we have
 \begin{align*}
 \Big(\bigcap\setbuilder{F\otimes F}{F\in\mathcal{F}}\Big)x &= \bigcap_{F\in\mathcal{F}}(F\otimes F)x \\
 &= \bigcap \setbuilder{F\in\mathcal{F}}{x\in\ker(F)} \\
