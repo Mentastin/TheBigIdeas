@@ -923,11 +923,14 @@ Let $\sSet{X,\xi}$ be a pretopological convergence space. Then $\mathcal{H}\in\p
 Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. A set $\mathcal{Z}\subseteq \powerset(X)$ is called
 \begin{itemize}
 \item a \udef{local base} at $x$ of the converence $\xi$ if there exists a pavement $\mathcal{H}$ of $\xi$ at $x$, such that each $F\in\mathcal{H}$ is based in $\mathcal{Z}$;
-\item a \udef{base} of the convergence if it is a local base at each point $x\in X$.
+\item a \udef{base} of the convergence if it is a local base at each point $x\in X$;
+\item if $\mathrm{P}$ is a property of a subset of a convergence space, then $X$ is said to be \udef{locally $\mathrm{P}$} if the set of $\mathrm{P}$-sets in $X$ is a base of the convergence. 
 \end{itemize}
 If $\mathcal{Z}$ is a base of $\xi$, we also say $\xi$ is \udef{based in} $\mathcal{Z}$.
 \end{definition}
+For example, we have local compactness, local convexity, etc.
 
+Note that sometimes ``locally $\mathrm{P}$'' means ``locally open and $\mathrm{P}$'' (see e.g. locally pathconnected).  
 
 \subsubsection{Bases of pretopological convergences}
 \begin{definition}
@@ -1406,6 +1409,8 @@ which is the intersection of an open set and a closed set.
 \begin{definition}
 A pretopological convergence space $\sSet{X,\xi}$ is called \udef{topological} if the topology $\topology_\xi$ is a base of $\xi$.
 \end{definition}
+In other words, a pretopological convergence space is topological if it is locally open.
+
 \begin{definition}
 A pretopological convergence space $\sSet{X,\xi}$ is called \udef{topological} if $\adh_\xi^2 = \adh_\xi$.
 \end{definition}
@@ -5421,117 +5426,6 @@ TODO
 
 
 
-\chapter{Compactness and connectedness}
-
-
-\section{Connectedness}
-\begin{definition}
-Let $\sSet{X, \xi}$ be a convergence space. A \udef{separation} of $X$ is a pair $(U,V)$ of disjoint nonempty closed subsets of $X$ whose union is $X$.
-
-The space $X$ is said to be \udef{connected} if there does not exist a separation of $X$.
-\end{definition}
-
-\begin{lemma} \label{disconnectionLemma}
-Let $\sSet{X, \xi}$ be a convergence space and $U,V\subseteq X$. The following are equivalent:
-\begin{enumerate}
-\item $(U, V)$ is a separation;
-\item $U$ is clopen and not equal to $\emptyset$ or $X$ (then $V= U^c$);
-\item $(U^c, V^c)$ is a separation.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-$(1) \Rightarrow (2)$ From $U\perp V$, we get $U\subseteq V^c$ by \ref{setPerpInequality}. From $U\cup V = U\cup V^{cc} = X$, we get $V^c \subseteq U$ by \ref{inclusionCriteria}. Now $U$ and $V$ are closed. So $U = V^c$ is also open.
-
-$(2) \Rightarrow (3)$ We have $U^c = V^{cc}$, so $U^c \subseteq V^{cc}$ and $V^{cc}\subseteq U^c$. As before, we get $U^c\perp V^c$ and $U^c \cup V^c = X$ by \ref{setPerpInequality} and \ref{inclusionCriteria}. Clearly $U^c$ and $V^c = U$ are closed.
-
-$(3) \Rightarrow (1)$ This follows by applying the implication $(1) \Rightarrow (3)$ to the separation $(U^c, V^c)$: we get that $(U^{cc}, V^{cc}) = (U,V)$ is a separation.
-\end{proof}
-\begin{corollary} \label{connectedCriteria}
-Let $\sSet{X, \xi}$ be a convergence space. The following are equivalent:
-\begin{enumerate}
-\item $X$ is connected;
-\item $X$ does not contain a pair of disjoint nonempty open subsets, whose union is $X$;
-\item the only clopen subsets of $X$ are $X$ and $\emptyset$.
-\end{enumerate}
-\end{corollary}
-
-\begin{proposition} 
-Let $\sSet{X, \xi}$ be a convergence space and $Y$ a discrete convergence space with at least two elements. The following are equivalent:
-\begin{enumerate}
-\item $X$ is connected;
-\item all continuous functions from $X$ to $Y$ are constant.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-By \ref{connectedCriteria}, (1) is equivalent to $X,\emptyset$ being the only clopen sets in $X$.
-
-$(1) \Rightarrow (2)$ Take arbitrary continuous $f\in (X\to Y)$ and take $y\in \im(f)$. Then $\{y\}$ is clopen by \ref{discreteTopologyCharacterisation}. Now $f^\preimf\{y\}$ is clopen by \ref{preimageOpenClosed} and $f^\preimf\{y\}\neq \emptyset$ (because $y\in\im(f)$). So $f^\preimf\{y\} = X$, which means that $f$ is constant.
-
-$(2) \Rightarrow (1)$ Take some clopen $A\subseteq X$. Take distinct $y_1,y_2\in Y$. And set
-\[ f: X\to Y: x\mapsto \begin{cases}
-y_1 & (x\in A) \\
-y_2 & (x\notin A)
-\end{cases}. \]
-This function is continuous. Indeed, take arbitrary $F\to x$. If $x\in A$, then $A\in F$ because $A$ is open, by \ref{openClosedCriteria}. So $f^{\imf\imf}[F] \supseteq \pfilter{y_1} \to y_1$. Similarly $f^{\imf\imf}[F] \supseteq \pfilter{y_2} \to y_2$ if $x\in A^c$.
-
-Then, by assumption, $f$ must be constant, so either $f = \constant{y_1}$ or $f = \constant{y_2}$. In the first case $A = X$ and in the second $A = \emptyset$.
-\end{proof}
-
-TODO: also equivalent in topological spaces: $X$ cannot be written as the union of two non-empty separated sets.
-
-The following lemma characterises separations in the subspace topology.
-\begin{lemma}
-Let $Y$ be a subspace of a topological space $X$. A pair of disjoint nonempty sets $A,B$ constitute a separation of the subspace $Y$ \textup{if and only if} neither set contains a limit point of the other in $X$.
-\end{lemma}
-\begin{proof}
-TODO ??
-\end{proof}
-
-\begin{proposition} \label{connectednessImage}
-Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a continuous function. If $X$ is connected, then $\im(f)$ is a connected subspace of $Y$.
-\end{proposition}
-\begin{proof}
-Suppose, towards a contradiction, that $\im(f)$ is not connected, so there exists a separation $(U,V)$ of $\im(f)$. As $f: X\to \im(f)$ is continuous, we have that $f^\preimf(U)$ and $f^{\preimf}(V)$ are closed by \ref{preimageOpenClosed}. They are clearly not empty. We also have that $f^\preimf(U)$ and $f^{\preimf}(V)$ are disjoint because $\emptyset = f^\preimf(\emptyset) = f^\preimf(U\cap V) = f^\preimf(U)\cap f^\preimf(V)$, by \ref{imagePreimageGaloisConnection}. Thus $\big(f^\preimf(U), f^\preimf(V)\big)$ is a separation of $X$. This is a contradiction because $X$ was assumed connected.
-\end{proof}
-
-\begin{proposition} \label{generalisedIntermediateValueTheorem}
-Let $\sSet{X,\xi}$ be a connected convergence space, $\sSet{Y, \leq}$ a totally ordered set with the order convergence and $f: X\to Y$ a continuous function. For all $a,b\in X$ and $y\in Y$ such that $f(a) \leq y \leq f(b)$, there exists $c\in X$ such that $f(c) = y$.
-\end{proposition}
-\begin{proof}
-Assume, towards a contradiction, that $y\notin \im(f)$. Then $Y\cap \downset \{y\}$ and $Y\cap \upset \{y\}$ constitutes a separation of $\im(f)$. This contradicts \ref{connectednessImage}.
-\end{proof}
-
-\subsection{Chains}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{U}$ an open cover of $X$. A \udef{chain} in $\mathcal{U}$ between two points $x,y\in X$ is a finite sequence $\seq{U_i}_{i=0}^n$ of sets in $\mathcal{U}$ such that
-\begin{itemize}
-\item $x\in U_0$ and $y\in U_n$;
-\item $U_{i-1}\mesh U_i$ for all $i\in 1:n$.
-\end{itemize}
-\end{definition}
-
-\begin{proposition}
-Let $\sSet{X,\xi}$ be a convergence space. Then $X$ is connected \textup{if and only if} for each open cover $\mathcal{U}$ and each pair of points $x,y$ there exists a chain in $\mathcal{U}$ between $x$ and $y$.
-\end{proposition}
-\begin{proof}
-First assume $X$ not connected. Then we can an open cover $\{U,V\}$, where $U$ and $V$ are disjoint. For any $x\in U$ and $y\in V$, there clearly does not exist a chain in $\{U,V\}$ between $x$ and $y$.
-
-Now assume $X$ connected. Take arbitrary $x\in X$ and open cover $\mathcal{U}$. Define
-\[ O \defeq \setbuilder{y\in X}{\text{there exists a chain in $\mathcal{U}$ between $x$ and $y$}}. \]
-Then $O$ is a union of open sets in $\mathcal{U}$ and thus open.
-
-We also show that $Oor a one-dimensional topological vectorspace V , that is, a free moz)\subseteq \vicinity(z)$. Now $U\perp O$, so $U\subseteq O^c$. Indeed, assume not, i.e.\ there exists $y\in U\cap O$. Then there exists a chain $\seq{U_{i}}_{i=0}^n$ between $x$ and $y$, so $\seq{U_{i}}_{i=0}^n\star\seq{U}$ is a chain between $x$ and $z$. This contradicts $z\in O^c$.
-
-We conclude that $O^c$ is open by point (6) of \ref{openClosedCriteria}. So $O$ is non-empty, open and closed. By \ref{connectedCriteria} $O = X$.
-\end{proof}
-
-
-\section{Path connectedness}
-\begin{example}
-Not the same as connectedness: topologist's sine curve. 
-\end{example}
-
-
 \chapter{Function spaces}
 \section{Function spaces}
 \subsection{Pointwise convergence}
@@ -6518,6 +6412,153 @@ Let $\sSet{X, \mathcal{B}}$, $\sSet{Y,\mathcal{C}}$ be bornological spaces. A fu
 
 \input{uniformSpaces}
 
+
+
+
+
+
+\chapter{Connectedness}
+\section{Connectedness}
+\begin{definition}
+Let $\sSet{X, \xi}$ be a convergence space. A \udef{separation} of $X$ is a pair $(U,V)$ of disjoint nonempty closed subsets of $X$ whose union is $X$.
+
+The space $X$ is said to be \udef{connected} if there does not exist a separation of $X$.
+\end{definition}
+
+\begin{lemma} \label{disconnectionLemma}
+Let $\sSet{X, \xi}$ be a convergence space and $U,V\subseteq X$. The following are equivalent:
+\begin{enumerate}
+\item $(U, V)$ is a separation;
+\item $U$ is clopen and not equal to $\emptyset$ or $X$ (then $V= U^c$);
+\item $(U^c, V^c)$ is a separation.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ From $U\perp V$, we get $U\subseteq V^c$ by \ref{setPerpInequality}. From $U\cup V = U\cup V^{cc} = X$, we get $V^c \subseteq U$ by \ref{inclusionCriteria}. Now $U$ and $V$ are closed. So $U = V^c$ is also open.
+
+$(2) \Rightarrow (3)$ We have $U^c = V^{cc}$, so $U^c \subseteq V^{cc}$ and $V^{cc}\subseteq U^c$. As before, we get $U^c\perp V^c$ and $U^c \cup V^c = X$ by \ref{setPerpInequality} and \ref{inclusionCriteria}. Clearly $U^c$ and $V^c = U$ are closed.
+
+$(3) \Rightarrow (1)$ This follows by applying the implication $(1) \Rightarrow (3)$ to the separation $(U^c, V^c)$: we get that $(U^{cc}, V^{cc}) = (U,V)$ is a separation.
+\end{proof}
+\begin{corollary} \label{connectedCriteria}
+Let $\sSet{X, \xi}$ be a convergence space. The following are equivalent:
+\begin{enumerate}
+\item $X$ is connected;
+\item $X$ does not contain a pair of disjoint nonempty open subsets, whose union is $X$;
+\item the only clopen subsets of $X$ are $X$ and $\emptyset$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proposition} \label{continuousFunctionsConnectedToDiscrete}
+Let $\sSet{X, \xi}$ be a convergence space and $Y$ a discrete convergence space with at least two elements. The following are equivalent:
+\begin{enumerate}
+\item $X$ is connected;
+\item all continuous functions from $X$ to $Y$ are constant.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+By \ref{connectedCriteria}, (1) is equivalent to $X,\emptyset$ being the only clopen sets in $X$.
+
+$(1) \Rightarrow (2)$ Take arbitrary continuous $f\in (X\to Y)$ and take $y\in \im(f)$. Then $\{y\}$ is clopen by \ref{discreteTopologyCharacterisation}. Now $f^\preimf\{y\}$ is clopen by \ref{preimageOpenClosed} and $f^\preimf\{y\}\neq \emptyset$ (because $y\in\im(f)$). So $f^\preimf\{y\} = X$, which means that $f$ is constant.
+
+$(2) \Rightarrow (1)$ Take some clopen $A\subseteq X$. Take distinct $y_1,y_2\in Y$. And set
+\[ f: X\to Y: x\mapsto \begin{cases}
+y_1 & (x\in A) \\
+y_2 & (x\notin A)
+\end{cases}. \]
+This function is continuous. Indeed, take arbitrary $F\to x$. If $x\in A$, then $A\in F$ because $A$ is open, by \ref{openClosedCriteria}. So $f^{\imf\imf}[F] \supseteq \pfilter{y_1} \to y_1$. Similarly $f^{\imf\imf}[F] \supseteq \pfilter{y_2} \to y_2$ if $x\in A^c$.
+
+Then, by assumption, $f$ must be constant, so either $f = \constant{y_1}$ or $f = \constant{y_2}$. In the first case $A = X$ and in the second $A = \emptyset$.
+\end{proof}
+
+TODO: also equivalent in topological spaces: $X$ cannot be written as the union of two non-empty separated sets.
+
+The following lemma characterises separations in the subspace topology.
+\begin{lemma}
+Let $Y$ be a subspace of a topological space $X$. A pair of disjoint nonempty sets $A,B$ constitute a separation of the subspace $Y$ \textup{if and only if} neither set contains a limit point of the other in $X$.
+\end{lemma}
+\begin{proof}
+TODO ??
+\end{proof}
+
+\begin{proposition} \label{connectednessImage}
+Let $\sSet{X,\xi}$ and $\sSet{Y,\zeta}$ be convergence spaces and $f:X\to Y$ a continuous function. If $X$ is connected, then $\im(f)$ is a connected subspace of $Y$.
+\end{proposition}
+\begin{proof}
+Suppose, towards a contradiction, that $\im(f)$ is not connected, so there exists a separation $(U,V)$ of $\im(f)$. As $f: X\to \im(f)$ is continuous, we have that $f^\preimf(U)$ and $f^{\preimf}(V)$ are closed by \ref{preimageOpenClosed}. They are clearly not empty. We also have that $f^\preimf(U)$ and $f^{\preimf}(V)$ are disjoint because $\emptyset = f^\preimf(\emptyset) = f^\preimf(U\cap V) = f^\preimf(U)\cap f^\preimf(V)$, by \ref{imagePreimageGaloisConnection}. Thus $\big(f^\preimf(U), f^\preimf(V)\big)$ is a separation of $X$. This is a contradiction because $X$ was assumed connected.
+\end{proof}
+
+\begin{proposition} \label{generalisedIntermediateValueTheorem}
+Let $\sSet{X,\xi}$ be a connected convergence space, $\sSet{Y, \leq}$ a totally ordered set with the order convergence and $f: X\to Y$ a continuous function. For all $a,b\in X$ and $y\in Y$ such that $f(a) \leq y \leq f(b)$, there exists $c\in X$ such that $f(c) = y$.
+\end{proposition}
+\begin{proof}
+Assume, towards a contradiction, that $y\notin \im(f)$. Then $Y\cap \downset \{y\}$ and $Y\cap \upset \{y\}$ constitutes a separation of $\im(f)$. This contradicts \ref{connectednessImage}.
+\end{proof}
+
+\subsection{Chains}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{U}$ an open cover of $X$. A \udef{chain} in $\mathcal{U}$ between two points $x,y\in X$ is a finite sequence $\seq{U_i}_{i=0}^n$ of sets in $\mathcal{U}$ such that
+\begin{itemize}
+\item $x\in U_0$ and $y\in U_n$;
+\item $U_{i-1}\mesh U_i$ for all $i\in 1:n$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{connectedChains}
+Let $\sSet{X,\xi}$ be a convergence space. Then $X$ is connected \textup{if and only if} for each open cover $\mathcal{U}$ and each pair of points $x,y$ there exists a chain in $\mathcal{U}$ between $x$ and $y$.
+\end{proposition}
+\begin{proof}
+First assume $X$ not connected. Then we can an open cover $\{U,V\}$, where $U$ and $V$ are disjoint. For any $x\in U$ and $y\in V$, there clearly does not exist a chain in $\{U,V\}$ between $x$ and $y$.
+
+Now assume $X$ connected. Take arbitrary $x\in X$ and open cover $\mathcal{U}$. Define
+\[ O \defeq \setbuilder{y\in X}{\text{there exists a chain in $\mathcal{U}$ between $x$ and $y$}}. \]
+Then $O$ is a union of open sets in $\mathcal{U}$ and thus open.
+
+We also show that $O^c$ is also open. Take $z\in O^c$. Since $\mathcal{U}$ covers $X$, there exists $U\in\mathcal{U}$ such that $z\in U$. Then $U\in \vicinity(z)$ by \ref{openClosedCriteria}.
+
+Now $U\perp O$, so $U\subseteq O^c$. Indeed, assume not, i.e.\ there exists $y\in U\cap O$. Then there exists a chain $\seq{U_{i}}_{i=0}^n$ between $x$ and $y$, so $\seq{U_{i}}_{i=0}^n\star\seq{U}$ is a chain between $x$ and $z$. This contradicts $z\in O^c$.
+
+Since $U\subseteq O^c$, we conclude that $O^c$ is open by \ref{openClosedCriteria}. So $O$ is non-empty, open and closed. By \ref{connectedCriteria} $O = X$.
+\end{proof}
+
+
+\section{Path connectedness}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then $\xi$ is called \udef{path connected} if, for all $x,y\in X$ there exists a continuous function $f:\interval{0,1}\to X$ such that $f(0) = x$ and $f(1) = y$.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space. If $\xi$ is path connected, then it is connected.
+\end{lemma}
+TODO: we can also argue that $X/\{U,V\}$ is discrete and use \ref{continuousFunctionsConnectedToDiscrete}.
+\begin{proof}
+Suppose, towards a contradiction, that $\xi$ is path connected, but not connected. Then there exists a separation $(U,V)$ of $X$. There exist $x\in U, y\in V$ and a continuous function $f: \interval{0,1}\to X$ such that $f(0)=x$ and $f(1) = y$.
+
+Now $f^\preimf(U)$ and $f^\preimf(V)$ are non-empty, disjoint and closed sets. Now $\interval{0,1} = f^\preimf(U\cup V) = f^\preimf(U)\cup f^\preimf(V)$, so $\big(f^\preimf(U), f^\preimf(V)\big)$ is a separation of $\interval{0,1}$. This contradicts the connectedness of $\interval{0,1}$ by \ref{connectedSubsetReals}.
+\end{proof}
+
+\begin{example}
+Not the same as connectedness: topologist's sine curve. 
+\end{example}
+
+\subsection{Local path connectedness}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. Then $X$ is called \udef{locally path connected} if it is locally open and path connected.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a topological convergence space. If $X$ is locally path connected and connected, then it is path connected.
+\end{proposition}
+\begin{proof}
+By assumption, the open path-connected sets form an open cover. Since $X$ is connected, there exists a chain of open path-connected sets between any two points by \ref{connectedChains}. This can be easily turned into a continuous function from the unit interval by concatenation. 
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a locally path connected space and $A\subseteq X$ an open subset. Then the subspace $A$ is locally path connected.
+\end{proposition}
+\begin{proof}
+TODO
+\end{proof}
 
 
 \chapter{TODO}

@@ -3,13 +3,43 @@ A \udef{complex function} is a function in $(U\subseteq \C \to \C)$.
 
 A \udef{region} of $\C$ is an open, connected subset of $\C$.
 \end{definition}
-\section{The complex numbers as a real algebra}
+
+\section{Prerequisites}
+TODO: move
+\subsection{The complex numbers as a real algebra}
 The set of complex numbers $\C$ is isomorphic to the algebra $\R^2$ where multiplication is defined by
 \[ (a, b)\cdot (x, y) \defeq (ax-by, ay+bx). \]
 Thus the regular representation $\lambda_{(a,b)}$ has matrix
 \[ \begin{pmatrix}
 a & -b \\ b & a
 \end{pmatrix}. \]
+
+\subsection{Curves and regions in $\C$}
+\subsubsection{Jordan curves}
+\begin{definition}
+A \udef{Jordan curve} in $\C$ is a continuous injective function $\gamma: \interval{0,1}\to \C$ such that $\gamma(0) = \gamma(1)$.
+\end{definition}
+Sometimes people use ``Jordan curve'' to mean a continuous injective function $\gamma: \interval{0,1}\to \C$, without the condition $\gamma(0) = \gamma(1)$. Then our Jordan curve is called a ``closed Jordan curve''.
+
+\begin{theorem}
+Let $\gamma$ be a Jordan curve. Then $\C\setminus\im(\gamma)$ has a separation $(I,E)$, such that
+\begin{enumerate}
+\item $I$ and $E$ are connected;
+\item $I$ is bounded;
+\item $E$ is unbounded;
+\item the boundary of both $I$ and $E$ in $\C$ is $\im(\gamma)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+\url{https://www.jstor.org/stable/2323369?origin=crossref&seq=3}
+\end{proof}
+
+\subsubsection{Rectifiable curves}
+\begin{definition}
+A curve $\gamma: \interval{0,1}\to \C$ is called \udef{rectifiable} if the curve has finite length.
+\end{definition}
+TODO: better definition.
+
 
 \section{Holomorphic functions}
 \begin{definition}
@@ -72,11 +102,20 @@ The Jacobian determinant is a simple calculation:
 &= \pd{\Re(f(a + ib))}{a}^2 + \pd{\Im(f(a + ib))}{a}^2 = |f'|^2.
 \end{align*}
 \end{proof}
+\begin{corollary}
+Let $f: U\subseteq \C \to C$ be a holomorphic function. Consider the function $f_1: V\subseteq \R^2 \to \R: (a,b) \mapsto \Re(f(a+ib))$ and $f_2: V\subseteq \R^2 \to \R: (a,b) \mapsto \Im(f(a+ib))$. Then $\nabla^2 f_1 = 0$ and $\nabla^2 f_2 = 0$.
+\end{corollary}
+Thus both the real and imaginary part satisfy Laplace's equation. We already use \ref{holomorphicFunctionIsAnalytic}, even though it is proved later. This corollary is not needed to establish \ref{holomorphicFunctionIsAnalytic}.
+\begin{proof}
+We calculate, using Schwarz's theorem \ref{SchwarzTheorem} and the fact that $f$ is infinitely differentiable \ref{holomorphicFunctionIsAnalytic},
+\[ \nabla^2 f_1 = \pd[2]{f_1}{a} + \pd[2]{f_1}{b} = \pd{}{a}\Big(\pd{f_2}{b}\Big) - \pd{}{b}\Big(\pd{f_2}{a}\Big) = 0. \]
+A similar calculation gives $\nabla^2 f_2 = 0$.
+\end{proof}
 
 \subsection{Cauchy's theorem, Morera's theorem and the integral formula}
 
 \begin{theorem}[Cauchy's theorem] \label{CauchyTheorem}
-Let $f: U\subseteq \C \to \C$ be a holomorphic complex function and $\gamma$ a closed Jordan curve whose interior lies in $U$. Then
+Let $f: U\subseteq \C \to \C$ be a holomorphic complex function and $\gamma$ a Jordan curve whose interior lies in $U$. Then
 \[ \oint_\gamma f(z)\diff{z} = 0. \]
 \end{theorem}
 TODO: looser requirements for $\gamma$
@@ -84,28 +123,32 @@ TODO: looser requirements for $\gamma$
 TODO: generalised Stokes + Cauchy-Riemann!
 \end{proof}
 \begin{corollary}
-Let $f: U\subseteq \C \to \C$ be a holomorphic complex function. Then there exists a primitive $F: U\to \C$ such that $\od{F}{z} = f$.
+Let $f: U\subseteq \C \to \C$ be a holomorphic complex function on a region $U$. Then there exists a primitive $F: U\to \C$ such that $\od{F}{z} = f$.
 \end{corollary}
 \begin{proof}
+Take $x_0\in U$ and define 
+
 The integral $\int_\gamma f(z)\diff{z}$ depends only on the endpoints of $\gamma$.
 \end{proof}
 
 \begin{theorem}[Morera's theorem]
 Let $f: U\subseteq \C \to \C$ be a complex function on an open set $U$ such that
 \[ \oint_\gamma f(z) \diff{z} = 0 \]
-for every closed, piecewise $C^1$ curve $\gamma$ in $U$, then $f$ is holomorphic.
+for every triangle $\gamma$ in $U$, then $f$ is holomorphic.
 \end{theorem}
 \begin{proof}
-$\int f(z)\diff{z}$ is a primitive, so $f$ is complex differentiable.
+$\int f(z)\diff{z}$ is a primitive, so $f$ is complex differentiable. TODO
 \end{proof}
-TODO: triangles enough!
+
 
 \begin{note}
 Positive orientation is counterclockwise. I.e. $e^{it}$ rotates with positive orientation.
+
+Local view: positive orientation if interior is on the left.
 \end{note}
 
 \begin{theorem}[Cauchy's integral formula] \label{CauchyIntergralFormula}
-Let $f: U\subseteq \C \to \C$ be a holomorphic complex function and $\gamma$ a closed, positively oriented Jordan curve whose interior lies in $U$. Then
+Let $f: U\subseteq \C \to \C$ be a holomorphic complex function and $\gamma$ a positively oriented Jordan curve whose interior lies in $U$. Then
 \[ f(z) = \frac{1}{2\pi i}\oint_\gamma \frac{f(\zeta)}{\zeta - z}\diff{\zeta} \]
 for any point $z$ in the interior of $\gamma$.
 \end{theorem}

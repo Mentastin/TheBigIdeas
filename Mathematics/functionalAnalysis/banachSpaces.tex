@@ -1498,9 +1498,15 @@ Immediate by \ref{graphNormConvergenceLemma}.
 
 \chapter{Differentiation}
 \url{file:///C:/Users/user/Downloads/978-1-4614-3894-6.pdf}
+
 \url{file:///C:/Users/user/Downloads/2011_Bookmatter_TheRicciFlowInRiemannianGeomet.pdf}
 
+TODO: move to section on convergence vector spaces.
+
+TODO: move real analysis above here.
 \section{Functions with real domain}
+If $V = \R$, then there is, up to scalar multiplication, only one direction $u$. We denote the directional derivative $f'(a) \defeq \partial_u f|_a$.
+
 \begin{definition}
 Let $\sSet{V,\xi}$ be a topological vector space, $f: U\subseteq \R \to V$ a function and $x\in U$. We call $f$ \udef{differentiable} at $x$ if the function
 \[ (U - x)\to V: h \mapsto \frac{f(x+h) - f(x)}{h} \]
@@ -1651,35 +1657,16 @@ Let $f_n: \interval{0,2\pi} \to \R: x\mapsto \frac{\sin(nx)}{n}$. Then $\seq{f_n
 \end{example}
 
 
-\section{Derivatives of functions between normed groups}
-\begin{definition}
-Let $G, H$ be normed groups, $f:G\to H$ a function and $x_0\in G$. We call $f$ \udef{differentiable} if there exists a continuous homomorphism $A_{x_0}$ such that
-\[ \lim_{x\to 1}\frac{\norm{f(xx_0)f(x_0)^{-1}A_{x_0}(x)^{-1}}}{\norm{x}} = 0. \]
-We call $A_{x_0}$ a \udef{derivative} of $f$ at $x_0$.
-\end{definition}
-
-\begin{proposition}
-Let $G, H$ be normed groups, $f:G\to H$ a function and $x_0\in G$. There exists at most one derivative of $f$ at $x_0$.
-\end{proposition}
-\begin{proof}
-TODO
-\end{proof}
 
 \section{Directional derivatives}
+One possible perspective: All derivatives are based on directional derivatives.
 
-\section{For real normed vector spaces}
-TODO: directional / Gateaux derivative for locally convex TVSs?
-\subsection{Directional derivatives}
 \begin{definition}
-Let $V,W$ be normed vector spaces and $f:U\subseteq V\to W$ a function defined on an open subset $U$. For $a,u\in V$, we call
+Let $V,W$ be convergence vector spaces and $f:U\subseteq V\to W$ a function. For $a\in U$ and $u\in V$, we call
 \[ \partial_u f|_a \defeq \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
-the \udef{directional derivative} of $f$ at $a$ in the direction $u$,if it exists.
-
-\begin{itemize}
-\item If $V= \R^n$, then we define $\pd{f}{x^i}f \defeq \partial_{\vec{e}_i}f$, where $\mathcal{E} = \seq{\vec{e}_i}_{i=1}^n$ is the standard basis of $\R^n$. These directional derivatives are called the \udef{partial derivatives} w.r.t. the basis $\mathcal{E}$.
-\item If $V = \R$, then there is, up to scalar multiplication, only one direction $u$. We denote the directional derivative $f'(a) \defeq \partial_u f|_a$.
-\end{itemize}
+the \udef{directional derivative} of $f$ at $a$ in the direction $u$, if it exists.
 \end{definition}
+
 For a given function $f:V\to W$, the directional derivative is a partial function of both a direction and a point:
 \[ (V\times V) \not\to W:\quad (u,a) \mapsto \partial_u f(a)  \]
 
@@ -1687,14 +1674,45 @@ Partial application in the first argument gives a function
 \[ \partial_u f:\; V\not\to W:\; a\mapsto \partial_u f(a) \defeq \partial_u f|_a \]
 that is also referred to as the \udef{directional derivative} of $f$ in the direction $u$.
 
-\begin{lemma}
-Let $f,g: V\to W$, $u\in V$ and $\lambda\in\F$, then
+\begin{lemma} \label{directionalDerivativeAsOD}
+Let $V$ be a convergence vector space and $f:U\subseteq V\to \R$ a real-valued function defined on a subset $U$. For $a\in U$ and $u\in V$, we have
+\[ \partial_u f|_a = \left.\dod{f(a+tu)}{t}\right|_{t=0}. \]
+In particular, the function $t\mapsto f(x+tu)$ is continuous at $0$.
+
+Also, for $t'\in \R$, $\partial_u f|_{a+t'u} = \left.\dod{f(a+tu)}{t}\right|_{t=t'}$. 
+\end{lemma}
+\begin{proof}
+Restatement of definitions. The `in particular' follows from \ref{differentiabilityImpliesContinuity}.
+\end{proof}
+
+\begin{lemma} \label{directionalDerivativeConstructions}
+Let $f,g: U\subseteq V\to W$, $h: U\to \F$, $a\in U$, $u\in V$ and $\lambda\in\F$. Suppose $\partial_uf|_a$ and $\partial_u g|_a$ exist. Then
 \begin{enumerate}
-\item $\partial_u(f+g) = \partial_uf + \partial_u g$;
-\item $\partial_u(fg) = (\partial_uf)g + f(\partial_u g)$;
-\item $\partial_u(\lambda f) = \lambda \partial_uf$.
+\item $\partial_u(f+g)|_a$ exists and $\partial_u(f+g)|_a = \partial_uf|_a + \partial_u g|_a$;
+\item $\partial_u(hf)|_a$ exists and $\partial_u(hf)|_a = (\partial_uh|_a)\cdot f(a) + h(a)\cdot(\partial_u f|_a)$;
+\item $\partial_u(\lambda f)_a$ exists and $\partial_u(\lambda f)_a = \lambda \partial_uf|_a$.
 \end{enumerate}
 \end{lemma}
+\begin{proof}
+(1) We calculate
+\begin{align*}
+\partial_u(f+g)|_a &= \lim_{t\to 0} \frac{(f+g)(a+tu) - (f+g)(a)}{t} \\
+&= \lim_{t\to 0} \Big(\frac{f(a+tu) - f(a)}{t} + \frac{g(a+tu) - g(a)}{t} \Big) \\
+&= \lim_{t\to 0}\frac{f(a+tu) - f(a)}{t} + \lim_{t\to 0} \frac{g(a+tu) - g(a)}{t} \\
+&= \partial_uf|_a + \partial_u g|_a.
+\end{align*}
+
+(2) We have that the function $t\mapsto g(a+tu)$ is continuous at $0$ by \ref{directionalDerivativeAsOD}. Then we calculate
+\begin{align*}
+\partial_u(hf)|_a &= \lim_{t\to 0} \frac{(hf)(a+tu) - (hf)(a)}{t} \\
+&= \lim_{t\to 0} \Big(\frac{h(a+tu)f(a+tu) - h(a)f(a+tu)}{t} + \frac{h(a)f(a+tu) - h(a)f(a)}{t}\Big) \\
+&= \lim_{t\to 0} \Big(\frac{h(a+tu) - h(a)}{t}f(a+tu)\Big) + \lim_{t\to 0}h(a)\frac{f(a+tu) - f(a)}{t} \\
+&= \Big(\lim_{t\to 0} \frac{h(a+tu) - h(a)}{t}\Big)f(a) + h(a)\lim_{t\to 0}\frac{f(a+tu) - f(a)}{t} \\
+&= (\partial_uh|_a)\cdot f(a) + h(a)\cdot(\partial_u f|_a).
+\end{align*}
+
+(3) This follows from (2) setting $h = \constant{\lambda}$.
+\end{proof}
 
 \begin{proposition} \label{derivativeBilinearForm}
 Let $B: V_1 \oplus V_2 \to W$ be a bilinear form. Then, for $(x,y),(a,b)\in V_1\oplus V_2$
@@ -1710,10 +1728,75 @@ We calculate
 \end{align*}
 \end{proof}
 
-\subsubsection{Partial derivatives}
+
+\subsection{Partial derivatives}
+\begin{definition}
+Let $V,W$ be convergence vector spaces, $f:U\subseteq V\to W$ a function defined on a subset $U$ and $u\in V$.
+We call the function
+\[ \partial_u f: U\to W: a\mapsto \partial_u f|_a \]
+the \udef{partial derivative} of $f$ in the direction $u$. We also write $\pd{f}{u}$ for $\partial_u f$.
+\begin{itemize}
+\item If $V = \R^n$ with the standard basis $\mathcal{E} = \seq{\vec{e}_i}_{i=1}^n$, then we will often write $\partial_{\vec{e}_i}f$ as $\pd{f}{x^i}$.
+\item If $V = \R^2$, then we often write the standard basis as $\seq{\vhat{x}, \vhat{y}}$ and the directional derivatives $\partial_{\vhat{x}}f$ and $\partial_{\vhat{y}}f$ are written as $\partial_{x}f$ and $\partial_{y}f$.
+\item If $V = \R^3$, then we often write the standard basis as $\seq{\vhat{x}, \vhat{y}, \vhat{z}}$ and the additional directional derivative $\partial_{\vhat{z}}f$ is written as $\partial_{z}f$.
+\end{itemize}
+\end{definition}
 TODO notation $D^\alpha$ for multiindex $\alpha$. Also $|\alpha| = \sum_i \alpha_i$.
 
-\subsubsection{Gateaux derivative}
+\begin{lemma} \label{partialDerivativeMeanValueTheorem}
+Let $V,W$ be real convergence vector spaces, $a,u\in V$, $t\in\R^+$ and $f: U\subseteq V\to W$ a function that is continuous on $a+\interval{0,1}\cdot u$ and whose partial derivative $\partial_u f$ exists on $a+\interval[o]{0,t}\cdot u$. Then there exists $h\in \interval[o]{0,t}$ such that
+\[ \frac{f(a+tu) - f(a)}{t} = \partial_u f(a+hu). \]
+\end{lemma}
+\begin{proof}
+Consider the function $g: \interval{0,t} \to W: t'\mapsto f(a+t'u)$. It is continuous, since $t'\mapsto a+t'u$ is continuous and $f$ restricted to the image of this function is continuous by assumption.
+
+The function $g$ is also differentiable on $\interval[o]{0,t}$ by \ref{directionalDerivativeAsOD}.
+
+Thus we can apply the mean value theorem \ref{meanValueTheorem} to $g$: there exists $h\in \interval[o]{0,t}$ such that
+\[ \frac{f(a+tu) - f(a)}{t} = \left.\dod{f(a+tu)}{t}\right|_{t=h} = \partial_u f(a+hu). \]
+The last equation is again an application of \ref{directionalDerivativeAsOD}.
+\end{proof}
+
+
+
+\begin{theorem}[Schwarz's theorem] \label{SchwarzTheorem}
+Let $V$ be a real convergence vector space, $f:U\subseteq V\to \R$ a real-valued function defined on an open convex subset $U$ and $u,v\in V$. Suppose $\partial_u\partial_v f$ and $\partial_v\partial_u f$ exist with domain $U$ and one of them is continuous, then $\partial_u\partial_v f = \partial_v\partial_u f$.
+\end{theorem}
+We also write $\md{f}{2}{u}{}{v}{} = \md{f}{2}{v}{}{u}{}$. In particular, if one is continuous, then the other is also continuous.
+
+This theorem is also known as Clairaut's theorem.
+\begin{proof}
+WLOG we may assume $\partial_v\partial_u f$ continuous. Take arbitrary $a\in U$. We now calculate
+\begin{align*}
+\partial_u\partial_v f(a) &= \lim_{t\to 0}\frac{1}{t}\big(\partial_v f(a+tu) - \partial_v f(a)\big) \\
+&= \lim_{t\to 0}\frac{1}{t}\Big(\lim_{t'\to 0}\frac{1}{t'}\big(f(a+tu+t'v) - f(a+tu)\big) - \lim_{t'\to 0}\frac{1}{t'}\big(f(a+t'v) - f(a)\big)\Big) \\
+&= \lim_{t\to 0}\lim_{t'\to 0}\frac{1}{tt'}\Big(\big(f(a+tu+t'v) - f(a+tu)\big) - \big(f(a+t'v) - f(a)\big)\Big).
+\end{align*}
+Fix $\epsilon > 0$ as in \ref{rectangleSubsetLemma} and take arbitrary $t,t'\in \interval{0, \epsilon}$. By \ref{directionalDerivativeConstructions}, $f(a+t'v) - f(a)$ is differentiable in the direction $u$. Then there exists, by \ref{partialDerivativeMeanValueTheorem}, $h(t) \in \interval{0,t}$ and $h'(t')\in \interval{0,t'}$ such that
+\begin{align*}
+\frac{1}{tt'}\Big(\big(f(a+tu+t'v) - f(a+tu)\big) - &\big(f(a+t'v) - f(a)\big)\Big) \\
+&= \frac{1}{t'}\partial_u\Big(f\big(a+h(t)u+t'v\big) - f\big(a+h(t)u\big)\Big) \\
+&= \frac{1}{t'}\Big(\partial_uf\big(a+h(t)u+t'v\big) - \partial_uf\big(a+h(t)u\big)\Big) \\
+&= \partial_v\partial_uf\big(a+h(t)u+h'(t)v\big).
+\end{align*}
+As $t\to 0$ and $t'\to 0$, $h(t)$ and $h'(t')$ tend to zero by the squeeze theorem \ref{squeezeTheorem}. By continuity of $\partial_v\partial_uf$, we have
+\begin{align*}
+\partial_u\partial_v f(a) &= \lim_{t\to 0}\lim_{t'\to 0}\frac{1}{tt'}\Big(\big(f(a+tu+t'v) - f(a+tu)\big) - \big(f(a+t'v) - f(a)\big)\Big) \\
+&= \lim_{t\to 0}\lim_{t'\to 0}\partial_v\partial_uf\big(a+h(t)u+h'(t)v\big) \\
+&= \partial_v\partial_u f(a).
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $V$ be a real locally convex TVS, $f:U\subseteq V\to \R$ a real-valued function defined on an open subset $U$ and $u,v\in V$. Suppose $\partial_u\partial_v f$ and $\partial_v\partial_u f$ exist with domain $U$ and one of them is continuous, then $\partial_u\partial_v f = \partial_v\partial_u f$.
+\end{corollary}
+\begin{proof}
+Take $a\in U$. Since $U$ is open, $a$ has a vicinity $U_a$ that is a subset of $U$. By local convexity and \ref{locallyConvexTVSLocallyConvexOpen}, we can find an open convex neighbourhood $U'_a$ of $a$ that is a subset of $U_a$. By restricting $f$ to $U'_a$, we can apply the theorem.
+\end{proof}
+
+
+
+
+\subsection{Gateaux derivative}
 \begin{definition}
 Let $f:V\to W$ be a function between normed spaces. If $\partial_u f|_a$ exists for all $u\in V$, then we call the partial application of the directional derivative in the second argument
 \[ \diff{_af}: V\not\to W: u\mapsto \diff{_af}(u) \defeq \partial_u f|_a = \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
@@ -1747,20 +1830,22 @@ Let $U,V,W$ be normed spaces and $f: U\to V$, $g: V\to W$ be functions. Suppose 
 \[ \diff_{u}\big(g\circ f\big) = \big(\diff{_{f(u)}}g\big) \circ \big(\diff{_u}f\big). \]
 If both $\diff{_u}f$ and $\diff{_{f(u)}}g$ are Gateaux derivatives, then $\diff_{u}\big(g\circ f\big)$ is a Gateaux derivative.
 \end{proposition}
+TODO for CVS? Compare with chain rule for Fréchet.
 \begin{proof}
 TODO!
 \end{proof}
 
-\subsection{Hadamard derivative}
-
 \subsection{Fréchet derivative}
 \begin{definition}
-If a function has a (bounded linear) Gateaux derivative at $a$ and the limit in the definition of the derivative
+Let $V,W$ be normed vector spaces and $f: U\subseteq V\to W$ a function defined on an open subset $U$.
+If $f$ has a (bounded linear) Gateaux derivative at $a$ and convergence in the definition of the derivative
 \[ \diff{_af}: V\not\to W: u\mapsto \diff{_af}(u) \defeq \partial_u f|_a = \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
 is uniform in all $u$ on the $S(\vec{0},1)$, then we say the function is \udef{(Fréchet) differentiable} at $a$ and has \udef{Fréchet derivative} $\diff{_af}$.
 
 We may also write $\diff{f}$, leaving the $a$ implicit.
 \end{definition}
+TODO: for CVS: uniform on some vicinity??
+
 
 \begin{proposition} \label{FrechetDerivativeAsymptotics}
 Let $V,W$ be normed vector spaces and $f:U\subseteq V\to W$ a function defined on an open subset $U$. Let $a\in V$.
@@ -1855,8 +1940,15 @@ Let $f:U\subseteq\R^m\to\R^n$ be a function. Then $A_{\diff{f}}$ is a matrix wit
 This matrix is called the \udef{Jacobian} $J_f$.
 \end{definition}
 
+\subsection{Hadamard derivative}
+\begin{definition}
+A directional derivative is a \udef{Hadamard derivative} if it is continuous in $u$.
+\end{definition}
+TODO: chech that this is the right definition.
 
-\subsection{Differentiation in a convergence algebra}
+
+
+\section{Differentiation in a convergence algebra}
 
 \begin{proposition}[Leibniz rule] \label{LeibnizRuleDerivativeAlgebra}
 Let $A$ be a normed algebra and $a,b\in (\R \to A)$ elements that have derivatives. Then
@@ -2953,7 +3045,7 @@ Take $\rho\in \dual{X}$. Then
 \end{proof}
 
 \begin{proposition} \label{weakAnalyticityConsequences}
-Let $U\subseteq \C$ be an open set, $X$ a Banach space, $f: U\to X$ a weakly analytic function and $\Gamma$ a closed Jordan curve in $U$ whose interior is also in $U$. Then
+Let $U\subseteq \C$ be an open set, $X$ a Banach space, $f: U\to X$ a weakly analytic function and $\Gamma$ a Jordan curve in $U$ whose interior is also in $U$. Then
 \begin{enumerate}
 \item $f$ is continuous;
 \item $\oint_{\Gamma}f(z)\diff{z} = 0$ and $f(w) = \frac{1}{2\pi i}\oint_{\Gamma}\frac{f(z)}{z-w}\diff{z}$ for all $w$ in the interior of $\Gamma$;
