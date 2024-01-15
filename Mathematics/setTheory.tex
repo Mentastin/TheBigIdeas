@@ -1531,6 +1531,11 @@ Let $R$ be a relation on $(A, B)$. The \udef{converse} $R^\transp$ of $R$ is the
 It is also known as the \udef{inverse}, \udef{transpose}, \udef{reciprocal}, \udef{opposite} or \udef{dual} of $R$.
 \end{definition}
 
+\begin{lemma} \label{transposeSwapLemma}
+Let $R$ be a relation on $(A, B)$. Then
+\[ \graph(R^\transp) = \pairSwap_{A,B}^\imf\big(\graph(R)\big) = \pairSwap_{B,A}^\preimf\big(\graph(R)\big). \]
+\end{lemma}
+
 \begin{lemma}
 Let $R,S$ be relations on $(A, B)$, $X\subseteq A$ and $Y\subseteq B$. Then
 \begin{enumerate}
@@ -2643,6 +2648,7 @@ Now assume $R$ is an equivalence class containing $R_1\cup R_2$, then
 \[ R \supseteq (R_1\cup R_2);(R_1\cup R_2) = R_1 \cup R_1;R_2 \cup R_2;R_1 \cup R_2 = R_1;R_2. \]
 \end{proof}
 
+
 \subsubsection{Tolerance relations}
 \begin{definition}
 A \udef{tolerance relation} is a binary relation that is reflexive and symmetric.
@@ -2695,6 +2701,90 @@ P \ni A &= a\setbuilder{(a,b)}{b\in A} \\
 &= a\operatorname{QP}^{-1}(P) \in \operatorname{QP}(\operatorname{QP}^{-1}(P)).
 \end{align*}
 This shows that $P = \operatorname{QP}(\operatorname{QP}^{-1}(P))$.
+\end{proof}
+
+\subsection{Lattices of relations}
+TODO: relocate
+
+\subsubsection{Reflexive relations}
+\begin{definition}
+Let $A$ be a set. Then the set of reflexive relations on $A$, ordered by inclusion, is denoted $\ReflRel(A)$.
+\end{definition}
+
+\begin{proposition}
+Let $A$ be a set. Then $\ReflRel(A)$ is
+\begin{enumerate}
+\item is a complete $\wedge$-subsemilattice of $\powerset(A^2)$;
+\item has an algebraic closure operator $\powerset(A^2)\to \ReflRel(A): R\mapsto R\cup \id_A$;
+\item is an algebraic lattice.
+\end{enumerate}
+\end{proposition}
+Note that the proof of (1) works if $I=\emptyset$. 
+\begin{proof}
+(1) Let $\setbuilder{R_i}{i\in I}$ be a set of reflexive relations on $A$. Then $\id_A \subseteq R_i$ for all $i\in I$, so $\id_A \subseteq \bigcap_{i\in I}R_i$, which implies that $\bigcap_{i\in I}R_i$ is reflexive.
+
+(2) To see that $\id_A \cup -$ is the closure operator, we verify the Galois connection of \ref{MooreClosureGaloisConnection}. Let $R$ be an arbitrary relation on $A$ and $R'\in \ReflRel(A)$ an arbitrary reflexive relation. Then
+\[ R\cup \id_A \subseteq R' \quad\implies\quad R\subseteq R' = \incl_{\ReflRel(A)}(R'). \]
+Conversely, assume $R \subseteq \incl_{\ReflRel(A)}(R')$. Then we have $\id_A \subseteq R'$, so $R\cup\id_A \subseteq R'$.
+
+To show that the closure is algebraic, we calculate, for an arbitrary relation $R$ on $A$, using the fact that $\powerset(A^2)$ is algebraic,
+\begin{align*}
+R\cup \id_A &= \id_A \cup \bigcup\setbuilder{R'}{\text{$R'\subseteq R$ finite}} \\
+&= \bigcup\setbuilder{R'\cup\id_A}{\text{$R'\subseteq R$ finite}}.
+\end{align*}
+
+(3) This is immediate from \ref{imageAlgebraicClosureAlgebraicLattice}.
+\end{proof}
+
+\subsubsection{Symmetric relations}
+\begin{definition}
+Let $A$ be a set. Then the set of symmetric relations on $A$, ordered by inclusion, is denoted $\SymmRel(A)$.
+\end{definition}
+
+\begin{proposition}
+Let $A$ be a set. Then $\SymmRel(A)$ is
+\begin{enumerate}
+\item is a complete $\wedge$-subsemilattice of $\powerset(A^2)$;
+\item has an algebraic closure operator $\powerset(A^2)\to \ReflRel(A): R\mapsto R\cup R^\transp$;
+\item is an algebraic lattice.
+\end{enumerate}
+\end{proposition}
+Note that the proof of (1) works if $I=\emptyset$. 
+\begin{proof}
+(1) Let $\setbuilder{R_i}{i\in I}$ be a set of symmetric relations on $A$. Then $\R_i = R_i^\transp$ for all $i\in I$, so $\Big(\bigcap_{i\in I}R_i\Big)^\transp = \bigcap_{i\in I}R_i^\transp = \bigcap_{i\in I}R_i$ by \ref{transposeSwapLemma} and \ref{imagePreimageGaloisConnection}, which implies that $\bigcap_{i\in I}R_i$ is symmetric.
+
+(2) To see that $- \cup (-)^\transp$ is the closure operator, we verify the Galois connection of \ref{MooreClosureGaloisConnection}. Let $R$ be an arbitrary relation on $A$ and $R'\in \SymmRel(A)$ an arbitrary symmetric relation. Then
+\[ R\cup R^\transp \subseteq R' \quad\implies\quad R\subseteq R' = \incl_{\SymmRel(A)}(R'). \]
+Conversely, assume $R \subseteq \incl_{\ReflRel(A)}(R')$. Then we have $R^\transp \subseteq R'$, so $R\cup R^\transp \subseteq R'$.
+
+To show that the closure is algebraic, we calculate, for an arbitrary relation $R$ on $A$, using the fact that $\powerset(A^2)$ is algebraic,
+\begin{align*}
+R\cup R^\transp &= \Big(\bigcup\setbuilder{R'}{\text{$R'\subseteq R$ finite}}\Big) \cup \Big(\bigcup\setbuilder{R'}{\text{$R'\subseteq R$ finite}}\Big)^\transp \\
+&= \Big(\bigcup\setbuilder{R'}{\text{$R'\subseteq R$ finite}}\Big) \cup \Big(\bigcup\setbuilder{R'^\transp}{\text{$R'\subseteq R$ finite}}\Big) \\
+&= \bigcup\setbuilder{R'\cup (R')^\transp}{\text{$R'\subseteq R$ finite}},
+\end{align*}
+where we have used \ref{transposeSwapLemma} and \ref{imagePreimageGaloisConnection}.
+
+(3) This is immediate from \ref{imageAlgebraicClosureAlgebraicLattice}.
+\end{proof}
+
+\subsubsection{Transitive relations}
+TODO
+
+\subsubsection{Equivalence relations}
+\begin{definition}
+Let $A$ be a set. Then the set of equivalence relations on $A$, ordered by inclusion, is denoted $\EquivRel(A)$.
+\end{definition}
+            
+\begin{proposition}
+Let $A$ be a set. Then
+\begin{enumerate}
+\item $\EquivRel(A)$ is a complete $\wedge$-subsemilattice of $\powerset(A\times A)$;
+\item $\EquivRel(A)$ is an algebraic lattice.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO by intersection of lattices.
 \end{proof}
 
 \subsection{Uniqueness and totality}
