@@ -2459,17 +2459,66 @@ and thus
 \[ \lim_{n\to\infty} F(x_n) = \lim_{n\to\infty}\int_a^{x_n}f\diff{t} = \int_a^b f \diff{t} - \lim_{n\to\infty}\int_{x_n}^b f\diff{t} = \int_a^b f \diff{t} - \int_x^b f\diff{t} = \int_a^x f \diff{t} = F(x). \]
 \end{proof}
 
-\subsection{Henstock-Kurzweil integration}
-\subsubsection{Tagged partitions and gauges}
+\section{Henstock-Kurzweil integration}
+\subsection{Tagged partitions and sums}
 \begin{definition}
 Let $a <  b\in \R$. A \udef{tagged partition} $P$ of $\interval{a,b}$ is a pair of sequences $(u,t)$, where $u\in \interval{a,b}^{n+1}$ and $t\in \interval{a,b}^{n}$ such that
 \begin{itemize}
-\item $u_0 = a$ and $u_{n} = b$;
-\item $u_{k} < t_k < u_{k+1}$ for all $k\in 0:n$.
+\item $a < u_0$ and $u_{n} < b$;
+\item $u_{k} \leq t_k \leq u_{k+1}$ for all $k\in 0:n$.
 \end{itemize}
-Let $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ be a function, which we call a \udef{gauge}. We say the tagged partition $P = (u,t)$ is \udef{$\delta$-fine} if
-\[ \forall k\in (0:n): \quad \interval{u_k, u_{k+1}} \subseteq \interval[o]{t_k-\delta(t_k), t_k+\delta(t_k)}. \]
 \end{definition}
+
+\subsubsection{Riemann sums}
+\begin{definition}
+Let $f: \interval[o]{a,b}\to \sSet{V,\xi}$ be a function to a convergence vector space $\sSet{V,\xi}$ and $P = (u,t)$ a tagged partition. Then the \udef{Riemann sum} $\sum_P f\Delta x$ is defined as
+\[ \sum_P f\Delta x \defeq \sum_{k = 0}^{\len(t)}f(t)\big(u_{k+1} - u_{k}\big). \]
+\end{definition}
+
+\subsubsection{Stieltjes sums}
+\begin{definition}
+Let $f: \interval[o]{a,b}\to \sSet{V,\xi}$ be a function to a convergence vector space $\sSet{V,\xi}$, $g: \interval[o]{a,b}\to \F$ a scalar function and $P = (u,t)$ a tagged partition. Then the \udef{Stieltjes sum} $\sum_P f\Delta g$ is defined as
+\[ \sum_P f \Delta g \defeq \sum_{k = 0}^{\len(t)}f(t)\Big(g\big(u_{k+1}\big) - g\big(u_{k}\big)\Big). \]
+\end{definition}
+Note that Riemann sums are special cases of Stieltjes sums.
+
+\subsubsection{Integrals}
+\begin{definition}
+Let $a <  b\in \R$ and $f: \interval[o]{a,b}\to \sSet{V,\xi}$ be a function to a convergence vector space $\sSet{V,\xi}$. Let $\mathcal{P}$ be a filter of tagged partitions. Then $f$ is said to be \udef{$\mathcal{P}$-integrable} if
+\[ \upset\Big(\sum_{(-)}f\Delta x\Big)^{\imf\imf}\big(\mathcal{P}\big)\qquad \text{converges in $V$.} \]
+The limit is called the \udef{$\mathcal{P}$-integral}, denoted $\mathcal{P}-\int_a^b f\diff{x}$.
+\end{definition}
+If $\mathcal{P}$ is clear from the context, then we may also just write $\int_a^b f\diff{x}$.
+
+Note that we only assume $f$ defined on $\interval[o]{a,b}$. If the function is in fact defined on $\interval{a,b}$, it has the same integral.
+
+\subsubsection{Stieltjes integrals}
+\begin{definition}
+Let $a <  b\in \R$ and $f: \interval[o]{a,b}\to \sSet{V,\xi}$ be a function to a convergence vector space $\sSet{V,\xi}$. Let $\mathcal{P}$ be a filter of tagged partitions. Then $f$ is said to be \udef{$(\mathcal{P},g)$-Stieltjes-integrable} if 
+\[ \upset\Big(\sum_{(-)}f\Delta g\Big)^{\imf\imf}\big(\mathcal{P}\big)\qquad \text{converges in $V$.} \]
+The limit is called the \udef{$(\mathcal{P},g)$-Stieltjes-integral}, denoted $\mathcal{P}-\int_a^b f\diff{g}$.
+\end{definition}
+
+\subsubsection{Darboux partitions}
+\begin{definition}
+Let $f: \interval[o]{a,b}\to \R$ be a real function. We define \udef{Darboux partitions} as follows:
+\begin{itemize}
+\item A tagged partition $P = (u,t)$ is called an \udef{upper Darboux partition} for $f$ if $f(t_k) = \max_{t\in \interval{u_k, u_{k+1}}}f(t)$.
+\item A tagged partition $P = (u,t)$ is called a \udef{lower Darboux partition} for $f$ if $f(t_k) = \min_{t\in \interval{u_k, u_{k+1}}}f(t)$.
+\end{itemize}
+\end{definition}
+
+\subsection{Gauges and Henstock-Kurzweil filters of partitions}
+\begin{definition}
+Let $\delta: \interval[o]{a,b}\to \interval[o]{0,+\infty}$ be a function, which we call a \udef{gauge}. We say the tagged partition $P = (u,t)$ is \udef{$\delta$-fine} if
+\[ \forall k\in (0:n): \quad \interval{u_k, u_{k+1}} \subseteq \interval[o]{t_k-\delta(t_k), t_k+\delta(t_k)}. \]
+We call
+\[ \mathcal{HK} \defeq \upset \setbuilder[\big]{\{\text{$P$ is $\delta$-fine}\}}{\delta: \interval[o]{a,b}\to \interval[o]{0,\infty}} \]
+the \udef{Henstock-Kurzweil} filter of partitions.
+\end{definition}
+TODO: We are no longer assuming $u_0 = a$ and $u_{n} = b$, in fact forcing $u_0 > a$ and $u_n < b$. I don't think this changes anything, but I need to check.
+
+Can we define a Henstock-Kurzweil uniform / Cauchy structure on the set of tagged partitions??
 
 \begin{lemma} \label{smallerGaugeFunctionFinerPartition}
 Let $a <  b\in \R$, $\delta_1, \delta_2: \interval{a,b}\to \interval[o]{0,+\infty}$ and $P = (u,t)$ a tagged partition. If $\delta_1 \leq \delta_2$ pointwise and $P$ is $\delta_1$-fine, then $P$ is $\delta_2$-fine.
@@ -2488,19 +2537,19 @@ Let $a <  b\in \R$, $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ and $P =
 Let $a <  b\in \R$ and $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ be a function. Then there exists a $\delta$-fine tagged partition of $\interval{a,b}$.
 \end{lemma}
 \begin{proof}
-Consider the set $\setbuilder{\interval[o]{p-\delta(p), p+\delta(p)}}{p\in \interval[o]{a,b}}$. This is an open cover of $\interval{a,b}$. Since $\interval{a,b}$ is compact by \ref{HeineBorel}, there exists a finite subcover $C$, by \ref{topologyCompactnessOpenCover}. Let the tag sequence $t$ by the sequence obtained by ordering $\setbuilder[\big]{p\in\interval[o]{a,b}}{\interval[o]{p-\delta(p), p+\delta(p)}\in C}$. Let $n$ be the length of this tag sequence.
+Consider the set $\setbuilder[\big]{\interval[o]{p-\delta(p), p+\delta(p)}}{p\in \interval[o]{a,b}}$. This is an open cover of $\interval{a,b}$. Since $\interval{a,b}$ is compact by \ref{HeineBorel}, there exists a finite subcover $C$, by \ref{topologyCompactnessOpenCover}. Let the tag sequence $t$ by the sequence obtained by ordering $\setbuilder[\big]{p\in\interval[o]{a,b}}{\interval[o]{p-\delta(p), p+\delta(p)}\in C}$. Let $n$ be the length of this tag sequence.
 
 
 For all $k\in (1:n)$, we have $t_{k+1}-\delta(t_{k+1}) < t_k + \delta(t_k)$, so we can take $u_{k} \in \interval[o]{t_{k+1}-\delta(t_{k+1}), t_k + \delta(t_k)}$. Setting $u_0 = a$ and $u_{n} = b$, we have that $(u,t)$ is a $\delta$-fine partition.
 \end{proof}
 
 \subsubsection{The Henstock-Kurzweil integral}
+TODO: for many results we do not need Banach space, only CVS.
+
 \begin{definition}
-Let $f: \interval[o]{a,b}\to X$ be a function to a Banach space $X$ and $P = (u,t)$ a tagged partition. Then the \udef{Riemann sum} $\sum_P f$ is defined as
-\[ \sum_P f \defeq \sum_{k = 0}^{\len(t)}f(t)\big(u_{k+1} - u_{k}\big). \]
-A vector $I\in X$ is called the \udef{Henstock-Kurzweil integral} of $f$ if
-\[ \forall \epsilon >0: \exists \delta\in \big(\interval{a,b}\to \interval[o]{0,\infty}\big): \forall \,\text{$\delta$-fine partitions}: \quad \norm{I - \sum_P f} < \epsilon. \]
-We call $f$ \udef{Henstock-Kurzweil integrable} if it has a Henstock-Kurzweil integral and we denote the Henstock-Kurzweil integral $\int_a^b f \diff{x}$.
+The Henstock-Kurzweil integral is the integral associated to the Henstock-Kurzweil partition filter.
+
+The Henstock-Kurzweil-Stieltjes integral is the Stieltjes-integral associated to the Henstock-Kurzweil partition filter.
 \end{definition}
 
 \begin{lemma}
@@ -2544,7 +2593,16 @@ The conclusion also holds for the Lebesgue or Riemann integral, if we additional
 TODO
 \end{proof}
 
-\subsubsection{Riemann integration}
+\subsubsection{Darboux integration}
+\begin{definition}
+upper-Darboux-Riemann-integral
+
+upper-Darboux-Henstock-Kurzweil-Stieltjes integral
+
+etc.
+\end{definition}
+
+\subsection{Riemann integration}
 \begin{definition}
 Let $f: \interval[o]{a,b}\to X$ be a function to a Banach space $X$ and $P = (u,t)$ a tagged partition. Then the \udef{Riemann sum} $\sum_P f$ is defined as
 \[ \sum_P f \defeq \sum_{k = 0}^{\len(t)}f(t)\big(u_{k+1} - u_{k}\big). \]
@@ -2605,7 +2663,6 @@ Let $a<b\in \R$ and $f: \interval[o]{a,b}\to \R$ a bounded function. Then $f$ is
 \begin{proof}
 TODO
 \end{proof}
-
 
 \subsubsection{Riemann-Stieltjes}
 
