@@ -2465,20 +2465,21 @@ and thus
 Let $a <  b\in \R$. A \udef{tagged partition} $P$ of $\interval{a,b}$ is a pair of sequences $(u,t)$, where $u\in \interval{a,b}^{n+1}$ and $t\in \interval{a,b}^{n}$ such that
 \begin{itemize}
 \item $a < u_0$ and $u_{n} < b$;
-\item $u_{k} \leq t_k \leq u_{k+1}$ for all $k\in 0:n$.
+\item $u_{k} \leq u_{k+1}$ for all $k\in 0:n$.
 \end{itemize}
+If $u_{k} \leq t_k \leq u_{k+1}$ for all $k\in 0:n$, then we call the tagged partition \udef{confined}. If this requirement is not imposed, then we call the tagged partition \udef{free}.
 \end{definition}
 
 \subsubsection{Riemann sums}
 \begin{definition}
 Let $f: \interval[o]{a,b}\to \sSet{V,\xi}$ be a function to a convergence vector space $\sSet{V,\xi}$ and $P = (u,t)$ a tagged partition. Then the \udef{Riemann sum} $\sum_P f\Delta x$ is defined as
-\[ \sum_P f\Delta x \defeq \sum_{k = 0}^{\len(t)}f(t)\big(u_{k+1} - u_{k}\big). \]
+\[ \sum_P f\Delta x \defeq \sum_{k = 0}^{\len(t)}f(t_k)\big(u_{k+1} - u_{k}\big). \]
 \end{definition}
 
 \subsubsection{Stieltjes sums}
 \begin{definition}
 Let $f: \interval[o]{a,b}\to \sSet{V,\xi}$ be a function to a convergence vector space $\sSet{V,\xi}$, $g: \interval[o]{a,b}\to \F$ a scalar function and $P = (u,t)$ a tagged partition. Then the \udef{Stieltjes sum} $\sum_P f\Delta g$ is defined as
-\[ \sum_P f \Delta g \defeq \sum_{k = 0}^{\len(t)}f(t)\Big(g\big(u_{k+1}\big) - g\big(u_{k}\big)\Big). \]
+\[ \sum_P f \Delta g \defeq \sum_{k = 0}^{\len(t)}f(t_k)\Big(g\big(u_{k+1}\big) - g\big(u_{k}\big)\Big). \]
 \end{definition}
 Note that Riemann sums are special cases of Stieltjes sums.
 
@@ -2507,14 +2508,12 @@ Let $f: \interval[o]{a,b}\to \R$ be a real function. We define \udef{Darboux par
 \item A tagged partition $P = (u,t)$ is called a \udef{lower Darboux partition} for $f$ if $f(t_k) = \min_{t\in \interval{u_k, u_{k+1}}}f(t)$.
 \end{itemize}
 \end{definition}
+Note that Darboux partitions are confined.
 
 \subsection{Gauges and Henstock-Kurzweil filters of partitions}
 \begin{definition}
 Let $\delta: \interval[o]{a,b}\to \interval[o]{0,+\infty}$ be a function, which we call a \udef{gauge}. We say the tagged partition $P = (u,t)$ is \udef{$\delta$-fine} if
 \[ \forall k\in (0:n): \quad \interval{u_k, u_{k+1}} \subseteq \interval[o]{t_k-\delta(t_k), t_k+\delta(t_k)}. \]
-We call
-\[ \mathcal{HK} \defeq \upset \setbuilder[\big]{\{\text{$P$ is $\delta$-fine}\}}{\delta: \interval[o]{a,b}\to \interval[o]{0,\infty}} \]
-the \udef{Henstock-Kurzweil} filter of partitions.
 \end{definition}
 TODO: We are no longer assuming $u_0 = a$ and $u_{n} = b$, in fact forcing $u_0 > a$ and $u_n < b$. I don't think this changes anything, but I need to check.
 
@@ -2534,7 +2533,7 @@ Let $a <  b\in \R$, $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ and $P =
 \end{lemma}
 
 \begin{lemma}[Cousin's lemma] \label{cousinsLemma}
-Let $a <  b\in \R$ and $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ be a function. Then there exists a $\delta$-fine tagged partition of $\interval{a,b}$.
+Let $a <  b\in \R$ and $\delta: \interval{a,b}\to \interval[o]{0,+\infty}$ be a function. Then there exists a $\delta$-fine confined tagged partition of $\interval{a,b}$.
 \end{lemma}
 \begin{proof}
 Consider the set $\setbuilder[\big]{\interval[o]{p-\delta(p), p+\delta(p)}}{p\in \interval[o]{a,b}}$. This is an open cover of $\interval{a,b}$. Since $\interval{a,b}$ is compact by \ref{HeineBorel}, there exists a finite subcover $C$, by \ref{topologyCompactnessOpenCover}. Let the tag sequence $t$ by the sequence obtained by ordering $\setbuilder[\big]{p\in\interval[o]{a,b}}{\interval[o]{p-\delta(p), p+\delta(p)}\in C}$. Let $n$ be the length of this tag sequence.
@@ -2543,10 +2542,16 @@ Consider the set $\setbuilder[\big]{\interval[o]{p-\delta(p), p+\delta(p)}}{p\in
 For all $k\in (1:n)$, we have $t_{k+1}-\delta(t_{k+1}) < t_k + \delta(t_k)$, so we can take $u_{k} \in \interval[o]{t_{k+1}-\delta(t_{k+1}), t_k + \delta(t_k)}$. Setting $u_0 = a$ and $u_{n} = b$, we have that $(u,t)$ is a $\delta$-fine partition.
 \end{proof}
 
+\subsubsection{The McShane integral}
+
 \subsubsection{The Henstock-Kurzweil integral}
 TODO: for many results we do not need Banach space, only CVS.
 
 \begin{definition}
+We call
+\[ \mathcal{HK} \defeq \upset \setbuilder[\big]{\{\text{$P$ is $\delta$-fine and confined}\}}{\delta: \interval[o]{a,b}\to \interval[o]{0,\infty}} \]
+the \udef{Henstock-Kurzweil} filter of partitions.
+
 The Henstock-Kurzweil integral is the integral associated to the Henstock-Kurzweil partition filter.
 
 The Henstock-Kurzweil-Stieltjes integral is the Stieltjes-integral associated to the Henstock-Kurzweil partition filter.
