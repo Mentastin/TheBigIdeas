@@ -2296,6 +2296,8 @@ We call $(\R, V, +, \precsim)$ a \udef{preordered vector space}.
 \end{itemize}
 \end{definition}
 
+Note that $\mu \leq \nu \in \R$ does not in general implies $\mu v \precsim \nu v$ for $v\in V$. For this to hold, we need $0\precsim v$.
+
 \begin{example}
 \begin{itemize}
 \item The finite-dimensional vector spaces $\R^n$ with coordinate-wise addition, scalar multiplication and order are Riesz spaces.
@@ -2322,7 +2324,7 @@ We get the implications
 \[ v \precsim w \implies 0 \precsim  w - v \implies -w \precsim -v \implies v-w \precsim 0 \implies v\precsim w \]
 by subsequently adding $-v, -w, v,w$ to both sides by compatibility of the order.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{orderPreservationReversalScalarMultiplication}
 Let $V$ be a preordered vector space and $\alpha \in \R\setminus\{0\}$. Then for all $v,w\in V$
 \[ v \precsim w \quad \iff \quad \begin{cases}
 \alpha v \precsim \alpha w & (0 < \alpha) \\
@@ -2363,24 +2365,6 @@ f \wedge g &= \frac{1}{2}(f+g) - \frac{1}{2}|f-g|.
 \end{align*}
 So the join and meet are still continuous and have the same properties as $f,g$.
 \end{proof}
-
-\section{Upsets and downsets}
-\begin{lemma} \label{sumMultipleUpDownsets}
-Let $V$ be a preordered vector space, $S\subseteq V$ a subset, $v\in V$ and $\alpha\in \R$. Then
-\begin{enumerate}
-\item if $\alpha > 0$, then $(\alpha S)^u = \alpha S^u$ and $(\alpha S)^l = \alpha S^l$;
-\item if $\alpha < 0$, then $(\alpha S)^u = \alpha S^l$ and $(\alpha S)^l = \alpha S^u$;
-\item $(S+v)^u = S^u + v$ and $(S+v)^l = S^l + v$.
-\end{enumerate}
-\end{lemma}
-\begin{corollary} \label{vectorSpaceOperationsOrderHomomorphisms}
-Let $V$ be a preordered vector space, $S\subseteq V$ a subset, $v\in V$ and $\alpha\in \R$. Then
-\begin{enumerate}
-\item $\sup(S+v) = \sup(S)+v$ and $\inf(S+v) = \inf(S)+v$;
-\item if $\alpha > 0$, then $\sup(\alpha S) = \alpha \sup(S)$ and $\inf(\alpha S) = \alpha \inf(S)$;
-\item if $\alpha < 0$, then $\sup(\alpha S) = \alpha \inf(S)$ and $\inf(\alpha S) = \alpha \sup(S)$.
-\end{enumerate}
-\end{corollary}
 
 \section{The positive cone}
 \begin{definition}
@@ -2423,10 +2407,16 @@ y-x \in V^+ \\ z-y \in V^+
 \end{proof}
 
 \begin{lemma} \label{scalarInequalityImpliesVectorInequality}
-Let $V$ be a preordered vector space, $v\in V^+$ and $0\leq \lambda \leq \mu\in \R$. Then $\lambda v \precsim \mu v$.
+Let $V$ be a preordered vector space, $v\in V^+$ and $\lambda \leq \mu\in \R$. Then $\lambda v \precsim \mu v$.
 \end{lemma}
 \begin{proof}
 We have $\mu-\lambda \geq 0$, so $0\precsim v$ implies $0 = (\mu-\lambda)\cdot 0 \precsim (\mu-\lambda)v$ and so $\lambda v \precsim \mu v$.
+\end{proof}
+\begin{corollary} \label{scalarVectorInequalityMultiplication}
+Let $V$ be a preordered vector space, $v,w\in V$ and $\alpha, \beta\in \F$ such that $0\precsim v\precsim w$ and $0\leq \alpha \leq \beta$. Then $\alpha v \precsim \beta w$.
+\end{corollary}
+\begin{proof}
+We have $\alpha v \precsim \alpha w \precsim \beta w$.
 \end{proof}
 TODO following corollary of previous.
 \begin{lemma} \label{scalarMultiplicationInequalities}
@@ -2462,6 +2452,199 @@ Let $V$ be a partially ordered vector space and $v,w\in V^+$. If $v+w = 0$, then
 We have $v \leq v$ and $0\leq w$, so $0\leq v\leq v+w = 0$. Thus $v = 0$. Similarly $w = 0$.
 \end{proof}
 
+\section{Upsets, downsets and bounds}
+\begin{lemma} \label{sumUpperLowerBounds}
+Let $V$ be a preordered vector space, $A, B\subseteq V$ subsets and $v\in V$. Then
+\begin{enumerate}
+\item $A^\precsim + B^\precsim \subseteq (A + B)^\precsim$ and $A^\succsim + B^\succsim \subseteq (A + B)^\succsim$;
+\item $(A+v)^\precsim = A^\precsim + \{v\}^\precsim = A^\precsim + v$ and $(A+v)^\succsim = A^\succsim + \{v\}^\succsim = A^\succsim + v$.
+\end{enumerate}
+\end{lemma}
+TODO: point (2) also follows immediately from the observation that $(-)+v$ is an order similarity.
+\begin{proof}
+(1) Take $u\in A^\precsim$ and $w\in B^\precsim$. Take arbitrary $a+b\in A+B$. Then $a\precsim u$ and $b\precsim w$, so $a+b \precsim u+w$ by \ref{additionVectorInequalities}. Since $a+b$ was taken arbitrarily, we have $u+w \in (A+B)^\precsim$. The other inclusion is dual.
+
+(2) First we show that $A^\precsim + \{v\}^\precsim = A^\precsim + v$. Indeed $A^\precsim + \{v\}^\precsim \supseteq A^\precsim + v$ is clear. Conversely, take $u + w \in A^\precsim + \{v\}^\precsim$. Then $u+ w = u + (w-v) + v$. Since $v\precsim w$, we have $0\precsim w-v$ and thus $u + (w-v)\in A^\precsim$ by upwards closure. This shows $A^\precsim + \{v\}^\precsim \subseteq A^\precsim + v$.
+
+From (1), we have $A^\precsim+ \{v\}^\precsim \subseteq (A+ v)^\precsim$. Similarly,
+\[ (A+v)^\precsim - v = (A+v)^\precsim + \{-v\}^\precsim \subseteq (A+v - v)^\precsim = A^\precsim, \]
+so $(A+v)^\precsim \subseteq A^\precsim + v = A^\precsim+ \{v\}^\precsim$.
+\end{proof}
+\begin{corollary} \label{vectorSumOrderHomomorphism}
+Let $V$ be a preordered vector space, $S\subseteq V$ a subset, $v\in V$ and $\alpha\in \R$. Then $\sup(S+v) = \sup(S)+v$ and $\inf(S+v) = \inf(S)+v$.
+\end{corollary}
+
+\begin{lemma} \label{sumUpDownsets}
+Let $V$ be a preordered vector space, $A, B\subseteq V$ subsets and $v\in V$. Then
+\begin{enumerate}
+\item $\upset A + \upset B \subseteq \upset (A + B)$ and $\downset A + \downset B \subseteq \downset(A + B)$;
+\item $\upset (A+v) = \upset A + \upset\{v\} = \upset A + v$ and $\downset (A+v) = \downset A + \downset \{v\} = \downset A + v$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $u\in \upset A$ and $w\in \upset B$. Then there exist $a\in A$ and $b\in B$ such that $a\precsim u$ and $b\precsim v$.
+
+So $a+b \precsim u+w$ by \ref{additionVectorInequalities}. Since $a+b \in A+B$, we have $u+w\in \upset(A+B)$.
+
+The other point is dual.
+
+(2) First we show that $\upset A + \upset\{v\} = \upset A + v$. Indeed $\upset A + \upset \{v\} \supseteq \upset A + v$ is clear. Conversely, take $u + w \in \upset A + \upset\{v\}$. Then $u+ w = u + (w-v) + v$. Since $v\precsim w$, we have $0\precsim w-v$ and thus $u + (w-v)\in \upset A$ by upwards closure. This shows that $\upset A + \upset \{v\} \subseteq \upset A + v$.
+
+From (1), we have $\upset A + \upset\{v\} \subseteq \upset(A+ v)$. Similarly,
+\[ \upset (A+v) - v = \upset (A+v) + \upset\{-v\} \subseteq \upset(A+v - v) = \upset A, \]
+so $\upset (A+v) \subseteq \upset A + v = \upset A + \upset\{v\}$.
+\end{proof}
+
+
+
+\begin{lemma} \label{scalarMultipleUpperLowerBounds}
+Let $V$ be a preordered vector space, $A\subseteq V$ and $\alpha\in \R$. Then
+\begin{enumerate}
+\item if $\alpha > 0$, then $(\alpha A)^\precsim = \alpha A^\precsim$ and $(\alpha A)^\succsim = \alpha A^\succsim$;
+\item if $\alpha < 0$, then $(\alpha A)^\precsim = \alpha A^\succsim$ and $(\alpha A)^\succsim = \alpha A^\precsim$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) For all $u\in V$ and $x\in A$, we have $\alpha x \precsim u$ iff $x\precsim \alpha^{-1}u$. Since this is true for arbitrary $x\in A$, we have $u\in (\alpha A)^\precsim$ iff $\alpha^{-1}u\in A^\precsim$. This is equivalent to $u\in \alpha A^\precsim$. The other point is dual.
+
+(2) For all $u\in V$ and $x\in A$, we have $\alpha x \precsim u$ iff $x\succsim \alpha^{-1}u$ by \ref{orderPreservationReversalScalarMultiplication}. Since this is true for arbitrary $x\in A$, we have $u\in (\alpha A)^\precsim$ iff $\alpha^{-1}u\in A^\succsim$. This is equivalent to $u\in \alpha A^\succsim$. The other point is dual.
+\end{proof}
+\begin{corollary} \label{scalarMultipleOrderHomomorphism}
+Let $V$ be a preordered vector space, $S\subseteq V$ a subset, $v\in V$ and $\alpha\in \R$. Then
+\begin{enumerate}
+\item if $\alpha > 0$, then $\sup(\alpha S) = \alpha \sup(S)$ and $\inf(\alpha S) = \alpha \inf(S)$;
+\item if $\alpha < 0$, then $\sup(\alpha S) = \alpha \inf(S)$ and $\inf(\alpha S) = \alpha \sup(S)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{lemma} \label{scalarMultipleSetsUpperLowerBounds}
+Let $V$ be a preordered vector space, $A\subseteq V^+$, $S\subseteq \R$ and $v\in V^+$. Then
+\begin{enumerate}
+\item if $S \subseteq \R^+$, then $S^\leq \cdot A^\precsim \subseteq (S\cdot A)^\precsim$ and $S^\geq\cdot A^\succsim \subseteq (S\cdot A)^\succsim$;
+\item if $S \subseteq -\R^+$, then $S^\leq \cdot A^\succsim \subseteq (S\cdot A)^\precsim$ and $S^\geq \cdot A^\precsim \subseteq (S\cdot A)^\succsim$.
+\end{enumerate}
+Note that, even for $S\subseteq \R^+$, we do not have $(Sv)^\precsim = S^\leq\cdot \{v\}^\precsim = S^\leq \cdot v$ or similar equations.
+\end{lemma}
+Note that $A$ needs to lie in the positive cone and $v$ needs to be positive.
+\begin{proof}
+(1) Take $\mu \cdot u \in S^\precsim \cdot A^\precsim$. Take arbitrary $\nu\in S$ and $a\in A$. Then $0\leq \nu \leq \mu$ and $0 \precsim a\precsim u$, so $\nu a \precsim \mu u$ by \ref{scalarVectorInequalityMultiplication}. Since $\nu$ and $a$ were taken arbitrarily, we have $\mu u \in (S\cdot A)^\precsim$.
+
+The other point is dual.
+
+(2) We calculate, using point (1) and \ref{scalarMultipleUpperLowerBounds}, setting $\alpha = -1$,
+\begin{align*}
+S^\leq \cdot A^\succsim &= \big((-1)\cdot -S\big)^\leq \cdot A^\succsim \\
+&= -(-S)^\geq \cdot A^\succsim \\
+&\subseteq - \big((-S)\cdot A\big)^\succsim \\
+&= \big((-1)(-S)\cdot A\big)^\precsim = (S\cdot A)^\precsim.
+\end{align*}
+The other point is dual.
+\end{proof}
+\begin{corollary}
+Let $V$ be a preordered vector space, $A\subseteq V^+$ and $\alpha\in \R$. Then
+\begin{enumerate}
+\item if $\alpha > 0$, then $(\alpha A)^\precsim = \{\alpha\}^\leq\cdot A^\precsim = \alpha A^\precsim$ and $(\alpha A)^\succsim = \{\alpha\}^\geq\cdot A^\succsim = \alpha A^\succsim$;
+\item if $\alpha < 0$, then $(\alpha A)^\precsim = \{\alpha\}^\leq\cdot A^\succsim = \alpha A^\succsim$ and $(\alpha A)^\succsim = \{\alpha\}^\geq \cdot A^\precsim = \alpha A^\precsim$.
+\end{enumerate}
+\end{corollary}
+Compare with \ref{scalarMultipleUpperLowerBounds}, which still holds if $A \nsubseteq V^+$.
+\begin{proof}
+(1) By the lemma (and reflexivity), we have $(\alpha A)^\precsim \supseteq \{\alpha\}^\leq\cdot A^\precsim \supseteq \alpha A^\precsim$. The equality of the first and last sets follows from \ref{scalarMultipleUpperLowerBounds}.
+
+The other point is dual.
+
+(2) By the lemma (and reflexivity), we have $(\alpha A)^\precsim \subseteq \{\alpha\}^\leq\cdot A^\succsim \subseteq \alpha A^\succsim$. The equality of the first and last sets follows from \ref{scalarMultipleUpperLowerBounds}.
+
+The other point is dual.
+\end{proof}
+
+\begin{lemma} \label{scalarMultipleUpDownSets}
+Let $V$ be a preordered vector space, $A, B\subseteq V$ subsets, $v\in V$ and $\alpha\in \R$. Then
+\begin{enumerate}
+\item if $\alpha > 0$, then $\upset (\alpha A) = \alpha \upset A$ and $\downset(\alpha A) = \alpha \downset A$;
+\item if $\alpha < 0$, then $\upset(\alpha A) = \alpha \downset A$ and $\downset(\alpha A) = \alpha \upset A$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) First take $u\in \upset (\alpha A)$. Then there exists $a\in A$ such that $\alpha a \precsim u$. Then $a\precsim \alpha^{-1}u$, so $u = \alpha (\alpha^{-1}u) \in \alpha \upset A$.
+
+Conversely, take $u\in \alpha \upset A$. Then there exists $a\in A$ and $u'\in V$ such that $u = \alpha u'$ and $a\precsim u'$. Now $\alpha a \precsim \alpha u' = u$, so $u \in \upset (\alpha A)$.
+
+The other point is dual.
+
+(2) First take $u\in \upset (\alpha A)$. Then there exists $a\in A$ such that $\alpha a \precsim u$. Then $a\succsim \alpha^{-1}u$, so $u = \alpha (\alpha^{-1}u) \in \alpha \downset A$.
+
+Conversely, take $u\in \alpha \downset A$. Then there exists $a\in A$ and $u'\in V$ such that $u = \alpha u'$ and $a\succsim u'$. Now $\alpha a \precsim \alpha u' = u$, so $u \in \upset (\alpha A)$.
+
+The other point is dual.
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a preordered vector space, $A\subseteq V^+$, $S\subseteq \R$ and $v\in V^+$. Then
+\begin{enumerate}
+\item if $S \subseteq \R^+$, then $\upset S \cdot \upset A \subseteq \upset (S\cdot A)$ and $\downset S\cdot \downset A \subseteq \downset(S\cdot A)$;
+\item if $S \subseteq -\R^+$, then $\upset S \cdot \downset A \subseteq \upset(S\cdot A)$ and $\downset S \cdot \upset A \subseteq \downset(S\cdot A)^\succsim$.
+\end{enumerate}
+Note that, even for $S\subseteq \R^+$, we do not have $\upset (Sv) = \upset S\cdot \upset \{v\} = S^\leq \cdot v$ or similar equations.
+\end{lemma}
+Note that $A$ needs to lie in the positive cone and $v$ needs to be positive.
+\begin{proof}
+(1) Take $\mu \cdot u \in \upset S \cdot \upset A$. Then there exist $\nu\in S$ and $a\in A$ such that $\nu \leq \mu$ and $a \precsim u$. Since $0\precsim a$ and $0\leq \nu$, we have $\nu a \precsim \mu u$  by \ref{scalarVectorInequalityMultiplication}.
+Thus $\mu u \in \upset (S\cdot A)$.
+
+The other point is dual.
+
+(2) We calculate, using point (1) and \ref{scalarMultipleUpDownSets}, setting $\alpha = -1$,
+\begin{align*}
+\upset S \cdot \downset A &= \upset\big((-1)\cdot -S\big) \cdot \downset A \\
+&= -\downset(-S) \cdot \downset A \\
+&\subseteq - \downset\big((-S)\cdot A\big) \\
+&= \upset\big((-1)(-S)\cdot A\big) = \upset (S\cdot A).
+\end{align*}
+The other point is dual.
+\end{proof}
+\begin{corollary} \label{scalarMultipleUpDownSetPositiveSet}
+Let $V$ be a preordered vector space, $A\subseteq V^+$ and $\alpha\in \R$. Then
+\begin{enumerate}
+\item if $\alpha > 0$, then $\upset (\alpha A) = \upset\{\alpha\}\cdot \upset A = \alpha \upset A$ and $\downset(\alpha A) = \downset\{\alpha\}\cdot \downset A = \alpha \downset A$;
+\item if $\alpha < 0$, then $\upset (\alpha A) = \upset\{\alpha\}\cdot \downset A = \alpha \downset A$ and $\downset(\alpha A) = \downset\{\alpha\} \cdot \upset A = \alpha \upset A$.
+\end{enumerate}
+\end{corollary}
+Compare with \ref{scalarMultipleUpperLowerBounds}, which still holds if $A \nsubseteq V^+$.
+\begin{proof}
+(1) By the lemma (and reflexivity), we have $\upset(\alpha A) \supseteq \upset\{\alpha\}\cdot \upset A \supseteq \alpha \upset A$. The equality of the first and last sets follows from \ref{scalarMultipleUpperLowerBounds}.
+
+The other point is dual.
+
+(2) By the lemma (and reflexivity), we have $\upset(\alpha A) \subseteq \upset\{\alpha\}\cdot \downset A \subseteq \alpha \downset A$. The equality of the first and last sets follows from \ref{scalarMultipleUpperLowerBounds}.
+
+The other point is dual.
+\end{proof}
+
+\section{Riesz decomposition property}
+\begin{definition}
+Let $\sSet{V, \precsim}$ be an ordered vector space. We say that $V$ has the \udef{Riesz decomposition property} if for all $u_1,v_1,u_2,v_2\in V$ such that $u_1\precsim v_1$ and $u_2\precsim v_2$, we have $\interval{u_1,v_1} + \interval{u_2,v_2} = \interval{u_1+u_2,v_1+v_2}$.
+\end{definition}
+
+For unbounded intervals, the analogous decomposition property is $\upset\{u\} + \upset\{v\} = \upset\{u+v\}$ and $\downset\{u\} + \downset\{v\} = \downset\{u+v\}$. This is always true, by \ref{sumUpDownsets}.
+
+\begin{lemma} \label{RieszDecompositionLemma}
+Let $\sSet{V, \precsim}$ be an ordered vector space. Then the following are equivalent:
+\begin{enumerate}
+\item $V$ has the Riesz decomposition property;
+\item $\interval{u_1,v_1} + \interval{u_2,v_2} \supseteq \interval{u_1+u_2,v_1+v_2}$ for all $u_1,v_1,u_2,v_2\in V$ such that $u_1\precsim v_1$ and $u_2\precsim v_2$;
+\item $\interval{0,v_1} + \interval{0,v_2} \supseteq \interval{0,v_1+v_2}$ for all $v_1,v_2\in V^+$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The direction $(1) \Rightarrow (3)$ is obvious.
+
+$(3) \Rightarrow (2)$ Suppose $z\in \interval{u_1+u_2,v_1+v_2}$. Then $u_1+u_2 \precsim z$ and $z\precsim v_1+v_2$, so $0\precsim z - (u_1+u_2) \precsim (v_1+v_2) - (u_1+u_2)$. By assumption, this means that $z - (u_1+u_2)\in \interval{0, v_1 - u_1} + \interval{v_2 - u_2}$, so
+\[ z \in u_1 + \interval{0, v_1 - u_1} + u_2 + \interval{v_2 - u_2} = \interval{u_1,v_1} + \interval{u_2,v_2}. \]
+
+$(2) \Rightarrow (1)$ It is enough to prove that the opposite inclusion always holds. Indeed, take $z_1 + z_2 \in \interval{u_1,v_1} + \interval{u_2,v_2}$, so $u_1 \precsim z_1 \precsim v_1$ and $u_2 \precsim z_2 \precsim v_2$. Then $u_1 + u_2 \precsim z_1 + z_2 \precsim v_1 + v_2$ by \ref{additionVectorInequalities}. This implies $z_1+z_2 \in \interval{u_1+u_2,v_1+v_2}$.
+\end{proof}
+
 \section{Riesz spaces}
 
 We take the convention that lattice operations bind tighter than addition, so $u\vee v + w = (u\vee v) + w$.
@@ -2475,7 +2658,7 @@ Let $V$ be a Riesz space, $u,v,w\in V$ and $\alpha\in \R$, then
 \item $u+(v \wedge w) = (u+v)\wedge (u+w)$ and $u+(v \vee w) = (u+v)\vee (u+w)$.
 \end{enumerate}
 \end{lemma}
-Cfr. also \ref{vectorSpaceOperationsOrderHomomorphisms}.
+Cfr. also \ref{vectorSumOrderHomomorphism} and \ref{scalarMultipleOrderHomomorphism}.
 \begin{proof}
 We apply \ref{imagePolars} to
 
@@ -2497,13 +2680,22 @@ Let space $\R^2$ with lexicographic ordering $\leq_l$ is a Riesz space. We have
 \end{cases} \]
 \end{example}
 
-\begin{theorem}[Riesz decomposition] \label{RieszDecomposition}
+\begin{theorem}
 Let $V$ be a Riesz space and $v,w_1,w_2\in V^+$ such that $v \leq w_1 + w_2$. Then $\exists v_1, v_2\in V^+$ such that $v = v_1 + v_2$ and $v_1 \leq w_2, v_2 \leq w_2$.
 \end{theorem}
 \begin{proof}
 Set $v_1 = v\wedge w_1$ and $v_2 = v - v_1$. These satisfy all the properties. We verify the inequality $v_2 \leq w_2$: from $w_2 \geq v - w_1$ we get
 \[ w_2 = 0\vee w_2 \geq 0\vee (v - w_1) = v + (-v)\vee(-w_1) = v - v\wedge w_1 = v-v_1 = v_2. \]
 \end{proof}
+
+
+\begin{theorem}[Riesz decomposition] \label{RieszDecomposition}
+Every Riesz space has the Riesz decomposition property.
+\end{theorem}
+\begin{proof}
+We use \ref{RieszDecompositionLemma}.
+\end{proof}
+
 
 \begin{proposition} \label{sumAsMeetJoin}
 Let $V$ be a Riesz space and $v,w\in V$, then
@@ -2539,21 +2731,32 @@ This shows that $\big(\bigvee S\big)\wedge v$ is the least upper bound.
 Riesz spaces are distributive lattices.
 \end{corollary}
 
-\begin{proposition} \label{additionLatticeOperationsInequalities}
+\begin{lemma} \label{additionLatticeOperationsInequalities}
 Let $V$ be a Riesz space, $u,v,w\in V$ and $x,y,z\in V^+$. Then
 \begin{enumerate}
 \item $(u+v)\vee (2w) \leq u\vee w + v\vee w$;
+\item $u\wedge w + v\wedge w \leq (u+v)\wedge (2w)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) From $u\leq u\vee w$ and $v\leq v\vee w$, we get $u+v \leq u\vee w + v\vee w$. Similarly from $w\leq u\vee w$ and $w\leq v\vee w$, we get $2w \leq u\vee w + v\vee w$. Together this gives (1).
+
+(2) Dual.
+\end{proof}
+
+
+\begin{lemma} \label{additionLatticeOperationsPositiveElementsInequalities}
+Let $V$ be a Riesz space, $u,v,w\in V$ and $x,y,z\in V^+$. Then
+\begin{enumerate}
 \item $(u+v)\vee z \leq u\vee z + v\vee z$;
 \item $(x+y)\wedge z \leq x\wedge z + y\wedge z$;
 \item if $x\wedge y = 0$, then $(x+y)\wedge z = x\wedge z + y\wedge z$.
 \end{enumerate}
-\end{proposition}
+\end{lemma}
 \begin{proof}
-(1) From $u\leq u\vee w$ and $v\leq v\vee w$, we get $u+v \leq u\vee w + v\vee w$. Similarly from $w\leq u\vee w$ and $w\leq v\vee w$, we get $2w \leq u\vee w + v\vee w$. Together this gives (1).
+(1) We have $2z \geq z$ by \ref{scalarMultiplicationInequalities}, so we can apply \ref{additionLatticeOperationsInequalities}.
 
-(2) We have $2z \geq z$ by \ref{scalarMultiplicationInequalities}, so we can apply (1).
-
-(3) We have $z \leq z+y$ by \ref{positiveVectorAddition}. By \ref{lemmaRieszSpaces},
+(2) We have $z \leq z+y$ by \ref{positiveVectorAddition}. By \ref{lemmaRieszSpaces},
 \[ (x+y)\wedge z \leq (x+y)\wedge (z+y) = y + x\wedge z \]
 and thus $(x+y)\wedge z - x\wedge z \leq y$. 
 
@@ -2561,7 +2764,7 @@ Now $x\wedge z \geq 0$ from $x\geq 0$ and $z\geq 0$, so $(x+y)\wedge z - x\wedge
 
 Putting the two inequalities together gives $(x+y)\wedge z - x\wedge z \leq y\wedge z$. This implies the result.
 
-(4) By \ref{sumAsMeetJoin}, we have $x+y = x\vee y$. Then $(x\wedge z)\wedge (y\wedge z) = x\wedge y \wedge z \leq 0$, but also $x\wedge y \wedge z \geq 0$, so it equals $0$. Then $(x\wedge z) + (y\wedge z) = (x\wedge z) \vee (y\wedge z)$, similarly by \ref{sumAsMeetJoin}. We can then calculate
+(3) By \ref{sumAsMeetJoin}, we have $x+y = x\vee y$. Then $(x\wedge z)\wedge (y\wedge z) = x\wedge y \wedge z \leq 0$, but also $x\wedge y \wedge z \geq 0$, so it equals $0$. Then $(x\wedge z) + (y\wedge z) = (x\wedge z) \vee (y\wedge z)$, similarly by \ref{sumAsMeetJoin}. We can then calculate
 \[ (x+y)\wedge z = (x\vee y)\wedge z = (x\wedge z)\vee (y\wedge z) = (x\wedge z) + (y\wedge z), \]
 where we have used distributivity \ref{distributivityRieszSpaces}.
 \end{proof}
@@ -3037,7 +3240,7 @@ The direction $\Rightarrow$ is immediate.
 
 For the converse, take $D\subseteq E$ such that the supremum exists in $V$. Call it $v$. We need to show $v\in E$.
 
-Pick $w\in D$. And consider the set $D' \defeq \setbuilder{w\wedge u - w}{u\in D}$. Then $D'\subseteq E^+$ and $\bigvee D' = w\wedge v - w$ by \ref{vectorSpaceOperationsOrderHomomorphisms} and $\bigvee D'\in E$. Since $w\in D$, we have $w\leq v$ and thus $w\wedge v = v$.
+Pick $w\in D$. And consider the set $D' \defeq \setbuilder{w\wedge u - w}{u\in D}$. Then $D'\subseteq E^+$ and $\bigvee D' = w\wedge v - w$ by \ref{vectorSumOrderHomomorphism} and $\bigvee D'\in E$. Since $w\in D$, we have $w\leq v$ and thus $w\wedge v = v$.
 
 Since $v-w,w\in E$, we have $v\in E$.
 \end{proof}
@@ -3051,9 +3254,9 @@ It is enough to prove that $B$ is a band.
 
 First we show that $B$ is solid, for which we use \ref{RieszSolidEquivalents}. By construction $w\in B \iff |w| \in B$, so it is enough to prove that $0\leq w \leq v$ for some $v\in B$ implies $w\in B$. We can write $v = \bigvee D$ for some $D\subseteq E^+$. Then there exists $d\in D$ such that $w \leq d$, which implies that $w\in E$ and thus in $B$.
 
-Now we show that $B$ is a linear subspace. Take $v,w\in B$. Then $|v| = \bigvee D_1$ and $|w| = \bigvee D_2$ for some $D_1, D_2\subseteq E^+$. By \ref{vectorSpaceOperationsOrderHomomorphisms}, we have $|v|+|w| = \bigvee (D_1+D_2)$, so $|v|+|w|\in B$. Since $|v+w|\leq |v|+|w|$ and $B$ is solid, we have $v+w\in B$.
+Now we show that $B$ is a linear subspace. Take $v,w\in B$. Then $|v| = \bigvee D_1$ and $|w| = \bigvee D_2$ for some $D_1, D_2\subseteq E^+$. By \ref{vectorSumOrderHomomorphism}, we have $|v|+|w| = \bigvee (D_1+D_2)$, so $|v|+|w|\in B$. Since $|v+w|\leq |v|+|w|$ and $B$ is solid, we have $v+w\in B$.
 
-Take $\alpha\in \R$ and $v\in B$. Then $|v| = \bigvee D$ for some $D\subseteq E^+$. We have, by \ref{vectorSpaceOperationsOrderHomomorphisms},
+Take $\alpha\in \R$ and $v\in B$. Then $|v| = \bigvee D$ for some $D\subseteq E^+$. We have, by \ref{scalarMultipleOrderHomomorphism},
 \[ |\alpha v| = |\alpha|\,|v| = |\alpha|\bigvee D = \bigvee |\alpha|D. \]
 Since $|\alpha|D\subseteq E^+$, we have $\alpha v\in B$.
 
@@ -3166,7 +3369,7 @@ Let $V$ be a Riesz space, $u,v,w\in V$ and $\alpha \in \R$. Then
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) We have, by the triangle inequality \ref{triangleInequalityRieszSpaces} and \ref{additionLatticeOperationsInequalities},
+(1) We have, by the triangle inequality \ref{triangleInequalityRieszSpaces} and \ref{additionLatticeOperationsPositiveElementsInequalities},
 \[ 0\leq |v+w|\wedge |u| \leq \big(|v| + |w|\big)\wedge |u| \leq |v|\wedge |u| + |w|\wedge |u| = 0.  \]
 Thus $|v+w|\wedge |u| = 0$.
 
@@ -3178,7 +3381,7 @@ If $|\alpha| > 1$, then
 (3) We have
 \[ 0\leq |u|\wedge |w| \leq |u|\wedge |v| = 0. \]
 
-(4) For all $x\in S$, we have $x\wedge |u| = |x|\wedge |u| = 0$, so $S\wedge |u| = \{0\}$. Thus, by \ref{vectorSpaceOperationsOrderHomomorphisms}, we have $\big(\bigvee S\big) \wedge |u| = \bigvee S\wedge |u| = \bigvee\{0\} = 0$. 
+(4) For all $x\in S$, we have $x\wedge |u| = |x|\wedge |u| = 0$, so $S\wedge |u| = \{0\}$. Thus, since Riesz spaces are infinitely distributive, by \ref{distributivityRieszSpaces}, we have $\big(\bigvee S\big) \wedge |u| = \bigvee S\wedge |u| = \bigvee\{0\} = 0$. 
 \end{proof}
 
 \begin{proposition} \label{disjointPolarBand}
@@ -3248,7 +3451,7 @@ Since $A$ is a Riesz ideal by \ref{sumRieszIdeals} and \ref{disjointPolarBand}, 
 
 Take arbitrary $u\in D$. Then we can write $u = u_1 + u_2$, where $u_1\in R_v$ and $u_2\in R_v^{\perp_r}$. By \ref{generatedRieszIdeals}, we have $u_1 \leq |u_1| \leq nv$ for some $n\in \N$. Thus $u_1 + v \leq (n+1)v \leq w$ and $u_1+v\in R_v$. Since $u_2\in R_v^{\perp_r}$, we have $(u_1+v)\perp_r u_2$, so
 \[ u+v = (u_1+v)+u_2 = (u_1+v)\vee u_2 \leq (u_1+v)\vee u \leq w, \]
-by \ref{RieszDisjointEquivalents} and the fact that $u\leq w$. Since the choice of $u\in D$ was arbitrary, we have $\bigvee (D+v) \leq w$. Thus, by \ref{vectorSpaceOperationsOrderHomomorphisms},
+by \ref{RieszDisjointEquivalents} and the fact that $u\leq w$. Since the choice of $u\in D$ was arbitrary, we have $\bigvee (D+v) \leq w$. Thus, by \ref{vectorSumOrderHomomorphism},
 \[ v+w = v+\bigvee D = \bigvee(v+D) \leq w, \]
 so $v\leq 0$. Since, by assumption, $v\geq 0$, we have $v = 0$.
 \end{proof}
@@ -3373,7 +3576,7 @@ Let $V$ be a Riesz space. Then the following implications hold:
 \begin{proof}
 (Principal projection) $\Rightarrow$ (Archimedean) Suppose $u,v\in V^+$ are such that $0\leq nv \leq u$ for all $n\in \N$. Thus $u\wedge (nv) = nv$. By \ref{principalProjectionBandCriterion}, the principal projection property implies that $u_1 = \bigvee_{n\in \N} u\wedge (nv) = \bigvee_{n\in \N}nv$ exists.
 
-By \ref{vectorSpaceOperationsOrderHomomorphisms}, we have $v+ u_1 = v+\bigvee_{n\in \N}nv = \bigvee_{n\in \N}(1+n)v = u_1$, so $v = 0$.
+By \ref{vectorSumOrderHomomorphism}, we have $v+ u_1 = v+\bigvee_{n\in \N}nv = \bigvee_{n\in \N}(1+n)v = u_1$, so $v = 0$.
 
 (Dedekind $\sigma$-completeness) $\Rightarrow$ (Principal projection property) Take $v, u\in V^+$. By \ref{principalProjectionBandCriterion}, we need to show that $\bigvee_{n\in\N}u\wedge (nv)$ exists. Clearly the set $\setbuilder{u\wedge (nv)}{n\in \N}$ has an upper bound $u$ and is countable, thus it has a supremum by Dedekind $\sigma$-completeness.
 
@@ -3382,14 +3585,46 @@ By \ref{vectorSpaceOperationsOrderHomomorphisms}, we have $v+ u_1 = v+\bigvee_{n
 Thus $C^{\perp_r} = \{0\}$ and $C^{\perp_r\perp_r} = V$. Now we have already proved that Dedekind completeness implies that $V$ is Archimedean, so \ref{ArchimedeanBandEquivalents} gives that $C= C^{\perp_r\perp_r} = V$ and $B$ is a projection band.
 \end{proof}
 
-\section{Order convergence}
+\section{Order and Riesz space convergence}
 
 \begin{proposition}
-Let $V$ be a Riesz space. Then the order convergence on $V$ makes it a vector space convergence.
+Let $\sSet{V, \leq}$ be a partially ordered vector space equipped with the order convergence. Then
+\begin{enumerate}
+\item vector addition is continuous;
+\item the restriction $\cdot: \R^+ \times V^+ \to V^+$ of scalar multiplication to positive scalars and vectors is continuous.
+\end{enumerate}
 \end{proposition}
+\begin{proof}
+(1) Suppose $F\overset{\mathfrak{o}}{\longrightarrow} x$ and $G\overset{\mathfrak{o}}{\longrightarrow} y$ in $V$. Then we calculate using \ref{sumUpDownsets}, \ref{orderConvergenceEquivalents} and \ref{sumUpperLowerBounds},
+\begin{align*}
+\upset\{x + y\} &= \upset\{x\} + \upset\{y\} \\
+&\subseteq \Big(\bigcup_{A\in F} A^\leq\Big) + \Big(\bigcup_{B\in G} B^\leq\Big) \\
+&= \bigcup_{\substack{A\in F \\ B\in G}} A^\leq + B^\leq \\
+&\subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A + B\big)^\leq.
+\end{align*}
+Dually, we have $\downset\{x + y\} \subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A + B\big)^\geq$.
+Then, by \ref{orderConvergenceEquivalents}, we have that $F + G \overset{\mathfrak{o}}{\longrightarrow} x + y$.
+
+(2) Suppose $F\overset{\R}{\longrightarrow} \lambda$ in $\R^+$ and $G\overset{\mathfrak{o}}{\longrightarrow} x$ in $V^+$. We note that the convergence on $\R^+$ is the order convergence, see \ref{realConvergenceOrderConvergence}. Then we calculate using \ref{scalarMultipleUpDownSetPositiveSet}, \ref{orderConvergenceEquivalents} and \ref{scalarMultipleSetsUpperLowerBounds},
+\begin{align*}
+\upset\{\lambda x\} &= \lambda\upset\{x\} \\
+&= \upset\{\lambda\} \cdot \upset\{x\} \\
+&\subseteq \Big(\bigcup_{A\in F} A^\leq\Big) \cdot \Big(\bigcup_{B\in G} B^\leq\Big) \\
+&= \bigcup_{\substack{A\in F \\ B\in G}} A^\leq \cdot B^\leq \\
+&\subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A \cdot B\big)^\leq.
+\end{align*}
+Dually, we have $\downset\{\lambda x\} \subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A \cdot B\big)^\geq$.
+Then, by \ref{orderConvergenceEquivalents}, we have that $F \cdot G \overset{\mathfrak{o}}{\longrightarrow} \lambda x$.
+\end{proof}
+
+\subsection{Riesz space convergence}
+\begin{definition}
+Let $V$ be a Riesz space, $v\in V$ and $F\in\powerfilters(V)$. Then $F\to v$ in the \udef{Riesz space convergence} if $|F-v|  \overset{\mathfrak{o}}{\longrightarrow} 0$.
+\end{definition}
+Here $|F-v|$ is the image filter of $F-v$ under the absolute value function $|-|$.
 
 \begin{lemma}
-Let $V$ be a Riesz space, $v\in V$ and $F\in\powerfilters(V)$. Then $F\overset{\mathfrak{o}}{\longrightarrow} v$ \textup{if and only if} $|F - v| \overset{\mathfrak{o}}{\longrightarrow} 0$.
+The Riesz space convergence is a vector space convergence.
 \end{lemma}
 \begin{proof}
 TODO
@@ -3418,6 +3653,7 @@ TODO
 \end{proof}
 
 \subsection{Riesz order uniform convergence}
+TODO: a filter converges $v$-uniformly to the origin iff greater than $\neighbourhood_\R(0)\cdot \cball(0,v)$.
 
 \begin{proposition}
 Let $V$ be a Riesz space. Then $V$ is Archimedean \textup{if and only if} for all $v\in V^+$, the $v$-uniform convergence is Hausdorff.

@@ -2640,6 +2640,8 @@ using \ref{polarOfUnion}.
 Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is the initial convergence w.r.t. $m: X \to \DM(X)$, the embedding of $X$ into the Dedekind-MacNeille completion.
 \end{definition}
 
+\url{https://arxiv.org/pdf/2012.13752.pdf}
+
 \begin{lemma}
 Let $\sSet{X,\leq}$ be a poset. The order convergence on $X$ is compatible with the weak order.
 \end{lemma}
@@ -2659,13 +2661,13 @@ the following are equivalent:
 \item $\{x\} = \Big(\bigcap_{A\in F}A^{\leq \geq}\Big)^\leq \cap \Big(\bigcap_{A\in F}A^{\geq\leq}\Big)^\geq$;
 \item $x\in \Big(\bigcap_{A\in F}A^{\leq \geq}\Big)^\leq \cap \Big(\bigcap_{A\in F}A^{\geq\leq}\Big)^\geq$.
 \end{enumerate}
-If $X$ is a lattice, then these are equivalent to
+If $X$ is a lattice, then these are equivalent to (WRONG!)
 \begin{enumerate} \setcounter{enumi}{7}
-\item $x\in \bigcap_{A\in F}A^{\leq \geq} \cap \bigcap_{A\in F}A^{\geq\leq}$;
+\item $x\in \bigcap_{A\in F}A^{\leq \geq} \cap \bigcap_{A\in F}A^{\geq\leq}$; (WRONG: this holds already if $x\in \ker(F)$, but in general a filter cannot order converge to all the elements in its kernel)
 \item $\{x\} = \bigcap_{A\in F}A^{\leq \geq} \cap \bigcap_{A\in F}A^{\geq\leq}$.
 \end{enumerate}
 \end{proposition}
-TODO: reorganise proof!
+TODO: reorganise proof! Fix parts (8), (9)!
 \begin{proof}
 The equivalence $(1) \Leftrightarrow (2)$ is a restatement of the definition.
 
@@ -2706,8 +2708,34 @@ The other assertion is dual.
 \end{proof}
 
 \begin{example}
-TODO: example to show that (7), (8) are not equivalent to the rest in general.
+TODO: example to show that (8), (9) are not equivalent to the rest in general.
 \end{example}
+
+\begin{proposition}
+Let $L$ be a lattice. The order convergence on $L$ makes the lattice operations $\vee: L\times L\to L$ and $\wedge: L\times L\to L$ continuous.
+\end{proposition}
+\begin{proof}
+By \ref{orderPolarOfLatticeOperations}, we have $A^\leq \vee B^\leq \subseteq \big(A\vee B\big)^\leq$ and $A^\geq \vee B^\geq \subseteq \big(A\vee B\big)^\geq$ for all $A,B\subseteq L$. Since $\big(A\vee B\big)^\geq$ is downwards closed, we have $\downset\big(A^\geq \vee B^\geq\big) \subseteq \big(A\vee B\big)^\geq$.
+
+Suppose $F\overset{\mathfrak{o}}{\longrightarrow} x$ and $G\overset{\mathfrak{o}}{\longrightarrow} y$. Then we calculate using \ref{orderConvergenceEquivalents},
+\begin{align*}
+\upset\{x\vee y\} &\subseteq \upset\{x\} \vee \upset\{y\} \\
+&\subseteq \Big(\bigcup_{A\in F} A^\leq\Big)\vee \Big(\bigcup_{B\in G} B^\leq\Big) \\
+&= \bigcup_{\substack{A\in F \\ B\in G}} A^\leq \vee B^\leq \\
+&\subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A \vee B\big)^\leq.
+\end{align*}
+Also
+\begin{align*}
+\downset\{x\vee y\} &\subseteq \downset\big(\downset\{x\} \vee \downset\{y\}\big) \\
+&\subseteq \downset\bigg(\Big(\bigcup_{A\in F} A^\geq\Big)\vee \Big(\bigcup_{B\in G} B^\geq\Big)\bigg) \\
+&= \downset\bigcup_{\substack{A\in F \\ B\in G}} A^\geq \vee B^\geq \\
+&= \bigcup_{\substack{A\in F \\ B\in G}} \downset\big(A^\geq \vee B^\geq\big) \\
+&\subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A \vee B\big)^\geq.
+\end{align*}
+Then, by \ref{orderConvergenceEquivalents}, we have that $F\vee G \overset{\mathfrak{o}}{\longrightarrow} x\vee y$.
+
+Since orderconvergence is self-dual, we have $F\wedge G \overset{\mathfrak{o}}{\longrightarrow} x\wedge y$ by duality.
+\end{proof}
 
 \begin{proposition}
 Let $\sSet{X,\leq}$ be a poset. Then the order convergence on $X$ makes it a Kent space.
@@ -2742,6 +2770,7 @@ Let $\sSet{X,\leq}$ be a poset and $F\subseteq \powerfilters(X)$ a filter. Then 
 \end{itemize}
 If $X$ is a lattice, then $M$ may be taken to be upwards directed and $N$ may be taken to be downwards directed.
 \end{proposition}
+In particular, if $F$ is the tails filter of a net $\seq{x_i}$, then $N\subseteq \upset\im(\seq{x_i})$ and $M\subseteq \downset\im(\seq{x_i})$.
 \begin{proof}
 First assume $F\overset{\mathfrak{o}}{\longrightarrow} x$. Then set $M \defeq \bigcup_{A\in F}A^\geq$ and $N \defeq \bigcup_{A\in F}A^\leq$. Then, by \ref{orderConvergenceEquivalents} and \ref{polarOfUnion},
 \[ M^\leq = \bigcap_{A\in F}A^{\geq\leq} = \upset\{x\}, \]
@@ -2763,6 +2792,30 @@ Now assume the second part. Then we have
 By \ref{limsupLiminfInequality}, we also have $\bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf\big(A\big) \subseteq \bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A)$, so the inclusions are in fact equalities. We have $F\overset{\mathfrak{o}}{\longrightarrow} x$ by \ref{orderConvergenceEquivalents}.
 
 Finally the claim about the directedness of $M$ and $N$ follows from \ref{latticeIntervalIntersection}.
+\end{proof}
+
+\begin{lemma}
+Let $\sSet{X,\leq}$ be a poset, $a,x\in X$ and $\seq{x_i}_{i\in I}$ a net in $X$ that order converges to $x$. If $\upset\{a\}$ is $\seq{x_i}$-frequent, then $a\leq x$.
+\end{lemma}
+\begin{proof}
+Consider the sets $M,N$ from \ref{orderConvergenceIntervalBase}. Take arbitrary $b\in N$. Then there exists $a\in M$ such that $\interval{a,b}$ is $\seq{x_i}$-eventual (i.e.\ an element of the tails filter). Then $\upset\{a\}$ meshes with $\interval{a,b}$, so there exists $c\in \upset\{a\}\cap \interval{a,b}$. This implies $a\leq c\leq b$ so $b\in \upset\{a\}$. Thus we have $N\subseteq \upset\{a\}$. Taking infima gives $x = \bigwedge N \geq a$.
+\end{proof}
+
+\begin{lemma} \label{orderLimitMeetJoin}
+Let $L$ be a lattice, $x\in X$ and $\seq{x_i}_{i\in I}$ a net in $L$ that order converges to $x$. Then
+\begin{enumerate}
+\item $x = \bigwedge_{i\in I}x_i \vee x$;
+\item $x = \bigvee_{i\in I}x_i \wedge x$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By construction $x$ is a lower bound of $x_i \vee x$. By \ref{orderConvergenceIntervalBase}, there exists a set $N\subseteq L$ such that $x = \bigwedge N$.
+
+We have $N\subseteq \upset\setbuilder{x_i \vee x}{i\in I}$. Indeed, take $b\in N$. Then clearly $x\leq b$ since it is a lower bound of $N$. We also have that $x_i \leq b$ for some $i\in I$. Thus $x_i\vee x \leq b$ by \ref{orderLatticeCorollary}.
+
+We conclude that any lower bound of $\upset\setbuilder{x_i \vee x}{i\in I}$ is a lower bound of $N$ and thus less than $x$.
+
+(2) Dual.
 \end{proof}
 
 \subsection{Squeeze convergence}
@@ -2787,11 +2840,24 @@ We use \ref{orderConvergenceIntervalBase}. Set $M = \setbuilder{x_i}{i\in I}$ an
 \[ x_i \;\leq\; x_k \;\leq\; x_{k'} \;\leq\; y_{k'} \;\leq\; z_{k'} \;\leq\; z_k \;\leq\; z_j, \]
 so $\setbuilder{y_{k'}}{k'\geq k} \subseteq \interval{x_i, z_j}$ and thus $\interval{x_i, z_j}\in\TailsFilter\seq{y_i}_{i\in I}$.
 \end{proof}
+\begin{corollary}
+Let $\sSet{X,\leq}$ be a poset, $x\in X$ and $\seq{x_i}_{i\in I}$ a net in $X$.
+\begin{enumerate}
+\item If $\seq{x_i}$ is monotonically increasing with $\bigvee_{i\in I}x_i = x$, then $x_i \overset{\mathfrak{o}}{\longrightarrow} x$.
+\item If $\seq{x_i}$ is monotonically decreasing with $\bigwedge_{i\in I}x_i = x$, then $x_i \overset{\mathfrak{o}}{\longrightarrow} x$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+We can apply the squeeze theorem by bounding the net on the other side by the constant net $\constant{x}$.
+\end{proof}
+TODO: converse of \ref{squeezeTheorem} for sequences in Riesz space??
+
+Even though to converse of the squeeze theorem fails (even for sequences in lattices), we have \ref{orderLimitMeetJoin}.
 
 \begin{example}
-The converse of \ref{squeezeTheorem} does not always hold.
+The converse of \ref{squeezeTheorem} does not always hold, even for sequences and even in a lattice.
 
-Let $X$ be an uncountable set and let $Y = \setbuilder{A\subseteq X}{\text{$A$ is finite of $X\setminus A$ is finite}}$ be ordered by inclusion. Let $\seq{y_n}_{n\in\N}$ be a sequence of distinct singletons.
+Let $X$ be an uncountable set and let $Y = \setbuilder{A\subseteq X}{\text{$A$ is finite or $X\setminus A$ is finite}}$ be ordered by inclusion. Let $\seq{y_n}_{n\in\N}$ be a sequence of distinct singletons.
 
 Then $y_n \overset{\mathfrak{o}}{\longrightarrow} \emptyset$ by \ref{orderConvergenceIntervalBase}, since the meet of the cofinite sets is the empty set and every cofinite set contains a tail of $\seq{y_n}$.
 
@@ -2808,15 +2874,6 @@ Consider $I = \{0,1\}\times\N$ with lexicographical ordering. Consider the net $
 \end{cases} \]
 Clearly $y_i \to 0$, but there exists no monotonically increasing net less than $y_i$ for all $i\in I$.
 \end{example}
-
-
-
-\begin{definition}
-Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is defined by
-\[ x\in \lim_\mathfrak{o}F \;\defequiv\;  \bigcap_{A\in F} A^{ul} \cap A^{lu}.
-\]
-for all filters $F\in \powerfilters(X)$.
-\end{definition}
 
 \subsubsection{Topologicity of order convergence}
 See ``Birkhoff's order-convergence in partially ordered sets'' and ``On Order-Convergence'' by Wolk.

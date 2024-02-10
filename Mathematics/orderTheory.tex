@@ -1658,10 +1658,10 @@ a = a\wedge b \\ c = c\wedge d
 b = a\vee b \\ d = c\vee d.
 \end{cases}\]
 We calculate
-\[ (a\vee c)\wedge (b\vee d) = (a\vee c)\wedge (a\vee b\vee c\vee d) = (a\vee c)\wedge ((a\vee c)\vee (b\vee d)) = a\vee c, \]
+\[ (a\vee c)\wedge (b\vee d) = (a\vee c)\wedge (a\vee b\vee c\vee d) = (a\vee c)\wedge \big((a\vee c)\vee (b\vee d)\big) = a\vee c, \]
 so $a\vee c\leq b\vee d$.
 Similarly
-\[ (a\wedge c)\vee (b\wedge d) = (a\wedge b\wedge c\wedge d)\vee (b\wedge d) = ((a\wedge c)\wedge (b\wedge d))\vee (b\wedge d) = b\wedge d, \]
+\[ (a\wedge c)\vee (b\wedge d) = (a\wedge b\wedge c\wedge d)\vee (b\wedge d) = \big((a\wedge c)\wedge (b\wedge d)\big)\vee (b\wedge d) = b\wedge d, \]
 so $a\wedge c \leq b\wedge d$.
 \end{proof}
 \begin{corollary} \label{orderLatticeCorollary}
@@ -1680,6 +1680,25 @@ First consider $A^\leq$ and take $x,y\in A^\leq$. Then $x\vee y \in A^\leq$, sin
 
 The argument for $A^\geq$ is dual.
 \end{proof}
+\begin{corollary} \label{orderPolarOfLatticeOperations}
+Let $L$ be a lattice and $A,B\subseteq L$ subsets. Then
+\begin{enumerate}
+\item $A^\leq \vee B^\leq \subseteq \big(A\vee B\big)^\leq$;
+\item $A^\leq \wedge B^\leq \subseteq \big(A\wedge B\big)^\leq$;
+\item $A^\geq \vee B^\geq \subseteq \big(A\vee B\big)^\geq$;
+\item $A^\geq \wedge B^\geq \subseteq \big(A\wedge B\big)^\geq$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) Take arbitrary $x\vee y \in A^\leq \vee B^\leq$. Now take arbitrary $a\vee b\in A\vee B$. Then $a \leq x$ and $b\leq y$. By the lemma, we have $a\vee b \leq x\vee y$. Since $a\vee b$ was chosen arbitrarily from $A\vee B$, we have $x\vee y \in \big(A\vee B\big)^\leq$.
+
+(2) Take arbitrary $x\wedge y \in A^\leq \wedge B^\leq$. Now take arbitrary $a\wedge b\in A\vee B$. Then $a \leq x$ and $b\leq y$. By the lemma, we have $a\wedge b \leq x\wedge y$. Since $a\wedge b$ was chosen arbitrarily from $A\wedge B$, we have $x\wedge y \in \big(A\wedge B\big)^\leq$.
+
+(3) Dual to (2).
+
+(4) Dual to (1).
+\end{proof}
+
 
 \begin{lemma} \label{cancellationGeneralLattices}
 Let $L$ be a lattice and $a,b\in L$. If for all $x\in L$: $a\vee x = b\vee x$ and $a\wedge x = b\wedge x$, then $a = b$.
@@ -7090,9 +7109,7 @@ Let $X$ be a set and $F\in\powerfilters(X)$. Then $F$ equals
 \end{enumerate}
 \end{corollary}
 
-
-\subsection{Subnets}
-\subsubsection{Frequent and eventual sets}
+\subsection{Frequent and eventual sets}
 \begin{definition}
 Let $\seq{x_i}_{i\in I}$ be a net in a set $X$. Let $S\subseteq X$ be a subset. We say that $S$ is
 \begin{itemize}
@@ -7133,6 +7150,20 @@ Let $\seq{x_i}_{i\in I}$ be a net in a set $X$ and $S\subseteq X$ a subset. Then
 Restatement of \ref{complementInIsotoneGrill}, by \ref{eventualFrequentInTermsOfFilters}.
 \end{proof}
 
+\begin{lemma} \label{sequenceInfrequentImpliesFinite}
+Let $X$ be a set, $\seq{x_n}_{n\in \N}$ a sequence in $X$ and $A\subseteq X$ a subset. If $A$ is not $\seq{x_n}$-frequent, then $A\cap \im(x)$ is finite.
+\end{lemma}
+\begin{proof}
+Suppose $A$ is not $\seq{x_n}$-frequent. Then there exists a tail $\setbuilder{x_k}{k\geq n}$ that is disjoint with $A$. Since $\im(x) = \setbuilder{x_k}{k < n} \cup \setbuilder{x_k}{k\geq n}$, we have
+\begin{align*}
+A\cap \im(x) &= \big(A \cap \setbuilder{x_k}{k < n}\big) \cup \big(A \cap \setbuilder{x_k}{k \leq n}\big) \\
+&= \big(A \cap \setbuilder{x_k}{k < n}\big) \cup \emptyset \\
+&= \big(A \cap \setbuilder{x_k}{k < n}\big),
+\end{align*}
+which is finite.
+\end{proof}
+
+\subsection{Subnets}
 \subsubsection{AA subnets}
 \begin{definition}
 Let $\seq{x_i}_{i\in I}$ and $\seq{y_j}_{j\in J}$ be nets. We say $\seq{y_j}$ is an \udef{Aarnes-Andenæs subnet} or \udef{AA subnet} if $\TailsFilter\seq{x_i} \subseteq \TailsFilter\seq{y_j}$.

@@ -3591,6 +3591,7 @@ If $[A,B]$ is trace-class, then $-[A,B]^* = [A,B^*]$ is also
 TODO: continuity: \url{https://math.stackexchange.com/questions/3511787/is-the-trace-map-continuous-on-the-trace-class}
 
 \section{Dilation theory}
+TODO: move below continuous functional calculus
 \subsection{Dilations, $N$-dilations and power dilations}
 \begin{definition}
 Let $\mathcal{H} \subseteq \mathcal{H}'$ be Hilbert spaces and let $P_\mathcal{H}$ be the projection on $\mathcal{H}$. If a pair of linear maps $S: \mathcal{H}'\to\mathcal{H}'$ and $T: \mathcal{H}\to \mathcal{H}$ satisfy the relation
@@ -3639,10 +3640,113 @@ D_{T^*}T - TD_{T} & \vec{1}.
 \end{pmatrix}
 \end{align*}
 We have used that $D_T$ is self-adjoint for all contractions $T$. We just need to show that $TD_T = D_{T^*}T$. Clearly we have
-\[ T(D_T)^2 = T(\vec{1} - T^*T) = T - TT^*T = (\vec{1} - TT^*)T = (D_{T^*}T)^2T. \]
-By functional-like calculus (TODO!!) we have $TD_T = D_{T^*}T$.
+\[ T(D_T)^2 = T(\vec{1} - T^*T) = T - TT^*T = (\vec{1} - TT^*)T = (D_{T^*})^2T. \]
+By iterating this calculation, we have $T(D_T)^{2n} = (D_{T^*})^{2n}T$ for all $n\in \N$. By linearity, we have $Tp(D_T^2) = p(D_{T^*}^2)T$ for all every polynomical $p$.
+
+Choose a sequence $\seq{p_n}$ of real polynomials that converges to the square root function $\sqrt{-}$ uniformly on $\interval{0,1}$ (e.g.\ Bernstein polynomials \ref{uniformApproximationByBernsteinPolynomials}; the existence of such a sequence is guaranteed by the Weierstrass approximation theorem \ref{WeierstrassApproximationTheorem}).
+
+Let $\Phi_{D_T^2}$ and $\Phi_{D_{T^*}^2}$ be the continuous functional calculi of $D_T^2$ and $D_{T^*}^2$, respectively. Using the fact that $D_T$ and $D_{T^*}$ are positive operators (by spectral mapping), we calculate
+\begin{align*}
+TD_{T} &= T\sqrt{D_T^2} \\
+&= T\Phi_{D_T^2}(\sqrt{-}) \\
+&= T\Phi_{D_T^2}(\lim_{n\to \infty}p_n) \\
+&= \lim_{n\to \infty}T\Phi_{D_T^2}(p_n) \\
+&= \lim_{n\to \infty}Tp_n\big(D_T^2\big) \\
+&= \lim_{n\to \infty}p_n\big(D_{T^*}^2\big)T \\
+&= \lim_{n\to \infty}\Phi_{D_{T^*}^2}(p_n)T \\
+&= \Phi_{D_{T^*}^2}(\lim_{n\to \infty} p_n)T \\
+&= \Phi_{D_{T^*}^2}(\sqrt{-})T \\
+&= \sqrt{D_{T^*}^2}T = D_{T^*}T.
+\end{align*}
 \end{proof}
 The operator $D_T$ in the previous proof is sometimes called the \udef{defect operator} of $T$. It measures in some sense how far $T$ is from being a unitary operator. If $T$ is unitary, then $D_T = 0 = D_{T^*}$. If $T$ is an isometry, then $D_T = 0$ (by \ref{isometryRangeProjection}) and $D_{T^*}$ is a projector ($TT^*$ is a projector by \ref{isometryCharacterisation}, so $\vec{1} - TT^*$ is too by \ref{projectorOrthogonalComplement} and $D_{T^*} = \sqrt{\vec{1}-TT^*} = \sqrt{(\vec{1}-TT^*)^2} = \vec{1}-TT^*$).
+
+There are other possible unitary dilations:
+\begin{lemma}
+Let $\mathcal{H}$ be a Hilbert space, $T$ an operator on $\mathcal{H}$ with unitary dilation $U$ on $\mathcal{H}^2$ and $W$ a unitary on $\mathcal{H}$. Then
+\[ \begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix}U \qquad\text{and}\qquad U\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix} \]
+are also unitary dilations of $T$.
+\end{lemma}
+\begin{proof}
+To see that these operators are unitary, it is enough to observe that $\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix}$ is unitary and that any product of unitaries is unitary (TODO ref). Indeed,
+\begin{align*}
+\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix}\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W^*
+\end{pmatrix}
+&= \begin{pmatrix}
+\vec{1} & 0 \\
+0 & WW^*
+\end{pmatrix} = \begin{pmatrix}
+\vec{1} & 0 \\
+0 & \vec{1}
+\end{pmatrix} \\
+\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W^*
+\end{pmatrix}\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix}
+&= \begin{pmatrix}
+\vec{1} & 0 \\
+0 & W^*W
+\end{pmatrix} = \begin{pmatrix}
+\vec{1} & 0 \\
+0 & \vec{1}
+\end{pmatrix}.
+\end{align*} 
+
+To see that these operators are dilations, we calculate
+\begin{align*}
+\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix}U &= \begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix}\begin{pmatrix}
+T & U_{0,1} \\
+U_{1,0} & U_{1,1} \\
+\end{pmatrix} = \begin{pmatrix}
+T & U_{0,1} \\
+WU_{1,0} & WU_{1,1}
+\end{pmatrix} \\
+U\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix} &= \begin{pmatrix}
+T & U_{0,1} \\
+U_{1,0} & U_{1,1} \\
+\end{pmatrix}\begin{pmatrix}
+\vec{1} & 0 \\
+0 & W
+\end{pmatrix} = \begin{pmatrix}
+T & U_{0,1}W \\
+U_{1,0} & U_{1,1}W
+\end{pmatrix}
+\end{align*}
+\end{proof}
+In particular, for any contraction $T$, the operators
+\[ \begin{pmatrix}
+T & -D_{T^*} \\ D_T & T^*
+\end{pmatrix} \qquad\text{and}\qquad \begin{pmatrix}
+T & D_{T^*} \\ -D_T & T^*
+\end{pmatrix} \]
+are also unitary dilations (which we obtain by setting $W = -\vec{1}$).
+
 
 \begin{proposition}
 Let $\mathcal{H} \cong \mathcal{H}\oplus \{0\} \subseteq \mathcal{H}\oplus \mathcal{H} = \mathcal{H}^2$ be a Hilbert space. Every isometry $T$ on $\mathcal{H}$ has a unitary power dilation $U$ on $\mathcal{H}^2$.
@@ -4578,7 +4682,7 @@ Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. There exists a 
 \[ \Phi_x: \cont(\spec(x))\to A \qquad \text{such that} \qquad \text{$\Phi_x(\id_{\spec(x)}) = x$ and $\Phi_x(\constant{1}_{\spec(x)}) = \vec{1}$.} \]
 This $*$-homomorphism is isometric.
 \end{theorem}
-We will usually write $f(x)$ to mean $\Phi_x(f)$.
+We will usually write $f(x)$ to mean $\Phi_x(f)$. Note that $\Phi_x$ is continuous by \ref{isometryLemma}.
 \begin{proof}
 For uniqueness, note that $\cont(\spec(x)) = C^*(\id_{\spec(x)}, \constant{1}_{\spec(x)})$ by the Weierstrass approximation theorem \ref{WeierstrassApproximation}. Thus any $*$-homomorphism defined on $\cont(\spec(x))$ is completely determined by its value at $\id_{\spec(x)}$ and $\constant{1}_{\spec(x)}$.
 
