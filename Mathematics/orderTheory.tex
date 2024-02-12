@@ -1104,8 +1104,7 @@ Let $m,n\in \N$. If $p = m+n$, then $\mathbb{m}\oplus\mathbb{n} = \mathbb{p}$.
 \chapter{Posets}
 TODO: notation: use $\inf, \sup$ for sets and $\bigwedge, \bigvee$ for the singleton unpacking of $\inf,\sup$.
 
-\section{Posets}
-\subsection{Order-preserving functions}
+\section{Order-preserving functions}
 
 \begin{proposition} \label{mappingJoinsMeets}
 Let $P,Q$ be posets, $f:P\to Q$ an order-preserving function and $A\subseteq P$. Then
@@ -1135,10 +1134,180 @@ Let $P,Q$ be posets and $f:P\to Q$ an order similarity. Then $f$ preserves all m
 Follows from \ref{relationIsomorphismSamePolars}.
 \end{proof}
 
+\section{$\mathrm{Z}$-systems}
+\begin{definition}
+Let $Z: \setbuilder{P}{\text{$P$ is a poset}} \to \setbuilder{X}{\Set(X)}$ be a class function. Then we call $Z$ a \udef{$\mathrm{Z}$-system} if
+\begin{itemize}
+\item $Z(P) \subseteq \powerset(P)$ for all posets $P$;
+\item there exists a poset $P'$ such that $Z(P')$ contains a non-empty set;
+\item $f^{\imf\imf}\big(Z(P)\big) \subseteq Z(Q)$ for all isotone functions $f: P\to Q$ between posets.
+\end{itemize}
+We call the elements of $Z(P)$ \udef{$Z$-subsets} of $P$. We say $Z$ is \udef{strict} if there exists a poset $P$ such that $\emptyset \in Z(P)$.
+\end{definition}
 
+\begin{lemma} \label{subsetZsets}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $Q\subseteq P$. Then $Z(Q) \subseteq Z(P)$.
+\end{lemma}
+\begin{proof}
+The inclusion $\incl_Q$ is isotone.
+\end{proof}
 
-\subsection{Atoms, density and irreducibility}
-\subsubsection{Join- and meet-density}
+\begin{lemma} \label{singletonsAreZSets}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $p\in P$. Then $\{p\} \in Z(P)$.
+\end{lemma}
+\begin{proof}
+Let $P'$ be a poset such that $Z(P')$ contains a non-empty set $X$. Now consider the constant function $\constant{p}: P'\to P: x\mapsto p$, which is isotone. Thus $\{p\} = f^\imf(X) \in Z(P)$.
+\end{proof}
+
+\begin{lemma} \label{strictZSystemEveryEmptySetZSet}
+Let $Z$ be a $\mathrm{Z}$-system. Then $Z$ is strict \textup{if and only if} $\emptyset \in Z(P)$ for every non-empty poset $P$.
+\end{lemma}
+\begin{proof}
+It is clear that if $\emptyset \in Z(P)$ for every non-empty poset $P$, then $Z$ is strict.
+
+Now assume $Z$ is strict and let $P'$ be a poset such that $\emptyset\in Z(P')$. Let $P$ be an arbitrary non-empty poset. Then we can find $x\in P$. The constant function $\constant{x}: P'\to P$ is isotone, so $\emptyset = f^\imf(\emptyset) \in f^{\imf\imf}\big(Z(P')\big) \subseteq Z(P)$.
+\end{proof}
+
+\begin{lemma}
+Let $Z: \setbuilder{P}{\text{$P$ is a poset}} \to \setbuilder{X}{\Set(X)}$ be a class function. Then $Z$ is a $\mathrm{Z}$-system \textup{if and only if}
+\begin{itemize}
+\item $Z(P) \subseteq \powerset(P)$ for all posets $P$;
+\item there exists a poset $P'$ such that $Z(P')$ contains a non-empty set;
+\item $f^{\imf\imf}\big(Z(P)\big) \subseteq Z\big(\im(f)\big)$ for all isotone functions $f: P\to Q$ between posets.
+\end{itemize}
+\end{lemma}
+We can also write the third condition, somewhat imprecisely, as $f^{\imf\imf}\circ Z \subseteq Z\circ f^\imf$.
+\begin{proof}
+Since, for any isotone function $f: P\to Q$ the restriction $f|^{\im(f)}$ is also isotone, the third condition follows straight from the definition.
+
+Conversely, take an arbitrary isotone function $f: P\to Q$ and assume the third condition holds. Then
+\[ f^{\imf\imf}\big(Z\big) \subseteq Z\big(\im(f)\big) \subseteq Z(Q) \]
+by \ref{subsetZsets}.
+\end{proof}
+
+\begin{example}
+The following are $\mathrm{Z}$-systems:
+\begin{itemize}
+\item non-empty subsets;
+\item subsets with cardinality strictly less than $\kappa$ (e.g.\ finite subsets);
+\item subsets with cardinality at most $\kappa$ (e.g.\ countable subsets, we also call this system the \udef{$\sigma$-system});
+\item chains;
+\item subsets that have an upper bound (we call this system the \udef{Dedekind system});
+\item subsets that have a maximum;
+\item subsets that have a maximal element.
+\end{itemize}
+\end{example}
+
+\subsection{Constructions}
+\begin{lemma}
+Let $Z_1$ and $Z_2$ be two $\mathrm{Z}$-systems. Then
+\begin{enumerate}
+\item $P\mapsto Z_1(P) \cup Z_2(P)$ is a $\mathrm{Z}$-system;
+\item $P\mapsto Z_1(P) \cap Z_2(P)$ is a $\mathrm{Z}$-system.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Take an arbitrary poset $P$. Since $Z_1(P) \subseteq \powerset(P)$ and $Z_2(P) \subseteq \powerset(P)$, we have $Z_1(P)\cup Z_2(P) \subseteq \powerset(P)$ and $Z_1(P)\cap Z_2(P) \subseteq \powerset(P)$.
+
+Let $x$ be an element. Then $\{x\}$ with the identity relation is a poset. By \ref{singletonsAreZSets}, we have $\{x\} \in Z_1\big(\{x\}\big)$ and $\{x\} \in Z_2\big(\{x\}\big)$, so $\{x\} \in Z_1\big(\{x\}\big) \cup Z_2\big(\{x\}\big)$ and $\{x\} \in Z_1\big(\{x\}\big) \cap Z_2\big(\{x\}\big)$. In particular both $Z_1\big(\{x\}\big) \cup Z_2\big(\{x\}\big)$ and $Z_1\big(\{x\}\big) \cap Z_2\big(\{x\}\big)$ contain a non-empty set.
+
+Now take an arbitrary isotone function $f:P\to Q$ between posets. Then $f^{\imf\imf}\big(Z_1(P)\big) \subseteq Z_1(Q)$ and $f^{\imf\imf}\big(Z_2(P)\big) \subseteq Z_2(Q)$, so $f^{\imf\imf}\big(Z_1(P)\big) \cup f^{\imf\imf}\big(Z_2(P)\big) \subseteq Z_1(Q)\cup Z_2(Q)$ and $f^{\imf\imf}\big(Z_1(P)\big) \cap f^{\imf\imf}\big(Z_2(P)\big) \subseteq Z_1(Q)\cap Z_2(Q)$.
+\end{proof}
+
+\subsubsection{Reflecting $\mathrm{Z}$-systems}
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system. Then $Z$ is called \udef{reflecting} if $f^{\imf\imf}\big(Z(P)\big) = Z\big(\im(f)\big)$ for all isotone functions $f: P\to Q$ between posets.
+\end{definition}
+
+\begin{example}
+The following $\mathrm{Z}$-systems are reflecting:
+\begin{itemize}
+\item non-empty subsets;
+\item subsets with cardinality strictly less than $\kappa$ (e.g.\ finite subsets);
+\item subsets with cardinality at most $\kappa$ (e.g.\ countable subsets, we also call this system the \udef{$\sigma$-system}).
+\end{itemize}
+For the last two examples, we need some version of choice if $\kappa$ is infinite.
+\end{example}
+
+\begin{lemma} \label{ZsystemWhereAllZSetsAreZSets}
+Let $Z_1$ be a reflecting $\mathrm{Z}$-system and $Z_2$ a $\mathrm{Z}$-system. Assume either $Z_2$ is strict or $Z_1$ is not strict. Then the following are $\mathrm{Z}$-systems:
+\begin{enumerate}
+\item $P\mapsto \setbuilder{X \subseteq P}{Z_1(X)\subseteq Z_2(X)}$;
+\item $P\mapsto \setbuilder{X \subseteq P}{Z_1(X)\subseteq Z_2(P)}$. If $Z_2$ is strict, then this system is also strict.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Let the function $P\mapsto \setbuilder{X \subseteq P}{Z_1(X)\subseteq Z_2(X)}$ be denoted $Z_3$. By construction $Z_3(P) \subseteq \powerset(P)$.
+
+Let $x$ be an element. Then $\{x\}$ with the identity relation is a poset. By \ref{singletonsAreZSets}, we have $\{x\} \in Z_1\big(\{x\}\big)$ and $\{x\} \in Z_2\big(\{x\}\big)$.
+
+First assume $Z_2$ is strict. Then $\big\{\emptyset, \{x\}\big\} \subseteq Z_2\big(\{x\}\big) \subseteq \powerset\big(\{x\}\big) = \big\{\emptyset, \{x\}\big\}$ by \ref{strictZSystemEveryEmptySetZSet}, so $Z_2\big(\{x\}\big) = \powerset\big(\{x\}\big)$. Now take arbitrary $X\subseteq \{x\}$. We have $Z_1\big(\{x\}\big) \subseteq \powerset\big(\{x\}\big) = Z_2\big(\{x\}\big)$, so $\{x\} \in Z_3\big(\{x\}\big)$ and there exists a poset $P'$ such that $Z(P')$ contains a non-empty set.
+
+Now assume $Z_1$ is not strict. Then $\emptyset \notin Z_1\big(\{x\}\big)$, so $Z_1\big(\{x\}\big) = \big\{\{x\}\big\}$. Since $\{x\} \in Z_2\big(\{x\}\big)$, we have $Z_1\big(\{x\}\big) \subseteq Z_2\big(\{x\})$ and thus $\{x\} \in Z_3\big(\{x\}\big)$, which means there exists a poset $P'$ such that $Z(P')$ contains a non-empty set.
+
+Let $f: P\to Q$ be an arbitrary isotone function between posets and take $X\in Z_3(P)$. Then we need to show that $f^\imf(X) \in Z_3(Q)$. Indeed, since $Z_1$ is reflecting and $Z_1(X) \subseteq Z_2(X)$, we have
+\[ Z_1\big(f^\imf(X)\big) = f^{\imf\imf}\big(Z_1(X)\big) \subseteq f^{\imf\imf}\big(Z_2(X)\big) \subseteq Z_2\big(f^\imf(X)\big). \]
+
+(2) Let the function $P\mapsto \setbuilder{X \subseteq P}{Z_1(X)\subseteq Z_2(P)}$ be denoted $Z_4$. By construction $Z_4(P) \subseteq \powerset(P)$.
+
+Let $x$ be an element. Then $\{x\}$ with the identity relation is a poset. By \ref{singletonsAreZSets}, we have $\{x\} \in Z_1\big(\{x\}\big)$ and $\{x\} \in Z_2\big(\{x\}\big)$.
+
+First assume $Z_2$ is strict. Then $\big\{\emptyset, \{x\}\big\} \subseteq Z_2\big(\{x\}\big) \subseteq \powerset\big(\{x\}\big) = \big\{\emptyset, \{x\}\big\}$ by \ref{strictZSystemEveryEmptySetZSet}, so $Z_2\big(\{x\}\big) = \powerset\big(\{x\}\big)$. Now take arbitrary $X\subseteq \{x\}$. We have $Z_1\big(\{x\}\big) \subseteq \powerset\big(\{x\}\big) = Z_2\big(\{x\}\big)$, so $\{x\} \in Z_3\big(\{x\}\big)$ and there exists a poset $P'$ such that $Z(P')$ contains a non-empty set.
+
+Now assume $Z_1$ is not strict. Then $\emptyset \notin Z_1\big(\{x\}\big)$, so $Z_1\big(\{x\}\big) = \big\{\{x\}\big\}$. Since $\{x\} \in Z_2\big(\{x\}\big)$, we have $Z_1\big(\{x\}\big) \subseteq Z_2\big(\{x\})$ and thus $\{x\} \in Z_3\big(\{x\}\big)$, which means there exists a poset $P'$ such that $Z(P')$ contains a non-empty set.
+
+Let $f: P\to Q$ be an arbitrary isotone function between posets and take $X\in Z_4(P)$. Then we need to show that $f^\imf(X) \in Z_4(Q)$. Indeed, since $Z_1$ is reflecting and $Z_1(X) \subseteq Z_2(P)$, we have
+\[ Z_1\big(f^\imf(X)\big) = f^{\imf\imf}\big(Z_1(X)\big) \subseteq f^{\imf\imf}\big(Z_2(P)\big) \subseteq Z_2(Q). \]
+
+Finally, assume $Z_2$ is strict. Then there exists a poset $P$ such that $\emptyset \in Z_2(P)$, i.e.\ $\big\{\emptyset\big\} \subseteq Z_2(P)$. Then $Z_1(\emptyset) \subseteq \powerset(\emptyset) = \big\{\emptyset\big\} \subseteq Z_2(P)$, so $\emptyset\in Z_3(P)$, which means $Z_3$ is strict.
+\end{proof}
+
+\begin{example}
+The following $\mathrm{Z}$-systems can be constructed using \ref{ZsystemWhereAllZSetsAreZSets}:
+\begin{itemize}
+\item directed subsets;
+\item well-ordered subsets (i.e.\ where each non-empty subsubset has a minimum);
+\item subsets such that each pair in the subset has an upper bound in $P$ (the \udef{pairwise compatible system});
+\item subsets such that each finite subsubset has an upper bound in $P$ (the \udef{compatible system}).
+\end{itemize}
+\end{example}
+
+\subsection{Completeness}
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system and $P$ a poset. We call $P$ \udef{$Z$-complete} if every subset in $Z(P)$ has a least upper bound.
+\end{definition}
+
+Let $Z$ be the $\mathrm{Z}$-system of sets with one or zero elements. Then a poset is $Z$-complete iff it has a least element.
+
+\subsection{Below relations}
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $x,y\in P$. Then $x$ is said to be \udef{$Z$-below} $y$, denoted $x \ll_Z y$ if, for all $S\in Z(P)$ such that $\bigvee S$ exists, we have
+\[ y \leq \bigvee S \qquad \implies \qquad x \in \downset S. \]
+For all $A\subseteq P$ we define
+\begin{align*}
+\uupset_Z A &\defeq \setbuilder{y\in P}{\exists x\in A: \; x \ll_Z y} \\
+\ddownset_Z A &\defeq \setbuilder{x\in P}{\exists y\in A: \; x \ll_Z y}.
+\end{align*}
+\end{definition}
+
+\subsubsection{$Z$-compact elements}
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $x\in P$. Then $x$ is called \udef{$Z$-compact} if $x \ll_Z x$. We denote the set of $Z$-compact elements of $P$ by $\compacts_Z(P)$.
+\end{definition}
+
+\begin{lemma}
+Let $Z$ be a $\mathrm{Z}$-system and $P$ a non-empty poset with bottom $\bot$. Then $\bot$ is $Z$-compact \textup{if and only if} $Z$ is not strict. 
+\end{lemma}
+\begin{proof}
+First suppose $\bot$ is $Z$-compact and, towards a contradiction, that $Z$ is not strict. Now $\emptyset \in Z(P)$ by \ref{strictZSystemEveryEmptySetZSet} and $\bigvee \emptyset$ exists since it is equal to $\bot$. Thus $\bot \leq \bigvee \emptyset$, so $\bot \in \downset \emptyset$ by compactness, but this is clearly false.
+
+Conversely, Suppose $Z$ is not strict. Then $\emptyset\notin Z(P)$. Suppose $\bigvee S$ exists and $\bot \leq \bigvee S$ for some $S\in Z(P)$. Then $\bot \leq S$ since $S$ is not empty. Thus $\bot$ is $Z$-compact.
+\end{proof}
+
+\subsection{Continuity of posets}
+
+\section{Atoms, density and irreducibility}
+\subsection{Join- and meet-density}
 \begin{definition}
 Let $P$ be a poset and let $Q\subset P$ be a subset. Then $Q$ is called \udef{join-dense} in $P$ if for every $x\in P$, there exists a subset $S\subset Q$ such that $x= \bigvee_P S$.
 
@@ -1158,7 +1327,7 @@ Let $P$ be a poset, $Q\subset P$ a subset and $x\in P$. Then
 (2) Dual.
 \end{proof}
 
-\subsubsection{Join- and meet-irreducible elements}
+\subsection{Join- and meet-irreducible elements}
 \begin{definition}
 Let $P$ be a poset. We call $x\in P$ \udef{join-irreducible} if
 \begin{itemize}
@@ -1203,7 +1372,7 @@ link with boundary
 \url{https://link.springer.com/content/pdf/10.1007/BF01349957.pdf}
 
 
-\subsubsection{Atomic elements}
+\subsection{Atomic elements}
 \begin{definition}
 Let $\sSet{P,\leq}$ be a poset.
 \begin{itemize}
@@ -1227,7 +1396,7 @@ Let $\sSet{P,\leq}$ be a poset. Then
 (2) Dual.
 \end{proof}
 
-\subsubsection{Atomic and atomistic posets}
+\subsection{Atomic and atomistic posets}
 \begin{definition}
 Let $\sSet{P,\leq}$ be a poset. Then
 \begin{itemize}
@@ -1281,8 +1450,7 @@ such that there is no element immediately above $x$. Then $\interval{x,\top}$ is
 \end{example}
 
 
-
-\section{Semilattice}
+\chapter{Semilattice}
 \begin{definition}
 A \udef{semilattice} is an algebraic structure $\sSet{S,\star}$ where $\star$ is a binary operation on the set $S$ satisfying
 \begin{itemize}[leftmargin=2.5cm]
@@ -1372,7 +1540,7 @@ Note that $\dom(f\wedge g) \subseteq \dom(f)\cap \dom(g)$.
 In fact every non-empty set has an infimum. This does not make $(X\not\to Y)$ a complete lattice (despite \ref{existenceSupremaInfima}), since the empty set does not have an infimum.
 \end{example}
 
-\subsection{Semilattice homomorphisms}
+\section{Semilattice homomorphisms}
 \begin{proposition} \label{orderPreservingFunctionLatticeOperations}
 Let $\sSet{P,\leq}$, $\sSet{Q,\leq}$ be posets and $f: P\to Q$ an order-preserving function.
 \begin{enumerate}
@@ -1423,7 +1591,7 @@ TODO complete notation.
 \end{proof}
 TODO link universal algebra.
 
-\subsection{Complete semilattices}
+\section{Complete semilattices}
 \begin{lemma}
 Let $\sSet{S,\wedge}$ be a semilattice. For every finite set $D\subset S$, $\inf(D)$ exists.
 \end{lemma}
@@ -1460,8 +1628,8 @@ In \ref{KnasterTarskiSemilattice}, the semilattice $\sSet{S,\wedge}$ must be com
 As a counter-example, consider $f: \R\to\R: x\mapsto x+1$.
 \end{example}
 
-\subsection{Subsets of semilattices}
-\subsubsection{Disjoint elements and meshing elements}
+\section{Subsets of semilattices}
+\subsection{Disjoint elements and meshing elements}
 TODO compare with set-theoretical definitions.
 \begin{definition}
 Let $S$ be a $\wedge$-semilattice with absorbing element $\bot$.
@@ -1479,8 +1647,8 @@ Let $D, E \subset S$. Then
 \end{itemize}
 \end{definition}
 
-\subsection{Subsemilattices}
-\subsubsection{Proper subsemilattices}
+\section{Subsemilattices}
+\subsection{Proper subsemilattices}
 \begin{definition}
 Let $S$ be a semilattice. A subsemilattice is called \udef{proper} if it does not contain an absorbing element.
 \end{definition}
@@ -1506,7 +1674,7 @@ If $D$ is not empty, then $D\subseteq D^\mesh$ implies that $D^\mesh$ is not emp
 $(4) \Rightarrow (1)$ Assume $\bot\in D$. Then $D^\mesh \subseteq \{\bot\}^\mesh$ by \ref{antitonicityPolars}. Now $\{\bot\}^\mesh = \emptyset$, which implies that $D^\mesh$ is empty. This contradicts our assumption and we conclude that $D$ is proper.
 \end{proof}
 
-\subsubsection{Ordering proper subsemilattices}
+\subsection{Ordering proper subsemilattices}
 \begin{definition}
 Let $S$ be a semilattice and $D,E$ subsemilattices. Then we write $D\lhd E$ if $D\subseteq E$ and $E$ is proper.
 \end{definition}
@@ -1538,7 +1706,7 @@ Now assume $D\subseteq E \subseteq D^\mesh$. We need to prove that $\bot\notin E
 \end{proof}
 
 
-\subsection{Generalised inverse of inf}
+\section{Generalised inverse of inf}
 \begin{proposition}
 Let $\sSet{P,\leq}$ be a poset and $S\subseteq P$ a subset such that $\sSet{S,\leq}$ is a complete $\wedge$-semilattice. Then
 \[ f: P \to \powerset(S)^o: x\mapsto \upset x \cap S \qquad\text{and}\qquad g: \powerset(S)^o\to P: D\mapsto \bigwedge_S D \]
@@ -1556,7 +1724,7 @@ Assume these functions form a Galois connection. In order to obtain a contradict
 Then $(\upset y)\cap S \supseteq (\upset \bigwedge_S D)\cap S \supseteq D$, but $y\geq \bigwedge_S D$.
 \end{proof}
 
-\subsubsection{Projection onto a complete subsemilattice}
+\subsection{Projection onto a complete subsemilattice}
 \begin{definition}
 Let $\sSet{P,\leq}$ be a poset and $S\subseteq P$ a subset such that $\sSet{S,\leq}$ is a complete $\wedge$-semilattice. Then the \udef{(upper) order projection} on $S$ is the function
 \[ P_S^u: P \to S: x\mapsto \bigwedge(\upset x\cap S). \]
@@ -1580,7 +1748,7 @@ Also $P_S^u$ is expansive \textup{if and only if} for all $D\subseteq S$: $\bigw
 
 
 
-\section{Lattices}
+\chapter{Lattices}
 \url{file:///C:/Users/user/Downloads/Gr%C3%A4tzer,%20George%20-%20General%20lattice%20theory-Birkh%C3%A4user%20(2007).pdf}
 \url{file:///C:/Users/user/Downloads/R.%20Padmanabhan,%20S.%20Rudeanu%20-%20Axioms%20for%20lattices%20and%20Boolean%20algebras-World%20Scientific%20(2008).pdf}
 \begin{definition}
@@ -1623,7 +1791,7 @@ In particular, for all $A,B\in \mathcal{P}(X)$:
 \end{itemize}
 \end{example}
 
-\subsection{Lattices and order}
+\section{Lattices and order}
 As for semilattices, we can equivalently characterise lattices as posets with certain conditions.
 \begin{proposition}
 Let $L$ be a set.
@@ -1798,7 +1966,7 @@ so $x\in \interval{a,b} \cap \interval{c,d}$.
 Let $L$ be a lattice. Then the set of intervals in $L$ is a $\cap$-subsemilattice of $\sSet{\powerset(L), \subseteq}$.
 \end{corollary}
 
-\subsection{Complete lattices}
+\section{Complete lattices}
 \begin{lemma}
 Let $L$ be a lattice. For every finite set $S\subset L$, $\sup(S)$ and $\inf(S)$ exist.
 \end{lemma}
@@ -1882,7 +2050,7 @@ f(x) & x\in X_1 \\ (g|_{Y_2})^{-1}(x) & x\in X_2
 \end{proof}
 The Schröder-Bernstein theorem was already proven in \ref{SchroederBernstein}.
 
-\subsubsection{Complete subsemilattices}
+\subsection{Complete subsemilattices}
 Let $L$ be a complete lattice and $S\subseteq L$ a subset. Then
 \begin{itemize}
 \item $S$ is a complete $\wedge$-subsemilattice if it is closed under arbitrary meets;
@@ -1943,7 +2111,7 @@ Let $P$ be a poset and $L_1, L_2 \subseteq P$ two complete $\wedge$-subsemilatti
 Take $A \subseteq L_1\cap L_2$. Then $\bigwedge_{P}A = \bigwedge_{L_1}A = \bigwedge_{L_2}A$, which is an element of both $L_1$ and $L_2$. Thus $\bigwedge_{P}A \in L_1\cap L_2$.
 \end{proof}
 
-\subsubsection{Chain conditions}
+\subsection{Chain conditions}
 TODO: move!
 
 The following requires dependent choice:
@@ -2010,7 +2178,7 @@ If $L$ has no finite chains, then it satisfies the ascending and descending chai
 Only the $\Rightarrow$ direction of (2) is not immediately obvious. Assume $Q$ is join-dense and let $x\in \joinIr(L)$. By the proposition there exists a finite $F\subseteq Q$ such that $x = \bigvee F$. Since $x$ is join-irreducible, we have $x \in F$ and hence $x \in Q$. Thus, $\joinIr(L) \subseteq Q$.
 \end{proof}
 
-\subsection{Moore closures and dual closures}
+\section{Moore closures and dual closures}
 
 \begin{lemma} \label{completeSubsemilattices}
 Let $L$ be a lattice and $A\subseteq L$ a subposet that is a complete lattice. Then
@@ -2179,7 +2347,7 @@ a \ar[dr, dash] & & b \ar[dl, dash] \\
 with $L_1 = \setbuilder{n}{\text{$n$ is even}} \cup \{a, \top\}$ and $L_2 = \setbuilder{n}{\text{$n$ is odd}} \cup \{b, \top\}$. Even if we consider the join in either $L_1$ or $L_2$, we have a problem.
 \end{example}
 
-\subsubsection{Dedekind-MacNeille completion}
+\subsection{Dedekind-MacNeille completion}
 TODO minimal / maximal completions: see Schroder book notes.
 
 \begin{definition}
@@ -2249,8 +2417,8 @@ See Schröder, p.212.
 \end{proposition}
 
 
-\subsection{Distributive and modular lattices}
-\subsubsection{Distributive lattices}
+\section{Distributive and modular lattices}
+\subsection{Distributive lattices}
 For all lattices $L$ the distributive inequalities, \ref{distributiveInequality}, hold: $\forall a,b,c \in L$:
 \begin{align*}
 a \vee (b\wedge c) &\leq (a\vee b) \wedge (a\vee c); \\
@@ -2332,7 +2500,7 @@ so $a\vee b\in S^\perp$.
 It is also clear $S^\perp$ must be a down set by \ref{orderLatticeCorollary}.
 \end{proof}
 
-\subsubsection{Modular lattices}
+\subsection{Modular lattices}
 For all lattices $L$ the modular inequality holds: $\forall a,b,c \in L$:
 \[ a\leq c \implies a \vee (b\wedge c) \leq (a\vee b) \wedge c. \]
 See \ref{distributiveInequality}.
@@ -2377,8 +2545,7 @@ If the lattice is distributive, point (2) of \ref{modularEquivalences} holds unc
 \subsubsection{Semimodular lattices}
 
 
-\subsubsection{Derived lattices}
-
+\subsection{Derived lattices}
 \begin{proposition}
 (i) If L is a modular (distributive) lattice, then every sublattice of L
 is modular (distributive).
@@ -2464,7 +2631,7 @@ Suppose either $a'\geq b$ or $c'\geq b$. In both cases $c'\geq b$ and $(a\vee b)
 (2) TODO Burris/Sankappanavar
 \end{proof}
 
-\subsubsection{Infinitely distributive lattices}
+\subsection{Infinitely distributive lattices}
 \begin{definition}
 Let $L$ be a lattice. We call $L$
 \begin{itemize}
@@ -2481,7 +2648,7 @@ The inequalities $x\wedge \bigvee D \geq \bigvee x\wedge D$ and $x\vee \bigwedge
 
 
 
-\subsubsection{Completely distributive lattices}
+\subsection{Completely distributive lattices}
 
 \section{Complementation}
 \subsection{Complementation}
