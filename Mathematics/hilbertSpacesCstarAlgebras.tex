@@ -2599,6 +2599,8 @@ properties is compact.
 TODO See \ref{spectrumCompactOperator}
 \end{proof}
 
+TODO we can attain eigenvectors due to compactness and extreme value theorem. Cfr. Courant-Weyl.
+
 \subsubsection{Self-adjoint extensions of symmetric operators}
 \paragraph{Cayley transform}
 Consider the Möbius transform
@@ -4278,8 +4280,9 @@ Notice that the $*$-operation acts as the element-wise $*$-operation composed wi
 \begin{definition}
 A (complex) \udef{$C^*$-algebra} is a complex Banach-$*$-algebra $A$ such that
 \[\forall x\in A: \quad \norm{x^*x} = \norm{x}^2.\]
-This identity is known as the \udef{$C^*$-identity}, the \udef{$C^*$-property}, the \udef{$C^*$-condition} or the \udef{$C^*$-axiom}.
+This identity is known as the \udef{$B^*$-identity}.
 \end{definition}
+TODO: originally 
 
 \begin{definition}
 A \udef{real} $C^*$-algebra is a real Banach-$*$-algebra such that 
@@ -4292,7 +4295,7 @@ $\mathcal{C}(X)$ for some compact $X$ (need Hausdorff?). TODO: norm well defined
 \end{example}
 
 \begin{proposition}
-The $C^*$-identity is equivalent to
+The $B^*$-identity is equivalent to the $C^*$-identity
 \[\forall x\in A: \quad \norm{x^*x} = \norm{x^*}\cdot\norm{x}.\]
 \end{proposition}
 \begin{proof}
@@ -4319,7 +4322,7 @@ $C^*(\vec{1},a)$ is commutative.
 \end{lemma}
 
 \begin{lemma} \label{consequencesC*}
-Let $A$ be a $C^*$-algebra. The $C^*$-identity implies
+Let $A$ be a $C^*$-algebra. The $B^*$-identity implies
 \begin{enumerate}
 \item  $\norm{\vec{1}} = 1$.
 \item the involution $*$ is isometric: $\norm{x^*} = \norm{x}$;
@@ -4827,8 +4830,7 @@ Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. Then
 \item By \ref{selfAdjointSpectrumReal} we have that self-adjoint implies real spectrum. The converse follows from the lemma applied to $z = \overline{z}$.
 \item Assume $x$ unitary. By the $C^*$-identity $\norm{x} = \sqrt{\norm{x^*x}} = 
 \sqrt{\norm{\vec{1}}} = 1$, by \ref{consequencesC*}. By \ref{normNormalElement}, $\spr(x) = \norm{x} = 1$. Also $\norm{x^{-1}}^{-1} = 1$. So $\sigma(x)\subseteq \mathbb{T}$ by \ref{openSetInvertibles}. The converse follows from the lemma applied to $1 = z\overline{z} = \overline{z}z$.
-\item Assume $x$ a projection. Then $x-\lambda$ has an inverse given by $-\lambda^{-1} + (1 - \lambda)^{-1}\lambda^{-1}x$ if $\lambda \notin \{0,1\}$:
-\[ (x-\lambda)\left( - \frac{1}{\lambda} + \frac{x}{(1-\lambda)\lambda} \right) = \vec{1} - \frac{x}{\lambda} + \frac{x-x\lambda}{(1-\lambda)\lambda} =  \vec{1} - \frac{x}{\lambda} + \frac{x}{\lambda} = \vec{1}. \]
+\item The direction $\Rightarrow$ follows from \ref{spectrumIdempotent}.
 The converse follows from the lemma applied to $z = \overline{z} = z^2$.
 \end{enumerate}
 \end{proof}
@@ -4843,14 +4845,6 @@ Let $x\in A$. By \ref{realImaginaryParts} we can write $x=x_1+ix_2$ for some sel
 TODO
 \end{proof}
 
-\subsection{Constructions}
-\subsubsection{Pseudoinverse}
-\begin{definition}
-Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. Then the \udef{pseudo-inverse} of $x$ is 
-\[ x^+ \defeq f(x) \qquad\text{where}\qquad f: y \mapsto \begin{cases}
-y^{-1} & (y \neq 0) \\ 0 & (y = 0).
-\end{cases} \]
-\end{definition}
 
 \section{Positivity}
 \url{https://link.springer.com/content/pdf/10.1023/A:1009717500980.pdf}
@@ -4964,6 +4958,15 @@ Let $A$ be a $C^*$-algebra and $a, b\in A^+$ with $\norm{a}\leq 1$ and $\norm{b}
 (1) Since the function $x\mapsto x-x^2$ is positive on $\interval{0,1}$ and $\spec(a) \subseteq \interval{0,1}$, we have that $a - a^2$ is positive by spectral mapping \ref{spectralMappingCFC}.
 
 (2) Since $\norm{a}_{\widetilde{A}} = \norm{a} \leq 1$ and $\norm{b}_{\widetilde{A}} = \norm{b} \leq 1$, we have $0\leq \vec{1}-a$ and $0\leq \vec{1}-b$ from \ref{selfAdjointUnitSphereFromOrder}. Thus $0\leq \vec{1}-a+b = \vec{1} - (a-b)$ and $0\leq \vec{1} -b +a = \vec{1}+ (a-b)$. Then $\norm{a-b} = \norm{a-b}_{\widetilde{A}} \leq 1$ by \ref{selfAdjointUnitSphereFromOrder}.
+\end{proof}
+
+\begin{lemma} \label{firstFactorInNormToAbsValue}
+Let $A$ be a $C^*$-algebra and $x,a\in A$. Then $\norm{xa} = \norm{|x|a}$.
+\end{lemma}
+\begin{proof}
+We calculate
+\[ \norm{xa}^2 = \norm{a^*x^*xa} = \norm{a^*\sqrt{x^*x}\sqrt{x^*x}a} = \norm{(\sqrt{x^*x}a)^*\sqrt{x^*x}a} = \norm{\sqrt{x^*x}a}^2 = \norm{|x|a}^2. \]
+Taking the square root gives the result.
 \end{proof}
 
 \subsection{Partial order on self-adjoint elements}
@@ -5113,7 +5116,7 @@ See Dana Williams
 
 \subsection{Absolute value}
 \begin{definition}
-Let $A$ be a unital $C^*$-algebra. For each $a\in A$, the \udef{absolute value} of $a$ is $|a| = (a^*a)^{1/2}$.
+Let $A$ be a $C^*$-algebra. For each $a\in A$, the \udef{absolute value} of $a$ is $|a| = (a^*a)^{1/2}$.
 \end{definition}
 The square root is well defined using functional calculus on the self-adjoint element $a^*a$.
 
@@ -5391,6 +5394,172 @@ If $A$ is commutative, the pure states are exactly the characters.
 \subsection{Comparison of projectors}
 Lattice
 \subsection{General comparison theory}
+
+\section{Constructions}
+\subsection{Moore-Penrose pseudoinverse}
+\begin{definition}
+Let $A$ be a $C^*$ algebra and $x\in A$. Let $x^+$ be an element of $A$ such that
+\begin{itemize}
+\item $xx^+x = x$;
+\item $x^+xx^+ = x^+$;
+\item $xx^+$ is Hermitian;
+\item $x^+x$ is Hermitian.
+\end{itemize}
+Then $x^+$ is called a \udef{Moore-Penrose pseudoinverse} of $x$.
+\end{definition}
+We will show that an element has at most one Moore-Penrose pseudoinverse, so we are justified in speaking of \emph{the} Moore-Penrose pseudoinverse of $x$, which we denote $x^+$.
+
+\begin{lemma} \label{MoorePenrosePseudoinverseSwapLemma}
+Let $A$ be a $C^*$ algebra, $x\in A$ and $x^+$ be a Moore-Penrose pseudoinverse of $x$. Then
+\begin{enumerate}
+\item $xx^+ = (x^+)^*x^*$;
+\item $x^+x = x^*(x^+)^*$;
+\item $x = xx^*x^{+*} = x^{+*}x^*x$;
+\item $x^+ = x^+x^{+*}x^* = x^*x^{+*}x^+$;
+\item $x^* = x^*xx^+ = x^+xx^*$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1,2) Immediate from $xx^+ = (xx^+)^* = (x^+)^*x^*$ and similarly for (2).
+
+(3, 4) We have $x = xx^+x$, which is equal to $xx^*x^{+*}$ and $x^{+*}x^*x$ by (1) and (2). For (3) we start with $x^+ = x^+xx^+$.
+
+(5) Follows by taking the adjoint of (3).
+\end{proof}
+
+\begin{proposition} \label{MPPseudoinverseUnique}
+Let $A$ be a $C^*$ algebra and $x\in A$. Then $x$ has at most one Moore-Penrose pseudoinverse.
+\end{proposition}
+\begin{proof}
+Suppose $a,b$ are two Moore-Penrose pseudoinverses of $x$. Then we first show $xa = xb$. Indeed, using \ref{MoorePenrosePseudoinverseSwapLemma}, we calculate
+\[ xa = a^*x^* = a^*(xbx)^* = a^*x^*(xb)^* = xaxb = xb. \]
+Similarly $ax = bx$. Thus
+\[ a = axa = (ax)a = (bx)a = b(xa) = b(xb) = bxb = b. \]
+\end{proof}
+\begin{corollary}
+Let $A$ be a $C^*$ algebra and $x\in A$ such that $x$ has a Moore-Penrose pseudoinverse. Then $(x^+)^+ = x$.
+\end{corollary}
+\begin{proof}
+Since the definition is symmetric w.r.t.\ $x\leftrightarrow x^+$, we have that $x^+$ is a Moore-Penrose pseudoinverse of $x$. By the proposition it is the only one.
+\end{proof}
+
+\begin{lemma} \label{MPPseudoinverseAdjoint}
+Let $A$ be a $C^*$ algebra and $x\in A$. Then $x^*$ has a Moore-Penrose pseudoinverse \textup{if and only if} $x$ has one. In this case $(x^*)^+ = (x^+)^*$.
+\end{lemma}
+\begin{proof}
+Assume $x$ has a Moore-Penrose pseudoinverse $x^+$. We show that $(x^+)^*$ satisfies the requirements to be a Moore-Penrose pseudoinverse of $x^*$. We have $(x^*)^+ = (x^+)^*$ by uniqueness of the Moore-Penrose pseudoinverse \ref{MPPseudoinverseUnique}.
+
+Taking the adjoint of $x = xx^+x$ gives $x^* = x^*(x^+)^*x^*$ and the adjoint of $x^+ = x^+xx^+$ gives $(x^+)^* = (x^+)^*x^*(x^+)^*$.
+
+Next, we have
+\begin{align*}
+\big(x^*(x^+)^*\big)^* &= x^+x = (x^+x)^* = x^*(x^+)^* \\
+\big((x^+)^*x^*\big)^* &= xx^+ = (xx^+)^* = (x^+)^*x^*.
+\end{align*}
+
+Finally, note that if $x^*$ has a Moore-Penrose pseudoinverse, then we have shown that $x^{**} = x$ has one.
+\end{proof}
+\begin{corollary} \label{MPPseudoinverseHermitianElement}
+The Moore-Penrose pseudoinverse of a Hermitian element is Hermitian, if it exists.
+\end{corollary}
+\begin{corollary}
+The Moore-Penrose pseudoinverse of a Hermitian element commutes with the element, if it exists.
+\end{corollary}
+Thus Hermitian elements with Moore-Penrose pseudoinverse are simply polar.
+\begin{proof}
+Follows from \ref{MoorePenrosePseudoinverseSwapLemma} and \ref{MPPseudoinverseHermitianElement}.
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a $C^*$ algebra and $x\in A$. Then the following are equivalent:
+\begin{enumerate}
+\item $x$ has a Moore-Penrose pseudoinverse;
+\item $x$ is regular;
+\item $x\widetilde{A}$ is closed;
+\item $|x|\widetilde{A}$ is closed;
+\item $|x|$ is simply polar;
+\item $x^*x$ is simply polar;
+\item $0$ is not an accumulation point of $\spec(x^*x)$;
+\item $x^*x$ has a Moore-Penrose pseudoinverse.
+\end{enumerate}
+\end{proposition}
+In this case we also have that $xA$ is closed, since $xA = x\widetilde{A}$ for regular elements.
+
+Note that we do not assume $A$ unital.
+\begin{proof}
+$(1) \Rightarrow (2)$ Immediate.
+
+$(2) \Rightarrow (3)$ Let $x'$ be the generalised inverse of $x$. Suppose $y \in x\widetilde{A}$. Then there exists $b\in \widetilde{A}$ such that $y = xb = xx'xb = xx'y$, so $0 = y- xx'y$. Conversely, if $0 = y- xx'y$, then $y = x(x'b) \in x\widetilde{A}$. Thus $x\widetilde{A}$ is exactly the kernel of the function $A\to A: y\mapsto y - xx'y$, which is continuous. Thus $x\widetilde{A}$ is closed.
+
+$(3) \Rightarrow (4)$ Let $\seq{|x|y_n}_{n\in \N}$ be a Cauchy sequence in $|x|\widetilde{A}$. For all $m,n\in \N$ we have $\norm{|x|(y_m - y_n)} = \norm{x(y_m - y_n)}$ by \ref{firstFactorInNormToAbsValue}. This means that $\seq{xy_n}$ is a Cauchy sequence in $x\widetilde{A}$. Since $x\widetilde{A}$ is closed, its limit lies in $x\widetilde{A}$ and thus can be written $xy$ for some $y\in \widetilde{A}$. Thus $\norm{x(y_n - y)} \to 0$, so also $\norm{|x|(y_n - y)} \to 0$, which means that $|x|y_n \to |x|y \in |x|\widetilde{A}$.
+
+$(4) \Rightarrow (5)$ Choose a sequence $\seq{p_n}$ of real polynomials that converges to the square root function $\sqrt{-}$ uniformly on $\interval{0,\norm{x}}$ such that no $p_n$ has a constant term (e.g.\ rescale the Bernstein polynomials \ref{uniformApproximationByBernsteinPolynomials}).
+
+For all $p_n$, we have $p_n(|x|) \in |x|\widetilde{A}$. Since $|x|\widetilde{A}$ is closed, $\sqrt{|x|} = \lim_{n\to \infty} p_n(|x|) \in |x|\widetilde{A}$. This means that $\sqrt{|x|} = |x|c$ for some $c\in \widetilde A$.
+
+Now we have
+\[ \sqrt{|x|}\widetilde{A} \supseteq \sqrt{|x|}\sqrt{|x|}\widetilde{A} = |x|\widetilde{A} \supseteq |x|c\widetilde{A} = \sqrt{|x|}\widetilde{A}, \]
+so $\sqrt{|x|}\widetilde{A} = |x|\widetilde{A}$. This also implies $\widetilde{A}\sqrt{|x|} = \big(\sqrt{|x|}\widetilde{A}\big)^* = \big(|x|\widetilde{A}\big)^* = \widetilde{A}|x|$.
+
+So we can apply \ref{simplyPolarLemma} to obtain that $\sqrt{|x|}$ is simply polar in $\widetilde{A}$. This means $\sqrt{|x|}$ has a commuting generalised inverse $d$ in $\widetilde{A}$. We do not know whether $d$ lies in $A$, but we can use it to construct a commuting generalised inverse of $|x|$ in $A$. Indeed, consider $|x|'\defeq \sqrt{|x|}d^3$. Clearly $|x|' \in \sqrt{|x|}\widetilde{A} \subseteq A$. Also it commutes with $\sqrt{|x|}$ and thus also with $|x|$. Finally, we calculate
+\begin{align*}
+|x||x|'|x| &= \sqrt{|x|}^5d^3 = \sqrt{|x|}^2 = |x| \\
+|x|'|x||x|' &= \sqrt{|x|}^4d^6 = d^3\sqrt{|x|} = |x|'.
+\end{align*}
+
+$(5) \Rightarrow (6)$ By \ref{squareSimplyPolar} and the fact that $x^*x = |x|^2$.
+
+$(6) \Rightarrow (7)$ Suppose $x^*x$ is simply polar with commuting generalised inverse $(x^*x)'$. Then we have, in $\widetilde{A}$, that
+\[ x^*x = \big(x^*x + (\vec{1} - (x^*x)'(x^*x))\big)(x^*x)'(x^*x) \]
+Now $(x^*x)'(x^*x)$ is idempotent, so $\spec\big((x^*x)'(x^*x)\big) \subseteq \{0,1\}$ by \ref{spectrumIdempotent}, and $\big(x^*x + (\vec{1} - (x^*x)'(x^*x))\big)$ is invertible. Indeed it has an inverse given by $\big((x^*x)' + (\vec{1} - (x^*x)'(x^*x))\big)$:
+\begin{align*}
+\big(x^*x + (\vec{1} - (x^*x)'(x^*x))\big)\big((x^*x)' + (\vec{1} - (x^*x)'(x^*x))\big) &= \begin{aligned}[t]x^*&x(x^*x)' + (x^*x)' - (x^*x)'x^*x(x^*x)' + x^*x \\
+&+ \vec{1} - (x^*x)'x^*x - x^*x(x^*x)'x^*x - (x^*x)'x^*x \\
+&+ (x^*x)'x^*x(x^*x)'x^*x\end{aligned} \\
+&= \vec{1} + x^*x(x^*x)' - (x^*x)'x^*x \\
+&= \vec{1}.
+\end{align*}
+This inverse is two-sided since everything commutes. Thus $0\notin \spec\big(x^*x + (\vec{1} - (x^*x)'(x^*x))\big)$. Since the spectrum is compact (\ref{spectrumCompact}), there exists $\epsilon >0$ such that $\interval{-\epsilon, \epsilon} \subseteq \res\big(x^*x + (\vec{1} - (x^*x)'(x^*x))\big)$. 
+
+Finally, by \ref{spectrumAlgebraicOperationsOnCommutingElements} (using commutativity), we have
+\begin{align*}
+\spec(x^*x) &= \spec\Big(\big(x^*x + (\vec{1} - (x^*x)'(x^*x))\big)(x^*x)'(x^*x)\Big) \\
+&\subseteq \spec\big(x^*x + (\vec{1} - (x^*x)'(x^*x))\big)\spec\big((x^*x)'(x^*x)\big) \\
+&\subseteq \big(\interval[oc]{-\infty, -\epsilon} \cup \interval[co]{\epsilon, \infty}\big)\cdot \{0,1\} \\
+&= \interval[oc]{-\infty, -\epsilon} \cup \interval[co]{\epsilon, \infty} \cup \{0\},
+\end{align*}
+so $0$ is not an accumulation point of $\spec(x^*x)$.
+
+$(7) \Rightarrow (8)$ In this case the function $f: \interval[co]{0,\infty} \to \interval[co]{0,\infty}: y \mapsto \begin{cases}
+y^{-1} & (y \neq 0) \\ 0 & (y = 0).
+\end{cases}$ is continuous when restricted to $\spec(x^*x)$. It also maps $0$ to $0$, so we can define $(x^*x)^+ \defeq f(x^*x)$ using \ref{nonUnitalContinuousFunctionalCalculus}.
+
+By functional calculus, we see that $f(x^*x)$ is a Moore-Penrose pseudoinverse: both $f\cdot \id_{\sigma(x^*x)}\cdot f - f$ and $\id_{\sigma(x^*x)}\cdot f\cdot \id_{\sigma(x^*x)} - \id_{\sigma(x^*x)}$ are identically zero; $f\cdot \id_{\sigma(x^*x)} = \id_{\sigma(x^*x)}\cdot f$ is real-valued.
+
+$(8) \Rightarrow (1)$ Suppose $x^*x$ has a Moore-Penrose pseudoinverse $(x^*x)^+$. We set $x^+ \defeq (x^*x)^+x^*$ and claim this is a Moore-Penrose pseudoinverse. Indeed, to show $x = xx^+x$, we calculate, using the fact that $x^*x$ is Hermitian and \ref{MPPseudoinverseAdjoint},
+\begin{align*}
+(x - xx^+x)^*(x - xx^+x) &= \big(x - x(x^*x)^+x^*x\big)^*\big(x - x(x^*x)^+x^*x\big) \\
+&= x^*x - x^*x(x^*x)^+x^*x - x^*x(x^*x)^{+*}x^*x + x^*x(x^*x)^{+*}x^*x(x^*x)^+x^*x \\
+&= x^*x - x^*x - (x^*x)^* + x^*x(x^*x)^{+*}x^*x \\
+&= x^*x - x^*x - x^*x + (x^*x)^{*} = 0.
+\end{align*}
+Thus, by the $B^*$-identity,
+\[ \norm{x - xx^+x} = \sqrt{\norm{(x - xx^+x)^*(x - xx^+x)}} = 0, \]
+so $x = xx^+x$.
+
+We also calculate
+\[ x^+xx^+ = (x^*x)^+x^*x(x^*x)^+x^* = (x^*x)^+x^* = x^+. \]
+
+Finally, we note that since $(x^*x)^+x^*x$ is Hermitian, we have that $x^+x = \big((x^*x)^+x^*\big)x = (x^*x)^+x^*x$ is also Hermitian. Since $(x^*x)^{+}$ is Hermitian, by \ref{MPPseudoinverseHermitianElement}, we have
+\[ xx^+ = x(x^*x)^+x^* = \big(x(x^*x)^+x^*\big)^*, \]
+so $xx^+$ is Hermitian.
+\end{proof}
+
+\subsubsection{The product formula}
+
+\subsubsection{Tychonoff regularisation}
+
+
 
 \section{Matrix $C^*$-algebras}
 \begin{proposition}
