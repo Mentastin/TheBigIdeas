@@ -686,6 +686,13 @@ so it is enough to show $\im(T|_{\ker(ST)}) = \im(T)\cap\ker(S)$. First take $v\
 Then take $v\in\im(T)\cap\ker(S)$, so we can find a $w$ such that $v = Tw$. Also $Sv = STw = 0$, so $w\in\ker(ST)$ and $v\in\im(T|_{\ker{ST}})$.
 \end{proof}
 
+\begin{lemma} \label{complementMapIdentityLemma}
+Let $V$ be a vector space, $L\in \Lin(V)$ and $W\subseteq V$ a subspace. Then $W \subseteq \ker(L)$ \textup{if and only if} $(\id_V - L)|_W = \id_W$.
+\end{lemma}
+\begin{proof}
+For all $w\in W$, we have $(\id_V - L)(w) = w - L(w)$, so $L(w) = w - (\id_V - L)(w)$. We have $L(w) = 0$ iff $w - (\id_V - L)(w) = 0$ iff $w = (\id_V - L)(w)$.
+\end{proof}
+
 \subsubsection{Algebraic operations on linear maps}
 \begin{definition}
 Suppose $K,L \in \Lin_{\mathbb{F}}(V,W)$ and $\lambda \in \mathbb{F}$.
@@ -821,13 +828,13 @@ Now take $u\in \im(\id_V - P)$. Then there exists $w\in V$ such that $u = w - Pw
 Let $V$ be a vector space and $P: V\to V$ a function. Then the following are equivalent:
 \begin{enumerate}
 \item $P$ is a projector;
-\item there exist complementary subspaces $U,W$ such that
-\[ P: U\oplus W = V \to V: u+w \mapsto u \qquad\text{and}\qquad \id_V - P: U\oplus W = V \to V: u+w \mapsto w. \]
+\item there exist complementary subspaces $U,W$ such that $P: U\oplus W = V \to V: u+w \mapsto u$.
 \end{enumerate}
+In this case $\id_V - P: U\oplus W = V \to V: u+w \mapsto w$.
 \end{proposition}
 \begin{proof}
 $(1) \Rightarrow (2)$ Set $U = \im P$ and $W = \im(\id_V - P)$. Also $W = \ker(P)$ by \ref{projectorKernelImageLemma}. Then
-\[ V = \im\id_V = \im(P + \id_V - P) \subseteq \im P + \im(\id_V - P) = U + W \subseteq V, \]
+\[ V = \im(\id_V) = \im(P + \id_V - P) \subseteq \im P + \im(\id_V - P) = U + W \subseteq V, \]
 so $U+W = V$. Next we show that the sum is direct. Take $v\in U \cap W = \im P \cap \ker P$. Since $v\in \im P$, we have $v= Pv$ by \ref{projectorKernelImageLemma}. Since $v\in \ker P$, we have $v= Pv = 0$. The sum is direct by \ref{directSumCriterion}.
 
 Finally take $u+w\in U\oplus W$. Then $P(u+w) = Pu + Pw = u+0 = u$ and $(\id_V-P)(u+w) = u+w - u = w$.
@@ -846,6 +853,57 @@ Let $U,W$ be the complementary subspaces of the proposition, so $V = U\oplus W$.
 \begin{definition}
 Let $V$ be a vector space and $U,W$ subspaces such that $U\oplus W = V$. Then the function $P_U: U\oplus W \to U: u+w \mapsto u$ is called the \udef{projector on $U$ along $W$}.
 \end{definition}
+Note that a projector $P$ is associated to a \emph{pair} of subspaces $(U,W)$. For any one subspace $U$ there exist many possible projectors $P$ with $\im(P) = U$.
+
+\begin{lemma} \label{projectorEquivalentsLemma}
+Let $V$ be a vector space, $U, W\subseteq V$  subspaces such that $U\cap W = \{0\}$ and $P: V\to V$ a linear function. Then the following are equivalent:
+\begin{enumerate}
+\item $V = U\oplus W$ and $P$ is the projector on $U$ along $W$;
+\item $P|_U = \id_U$, $\im(P) \subseteq U$ and $\im(\id_V - P) \subseteq W$;
+\item $V = U\oplus W$, $P|_U = \id_U$ and $\ker(P) = W$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Immediate.
+
+$(2) \Rightarrow (3)$ For all $v\in V$, we have $v = v -P(v) + P(v) \in \im(\id_V - P) + \im(P)$, so $V = U+W$. Since $U\cap W = \{0\}$, we have that the sum is direct.
+
+First take $v\in \ker(P)$. Then $v = v-P(v) \in \im(\id_V - P) \subseteq W$.
+
+Now take $w\in W$. Then $(\id_V - P)w = w - P(w) \eqdef w' \in W$, so $P(w) = w - w'$. We have $P(w) \in \im(P) \subseteq U$ and $w-w'\in W$. Since the sum is direct, we have $U\cap W = \{0\}$ and thus $P(w) = 0$.
+
+$(3) \Rightarrow (1)$ Take $v = u+w \in U\oplus W = V$. Then $P(v) = P(u)+ P(w) = u+0 = u$.
+\end{proof}
+
+Cfr. \ref{complementMapIdentityLemma}.
+
+\begin{lemma} \label{commutingProjectorLemma}
+Let $V$ be a vector space and $P,Q: V\to V$ projectors. Then each of the following implies the next:
+\begin{enumerate}
+\item $PQ = QP$;
+\item $\im(PQ) = \im(P)\cap \im(Q)$;
+\item $\im(PQ) \subseteq \im(Q)$;
+\item $PQ$ is a projector.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ We have $\im(PQ) \subseteq \im(P)$ and $\im(PQ) = \im(QP) \subseteq \im(Q)$, so $\im(PQ) \subseteq \im(P)\cap \im(Q)$. Conversely, take $x\in \im(P)\cap\im(Q)$. Then $PQx = Px = x$ by \ref{projectorKernelImageLemma}, so $x\in \im(PQ)$.
+
+$(2) \Rightarrow (3)$ Immediate.
+
+$(3) \Rightarrow (4)$ Take arbitrary $v\in V$. Then we can write $v = v_1 + v_2 \in \im(Q)\oplus \ker(Q)$ and $v_1 = v_1' + v_2'' \in \im(P)\oplus \ker(P)$. Now $PQv = Pv_1 = v_1'$. Since $\im(PQ) \subseteq \im(Q)$, we have $v_1'\in \im(Q)$. By construction $v_1'\in \im(P)$. Thus $PQv_1' = Pv_1' = v_1'$, which implies $PQPQv = PQv_1' = v_1' = PQv$. Thus $PQ$ is idempotent.
+\end{proof}
+
+\begin{example}
+In \ref{commutingProjectorLemma}, it is not true that $PQ$ being a projector implies $PQ = QP$. Indeed, set
+\[ A = \begin{pmatrix}
+1 & 0 \\ 0 & 0
+\end{pmatrix}\qquad \text{and}\qquad B = \begin{pmatrix}
+1 & 1 \\ 0 & 0
+\end{pmatrix}. \]
+Then $A^2 = A$ and $B^2 = B$, but $AB = B \neq A = BA$.
+\end{example}
+
 
 TODO trace:
 \begin{lemma}
@@ -2282,6 +2340,7 @@ Or: $(A^\transp)_{ab} = A_{ba}$ and $\tensor{(A^\transp)}{_i^j} = \tensor{A}{^j_
 
 \chapter{Ordered vector spaces}
 TODO link ordered groups.
+\section{Preordered vector spaces}
 \begin{definition}
 Let $\sSet{\R, V, +}$ be a real vector space and $\precsim$ a preorder on the set $V$. Then $\precsim$ is a \udef{vector preorder} if it is compatible with the vector space structure as follows: $\forall x,y,z\in V, \lambda\in\R$
 \begin{enumerate}
@@ -2346,6 +2405,12 @@ For the second implication, assume $w\precsim v$, so $w-v \precsim 0$. We can th
 
 Now let $\precsim$ be connex and assume $v+ x \precsim w+y$. By connexity, we either have $v\precsim w$ or $w\precsim v$. By the previous part, $w\precsim v$ implies $x\precsim y$. So either $v\precsim w$ or $x\precsim y$.
 \end{proof}
+\begin{corollary} \label{intervalSumInclusion}
+Let $V$ be a preordered vector space, $u_1\precsim v_1$ and $u_2 \precsim v_2$. Then $\interval{u_1, v_1} + \interval{u_2, v_2} \subseteq \interval{u_1 + u_2, v_1+ v_2}$.
+\end{corollary}
+\begin{proof}
+Take $a+ b \in \interval{u_1, v_1} + \interval{u_2, v_2}$. Since $u_1 \precsim a$ and $u_2 \precsim b$, we have $u_1 + u_2 \precsim a+b$. Similarly $a+b \precsim v_1 + v_2$, so $a+b \in \interval{u_1 + u_2, v_1+ v_2}$.
+\end{proof}
 
 \begin{lemma}
 Let $X$ be a topological space. The spaces
@@ -2366,7 +2431,16 @@ f \wedge g &= \frac{1}{2}(f+g) - \frac{1}{2}|f-g|.
 So the join and meet are still continuous and have the same properties as $f,g$.
 \end{proof}
 
-\section{The positive cone}
+\begin{lemma} \label{vectorPreorderDual}
+Let $\sSet{V,\precsim}$ be a preordered vector space. Then $\sSet{V,\precsim^\transp}$ is also a preordered vector space.
+\end{lemma}
+\begin{proof}
+We show the two conditions for $\precsim^\transp$ to be a vector preorder. Take $x,y,z\in V$ such that $x\precsim^\transp y$ and $\lambda > 0$. Then $y \precsim x$ and thus $y + z \precsim x+z$, so $x+z \precsim^\transp y+z$.
+
+Similarly $y\precsim x$ implies $\lambda y \precsim \lambda x$, so $\lambda x \precsim^\transp \lambda y$.
+\end{proof}
+
+\subsection{The positive cone}
 \begin{definition}
 Let $V$ be a preordered vector space. The subset
 \[ V^+ \defeq \setbuilder{v\in V}{0 \precsim v} \]
@@ -2418,6 +2492,13 @@ Let $V$ be a preordered vector space, $v,w\in V$ and $\alpha, \beta\in \F$ such 
 \begin{proof}
 We have $\alpha v \precsim \alpha w \precsim \beta w$.
 \end{proof}
+\begin{corollary} \label{intervalScalarMultiplicationInclusion}
+Let $V$ be a preordered vector space, $0\precsim v \precsim w\in V$ and $0\leq \alpha \leq \beta \in \R$. Then $\interval{\alpha, \beta} \cdot \interval{v, w} \subseteq \interval{\alpha v, \beta w}$.
+\end{corollary}
+\begin{proof}
+Take $\mu x\in \interval{\alpha, \beta} \cdot \interval{v, w}$. Then $\alpha \leq \mu$ and $v \precsim x$, so $\alpha v \precsim \mu x$. Similarly $\mu x \precsim \beta w$. Thus $\mu x \in \interval{\alpha v, \beta w}$.
+\end{proof}
+
 TODO following corollary of previous.
 \begin{lemma} \label{scalarMultiplicationInequalities}
 Let $V$ be a preordered vector space, $v\in V^+$ and $\alpha\in \R$. Then
@@ -2452,7 +2533,29 @@ Let $V$ be a partially ordered vector space and $v,w\in V^+$. If $v+w = 0$, then
 We have $v \leq v$ and $0\leq w$, so $0\leq v\leq v+w = 0$. Thus $v = 0$. Similarly $w = 0$.
 \end{proof}
 
-\section{Upsets, downsets and bounds}
+\subsection{Archimedean spaces}
+\begin{definition}
+A partially ordered vector space $V$ is called \udef{Archimedean} if $\bigwedge_{\epsilon > 0}\epsilon v = 0$ for all $v\in V^+$.
+\end{definition}
+
+\begin{lemma} \label{ArchimedeanEquivalents}
+Let $\sSet{V,\leq}$ be a partially ordered vector space. Then the following are equivalent:
+\begin{enumerate}
+\item $V$ is Archimedean;
+\item $\bigwedge S\cdot v = 0$ for all $v\in V^+$ and $S\subseteq \R^+$ such that $\bigwedge S = 0$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Clearly $(S\cdot v)^\geq \supseteq \big( \interval[o]{0,+\infty}\cdot v\big)^\geq$. For the other inclusion, take $w\in (S\cdot v)^\geq$ and an arbitrary $\epsilon > 0$. Then there exists $\mu \in S$ such that $\mu \leq \epsilon$, so $w \leq \mu v \leq \epsilon v$ by \ref{scalarInequalityImpliesVectorInequality}. Since $\epsilon$ was taken arbitrarily, we have $w\in \big( \interval[o]{0,+\infty}\cdot v\big)^\geq$.
+
+$(2) \Rightarrow (1)$ Immediate, by setting $S = \interval[o]{0,+\infty}$.
+\end{proof}
+
+\begin{example}
+The space $\R^2$ with the lexicographic ordering $\leq_l$ is not Archimedean. Indeed $(0,1)$ is a lower bound of $n^{-1}(1,1) = (n^{-1}, n^{-1})$, but $(0,1) \neq \vec{0}$.
+\end{example}
+
+\subsection{Upsets, downsets and bounds}
 \begin{lemma} \label{sumUpperLowerBounds}
 Let $V$ be a preordered vector space, $A, B\subseteq V$ subsets and $v\in V$. Then
 \begin{enumerate}
@@ -2610,18 +2713,62 @@ Let $V$ be a preordered vector space, $A\subseteq V^+$ and $\alpha\in \R$. Then
 \item if $\alpha < 0$, then $\upset (\alpha A) = \upset\{\alpha\}\cdot \downset A = \alpha \downset A$ and $\downset(\alpha A) = \downset\{\alpha\} \cdot \upset A = \alpha \upset A$.
 \end{enumerate}
 \end{corollary}
-Compare with \ref{scalarMultipleUpperLowerBounds}, which still holds if $A \nsubseteq V^+$.
+Compare with \ref{scalarMultipleUpDownSets}, which still holds if $A \nsubseteq V^+$.
 \begin{proof}
-(1) By the lemma (and reflexivity), we have $\upset(\alpha A) \supseteq \upset\{\alpha\}\cdot \upset A \supseteq \alpha \upset A$. The equality of the first and last sets follows from \ref{scalarMultipleUpperLowerBounds}.
+(1) By the lemma (and reflexivity), we have $\upset(\alpha A) \supseteq \upset\{\alpha\}\cdot \upset A \supseteq \alpha \upset A$. The equality of the first and last sets follows from \ref{scalarMultipleUpDownSets}.
 
 The other point is dual.
 
-(2) By the lemma (and reflexivity), we have $\upset(\alpha A) \subseteq \upset\{\alpha\}\cdot \downset A \subseteq \alpha \downset A$. The equality of the first and last sets follows from \ref{scalarMultipleUpperLowerBounds}.
+(2) By the lemma (and reflexivity), we have $\upset(\alpha A) \subseteq \upset\{\alpha\}\cdot \downset A \subseteq \alpha \downset A$. The equality of the first and last sets follows from \ref{scalarMultipleUpDownSets}.
 
 The other point is dual.
 \end{proof}
 
-\section{Riesz decomposition property}
+
+\subsubsection{Extrema in vector posets}
+\begin{lemma} \label{extremaVectorSum}
+Let $V$ be a vector poset and $A,B\subseteq V$. Then
+\begin{enumerate}
+\item if $\bigvee A$ and $\bigvee B$ exist, then $\bigvee(A+B)$ exists and $\bigvee(A+B) = \bigvee A + \bigvee B$;
+\item if $\bigwedge A$ and $\bigwedge B$ exist, then $\bigwedge(A+B)$ exists and $\bigwedge(A+B) = \bigwedge A + \bigwedge B$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Set $x \defeq \bigvee A$ and $y \defeq \bigvee B$. We have that $x+y$ is an upper bound of $A+B$ by \ref{sumUpperLowerBounds}. To show that $x+y$ is the least upper bound, let $v$ be some other upper bound of $A+B$. Take arbitrary $a\in A$ and $b\in B$. Then $a+b \leq v$, so $b\leq v-a$. Thus $v-a$ is an upper bound of $B$ and so $y \leq v-a$. Now $a\leq v-y$, so $v-y$ is an upper bound of $A$, meaning $x \leq v-y$. This implies $x+y \leq v$ and thus that $x+y$ is the least upper bound.
+
+(2) Follows from (1) by duality, see \ref{vectorPreorderDual}.
+\end{proof}
+
+\begin{lemma} \label{extremaScalarProduct}
+Let $V$ be an Archimedean vector poset, $A\subseteq V^+$ and $S\subseteq \R^+$. Then
+\begin{enumerate}
+\item if $\bigvee A$ and $\bigvee S$ exist, then $\bigvee(S\cdot A)$ exists and $\bigvee(S\cdot A) = \bigvee S\cdot \bigvee A$;
+\item if $\bigwedge A$ and $\bigwedge S$ exist, then $\bigwedge(S\cdot A)$ exists and $\bigwedge(S\cdot A) = \bigwedge S\cdot \bigwedge A$;
+\end{enumerate}
+\end{lemma}
+In fact any of these points is equivalent to $V$ being Archimedean.
+\begin{proof}
+(1) Set $\lambda \defeq \bigvee S$ and $x \defeq \bigvee A$. First suppose $\lambda = 0$. Then $S = \{0\}$, so $S\cdot A = \{0\}$ and $0 = \bigvee(S\cdot A) = 0\cdot \bigvee A = \bigvee S \cdot \bigvee A$.
+
+Now suppose $\lambda \neq 0$. Then, WLOG, we may assume $0\notin S$. We have that $\lambda x$ is an upper bound of $S\cdot A$ by \ref{scalarMultipleSetsUpperLowerBounds}.
+
+To show that $\lambda x$ is the least upper bound, let $v$ be some other upper bound of $S\cdot A$. Take arbitrary $\mu\in S$ and $a\in A$, then $\mu a \leq v$, so $a \leq \mu^{-1}v$. Since $a\in A$ was taken arbitrarily, we have that $\mu^{-1}v$ is an upper bound of $A$ and thus $x \leq \mu^{-1}v$, so $\mu x\leq v$.
+
+Now we have $\lambda x - v \leq \lambda x - \mu x = (\lambda - \mu) x$. Since $\mu$ was taken arbitrarily, we have that $\lambda x - v$ is a lower bound of $(\lambda - S)x$. Since $V$ is Archimedean and $\bigwedge (\lambda - S) = \lambda + \bigwedge (-S) = \lambda - \bigvee S = \lambda - \lambda = 0$, we have $\bigwedge (\lambda - S)x = 0$ by \ref{ArchimedeanEquivalents}. Thus $\lambda x - v \leq 0$ and so $\lambda x \leq v$. This implies that $\lambda x$ is the least upper bound.
+
+(2) First suppose $0\in S$. Then $\bigvee S = 0$, so $\bigvee S \cdot \bigvee A = 0$. Also $0\in S\cdot A$, which implies that $0 = \bigvee S\cdot A$ (since $S\cdot A \subseteq V^+$).
+
+Now suppose $0\notin S$. Set $\lambda \defeq \bigvee S$ and $x\defeq \bigvee A$.
+
+We have that $\lambda x$ is a lower bound of $S\cdot A$ by \ref{scalarMultipleSetsUpperLowerBounds}.
+
+To show that $\lambda x$ is the greatest lower bound, let $v$ be some other lower bound of $S\cdot A$. Take arbitrary $\mu\in S$ and $a\in A$, then $v \leq \mu a$, so $\mu^{-1}v \leq a$. Since $a\in A$ was taken arbitrarily, we have that $\mu^{-1}v$ is a lower bound of $A$ and thus $\mu^{-1}v \leq x$, so $v \leq \mu x$.
+
+Now we have $v - \lambda x \leq \mu x - \lambda x = (\mu - \lambda) x$. Since $\mu$ was taken arbitrarily, we have that $v - \lambda x$ is a lower bound of $(S - \lambda)x$. Since $V$ is Archimedean and $\bigwedge (S - \lambda) = \lambda - \lambda = 0$, we have $\bigwedge (S - \lambda)x = 0$ by \ref{ArchimedeanEquivalents}. Thus $v - \lambda x \leq 0$ and so $v \leq \lambda x$. This implies that $\lambda x$ is the greatest lower bound.
+\end{proof}
+
+
+\subsection{Riesz decomposition property}
 \begin{definition}
 Let $\sSet{V, \precsim}$ be an ordered vector space. We say that $V$ has the \udef{Riesz decomposition property} if for all $u_1,v_1,u_2,v_2\in V$ such that $u_1\precsim v_1$ and $u_2\precsim v_2$, we have $\interval{u_1,v_1} + \interval{u_2,v_2} = \interval{u_1+u_2,v_1+v_2}$.
 \end{definition}
@@ -2644,6 +2791,22 @@ $(3) \Rightarrow (2)$ Suppose $z\in \interval{u_1+u_2,v_1+v_2}$. Then $u_1+u_2 \
 
 $(2) \Rightarrow (1)$ It is enough to prove that the opposite inclusion always holds. Indeed, take $z_1 + z_2 \in \interval{u_1,v_1} + \interval{u_2,v_2}$, so $u_1 \precsim z_1 \precsim v_1$ and $u_2 \precsim z_2 \precsim v_2$. Then $u_1 + u_2 \precsim z_1 + z_2 \precsim v_1 + v_2$ by \ref{additionVectorInequalities}. This implies $z_1+z_2 \in \interval{u_1+u_2,v_1+v_2}$.
 \end{proof}
+
+\subsection{Functions on ordered vector spaces}
+\subsubsection{Positive functions}
+\begin{definition}
+Let $V,W$ be preordered vector spaces and $f: V\to W$ a function. Then $f$ is called \udef{positive} if $f^\imf(V^+) \subseteq W^+$.
+\end{definition}
+
+\begin{lemma} \label{positiveLinearFunctionIsotone}
+Let $V,W$ be preordered vector spaces and $f: V\to W$ a linear function. Then $f$ is positive \textup{if and only if} $f$ is order-preserving.
+\end{lemma}
+\begin{proof}
+First assume $f$ is order-preserving and take $v\in V^+$. Then $0\precsim v$, so $0=f(0) \precsim f(v)$ and thus $f(v)\in W^+$. Since $v\in V^+$ was taken arbitrarily, we have $f^\imf(V^+) \subseteq W^+$.
+
+Now assume $f$ is positive and take $v\precsim w$ in $V$. Then $w-v \in V^+$ and so $f(w) - f(v) = f(w-v) \in W^+$. This implies $f(v)\precsim f(w)$.
+\end{proof}
+
 
 \section{Riesz spaces}
 
@@ -2680,20 +2843,16 @@ Let space $\R^2$ with lexicographic ordering $\leq_l$ is a Riesz space. We have
 \end{cases} \]
 \end{example}
 
-\begin{theorem}
-Let $V$ be a Riesz space and $v,w_1,w_2\in V^+$ such that $v \leq w_1 + w_2$. Then $\exists v_1, v_2\in V^+$ such that $v = v_1 + v_2$ and $v_1 \leq w_2, v_2 \leq w_2$.
-\end{theorem}
-\begin{proof}
-Set $v_1 = v\wedge w_1$ and $v_2 = v - v_1$. These satisfy all the properties. We verify the inequality $v_2 \leq w_2$: from $w_2 \geq v - w_1$ we get
-\[ w_2 = 0\vee w_2 \geq 0\vee (v - w_1) = v + (-v)\vee(-w_1) = v - v\wedge w_1 = v-v_1 = v_2. \]
-\end{proof}
-
-
 \begin{theorem}[Riesz decomposition] \label{RieszDecomposition}
 Every Riesz space has the Riesz decomposition property.
 \end{theorem}
 \begin{proof}
-We use \ref{RieszDecompositionLemma}.
+We use \ref{RieszDecompositionLemma}. Take $v_1,v_2\in V^+$ and $0 \leq w \leq v_1+v_2$. Set $w_1 \defeq w\wedge v_1$ and $w_2 \defeq w-w_1$, so $w = w_1+w_2$. We want to show that $0\leq w_1 \leq v_1$ and $0 \leq w_2 \leq v_2$.
+
+Since $0\leq w$ and $0\leq v_1$, we have $w_1 = w\wedge v_1 \geq 0$. Clearly we also have $w_1 = w\wedge v_1 \leq v_1$.
+
+Since $w_1 = w\wedge v_1 \leq w$, we have $0 \leq w - w_1 = w_2$. Since $w\leq v_1 + v_2$, we have $v_2 \geq w-v_1$. Now
+\[ v_2 = 0\vee v_2 \geq 0\vee (w - v_1) = w + (-w)\vee(-v_1) = w - w\wedge v_1 = w-w_1 = w_2. \]
 \end{proof}
 
 
@@ -2881,6 +3040,16 @@ The rest are immediate consequences, using the results of \ref{PositiveNegativeE
 In particualar, for (8) we have that $|v|=0$ implies $v^+ + v^- = 0$, which implies $v^+ = -v^-$. Thus $0\leq v^-$ and $0\leq -v^-$, so $v^- = 0$. Then $v^+ = 0$ and thus so is $v$.
 \end{proof}
 
+\begin{lemma} \label{solidLemma}
+Let $V$ be a Riesz space and $v,w\in V$, then
+\[ |w|\leq |v| \iff -|v| \leq w \leq |v|. \]
+\end{lemma}
+\begin{proof}
+First sssume $|w| \leq |v|$. Since we have $w \leq |w|$, we also have $w\leq |v|$. Also $-w \leq |-w| = |w|$, so $-|v| \leq -|w| \leq w$.
+
+Conversely, we have $w\leq |v|$ and $-|v| \leq w$ implies $-w\leq |v|$. So $|w| = w\vee (-w) \leq |v|$.
+\end{proof}
+
 \begin{lemma} \label{positiveNegativePartAverage}
 Let $V$ be a Riesz space and $v\in V$. Then
 \begin{enumerate}
@@ -3005,17 +3174,26 @@ Using \ref{absoluteValueDifference} and \ref{sumAsMeetJoin}, we get
 &= (v \vee w) - (v \wedge w) = |v-w|.
 \end{align*}
 \end{proof}
-\begin{corollary}[Birkhoff inequalities]
-Let $V$ be a Riesz space and $u,v,w\in V$, then
+\begin{corollary}[Birkhoff inequalities] \label{BirkhoffInequalities}
+Let $V$ be a Riesz space and $t,u,v,w\in V$, then
 \begin{enumerate}
 \item $|u\vee v - u\vee w| \leq |v-w|$ and $|u\wedge v - u\wedge w| \leq |v-w|$;
+\item $|t\vee u - v\vee w| \leq |t-v| + |u-w|$ and $|t\wedge u - v\wedge w| \leq |t-v| + |u-w|$;
 \item $|v^+-w^+|\leq |v-w|$ and $|v^- - w^-|\leq |v-w|$.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
 (1) These follow from the lemma, \ref{positiveVectorAddition} and the fact that the absolute value is positive.
 
-(2) Follows from (1) because
+(2) We calculate, using the triangle inequality \ref{triangleInequalityRieszSpaces} and point (1),
+\begin{align*}
+|t\vee u - v\vee w| &= |t\vee u - v \vee u + v\vee u - v\vee w| \\
+&\leq |t\vee u - v \vee u| + |v\vee u - v\vee w| \\
+&\leq |t - v| + |u - w|.
+\end{align*}
+The argument for the second part is similar.
+
+(3) Follows from (1) because
 \[ |0\vee v - 0\vee w| = |v^+ -w^+| \qquad\text{and}\qquad |0\wedge v - 0\wedge w| = |v^- - w^-|. \]
 \end{proof}
 
@@ -3070,213 +3248,6 @@ We calculate
 where we have used \ref{absoluteValueDifference}, \ref{firstMiniMaxCorollary} and \ref{lemmaRieszSpaces}.
 \end{proof}
 
-\subsection{Subsets}
-\begin{definition}
-Let $V$ be a Riesz space. A subset $E$ is called
-\begin{itemize}
-\item a \udef{Riesz subspace} if it is both a subspace and a sublattice;
-\item \udef{solid} if for all $v\in E$ the interval $[-|v|,|v|]$ is a subset of $E$;
-\item a \udef{Riesz ideal} if it is a solid (vector) subspace;
-\item a \udef{band} if it is a Riesz ideal such that for all subsets $S\subseteq E$, we have $\sup(S) \subset E$. 
-\end{itemize}
-\end{definition}
-For the definition of a Riesz ideal we only assume it is a linear subspace, not a Riesz subspace. However it turns out that a Riesz ideal is automatically a Riesz subspace, see \ref{RieszIdealRieszSubspace}. 
-
-\begin{lemma} \label{RieszSubspaceJoinClosure}
-Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is a Riesz subspace if $E$ is a subspace that is closed under taking joins.
-\end{lemma}
-\begin{proof}
-For all $v,w\in E$, we have $v\wedge w = -\big((-v)\vee (-w)\big)\in E$.
-\end{proof}
-
-\begin{example}
-Consider the Riesz space $\cont(\interval{0,1})$.
-\begin{itemize}
-\item The subset of polynomials is a subspace, but not a Riesz subspace;
-\item The subset of constant functions is a Riesz subspace, but not a Riesz ideal.
-\item The subset $\setbuilder{f\in \cont(\interval{0,1})}{f(0) = 0}$ is a Riesz ideal, but not a band. Consider the set $\{f_n\}_{n\in\N}$ where $f_n(x) = 1 \wedge nx$. Then $\sup f_n$ exists in $\cont(\interval{0,1})$ and equals $\underline{1}$, which is not an element of the set (note that it is not $[x\neq 0]$, because we are working in $\cont(\interval{0,1})$).
-\item The subset $\setbuilder{f\in \cont(\interval{0,1})}{\forall x\in \interval{0,\frac{1}{2}}: f(x) = 0}$ is a band. 
-\end{itemize}
-Consider the Riesz space $\R^\N$ with pointwise ordering.
-\begin{itemize}
-\item the set of bounded sequences $\ell_\infty$ is an ideal;
-\item the set of convergent sequences $c$ is a Riesz subspace of $\ell_\infty$;
-\item the set $c_0$ of sequences that converge to $0$ is an ideal in $c$.
-\end{itemize}
-\end{example}
-
-\subsubsection{Riesz ideals}
-\begin{lemma} \label{RieszIdealRieszSubspace}
-Every Riesz ideal is a Riesz subspace.
-\end{lemma}
-\begin{proof}
-The Riesz ideal is a Riesz subspace if it is closed under lattice operations, i.e.\ under meets and joins. By \ref{RieszSubspaceJoinClosure}, we just need to check closure under joins. This follows from
-\[ v \vee w = \frac{1}{2}\big(v+ w+|v-w|\big) \]
-(\ref{absoluteValueMeetJoin}) and the fact that the Riesz ideal is a linear subspace.
-\end{proof}
-
-\begin{lemma} \label{solidLemma}
-Let $V$ be a Riesz space and $v,w\in V$, then
-\[ |w|\leq |v| \iff -|v| \leq w \leq |v|. \]
-\end{lemma}
-\begin{proof}
-First sssume $|w| \leq |v|$. Since we have $w \leq |w|$, we also have $w\leq |v|$. Also $-w \leq |-w| = |w|$, so $-|v| \leq -|w| \leq w$.
-
-Conversely, we have $w\leq |v|$ and $-|v| \leq w$ implies $-w\leq |v|$. So $|w| = w\vee (-w) \leq |v|$.
-\end{proof}
-
-\begin{proposition} \label{RieszSolidEquivalents}
-Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then the following are equivalent:
-\begin{enumerate}
-\item $E$ is solid;
-\item $|w|\leq |v| \implies w\in E$ for all $v\in E$ and $w\in V$;
-\item we have
-\begin{enumerate}
-\item $w \in E \iff |w|\in E$ for all $w\in V$;
-\item $0\leq w \leq v \implies w\in E$ for all $v\in E$ and $w\in V$;
-\end{enumerate}
-\item we have
-\begin{enumerate}
-\item $w \in E \iff |w|\in E$ for all $w\in V$;
-\item $v\wedge w\in E$ for all $v\in E^+$ and $w\in V^+$.
-\end{enumerate}
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-$(1) \Leftrightarrow (2)$ Immediate from \ref{solidLemma}.
-
-$(2) \Rightarrow (3a)$ First suppose $w\in E$. Since $\big||w|\big| = |w|\leq |w|$, we have $|w|\in E$. Now suppose $|w|\in E$. Since $|w|\leq |w| = \big||w|\big|$, we have $w\in E$.
-
-$(2) \Rightarrow (3b)$ Assume $0 \leq w \leq v$. Since $v = |v|$ and $w = |w|$, we have $|w|\leq |v|$, so $w\in E$.
-
-$(3) \Rightarrow (2)$ Assume $|w| \leq |v|$ for some $v\in E$ and $w\in V$. As $|v|\in E$ by (3a), we have $|w|\in E$ by (3b) and so $w\in E$ by (3a).
-
-$(3b) \Rightarrow (4b)$ We have $0\leq v\wedge w\leq v$, so $v\wedge w\in E$.
-
-$(4b) \Rightarrow (3b)$ 
-\end{proof}
-\begin{corollary} \label{RieszIdealEquivalents}
-Let $V$ be a Riesz space and $E\subseteq V$ a subspace. Then the following are equivalent:
-\begin{enumerate}
-\item $E$ is a Riesz ideal;
-\item we have
-\begin{enumerate}
-\item $w \in E \implies |w|\in E$ for all $w\in V$;
-\item $0\leq w \leq v \implies w\in E$ for all $v\in E$ and $w\in V$.
-\end{enumerate}
-\end{enumerate}
-\end{corollary}
-\begin{proof}
-The only point we need to prove is that $(2b)$ implies that $|w|\in E \implies w\in E$. Take $w\in V$ such that $|w|\in E$. Since $w^+ \leq w^+ + w^- = |w|$, we have $w^+\in E$. Similarly $w^-\in E$. Since $E$ is a subspace, $w = w^+ - w^- \in E$.
-\end{proof}
-
-\begin{lemma} \label{generatedRieszIdeals}
-Let $V$ be a Riesz space and $A\subseteq V$ a subset. The Riesz ideal generated by $A$ is given by
-\[ R = \setbuilder{w\in V}{\exists N\in \N: \exists \seq{\alpha_n}_{n=0}^N \subseteq \R: \exists \seq{v_n}_{n=0}^N \subseteq A: \; |w| \leq \sum_{n=0}^N |\alpha_nv_n|}. \]
-In particular, the principal Riesz ideal generated by $v\in V$ is given by
-\[ R_v = \setbuilder{w\in V}{\exists \alpha\in \R: \; |w|\leq |\alpha v|}. \]
-\end{lemma}
-\begin{proof}
-We first show that any $w\in R$ is an element of each ideal that contains $A$. Take $N\in \N, \seq{\alpha_n}_{n=0}^N \subseteq \R$ and $\seq{v_n}_{n=0}^N \subseteq A$ such that $|w| \leq \sum_{n=0}^N |\alpha_nv_n|$. By the Riesz decomposition theorem \ref{RieszDecomposition}, we can write $|w| = \sum_{n=0}^N v_{n}'$, where $0\leq v_n' \leq |\alpha_nv_n|$.
-
-Let $I$ be a Riesz ideal that contains $A$. Then $\alpha_nv_n \in I$ for all $n\leq N$ since $I$ is a linear subspace and $v_n'\in I$ for all $n\leq N$ by solidity. So $|w|\in I$ because it is a linear subspace and $w\in I$ by solidity. Thus $R$ is contained in any Riesz ideal that contains $A$.
-
-We now straightforward to see that $R$ is indeed a Riesz ideal.
-\end{proof}
-
-\begin{definition}
-Let $V$ be a Riesz space and $v\in V$. If the principal Riesz ideal generated by $v$ is equal to $V$, then $u$ is called a \udef{strong Riesz unit}.
-\end{definition}
-
-\begin{example}
-The function $\underline{1}$ is a strong Riesz unit in $L^\infty(\R)$.
-\end{example}
-
-\begin{proposition} \label{sumRieszIdeals}
-Let $V$ be a Riesz space and $E_1, E_2$ Riesz ideals in $V$. Then
-\begin{enumerate}
-\item $E_1 + E_2$ is a Riesz ideal in $V$;
-\item $(E_1 + E_2)^+ = E_1^+ + E_2^+$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Since $E_1+E_2$ is automatically a linear subspace, we just need to prove that it is solid, for which we use \ref{RieszSolidEquivalents}. To that end, take $v_1+v_2\in E_1+E_2$ and $w\in V$ such that $|w| \leq |v_1 + v_2| \leq |v_1| + |v_2|$.
-
-Since $w^+ \leq |w| \leq |v_1| + |v_2|$, there exist $w_1, w_2\in V^+$ such that $w^+= w_1+w_2$ and $w_1\leq |v_1|, w_2\leq |v_2|$ by the Riesz decomposition theorem \ref{RieszDecomposition}. By \ref{RieszSolidEquivalents}, $w_1\in E_1$ and $w_2\in E_2$, so $w^+\in E_1+E_2$. Similarly $w^-\in E_1+E_2$ and thus $w = w^+-w^-\in E_1+E_2$.
-
-(2) It is clear that $(E_1 + E_2)^+ \supseteq E_1^+ + E_2^+$, since $0\leq v$ and $0\leq w$ implies $0 = 0+0\leq v+w$.
-
-For the converse, take $v\in (E_1+E_2)^+$. Then we can write $v = v_1+v_2$, where $v_1\in E_1$ and $v_2\in E_2$. Now $v = |v| = |v_1 + v_2| \leq |v_1| + |v_2|$. By the Riesz decomposition theorem \ref{RieszDecomposition}, we can find $v_1',v_2'\in V^+$ such that $v = v_1'+v_2'$ and $v_1'\leq |v_1|, v_2'\leq |v_2|$. Then $v_1'\in E_1^+$ and $v_2'\in E_2^+$, so $v\in E_1^+ + E_2^+$.
-\end{proof}
-\begin{corollary} \label{RieszIdealDirectSumPreservesOrder}
-Let $V$ be a Riesz space and $E_1, E_2$ Riesz ideals in $V$ such that the sum $E_1\oplus E_2$ is direct. Then
-\begin{enumerate}
-\item For all $0\leq v = v_1 + v_2 \in E_1\oplus E_2$, we have $0\leq v_1$ and $0\leq v_2$.
-\item For all $v_1 +v_2 \leq w_1 + w_2 \in E_1\oplus E_2$, we have $v_1 \leq w_1$ and $v_2 \leq w_2$.
-\end{enumerate}
-\end{corollary}
-\begin{proof}
-(1) Restatement of point (2) of the proposition.
-
-(2) We have that $0\leq (w_1 - v_1) + (w_2 - v_2) \in E_1\oplus E_2$, so $0\leq w_1 - v_1$ and $0\leq w_2 - v_2$, by the first point. Thus $v_1\leq w_1$ and $v_2\leq w_2$.
-\end{proof}
-
-\begin{example}
-The algebraic sum of two bands is not always a band. Take $V = \cont(\interval{-1,1})$ and
-\begin{align*}
-B_1 &= \setbuilder{f\in\cont(\interval{-1,1})}{\forall x\in \interval{-1,0}: f(x) = 0} \\
-B_2 &= \setbuilder{f\in\cont(\interval{-1,1})}{\forall x\in \interval{0,1}: f(x) = 0}.
-\end{align*}
-Then $B_1+B_2 = \setbuilder{f\in\cont(\interval{-1,1})}{f(0) = 0}$, which is not a band. 
-\end{example}
-
-\subsubsection{Bands}
-
-\begin{proposition} \label{bandFromIdealByPositiveCone}
-Let $V$ be a Riesz space and $E\subseteq V$ a Riesz ideal. Then $E$ is a band \textup{if and only if} $\sup(S) \subseteq E$ for all $S\subseteq E^+$.
-\end{proposition}
-\begin{proof}
-The direction $\Rightarrow$ is immediate.
-
-For the converse, take $D\subseteq E$ such that the supremum exists in $V$. Call it $v$. We need to show $v\in E$.
-
-Pick $w\in D$. And consider the set $D' \defeq \setbuilder{w\wedge u - w}{u\in D}$. Then $D'\subseteq E^+$ and $\bigvee D' = w\wedge v - w$ by \ref{vectorSumOrderHomomorphism} and $\bigvee D'\in E$. Since $w\in D$, we have $w\leq v$ and thus $w\wedge v = v$.
-
-Since $v-w,w\in E$, we have $v\in E$.
-\end{proof}
-
-\begin{proposition} \label{bandGeneratedByRieszIdeal}
-Let $V$ be a Riesz space and $E\subseteq V$ a Riesz ideal. Then the band generated by $E$ is
-\[ B = \setbuilder{v\in V}{\exists D\subseteq E^+: \; |v| = \bigvee D}. \]
-\end{proposition}
-\begin{proof}
-It is enough to prove that $B$ is a band.
-
-First we show that $B$ is solid, for which we use \ref{RieszSolidEquivalents}. By construction $w\in B \iff |w| \in B$, so it is enough to prove that $0\leq w \leq v$ for some $v\in B$ implies $w\in B$. We can write $v = \bigvee D$ for some $D\subseteq E^+$. Then there exists $d\in D$ such that $w \leq d$, which implies that $w\in E$ and thus in $B$.
-
-Now we show that $B$ is a linear subspace. Take $v,w\in B$. Then $|v| = \bigvee D_1$ and $|w| = \bigvee D_2$ for some $D_1, D_2\subseteq E^+$. By \ref{vectorSumOrderHomomorphism}, we have $|v|+|w| = \bigvee (D_1+D_2)$, so $|v|+|w|\in B$. Since $|v+w|\leq |v|+|w|$ and $B$ is solid, we have $v+w\in B$.
-
-Take $\alpha\in \R$ and $v\in B$. Then $|v| = \bigvee D$ for some $D\subseteq E^+$. We have, by \ref{scalarMultipleOrderHomomorphism},
-\[ |\alpha v| = |\alpha|\,|v| = |\alpha|\bigvee D = \bigvee |\alpha|D. \]
-Since $|\alpha|D\subseteq E^+$, we have $\alpha v\in B$.
-
-Finally, we use \ref{bandFromIdealByPositiveCone} to see that $B$ is a band.
-\end{proof}
-
-\begin{proposition} \label{DedekindCompleteDirectSumBands}
-Let $V$ be a Dedekind complete Riesz space and $B_1, B_2\subseteq V$ bands such that the sum $B_1\oplus B_2$ is direct. Then $B_1 \oplus B_2$ is a band.
-\end{proposition}
-\begin{proof}
-We have that $B_1\oplus B_2$ is a Riesz ideal by \ref{sumRieszIdeals}, so we just need to show that $\sup(D)\subseteq B_1\oplus B_2$ for all $D\subseteq B_1\oplus B_2$. By \ref{bandFromIdealByPositiveCone}, it is enough to consider $D\subseteq (B_1\oplus B_2)^+$. Take $u\in \sup(D)$. Set
-\begin{align*}
-D_1 &= \setbuilder{v_1\in B_1}{\exists v_2\in B_2, v\in D: \; v_1 + v_2 = v} \\
-D_2 &= \setbuilder{v_2\in B_2}{\exists v_1\in B_1, v\in D: \; v_1 + v_2 = v}.
-\end{align*}
-All elements of $D_1$ and $D_2$ are positive by \ref{RieszIdealDirectSumPreservesOrder}. Since each $v\in D$ is less than $u$, each element of $D_1$ and $D_2$ is less than $u$. Thus $D_1$ and $D_2$ are bounded above. By Dedekind completeness, $u_1\defeq \bigvee D_1$ and $u_2\defeq \bigvee D_2$ exist. By definition of band, $u_1\in B_1$ and $u_2\in B_2$.
-
-Now $D_1 + D_2 \supseteq D$, so $u_1 + u_2 = \bigvee D_1 + \bigvee D_2 = \bigvee(D_1\oplus D_2) \geq u$. Conversely, let $u = u'_1 + u'_2\in B_1\oplus B_2$. By \ref{RieszIdealDirectSumPreservesOrder}, each $v_1\in D_1$ is less than $u_1'$ and each $v_2\in D_2$ is less than $u_2'$. Thus $u_1 +u_2 \leq u_1'+u_2' = u$ and so $u_1 + u_2 = u$, which means that $u\in B_1\oplus B_2$.
-\end{proof}
-
 \subsection{Disjointness}
 \begin{definition}
 Let $V$ be a Riesz space and $v,w\in V$. We call $v$ and $w$ \udef{(Riesz) disjoint} if $|v|\wedge |w| = 0$. We write $v\perp_r w$.
@@ -3327,7 +3298,7 @@ $(2) \Leftrightarrow (3)$ By the sixth point of \ref{meetJoinAbsoluteValues2}.
 
 $(3) \Leftrightarrow (4)$ By the fifth point of \ref{meetJoinAbsoluteValues2}.
 
-$(2,3,4) \Rightarrow (5)$ From the first point of \ref{meetJoinAbsoluteValues1}.
+$(2,3,4) \Rightarrow (5)$ From the first point of \ref{meetJoinAbsoluteValues}.
 
 $(5) \Rightarrow (1)$ From \ref{sumAsMeetJoin}:
 \[ |v|\vee |w| = |v|+ |w| = |v|\vee |w| + |v|\wedge |w|. \]
@@ -3384,20 +3355,50 @@ If $|\alpha| > 1$, then
 (4) For all $x\in S$, we have $x\wedge |u| = |x|\wedge |u| = 0$, so $S\wedge |u| = \{0\}$. Thus, since Riesz spaces are infinitely distributive, by \ref{distributivityRieszSpaces}, we have $\big(\bigvee S\big) \wedge |u| = \bigvee S\wedge |u| = \bigvee\{0\} = 0$. 
 \end{proof}
 
-\begin{proposition} \label{disjointPolarBand}
-Let $V$ be a Riesz space and $D\subseteq V$ a subset. Then
-\begin{enumerate}
-\item $D^{\perp_r}$ is a band;
-\item $D^{\perp_r} \cap D^{\perp_r\perp_r} = \{0\}$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) We have that $D^{\perp_r}$ is a linear subspace from the first two points of \ref{disjointComplementBandLemma}. It is solid by the third point and a band by the fourth point and \ref{bandFromIdealByPositiveCone}.
+\subsection{Subsets}
+\begin{definition}
+Let $V$ be a Riesz space. A subset $E$ is called
+\begin{itemize}
+\item a \udef{Riesz subspace} if it is both a subspace and a sublattice;
+\item \udef{solid} if for all $v\in E$ the interval $[-|v|,|v|]$ is a subset of $E$;
+\item a \udef{Riesz ideal} if it is a solid (vector) subspace;
+\item a \udef{band} if it is a Riesz ideal such that for all subsets $S\subseteq E$, we have $\sup(S) \subset E$. 
+\end{itemize}
+\end{definition}
+For the definition of a Riesz ideal we only assume it is a linear subspace, not a Riesz subspace. However it turns out that a Riesz ideal is automatically a Riesz subspace, see \ref{RieszIdealRieszSubspace}. 
 
-(2) By \ref{vectorDisjointWithItself}, we have $D^{\perp_r} \cap D^{\perp_r\perp_r} \subseteq \{0\}$. The other inclusion follows because both $D^{\perp_r}$ and $D^{\perp_r\perp_r}$ are linear subspaces and thus contain $0$.
+\begin{lemma} \label{RieszSubspaceJoinClosure}
+Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then $E$ is a Riesz subspace if $E$ is a subspace that is closed under taking joins.
+\end{lemma}
+\begin{proof}
+For all $v,w\in E$, we have $v\wedge w = -\big((-v)\vee (-w)\big)\in E$.
 \end{proof}
 
-For any subset $D$, the set $D^{\perp_r\perp_r}$ is a band that contains $D$ and thus it contains the band generated by $D$, but in general it may be larger.
+\begin{example}
+Consider the Riesz space $\cont(\interval{0,1})$.
+\begin{itemize}
+\item The subset of polynomials is a subspace, but not a Riesz subspace;
+\item The subset of constant functions is a Riesz subspace, but not a Riesz ideal.
+\item The subset $\setbuilder{f\in \cont(\interval{0,1})}{f(0) = 0}$ is a Riesz ideal, but not a band. Consider the set $\{f_n\}_{n\in\N}$ where $f_n(x) = 1 \wedge nx$. Then $\sup f_n$ exists in $\cont(\interval{0,1})$ and equals $\underline{1}$, which is not an element of the set (note that it is not $[x\neq 0]$, because we are working in $\cont(\interval{0,1})$).
+\item The subset $\setbuilder{f\in \cont(\interval{0,1})}{\forall x\in \interval{0,\frac{1}{2}}: f(x) = 0}$ is a band. 
+\end{itemize}
+Consider the Riesz space $\R^\N$ with pointwise ordering.
+\begin{itemize}
+\item the set of bounded sequences $\ell_\infty$ is an ideal;
+\item the set of convergent sequences $c$ is a Riesz subspace of $\ell_\infty$;
+\item the set $c_0$ of sequences that converge to $0$ is an ideal in $c$.
+\end{itemize}
+\end{example}
+
+\begin{proposition} \label{RieszSpaceIntersectionSystems}
+Let $V$ be a Riesz space. Then the following are complete $\wedge$-subsemilattices of $\powerset(V)$:
+\begin{enumerate}
+\item the set of Riesz subspaces;
+\item the set of solid subsets;
+\item the set of Riesz ideals;
+\item the set of bands.
+\end{enumerate}
+\end{proposition}
 
 \begin{proposition} \label{disjointDoublePolarConstruction}
 Let $V$ be a Riesz space, $A\subseteq V$ a solid subset and $v\in V\setminus\{0\}$. Then $v\in A^{\perp_r\perp_r}$ \textup{if and only if} there exists $u\in A$ such that $0 < |u| \leq |v|$.
@@ -3408,14 +3409,246 @@ First suppose $v\in A^{\perp_r\perp_r}$. Then $v\notin A^{\perp_r}$, because $v$
 Now suppose there exists $u\in A$ such that $0 < |u| \leq |v|$. Assume, towards a contradiction, that $v\notin A^{\perp_r\perp_r}$. Then there exists $w\in A^{\perp_r}$ such that $|v|\wedge |w| \neq 0$. Since both $A$ and $A^{\perp_r}$ are solid, we have $|v|\wedge |w| \in A\cap A^{\perp_r}$, which by \ref{vectorDisjointWithItself} implies $|v|\wedge |w| = 0$. A contradiction.
 \end{proof}
 
-\subsection{Archimedean spaces}
+\subsubsection{Riesz ideals}
+\begin{lemma} \label{RieszIdealRieszSubspace}
+Every Riesz ideal is a Riesz subspace.
+\end{lemma}
+\begin{proof}
+The Riesz ideal is a Riesz subspace if it is closed under lattice operations, i.e.\ under meets and joins. By \ref{RieszSubspaceJoinClosure}, we just need to check closure under joins. This follows from
+\[ v \vee w = \frac{1}{2}\big(v+ w+|v-w|\big) \]
+(\ref{absoluteValueMeetJoin}) and the fact that the Riesz ideal is a linear subspace.
+\end{proof}
+
+\begin{proposition} \label{RieszSolidEquivalents}
+Let $V$ be a Riesz space and $E\subseteq V$ a subset. Then the following are equivalent:
+\begin{enumerate}
+\item $E$ is solid;
+\item $|w|\leq |v| \implies w\in E$ for all $v\in E$ and $w\in V$;
+\item we have
+\begin{enumerate}
+\item $w \in E \iff |w|\in E$ for all $w\in V$;
+\item $0\leq w \leq v \implies w\in E$ for all $v\in E$ and $w\in V$;
+\end{enumerate}
+\item we have
+\begin{enumerate}
+\item $w \in E \iff |w|\in E$ for all $w\in V$;
+\item $v\wedge w\in E$ for all $v\in E^+$ and $w\in V^+$.
+\end{enumerate}
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Leftrightarrow (2)$ Immediate from \ref{solidLemma}.
+
+$(2) \Rightarrow (3a)$ First suppose $w\in E$. Since $\big||w|\big| = |w|\leq |w|$, we have $|w|\in E$. Now suppose $|w|\in E$. Since $|w|\leq |w| = \big||w|\big|$, we have $w\in E$.
+
+$(2) \Rightarrow (3b)$ Assume $0 \leq w \leq v$. Since $v = |v|$ and $w = |w|$, we have $|w|\leq |v|$, so $w\in E$.
+
+$(3) \Rightarrow (2)$ Assume $|w| \leq |v|$ for some $v\in E$ and $w\in V$. As $|v|\in E$ by (3a), we have $|w|\in E$ by (3b) and so $w\in E$ by (3a).
+
+$(3b) \Rightarrow (4b)$ We have $0\leq v\wedge w\leq v$, so $v\wedge w\in E$.
+
+$(4b) \Rightarrow (3b)$ 
+\end{proof}
+\begin{corollary} \label{RieszIdealEquivalents}
+Let $V$ be a Riesz space and $E\subseteq V$ a subspace. Then the following are equivalent:
+\begin{enumerate}
+\item $E$ is a Riesz ideal;
+\item we have
+\begin{enumerate}
+\item $w \in E \implies |w|\in E$ for all $w\in V$;
+\item $0\leq w \leq v \implies w\in E$ for all $v\in E$ and $w\in V$.
+\end{enumerate}
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+The only point we need to prove is that $(2b)$ implies that $|w|\in E \implies w\in E$. Take $w\in V$ such that $|w|\in E$. Since $w^+ \leq w^+ + w^- = |w|$, we have $w^+\in E$. Similarly $w^-\in E$. Since $E$ is a subspace, $w = w^+ - w^- \in E$.
+\end{proof}
+
+\begin{proposition} \label{sumRieszIdeals}
+Let $V$ be a Riesz space and $E_1, E_2$ Riesz ideals in $V$. Then
+\begin{enumerate}
+\item $E_1 + E_2$ is a Riesz ideal in $V$;
+\item $(E_1 + E_2)^+ = E_1^+ + E_2^+$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Since $E_1+E_2$ is automatically a linear subspace, we just need to prove that it is solid, for which we use \ref{RieszSolidEquivalents}. To that end, take $v_1+v_2\in E_1+E_2$ and $w\in V$ such that $|w| \leq |v_1 + v_2| \leq |v_1| + |v_2|$.
+
+Since $w^+ \leq |w| \leq |v_1| + |v_2|$, there exist $w_1, w_2\in V^+$ such that $w^+= w_1+w_2$ and $w_1\leq |v_1|, w_2\leq |v_2|$ by the Riesz decomposition theorem \ref{RieszDecomposition}. By \ref{RieszSolidEquivalents}, $w_1\in E_1$ and $w_2\in E_2$, so $w^+\in E_1+E_2$. Similarly $w^-\in E_1+E_2$ and thus $w = w^+-w^-\in E_1+E_2$.
+
+(2) It is clear that $(E_1 + E_2)^+ \supseteq E_1^+ + E_2^+$, since $0\leq v$ and $0\leq w$ implies $0 = 0+0\leq v+w$.
+
+For the converse, take $v\in (E_1+E_2)^+$. Then we can write $v = v_1+v_2$, where $v_1\in E_1$ and $v_2\in E_2$. Now $v = |v| = |v_1 + v_2| \leq |v_1| + |v_2|$. By the Riesz decomposition theorem \ref{RieszDecomposition}, we can find $v_1',v_2'\in V^+$ such that $v = v_1'+v_2'$ and $v_1'\leq |v_1|, v_2'\leq |v_2|$. Then $v_1'\in E_1^+$ and $v_2'\in E_2^+$, so $v\in E_1^+ + E_2^+$.
+\end{proof}
+\begin{corollary}
+Let $V$ be a Riesz space and $E_1,E_2\in V$ be Riesz ideals. Then the join of $E_1$ and $E_2$ in the complete $\wedge$-subsemilattice of Riesz ideals is $E_1+E_2$.
+\end{corollary}
+\begin{corollary} \label{RieszIdealDirectSumPreservesOrder}
+Let $V$ be a Riesz space and $E_1, E_2$ Riesz ideals in $V$ such that the sum $E_1\oplus E_2$ is direct. Then
+\begin{enumerate}
+\item For all $0\leq v = v_1 + v_2 \in E_1\oplus E_2$, we have $0\leq v_1$ and $0\leq v_2$.
+\item For all $v_1 +v_2 \leq w_1 + w_2 \in E_1\oplus E_2$, we have $v_1 \leq w_1$ and $v_2 \leq w_2$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) Restatement of point (2) of the proposition.
+
+(2) We have that $0\leq (w_1 - v_1) + (w_2 - v_2) \in E_1\oplus E_2$, so $0\leq w_1 - v_1$ and $0\leq w_2 - v_2$, by the first point. Thus $v_1\leq w_1$ and $v_2\leq w_2$.
+\end{proof}
+
+\begin{example}
+The algebraic sum of two bands is not always a band. Take $V = \cont(\interval{-1,1})$ and
+\begin{align*}
+B_1 &= \setbuilder{f\in\cont(\interval{-1,1})}{\forall x\in \interval{-1,0}: f(x) = 0} \\
+B_2 &= \setbuilder{f\in\cont(\interval{-1,1})}{\forall x\in \interval{0,1}: f(x) = 0}.
+\end{align*}
+Then $B_1+B_2 = \setbuilder{f\in\cont(\interval{-1,1})}{f(0) = 0}$, which is not a band. 
+\end{example}
+
+\begin{lemma} \label{generatedRieszIdeals}
+Let $V$ be a Riesz space and $A\subseteq V$ a subset. The Riesz ideal generated by $A$ is given by
+\[ R = \setbuilder{w\in V}{\exists N\in \N: \exists \seq{\alpha_n}_{n=0}^N \subseteq \R: \exists \seq{v_n}_{n=0}^N \subseteq A: \; |w| \leq \sum_{n=0}^N |\alpha_nv_n|}. \]
+In particular, the principal Riesz ideal generated by $v\in V$ is given by
+\[ R_v = \setbuilder{w\in V}{\exists \alpha\in \R: \; |w|\leq |\alpha v|}. \]
+\end{lemma}
+\begin{proof}
+We first show that any $w\in R$ is an element of each ideal that contains $A$. Take $N\in \N, \seq{\alpha_n}_{n=0}^N \subseteq \R$ and $\seq{v_n}_{n=0}^N \subseteq A$ such that $|w| \leq \sum_{n=0}^N |\alpha_nv_n|$. By the Riesz decomposition theorem \ref{RieszDecomposition}, we can write $|w| = \sum_{n=0}^N v_{n}'$, where $0\leq v_n' \leq |\alpha_nv_n|$.
+
+Let $I$ be a Riesz ideal that contains $A$. Then $\alpha_nv_n \in I$ for all $n\leq N$ since $I$ is a linear subspace and $v_n'\in I$ for all $n\leq N$ by solidity. So $|w|\in I$ because it is a linear subspace and $w\in I$ by solidity. Thus $R$ is contained in any Riesz ideal that contains $A$.
+
+We now straightforward to see that $R$ is indeed a Riesz ideal.
+\end{proof}
+
+\begin{proposition} \label{latticePropertiesPrincipalRieszIdeals}
+Let $V$ be a Riesz space and $v,w\in V^+$. Then
+\begin{enumerate}
+\item $R_{v\wedge w} = R_v \cap R_w$;
+\item $R_{v\vee w} = R_{v+w} = R_v + R_w$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) It is clear, by \ref{generatedRieszIdeals}, that
+\[ R_{v\wedge w} = \setbuilder{x\in V}{\exists \alpha\in \R: \; |x|\leq |\alpha| v\wedge w} \subseteq \setbuilder{x\in V}{\exists \alpha\in \R: \; |x|\leq |\alpha| v} = R_v. \]
+Similarly $R_{v\wedge w} \subseteq R_w$, so $R_{v\wedge w} \subseteq R_v \cap R_w$.
+
+Conversely, take $x\in R_v \cap R_w$. Then there exist $\alpha, \beta\in\R$ such that $|x| \leq |\alpha| v$ and $|x|\leq |\beta| w$. Set $\gamma = |\alpha|\vee|\beta|$, so $|x| \leq \gamma v$ and $|x|\leq \gamma w$ by \ref{scalarInequalityImpliesVectorInequality}. We have $\gamma^{-1}|x| \leq v$ and $\gamma^{-1}|x| \leq w$, so $\gamma^{-1}|x| \leq v\wedge w$ and $|x| \leq \gamma v\wedge w$. This implies $x\in R_{v\wedge w}$.
+
+(2) Since $v\vee w \leq v\vee w + v\wedge w = v+w$ by \ref{sumAsMeetJoin}, it is clear, by \ref{generatedRieszIdeals}, that
+\[ R_{v\vee w} = \setbuilder{x\in V}{\exists \alpha\in \R: \; |x|\leq |\alpha| v\vee w} \subseteq \setbuilder{x\in V}{\exists \alpha\in \R: \; |x|\leq |\alpha| (v+w)} = R_{v+w}. \]
+Conversely, take $x\in R_{v+w}$. Then there exist $\alpha\in\R$ such that $|x| \leq |\alpha| (v+w) \leq |2\alpha|(v\vee w)$, so $x\in R_{v\vee w}$.
+
+Now take $x\in R_{v+w}$. Then, by \ref{generatedRieszIdeals}, there exists $\alpha \in \R$ such that $|x| \leq |\alpha|(v+w)$. Since $|\alpha|(v+w) \in R_v + R_w$ and $R_v + R_w$ is a Riesz ideal, by \ref{sumRieszIdeals}, we have $x\in R_v+R_w$ and so $R_{v+w} \subseteq R_v+R_w$.
+
+Finally we have, by \ref{generatedRieszIdeals}, and the fact that $v \leq v+w$, that
+\[ R_{v} = \setbuilder{x\in V}{\exists \alpha\in \R: \; |x|\leq |\alpha| v} \subseteq \setbuilder{x\in V}{\exists \alpha\in \R: \; |x|\leq |\alpha| (v+w)} = R_{v+w}. \]
+Similarly $R_w \subseteq R_{v+w}$. Thus $R_v + R_w \subseteq R_{v+w} + R_{v+w} = R_{v+w}$.
+\end{proof}
+
 \begin{definition}
-A Riesz space $V$ is called \udef{Archimedean} if $\bigwedge_{\epsilon > 0}\epsilon v = 0$ for all $v\in V^+$.
+Let $V$ be a Riesz space and $v\in V$. If the principal Riesz ideal generated by $v$ is equal to $V$, then $u$ is called a \udef{strong Riesz unit}.
 \end{definition}
 
 \begin{example}
-The space $\R^2$ with the lexicographic ordering $\leq_l$ is not Archimedean. Indeed $(0,1)$ is a lower bound of $n^{-1}(1,1) = (n^{-1}, n^{-1})$, but $(0,1) \neq \vec{0}$.
+The function $\underline{1}$ is a strong Riesz unit in $L^\infty(\R)$.
 \end{example}
+
+\subsubsection{Bands}
+
+\begin{proposition} \label{bandFromIdealByPositiveCone}
+Let $V$ be a Riesz space and $E\subseteq V$ a Riesz ideal. Then $E$ is a band \textup{if and only if} $\sup(S) \subseteq E$ for all $S\subseteq E^+$.
+\end{proposition}
+\begin{proof}
+The direction $\Rightarrow$ is immediate.
+
+For the converse, take $D\subseteq E$ such that the supremum exists in $V$. Call it $v$. We need to show $v\in E$.
+
+Pick $w\in D$. And consider the set $D' \defeq \setbuilder{w\wedge u - w}{u\in D}$. Then $D'\subseteq E^+$ and $\bigvee D' = w\wedge v - w$ by \ref{vectorSumOrderHomomorphism} and $\bigvee D'\in E$. Since $w\in D$, we have $w\leq v$ and thus $w\wedge v = v$.
+
+Since $v-w,w\in E$, we have $v\in E$.
+\end{proof}
+
+\begin{lemma} \label{disjointPolarBand}
+Let $V$ be a Riesz space and $D\subseteq V$ a subset. Then
+\begin{enumerate}
+\item $D^{\perp_r}$ is a band;
+\item $D^{\perp_r} \cap D^{\perp_r\perp_r} = \{0\}$;
+\item $D \cap D^{\perp_r} \subseteq \{0\}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have that $D^{\perp_r}$ is a linear subspace from the first two points of \ref{disjointComplementBandLemma}. It is solid by the third point and a band by the fourth point and \ref{bandFromIdealByPositiveCone}.
+
+(2) By \ref{vectorDisjointWithItself}, we have $D^{\perp_r} \cap D^{\perp_r\perp_r} \subseteq \{0\}$. The other inclusion follows because both $D^{\perp_r}$ and $D^{\perp_r\perp_r}$ are linear subspaces and thus contain $0$.
+
+(3) Follows from $D\subseteq D^{\perp_r\perp_r}$.
+\end{proof}
+For any subset $D$, the set $D^{\perp_r\perp_r}$ is a band that contains $D$ and thus it contains the band generated by $D$, but in general it may be larger.
+
+\begin{proposition} \label{bandGeneratedByRieszIdeal}
+Let $V$ be a Riesz space and $E\subseteq V$ a Riesz ideal. Then the band generated by $E$ is
+\[ B = \setbuilder{v\in V}{\exists D\subseteq E^+: \; |v| = \bigvee D}. \]
+\end{proposition}
+\begin{proof}
+It is enough to prove that $B$ is a band.
+
+First we show that $B$ is solid, for which we use \ref{RieszSolidEquivalents}. By construction $w\in B \iff |w| \in B$, so it is enough to prove that $0\leq w \leq v$ for some $v\in B$ implies $w\in B$. We can write $v = \bigvee D$ for some $D\subseteq E^+$. Then there exists $d\in D$ such that $w \leq d$, which implies that $w\in E$ and thus in $B$.
+
+Now we show that $B$ is a linear subspace. Take $v,w\in B$. Then $|v| = \bigvee D_1$ and $|w| = \bigvee D_2$ for some $D_1, D_2\subseteq E^+$. By \ref{vectorSumOrderHomomorphism}, we have $|v|+|w| = \bigvee (D_1+D_2)$, so $|v|+|w|\in B$. Since $|v+w|\leq |v|+|w|$ and $B$ is solid, we have $v+w\in B$.
+
+Take $\alpha\in \R$ and $v\in B$. Then $|v| = \bigvee D$ for some $D\subseteq E^+$. We have, by \ref{scalarMultipleOrderHomomorphism},
+\[ |\alpha v| = |\alpha|\,|v| = |\alpha|\bigvee D = \bigvee |\alpha|D. \]
+Since $|\alpha|D\subseteq E^+$, we have $\alpha v\in B$.
+
+Finally, we use \ref{bandFromIdealByPositiveCone} to see that $B$ is a band.
+\end{proof}
+
+\begin{proposition} \label{DedekindCompleteDirectSumBands}
+Let $V$ be a Dedekind complete Riesz space and $B_1, B_2\subseteq V$ bands such that the sum $B_1\oplus B_2$ is direct. Then $B_1 \oplus B_2$ is a band.
+\end{proposition}
+\begin{proof}
+We have that $B_1\oplus B_2$ is a Riesz ideal by \ref{sumRieszIdeals}, so we just need to show that $\sup(D)\subseteq B_1\oplus B_2$ for all $D\subseteq B_1\oplus B_2$. By \ref{bandFromIdealByPositiveCone}, it is enough to consider $D\subseteq (B_1\oplus B_2)^+$. Take $u\in \sup(D)$. Set
+\begin{align*}
+D_1 &= \setbuilder{v_1\in B_1}{\exists v_2\in B_2, v\in D: \; v_1 + v_2 = v} \\
+D_2 &= \setbuilder{v_2\in B_2}{\exists v_1\in B_1, v\in D: \; v_1 + v_2 = v}.
+\end{align*}
+All elements of $D_1$ and $D_2$ are positive by \ref{RieszIdealDirectSumPreservesOrder}. Since each $v\in D$ is less than $u$, each element of $D_1$ and $D_2$ is less than $u$. Thus $D_1$ and $D_2$ are bounded above. By Dedekind completeness, $u_1\defeq \bigvee D_1$ and $u_2\defeq \bigvee D_2$ exist. By definition of band, $u_1\in B_1$ and $u_2\in B_2$.
+
+Now $D_1 + D_2 \supseteq D$, so $u_1 + u_2 = \bigvee D_1 + \bigvee D_2 = \bigvee(D_1\oplus D_2) \geq u$. Conversely, let $u = u'_1 + u'_2\in B_1\oplus B_2$. By \ref{RieszIdealDirectSumPreservesOrder}, each $v_1\in D_1$ is less than $u_1'$ and each $v_2\in D_2$ is less than $u_2'$. Thus $u_1 +u_2 \leq u_1'+u_2' = u$ and so $u_1 + u_2 = u$, which means that $u\in B_1\oplus B_2$.
+\end{proof}
+
+
+\begin{lemma} \label{approximationInPrincipalBand}
+Let $V$ be a Riesz space and $v\in V^+$. Let $B_v$ be the principal band generated by $v$. Then for all $u \in B_v \cap V^+$, we have $u = \bigvee_{n\in \N}u\wedge (nv)$.
+\end{lemma}
+\begin{proof}
+By \ref{generatedRieszIdeals} and \ref{bandGeneratedByRieszIdeal}, there exists $D\subseteq V^+$ such that $u = \bigvee D$ and for all $d\in D$ there exists $\alpha_d\in \R$ such that $d \leq |\alpha_d| v$.
+
+Take arbitrary $d\in D$. Then $\bigvee_{n\in \N}d\wedge (nv) = d$. In fact $d$ the maximum, since $d$ is clearly an upper bound and for all $n \geq |\alpha_d|$, we have $d\wedge (nv) = d$. By the infinite distributivity of the Riesz space, \ref{distributivityRieszSpaces}, we have
+\[ u = \bigvee_{d\in D}d = \bigvee_{d\in D}\bigvee_{n\in \N}d\wedge (nv) = \bigvee_{n\in \N}\bigvee_{d\in D}d\wedge (nv) = \bigvee_{n\in \N}\big(\bigvee D\big)\wedge (nv) = \bigvee_{n\in \N}u\wedge (nv). \]
+\end{proof}
+\begin{proof}[Alternate proof]
+We can also base a proof on \ref{principalProjectionBandCriterion}, see later.
+
+The principal band $B_v$ is itself a Riesz subspace by \ref{RieszIdealRieszSubspace} and is a projection band in itself. Thus $u = \bigvee_{n\in \N}u\wedge (nv)$ by \ref{principalProjectionBandCriterion}, where the join is taken in $B_v$. We need to show that this is also the join in $V$. Take arbitrary $w\in \setbuilder{u\wedge (nv)}{n\in \N}^\leq \subseteq V$. Since $u\in \setbuilder{u\wedge (nv)}{n\in \N}^\leq$, we have $w\wedge u \in \setbuilder{u\wedge (nv)}{n\in \N}^\leq$. Also $w\wedge u \in B_v$ by solidity, which implies $w\wedge u \geq u$ and thus $u = w\wedge u$, so $u \leq w$. Thus $u$ is also the least of all the upper bounds in $V$.
+\end{proof}
+
+\begin{proposition} \label{latticePropertiesPrincipalBands}
+Let $V$ be a Riesz space and $v,w\in V^+$. Then
+\begin{enumerate}
+\item $B_{v\wedge w} = B_v \cap B_w$;
+\item $B_{v\vee w} = B_{v+w}$.
+\end{enumerate}
+\end{proposition}
+Here $B_v$ is the principal band generated by $v$. We have $B_{v+w} = B_v + B_w$ if $V$ is Archimedean and $B_v, B_w$ are projection bands, see TODO.
+\begin{proof}
+(1) By \ref{latticePropertiesPrincipalRieszIdeals}, we have $R_{v\wedge w} \subseteq R_v$. Taking the closure into the lattice of bands gives $B_{v\wedge w} \subseteq B_v$. Similarly $B_{v\wedge w} \subseteq B_w$ and thus $B_{v\wedge w} \subseteq B_v \cap B_w$.
+
+(2) This follows straight from $\frac{v+w}{2} \leq v\vee w \leq v\vee w + v\wedge w = v + w$ (see \ref{sumAsMeetJoin}).
+\end{proof}
+
+
+
+\subsection{Archimedean spaces}
 
 \begin{proposition} \label{ArchimedeanBandEquivalents}
 Let $V$ be a Riesz space. Then the following are equivalent:
@@ -3455,6 +3688,9 @@ by \ref{RieszDisjointEquivalents} and the fact that $u\leq w$. Since the choice 
 \[ v+w = v+\bigvee D = \bigvee(v+D) \leq w, \]
 so $v\leq 0$. Since, by assumption, $v\geq 0$, we have $v = 0$.
 \end{proof}
+\begin{corollary} \label{bandClosureArchimedeanSpaces}
+Let $V$ be an Archimedean Riesz space. Then $(-)^{\perp_r\perp_r}$ is the Moore closure of the lattice of bands in $V$.
+\end{corollary}
 
 \begin{example}
 In the non-Archimedean space $\sSet{\R^2, \leq_l}$, the band $B = \setbuilder{(0,y)}{y\in \R}$ is such that $B \subsetneq B^{\perp_r\perp_r}$.
@@ -3465,8 +3701,6 @@ Indeed, $B^{\perp_r} = \{\vec{0}\}$, so $B^{\perp_r\perp_r} = \R^2$.
 \subsection{Projection bands}
 \begin{definition}
 Let $V$ be a Riesz space and $B\subseteq V$ a band. Then $B$ is called a \udef{projection band} if $B\oplus B^{\perp_r} = V$.
-
-For all $v\in V$ with decomposition $v= v_1 +v_2 \in B\oplus B^{\perp_r}$, the vector $v_1$ is called the \udef{component} of $v$ in $B$.
 \end{definition}
 
 \begin{lemma}
@@ -3507,7 +3741,7 @@ We just need to prove that $A^{\perp_r\perp_r} \subseteq A$. Take arbitrary $v\i
 \begin{proposition} \label{projectionBandCriterion}
 Let $V$ be a Riesz space and $B\subseteq V$ a band. Then $B$ is a projection band \textup{if and only if} $u_1 = \bigvee \setbuilder{v\in B}{0\leq v\leq u}$ exists for all $u\in V^+$.
 
-Then $u_1$ is the component of $u$ in $B$.
+Then $u_1$ is the component of $u$ in $B$, w.r.t. the decomposition $B\oplus B^{\perp_r}$.
 \end{proposition}
 \begin{proof}
 First assume $B$ is a projection band and take $u\in V^+$. Since $B$ is a projection band, there exists a unique decomposition $u = u_1 + u_2$, where $u_1 \in B$ and $u_2 \in B^{\perp_r}$. We claim that $u_1 = \bigvee \setbuilder{v\in B}{0\leq v\leq u}$. Since $u_1 \in \setbuilder{v\in B}{0\leq v\leq u}$ it is less than any upper bound. Thus we just need to prove that it is an upper bound.
@@ -3523,21 +3757,25 @@ so $c\leq 0$. By construction, $0\leq c$, so $c = 0$. This means that $u_2 \perp
 \begin{corollary} \label{principalProjectionBandCriterion}
 Let $V$ be a Riesz space and $v\in V^+$. Let $B_v$ be the principal band generated by $v$. Then $B_v$ is a projection band \textup{if and only if} $u_1 = \bigvee_{n\in \N} u\wedge (nv)$ exists for all $u\in V^+$.
 
-Then $u_1$ is the component of $u$ in $B_v$.
+Then $u_1$ is the component of $u$ in $B_v$, w.r.t.\ the decomposition $B_v \oplus B_v^{\perp_r}$.
 \end{corollary}
 \begin{proof}
-It is enough to show $\setbuilder{w\in B_v}{0\leq w\leq u}^u = \setbuilder{u\wedge (nv)}{n\in \N}^u$. First take an upper bound $b$ of $\setbuilder{w\in B_v}{0\leq w\leq u}$ and an arbitrary $n\in \N$. Then $u\wedge (nv)$ is an element of the princial ideal generated by $v$ by \ref{generatedRieszIdeals}, since $u\wedge (nv) \leq nv = |nv|$. Thus it is an element of $B_v$ and $u\wedge (nv)\leq b$.
+It is enough to show $\setbuilder{w\in B_v}{0\leq w\leq u}^\leq = \setbuilder{u\wedge (nv)}{n\in \N}^\leq$. First take an upper bound $b$ of $\setbuilder{w\in B_v}{0\leq w\leq u}$ and an arbitrary $n\in \N$. Then $u\wedge (nv)$ is an element of the princial ideal generated by $v$ by \ref{generatedRieszIdeals}, since $u\wedge (nv) \leq nv = |nv|$. Thus it is an element of $B_v$ and $u\wedge (nv)\leq b$.
 
 Now take an upper bound $c$ of $\setbuilder{u\wedge (nv)}{n\in \N}$. Take an arbitrary $x\in \setbuilder{w\in B_v}{0\leq w\leq u}$, so in particular $x\leq u$. By \ref{bandGeneratedByRieszIdeal}, there exists a subset $D$ of the principal ideal generated by $v$ such that $x = \bigvee D$. Take an arbitrary $y\in D$. By \ref{generatedRieszIdeals}, there exists $\alpha \in \R$ such that $y\leq |y|\leq |\alpha v|$. Take $n\geq |\alpha|$, so $y \leq |nv| = nv$. Now we also have that $y\leq x \leq u$, so $y \leq u\wedge (nv)$, which means that $y \leq c$.
 
 Since $y\in D$ was taken arbitrarily, we have $x\leq c$ and thus $c$ is an upper bound of $\setbuilder{w\in B_v}{0\leq w\leq u}$.
 \end{proof}
 
+\subsubsection{Band projectors}
+\begin{definition}
+Let $V$ be a Riesz space and $B \subseteq V$ a projection band. Then the projector on $B$ along $B^{\perp_r}$ is called the \udef{band projector} on $B$.
+\end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{projectorOnProjectionBand}
 Let $V$ be a Riesz space and $P: V\to V$ a function. Then the following are equivalent:
 \begin{enumerate}
-\item $P$ maps vectors to their components in some projection band $B$;
+\item $P$ is the band projector for some projection band $B$;
 \item $P$ is a projector and $0\leq Pu \leq u$ holds for all $u\in V^+$.
 \end{enumerate}
 \end{proposition}
@@ -3554,12 +3792,109 @@ Suppose $0\leq w \leq Pv$, where $Pv\in \im(P)$. Then $x\defeq Pv - w \geq 0$, s
 In order to conclude with \ref{RieszIdealEquivalents}, we need to show that for all $w\in V$, $w\in \im(P)$ implies $|w|\in \im(P)$. We have $w^+ - w^- = w =Pw = Pw^+ - Pw^-$, so $w^+ - Pw^+ + w^- - Pw^- = 0$. Since, by assumption, $w^+ - Pw^+ \geq 0$ and $w^- - Pw^- \geq 0$, we have $w^+  = Pw^+$ and $w^- = Pw^-$ by \ref{positiveElementsSumToZeroImpliesZero}. Thus $w^+, w^-\in\im(P)$, so $|w| = w^++w^- \in \im(P)$.
 \end{proof}
 
+\begin{proposition} \label{intersectionProjectionBands}
+Let $V$ be an Archimedean Riesz space and $B_1,B_2\subseteq V$ projection bands with band projectors $P_1$ and $P_2$. Then
+\begin{enumerate}
+\item $B_1 \cap B_2$ is a projection band and $P_1P_2 = P_2P_1$ is the band projector on $B_1 \cap B_2$;
+\item $P_1P_2(u) = P_1(u)\wedge P_2(u)$ for all $u\in V^+$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) We show that $P_1P_2$ is the band projector on $B_1 \cap B_2$. Since we may swap $B_1$ and $B_2$, the same argument holds for $P_2P_1$, making them equal.
+
+Since $(B_1 \cap B_2) \cap (B_1 \cap B_2)^{\perp_r}$ by \ref{disjointPolarBand} and $B_1\cap B_2$ is a band by \ref{RieszSpaceIntersectionSystems}, the results follow from \ref{projectorEquivalentsLemma}, if we can show $P_1P_2|_{B_1 \cap B_2} = \id_{B_1 \cap B_2}$ (which is immediate), $\im(P_1P_2)\subseteq B_1 \cap B_2$ and $\im(\id_V - P_1P_2) \subseteq (B_1 \cap B_2)^{\perp_r}$.
+
+Take $v\in V$ and write $v = v^+ - v^-$. By \ref{projectorOnProjectionBand}, we have $P_2v^+ \in V^+$ and $0 \leq P_1P_2v^+ \leq P_2v^+$. Since $P_2v^+\in B_2$, we have $P_1P_2v^+ \in B_2$ by solidity. Clearly $P_1P_2v^+ \in B_1$, so $P_1P_2v^+\in B_1\cap B_2$. Similarly $P_1P_2v^- \in B_1\cap B_2$ and thus $P_1P_2v\in B_1\cap B_2$, meaning that $\im(P_1P_2)\subseteq B_1 \cap B_2$.
+
+Take $v\in V$. Then
+\begin{align*}
+v - P_1P_2v &= (v-P_2v) + (P_2v - P_1P_2v) \\
+&= (\id_V - P_2)(v) + (\id_V - P_1)(P_2 v) \in B_2^{\perp_r} + B_1^{\perp} \subseteq (B_1 \cap B_2)^{\perp_r} + (B_1 \cap B_2)^{\perp_r} = (B_1 \cap B_2)^{\perp_r}.
+\end{align*}
+
+(2) Take $u\in V^+$. By \ref{projectorOnProjectionBand} we have $P_1(u), P_2(u) \in V^+$, $P_1P_2(u) \leq P_2(u)$ and $P_2P_1(u)\leq P_1(u)$. Thus $P_1P_2(u) \leq P_1(u) \wedge P_2(u)$.
+
+For the other inequality, we note that $0 \leq P_1(u) \wedge P_2(u) \leq P_1(u)$, so $P_1(u) \wedge P_2(u) \in B_1$ by solidity. Similarly $P_1(u) \wedge P_2(u)\in B_2$, so $P_1(u) \wedge P_2(u)\in B_1\cap B_2$. By \ref{projectorOnProjectionBand}, we have $P_1(u) \wedge P_2(u) \leq u$. Thus $P_1(u) \wedge P_2(u) \in \setbuilder{v\in B_1\cap B_2}{0\leq v\leq u}$. By \ref{projectionBandCriterion}, we have $P_1P_2(u) = \bigvee\setbuilder{v\in B_1\cap B_2}{0\leq v\leq u} \geq P_1(u) \wedge P_2(u)$.
+\end{proof}
+\begin{corollary}
+Let $V$ be an Archimedean Riesz space and $B_1,B_2\subseteq V$ projection bands with band projectors $P_1$ and $P_2$. Then the following are equivalent:
+\begin{enumerate}
+\item $B_1 \subseteq B_2$;
+\item $P_1P_2 = P_2P_1 = P_1$;
+\item $P_1(u) \leq P_2(u)$ for all $u\in V^+$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+$(1) \Rightarrow (2)$ Immediate from the proposition.
+
+$(2) \Rightarrow (3)$ By \ref{projectorOnProjectionBand}, we have $P_2(u) \in V^+$ and $P_1 = P_1P_2(u) \leq P_2(u)$.
+
+$(3) \Rightarrow (1)$ Take $v\in B_1$. Then $|v| \in B_1$ by solidity. Now $|v| = P_1(|v|) \leq P_2(|v|) \in B_2$, so $|v| \in B_2$ and $v\in B_2$.
+\end{proof}
+
+\begin{proposition} \label{sumProjectionBands}
+Let $V$ be an Archimedean Riesz space and $B_1,B_2\subseteq V$ projection bands with projectors $P_1$ and $P_2$. Then
+\begin{enumerate}
+\item $(B_1 \cup B_2)^{\perp_r\perp_r}$ is a projection band with band projector $P_1 + P_2 - P_1P_2$;
+\item $B_1 + B_2 = (B_1 \cup B_2)^{\perp_r\perp_r}$;
+\item $P_1 + P_2 - P_1P_2 = P_1(u)\vee P_2(u)$ for all $u\in V^+$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{intersectionProjectionBands}, we have that $B_1^{\perp_r}\cap B_2^{\perp_r}$ is a projection band with band projector
+\[ (\id_V - P_1)(\id_V - P_2) = \id_V - P_1 - P_2 + P_1P_2. \]
+Therefore, $(B_1^{\perp_r}\cap B_2^{\perp_r})^{\perp_r}$ is a projection band with band projector $P_1 + P_2 - P_1P_2$. By \ref{polarOfUnion} we have $(B_1^{\perp_r}\cap B_2^{\perp_r})^{\perp_r} = (B_1 \cup B_2)^{\perp_r\perp_r}$.
+
+(2) We have
+\[ B_1 + B_2 = \Span(B_1 \cup B_2) \subseteq (B_1 \cup B_2)^{\perp_r\perp_r}, \]
+since $(B_1 \cup B_2)^{\perp_r\perp_r}$ is a band (and thus a subspace) by \ref{disjointPolarBand}. Conversely, for all $v\in (B_1 \cup B_2)^{\perp_r\perp_r}$, we have $v = P_1(v) + P_2(v) - P_1P_2(v) \in B_1 + B_2$, so $(B_1^{\perp_r}\cap B_2^{\perp_r})^{\perp_r} \subseteq B_1 + B_2$.
+
+(3) We calculate, using \ref{intersectionProjectionBands} and \ref{sumAsMeetJoin},
+\begin{align*}
+(P_1 + P_2 - P_1P_2)(u) &= P_1(u) + P_2(u) - P_1(u)\wedge P_2(u) \\
+&= P_1(u)\vee P_2(u).
+\end{align*}
+\end{proof}
+
+\begin{definition}
+Let $V$ be a Riesz space and $v\in V$. Then $v$ is called a \udef{projection element} if $B_v$ is a projection band.
+\end{definition}
+
+\begin{proposition}
+Let $V$ be an Archimedean Riesz space and $v,w\in V^+$ are projection elements. Then
+\begin{enumerate}
+\item $B_{v\wedge w} = B_v \cap B_w$ and $P_{v\wedge w} = P_vP_w = P_wP_v$;
+\item $B_{v\vee w} = B_{v+w} = B_v + B_w$ and $P_{v\vee w} = P_{v+w} = P_u+P_v - P_uP_v$;
+\item $v\wedge w$, $v\vee w$ and $v+w$ are projection elements;
+\item the following are equivalent:
+\begin{enumerate}
+\item $v$ and $w$ are disjoint;
+\item $P_vP_w = 0$;
+\item $P_wP_v = 0$;
+\item $P_{v+w} = P_v + P_w$.
+\end{enumerate}
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Immediate from \ref{latticePropertiesPrincipalBands} and \ref{intersectionProjectionBands}.
+
+(2) We have $B_{v\vee w} = B_{v+w}$ by \ref{latticePropertiesPrincipalBands}. From \ref{latticePropertiesPrincipalRieszIdeals}, we have $R_{v} \subseteq R_{v+w}$. Taking the closure into the lattice of bands gives $B_{v} \subseteq B_{v+w}$. Similarly $B_w \subseteq B_{v+w}$, so $B_v + B_w \subseteq B_{v+w} + B_{v+w} = B_{v+w}$.
+
+Conversely, $B_v+ B_w$ is a projection band by \ref{sumProjectionBands} and it contains $v+w$, so $B_{v+w} \subseteq B_v + B_w$.
+
+The statements about the band projectors are given by \ref{sumProjectionBands}.
+
+(3) This follows from (1) and (2) and the fact that $B_v \cap B_w$ and $B_v + B_w$ are projection bands.
+
+(4) For the equivalences, it is enough to note that $B_v = \{0\}$ iff $v = 0$ iff $P_v = 0$.
+\end{proof}
+
 \subsubsection{The projection property}
 \begin{definition}
 Let $V$ be a Riesz space. We say that
 \begin{itemize}
 \item $V$ has the \udef{projection property} if every band in $V$ is a projection band;
-\item $V$ has the \udef{principal projection property} if every principal band in $V$ is a projection band.
+\item $V$ has the \udef{principal projection property} if element in $V$ is a projection element.
 \end{itemize}
 \end{definition}
 
@@ -3585,142 +3920,152 @@ By \ref{vectorSumOrderHomomorphism}, we have $v+ u_1 = v+\bigvee_{n\in \N}nv = \
 Thus $C^{\perp_r} = \{0\}$ and $C^{\perp_r\perp_r} = V$. Now we have already proved that Dedekind completeness implies that $V$ is Archimedean, so \ref{ArchimedeanBandEquivalents} gives that $C= C^{\perp_r\perp_r} = V$ and $B$ is a projection band.
 \end{proof}
 
-\subsubsection{Projection bands in Archimedean Riesz spaces}
+Principal projection + uniform completeness imply Dedekind completeness, see \url{https://core.ac.uk/download/pdf/82353250.pdf}.
 
-\section{Order and Riesz space convergence}
+\subsubsection{The principal projection property}
+
+\begin{theorem}[Freudenthal's spectral theorem]
+Let $V$ be a Riesz space with the principal projection property, $0 < e \in V$ and $R_e$ be the principal Riesz ideal generated by $e$. Then, for all $x\in R_e$, there exist sequences $\seq{s_n}$ and $\seq{t_n}$ of $e$-step functions such that
+\end{theorem}
+
+\subsection{Components}
+\begin{definition}
+Let $V$ be a Riesz space and $u\in V^+$. Then $p\in V$ is called a \udef{component} of $u$ if $p\wedge (u-p) = 0$. The set of components of $u$ is denoted $C_u$.
+\end{definition}
+
+\begin{lemma} \label{RieszComponentsLemma}
+Let $V$ be a Riesz space, $u\in V^+$ and $p\in V$. Then
+\begin{enumerate}
+\item $0$ and $u$ are components of $u$;
+\item $p$ is a component of $u$ \textup{if and only if} $u-p$ is a component of $u$;
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Immediate.
+
+(2) We have $p\wedge (u-p) = \big(u - (u-p)\big)\wedge (u-p)$.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $u\in V^+$. Then the set $C_u$ of components of $u$
+\begin{enumerate}
+\item has top $u$ and bottom $0$;
+\item is a sublattice of $V$;
+\item has a complement $\overline{p} = u-p$ for all $p\in C_u$.
+\end{enumerate}
+In particular $C_u$ is a Boolean lattice, since $V$ is distributive.
+\end{proposition}
+\begin{proof}
+(1) Let $p\in C_u$. We have $0 = p\wedge (u-p) \leq p$, so $p\in V^+$.
+
+Since $0 = p\wedge (u-p)$, \ref{lemmaRieszSpaces} gives $0 = (-p)\vee (p-u)$, so $u = u+(-p)\vee (p-u) = (u-p)\vee p \geq p$.
+
+(2) Let $p,q\in V$ be components of $u$. By (1) we have $p\leq u$ and $q\leq u$, so $p\vee q \leq u$. Thus, by \ref{lemmaRieszSpaces},
+\[ 0 \leq u - (p\vee q) = u + (-p)\wedge(-q) = (u-p)\wedge (u-q). \]
+We then have
+\begin{align*}
+(p\vee q)\wedge \big(u - p\vee q\big) &= (p\vee q)\wedge \big((u-p)\wedge (u-q)\big) \\
+&= \big(p \wedge (u-p)\wedge (u-q)\big)\vee \big(q\wedge (u-p)\wedge (u-q)\big) \\
+&= 0\vee 0 = 0,
+\end{align*}
+since $p \wedge (u-p) = 0$ and $q \wedge (u-q) = 0$. This shows that $p\vee q\in C_u$ and thus that $C_u$ is closed under joins.
+
+We have $u - (p\wedge q) = (u-p)\vee (u-q)$. Since $u-p$ and $u-q$ are components, by \ref{RieszComponentsLemma}, and $C_u$ is closed under joins, we have that $u - (p\wedge q)$ is a component and thus that $p\wedge q$ is a component, by \ref{RieszComponentsLemma}.
+
+(3) We have $p\wedge \overline{p} = p\wedge (u-p) = 0$ by definition. We have $p\vee \overline{p} = p\vee (u-p) = u$ by the calculation in (1).
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space with the principal projection property and $u\in V^+$. Then $p\in C_u$ \textup{if and only if} $p = P_v(u)$ for some $v\in V$.
+\end{proposition}
+\begin{proof}
+First assume $p\in C_u$. Clearly $p\in B_p$. Also $p\perp_r(e-p)$, so $e-p \in \{p\}^{\perp_r} = \{p\}^{\perp_r\perp_r\perp_r} = B_p^{\perp_r}$ by \ref{bandClosureArchimedeanSpaces}. Thus $e = p + (e-p) \in B_p\oplus B_p^{\perp_r}$ and $p = P_p(u)$.
+
+Now assume $p = P_v(u)$ for some $v\in V$. Since $P_v$ is the band projector of a projection band, we have $p = P_v(u) \in B_v$ and $u-p = (\id_V- P_v)(u) \in B_v^{\perp_r}$. Thus $p$ and $u-p$ are disjoint, meaning $0 = |p|\wedge |u-p| = u\wedge (u-p)$.
+\end{proof}
+
+\section{Order convergence in ordered vector spaces}
 
 \begin{proposition} \label{continuityOrderConvergenceOrderedVectorSpaces}
 Let $\sSet{V, \leq}$ be a partially ordered vector space equipped with the order convergence. Then
 \begin{enumerate}
 \item vector addition is continuous;
 \item for all $\lambda\in \R$, the scalar multiplication $V\to V: v \mapsto \lambda v$ is continuous;
-\item the restriction $\cdot: \R^+ \times V^+ \to V^+$ of scalar multiplication to positive scalars and vectors is continuous.
+\item if $V$ is Archimedean, then the restriction $\cdot: \R^+ \times V^+ \to V^+$ of scalar multiplication to positive scalars and vectors is continuous.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-(1) Suppose $F\overset{\mathfrak{o}}{\longrightarrow} x$ and $G\overset{\mathfrak{o}}{\longrightarrow} y$ in $V$. Then we calculate using \ref{sumUpDownsets}, \ref{orderConvergenceEquivalents} and \ref{sumUpperLowerBounds},
-\begin{align*}
-\upset\{x + y\} &= \upset\{x\} + \upset\{y\} \\
-&\subseteq \Big(\bigcup_{A\in F} A^\leq\Big) + \Big(\bigcup_{B\in G} B^\leq\Big) \\
-&= \bigcup_{\substack{A\in F \\ B\in G}} A^\leq + B^\leq \\
-&\subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A + B\big)^\leq.
-\end{align*}
-Dually, we have $\downset\{x + y\} \subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A + B\big)^\geq$.
-Then, by \ref{orderConvergenceEquivalents}, we have that $F + G \overset{\mathfrak{o}}{\longrightarrow} x + y$.
+(1) Suppose $F\overset{\mathfrak{o}}{\longrightarrow} x$ and $G\overset{\mathfrak{o}}{\longrightarrow} y$ in $V$. Then we can find $M_F, N_F, M_G, N_G$ according to \ref{orderConvergenceIntervalBase} such that $\bigvee M_F = x = \bigwedge N_F$ and $\bigvee M_G = y = \bigwedge N_G$.
 
-(2) Suppose $F\overset{\mathfrak{o}}{\longrightarrow} v$ in $V$.
-First suppose $\lambda = 0$. Then, for all $A\in F$, we have $\upset\{0\} = \{0\}^\leq = (0\cdot A)^\leq$. Thus $\upset\{0\} = \bigcup_{A\in F}(0\cdot A)^\leq$ and, similarly, $\downset\{0 \cdot v\} = \bigcup_{A\in F}(0\cdot A)^\geq$. Then, by \ref{orderConvergenceEquivalents}, we have that $0\cdot F \overset{\mathfrak{o}}{\longrightarrow} 0$.
+Now $\bigvee M_F + M_G = \bigvee M_F + \bigvee M_G = x+y$ by \ref{extremaVectorSum}. Similarly $\bigwedge N_F + N_G = \bigwedge N_F + \bigwedge N_G = x+y$.
 
-Next, suppose $\lambda > 0$. Then we calculate using \ref{scalarMultipleUpDownSets}, \ref{orderConvergenceEquivalents} and \ref{scalarMultipleUpperLowerBounds},
-\begin{align*}
-\upset\{\lambda \cdot v\} &= \lambda\upset\{v\} \\
-&\subseteq \lambda\Big(\bigcup_{A\in F} A^\leq\Big) \\
-&= \bigcup_{A\in F} \lambda A^\leq \\
-&= \bigcup_{A\in F} (\lambda A)^\leq.
-\end{align*}
-Dually, we have $\downset \{\lambda \cdot v\} \subseteq \bigcup_{A\in F} (\lambda A)^\geq$.
-Then, by \ref{orderConvergenceEquivalents}, we have that $\lambda\cdot F \overset{\mathfrak{o}}{\longrightarrow} \lambda v$.
+We want to apply \ref{orderConvergenceIntervalBase} to conclude $F+G \overset{\mathfrak{o}}{\longrightarrow} x + y$. To that end, take $a_F + a_G \in M_F+ M_G$ and $b_F + b_G \in N_F + N_G$.
+We have $\interval{a_F, b_F}\in F$ and $\interval{a_G, b_G} \in G$. Since $\interval{a_F, b_F} + \interval{a_G, b_G} \subseteq \interval{a_F + a_G, b_F + b_G}$, by \ref{intervalSumInclusion}, we have $\interval{a_F + a_G, b_F + b_G} \in F+G$.
 
-Finally, suppose $\lambda < 0$. Then we calculate using \ref{scalarMultipleUpDownSets}, \ref{orderConvergenceEquivalents} and \ref{scalarMultipleUpperLowerBounds},
-\begin{align*}
-\upset\{\lambda \cdot v\} &= \lambda\downset\{v\} \\
-&\subseteq \lambda\Big(\bigcup_{A\in F} A^\geq\Big) \\
-&= \bigcup_{A\in F} \lambda A^\geq \\
-&= \bigcup_{A\in F} (\lambda A)^\leq.
-\end{align*}
-Dually, we have $\downset \{\lambda \cdot v\} \subseteq \bigcup_{A\in F} (\lambda A)^\geq$.
-Then, by \ref{orderConvergenceEquivalents}, we have that $\lambda\cdot F \overset{\mathfrak{o}}{\longrightarrow} \lambda v$.
+(2) If $\lambda = 0$, then the scalar multiplication is a constant function and thus constant. If $\lambda > 0$, then the scalar multiplication is an order similarity and thus continuous.
 
-(3) Suppose $F\overset{\R}{\longrightarrow} \lambda$ in $\R^+$ and $G\overset{\mathfrak{o}}{\longrightarrow} x$ in $V^+$. We note that the convergence on $\R^+$ is the order convergence, see \ref{realConvergenceOrderConvergence}. Then we calculate using \ref{scalarMultipleUpDownSetPositiveSet}, \ref{orderConvergenceEquivalents} and \ref{scalarMultipleSetsUpperLowerBounds},
-\begin{align*}
-\upset\{\lambda x\} &= \lambda\upset\{x\} \\
-&= \upset\{\lambda\} \cdot \upset\{x\} \\
-&\subseteq \Big(\bigcup_{A\in F} A^\leq\Big) \cdot \Big(\bigcup_{B\in G} B^\leq\Big) \\
-&= \bigcup_{\substack{A\in F \\ B\in G}} A^\leq \cdot B^\leq \\
-&\subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A \cdot B\big)^\leq.
-\end{align*}
-Dually, we have $\downset\{\lambda x\} \subseteq \bigcup_{\substack{A\in F \\ B\in G}} \big(A \cdot B\big)^\geq$.
-Then, by \ref{orderConvergenceEquivalents}, we have that $F \cdot G \overset{\mathfrak{o}}{\longrightarrow} \lambda x$.
+If $\lambda < 0$, then the scalar multiplication is an order similarity to $V^o$ (with the opposite order). The order convergence on $V^o$ is the same as that on $V$.
+
+(3) Assume $V$ is Archimedean. Suppose $F\overset{\R}{\longrightarrow} \lambda$ in $\R^+$ and $G\overset{\mathfrak{o}}{\longrightarrow} x$ in $V^+$. We note that the convergence on $\R^+$ is the order convergence, see \ref{realConvergenceOrderConvergence}. Then we can find $M_F, N_F, M_G, N_G$ according to \ref{orderConvergenceIntervalBase} such that $\bigvee M_F = \lambda = \bigwedge N_F$ and $\bigvee M_G = x = \bigwedge N_G$.
+
+Now $\bigvee M_F \cdot M_G = \bigvee M_F \cdot \bigvee M_G = \lambda x$ by \ref{extremaScalarProduct}. Similarly $\bigwedge N_F \cdot N_G = \bigwedge N_F \cdot \bigwedge N_G = \lambda x$.
+
+We want to apply \ref{orderConvergenceIntervalBase} to conclude $F\cdot G \overset{\mathfrak{o}}{\longrightarrow} \lambda x$. To that end, take $\mu \cdot a \in M_F \cdot M_G$ and $\nu b \in N_F \cdot N_G$.
+We have $\interval{\mu, \nu}\in F$ and $\interval{a, b} \in G$. Since $\interval{\mu, \nu} \cdot \interval{a, b} \subseteq \interval{\mu a, \nu b}$, by \ref{intervalScalarMultiplicationInclusion}, we have $\interval{\mu a, \nu b} \in F\cdot G$.
 \end{proof}
 
 \begin{lemma} \label{orderConvergencePositiveFilterLemma}
 Let $\sSet{V, \leq}$ be a partially ordered vector space equipped with the order convergence. Let $F, G\in\powerfilters(V^+)$ be proper filters of positive vectors. Then
 \begin{enumerate}
-\item $\downset\{0\} \subseteq \bigcup_{A\in F}A^\geq$;
 \item if $G \overset{\mathfrak{o}}{\longrightarrow} 0$ and for all $B\in G$, there exists $A\in F$ such that $A\subseteq \downset B$, then $F \overset{\mathfrak{o}}{\longrightarrow} 0$;
 \item $F+G \overset{\mathfrak{o}}{\longrightarrow} 0$ \textup{if and only if} $F \overset{\mathfrak{o}}{\longrightarrow} 0$ and $G \overset{\mathfrak{o}}{\longrightarrow} 0$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) For all $A\in F$, we have $A\subseteq \upset \{0\}$, so $\downset \{0\} = \big(\upset \{0\}\big)^\geq \subseteq A^\geq$ and $\downset\{0\} \subseteq \bigcup_{A\in F}A^\geq$. 
+(1) By \ref{orderConvergenceIntervalBase}, there exists $N$ such that $\bigwedge N = 0$ and $\interval{0,b} \in G$ for all $b\in N$.
 
-(2) Take $v\in \upset\{0\}$. Since $\upset \{0\} \subseteq \bigcup_{B\in G}B^\leq$, there exists $B\in G$ such that $v\in B^\leq$. Take $A\in F$ such that $A\subseteq \downset B$. Then $B^\leq = (\downset B)^\leq \subseteq A^\leq$, so $v\in \bigcup_{A\in F}A^\leq$ and $\upset \{0\} \subseteq \bigcup_{A\in F}A^\leq$.
+Suppose $B\in G$ such that $B\subseteq \interval{0,b}$. Then there exists $A$ such that $A\subseteq \downset B$. Since $A\subseteq V^+$, we have $A \subseteq \downset B \cap V^+ \subseteq \interval{0,b}$. We have $F \overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{orderConvergenceIntervalBase}.
 
-We have $\downset\{0\} \subseteq \bigcup_{A\in F}A^\geq$ from (1).
-We conclude $F \overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{orderConvergenceEquivalents}.
+(2) The direction $\Leftarrow$ is given by \ref{continuityOrderConvergenceOrderedVectorSpaces}.
 
-(3) The direction $\Leftarrow$ is given by \ref{continuityOrderConvergenceOrderedVectorSpaces}.
-
-For the direction $\Rightarrow$, assume $F+G \overset{\mathfrak{o}}{\longrightarrow} 0$. We show $F \overset{\mathfrak{o}}{\longrightarrow} 0$. The argument for $G$ is the same. 
-
-We have $\upset \{0\} \subseteq \bigcup_{\substack{A\in F\\B\in G}}(A+B)^\leq$ by \ref{orderConvergenceEquivalents}. Now take arbitrary $v\in \upset\{0\}$. There exists $A\in F$ and $B\in G$ such that $v\in (A+B)^\leq$. Take arbitrary $a\in A$ and $b\in B$. Since $0\leq b$, we have $a \leq a+b \leq v$. Thus $v\in A^\leq \bigcup_{A\in F}A^\leq$ and so $\upset \{0\} \subseteq \bigcup_{A\in F}A^\leq$.
-
-We have $\downset\{0\} \subseteq \bigcup_{A\in F}A^\geq$ from (1).
-We conclude $F \overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{orderConvergenceEquivalents}.
+For the direction $\Rightarrow$, we use point (1). Take arbitrary $A+B\in F + G$. Then $A\subseteq \downset (A+B)$ and so $F \overset{\mathfrak{o}}{\longrightarrow} 0$. The argument for $G \overset{\mathfrak{o}}{\longrightarrow} 0$ is similar.
 \end{proof}
 
-\begin{lemma} \label{RieszAbsoluteValueOrderContinuous}
-Let $V$ be a Riesz space then the absolute value function $|-|$ is continuous when $V$ is equipped with the order convergence.
-\end{lemma}
-\begin{proof}
-Since $|v| = v\vee (-v)$ for all $v\in V$, the result follows from \ref{continuityOrderConvergenceOrderedVectorSpaces} and \ref{latticeOperationsContinuousInOrderConvergence}.
-\end{proof}
+\subsection{Order convergence in Riesz spaces}
 
-\subsection{Riesz space convergence}
-\begin{definition}
-Let $V$ be a Riesz space, $v\in V$ and $F\in\powerfilters(V)$. Then $F\to v$ in the \udef{Riesz space convergence} if $|F-v|  \overset{\mathfrak{o}}{\longrightarrow} 0$.
-\end{definition}
-Here $|F-v|$ is the image filter of $F-v$ under the absolute value function $|-|$.
-
-\begin{lemma} \label{RieszAbsoluteValueRieszContinuous}
-Let $V$ be a Riesz space then the absolute value function $|-|$ is continuous when $V$ is equipped with the Riesz convergence.
-\end{lemma}
-\begin{proof}
-Let $F\to v \in V$. Then $|F-v|\overset{\mathfrak{o}}{\longrightarrow} 0$. Take arbitrary $|A-v|\in |F-v|$ and $\big||a| - |v|\big|\in \big||A|-|v|\big|$. Then $\big||a| - |v|\big| \leq |a-v| \in |A-v|$ by the reverse triangle inequality \ref{triangleInequalityRieszSpaces}. Thus $\big||F| - |v|\big| \overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{orderConvergencePositiveFilterLemma}. This means that $|F| \to |v|$.
-\end{proof}
-
-\begin{lemma} \label{RieszConvergenceVersusOrderConvergence}
-Let $V$ be a Riesz space, $v\in V$ and $F\in\powerfilters(V)$. Then
+\begin{lemma} \label{RieszSpaceOperationsOrderContinuous}
+Let $V$ be a Riesz space equipped with the order convergence. Then
 \begin{enumerate}
-\item if $F \overset{\mathfrak{o}}{\longrightarrow} v$, then $F\to v$;
-\item if $F\to v$, then $|F|\overset{\mathfrak{o}}{\longrightarrow} |v|$.
+\item the absolute value function $|-|$ is continuous;
+\item the lattice operations $\wedge: V\times V \to V$ and $\vee: V\times V \to V$ are continuous.
 \end{enumerate}
 \end{lemma}
-Thus (1) the Riesz convergence is weaker than the order convergence and (2) the absolute value function is Riesz-to-order-convergence-continuous.
 \begin{proof}
-(1) If $F \overset{\mathfrak{o}}{\longrightarrow} v$, then $F-v \overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{continuityOrderConvergenceOrderedVectorSpaces} and $|F-v| \overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{RieszAbsoluteValueOrderContinuous}. This means that $F \to v$.
+(1) Since $|v| = v^+ + v^- = v\vee 0 + (-v)\vee 0$ for all $v\in V$, the result follows from \ref{continuityOrderConvergenceOrderedVectorSpaces}, \ref{singleArgumentMeetJoinOrderContinuous} and \ref{distributivityRieszSpaces}.
 
-(2) If $F\to v$, then $|F-v| \overset{\mathfrak{o}}{\longrightarrow} 0$. Take arbitrary $w\in \upset\{|v|\}$, so $0\leq w - |v|$ and $w-|v| \in \upset \{0\} \subseteq \bigcup_{A\in F}|A-v|^\leq$. Take $A\in F$ such that $w-|v| \in |A-v|^\leq$. Take arbitrary $a\in A$. Then $|a-v| \leq w - |v|$, so
-\[ |a| = |a-v+v| \leq |a-v|+|v| \leq w. \]
-Thus $w\in |A|^\leq$ and $\upset\{|v|\} \subseteq |A|^\leq \subseteq \bigcup_{A\in F}|A|^\leq$.
-
-Now take arbitrary $w\in \downset\{|v|\}$, so $0\leq |v| - w$ and $|v|-w \in \upset \{0\} \subseteq \bigcup_{A\in F}|A-v|^\leq$. Take $A\in F$ such that $|v|-w \in |A-v|^\leq$. Take arbitrary $a\in A$. Then $|a-v| \leq |v|-w$, so
-\[ w \leq |v| - |a-v| \leq \big||v| - |a-v|\big| \leq |v + a-v| = |a| \]
-by the reverse triangle inequality \ref{triangleInequalityRieszSpaces}.
-Thus $w\in |A|^\geq$ and $\downset\{|v|\} \subseteq |A|^\geq \subseteq \bigcup_{A\in F}|A|^\geq$.
-
-We conclude $|F| \overset{\mathfrak{o}}{\longrightarrow} |v|$ by \ref{orderConvergenceEquivalents}.
+(2) Since, for all $v,w\in V$, we have $v\vee w = \frac{1}{2}(v+w + |v-w|)$ and $v\wedge w = \frac{1}{2}(v+w - |v-w|)$, by \ref{absoluteValueMeetJoin}, the continuity of the lattice operations follows from (1) and \ref{continuityOrderConvergenceOrderedVectorSpaces}.
 \end{proof}
 
+\begin{lemma} \label{orderConvergenceInRieszSpaceLemma}
+Let $V$ be a Riesz space, $F\in\powerfilters(V)$ and $v\in V$. Then $F\overset{\mathfrak{o}}{\longrightarrow} v$ \textup{if and only if} $|F-v|\overset{\mathfrak{o}}{\longrightarrow} 0$.
+\end{lemma}
+\begin{proof}
+The direction $\Rightarrow$ follows from \ref{RieszSpaceOperationsOrderContinuous}.
 
-\begin{proposition} \label{RieszSpaceConvergenceVectorConvergence}
-The Riesz space convergence is a vector space convergence.
+Now assume $|F-v|\overset{\mathfrak{o}}{\longrightarrow} 0$. By \ref{orderConvergenceIntervalBase} there exists $N$ such that $\bigwedge N = 0$ (thus $N\subseteq V^+$) and for all $b\in N$, we have $\interval{0,b} \in |F-v|$.
+
+Now, by \ref{scalarMultipleUpperLowerBounds}, we have $\bigvee -N = -\bigwedge N = -0 = 0$. Take arbitrary $a, b\in N$. Then there exist $A, B\in F-v$ such that $|A| \subseteq \interval{0, a}$ and $|B|\subseteq \interval{0,b}$. We have
+\[ |A\cap B| \subseteq |A|\cap |B| \subseteq \interval{0,a}\cap \interval{0,b} \subseteq \interval{0,a\wedge b} \]
+by \ref{orderPreservingFunctionLatticeOperations} and \ref{unionIntersectionIntervals}. Then $A\cap B \subseteq \interval{-(a\wedge b),a\wedge b} \subseteq \interval{-a, b}$ by \ref{solidLemma}. This implies $\interval{-a,b} \in F-v$. We conclude that $F-v\overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{orderConvergenceIntervalBase} and thus that $F\overset{\mathfrak{o}}{\longrightarrow} v$ by \ref{continuityOrderConvergenceOrderedVectorSpaces}.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be an Archimedean Riesz space. Then the order convergence on $V$ is a vector space convergence.
 \end{proposition}
 \begin{proof}
-We first show continuity of vector addition. Let $F\to v$ and $G \to w$, so $|F-v|\overset{\mathfrak{o}}{\longrightarrow} 0$ and $|G-w| \overset{\mathfrak{o}}{\longrightarrow} 0$. Then $|F-v|+|G-w|\overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{continuityOrderConvergenceOrderedVectorSpaces}. Take arbitrary $|A-v| + |B-w|\in |F-v|+|G-w|$. Take arbitrary $|a+b-v-w| \in |A+B - v-w|$. Then $|a+b-v-w| \leq |a-v|+|b-w| \in |A-v|+|B-w|$ by the triangle inequality \ref{triangleInequalityRieszSpaces}, so $|A+B - v-w| \subseteq \downset |A-v| + |B-w|$. This means we can apply \ref{orderConvergencePositiveFilterLemma} to obtain $|F + G-v - w|\overset{\mathfrak{o}}{\longrightarrow} 0$ and thus $F+G \to v+w$.
+We have that vector addition is continuous by \ref{continuityOrderConvergenceOrderedVectorSpaces}.
 
-Now we show continuity of scalar multiplication. Let $F\to v$ and $H \to \lambda\in \R$. Then $|H|\overset{\mathfrak{o}}{\longrightarrow} |\lambda|$, $|H-\lambda|\overset{\mathfrak{o}}{\longrightarrow} 0$ and $|F-v| \overset{\mathfrak{o}}{\longrightarrow}$.
-
+We just need to show that scalar multiplication is continuous. Let $F\to v$ and $H \to \lambda\in \R$. Then, by \ref{orderConvergenceInRieszSpaceLemma}, we just need to show that $|H\cdot F - \lambda v|\overset{\mathfrak{o}}{\longrightarrow} 0$.
 
 By \ref{continuityOrderConvergenceOrderedVectorSpaces}, we have $|H\cdot F - H\cdot v| \supseteq |H|\cdot |F-v| \overset{\mathfrak{o}}{\longrightarrow} 0$, $|H\cdot v - \lambda v| = |H-\lambda|\cdot |v| \overset{\mathfrak{o}}{\longrightarrow} 0$ and thus $|H\cdot F - H\cdot v| + |H\cdot v - \lambda v| \overset{\mathfrak{o}}{\longrightarrow} 0$.
 
@@ -3729,18 +4074,120 @@ Take arbitrary $|B\cdot A - B\cdot v| + |B\cdot v - \lambda v| \in |H\cdot F - H
 by the triangle inequality \ref{triangleInequalityRieszSpaces}. Thus $|B\cdot A - \lambda v| \subseteq \downset |B\cdot A - B\cdot v| + |B\cdot v - \lambda v|$ and $|H\cdot F - \lambda v| \overset{\mathfrak{o}}{\longrightarrow} 0$ by \ref{orderConvergencePositiveFilterLemma}. This means that $H\cdot F \to \lambda v$.
 \end{proof}
 
-\begin{proposition}
-Let $V$ be a Riesz space equipped with the Riesz convergence. Then the lattice operations $\wedge: V\times V \to V$ and $\vee: V\times V \to V$ are continuous.
-\end{proposition}
+\subsubsection{Uniform Riesz convergence}
+\begin{definition}
+Let $V$ be a Riesz space and $v\in V^+$. Let $F\in \powerfilters(V)$ and $x\in V$. Then we say $F$ converges \udef{$v$-uniformly} to $x$ if $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq |F - x|$. We write $F\overset{\text{$v$-un}}{\longrightarrow} x$.
+\end{definition}
+
+\begin{lemma} \label{uniformRieszConvergenceAbsoluteValueConvergenceLemma}
+Let $V$ be a Riesz space and $v\in V^+$. Let $F\in \powerfilters(V)$ and $x\in V$. Then $F\overset{\text{$v$-un}}{\longrightarrow} x$ \textup{if and only if} $|F-x|\overset{\text{$v$-un}}{\longrightarrow} 0$.
+\end{lemma}
 \begin{proof}
-Since, for all $v,w\in V$, we have $v\vee w = \frac{1}{2}(v+w + |v-w|)$ and $v\wedge w = \frac{1}{2}(v+w - |v-w|)$, \ref{absoluteValueMeetJoin}, the continuity of the lattice operations follows from \ref{RieszAbsoluteValueRieszContinuous} and \ref{RieszSpaceConvergenceVectorConvergence}.
+This follows immediately from $|F-x| = \big||F-x|-0\big|$.
 \end{proof}
 
+\begin{lemma} \label{filterGreaterThanRieszUniformNeighbourhoodLemma}
+Let $V$ be a Riesz space and $F,G\in\powerfilters(V^+)$. Suppose $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq G$ and for all $B\in G$ there exists $A\in F$ such that $A\subseteq \downset B$, then $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq F$.
+\end{lemma}
+\begin{proof}
+Take $\interval{0,\epsilon} \cdot \interval{0,v} \in \neighbourhood_{\R^+}(0)\cdot \interval{0,v}$. Then there exists $B\in G$ such that $B\subseteq \interval{0,\epsilon} \cdot \interval{0,v}$. Then $\downset B \cap V^+ \subseteq \interval{0,\epsilon} \cdot \interval{0,v}$. By assumption, there exists $A\in F$ such that $A\subseteq \downset B$. Since $A\subseteq V^+$, we have $A\subseteq \downset B \cap V^+ \subseteq \interval{0,\epsilon} \cdot \interval{0,v}$. Thus $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq F$.
+\end{proof}
 
 \begin{lemma}
-TODO: Is the Riesz space convergence compatible with the weak order???
+Let $V$ be an Archimedean Riesz space and $v\in V^+$. Then $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \overset{\mathfrak{o}}{\longrightarrow} 0$.
+\end{lemma}
+\begin{proof}
+We can set $N \defeq \setbuilder{\epsilon v}{\epsilon > 0}$. Then $\bigwedge N = 0$, since $V$ is Archimedean. We conclude by \ref{orderConvergenceIntervalBase}.
+\end{proof}
+\begin{corollary}
+Let $V$ be an Archimedean Riesz space and $v\in V^+$. Then the $v$-uniform convergence is stronger than the order convergence.
+\end{corollary}
+\begin{proof}
+Let $F\in \powerfilters(V)$ be a filter that converges to $x\in V$. Then $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq |F - x|$. By the lemma, this means that $|F-x|$ order-converges to $0$ and $F$ converges to $x$ by \ref{orderConvergenceInRieszSpaceLemma}.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a Riesz space and $v\in V^+$. Equip $V$ with the $v$-uniform convergence. Then
+\begin{enumerate}
+\item the vector addition $+: V\times V\to V$ is continuous, i.e.\ the $v$-uniform convergence is a group convergence;
+\item for all $\lambda \in R$, the scalar multiplication $V\to V: x\mapsto \lambda x$ is continuous;
+\item the lattice operations $\wedge: V\times V\to V$ and $\vee: V\times V\to V$ are continuous;
+\item the absolute value function $|-|: V\to V$ is continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Since $\sSet{V,+,0}$ is a commutative group, we can use \ref{groupConvergenceConstruction}. Points (1) and (2) are immediate. For point (3), we need to prove that for all $F,G\in \powerfilters(V)$, we have that $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq |F|$ and $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq |G|$ implies $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq |F - G|$. Indeed, take arbitrary $\interval{0,\epsilon}\cdot \interval{0,v}$. We claim
+\[ \big|\interval{0,\epsilon/2}\cdot \interval{0,v} - \interval{0,\epsilon/2}\cdot \interval{0,v}\big| \subseteq \interval{0,\epsilon}\cdot \interval{0,v}. \]
+To show this, take arbitrary $|\lambda u - \mu w|\in \big|\interval{0,\epsilon/2}\cdot \interval{0,v} - \interval{0,\epsilon/2}\cdot \interval{0,v}\big|$. We have
+\begin{align*}
+0 \leq |\lambda u - \mu w| &\leq \lambda u + \mu w \\
+&\leq (\lambda \vee \mu) (u + w) \\
+&\leq (\epsilon / 2) (2v) = \epsilon v.
+\end{align*}
+This completes the proof.
+
+(2) Take $\lambda\in \R$. If $\lambda = 0$, then the scalar multiplication is a constant function, which is continuous. Now suppose $\lambda \neq 0$. Take $F\overset{\text{$v$-un}}{\longrightarrow} x$. Now we have $\neighbourhood_{\R^+}(0)\cdot \interval{0,v} = |\lambda|\cdot\neighbourhood_{\R^+}(0)\cdot \interval{0,v} \subseteq |\lambda|\cdot|F - x| = |\lambda F - \lambda x|$, so $\lambda F\overset{\text{$v$-un}}{\longrightarrow} \lambda x$.
+
+(3) Take $F\overset{\text{$v$-un}}{\longrightarrow} x$ and $G\overset{\text{$v$-un}}{\longrightarrow} y$. Take arbitrary $A\in F$, $B\in G$, $a\in A$ and $b\in B$. By \ref{BirkhoffInequalities}, we have
+\[ |a\vee b - x\vee y| \leq |a-x| + |b-y|, \]
+so $|A\vee B - x\vee y| \subseteq \downset \big(|A-x| + |B-y|\big)$. Since $|F-x| \overset{\text{$v$-un}}{\longrightarrow} 0$ and $|G - y| \overset{\text{$v$-un}}{\longrightarrow} 0$, by \ref{uniformRieszConvergenceAbsoluteValueConvergenceLemma}, we have $|F-x| + |G-y|\overset{\text{$v$-un}}{\longrightarrow} 0$ by point (1). By \ref{filterGreaterThanRieszUniformNeighbourhoodLemma}, we have $|F\vee G - x\vee y| \overset{\text{$v$-un}}{\longrightarrow} 0$ and so $F\vee G \overset{\text{$v$-un}}{\longrightarrow} x\vee y$ by \ref{uniformRieszConvergenceAbsoluteValueConvergenceLemma}.
+
+The argument for $\wedge$ is similar.
+
+(4) Since $|v| = v\vee (-v)$, this follows from (2) and (3).
+\end{proof}
+
+\subsection{The Daniell integral}
+\begin{definition}
+Let $V$ be a Riesz space and $E\subseteq V$ a Riesz subspace. A function $f: E\to \R$ is called a \udef{Daniell functional} if it is
+\begin{itemize}
+\item linear;
+\item positive;
+\item Riesz-continuous.
+\end{itemize}
+\end{definition}
+TODO: $E$ just vector subspace??
+
+The positivity of $f$ is equivalent to it being order-preserving, see \ref{positiveLinearFunctionIsotone}.
+
+\begin{lemma}
+Let $V$ be a Riesz space, $E\subseteq V$ a Riesz subspace and $f: E\to \R$ a positive linear functional. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is a Daniell functional;
+\item $f$ is Riesz-continuous at $0$;
+\item $f$ is order-continuous at $0$;
+\item $f$ is order-continuous when restricted to $E^+$;
+\item $f$ is order-continuous;
+\item $f$ is continuous when $V$ is equipped with the isotonic convergence;
+\item $f$ is continuous when $V$ is equipped with the antitonic convergence;
+\item $f$ is continuous when $V$ is equipped with the monotonic convergence;
+\end{enumerate}
 \end{lemma}
 
+
+\subsection{Riesz space convergence}
+
+
+\subsubsection{Monotone filters}
+\begin{definition}
+Let $V$ be a Riesz space and $F$ a filter on $V$ that Riesz-converges to $x$. We say $F$
+\begin{enumerate}
+\item \udef{converges isotonically} if $F \leq_s\pfilter{x}$;
+\item \udef{converges antitonically} if $F \geq_s\pfilter{x}$;
+\item \udef{converges monotonically} if $F \leq_s\pfilter{x}$ or $F \geq_s\pfilter{x}$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}
+Let $V$ be a Riesz space. Then isotonic, antitonic and monotonic convergence on $V$ are convergences.
+\end{lemma}
+\begin{proof}
+We first note that isotonic convergence is centered, since $\pfilter{v} \leq_s \pfilter{v}$ for all $v\in V$.
+
+Next, suppose $F$ converges isotonically to $v$ and $F\subseteq G$, then there exists $A\in F$ such that $v \in A^\leq$. Since $A\in G$, we have $G\leq_s \pfilter{x}$.
+
+We have a similar argument for antitonic convergence. For monotonic convergence, we use \ref{latticeConvergences}.
+\end{proof}
 
 \subsection{Riesz order uniformity}
 \begin{definition}

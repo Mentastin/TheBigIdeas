@@ -2599,7 +2599,7 @@ properties is compact.
 TODO See \ref{spectrumCompactOperator}
 \end{proof}
 
-TODO we can attain eigenvectors due to compactness and extreme value theorem. Cfr. Courant-Weyl.
+TODO we can attain eigenvectors due to compactness and extreme value theorem. Cfr. Courant-Fisher-Weyl.
 
 \subsubsection{Self-adjoint extensions of symmetric operators}
 \paragraph{Cayley transform}
@@ -3744,10 +3744,12 @@ U_{1,0} & U_{1,1}W
 In particular, for any contraction $T$, the operators
 \[ \begin{pmatrix}
 T & -D_{T^*} \\ D_T & T^*
-\end{pmatrix} \qquad\text{and}\qquad \begin{pmatrix}
+\end{pmatrix}, \qquad \begin{pmatrix}
 T & D_{T^*} \\ -D_T & T^*
+\end{pmatrix} \qquad\text{and}\qquad \begin{pmatrix}
+T & iD_{T^*} \\ iD_T & T^*
 \end{pmatrix} \]
-are also unitary dilations (which we obtain by setting $W = -\vec{1}$).
+are also unitary dilations (which we obtain by setting $W = -\vec{1}$ and $W = i\vec{1}$).
 
 
 \begin{proposition}
@@ -4346,6 +4348,12 @@ We compute
 where we have repeatedly applied the $C^*$-identity and used normality once. We conclude that $\norm{x^2} = \norm{x}^2$. Inductively we obtain $\norm{x^{(2^n)}} = \norm{x}^{2^n}$. By the spectral radius formula, \ref{spectralRadiusFormula}, we get
 \[ \spr(x) = \lim_{n\to\infty}\norm{x^{(2^n)}}^{1/2^n} = \lim_{n\to\infty}\norm{x} = \norm{x}. \]
 \end{proof}
+\begin{corollary}
+Let $A$ be a $C^*$-algebra and $x\in A$. If $x$ is normal and nilpotent, then $x=0$.
+\end{corollary}
+\begin{proof}
+Every nilpotent is quasinilpotent by the spectral radius formula. By the proposition, we have $\norm{x} = 0$, so $x=0$.
+\end{proof}
 \begin{corollary} \label{atMostOneNorm}
 Let $A$ be a $*$-algebra. There exists at most one norm on $A$ turning it into a $C^*$-algebra. If there is such a norm, it is given by $\norm{x} = \sqrt{\spr(x^*x)}$.
 \end{corollary}
@@ -4412,6 +4420,8 @@ Every character on $A$ is $*$-preserving.
 
 
 \subsubsection{Partial isometries}
+Partial isometry is the same as saying the adjoint is the Moore-Penrose pseudoinverse (i.e. $x^* = x^+$).
+
 \begin{lemma} \label{partialIsometries}
 Let $A$ be a $C^*$-algebra and $v\in A$.
 If either $v^*v$ or $vv^*$ is a projection, then
@@ -5190,32 +5200,6 @@ Finally $|A| + |B| - |A+B| = \begin{pmatrix}
 \end{pmatrix} = 1-\sqrt{2} < 0. \]
 \end{example}
 
-\subsubsection{Polar decomposition}
-\begin{proposition}[Polar decomposition for invertible elements]
-Let $A$ be a unital $C^*$-algebra and $a\in \GL(A)$ an invertible element. Then there exists a unique decomposition
-\[ a = u(a) |a| \]
-such that $u(a)$ is unitary. The map $u: \GL(A) \to \Unitaries(A)$ is continuous.
-\end{proposition}
-\begin{proof}
-If $a$ is invertible, then $|a|$ is invertible by \ref{propertiesAbsoluteValue}. Put $u(a) = a|a|^{-1}$. Clearly $a = u(a)|a|$ and $u(a)$ is unitary because it is invertible and
-\[ u(a)^*u(a) = |a|^{-1}a^*a|a|^{-1} = |a|^{-1}|a|^2|a|^{-1} = \vec{1}. \]
-
-The continuity of u: $a\mapsto a|a|^{-1}$ follows from the continuity of multiplication, \ref{multiplicationContinuous}, the continuity of the absolute value, \ref{propertiesAbsoluteValue} and the continuity of the inverse, \ref{inverseMapContinuous}.
-\end{proof}
-
-In some cases we can find a polar decomposition for non-invertible elements.
-\begin{definition}
-A $C^*$ algebra $A$ is said to have the \udef{polar decomposition property} if for each $a\in A$ there exists a \emph{unique} pair $(v,p)$ of elements in $A$ such that
-\begin{enumerate}
-\item $a = vb$;
-\item $v$ is a partial isometry and $b$ is positive;
-\item $a^*a = b^2$;
-\item $ap = 0$ implies $vp = 0$ for all projections $p\in\Projections(A)$.
-\end{enumerate}
-\end{definition}
-Von Neumann algebras have the polar decomposition property. (TODO ref).
-
-TODO: Rickart $C^*$ algebras have the polar decomposition property.
 
 
 \subsection{Positive maps}
@@ -5409,6 +5393,8 @@ Then $x^+$ is called a \udef{Moore-Penrose pseudoinverse} of $x$.
 \end{definition}
 We will show that an element has at most one Moore-Penrose pseudoinverse, so we are justified in speaking of \emph{the} Moore-Penrose pseudoinverse of $x$, which we denote $x^+$.
 
+If $x$ has a generalised inverse $x^+$, then $xx^+$ and $x^+x$ are automatically idempotent, so the requirement that they be Hermitian is equivalent to requiring they be orthogonal projectors.
+
 \begin{lemma} \label{MoorePenrosePseudoinverseSwapLemma}
 Let $A$ be a $C^*$ algebra, $x\in A$ and $x^+$ be a Moore-Penrose pseudoinverse of $x$. Then
 \begin{enumerate}
@@ -5559,7 +5545,57 @@ so $xx^+$ is Hermitian.
 
 \subsubsection{Tychonoff regularisation}
 
+\subsection{Polar decomposition}
+\begin{proposition}[Polar decomposition for invertible elements]
+Let $A$ be a unital $C^*$-algebra and $a\in \GL(A)$ an invertible element. Then there exists a unique decomposition
+\[ a = u(a) |a| \]
+such that $u(a)$ is unitary. The map $u: \GL(A) \to \Unitaries(A)$ is continuous.
+\end{proposition}
+\begin{proof}
+If $a$ is invertible, then $|a|$ is invertible by \ref{propertiesAbsoluteValue}. Put $u(a) = a|a|^{-1}$. Clearly $a = u(a)|a|$ and $u(a)$ is unitary because it is invertible and
+\[ u(a)^*u(a) = |a|^{-1}a^*a|a|^{-1} = |a|^{-1}|a|^2|a|^{-1} = \vec{1}. \]
 
+The continuity of u: $a\mapsto a|a|^{-1}$ follows from the continuity of multiplication, \ref{multiplicationContinuous}, the continuity of the absolute value, \ref{propertiesAbsoluteValue} and the continuity of the inverse, \ref{inverseMapContinuous}.
+\end{proof}
+
+In some cases we can find a polar decomposition for non-invertible elements.
+\begin{definition}
+A $C^*$ algebra $A$ is said to have the \udef{polar decomposition property} if for each $a\in A$ there exists a \emph{unique} pair $(v,p)$ of elements in $A$ such that
+\begin{enumerate}
+\item $a = vb$;
+\item $v$ is a partial isometry and $b$ is positive;
+\item $a^*a = b^2$;
+\item $ap = 0$ implies $vp = 0$ for all projections $p\in\Projections(A)$.
+\end{enumerate}
+\end{definition}
+Von Neumann algebras have the polar decomposition property. (TODO ref).
+
+TODO: Rickart $C^*$ algebras have the polar decomposition property.
+
+\begin{proposition}[Polar decomposition for elements with pseudoinverse]
+Let $A$ be a $C^*$-algebra and $a\in A$ an element that has a Moore-Penrose pseudoinverse. Then there exists a unique decomposition
+\[ a = v(a)|a| \]
+such that $v(a)$ is a partial isometry.
+\end{proposition}
+TODO: The map $v$ is continuous??
+\begin{proof}
+TODO: clean up and complete! TODO: Show uniqueness of decomposition!?!
+
+Set $v(a) \defeq a|a|^+$. Then (can we give a less convoluted argument?? In particular avoiding $\vec{1}$??)
+\begin{align*}
+\norm{a - v(a)|a|} &= \norm{a - a|a|^+|a|} \\
+&= \norm{a(\vec{1} - |a|^+|a|)} \\
+&= \norm{|a|(\vec{1} - |a|^+|a|)} \\
+&= \norm{|a| - |a||a|^+|a|} = 0.
+\end{align*}
+To show that $v(a)$ is a partial isometry, we use \ref{partialIsometries}.
+\end{proof}
+
+
+\subsection{Singular value decomposition}
+Suppose $a$ has a pseudoinverse $a^+$, can we construct an SVD if $aa^+$ and $a^+a$ are Murray-von Neumann equivalent??
+
+TODO: Link to $K$-theory?? Does this have algorithmic implications??
 
 \section{Matrix $C^*$-algebras}
 \begin{proposition}

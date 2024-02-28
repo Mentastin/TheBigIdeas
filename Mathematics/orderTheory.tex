@@ -1840,6 +1840,18 @@ Let $L$ be a lattice and $a,b,c,d\in L$. Then
 \item if $a\leq b$ and $a\leq c$, then $a\leq b\wedge c$.
 \end{enumerate}
 \end{corollary}
+\begin{corollary} \label{unionIntersectionIntervals}
+Let $L$ be a lattice and $a,b,c,d\in L$. Then
+\begin{enumerate}
+\item $\interval{a, b} \cap \interval{c,d} \subseteq \interval{a\vee c, b\wedge d}$;
+\item $\interval{a, b} \cup \interval{c,d} \subseteq \interval{a\wedge c, b\vee d}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) Take $x\in \interval{a, b} \cap \interval{c,d}$. Then $a\leq x$ and $c \leq x$, so $a\vee c \leq x$. Similarly $x \leq b\wedge d$.
+
+(2) Take $x\in \interval{a, b} \cup \interval{c,d}$. Then either $a \leq x$ or $c \leq x$. In both cases $a\wedge c \leq x$. Similarly $x  \leq b \vee d$.
+\end{proof}
 \begin{corollary} \label{boundsSetsClosedUnderLatticeOperations}
 Let $L$ be a lattice and $A\subseteq L$. Then $A^\leq$ and $A^\geq$ are closed under meets and joins.
 \end{corollary}
@@ -2315,7 +2327,7 @@ x & \big(x\in \interval[o]{-\infty, 0}\cup \interval[co]{1,+\infty}\big) \\
 Then $f$ is a Moore closure and $\bigvee_{\im(f)}\interval[o]{-\infty, 0}$ exists and is equal to $1$. Clearly $\bigvee_{\R\setminus\{0\}}\interval[o]{-\infty, 0}$ does not exist.
 \end{example}
 
-\begin{proposition}
+\begin{proposition} \label{MooreClosureIntersectionCompleteSublattices}
 Let $P$ be a poset and $L_1, L_2$ complete $\wedge$-subsemilattices with Moore closures $f_1$ and $f_2$. Suppose $f_1 \circ f_2 \circ f_1 = f_2\circ f_1$. Then $f_2\circ f_1$ is the Moore closure of $L_1\cap L_2$.
 \end{proposition}
 We know that $L_1\cap L_2$ is a complete $\wedge$-subsemilattice by \ref{intersectionCompleteSemilatticesCompleteSemilattice}.
@@ -2589,8 +2601,8 @@ a \ar[dr, dash] & {} & {} \\
 \begin{theorem}[$\mathbf{M}_3-\mathbf{N}_5$ theorem]
 Let $L$ be a lattice.
 \begin{enumerate}
-\item $L$ is non-modular \textup{if and only if} $\mathbf{N}_5$ is embedded in $L$;
-\item $L$ is non-distributive \textup{if and only if} $\mathbf{N}_5$ or $\mathbf{M}_3$ is embedded in $L$.
+\item $L$ is non-modular \textup{if and only if} $L$ has no sublattice isomorphic to $\mathbf{N}_5$;
+\item $L$ is non-distributive \textup{if and only if} $L$ has no sublattice isomorphic to either $\mathbf{N}_5$ or $\mathbf{M}_3$.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
@@ -2631,22 +2643,41 @@ Suppose either $a'\geq b$ or $c'\geq b$. In both cases $c'\geq b$ and $(a\vee b)
 (2) TODO Burris/Sankappanavar
 \end{proof}
 
+\begin{example}
+Consider the following lattice lattice:
+\[ \begin{tikzcd}[row sep=tiny, column sep=tiny]
+ & & \times \ar[dl, dash] \ar[dr, dash] & & \\
+ & \bullet \ar[dl, dash] \ar[dr, dash] && \times \ar[dl, dash] \ar[dr, dash] & \\
+\times \ar[dr, dash] & & \bullet \ar[dl, dash] \ar[dr, dash] & & \times \ar[dl, dash] \\
+ & \bullet \ar[dr, dash] && \bullet \ar[dl, dash] & \\
+ & & \times & & 
+\end{tikzcd} \]
+It is neither distributive nor modular, since the subset indicated by crosses is a sublattice isomorphic to $\mathbf{N}_5$.
+\end{example}
+
 \subsection{Infinitely distributive lattices}
 \begin{definition}
 Let $L$ be a lattice. We call $L$
 \begin{itemize}
-\item \udef{join-infinitely distributive} if $L$ is complete as a $\vee$-semilattice and
-\[ \forall x\in L, \forall D\subseteq L: \qquad x\wedge \bigvee D = \bigvee\setbuilder{x\wedge y}{y\in D}; \]
-\item \udef{meet-infinitely distributive} if $L$ is complete as a $\wedge$-semilattice and
-\[ \forall x\in L, \forall D\subseteq L: \qquad x\vee \bigwedge D = \bigwedge\setbuilder{x\vee y}{y\in D}; \]
-\item \udef{infinitely distributive} if $L$ is both join-infinitely distributive and meet-infinitely distributive.
+\item \udef{infinitely join-distributive} if, for all $x\in L$ and $A\subseteq L$ such that $\bigvee A$ exists, we have $x\wedge \bigvee A = \bigvee\setbuilder{x\wedge y}{y\in A}$;
+\item \udef{infinitely meet-distributive} if, for all $x\in L$ and $A\subseteq L$ such that $\bigwedge A$ exists, we have $x\vee \bigwedge A = \bigwedge\setbuilder{x\vee y}{y\in A}$;
+\item \udef{infinitely distributive} if $L$ is both infinitely join-distributive and infinitely meet-distributive.
 \end{itemize}
 \end{definition}
 TODO cfr Heyting algebras
 
 The inequalities $x\wedge \bigvee D \geq \bigvee x\wedge D$ and $x\vee \bigwedge D \leq \bigwedge x\vee D$ hold in any lattice, see \ref{infiniteDistributiveInequalities}.
 
-
+\begin{lemma}
+Let $L$ be a lattice and $x\in L$. Then
+\begin{enumerate}
+\item if $L$ is both infinitely join-distributive and a complete $\vee$-semilattice, then $x\wedge -$ has an upper adjoint;
+\item if $L$ is both infinitely meet-distributive and a complete $\wedge$-semilattice, then $x\vee -$ has a  lower adjoint.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Immediate from \ref{GaloisConnectionLatticePreservation}.
+\end{proof}
 
 \subsection{Completely distributive lattices}
 
