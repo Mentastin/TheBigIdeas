@@ -271,27 +271,7 @@ The following are also equivalent:
 \end{enumerate}
 \end{lemma}
 
-\subsection{Preservation of principal joins and meets}
 
-\begin{proposition} \label{monotonicPreservationPrincipalJoinsMeets}
-Let $P, Q$ be ordered sets and $f: P\to Q$ a function. Then the following are equivalent:
-\begin{enumerate}
-\item $f$ is monotonic;
-\item $f$ preserves principal joins:
-\[ \forall x\in P: \quad f(x) = f\Big(\bigvee \downset x\Big) = \bigvee f^\imf(\downset x); \]
-\item $f$ preserves principal meets:
-\[ \forall x\in P: \quad f(x) = f\Big(\bigwedge \upset x\Big) = \bigwedge f^\imf(\upset x). \]
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-$(1) \Rightarrow (2)$ Take arbitrary $x\in P$. We first show that $f(x)$ is an upper bound of $f^\imf(\downset x)$. Indeed, take $y\in \downset x$. Then $y\Yleft x$, so $f(y)\Yleft f(x)$ by monotonicity.
-
-Now it is easy to see that $f(x)$ is a least upper bound: take some other upper bound $z$ of $f^\imf(\downset x)$, then in particular we have $f(x) \Yleft z$.
-
-$(1) \Leftarrow (2)$ Take $x\Yleft y \in P$, so $x\in\downset y$. Then $f(y) = \bigvee f^\imf(\downset y)$, so in particular $f(x) \Yleft f(y)$.
-
-$(1) \Leftrightarrow (3)$ This is dual to $(1) \Leftrightarrow (2)$.
-\end{proof}
 
 \subsection{Closure}
 
@@ -953,21 +933,6 @@ Let $B,D$ be ordered sets and $f:B\to D$ a function. Then $f$ is \udef{preserves
 \[ f\big(\dirvee S\big) \;=\; \bigvee f^\imf(S). \]
 \end{definition}
 
-\begin{lemma} \label{monotonicDirectedness}
-Let $B,D$ be ordered sets, $S\subseteq B$ a directed subset and $f:B\to D$ a function. 
-\begin{enumerate}
-\item If $f$ preserves directed joins, then $f$ is monotonic.
-\item If $f$ is monotonic, then $f^\imf(S)$ is directed.
-\end{enumerate}
-\end{lemma}
-This means that $f$ preserves directed joins iff for all directed sets $S$ such that $\dirvee S$ exists, we have
-\[ f\big(\dirvee S\big) \;=\; \dirvee f^\imf(S). \]
-\begin{proof}
-(1) Instance of \ref{monotonicPreservationPrincipalJoinsMeets}.
-
-(2) Take $x,y\in f^\imf(S)$. Then there exist $a,b\in S$ such that $f(a) = x$ and $f(b) = y$. By directedness of $S$, we can find a $c\in S$ such that $a\leq c$ and $b\leq c$. Then $x \leq f(c)$ and $y \leq f(c)$ by monotonicity.
-\end{proof}
-
 \section{Ordered sets of subsets}
 \subsection{Refinement}
 \begin{definition}
@@ -1188,6 +1153,7 @@ by \ref{subsetZsets}.
 \begin{example}
 The following are $\mathrm{Z}$-systems:
 \begin{itemize}
+\item $\powerset$;
 \item non-empty subsets;
 \item subsets with cardinality strictly less than $\kappa$ (e.g.\ finite subsets);
 \item subsets with cardinality at most $\kappa$ (e.g.\ countable subsets, we also call this system the \udef{$\sigma$-system});
@@ -1272,12 +1238,438 @@ The following $\mathrm{Z}$-systems can be constructed using \ref{ZsystemWhereAll
 \end{itemize}
 \end{example}
 
-\subsection{Completeness}
+\subsubsection{Hereditary $\mathrm{Z}$-systems}
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system. Then $Z$ is called \udef{hereditary} if $Z(P) = f^{\preimf\imf}\big(Z(Q)\big)$ for all order-preserving and -reflecting functions $f: P\to Q$.
+\end{definition}
+
+\begin{lemma}
+Let $Z$ be a $\mathrm{Z}$-system. Then $Z$ is hereditary \textup{if and only if} for all order-preserving and -reflecting functions $f: P\to Q$ we have $A \in Z(P) \iff f^\imf(A) \in Z(Q)$.
+\end{lemma}
+
+\begin{lemma} \label{subsetHereditaryZsets}
+Let $Z$ be a hereditary $\mathrm{Z}$-system, $P$ a poset and $Q\subseteq P$. Then $Z(Q) = Z(P)\cap \powerset(Q)$.
+\end{lemma}
+\begin{proof}
+We have $Z(Q) \subseteq Z(P) \cap \powerset(Q)$ by \ref{subsetZsets}.
+
+Take some $A\in Z(P) \cap \powerset(Q)$, so $\incl_Q(A) \in Z(P)$. The inclusion function $\incl_A: A\to P$ is order-preserving and order-reflecting, which implies $A\in Z(Q)$.
+\end{proof}
+
+
+\subsection{Closedness and completeness}
+\subsubsection{Closedness}
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $A\subseteq P$. We call $A$
+\begin{itemize}
+\item \udef{$Z$-closed} in $P$ if $\bigvee_P B \in A$ for all $B\subseteq A$ such that
+\begin{itemize}
+\item $B\in Z(P)$; and
+\item $\bigvee B$ exists in $P$.
+\end{itemize}
+\item \udef{${\downarrow}Z$-closed} in $P$ if $A$ is both $Z$-closed and downwards closed.
+\end{itemize}
+We denote the set of $Z$-closed subsets of $P$ by $\mathcal{C}_Z(P)$ and the set of ${\downarrow}Z$-closed subsets of $P$ by $\mathcal{C}_{\downarrow Z}(P)$.
+\end{definition}
+
+\begin{lemma}
+Let $Z$ be a $\mathrm{Z}$-system and $P$ a poset. Then both $\mathcal{C}_Z(P)$ and $\mathcal{C}_{\downarrow Z}(P)$ are complete $\wedge$-subsemilattices of $\powerset(P)$.
+\end{lemma}
+
+\begin{definition}
+We denote the Moore closures associated to $\mathcal{C}_Z(P)$ and $\mathcal{C}_{\downarrow Z}(P)$ by $\Closure_Z: \powerset(P)\to \mathcal{C}_Z(P)$ and $\Closure_{\downarrow Z}: \powerset(P)\to \mathcal{C}_{\downarrow Z}(P)$.
+\end{definition}
+
+\begin{lemma} \label{ZclosureContainsJoin}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $A\in Z(P)$. If $\bigvee A$ exists, then $\bigvee A \in \Closure_{Z}(A)$.
+\end{lemma}
+\begin{proof}
+Immediate, since $A \subseteq \Closure_{Z}(A)$ and $\Closure_{Z}(A)$ is $Z$-closed.
+\end{proof}
+
+\begin{lemma} \label{principalDownsetsZclosed}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $x\in P$. Then
+\begin{enumerate}
+\item $\downset\{x\}$ is $Z$-closed;
+\item $\downset\{x\}$ is ${\downarrow}Z$-closed.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take arbitrary $B\subseteq \downset\{x\}$ such that $B\in Z(P)$ and $\bigvee B$ exists. Since $x$ is an upper bound of $B$, we have $\bigvee B\leq x$ and so $\bigvee B \in \downset\{x\}$.
+
+(2) Immediate, since $\downset\{x\}$ is downwards closed.
+\end{proof}
+\begin{corollary} \label{closureZsetWithJoin}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $A\in Z(P)$. If $\bigvee A$ exists, then $\Closure_{\downarrow Z}(A) = \downset\{\bigvee A\}$.
+\end{corollary}
+\begin{proof}
+By \ref{ZclosureContainsJoin} and the definition of ${\downarrow}Z$-closedness, we have that $\bigvee A\in \Closure_{\downarrow Z}(A)$ and that $\Closure_{\downarrow Z}(A)$ be downwards closed. Thus $\downset\{\bigvee A\} \subseteq \Closure_{\downarrow Z}(A)$.
+
+For the other inclusion, it is enough to note that $\downset\{\bigvee A\}$ is ${\downarrow}Z$-closed.
+\end{proof}
+
+\begin{example}
+The result of \ref{principalDownsetsZclosed} can be rephrased as saying that the downwards closure of principal $Z$-closed sets is $Z$-closed.
+
+This is not true for more general $Z$-closed sets. Consider the following poset:
+\[ \begin{tikzcd}
+A \ar[d, dash] & b \ar[dl, dash] \ar[dr, dash] & C \ar[d, dash] \\
+d & {} & e
+\end{tikzcd} \]
+Let $Z$ be any $Z$-system such that $\{d,e\}$ is a $Z$-set (e.g.\ $Z = \powerset$).
+Let $X$ be the subset $\{A,C\}$. It is clearly $Z$-closed, since each subset that has a join (i.e.\ $\{A\}$ and $\{C\}$) has a join in $X$.
+
+Consider the $Z$-set $\{d,e\} \subseteq \downset X$. It has a join, $b$, which is not an element of $\downset X = \{A,C,d,e\}$.
+
+This also means that $\Closure_{\downarrow Z} \neq (\downarrow) \circ \Closure_Z$.
+\end{example}
+
+\subsubsection{Preservation of $Z$-joins}
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system, $P,Q$ a poset and $f: P\to Q$ a function. We say $f$ \udef{preserves $Z$-joins} or is \udef{$Z$-continuous} if $\bigvee f^\imf(A)$ exists and $f\Big(\bigvee A\Big) = \bigvee f^\imf (A)$ for all $A\in Z(P)$ such that $\bigvee A$ exists.
+\end{definition}
+TODO can $Z$-continuity be associated to a convergence?? Definitely not to a topological convergence in general!
+
+\begin{lemma} \label{ZcontinuousImpliesIsotone}
+Let $Z$ be a $\mathrm{Z}$-system, $P,Q$ a poset and $f: P\to Q$ a $Z$-continuous function. If $\{a,b\}\in Z(P)$ for all $a\leq b$, then $f$ is isotone.
+\end{lemma}
+\begin{proof}
+Take $a\leq b\in P$. Then $b = \bigvee \{a,b\}$, so $\bigvee\big\{f(a), f(b)\big\}$ exists and it is equal to $f(b)$. This means that $f(a) \leq f(b)$.
+\end{proof}
+\begin{corollary}
+Directed-continuous functions are isotone.
+\end{corollary}
+
+\begin{example}
+A $Z$-continuous function is not necessarily isotone. For instance, let $Z$ be the $\mathrm{Z}$-system consisting of singletons. Then every function is $Z$-continuous.
+\end{example}
+
+\begin{lemma}
+Let $Z$ be the $\mathrm{Z}$-system of the sets that contain a maximum. Let $P, Q$ be posets and $f: P\to Q$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is isotone;
+\item $f$ is $Z$-continuous.
+\end{enumerate}
+$(1) \Rightarrow (2)$ Take $A\in Z(P)$ with maximum $a\in A$, so $\downset A = \downset \{a\}$. Then, by \ref{isotoneIffDownsetContinuous}
+\[ \{f(a)\} \subseteq f^\imf(A) \subseteq f^\imf(\downset A) = f^\imf\big(\downset \{a\}\big) \subseteq \downset \{f(a)\}. \]
+Taking downwards closure gives $\downset\{f(a)\} = \downset f^\imf(A)$. Thus, by \ref{extremaAfterOrderClosure}, we have
+\[ f\Big(\bigvee A\Big) = f(a) = \bigvee \downset\{f(a)\} = \bigvee \downset f^\imf(A) = \bigvee f^\imf(A). \]
+
+$(2) \Rightarrow (1)$ Immediate, by \ref{ZcontinuousImpliesIsotone}.
+\end{lemma}
+
+If we remove the requirement that a $Z$-closed set needs to be downwards closed, the following holds, even for non-isotone $f$:
+\begin{proposition} \label{ZcontinuityZclosureContinuity}
+Let $Z$ be a $\mathrm{Z}$-system, $P,Q$ a poset and $f: P\to Q$ a function. The following are equivalent:
+\begin{enumerate}
+\item $f$ is $Z$-continuous;
+\item $f$ is $\Closure_{Z}$-continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Let $B\subseteq Q$ be an arbitrary $Z$-closed. Let $A\subseteq f^\preimf(B)$ be such that $A\in Z(P)$ and $\bigvee A$ exists in $P$. Then, by assumption, $\bigvee f^\imf(A)$ exists and is equal to $f\big(\bigvee A\big)$.
+
+Since $A\subseteq f^\preimf(B)$, we have $f(A) \subseteq B$. Since $\bigvee f^\imf(A)$ exists, $f^\imf(A)\subseteq B$, $f^\imf(A) \in Z(Q)$ and $B$ is $Z$-closed, we have that $\bigvee f^\imf(A) = f\big(\bigvee A\big) \in B$. Thus $\bigvee A \in f^\preimf(B)$. This implies that $f^\preimf(B)$ is $Z$-closed.
+
+$(2) \Rightarrow (1)$ Take $A\in Z(P)$ such that $\bigvee A$ exists. We have that $f(\bigvee A)$ is an upper bound of $f^\imf(A)$. To show that it is the least upper bound, let $b\in Q$ be some other upper bound of $f^\imf(A)$, so $f^\imf(A) \subseteq \downset\{b\}$.
+We have $\bigvee A \in \Closure_Z(A)$ by \ref{ZclosureContainsJoin}, so we calculate, using \ref{closureContinuousEquivalents},
+\[ f\Big(\bigvee A\Big) \in f^\imf\big(\Closure_Z(A)\big) = (f^\imf\circ \Closure_Z)(A) \subseteq (\Closure_Z\circ f^\imf)(A)\subseteq \Closure_Z\big(\downset\{b\}\big) = \downset\{b\}, \]
+since $\downset\{b\}$ is $Z$-closed by \ref{principalDownsetsZclosed}. This implies that $f\big(\bigvee A\big) \leq b$.
+\end{proof}
+
+
+\begin{proposition} \label{isotoneZcontinuousFunction}
+Let $Z$ be a $\mathrm{Z}$-system, $P,Q$ a poset and $f: P\to Q$ a function. The following are equivalent:
+\begin{enumerate}
+\item $f$ is $Z$-continuous and isotone;
+\item $f$ is $\Closure_{\downarrow Z}$-continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Let $B\subseteq Q$ be a subset that is both $Z$-closed and downwards closed. By $Z$-continuity, through \ref{ZcontinuityZclosureContinuity}, and isotonicity, through \ref{isotoneIffDownsetContinuous}, we have that $f^\preimf(B)$ is both $Z$-closed and downwards closed, i.e.\ a ${\downarrow Z}$-set.
+
+$(2) \Rightarrow (1)$ Since principal downsets are ${\downarrow}Z$-closed, by \ref{principalDownsetsZclosed}, the preimage of a principal downset is ${\downarrow}Z$-closed and, in particular, downwards closed. This implies that $f$ is isotone by \ref{isotoneIffDownsetContinuous}.
+
+Now take $A\in Z(P)$ such that $\bigvee A$ exists. We have that $f(\bigvee A)$ is an upper bound of $f^\imf(A)$. To show that it is the least upper bound, let $b\in Q$ be some other upper bound of $f^\imf(A)$, so $f^\imf(A) \subseteq \downset\{b\}$.
+We have $\bigvee A \in \Closure_Z(A) \subseteq \Closure_{\downarrow Z}(A)$ by \ref{ZclosureContainsJoin}, so we calculate, using \ref{closureContinuousEquivalents},
+\[ f\Big(\bigvee A\Big) \in f^\imf\big(\Closure_{\downarrow Z}(A)\big) = (f^\imf\circ \Closure_{\downarrow Z})(A) \subseteq (\Closure_{\downarrow Z}\circ f^\imf)(A)\subseteq \Closure_{\downarrow Z}\big(\downset\{b\}\big) = \downset\{b\}, \]
+since $\downset\{b\}$ is ${\downarrow} Z$-closed by \ref{principalDownsetsZclosed}. This implies that $f\big(\bigvee A\big) \leq b$.
+\end{proof}
+
+\subsubsection{Completeness}
 \begin{definition}
 Let $Z$ be a $\mathrm{Z}$-system and $P$ a poset. We call $P$ \udef{$Z$-complete} if every subset in $Z(P)$ has a least upper bound.
 \end{definition}
 
 Let $Z$ be the $\mathrm{Z}$-system of sets with one or zero elements. Then a poset is $Z$-complete iff it has a least element.
+
+\subsection{Completion}
+\subsubsection{$Z$-continuous completion}
+\begin{definition}
+Let $P$ be a poset and $Z$ a $\mathrm{Z}$-system. A \udef{$Z$-continuous completion} of $P$ is a $Z$-continuous embedding $f: P \to L$, where $L$ is a complete lattice.
+
+We call the completion \udef{join-dense} if $\im(f)$ is join-dense in $L$.
+\end{definition}
+
+\begin{lemma} \label{closureGivesJoinDenseCompletion}
+Let $f: P \to L$ be a $Z$-continuous completion. Then $f: P\to \Closure_{\powerset}(\im(f))$ is a join-dense completion.
+\end{lemma}
+\begin{proof}
+It is clear that $f: P\to \Closure_{\powerset}(\im(f))$ is a completion. Consider the set $C \defeq \setbuilder{\bigvee A}{A\subseteq \im(f)}$. This set is $\powerset$-closed, by \ref{joinMeetUnion}, and join-dense, so $\Closure_{\powerset}(\im(f)) \subseteq C$ and $\Closure_{\powerset}(\im(f))$ is join-dense.
+\end{proof}
+
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system and $P$ a poset. A complete $\wedge$-subsemilattice $M\subseteq \powerset(P)$ is called a \udef{$Z$-continuous intersection system} on $P$ if
+\begin{itemize}
+\item $A$ is downwards closed for all $A\in M$;
+\item $\Closure_{M}(D) = \downset\big\{\bigvee D\big\}$ for all $D\in Z(P)$ such that $\bigvee D$ exists.
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{ZcontinuityIntersectionSystem}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $M \subseteq \powerset(P)$ a complete $\wedge$-subsemilattice. Let $\Closure_{M}$ be the associated Moore closure. Then the following are equivalent:
+\begin{enumerate}
+\item $M$ is $Z$-continuous;
+\item $\setbuilder[\big]{\downset\{x\}}{x\in P} \subseteq M \subseteq \mathcal{C}_{\downarrow Z}(P)$;
+\item $\setbuilder{A^\leq}{A\subseteq P} \subseteq M \subseteq \mathcal{C}_{\downarrow Z}(P)$.
+\end{enumerate}
+\end{proposition}
+Note that $\setbuilder[\big]{\downset\{x\}}{x\in P}$ is not, in general, a complete $\wedge$-subsemilattice! 
+\begin{proof}
+$(1) \Rightarrow (2)$ Take arbitrary $x\in P$. Then $\{x\}\in Z(P)$ by \ref{singletonsAreZSets}, so $\Closure_{M}\big(\{x\}\big) = \downset\{x\}$. This implies that $\downset\{x\}$ is in $M$.
+
+Take arbitrary $A\in M$. We need to show that $A$ is $Z$-closed. To that end take $D\subseteq A$ such that $D\in Z(P)$ and $\bigvee D$ exists. Then
+\[ \downset\{\bigvee D\} = \Closure_{M}(D) \subseteq \Closure_{M}(A) = A, \]
+so $\bigvee D \in A$.
+
+$(2) \Rightarrow (1)$ Since each set in $\mathcal{C}_{\downarrow Z}(P)$ is downwards closed, each set in $M$ is also downwards closed. Now take arbitrary $D\in Z(P)$ such that $\bigvee D$ exists. Since $\Closure_{M}(D) \in \mathcal{C}_Z(P)$, we have $(\Closure_{\downarrow Z}\circ \Closure_{M})(D) = \Closure_{M}(D)$. Thus $D\subseteq \Closure_{M}(D)$ implies $\Closure_{\downarrow Z}(D) \subseteq (\Closure_{\downarrow Z}\circ \Closure_{M})(D) = \Closure_{M}(D)$. We have $D\subseteq \downset\{\bigvee D\}$, so using \ref{closureZsetWithJoin} we calculate
+\[ \downset\{\bigvee D\} = \Closure_{\downarrow Z}(D) \subseteq \Closure_{M}(D) \subseteq \Closure_{M}\big(\downset \{\bigvee D\}\big) = \downset\{\bigvee D\}. \]
+Thus all the inclusions are equalities and we have $\Closure_{M}(D) = \downset\big\{\bigvee D\big\}$.
+
+$(2) \Leftrightarrow (3)$ Take arbitrary $A\subseteq P$. Since $M$ is a complete $\wedge$-subsemilattice, we have $\bigcap_{x\in A}\downset\{x\} = A^\leq \in M$.
+
+For the converse, it is enough to note that $\{x\}^\leq = \downset\{x\}$ for all $x\in P$.
+\end{proof}
+\begin{corollary}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $M \subseteq \powerset(P)$ a complete $\wedge$-subsemilattice. Let $\Closure_{M}$ be the associated Moore closure. Then the following are equivalent:
+\begin{enumerate}
+\item $M$ is $Z$-continuous, where $Z$ is the $\mathrm{Z}$-system of singletons;
+\item $\Closure_{M(P)}\big(\{x\}\big) = \downset\{x\}$ for all $x\in P$ and $A$ is downwards closed for all $A\in M$;
+\item $\setbuilder[\big]{\downset\{x\}}{x\in P} \subseteq M(P) \subseteq \setbuilder{\downset A}{A\subseteq P}$;
+\item $\setbuilder{A^\leq}{A\subseteq P} \subseteq M(P) \subseteq \setbuilder{\downset A}{A\subseteq P}$.
+\end{enumerate}
+\end{corollary}
+
+\begin{lemma} \label{closureDownwardsClosedSets}
+Let $P$ be a poset, $A\subseteq P$ and $M$ a complete $\wedge$-subsemilattice of $\powerset(P)$ that consists of downwards closed sets. Then $\Closure_M(A) = \Closure_M(\downset A)$.
+\end{lemma}
+\begin{proof}
+Clearly $\Closure_{M}(A) \subseteq \Closure_{M}(\downset A)$. Conversely, we have $A\subseteq \Closure_{M}(A)$, which is downwards closed, so $\downset A \subseteq \Closure_{M}(A)$. Taking the closure gives $\Closure_{M}(\downset A) \subseteq \Closure_{M}(A)$.
+\end{proof}
+
+\begin{lemma} \label{dFunctionLemma}
+Let $P$ be a poset, $\mathcal{A} \subseteq \setbuilder[\big]{\downset\{x\}}{x\in P}$,  $A\subseteq P$ and $d$ the function $d: P\to M: x\mapsto \downset\{x\}$. Then
+\begin{enumerate}
+\item $\bigcup \mathcal{A} = d^{\preimf}\big(\downset \mathcal{A}\big)$;
+\item $\bigcup d^\imf(A) = \downset A$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) First take an arbitrary $x\in \bigcup \mathcal{A}$. Then there exists $\downset\{y\}\in \mathcal{D}$ such that $x\in \downset\{y\}$, so $\downset\{x\} \subseteq \downset\{y\}$. Thus $d(x) = \downset\{x\}\in \downset\mathcal{A}$ and $x\in d^\preimf\big(\downset \mathcal{A}\big)$.
+
+Now take arbitrary $x\in d^{\preimf}\big(\downset \mathcal{A}\big)$, so $d(x) = \downset\{x\}\in \downset\mathcal{A}$. This means that there exists $\downset\{y\}\in\mathcal{A}$ such that $\downset\{x\} \subseteq \downset\{y\}$, so $x\in \downset\{y\} \subseteq \bigcup \mathcal{A}$.
+
+(2) First take $x\in \bigcup d^\imf(A)$. Then there exists $y\in A$ such that $x\in d(y) = \downset\{y\}$, so $x \leq y$. Thus $x\in \downset A$.
+
+Now take $x\in \downset A$. Then there exists $y\in A$ such that $x\leq y$, so $x\in \downset\{y\} = d(y) \subseteq \bigcup d^\imf(A)$.
+\end{proof}
+
+\begin{proposition} \label{continuousIntersectionSystemGivesJoinDenseCompletion}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $M \subseteq \powerset(P)$ a $Z$-continuous intersection system on $P$. Then
+\begin{enumerate}
+\item the function $d: P\to M: x\mapsto \downset\{x\}$ preserves arbitrary meets;
+\item the function $d: P\to M: x\mapsto \downset\{x\}$ preserves $Z$-joins;
+\item $\im(d)$ is join-dense in $M$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Let $A\subseteq P$ be a set such that $\bigwedge A$ exists. We need to show that $\bigcap d^\imf(A) = d\big(\bigwedge A\big)$. Since $\bigwedge A \in d(x)$ for all $x\in A$, we have $d\big(\bigwedge A\big) \subseteq \bigcap d^\imf(A)$. For the other inclusion, take $a\in \bigcap d^\imf(A)$. Then $a$ is a lower bound of $A$, so $a \leq \bigwedge A$ and $a \in d\big(\bigwedge A\big)$.
+
+(2) Take some $D\in Z(P)$ such that $\bigvee D$ exists. We calculate
+\begin{align*}
+\bigvee_{M} d^\imf(D) &= \Closure_{M}\Big(\bigcup d^\imf(D)\Big) \\
+&= \Closure_{M}(\downset D) = \Closure_{M}(D) \\
+&= \downset\big\{\bigvee D\big\} = d\Big(\bigvee D\Big),
+\end{align*}
+by \ref{meetJoinImageMooreClosure}, \ref{dFunctionLemma} and \ref{closureDownwardsClosedSets}.
+
+(3) Take $A \in M$. Then $A = \Closure_M(A) = \Closure_M(\downset A) = \Closure_M\big(\bigcup d^\imf(A)\big) = \bigvee_M d^\imf(A)$ by \ref{dFunctionLemma} and \ref{meetJoinImageMooreClosure}.
+\end{proof}
+
+\begin{proposition} \label{classificationZcontinuousCompletions}
+Let $Z$ be a $\mathrm{Z}$-system and $P$ a poset. Then
+\begin{enumerate}
+\item if $M \subseteq \powerset(P)$ is a $Z$-continuous intersection system on $P$, then $d: P \to M$ is a join-dense $Z$-continuous completion;
+\item if $c: P\to L$ is a join-dense $Z$-continuous completion, then $M \defeq \setbuilder{c^\preimf\big(\downset \{y\}\big)}{y \in L} \subseteq \powerset(P)$ is a $Z$-continuous intersection system on $P$;
+\item if $c$ is join-dense, then $f: M \to L: A\mapsto \bigvee_L c^\imf(A)$ is an order similarity, with inverse $f^{-1}: L \to M: x\mapsto c^\preimf\big(\downset\{x\}\big)$. In particular $L \cong M$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Immediate from \ref{continuousIntersectionSystemGivesJoinDenseCompletion}.
+
+(2) To show that $M$ is closed under intersections, take arbitrary $Y\subseteq L$. Then, by \ref{functionImagePreimageGaloisConnection},
+\[ \bigcap_{y\in Y} c^\preimf\big(\downset \{y\}\big) = c^\preimf\Big(\bigcap_{y\in Y}\downset \{y\}\Big) = c^\preimf\big(\downset\{\bigwedge Y\}\big) \in M. \]
+
+Take $y\in L$. Then $c^\preimf\big(\downset \{y\}\big)$ is downwards closed, since $c$ is isotone and \ref{isotoneIffDownsetContinuous}.
+
+Now take $D\in Z(P)$ such that $\bigvee D$ exists. We have, using \ref{completeSubsemilattices},
+\begin{align*}
+\Closure_M(D) &= \bigcap \setbuilder{A \in M}{D \subseteq A} \\
+&= \bigcap \setbuilder{c^\preimf\big(\downset \{y\}\big)}{y\in L,\; D \subseteq c^\preimf\big(\downset \{y\}\big)} \\
+&= \bigcap \setbuilder{c^\preimf\big(\downset \{y\}\big)}{y\in L,\; c^\imf(D) \subseteq \downset \{y\}} \\
+&= \bigcap \setbuilder{c^\preimf\big(\downset \{y\}\big)}{y\in L,\; \bigvee c^\imf(D) \leq y} \\
+&= \bigcap \setbuilder{c^\preimf\big(\downset \{y\}\big)}{y\in \upset\big\{\bigvee c^\imf(D)\big\}} \\
+&= c^\preimf\Big(\bigcap \setbuilder{\downset \{y\}}{y\in \upset\big\{\bigvee c^\imf(D)\big\}}\Big) \\
+&= c^\preimf\Big(\downset\big\{\bigwedge \upset\big\{\bigvee c^\imf(D)\big\}\big\}\Big) \\
+&= c^\preimf\Big(\downset\big\{\bigvee c^\imf(D)\big\}\Big) \\
+&= c^\preimf\Big(\downset\big\{c\big(\bigvee D\big)\big\}\Big),
+\end{align*}
+where we have made repeated use of \ref{upsetDownsetConnections} and the fact that $c$ is $Z$-continuous.
+
+Finally, we show that $c^\preimf\big(\downset\big\{c\big(\bigvee D\big)\big\}\big) = \downset\{\bigvee D\}$. It is clear that $\bigvee D \in c^\preimf\big(\downset\big\{c\big(\bigvee D\big)\big\}\big)$ and $c^\preimf\big(\downset\big\{c\big(\bigvee D\big)\big\}\big)$ is downwards closed, as this has already been shown. This means that $\downset \{\bigvee D\} \subseteq c^\preimf\big(\downset \{c\big(\bigvee D\big)\}\big)$. Conversely, take $x \in c^\preimf\big(\downset \{c\big(\bigvee D\big)\}\big)$. Then there exists $y \in \downset \{c\big(\bigvee D\big)\}$ such that $c(x) = y$. Thus $c(x) = y \leq c\big(\bigvee D\big)$, so $x\leq \big(\bigvee D\big)$, since $c$ is order-reflecting, and $x\in \downset\{\big(\bigvee D\big)\}$. 
+
+(3) It is clear $f$ and $f^{-1}$ are order-preserving. We show they are inverses of each other. First take $x\in L$. Then
+\begin{align*}
+(f\circ f^{-1})(x) &= \bigvee_L (c^\imf \circ c^{\preimf})\big(\downset\{x\}\big) \\
+&= \bigvee_L \downset\{x\}\cap \im(c) \\
+&= x,
+\end{align*}
+by join-density of $\im(c)$. Now take $A = c^\preimf\big(\downset\{y\}\big) \in M$. Then
+\begin{align*}
+(f^{-1}\circ f)(A) &= c^\preimf\Big(\downset\big\{\bigvee_L c^{\imf}(A)\big\}\Big) \\
+&= c^\preimf\Big(\downset\big\{\bigvee_L (c^{\imf}\circ c^\preimf)\big(\downset\{y\}\big)\big\}\Big) \\
+&= c^\preimf\Big(\downset\big\{\bigvee_L \downset\{y\} \cap \im(c)\big\}\Big) \\
+&= c^\preimf\Big(\downset\{y\}\Big),
+\end{align*}
+by join-density of $\im(c)$.
+\end{proof}
+
+\subsubsection{$Z_1$-continuous $Z_2$-completion}
+\begin{definition}
+Let $P$ be a poset and $Z_1,Z_2$ $\mathrm{Z}$-systems. A \udef{$Z_1$-continuous $Z_2$-completion} of $P$ is a $Z_1$-continuous embedding $f: P \to L$, where $L$ is a $Z_2$-complete poset.
+
+We call the completion \udef{join-dense} if $\im(f)$ is join-dense in $L$.
+\end{definition}
+
+\begin{lemma} \label{ZcompletionFromCompletion}
+Let $P$ be a poset and $Z_1,Z_2$ $\mathrm{Z}$-systems. Let $c: P\to L$ be a $Z_1$-continuous completion of $P$. Then $c|^{\Closure_{Z_2}(\im(c))}: P \to \Closure_{Z_2}(\im(c))$ is a join-dense $Z_1$-continuous $Z_2$-completion.
+\end{lemma}
+\begin{proof}
+The only point that may not be clear is join-density. We have $\Closure_{Z_2}(\im(c)) \subseteq \Closure_{\powerset}(\im(c))$ and $\Closure_{\powerset}(\im(c))$ is a join-dense completion by \ref{closureGivesJoinDenseCompletion}.
+\end{proof}
+
+\begin{proposition} \label{standardFormZcontinuousZcompletion}
+Let $Z_1,Z_2$ be $\mathrm{Z}$-systems, $P$ a poset and $M$ a $Z_1$-continuous intersection system on $P$. Then $d: P \to \Closure_{Z_2}\big(\im(d)\big): x\mapsto \downset\{x\}$ is a join-dense $Z_1$-continuous $Z_2$-completion.
+\end{proposition}
+\begin{proof}
+This follows straight from \ref{classificationZcontinuousCompletions} and \ref{ZcompletionFromCompletion}.
+\end{proof}
+
+TODO: presumably we also have a result saying that all join-dense $Z_1$-continuous $Z_2$-completions are isomorphic to one of this form.
+
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset, $M$ a $Z$-continuous intersection system on $P$ and $A\subseteq P$. Then $A$ is called \udef{$(Z,M)$-tapered} if $f^\imf(A)$ has a join for all closure-continuous functions $f: \sSet{P, \Closure_M}\to \sSet{L, (-)^{\leq\geq}}$ to a $Z$-continuous poset $L$.
+\end{definition}
+
+\begin{lemma} \label{MfunctionIsotone}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $M$ an intersection system on $P$ with downwards closed elements. Let $f: \sSet{P, \Closure_M}\to \sSet{Q, (-)^{\leq\geq}}$ be a closure-continuous function to some poset $Q$. Then $f$ is isotone.
+\end{lemma}
+\begin{proof}
+This follows from $\downset\{y\} = \big(\downset\{y\}\big)^{\leq\geq}$ for all $y\in Q$, the fact that all elements of $M$ are downwards closed and \ref{isotoneIffDownsetContinuous}.
+\end{proof}
+
+\begin{lemma} \label{ZsetsTapered}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset, $M$ a $Z$-continuous intersection system on $P$ and $A\in Z(P)$. 
+Then
+\begin{enumerate}
+\item $A$ is $(Z,M)$-tapered;
+\item $\downset A$ is $(Z,M)$-tapered.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Let $f: P\to L$ be an $M$-continuous function to a $Z$-complete poset $L$. Since $f$ is isotone, by \ref{MfunctionIsotone}, we have that $f^\imf(A)\in Z(L)$ has a join in $L$ because $L$ is $Z$-complete.
+
+(2) We have $f^\imf(A) \subseteq f^\imf(\downset A) \subseteq \downset f^\imf(A)$ by \ref{isotoneIffDownsetContinuous}. The first and third sets have the same join, so the middle set also has a join.
+\end{proof}
+
+\begin{proposition} \label{extensionMcontinuousFunctionZcontinuous}
+Let $Z$ be a hereditary $\mathrm{Z}$-system, $P$ a poset and $M$ an intersection system on $P$. Let $f: \sSet{P, \Closure_M}\to \sSet{L, (-)^{\leq\geq}}$ be a closure-continuous function to a $Z$-complete poset $L$. Take $\mathcal{D} \in Z(M)$ such that $\mathcal{D} \subseteq \setbuilder{A\in M}{\text{$A$ is $(Z,M)$-tapered}}$. Then 
+\begin{enumerate}
+\item the join $\bigvee_{D\in \mathcal{D}}\bigvee_L f^\imf(D)$ exists;
+\item the join $\bigvee_L f^\imf\Big(\bigvee_{M}\mathcal{D}\Big)$ exists;
+\item these joins are equal.
+\end{enumerate}
+\end{proposition}
+Note that we do not need $M$ to be $Z$-continuous.
+\begin{proof}
+Let $T$ be the set $\setbuilder{A\in M}{\text{$A$ is $(Z,M)$-tapered}}$. The function $D\mapsto \bigvee_L f^\imf(D)$ is a well-defined isotone function on $T$. Since $Z$ is hereditary, we have $\mathcal{D} \in Z(T)$ by \ref{subsetHereditaryZsets}, which implies that $\setbuilder{\bigvee_L f^\imf(D)}{D\in \mathcal{D}} \in Z(L)$. Thus $\bigvee_{D\in \mathcal{D}}\bigvee_L f^\imf(D)$ exists, by $Z$-completeness of $L$ and $\bigvee_L \Big(\bigcup_{D\in \mathcal{D}}f^\imf(D)\Big)$ exists by \ref{joinMeetUnion} and is equal to $\bigvee_{D\in \mathcal{D}}\bigvee_L f^\imf(D)$.
+Then we can calculate
+\begin{align*}
+\bigcup_{D\in \mathcal{D}}f^\imf(D) &= f^\imf\Big(\bigcup \mathcal{D}\Big) \\
+&\subseteq f^\imf\Big(\Closure_{M}\big(\bigcup \mathcal{D}\big)\Big) \\
+&\subseteq \Big(f^\imf\big(\bigcup \mathcal{D}\big)\Big)^{\leq\geq} \\
+&= \Big(\bigcup_{D\in \mathcal{D}}f^\imf(D) \Big)^{\leq\geq} \\
+&\subseteq \Big(\bigcup_{D\in \mathcal{D}}\downset\{\bigvee_L f^\imf(D)\} \Big)^{\leq\geq} \\
+&= \Big(\downset \setbuilder[\big]{\bigvee_L f^\imf(D)}{D\in \mathcal{D}} \Big)^{\leq\geq} \\
+&= \downset \Big\{\bigvee \setbuilder[\big]{\bigvee_L f^\imf(D)}{D\in \mathcal{D}} \Big\},
+\end{align*}
+where we have used the continuity of $f$. Since the joins of the first and last sets exist in $L$ and are equal (both to $\bigvee_{D\in \mathcal{D}}\bigvee_L f^\imf(D)$), the set $f^\imf\Big(\Closure_{M}\big(\bigcup \mathcal{D}\big)\Big) = f^\imf\big(\bigvee_{M}\mathcal{D}\big)$ (the equality follows from \ref{meetJoinImageMooreClosure}) has the same join in $L$.
+\end{proof}
+\begin{corollary} \label{ZMtaperedSetsZclosed}
+Let $Z$ be a hereditary $\mathrm{Z}$-system, $P$ a poset and $M$ a $Z$-continuous intersection system on $P$. Then the set $\setbuilder{A\in M}{\text{$A$ is $(Z,M)$-tapered}}$ is a $Z$-closed subset of $M$.
+\end{corollary}
+\begin{proof}
+Let $T$ be the set $\setbuilder{A\in M}{\text{$A$ is $(Z,M)$-tapered}}$. To show that $T$ is $Z$-closed, take arbitrary $\mathcal{D} \subseteq T$ such that $\mathcal{D}\in Z(M)$. We have to show that $\bigvee_{M}\mathcal{D}$ is $(Z,M)$-tapered. This is indeed the case: let $f: \sSet{P, \Closure_M}\to \sSet{L, (-)^{\leq\geq}}$ be a closure-continuous function to a $Z$-complete poset $L$. Then the join $\bigvee_L f^\imf\Big(\bigvee_{M}\mathcal{D}\Big)$ exists by the proposition. Thus $\bigvee_{M}\mathcal{D}\in T$ and $T$ is $Z$-closed.
+\end{proof}
+
+\begin{proposition}
+Let $Z_1$ be a $\mathrm{Z}$-system, $Z_2$ a hereditary $\mathrm{Z}$-system, $P$ a poset and $M$ a $Z_1$-continuous intersection system on $P$. Then the $Z_1$-continuous $Z_2$-completion $d: P \to \Closure_{Z_2}\big(\im(d)\big): x\mapsto \downset\{x\}$ satisfies the following property:
+
+Let $L$ be a $Z_2$-complete poset and $f: \sSet{P, \Closure_M}\to \sSet{L, (-)^{\leq\geq}}$ a closure-continuous function. Then there exists a unique $Z_2$-continuous function $\tilde{f}: \Closure_{Z_2}\big(\im(d)\big) \to L$ such that
+\[ \begin{tikzcd}
+P \ar[r, "d"] \ar[dr, swap, "f"] & \Closure_{Z_2}\big(\im(d)\big) \ar[d, dashed, "{\tilde{f}}"] \\ {} & L
+\end{tikzcd} \qquad \text{commutes.} \]
+This $\tilde{f}$ is defined by $\tilde{f}(A) = \bigvee_L f^\imf(A)$.
+\end{proposition}
+We have that $d: P \to \Closure_{Z_2}\big(\im(d)\big): x\mapsto \downset\{x\}$ is a $Z_1$-continuous $Z_2$-completion by \ref{standardFormZcontinuousZcompletion}.
+\begin{proof}
+First we observe that $\tilde{f}$ is well-defined. Indeed, $\im(d)$ consists of $(Z_2, M)$-tapered sets by \ref{ZsetsTapered} and the fact that singletons are $Z$-sets, \ref{singletonsAreZSets}. Also the set of $(Z_2, M)$-tapered sets is $Z_2$-closed by \ref{ZMtaperedSetsZclosed}. Thus all elements of $\Closure_{Z_2}\big(\im(d)\big)$ are $(Z_2, M)$-tapered.
+
+Next we show that $\tilde{f}$ is $Z_2$-continuous. Take $\mathcal{D} \in Z_2\big(\Closure_{Z_2}(\im(d))\big)$. Then \ref{extensionMcontinuousFunctionZcontinuous} says that $\tilde{f}\Big(\bigvee \mathcal{D}\Big) = \bigvee_{D\in \mathcal{D}}\tilde{f}(D) = \bigvee\tilde{f}^\imf(\mathcal{D})$.
+
+Finally we show that $\tilde{f}$ is unique. Let $g: \Closure_{Z_2}\big(\im(d)\big) \to L$ be some other $Z_2$-continuous function such that $f = g\circ d$. Consider the set $S\defeq\setbuilder{A\in \Closure_{Z_2}\big(\im(d)\big)}{g(A) = \tilde{f}(A)}$. By assumption $\im(d) \subseteq S$. It is now enough to show that $S$ is a $Z_2$-closed subset of $M$.
+
+Let $\mathcal{D} \subseteq S$ such that $\mathcal{D} \in Z_2(M)$. Since $2$ is hereditary, we have $\mathcal{D} \in Z_2\big(\Closure_{Z_2}(\im(d))\big)$ by \ref{subsetHereditaryZsets}. Then, since each $D\in\mathcal{D}$ is an element of $S$,
+\[ g\Big(\bigvee \mathcal{D}\Big) = \bigvee_{D\in \mathcal{D}}g(D) = \bigvee_{D\in \mathcal{D}}\tilde{f}(D) = \tilde{f}\Big(\bigvee \mathcal{D}\Big). \]
+Since $\bigvee \mathcal{D}\in \big(\Closure_{Z_2}(\im(d))\big)$, we have that $\bigvee \mathcal{D} \in S$ and thus that $S$ is $Z_2$-closed.
+\end{proof}
+
+\subsubsection{The Dedekind-MacNeille completion}
+
+The intersection system $\setbuilder{A^\leq}{A\subseteq P}$ is $\powerset$-continuous.
+
+\begin{example}
+The sets $A^{\leq\geq}$ are $\powerset$-closed, but the converse is not true. There exist $\powerset$-closed sets that are not of the form $A^\geq$. For example, let $P$ be the poset consisting of two parallel copies of $\N$, together with a top $\top$:
+\[ \begin{tikzcd}
+{} & \top \ar[dl, dash] \ar[dr, dash] & {} \\
+\hdots \ar[d,dash] & {} & \hdots \ar[d,dash] \\
+2 \ar[d,dash] & {} & 2 \ar[d,dash] \\
+1 \ar[d,dash] & {} & 1 \ar[d,dash] \\
+0 & {} & 0
+\end{tikzcd} \]
+Then each copy of $\N$ is $\powerset$-closed, but not of the form $A^\geq$ for any $A\subseteq P$.
+\end{example}
+
 
 \subsection{Below relations}
 \begin{definition}
@@ -2062,6 +2454,14 @@ f(x) & x\in X_1 \\ (g|_{Y_2})^{-1}(x) & x\in X_2
 \end{proof}
 The Schröder-Bernstein theorem was already proven in \ref{SchroederBernstein}.
 
+\begin{theorem}
+Let $L$ be a lattice. Then $L$ is complete \textup{if and only if} all isotone maps $f: L\to L$ have a fixed point.
+\end{theorem}
+TODO: do we need lattice? Can we use poset?
+\begin{proof}
+See Nation's lecture notes p.24
+\end{proof}
+
 \subsection{Complete subsemilattices}
 Let $L$ be a complete lattice and $S\subseteq L$ a subset. Then
 \begin{itemize}
@@ -2201,14 +2601,19 @@ Let $L$ be a lattice and $A\subseteq L$ a subposet that is a complete lattice. T
 \item $\incl_A: A\hookrightarrow L$ preserves arbitrary meets;
 \item the inclusion function $\incl_A: A\hookrightarrow L$ has a lower adjoint;
 \end{enumerate}
+in this case, the lower adjoint is the function
+\[ L \to A: x \mapsto \bigwedge \setbuilder{y\in A}{x\leq y}; \]
 \item the following are equivalent:
 \begin{enumerate}
 \item $A$ is a complete $\vee$-subsemilattice;
 \item $\incl_A: A\hookrightarrow L$ preserves arbitrary joins;
-\item the inclusion function $\incl_A: A\hookrightarrow L$ has an upper adjoint.
+\item the inclusion function $\incl_A: A\hookrightarrow L$ has an upper adjoint;
 \end{enumerate}
+in this case, the upper adjoint is the function
+\[ L \to A: x \mapsto \bigvee \setbuilder{y\in A}{y\leq x}. \]
 \end{enumerate}
 \end{lemma}
+Note that the meet and join in the adjoints can be taken either in $A$ or in $L$ (due to points (a)).
 \begin{proof}
 (1) Take $B\subseteq A$. We have $\bigwedge_A B = \incl_A\Big(\bigwedge_A B\Big)$ and $\bigwedge_L B = \bigwedge_L \incl_A^{\imf}(B)$. Consider
 \[ \begin{tikzcd}
@@ -2217,9 +2622,12 @@ Let $L$ be a lattice and $A\subseteq L$ a subposet that is a complete lattice. T
 \end{tikzcd}. \]
 It is clear that the top equality holds if and only if the bottom equality holds.
 
-The top equality holding for all $B\subseteq A$ is equivalent to $A$ being a comlete $\vee$-subsemilattice. The botting equality holding for all $B\subseteq A$ is equivalent to $\incl_A: A\hookrightarrow L$ preserving arbitrary meets. Thus $(a)$ and $(b)$ are equivalent.
+The top equality holding for all $B\subseteq A$ is equivalent to $A$ being a complete $\vee$-subsemilattice. The botting equality holding for all $B\subseteq A$ is equivalent to $\incl_A: A\hookrightarrow L$ preserving arbitrary meets. Thus $(a)$ and $(b)$ are equivalent.
 
 We have that $(b)$ and $(c)$ are equivalent by \ref{GaloisConnectionLatticePreservation}.
+
+
+The form of the adjoint is given by \ref{GaloisConnectionLatticePreservation} and the fact that $\incl_A^\preimf(B) = A\cap B$.
 
 (2) Dual.
 \end{proof}
@@ -2246,10 +2654,11 @@ Let $P$ be a poset and $f: P\to \im(f) \subseteq P$ a function. We call $f$
 \item idempotent, i.e.\ $f = f^2$.
 \end{itemize}
 \end{itemize}
+A pairing $\sSet{P,f}$ of a poset $P$ and a Moore closure $f$ on $P$ is called a \udef{(Moore) closure space}. A \udef{(Moore) dual closure space} is defined similarly.
 \end{definition}
 
 \begin{lemma} \label{idempotencyMooreClosureLemma}
-Let $P$ be a poset and $f: P\to \im(f)$ a Moore closure or Moore dual closure. Then $f(x) = x$ for all $x\in \im(f)$.
+Let $P$ be a poset, $f: P\to \im(f)$ a Moore closure or Moore dual closure and $x\in P$. Then $f(x) = x$ \textup{if and only if} $x\in \im(f)$.
 \end{lemma}
 \begin{proof}
 Immediate consequence of idempotency.
@@ -2312,9 +2721,27 @@ Finally, assume $\bigwedge_{\im(f)} A$ exists. We have that $\incl_{\im(f)}$ pre
 
 (2) Dual.
 
-(3) Immediate. 
+(3, 4) Immediate. 
 \end{proof}
+\begin{corollary} \label{antitoneCorrespondenceMooreClosuresCompleteSubsemilattices}
+Let $L$ be a complete lattice. Then there exists an antitone similarity between the set of surjective Moore closures on $L$, ordered pointwise, and the set of complete $\wedge$-subsemilattices, ordered by inclusion. This similarity is given by
+\[ \Phi: \{\text{complete $\wedge$-subsemilattices}\} \to \{\text{Moore closures on $L$}\}: A \mapsto \Big(L\to A: x\mapsto \bigwedge\setbuilder{y\in A}{x\leq y}\Big), \]
+with inverse
+\[ \Phi^{-1}: \{\text{Moore closures on $L$}\} \to \{\text{complete $\wedge$-subsemilattices}\}: f \mapsto \im(f). \]
+\end{corollary}
+\begin{proof}
+If $A \subseteq L$ is a complete $\wedge$-subsemilattice. Then $\Phi(A)$ is a Moore closure by \ref{completeSubsemilattices} and \ref{MooreClosureGaloisConnection}. It is surjective by construction.
+Suppose $f$ is a Moore closure, then $\Phi^{-1}(f) = \im(f)$ is a complete $\wedge$-subsemilattice by \ref{meetJoinImageMooreClosure}.
 
+We now show that $\Phi^{-1}$ is really the inverse of $\Phi$. Let $f$ be a Moore closure and $A \subseteq L$ a complete $\wedge$-subsemilattice. 
+Suppose $\Phi^{-1}(f) = A$. Then $(f, \incl_{A})$ is a Galois connection by \ref{MooreClosureGaloisConnection}, so $f = \Phi(A)$ by \ref{completeSubsemilattices} and uniqueness of the adjoint. 
+
+Conversely, suppose $f = \Phi(A)$. Then $\im(f) = A$ by construction, so $\Phi^{-1}(f) = A$.
+
+To show that $\Phi$ preserves and reflects the order, we can show that $\Phi^{-1}$ does. Take Moore closures $f,g$. First suppose $f \leq g$ pointwise. Take $x\in \im(g)$. Then $x\leq f(x) \leq g(x) = x$ by \ref{idempotencyMooreClosureLemma}. This implies $f(x) = x$ and thus that $x\in \im(f)$. So $\im(g) \subseteq \im(f)$.
+
+Now suppose $\im(g) \subseteq \im(f)$ and take $x\in L$. Then we have $x\leq f(x)$, so $f(x) \leq (f\circ g)(x) = g(x)$, by \ref{idempotencyMooreClosureLemma} since $g(x) \in \im(f)$.
+\end{proof}
 
 \begin{example}
 In point (1a) of \ref{meetJoinImageMooreClosure}, we do not have that the existence of $\bigvee_{\im(f)}A$ implies the existence of $\bigvee_P A$.
@@ -2359,9 +2786,136 @@ a \ar[dr, dash] & & b \ar[dl, dash] \\
 with $L_1 = \setbuilder{n}{\text{$n$ is even}} \cup \{a, \top\}$ and $L_2 = \setbuilder{n}{\text{$n$ is odd}} \cup \{b, \top\}$. Even if we consider the join in either $L_1$ or $L_2$, we have a problem.
 \end{example}
 
-\subsection{Dedekind-MacNeille completion}
-TODO minimal / maximal completions: see Schroder book notes.
 
+\begin{lemma} \label{continuousFunctionsBetweenClosureSpaces}
+Let $\sSet{P,f}$, $\sSet{Q,g}$ be Moore closure spaces and $\varphi: P\to Q$ an isotone function. Then the following are equivalent:
+\begin{enumerate}
+\item $(\varphi \circ f)(x) \leq (g\circ \varphi)(x)$ for all $x\in P$;
+\item $g\circ \varphi = g\circ \varphi\circ f$.
+\end{enumerate}
+The following are also equivalent:
+\begin{enumerate} \setcounter{enumi}{2}
+\item $(g\circ \varphi)(x) \leq (\varphi\circ f)(x)$ for all $x\in P$;
+\item $\varphi\circ f = g\circ \varphi\circ f$;
+\item $\varphi^\imf(\im(f)) \subseteq \im(g)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Take arbitrary $x\in P$. We have $x \leq f(x)$, so $\varphi(x) \leq (\varphi\circ f)(x)$ and thus
+\[ (g\circ \varphi)(x) \leq (g\circ \varphi \circ f)(x) = g\big((\varphi\circ f)(x)\big) \leq g\big((g\circ \varphi)(x)\big) = (g\circ \varphi)(x). \]
+This implies that all the inequalities are in fact equalities.
+
+$(2) \Rightarrow (1)$ Take arbitrary $x\in P$. Since $g$ is expansive, we have
+\[ (\varphi \circ f)(x) \leq (g\circ \varphi\circ f)(x) = (g\circ \varphi)(x) \]
+for all $x\in P$.
+
+$(3) \Rightarrow (4)$ Take arbitrary $x\in P$. Since $g$ is expansive, we have
+\[ (\varphi\circ f)(x) \leq (g\circ \varphi \circ f)(x) = (g\circ \varphi)\big(f(x)\big) \leq (\varphi\circ f)\big(f(x)\big) = (\varphi\circ f)(x). \]
+This implies that all the inequalities are in fact equalities.
+
+$(4) \Rightarrow (3)$ Take arbitrary $x\in P$. Since $f$ is expansive, we have $x\leq f(x)$. Since $g\circ \varphi$ is isotone, we have $(g\circ \varphi)(x) \leq (g\circ \varphi\circ f)(x) = (\varphi\circ f)(x)$.
+
+$(4) \Leftrightarrow (5)$ Take arbitrary $x\in P$. By \ref{idempotencyMooreClosureLemma} we have $\big((\varphi\circ f)(x)\big) \in \im(g)$ iff $(\varphi\circ f)(x) = (g\circ \varphi\circ f)(x)$.
+\end{proof}
+
+\begin{lemma} \label{continuousGaloisConnectionBetweenClosureSpaces}
+Let $\sSet{P,f}$, $\sSet{Q,g}$ be Moore closure spaces and $\big(\varphi: P\to Q, \psi: Q\to P\big)$ a Galois connection. Then the following are equivalent:
+\begin{enumerate}
+\item $(\varphi \circ f)(x) \leq (g\circ \varphi)(x)$ for all $x\in P$;
+\item $(f\circ \psi)(y) \leq (\psi \circ g)(y)$ for all $y\in Q$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Take arbitrary $y\in Q$. Then, since $(\varphi\circ \psi)(y) \leq y$, we have
+\[ (\varphi \circ f \circ \psi)(y) \leq (g\circ \varphi \circ \psi)(y) \leq g(y). \]
+Since $\varphi$ is the lower adjoint, we have $(f\circ \psi)(y) \leq (\psi\circ g)(y)$.
+
+$(2) \Rightarrow (1)$ Take arbitrary $x\in P$. Then, since $x \leq (\psi\circ \varphi)(x)$, we have
+\[ f(x) \leq (f\circ\psi\circ \varphi)(x) \leq (\psi \circ g\circ \varphi)(x). \]
+Since $\psi$ is the upper adjoint, we have $(\varphi \circ f)(x) \leq (g\circ \varphi)(x)$.
+\end{proof}
+
+\subsection{Closure-continuous functions}
+\begin{definition}
+Let $X,Y$ be sets, $c: \powerset(X)\to \im(c)$ a Moore closure on $\powerset(X)$ and $d: \powerset(Y)\to \im(d)$ a Moore closure on $\powerset(Y)$. A function $f: \sSet{X, c}\to \sSet{Y, d}$ is called \udef{(closure) continuous} if $f^\preimf(B)$ is $c$-closed for all $d$-closed subsets $B\subseteq Y$.
+\end{definition}
+
+\begin{lemma} \label{closureContinuousEquivalents}
+Let $X,Y$ be sets, $c: \powerset(X)\to \im(c)$ a Moore closure on $\powerset(X)$, $d: \powerset(Y)\to \im(d)$ a Moore closure on $\powerset(Y)$ and function $f: \sSet{X, c}\to \sSet{Y, d}$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is closure continuous;
+\item $f^\preimf\circ d = c\circ f^\preimf\circ d$;
+\item $(c\circ f^\preimf)(B) \subseteq (f^\preimf \circ d)(B)$ for all $B\subseteq Y$;
+\item $d\circ f^\imf = d\circ f^\imf\circ c$;
+\item $(f^\imf\circ c)(A) \subseteq (d\circ f^\imf)(A)$ for all $A\subseteq X$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+This is an immediate consequence of \ref{continuousFunctionsBetweenClosureSpaces} and \ref{continuousGaloisConnectionBetweenClosureSpaces}.
+\end{proof}
+
+\subsubsection{Downwards closure}
+TODO: preorder makes downwards closure (i.e.\ image set under order relation) a closure. TODO: sort out definitions!!
+
+TODO: has the following been proved somewhere else??
+\begin{lemma}
+Let $P$ be a preordered set and $A\subseteq P$. Then
+\begin{enumerate}
+\item $A^\precsim = (\downset A)^\precsim$;
+\item $A^\succsim = (\upset A)^\succsim$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) By monotonicity of the polar, we have $(\downset A)^\precsim \subseteq A^\precsim$. For the other inclusion, take $b \in A^\precsim$. Take arbitrary $x\in \downset A$. Then there exists $a\in A$ such that $x \precsim a$. Since $a \precsim b$, we have $x\precsim b$. Since $x$ was chosen arbitrarily, we have $x\in (\downset A)^\precsim$.
+
+(2) Dual.
+\end{proof}
+\begin{corollary} \label{extremaAfterOrderClosure}
+Let $P$ be a preordered set and $A\subseteq P$. Then
+\begin{enumerate}
+\item $\sup(A) = \sup(\downset A)$;
+\item $\inf(A) = \inf(\upset A)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proposition} \label{isotoneIffDownsetContinuous}
+Let $P,Q$ be preordered sets and $f: P\to Q$ a function. The following are equivalent:
+\begin{enumerate}
+\item $f$ is isotone;
+\item $f$ is $\downset$-continuous;
+\item $f^{\preimf}\big(\downset\{y\}\big)$ is downwards closed for all $y\in Q$;
+\item $f^\imf\big(\downset\{x\}\big) \subseteq \downset\{f(x)\}$ for all $x\in P$;
+\item $\downset f^\imf\big(\downset\{x\}\big) = \downset\{f(x)\}$ for all $x\in P$.
+\end{enumerate}
+If $P,Q$ are posets, then these points are also equivalent to the following:
+\begin{enumerate} \setcounter{enumi}{5}
+\item $f$ preserves principal joins:
+\[ \forall x\in P: \quad f(x) = f\Big(\bigvee \downset x\Big) = \bigvee f^\imf(\downset \{x\}); \]
+\item $\bigvee f^\imf(\downset \{x\}) \leq f(x)$ for all $x\in P$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Suppose $f$ is isotone and $B\subseteq Q$ a downwards closed set. Take $x\in \downset f^\preimf(B)$, so there exists $y\in P$ such that $f(y) \in B$ and $x\precsim y$. Then $f(x) \precsim f(y)$ and, since $B$ is downwards closed, $f(x) \in B$. Thus $x\in f^\preimf(B)$.
+
+$(2) \Rightarrow (3)$ Immediate since $\downset\{y\}$ is downwards closed.
+
+$(3) \Rightarrow (4)$ We have $\{x\} \subseteq f^\preimf\big(\downset\{f(x)\}\big)$. By assumption, we then have $\downset \{x\} \subseteq f^\preimf\big(\downset\{f(x)\}\big)$. By \ref{functionImagePreimageGaloisConnection}, this implies $f^\imf\big(\downset \{x\}\big) \subseteq \downset\{f(x)\}$.
+
+$(4) \Rightarrow (5)$ Since $\{f(x)\} \subseteq f^\imf\big(\downset \{x\}\big) \subseteq \downset\{f(x)\}$, taking the downwards closude yields the result.
+
+$(5) \Rightarrow (1)$ Take $x\precsim y \in P$. Then $x\in \downset \{y\}$, so
+\[ f(x) \in f^\imf\big(\downset \{y\}\big) \subseteq \downset f^\imf\big(\downset \{y\}\big) = \downset f^\imf\big(\{y\}\big) = \downset \{f(y)\}, \]
+which implies that $f(x) \precsim f(y)$.
+
+$(5) \Rightarrow (6)$ By \ref{extremaAfterOrderClosure}, we have
+\[ f(x) = \bigvee \downset \{f(x)\} = \bigvee \downset f^\imf\big(\downset\{x\}\big) = \bigvee f^\imf\big(\downset\{x\}\big). \]
+
+$(6) \Rightarrow (7)$ Immediate.
+
+$(7) \Rightarrow (4)$ This follows immediately from the Galois connection \ref{upsetDownsetConnections}.
+\end{proof}
+
+\subsection{Dedekind-MacNeille completion}
 \begin{definition}
 Let $\sSet{P, \leq}$ be a poset. Then the set $\DM(P) = \setbuilder{B^\geq}{B\subseteq P}$ together with the order embedding
 \[ m: P \to \DM(P): x\mapsto \downset\{x\} \]
@@ -2388,7 +2942,8 @@ We can also prove that $(-)^{\leq\geq}: \powerset(P) \to \DM(P)$ is adjoint to t
 Let $\sSet{P, \leq}$ be a poset and $A\subseteq P$ a subset. Then
 \begin{enumerate}
 \item $\bigwedge_{\DM(P)} m^\imf(A) = A^\geq$;
-\item $\bigvee_{\DM(P)} m^\imf(A) = A^{\leq\geq}$.
+\item $\bigvee_{\DM(P)} m^\imf(A) = A^{\leq\geq}$;
+\item $\bigvee_{\DM(P)} m^\imf(A^\geq) = A^{\geq}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -2397,6 +2952,14 @@ Let $\sSet{P, \leq}$ be a poset and $A\subseteq P$ a subset. Then
 
 (2) We have, by \ref{imagesFromPrincipalImages}, \ref{meetJoinImageMooreClosure} and \ref{DedekindMacNeilleCompletionComplete},
 \[ \bigvee_{\DM(P)} m^{\imf}(A) = \Big(\bigcup m^\imf(A)\Big)^{\leq\geq} = \Big(\bigcup_{x\in A} \downset\{x\}\Big)^{\leq\geq} = (\downset A)^{\leq\geq} = A^{\leq\geq}. \]
+
+(3) Immediate from (2) and the fact that $A^{\geq\leq\geq} = A^\geq$.
+\end{proof}
+\begin{corollary}
+The image $\im(P)$ is both join-dense and meet-dense in $\DM(P)$.
+\end{corollary}
+\begin{proof}
+Every $A^\geq$ can clearly be expressed as both the meet and the join of a set in $\im(m)$.
 \end{proof}
 
 \begin{proposition}
@@ -2420,13 +2983,36 @@ m\Big(\bigvee A\Big) &= \downset\Big\{\bigvee A\Big\} \\
 Let $L$ be a complete lattice. Then $m: L\to \DM(L)$ is an order similarity.
 \end{lemma}
 
-\begin{proposition}
-$\im(P)$ is join-dense and meet-dense in $\DM(P)$.
-\end{proposition}
-
 \begin{proposition}[Universal property of the Dedekind-MacNeille completion]
-See Schröder, p.212.
+Let $\sSet{P, \leq}$ be a poset, $L$ a complete lattice and $f: P\to L$ a residuated function. Then there exists a unique residuated function $\tilde{f}: \DM(P) \to L$ such that
+\[ \begin{tikzcd}
+P \ar[r, "m"] \ar[dr, "f"] & \DM(P) \ar[d, dashed, "{\tilde{f}}"] \\
+{} & L
+\end{tikzcd} \qquad \text{commutes.} \]
+This $\tilde{f}$ is defined by $\tilde{f}(A^\geq) = \bigvee_L f^\imf(A^\geq)$.
 \end{proposition}
+Note that the residuation of $\tilde{f}$ is equivalent to join preservation, by \ref{GaloisConnectionLatticePreservation}. For $f$ this is not the case, since $P$ may not contain enough joins.
+\begin{proof}
+First we show the diagram commutes. Take arbitrary $x\in P$. Then we calculate
+\[ (\tilde{f}\circ m)(x) = \tilde{f}\big(\{x\}^\geq\big) = \bigvee_L f^\imf\big(\downset\{x\}\big) = \bigvee_L \downset\{f(x)\} = f(x). \]
+Next we show that $\tilde{f}$ preserves joins, which implies it is residuated by \ref{GaloisConnectionLatticePreservation}. First note that, for all $A\subseteq P$, we have $f^\imf(A^{\leq \geq}) \subseteq f^\imf(A^\leq)^\geq = f^\imf(A)^{\leq\geq}$, by \ref{residuationPreservesSupInf}. Since $A\subseteq A^{\leq\geq}$, we have
+\[ f^\imf(A)^{\leq\geq} \subseteq f^\imf(A^{\leq \geq})^{\leq\geq} \subseteq f^\imf(A)^{\leq\geq\leq\geq} = f^\imf(A)^{\leq\geq}, \]
+and so $f^\imf(A)^{\leq\geq} = f^\imf(A^{\leq \geq})^{\leq\geq}$.
+
+To show preservation of joins, take some $\mathcal{A}\subseteq \DM(P)$. We calculate
+\begin{align*}
+\tilde{f}\Big(\bigvee_{\DM(P)}\mathcal{A}\Big) &= \bigvee_Lf^\imf\bigg(\Big(\bigcup_{A^\geq \in \mathcal{A}}A^\geq\Big)^{\leq\geq}\bigg) \\
+&= \bigvee_Lf^\imf\bigg(\Big(\bigcup_{A^\geq \in \mathcal{A}}A^\geq\Big)^{\leq\geq}\bigg)^{\leq\geq} \\
+&= \bigvee_Lf^\imf\Big(\bigcup_{A^\geq \in \mathcal{A}}A^\geq\Big)^{\leq\geq} \\
+&= \bigvee_L\bigcup_{A^\geq \in \mathcal{A}} f^\imf(A^\geq) \\
+&= \bigvee_{A^\geq \in \mathcal{A}}\bigvee_L f^\imf(A^\geq) \\
+&= \bigvee_{A^\geq \in \mathcal{A}}\tilde{f}(A^\geq),
+\end{align*}
+where we have used the general identity $\bigvee A = \bigvee A^{\leq\geq}$ and \ref{joinMeetUnion}.
+
+Finally, we show uniqueness. Assume $g: \DM(P)\to L$ is some other function that preserves joins and satisfies $f = g\circ m$. We then calculate, using \ref{joinMeetDMImage},
+\[ g(A^\geq) = g\Big(\bigvee_{\DM(P)}m^\imf(A^\geq)\Big) = \bigvee_L (g\circ m)^\imf(A^\geq) = \bigvee_L f^\imf(A^\geq) = \tilde{f}(A^\geq). \]
+\end{proof}
 
 
 \section{Distributive and modular lattices}
@@ -4615,6 +5201,16 @@ Let $D$ be a domain and $\{x_i\}_{i\in I}\subseteq D$. Then
 (2) Restatement of \ref{directedJoinDomain}.
 \end{proof}
 
+\subsection{The Scott topology}
+
+
+\begin{proposition}
+Let $P$ be a DCPO, then the Scott topology on $P$ is a topology.
+\end{proposition}
+\begin{proof}
+We show that the set of Scott-closed sets is closed under binary unions. Let $A,B \subseteq P$ be Scott closed. It is clear that $A\cup B$ is downwards closed. Take some non-empty, directed $D\subseteq A\cup B$. If $D\subseteq A$, then $\dirvee D \in A \subseteq A\cup B$ by closedness of $A$. If $D\subseteq B$, then $\dirvee D \in B \subseteq A\cup B$ by closedness of $B$. If neither of these cases holds, then $D\mesh A$ and $D\mesh B$. Take $a\in D\setminus B$ and $b\in D\setminus A$. By directedness of $D$, there must exist some $c\in D\subseteq A\cup B$ such that $a,b\leq c$. But, this yields a contradiction: either $c\in A$, in which case $b\in A$ by downwards closure, of $c\in B$, in which case $a\in B$ by downwards closure. Thus, one of the previous cases must have held and we can conclude.
+\end{proof}
+
 \subsection{Functions on domains}
 \subsubsection{Extending functions on bases}
 \begin{proposition}
@@ -4623,9 +5219,9 @@ Let $B$ be a finitary basis, $D$ a DCPO and $f: B \to D$ a monotone function. Th
 \begin{proof}
 To show existence, we take
 \[ f': \domain_B \to D: \; A \mapsto \dirvee_{x\in A} f(x). \]
-Note that directedness is given by \ref{monotonicDirectedness}.
+Note that $f^\imf(A)$ is directed since the directed sets form a $\mathrm{Z}$-system.
 
-By \ref{monotonicPreservationPrincipalJoinsMeets}, this function satisfies $f'(\downset x) = \dirvee f^\imf(\downset x) = f(x)$ for all $x\in B$.
+By \ref{isotoneIffDownsetContinuous}, this function satisfies $f'(\downset x) = \dirvee f^\imf(\downset x) = f(x)$ for all $x\in B$.
 
 For Scott-continuity, take a directed set of ideals $\{A_i\}_{i\in I}$ and calculate
 \begin{align*}
@@ -4679,7 +5275,7 @@ We first show that these maps are well-defined. Let $R$ be an approximable relat
 
 To show Scott continuity, let $\{A_i\}_{i\in I}$ be a directed subset of $\domain_B$. Then Scott continuity follows from
 \[ \Big(\dirvee_{i\in I}A_i\Big)R = \Big(\bigcup_{i\in I}A_i\Big)R = \bigcup_{i\in I}A_iR \]
-and the fact that $\{A_iR\}_{i\in I}$ is directed (by \ref{monotonicDirectedness}).
+and the fact that $\{A_iR\}_{i\in I}$ is directed (since the directed sets form a $\mathrm{Z}$-system).
 
 Let $f: \domain_B\to\domain_C$ be a Scott-continuous function. Then, for all $x\in B$,
 \[ x\setbuilder{(b,c)\in B\times C}{c \in f(\downset b)} = \setbuilder{c\in C}{c\in f(\downset x)} = f(\downset x) \]
