@@ -3113,11 +3113,163 @@ Let $f$ be a relation. Then $f$ is a function \textup{if and only if} $f;\overli
 Let $f,g: A\to B$ be functions. Then $f = g$ \textup{if and only if} $\id_A \subseteq f;g^\transp$.
 \end{lemma}
 
-\subsection{Constructing functions from expressions}
+
+\subsection{Constructing functions}
+Constructions defined for relations are in particular applicable to functions.
+
+\subsubsection{Constructing functions from expressions}
 \begin{definition}
 We use $-$ or $(-)$ in an expression to mean the function that maps $x$ to the expression where $-$ has been replaced by $x$.
 \end{definition}
 TODO: Needs to bind very loosely: for a bounded linear operator $T$ we want $\norm{T(-)} \neq \norm{T}$.
+
+\subsubsection{Obtaining a function from a relation}
+\begin{lemma} \label{functionalRestriction}
+Let $R$ be a relation on $(A,B)$. Then
+\[ f_R \defeq \setbuilder{(x,y)\in A\times B}{\forall y'\in B:\; xRy' \implies y'= y } \]
+is a functional relation and $f_R|_{\dom(f_R)}$ is a function.
+\end{lemma}
+
+\begin{definition}
+Let $R$ be a relation on $(A,B)$. Then the function $f_R|_{\dom(f_R)}$ from \ref{functionalRestriction} is called the function restriction of $R$.
+\end{definition}
+
+\subsubsection{Restriction and extension}
+\begin{lemma}
+Let $f: A\to B$ be a function and $S\subset A$. Then $f|_S$ is a function.
+\end{lemma}
+When talking about the restriction of a function, this left restriction is always the one that is meant. Right restrictions $f|^K$ are sometimes called \udef{corestrictions} and are in general not functions.
+
+\begin{definition}
+Let $A\subset B$ and $C$ be classes. Let $f: A\to C$ be a function. A function $\tilde{f}: B\to C$ such that $\tilde{f}|_A = f$ is called an \udef{extension} of $f$.
+\end{definition}
+Given a function, a different function with as codomain a superset of the original codomain, which is otherwise identical, is sometimes called a \udef{coextension} of the function.
+
+When given a function prescription, we may need to verify the function is \emph{well-defined} in the sense that the prescription always gives an element in the codomain for every element in the domain.
+
+\subsubsection{Composition}
+\begin{lemma}
+The functions $f:A\to B$ and $g:B\to C$ are composable as relations and the relation
+\[ f;g = g\circ f \]
+is a function. In particular it has functional form
+\[ g\circ f: A\to C: x\mapsto g(f(x)). \]
+\end{lemma}
+Because of the simplicity of $(g\circ f)(x) = g(f(x))$, the notation $\circ$ is almost exclusively used when dealing with functions.
+
+\begin{definition}
+Let $f, g:A\to A$ be functions. We say $f$ and $g$ \udef{commute} if $f\circ g = g\circ f$.
+\end{definition}
+
+\begin{note}
+Let $X,Y,Z$ be classes. Using composition we can view any function $f: X\to Y$ also as a function
+\[ f: (Z\to X)\to (Z\to Y): g\mapsto f(g) = (z\mapsto (f\circ g)(z)). \]
+\end{note}
+
+\subsubsection{Pre- and post-composition}
+\begin{definition}
+Let $A,B,C$ be sets and $f\in (A\to B)$. Then we define
+\begin{itemize}
+\item the \udef{post-composition function} of $f$ as $f_\star: (C\to A) \to (C\to B): g\mapsto f\circ g$.
+\item the \udef{pre-composition function} of $f$ as $f^\star: (B\to C) \to (A\to C): g\mapsto g\circ f$.
+\end{itemize}
+The post-composition function is also known as the \udef{pointwise} application or extension of $f$.
+\end{definition}
+
+\begin{lemma} \label{covarianceContravarianceComposition}
+Let $A,B,C, D$ be sets, $f\in (A\to B)$ and $g\in(B\to C)$. Then
+\begin{enumerate}
+\item $(g\circ f)_\star = g_\star\circ f_\star$;
+\item $(g\circ f)^\star = f^\star\circ g^\star$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Let $h\in (D\to A)$. Then
+\[(g\circ f)_\star(h) = (g\circ f)\circ h = g\circ(f\circ h) = g_\star(f_\star(h)) = (g_\star\circ f_\star)(h). \]
+
+(2) Let $h\in (C\to D)$. Then, similarly, 
+\[ (g\circ f)^\star(h) = h\circ (g\circ f) = (h\circ g)\circ f = (g^\star(h))\circ f = f^\star(g^\star(h)) = (f^\star\circ g^\star)(h). \]
+\end{proof}
+
+\subsubsection{Inverses of functions}
+All identity relations are functions.
+
+\begin{definition}
+Let $f:X\to Y$ be a function.
+\begin{itemize}
+\item A \udef{left inverse} (or \udef{retraction}) of $f$ is a function $g: Y\to X$ such that
+\[ g\circ f = \id_X. \]
+\item A \udef{right inverse} (or \udef{section}) of $f$ is a function $h: Y\to X$ such that
+\[ f\circ h = \id_Y. \]
+\item A \udef{(two-sided) inverse} of $f$ is a function that is both a left and a right inverse.
+\end{itemize}
+\end{definition}
+
+\begin{lemma} \label{injectiveInverse}
+Let $f:X\to Y$ be a function. The following are equivalent:
+\begin{enumerate}
+\item $f$ has a left inverse $g$;
+\item $f^\transp$ is a partial function from $X$ to $Y$; 
+\item $\graph(f^\transp) \subseteq \graph(g)$;
+\item $f$ is injective.
+\end{enumerate}
+\end{lemma}
+There is also a result linking the existence of a right inverse and surjectivity, but this in general only holds assuming the axiom of choice. (TODO ref)
+
+\begin{lemma} \label{leftRightInverse}
+If $f$ has a left inverse $g$ and a right inverse $h$, then $g=h$.
+\end{lemma}
+\begin{proof}
+By the simple calculation
+\[ g = g\circ (f\circ h) = (g\circ f) \circ h = h. \]
+\end{proof}
+Thus the two-sided inverse of $f$ is unique and exists \textup{if and only if} $f$ has a left and a right inverse. The unique two-sided inverse is denoted $f^{-1}$.
+
+\begin{lemma} \label{bijectionInverse}
+Let $f:X\to Y$ be a function. The following are equivalent:
+\begin{enumerate} 
+\item the inverse exists;
+\item the inverse exists and $f^{-1} = f^\transp$;
+\item $f^\transp$ is a function from $X$ to $Y$;
+\item $f$ is a bijection;
+\item $f^\transp$ is a bijective function from $X$ to $Y$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma} \label{commutationInverse}
+Let $f, g:A\to A$ be commuting and bijective functions. Then $f^{-1}$ and $g^{-1}$ commute.
+\end{lemma}
+\begin{proof}
+We calculate
+\[ f^{-1}\circ g^{-1} = f^{-1}\circ g^{-1}\circ (f\circ g \circ g^{-1} \circ f^{-1}) = f^{-1}\circ g^{-1}\circ (g\circ f) \circ g^{-1} \circ f^{-1} = g^{-1} \circ f^{-1} \]
+\end{proof}
+
+\subsubsection{Constant functions}
+\begin{definition}
+Let $X,Y$ be classes. A function $f:X\to Y$ is called \udef{constant} if there exists a $y_0$ such that $\forall x\in X: f(x) = y_0$.
+
+We denote this function $\constant{y_0}$.
+\end{definition}
+
+A function is constant if and only if its range is a singleton.
+
+\begin{lemma}
+Let $X,Y$ be classes and $y\in Y$. Then
+\[ \graph(\constant{y}) = X\times \{y\}. \]
+\end{lemma}
+
+\subsubsection{Inclusions}
+\begin{definition}
+Let $X$ be a class and $A\subseteq X$ a subclass. Then the function
+\[ \incl_A: A\to X: a\mapsto a \]
+is the \udef{inclusion} function of $A$ in $X$.
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a set and $A,B\subseteq X$ subsets. Then
+\begin{enumerate}
+\item $\incl_A^\preimf(B) = A\cap B$.
+\end{enumerate}
+\end{lemma}
 
 \subsection{Image and preimage}
 \subsubsection{Functions associated to a relation}
@@ -3317,145 +3469,7 @@ so $f''$ is well-defined.
 
 
 
-\subsection{Constructing new functions}
-Constructions defined for relations are in particular applicable to functions.
 
-\subsubsection{Restriction and extension}
-\begin{lemma}
-Let $f: A\to B$ be a function and $S\subset A$. Then $f|_S$ is a function.
-\end{lemma}
-When talking about the restriction of a function, this left restriction is always the one that is meant. Right restrictions $f|^K$ are sometimes called \udef{corestrictions} and are in general not functions.
-
-\begin{definition}
-Let $A\subset B$ and $C$ be classes. Let $f: A\to C$ be a function. A function $\tilde{f}: B\to C$ such that $\tilde{f}|_A = f$ is called an \udef{extension} of $f$.
-\end{definition}
-Given a function, a different function with as codomain a superset of the original codomain, which is otherwise identical, is sometimes called a \udef{coextension} of the function.
-
-When given a function prescription, we may need to verify the function is \emph{well-defined} in the sense that the prescription always gives an element in the codomain for every element in the domain.
-
-\subsubsection{Composition}
-\begin{lemma}
-The functions $f:A\to B$ and $g:B\to C$ are composable as relations and the relation
-\[ f;g = g\circ f \]
-is a function. In particular it has functional form
-\[ g\circ f: A\to C: x\mapsto g(f(x)). \]
-\end{lemma}
-Because of the simplicity of $(g\circ f)(x) = g(f(x))$, the notation $\circ$ is almost exclusively used when dealing with functions.
-
-\begin{definition}
-Let $f, g:A\to A$ be functions. We say $f$ and $g$ \udef{commute} if $f\circ g = g\circ f$.
-\end{definition}
-
-\begin{note}
-Let $X,Y,Z$ be classes. Using composition we can view any function $f: X\to Y$ also as a function
-\[ f: (Z\to X)\to (Z\to Y): g\mapsto f(g) = (z\mapsto (f\circ g)(z)). \]
-\end{note}
-
-\subsubsection{Pre- and post-composition}
-\begin{definition}
-Let $A,B,C$ be sets and $f\in (A\to B)$. Then we define
-\begin{itemize}
-\item the \udef{post-composition function} of $f$ as $f_\star: (C\to A) \to (C\to B): g\mapsto f\circ g$.
-\item the \udef{pre-composition function} of $f$ as $f^\star: (B\to C) \to (A\to C): g\mapsto g\circ f$.
-\end{itemize}
-The post-composition function is also known as the \udef{pointwise} application or extension of $f$.
-\end{definition}
-
-\begin{lemma} \label{covarianceContravarianceComposition}
-Let $A,B,C, D$ be sets, $f\in (A\to B)$ and $g\in(B\to C)$. Then
-\begin{enumerate}
-\item $(g\circ f)_\star = g_\star\circ f_\star$;
-\item $(g\circ f)^\star = f^\star\circ g^\star$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Let $h\in (D\to A)$. Then
-\[(g\circ f)_\star(h) = (g\circ f)\circ h = g\circ(f\circ h) = g_\star(f_\star(h)) = (g_\star\circ f_\star)(h). \]
-
-(2) Let $h\in (C\to D)$. Then, similarly, 
-\[ (g\circ f)^\star(h) = h\circ (g\circ f) = (h\circ g)\circ f = (g^\star(h))\circ f = f^\star(g^\star(h)) = (f^\star\circ g^\star)(h). \]
-\end{proof}
-
-\subsubsection{Inverses of functions}
-All identity relations are functions.
-
-\begin{definition}
-Let $f:X\to Y$ be a function.
-\begin{itemize}
-\item A \udef{left inverse} (or \udef{retraction}) of $f$ is a function $g: Y\to X$ such that
-\[ g\circ f = \id_X. \]
-\item A \udef{right inverse} (or \udef{section}) of $f$ is a function $h: Y\to X$ such that
-\[ f\circ h = \id_Y. \]
-\item A \udef{(two-sided) inverse} of $f$ is a function that is both a left and a right inverse.
-\end{itemize}
-\end{definition}
-
-\begin{lemma} \label{injectiveInverse}
-Let $f:X\to Y$ be a function. The following are equivalent:
-\begin{enumerate}
-\item $f$ has a left inverse $g$;
-\item $f^\transp$ is a partial function from $X$ to $Y$; 
-\item $\graph(f^\transp) \subseteq \graph(g)$;
-\item $f$ is injective.
-\end{enumerate}
-\end{lemma}
-There is also a result linking the existence of a right inverse and surjectivity, but this in general only holds assuming the axiom of choice. (TODO ref)
-
-\begin{lemma} \label{leftRightInverse}
-If $f$ has a left inverse $g$ and a right inverse $h$, then $g=h$.
-\end{lemma}
-\begin{proof}
-By the simple calculation
-\[ g = g\circ (f\circ h) = (g\circ f) \circ h = h. \]
-\end{proof}
-Thus the two-sided inverse of $f$ is unique and exists \textup{if and only if} $f$ has a left and a right inverse. The unique two-sided inverse is denoted $f^{-1}$.
-
-\begin{lemma} \label{bijectionInverse}
-Let $f:X\to Y$ be a function. The following are equivalent:
-\begin{enumerate} 
-\item the inverse exists;
-\item the inverse exists and $f^{-1} = f^\transp$;
-\item $f^\transp$ is a function from $X$ to $Y$;
-\item $f$ is a bijection;
-\item $f^\transp$ is a bijective function from $X$ to $Y$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma} \label{commutationInverse}
-Let $f, g:A\to A$ be commuting and bijective functions. Then $f^{-1}$ and $g^{-1}$ commute.
-\end{lemma}
-\begin{proof}
-We calculate
-\[ f^{-1}\circ g^{-1} = f^{-1}\circ g^{-1}\circ (f\circ g \circ g^{-1} \circ f^{-1}) = f^{-1}\circ g^{-1}\circ (g\circ f) \circ g^{-1} \circ f^{-1} = g^{-1} \circ f^{-1} \]
-\end{proof}
-
-\subsubsection{Constant functions}
-\begin{definition}
-Let $X,Y$ be classes. A function $f:X\to Y$ is called \udef{constant} if there exists a $y_0$ such that $\forall x\in X: f(x) = y_0$.
-
-We denote this function $\constant{y_0}$.
-\end{definition}
-
-A function is constant if and only if its range is a singleton.
-
-\begin{lemma}
-Let $X,Y$ be classes and $y\in Y$. Then
-\[ \graph(\constant{y}) = X\times \{y\}. \]
-\end{lemma}
-
-\subsubsection{Inclusions}
-\begin{definition}
-Let $X$ be a class and $A\subseteq X$ a subclass. Then the function
-\[ \incl_A: A\to X: a\mapsto a \]
-is the \udef{inclusion} function of $A$ in $X$.
-\end{definition}
-
-\begin{lemma}
-Let $X$ be a set and $A,B\subseteq X$ subsets. Then
-\begin{enumerate}
-\item $\incl_A^\preimf(B) = A\cap B$.
-\end{enumerate}
-\end{lemma}
 
 \subsection{Partial functions}
 \begin{definition}
