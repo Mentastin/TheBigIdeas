@@ -885,17 +885,28 @@ Let $X$ be a set, $\xi$ a convergence on $X$, $A\subseteq X$ and $\mathcal{A}\su
 
 TODO: move to compactness + inherence $\inh(\mathcal{A})$ largest set for which $\mathcal{A}$ is a cover.
 
-\subsection{Extension of functions}
+\subsection{Continuous modification of functions}
 \begin{definition}
-Let $\sSet{X,\xi}, \sSet{,\zeta}$ be convergence spaces, $A\subseteq X$ and $f: A\to Y$ a function.
-Consider the relation
-\[ C_f \defeq \setbuilder{(x,y)\in X\times Y}{\exists F\in\powerfilters(X): \; \big(F \overset{\xi}{\longrightarrow}x\big) \land \big(f^\imf(F)\overset{\zeta}{\longrightarrow} y\big)}. \]
-The function restriction of $C_f$ is called the \udef{continuous extension} of $f$.
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta}$ a Hausdorff convergence space, $A\subseteq X$ and $f: A\to Y$ a function. The \udef{continuous modification} of $f$ is defined as
+\[ \tilde{f}: \setbuilder{(x,y) \in X\times Y}{\exists F\overset{\xi|_A}{\longrightarrow} x \quad\land\quad \forall F\overset{\xi|_A}{\longrightarrow} x: \; f^{\imf\imf}(F)\overset{\zeta}{\longrightarrow} y}. \]
 \end{definition}
 
 \begin{lemma}
-Let $\sSet{X,\xi}, \sSet{,\zeta}$ be convergence spaces, $A\subseteq X$ and $f: A\to Y$ a function. Let $g: B \to Y$ be the continuous extension of $f$. If $f$ is continuous, then $f \subseteq g$.
+Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta}$ a Hausdorff convergence space, $A\subseteq X$ and $f: A\to Y$ a function. Let $\tilde{f}$ be the continuous modification of $f$. Then
+\begin{enumerate}
+\item $\tilde{f}$ is a functional relation;
+\item $\tilde{f}: \dom(\tilde{f})\to Y$ is a continuous function;
+\item if $f$ is continuous, then $f \subseteq \tilde{f}$.
+\end{enumerate}
 \end{lemma}
+\begin{proof}
+(1) Take $x\in X$, $y,y'\in Y$ and suppose $x\mathrel{\tilde{f}}y$ and $x\mathrel{\tilde{f}}y'$. Then there exists $F\to x$ and both $f^{\imf\imf}(F)\to y$ and $f^{\imf\imf}(F)\to y'$ hold. Since $Y$ is Hausdorff, this implies $y = y'$.
+
+(2) Take $x\in \dom(\tilde{f})$ and $F\to x$. Then $f^{\imf\imf}(F)\to f(x)$ by definition.
+
+(3) For all $x\in \dom(f)$, we have 
+\end{proof}
+
 
 
 \section{Base, pavement and cover}
@@ -2671,7 +2682,7 @@ Let $\sSet{X,\leq}$ be a poset and $F\in\powerfilters(X)$. Then
 the following are equivalent:
 \begin{enumerate}
 \item $F\overset{\mathfrak{o}}{\longrightarrow} x$;
-\item $\bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A) = \downset\{x\} = \bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf(A)$;
+\item $\bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A) = m(x) = \bigvee_{A\in F}\bigwedge_{\DM(P)} m^\imf(A)$;
 \item $\bigcap_{A\in F}A^{\leq \geq} = \downset \{x\}$ and $\bigcap_{A\in F}A^{\geq\leq} = \upset\{x\}$;
 \item $\bigcap_{A\in F}A^{\leq \geq} \subseteq \downset \{x\}$ and $\bigcap_{A\in F}A^{\geq\leq} \subseteq \upset\{x\}$;
 \item $\upset\{x\} \subseteq \Big(\bigcap_{A\in F}A^{\leq \geq}\Big)^\leq$ and $\downset\{x\} \subseteq \Big(\bigcap_{A\in F}A^{\geq \leq}\Big)^\geq$;
@@ -2681,7 +2692,7 @@ the following are equivalent:
 \begin{proof}
 The equivalence $(1) \Leftrightarrow (2)$ is a restatement of the definition.
 
-$(2) \Leftrightarrow (3)$ First note that
+$(2) \Leftrightarrow (3)$ First note that $m(x) = \downset \{x\}$. We have
 \[ \bigwedge_{A\in F}\bigvee_{\DM(P)} m^\imf(A) = \bigwedge_{A\in F}A^{\leq\geq} = \bigcap_{A\in F}A^{\leq\geq}, \]
 by \ref{joinMeetDMImage}. Also
 \[ \bigcap_{A\in F}A^{\geq\leq} = \Big(\bigcup_{A\in F}A^\geq\Big)^\leq. \]
@@ -2703,6 +2714,26 @@ $(4) \Rightarrow (5)$ Follows because taking the polar is antitone.
 $(5) \Rightarrow (6)$ Immediate.
 
 $(6) \Rightarrow (4)$ Take $y\in \bigcap_{A\in F} A^{\leq \geq}$. Then $y\leq x$ by assumption, so $y\in \downset\{x\}$. The other assertion is similar.
+\end{proof}
+
+\begin{proposition}
+Let $L$ be a Dedekind complete lattice, $F\in \powerfilters(L)$ and $x\in L$. Then $F\overset{\mathfrak{o}}{\longrightarrow} x$ \textup{if and only if}
+\[ \bigwedge \setbuilder{\bigvee A}{A\in F \land \bigvee A\,\text{exists}} = x = \bigvee \setbuilder{\bigwedge A}{A\in F \land \bigwedge A\,\text{exists}}. \]
+\end{proposition}
+\begin{proof}
+For all $A\subseteq L$, we have that either $A$ has no upper bound, in which case $A^{\leq} = \emptyset$ and $A^{\leq\geq} = L$, or $A$ has an upper bound and $A^{\leq\geq} = \downset \{\bigvee A\}$. Thus, by 
+\begin{align*}
+\bigcap_{A\in F}A^{\leq \geq} &= \bigcap \setbuilder{\downset \{\bigvee A\} }{A\in F \land \bigvee A\,\text{exists}} \\
+&= \setbuilder{\bigvee A}{A\in F \land \bigvee A\,\text{exists}}^{\geq}.
+\end{align*}
+Then we have
+\begin{align*}
+\downset \{x\} = \bigcap_{A\in F}A^{\leq \geq} &\iff \downset \{x\} = \setbuilder{\bigvee A}{A\in F \land \bigvee A\,\text{exists}}^{\geq} \\
+&\iff x = \bigwedge \setbuilder{\bigvee A}{A\in F \land \bigvee A\,\text{exists}}.
+\end{align*}
+Similarly
+\[ \upset \{x\} = \bigcap_{A\in F}A^{\geq \leq} \iff x = \bigvee \setbuilder{\bigwedge A}{A\in F \land \bigwedge A\,\text{exists}}. \]
+The result then follows from \ref{orderConvergenceEquivalents}.
 \end{proof}
 
 \begin{proposition}

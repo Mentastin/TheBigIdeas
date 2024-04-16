@@ -1469,6 +1469,138 @@ Let $Z$ be a $\mathrm{Z}$-system and $P$ a poset. We call $P$ \udef{$Z$-complete
 
 Let $Z$ be the $\mathrm{Z}$-system of sets with one or zero elements. Then a poset is $Z$-complete iff it has a least element.
 
+
+\subsubsection{$Z$-stable subsets}
+\begin{definition}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $Q\subseteq P$. Then $Q$ is called \udef{$Z$-stable} in $P$ if $\Closure_{\downarrow Z, Q}(A) = \Closure_{\downarrow Z}(A) \cap Q$ for all $A\subseteq Q$.
+\end{definition}
+
+\begin{lemma} \label{ZstableLemma}
+Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $Q\subseteq P$. Then the following are equivalent:
+\begin{enumerate}
+\item $Q$ is $Z$-stable;
+\item $\Closure_{\downarrow Z, Q}(A) \supseteq \Closure_{\downarrow Z}(A) \cap Q$ for all $A\subseteq Q$ and $\incl_Q$ is $Z$-continuous;
+\item $\Closure_{\downarrow Z, Q}(A) \supseteq \Closure_{\downarrow Z}\big(\Closure_{\downarrow Z, Q}(A)\big) \cap Q$ for all $A\subseteq Q$ and $\incl_Q$ is $Z$-continuous.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ The first part is immediate. For the $Z$-continuity of $\incl_Q$, we take arbitrary $B\subseteq P$ and calculate
+\[ \Closure_{\downarrow Z, Q}\big(\incl_Q^\preimf(B)\big) = \Closure_{\downarrow Z, Q}(B\cap Q) = \Closure_{\downarrow Z}(B\cap Q) \cap Q \subseteq \Closure_{\downarrow Z}(B) \cap Q = \incl_Q^\preimf\big(\Closure_{\downarrow Z}(B)\big). \]
+This implies that $\incl_Q$ is $\Closure_{\downarrow Z}$-continuous by \ref{closureContinuousEquivalents} and thus $Z$-continuous by \ref{isotoneZcontinuousFunction}.
+
+$(2) \Rightarrow (1)$ The $Z$-continuity of $\incl_Q$ implies $\Closure_{\downarrow Z}$-continuity by \ref{isotoneZcontinuousFunction} and thus, by \ref{closureContinuousEquivalents},
+\[ \Closure_{\downarrow Z, Q}(A) = \Closure_{\downarrow Z, Q}(A\cap Q) = \Closure_{\downarrow Z, Q}\big(\incl_Q^\preimf(A)\big) \subseteq \incl_Q^\preimf\big(\Closure_{\downarrow Z}(A)\big) = \Closure_{\downarrow Z}(A) \cap Q. \]
+
+$(2) \Leftrightarrow (3)$ Since $\incl_Q$ is $Z$-continuous, we have
+\[ \Closure_{\downarrow Z}\big(\Closure_{\downarrow Z, Q}(A)\big) = (\Closure_{\downarrow Z}\circ \incl_Q^\imf \circ \Closure_{\downarrow Z, Q})(A) = (\Closure_{\downarrow Z}\circ \incl_Q^\imf)(A) = \Closure_{\downarrow Z}(A), \]
+by \ref{closureContinuousEquivalents}.
+\end{proof}
+
+\begin{example}
+The $Z$-continuity of $\incl_Q$ can easily fail. Let, for example, $Z$ be the $\mathrm{Z}$-system of $\sigma$-chains. Let $P$ be the following lattice
+\[ \begin{tikzcd}
+1 \ar[d, dash] \\
+2 \ar[d, dash, dashed] \\
+\bullet
+\end{tikzcd} \]
+Here the dashed line means a copy of $\N$. Let $Q$ be the dashed line together with $1$. Then the join of the dashed line in $Q$ is $1$. In $P$, however, the join is $2$.
+\end{example}
+
+
+\subsection{Results for specific $\mathrm{Z}$-systems}
+\subsubsection{$\sigma$-chains}
+
+TODO: results about subsequences above here!
+
+\begin{lemma} \label{monotoneSequenceLemma}
+Let $P$ be a poset and $A\subseteq P$ be a $\sigma$-chain in $P$ such that $\bigvee A$ exists. Then
+\begin{enumerate}
+\item there exists a monotonically increasing sequence $\seq{x_n}_{n\in \N}$ in $A$ such that $\bigvee_{n\in \N} x_n = \bigvee A$.
+\item if $A$ has no maximum, then $\seq{x_n}$ can be taken to be strictly increasing.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Since $A$ is countable, there exists an enumeration $\seq{y_n}_{n\in \N}$ of $A$. Now define
+\[ x_n \defeq \max_{k\leq n} y_k, \]
+where the maximum exists, since it is taken over a finite set of elements that are all comparable.
+This is clearly a monotonically increasing sequence. We have
+\[ \bigvee_{n\in \N} x_n = \bigvee \downset \setbuilder{x_n}{n\in \N} = \bigvee \downset \setbuilder{y_n}{n\in \N} = \bigvee \downset A = \bigvee A. \]
+
+(2) Take the sequence $\seq{x_n}$ from (1). We first observe that $\seq{x_n}$ has not got a tail that is a singleton. If it did, then the element of this singleton would be a maximum of $A$. This is not the case by assumption. By \ref{RlinkedSequenceHasStrictSubsequence}, we can find a strictly increasing subsequence $\seq{y_n}$ with the same image, so
+\[ \bigvee_{n\in \N}y_n = \bigvee \im(y) = \bigvee \im(x) = \bigvee A. \]
+Replace $\seq{x_n}$ by $\seq{y_n}$.
+\end{proof}
+
+\begin{proposition} \label{sigmaClosureOfSubjoinSemilattice}
+Let $Z$ be the $\mathrm{Z}$-system of $\sigma$-chains. Let $L$ be a lattice and $Q\subseteq L$ a subset that is closed under finite joins. Then
+\begin{enumerate}
+\item $\setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$ is the $\sigma$-closure of $Q$;
+\item if $L$ is a $\sigma$-complete lattice, then $\downset \setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$ is the $\downarrow \sigma$-closure of $Q$;
+\item if $L$ is countably join-distributive, then $\setbuilder{x\in L}{\exists A\in Z(\downset Q): x = \bigvee A}$ is the $\downarrow \sigma$-closure of $Q$.
+\end{enumerate}
+\end{proposition}
+In particular, $\setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$ is $\sigma$-chain-closure of $Q$.
+\begin{proof}
+(1) Since $\setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$ is obviously contained in the $\sigma$-closure of $Q$, it is enough to show that it is $\sigma$-closed.
+
+Let $B\subseteq \setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$ be a countable set such that $\bigvee B$ exists. We need to show that $\bigvee \in \setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$. Since $B$ is countable, we can find an enumeration $\seq{b_n}$ of $B$. For each $b_n$ we can find an increasing sequence $\seq{x_{n,k}}_{k\in \N}$ in $Q$ such that $\bigvee_{k\in\N}x_{n,k} = b_n$, by \ref{monotoneSequenceLemma}.
+
+Now define
+\[ y_n \defeq \bigvee_{n'= 0}^n x_{n',n}, \]
+which is a sequence in $Q$, since all the joins are finite. It is also increasing since
+\[ y_n = \bigvee_{n'= 0}^n x_{n',n} \geq \bigvee_{n'= 0}^{n-1} x_{n',n} \geq \bigvee_{n'= 0}^{n-1} x_{n',n-1} = y_{n-1}. \]
+Finally, we want to show that $\bigvee_{n\in \N} y_n$ exists and is equal to $\bigvee B$. We have that $\bigvee B$ is an upper bound of $\seq{y_n}$, since
+\[ y_n = \bigvee_{n'= 0}^n x_{n',n} \leq \bigvee_{n'= 0}^n b_{n'} \leq \bigvee_{n'= 0}^{\infty} b_{n'} = \bigvee B. \]
+Now suppose $u$ is some other upper bound of $\seq{y_n}$. Then
+\[ x_{n,k} \leq x_{n, \max(n,k)} \leq \bigvee_{n'=0}^{\max(n,k)}x_{n, \max(n,k)} = y_{\max(n,k)} \leq u. \]
+This implies that, for all $n\in \N$, $u$ is an upper bound of $\seq{x_{n,k}}_{k\in \N}$ and so $b_n = \bigvee_{k\in \N}x_{n,k} \leq u$. Thus $u$ is an upper bound of $\seq{b_n}$, which means that $\bigvee B = \bigvee_{n\in\N} b_n \leq u$. So $\bigvee B$ is the least upper bound of $\seq{y_n}$.
+
+(2) We just need to show that $\downset \setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$ is $\sigma$-closed. To that end, take some countable $B\subseteq \downset \setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$. Let $\seq{b_n}$ be an enumeration of $B$. We can then find a sequence $\seq{c_n}$ in $\setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$ such that $b_n \leq c_n$ for all $n\in \N$. We have that $\bigvee_{n\in \N}c_n$ exists since $L$ is $\sigma$-complete. Then $\bigvee B = \bigvee_{n\in \N}b_n \leq \bigvee_{n\in \N}c_n \in \setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$, since it is $\sigma$-closed by (1). This implies $\bigvee B \in \downset \setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A}$.
+
+(3) Since $\setbuilder{x\in L}{\exists A\in Z(\downset Q): x = \bigvee A}$ is $\sigma$-closed by (1) (since $\downset Q$ is also a sublattice of $L$), we just need to show that it is downwards closed.
+
+Take arbitrary $y\in \downset \setbuilder{x\in L}{\exists A\in Z(\downset Q): x = \bigvee A}$. Then there exists $A\in Z(\downset Q)$ such that $y \leq \bigvee A$. By \ref{monotoneSequenceLemma} there exists an increasing sequence $\seq{a_n}$ such that $\bigvee_{n\in \N} a_n = \bigvee A$. Then $\seq{a_n \wedge y}$ is an increasing sequence in $\downset Q$ and
+\[ \bigvee_{n\in \N}a_n \wedge y = y \wedge \bigvee_{n\in \N}a_n = y \wedge \bigvee A = y \wedge x = y. \]
+Thus $y\in \setbuilder{x\in L}{\exists A\in Z(\downset Q): x = \bigvee A}$.
+\end{proof}
+
+\begin{example}
+We give some examples to support the necessity of the conditions in \ref{sigmaClosureOfSubjoinSemilattice}. are necessary.
+
+\begin{itemize}
+\item Consider the lattice $L$ with Hasse diagram
+\[ \begin{tikzcd}
+\infty \ar[dd, dashed, dash] & {} \ar[d, dashed, dash] \\
+{} & \bullet \ar[dl, dash] \ar[d, dash] \\
+\bullet \ar[d, dash] & \bullet \ar[dl, dash] \ar[d, dash] \\
+\bullet \ar[d, dash] & \bullet \ar[dl, dash] \ar[d, dash] \\
+\bullet & \bullet
+\end{tikzcd} \]
+where both columns are countable. Let $Q$ be the right column. Then $\setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A} = Q$ and $\downset \setbuilder{x\in L}{\exists A\in Z(Q): x = \bigvee A} = \downset Q$, which does not include $\infty$, so it is not $\sigma$-chain-closed. 
+
+\item Consider the lattice $L$ with Hasse diagram
+\[ \begin{tikzcd}
+\infty \ar[dd, dashed, dash] \ar[dr, dash] & {} \\
+{} & \bullet \ar[dl, dash] \\
+0 & {}
+\end{tikzcd} \]
+where the dashed part is $\N \setminus\{0\}$, call it $Q$. In this case $\setbuilder{x\in L}{\exists A\in Z(\downset Q): x = \bigvee A}$ is everything except $\bullet$. It is not downwards closed.
+\end{itemize}
+\end{example}
+
+\subsubsection{Finite sets or $\sigma$-chains}
+
+\begin{proposition}
+Let $Z_0$ be the $\mathrm{Z}$-system of sets that are either finite or $\sigma$-chains. Let $Z$ be a $\mathrm{Z}$-system such that $Z_0 \subseteq Z \subseteq \sigma$. Let $L$ be a countably join-distributive lattice and $Q$ a subset that is closed under finite joins. If $\incl_Q: Q\to L$ is a $Z$-continuous, then $Q$ is $Z$-stable in $L$.
+\end{proposition}
+\begin{proof}
+By \ref{ZstableLemma}, it is enough to show that $\Closure_{\downarrow Z, Q}(A) \supseteq \Closure_{\downarrow Z}\big(\Closure_{\downarrow Z, Q}(A)\big) \cap Q$ for all $A\subseteq Q$ and $\incl_Q$ is $Z$-continuous.
+
+By \ref{sigmaClosureOfSubjoinSemilattice} and the fact that $\Closure_{\downarrow Z, Q}(A)$ is closed under finite joins, we have $\Closure_{\downarrow Z}\big(\Closure_{\downarrow Z, Q}(A)\big) = \setbuilder{x\in L}{\exists B\in Z'\big(\Closure_{\downarrow Z, Q}(A)\big): x = \bigvee B}$, where $Z'$ is the $\mathrm{Z}$-system of $\sigma$-chains.
+
+Take arbitrary $x\in \Closure_{\downarrow Z}\big(\Closure_{\downarrow Z, Q}(A)\big) \cap Q$. Then there exists $B\in Z'\big(\Closure_{\downarrow Z, Q}(A)\big)$ such that $x = \bigvee_L B$. Since $x\in Q$ and $B\subseteq Q$, we have $x = \bigvee_{Q} B$. Since $B\in Z'\big(\Closure_{\downarrow Z, Q}(A)\big) \subseteq Z\big(\Closure_{\downarrow Z, Q}(A)\big)$, we have $x\in \Closure_{\downarrow Z, Q}(A)$.
+\end{proof}
+
 \subsection{Completion}
 \subsubsection{$Z$-continuous completion}
 \begin{definition}
@@ -1700,7 +1832,7 @@ Let $T$ be the set $\setbuilder{A\in M}{\text{$A$ is $(Z,M)$-tapered}}$. To show
 \end{proof}
 
 \begin{proposition} \label{ZcontinuousExtension}
-Let $Z_1$ be a $\mathrm{Z}$-system, $Z_2$ a hereditary $\mathrm{Z}$-system, $P$ a poset and $M$ a $Z_1$-continuous intersection system on $P$. Then the $Z_1$-continuous $Z_2$-completion $d|^{\Closure_{Z_2}\big(\im(d)\big)}: P \to M: x\mapsto \downset\{x\}$ satisfies the following property:
+Let $Z_1$ be a $\mathrm{Z}$-system, $Z_2$ a hereditary $\mathrm{Z}$-system, $P$ a poset and $M$ a $Z_1$-continuous intersection system on $P$. Then the $Z_1$-continuous $Z_2$-completion $d: P \to \Closure_{Z_2}\big(\im(d)\big) \subseteq M: x\mapsto \downset\{x\}$ satisfies the following property:
 
 Let $L$ be a $Z_2$-complete poset and $f: \sSet{P, \Closure_M}\to \sSet{L, (-)^{\leq\geq}}$ a closure-continuous function. Then there exists a unique $Z_2$-continuous function $\tilde{f}: \Closure_{Z_2}\big(\im(d)\big) \to L$ such that
 \[ \begin{tikzcd}
@@ -1721,7 +1853,7 @@ Let $\mathcal{D} \subseteq S$ such that $\mathcal{D} \in Z_2(M)$. Since $Z_2$ is
 Since $\bigvee \mathcal{D}\in \big(\Closure_{Z_2}(\im(d))\big)$, we have that $\bigvee \mathcal{D} \in S$ and thus that $S$ is $Z_2$-closed.
 \end{proof}
 \begin{corollary} \label{ZcontinuousExtensionZcontinuousFunction}
-Let $Z$ be a hereditary $\mathrm{Z}$-system and $P$ a poset. Then the $Z$-continuous $Z$-completion $d|^{\Closure_{Z}\big(\im(d)\big)}: P \to \mathcal{C}_{\downarrow Z}(P): x\mapsto \downset\{x\}$ satisfies the following property:
+Let $Z$ be a hereditary $\mathrm{Z}$-system and $P$ a poset. Then the $Z$-continuous $Z$-completion $d: P \to \Closure_{Z}\big(\im(d)\big) \subseteq \mathcal{C}_{\downarrow Z}(P): x\mapsto \downset\{x\}$ satisfies the following property:
 
 Let $L$ be a $Z$-complete poset and $f: P \to L$ an isotone $Z$-continuous function. Then there exists a unique $Z$-continuous function $\tilde{f}: \Closure_{Z}\big(\im(d)\big) \to L$ such that
 \[ \begin{tikzcd}
@@ -1736,64 +1868,6 @@ Now it is enough to prove that every isotone $Z$-continuous function $f: P \to L
 \end{proof}
 
 
-\subsubsection{$Z$-stable subsets}
-\begin{definition}
-Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $Q\subseteq P$. Then $Q$ is called \udef{$Z$-stable} in $P$ if $\Closure_{\downarrow Z, Q}(A) = \Closure_{\downarrow Z}(A) \cap Q$ for all $A\subseteq Q$.
-\end{definition}
-
-\begin{lemma} \label{ZstableLemma}
-Let $Z$ be a $\mathrm{Z}$-system, $P$ a poset and $Q\subseteq P$. Then the following are equivalent:
-\begin{enumerate}
-\item $Q$ is $Z$-stable;
-\item $\Closure_{\downarrow Z, Q}(A) \supseteq \Closure_{\downarrow Z}(A) \cap Q$ for all $A\subseteq Q$ and $\incl_Q$ is $Z$-continuous.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-$(1) \Rightarrow (2)$ The first part is immediate. For the $Z$-continuity of $\incl_Q$, we take arbitrary $B\subseteq P$ and calculate
-\[ \Closure_{\downarrow Z, Q}\big(\incl_Q^\preimf(B)\big) = \Closure_{\downarrow Z, Q}(B\cap Q) = \Closure_{\downarrow Z}(B\cap Q) \cap Q \subseteq \Closure_{\downarrow Z}(B) \cap Q = \incl_Q^\preimf\big(\Closure_{\downarrow Z}(B)\big). \]
-This implies that $\incl_Q$ is $\Closure_{\downarrow Z}$-continuous by \ref{closureContinuousEquivalents} and thus $Z$-continuous by \ref{isotoneZcontinuousFunction}.
-
-$(2) \Rightarrow (1)$ The $Z$-continuity of $\incl_Q$ implies $\Closure_{\downarrow Z}$-continuity by \ref{isotoneZcontinuousFunction} and thus, by \ref{closureContinuousEquivalents},
-\[ \Closure_{\downarrow Z, Q}(A) = \Closure_{\downarrow Z, Q}(A\cap Q) = \Closure_{\downarrow Z, Q}\big(\incl_Q^\preimf(A)\big) \subseteq \incl_Q^\preimf\big(\Closure_{\downarrow Z}(A)\big) = \Closure_{\downarrow Z}(A) \cap Q. \]
-\end{proof}
-
-\begin{lemma} \label{monotoneSequenceLemma}
-Let $P$ be a poset and $A\subseteq P$ be a $\sigma$-chain in $P$ such that $\bigvee A$ exists. Then there exists a monotonically increasing sequence $\seq{x_n}_{n\in \N}$ in $A$ such that $\bigvee_{n\in \N} x_n = \bigvee A$.
-\end{lemma}
-\begin{proof}
-Since $A$ is countable, there exists an enumeration $\seq{y_n}_{n\in \N}$ of $A$. Now define
-\[ x_n \defeq \max_{k\leq n} y_k. \]
-This is clearly a monotonically increasing sequence and
-\[ \bigvee_{n\in \N} x_n = \bigvee \downset \setbuilder{x_n}{n\in \N} = \bigvee \downset \setbuilder{y_n}{n\in \N} = \bigvee \downset A = \bigvee A. \]
-\end{proof}
-
-TODO: either strictly monotonic subsequence, or there exists $k\in \N$ such that $x_k = \bigvee_{n\in \N}x_n$.
-
-\begin{proposition}
-Let $L$ be a lattice. Let $Z$ be the $\mathrm{Z}$-system of $\sigma$-chains. Then, for all $A\subseteq L$, we have
-\begin{enumerate}
-\item $\Closure_{Z}(A) = \setbuilder{x\in L}{\exists B\in Z(A): x = \bigvee B}$;
-\item $\Closure_{\downarrow Z}(A) = \downset\setbuilder{x\in L}{\exists B\in Z(A): x = \bigvee B}$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) It is clear that $A\subseteq \setbuilder{x\in L}{\exists B\in Z(A): x = \bigvee B} \subseteq \Closure_{Z}(A)$, so it is enough to show that $C\defeq \setbuilder{x\in L}{\exists B\in Z(A): x = \bigvee B}$ is $Z$-closed.
-
-Take $B\in Z(L)$ such that $B\subseteq C$ and $\bigvee B$ exists. By \ref{monotoneSequenceLemma}, there exists a sequence $\seq{y_n}$ in $B$ such that $\bigvee_{n\in \N}y_n = \bigvee B$.
-
-TODO: WLOG $\seq{y_n}$ strictly increasing.
-
-By the definition of $C$ and \ref{monotoneSequenceLemma}, for each $n\in \N$, there exists a sequence $\seq{x_{n,k}}_k$ in $C$ such that $y_n = \bigvee_{k\in \N}x_{n,k}$.
-
-Now define $y'_n$ to be some $x_{n, l}$ greater than $\bigvee_{k\leq n} x_{k,n}$.
-\end{proof}
-
-\begin{proposition}
-Let $P$ be a poset and $L \subseteq P$ a subposet that is a lattice. Then $L$ is $\sigma$-chain-stable in $P$.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
 
 \subsubsection{Extension of functions to $Z$-closure}
 \begin{lemma} \label{extensionDomainDownsetCompletion}
@@ -7443,6 +7517,8 @@ We can think of $A^*$ as a generalisation of $\N$, with $\seq{}$ instead of $0$ 
 \[ S_a(u) = u\concat \seq{a} \]
 for all $a\in A$. In this way $\N \cong \{1\}^*$.
 
+TODO: unification of strings and sequences. Also notation for $A^* \cup A^\N$. In this case $\len: A^* \cup A^\N \to \overline{\N} = \N^+$.
+
 
 \begin{proposition}[String pigeonhole principle] \label{stringPigeonholePrinciple}
 Let $A$ be a finite alphabet and $u\in A^*$. If $\#A < \len(u)$, then $u$ is not simple.
@@ -7664,8 +7740,15 @@ Let $T$ be a tree on an alphabet $A$. We say $T$ is
 \begin{definition}
 Let $\sSet{A,R}$ be a relational structure. The tree
 \[ T_R \defeq \setbuilder{u\in A^*}{\forall n\in (0:\len(u)): \; u_nRu_{n+1}} \]
-is the \udef{associated tree} of $\sSet{A,R}$.
+is the \udef{associated tree} of $\sSet{A,R}$. We call its elements \udef{$R$-linked} strings.
 \end{definition}
+
+\begin{lemma} \label{TransitiveRlinkedStringSequence}
+Let $\sSet{A,R}$ be a transitive relational structure and $u\in A^* \cup A^\N$. Then $u$ is $R$-linked \textup{if and only if} it is isotone as a function $u: \sSet{(0:\len(u)), \leq} \to \sSet{A,R}$.
+\end{lemma}
+\begin{proof}
+If $u$ is isotone, then it is clearly $R$-linked. The converse is proved by induction on the length $\len(u)$.
+\end{proof}
 
 \begin{lemma} \label{relationalTreeLemma}
 Let $\sSet{A,R}$ be a relational structure with associated tree $T_R$. Take $u\in T_R$. Then
@@ -8004,11 +8087,13 @@ TODO safari method (cfr Bolzano-Weierstrass)
 \end{enumerate}
 
 \begin{definition}
-We call such a sequence $\seq{a_n}_{n\in \N}$ a \udef{choice sequence}.
+We call such a sequence $\seq{a_n}_{n\in \N}$ an \udef{$R$-linked} sequence.
 \end{definition}
 
+TODO: relate to $R$-linked strings.
+
 \begin{lemma} \label{choiceSequenceMonotone}
-Let $\sSet{A, R}$ be a relational structure. Every choice sequence in $R$ is a monotone function in $\sSet{\N, <} \to \sSet{A, R^+}$.
+Let $\sSet{A, R}$ be a relational structure. Every $R$-linked sequence is a monotone function in $\sSet{\N, <} \to \sSet{A, R^+}$.
 \end{lemma}
 \begin{proof}
 TODO \ref{transitiveClosureSequenceLemma}.
@@ -8018,7 +8103,7 @@ TODO \ref{transitiveClosureSequenceLemma}.
 Over NBG, the following are equivalent:
 \begin{enumerate}
 \item the axiom of dependent choice;
-\item for any left-total binary relation $R$ on a set $A$ and $a\in A$, there exists a choice sequence starting at $a$.
+\item for any left-total binary relation $R$ on a set $A$ and $a\in A$, there exists an $R$-linked sequence starting at $a$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -8026,9 +8111,9 @@ $\boxed{(1)\Rightarrow (2)}$ Take $a\in A$. Define $B = aR^+$, i.e.\ the image u
 
 We have that $R|^B_B$ is left-total on $B$. By the axiom of dependent choice we can find some sequence $\seq{b_n}_{n\in \N}$ in $B$. Now $b_0\in aR^+$, so there exists some finite sequence $u\seq{a, a_1, \ldots, a_n, b_0}$ such that $aRa_1$,  $a_{j}Ra_{j+1}$ for all $j\in 1:n$ and $a_nRb_0$.
 
-Now $u\concat \seq{b_n}_{n\in \N}$ is a choice sequence starting at $a$.
+Now $u\concat \seq{b_n}_{n\in \N}$ is an $R$-linked sequence starting at $a$.
 
-$\boxed{(2)\Rightarrow (1)}$ Let $A$ be a non-empty set. Then there exists $a\in A$. By assumption there exists a choice sequence in $A$ starting at $a$, so there exists a choice sequence in $A$.
+$\boxed{(2)\Rightarrow (1)}$ Let $A$ be a non-empty set. Then there exists $a\in A$. By assumption there exists an $R$-linked sequence in $A$ starting at $a$, so there exists an $R$-linked sequence in $A$.
 \end{proof}
 
 \begin{proposition} \label{ZornEquivalentsDC}
@@ -8043,11 +8128,11 @@ Over NBG, the following are equivalent:
 \begin{proof}
 $(1) \Rightarrow (2)$ We prove the contrapositive: if $\sSet{P, \leq}$ is a poset without a maximal element, then $P$ contains an infinite chain.
 
-Assume DC and that $P$ has no maximal element. Define ${<} \defeq {\leq} \setminus\id_P$, which is antisymmetric and irreflexive, and thus asymmetric by \ref{asymmetricIrreflexive}. Then $<$ is left total by \ref{maximalElementNotLeftTotal}, and we can find a choice sequence by DC. The choice sequence is injective by \ref{choiceSequenceMonotone} and \ref{relationPreservingFunctionFromSemiConnexStructure}. Thus the image of the choice sequence is an infinite chain.
+Assume DC and that $P$ has no maximal element. Define ${<} \defeq {\leq} \setminus\id_P$, which is antisymmetric and irreflexive, and thus asymmetric by \ref{asymmetricIrreflexive}. Then $<$ is left total by \ref{maximalElementNotLeftTotal}, and we can find a $<$-linked sequence by DC. The $<$-linked sequence is injective by \ref{choiceSequenceMonotone} and \ref{relationPreservingFunctionFromSemiConnexStructure}. Thus the image of the $<$-linked sequence is an infinite chain.
 
 $(2) \Rightarrow (3)$ Let $T$ be a non-empty pruned tree. Then (2) gives that $T$ contains an infinite chain $C$ by modus tollens. Then closure of $C$ under $\sqsubseteq$ is an infinite branch by \ref{treeOrderingLemma}.
 
-$(3) \Rightarrow (1)$ Let $R$ be a left-total binary relation on a non-empty set $A$. Construct the tree $T_R$ associated to the binary relation. It is pruned by \ref{relationalTreeLemma} and thus $T_R$ has an infinite branch. The infinite branch is well-founded (because $T_R$ is well-founded, \ref{treeOrderingLemma}) and thus a well-ordering, as it is connex \ref{wellOrderedCondition}. As the branch is infinite, we can find an initial segment which is similar to $\N$. Call this similarity $f: \N \to T_R$. Consider the function $n\mapsto f(n+1)_{n}$. This is a choice sequence.
+$(3) \Rightarrow (1)$ Let $R$ be a left-total binary relation on a non-empty set $A$. Construct the tree $T_R$ associated to the binary relation. It is pruned by \ref{relationalTreeLemma} and thus $T_R$ has an infinite branch. The infinite branch is well-founded (because $T_R$ is well-founded, \ref{treeOrderingLemma}) and thus a well-ordering, as it is connex \ref{wellOrderedCondition}. As the branch is infinite, we can find an initial segment which is similar to $\N$. Call this similarity $f: \N \to T_R$. Consider the function $n\mapsto f(n+1)_{n}$. This is an $R$-linked sequence.
 
 $(3) \Rightarrow (4)$ We prove the contrapositive of (4). Assume $\sSet{T,\sqsubseteq}$ is not converse well-founded. Then $T$ has a subset $S$ without maximal elements. Then $\downset S$ is a pruned subtree. It contains an infinite branch by (3) and thus so does $T$.
 
@@ -8383,7 +8468,7 @@ By \ref{commonSubnetExistence} we have $\TailsFilter\seq{x_i} \amesh \TailsFilte
 Let $\seq{x_n}_{n\in \N}$ and $\seq{y_n}_{n\in \N}$ be sequences then $\seq{y_n}$ is called a \udef{subsequence} of $\seq{x_n}$ if it is a frequent subnet. 
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{subsequenceLemma}
 Let $\seq{x_n}_{n\in \N}$ and $\seq{y_n}_{n\in \N}$ be sequences. Then $\seq{y_n}$ is a subsequence \textup{if and only if} there exists a strictly increasing function $\varphi: \N\to \N$ such that $y = x\circ \varphi$.
 \end{lemma}
 \begin{proof}
@@ -8454,7 +8539,7 @@ which is a contradiction. By \ref{increasingEnumeration} we have a strictly incr
 \begin{proposition} \label{existenceMonotoneSubsequenceConnexRelation}
 Let $\sSet{X,R}$ be a connex ordered set. Every sequence $\seq{x_n}$ in $X$ has a monotone subsequence.
 \end{proposition}
-TODO: we may remove the ordered requirement. Monotone sequence then becomes ``choice sequence'' of $R$ or $R^\transp$.
+TODO: we may remove the ordered requirement. Monotone sequence then becomes $R$-linked or $R^\transp$-linked sequence.
 
 TODO: clean up proof.
 \begin{proof}
@@ -8467,6 +8552,28 @@ Now suppose $S$ is finite. Then $S$ has a maximal element $n_0$. By construction
 Define the function $\varphi$ recursively by $\varphi(0) = n_0$ and $\varphi(n+1) = \min\setbuilder{m>n}{x_n \Yright x_m}$, which exists since $\N$ is well-founded. This $\varphi$ determines a monotone subsequence.
 \end{proof}
 
+\begin{proposition} \label{RlinkedSequenceHasStrictSubsequence}
+Let $\sSet{X,R}$ be a relational structure and $\seq{x_n}$ an $R$-linked sequence. If $\Tails\seq{x_n}$ does not contain a singleton, then $\seq{x_n}$ has an $R\setminus \id_X$-linked subsequence $\seq{y_n}$ with $\im(x) = \im(y)$.
+\end{proposition}
+\begin{proof}
+The set $\setbuilder{k\in \N}{\big(k > n\big)\land \big(x_k \neq x_{k-1}\big)}$ is non-empty for all $n$. Indeed, suppose it was empty for $n\in \N$, then $x_k = x_{k-1}$ for all $k > n$, so $\seq{x_{n+1+k}}_{k\in \N}$ is $=$-linked. By \ref{TransitiveRlinkedStringSequence}, this implies $x_{n+1+k} = x_{n+1}$ for all $k\in \N$.
+Thus $\setbuilder{x_k}{k \geq n+1}$ is a singleton. This is not true by assumption.
+
+We define $\varphi: \N \to \N$ recursively by
+\[ \begin{cases}
+\varphi(0) = 0 \\
+\varphi(n) = \min \setbuilder{k\in \N}{\big(k > \varphi(n-1)\big)\land \big(x_k \neq x_{k-1}\big)}.
+\end{cases} \]
+By \ref{subsequenceLemma}, this $\varphi$ determines a subsequence $y = x\circ \varphi$, since it is clearly strictly increasing.
+
+We just need to show that $\seq{y_n}$ is $R\setminus \id_X$-linked. Take arbitrary $n\in \N$. For all $k\in \interval[co]{\varphi(n-1), \varphi(n)}$, we have $x_{k} = x_{\varphi(n-1)}$. This is clear for $k = \varphi(n-1)$. For $\varphi(n-1) < k < \varphi(n)$, we have $k\notin \setbuilder{k\in \N}{\big(k > \varphi(n-1)\big)\land \big(x_k \neq x_{k-1}\big)}$, so $x_k = x_{k-1}$. Then \ref{TransitiveRlinkedStringSequence} implies $x_{\varphi(n)-1} = x_{\varphi(n-1)}$. We also have $x_{\varphi(n)-1} \neq x_{\varphi(n)}$ by definition of $\varphi(n)$, so $x_{\varphi(n)-1} \big(R\setminus \id_X\big) x_{\varphi(n)}$. Then we have
+\[ y_{n-1} = x_{\varphi(n-1)} = x_{\varphi(n)-1} \mathrel{\big(R\setminus \id_X\big)} x_{\varphi(n)} = y_n.  \]
+
+Finally we show that $\im(x) = \im(y)$. Clearly $\im(y) \subseteq \im(x)$. Now take $x_n \in \im(x)$. Then we can take $n' \defeq \min\setbuilder{k\in\N}{x_k = x_n}$. If $n' = 0$, then $x_n = x_{n'} = x_0 = x_{\varphi(0)} \in \im(y)$. Now suppose $n'\neq 0$.
+
+Clearly $x_{n'-1}\neq x_{n'}$, because otherwise $n'$ would not be minimal. We set $n'' \defeq \max\big(\im(\varphi)\cap \interval{0,n'}\big)$ and we can write $n'' = \varphi(m)$.
+It is clear that $n' = \varphi(m+1)$, so $x_n = x_{n'} = x_{\varphi(m+1)} \in \im(y)$.
+\end{proof}
 
 \chapter{Fixed points}
 
