@@ -1250,8 +1250,8 @@ The following $\mathrm{Z}$-systems can be constructed using \ref{ZsystemWhereAll
 \begin{itemize}
 \item directed subsets;
 \item well-ordered subsets (i.e.\ where each non-empty subsubset has a minimum);
-\item subsets such that each pair in the subset has an upper bound in $P$ (the \udef{pairwise compatible system});
-\item subsets such that each finite subsubset has an upper bound in $P$ (the \udef{compatible system}).
+\item subsets such that each pair in the subset has an upper bound in $P$ (the \udef{pairwise consistent system});
+\item subsets such that each finite subsubset has an upper bound in $P$ (the \udef{consistent system}).
 \end{itemize}
 \end{example}
 
@@ -5487,13 +5487,120 @@ By \ref{meetJoinImageMooreClosure}, $\im(f)$ is a $\vee$-semilattice.
 Since $f$ preserves the way-below relation, by \ref{algebraicClosureIsContinuous}, $f^\imf\big(\ddownset\{x\}\cap \compacts(L)\big)$ is a set of compact elements. Thus $\im(f)$ is algebraic by \ref{algebraicJoinSemilattice}.
 \end{proof}
 
+\section{Consistency}
+\begin{definition}
+Let $P$ be a poset, $S\subseteq P$ and $x,y\in P$. Then
+\begin{itemize}
+\item $S$ is called \udef{consistent} if $S$ has an upper bound;
+\item $x$ is said to be \udef{consistent} with $y$ if $\{x,y\}$ is consistent. We denote this $x \cons y$.
+\end{itemize}
+\end{definition}
+
+Suppose $x$ is a partial (i.e.\ not maximal) element that approximates some true element $y$. Then any $x'$ that is consistent with $x$ could be an approximation of $y$.
+
+\begin{lemma} \label{consistencyInclusionFromInequality}
+Let $P$ be a poset and $x,y\in P$. Then
+\begin{enumerate}
+\item if $x \leq y$, then $\{y\}^\cons \subseteq \{x\}^\cons$;
+\item if $x \leq y$, then $x\in \{y\}^{\cons\cons}$;
+\item $\downset \{x\} \subseteq \{x\}^{\cons\cons}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Take $a\in \{y\}^\cons$, then there exists $b\in P$ such that $a,y \leq b$.
+
+Now $x\leq y\leq b$, so $b$ is an upper bound of $\{x,a\}$ and thus $x\cons a$, which means that $a\in \{x\}^\cons$.
+
+(2) Immediate from (1), using \ref{polarsGaloisConnection}.
+
+(3) Immediate from (2).
+\end{proof}
+
+\subsection{Consistent extensions}
+For any two elements $x,y$, the intuition is that $x$ and $y$ contain as much information as each other if $\{x\}^\cons = \{y\}^\cons$.
+
+\begin{definition}
+Let $P$ be a poset and $x\in P$. Then
+\[ \tilde{x} \defeq \max \setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons } \]
+is called the \udef{consistent extension} of $x$ if the maximum exists.
+\end{definition}
+
+\begin{proposition}
+Let $P$ be a poset and $x\in P$. Then
+\begin{enumerate}
+\item $\setbuilder[\big]{y \in P}{ \{y\}^\cons = \{x\}^\cons } \subseteq \{x\}^{\cons\cons}$.
+\item $\max \big(\{x\}^{\cons\cons}\big) \subseteq \max \setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$;
+\item $\max \big(\{x\}^{\cons\cons}\big) = \max \setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$ if $P$ is 3-pairwise-consistent-complete.
+\end{enumerate}
+\end{proposition}
+The property 3-pairwise-consistent-complete means that if $A\subseteq P$ is such that every pair of elements of $A$ is consistent and contains fewer than $3$ elements, then $\bigvee A$ exists. This notion might still be slightly too strong.
+\begin{proof}
+(1) Take $y\in \setbuilder[\big]{y\in P}{\{y\}^\cons = \{x\}^\cons}$. In particular, $\{x\}^\cons \subseteq \{y\}^\cons$, so $y\in \{y\} \subseteq \{x\}^{\cons\cons}$.
+
+(2) Let $\tilde{x}$ be the maximum of $\{x\}^{\cons\cons}$, assuming it exists. By (1), we have that $\tilde{x}$ is an upper bound of $\setbuilder[\big]{y\in P}{\{y\}^\cons = \{x\}^\cons}$.
+
+We just need to show that $\tilde{x} \in \setbuilder[\big]{y\in P}{\{y\}^\cons = \{x\}^\cons}$. Since $\tilde{x} \in \{x\}^{\cons\cons}$, we have $\{\tilde{x}\} \subseteq \{x\}^{\cons\cons}$, so $\{x\}^\cons \subseteq \{\tilde{x}\}^\cons$.
+
+For the other inclusion, we have $x\in \{x\}^{\cons\cons}$, so $x \leq \tilde{x}$, which implies $\{\tilde{x}\}^\cons \subseteq \{x\}^\cons$ by \ref{consistencyInclusionFromInequality}.
+
+(3) One inclusion is given by (2). For the other inclusion, take $\tilde{x} = \max \setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$, if this exists. From (1) and (2), it is enough to show that $\tilde{x}$ is an upper bound of $\{x\}^{\cons\cons}$.
+
+Take $y\in \{x\}^{\cons\cons}$. Since $x\in \{x\}^\cons$, we have $y \cons x$ and so $\{x,y\}$ is $3$-pairwise-consistent. Thus $x\vee y$ exists.
+
+We claim $x\vee y\in \{x\}^{\cons\cons}$. Indeed, take arbitrary $a\in \{x\}^\cons$. Then $x\cons a$ and $y \cons a$. Since also $x\cons y$, we have that $\{x,y,a\}$ is $3$-pairwise-consistent, so $a\vee x \vee y$ exists and, in particular, $a \cons (x\vee y)$. Since $a\in \{x\}^\cons$ was chosen arbitrarily, we have $x\vee y \in \{x\}^{\cons\cons}$.
+
+Now this implies $\{x\}^\cons \subseteq \{x\vee y\}^{\cons}$ by \ref{polarsGaloisConnection}. Also $\{x\vee y\}^\cons \subseteq \{x\}^\cons$ by \ref{consistencyInclusionFromInequality}, so $x\vee y \in \setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$. This implies $y \leq x\vee y \leq \tilde{x}$. Since $y\in \{x\}^{\cons\cons}$ was chosen arbitrarily, we have that $\tilde{x}$ is an upper bound of $\{x\}^{\cons\cons}$.
+\end{proof}
+
+\begin{example}
+Let $P$ be a poset and $x\in P$. The sets $\setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$ and $\{x\}^{\cons\cons}$ are not the same in general. Take, for example,
+\[ \begin{tikzcd}[column sep=tiny]
+{} & \bullet \ar[dl ,dash] \ar[dr, dash] & {} & \bullet \ar[dl, dash] \\
+x & {} & \bullet & {}
+\end{tikzcd} \]
+Here $\setbuilder[\big]{y\in P}{\{y\}^\cons = \{x\}^\cons}$ consists of $x$ and the $\bullet$ above it. The set $\{x\}^{\cons\cons}$ consists of the left-hand triangle.
+
+Note that in this case both sets have the same maximum. This is not always the case. Take, e.g.\ 
+\[ \begin{tikzcd}
+\bullet \ar[d, dash] \ar[dr, dash] & \bullet \ar[d, dash] \ar[dl, dash] & \bullet \ar[dl, dash] \\
+x & \bullet & {}
+\end{tikzcd} \]
+Here $\setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$ consists of just $x$ and $\{x\}^{\cons\cons}$ consists of the two elements in the lower row.
+\end{example}
+
+\subsubsection{Consistent extensions of order-preserving functions}
+
+\begin{lemma} \label{consistentExtenionsIsotoneFunctionToDedekindPoset}
+Let $P$ be a poset, $Q$ a Dedekind-complete poset, $(x,y)\in P\times Q$ and $f: P\not\to Q$ a partial order-preserving function. Then $\{(x,y)\} \in \{f\}^\cons$ \textup{if and only if}
+\[ \bigvee f^\imf\big(\downset \{x\} \cap \dom(f)\big) \leq y \leq \bigwedge f^\imf\big(\upset \{x\} \cap \dom(f)\big). \]
+\end{lemma}
+\begin{proof}
+Since any restriction of an order-preserving function is order-preserving, we have that $\{(x,y)\} \cons f$ iff $f\cup \{(x,y)\}$ is order-preserving. This is equivalent to
+\[ \begin{cases}
+\forall x'\in \downset\{x\} \cap \dom(f): \; f(x') \leq y \\
+\forall x'\in \upset\{x\} \cap \dom(f): \; f(x') \geq y.
+\end{cases} \]
+Since $Q$ is Dedekind complete, this is equivalent to 
+\[ \begin{cases}
+\bigvee f^\imf\big(\downset\{x\} \cap \dom(f)\big) \leq y \\
+\bigvee f^\imf\big(\upset\{x\} \cap \dom(f)\big) \geq y.
+\end{cases} \]
+\end{proof}
+
+\begin{proposition}
+Let $P$ be a poset, $Q$ a Dedekind-complete poset and $f: P\not\to Q$ a partial order-preserving function. Then the consistent extension $\tilde{f}$ of $f$ is defined by
+\[ \tilde{f}(x) = y \defequiv \bigvee f^\imf\big(\downset \{x\} \cap \dom(f)\big) = y = \bigwedge f^\imf\big(\upset \{x\} \cap \dom(f)\big). \]
+\end{proposition}
+\begin{proof}
+From \ref{consistentExtenionsIsotoneFunctionToDedekindPoset}. TODO.
+\end{proof}
 
 \section{Domains}
 \begin{definition}
-Let $\sSet{P,\Yleft}$ be a poset, $S\subseteq P$ and $x\in P$. Then
+Let $\sSet{P,\Yleft}$ be a poset and $x\in P$. Then
 \begin{itemize}
-\item $S$ is called \udef{consistent} if $S$ has an upper bound;
-\item $x$ is called \udef{total} if it is maximal and \udef{partial} if not.
+\item $x$ is called \udef{total} if it is maximal and
+\item \udef{partial} if not.
 \end{itemize}
 \end{definition}
 
@@ -5755,6 +5862,8 @@ Take $(x,y)\in B\times C$ and $z\in D$. Clearly $(x,y)F = yF_{x,*}$ is an ideal.
 \[ y'F_{x,*}z \implies (x,y')Fz \implies xF_{*,y'}z \implies x'F_{*,y'}z \implies (x',y')Fz. \]
 We conclude that $Fz$ is upwards closed.
 \end{proof}
+
+
 
 \chapter{The poset of subsets}
 \begin{definition}

@@ -885,29 +885,6 @@ Let $X$ be a set, $\xi$ a convergence on $X$, $A\subseteq X$ and $\mathcal{A}\su
 
 TODO: move to compactness + inherence $\inh(\mathcal{A})$ largest set for which $\mathcal{A}$ is a cover.
 
-\subsection{Continuous modification of functions}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta}$ a Hausdorff convergence space, $A\subseteq X$ and $f: A\to Y$ a function. The \udef{continuous modification} of $f$ is defined as
-\[ \tilde{f}: \setbuilder{(x,y) \in X\times Y}{\exists F\overset{\xi|_A}{\longrightarrow} x \quad\land\quad \forall F\overset{\xi|_A}{\longrightarrow} x: \; f^{\imf\imf}(F)\overset{\zeta}{\longrightarrow} y}. \]
-\end{definition}
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space and $\sSet{Y,\zeta}$ a Hausdorff convergence space, $A\subseteq X$ and $f: A\to Y$ a function. Let $\tilde{f}$ be the continuous modification of $f$. Then
-\begin{enumerate}
-\item $\tilde{f}$ is a functional relation;
-\item $\tilde{f}: \dom(\tilde{f})\to Y$ is a continuous function;
-\item if $f$ is continuous, then $f \subseteq \tilde{f}$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Take $x\in X$, $y,y'\in Y$ and suppose $x\mathrel{\tilde{f}}y$ and $x\mathrel{\tilde{f}}y'$. Then there exists $F\to x$ and both $f^{\imf\imf}(F)\to y$ and $f^{\imf\imf}(F)\to y'$ hold. Since $Y$ is Hausdorff, this implies $y = y'$.
-
-(2) Take $x\in \dom(\tilde{f})$ and $F\to x$. Then $f^{\imf\imf}(F)\to f(x)$ by definition.
-
-(3) For all $x\in \dom(f)$, we have 
-\end{proof}
-
-
 
 \section{Base, pavement and cover}
 \subsection{Pavement}
@@ -2793,6 +2770,30 @@ By \ref{limsupLiminfInequality}, we also have $\bigvee_{A\in F}\bigwedge_{\DM(P)
 Finally the claim about the directedness of $M$ and $N$ follows from \ref{latticeIntervalIntersection}.
 \end{proof}
 
+\begin{proposition}
+Let $P, Q$ be posets, $f: P\to Q$ an order-preserving function and $x\in P$. If $f$ is order-continuous at $x$, then 
+\begin{enumerate}
+\item $\bigvee f^\imf(M) = f(x)$ for all upwards directed $M \subseteq P$ such that $\bigvee M = x$;
+\item $\bigwedge f^\imf(N) = f(x)$ for all downwards directed $N \subseteq P$ such that $\bigwedge N = x$.
+\end{enumerate}
+If $P$ is a lattice, then the converse also holds: (1) and (2) together imply that $f$ is order-continuous at $x$.
+\end{proposition}
+\begin{proof}
+(1) Take arbitrary directed $M \subseteq P$ such that $\bigvee M = x$. Consider the filter
+\[ F \defeq \upset \setbuilder{\interval{a,x} \subseteq P}{a\in M}, \]
+which is directed (and thus a filter), since $M$ is directed.
+
+By continuity of $f$, we have $f^{\imf\imf}(F)\overset{\mathfrak{o}}{\longrightarrow} f(x)$. We can apply \ref{orderConvergenceIntervalBase}. Since $f^{\imf\imf}(F)$ contains $\downset\{f(x)\}$, we can set $N' = \{f(x)\}$ and find a set $M'$ such that $\bigvee M = f(x)$ and $\interval{a', f(x)} \in \upset f^{\imf\imf}(F)$ for all $a'\in M'$.
+
+Now take $b\in f^\imf(M)^\leq$. Take arbitrary $a'\in M'$. Since $\interval{a', f(x)} \in \upset f^{\imf\imf}(F)$, there exists $a\in M$ such that $f^\imf\big(\interval{a, x}\big) \subseteq \interval{a', f(x)}$. Thus $a'\leq f(a) \leq b$. Since $a'$ was taken arbitrarily, we have $b \in M'^{\leq}$ and so $f^\imf(M)^\leq \subseteq M^{\prime\leq}$. Also $x$ is an upper bound of $M$, so $f(x)$ is an upper bound of $f^\imf(M)$. Thus
+\[ \upset\{f(x)\} \subseteq f^{\imf}(M)^\leq \subseteq M^{\prime\leq} = \upset\{f(x)\}. \]
+We conclude that $\bigvee f^{\imf}(M) = f(x)$.
+
+(2) Dual to (1).
+
+(1,2 $\Rightarrow$ order-continuity) Suppose $P$ is a lattice. Suppose $F\in \powerfilters(P)$ such that $F\overset{\mathfrak{o}}{\longrightarrow} x$. By \ref{orderConvergenceIntervalBase} there exist upwards directed $M \subseteq P$ and downwards directed $N \subseteq P$ such that $\bigvee M = x = \bigwedge N$ and $\interval{a,b}\in F$ for all $a\in M$ and $b\in N$. We can then prove that $\upset f^{\imf\imf}(F)\overset{\mathfrak{o}}{\longrightarrow} f(x)$ by \ref{orderConvergenceIntervalBase}: we have $\bigvee f^\imf(M) = f(x) = \bigwedge f^\imf(N)$ and for all $f(a) \in f^\imf(M)$ and $f(b)\in f^\imf(N)$, we have $f^\imf\big(\interval{a,b}\big) \subseteq \interval{f(a), f(b)}$.
+\end{proof}
+
 \begin{lemma}
 Let $\sSet{X,\leq}$ be a poset, $a,x\in X$ and $\seq{x_i}_{i\in I}$ a net in $X$ that order converges to $x$. If $\upset\{a\}$ is $\seq{x_i}$-frequent, then $a\leq x$.
 \end{lemma}
@@ -3679,12 +3680,27 @@ $\boxed{\subseteq}$ Take $A\in (F\cap G)$ and $B\in H$. Then $A\times B\in F\oti
 $\boxed{\supseteq}$ Take $A \in (F\otimes H)\cap (G\otimes H)$. Then we can find $B_1\in F$, $C_1,C_2\in H$ and $B_2\in G$ such that $B_1\times C_1 \subseteq A$ and $B_2\times C_2 \subseteq A$. Now $(B_1\cup B_2)\times (C_1\cap C_2) \subseteq A$. Also $B_1\cup B_2 \in F\cap G$ and $C_1\cap C_2 \in H$, so $(B_1\cup B_2)\times (C_1\cap C_2) \in (F\cap G)\otimes H$. By upwards closure $A\in (F\cap G)\otimes H$.
 \end{proof}
 
-\begin{lemma} \label{filterPairingLemma}
+\begin{lemma}
 Let $X,Y$ be sets, $F\in\powerfilters(X)$, $\Delta: X\to X^2: x\mapsto (x,x)$ and $f: X^2\to Y$ a function. Then
 \[ \upset f^{\imf\imf}(F\otimes F) = \upset (f\circ \Delta)^{\imf\imf}(F). \]
 \end{lemma}
 \begin{proof}
 Let $A,B,C\in F$. Any basis set of the form $f^{\imf}(A\times B)$ contains a set of the form $f^\imf(C\times C)$, namely $f^{\imf}\big((A\cap B)\times (A\cap B)\big)$.
+\end{proof}
+
+\begin{lemma} \label{filterPairingLemma}
+Let $X, Y$ be sets, $F\in\powerfilters(X)$, $f: X\times X\to Y$ a function and $\Delta: X \to X\times X: x\mapsto (x, x)$ the diagonal function. Then
+\begin{enumerate}
+\item $F\otimes F = \upset\setbuilder{A\times A}{A\in F}$;
+\item $\upset f^{\imf\imf}(F\otimes F) \subseteq \upset (f\circ \Delta)^{\imf}(F)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Since $\setbuilder{A\times B}{A, B\in F}$ is a basis of $F \otimes F$, and every element $A\times B$ of this basis contains $(A\cap B)\times (A\cap B)$, the sets of the form $A\times A$ also form a basis of $F\otimes F$.
+
+(2) By (1), any element of $\upset f^{\imf\imf}(F\otimes F)$ contains a set of the form $f^{\imf}(A\times A)$ for some $A\in F$.
+
+For all $x\in A$, we have $f(x,x) \in f^{\imf}(A\times A)$, so $(f\circ \Delta)^\imf(A) \subseteq f^{\imf}(A\times A)$. This implies $f^{\imf}(A\times A) \in \upset (f\circ \Delta)^{\imf}(F)$.
 \end{proof}
 
 \begin{proposition}
@@ -6183,7 +6199,7 @@ Let $\sSet{X, \mathfrak{C}}$ be a Cauchy space. A \udef{completion} of $\sSet{X,
 The completion is called \udef{strict} if $\im(k)$ is strictly dense in $Y$.
 \end{definition}
 
-Let $\hat{X}$ be the set of equivalence classes of proper Cauchy filters (which exist since the Cauchy structure if of finite depth, \ref{CauchyEquivalence}) and $k: X\to \hat{X}: x\mapsto [\pfilter{x}]$. Since $X$ is Hausdorff, $k$ is injective.
+Let $\hat{X}$ be the set of equivalence classes of proper Cauchy filters (which exist since the Cauchy structure is of finite depth, \ref{CauchyEquivalence}) and $k: X\to \hat{X}: x\mapsto [\pfilter{x}]$. Since $X$ is Hausdorff, $k$ is injective.
 Define
 \[ \Lambda_\mathfrak{C} \defeq \setbuilder{\lambda\in \big(\hat{X} \to \powerfilters(X)\big)}{\big(\forall p\in \hat{X}: \exists F\in p: \lambda(p) \subseteq F \in p\big) \land \big((\lambda\circ k)(x) = \pfilter{x}\big)}. \]
 
@@ -7820,12 +7836,17 @@ Let $G$ be a convergence group and $A,B\subseteq G$ subsets.
 
 (3) The set $A\cdot B = \bigcup_{b\in B} A\cdot b$ is a union of open sets (by \ref{shiftHomeomorphism}) and thus open by \ref{propertiesTopology}.
 
-(4) We need to show that $\adh(A\cdot B) \subseteq A\cdot B$. To that end, take $x\in \adh(A\cdot B)$. By \ref{differentUnionsForAdherence} there exist an ultrafilter $U\in \powerultrafilters(G)$ that converges to $x$ and contains $A\cdot B$, i.e.\ $\upset\cdot^{\imf\imf}\{A\times B\} \subseteq U$. By \ref{mappingUltrafiltersLemma}, there exists $U'\in \powerultrafilters(G)$ such that $\upset\cdot^{\imf\imf}(U') = U$ and $A\times B \in U'$. By \ref{imageFilterProperties}, $\upset \pi_2^{\imf\imf}(U')$ is an ultrafilter and it contains $B$ by construction.
-By compactness, $\upset \pi_2^{\imf\imf}(U')$ converges to some $b\in B$.
+(4) We need to show that $\adh(A\cdot B) \subseteq A\cdot B$. To that end, take $x\in \adh(A\cdot B)$. By \ref{differentUnionsForAdherence} there exist an ultrafilter $U\in \powerultrafilters(G)$ that converges to $x$ and contains $A\cdot B$, i.e.\ $\upset\cdot^{\imf\imf}\{A\times B\} \subseteq U$. By \ref{mappingUltrafiltersLemma}, there exists $U'\in \powerultrafilters(G)$ such that $\upset\cdot^{\imf\imf}(U') = U$ and $A\times B \in U'$. By \ref{imageFilterProperties}, $\upset \proj_2^{\imf\imf}(U')$ is an ultrafilter and it contains $B$ by construction.
+By compactness, $\upset \proj_2^{\imf\imf}(U')$ converges to some $b\in B$.
 
-Finally consider $U\cdot \pi_2^{\imf\imf}(U')^{-1}$, which converges to $xb^{-1}$. By \ref{filterPairingLemma}, we have
-\[ U\cdot \pi_2^{\imf\imf}(U')^{-1} = \upset\cdot^{\imf\imf}(U')\cdot \pi_2^{\imf\imf}(U')^{-1} = \upset \big((x,y)\mapsto x\cdot y \cdot y^{-1}\big)^{\imf\imf}(U') = \upset \pi_1^{\imf\imf}(U') \ni A. \]
-By \ref{principalAdherenceInherence}, this implies that $xb^{-1}\in \adh(A) = A$, so $x\in A\cdot B$.
+Now consider $U\cdot \proj_2^{\imf\imf}(U')^{-1}$, which converges to $xb^{-1}$. By \ref{filterPairingLemma}, we have
+\begin{align*}
+\upset U\cdot \proj_2^{\imf\imf}(U')^{-1} &= \upset\cdot^{\imf\imf}(U')\cdot \pi_2^{\imf\imf}(U')^{-1} \\
+&\subseteq \upset \big((x,y)\mapsto xyy^{-1}\big)^{\imf\imf}(U') \\
+&= \upset \big((x,y)\mapsto x\big)^{\imf\imf}(U') \\
+&= \upset \proj_1^{\imf\imf}(U').
+\end{align*}
+Since $A\in \upset \proj_1^{\imf\imf}(U')$, we have $xb^{-1}\in \adh(A) = A$ by \ref{principalAdherenceInherence} and thus $x\in A\cdot B$.
 \end{proof}
 
 
@@ -7961,6 +7982,29 @@ Let $\sSet{G, \cdot, 1, \norm{\cdot}}$ be a cyclically permutable seminormed gro
 Immediate from \ref{partialApplicationMetricUniformlyContinuous}.
 \end{proof}
 
+\begin{proposition}
+Let $\sSet{G,\cdot, 1}$ be a group and $\norm{\cdot}_1, \norm{\cdot}_2$ two cyclically permutable norms on $G$ with associated uniformities $\mathcal{U}_1, \mathcal{U}_2$. Then
+\begin{enumerate}
+\item $\norm{\cdot}_1 + \norm{\cdot}_2$ is a cyclically permutable norm on $G$;
+\item the associated uniformity is $\mathcal{U}_1 \cap \mathcal{U}_2$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Easily checked.
+
+(2) Set $\norm{\cdot} \defeq \norm{\cdot}_1 + \norm{\cdot}_2$, so $\norm{g} = \norm{g}_1 + \norm{g}_2$ for all $g\in G$. Let $\mathcal{U}$ be the uniformity associated with $\norm{\cdot}$.
+
+First take arbitrary $H\in \mathcal{U}_1 \cap \mathcal{U}_2$. Then $\norm{\Delta_r^{\imf\imf}(H)}_1 \to 0$ and $\norm{\Delta_r^{\imf\imf}(H)}_2 \to 0$. By \ref{filterPairingLemma}, we have
+\[ \norm{\Delta_r^{\imf\imf}(H)} \supseteq \norm{\Delta_r^{\imf\imf}(H)}_1 + \norm{\Delta_r^{\imf\imf}(H)}_2 \to 0, \]
+by continuity of the addition, so $\norm{\Delta_r^{\imf\imf}(H)} \to 0$. By \ref{imagePseudometricConvergesToZero}, this means that $H \in \mathcal{U}$.
+
+Now take arbitrary $H\in \mathcal{U} = \upset \{\mathcal{E}\} = $. We then need to show that $H \in \mathcal{U}_1 = \upset \{\mathcal{E}_1\}$ and $H \in \mathcal{U}_2 = \upset \{\mathcal{E}_2\}$. We show that $H$ is greater than the entourage filter $\mathcal{E}_1$ of the uniformity $\mathcal{U}_1$. Take arbitrary $\epsilon > 0$. Since $H\in \mathcal{U}$, there exists $A\in H$ such that $\norm{\Delta_r^\imf(A)} \subseteq V_{\norm{\cdot}\circ \Delta_r}(\epsilon)$.
+
+For all $(x,y)\in A$, we have $\norm{xy^{-1}}_1 + \norm{xy^{-1}}_2 = \norm{xy^{-1}} \leq \epsilon$, so $\norm{xy^{-1}}_1 \leq \epsilon$. This implies $A \subseteq V_{\norm{\cdot}\circ \Delta_r}(\epsilon)$, so $V_{\norm{\cdot}\circ \Delta_r}(\epsilon)\in H$. Since $\epsilon$ was taken arbitrarily, we have $\mathcal{E}_1 \subseteq H$ and $H \in \mathcal{U}_1$. Similarly $H \in \mathcal{U}_2$, so $H \in \mathcal{U}_1 \cap \mathcal{U}_2$.
+\end{proof}
+
+TODO: $L^1$ norm is continuous version of this.
+
 \begin{lemma} \label{groupUniformNorm}
 Let $\sSet{X,d}$ be a metric space and $\sSet{G,\cdot, 1,\norm{\cdot}}$ a seminormed group with cyclically permutable seminorm. Then
 \begin{enumerate}
@@ -7976,7 +8020,7 @@ We first prove the triangle inequality:
 \norm{fg}_u &= \sup_{x\in X}\norm{f(x)g(x)} \\
 &\leq \sup_{x,y\in X}\norm{f(x)g(y)} \\
 &\leq \sup_{x,y\in X}\norm{f(x)} + \norm{g(y)} \\
-&= sup_{x\in X}\norm{f(x)} + \sup_{y\in X}\norm{g(y)} \\
+&= \sup_{x\in X}\norm{f(x)} + \sup_{y\in X}\norm{g(y)} \\
 &= \norm{f}_u + \norm{g}_u.
 \end{align*}
 Inversion follows from inversion at every point:
