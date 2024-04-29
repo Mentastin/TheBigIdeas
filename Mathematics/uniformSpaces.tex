@@ -2095,6 +2095,7 @@ Let $\sSet{X,d}$ be a pseudometric space and $x\in X$. Then
 \begin{enumerate}
 \item the pseudometric convergence is topological;
 \item $\neighbourhood_d(x) = \upset\setbuilder{\cball_d(x,\epsilon)}{\epsilon >0} = \upset\setbuilder{\ball_d(x,\epsilon)}{\epsilon >0}$;
+\item $\neighbourhood_d(x) = \upset\setbuilder{\cball_d(x,n^{-1})}{n\in \N} = \upset\setbuilder{\ball_d(x,n^{-1})}{n\in \N}$;
 \item open balls are open sets and form a basis of the topology;
 \item closed balls are closed sets.
 \end{enumerate}
@@ -2106,13 +2107,15 @@ Let $\sSet{X,d}$ be a pseudometric space and $x\in X$. Then
 
 For the second equality, it is clear that $\upset\setbuilder{\cball_d(x,\epsilon)}{\epsilon >0} \subseteq \upset\setbuilder{\ball_d(x,\epsilon)}{\epsilon >0}$. For the other inclusion, take arbitrary $\epsilon$. Then $\cball_d(x,\epsilon/2)\subseteq \ball_d(x,\epsilon)$.
 
-(3) First we show that an open ball $\ball_d(x,\epsilon)$ is an open set, by \ref{openClosedCriteria}. Take $y\in \ball_d(x,\epsilon)$. Then $d(x,y)<\epsilon$, so $\delta \defeq \epsilon - d(x,y) \geq 0$. Now we claim that $\ball_d(y,\delta)\subseteq \ball_d(x,\epsilon)$. Indeed, take $z\in \ball_d(y,\delta)$, so $d(y,z)<\delta$. Then we have
+(3) For all $\epsilon > 0$, we have $\ball_d(x,\ceil{\epsilon^{-1}}^{-1}) \subseteq \ball_d(x,\epsilon)$ and $\cball_d(x,\ceil{\epsilon^{-1}}^{-1}) \subseteq \ball_d(x,\epsilon)$.
+
+(4) First we show that an open ball $\ball_d(x,\epsilon)$ is an open set, by \ref{openClosedCriteria}. Take $y\in \ball_d(x,\epsilon)$. Then $d(x,y)<\epsilon$, so $\delta \defeq \epsilon - d(x,y) \geq 0$. Now we claim that $\ball_d(y,\delta)\subseteq \ball_d(x,\epsilon)$. Indeed, take $z\in \ball_d(y,\delta)$, so $d(y,z)<\delta$. Then we have
 \[ d(x,z) \leq d(x,y) + d(y,z) < d(x,y) + \delta \leq d(x,y) + \epsilon - d(x,y) = \epsilon, \]
 which implies that $z\in \ball_d(x,\epsilon)$.
 
 To see that the open balls form a basis of the topology, it is enough to observe that every open set is a neighbourhood of all its points and use the form of the neighbourhood filter in (2) to observe that every open set contains an open ball.
 
-(4) We show that a closed ball $\cball_d(x,\epsilon)$ is an open set, by \ref{openClosedCriteria}. Suppose $y\in X$ is such that $\cball_d(x,\epsilon) \in \neighbourhood_d(y)^\mesh$. Then, by (2), for all $\delta >0$, we have
+(5) We show that a closed ball $\cball_d(x,\epsilon)$ is an open set, by \ref{openClosedCriteria}. Suppose $y\in X$ is such that $\cball_d(x,\epsilon) \in \neighbourhood_d(y)^\mesh$. Then, by (2), for all $\delta >0$, we have
 \[ \exists z \in \cball_d(x,\epsilon) \cap \cball_d(y,\delta). \]
 Then $d(x,y) \leq d(x,z) + d(z,y) \leq \epsilon + \delta$. Since this holds for all $\delta > 0$, we can take $\delta \to 0$ and we get $d(x,y) \leq \epsilon$. This means that $y\in \cball_d(x,\epsilon)$.
 \end{proof}
@@ -2121,11 +2124,72 @@ Let $\sSet{X,d}$ be a pseudometric space and $\seq{x_n}$ a sequence in $X$. Then
 \[ \forall \epsilon>0: \exists N\in\N: \forall n\geq N: \quad d(x_n,x)\leq \epsilon. \]
 \end{corollary}
 \begin{corollary} \label{pseudometricSpaceFrechetUrysohn}
-Every pseudometrisable uniform space is Fréchet-Urysohn.
+Let $\sSet{X,\xi}$ be a pseudometrisable convergence space. Then $X$ is
+\begin{enumerate}
+\item $C_1$;
+\item Fréchet-Urysohn.
+\end{enumerate}
 \end{corollary}
 In particular, every pseudometrisable uniform space is sequential.
 \begin{proof}
-We have $\neighbourhood_d(x) = \upset\setbuilder{\cball_d(x,n^{-1})}{n\in \N}$, so the result follows from \ref{C1ImpliesFrechetUrysohn}.
+(1) Since $\neighbourhood_d(x) = \upset\setbuilder{\cball_d(x,n^{-1})}{n\in \N}$, by \ref{metricConvergenceNeighbourhood}, every neighbourhood filter has a countable base.
+
+(2) This follows from (1) and \ref{C1ImpliesFrechetUrysohn}.
+\end{proof}
+
+\begin{lemma} \label{closureLemmaMetricSpace}
+Let $\sSet{X,d}$ be a metric space, $A\subseteq X$ and $x\in X$. Then $x\in \adh(A)$ \textup{if and only if}
+\[ \forall \epsilon >0: \exists y\in A: \quad d(x,y) \leq \epsilon. \]
+\end{lemma}
+\begin{proof}
+We have, by \ref{principalAdherenceInherence},
+\begin{align*}
+x\in \adh(A) &\iff A\in \vicinity(x)^\mesh \\
+&\iff \forall \epsilon > 0: \; A\mesh \cball_d(x,\epsilon) \\
+&\iff \forall \epsilon > 0: \exists y\in A \; y\in \cball_d(x,\epsilon) \\
+&\iff \forall \epsilon > 0: \exists y\in A \; d(x,y) \leq \epsilon.
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Let $\sSet{X,\xi}$ be a pseudometrisable convergence space. Then the following are equivalent:
+\begin{enumerate}
+\item $X$ is $C_2$;
+\item $X$ is separable;
+\item $X$ is Lindelöf.
+\end{enumerate}
+\end{proposition}
+This requires countable choice.
+\begin{proof}
+Let $d$ be a metric such that $\xi$ is the metric convergence determined by $d$.
+
+For all convergence spaces we have that $C_2$ implies separability and Lindelöf, by \ref{C2properties}.
+
+$(2) \Rightarrow (1)$ Let $D\subseteq X$ be a countable dense subset. The set $\mathcal{B} \defeq \setbuilder{\cball_d(x, n^{-1})}{x\in D, n\in \N}$ is countable. We aim to show that it is a base of the convergence on $X$.
+
+Since the closed balls form a base of the convergence $X$, it is enough to show that, for every closed ball $\cball_d(x,\epsilon)$, there exists $B\in \mathcal{B}$ such that $B\subseteq \cball_d(x,\epsilon)$ and $B \in \neighbourhood(x)$. WLOG we may fix $\epsilon \leq 1/3$.
+
+Since $x \in X = \adh(D)$, we can find $y\in D$ such that $d(x,y) \leq \epsilon / 4$ by \ref{closureLemmaMetricSpace}. Take $B = \cball_d(y, \ceil{(3\epsilon / 4)^{-1}}^{-1})$. To see that $B\subseteq \cball_d(x,\epsilon)$, take arbitrary $z\in B$. Then
+\[ d(x,z) \leq d(x,y)+ d(y,z) \leq \epsilon /4 + \ceil{(3\epsilon / 4)^{-1}}^{-1} \leq \epsilon, \]
+so $z\in \cball_d(x,\epsilon)$.
+
+To see that $B\in \neighbourhood(x)$, it is enough to show that $\cball(x, \epsilon / 4) \subseteq B$. First note that $\ceil{(3\epsilon / 4)^{-1}} - (3\epsilon / 4)^{-1} \leq 1$, so
+\begin{align*}
+\ceil{(3\epsilon / 4)^{-1}}^{-1} &\geq \big(1 + (3\epsilon / 4)^{-1}\big)^{-1} \\
+&= \frac{3\epsilon}{4+3\epsilon} \\
+&\geq \frac{3\epsilon}{4+1} \geq \epsilon / 2,
+\end{align*}
+where we have used the assumption that $\epsilon \leq 1/3$.
+Now take $z'\in \cball(x, \epsilon / 4)$. Then
+\[ d(y,z') \leq d(y,x) + d(x, z') \leq \epsilon / 4 + \epsilon / 4 = \epsilon / 2 \leq \ceil{(3\epsilon / 4)^{-1}}^{-1}. \]
+Thus $z'\in \cball_d(y, \ceil{(3\epsilon / 4)^{-1}}^{-1}) = B$.
+
+
+$(3) \Rightarrow (1)$ For each $n\in \N$, define the open cover $\mathcal{C}_n \defeq \setbuilder{\ball_d(x, n^{-1})}{x\in X}$. Since $X$ is Lindelöf, each $\mathcal{C}_n$ has a countable subcover $\mathcal{C}'_n$. Take the union $\mathcal{C} \defeq \bigcup_{n\in \N}\mathcal{C}_n$. This is countable and we claim that it is a base of the convergence.
+
+Indeed, take $x\in X$ and $\ball(x,\epsilon) \in \neighbourhood(x)$. Then there exists $B = \ball_d(y, \ceil{(\epsilon/2)^{-1}}^{-1})\in \mathcal{C}'_{\ceil{(\epsilon/2)^{-1}}}$ such that $x\in B$. Since $x\in B$ and $B$ is open, we have $B\in \neighbourhood(x)$. We also have $B\subseteq \ball(x,\epsilon)$. Indeed, take $z\in B$. Then
+\[ d(x,z) \leq d(x,y) + d(y,z) < \ceil{(\epsilon/2)^{-1}}^{-1} + \ceil{(\epsilon/2)^{-1}}^{-1} \leq \epsilon, \]
+so $z\in \ball(x,\epsilon)$.
 \end{proof}
 
 \begin{lemma} \label{continuityMetricSpaces}

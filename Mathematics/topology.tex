@@ -835,6 +835,11 @@ If $A^c$ contains a non-empty open set, then $A$ is not dense,
 If $A$ is dense, then $\adh(A) = \inh(A^c)^c = X$, so $\inh(A^c) = \emptyset$. If $A^c$ contains an open set $B$, then $\inh(A^c) \supseteq \inh(B) = B$. This means that $\inh(A^c) \neq \emptyset$ and thus that $A$ is not dense.
 \end{proof}
 
+\subsubsection{Separability}
+\begin{definition}
+Let $\sSet{X, \xi}$ be a convergence space. Then $X$ is called \udef{separable} if $X$ contains a countable dense subset.
+\end{definition}
+
 \subsubsection{Strict density}
 \begin{definition}
 Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$ a subset. Then $A$ is called \udef{strictly dense} in $X$ if for all $F\to x\in X$, there exists $G\in \powerfilters(X)$ such that
@@ -868,23 +873,6 @@ Let $\sSet{X,\xi}$ be a pretopological convergence space, $F\in\powerfilters(X)$
 \begin{proof}
 By \ref{joinProperFilter}, we have that $F\cup \vicinity_\xi(x)$ is a proper filter. We can take this filter to be $G$.
 \end{proof}
-
-\subsection{Cover}
-\begin{definition}
-Let $X$ be a set, $\xi$ a convergence on $X$, $A\subseteq X$ and $\mathcal{A}\subseteq \powerset(X)$.
-We say $\mathcal{A}$ is an \udef{$\xi$-cover} (or simply \udef{cover}) of $A$ if every filter converging to a point in $A$ contains an element of $\mathcal{A}$. We write $\mathcal{A} \succ_\xi A$.
-\end{definition}
-So we have
-\[ \mathcal{A} \succ_\xi A \;\iff\; \forall F\in \powerfilters(X): \Big( \lim_\xi F \amesh A \implies F \mesh \mathcal{A} \Big). \]
-
-\begin{proposition}
-Let $X$ be a set, $\xi$ a convergence on $X$, $A\subseteq X$ and $\mathcal{A}\subseteq \powerset(X)$. Then
-\[ \mathcal{A} \succ_\xi A \quad\iff\quad \adh_\xi [\mathcal{A}]^c \perp A \]
-\end{proposition}
-
-
-TODO: move to compactness + inherence $\inh(\mathcal{A})$ largest set for which $\mathcal{A}$ is a cover.
-
 
 \section{Base, pavement and cover}
 \subsection{Pavement}
@@ -959,6 +947,53 @@ Take the effective portion $\mathcal{X}'$ of $\mathcal{X}$. Because the effectiv
 The set $\mathcal{Z} \defeq \setbuilder{X_Y}{Y\in \mathcal{Y}'} \subseteq \mathcal{X}$ has cardinality smaller than $\mathcal{Y}'$, which has cardinality smaller than $\mathcal{Y}$.
 \end{proof}
 
+\subsection{Covers}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{C}\subseteq \powerset(X)$ a family of sets. We call $\mathcal{C}$ 
+\begin{itemize}
+\item a \udef{convergence cover} if $\mathcal{C}\mesh F$ for each convergent filter $F\in\powerfilters(X)$;
+\item a \udef{local convergence cover} at $x\in X$ if $\mathcal{C}\mesh F$ for each filter $F\in\powerfilters(X)$ that converges to $x$;
+\item a \udef{cover of vicinities} if $\mathcal{C}\mesh \vicinity_\xi(x)$ for all $x\in X$;
+\item a \udef{cover of neighbourhoods} if $\mathcal{C}\mesh \neighbourhood_\xi(x)$ for all $x\in X$;
+\item an \udef{open cover} if $\mathcal{C} \subseteq \topology_\xi$ and $\bigcup \mathcal{C} = X$;
+\item a \udef{cover} of $X$ if $\bigcup \mathcal{C} = X$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then
+\begin{enumerate}
+\item the set of local convergence covers at $x$ is given by $\setbuilder{F}{F\overset{\xi}{\longrightarrow} x}^\mesh$;
+\item the set of convergence covers is given by $\setbuilder{F}{\exists y\in X: F\overset{\xi}{\longrightarrow} y}^\mesh$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space.
+\begin{enumerate}
+\item Every cover of vicinities is a convergence cover.
+\item If $\xi$ is pretopological, then every convergence cover is a cover of vicinities.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{C}\subseteq \powerset(X)$ a family of sets. Then $\mathcal{C}$ is a cover of neighbourhoods \textup{if and only if} $\interior^\imf[\mathcal{C}]$ is an open cover.
+\end{lemma}
+\begin{proof}
+First assume $\mathcal{C}$ is a cover of neighbourhoods. Clearly $\mathcal{C} \subseteq \topology_\xi$. For all $x\in X$ there exists $A\in \mathcal{C}$ such that $A\in \neighbourhood(x)$ and thus $\interior(A) \in \neighbourhood(x)$ by \ref{interiorModificationNeighbourhoods}. This means that $x\in \interior(A)$ and thus $X\subseteq \bigcup\interior^\imf[\mathcal{C}]$.
+
+Next assume $\interior^\imf[\mathcal{C}]$ is an open cover. Then for all $x\in X$ there exists $A\in \mathcal{C}$ such that $x\in \interior(A)$, which implies $A\in \neighbourhood(x)$ by \ref{interiorClosureMembership}.
+\end{proof}
+
+\subsubsection{Lindelöf spaces}
+\begin{definition}
+A convergence space $\sSet{X, \xi}$ is called \udef{Lindelöf} if every convergence cover of $X$ has a countable subcover.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{X, \xi}$ be a topological space. Then $X$ is Lindelöf \textup{if and only if} every open cover of $X$ has a countable subcover.
+\end{lemma}
+
 \subsection{Countability properties}
 \subsubsection{$C1$ or first countable}
 \begin{definition}
@@ -999,6 +1034,24 @@ Let $\sSet{X,\xi}$ be a $C_2$ and $T_1$ topological convergence space. Then ever
 (2) We can write $A^c$ as a countable intersection of open sets by (1). Taking the complement yields the result.
 \end{proof}
 
+\begin{proposition} \label{C2properties}
+Let $\sSet{X,\xi}$ be a convergence space. If $X$ is $C_2$, then
+\begin{enumerate}
+\item $X$ is separable;
+\item $X$ is Lindelöf.
+\end{enumerate}
+\end{proposition}
+This makes use of countable choice.
+\begin{proof}
+(1) Let $\seq{B_n}_{n\in \N}$ be a countable base of $X$. For each $n\in \N$, chose some $x_n\in B_n$. Clearly the set $A \defeq \setbuilder{x_n\in X}{n\in \N}$ is countable. We claim it is dense.
+
+Take arbitrary $x\in X$. Since $\seq{B_n}_{n\in \N}$ is a base, there exists a filter $G \subseteq \pfilter{x}$ such that $G$ is based in $\seq{B_n}_{n\in \N}$ and $G\to x$. For any $C\in G$, there exists $B_k$ such that $B_k \subseteq C$ and thus $x_k \in A \cap C$.
+This means that $A\in G^\mesh$ and so $x\in \adh(A)$ by \ref{principalAdherenceInherence}.
+
+(2) Let $\seq{B_n}_{n\in \N}$ be a countable base of $X$. Let $\mathcal{C}$ be a convergence cover of $X$. For each $B_n$ such that there exists $C\in \mathcal{C}$ such that $B_n \subseteq C$, pick one such $C$. Let $\mathcal{C}'$ be the set of all these $C$s. It is clearly a countable subset of $\mathcal{C}$. We need to show that it is a convergence cover.
+
+Let $F$ be a convergent filter. Let $G\subseteq F$ be based in $\seq{B_n}$. Since $\mathcal{C}$ is a convergence cover, there exists $C\in G\cap \mathcal{C}$. Since $G$ is based in $\seq{B_n}$, there exists $B_k\in G$ such that $B_k \subseteq C$. By construction there exists some $C'\in \mathcal{C}'$ such that $B_k \subseteq C'$. Then $C'\in G \subseteq F$ by upwards closure.
+\end{proof}
 
 \begin{proposition} \label{countableRegularityImpliesNormality}
 Let $\sSet{X,\xi}$ be a topological space. If $\xi$ is regular and second countable, then $\xi$ is normal.
@@ -1008,43 +1061,6 @@ TOOD eg \url{https://www.math.auckland.ac.nz/~gauld/750-05/section3.pdf}
 \end{proof}
 
 
-\subsection{Covers}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{C}\subseteq \powerset(X)$ a family of sets. We call $\mathcal{C}$ 
-\begin{itemize}
-\item a \udef{convergence cover} if $\mathcal{C}\mesh F$ for each convergent filter $F\in\powerfilters(X)$;
-\item a \udef{local convergence cover} at $x\in X$ if $\mathcal{C}\mesh F$ for each filter $F\in\powerfilters(X)$ that converges to $x$;
-\item a \udef{cover of vicinities} if $\mathcal{C}\mesh \vicinity_\xi(x)$ for all $x\in X$;
-\item a \udef{cover of neighbourhoods} if $\mathcal{C}\mesh \neighbourhood_\xi(x)$ for all $x\in X$;
-\item an \udef{open cover} if $\mathcal{C} \subseteq \topology_\xi$ and $\bigcup \mathcal{C} = X$;
-\item a \udef{cover} of $X$ if $\bigcup \mathcal{C} = X$.
-\end{itemize}
-\end{definition}
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then
-\begin{enumerate}
-\item the set of local convergence covers at $x$ is given by $\setbuilder{F}{F\overset{\xi}{\longrightarrow} x}^\mesh$;
-\item the set of convergence covers is given by $\setbuilder{F}{\exists y\in X: F\overset{\xi}{\longrightarrow} y}^\mesh$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space.
-\begin{enumerate}
-\item Every cover of vicinities is a convergence cover.
-\item If $\xi$ is pretopological, then every convergence cover is a cover of vicinities.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space and $\mathcal{C}\subseteq \powerset(X)$ a family of sets. Then $\mathcal{C}$ is a cover of neighbourhoods \textup{if and only if} $\interior^\imf[\mathcal{C}]$ is an open cover.
-\end{lemma}
-\begin{proof}
-First assume $\mathcal{C}$ is a cover of neighbourhoods. Clearly $\mathcal{C} \subseteq \topology_\xi$. For all $x\in X$ there exists $A\in \mathcal{C}$ such that $A\in \neighbourhood(x)$ and thus $\interior(A) \in \neighbourhood(x)$ by \ref{interiorModificationNeighbourhoods}. This means that $x\in \interior(A)$ and thus $X\subseteq \bigcup\interior^\imf[\mathcal{C}]$.
-
-Next assume $\interior^\imf[\mathcal{C}]$ is an open cover. Then for all $x\in X$ there exists $A\in \mathcal{C}$ such that $x\in \interior(A)$, which implies $A\in \neighbourhood(x)$ by \ref{interiorClosureMembership}.
-\end{proof}
 
 
 
@@ -5209,6 +5225,14 @@ Let $\sSet{X,\xi}$ be a pretopological convergence space. Then the following are
 $(1) \Leftrightarrow (2)$ We have $F\in {\lim_\xi}^{-1}(x)\cap {\lim_\xi}^{-1}(y)$ iff $F\in \upset \{\vicinity(x)\} \cap \upset \{\vicinity(y)\}$ iff $F \supseteq \vicinity(x)\vee \vicinity(y)$. We can find such a proper filter $F$ iff $\vicinity(x) \amesh \vicinity(y)$, by \ref{joinProperFilter}.
 
 $(2) \Leftrightarrow (3)$ Immediate.
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,\xi}$ be a pretopological Hausdorff convergence space and $x\in X$. Then $\vicinity(x)$ contains a finite set \textup{if and only if} $\vicinity(x) = \pfilter{x}$.
+\end{corollary}
+\begin{proof}
+The direction $\Leftarrow$ is immediate.
+
+Now assume $\vicinity(x)$ contains a finite set $A$. For all $y\in A\setminus \{x\}$, we can find $A_y\in \vicinity(x)$ such that $y\notin A_y$, by the proposition. Since $A$ is finite, we have $\{x\} = A\cap \bigcap_{y\in A}A_y \in \vicinity(x)$.
 \end{proof}
 
 \begin{proposition}
