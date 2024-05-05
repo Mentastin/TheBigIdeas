@@ -888,9 +888,11 @@ Follows immediately from \ref{energyFormHermitianSymmetric}.
 
 On a real inner product space there may exist positive operators that are not symmetric.
 \begin{example}
-Let $V= \R^2$ and $T: \R^2 \to\R^2: (x,y)\mapsto (y,-x)$. Then
+Let $V= \R^2$ and $T: \R^2 \to\R^2: (x,y)\mapsto (y,-x)$, so $T$ has matrix representation $\begin{pmatrix}
+0 & 1 \\ -1 & 0
+\end{pmatrix}$. Then
 \[ \forall (x,y)\in V: \quad Q_T\big((x,y)\big) = \inner{(x,y), (y,-x)} = xy -xy = 0 \geq 0, \]
-so $T$ is positive. But $T$ is not symmetric. Indeed $\inner{(0,y), T(x,0)} = -xy$ and $\inner{T(0,y), (x, 0)} = xy$.
+so $T$ is positive, but $T$ is clearly not symmetric.
 \end{example}
 
 \begin{lemma}
@@ -4362,7 +4364,7 @@ By the $C^*$-identity $\norm{x} = \sqrt{\norm{x^*x}}$ and $x^*x$ is normal, so w
 \end{proof}
 It is important to note that the spectral radius is a purely algebraic property and is independent of the norm.
 
-\begin{lemma}
+\begin{lemma} \label{C*normSupNorm}
 Let $A$ be a $C^*$-algebra and $a\in A$. Then $\norm{a} = \sup_{\norm{x}\leq 1}\norm{ax}$.
 \end{lemma}
 \begin{proof}
@@ -4696,6 +4698,8 @@ Let $A$ be a unital $C^*$-algebra and $x\in A$ a normal element. There exists a 
 This $*$-homomorphism is isometric.
 \end{theorem}
 We will usually write $f(x)$ to mean $\Phi_x(f)$. Note that $\Phi_x$ is continuous by \ref{isometryLemma}.
+
+The result can be reformulated as saying that there exists a unique \emph{unital} $*$-homomorphism $\Phi_x: \cont(\spec(x))\to A$ such that $\Phi_x(\id_{\spec(x)}) = x$.
 \begin{proof}
 For uniqueness, note that $\cont(\spec(x)) = C^*(\id_{\spec(x)}, \constant{1}_{\spec(x)})$ by the Weierstrass approximation theorem \ref{WeierstrassApproximation}. Thus any $*$-homomorphism defined on $\cont(\spec(x))$ is completely determined by its value at $\id_{\spec(x)}$ and $\constant{1}_{\spec(x)}$.
 
@@ -4726,57 +4730,118 @@ In fact we can apply functional calculus to any continuous defined on a superset
 \begin{proposition} \label{compositionPropertiesCFC}
 Let $A$ be a unital $C^*$-algebra and $x\in A$ be a normal element with functional calculus $\Phi_x$. Then
 \begin{enumerate}
-\item if $B$ is a unital $C^*$-algebra and $\Psi: A\to B$ a unital $*$-homomorphism, then $\Psi\circ\Phi_x = \Phi_{\Psi(x)}$;
+\item if $B$ is a unital $C^*$-algebra and $\Psi: A\to B$ a unital $*$-homomorphism, then $\Psi\circ\Phi_x = \Phi_{\Psi(x)}|_{\cont(\spec(x))}$;
 \item if $f\in\cont(\spec(x))$ and $g\in\cont\big(f^{\imf}(\spec(x))\big)$, then $\Phi_x(g\circ f) = \Phi_{\Phi_x(f)}(g)$.
 \end{enumerate}
 \end{proposition}
 The first point means that $\Psi(f(x)) = f(\Psi(x))$ for all $f\in \cont(\spec(x))$. The second that $(g\circ f)(x) = g\big(f(x)\big)$.
 \begin{proof}
-(1) The claim is well-defined because $\spec(\Psi(x))\subseteq \spec(x)$, by \ref{spectrumOfImage}. It is easy to check both sides are unital $*$-homomorphisms from $\cont(\spec(x))$ to $B$, sending the identity function to $\Psi(x)$. The claim then follows from uniqueness of the functional calculus \ref{continuousFunctionalCalculus}.
+(1) The claim is well-defined because $\spec(\Psi(x))\subseteq \spec(x)$, by \ref{spectrumOfImage}. It is easy to check, by \ref{continuousFunctionalCalculus}, that both sides are unital $*$-homomorphisms from $\cont(\spec(x))$ to $B$, sending the identity function to $\Psi(x)$, meaning they assign the same value to $\id_{\spec(x)}$ and $\constant{1}_{\spec(x)}$. Since $\cont(\spec(x)) = C^*(\id_{\spec(x)}, \constant{1}_{\spec(x)})$ by the Weierstrass approximation theorem \ref{WeierstrassApproximation}, this uniquely defines the $*$-homomorphism.
 
 (2) We need to prove $\Phi_x\circ f^\star = \Phi_{\Phi_x(f)}$. We calculate
-\[ (\Phi_x\circ f^\star)(\id_{f^\imf(\spec(x))}) = \Phi_x(\id_{f^\imf(\spec(x))}\circ f) = \Phi_x(f) \qquad\text{and}\qquad (\Phi_x\circ f^\star)(\constant{1}_{f^\imf(\spec(x))}) = \Phi_x(\constant{1}_{f^\imf(\spec(x))}\circ f) = \Phi_x(\constant{1}_{\spec(x)}) = \vec{1}, \]
+\[ (\Phi_x\circ f^\star)(\id_{f^\imf(\spec(x))}) = \Phi_x(\id_{f^\imf(\spec(x))}\circ f) = \Phi_x(f) \]
+and
+\[ (\Phi_x\circ f^\star)(\constant{1}_{f^\imf(\spec(x))}) = \Phi_x(\constant{1}_{f^\imf(\spec(x))}\circ f) = \Phi_x(\constant{1}_{\spec(x)}) = \vec{1}, \]
 so the equality holds by uniqueness of the continuous functional calculus \ref{continuousFunctionalCalculus}.
 \end{proof}
 
+\begin{lemma} \label{unitisationNonUnitalFunctionalC*algebra}
+Let $X$ be a compact Hausdorff space and $x_0\in X$. Then
+\[ \Psi: \cont(X) \to \setbuilder{f \in \cont(X)}{f(x_0) = 0}^\dagger: f \mapsto \big(f - \constant{f(x_0)}, f(x_0)\big). \]
+is a unital $*$-isomorphism. If $X$ is ..., then $\Psi$ is isometric.
+\end{lemma}
+TODO: when isometric?? Regularity???
+
+\begin{proof}
+Linearity is easily checked, as is bijectivity.
+For multiplicativity, take $f,g \in \cont(X)$. Then
+\begin{align*}
+\Psi(f\cdot g) &= \big((f\cdot g) - \constant{(f\cdot g)(x_0)}, (f\cdot g)(x_0)\big) \\
+&= \big(f\cdot g - \constant{f(x_0)}\cdot\constant{g(x_0)} - f\cdot\constant{g(x_0)} - g\cdot\constant{f(x_0)} + f\cdot\constant{g(x_0)} + g\cdot\constant{f(x_0)}, (f\cdot g)(x_0)\big) \\
+&= \big((f - \constant{f(x_0)})(g - \constant{g(x_0)})  + g(x_0)f + f(x_0)g, f(x_0)\cdot g(x_0)\big) \\
+&= \big(f - \constant{f(x_0)}, f(x_0)\big)\big(g - \constant{g(x_0)}, g(x_0)\big) \\
+&= \Psi(f)\cdot\Psi(g).
+\end{align*}
+
+
+Finaly we prove that $\Psi$ is isometric. For all $f\in \cont(X)$, we have
+\begin{align*}
+\norm{\Psi(f)} = \norm{\big(f - \constant{f(x_0)}, f(x_0)\big)} &= \sup_{\substack{g \in \cont(X) \\ g(x_0) = 0 \\ \norm{g} \leq 1}}\norm{f\cdot g - \constant{f(x_0)}g + f(x_0)g} \\
+&= \sup_{\substack{g \in \cont(X) \\ g(x_0) = 0 \\ \norm{g} \leq 1}}\norm{f\cdot g} \leq \sup_{\substack{g \in \cont(X) \\ g(x_0) = 0 \\ \norm{g} \leq 1}}\norm{f}\,\norm{g} = \norm{f}.
+\end{align*}
+We need to prove the other inequality.
+We have that $|f(x)|$ attains a maximum at $x_1 \in X$ by
+If $x_1 \neq x_0$, then we have 
+
+
+\ref{C*normSupNorm}
+\end{proof}
 
 \begin{theorem}[Continuous functional calculus for non-unital $C^*$-algebras] \label{nonUnitalContinuousFunctionalCalculus}
-Let $A$ be a $C^*$-algebra and $x\in A$ a normal element. There exists a unique $*$-homomorphism
-\[ \Phi'_x: \setbuilder{f\in \cont\big(\spec(x)\big)}{f(0) = 0} \to A \qquad \text{such that $\Phi'_x(\id_{\spec(x)}) = x$.} \]
-Also $\Phi'_x$ is isometric.
-\end{theorem}
-\begin{proof}
-We first show existence. By \ref{continuousFunctionalCalculus}, there exists a isometric $*$-homomorphism $\Phi_x: \cont\big(\spec(x)\big)\to A^\dagger$ that maps $\id_{\spec(x)}$ to $x$. We can then take $\Phi'_x = \proj_1\circ \Phi_x|_{\setbuilder{f\in \cont\big(\spec(x)\big)}{f(0) = 0}}$. By \ref{unitalProjectionsAlgebraHomomorphisms} this is an isometric algebra homomorphism if $\proj_2\big(\Phi_x(f)\big) = 0$ for all $f\in \cont\big(\spec(x)\big)$ such that $f(0) = 0$. Indeed, by \ref{compositionPropertiesCFC} (and the fact that $\proj_2$ is unital \ref{unitalProjectionsAlgebraHomomorphisms}), 
-\[ \proj_2\big(\Phi_x(f)\big) = \Phi_{\proj_2(x)}(f) = \Phi_{0}(f) = f(0) = 0. \]
-For uniqueness, note that the unitisation $(\Phi'_x)^\dagger = \cont\big(\spec(x)\big)\to A^\dagger$ is a continuous functional calculus for $A^\dagger$ and thus unique by \ref{continuousFunctionalCalculus}. This means that the restriction is also unique.
-\end{proof}
-
-
-\begin{proposition} \label{compositionPropertiesCFC}
-Let $A$ be a unital $C^*$-algebra and $x\in A$ be a normal element with functional calculus $\Phi_x$. Then
+Let $A$ be a non-unital $C^*$-algebra and $x\in A$ a normal element. There exists a unique $*$-homomorphism
+\[ \Phi'_x: \setbuilder{f\in \cont\big(\spec(x)\big)}{f(0) = 0} \to A \qquad \text{such that} \qquad \Phi'_x(\id_{\spec(x)}) = x. \]
+This $\Phi'_x$ is given by
+\[ \Phi'_x \defeq \proj_1\circ \Phi_{\iota(x)}|_{\setbuilder{f\in \cont(\spec(x))}{f(0) = 0}}, \]
+where $\iota: A\to \widetilde{A}$ is the canonical embedding and $\Phi_{\iota(x)}$ is the continuous functional calculus of $\iota(x)\in A^\dagger$. In particular
 \begin{enumerate}
-\item if $B$ is a unital $C^*$-algebra and $\Psi: A\to B$ a unital $*$-homomorphism, then $\Psi\circ\Phi_x = \Phi_{\Psi(x)}$;
-\item if $f\in\cont(\spec(x))$ and $g\in\cont\big(f^{\imf}(\spec(x))\big)$, then $\Phi_x(g\circ f) = \Phi_{\Phi_x(f)}(g)$.
+\item $\Phi'_x$ is isometric;
+\item $\iota\big(\Phi'_x(f)\big) = \Phi_{\iota(x)}(f)$ for all $f\in \cont\big(\spec(x)\big)$ such that $f(0) = 0$.
 \end{enumerate}
-\end{proposition}
-The first point means that $\Psi(f(x)) = f(\Psi(x))$ for all $f\in \cont(\spec(x))$. The second that $(g\circ f)(x) = g\big(f(x)\big)$.
-\begin{proof}
-(1) The claim is well-defined because $\spec(\Psi(x))\subseteq \spec(x)$, by \ref{spectrumOfImage}. It is easy to check both sides are unital $*$-homomorphisms from $\cont(\spec(x))$ to $B$, sending the identity function to $\Psi(x)$. The claim then follows from uniqueness of the functional calculus \ref{continuousFunctionalCalculus}.
+\end{theorem}
+Note that the requirement $f(0) = 0$ is well-defined, since $0\in \spec(x)$ by \ref{zeroSpectrumNonunitalAlgebra}.
 
-(2) We need to prove $\Phi_x\circ f^\star = \Phi_{\Phi_x(f)}$. We calculate
-\[ (\Phi_x\circ f^\star)(\id_{f^\imf(\spec(x))}) = \Phi_x(\id_{f^\imf(\spec(x))}\circ f) = \Phi_x(f) \qquad\text{and}\qquad (\Phi_x\circ f^\star)(\constant{1}_{f^\imf(\spec(x))}) = \Phi_x(\constant{1}_{f^\imf(\spec(x))}\circ f) = \Phi_x(\constant{1}_{\spec(x)}) = \vec{1}, \]
-so the equality holds by uniqueness of the continuous functional calculus \ref{continuousFunctionalCalculus}.
+Point (2) means that $\iota(f(x)) = f(\iota(x))$.
+\begin{proof}
+For existence, we just need to verify that the proposed solution works. By \ref{continuousFunctionalCalculus}, $\Phi_{\iota(x)}: \cont\big(\spec(x)\big)\to A^\dagger$ is an isometric $*$-homomorphism that maps $\id_{\spec(x)}$ to $\iota(x)$. By \ref{unitalProjectionsAlgebraHomomorphisms} $\Phi'_x$ is an isometric algebra homomorphism if $\proj_2\big(\Phi_x(f)\big) = 0$ for all $f\in \cont\big(\spec(x)\big)$ such that $f(0) = 0$.
+
+To prove this, take arbitrary $f\in \cont\big(\spec(x)\big)$ such that $f(0) = 0$. By \ref{compositionPropertiesCFC} (and the fact that $\proj_2$ is unital \ref{unitalProjectionsAlgebraHomomorphisms}), we have
+\[ \proj_2\big(\Phi_{\iota(x)}(f)\big) = \Phi_{\proj_2(\iota(x))}(f) = \Phi_{0}(f) = f(0) = 0. \]
+For the second point, we use this result to write
+\[ \Phi_{\iota(x)}(f) = \big((\proj_1\circ \Phi_{\iota(x)})(f), (\proj_2\circ \Phi_{\iota(x)})(f)\big) = \big((\proj_1\circ \Phi_{\iota(x)})(f), 0\big) = \iota\big((\proj_1\circ \Phi_{\iota(x)})(f)\big). \]
+
+For uniqueness, suppose $\Phi''_x$ is some other such $*$-homomorphism. Then the unitisation $(\Phi''_x)^\dagger$ is a unital $*$-homomorphism that maps $\id_{\spec(x)}$ to $x$, by \ref{unitalExtensionLinearFunction}. 
+
+
+
+
+
+
+
+It is equal to $\Phi_{\iota(x)}$ by \ref{continuousFunctionalCalculus}. This implies
+\[ \Phi''_x = \proj_1 \circ (\Phi''_x)^\dagger = \proj_1 \circ (\Phi''_x)^\dagger \]
+
+
+
+
+
+
+note that the unitisation $(\Phi'_x)^\dagger = \cont\big(\spec(x)\big)\to A^\dagger$ is a continuous functional calculus for $A^\dagger$ and thus unique by \ref{continuousFunctionalCalculus}. This means that the restriction is also unique.
+
+TODO: rework, using \ref{unitisationNonUnitalFunctionalC*algebra}
 \end{proof}
 
 \begin{proposition}[Spectral mapping] \label{spectralMappingCFC}
-Let $A$ be a unital $C^*$-algebra and $x\in A$ be a normal element and $f\in\mathcal{C}(\sigma(x))$. Then
-\[ \sigma(f(x)) = f^\imf(\sigma(x)). \]
+Let $A$ be a $C^*$-algebra and $x\in A$ be a normal element and $f\in\mathcal{C}(\spec(x))$. If $A$ is non-unital, we additionally assume $f(0) = 0$. Then
+\[ \spec(f(x)) = f^\imf(\spec(x)). \]
 \end{proposition}
 \begin{proof}
-Let $B = C^*(x,\vec{1})$, which is commutative because $x$ is normal. We calculate
-\[ \sigma(f(x)) = \setbuilder{\varphi(f(x))}{\varphi\in\hat{B}} = \setbuilder{f(\varphi(x))}{\varphi\in\hat{B}} = f(\sigma(x)). \]
-using \ref{spectrumFromSpectrum} and \ref{compositionPropertiesCFC}.
+Let $\iota: A\to \widetilde{A}$ be the canonical embedding (i.e.\ it is identity if $A$ is unital).
+
+Set $B = C^*(\iota(x),\vec{1})$, which is commutative because $\iota(x)$ is normal. We calculate
+\begin{align*}
+\spec\big(f(x)\big) &= \spec\big(\iota(f(x))\big) \\
+&= \spec\big(f(\iota(x))\big) \\
+&= \setbuilder{\varphi(f(\iota(x)))}{\varphi\in\hat{B}} \\
+&= \setbuilder{f(\varphi(\iota(x)))}{\varphi\in\hat{B}} \\
+&= f^\imf\big(\setbuilder{\varphi(\iota(x))}{\varphi\in\hat{B}}\big) \\
+&= f^\imf\big(\spec(\iota(x))\big).\\
+&= f^\imf\big(\spec(x)\big),
+\end{align*}
+using \ref{spectrumFromSpectrum}, \ref{compositionPropertiesCFC} and, if $A$ is not unital, \ref{nonUnitalContinuousFunctionalCalculus}.
 \end{proof}
+
+
+
 
 
 \begin{proposition} \label{commutativityFunctionalCalculus}
@@ -4860,10 +4925,10 @@ TODO
 \url{https://link.springer.com/content/pdf/10.1023/A:1009717500980.pdf}
 \subsection{Positive elements}
 \begin{definition}
-Let $A$ be a $C^*$-algebra. An element $a\in A$ is \udef{positive} if it is normal and $\sigma(a) \subset \interval[co]{0,+\infty}$. We write $a\geq 0$.
+Let $A$ be a $C^*$-algebra. An element $a\in A$ is \udef{positive} if it is normal and $\spec(a) \subset \interval[co]{0,+\infty}$.
 
 The set of all positive elements of $A$ is the \udef{positive cone} of $A$
-\[ A^+ \defeq \setbuilder{a\in A}{a\geq 0}. \]
+\[ A^+ \defeq \setbuilder{a\in \Normals(A)}{ \spec(a) \subset \interval[co]{0,+\infty} }. \]
 \end{definition}
 By \ref{propertiesFromSpectrum} every projection is positive and every positive element is in fact self-adjoint.
 
@@ -4871,6 +4936,13 @@ By \ref{normalSpectralRadiusEqualsNorm} we have for all positive $a\in A$:
 \[ \norm{a} = \sup\sigma(a) = \max\sigma(a). \]
 
 By definition, $A^+ = \widetilde{A}^+ \cap A$.
+
+\begin{lemma} \label{positiveMultipleOfUnity}
+Let $A$ be a unital $C^*$-algebra and $\lambda\in \C$. Then $\lambda\vec{1} \in A^+$ \textup{if and only if} $\lambda \in \R^+$.
+\end{lemma}
+\begin{proof}
+We have $\spec(\lambda \vec{1}) = \{\lambda\}$.
+\end{proof}
 
 \begin{proposition}
 Let $A$ be a unital $C^*$-algebra and $a\in A$ a self-adjoint element. Then
@@ -4904,11 +4976,23 @@ $(3.\Rightarrow 4.)$ Clear.
 
 $(4.\Rightarrow 1.)$ By \ref{normNormalElement}, $\sigma(r\vec{1} - a / \norm{a}) \subseteq [-r, r]$. By spectral mapping, this means $\sigma(a) \subseteq [0, 2r\norm{a}]$ and thus $a$ is positive.
 \end{proof}
-\begin{corollary} \label{CstarPositiveConeClosed}
-Let $A$ be a $C^*$-algebra. The positive cone $A^+$ is closed.
-\end{corollary}
+
+
+\begin{proposition} \label{CstarPositiveConeProperties}
+Let $A$ be a $C^*$-algebra. The set $A^+$ is
+\begin{enumerate}
+\item a salient pointed convex cone;
+\item closed.
+\end{enumerate}
+\end{proposition}
 \begin{proof}
-It is enough to prove this for unital $C^*$-algebras since $A^+ = \widetilde{A}^+ \cap A$.
+(1) That $A^+$ is a cone follows from spectral mapping (\ref{spectralMappingCFC}), as does the salience of $A^+$.
+
+For convexity, we verify additive closure (see \ref{convexityAdditiveClosure}) Take $a,b\in A$ and set $p= \frac{\norm{a}+\norm{b}}{\norm{a+b}} \geq 1 \geq 1/2$. Then
+\[ \norm{p\vec{1} - \frac{a+b}{\norm{a+b}}} \leq \frac{1}{\norm{a+b}}\Big(\norm{\big.\norm{a}\vec{1}-a} + \norm{\big.\norm{b}\vec{1}-b}\Big) \leq \frac{\norm{a}+\norm{b}}{\norm{a+b}} = p \]
+using the triangle inequality and point 3. of \ref{positivityDistanceToNorm} with $r=1$.
+
+(2) It is enough to prove this for unital $C^*$-algebras since $A^+ = \widetilde{A}^+ \cap A$.
 
 Set $g: A\setminus\{0\}\to \R^+: a\mapsto \norm{\vec{1} - a/\norm{a}\big.}$, which is continuous by construction. By the proposition, a non-zero self-adjoint vector $a$ is positive iff $g(a) \in \interval{0,1}$. So the set of positive non-zero vectors is $X \defeq g^\preimf\big(\interval{0,1}\big) \cap \SelfAdjoints(A)$. This is a closed subset of $A\setminus\{0\}$ by \ref{preimageOpenClosed}, \ref{closedSubsetsBanachStarAlgebra} and \ref{propertiesTopology}.
 
@@ -4922,6 +5006,7 @@ A^+ &= \big(A^+ \setminus \{0\}\big) \cup \{0\} = \Big(\closure_{A}\big(A^+\setm
 Thus $A^+$ is closed.
 \end{proof}
 
+
 \begin{proposition}\label{existenceSquareRoot}
 Let $A$ be a $C^*$-algebra and $a\in A$. Then $a$ is positive \textup{if and only if} $a = b^*b$ for some $b\in A$.
 \end{proposition}
@@ -4933,7 +5018,7 @@ TODO: link with $\sqrt{a}$?
 Every positive element is self-adjoint (and, in particular, normal).
 \end{corollary}
 \begin{corollary}
-Let $A$ be a concrete $C^*$-algebra of bounded operators on some Hilbert space $\mathcal{H}$ and $a\in A$. Then $a$ is positive as an element of the $C^*$ algebra \textup{if and only if} $a$ is positive as an operator on $\mathcal{H}$. for all $x\in \mathcal{H}: \inner{x,ax}\geq 0$.
+Let $A$ be a concrete $C^*$-algebra of bounded operators on some Hilbert space $\mathcal{H}$ and $a\in A$. Then $a$ is positive as an element of the $C^*$ algebra \textup{if and only if} $a$ is positive as an operator on $\mathcal{H}$, i.e.\ for all $x\in \mathcal{H}: \inner{x,ax}\geq 0$.
 \end{corollary}
 \begin{proof}
 If $a$ is positive, then $a = b^*b$ and thus
@@ -4957,53 +5042,24 @@ By \ref{normNormalElement}, we have $\norm{a} = \spr(a)$, so, by spectral mappin
 \end{align*}
 \end{proof}
 
-\begin{lemma} \label{orderSubUnitVectorLemma}
-Let $A$ be a $C^*$-algebra and $a, b\in A^+$ with $\norm{a}\leq 1$ and $\norm{b}\leq 1$. Then
-\begin{enumerate}
-\item $a^2 \leq a$;
-\item $\norm{a-b} \leq 1$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Since the function $x\mapsto x-x^2$ is positive on $\interval{0,1}$ and $\spec(a) \subseteq \interval{0,1}$, we have that $a - a^2$ is positive by spectral mapping \ref{spectralMappingCFC}.
-
-(2) Since $\norm{a}_{\widetilde{A}} = \norm{a} \leq 1$ and $\norm{b}_{\widetilde{A}} = \norm{b} \leq 1$, we have $0\leq \vec{1}-a$ and $0\leq \vec{1}-b$ from \ref{selfAdjointUnitSphereFromOrder}. Thus $0\leq \vec{1}-a+b = \vec{1} - (a-b)$ and $0\leq \vec{1} -b +a = \vec{1}+ (a-b)$. Then $\norm{a-b} = \norm{a-b}_{\widetilde{A}} \leq 1$ by \ref{selfAdjointUnitSphereFromOrder}.
-\end{proof}
-
-\begin{lemma} \label{firstFactorInNormToAbsValue}
-Let $A$ be a $C^*$-algebra and $x,a\in A$. Then $\norm{xa} = \norm{|x|a}$.
-\end{lemma}
-\begin{proof}
-We calculate
-\[ \norm{xa}^2 = \norm{a^*x^*xa} = \norm{a^*\sqrt{x^*x}\sqrt{x^*x}a} = \norm{(\sqrt{x^*x}a)^*\sqrt{x^*x}a} = \norm{\sqrt{x^*x}a}^2 = \norm{|x|a}^2. \]
-Taking the square root gives the result.
-\end{proof}
 
 \subsection{Partial order on self-adjoint elements}
-\begin{proposition}
-Let $A$ be a $C^*$-algebra. The set $A^+$ is a salient pointed convex cone.
-\end{proposition}
-\begin{proof}
-That $A^+$ is a cone follows from spectral mapping (\ref{spectralMappingCFC}), as does the salience of $A^+$.
 
-For convexity, we verify additive closure (see \ref{convexityAdditiveClosure}) Take $a,b\in A$ and set $p= \frac{\norm{a}+\norm{b}}{\norm{a+b}} \geq 1 \geq 1/2$. Then
-\[ \norm{p\vec{1} - \frac{a+b}{\norm{a+b}}} \leq \frac{1}{\norm{a+b}}\Big(\norm{\big.\norm{a}\vec{1}-a} + \norm{\big.\norm{b}\vec{1}-b}\Big) \leq \frac{\norm{a}+\norm{b}}{\norm{a+b}} = p \]
-using the triangle inequality and point 3. of \ref{positivityDistanceToNorm} with $r=1$.
+\begin{definition}
+Let $A$ be a $C^*$-algebra and $x,y \in A$. We define the order relation $\leq$ on $A$ by $x\leq y \iff y-x\in A^+$.
+\end{definition}
+
+
+\begin{lemma} \label{C*PositivityVectorOrder}
+Let $A$ be a $C^*$-algebra. The order relation on $A$ is a vector partial order on $A$.
+\end{lemma}
+\begin{proof}
+This follows from \ref{positiveCone} and \ref{CstarPositiveConeProperties}.
 \end{proof}
-By \ref{positiveCone}, we have:
-\begin{corollary} \label{C*PositivityVectorOrder}
-The relation $\leq$ defined by
-\[ a\leq b \qquad\iff\qquad b-a\in A^+ \]
-is a vector partial order on $A$.
-\end{corollary}
+
 In particular $x\leq y$ implies $x+z \leq y+z$ and $\lambda \geq 0\in \R$ implies $\lambda x \leq \lambda y$.
 
 TODO in general $\sSet{A, \leq}$ is not a Riesz space. (See e.g.\ the absolute value)
-
-\begin{lemma}
-If $\alpha,\beta\in\R$ and $\alpha\leq \beta$, then $\alpha\vec{1}\leq \beta\vec{1}$.
-\end{lemma}
-
 
 \begin{lemma} \label{CstarOrderLemma}
 Let $A$ be a $C^*$-algebra, $x\leq y$ and $a\in A$. Then $a^*xa \leq a^*ya$.
@@ -5012,21 +5068,6 @@ Let $A$ be a $C^*$-algebra, $x\leq y$ and $a\in A$. Then $a^*xa \leq a^*ya$.
 By \ref{existenceSquareRoot}, there exists $c\in A$ such that $y-x = c^*c$. Then
 \[ 0 \leq (ac)^*ac = a^*c^*ca = a^*(y-x)a = a^*ya - a^*xa. \]
 This implies $a^*xa \leq a^*ya$.
-\end{proof}
-
-\begin{lemma}
-Let $A$ be a unital $C^*$-algebra, $x\in \Normals(A)$ a normal element and $f,g\in \cont\big(\spec(x)\big)$. Then
-\begin{enumerate}
-\item if $\im(f)\subseteq \R^+$, then $0\leq f(x)$;
-\item if $\im(f)\cup\im(g) \subseteq \R$ and $f\leq g$ pointwise, then $f(x) \leq g(x)$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Immediate, by spectral mapping \ref{spectralMappingCFC}.
-
-(2) Let $\Phi_x$ be the functional calculus at $x$. Then we have $\im(g-f) \subseteq \R^+$, so
-\[ 0 \leq \Phi_x(g-f) = \Phi_x(g)- \Phi_x(f) = g(x) - f(x), \]
-and thus $f(x)\leq g(x)$.
 \end{proof}
 
 \begin{lemma} \label{normInequalityFromSAInequality}
@@ -5040,6 +5081,21 @@ Let $A$ be a unital $C^*$-algebra, $a\in \SelfAdjoints(A)$ and $x\in A$. Then
 (1) We have that $\frac{a}{\norm{a}}$ is a self-adjoint element with norm less than one. Thus, by \ref{selfAdjointUnitSphereFromOrder}, we have $0\leq \vec{1} - \frac{a}{\norm{a}}$. Since $\leq$ is a vector order, this can be rewritten as $a\leq \norm{a}\vec{1}$.
 
 (2) We have that $x^*x$ is self-adjoint and $\norm{x^*x} = \norm{x}^2$. The result then follows from (1).
+\end{proof}
+
+\begin{lemma} \label{orderSubUnitVectorLemma}
+Let $A$ be a $C^*$-algebra and $a, b\in A^+$ with $\norm{a}\leq 1$ and $\norm{b}\leq 1$. Then
+\begin{enumerate}
+\item $a^2 \leq a$;
+\item $\norm{a-b} \leq 1$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Since the function $x\mapsto x-x^2$ is positive on $\interval{0,1}$ and $\spec(a) \subseteq \interval{0,1}$, we have that $a - a^2$ is positive by spectral mapping \ref{spectralMappingCFC}.
+
+(1, Alternative) From \ref{normInequalityFromSAInequality} and \ref{positiveMultipleOfUnity}, we have $a\leq \norm{a}\vec{1} \leq \vec{1}$. Then \ref{CstarOrderLemma} implies $a^2 = \sqrt{a}a\sqrt{a} \leq \sqrt{a}\sqrt{a} = a$.
+
+(2) Since $\norm{a}_{\widetilde{A}} = \norm{a} \leq 1$ and $\norm{b}_{\widetilde{A}} = \norm{b} \leq 1$, we have $\vec{1}-a\in \widetilde{A}^+$ and $\vec{1}-b\in \widetilde{A}^+$ from \ref{selfAdjointUnitSphereFromOrder}. Thus $0\leq \vec{1}-a+b = \vec{1} - (a-b)$ and $0\leq \vec{1} -b +a = \vec{1}+ (a-b)$. Then $\norm{a-b} = \norm{a-b}_{\widetilde{A}} \leq 1$ by \ref{selfAdjointUnitSphereFromOrder}.
 \end{proof}
 
 \begin{lemma} \label{inequalityPositiveElementsLemma}
@@ -5058,6 +5114,21 @@ by \ref{CstarOrderLemma}. Thus $\spec\big(\frac{1}{\sqrt{a}}b\frac{1}{\sqrt{a}} 
 
 By spectral mapping \ref{spectralMappingCFC}, we have $\vec{1} \leq \big(\frac{1}{\sqrt{a}}b\frac{1}{\sqrt{a}}\big)^{-1} = \sqrt{a}b^{-1}\sqrt{a}$. So
 \[ a^{-1} = \frac{1}{\sqrt{a}}\vec{1}\frac{1}{\sqrt{a}} \leq \frac{1}{\sqrt{a}}\sqrt{a}b^{-1}\sqrt{a}\frac{1}{\sqrt{a}} = b^{-1}. \]
+\end{proof}
+
+\begin{lemma}
+Let $A$ be a unital $C^*$-algebra, $x\in \Normals(A)$ a normal element and $f,g\in \cont\big(\spec(x)\big)$. Then
+\begin{enumerate}
+\item if $\im(f)\subseteq \R^+$, then $0\leq f(x)$;
+\item if $\im(f)\cup\im(g) \subseteq \R$ and $f\leq g$ pointwise, then $f(x) \leq g(x)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) Immediate, by spectral mapping \ref{spectralMappingCFC}.
+
+(2) Let $\Phi_x$ be the functional calculus at $x$. Then we have $\im(g-f) \subseteq \R^+$, so
+\[ 0 \leq \Phi_x(g-f) = \Phi_x(g)- \Phi_x(f) = g(x) - f(x), \]
+and thus $f(x)\leq g(x)$.
 \end{proof}
 
 \begin{lemma}
@@ -5200,6 +5271,15 @@ Finally $|A| + |B| - |A+B| = \begin{pmatrix}
 \end{pmatrix} = 1-\sqrt{2} < 0. \]
 \end{example}
 
+\begin{lemma} \label{firstFactorInNormToAbsValue}
+Let $A$ be a $C^*$-algebra and $x,a\in A$. Then $\norm{xa} = \norm{|x|a}$.
+\end{lemma}
+\begin{proof}
+We calculate
+\[ \norm{xa}^2 = \norm{a^*x^*xa} = \norm{a^*\sqrt{x^*x}\sqrt{x^*x}a} = \norm{(\sqrt{x^*x}a)^*\sqrt{x^*x}a} = \norm{\sqrt{x^*x}a}^2 = \norm{|x|a}^2. \]
+Taking the square root gives the result.
+\end{proof}
+
 
 
 \subsection{Positive maps}
@@ -5241,7 +5321,7 @@ Let $A$ be a $C^*$-algebra and $f: A\to \C$ a positive linear functional on $A$.
 \begin{proof}
 We first show that $f$ is bounded on $A^+$. Suppose, towards a contradiction, that $f$ is not bounded on $A^+$. Then for all $n\in \N$, we can find a unit vector $a_n\in A^+$ such that $f(a_n) \geq n$. Now $\sum_{n=1}^\infty \frac{a_n}{n^2}$ is absolutely convergent by \ref{pseriesConvergence} and thus is convergent by \ref{absoluteConvergenceImpliesConvergence}. We call the limit $a$. Let $b_N \defeq \sum_{n=1}^N \frac{a_n}{n^2}$ be the partial sum for all $N\geq 1$.
 
-For all such $N$ we have $0 \leq b_N \leq a$. Indeed, $a-b_N$ is the limit of $\seq{b_M - b_N}_{M\geq N}$ which is a sequence of positive elements. Since $A^+$ is closed by \ref{CstarPositiveConeClosed} in $A$, $a-b_N$ is also an element of $A^+$. Thus
+For all such $N$ we have $0 \leq b_N \leq a$. Indeed, $a-b_N$ is the limit of $\seq{b_M - b_N}_{M\geq N}$ which is a sequence of positive elements. Since $A^+$ is closed by \ref{CstarPositiveConeProperties} in $A$, $a-b_N$ is also an element of $A^+$. Thus
 \[ f(a) \geq f(b_N) = \sum_{n=1}^N \frac{f(a_n)}{n^2} \geq \sum_{n=1}^N \frac{1}{n}. \]
 Since, by \ref{pseriesConvergence}, $\sum_{n=1}^N \frac{1}{n}$ grows arbitrarily large, this is a contradiction. We have established that $m \defeq\sup_{\substack{a \geq 0  \\ \norm{a} = 1}} f(a)$ is finite.
 
@@ -5597,34 +5677,396 @@ Suppose $a$ has a pseudoinverse $a^+$, can we construct an SVD if $aa^+$ and $a^
 
 TODO: Link to $K$-theory?? Does this have algorithmic implications??
 
-\section{Matrix $C^*$-algebras}
-\begin{proposition}
-Let $A$ be a $C^*$-algebra. There exists a norm that makes $A^{n\times n}$ a $C^*$-algebra, which is given by
-\begin{align*}
-\norm{\begin{pmatrix}
-a_{1, 1} & \hdots & a_{1,n} \\
-\vdots & \ddots & \vdots \\
-a_{n,1} & \hdots & a_{n,n}
-\end{pmatrix}}_{A^{n\times n}} &\defeq \sup\setbuilder{\norm{\sum_{i,j=1}^nx_i^*a_{i,j}y_{j}}_A}{\seq{x_i}_{i=0}^n, \seq{y_j}_{j=0}^n\in A^n, \, \sqrt{\sum_{i=1}^n \norm{x_i}^2} = 1 = \sqrt{\sum_{j=1}^n \norm{y_j}^2}}.
-\end{align*}
+\section{Hilbert $C^*$-modules}
+\subsection{Inner $C^*$-modules}
+\begin{definition}
+Let $A$ be a $C^*$-algebra. A vector space $V$ is a \udef{pre-inner-product $A$-module} if it is a \emph{right} $A$-module and is equipped with a function $(\cdot, \cdot): V\times V\to A$ such that
+\begin{itemize}
+\item $(\cdot, \cdot): V\times V\to A$ is linear in the second component;
+\item $(v,wa) = (v,w)a$ for all $v,w\in V$ and $a\in A$;
+\item $(v,w) = (w,v)^*$ for all $v,w\in V$;
+\item $(v,v) \in A^+$   for all $v\in V$.
+\end{itemize}
+We call $V$ a \udef{inner-product $A$-module} if $(v,v) = 0$ implies $v=0$ for all $v\in V$.
+\end{definition}
+
+\begin{lemma} \label{preInnerProductAmodule}
+Let $A$ be a $C^*$-algebra and $V$ a pre-inner-product $A$-module, $v,w\in V$ and $a\in A$. Then
+\begin{enumerate}
+\item $(xa, y) = a^*(x,y)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(1) We have
+\[ (xa, y) = (y, xa)^* = \big((y, x)a\big)^* = a^*(y,x)^* = a^*(x,y). \]
+\end{proof}
+
+\subsubsection{The norm}
+\begin{definition}
+Let $A$ be a $C^*$-algebra and $V$ a pre-inner-product $A$-module. We equip $V$ with a seminorm defined by $\norm{v} \defeq \sqrt{\norm{(v,v)}}$ for all $v\in V$.
+
+If $V$ is an inner-product $A$-module, then the seminorm is a norm.
+\end{definition}
+
+\subsubsection{Cauchy-Schwarz}
+
+\begin{proposition}[Cauchy-Schwarz for pre-inner-product $C^*$-modules]
+Let $V$ be a pre-inner-product $A$-module and $v,w\in V$. Then
+\[ (y,x)(x,y) \leq \norm{(x,x)}(y,y). \]
 \end{proposition}
 \begin{proof}
-It is clear that $\norm{\cdot}_{A^{n\times n}}$ is a norm. We just need to verify the $C^*$-identity. Take $[a_{i,j}]\in A^{n\times n}$. Then
+For all $a\in A$, we can calculate,
 \begin{align*}
-\norm{[a_{i,j}]}_{A^{n\times n}} &= \sup\setbuilder{\norm{\sum_{i,j=1}^nx_i^*a_{i,j}y_{j}}_A}{\seq{x_i}_{i=0}^n, \seq{y_j}_{j=0}^n\in A^n, \,\forall i,j\leq n: \norm{x_i}_{A} \leq 1, \norm{y_j}_{A}\leq 1}
+0 &\leq (xa-y, xa-y) \\
+&= a^*(x,x)a - (y,x)a - a^*(x,y) + (y,y) \\
+&\leq \norm{(x,x)}a^*a - (y,x)a - a^*(x,y) + (y,y),
 \end{align*}
+where we have used \ref{preInnerProductAmodule} and $\norm{(x,x)}a^*a = a^*\norm{(x,x)}a \leq a^*(x,x)a$ follows from \ref{normInequalityFromSAInequality} and \ref{CstarOrderLemma}.
+
+Now the inequality follows from setting $a = \norm{(x,x)}^{-1}(x,y)$.
+\end{proof}
+\begin{corollary} \label{CSnormInequality}
+Let $V$ be a pre-inner-product $A$-module and $v,w\in V$. Then
+\[ \norm{(x,y)} \leq \norm{x}\norm{y}. \]
+\end{corollary}
+\begin{proof}
+We calculate, using \ref{inequalityPositiveElementsLemma},
+\begin{align*}
+\norm{(x,y)}^2 &= \norm{(x,y)^*(x,y)} \\
+&= \norm{(y,x)(x,y)} \\
+&\leq \norm{\big.\norm{(x,x)}(y,y)} \\
+&= \norm{(x,x)}\norm{(y,y)} \\
+&= \norm{x}^2\norm{y}^2.
+\end{align*}
+Taking the square root yields the result.
+\end{proof}
+
+\subsection{Hilbert $C^*$-modules}
+\begin{definition}
+Let $A$ be a $C^*$-algebra and $V$ an inner-product $A$-module. We call $V$ a \udef{Hilbert $C^*$-module} if it is complete as a normed space.
+\end{definition}
+
+\section{Matrix $C^*$-algebras}
+TODO: more information in \cite{lance_hilbert_1995}.
+
+\begin{proposition}
+Let $A$ be a $C^*$-algebra and $n\in \N$. Then $A^n$ is a right-module with multiplication defined by
+\[ \cdot: A^n \times A\to A^n: \big(\seq{x_k}, a\big) \mapsto \seq{x_ka}. \]
+When equipped with
+\[ (\cdot, \cdot): A^n\times A^n \to A: \big(\seq{x_k}, \seq{y_k}\big) \mapsto \sum_{k=0}^{n-1}x_k^*y_k, \]
+it is a Hilbert $A$-module.
+\end{proposition}
+\begin{proof}
+Mostly routine verification.
+
+For definiteness, take $\seq{x_k} \in A^n$ such that $(\seq{x_k}, \seq{x_k}) = 0$. Now take arbitrary $m \in [0:n-1]$. We have $0\leq x^*_mx_m \leq \sum_{k=0}^{n-1}x_k^*x_k = (\seq{x_k}, \seq{x_k}) = 0$. By \ref{inequalityPositiveElementsLemma}, this implies $0\leq \norm{x^*_mx_m} \leq 0$, so $\norm{x_m}^2 = \norm{x^*_mx_m} = 0$. By definiteness of the norm of $A$, this implies $x_m=0$. Since $m$ was chosen arbitrarily, we have $\seq{x_k} = \constant{0}$.
+
+Completeness. TODO.
 \end{proof}
 
 \begin{proposition}
-Norm given by representing matrix algebra on Hilbert space. If representation is faithful, then norm independent of representation.
+Let $A$ be a $C^*$-algebra. There exists a norm that makes $A^{n\times n}$ a $C^*$-algebra, which is given by, for $a\in A^{n\times n}$,
+\begin{align*}
+\norm{a}_{A^{n\times n}} &\defeq \sup\setbuilder{\norm{\sum_{i,j=0}^{n-1}x_i^*[a]_{i,j}y_{j}}_A}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&= \sup\setbuilder{\norm{\Bigg(\seq{x_k}_k, \seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k\Bigg)}_{A}}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&= \sup\setbuilder{\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}_{A^n}}{\seq{y_j}\in A^n, \, 1 = \norm{\seq{y_j}}}.
+\end{align*}
 \end{proposition}
+\begin{proof}
+The first equality is immediate from the definitions.
 
-\subsection{Dilation tricks}
+For the second equality, the inequality $\leq$ follows from \ref{CSnormInequality}. For the other inequality, we calculate
+\begin{align*}
+\sup_{\seq{y_j}\in B_{A^n}(0,1)}\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k} &= \sup_{\seq{y_j}\in B_{A^n}(0,1)}\sqrt{\norm{\Bigg(\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k, \seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k\Bigg)}} \\
+&= \sup_{\seq{y_j}\in B_{A^n}(0,1)}\sqrt{\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}}\sqrt{\norm{\Bigg(\frac{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}{\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}}, \seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k\Bigg)}} \\ 
+&\leq \sup_{\seq{x_i}, \seq{y_j}\in B_{A^n}(0,1)}\sqrt{\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}}\sqrt{\norm{\Bigg(\seq{x_i}, \seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k\Bigg)}} \\ 
+&\leq \sup_{\seq{y_j}\in B_{A^n}(0,1)}\sqrt{\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}}\sup_{\seq{x_i}, \seq{y_j}\in B_{A^n}(0,1)}\sqrt{\norm{\Bigg(\seq{x_i}, \seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k\Bigg)}}.
+\end{align*}
+Dividing both sides by $\sup_{\seq{y_j}\in B_{A^n}(0,1)}\sqrt{\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}}$ and taking the square yields the result.
+
+It is clear that $\norm{\cdot}_{A^{n\times n}}$ is a norm.
+
+We check submultiplicativity, using \ref{CSnormInequality}. Take $a,b\in A^{n\times n}$. Then
+\begin{align*}
+\norm{ab}_{A^{n\times n}} &= \sup\setbuilder{\norm{\sum_{i,j=0}^{n-1}x_i^*[ab]_{i,j}y_{j}}}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&= \sup\setbuilder{\norm{\sum_{i,j,k=0}^{n-1}x_i^*[a]_{i,k}[b]_{k,j}y_{j}}}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&= \sup\setbuilder{\norm{\Bigg(\seq{\sum_{i=0}^{n-1}[a]_{i,k}^*x_i}_k, \seq{\sum_{j=0}^{n-1}[b]_{k,j}y_{j}}_k\Bigg)}}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&\leq \sup\setbuilder{\norm{\seq{\sum_{i=0}^{n-1}[a^*]_{k,i}^*x_i}_k}\, \norm{\seq{\sum_{j=0}^{n-1}[b]_{k,j}y_{j}}_k}}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&= \norm{a}_{A^{n\times n}}\norm{b}_{A^{n\times n}}.
+\end{align*}
+We now just need to verify the $C^*$-identity, which we can do using \ref{C*identityEquivalent}.
+Take $a\in A^{n\times n}$. Then we calculate, using \ref{CSnormInequality},
+\begin{align*}
+\norm{a}_{A^{n\times n}}^2 &= \sup\setbuilder{\norm{\sum_{i,j=0}^{n-1}x_i^*[a]_{i,j}y_{j}}^2}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&= \sup\setbuilder{\norm{\Bigg(\seq{x_k}, \seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k\Bigg)}^2}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&\leq \sup\setbuilder{\norm{\seq{x_k}}^2\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}^2}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&= \sup\setbuilder{\norm{\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k}^2}{\seq{y_j}\in A^n, \, \norm{\seq{y_i}} = 1} \\
+&= \sup\setbuilder{\norm{\Bigg(\seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k, \seq{\sum_{j=0}^{n-1}[a]_{k,j}y_{j}}_k\Bigg)}}{\seq{y_j}\in A^n, \, \norm{\seq{y_i}} = 1} \\
+&= \sup\setbuilder{\norm{\sum_{i,j,k=0}^{n-1}y^*_{i}[a]^*_{k,i}[a]_{k,j}y_{j}}}{\seq{y_j}\in A^n, \, \norm{\seq{y_i}} = 1} \\
+&= \sup\setbuilder{\norm{\sum_{i,j,k=0}^{n-1}y^*_{i}[a^*]_{i,k}[a]_{k,j}y_{j}}}{\seq{y_j}\in A^n, \, \norm{\seq{y_i}} = 1} \\
+&= \sup\setbuilder{\norm{\sum_{i,j=0}^{n-1}y^*_{i}[a^*a]_{i,j}y_{j}}}{\seq{y_j}\in A^n, \, \norm{\seq{y_i}} = 1} \\
+&\leq \sup\setbuilder{\norm{\sum_{i,j=0}^{n-1}x^*_{i}[a^*a]_{i,j}y_{j}}}{\seq{x_i}, \seq{y_j}\in A^n, \, \norm{\seq{x_i}} = 1 = \norm{\seq{y_j}}} \\
+&= \norm{a^*a}_{A^{n\times n}}.
+\end{align*}
+\end{proof}
+
+
+\subsection{Elementary properties}
+\subsubsection{Inverses}
+\begin{lemma} \label{2by2TriangularMatrixInverse}
+Let $A$ be a unital $C^*$-algebra and $a\in A$. Then $\begin{pmatrix}
+\vec{1} & a \\ 0 & \vec{1}
+\end{pmatrix}$ is invertible with inverse $\begin{pmatrix}
+\vec{1} & -a \\ 0 & \vec{1}
+\end{pmatrix}$.
+\end{lemma}
+\begin{proof}
+We calculate
+\[ \begin{pmatrix}
+\vec{1} & a \\ 0 & \vec{1}
+\end{pmatrix}\begin{pmatrix}
+\vec{1} & -a \\ 0 & \vec{1}
+\end{pmatrix} = \begin{pmatrix}
+\vec{1} & -a + a \\ 0 & \vec{1}
+\end{pmatrix} = \begin{pmatrix}
+\vec{1} & 0 \\ 0 & \vec{1}
+\end{pmatrix}. \]
+\end{proof}
+
+\subsubsection{Diagonal elements}
+
 \begin{lemma}
+Let $A$ be a unital $C^*$-algebra and $\seq{x_k}_{k=0}^{n-1} \in A^n$. Then $\diag\big(\seq{x_k}_{k=0}^{n-1}\big)$ is invertible \textup{if and only if} each $x_k$ is invertible. In this case  $\diag\big(\seq{x_k}_{k=0}^{n-1}\big)^{-1} = \diag\big(\seq{x_k^{-1}}_{k=0}^{n-1}\big)$.
+\end{lemma}
+\begin{proof}
+If each $x_k$ is invertible, then we can calculate
+\[ \diag\big(\seq{x_k}_{k=0}^{n-1}\big)\cdot \diag\big(\seq{x_k^{-1}}_{k=0}^{n-1}\big) = \diag(\seq{\vec{1}}_{k=0}^{n-1}). \]
+Now suppose $\diag\big(\seq{x_k}_{k=0}^{n-1}\big)$ is invertible with inverse $Y$. Then
+\[ \delta_{i,j}\vec{1} = \big[Y\cdot \diag\big(\seq{x_k}_{k=0}^{n-1}\big)\big]_{i,j} = [Y]_{i,j}x_j \]
+and
+\[ \delta_{i,j}\vec{1} = \big[\diag\big(\seq{x_k}_{k=0}^{n-1}\big)\cdot Y\big]_{i,j} = x_i[Y]_{i,j}. \]
+This implies, for all $j\in [0:n-1]$, that $[Y]_{j,j}$ is the inverse of $x_j$, so $x_j$ is invertible.
+\end{proof}
+\begin{corollary} \label{spectrumDiagonalMatrix}
+Let $A$ be a unital $C^*$-algebra and $\seq{x_k}_{k=0}^{n-1} \in A^n$. Then
+\[ \spec\Big(\diag\big(\seq{x_k}_{k=0}^{n-1}\big)\Big) = \bigcup_{k=0}^{n-1}\spec(x_k). \]
+\end{corollary}
+\begin{proof}
+We have
+\begin{align*}
+\lambda \in \spec\Big(\diag\big(\seq{x_k}_{k=0}^{n-1}\big)\Big) &\iff \text{$\lambda\vec{1} - \diag\big(\seq{x_k}_{k=0}^{n-1}\big)$ is not invertible} \\
+&\iff \text{$\diag\big(\seq{\lambda\vec{1} - x_k}_{k=0}^{n-1}\big)$ is not invertible} \\
+&\iff \exists k\in [0:n-1]: \text{$\lambda\vec{1} - x_k$ is not invertible} \\
+&\iff \exists k\in [0:n-1]: \lambda \in \spec(x_k) \\
+&\iff \lambda \in \bigcup_{k=0}^{n-1}\spec(x_k).
+\end{align*}
+\end{proof}
+
+\subsubsection{Schur complements}
+TODO: merge with matrix section.
+
+\begin{lemma} \label{schurComplementInAlgebra}
+Let $A$ be a unital $C^*$-algebra and $a,b,c,d\in A$. If $d$ is invertible, then 
+\[ M = \begin{bmatrix}
+a & b \\ c & d
+\end{bmatrix} = \begin{bmatrix}
+\vec{1} & bd^{-1} \\ 0 & \vec{1}
+\end{bmatrix}\begin{bmatrix}
+a-bd^{-1}c & 0 \\ 0 & d
+\end{bmatrix}\begin{bmatrix}
+\vec{1} & 0 \\ d^{-1}c & \vec{1}
+\end{bmatrix}  \]
+and if $a$ is invertible,
+\[ M = \begin{bmatrix}
+a & a \\ c & d
+\end{bmatrix} = \begin{bmatrix}
+\vec{1} & 0 \\ ca^{-1} & \vec{1}
+\end{bmatrix}\begin{bmatrix}
+a & 0 \\ 0 & d - ca^{-1}b
+\end{bmatrix}\begin{bmatrix}
+\vec{1} & a^{-1}b \\ 0 & 1
+\end{bmatrix}.  \]
+\end{lemma}
+\begin{definition}
+The element $M/d \defeq a-bd^{-1}c$ is the \udef{Schur complement} of $d$ in $M$.
+
+Similarly $M/a \defeq d-ca^{-1}b$ is the Schur complement of $a$ in $M$.
+\end{definition}
+
+
+\subsection{Positivity in matrix $C^*$-algebras}
+
+\begin{proposition}
+Let $A$ be a unital $C^*$-algebra and $\mathfrak{a} \in A^{n\times n}$. Then the following are equivalent:
+\begin{enumerate}
+\item $\mathfrak{a}$ is positive;
+\item $\sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j \geq 0$ for all $\seq{x_k} \in A^n$;
+\item $\sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j \geq 0$ for all $\seq{x_k} \in A^n$ such that $\big(\seq{x_k},\seq{x_k}\big) = \vec{1}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+\begin{corollary} \label{diagonalPositiveMatrixPositive}
+Let $A$ be a unital $C^*$-algebra and $\mathfrak{a} \in A^{n\times n}$. If $\mathfrak{a}$ is positive, then $[\mathfrak{a}]_{k,k} \geq 0$ for all $k\in [0:n-1]$.
+\end{corollary}
+\begin{proof}
+Take positive $\mathfrak{a} \in A^{n\times n}$ and $\seq{x_m}$, with $x_m \defeq \begin{cases}
+0 & (m \neq k) \\ \vec{1} & (m = k)
+\end{cases}$. Then
+\[ [\mathfrak{a}]_{k,k} = \sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j \geq 0. \]
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a unital $C^*$-algebra and $a,b,c\in A$. Suppose $a,b\in A^+$ and $a,b$ are invertible. Then the following are equivalent:
+\begin{enumerate}
+\item $\begin{pmatrix}
+a & c \\
+c^* & b
+\end{pmatrix}$ is positive;
+\item there exists $x \in A$ such that $\norm{x} \leq 1$ and $c = \sqrt{a}x\sqrt{b}$.
+\end{enumerate}
+\end{proposition}
+TODO: can we drop requirement that $a,b$ be invertible? By considering $\begin{pmatrix}
+a & c \\
+c^* & b
+\end{pmatrix} + \epsilon \begin{pmatrix}
+\vec{1} & 0 \\ 0 & \vec{1}
+\end{pmatrix}$? See Schur parameters, Constantinescu.
+\begin{proof}
+$(1) \Rightarrow (2)$ We have, see \ref{schurComplementInAlgebra},
+\[ \begin{pmatrix}
+a & c \\
+c^* & b
+\end{pmatrix} = \begin{pmatrix}
+\vec{1} & 0 \\ c^*a^{-1} & \vec{1}
+\end{pmatrix}\begin{pmatrix}
+a & 0 \\ 0 & b - c^*a^{-1}c
+\end{pmatrix}\begin{pmatrix}
+\vec{1} & a^{-1}c \\ 0 & \vec{1}
+\end{pmatrix}. \]
+By \ref{2by2TriangularMatrixInverse}, we can write
+\[ \begin{pmatrix}
+a & 0 \\ 0 & b - c^*a^{-1}c
+\end{pmatrix} = \begin{pmatrix}
+\vec{1} & 0 \\ -c^*a^{-1} & \vec{1}
+\end{pmatrix}\begin{pmatrix}
+a & c \\
+c^* & b
+\end{pmatrix}\begin{pmatrix}
+\vec{1} & -a^{-1}c \\ 0 & \vec{1}
+\end{pmatrix}, \]
+so $\begin{pmatrix}
+a & 0 \\ 0 & b - c^*a^{-1}c
+\end{pmatrix}$ is positive by \ref{CstarOrderLemma} and $b - c^*a^{-1}c$ is positive by \ref{spectrumDiagonalMatrix}. Then $\sqrt{b}^{-1}(b - c^*a^{-1}c)\sqrt{b}^{-1} = \vec{1} - \sqrt{b}^{-1}c^*a^{-1}c\sqrt{b}^{-1}$ is positive, again by \ref{CstarOrderLemma}. This implies, by \ref{inequalityPositiveElementsLemma}, that 
+\[ \norm{\sqrt{a}^{-1}c\sqrt{b}^{-1}}^2 = \norm{\sqrt{b}^{-1}c^*a^{-1}c\sqrt{b}^{-1}} \leq 1, \]
+so $x\defeq \sqrt{a}^{-1}c\sqrt{b}^{-1}$ is a contraction. Also $c = \sqrt{a}x\sqrt{b}$.
+
+$(2) \Rightarrow (1)$ We have that $x^*x$ is self-adjoint and $\norm{x^*x} = \norm{x}^2 \leq 1$, so $\vec{1} - x^*x$ is positive by \ref{selfAdjointUnitSphereFromOrder} and $\begin{pmatrix}
+\vec{1} & 0 \\ 0 & \vec{1} - x^*x
+\end{pmatrix}$ is positive by \ref{spectrumDiagonalMatrix}. Now
+\[ \begin{pmatrix}
+a & c \\
+c^* & b
+\end{pmatrix} = \begin{pmatrix}
+a & \sqrt{a}x\sqrt{b} \\
+\sqrt{b}x^*\sqrt{a} & b
+\end{pmatrix} = \begin{pmatrix}
+\sqrt{a} & 0 \\ \sqrt{b}x^* & \sqrt{b}
+\end{pmatrix}\begin{pmatrix}
+\vec{1} & 0 \\ 0 & \vec{1} - x^*x
+\end{pmatrix}\begin{pmatrix}
+\sqrt{a} & x\sqrt{b} \\ 0 & \sqrt{b}
+\end{pmatrix}, \]
+so $\begin{pmatrix}
+a & c \\
+c^* & b
+\end{pmatrix}$ is positive by \ref{CstarOrderLemma}.
+\end{proof}
+\begin{proof}[Alternate proof of $(2) \Rightarrow (1)$]
+We can also factorise
+\begin{align*}
+\begin{pmatrix}
+a & \sqrt{a}x\sqrt{b} \\
+\sqrt{b}x^*\sqrt{a} & b
+\end{pmatrix} &= \begin{pmatrix}
+\sqrt{a} & 0 \\
+\sqrt{b}x^* & \sqrt{b}D_x
+\end{pmatrix}\begin{pmatrix}
+\sqrt{a} & x\sqrt{b} \\
+0 & D_x\sqrt{b} \\
+\end{pmatrix} = \begin{pmatrix}
+\sqrt{a} & x\sqrt{b} \\
+0 & D_x\sqrt{b} \\
+\end{pmatrix}^*\begin{pmatrix}
+\sqrt{a} & x\sqrt{b} \\
+0 & D_x\sqrt{b} \\
+\end{pmatrix} \\
+&= \begin{pmatrix}
+\sqrt{a}D_{x^*} & \sqrt{a}x \\
+0 & \sqrt{b}
+\end{pmatrix}\begin{pmatrix}
+D_{x^*}\sqrt{a} & 0 \\
+x^*\sqrt{a} & \sqrt{b} \\
+\end{pmatrix} = \begin{pmatrix}
+D_{x^*}\sqrt{a} & 0 \\
+x^*\sqrt{a} & \sqrt{b} \\
+\end{pmatrix}^*\begin{pmatrix}
+D_{x^*}\sqrt{a} & 0 \\
+x^*\sqrt{a} & \sqrt{b} \\
+\end{pmatrix},
+\end{align*}
+where $D_x = \sqrt{\vec{1} - x^*x}$. This implies $\begin{pmatrix}
+a & c \\
+c^* & b
+\end{pmatrix}$ is positive by \ref{existenceSquareRoot}.
+\end{proof}
+\begin{corollary}
+Let $A$ be a unital $C^*$-algebra and $a, b\in A$. Then the following are equivalent:
+\begin{enumerate}
+\item $\begin{pmatrix}
+\vec{1} & a \\ a^* & b
+\end{pmatrix}$ is positive;
+\item $a^*a \leq b$.
+\end{enumerate}
+\end{corollary}
+Note that both conditions imply that $b$ is positive, so we do not need to assume it a priori.
+\begin{proof}
+We first observe that that both conditions imply that $b$ is positive. In the first case, TODO use \ref{diagonalPositiveMatrixPositive}.
+
+
+note that
+\[ \begin{pmatrix}
+0 & 0 \\ 0 & 1
+\end{pmatrix}\begin{pmatrix}
+\vec{1} & a \\ a^* & b
+\end{pmatrix}\begin{pmatrix}
+0 & 0 \\ 0 & 1
+\end{pmatrix} = \begin{pmatrix}
+0 & 0 \\ 0 & b
+\end{pmatrix} \]
+is positive by \ref{CstarOrderLemma} and thus $b$ is positive by \ref{spectrumDiagonalMatrix}. The second case follows by positivity of $a^*a$ and transitivity of the order.
+
+$(1) \Rightarrow (2)$ By the proposition, there exists a contraction $x\in A$ such that $a = x\sqrt{b}$. Since $x^*x \leq 1$, by \ref{selfAdjointUnitSphereFromOrder}, we have
+\[ a^*a \; = \; \sqrt{b}x^*x\sqrt{b} \; \leq \; \sqrt{b}\vec{1}\sqrt{b} \; = \; b, \]
+by \ref{CstarOrderLemma}.
+
+$(2) \Rightarrow (1)$ TODO
+\end{proof}
+\begin{corollary}
 Let $A$ be a unital $C^*$-algebra and $a\in A$. Then $\norm{a}\leq 1$ \textup{if and only if} $\begin{pmatrix}
 \vec{1} & a \\ a^* & \vec{1}
 \end{pmatrix}$ is positive in $A^{2\times 2}$.
-\end{lemma}
+\end{corollary}
+
+\subsection{Positive kernels}
+\begin{definition}
+Let $A$ be a $C^*$-algebra. A function $K: \Z\times \Z\to A$ is called a \udef{positive definite kernel} if $[A(i,j)]_{i,j\in [-n:n]}$ is positive for all $n\in \N$.
+\end{definition}
+
+\begin{proposition}[Kolmogorov decomposition]
+Let $A$ be a $C^*$-algebra and $K: \Z\times \Z\to A$ a positive kernel. Then there exists a function $V: \Z\to A$ such that $A(i,j) = V^*(i)V(j)$ for all $i,j\in \Z$.
+\end{proposition}
 \begin{proof}
 
 \end{proof}
