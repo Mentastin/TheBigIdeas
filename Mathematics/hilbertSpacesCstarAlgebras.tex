@@ -237,14 +237,14 @@ Polarisation identities allow us to recover the inner product from the norm.
 \end{align*}
 \item For complex inner product spaces, $\mathbb{F} = \C$:
 \[ \inner{x,y} = \frac{1}{4}\sum_{k=0}^3 i^k\norm{i^k x+y}^2. \]
-\item For general sesquilinear forms:
+\item For sesquilinear forms, $\mathbb{F} = \C$:
 \[ S(x,y) = \frac{1}{4}\sum_{k=0}^3 i^k S(i^k x+y, i^k x+y). \]
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 We prove (3):
 \begin{align*}
-\sum_{k=0}^3 i^k S(i^k x+y, i^k x+y) &= \sum_{k=0}^3 i^ki^k(-1)^k S(x, x) + i^k(-i)^kS(x,y) + i^ki^kS(y,x) + i^kS(y,y) \\
+\sum_{k=0}^3 i^k S(i^k x+y, i^k x+y) &= \sum_{k=0}^3 i^ki^k(-i)^k S(x, x) + i^k(-i)^kS(x,y) + i^ki^kS(y,x) + i^kS(y,y) \\
 &= \sum_{k=0}^3 i^k S(x, x) + S(x,y) + (-1)^kS(y,x) + i^kS(y,y) \\
 &= \sum_{k=0}^3 S(x,y) \\
 &= 4 S(x,y),
@@ -253,12 +253,16 @@ where we have used that $\sum_{k=0}^3 i^k = 0$ and $\sum_{k=0}^3 (-1)^k = 0$.
 \end{proof}
 
 \begin{proposition} \label{HermitianRealQuadratic}
-A sesquilinear form $S$ is Hermitian (i.e.\ conjugate symmetric) \textup{if and only if} $S(v,v)$ is real for all $v\in V$.
-
+Let $V$ be a \emph{complex} vector space and $S: V\times V\to \C$ a sesquilinear form. Then
+\begin{enumerate}
+\item $S$ is Hermitian \textup{if and only if} $S(v,v)$ is real for all $v\in V$;
+\item $S = \constant{0}$ \textup{if and only if} $S(v,v = 0)$ for all $v\in V$.
+\end{enumerate}
 In particular, all positive sesquilinear forms are pre-inner products.
 \end{proposition}
+Note that we do not have analogous results in real vector spaces.
 \begin{proof}
-The direction $\boxed{\Rightarrow}$ is immediate: conjugate symmetry gives $S(v,v) = \overline{S(v,v)}$.
+(1) The direction $\boxed{\Rightarrow}$ is immediate: conjugate symmetry gives $S(v,v) = \overline{S(v,v)}$.
 
 For the other direction, assume $S(v,v)$ is real for all $v\in V$ and consider arbitrary $u,v\in V$. Then
 \[ \begin{cases}
@@ -271,8 +275,11 @@ Taking the imaginary part gives
 0 = \Im S(u+v, u+v) = \cancel{\Im S(u,u)} + \cancel{\Im S(v,v)} + \Im\Big(S(u,v) - S(v,u)\Big).
 \end{cases} \]
 Thus $\Re S(u,v) = \Re S(v,u)$ and $\Im S(u,v) = - \Im S(v,u)$, which means $S(u, v) = \overline{S(v,u)}$.
+
+(2) The direction $\Rightarrow$ is clear. The converse follows from the polarisation identity \ref{polarisationIdentities}. Take $u,v\in V$. Then
+\[ S(u,v) = \frac{1}{4}\sum_{k=0}^3 i^k S(i^k u+v, i^k u+v) = 0. \]
 \end{proof}
-\begin{proof}[Alternate proof]
+\begin{proof}[Alternate proof of (1)]
 We can also prove the direction $\Leftarrow$ by a direct calculation using the polarisation identity \ref{polarisationIdentities}:
 \begin{align*}
 \overline{S(u,v)} &= \frac{1}{4}\sum^3_{k=0}(-i)^kS(u+i^kv,u+i^kv) & &\text{Using the fact that $S(u+i^kv,u+i^kv)$ is real} \\
@@ -851,7 +858,7 @@ This is a consequence of \ref{elementaryOrthogonality}.
 \end{proof}
 
 \begin{lemma} \label{energyFormHermitianSymmetric}
-Let $V$ be an inner product space and $T$ an operator on $V$. Then the following are equivalent:
+Let $V$ be a \emph{complex} inner product space and $T$ an operator on $V$. Then the following are equivalent:
 \begin{enumerate}
 \item $T$ is symmetric;
 \item $\inner{\cdot,\cdot}_T$ is Hermitian;
@@ -4090,6 +4097,18 @@ so that solutions of the integral equation are exactly the fixed points of $T$. 
 So $T$ is a contraction if $|\lambda| > \sup_{x\in \Omega} \int_{\Omega}|K(x,y)|\diff{\mu(y)}$. The result follows from \ref{contractionFixedPoint}.
 \end{proof}
 
+\subsection{Positive kernels}
+\begin{definition}
+Let $\mathcal{H}$ be a Hilbert space. A function $K: \Z\times \Z\to \Bounded(\mathcal{H})$ is called a \udef{positive definite kernel} if $[A(i,j)]_{i,j\in [-n:n]} \in \Bounded(\bigotimes_{i = -n}^n \mathcal{H})$ is positive for all $n\in \N$.
+\end{definition}
+
+\begin{proposition}[Kolmogorov decomposition]
+Let $\mathcal{H}$ be a Hilbert space and $K: \Z\times \Z\to \Bounded(\mathcal{H})$ a positive kernel. Then there exists a function $V: \Z\to A$ such that $A(i,j) = V^*(i)V(j)$ for all $i,j\in \Z$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
 \section{Convolution operators}
 
 
@@ -4748,10 +4767,9 @@ so the equality holds by uniqueness of the continuous functional calculus \ref{c
 \begin{lemma} \label{unitisationNonUnitalFunctionalC*algebra}
 Let $X$ be a compact Hausdorff space and $x_0\in X$. Then
 \[ \Psi: \cont(X) \to \setbuilder{f \in \cont(X)}{f(x_0) = 0}^\dagger: f \mapsto \big(f - \constant{f(x_0)}, f(x_0)\big). \]
-is a unital $*$-isomorphism. If $X$ is ..., then $\Psi$ is isometric.
+is a unital $*$-isomorphism. If $X$ is topological and has no isolated points, then $\Psi$ is isometric.
 \end{lemma}
-TODO: when isometric?? Regularity???
-
+TODO: relax condition on $X$ for isometricity?
 \begin{proof}
 Linearity is easily checked, as is bijectivity.
 For multiplicativity, take $f,g \in \cont(X)$. Then
@@ -4764,17 +4782,20 @@ For multiplicativity, take $f,g \in \cont(X)$. Then
 \end{align*}
 
 
-Finaly we prove that $\Psi$ is isometric. For all $f\in \cont(X)$, we have
+Finaly we prove that $\Psi$ is isometric. We have that $X$ is normal by \ref{compactHausdorffSpacesNormal}, so disjoint closed sets are functionally separated by \ref{UrysohnLemma}.
+
+For all $f\in \cont(X)$, we have
 \begin{align*}
 \norm{\Psi(f)} = \norm{\big(f - \constant{f(x_0)}, f(x_0)\big)} &= \sup_{\substack{g \in \cont(X) \\ g(x_0) = 0 \\ \norm{g} \leq 1}}\norm{f\cdot g - \constant{f(x_0)}g + f(x_0)g} \\
 &= \sup_{\substack{g \in \cont(X) \\ g(x_0) = 0 \\ \norm{g} \leq 1}}\norm{f\cdot g} \leq \sup_{\substack{g \in \cont(X) \\ g(x_0) = 0 \\ \norm{g} \leq 1}}\norm{f}\,\norm{g} = \norm{f}.
 \end{align*}
 We need to prove the other inequality.
-We have that $|f(x)|$ attains a maximum at $x_1 \in X$ by
-If $x_1 \neq x_0$, then we have 
+We have that $|f(x)|$ attains a maximum at $x_1 \in X$ by the extreme value theorem, \ref{extremeValueTheorem}. If $x_1 \neq x_0$, then $\{x_0\}$ and $\{x_1\}$ are disjoint closed sets and we can find a continuous $g: X\to \interval{0,1}$ such that $g(x_0) = 0$ and $g(x_1) = 1$ by \ref{UrysohnLemma}. This implies
+\[ \sup_{\substack{g \in \cont(X) \\ g(x_0) = 0 \\ \norm{g} \leq 1}}\norm{f\cdot g} \geq |f(x_1)g(x_1)| = |f(x_1)| = \norm{f}. \]
 
-
-\ref{C*normSupNorm}
+Now assume $x_0 = x_1$. Take arbitrary $\epsilon >0$. Since $|f|$ is continuous and $x_0$ is not an isolated point, there must be $x_2\in X\setminus\{x_0\}$ such that $|f(x_2)| \geq \norm{f} - \epsilon$. Now $\{x_0\}$ and $\{x_2\}$ are disjoint closed sets and we can find a continuous $g: X\to \interval{0,1}$ such that $g(x_2) = 1$ and $g(x_0) = 0$. This implies
+\[ \sup_{\substack{g \in \cont(X) \\ g(x_0) = 0 \\ \norm{g} \leq 1}}\norm{f\cdot g} \geq |f(x_2)g(x_2)| = |f(x_2)| \geq \norm{f}-\epsilon. \]
+Since this holds for all $\epsilon > 0$, we have $\norm{\Psi(f)} \geq \norm{f}$.
 \end{proof}
 
 \begin{theorem}[Continuous functional calculus for non-unital $C^*$-algebras] \label{nonUnitalContinuousFunctionalCalculus}
@@ -4782,7 +4803,7 @@ Let $A$ be a non-unital $C^*$-algebra and $x\in A$ a normal element. There exist
 \[ \Phi'_x: \setbuilder{f\in \cont\big(\spec(x)\big)}{f(0) = 0} \to A \qquad \text{such that} \qquad \Phi'_x(\id_{\spec(x)}) = x. \]
 This $\Phi'_x$ is given by
 \[ \Phi'_x \defeq \proj_1\circ \Phi_{\iota(x)}|_{\setbuilder{f\in \cont(\spec(x))}{f(0) = 0}}, \]
-where $\iota: A\to \widetilde{A}$ is the canonical embedding and $\Phi_{\iota(x)}$ is the continuous functional calculus of $\iota(x)\in A^\dagger$. In particular
+where $\iota: A\to A^\dagger$ is the canonical embedding and $\Phi_{\iota(x)}$ is the continuous functional calculus of $\iota(x)\in A^\dagger$. In particular
 \begin{enumerate}
 \item $\Phi'_x$ is isometric;
 \item $\iota\big(\Phi'_x(f)\big) = \Phi_{\iota(x)}(f)$ for all $f\in \cont\big(\spec(x)\big)$ such that $f(0) = 0$.
@@ -4799,25 +4820,19 @@ To prove this, take arbitrary $f\in \cont\big(\spec(x)\big)$ such that $f(0) = 0
 For the second point, we use this result to write
 \[ \Phi_{\iota(x)}(f) = \big((\proj_1\circ \Phi_{\iota(x)})(f), (\proj_2\circ \Phi_{\iota(x)})(f)\big) = \big((\proj_1\circ \Phi_{\iota(x)})(f), 0\big) = \iota\big((\proj_1\circ \Phi_{\iota(x)})(f)\big). \]
 
-For uniqueness, suppose $\Phi''_x$ is some other such $*$-homomorphism. Then the unitisation $(\Phi''_x)^\dagger$ is a unital $*$-homomorphism that maps $\id_{\spec(x)}$ to $x$, by \ref{unitalExtensionLinearFunction}. 
-
-
-
-
-
-
-
-It is equal to $\Phi_{\iota(x)}$ by \ref{continuousFunctionalCalculus}. This implies
-\[ \Phi''_x = \proj_1 \circ (\Phi''_x)^\dagger = \proj_1 \circ (\Phi''_x)^\dagger \]
-
-
-
-
-
-
-note that the unitisation $(\Phi'_x)^\dagger = \cont\big(\spec(x)\big)\to A^\dagger$ is a continuous functional calculus for $A^\dagger$ and thus unique by \ref{continuousFunctionalCalculus}. This means that the restriction is also unique.
-
-TODO: rework, using \ref{unitisationNonUnitalFunctionalC*algebra}
+For uniqueness, suppose $\Phi''_x$ is some other such $*$-homomorphism. Let
+\[ \Psi: \cont\big(\spec(x)\big) \to \setbuilder{f\in \cont\big(\spec(x)\big)}{f(0) = 0}^\dagger \]
+be the unital $*$-homomorphism of \ref{unitisationNonUnitalFunctionalC*algebra}. Consider the unitisation $(\Phi''_x)^\dagger$. Then $(\Phi''_x)^\dagger\circ \Psi: \cont\big(\spec(x)\big) \to A^\dagger$ is a unital $*$-homomorphism that maps $\id_{\spec(x)}$ to $x$, by \ref{unitalExtensionLinearFunction}. 
+It is equal to $\Phi_{\iota(x)}$ by the uniqueness result in \ref{continuousFunctionalCalculus}. This implies, for all $f\in \setbuilder{f\in \cont\big(\spec(x)\big)}{f(0) = 0}$,
+\begin{align*}
+\Phi'_x(f) &= \Big(\proj_1\circ \Phi_{\iota(x)}|_{\setbuilder{f\in \cont(\spec(x))}{f(0) = 0}}\Big)(f) \\
+&= \Big(\proj_1\circ \Phi_{\iota(x)}\Big)(f) \\
+&= \Big(\proj_1\circ (\Phi''_x)^\dagger\circ \Psi\Big)(f) \\
+&= \Big(\proj_1\circ (\Phi''_x)^\dagger\Big)\big((f, 0)\big) \\
+&= \proj_1\Big(\big(\Phi''_x(f), 0\big)\Big) \\
+&= \Phi''_x(f).
+\end{align*}
+So $\Phi'_x = \Phi''_x$.
 \end{proof}
 
 \begin{proposition}[Spectral mapping] \label{spectralMappingCFC}
@@ -4852,7 +4867,7 @@ TODO proof + restructure + define joint functional calculus? (but we still need 
 
 \begin{lemma}
 Let $X$ be a compact space and view $\mathcal{C}(X)$ as a unital commutative $C^*$-algebra. Fix $g\in\mathcal{C}(X)$. The functional calculus is then given simply by composition:
-\[ \mathcal{C}(g[X]) \to \mathcal{C}(X): f\mapsto f(g) = f\circ g. \]
+\[ \mathcal{C}\big(g^\imf(X)\big) \to \mathcal{C}(X): f\mapsto f(g) = f\circ g. \]
 \end{lemma}
 \begin{proof}
 Composition is a unital $*$-homomorphism with the right properties. The claim follows from uniqueness of the functional calculus.
@@ -4921,6 +4936,7 @@ TODO
 \end{proof}
 
 
+
 \section{Positivity}
 \url{https://link.springer.com/content/pdf/10.1023/A:1009717500980.pdf}
 \subsection{Positive elements}
@@ -4942,17 +4958,6 @@ Let $A$ be a unital $C^*$-algebra and $\lambda\in \C$. Then $\lambda\vec{1} \in 
 \end{lemma}
 \begin{proof}
 We have $\spec(\lambda \vec{1}) = \{\lambda\}$.
-\end{proof}
-
-\begin{proposition}
-Let $A$ be a unital $C^*$-algebra and $a\in A$ a self-adjoint element. Then
-\[ a\in A^+ \qquad\iff\qquad \exists b\in \SelfAdjoints(A):\quad a = b^2. \]
-If we further require $b$ to be positive, then it is unique.
-\end{proposition}
-\begin{proof}
-Let $a\in A^+$. Then define $b = \sqrt{a}$ by spectral calculus. Then we have
-\[ b^2 = (\Phi_a(\sqrt{\mbox{\;\;}}))^2 = \Phi_a(\sqrt{\mbox{\;\;}})\cdot \Phi_a(\sqrt{\mbox{\;\;}}) = \Phi_a(\sqrt{\mbox{\;\;}}^2) = \Phi_a(I_{\sigma(a)}) = a. \]
-Converse by spectral mapping \ref{spectralMappingCFC}.
 \end{proof}
 
 \begin{lemma} \label{positivityDistanceToNorm}
@@ -4985,6 +4990,7 @@ Let $A$ be a $C^*$-algebra. The set $A^+$ is
 \item closed.
 \end{enumerate}
 \end{proposition}
+In particular $A^+$ is closed under addition.
 \begin{proof}
 (1) That $A^+$ is a cone follows from spectral mapping (\ref{spectralMappingCFC}), as does the salience of $A^+$.
 
@@ -5006,22 +5012,89 @@ A^+ &= \big(A^+ \setminus \{0\}\big) \cup \{0\} = \Big(\closure_{A}\big(A^+\setm
 Thus $A^+$ is closed.
 \end{proof}
 
+\begin{lemma} \label{positiveElementEqualsItsAbsValue}
+Let $A$ be a $C^*$-algebra and $a\in A^+$. Then $a = \sqrt{a^2}$.
+\end{lemma}
+If $a,b\in A^+$ are such that $a^2 = b^2$, then $a = \sqrt{a^2} = \sqrt{b^2} = b$.
+\begin{proof}
+Since $\sqrt{(-)^2}$ is equal to the identity on $\spec(a)$, the result follows from continuous functional calculus \ref{continuousFunctionalCalculus} or \ref{nonUnitalContinuousFunctionalCalculus}.
+\end{proof}
 
-\begin{proposition}\label{existenceSquareRoot}
-Let $A$ be a $C^*$-algebra and $a\in A$. Then $a$ is positive \textup{if and only if} $a = b^*b$ for some $b\in A$.
+\begin{proposition}[Jordan decomposition] \label{positiveNegativeParts}
+Let $A$ be a $C^*$-algebra, and $a\in A$ a self-adjoint element. Then there exists a unique decomposition $a=a^+ - a^-$ where $a^+,a^-\in A^+$ and $a^+a^- = 0 = a^-a^+$.
 \end{proposition}
 \begin{proof}
-TODO!!!!
+For existence we can use functional calculus \ref{continuousFunctionalCalculus} or \ref{nonUnitalContinuousFunctionalCalculus}, by setting $a^+ = f^+(a)$ and $a^- = f^-(a)$ where
+\[ f^+: x\mapsto \begin{cases}
+x & (x\geq 0)\\ 0 & (x < 0)
+\end{cases} \qquad\text{and}\qquad f^-: x\mapsto \begin{cases}
+0 & (x\geq 0)\\ -x & (x < 0)
+\end{cases}. \]
+Then $a^+, a^-$ are positive by spectral mapping \ref{spectralMappingCFC} and
+\[ a^+a^- = \Phi_{a}(f^+)\Phi_{a}(f^-) = \Phi_{a}(f^+\cdot f^-) = \Phi_{a}(\constant{0}) = 0. \]
+Now for uniqueness, suppose $a^+_1, a^-_1$ is another such decomposition. Then
+\begin{align*}
+a^2 &= (a^+ - a^-)^2 \\
+&= (a^{+})^2 + (a^{-})^2 - a^+a^- - a^-a^+ \\
+&= (a^{+})^2 + (a^{-})^2 \\
+&= (a^{+})^2 + (a^{-})^2 + a^+a^- + a^-a^+ \\
+&= (a^+ + a^-)^2.
+\end{align*}
+Similarly $a^2 = (a^+_1 + a^-_1)^2$. Since both $a^+ + a^-$ and $a^+_1 + a^-_1$ are positive, by \ref{CstarPositiveConeProperties}, we have
+\[ a^+ + a^- = \sqrt{(a^+ + a^-)^2} = \sqrt{a^2} = \sqrt{(a^+_1 + a^-_1)^2} = a^+_1 + a^-_1 \]
+by \ref{positiveElementEqualsItsAbsValue}. Thus
+\[ 2a_1^+ = (a_1^+ + a_1^-) + (a_1^+ - a_1^-) = (a^+ + a^-) + (a^+ - a^-) = 2a^+, \]
+which implies $a_1^+ = a^+$. Similarly $a_1^- = a^-$.
 \end{proof}
-TODO: link with $\sqrt{a}$?
-\begin{corollary}
-Every positive element is self-adjoint (and, in particular, normal).
-\end{corollary}
-\begin{corollary}
-Let $A$ be a concrete $C^*$-algebra of bounded operators on some Hilbert space $\mathcal{H}$ and $a\in A$. Then $a$ is positive as an element of the $C^*$ algebra \textup{if and only if} $a$ is positive as an operator on $\mathcal{H}$, i.e.\ for all $x\in \mathcal{H}: \inner{x,ax}\geq 0$.
+\begin{corollary}[Cartesian decomposition] \label{CartesianDecomposition}
+Let $A$ be a $C^*$-algebra and $a\in A$. Then we can decompose $a$ as
+\[ (p_1-p_2) + i(p_3-p_4), \]
+where $p_1,p_2,p_3,p_4$ are positive.
 \end{corollary}
 \begin{proof}
-If $a$ is positive, then $a = b^*b$ and thus
+By \ref{realImaginaryParts}.
+\end{proof}
+\begin{corollary}
+Let $A$ be a $C^*$-algebra. Then $\Span_\C(A^+) = A$.
+\end{corollary}
+
+
+\begin{proposition}\label{existenceSquareRoot}
+Let $A$ be a $C^*$-algebra and $a\in A$. Then the following are equivalent:
+\begin{enumerate}
+\item $a$ is positive;
+\item $a = b^2$ for some $b\in A^+$;
+\item $a = c^*c$ for some $c\in A$.
+\end{enumerate}
+The $b$ in point (2) is unique.
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ If $a$ is positive, then $a$ is normal and the square root is a continuous function on $\spec(a)$, with $\sqrt{0} = 0$. Then define $b = \sqrt{a}$ by spectral calculus \ref{continuousFunctionalCalculus} or \ref{nonUnitalContinuousFunctionalCalculus}. We have
+\[ b^2 = (\Phi_a(\sqrt{\mbox{\;\;}}))^2 = \Phi_a(\sqrt{\mbox{\;\;}})\cdot \Phi_a(\sqrt{\mbox{\;\;}}) = \Phi_a(\sqrt{\mbox{\;\;}}^2) = \Phi_a(\id_{\spec(a)}) = a. \]
+By spectral mapping, \ref{spectralMappingCFC}, we have that $b$ is positive and thus self-adjoint. Thus $a = b^2$.
+
+$(2) \Rightarrow (3)$ We can set $c\defeq b$. We have $c^* = b^* = b$.
+
+$(3) \Rightarrow (1)$ Suppose $a = c^*c$. Clearly $a$ is self-adjoint, so we can write $a = a^+ - a^-$ as in \ref{positiveNegativeParts}. Set $d\defeq ca^-$. Then
+\[ d^*d = a^-c^*ca- = a^-aa^- = a^-(a^+ - a^-)a^- = - (a^-)^3. \]
+Thus $\spec(d^*d) = -\spec\big((a^-)^3\big) \subseteq -\R^+$, so $-d^*d$ is positive.
+
+Now, by \ref{realImaginaryParts}, $d = d_0 + id_1$, where $d_0,d_1$ are self-adjoint. Then
+\[ d^*d + dd^* = d_0^2 + id_0d_1 - id_1d_0 + d_1^2 + d_0^2 - id_0d_1 + id_1d_0 + d_1^2 = 2(d_0^2+ d_1^2). \]
+Since $d_0^2, d_1^2$ are positive by \ref{spectrumAlgebraicOperationsOnCommutingElements} (or spectral mapping), and a sum of positive elements is positive by \ref{CstarPositiveConeProperties}, so $dd^* = 2(d_0^2+ d_1^2) + (-d^*d) \in A^+$.
+
+We have $\spec(d^*d) \cup \{0\} = \spec(dd^*)\cup \{0\}$ by \ref{spectrumSwappedElements}. The left-hand side is a subset of $\R^-$, the right-hand side a subset of $\R^+$. Thus $\spec(d^*d) \subseteq \{0\}$. Since $\spec(d^*d)$ is non-empty by \ref{spectrumNonEmpty}, we have $\spec(d^*d) = 0$, so $d^*d$ is quasinilpotent. Since $d^*d$ is normal, we have $d^*d = 0$ by \ref{normNormalElement}. Thus $(a^-)^3 = 0$, so $a^- = \sqrt[3]{(a^-)^3} = \sqrt[3]{0} = 0$. This implies that $a = a^+$, which is positive.
+
+(Uniqueness) Suppose $a = b^2 = b_0^2$ for $b,b_0\in A^+$. Then
+\[ b_0 = \sqrt{b_0^2} = \sqrt{b^2} = b, \]
+by \ref{positiveElementEqualsItsAbsValue}.
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a concrete $C^*$-algebra of bounded operators on some Hilbert space $\mathcal{H}$ and $a\in A$. Then $a$ is positive as an element of the $C^*$ algebra \textup{if and only if} $a$ is positive as an operator on $\mathcal{H}$, i.e.\ for all $x\in \mathcal{H}: \inner{x,ax}\geq 0$.
+\end{proposition}
+\begin{proof}
+If $a$ is positive, then $a = b^*b$ by \ref{existenceSquareRoot} and thus
 \[ \forall x\in \mathcal{H}: \inner{x,ax} = \inner{x, b^*bx} = \inner{bx,bx} = \norm{bx}^2 \geq 0, \]
 meaning $a$ is a positive operator.
 
@@ -5149,28 +5222,8 @@ Let $A$ be a $C^*$-algebra. The real vector space of self-adjoint operators $\Se
 \begin{proof}
 TODO
 \end{proof}
-\begin{corollary} \label{positiveNegativeParts}
-Let $A$ be a unital $C^*$-algebra, and $a\in A$ a self-adjoint element. Then there exists a unique decomposition $a=a^+ - a^-$ where $a^+,a^-\in A^+$ and $a^+a^- = 0$.
-\end{corollary}
-\begin{proof}
-TODO
-\end{proof}
-The corollary \ref{positiveNegativeParts} can also be proved using functional calculus, by setting $a^+ = f^+(a)$ and $a^- = f^-(a)$ where
-\[ f^+: x\mapsto \begin{cases}
-x & (x\geq 0)\\ 0 & (x < 0)
-\end{cases} \qquad\text{and}\qquad f^-: x\mapsto \begin{cases}
-0 & (x\geq 0)\\ -x & (x < 0)
-\end{cases} \]
+Let $A$ be a $C^*$-algebra and $a\in \SelfAdjoints(A)$. Since the $C^*$-subalgebra generated by $\{a\}$ is commutative (because $a$ commutes with $a^* = a$), general Riesz space theory (in particular \ref{PositiveNegativeElements}) gives an alternative proof of the existence of the positive and negative parts of $a$, see \ref{positiveNegativeParts}.
 
-\begin{corollary}[Cartesian decomposition] \label{CartesianDecomposition}
-Let $A$ be a $C^*$-algebra and $a\in A$. Then we can decompose $a$ as
-\[ (p_1-p_2) + i(p_3-p_4) \]
-where $p_1,p_2,p_3,p_4$ are positive.
-\end{corollary}
-\begin{proof}
-By \ref{realImaginaryParts}.
-\end{proof}
-Thus $\Span_\C(A^+) = A$.
 
 \begin{proposition}
 The set of all bounded self-adjoint operators on a Hilbert space is an anti-lattice.
@@ -5678,7 +5731,39 @@ Suppose $a$ has a pseudoinverse $a^+$, can we construct an SVD if $aa^+$ and $a^
 TODO: Link to $K$-theory?? Does this have algorithmic implications??
 
 \section{Hilbert $C^*$-modules}
-\subsection{Inner $C^*$-modules}
+\subsection{$C^*$-sesquilinear forms}
+\begin{definition}
+Let $A$ be a $C^*$-algebra and $V$ a complex vector space. An \udef{$A$-sesquilinear form} on $V$ is a function $S: V\times V\to A$ such that
+\begin{itemize}
+\item $S(x+\lambda y, z) = S(x,z) + \overline{\lambda}S(y,z)$ for all $x,y,z\in V$ and $\lambda \in \C$;
+\item $S(x, y+\lambda z) = S(x,y) + \lambda S(x,z)$ for all $x,y,z\in V$ and $\lambda \in \C$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Polarisation identity for $C^*$-sesquilinear forms] \label{C*PolarisationIdentity}
+Let $A$ be a $C^*$-algebra, $V$ a complex vector space and $S: V\times V \to A$ an $A$-sesquilinear form. Then
+\[ S(x,y) = \frac{1}{4}\sum_{k=0}^3 i^k S(i^k x+y, i^k x+y). \]
+\end{theorem}
+The proof is essentially the same as normal sesquilinear forms, \ref{polarisationIdentities}. TODO: merge?
+\begin{proof}
+We calculate
+\begin{align*}
+\sum_{k=0}^3 i^k S(i^k x+y, i^k x+y) &= \sum_{k=0}^3 i^ki^k(-i)^k S(x, x) + i^k(-i)^kS(x,y) + i^ki^kS(y,x) + i^kS(y,y) \\
+&= \sum_{k=0}^3 i^k S(x, x) + S(x,y) + (-1)^kS(y,x) + i^kS(y,y) \\
+&= \sum_{k=0}^3 S(x,y) \\
+&= 4 S(x,y),
+\end{align*}
+where we have used that $\sum_{k=0}^3 i^k = 0$ and $\sum_{k=0}^3 (-1)^k = 0$.
+\end{proof}
+\begin{corollary} \label{zeroSesquilinearForm}
+Let $A$ be a $C^*$-algebra, $V$ a complex vector space and $S: V\times V \to A$ an $A$-sesquilinear form. Then $S = \constant{0}$ \textup{if and only if} $S(v,v) = 0$ for all $v\in V$.
+\end{corollary}
+\begin{proof}
+The direction $\Rightarrow$ is immediate. For the converse we use the polarisation identity:
+\[ S(u,v) = \frac{1}{4}\sum_{k=0}^3 i^k S(i^k v+u, i^k u+v) = 0. \]
+\end{proof}
+
+\subsection{Inner-product $C^*$-modules}
 \begin{definition}
 Let $A$ be a $C^*$-algebra. A vector space $V$ is a \udef{pre-inner-product $A$-module} if it is a \emph{right} $A$-module and is equipped with a function $(\cdot, \cdot): V\times V\to A$ such that
 \begin{itemize}
@@ -5810,6 +5895,12 @@ Take $a\in A^{n\times n}$. Then we calculate, using \ref{CSnormInequality},
 \end{align*}
 \end{proof}
 
+\subsection{Matrix $C^*$-algebra multiplication}
+\begin{definition}
+Let $A$ be a $C^*$-algebra and $l,m,n \in \N$. Then for all $\mathfrak{a} \in A^{l\times m}$ and $\mathfrak{b} \in A^{m\times n}$ we define $\mathfrak{a}\cdot \mathfrak{b} \in A^{l\times n}$ by
+\[ [\mathfrak{a}\cdot \mathfrak{b}]_{i,j} \defeq \sum_{k=0}^{m-1} [\mathfrak{a}]_{i,k}\cdot [\mathfrak{b}]_{k, j} \]
+for all $i\in [0:l-1]$ and $j\in [0:n-1]$.
+\end{definition}
 
 \subsection{Elementary properties}
 \subsubsection{Inverses}
@@ -5833,33 +5924,93 @@ We calculate
 \end{pmatrix}. \]
 \end{proof}
 
-\subsubsection{Diagonal elements}
+\subsubsection{Diagonal and block-diagonal elements}
 
-\begin{lemma}
-Let $A$ be a unital $C^*$-algebra and $\seq{x_k}_{k=0}^{n-1} \in A^n$. Then $\diag\big(\seq{x_k}_{k=0}^{n-1}\big)$ is invertible \textup{if and only if} each $x_k$ is invertible. In this case  $\diag\big(\seq{x_k}_{k=0}^{n-1}\big)^{-1} = \diag\big(\seq{x_k^{-1}}_{k=0}^{n-1}\big)$.
+\begin{lemma} \label{invertibilityBlockDiagonalMatrix}
+Let $A$ be a unital $C^*$-algebra, $\mathfrak{a}\in A^{n\times n}$ and $\mathfrak{b}\in A^{m\times m}$. Then
+\[ \begin{pmatrix}
+\mathfrak{a} & \mathbb{0} \\
+\mathbb{0} & \mathfrak{b}
+\end{pmatrix} \]
+is invertible \textup{if and only if} both $\mathfrak{a}$ and $\mathfrak{b}$ are invertible.
 \end{lemma}
 \begin{proof}
-If each $x_k$ is invertible, then we can calculate
-\[ \diag\big(\seq{x_k}_{k=0}^{n-1}\big)\cdot \diag\big(\seq{x_k^{-1}}_{k=0}^{n-1}\big) = \diag(\seq{\vec{1}}_{k=0}^{n-1}). \]
-Now suppose $\diag\big(\seq{x_k}_{k=0}^{n-1}\big)$ is invertible with inverse $Y$. Then
-\[ \delta_{i,j}\vec{1} = \big[Y\cdot \diag\big(\seq{x_k}_{k=0}^{n-1}\big)\big]_{i,j} = [Y]_{i,j}x_j \]
-and
-\[ \delta_{i,j}\vec{1} = \big[\diag\big(\seq{x_k}_{k=0}^{n-1}\big)\cdot Y\big]_{i,j} = x_i[Y]_{i,j}. \]
-This implies, for all $j\in [0:n-1]$, that $[Y]_{j,j}$ is the inverse of $x_j$, so $x_j$ is invertible.
+First suppose $\begin{pmatrix}
+\mathfrak{a} & \mathbb{0} \\
+\mathbb{0} & \mathfrak{b}
+\end{pmatrix}$ is invertible, with inverse $Y$. Then we can partition $Y = \begin{pmatrix}
+Y_{0,0} & Y_{0,1} \\ Y_{1,0} & Y_{1,1}
+\end{pmatrix}$, where $Y_{0,0} \in A^{n\times n}, Y_{0,1} \in A^{n\times m}, Y_{1,0} \in A^{m\times n}$ and $Y_{1,1} \in A^{m\times m}$. Then
+\begin{align*}
+\begin{pmatrix}
+\mathbb{1} & \mathbb{0} \\
+\mathbb{0} & \mathbb{1}
+\end{pmatrix} &= \begin{pmatrix}
+\mathfrak{a} & \mathbb{0} \\
+\mathbb{0} & \mathfrak{b}
+\end{pmatrix} \begin{pmatrix}
+Y_{0,0} & Y_{0,1} \\ Y_{1,0} & Y_{1,1}
+\end{pmatrix} = \begin{pmatrix}
+\mathfrak{a}Y_{0,0} & \mathfrak{a}Y_{0,1} \\
+\mathfrak{b}Y_{1,0} & \mathfrak{b}Y_{1,1}
+\end{pmatrix} \\
+&= \begin{pmatrix}
+Y_{0,0} & Y_{0,1} \\ Y_{1,0} & Y_{1,1}
+\end{pmatrix}\begin{pmatrix}
+\mathfrak{a} & \mathbb{0} \\
+\mathbb{0} & \mathfrak{b}
+\end{pmatrix} = \begin{pmatrix}
+Y_{0,0}\mathfrak{a} & Y_{0,1}\mathfrak{b} \\
+Y_{1,0}\mathfrak{a} & Y_{1,1}\mathfrak{b}
+\end{pmatrix}.
+\end{align*}
+This implies $\mathfrak{a}Y_{0,0} = \mathbb{1} = Y_{0,0}\mathfrak{a}$, so $Y_{0,0}$ is the inverse of $\mathfrak{a}$. Similarly $Y_{1,1}$ is the inverse of $\mathfrak{b}$.
+
+Now assume $\mathfrak{a}, \mathfrak{b}$ are invertible. It is clear that $\begin{pmatrix}
+\mathfrak{a}^{-1} & \mathbb{0} \\ \mathbb{0} & \mathfrak{b}^{-1}
+\end{pmatrix}$ is the inverse of $\begin{pmatrix}
+\mathfrak{a} & \mathbb{0} \\ \mathbb{0} & \mathfrak{b}
+\end{pmatrix}$.
+\end{proof}
+\begin{corollary}
+Let $A$ be a unital $C^*$-algebra and $\seq{x_k}_{k=0}^{n-1} \in A^n$. Then $\diag\big(\seq{x_k}_{k=0}^{n-1}\big)$ is invertible \textup{if and only if} each $x_k$ is invertible. In this case  $\diag\big(\seq{x_k}_{k=0}^{n-1}\big)^{-1} = \diag\big(\seq{x_k^{-1}}_{k=0}^{n-1}\big)$.
+\end{corollary}
+\begin{proof}
+Straightforward consequence of the lemma, by induction on $n$.
+\end{proof}
+
+\begin{lemma} \label{spectrumBlockDiagonalMatrix}
+Let $A$ be a unital $C^*$-algebra, $\mathfrak{a}\in A^{n\times n}$ and $\mathfrak{b}\in A^{m\times m}$. Then
+\[ \spec\begin{pmatrix}
+\mathfrak{a} & \mathbb{0} \\
+\mathbb{0} & \mathfrak{b}
+\end{pmatrix} = \spec(\mathfrak{a}) \cup \spec(\mathfrak{b}). \]
+\end{lemma}
+\begin{proof}
+We have
+\begin{align*}
+\lambda \in \spec\begin{pmatrix}
+\mathfrak{a} & \mathbb{0} \\
+\mathbb{0} & \mathfrak{b}
+\end{pmatrix} &\iff \text{$\lambda \mathbb{1} - \begin{pmatrix}
+\mathfrak{a} & \mathbb{0} \\
+\mathbb{0} & \mathfrak{b}
+\end{pmatrix}$ is not invertible} \\
+&\iff \text{$\begin{pmatrix}
+\lambda \mathbb{1} -  \mathfrak{a} & \mathbb{0} \\
+\mathbb{0} & \lambda \mathbb{1} - \mathfrak{b}
+\end{pmatrix}$ is not invertible} \\
+&\iff \text{either $\lambda \mathbb{1} -  \mathfrak{a}$ is not invertible or $\lambda \mathbb{1} -  \mathfrak{b}$ is not invertible} \\
+&\iff \lambda \in \spec(\mathfrak{a}) \cup \spec(\mathfrak{b}),
+\end{align*}
+where we have used \ref{invertibilityBlockDiagonalMatrix}.
 \end{proof}
 \begin{corollary} \label{spectrumDiagonalMatrix}
 Let $A$ be a unital $C^*$-algebra and $\seq{x_k}_{k=0}^{n-1} \in A^n$. Then
 \[ \spec\Big(\diag\big(\seq{x_k}_{k=0}^{n-1}\big)\Big) = \bigcup_{k=0}^{n-1}\spec(x_k). \]
 \end{corollary}
 \begin{proof}
-We have
-\begin{align*}
-\lambda \in \spec\Big(\diag\big(\seq{x_k}_{k=0}^{n-1}\big)\Big) &\iff \text{$\lambda\vec{1} - \diag\big(\seq{x_k}_{k=0}^{n-1}\big)$ is not invertible} \\
-&\iff \text{$\diag\big(\seq{\lambda\vec{1} - x_k}_{k=0}^{n-1}\big)$ is not invertible} \\
-&\iff \exists k\in [0:n-1]: \text{$\lambda\vec{1} - x_k$ is not invertible} \\
-&\iff \exists k\in [0:n-1]: \lambda \in \spec(x_k) \\
-&\iff \lambda \in \bigcup_{k=0}^{n-1}\spec(x_k).
-\end{align*}
+Straightforward consequence of the lemma, by induction on $n$.
 \end{proof}
 
 \subsubsection{Schur complements}
@@ -5893,6 +6044,7 @@ The element $M/d \defeq a-bd^{-1}c$ is the \udef{Schur complement} of $d$ in $M$
 Similarly $M/a \defeq d-ca^{-1}b$ is the Schur complement of $a$ in $M$.
 \end{definition}
 
+TODO: Link with Cholesky decomposition.
 
 \subsection{Positivity in matrix $C^*$-algebras}
 
@@ -5900,12 +6052,73 @@ Similarly $M/a \defeq d-ca^{-1}b$ is the Schur complement of $a$ in $M$.
 Let $A$ be a unital $C^*$-algebra and $\mathfrak{a} \in A^{n\times n}$. Then the following are equivalent:
 \begin{enumerate}
 \item $\mathfrak{a}$ is positive;
-\item $\sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j \geq 0$ for all $\seq{x_k} \in A^n$;
-\item $\sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j \geq 0$ for all $\seq{x_k} \in A^n$ such that $\big(\seq{x_k},\seq{x_k}\big) = \vec{1}$.
+\item $\sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j \geq 0$ for all $\seq{x_k} \in A^n$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
+$(1) \Rightarrow (2)$ By \ref{existenceSquareRoot}, there exists $\mathfrak{b} \in A^{n\times n}$ such that $\mathfrak{a} = \mathfrak{b}^*\mathfrak{b}$. Take $\seq{x_k} \in A^n$. We calculate
+\begin{align*}
+\sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j &= \sum_{i,j=0}^{n-1}x^*_i[\mathfrak{b}^*\mathfrak{b}]_{i,j}x_j \\
+&= \sum_{i,j,k=0}^{n-1}x^*_i[\mathfrak{b}^*]_{i,k}[\mathfrak{b}]_{k,j}x_j \\
+&= \sum_{i,j,k=0}^{n-1}\big([\mathfrak{b}]_{k,i}x_i\big)^*[\mathfrak{b}]_{k,j}x_j \\
+&= \sum_{k=0}^{n-1}\Big(\sum_{i=0}^{n-1}[\mathfrak{b}]_{k,i}x_i\Big)^*\Big(\sum_{j=0}^{n-1}[\mathfrak{b}]_{k,j}x_j\Big) \\
+&= \Bigg(\seq{\sum_{i=0}^{n-1}[\mathfrak{b}]_{k,i}x_i}_k, \seq{\sum_{j=0}^{n-1}[\mathfrak{b}]_{k,j}x_j}_k\Bigg) \geq 0.
+\end{align*}
 
+
+$(2) \Rightarrow (1)$ First we prove that (2) implies that $\mathfrak{a}$ is self-adjoint.
+
+For arbitrary $\seq{x_k} \in A^n$, we have
+\[ \sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j = \Big(\sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j\Big)^* = \sum_{i,j=0}^{n-1}x^*_j[\mathfrak{a}]^*_{i,j}x_i = \sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]^*_{j,i}x_j = \sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}^*]_{i,j}x_j, \]
+so
+\[ 0 = \sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j - \sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a}^*]_{i,j}x_j = \sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a} - \mathfrak{a}^*]_{i,j}x_j. \]
+Then \ref{zeroSesquilinearForm} implies that $\sum_{i,j=0}^{n-1}x^*_i[\mathfrak{a} - \mathfrak{a}^*]_{i,j}y_j$ for all $\seq{x_k}, \seq{y_k}\in A^n$. In particular, for all $k,l\in [0:n-1]$, we have
+\[ 0 = \sum_{i,j=0}^{n-1}\delta_{k,i}^*[\mathfrak{a} - \mathfrak{a}^*]_{i,j}\delta_{l,j} = [\mathfrak{a} - \mathfrak{a}^*]_{k,l}, \]
+so $[\mathfrak{a}]_{k,l} = [\mathfrak{a}^*]_{k,l}$. This implies that $\mathfrak{a}$ is self-adjoint.
+
+We prove the positivity of $\mathfrak{a}$ by induction on $n$. The base case is straightforward: take $a\in A^1$ such that $x^*ax \geq 0$ for all $x\in A$. Then, in particular, taking $x = \vec{1}$ yields $a \geq 0$.
+
+Now suppose $(2)\Rightarrow (1)$ holds for all $\mathfrak{b} \in A^{n-1\times n-1}$. Take arbitrary self-adjoint $\mathfrak{a} = \begin{pmatrix}
+\mathfrak{b} & \arrow{c} \\
+\arrow{c}^* & d
+\end{pmatrix} \in A^{n\times n}$, where $\arrow{c} \in A^{n-1}$ and $d\in A$, such that the property in (2) holds.
+
+We first show that $\mathfrak{b}$ is positive. To that end, take arbitrary $\seq{x_k}\in A^{n-1}$ and consider the sequence $\seq{x_k'} = \seq{x_k} \concat \seq{0}\in A^n$. Then
+\[ \sum_{i,j = 0}^{n-2}x^*_{i}[\mathfrak{b}]_{i,j}x_j = \sum_{i,j = 0}^{n-1}x^{\prime*}_{i}[\mathfrak{a}]_{i,j}x'_j \geq 0. \]
+By the induction hypothesis, this implies that $\mathfrak{b}$ is positive.
+
+By spectral mapping, $\mathfrak{b}_n \defeq \mathfrak{b} + n^{-1}\mathbb{1}$ is invertible and positive for all $n\in \N$. Also define $\mathfrak{a}_n \defeq \mathfrak{a} + n^{-1}\mathbb{1}$.
+
+Then
+\[ \mathfrak{a}_n = \begin{pmatrix}
+\mathfrak{b}_n & \arrow{c} \\
+\arrow{c}^* & d + n^{-1}\vec{1}
+\end{pmatrix} = \begin{pmatrix}
+\mathbb{1} & \mathbb{0} \\
+\arrow{c}^* \mathfrak{b}_n^{-1} & \vec{1}
+\end{pmatrix}\begin{pmatrix}
+\mathfrak{b}_n & \mathbb{0} \\
+\mathbb{0} & d + n^{-1}\vec{1} - \arrow{c}^* \mathfrak{b}_n^{-1} \arrow{c}
+\end{pmatrix}\begin{pmatrix}
+\mathbb{1} & \mathfrak{b}_n^{-1}\arrow{c} \\
+\mathbb{0} & \vec{1}
+\end{pmatrix}. \]
+By \ref{CstarOrderLemma}, the positivity of $\mathfrak{a}_n$ follows from the positivity of $\begin{pmatrix}
+\mathfrak{b}_n & \mathbb{0} \\
+\mathbb{0} & d + n^{-1}\vec{1} - \arrow{c}^* \mathfrak{b}_n^{-1} \arrow{c}
+\end{pmatrix}$, which, by \ref{spectrumBlockDiagonalMatrix}, follows from the positivity of both $\mathfrak{b}_n$ and $d + n^{-1}\vec{1} - \arrow{c}^* \mathfrak{b}^{-1}_n \arrow{c}$. The positivity of $\mathfrak{b}_n$ has already been established. For the positivity of $d + n^{-1}\vec{1} - \arrow{c}^* \mathfrak{b}^{-1}_n \arrow{c}$, consider the sequence
+\[ \seq{x_k} \defeq \seq{- \sum_{l=0}^{n-2}[\mathfrak{b}_n^{-1}]_{k,l}c_l}_k \concat\seq{\vec{1}} \in A^{n}. \]
+Now
+\begin{align*}
+0 &\leq \sum_{i,j = 0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j \\
+&\leq \sum_{i,j = 0}^{n-1}x^*_i[\mathfrak{a}]_{i,j}x_j + n^{-1}\sum_{i = 0}^{n-1}x^*_ix_j = \sum_{i,j = 0}^{n-1}x^*_i[\mathfrak{a}_n]_{i,j}x_j \\
+&= d + n^{-1}\vec{1} - \sum_{i= 0}^{n-2}\Big(\sum_{l=0}^{n-2}[\mathfrak{b}_n^{-1}]_{i,l}c_l\Big)^*c_i - \sum_{j = 0}^{n-2}c^*_j\Big(\sum_{l=0}^{n-2}[\mathfrak{b}_n^{-1}]_{j,l}c_l\Big) + \sum_{i,j = 0}^{n-2}\Big(- \sum_{l=0}^{n-2}[\mathfrak{b}_n^{-1}]_{i,l}c_l\Big)^*[\mathfrak{b}_n]_{i,j}\Big(- \sum_{l=0}^{n-2}[\mathfrak{b}_n^{-1}]_{j,l}c_l\Big) \\
+&= d + n^{-1}\vec{1} - \sum_{i,l = 0}^{n-2}c_l^*[\mathfrak{b}_n^{-1}]^*_{i,l}c_i - \sum_{j,l = 0}^{n-2}c^*_j[\mathfrak{b}_n^{-1}]_{j,l}c_l + \sum_{i,j,k,l = 0}^{n-2}c_k^*[\mathfrak{b}_n^{-1}]_{i,k}^*[\mathfrak{b}_n]_{i,j}[\mathfrak{b}_n^{-1}]_{j,l}c_l \\
+&= d + n^{-1}\vec{1} - \sum_{i,l = 0}^{n-2}c_l^*[\mathfrak{b}_n^{-1}]_{l,i}c_i - \sum_{j,l = 0}^{n-2}c^*_j[\mathfrak{b}_n^{-1}]_{j,l}c_l + \sum_{i,j,k,l = 0}^{n-2}c_k^*[\mathfrak{b}_n^{-1}]_{k,i}[\mathfrak{b}_n]_{i,j}[\mathfrak{b}_n^{-1}]_{j,l}c_l \\
+&= d + n^{-1}\vec{1} - \sum_{i,l = 0}^{n-2}c_l^*[\mathfrak{b}_n^{-1}]_{l,i}c_i - \sum_{j,l = 0}^{n-2}c^*_j[\mathfrak{b}_n^{-1}]_{j,l}c_l + \sum_{k,l = 0}^{n-2}c_k^*[\mathfrak{b}_n^{-1}\mathfrak{b}_n\mathfrak{b}_n^{-1}]_{k,l}c_l \\
+&= d + n^{-1}\vec{1} - \sum_{i,l = 0}^{n-2}c_l^*[\mathfrak{b}_n^{-1}]_{l,i}c_i = d + n^{-1}\vec{1} - \arrow{c}^* \mathfrak{b}^{-1}_n \arrow{c}.
+\end{align*}
+This proves that $\mathfrak{a}_n$ is positive, for all $n\in \N$. Since the set of positive elements is closed, \ref{CstarPositiveConeProperties}, $\mathfrak{a} = \lim_{n\to \infty}\mathfrak{a}_n$ is also positive.
 \end{proof}
 \begin{corollary} \label{diagonalPositiveMatrixPositive}
 Let $A$ be a unital $C^*$-algebra and $\mathfrak{a} \in A^{n\times n}$. If $\mathfrak{a}$ is positive, then $[\mathfrak{a}]_{k,k} \geq 0$ for all $k\in [0:n-1]$.
@@ -6059,17 +6272,7 @@ Let $A$ be a unital $C^*$-algebra and $a\in A$. Then $\norm{a}\leq 1$ \textup{if
 \end{pmatrix}$ is positive in $A^{2\times 2}$.
 \end{corollary}
 
-\subsection{Positive kernels}
-\begin{definition}
-Let $A$ be a $C^*$-algebra. A function $K: \Z\times \Z\to A$ is called a \udef{positive definite kernel} if $[A(i,j)]_{i,j\in [-n:n]}$ is positive for all $n\in \N$.
-\end{definition}
 
-\begin{proposition}[Kolmogorov decomposition]
-Let $A$ be a $C^*$-algebra and $K: \Z\times \Z\to A$ a positive kernel. Then there exists a function $V: \Z\to A$ such that $A(i,j) = V^*(i)V(j)$ for all $i,j\in \Z$.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
 
 \subsection{Completely positive maps}
 \begin{definition}
