@@ -153,6 +153,8 @@ Let $(P, \Yleft_P)$ and $(Q, \Yleft_Q)$ be ordered sets and $f: P\to Q$ a functi
 Similarly we say $f$ is \udef{(reverse) order-reflecting} or a \udef{(reverse) order embedding} if $f$ is relation-reflecting or a relation embedding as a function $P\to Q$ (resp. $P\to Q^o$).
 
 The adjectives ``strict'' and ``weak'' can be added to any of these cases to identify whether the (weak, i.e.\ reflexive) order or the associated strict order is meant.
+
+We let $(P\to Q)_\Yleft$ denote the set of order-preserving functions from $P$ to $Q$.
 \end{definition}
 The concept of order isomorphism (or \udef{similarity}) is similarly inherited. Let $U,V$ be ordered sets. We write $U =_o V$ if $U$ and $V$ are order isomorphic and $U \neq_o V$ if not.
 
@@ -2038,6 +2040,7 @@ Conversely, Suppose $Z$ is not strict. Then $\emptyset\notin Z(P)$. Suppose $\bi
 \subsection{Continuity of posets}
 
 \section{Atoms, density and irreducibility}
+TODO: move down!!
 \subsection{Join- and meet-density}
 \begin{definition}
 Let $P$ be a poset and let $Q\subset P$ be a subset. Then $Q$ is called \udef{join-dense} in $P$ if for every $x\in P$, there exists a subset $S\subset Q$ such that $x= \bigvee_P S$.
@@ -2127,7 +2130,8 @@ Let $\sSet{P,\leq}$ be a poset. Then
 (2) Dual.
 \end{proof}
 
-\subsection{Atomic and atomistic posets}
+
+\subsubsection{Atomic and atomistic posets}
 \begin{definition}
 Let $\sSet{P,\leq}$ be a poset. Then
 \begin{itemize}
@@ -2180,6 +2184,27 @@ An atomistic poset is not necessarily strongly atomic. Consider
 such that there is no element immediately above $x$. Then $\interval{x,\top}$ is not atomic, even though the poset is atomistic.
 \end{example}
 
+\subsection{Tiny elements}
+\begin{definition}
+Let $\sSet{P,\leq}$ be a poset. An element $x\in P$ is called \udef{tiny} if it is $\powerset$-compact.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{P,\leq}$ be a poset. Then
+\begin{enumerate}
+\item if $P$ is infinitely join-distributive, then every atom is tiny;
+\item if $P$ is a Boolean algebra, then every tiny element is an atom.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Let $x\in P$ be an atom. Let $D\subseteq P$ be a subset such that $\bigvee D$ exists and $x \leq \bigvee D$. Then
+\[ x = x\wedge \bigvee D = \bigvee_{d\in D}x\wedge d. \]
+Now for all $d\in D$, $x\wedge d \leq x$, so either $x\wedge d = x$ or $x\wedge d = \bot$. If $x\wedge d = \bot$ for all $d\in D$, then $x =  \bigvee_{d\in D}x\wedge d = \bot$, which is a contradiction. Thus there mus exist at least one $d'\in D$ such that $x\wedge d' = x$. This implies $x\leq d'$ and thus $x\in \downset D$. We conclude that $x$ is tiny.
+
+(2) Let $x\in P$ be tiny. Suppose there exists $y \leq x$ and $x \neq y \neq \bot$. We show that this would imply that $x$ is not tiny. Consider the set $D \defeq \{y, x\wedge \overline{y}\}$. Then
+\[ \bigvee D = y \vee (x\wedge \overline{y}) = (y\vee x)\wedge (y\vee \overline{y}) = (y\vee x)\wedge \top = y\wedge x = x, \]
+so $x \leq \bigvee D$. We do not, however, have $x\in \downset D$. If $x \leq y$, then $x=y$, which is not the case. If $x \leq x\wedge \overline{y}$, then $x = x\wedge \overline{y}$ and thus $x \leq \overline{y}$. By \ref{BooleanComplementLargestDisjoint}, this implies $\bot = x\wedge y = y$, which was disallowed.
+\end{proof}
 
 \chapter{Semilattice}
 \begin{definition}
@@ -5501,19 +5526,22 @@ Suppose $x$ is a partial (i.e.\ not maximal) element that approximates some true
 \begin{lemma} \label{consistencyInclusionFromInequality}
 Let $P$ be a poset and $x,y\in P$. Then
 \begin{enumerate}
+\item $\{x\}^\cons$ is downwards closed;
 \item if $x \leq y$, then $\{y\}^\cons \subseteq \{x\}^\cons$;
 \item if $x \leq y$, then $x\in \{y\}^{\cons\cons}$;
 \item $\downset \{x\} \subseteq \{x\}^{\cons\cons}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) Take $a\in \{y\}^\cons$, then there exists $b\in P$ such that $a,y \leq b$.
+(1) Take $y \leq z \in \{x\}^\cons$. Any upper bound of $\{x,z\}$ is also an upper bound of $\{x,y\}$, so $y\in \{x\}^\cons$.
+
+(2) Take $a\in \{y\}^\cons$, then there exists $b\in P$ such that $a,y \leq b$.
 
 Now $x\leq y\leq b$, so $b$ is an upper bound of $\{x,a\}$ and thus $x\cons a$, which means that $a\in \{x\}^\cons$.
 
-(2) Immediate from (1), using \ref{polarsGaloisConnection}.
+(3) Immediate from (2), using \ref{polarsGaloisConnection}.
 
-(3) Immediate from (2).
+(4) Immediate from (3).
 \end{proof}
 
 \subsection{Consistent extensions}
@@ -5525,14 +5553,14 @@ Let $P$ be a poset and $x\in P$. Then
 is called the \udef{consistent extension} of $x$ if the maximum exists.
 \end{definition}
 
-\begin{proposition}
+\begin{lemma} \label{consistentExtensionLemma}
 Let $P$ be a poset and $x\in P$. Then
 \begin{enumerate}
 \item $\setbuilder[\big]{y \in P}{ \{y\}^\cons = \{x\}^\cons } \subseteq \{x\}^{\cons\cons}$.
 \item $\max \big(\{x\}^{\cons\cons}\big) \subseteq \max \setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$;
 \item $\max \big(\{x\}^{\cons\cons}\big) = \max \setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$ if $P$ is 3-pairwise-consistent-complete.
 \end{enumerate}
-\end{proposition}
+\end{lemma}
 The property 3-pairwise-consistent-complete means that if $A\subseteq P$ is such that every pair of elements of $A$ is consistent and contains fewer than $3$ elements, then $\bigvee A$ exists. This notion might still be slightly too strong.
 \begin{proof}
 (1) Take $y\in \setbuilder[\big]{y\in P}{\{y\}^\cons = \{x\}^\cons}$. In particular, $\{x\}^\cons \subseteq \{y\}^\cons$, so $y\in \{y\} \subseteq \{x\}^{\cons\cons}$.
@@ -5570,8 +5598,26 @@ Here $\setbuilder[\big]{y\in P}{ \{y\}^\cons = \{x\}^\cons }$ consists of just $
 
 \subsubsection{Consistent extensions of order-preserving functions}
 
+\begin{lemma} \label{consistencyFromAtomsOrderPreservingPartialFunctions}
+Let $P,Q$ be posets and $f,g: P\not\to Q$ order-preserving partial functions in $(P\not\to Q)_{\leq}$. Then
+\[ f\cons g \quad\iff\quad \forall x\in \dom(f): \; \{(x, f(x))\} \in \{g\}^\cons. \]
+\end{lemma}
+\begin{proof}
+The direction $\Rightarrow$ is immediate, since $\{g\}^\cons$ is downwards closed, \ref{consistencyInclusionFromInequality}.
+
+For the other direction, suppose $\{(x, f(x))\} \in \{g\}^\cons$ for all $x\in \dom(f)$. We now aim to show that $f\cup g$ is an order-preserving partial function.
+
+First we check that $f\cup g$ is functional. Suppose $x\in \dom(f)\cap \dom(g)$. Then $\{(x, f(x))\} \in \{g\}^\cons$. Let $h$ be an upper bound of $\big\{\{(x, f(x))\}, g\big\}$. Then $f(x) = h(x) = g(x)$. Since $x\in \dom(f)\cap \dom(g)$ was chosen arbitrarily, we have that $f\cup g$ is functional.
+
+Finally, we check that $f\cup g$ is order preserving. Take arbitrary $x,y\in \dom(f\cup g)$ such that $x\leq y$. If $x,y\in \dom(f)$, then $(f\cup g)(x) = f(x) \leq f(y) = (f\cup g)(y)$. Similarly $(f\cup g)(x) \leq (f\cup g)(y)$ if $x,y\in \dom(f)$.
+
+Now assume $x\in \dom(f)$ and $y\in \dom(g)$. Then $\{(x,f(x))\} \cons g$, so we can find an upper bound $h$ of $\big\{\{(x, f(x))\}, g\big\}$. We have
+\[ (f\cup g)(x) = f(x) = h(x) \leq h(y) = g(y) = (f\cup g)(y). \]
+If $x\in \dom(g)$ and $y\in \dom(f)$, then the argument is similar.
+\end{proof}
+
 \begin{lemma} \label{consistentExtenionsIsotoneFunctionToDedekindPoset}
-Let $P$ be a poset, $Q$ a Dedekind-complete poset, $(x,y)\in P\times Q$ and $f: P\not\to Q$ a partial order-preserving function. Then $\{(x,y)\} \in \{f\}^\cons$ \textup{if and only if}
+Let $P$ be a poset, $Q$ a Dedekind-complete poset, $(x,y)\in P\times Q$ and $f\in (P\not\to Q)_\leq$ a partial order-preserving function. Then $\{(x,y)\} \in \{f\}^\cons$ \textup{if and only if}
 \[ \bigvee f^\imf\big(\downset \{x\} \cap \dom(f)\big) \leq y \leq \bigwedge f^\imf\big(\upset \{x\} \cap \dom(f)\big). \]
 \end{lemma}
 \begin{proof}
@@ -5583,16 +5629,53 @@ Since any restriction of an order-preserving function is order-preserving, we ha
 Since $Q$ is Dedekind complete, this is equivalent to 
 \[ \begin{cases}
 \bigvee f^\imf\big(\downset\{x\} \cap \dom(f)\big) \leq y \\
-\bigvee f^\imf\big(\upset\{x\} \cap \dom(f)\big) \geq y.
+\bigwedge f^\imf\big(\upset\{x\} \cap \dom(f)\big) \geq y.
 \end{cases} \]
 \end{proof}
 
 \begin{proposition}
-Let $P$ be a poset, $Q$ a Dedekind-complete poset and $f: P\not\to Q$ a partial order-preserving function. Then the consistent extension $\tilde{f}$ of $f$ is defined by
+Let $P$ be a poset, $Q$ a Dedekind-complete poset and $f: P\not\to Q$ a partial order-preserving function. Then consider the function $\tilde{f}: P\not\to Q$ defined by
 \[ \tilde{f}(x) = y \defequiv \bigvee f^\imf\big(\downset \{x\} \cap \dom(f)\big) = y = \bigwedge f^\imf\big(\upset \{x\} \cap \dom(f)\big). \]
+Then
+\begin{enumerate}
+\item for all $x\in P$, we have
+\[ \bigvee \tilde{f}^\imf\big(\downset \{x\} \cap \dom(\tilde{f})\big) = \bigvee f^\imf\big(\downset \{x\} \cap \dom(f)\big); \]
+\item for all $x\in P$, we have
+\[ \bigwedge \tilde{f}^\imf\big(\upset \{x\} \cap \dom(\tilde{f})\big) = \bigwedge f^\imf\big(\upset \{x\} \cap \dom(f)\big); \]
+\item $\tilde{f}$ is the the consistent extension of $f$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-From \ref{consistentExtenionsIsotoneFunctionToDedekindPoset}. TODO.
+(1) We show that $\tilde{f}^\imf\big(\downset \{x\} \cap \dom(\tilde{f})\big)^\leq = f^\imf\big(\downset \{x\} \cap \dom(f)\big)^\leq$. The inclusion $\subseteq$ follows because $f\subseteq \tilde{f}$.
+
+For the other inclusion, take arbitrary $u \in f^\imf\big(\downset \{x\} \cap \dom(f)\big)^\leq$. Take arbitrary $y\in \downset\{x\} \cup \dom(\tilde{f})$. Then
+\begin{align*}
+\tilde{f}(y) &= \bigvee f^\imf\big(\downset\{y\} \cap \dom(f)\big) \\
+&\leq \bigvee f^\imf\big(\downset\{x\} \cap \dom(f)\big) \leq u,
+\end{align*}
+so $u\in \tilde{f}^\imf\big(\downset \{x\} \cap \dom(\tilde{f})\big)^\leq$.
+
+(2) Dual to (1).
+
+(3) We first show that $\tilde{f} \in \setbuilder{g\in (P\not\to Q)_\leq}{\{g\}^\cons = \{f\}^\cons}$. Indeed, take arbitrary $h\in (P\not\to Q)_\leq$. Then
+\begin{align*}
+h\in \{f\}^\cons &\iff \forall x\in \dom(h): \; \{(x, h(x))\} \in \{f\}^\cons \\
+&\iff \forall x\in \dom(h): \; \bigvee f^\imf\big(\downset \{x\} \cap \dom(f)\big) \leq h(x) \leq \bigwedge f^\imf\big(\upset \{x\} \cap \dom(f)\big) \\
+&\iff \forall x\in \dom(h): \; \bigvee \tilde{f}^\imf\big(\downset \{x\} \cap \dom(\tilde{f})\big) \leq h(x) \leq \bigwedge \tilde{f}^\imf\big(\upset \{x\} \cap \dom(\tilde{f})\big) \\
+&\iff \forall x\in \dom(h): \; \{(x, h(x))\} \in \{\tilde{f}\}^\cons \\
+&\iff h\in \{\tilde{f}\}^\cons,
+\end{align*}
+where we have used \ref{consistencyFromAtomsOrderPreservingPartialFunctions}, \ref{consistentExtenionsIsotoneFunctionToDedekindPoset} and points (1) and (2).
+
+Now we show that $\tilde{f}$ is an upper bound of $\setbuilder{g\in (P\not\to Q)_\leq}{\{g\}^\cons = \{f\}^\cons}$. Take arbitrary $g \in \setbuilder{g\in (P\not\to Q)_\leq}{\{g\}^\cons = \{f\}^\cons}$. We want to show that $g\subseteq \tilde{f}$. To that end, take arbitrary $(x,g(x))\in g$.
+
+Since $f\in \{f\}^\cons = \{g\}^\cons$, we have that $g' \defeq g\cup f$ is order-preserving, so
+\[ g(x) = g'(x) \in g^{\prime\imf}\big(\downset\{x\} \cap \dom(f)\big)^\leq = f^\imf\big(\downset\{x\} \cap \dom(f)\big)^\leq. \]
+Similarly, $g(x) \in f^\imf\big(\upset\{x\} \cap \dom(f)\big)^\geq$. Thus
+\[ \bigvee f^\imf\big(\downset \{x\} \cap \dom(f)\big) \leq g(x) \leq \bigwedge f^\imf\big(\upset \{x\} \cap \dom(f)\big). \]
+Now define
+\[ a \defeq \bigvee f^\imf\big(\downset \{x\} \cap \dom(f)\big) \quad\text{and}\quad b \defeq  \bigwedge f^\imf\big(\upset \{x\} \cap \dom(f)\big). \] 
+By \ref{consistentExtenionsIsotoneFunctionToDedekindPoset}, we have $\{(x,a)\} \in \{f\}^\cons = \{g\}^\cons$ and $\{(x,b)\}\in \{f\}^\cons = \{g\}^\cons$. Since $x\in \dom(g)$, this implies $a = g(x) = b$ and so $x\in\dom(\tilde{f})$, with $g(x) = \tilde{f}(x)$.
 \end{proof}
 
 \section{Domains}
@@ -7206,8 +7289,12 @@ TODO: initial ordering??
 
 
 
-\subsection{Succession in well-ordered sets}
-Let $U$ be a well-ordered set with antisymmetric ordering $\leq$. Then the low end of $U$ it looks like $\N$:
+\subsection{Succession in well-ordered posets}
+\begin{definition}
+Let $P$ be a well-ordered poset. We define the \udef{successor function} $\successor_P: P\to $
+\end{definition}
+
+Let $U$ be a well-ordered poset. Then the low end of $U$ it looks like $\N$:
 \begin{itemize}
 \item let $0_U$ denote the (unique) least element of $U$;
 \item we can define $S_U(x) \defeq \min\setbuilder{y\in U}{x\leq y \land x\neq y}$.
@@ -7220,6 +7307,10 @@ TODO: picture.
 The first limit point (i.e.\ the minimum in the set of limit points) is denoted $\omega_U$ or just $\omega$.
 \end{definition}
 Note that $\omega_U$ exists by definition of well-ordering.
+
+
+\subsubsection{Indexing well-ordered posets}
+
 
 \subsection{Initial segments in well-ordered sets}
 \begin{proposition}

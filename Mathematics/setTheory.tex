@@ -3906,6 +3906,180 @@ Let $A$ be a class and $f,g: A\times A\to A$ binary functions. If $f$ and $g$ ar
 For all $x\in A$ we have $f(x,x) = f(x,g(x,f(x,x))) = x$, where the last equality follows from the absorption law with $y = f(x,x)$.
 \end{proof}
 
+\chapter{Typeclasses}
+\section{The language of types}
+\begin{definition}
+Let $C, F$ be finite sets of symbols. Then \udef{language of types} $T(C, F)$ is defined by
+\[ T \qquad \Coloneqq \qquad C \;|\; F(T) \;|\; T_1\times T_2 \;|\; T_1\to T_2. \]
+\end{definition}
+TODO: deal with brackets???????
+
+TODO: we follow Haskell and make $\to$ right-associative.
+
+\subsection{Interpretation of types}
+\begin{definition}
+Let $C, F$ be finite sets of symbols. An \udef{interpretation} of $\sSet{C, F}$ is a tuple $\sSet{I_C, I_F}$ where
+\begin{itemize}
+\item $I_C: C \to \setbuilder{x}{\Set(x)}$ is a function; and
+\item $I_F: F \to \big(\setbuilder{x}{\Set(x)} \not\to \setbuilder{x}{\Set(x)}\big)$ is a functional relation.
+\end{itemize}
+\end{definition}
+
+\begin{proposition} \label{existenceUniquenessInterpretationOfType}
+Let $C, F$ be finite sets of symbols with interpretation $\sSet{I_C, I_F}$. There exists a unique function $I: T(C,F) \to \setbuilder{x}{\Set(x)}$ such that
+\begin{enumerate}
+\item $I(\seq{c}) = I_C(c)$ for all $c\in C$;
+\item $I(\seq{f}) = I_F(f)$ for all $f\in F$;
+\item $I\big(\seq{\big.f(}\concat t\concat \seq{\big.)}\big) = \begin{cases}
+I(f)\big(I(t)\big) & (I(t) \in \dom(I(f))) \\
+\emptyset & (\text{otherwise})
+\end{cases}$ for all $f\in F$ and $t\in T(C,F)$;
+\item $I\big(t_1\concat \seq{\times} \concat t_2\big) = I(t_1)\times I(t_2)$ for all $t_1,t_2 \in T(C,F)$;
+\item $I\big(t_1\concat \seq{\to} \concat t_2\big) = \big(I(t_1)\to I(t_2)\big)$ for all $t_1,t_2 \in T(C,F)$;
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+TODO! Deal with ambiguity via brackets!
+\end{proof}
+
+\begin{definition}
+We call a function $I: T(C,F) \to \setbuilder{x}{\Set(x)}$ as defined in \ref{existenceUniquenessInterpretationOfType} an \udef{interpretation} of $T(C,F)$.
+\end{definition}
+
+
+\section{Typeclasses}
+\begin{definition}
+Let $C,F, \Omega$ be disjoint sets and $\blank$ an element not in any of them.
+
+A \udef{typeclass signature} is a tuple $\sSet{\Omega, C, \blank,F,t}$, where $t: \Omega \to T(C\cup\{\blank\},F)$ is a function.
+\end{definition}
+
+\subsection{Semantics}
+\begin{definition}
+A \udef{structure} of type $\sSet{\Omega, C, \blank,F,t}$ or \udef{$\Omega$-structure} consists of
+\begin{itemize}
+\item a set $A$;
+\item an interpretation $I$ of $T(C\cup\{\blank\}, F)$ such that $I(\seq{\blank}) = A$;
+\item a function $s: \Omega \to \setbuilder{x}{\Set(x)}$ such that $s(\omega) \in I\big(t(\omega)\big)$ for all $\omega\in \Omega$.
+\end{itemize}
+\end{definition}
+
+TODO convenient ways to represent signature (see Functors, Applicative, Monads).
+
+\section{Parametric typeclasses}
+\begin{definition}
+Let $C,V,F, \Omega$ be disjoint sets and $\blank$ an element not in any of them.
+
+A \udef{parametric typeclass signature} is a tuple $\sSet{\Omega, C, V, F, \blank,t}$, where $t: \Omega \to T(C\cup V,F\cup\{\blank\})$ is a function.
+\end{definition}
+
+\subsection{Semantics}
+\begin{definition}
+A \udef{structure} of type $\sSet{\Omega,C,V,F, \blank,t}$ or \udef{$\Omega$-structure} consists of
+\begin{itemize}
+\item a functional relation $f: \setbuilder{x}{\Set(x)} \to \setbuilder{x}{\Set(x)}$;
+\item an iterpretation $(I_C, I_F)$ of $(C,F\cup\{\blank\})$
+\item for all interpretations $I: T(C\cup V,F\cup\{\blank\})$ that extend $(I_C, I_F)$ and $\omega\in \Omega$, there exists $\omega_J \in J\big(t(\omega)\big)$.
+\end{itemize}
+\end{definition}
+TODO notion of extending an interpretation.
+
+TODO: we often write $\omega_J$ as $\omega_{A,B}$ if $V = \{A,B\}$, since defining these defines $J$.
+
+\subsection{Examples}
+
+\url{https://wiki.haskell.org/Typeclassopedia}
+
+\url{https://blog.ploeh.dk/2018/03/19/functors-applicatives-and-friends/}
+
+\url{https://mathoverflow.net/questions/85391/any-example-of-a-non-strong-monad}
+
+\url{https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html}
+
+TODO: Type classes: An exploration of the design space
+
+\subsubsection{Functors}
+\begin{definition}
+A \udef{functor} is a parametric typeclass of type
+\[ \sSet{\{\fmap\}, \emptyset, \{A, B\}, \emptyset, F, \{ (\fmap, \seq{(A\to B) \to F(A) \to F(B)}) \} } \]
+such that
+\begin{itemize}
+\item $\fmap_{A,A}(\id_A) = \id_{F(A)}$ for all $A\in \dom(F)$;
+\item $\fmap_{C,B}(f)\circ \fmap_{B,A}(g) = \fmap_{C,A}(f\circ g)$ for all $A,B,C\in \dom(F)$, $g: A\to B$ and $f: B\to C$.
+\end{itemize}
+\end{definition}
+TODO: make $\id_A$ part of type?? This would allow other identities to be used.
+
+TODO: here many tokens are symbols. Should I use quotes??
+
+We can simplify the type information by saying that a \udef{functor} is a parametric typeclass $F$ with signature
+\[ \fmap: (A\to B) \to F(A) \to F(B). \]
+
+
+\subsubsection{Semi-applicatives}
+\begin{definition}
+A \udef{semi-applicative} is a parametric typeclass $F$ with signature
+\begin{align*}
+&\fmap: (A\to B) \to F(A) \to F(B) \\
+&\pure: A\to F(A)
+\end{align*}
+such that
+\begin{itemize}
+\item $\sSet{F,\fmap}$ is a functor;
+\item $\pure_B\circ f = \fmap_{A,B} \circ \pure_A$ for all $A,B\in \dom(F)$ and $f: A\to B$.
+\end{itemize}
+\end{definition}
+TODO: This is a functor with unit $\eta$.
+
+TODO: I have no reference for this, is it equivalent to something else?
+
+
+\subsubsection{Applicatives}
+Let $(\circ)_{A,B,C}$ be the function $(B\to C) \to (A\to B) \to (A\to C)$
+
+\begin{definition}
+An \udef{applicative} is a parametric typeclass $F$ with signature
+\begin{align*}
+&\fmap: (A\to B) \to F(A) \to F(B) \\
+&\pure: A\to F(A) \\
+&\Aseq: F(A\to B) \to F(A) \to F(B)
+\end{align*}
+such that
+\begin{itemize}
+\item $\sSet{F,\fmap, \pure}$ is a semi-applicative;
+\item $\fmap_{A,B} = \Aseq_{A,B} \circ \pure_{A\to B}$ for all $A,B\in \dom(F)$;
+\item $\Aseq_{(B\to C), (A\to C)} \circ \fmap_{(B\to C), (A\to B)\to (A\to C)} \big((\circ)_{A,B,C}\big) = (\circ)_{F(A), F(B), F(C)}$ for all $A,B,C,\in \dom(F)$;
+\item $\fmap_{(A\to B), B}(\evalMap_x)(a) = \Aseq_{A,B}(a)\big(\pure(x)\big)$ for all $A,B\in \dom(F)$, $x\in A$ and $a\in F(A\to B)$. 
+\end{itemize}
+\end{definition}
+Note that the second point implies that we can define applicatives without reference to $\fmap$.
+
+\subsubsection{Monads}
+\begin{definition}
+A \udef{monad} is a parametric typeclass $F$ with signature
+\begin{align*}
+&\fmap: (A\to B) \to F(A) \to F(B) \\
+&\pure: A\to F(A) \\
+&\join: F^2(A) \to F(A)
+\end{align*}
+such that
+\begin{itemize}
+\item $\sSet{F,\fmap, \pure}$ is a semi-applicative;
+\item $\join_{A} \circ \fmap_{F^2(A), F(A)}(\join_A) = \join_A \circ \join_{F(A)}$ for all $A\in \dom(F)$;
+\item $\join_{A}\circ \fmap_{A, F(A)}(\pure_A) = \join_A \circ \pure_{F(A)} = \id_{F(A)}$ for all $A\in \dom(F)$;
+\item $\join_B \circ \fmap_{F(A), F(B)}\big(\fmap_{A,B}(f)\big) = \fmap_{A,B}(f)\circ \join_A$ for all $A, B\in \dom(F)$ and $f\in (A\to B)$.
+\end{itemize}
+\end{definition}
+The last point means that $\join$ is a natural transformation. We can also write it as
+\[ \join_B \circ \fmap^2_{A,B}(f) = \fmap_{A,B}(f)\circ \join_A. \]
+
+\begin{definition}
+Let $\sSet{M, \fmap, \pure, \join}$ be a monad. TODO define $\bind$.
+\end{definition}
+
+
+TODO: Parsec.
+
 
 \chapter{The natural numbers}
 \begin{definition}
