@@ -6,89 +6,215 @@
 \chapter{Integration}
 
 \section{Integration of functions with real domain}
+\subsection{Finite sets and (tagged) partitions}
+\begin{definition}
+Let $J \subseteq \R$ be a finite set. 
+\begin{itemize}
+\item The \udef{segment set} of $J$ is the set
+\[ \seg(J) \defeq \setbuilder{(x,y)\in J\times J}{x \lessdot y}. \]
+\item We call $\min_{(x,y) \in \seg(J)}y-x$ the \udef{width} of $J$.
+\item A \udef{free tagging function} for $J$ is a function $t: \seg(J) \to \R$.
+\item We call $t$ a \udef{tagging function} or a \udef{confined tagging function} if $t\big((x,y)\big) \in \interval{x,y}$.
+\item We call $t$ a \udef{strict tagging function} or a \udef{strictly confined tagging function} if $t\big((x,y)\big) \in \interval[o]{x,y}$.
+\item A \udef{(free/confined/strict) tagged partition} is a pair $\sSet{J, t}$, where $J\subseteq \R$ is a finite set and $t$ is a (free/confined/strict) tagging function on $J$.
+\end{itemize}
+\end{definition}
+The relation $\lessdot$ is the covering relation.
+
 \subsection{Step functions}
 \begin{definition}
-Let $V$ be a real vector space. A function $f: \R \to V$ is called a \udef{step function} if
+Let $V$ be a vector space. A function $f: \R \to V$ is called a \udef{step function} if
 \begin{itemize}
-\item there exists an ordered string $\seq{x_k}_{k=0}^n$ of real numbers;
-\item $f(x) = 0$ for all $x\in \interval[o]{-\infty, x_0} \cup \interval[o]{x_n, \infty}$;
-\item for all $k\in [0:n-1]$ there exists $v\in V$ such that $f(x) = v$ for all $x\in \interval[o]{x_k, x_{k+1}}$.
+\item there exists a finite set $J$ of real numbers with at least two distinct elements;
+\item $f(x) = 0$ for all $x\in \interval[o]{-\infty, \min(J)} \cup \interval[o]{\max(J), \infty}$;
+\item $f(x) = f(y)$ for all $a \lessdot b \in J$ and $x,y\in \interval[o]{a,b}$.
 \end{itemize}
-We call $\seq{x_k}_{k=0}^n$ a \udef{string of jumps} of $f$. We denote the set of step functions in $(\R\to V)$ by $\SF(\R,V)$ or $\SF(V)$.
+We call $J$ a \udef{set of jumps} of $f$. We denote the set of step functions in $(\R\to V)$ by $\SF(\R,V)$ or $\SF(V)$.
 \end{definition}
 Note that we allow $f$ to take any value at the jumps. A step function does not have a unique string of jumps, since we do not require the function to change at the jump points. So we can always add extra points.
 
-TODO: establish a (unique) minimal string of jumps?
+TODO: establish a (unique) minimal set of jumps?
+
+\begin{lemma} \label{segmentFunctionAssociatedToStepFunction}
+Let $V$ be a vector space and $f\in \SF(V)$ with jump set $J$. Then there exists a unique function $f_J: \seg(J) \to V$ such that $f(x) = f_J\big((a,b)\big)$ for all $(a,b)\in \seg(J)$ and $x\in \interval[o]{a,b}$.
+
+This function is given by
+\[ f_J: \seg(J) \to V: (a,b) \mapsto f\Big(\frac{a+b}{2}\Big). \]
+\end{lemma}
+\begin{proof}
+For existence, we just need to check that the proposed function works. Take arbitrary $(a,b)\in \seg(J)$ and $x\in \interval[o]{a,b}$. Since $a < b$, we have $a < \frac{a+b}{2} < b$, so $\frac{a+b}{2}\in \interval[o]{a,b}$. By the definition of jump function, we have
+\[ f(x) = f\Big(\frac{a+b}{2}\Big) = f_J(a,b). \]
+
+For uniqueness, suppose some other function $h: \seg(J) \to V$ satisfies the requirements. Take arbitrary $(a,b)\in \seg(J)$. Then $\frac{a+b}{2}\in \interval[o]{a,b}$ implies that $h(a,b) = f\Big(\frac{a+b}{2}\Big)$.
+\end{proof}
+
+\begin{lemma} \label{supersetJumpSet}
+Let $V$ be a vector space and $f\in \SF(V)$. Let $J,K \subseteq \R$ be finite subsets. If $J\subseteq K$ and $J$ is a jump set of $f$, then $K$ is also a jump set of $f$.
+\end{lemma}
+\begin{proof}
+Suppose $J\subseteq K$ and that $J$ is a jump set of $f$. Then $K$ has more distinct elements than $J$, so at least 2.
+
+Also,
+\[ \interval[o]{-\infty,\min(K)} \cup \interval[o]{\max(K), \infty} \subseteq \interval[o]{\big.-\infty,\min(J)} \cup \interval[o]{\max(J), \infty}, \]
+so $f(x) = 0$ for all $x\in \interval[o]{-\infty,\min(K)} \cup \interval[o]{\max(K), \infty}$.
+
+Finally, take $a\lessdot b\in K$ and $x, y\in \interval[o]{a,b}$. Since
+\[ \interval[o]{a,b} \subseteq \interval[o]{\max(\downset\{a\}\cap J), \min(\upset\{a\}\cap J)} \]
+and $\max(\downset\{a\}\cap J) \lessdot \min(\upset\{a\}\cap J)$, we have $f(x) = f(y)$.
+\end{proof}
 
 
-TODO: interleaving of jump points?
+\begin{lemma} \label{jumpSetSumFunction}
+Let $V$ be a vector space and $f,g \in \SF(V)$ with jump sets $J_f, J_g$. Then $f+g\in \SF(V)$ with jump set $J_f\cup J_g$.
+\end{lemma}
+\begin{proof}
+Indeed, take $a \lessdot b \in J_f \cup J_g$. Then
+\[ \interval[o]{a,b} \subseteq \interval[o]{\big.\max(\downset\{x\}\cap J_f), \min(\upset\{x\}\cap J_f)} \quad\text{and}\quad \interval[o]{a,b} \subseteq \interval[o]{\big.\max(\downset\{x\}\cap J_g), \min(\upset\{x\}\cap J_g)}. \]
+Take $x,y\in \interval[o]{a,b}$ and calculate
+\[ (f+g)(x) = f(x) + g(x) = f(y) + g(y) = (f+g)(y). \]
+\end{proof}
 
 
 \begin{proposition}
-Let $V$ be a real vector space. Then $\SF(V)$ is a Riesz subspace of $(\R\to V)$.
+Let $V$ be a vector space. Then
+\begin{enumerate}
+\item $\SF(V)$ is a subspace of $(\R\to V)$;
+\item if $V$ is a Riesz space, then $\SF(V)$ is a Riesz subspace of $(\R\to V)$.
+\end{enumerate}
 \end{proposition}
 The Riesz space $(\R\to V)$ is equipped with point-wise operations.
 \begin{proof}
-By \ref{RieszSubspaceJoinClosure}, it is enough to check that $\SF(V)$ is a subspace and closed under binary joins.
+(1) We need to show that $\SF(V)$ is closed under vector operations. Let $f,g \in \SF(V)$ and $\lambda\in \R$. Let $J_f$ be a set of jumps for $f$ and $J_g$ a set of jumps for $g$. It is clear that $\lambda f$ is still a step function with set of jumps $J_f$.
 
-Let $f,g \in \SF(V)$ and $\lambda\in \R$. Let $s_f$ be a string of jumps for $f$ and $s_g$ a string of jumps for $g$. It is clear that $\lambda f$ is still a step function with string of jumps $s_f$.
+The function $f+g$ is a step function by \ref{jumpSetSumFunction}.
 
-The functions $f+g$ and $f\vee g$ are step functions with jump string TODO.
+(2) By \ref{RieszSubspaceJoinClosure} and (1), it is enough to check that $\SF(V)$ is closed under binary joins. The proof is completely analogous to the proof of \ref{jumpSetSumFunction}, with $+$ replaced by $\vee$.
 \end{proof}
 
-\subsubsection{Riemann sums}
+\subsubsection{Riemann and Stieltjes sums}
 \begin{definition}
-Let $V$ be a real vector space and $f: \R\to V$ a step function with string of jumps $\seq{x_k}_{k=0}^n$. Then
-\[ \sum f \Delta{x} \defeq \sum_{k=0}^{n-1} f\Big(\frac{x_{k+1} - x_k}{2}\Big)(x_{k+1} - x_k) \]
-is called the \udef{Riemann sum} of $f$.
-
-We call the function
-\[ I: \SF(V,\R) \to V: f \mapsto \sum f \Delta{x} \]
-the \udef{Riemann summation} function.
-\end{definition}
-Note that $f\big(\frac{x_{k+1} - x_k}{2}\big)$ can be replaced by $f(x')$ for any $x'\in \interval[o]{x_{k}, x_{k+1}}$. 
-
-\begin{lemma}
-Let $V$ be a real vector space. The Riemann summation function is well-defined, i.e.\ its value is independent of the chosen string of jumps.
-\end{lemma}
-\begin{proof}
-Take $f\in \SF(V,\R)$ and let $u,v$ be two jump strings for $f$. Set $w \defeq $. It is enough to show that the Riemann sum is the same when computed using either $u$ or $w$.
-
-
-\end{proof}
-
-\begin{lemma}
-Let $V$ be a real vector space. Then the Riemann summation function is
-\begin{enumerate}
-\item linear;
-\item order-preserving.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) Take $f,g\in \SF(V)$ and $\lambda\in \R$. Then 
-\end{proof}
-
-\subsubsection{Stieltjes sums}
-\begin{definition}
-Let $V$ be a real vector space, $g: \R\to \R$ a real function and $f: \R\to V$ a step function with string of jumps $\seq{x_k}_{k=0}^n$. Then
-\[ \sum f \Delta{g} \defeq \sum_{k=0}^{n-1} f\Big(\frac{x_{k+1} - x_k}{2}\Big)\big(g(x_{k+1}) - g(x_k)\big) \]
-is called the \udef{Stieljes sum} of $f$ with respect to $g$.
+Let $V$ be a real vector space, $g: \R\to \R$ a real function and $f: \R\to V$ a step function with set of jumps $J$. Consider $f_J$ as defined in \ref{segmentFunctionAssociatedToStepFunction}. Then
+\[ \sum f \Delta{g} \defeq \sum_{a \lessdot b\in J} f_J(a,b)\big(g(b) - g(a)\big) \]
+is called the \udef{Stieljes sum} of $f$ with respect to $g$. If $g = \id_\R$, we call it the \udef{Riemann sum} of $f$, which is denoted $\sum f \Delta{x}$
 
 We call the function
 \[ I_g: \SF(V,\R) \to V: f \mapsto \sum f \Delta{g} \]
-the \udef{Stieltjes summation} function.
+the \udef{Stieltjes summation} function. If $g = \id_\R$, it is called the \udef{Riemann summation} function.
 \end{definition}
+Explicity, we can define the Stieltjes sum as
+\[ \sum f \Delta{g} \defeq \sum_{a \lessdot b\in J} f\Big(\frac{a+ b}{2}\Big)\big(g(b) - g(a)\big). \]
+In fact, $f\big(\frac{a + b}{2}\big)$ can be replaced by $f(x')$ for any $x'\in \interval[o]{a, b}$. 
+The Riemann sum is given by
+\[ \sum f \Delta{x} = \sum_{a\lessdot b \in J} f_J(a,b)(b - a) = \sum_{a\lessdot b \in J} f\Big(\frac{a+ b}{2}\Big)(b - a). \]
 
-\subsection{The Riemann integral}
+\begin{lemma}
+Let $V$ be a real vector space and $g: \R\to \R$ a real function. The Stieltjes summation function $I_g$ w.r.t.\ $g$ is well-defined, i.e.\ its value is independent of the chosen set of jumps.
+\end{lemma}
+\begin{proof}
+Take $f\in \SF(V,\R)$ and let $J,J'$ be two jump strings for $f$. Set $J'' \defeq J\cup J'$. It is enough to show that the Riemann sum is the same when computed using either $J$ or $J''$.
+
+Since $J \subseteq J ''$, we observe that
+\[ \seg(J'') = \biguplus_{(a,b) \in \seg(J)}\setbuilder{(x,y)\in \seg(J'')}{a \leq x \leq y \leq b} \eqdef \biguplus_{(a,b) \in \seg(J)} S_{a,b}. \]
+We can calculate
+\begin{align*}
+I_g(f) &= \sum_{(x,y)\in \seg(J'')} f_{J''}(x,y)\big(g(y) - g(x)\big)  \\
+&= \sum_{(a,b)\in \seg{J}}\sum_{(x,y)\in S_{a,b}} f_{J''}(x,y)\big(g(y) - g(x)\big)  \\
+&= \sum_{(a,b)\in \seg{J}}\sum_{(x,y)\in S_{a,b}} f\Big(\frac{x+y}{2}\Big)\big(g(y) - g(x)\big)  \\
+&= \sum_{(a,b)\in \seg{J}}\sum_{(x,y)\in S_{a,b}} f_J(a,b)\big(g(y) - g(x)\big)  \\
+&= \sum_{(a,b)\in \seg{J}}f_J(a,b)\bigg(\sum_{(x,y)\in S_{a,b}}g(y) - g(x)\bigg) \\
+&= \sum_{(a,b)\in \seg{J}}f_J(a,b)\big(g(b) - g(a)\big),
+\end{align*}
+where we have used $\frac{x+y}{2} \in \interval[o]{a,b}$.
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a vector space and $g: \R\to \R$ a real function. Let $f\in \SF(V)$ be a step function with jump set $J$. We have
+\[ I_g(f) = \sum_{(a,b) \in \seg(J)}(f\circ t)(a,b)\big(g(b) - g(a)\big) \]
+for every strict tagging function $t: \seg(J) \to \R$.
+\end{lemma}
+\begin{proof}
+For all $(a,b) \in \seg(J)$, we have $t(a,b) \in \interval[o]{a,b}$, so $f\big(t(a,b)\big) = f_J(a,b)$ by \ref{segmentFunctionAssociatedToStepFunction}. Thus
+\[ I_g(f) = \sum_{(a,b) \in \seg(J)}f_J(a,b)\big(g(b) - g(a)\big) = \sum_{(a,b) \in \seg(J)}(f\circ t)(a,b)\big(g(b) - g(a)\big). \]
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a vector space and $g: \R\to \R$ a real function. Then 
+\begin{enumerate}
+\item the Stieltjes summation function $I_g$ is linear;
+\item if $V$ is an ordered vector space and $g$ is increasing, then $I_g$ order-preserving.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Take $f,h\in \SF(V)$ and $\lambda\in \F$. Let $J_f$ be a jump set of $f$ and $J_h$ a jump set of $h$. Then, by \ref{supersetJumpSet} and \ref{jumpSetSumFunction}, $J \defeq J_f\cup J_h$ is a jump set for $f,h, f+h$ and $f+\lambda h$. We calculate, using the notation of \ref{segmentFunctionAssociatedToStepFunction}
+\begin{align*}
+I_g(f+\lambda h) &= \sum_{a \lessdot b\in J} (f + \lambda h)_J(a,b)\big(g(b) - g(a)\big) \\
+&= \sum_{a \lessdot b\in J} (f + \lambda h)\Big(\frac{a + b}{2}\Big)\big(g(b) - g(a)\big) \\
+&= \sum_{a \lessdot b\in J} \bigg(f\Big(\frac{a + b}{2}\Big) + \lambda h\Big(\frac{a + b}{2}\Big)\bigg)\big(g(b) - g(a)\big) \\
+&= \sum_{a \lessdot b\in J} f\Big(\frac{a + b}{2}\Big)\big(g(b) - g(a)\big) + \lambda \sum_{a \lessdot b\in J} h\Big(\frac{a + b}{2}\Big)\big(g(b) - g(a)\big) \\
+&= I_g(f) + \lambda I_g(h).
+\end{align*}
+
+(2) Take $f,h\in \SF(V)$ such that $f \leq h$ pointwise. Let $J_f$ be a jump set of $f$ and $J_h$ a jump set of $h$. Then, by \ref{supersetJumpSet}, $J \defeq J_f\cup J_h$ is a jump set for $f$ and $h$. We calculate
+\[ I_g(f) = \sum_{a \lessdot b\in J} f\Big(\frac{a + b}{2}\Big)\big(g(b) - g(a)\big) \leq \sum_{a \lessdot b\in J} h\Big(\frac{a + b}{2}\Big)\big(g(b) - g(a)\big) = I_g(h), \]
+using \ref{additionVectorInequalities} and the fact that $g(b) - g(a)$ is positive for all $a \lessdot b$.
+\end{proof}
+
+\begin{proposition}
+$I_g$ is $\sigma$-chain continuous. (if $g$ is of bounded variation?)
+\end{proposition}
+
+
+\subsubsection{Bounded variation}
+
+
+\subsection{The Riemann and Riemann-Stieltjes integral}
 \begin{definition}
-Let $V$ be a real vector space. 
+Let $V$ be a real ordered vector space, $g: \R\to\R$ a monotonically increasing function. Consider the Stieltjes summation function $I_g$ as partial order-preserving function in $(\R\to V)\not\to V$. We call the consistent extension of $I_g$ the \udef{Riemann-Stieltjes integral} w.r.t.\ $g$. We denote this function $\int \mathrel{.} \diff{g}$.
+If a function $f: \R \to V$ is an element of $\dom\big(\int \mathrel{.} \diff{g}\big)$, we say it is \udef{Riemann-Stieltjes integrable} w.r.t.\ $g$.
+
+The consistent extension of the Riemann summation function $I$ is called the \udef{Riemann integral} and denoted $\int \mathrel{.} \diff{x}$. Function $f: \R \to V$ that are elements of $\dom\big(\int \mathrel{.} \diff{x}\big)$ are called \udef{Riemann integrable}.
 \end{definition}
 
+TODO: every Riemann integrable function is bounded and has compact support. TODO: improper Riemann integral.
+
+\begin{proposition}
+Let $V$ be a real ordered vector space and $g: \R\to\R$ a monotonically increasing function. Then $\dom\big(\int \mathrel{.} \diff{g}\big)$ is a vector space and $\int \mathrel{.} \diff{g}$ is a linear function.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+\begin{proposition} \label{RiemannIntegralSqueeze}
+Let $V$ be a Dedekind complete Riesz space, $g: \R\to\R$ a monotonically increasing function and $f: \R\to V$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is Riemann-Stieltjes integrable;
+\item there exists $y\in V$ such that
+\[ \bigvee \setbuilder{\int \varphi \diff{g}}{\big(\varphi \in \SF(V)\big) \land (\varphi \leq f)} \leq y \leq \bigwedge\setbuilder{\int \varphi \diff{g}}{\big(\varphi \in \SF(V)\big) \land (\varphi \geq f)}. \]
+\end{enumerate}
+In this case $y = \int f \diff{g}$.
+\end{proposition}
+\begin{proof}
+This follows immediately from \ref{consistentExtensionIsotoneFunctionToDedekindCompletePoset}.
+\end{proof}
+
+\begin{proposition}
+Let $g: \R\to\R$ a monotonically increasing function and $f: \R\to \R$ a function. Then the following are equivalent:
+\begin{enumerate}
+\item $f$ is integrable w.r.t.\ $g$;
+\item $\exists y\in \R: \forall \epsilon > 0: \exists \delta > 0:$ such that for all tagged partitions $(J,t)$:
+\[  w_J \leq \delta \implies \bigg|\sum_{(a,b)\in \seg(J)}(f\circ t)(a,b)\big(g(b) - g(a)\big) - y \bigg| \leq \epsilon, \]
+where $w_J$ is the width of $J$;
+\item $\exists y\in \R: \forall \epsilon > 0: \exists \delta > 0:$ such that for all \emph{strict} tagged partitions $(J,t)$:
+\[  w_J \leq \delta \implies \bigg|\sum_{(a,b)\in \seg(J)}(f\circ t)(a,b)\big(g(b) - g(a)\big) - y \bigg| \leq \epsilon, \]
+where $w_J$ is the width of $J$.
+\end{enumerate}
+In this case $y = \int f \diff{g}$.
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Set $y = \int f \diff{g}$. By \ref{RiemannIntegralSqueeze}, we can find $\varphi_0, \varphi_1 \in \SF(\R)$ such that $\varphi_0 \leq f \leq \varphi_1$ and $||$.
 
 
-\begin{definition}
-Let $V$ be a Dedekind complete Riesz space. 
-\end{definition}
+\end{proof}
 
 
 \section{Real integrals}
