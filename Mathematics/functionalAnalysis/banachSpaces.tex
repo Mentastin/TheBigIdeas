@@ -1522,50 +1522,364 @@ Immediate by \ref{graphNormConvergenceLemma}.
 TODO: move to section on convergence vector spaces.
 
 TODO: move real analysis above here.
-\section{Functions with real domain}
-If $V = \R$, then there is, up to scalar multiplication, only one direction $u$. We denote the directional derivative $f'(a) \defeq \partial_u f|_a$.
+
+
+\section{Directional derivatives}
+One possible perspective: All derivatives are based on directional derivatives.
+
+TODO: Hadamard derivative.
 
 \begin{definition}
-Let $\sSet{V,\xi}$ be a topological vector space, $f: U\subseteq \R \to V$ a function and $x\in U$. We call $f$ \udef{differentiable} at $x$ if the function
-\[ (U - x)\to V: h \mapsto \frac{f(x+h) - f(x)}{h} \]
-is continuous at $0$. This limit is called the \udef{derivative} of $f$ at $x$ and is denoted by $f'(x)$. The partial function $f': U\not\to V: x\mapsto f'(x)$ is called the \udef{derivative} of $f$. It is also denoted $\od{f(x)}{x}$.
+Let $V,W$ be convergence vector spaces and $f:U\subseteq V\to W$ a function. For $a\in U$ and $u\in V$, we call
+\[ \partial_u f|_a \defeq \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
+the \udef{directional derivative} of $f$ at $a$ in the direction $u$, if it exists.
 \end{definition}
 
-\begin{lemma} \label{differentiabilityImpliesContinuity}
-Let $\sSet{V,\xi}$ be a convergence vector space, $f: U\subseteq \R \to V$ a function and $x\in U$. If $f$ is differentiable at $x$, then it is continuous at $x$.
+For a given function $f:V\to W$, the directional derivative is a partial function of both a direction and a point:
+\[ (V\times V) \not\to W:\quad (u,a) \mapsto \partial_u f(a)  \]
+
+Partial application in the first argument gives a function
+\[ \partial_u f:\; V\not\to W:\; a\mapsto \partial_u f(a) \defeq \partial_u f|_a \]
+that is also referred to as the \udef{directional derivative} of $f$ in the direction $u$.
+
+
+
+\subsection{Partial derivatives}
+\begin{definition}
+Let $V,W$ be convergence vector spaces, $f:U\subseteq V\to W$ a function defined on a subset $U$ and $u\in V$.
+We call the function
+\[ \partial_u f: U\to W: a\mapsto \partial_u f|_a \]
+the \udef{partial derivative} of $f$ in the direction $u$. We also write $\pd{f}{u}$ for $\partial_u f$.
+\begin{itemize}
+\item If $V = \R^n$ with the standard basis $\mathcal{E} = \seq{\vec{e}_i}_{i=1}^n$, then we will often write $\partial_{\vec{e}_i}f$ as $\pd{f}{x^i}$.
+\item If $V = \R^2$, then we often write the standard basis as $\seq{\vhat{x}, \vhat{y}}$ and the directional derivatives $\partial_{\vhat{x}}f$ and $\partial_{\vhat{y}}f$ are written as $\partial_{x}f$ and $\partial_{y}f$.
+\item If $V = \R^3$, then we often write the standard basis as $\seq{\vhat{x}, \vhat{y}, \vhat{z}}$ and the additional directional derivative $\partial_{\vhat{z}}f$ is written as $\partial_{z}f$.
+\end{itemize}
+\end{definition}
+TODO notation $D^\alpha$ for multiindex $\alpha$. Also $|\alpha| = \sum_i \alpha_i$.
+
+
+\subsection{Gateaux derivative}
+\begin{definition}
+Let $f:V\to W$ be a function between convergence vector spaces. If $\partial_u f|_a$ exists for all $u\in V$, then we call the partial application of the directional derivative in the second argument
+\[ \diff{_af}: V\to W: u\mapsto \diff{_af}(u) \defeq \partial_u f|_a = \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
+the \udef{Gateaux differential} of $f$ at the point $a$.
+
+If $\diff{_af}: V\to W$ is a continuous linear map, we will refer to it as the \udef{Gateaux derivative}.
+\end{definition}
+The Gateaux differential is homogeneous even if it is not linear:
+\begin{lemma} \label{GateauxDifferentialHomogeneous}
+Let $f:V\to W$ be a function between normed spaces and $a,u\in V$. If $\partial_u f$ is defined at $a$, then
+\[ \diff{_a f}(\lambda u) = \partial_{\lambda u}f(a) = \lambda\partial_u f(a) = \lambda \diff{_a f}(u) \qquad \forall \lambda\in\F. \]
 \end{lemma}
 \begin{proof}
-Let $\seq{x_i}_{i\in I}$ be a net in $U$ that converges to $x$. Then $\seq{x_i - x}_{i\in I}$ is a net in $U-x$ that converges to $0$. Then
-\[ \frac{f\big(x + (x_i - x)\big) - f(x)}{x_i - x} = \frac{f(x_i) - f(x)}{x_i - x} \to f'(x). \]
-By continuity of the scalar multiplication, we have
-\[ f(x_i) - f(x) = \frac{f(x_i) - f(x)}{x_i - x}(x_i - x) \to f'(x)\cdot 0 = 0. \]
-By continuity of the addition, this implies $f(x_i) \to f(x)$.
+$\partial_{\lambda u}f(a) = \lim_{t\to 0} \frac{f(a+t\lambda u) - f(a)}{t} = \lim_{t\lambda\to 0} \frac{f(a+t\lambda u) - f(a)}{t \lambda / \lambda} = \lambda\partial_u f(a)$.
 \end{proof}
 
-\begin{lemma} \label{derivativeOfConstructions}
-Let $\sSet{V,\xi}, \sSet{W,\zeta}$ be convergence vector spaces, $T\in \contLin(V, W)$ a continuous linear function $f,g: U\subseteq \R \to V$ functions and $x\in U$. Suppose $f$ and $g$ are differentiable at $x$, then
-\begin{enumerate}
-\item $f+g$ is differentiable at $x$ and $(f+ g)'(x) = f'(x)+ g'(x)$;
-\item $T\circ f$ is differentiable at $x$ and $(T\circ f)'(x) = T\big(f'(x)\big)$.
-\end{enumerate}
+
+\begin{example}
+The function
+\[ f: \R^2\to \R: (x,y) \mapsto \begin{cases}
+\frac{x^2y}{x^2+y^2} & (x,y)\neq (0,0) \\0 & (x,y) = (0,0)
+\end{cases} \]
+has a Gateaux differential $\diff{_{\vec{0}}f}$ that is defined everywhere, but is non-linear.
+Indeed, take $(x_0, y_0)\in R^2$. Then
+\begin{align*}
+\diff{_{\vec{0}}f}(x_0, y_0) &= \lim_{t\to 0}\frac{f(tx_0, ty_0) - f(0,0)}{t} \\
+&= \lim_{t\to 0}\frac{1}{t}\frac{(tx_0)^2(ty_0)}{(tx_0)^2+(ty_0)^2} \\
+&= \lim_{t\to 0}\frac{x_0y_0}{x_0^2+y_0^2} = \frac{x_0y_0}{x_0^2+y_0^2}.
+\end{align*}
+This is clearly non-linear in $(x_0, y_0)$.
+\end{example}
+
+
+\subsection{Fréchet derivative}
+\url{https://link.springer.com/content/pdf/bbm%3A978-3-642-16286-2%2F1.pdf}
+\url{http://www.m-hikari.com/ams/ams-password-2008/ams-password17-20-2008/behmardiAMS17-20-2008.pdf}
+
+\begin{definition}
+Let $V,W$ be normed vector spaces and $f: V\to W$ a function.
+If $f$ has a (bounded linear) Gateaux derivative at $a$ and convergence in the definition of the derivative
+\[ \diff{_af}: V\to W: u\mapsto \diff{_af}(u) \defeq \partial_u f|_a = \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
+is uniform in all $u$ on the $\sphere(\vec{0},1)$, then we say the function is \udef{(Fréchet) differentiable} at $a$ and has \udef{Fréchet derivative} $\diff{_af}$.
+
+We may also write $\diff{f}$, leaving the $a$ implicit.
+\end{definition}
+TODO: for CVS: uniform on some vicinity??
+
+\begin{proposition} \label{FrechetDerivativeAsymptotics}
+Let $V,W$ be normed vector spaces, $f:V\to W$ a function and $a\in V$.
+
+Then $f$ is Fréchet differentiable at $a$ \textup{if and only if} there exists a bounded linear map $A: V\to W$ such that $f(a+x)$ can be written as
+\[ f(a+x) = f(a) + A(x) + o\big(\norm{x}\big) \qquad \text{as} \qquad x\to 0. \]
+In this case $A = \diff{_af}$.
+\end{proposition}
+\begin{proof}
+First assume $f$ is Fréchet differentiable at $a$. Then
+\begin{multline*}
+\forall \varepsilon>0:\exists \delta>0: \; \forall u\in S(\vec{0},1): \forall t\in\R: \; t< \delta \implies \varepsilon > \\ \norm{\frac{f(a+tu) - f(a)}{t} - \diff{_af}(u)} = \frac{\norm{f(a+tu) - f(a)- \diff{_af}(tu)}}{|t|} = \frac{\norm{f(a+tu) - f(a)- \diff{_af}(tu)}}{\norm{tu}}.
+\end{multline*}
+
+Now each vector $x$ in $V$ can be written as $tu$ for some $t\in\R$ and $u\in S(\vec{0},1)$, so this can be written as
+\[ \forall \varepsilon>0:\exists \delta>0: \; \forall x\in V: \; \norm{x}< \delta \implies  \varepsilon > \frac{\norm{f(a+x) - f(a)- \diff{_af}(x)}}{\norm{x}} \]
+which is exactly the statement $f(a+x) = f(a) + \diff{_af}(x) + o(x)$ as $x\to 0$.
+
+The logic can be reversed to obtain the equivalence.
+\end{proof}
+
+\begin{proposition} \label{FrechetDifferentiableImpliesContinuous}
+Let $V,W$ be normed vector spaces, $f:V\to W$ a function and $a\in V$. If $f$ is Fréchet differentiable at $a$, then $f$ is continuous at $a$.
+\end{proposition}
+\begin{proof}
+Assume $f$ is has Fréchet derivative $A$. Then
+\[ 0 = \lim_{x\to a} \norm{f(x) - f(a) - \diff{_af}(x-a)} = \norm{\lim_{x\to a}f(x) - f(a) - \diff{_af}(\lim_{x\to a} x-a)} = \norm{\lim_{x\to a}f(x) - f(a)}. \]
+\end{proof}
+
+\begin{example}
+The result \ref{FrechetDifferentiableImpliesContinuous} does not hold for Gateaux derivatives. Every linear functional is Gateaux differentiable, but there exist discontinuous linear functionals.
+\end{example}
+
+\begin{proposition}
+If there exists a basis $\beta$ of $V$ such that the partial derivatives of $f:U\subseteq V\to W$ w.r.t. $\beta$ exist and are continuous in $a\in V$, then $f$ is Fréchet differentiable in $a$.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+TODO for finite dimensions! Expand to criterion for Gateaux to Fréchet.
+\begin{example}
+
+\end{example}
+
+\subsection{Functions with real domain}
+If $V = \R$, then there is, up to scalar multiplication, only one direction in $V$, namely $1$. We denote the directional derivative $f'(a) \defeq \partial_1 f|_a$.
+
+
+\begin{definition}
+Let $\sSet{V,\xi}$ be a convergence vector space, $f: \R \to V$ a function and $a\in \R$. We call $f$ \udef{differentiable} at $a$ if the directional derivative $\partial_1f|_a$ exists.
+
+The partial function $f': \R\not\to V: x\mapsto f'(x) \defeq \partial_1f|_x$ is called the \udef{derivative} of $f$. It is also denoted $\od{f(x)}{x}$, in which case $f'(a)$ is denoted $\left.\od{f(x)}{x}\right|_{x=a}$.
+\end{definition}
+
+\begin{lemma} \label{elementaryRealDomainDerivative}
+Let $\sSet{V,\xi}$ be a convergence vector space, $f: \R \to V$ a function and $a\in \R$. Then
+\[ f'(a) = \lim_{t\to 0} \frac{f(a+t) - f(a)}{t}. \]
 \end{lemma}
-In particular, combining (1) and (2) gives $(f+\lambda g)' = f'+\lambda g'$.
+We mean, in particular, that $f$ is differentiable at $a$ if and only if the limit exists.
+\begin{proof}
+Restatement of the definition.
+\end{proof}
+
+\begin{proposition} \label{realDomainDerivativeIsFrechet}
+Let $\sSet{V,\xi}$ be a convergence vector space, $f: \R \to V$ a function and $a\in \R$. Then the following are equivalent:
+\begin{enumerate}
+\item the derivative $f'(a)$ exists;
+\item $\diff{_af}: \R \to \R$ exists as a Gateaux differential;
+\item $\diff{_af}: \R \to \R$ exists as a Gateaux derivative;
+\item $\diff{_af}: \R \to \R$ exists as a Fréchet derivative.
+\end{enumerate}
+\end{proposition}
+We have $f'(a) = \diff{_af}(1)$.
+\begin{proof}
+$(1) \Rightarrow (2)$ For all $\lambda \in \R$, we have, by \ref{GateauxDifferentialHomogeneous}, that
+\[ \diff{_af}(\lambda) = \lambda \diff{_af}(1) = \lambda \partial_1f|_a = f'(a) \]
+exists.
+
+$(2) \Rightarrow (3)$ Every Gateaux differential is homogeneous, \ref{GateauxDifferentialHomogeneous}. Since the domain of $\diff{_af}$ is $\R$, this also implies that $\diff_{af}$ is linear.
+
+$(3) \Rightarrow (4)$ For the non-trivial direction, we need to check uniformity of the convergence on $\sphere(\vec{0}, 1) = \{-1,1\}$. Since this is a finite set, this follows easily.
+\end{proof}
+
+
+
+\begin{lemma} \label{directionalDerivativeAsOD}
+Let $V,W$ be convergence vector spaces, $f: V\to W$ a function, $a,u\in V$ and $t'\in \R$. Then
+\[ \partial_u f|_{a+t'u} = \left.\dod{f(a+tu)}{t}\right|_{t=t'}. \]
+\end{lemma}
+In particular $\partial_u f|_a = \left.\dod{f(a+tu)}{t}\right|_{t=0}$.
+\begin{proof}
+We calculate, using \ref{elementaryRealDomainDerivative},
+\begin{align*}
+\left.\dod{f(a+tu)}{t}\right|_{t=t'} &= \lim_{t\to 0}\frac{f\big(a+(t+t')u\big) - f(a+t'u)}{t} \\
+&= \lim_{t\to 0}\frac{f\big(a+t'u + tu \big) - f(a+t'u)}{t} = \partial_uf|_{a+t'u}.
+\end{align*}
+\end{proof}
+\begin{corollary} \label{partialDerivativeImpliesContinuityAlongLine}
+Let $V,W$ be convergence vector spaces, $f: V\to W$ a function, $a,u\in V$. Suppose $\partial_uf|_a$ exists. Then the function $t\mapsto f(a+tu)$ is continuous at $t=0$.
+\end{corollary}
+\begin{proof}
+By the lemma we have that $t\mapsto f(a+tu)$ is differentiable at $t=0$. This implies continuity by \ref{realDomainDerivativeIsFrechet} and \ref{FrechetDifferentiableImpliesContinuous}.
+\end{proof}
+
+
+
+
+
+
+\section{Rules of calculus}
+\begin{proposition}[Chain rule for Gateaux and Fréchet derivative] \label{FrechetChainRule}
+Let $U$ be a convergence vector space, $V,W$ be normed spaces and $f: U\to V$, $g: V\to W$ be functions. Suppose $f$ has a Gateaux differential at $a\in U$ and $g$ is Fréchet differentiable at $f(a)$, then $g\circ f$ has a Gateaux differential at $a$ defined by
+\[ \diff{_a}\big(g\circ f\big) = \big(\diff{_{f(a)}}g\big) \circ \big(\diff{_a}f\big). \]
+In addition, if $\diff{_a}f$ is linear / bounded / a Fréchet derivative, then $\diff{_a}\big(g\circ f\big) $ is too.
+\end{proposition}
+\begin{proof}
+Take arbitrary $u\in V$.
+
+We calculate, using the fact that $\diff{_{f(a)}g}$ is a bounded linear function and \ref{FrechetDerivativeAsymptotics},
+\begin{align*}
+\diff{_{f(a)}g}\big(\diff{_af}(u)\big) &= \diff{_{f(a)}g}\Big(\lim_{t\to 0}\frac{f(a+tu) - f(a)}{t}\Big) \\
+&= \lim_{t\to 0}\frac{1}{t}\diff{_{f(a)}g}\big(f(a+tu) - f(a)\big) \\
+&= \lim_{t\to 0}\frac{1}{t}\Big(g\big(f(a) + f(a+tu) - f(a)\big) - g\big(f(a)\big) + h\big(f(a+tu) - f(a)\big)\Big) \\
+&= \lim_{t\to 0}\frac{(g\circ f)(a+tu) - (g\circ f)(a)}{t} + \lim_{t\to 0}\frac{h\big(f(a+tu) - f(a)\big)}{t} \\
+&= \diff{_a}\big(g\circ f\big)(u) + \lim_{t\to 0}\frac{h\big(f(a+tu) - f(a)\big)}{t},
+\end{align*}
+where $h(x) \in o\big(\norm{x}\big)$ as $x\to 0$. We just need to prove $\lim_{t\to 0}\frac{h\big(f(a+tu) - f(a)\big)}{t} = 0$. Indeed, we have
+\begin{align*}
+\lim_{t\to 0}\frac{\norm{h\big(f(a+tu) - f(a)\big)}}{t} &= \lim_{t\to 0}\frac{\norm{h\big(f(a+tu) - f(a)\big)}}{\norm{f(a+tu) - f(a)}}\frac{\norm{f(a+tu) - f(a)}}{t} \\
+&= \lim_{t\to 0}\frac{\norm{h\big(f(a+tu) - f(a)\big)}}{\norm{f(a+tu) - f(a)}}\cdot \lim_{t\to 0}\norm{\frac{f(a+tu) - f(a)}{t}} \\
+&= 0\cdot \diff{_af}(u).
+\end{align*}
+Since composiing linear / bounded functions results in a linear / bounded function, these properties are transferred from $\diff{_a}f$ to $\diff{_a}(g\circ f)$.
+
+Finally, suppose $\diff{_a}f$ is a Fréchet derivative. We verify that $\diff{_a}(g\circ f)$ is a Fréchet derivative using \ref{FrechetDerivativeAsymptotics}. Take $u\in U$. Then
+\begin{align*}
+(g\circ f)(a+x) &= g\big(f(a) + \diff{_af}(x) + h(x)\big) \\
+&= (g\circ f)(a) + \diff{_{f(a)}g}\big(\diff{_af}(x) + h(x)\big) + h'\big(\diff{_af}(x) + h(x)\big) \\
+&= (g\circ f)(a) + (\diff{_{f(a)}g}\circ \diff{_af})(x) + \diff{_{f(a)}g}\big(h(x)\big) + h'\big(\diff{_af}(x) + h(x)\big),
+\end{align*}
+where $h(x), h'(x) \in o\big(\norm{x}\big)$. We need to show that $\diff{_{f(a)}g}\big(h(x)\big) + h'\big(\diff{_af}(x) + h(x)\big) \in o\big(\norm{x}\big)$. Indeed,
+\begin{align*}
+\frac{\norm{\diff{_{f(a)}g}\big(h(x)\big) + h'\big(\diff{_af}(x) + h(x)\big)}}{\norm{x}} &\leq \norm{\diff{_{f(a)}g}}\frac{\norm{h(x)}}{\norm{x}} + \frac{\norm{h'\big(\diff{_af}(x) + h(x)\big)}}{\norm{\diff{_af}(x) + h(x)}}\frac{\norm{\diff{_af}(x) + h(x)}}{\norm{x}} \\
+&\leq \norm{\diff{_{f(a)}g}}\frac{\norm{h(x)}}{\norm{x}} + \frac{\norm{h'\big(\diff{_af}(x) + h(x)\big)}}{\norm{\diff{_af}(x) + h(x)}}\Big(\norm{\diff{_af}} + \frac{\norm{h(x)}}{\norm{x}}\Big) \\
+&\to \norm{\diff{_{f(a)}g}}\cdot 0 + 0\cdot \Big(\norm{\diff{_af}} + 0\Big) = 0 \qquad \text{as $x\to 0$}.
+\end{align*}
+\end{proof}
+
+\begin{proposition} \label{directionalDerivativeConstructions}
+Let $U,V,W$ be convergence vector spaces, $f,g: U\to V$, $h: U\to \F$, $a\in U$, $u\in U$ and $\lambda\in\F$. Let $T\in \contLin(V,W)$ be a continuous linear function. Suppose $\partial_uf|_a$ and $\partial_u g|_a$ exist. Then
+\begin{enumerate}
+\item $\partial_u(f+g)|_a$ exists and $\partial_u(f+g)|_a = \partial_uf|_a + \partial_u g|_a$;
+\item $\partial_u(hf)|_a$ exists and $\partial_u(hf)|_a = (\partial_uh|_a)\cdot f(a) + h(a)\cdot(\partial_u f|_a)$;
+\item $\partial_u(T\circ f)|_a = T\big(\partial_uf|_a\big)$;
+\item $\partial_u(\lambda f)_a$ exists and $\partial_u(\lambda f)_a = \lambda \partial_uf|_a$;
+\item define $h: x\mapsto f(a+x)$. Then $\partial_u h|_0$ exists and $\partial_uh|_0 = \partial_u f|_a$.
+\end{enumerate}
+\end{proposition}
 \begin{proof}
 (1) We calculate
 \begin{align*}
-\lim_{h\to 0} \frac{(f+g)(x+h) - (f+g)(x)}{h} &= \lim_{h\to 0} \frac{f(x+h) - f(x)}{h} + \frac{g(x+h) - g(x)}{h} \\
-&= \lim_{h\to 0} \frac{f(x+h) - f(x)}{h} + \lim_{h\to 0}\frac{g(x+h) - g(x)}{h} \\
-&= f'(x) + g'(x).
+\partial_u(f+g)|_a &= \lim_{t\to 0} \frac{(f+g)(a+tu) - (f+g)(a)}{t} \\
+&= \lim_{t\to 0} \Big(\frac{f(a+tu) - f(a)}{t} + \frac{g(a+tu) - g(a)}{t} \Big) \\
+&= \lim_{t\to 0}\frac{f(a+tu) - f(a)}{t} + \lim_{t\to 0} \frac{g(a+tu) - g(a)}{t} \\
+&= \partial_uf|_a + \partial_u g|_a.
 \end{align*}
 
-(2) We calculate
+(2) We have that the function $t\mapsto f(a+tu)$ is continuous at $0$ by \ref{partialDerivativeImpliesContinuityAlongLine}. Then we calculate
 \begin{align*}
-\lim_{h\to 0} \frac{(T\circ f)(x+h) - (T\circ f)(x)}{h} &= \lim_{h\to 0} T\Big(\frac{f(x+h)-f(x)}{h}\Big) \\
-&= T\Big(\lim_{h\to 0} \frac{f(x+h)-f(x)}{h}\Big) \\
-&= T\big(f'(x)\big).
+\partial_u(hf)|_a &= \lim_{t\to 0} \frac{(hf)(a+tu) - (hf)(a)}{t} \\
+&= \lim_{t\to 0} \Big(\frac{h(a+tu)f(a+tu) - h(a)f(a+tu)}{t} + \frac{h(a)f(a+tu) - h(a)f(a)}{t}\Big) \\
+&= \lim_{t\to 0} \Big(\frac{h(a+tu) - h(a)}{t}f(a+tu)\Big) + \lim_{t\to 0}h(a)\frac{f(a+tu) - f(a)}{t} \\
+&= \Big(\lim_{t\to 0} \frac{h(a+tu) - h(a)}{t}\Big)f(a) + h(a)\lim_{t\to 0}\frac{f(a+tu) - f(a)}{t} \\
+&= (\partial_uh|_a)\cdot f(a) + h(a)\cdot(\partial_u f|_a).
+\end{align*}
+
+(3) \begin{align*}
+\partial_u(T\circ f)|_a &= \lim_{t\to 0} \frac{(T\circ f)(a+tu) - (T\circ f)(a)}{t} \\
+&= \lim_{t\to 0} T\Big(\frac{f(a+tu)-f(a)}{t}\Big) \\
+&= T\Big(\lim_{t\to 0} \frac{f(a+tu)-f(a)}{t}\Big) \\
+&= T\big(\partial_uf|_a\big).
+\end{align*}
+
+(4) This follows from (2) setting $h = \constant{\lambda}$. Alternatively, this follows from (3), since multiplication by $\lambda$ is a continuous linear operator.
+
+(5) We calculate
+\begin{align*}
+\partial_uh|_0 &= \lim_{t\to 0} \frac{h(tu) - h(0)}{t} \\
+&= \lim_{t\to 0} \frac{f(a+ tu) - f(a)}{t} \\
+&= \partial_uf|_a.
+\end{align*}
+\end{proof}
+\begin{corollary} \label{derivativeOfConstructions}
+Let $U,V,W$ be convergence vector spaces, $f,g: U\to V$ functions and $a\in U$. Let $T\in \contLin(V,W)$ be a continuous linear function and $\lambda \in \F$. Suppose $f,g$ are Gateaux differentiable at $a$. Then
+\begin{enumerate}
+\item $\diff{_a(f+g)}$ exists and $\diff{_a(f+g)} = \diff{_af} + \diff{_ag}$;
+\item $\diff{_a(T\circ f)}$ exists and $T\circ \diff{_af}$;
+\item $\diff{_a(f+\lambda g)}$ exists and $\diff{_a(f+\lambda g)} = \diff{_af} + \lambda \diff{_ag}$.
+\end{enumerate}
+\end{corollary}
+If $V,W$ are normed spaces, then point (2) follows from the chain rule \ref{FrechetChainRule}.
+
+\begin{lemma}
+Let $V$ be a vector space, $W$ a convergence vector space and $T\in\Lin(V,W)$ a linear function. For all $a\in V$, we have $\diff{_aT} = T$.
+\end{lemma}
+\begin{proof}
+Take arbitrary $u\in V$. Then
+\[ \diff_{aT}(u) = \lim_{t\to 0} \frac{T(a+tu) - T(a)}{t} = \lim_{t\to 0} \frac{tT(u)}{t} = T(u). \]
+\end{proof}
+
+\begin{proposition} \label{derivativeBilinearForm}
+Let $B: V_1 \oplus V_2 \to W$ be a bilinear form. Then, for $(x,y),(a,b)\in V_1\oplus V_2$
+\[ \partial_{(x,y)}B|_{(a,b)} = B(x,b) + B(a,y). \]
+\end{proposition}
+\begin{proof}
+We calculate
+\begin{align*}
+\partial_{(x,y)}B|_{(a,b)} &= \lim_{t\to 0} \frac{B(a+tx, b+ty) - B(a,b)}{t} \\
+&= \lim_{t\to 0} \frac{1}{t} (B(a,b) + tB(a,y) + tB(x,b) + t^2B(x,y) - B(a,b)) \\
+&=B(x,b) + B(a,y) + \lim_{t\to 0} tB(x,y) \\
+&= B(x,b) + B(a,y).
 \end{align*}
 \end{proof}
 
+
+\subsection{Mean value theorem}
+\subsubsection{Scalar-valued functions}
+I.e.\ functions with scalar codomain.
+
+
+TODO: requires Rolle's theorem, so move that up.
+
+\begin{theorem}[Mean value theorem] \label{meanValueTheorem}
+Let $a<b\in \R$ and $f: \interval{a,b}\to \R$ be a continuous real function that is differentiable on $\interval[o]{a,b}$. Then there exists $c\in \interval[o]{a,b}$ such that
+\[f'(c) = \frac{f(b)-f(a)}{b-a}. \]
+\end{theorem}
+\begin{proof}
+Define $g(x) = f(x) - x\frac{f(b)-f(a)}{b-a}$. Then
+\begin{multline*}
+g(a) = f(a) - a\frac{f(b)-f(a)}{b-a} = \frac{bf(a) - af(a)}{b-a} - a\frac{f(b)-f(a)}{b-a} = \\ \frac{bf(a)-af(b)}{b-a} = \frac{bf(a)-bf(b) + bf(b)-af(b)}{b-a} = \\ \frac{bf(b) - af(b)}{b-a} - \frac{bf(b) - bf(a)}{b-a} = f(b) - b \frac{f(b)-f(a)}{b-a} = g(b),
+\end{multline*}
+so we can apply Rolle's theorem \ref{RollesTheorem} to $g$. Thus there exists $c\in \interval[o]{a,b}$ such that $0 = g'(c) = f'(c) - \frac{f(b)-f(a)}{b-a}$. Thus $f'(c) = \frac{f(b)-f(a)}{b-a}$.
+\end{proof}
+\begin{corollary}
+Let $a,b, M\in \R$ and $f:\interval{a,b}\to \R$ a function differentiable on $\interval[o]{a,b}$. If $|f'(x)| \leq M$ for all $x\in \interval[o]{a,b}$, then $f$ is Lipschitz continuous with Lipschitz constant $M$.
+\end{corollary}
+\begin{corollary} \label{partialDerivativeMeanValueTheorem}
+Let $V$ be a vector space, $a,u\in V$, $t\in\R^+$ and $f: V\to \R$ a function whose partial derivative $\partial_u f$ exists on $a+\interval{0,t}\cdot u$. Then there exists $h\in \interval[o]{0,t}$ such that
+\[ \frac{f(a+tu) - f(a)}{t} = \partial_u f(a+hu). \]
+\end{corollary}
+\begin{proof}
+Consider the function $g: \interval{0,t} \to \R: t'\mapsto f(a+t'u)$. It is continuous and differentiable by \ref{partialDerivativeImpliesContinuityAlongLine} and \ref{directionalDerivativeAsOD}.
+
+Thus we can apply the mean value theorem \ref{meanValueTheorem} to $g$: there exists $h\in \interval[o]{0,t}$ such that
+\[ \frac{f(a+tu) - f(a)}{t} = \left.\dod{f(a+tu)}{t}\right|_{t=h} = \partial_u f(a+hu). \]
+The last equation is again an application of \ref{directionalDerivativeAsOD}.
+\end{proof}
+
+TODO: \url{https://ejde.math.txstate.edu/Volumes/2012/34/cakmak.pdf}
+
+\begin{lemma} \label{boundDerivativeAndFixedPointGivesRange}
+Let $a,b\in \R$ and $f:\interval{a,b}\to \R$ be a continuous function that is differentiable on $\interval[o]{a,b}$. If $f$ has a fixed point and $0\leq f' \leq 1$ everywhere, then $\im(f)\subseteq \interval{a,b}$. 
+\end{lemma}
+\begin{proof}
+Let $x^*\in \interval{a,b}$ be a fixed point, then $f(x^*) = x^* \in \interval{a,b}$. Take arbitrary $x\in \interval{a,b}\setminus\{x^*\}$. Then
+\[ \frac{f(x) - x^*}{x - x^*} = \frac{f(x) - f(x^*)}{x - x^*} = f'(c) \]
+for some $c\in \interval[o]{a,b}$ by the mean value theorem \ref{meanValueTheorem}. Thus $0\leq \frac{f(x) - x^*}{x - x^*} \leq 1$.
+
+First assume $x^* \leq x$, so $x - x^* \geq 0$. Then $0 \leq f(x) - x^* \leq x - x^*$, so $x^* \leq f(x) \leq x$. Since $x^*, x\in \interval{a,b}$, we have $f(x)\in \interval{a,b}$.
+
+Now assume $x\leq x^*$, so $x - x^* \leq 0$. Then $x - x^* \leq f(x) - x^* \leq 0$, so $x \leq f(x) \leq x^*$. Since $x^*, x\in \interval{a,b}$, we have $f(x)\in \interval{a,b}$.
+\end{proof}
+
+\subsubsection{Vector-valued functions}
 
 \begin{proposition}[Mean value theorem for vector-valued functions] \label{meanValueTheoremVectorFunctions}
 Let $X$ be a normed space. Let $a<b\in \R$ and $f: \interval{a,b}\to X$ be a continuous real function that is differentiable on $\interval[o]{a,b}$. Then there exists $c\in \interval[o]{a,b}$ such that
@@ -1600,6 +1914,27 @@ Consider the function $g(t) \defeq \inner{f(b)-f(a), f(t)}$. Since $g$ is real-v
 \[ \frac{\norm{f(b)-f(a)}^2}{b-a} = \left|\frac{\norm{f(b)-f(a)}^2}{b-a}\right| = \left|\frac{g(b)-g(a)}{b-a}\right| = |g'(c)| = |\inner{f(b)-f(a), f'(t)}| \leq \norm{f(b)-f(a)} \norm{f'(t)}. \]
 Dividing by $\norm{f(b)-f(a)}$ yields the result.
 \end{proof}
+\begin{corollary} \label{meanValueTheoremGateauxDerivative}
+Let $V$ be a vector space and $W$ a normed vector space, $a,u\in V$, $t\in\R^+$ and $f: U\subseteq V\to W$ a function that is continuous on $a+\interval{0,1}\cdot u$ and whose partial derivative $\partial_u f$ exists on $a+\interval[o]{0,t}\cdot u$. Then there exists $h\in \interval[o]{0,t}$ such that
+\[ \norm{f(a+tu) - f(a)} = t\norm{\partial_u f(a+hu)}. \]
+\end{corollary}
+\begin{proof}
+Consider the function $g: \interval{0,t} \to W: t'\mapsto f(a+t'u)$. It is continuous and differentiable by \ref{partialDerivativeImpliesContinuityAlongLine} and \ref{directionalDerivativeAsOD}.
+
+Thus we can apply the mean value theorem \ref{meanValueTheorem} to $g$: there exists $h\in \interval[o]{0,t}$ such that
+\[ \frac{\norm{f(a+tu) - f(a)}}{t} \leq \norm{\left.\dod{f(a+tu)}{t}\right|_{t=h}} = \norm{\partial_u f(a+hu)}. \]
+The last equation is again an application of \ref{directionalDerivativeAsOD}.
+\end{proof}
+
+
+\subsection{The Jacobian}
+\begin{definition}
+Let $f:U\subseteq\R^m\to\R^n$ be a function. Then $A_{\diff{f}}$ is a matrix with
+\[ [A_{\diff{f}}]_{ij} = [\diff{f}\vec{e}_j]_i = \left[\pd{f}{x^j}\right]_i. \]
+This matrix is called the \udef{Jacobian} $J_f$.
+\end{definition}
+
+\subsection{Interchange of limits}
 
 \begin{proposition} \label{derivativeOfUniformLimit}
 Let $X$ be a Banach space, $a,b\in \R$ and $\seq{f_n: \interval{a,b} \to X}_{n\in\N}$ a sequence of differentiable functions. Suppose
@@ -1675,108 +2010,6 @@ Let $f_n: \interval{0,2\pi} \to \R: x\mapsto \frac{\sin(nx)}{n}$. Then $\seq{f_n
 \end{example}
 
 
-
-\section{Directional derivatives}
-One possible perspective: All derivatives are based on directional derivatives.
-
-\begin{definition}
-Let $V,W$ be convergence vector spaces and $f:U\subseteq V\to W$ a function. For $a\in U$ and $u\in V$, we call
-\[ \partial_u f|_a \defeq \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
-the \udef{directional derivative} of $f$ at $a$ in the direction $u$, if it exists.
-\end{definition}
-
-For a given function $f:V\to W$, the directional derivative is a partial function of both a direction and a point:
-\[ (V\times V) \not\to W:\quad (u,a) \mapsto \partial_u f(a)  \]
-
-Partial application in the first argument gives a function
-\[ \partial_u f:\; V\not\to W:\; a\mapsto \partial_u f(a) \defeq \partial_u f|_a \]
-that is also referred to as the \udef{directional derivative} of $f$ in the direction $u$.
-
-\begin{lemma} \label{directionalDerivativeAsOD}
-Let $V$ be a convergence vector space and $f:U\subseteq V\to \R$ a real-valued function defined on a subset $U$. For $a\in U$ and $u\in V$, we have
-\[ \partial_u f|_a = \left.\dod{f(a+tu)}{t}\right|_{t=0}. \]
-In particular, the function $t\mapsto f(x+tu)$ is continuous at $0$.
-
-Also, for $t'\in \R$, $\partial_u f|_{a+t'u} = \left.\dod{f(a+tu)}{t}\right|_{t=t'}$. 
-\end{lemma}
-\begin{proof}
-Restatement of definitions. The `in particular' follows from \ref{differentiabilityImpliesContinuity}.
-\end{proof}
-
-\begin{lemma} \label{directionalDerivativeConstructions}
-Let $f,g: U\subseteq V\to W$, $h: U\to \F$, $a\in U$, $u\in V$ and $\lambda\in\F$. Suppose $\partial_uf|_a$ and $\partial_u g|_a$ exist. Then
-\begin{enumerate}
-\item $\partial_u(f+g)|_a$ exists and $\partial_u(f+g)|_a = \partial_uf|_a + \partial_u g|_a$;
-\item $\partial_u(hf)|_a$ exists and $\partial_u(hf)|_a = (\partial_uh|_a)\cdot f(a) + h(a)\cdot(\partial_u f|_a)$;
-\item $\partial_u(\lambda f)_a$ exists and $\partial_u(\lambda f)_a = \lambda \partial_uf|_a$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) We calculate
-\begin{align*}
-\partial_u(f+g)|_a &= \lim_{t\to 0} \frac{(f+g)(a+tu) - (f+g)(a)}{t} \\
-&= \lim_{t\to 0} \Big(\frac{f(a+tu) - f(a)}{t} + \frac{g(a+tu) - g(a)}{t} \Big) \\
-&= \lim_{t\to 0}\frac{f(a+tu) - f(a)}{t} + \lim_{t\to 0} \frac{g(a+tu) - g(a)}{t} \\
-&= \partial_uf|_a + \partial_u g|_a.
-\end{align*}
-
-(2) We have that the function $t\mapsto g(a+tu)$ is continuous at $0$ by \ref{directionalDerivativeAsOD}. Then we calculate
-\begin{align*}
-\partial_u(hf)|_a &= \lim_{t\to 0} \frac{(hf)(a+tu) - (hf)(a)}{t} \\
-&= \lim_{t\to 0} \Big(\frac{h(a+tu)f(a+tu) - h(a)f(a+tu)}{t} + \frac{h(a)f(a+tu) - h(a)f(a)}{t}\Big) \\
-&= \lim_{t\to 0} \Big(\frac{h(a+tu) - h(a)}{t}f(a+tu)\Big) + \lim_{t\to 0}h(a)\frac{f(a+tu) - f(a)}{t} \\
-&= \Big(\lim_{t\to 0} \frac{h(a+tu) - h(a)}{t}\Big)f(a) + h(a)\lim_{t\to 0}\frac{f(a+tu) - f(a)}{t} \\
-&= (\partial_uh|_a)\cdot f(a) + h(a)\cdot(\partial_u f|_a).
-\end{align*}
-
-(3) This follows from (2) setting $h = \constant{\lambda}$.
-\end{proof}
-
-\begin{proposition} \label{derivativeBilinearForm}
-Let $B: V_1 \oplus V_2 \to W$ be a bilinear form. Then, for $(x,y),(a,b)\in V_1\oplus V_2$
-\[ \partial_{(x,y)}B|_{(a,b)} = B(x,b) + B(a,y). \]
-\end{proposition}
-\begin{proof}
-We calculate
-\begin{align*}
-\partial_{(x,y)}B|_{(a,b)} &= \lim_{t\to 0} \frac{B(a+tx, b+ty) - B(a,b)}{t} \\
-&= \lim_{t\to 0} \frac{1}{t} (B(a,b) + tB(a,y) + tB(x,b) + t^2B(x,y) - B(a,b)) \\
-&=B(x,b) + B(a,y) + \lim_{t\to 0} tB(x,y) \\
-&= B(x,b) + B(a,y).
-\end{align*}
-\end{proof}
-
-
-\subsection{Partial derivatives}
-\begin{definition}
-Let $V,W$ be convergence vector spaces, $f:U\subseteq V\to W$ a function defined on a subset $U$ and $u\in V$.
-We call the function
-\[ \partial_u f: U\to W: a\mapsto \partial_u f|_a \]
-the \udef{partial derivative} of $f$ in the direction $u$. We also write $\pd{f}{u}$ for $\partial_u f$.
-\begin{itemize}
-\item If $V = \R^n$ with the standard basis $\mathcal{E} = \seq{\vec{e}_i}_{i=1}^n$, then we will often write $\partial_{\vec{e}_i}f$ as $\pd{f}{x^i}$.
-\item If $V = \R^2$, then we often write the standard basis as $\seq{\vhat{x}, \vhat{y}}$ and the directional derivatives $\partial_{\vhat{x}}f$ and $\partial_{\vhat{y}}f$ are written as $\partial_{x}f$ and $\partial_{y}f$.
-\item If $V = \R^3$, then we often write the standard basis as $\seq{\vhat{x}, \vhat{y}, \vhat{z}}$ and the additional directional derivative $\partial_{\vhat{z}}f$ is written as $\partial_{z}f$.
-\end{itemize}
-\end{definition}
-TODO notation $D^\alpha$ for multiindex $\alpha$. Also $|\alpha| = \sum_i \alpha_i$.
-
-\begin{lemma} \label{partialDerivativeMeanValueTheorem}
-Let $V,W$ be real convergence vector spaces, $a,u\in V$, $t\in\R^+$ and $f: U\subseteq V\to W$ a function that is continuous on $a+\interval{0,1}\cdot u$ and whose partial derivative $\partial_u f$ exists on $a+\interval[o]{0,t}\cdot u$. Then there exists $h\in \interval[o]{0,t}$ such that
-\[ \frac{f(a+tu) - f(a)}{t} = \partial_u f(a+hu). \]
-\end{lemma}
-\begin{proof}
-Consider the function $g: \interval{0,t} \to W: t'\mapsto f(a+t'u)$. It is continuous, since $t'\mapsto a+t'u$ is continuous and $f$ restricted to the image of this function is continuous by assumption.
-
-The function $g$ is also differentiable on $\interval[o]{0,t}$ by \ref{directionalDerivativeAsOD}.
-
-Thus we can apply the mean value theorem \ref{meanValueTheorem} to $g$: there exists $h\in \interval[o]{0,t}$ such that
-\[ \frac{f(a+tu) - f(a)}{t} = \left.\dod{f(a+tu)}{t}\right|_{t=h} = \partial_u f(a+hu). \]
-The last equation is again an application of \ref{directionalDerivativeAsOD}.
-\end{proof}
-
-
-
 \begin{theorem}[Schwarz's theorem] \label{SchwarzTheorem}
 Let $V$ be a real convergence vector space, $f:U\subseteq V\to \R$ a real-valued function defined on an open convex subset $U$ and $u,v\in V$. Suppose $\partial_u\partial_v f$ and $\partial_v\partial_u f$ exist with domain $U$ and one of them is continuous, then $\partial_u\partial_v f = \partial_v\partial_u f$.
 \end{theorem}
@@ -1812,159 +2045,32 @@ Take $a\in U$. Since $U$ is open, $a$ has a vicinity $U_a$ that is a subset of $
 \end{proof}
 
 
-
-
-\subsection{Gateaux derivative}
-\begin{definition}
-Let $f:V\to W$ be a function between normed spaces. If $\partial_u f|_a$ exists for all $u\in V$, then we call the partial application of the directional derivative in the second argument
-\[ \diff{_af}: V\not\to W: u\mapsto \diff{_af}(u) \defeq \partial_u f|_a = \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
-the \udef{Gateaux differential} of $f$ at the point $a$.
-
-If $\diff{_af}: V\not\to W$ is a bounded linear map, we will refer to it as the \udef{Gateaux derivative}.
-\end{definition}
-The Gateaux differential is homogeneous even if it is not linear:
-\begin{lemma}
-Let $f:V\to W$ be a function between normed spaces and $a,u\in V$. If $\partial_u f$ is defined at $a$, then
-\[ \diff{_a f}(\lambda u) = \partial_{\lambda u}f(a) = \lambda\partial_u f(a) = \lambda \diff{_a f}(u) \qquad \forall \lambda\in\F. \]
-\end{lemma}
-\begin{proof}
-$\partial_{\lambda u}f(a) = \lim_{t\to 0} \frac{f(a+t\lambda u) - f(a)}{t} = \lim_{t\lambda\to 0} \frac{f(a+t\lambda u) - f(a)}{t \lambda / \lambda} = \lambda\partial_u f(a)$.
-\end{proof}
-
-TODO mean value theorem?
-
-\begin{example}
-The function
-\[ f: \R^2\to \R: (x,y) \mapsto \begin{cases}
-\frac{x^2y}{x^2+y^2} & (x,y)\neq (0,0) \\0 & (x,y) = (0,0)
-\end{cases} \]
-has a Gateaux differential that is defined everywhere, but is non-linear.
-
-TODO??
-\end{example}
-
-\begin{proposition}[Chain rule for Gateaux differential]
-Let $U,V,W$ be normed spaces and $f: U\to V$, $g: V\to W$ be functions. Suppose the Gateaux differential of $f$ at $u\in U$ exists and the Gateaux differential of $g$ at $f(u)$ exists, then the Gateaux differential of $g\circ f$ at $u$ exists and
-\[ \diff_{u}\big(g\circ f\big) = \big(\diff{_{f(u)}}g\big) \circ \big(\diff{_u}f\big). \]
-If both $\diff{_u}f$ and $\diff{_{f(u)}}g$ are Gateaux derivatives, then $\diff_{u}\big(g\circ f\big)$ is a Gateaux derivative.
-\end{proposition}
-TODO for CVS? Compare with chain rule for Fréchet.
-\begin{proof}
-TODO!
-\end{proof}
-
-\subsection{Fréchet derivative}
-\begin{definition}
-Let $V,W$ be normed vector spaces and $f: U\subseteq V\to W$ a function defined on an open subset $U$.
-If $f$ has a (bounded linear) Gateaux derivative at $a$ and convergence in the definition of the derivative
-\[ \diff{_af}: V\not\to W: u\mapsto \diff{_af}(u) \defeq \partial_u f|_a = \lim_{t\to 0} \frac{f(a+tu) - f(a)}{t} \]
-is uniform in all $u$ on the $S(\vec{0},1)$, then we say the function is \udef{(Fréchet) differentiable} at $a$ and has \udef{Fréchet derivative} $\diff{_af}$.
-
-We may also write $\diff{f}$, leaving the $a$ implicit.
-\end{definition}
-TODO: for CVS: uniform on some vicinity??
-
-
-\begin{proposition} \label{FrechetDerivativeAsymptotics}
-Let $V,W$ be normed vector spaces and $f:U\subseteq V\to W$ a function defined on an open subset $U$. Let $a\in V$.
-
-Then $f$ is Fréchet differentiable at $a$ \textup{if and only if} there exists a bounded linear map $A: V\to W$ such that $f(a+x)$ can be written as
-\[ f(a+x) = f(a) + A(x) + o\big(\norm{x}\big) \qquad \text{as} \qquad x\to 0. \]
-In this case $A = \diff{_af}$.
-\end{proposition}
-\begin{proof}
-First assume $f$ is Fréchet differentiable at $a$. Then
-\begin{multline*}
-\forall \varepsilon>0:\exists \delta>0: \; \forall u\in S(\vec{0},1): \forall t\in\R: \; t< \delta \implies \varepsilon > \\ \norm{\frac{f(a+tu) - f(a)}{t} - \diff{_af}(u)} = \frac{\norm{f(a+tu) - f(a)- \diff{_af}(tu)}}{|t|} = \frac{\norm{f(a+tu) - f(a)- \diff{_af}(tu)}}{\norm{tu}}.
-\end{multline*}
-
-Now each vector $x$ in $V$ can be written as $tu$ for some $t\in\R$ and $u\in S(\vec{0},1)$, so this can be written as
-\[ \forall \varepsilon>0:\exists \delta>0: \; \forall x\in V: \; \norm{x}< \delta \implies  \varepsilon > \frac{\norm{f(a+x) - f(a)- \diff{_af}(x)}}{\norm{x}} \]
-which is exactly the statement $f(a+x) = f(a) + \diff{_af}(x) + o(x)$ as $x\to 0$.
-
-The logic can be reversed to obtain the equivalence.
-\end{proof}
-
 \begin{proposition}
-If a function is Fréchet differentiable at a point $a$, then it is continuous at $a$.
+Let $V,W$ be normed spaces and $f: V\to W$ be a function. Suppose
+\begin{itemize}
+\item there exists an open set $U\subseteq V$ such that $\diff{_af}$ exists as a Gateaux derivative (i.e.\ is a bounded linear function) for all $a\in U$;
+\item the function $U \to \Bounded(V,W): a\mapsto \diff{_af}$ is continuous;
+\end{itemize}
+Then $\diff{_af}$ is a Fréchet derivative for all $a\in U$.
 \end{proposition}
-\begin{proof}
-Assume $f$ is has Fréchet derivative $A$. Then
-\[ 0 = \lim_{x\to a} \norm{f(x) - f(a) - \diff{_af}(x-a)} = \norm{\lim_{x\to a}f(x) - f(a) - \diff{_af}(\lim_{x\to a} x-a)} = \norm{\lim_{x\to a}f(x) - f(a)}. \]
-\end{proof}
+In particular, $f$ is continuous on $U$.
 
-\begin{lemma}
-The Fréchet derivative is the same for equivalent norms.
-\end{lemma}
-
-\begin{proposition}[Chain rule for Fréchet derivative] \label{FrechetChainRule}
-Let $U,V,W$ be normed spaces and $f: U\to V$, $g: V\to W$ be functions. Suppose $f$ is Fréchet differentiable at $u\in U$ and $g$ is Fréchet differentiable at $f(u)$, then $g\circ f$ is Fréchet differentiable at $u$ and
-\[ \diff_{u}\big(g\circ f\big) = \big(\diff{_{f(u)}}g\big) \circ \big(\diff{_u}f\big). \]
-\end{proposition}
+This proof uses the mean value theorem. For a proof using the fundamental theorem of calculus, see 
+\url{https://math.stackexchange.com/questions/3745037/a-frech%C3%A9t-differentiable-function-to-has-a-continuous-derivative-in}
 \begin{proof}
-Take $x\in U$. Then
+Since $U$ is open, we can find $\delta >0$ such that $\cball(a, \delta) \subseteq U$. We define the function
+\[ g: \cball(0, \delta) \to W: x\mapsto f(a+x) - \diff{_af}(x), \]
+which has Gateaux derivative $\diff{_bg} = \diff{_{a+b}f} - \diff{_af}$, by \ref{derivativeOfConstructions}. Now we calculate, for all $x\in \cball(a,\delta)$,
 \begin{align*}
-(g\circ f)(u+x) &= g\Big(f(u) + \big(\diff{_uf}\big)(x) + o\big(\norm{x}\big)\Big) \\
-&= (g\circ f)(u) + \big(\diff{_f(u)}\big)\Big(\big(\diff{_uf}\big)(x) + o\big(\norm{x}\big)\Big) + o\big(\norm{x}\big) \\
-&= (g\circ f)(u) + \Big(\big(\diff{_f(u)}\big)\circ \big(\diff{_uf}\big)\Big)(x) + \big(\diff{_f(u)}\big)\big(o\big(\norm{x}\big)\big) + o\big(\norm{x}\big).
+\frac{\norm{f(a+x) - f(a) - \diff{_af}(x)}}{\norm{x}} &= \frac{\norm{g(x) - g(0)}}{\norm{x}} \\
+&\leq \frac{\norm{\diff{_{hx}g}(x)}}{\norm{x}} \\
+&= \frac{\norm{\diff{_{a+hx}f}(x) - \diff{_af}(x)}}{\norm{x}} \\
+&\leq \norm{\diff{_{a+hx}f} - \diff{_af}},
 \end{align*}
-We just need to observe that $\big(\diff{_f(u)}\big)\big(o\big(\norm{x}\big)\big)$ is $o\big(\norm{x}\big)$ as $x\to 0$, which is immediate since $\diff{_f(u)}$ is a bounded linear function.
+where the $h \in \interval[o]{0,1}$ depends on $x$ and is given by \ref{meanValueTheoremGateauxDerivative}. The last inequality is by definition of the operator norm.
+
+Since $h(x)$ is bounded, we have that $hx \to 0$ as $x\to 0$. Thus $\norm{\diff{_{a+hx}f} - \diff{_af}}$ also converges to $0$ and $\frac{\norm{f(a+x) - f(a) - \diff{_af}(x)}}{\norm{x}}$ converges to $0$. We conclude that the derivative is a Fréchet derivative by \ref{FrechetDerivativeAsymptotics}.
 \end{proof}
-
-\subsubsection{Link with Gateaux derivative}
-\url{https://link.springer.com/content/pdf/bbm%3A978-3-642-16286-2%2F1.pdf}
-\url{http://www.m-hikari.com/ams/ams-password-2008/ams-password17-20-2008/behmardiAMS17-20-2008.pdf}
-\begin{proposition}
-If a function between subsets of normed spaces is Fréchet differentiable, it is also Gateaux differentiable and the Fréchet derivative is equal to the Gateaux derivative.
-\end{proposition}
-\begin{proof}
-Let $A$ be the Fréchet derivative of $f: U\subseteq V\to W$. Then for all $u\in V$
-\begin{align*}
-0 &= \lim_{t\to 0} \frac{\norm{f(a+tu) - f(a) - A(tu)}}{\norm{tu}} = \lim_{t\to 0} \frac{\norm{(f(a+tu) - f(a))/t - A(u)}}{\norm{u}} \\
-&= \frac{\norm{\lim_{t\to 0}(f(a+tu) - f(a))/t - A(u)}}{\norm{u}} = \frac{\norm{\diff{_af}(u) - A(u)}}{\norm{u}}. 
-\end{align*}
-\end{proof}
-For this reason we will also denote the Fréchet derivative of $f$ at $a$ as $\diff{_a f}$. We will sometimes also write $f'(a)$.
-
-\begin{example}
-TODO!
-
-There are functions that have a Gateaux derivative, but not a Fréchet derivative at certain points. For example
-\[ f: \R^2\to \R: (x,y) \mapsto \begin{cases}
-\frac{xy}{x^2+y^2} & (x,y)\neq (0,0) \\0 & (x,y) = (0,0)
-\end{cases} \]
-which has $\partial_{\vec{u}}f(\vec{0}) = 0$ for all $\vec{u}\in \R^2$ and thus the Gateaux derivative at zero is $\diff{f} = 0$.
-
-Composing $f$ with $t\mapsto (t,t^2)$ yields the function $t\mapsto \begin{cases}
-t^{-2} & t\neq 0 \\ 0 & t=0
-\end{cases}$, which is not continuous at $0$. So $f$ is not continuous at zero and a fortiori is not Fréchet differentiable.
-\end{example}
-
-\begin{proposition}
-If there exists a basis $\beta$ of $V$ such that the partial derivatives of $f:U\subseteq V\to W$ w.r.t. $\beta$ exist and are continuous in $a\in V$, then $f$ is Fréchet differentiable in $a$.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-TODO for finite dimensions! Expand to criterion for Gateaux to Fréchet.
-\begin{example}
-
-\end{example}
-
-\subsubsection{The Jacobian}
-\begin{definition}
-Let $f:U\subseteq\R^m\to\R^n$ be a function. Then $A_{\diff{f}}$ is a matrix with
-\[ [A_{\diff{f}}]_{ij} = [\diff{f}\vec{e}_j]_i = \left[\pd{f}{x^j}\right]_i. \]
-This matrix is called the \udef{Jacobian} $J_f$.
-\end{definition}
-
-\subsection{Hadamard derivative}
-\begin{definition}
-A directional derivative is a \udef{Hadamard derivative} if it is continuous in $u$.
-\end{definition}
-TODO: chech that this is the right definition.
-
-
 
 \section{Differentiation in a convergence algebra}
 
