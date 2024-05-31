@@ -1,7 +1,7 @@
-\chapter{Semigroups and evolution operators}
+\chapter{$C_0$ semigroups}
 \section{Semigroups of linear operators}
 \begin{definition}
-Let $X$ be a Banach space. We call a function $T: \R^+ \to \Lin(X)$ a \udef{semigroup of linear operators} (or just \udef{semigroup}) if
+Let $X$ be a normed space. We call a function $T: \R^+ \to \Lin(X)$ a \udef{semigroup of linear operators} (or just \udef{semigroup}) if
 \begin{itemize}
 \item $T(0) = \id_X$;
 \item $T(s+t) = T(s)T(t)$ for all $s,t \in \R^+$.
@@ -9,201 +9,266 @@ Let $X$ be a Banach space. We call a function $T: \R^+ \to \Lin(X)$ a \udef{semi
 A function $T: \R \to \Lin(X)$ satisfying the same conditions is called a \udef{group of linear operators}.
 \begin{itemize}
 \item A semigroup is called \udef{strongly continuous} if it is continuous when $\Lin(X)$ is equipped with the strong operator topology.
-\item We call $T$ \udef{bounded} if $T(t)$ is bounded for all $t\in \R^+$.
-\item A bounded semigroup is called \udef{uniformly continuous} if it is continuous when $\Bounded(X)$ is equipped with the norm topology.
+\item A semigroup of bounded operators is called \udef{uniformly continuous} if it is continuous when $\Bounded(X)$ is equipped with the norm topology.
 \end{itemize}
 \end{definition}
 A semigroup of linear operators is just a monoid homomorphism from $\R^+$ to $\Lin(X)$.
 
 \begin{lemma}
-A semigroup of linear operators $T:\R^+\to \Lin(X)$ is bounded \textup{if and only if} $T(t)$ is bound for all $t\in \interval{0,1}$.
+Let $T:\R\to \Lin(X)$ be a group of linear operators. Then $T(t)$ is invertible for all $t\in \R$.
 \end{lemma}
+\begin{proof}
+Take arbitrary $t\in \R$. We have
+\[ \id_X = T(0) = T(t-t) = T(t)T(-t) \]
+and similarly $\id_X = T(-t)T(t)$, so $T(t)^{-1} = T(-t)$.
+\end{proof}
 
-\begin{proposition}
-Let $T:I^+\to \Lin(X)$ be a semigroup of operators on a Banach space. Then the following are equivalent:
+\begin{proposition} \label{extendingSemigroupToGroupOfLinearOperators}
+Let $T:\R^+\to \Lin(X)$ be a semigroup of linear operators and suppose $T(t_0)$ is invertible. Then
+\begin{enumerate}
+\item for all $k\in \N$, we have $\begin{aligned}[t]
+T(t) &= T(t_0)^{-k}T(t+kt_0) \\
+&= T(t+kt_0)T(t_0)^{-k};
+\end{aligned}$
+\item $T$ can be extended to the following group of linear operators
+\[ T_0: \R\to \Bounded(X): t \mapsto T(t_0)^{-\ceil{|t|/t_0}}T\big(t + \ceil{|t|/t_0}t_0\big). \]
+\end{enumerate}
+\end{proposition}
+Note that $T_0$ is well-defined since $\ceil{|t|/t_0}t_0 \geq |t|$ and so $t + \ceil{|t|/t_0}t_0 \geq 0$.
+\begin{proof}
+(1) We have $T(t_0)^kT(t) = T(t+kt_0) = T(t)T(t_0)^k$. Multiplying by $T(t_0)^{-k}$ yields the result.
+
+(2) First we note that for all $t\in \R^+$, we have $T_0(t) = T(t_0)^{-\ceil{|t|/t_0}}T\big(t + \ceil{|t|/t_0}t_0\big) = T(t)$ by (1).
+
+We also have $\ceil{|s+t|/t_0} \leq \ceil{|s|/t_0} + \ceil{|t|/t_0}$ and thus
+\[ \ceil{|s|/t_0} + \ceil{|t|/t_0} - \ceil{|s+t|/t_0} \in \N. \]
+We can then calculate
+\begin{align*}
+T_0(s+t) &= T(t_0)^{-\ceil{|s+t|/t_0}}T\big(s+t+\ceil{|s+t|/t_0}t_0\big) \\
+&= \begin{aligned}[t]T(t_0)^{-\ceil{|s+t|/t_0}}&T(t_0)^{-\ceil{|s|/t_0} - \ceil{|t|/t_0} + \ceil{|s+t|/t_0}} \\
+T&\big(s+t+\ceil{|s+t|/t_0}t_0 + (\ceil{|s|/t_0} + \ceil{|t|/t_0} - \ceil{|s+t|/t_0})t_0\big)\end{aligned} \\
+&= T(t_0)^{-\ceil{|s|/t_0} - \ceil{|t|/t_0}}T\big(s+t+\ceil{|s|/t_0}t_0 + \ceil{|t|/t_0}t_0\big) \\
+&= T(t_0)^{-\ceil{|s|/t_0}}T\big(s+\ceil{|s|/t_0}t_0\big)T(t_0)^{ - \ceil{|t|/t_0}}T\big(t+ \ceil{|t|/t_0}t_0\big) \\
+&=T_0(s)T_0(t).
+\end{align*}
+\end{proof}
+
+\begin{lemma} \label{normBoundFromSemigroupEquation}
+Let $T:\R^+\to \Lin(X)$ be a semigroup of linear operators on a normed space $X$, $\delta > 0$ and $x\in X$. If $T(s)$ is bounded for all $s\in \interval{0,\delta}$, then for all $t\in \R^+$,
+\begin{enumerate}
+\item $\norm{T(t)} \leq \norm{T(\delta)}^{\floor{\tfrac{t}{\delta}}}\norm{T(t-\floor{\tfrac{t}{\delta}})}$;
+\item $\norm{T(t)x} \leq \norm{T(\delta)}^{\floor{\tfrac{t}{\delta}}}\norm{T(t-\floor{\tfrac{t}{\delta}})x}$.
+\end{enumerate}
+In particular $T:\R^+\to \Lin(X)$ is a bounded semigroup of linear operators \textup{if and only if} there exists $\delta > 0$ such that $T(t)$ is bounded for all $t\in \interval{0,\delta}$.
+\end{lemma}
+\begin{proof}
+(1) Take arbitrary $t \in \R^+$. Then $t = \floor{\frac{t}{\delta}}\delta + (t-\floor{\frac{t}{\delta}}\delta)$, with $\floor{\frac{t}{\delta}}\in \N$ and $\frac{t}{\delta} - \floor{\frac{t}{\delta}} \in \interval{0,1}$, so $\delta(\frac{t}{\delta}-\floor{\frac{t}{\delta}}\delta) = (t-\floor{\frac{t}{\delta}}\delta)\in \interval{0,\delta}$. Then we calculate
+\[ \norm{T(t)} = \norm{T\big(\floor{\tfrac{t}{\delta}}\delta + (t-\floor{\tfrac{t}{\delta}}\delta)\big)} = \norm{T(\delta)^{\floor{\tfrac{t}{\delta}}}T(t-\floor{\tfrac{t}{\delta}\delta})} \leq \norm{T(\delta)}^{\floor{\tfrac{t}{\delta}}}\norm{T(t-\floor{\tfrac{t}{\delta}})}. \]
+
+(2) Similar, but evaluated at $x$.
+\end{proof}
+
+
+
+
+\section{The $C_0$ property}
+\begin{definition}
+Let $X$ be a Banach space. A semigroup of bounded linear operators $T: \R^{\geq 0} \to \Bounded(X)$ is called a \udef{$C_0$ semigroup} if it is strongly continuous, i.e.\ $T$ is continuous when $\Bounded(X)$ is equipped with the strong operator convergence.
+
+So $C_0$ means
+\begin{itemize}
+\item strongly continuous semigroup
+\item of bounded operators
+\item on a Banach space.
+\end{itemize}
+\end{definition}
+
+
+\begin{proposition} \label{equivalentContinuityConditionsC0Semigroup}
+Let $T:\R^+\to \Bounded(X)$ be a semigroup of bounded operators on a Banach space. Then the following are equivalent:
 \begin{enumerate}
 \item $T$ is strongly continuous;
 \item $T$ is strongly continuous at $0$;
-\item $T(t)$ is uniformly bounded on some neighbourhood of $0$ and there exists a dense subset $D\subseteq X$ such that $\lim_{t\to 0} T(t)x = x$ for all $x\in D$.
+\item there exists $\delta > 0$ such that $T(t)$ is uniformly bounded on $\interval{0,\delta}$ and there exists a dense subset $D\subseteq X$ such that $\lim_{t\to 0} T(t)x = x$ for all $x\in D$.
 \end{enumerate}
 \end{proposition}
+TODO: is there a more general principle that gives $(3) \Rightarrow (1)$??
 \begin{proof}
 $(1) \Rightarrow (2)$ If a semigroup is strongly continuous, then it is obviously strongly continuous at $0$.
 
 $(2) \Rightarrow (3)$ Because $T(0) = \id_X$, strong continuity at $0$ means that $\lim_{t\to 0} T(t)x = x$ for all $x\in X$. Thus this also holds for all $x$ in any (dense) subset of $X$.
 
-For the uniform bound we use the uniform boundedness principle \ref{uniformBoundednessPrinciple}. It is then enough to show that there exists a neighbourhood $U$ of $0$ such that $\sup\setbuilder{\norm{T(t)x}}{t\in U} <\infty$ for all $x\in X$.
+We will show that $T(t)$ is uniformly bounded on $\interval{0,1}$. By the uniform boundedness principle \ref{uniformBoundednessPrinciple}, it is enough to prove that $\setbuilder{\norm{T(t)x}}{t\in \interval{0,1}}$ is bounded for all $x\in X$.
 
-TODO
-
-$(3) \Rightarrow (1)$
-
-Conversely, assume a semigroup $T: I^+\to \Lin(X)$ is continuous at $0$. Take $t_0\in I^+$. By \ref{leftRightConvergence} it is enough to check that $T$ is left and right continuous at $t_0$.
-
-First let $F$ be a filter in $\powerfilters(\upset t_0)$ that converges to $t_0$. Then $F - t_0 \in \powerfilters(I^+)$ and $F-t_0 \to 0$. Thus $T[F] = T[F-t_0 + t_0] = T[F-t_0]T[t_0] \to T[0]T[t_0] = T[t_0]$, meaning that $T$ is right continuous.
-
-TODO left continuity.
-\end{proof}
-TODO cfr SOT.
-
-\subsection{Growth bounds}
-\begin{proposition}
-Let $T: I^+ \to \Lin(X)$ be a strongly continuous semigroup of bounded linear operators. Then there exist contstants $w\in \R$ and $M\geq 1$ such that
-\[ \forall t\in I^+:\quad \norm{T(t)} \leq Me^{w\norm{t}}. \]
-\end{proposition}
-\begin{proof}
-Choose $M$ such that for all $0\leq s\leq 1$, $\norm{T(s)}\leq M$.
-\end{proof}
-
-
-\section{Uniformly continuous semigroups}
-
-\begin{proposition}
-Let $X$ be a Banach space and $T: \R^+\to \Bounded(X)$ a uniformly continuous semigroup. Then $T$ is differentiable and there exists $A\in \Bounded(X)$ such that $\dod{T(t)}{t} = AT(t)$.
-\end{proposition}
-\begin{proof}
-Since $T$ is continuous, the function $V: \R^+ \to \Bounded(X): t\mapsto \int_0^t T(s)\diff{s}$ is differentiable with $\od{V}{t} = T$ (TODO vector version of fundamental theorem of calculus). Then
-\[ \lim_{t\to 0}\frac{V(t)}{t} = \dod{V}{t}\Big|_{t=0} = T(0) = \id_X. \]
-Now $\id_X$ is invertible and the set of invertible elements of $\Bounded(X)$ is open by \ref{openSetInvertibles}, so there exists an interval $\interval{0,t_0}$ such that $V(t)$ is invertible for all $t\in \interval{0,t_0}$ (using the fact that such intervals form a basis of the vicinity filter of $\R^+$, the vicinity filter converges and \ref{openClosedCriteria}).
-
-Now, using \ref{boundedOperatorUnderIntegral}, the fact that $T$ is a semigroup and (TODO change of variables), we calculate, for all $t\in \R^+$,
+Take arbitrary $x\in X$. Since $t\mapsto T(t)x$ converges to $x$ at $t=0$, there exists $\delta_x >0$ such that $\norm{T(s)x-x} \leq 1$ for all $s\in \interval{0,\delta_x}$. This implies
+\[ 1 \geq \norm{T(s)x-x} \geq \big|\norm{T(s)x} - \norm{x}\big| \geq \norm{T(s)x} - \norm{x}, \]
+by the reverse triangle inequality \ref{reverseTriangleInequality}, so $\norm{T(s)x} \leq 1 + \norm{x}$. Set $M \defeq \max\{\norm{T(\delta_x)}, 1\}$. For all $t\in \interval{0,1}$, \ref{normBoundFromSemigroupEquation} gives
 \begin{align*}
-T(t) &= V(t_0)^{-1}V(t_0)T(t) \\
-&= V(t_0)^{-1}\int_0^{t_0}T(t+s)\diff{s} \\
-&= V(t_0)^{-1}\int_t^{t+t_0}T(s)\diff{s} \\
-&= V(t_0)^{-1}\Big(\int_0^{t+t_0}T(s)\diff{s} - \int_0^{t}T(s)\diff{s}\Big) \\
-&= V(t_0)^{-1}\Big(V(t+t_0) - V(t)\Big).
+\norm{T(t)x} &\leq \norm{T(\delta_x)}^{\floor{\tfrac{t}{\delta_x}}}\norm{T(t-\floor{\tfrac{t}{\delta_x}})x} \\
+&\leq M^{\floor{\tfrac{t}{\delta_x}}}\big(1 + \norm{x}\big) \\
+&\leq M^{\delta_x^{-1}}\big(1 + \norm{x}\big).
 \end{align*}
-Thus the differentiability of $T$ follows from the differentiability of $V$ (TODO ref product and shift differentiable). Now that we know that $T$ is differentiable (in particular that $T$ is differentiable at $0$), we can calculate
+This bound does not depend on $t$, so it is a bound for $\setbuilder{\norm{T(t)x}}{t\in \interval{0,1}}$.
+
+$(3) \Rightarrow (1)$ Let $M$ be the uniform bound of $T(t)$ for $t\in \interval{0,\delta}$. Fix $s\in \R^+$ and $x\in X$. We need to show that $t\mapsto T(t)x$ is continuous at $s$. By \ref{sequentialSpaceSequentialContinuity} it is enough to show that the map is sequentially continuous. Take some real sequence $\seq{s_n}$ that converges to $s$.
+
+For all $t\in \interval{s-\delta/2, s+\delta/2}$, we have $t = s-\delta/2+\epsilon$ for some $0\leq \epsilon \leq \delta$. So
+\[ \norm{T(t)} = \norm{T(s-\delta/2+\epsilon)} \leq \norm{T(s-\delta/2)}\norm{T(\epsilon)} \leq M\norm{T(s-\delta/2)}. \]
+
+Since $s_n\to s$, we have $|s_n-s| \to 0$. There exists some $n_0$ such that $|s_n-s| \in \interval{0,\delta/2}$ for all $n\geq n_0$. In this case $s_n \in \interval{s-\delta/2, s+\delta/2}$.
+
+To show that $T(s_n)x \to T(s)x$, we take arbitrary $\epsilon > 0$. Since $D\subseteq X$ is dense, there exists $x' \in D$ such that $\norm{x-x'} \leq \frac{\epsilon}{3M\norm{T(s-\delta/2)}\norm{T(s)}}$ by \ref{metricDensityLemma}.
+
+Since $\lim_{n\to \infty}T(|s_n-s|)x' = x'$, there exists $n_1\in \N$ such that $\norm{T\big(|s_n - s|\big)x' - x'} \leq \frac{\epsilon}{3M\norm{T(s-\delta/2)}}$ for all $n\geq n_1$.
+
+We now show that, for all $n\geq \max\{n_0, n_1\}$, $\norm{T(s_n)x - T(s)x} \leq \epsilon$. Indeed, take arbitrary $n \geq \max\{n_0, n_1\}$ and we can write
+\[ \norm{T(s_n)x - T(s)x} \leq \norm{T(s_n)x - T(s_n)x'} + \norm{T(s_n)x' - T(s)x'} + \norm{T(s)x' - T(s)x} \]
+and it is enough to show that each term on the right is less than $\epsilon / 3$. For the first we have
+\[ \norm{T(s_n)x - T(s_n)x'} \leq \norm{T(s_n)}\,\norm{x-x'} \leq M\norm{T(s-\delta/2)}\frac{\epsilon}{3M\norm{T(s-\delta/2)}} = \frac{\epsilon}{3} \]
+and similarly for the third
+\[ \norm{T(s)x - T(s)x'} \leq \norm{T(s)}\,\norm{x-x'} \leq M\norm{T(s-\delta/2)}\frac{\epsilon}{3M\norm{T(s-\delta/2)}} = \frac{\epsilon}{3}. \]
+
+Finally consider the middle term and first suppose $s_n \geq s$. Then
 \begin{align*}
-\dod{}{t}T(t) &= \lim{h\to 0} \frac{T(t+h) - T(t)}{h} \\
-&= \lim{h\to 0} \frac{T(h) - T(0)}{h}T(t) \\
-&= \Big(\dod{}{t}\Big|_t=0 T(t)\Big)T(t).
+\norm{T(s_n)x' - T(s)x'} &= \norm{T(s)\big(T(s_n-s)x' - x'\big)} \\
+&\leq \norm{T(s)}\norm{T\big(|s_n-s|\big)x' - x'} \\
+&\leq \norm{T(s)}\frac{\epsilon}{3M\norm{T(s-\delta/2)}} \leq \frac{\epsilon}{3}.
 \end{align*}
-We set $A\defeq \dod{}{t}\Big|_t=0 T(t)$.
-\end{proof}
-
-\begin{proposition} \label{exponentialDifferentiableSemigroup}
-Let $X$ be a Banach space and $A\in\Bounded(X)$ a bounded operator. Then $e^{tA}$ is a differentiable semigroup and $\dod{e^{tA}}{t} = Ae^{tA}$.
-\end{proposition}
-By \ref{FrechetDifferentiableImpliesContinuous}, we have that $e^{tA}$ is a uniformly continuous semigroup.
-\begin{proof}
-We observe that $e^{tA}$ is a semigroup by (TODO ref $e^{A+B} = e^Ae^B$ is $A,B$ commute).
-
-We show that $e^{tA} = \sum_{n=0}^\infty \frac{t^nA^n}{n!}$ is differentiable using \ref{derivativeOfUniformLimit}. First we need to show that the convergence of
-\[ \sum_{n=1}^\infty \frac{nt^{n-1}A^n}{n!} = \sum_{n=1}^\infty \frac{t^{n-1}A^n}{(n-1)!} = \sum_{n=0}^\infty A\frac{t^{n}A^n}{n!} = Ae^{tA} \]
-is uniform on $\interval{0,1}$. This follows from the Weierstrass $M$-test \ref{WeierstrassMTest}, by observing $\sup_{t\in \interval{0,1}}\norm{A\frac{t^{n}A^n}{n!}} \leq \norm{A}\frac{\norm{A}^n}{n!}$ and $\sum_{n=0} \norm{A}\frac{\norm{A}^n}{n!} = \norm{A}e^{\norm{A}}$.
-
-By \ref{derivativeOfUniformLimit}, $e^{tA}$ is differentiable on $\interval{0,1}$, with $\dod{e^{tA}}{t} = Ae^{tA}$. This result extends to the whole of $\R^+$ by shifting using the semigroup property.
-\end{proof}
-\begin{proof}[Alternate proof by holomorphic functional calculus]
-Let $\Gamma$ be a counterclockwise path such that $\spec(A)$ lies in the interior of $\Gamma$. We calculate
+Now suppose $s_n \leq s$. Then
 \begin{align*}
-\od{}{t}e^{tA} &= \od{}{t}\frac{1}{2\pi i}\oint_\Gamma e^{tz}R_{A}(z)\diff{z} \\
-&= \frac{1}{2\pi i}\oint_\Gamma \od{}{t}e^{tz}R_{A}(z)\diff{z} \\
-&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}zR_{A}(z)\diff{z} \\
-&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}\big(AR_A(z) + \id_X\big)\diff{z} \\
-&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}AR_A(z)\diff{z} \\
-&= Ae^{tA},
+\norm{T(s)x' - T(s_n)x'} &= \norm{T(s_n)\big(T(s-s_n)x' - x'\big)} \\
+&\leq \norm{T(s_n)}\norm{T\big(|s_n-s|\big)x' - x'} \\
+&\leq \norm{T(s_n)}\frac{\epsilon}{3M\norm{T(s-\delta/2)}} \leq \frac{\epsilon}{3}.
 \end{align*}
-where we have used \ref{pathIntegralContinuousOperator} and \ref{derivativeOfConstructions} to move the derivative inside the integral. Then we have used the indentity \ref{BanachAlgebraResolventMultiplication}, \ref{weakAnalyticityConsequences} to see that the second term is zero and \ref{derivativeOfConstructions} again to move the $A$ outside.
+In both cases $\norm{T(s_n)x' - T(s)x'} \leq \frac{\epsilon}{3}$.
+We conclude that $T(s_n)x$ converges to $T(s)x$.
 \end{proof}
-
-\begin{proposition}
-Let $X$ be a Banach space and $A\in \Bounded(X)$ a bounded operator. Then there exists a unique function $T: \R^+\to \Bounded(X)$ such that
-\[ \begin{cases}
-\dod{T(t)}{t} = AT(t) \\
-T(0) = \id_X.
-\end{cases} \]
-\end{proposition}
-Note that $T$ is unique even among all such functions, not just the semigroups.
-\begin{proof}
-By \ref{exponentialDifferentiableSemigroup} the semigroup $t\mapsto e^{tA}$ satisfies the criteria.
-
-Now suppose, towards a contradiction, that there was another function $T: \R^+ \to \Bounded(X)$ that fits the criteria. Then, for fixed $t\in \R^+$, define
-\[ Q: \interval{0,t}\to \Bounded(X): s\mapsto e^{sA}T(t-s). \]
-Now, using \ref{FrechetChainRule} and \ref{LeibnizRuleDerivativeAlgebra},
-\[ \dod{Q}{s} = Ae^{sA}T(t-s) - e^{sA}AT(t-s) = 0. \]
-It follows from the vector mean value theorem \ref{meanValueTheoremVectorFunctions} that $Q$ is constant, so $T(t) = Q(0) = Q(t) = e^{tA}$.
-\end{proof}
-
-
-\begin{corollary}
-Let $X$ be a Banach space and $T: \R^+\to \Bounded(X)$ a function.
-Then the following are equivalent:
+\begin{corollary} \label{stronglyContinuousConditionGroupOfOperators}
+Let $T:\R\to \Bounded(X)$ be a group of bounded operators on a Banach space and $t_0\in \R$. Then the following are equivalent:
 \begin{enumerate}
-\item $T$ is a uniformly continuous semigroup;
-\item $T$ is differentiable and
-\[ \begin{cases}
-\dod{T(t)}{t} = AT(t) \\
-T(0) = \id_X,
-\end{cases} \]
-for some $A\in \Bounded(X)$;
-\item there exists an $A\in \Bounded(X)$ such that $T(t) = e^{tA}$ for all $t\in \R^+$.
+\item $T$ is strongly continuous;
+\item there exists $t_0\in \R$ such that $T$ is strongly continuous at $t_0$;
+\item \emph{there exists} $t_0\in \R$ and $\delta > 0$ such that $T(t)$ is uniformly bounded on $\interval{t_0, t_0+\delta}$ and there exists a dense subset $D\subseteq X$ such that $\lim_{t\downarrow t_0} T(t)x = T(t_0)x$ for all $x\in D$;
+\item \emph{for all} $t_1\in \R$, there exists $\delta > 0$ such that $T(t)$ is uniformly bounded on $\interval{t_1, t_1+\delta}$ and there exists a dense subset $D\subseteq X$ such that $\lim_{t\downarrow t_1} T(t)x = T(t_1)x$ for all $x\in D$.
 \end{enumerate}
 \end{corollary}
-In cases (2) and (3) the operator $A$ is the same.
+\begin{proof}
+$(1) \Leftrightarrow (2)$ The direction $\Rightarrow$ is immediate.
 
+For the other direction, take arbitrary $t_1\in \R$. Then $T(t)$ is strongly continuous at $t_1$ if $T(t+t_1-t_0) = T(t_1-t_0)T(t)$ is strongly continuous at $t_0$, which it clearly is since $T(t)$ is strongly continuous at $t_0$ and $T(t_1-t_0)$ is continuous. 
 
+$(1) \Rightarrow (3)$ The case $t_0 = 0$ follows from the proposition.
 
-\subsection{Matrix semigroups}
-\subsubsection{Explicit 2D solutions}
+$(3) \Rightarrow (4)$ Take arbitrary $t_1\in \R$ and take $t\in \interval{t_1, t_1+\delta}$. Then $t-t_1+t_0 \in \interval{t_0,t_0+\delta}$ and
+\[ \norm{T(t)} = \norm{T\big(t_1 - t_0 + (t-t_1+t_0)\big)} \leq \norm{T(t_1 - t_0)}\,\norm{T(t-t_1+t_0)} \leq \norm{T(t_1-t_0)}M. \]
+Thus $\norm{T(t_1 - t_0)}M$ is a uniform bound on $\interval{t_1, t_1+\delta}$.
+
+For all $x\in D$, we have
+\begin{align*}
+\lim_{t\downarrow t_1} T(t)x &= \lim_{t\downarrow t_0} T(t_1 - t_0 + t)x \\
+&= \lim_{t\downarrow t_0} T(t_1 - t_0)T(t)x \\
+&= T(t_1-t_0)\lim_{t\downarrow t_0} T(t)x \\
+&= T(t_1 - t_0)T(t_0)x = T(t_1)x.
+\end{align*}
+
+$(4) \Rightarrow (2)$ Setting $t_1 = 0$, the proposition proposition gives that $T|_{\R^+}$ is strongly continuous and thus $T$ is strongly continuous at $t_0$ for all $t_0\in \R^+$.
+\end{proof}
+
 \begin{proposition}
-Let $A = \begin{pmatrix}
-a & b \\ c & d
-\end{pmatrix}$ be a $2\times 2$-matrix. For $t\in \R$, we have
-\[ e^{tA} = \begin{cases}
-e^{t\tau/2}\Big(\frac{\sinh(t\gamma)}{\gamma}A + \big(\cosh(t\gamma) - \frac{2\tau}{\gamma}\sinh(t\gamma)\big)\mathbb{1}_2\Big) & (\gamma \neq 0) \\
-e^{t\tau/2}\big(tA + (1-\frac{t\tau}{2})\mathbb{1}_2\big) & (\gamma = 0),
-\end{cases} \]
-where $\delta = \det(A)$, $\tau = \Tr(A)$ and $\gamma = \frac{\tau^2 - 4\delta}{4}$.
+Let $T:\R^+\to \Bounded(X)$ be a semigroup of bounded operators on a Banach space. Then $T$ is strongly continuous \textup{if and only if} it is weakly continuous, i.e.\ the functions
+\[ \R^+ \to \C: t\mapsto f\big(T(t)x\big) \]
+are continuous for all $x\in X$ and $f\in \dual{X}$.
 \end{proposition}
+\begin{proof}
+TODO theorem 5.8 in \cite{engel_one-parameter_2000}.
+\end{proof}
+
+
+
+\begin{proposition}
+Let $T:\R^+\to \Bounded(X)$ be a $C_0$ semigroup. Suppose $T(t_0)$ is invertible for some $t_0$. Then $T$ can be extended to a strongly continuous group of bounded operators.
+\end{proposition}
+\begin{proof}
+We can extend $T$ to a group of linear operators $T_0$ by \ref{extendingSemigroupToGroupOfLinearOperators}.
+
+By construction $T_0(t)$ is bounded for all $t\in \R$.
+
+By \ref{stronglyContinuousConditionGroupOfOperators} it is enough to show that $T_0$ is strongly continuous at some point, which is immediate since it is equal to $T$ for all $t\in \R^+$.
+\end{proof}
+
+
+\subsection{The growth bound}
+\begin{proposition} \label{growthBoundNotInfinite}
+Let $T: \R^+ \to \Bounded(X)$ be a $C_0$ semigroup. Then there exist contstants $w\in \R$ and $M\geq 1$ such that
+\[ \forall t\in \R^+:\quad \norm{T(t)} \leq Me^{wt}. \]
+\end{proposition}
+\begin{proof}
+By \ref{equivalentContinuityConditionsC0Semigroup}, there exists $M_0$ such that $\norm{T(s)} \leq M_0$ for all $s\in \interval{0,\delta}$. Set $M \defeq \max\{M_0, 1\}$.
+
+By \ref{normBoundFromSemigroupEquation}, we have
+\[ \norm{T(t)} \leq M^{\floor{\tfrac{t}{\delta}}}M \leq M\big(M^{\delta^{-1}}\big)^t = Me^{\ln(M^{\delta^{-1}})t} = Me^{wt}, \]
+where we have set $w\defeq \ln(M^{\delta^{-1}})$.
+\end{proof}
+
+\begin{definition}
+Let $T: \R^+ \to \Bounded(X)$ be a $C_0$ semigroup. Then
+\[ w_0 \defeq \inf\setbuilder{w\in \R}{\exists M \geq 1: \forall t\in \R^+: \; \norm{T(t)} \leq Me^{wt}} \]
+is called the \udef{growth bound} or \udef{type} of $T$.
+\begin{itemize}
+\item We call $T$ \udef{bounded} if there exists $M\geq 1$ such that $\norm{T(t)}\leq M = Me^{0t}$ for all $t\in \R^+$.
+\item We call $T$ \udef{contractive} if $\norm{T(t)} \leq 1$ for all $t\in \R^+$.
+\end{itemize}
+\end{definition}
+Note that $T$ being bounded implies $w_0 = 0$. The converse is \emph{not true}. In particular, the infimum in the definition of $w_0$ is not, in general, a minimum.
 
 \begin{example}
-\begin{itemize}
-\item If $A = \begin{pmatrix}
-0 & 1 \\ -1 & 0
-\end{pmatrix}$, then $e^{tA} = \begin{pmatrix}
-\cos(t) & \sin(t) \\ -\sin(t) & \cos(t)
-\end{pmatrix}$.
-\item If $A = \begin{pmatrix}
-0 & 1 \\ 1 & 0
-\end{pmatrix} = \sigma_X$, then $e^{tA} = \begin{pmatrix}
-\cosh(t) & \sinh(t) \\ \sinh(t) & \cosh(t)
-\end{pmatrix}$.
-\item If $A = \begin{pmatrix}
-1 & 1 \\ -1 & -1
-\end{pmatrix}$, then $e^{tA} = \begin{pmatrix}
-1+t & t \\ -t & 1-t
-\end{pmatrix}$.
-\end{itemize}
+Take the semigroup
+\[ T(t) = \begin{pmatrix}
+1 & t \\ 0 & 1
+\end{pmatrix}. \]
+Then
+\[ \norm{T(t)} = \frac{\sqrt{t^2(1+\sqrt{t^2+2}+ 2)}}{\sqrt{2}} = O(t^{3/2}), \]
+so $w_0 = 0$, but $T$ is not bounded.
 \end{example}
 
-\chapter{$C_0$ semigroups}
-\section{The $C_0$ property}
-\begin{definition}
-Let $X$ be a Banach space. A semigroup of bounded linear operators $T: \R^{\geq 0} \to \Bounded(X)$ is called a \udef{$C_0$ semigroup} if it is strongly continuous, i.e.\ $T$ is continuous when $\Bounded(X)$ is equipped with the strong operator convergence.
-\end{definition}
-
 \begin{lemma}
-A semigroup of linear operators $T: \R^{\geq 0} \to \Lin(X)$ is $C_0$ \textup{if and only if} it is strongly continuous at $0$.
+Let $T: \R^+ \to \Bounded(X)$ be a $C_0$ semigroup with growth bound $w_0$. Then
+\[ \inf_{t>0}t^{-1}\ln\norm{T(t)} \leq \lim_{t\to \infty}t^{-1}\ln\norm{T(t)} \leq w_0 < \infty. \]
 \end{lemma}
 \begin{proof}
-It is enough to prove the strong continuity at $0$ implies strong continuity.
+The first inequality is clear. For the second, suppose $\norm{T(t)} \leq Me^{wt}$. Then
+\[ t^{-1}\ln\norm{T(t)} \leq \frac{\ln(M) + wt}{t}, \]
+so $\lim_{t\to \infty}t^{-1}\ln\norm{T(t)} \leq w$.
 
-Take some filter $F\to t\in\R^{\geq}$.
+Finally, the last inequality is an immediate consequence of \ref{growthBoundNotInfinite}.
 \end{proof}
 
-\begin{proposition}
-Let $T: \R^{\geq} \to \Bounded(X)$ be a $C_0$ semigroup. Then
-\begin{enumerate}
-\item $w_0 \defeq \inf_{t>0}t^{-1}\ln\norm{T(t)} = \lim_{t\to \infty}t^{-1}\ln\norm{T(t)} < \infty$;
-\item for all $w > w_0$ there exists $M_w \geq 1$ such that $\norm{T(t)} \leq M_we^{wt}$.
-\end{enumerate}
-\end{proposition}
+\begin{example}
+The growth bound may be $w_0 = -\infty$. This is the case for any nilpotent $C_0$ semigroup. For example the translation semigroup on a finite interval that pads with zero.
+\end{example}
+
+
+\subsection{Orbit maps}
+
+\begin{lemma} \label{integrabilityOrbitMaps}
+Let $T: \R^+\to \Bounded(X)$ be a $C_0$ semigroup. For all $x\in X$, the orbit map $(t\mapsto T(t)x)$ is integrable on any compact $K\subseteq [0,\infty]$.
+\end{lemma}
 \begin{proof}
-TODO
+Since $(t\mapsto T(t)x)$ is continuous, it is also measurable (TODO ref).
+
+By \ref{BochnerIntegrabilityCondition} we just need to show $\int_K\norm{T(s)x}\diff{s} < \infty$. We have $\int_K\norm{T(s)x}\diff{s} \leq \sup_{s\in K}\norm{T(s)x}\lambda(K)$. Now $\lambda(K)$ is finite by \ref{HaarConsequences} and $\sup_{s\in K}\norm{T(s)x}$ is finite by (TODO ref: extreme value theorem), as $\R \to \R: t\mapsto \norm{T(t)x}$ is a continuous function.
 \end{proof}
+
+
+
+\section{The generator}
+\begin{definition}
+Let $T: \R^+\to \Bounded(X)$ be a $C_0$ semigroup. The \udef{generator} of $T$ is the operator $A: X\not\to X$ defined by
+\[ Ax \defeq \lim_{h\downarrow 0}\frac{T(h)x - x}{h} \]
+with domain
+\[ \dom(A) = \setbuilder{x\in X}{\text{$\lim_{h\downarrow 0}\frac{T(h)x - x}{h}$ exists}}. \]
+\end{definition}
+Notice that the generator is indeed a linear operator.
 
 \begin{lemma}
 Let $T: \R^+\to \Bounded(X)$ be an operator semigroup. Consider the orbit map $\xi_x: \R^+ \to X: t\mapsto T(t)x$ for some $x\in X$. The following are equivalent:
@@ -222,27 +287,20 @@ Clearly $(1)$ implies $(2)$. Now assume $(2)$, we show $\xi_x$ is left and right
 TODO
 \end{proof}
 
-\begin{lemma} \label{integrabilityOrbitMaps}
-Let $T: \R^+\to \Bounded(X)$ be an operator semigroup. For all $x\in X$, the orbit map $\xi_x$ is integrable on any compact $K\subseteq [0,\infty]$.
-\end{lemma}
-\begin{proof}
-By \ref{BochnerIntegrabilityCondition} we just need to show $\int_K\norm{\xi_x(s)}\diff{s} < \infty$. We have $\int_K\norm{\xi_x(s)}\diff{s} \leq \sup_{s\in K}\norm{\xi_x(s)}\lambda(K)$. Now $\lambda(K)$ is finite by \ref{HaarConsequences} and $\sup_{s\in K}\norm{\xi_x(s)}$ is finite by (TODO ref: extreme value theorem), as $\R \to \R: t\mapsto \norm{\xi_x(t)}$ is a continuous function.
-\end{proof}
-
-\section{The generator}
-\begin{definition}
-Let $T: \R^+\to \Bounded(X)$ be an operator semigroup. The \udef{generator} of $T$ is the operator $A: X\not\to X$ defined by
-\[ Ax \defeq \xi_x'(0) = \lim_{h\downarrow 0}\frac{1}{h}\big(T(h)x - x\big) \]
-with domain
-\[ \dom(A) = \setbuilder{x\in X}{\text{$\xi_x$ is differentiable}}. \]
-\end{definition}
-Notice that the generator is indeed a linear operator.
-
+\subsection{Computing derivatives}
 \begin{lemma} \label{differentialOperatorSemigroupGenerator}
 Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. If $x\in\dom(A)$, then $T(t)x\in\dom(A)$ and
 \[ \od{}{t}T(t)x = T(t)Ax = AT(t)x \]
 for all $t\in [0,\infty]$.
 \end{lemma}
+
+\begin{lemma}
+Let $T$ be a $C_0$-semigroup on a Banach space $X$, $t_0\in\R^+$ $U\in\neighbourhood(t_0)$ and $u: U \to X$ function. Suppose $u(s) \in \dom(A)$ for all $s\in U$. Then
+\[ \left.\od{}{t}\right|_{t=t_0}T(t)u(t) = T(t_0)Au(t_0) + T(t_0)u'(t_0) \]
+\end{lemma}
+\begin{proof}
+\ref{equicontinuityBoundedOperators}
+\end{proof}
 
 \begin{lemma} \label{domainGeneratorLemma}
 Let $T(t)$ be a $C_0$ semigroup on a Banach space $X$ with generator $A$. If $x,y\in X$ are such that
@@ -347,6 +405,7 @@ As the left-hand side converges, it must converge to zero. Thus $T(t)x - x = \in
 (2) Fix $x\in X$. By assumption there exists a sequence $\seq{h_n}\to 0$ such that the sequence $\seq{A_{h_n}x}$ remains bounded. By (TODO ref) this sequence is contained in a weakly compact set, meaning there exists a weakly convergent subsequence $\seq{A_{h'_n}x}$. TODO rest.
 \end{proof}
 
+\subsection{Properties of the generator}
 \begin{proposition} \label{generatorClosedDenselyDefined}
 The generator of an operator semigroup is closed and densely defined.
 \end{proposition}
@@ -468,7 +527,38 @@ Let $T(t)$ be a $C_0$ semigroup on a Banach space $X$ with generator $A$ and $r\
 
 \end{proof}
 
-\subsection{Algebra of semigroups and generators}
+\section{Examples and constructions}
+\subsection{Similar semigroups}
+\begin{proposition}
+Let $T: \R^+\to \Bounded(X)$ be a $C_0$ semigroup with generator $A$, $Y$ a Banach space and $V: Y\to X$ a linear homeomorphism. Then
+\[ S: \R^+ \to \Bounded{Y}: t\mapsto V^{-1}T(t)V \]
+is a $C_0$ semigroup with generator $B = V^{-1}AV$ that has domain $\setbuilder{y\in Y}{Vy \in \dom(A)}$.
+\end{proposition}
+\begin{proof}
+First we check that $S$ is a semigroup. This follows from
+\begin{align*}
+S(0) &= V^{-1}T(0)V = V^{-1}\id_XV = V^{-1}V = \id_Y \\
+S(s+t) &= V^{-1}T(s+t)V = V^{-1}T(s)T(t)V = V^{-1}T(s)VV^{-1}T(t)V = S(s)S(t),
+\end{align*}
+for all $s,t\in \R^+$. Strong continuity is immediate, since $V^{-1}$ is continuous.
+
+Finally, we verify the generator. First take $y\in Y$ such that $Vy \in \dom(A)$. Then we have
+\begin{align*}
+By &= V^{-1}AVy \\
+&= V^{-1}\Big(\lim_{h\to 0}\frac{T(h)Vy - Vy}{h}\Big) \\
+&= \lim_{h\to 0}\frac{V^{-1}T(h)Vy - V^{-1}Vy}{h} \\
+&= \lim_{h\to 0}\frac{S(h)y - y}{h}.
+\end{align*}
+We also have to check that if $\lim_{h\to 0}\frac{S(h)y - y}{h}$ exists, then $y\in \dom(B)$. In this case we calculate
+\begin{align*}
+V\Big(\lim_{h\to 0}\frac{S(h)y - y}{h}\Big) &= \lim_{h\to 0}\frac{VS(h)y - Vy}{h} \\
+&= \lim_{h\to 0}\frac{T(h)Vy - Vy}{h} \\
+&= A(Vy),
+\end{align*}
+so $Vy\in \dom(A)$ and $y\in\dom(B)$.
+\end{proof}
+
+\subsection{Rescaled semigroups}
 \begin{proposition}
 Let $T: \R^+\to \Bounded(X)$ be a strongly continuous operator semigroup with generator $A$, $\mu\in\C$ and $\alpha >0$. Then $e^{\mu t}T(\alpha t)$ is a strongly continuous operator semigroup with generator $\alpha A + \mu\id_X$.
 \end{proposition}
@@ -489,7 +579,7 @@ Let $T: \R^+\to \Bounded(X)$ and $S: \R^+\to \Bounded(X)$ be strongly continuous
 (3) TODO
 \end{proof}
 
-\subsection{Spectral properties of resolvents}
+\subsubsection{Resolvent of generator as Laplace transform}
 
 \begin{lemma} \label{expScaledSemigroupLemma}
 Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with generator $A$. Take $\lambda\in \C$ and $t> 0$. Then
@@ -579,11 +669,67 @@ Let $T: \R^+\to \Bounded(X)$ be an operator semigroup with growth bound $\norm{T
 TODO
 \end{proof}
 
+\subsection{Multiplication semigroups}
+
+\begin{proposition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space, $1\leq p \leq \infty$ and $q: \Omega \to \C$ be a measurable function. Define the function $T: \R^+\to \Bounded(L^p(\Omega, \mu)): t\mapsto M_{e^{tq}}$, where $M_{e^{tq}}$ is a multiplication operator. Then $T$ is a strongly continuous semigroup with generator $M_q$.
+\end{proposition}
+
+
+
+
+\begin{proposition}
+Let $X$ be a Banach space. Let $E$ be the function space $\cont(\R,X)$ equipped with the supremum norm. Consider a function $A: \R\to \Lin(X)$ such that
+\begin{itemize}
+\item there exists a common core $D\subseteq \bigcap_{s\in R}\dom\big(A(s)\big)$ such that $A$ is strongly continuous on $D$;
+\item each $A(s)$ is the generator of a semigroup $T_s$ satisfying the common growth bound $\norm{T_s(t)}\leq Me^{wt}$.
+\end{itemize}
+Then $\mathcal{M}: \R^{\geq 0}\to \Bounded\big(E\big)$ defined by
+\[ \mathcal{M}(t)f(s) \defeq T_s(t)f(s) \]
+for all $s\in R$, $t\geq 0$ and $f\in E$, is a strongly continuous semigroup satisfying the common growth bound $\norm{\mathcal{M}(t)}_{\infty} \leq Me^{wt}$.
+
+The generator of this semigroup is the operator $\mathcal{A}:E\to E$ defined by
+\[ \big(\mathcal{A}f\big)(s) \defeq A(s)f(s) \]
+for all $s\in \R$. Its domain is given by
+\[ \dom(\mathcal{A}) = \setbuilder{f\in E}{\forall s\in \R: f(s)\in \dom\big(A(s)\big)\;\text{and}\; \big(s\mapsto A(s)f(s)\big)\in E}. \]
+\end{proposition}
+The semigroup $\mathcal{M}$ is called a \udef{multiplication semigroup}.
+\begin{proof}
+The semigroup property and growth bound of $\mathcal{M}$ are clear. For strong continuity, it is enough by (TODO EN00 I.5.3) and the growth bound to check strong continuity on a dense subset, in this case $\cont_c(\R,X)$, the space of functions with compact support.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a Banach space, let $E$ be the function space $\cont(\R,X)$ equipped with the supremum norm and let $\mathcal{A}$ be a bounded operator on $E$. Then $\mathcal{A}$ is the multiplication operator associated to a family $A: \R\to \cont_b(\R, \Bounded(X))$ \textup{if and only if} $\mathcal{A}(\varphi f) = \varphi\mathcal{A}(f)$ for all $f\in E$ and $\varphi\in\cont_c(\R)$. Moreover,
+\[ \norm{\mathcal{A}}_{\Bounded(E)} = \sup_{t\in\R}\norm{A(t)}_{\Bounded(X)}. \]
+\end{proposition}
+\begin{proof}
+The direction $\Rightarrow$ is immediate by linearity of each $A(s)$.
+
+For the converse, fix $s\in \R$. In order to define $A(s)x$, we take some $f\in E$ such that $f(s) = x$ and set $A(s)x \defeq (\mathcal{A}f)(s)$. Now we just need to show this does not depend on the $f$ chosen. To this end, take $f_1$ and $f_2$ such that $f_1(s) = x = f_2(s)$. Also fix $\epsilon >0$ and choose a $\varphi_\epsilon\in\cont_c(\R)$ such that $\varphi_\epsilon(t) = 1$ and the support of $\varphi_\epsilon$ is contained in $\interval{t-\epsilon, t+\epsilon}$. Then we calculate
+\begin{align*}
+\norm{(\mathcal{A}f_1)(s) - (\mathcal{A}f_2)(s)} &= \norm{\big(\mathcal{A}(f_1 - f_2)\big)(s)} = \norm{\big(\mathcal{A}(\varphi_\epsilon (f_1 - f_2))\big)(s)} \\
+&\leq \norm{\mathcal{A}}\cdot\norm{\varphi_\epsilon (f_1-f_2)}_\infty \leq \norm{\mathcal{A}} \sup_{|t-s|\leq \epsilon}\norm{f_1(s)-f_2(s)}.
+\end{align*}
+In the limit $\epsilon\to 0$, the right hand side goes to zero, so $\norm{(\mathcal{A}f_1)(s) - (\mathcal{A}f_2)(s)} = 0$ for all $s\in \R$, meaning that $\mathcal{A}f_1 = \mathcal{A}f_2$.
+\end{proof}
+
+\subsection{Translation semigroups}
+\begin{proposition}
+The left translation $T:\R \to \Bounded(L^p)$ defined by
+\[ \big(T(t)f\big)(x) = f(t+x) \]
+is a strongly continuous group for all $1\leq p < \infty$.
+\end{proposition}
+\begin{proof}
+P. 39 in \cite{engel_one-parameter_2000}.
+\end{proof}
+
+\subsection{Diffusion semigroups}
+
 \subsection{Hille-Yosida generation theorems}
 \begin{lemma} \label{resolventLimitLemma}
 Let $A$ be an operator on a Banach space $X$. Suppose
 \begin{itemize}
-\item there exists $w\in \R$ such that $[w,\infty[ \subseteq \res(A)$;
+\item there exists $w\in \R$ such that $\interval[co]{w,\infty} \subseteq \res(A)$;
 \item there exists $M>0$ such that $\norm{r R_A(r)}\leq M$ for all $r \geq w$.
 \end{itemize}
 Then $\lim_{r\to \infty} r R_A(r)x = x$ for all $x\in \overline{\dom(A)}$.
@@ -825,7 +971,7 @@ we get
 &= 2\frac{\norm{x}}{t} + \frac{1}{t}\left(t^2 - \frac{t^2}{2}\right)\norm{A^2x} \\
 &= 2\frac{\norm{x}}{t} + \frac{t}{2}\norm{A^2x}.
 \end{align*}
-This holds for all $t$. In particular this holds if $t = 2\sqrt{\frac{\norm{x}}{\norm{A^x}}}$ (this is in fact the minimum). Then we get
+This holds for all $t$. In particular this holds if $t = 2\sqrt{\frac{\norm{x}}{\norm{A^2x}}}$ (this is in fact the minimum). Then we get
 \begin{align*}
 \norm{Ax}^2 &\leq \left(\sqrt{\norm{x}\cdot\norm{A^2x}} + \sqrt{\norm{x}\cdot\norm{A^2x}}\right)^2 \\
 &= 4\norm{x}\cdot\norm{A^2x}.
@@ -1281,49 +1427,135 @@ Finally assume $T(t)x-x = O(t)$. Then for all $t$ in some interval $\interval{0,
 \end{proof}
 
 
-\section{Examples and constructions}
-\subsection{Translation semigroups}
 
-\subsection{Multiplication semigroups}
-\begin{proposition}
-Let $X$ be a Banach space. Let $E$ be the function space $\cont(\R,X)$ equipped with the supremum norm. Consider a function $A: \R\to \Lin(X)$ such that
-\begin{itemize}
-\item there exists a common core $D\subseteq \bigcap_{s\in R}\dom\big(A(s)\big)$ such that $A$ is strongly continuous on $D$;
-\item each $A(s)$ is the generator of a semigroup $T_s$ satisfying the common growth bound $\norm{T_s(t)}\leq Me^{wt}$.
-\end{itemize}
-Then $\mathcal{M}: \R^{\geq 0}\to \Bounded\big(E\big)$ defined by
-\[ \mathcal{M}(t)f(s) \defeq T_s(t)f(s) \]
-for all $s\in R$, $t\geq 0$ and $f\in E$, is a strongly continuous semigroup satisfying the common growth bound $\norm{\mathcal{M}(t)}_{\infty} \leq Me^{wt}$.
+\chapter{Special classes of semigroups}
 
-The generator of this semigroup is the operator $\mathcal{A}:E\to E$ defined by
-\[ \big(\mathcal{A}f\big)(s) \defeq A(s)f(s) \]
-for all $s\in \R$. Its domain is given by
-\[ \dom(\mathcal{A}) = \setbuilder{f\in E}{\forall s\in \R: f(s)\in \dom\big(A(s)\big)\;\text{and}\; \big(s\mapsto A(s)f(s)\big)\in E}. \]
-\end{proposition}
-The semigroup $\mathcal{M}$ is called a \udef{multiplication semigroup}.
-\begin{proof}
-The semigroup property and growth bound of $\mathcal{M}$ are clear. For strong continuity, it is enough by (TODO EN00 I.5.3) and the growth bound to check strong continuity on a dense subset, in this case $\cont_c(\R,X)$, the space of functions with compact support.
-\end{proof}
+\section{Uniformly continuous semigroups}
 
 \begin{proposition}
-Let $X$ be a Banach space, let $E$ be the function space $\cont(\R,X)$ equipped with the supremum norm and let $\mathcal{A}$ be a bounded operator on $E$. Then $\mathcal{A}$ is the multiplication operator associated to a family $A: \R\to \cont_b(\R, \Bounded(X))$ \textup{if and only if} $\mathcal{A}(\varphi f) = \varphi\mathcal{A}(f)$ for all $f\in E$ and $\varphi\in\cont_c(\R)$. Moreover,
-\[ \norm{\mathcal{A}}_{\Bounded(E)} = \sup_{t\in\R}\norm{A(t)}_{\Bounded(X)}. \]
+Let $X$ be a Banach space and $T: \R^+\to \Bounded(X)$ a uniformly continuous semigroup. Then $T$ is differentiable and there exists $A\in \Bounded(X)$ such that $\dod{T(t)}{t} = AT(t)$.
 \end{proposition}
 \begin{proof}
-The direction $\Rightarrow$ is immediate by linearity of each $A(s)$.
+Since $T$ is continuous, the function $V: \R^+ \to \Bounded(X): t\mapsto \int_0^t T(s)\diff{s}$ is differentiable with $\od{V}{t} = T$ (TODO vector version of fundamental theorem of calculus). Then
+\[ \lim_{t\to 0}\frac{V(t)}{t} = \dod{V}{t}\Big|_{t=0} = T(0) = \id_X. \]
+Now $\id_X$ is invertible and the set of invertible elements of $\Bounded(X)$ is open by \ref{openSetInvertibles}, so there exists an interval $\interval{0,t_0}$ such that $V(t)$ is invertible for all $t\in \interval{0,t_0}$ (using the fact that such intervals form a basis of the vicinity filter of $\R^+$, the vicinity filter converges and \ref{openClosedCriteria}).
 
-For the converse, fix $s\in \R$. In order to define $A(s)x$, we take some $f\in E$ such that $f(s) = x$ and set $A(s)x \defeq (\mathcal{A}f)(s)$. Now we just need to show this does not depend on the $f$ chosen. To this end, take $f_1$ and $f_2$ such that $f_1(s) = x = f_2(s)$. Also fix $\epsilon >0$ and choose a $\varphi_\epsilon\in\cont_c(\R)$ such that $\varphi_\epsilon(t) = 1$ and the support of $\varphi_\epsilon$ is contained in $\interval{t-\epsilon, t+\epsilon}$. Then we calculate
+Now, using \ref{boundedOperatorUnderIntegral}, the fact that $T$ is a semigroup and (TODO change of variables), we calculate, for all $t\in \R^+$,
 \begin{align*}
-\norm{(\mathcal{A}f_1)(s) - (\mathcal{A}f_2)(s)} &= \norm{\big(\mathcal{A}(f_1 - f_2)\big)(s)} = \norm{\big(\mathcal{A}(\varphi_\epsilon (f_1 - f_2))\big)(s)} \\
-&\leq \norm{\mathcal{A}}\cdot\norm{\varphi_\epsilon (f_1-f_2)}_\infty \leq \norm{\mathcal{A}} \sup_{|t-s|\leq \epsilon}\norm{f_1(s)-f_2(s)}.
+T(t) &= V(t_0)^{-1}V(t_0)T(t) \\
+&= V(t_0)^{-1}\int_0^{t_0}T(t+s)\diff{s} \\
+&= V(t_0)^{-1}\int_t^{t+t_0}T(s)\diff{s} \\
+&= V(t_0)^{-1}\Big(\int_0^{t+t_0}T(s)\diff{s} - \int_0^{t}T(s)\diff{s}\Big) \\
+&= V(t_0)^{-1}\Big(V(t+t_0) - V(t)\Big).
 \end{align*}
-In the limit $\epsilon\to 0$, the right hand side goes to zero, so $\norm{(\mathcal{A}f_1)(s) - (\mathcal{A}f_2)(s)} = 0$ for all $s\in \R$, meaning that $\mathcal{A}f_1 = \mathcal{A}f_2$.
+Thus the differentiability of $T$ follows from the differentiability of $V$ (TODO ref product and shift differentiable). Now that we know that $T$ is differentiable (in particular that $T$ is differentiable at $0$), we can calculate
+\begin{align*}
+\dod{}{t}T(t) &= \lim{h\to 0} \frac{T(t+h) - T(t)}{h} \\
+&= \lim{h\to 0} \frac{T(h) - T(0)}{h}T(t) \\
+&= \Big(\dod{}{t}\Big|_t=0 T(t)\Big)T(t).
+\end{align*}
+We set $A\defeq \dod{}{t}\Big|_t=0 T(t)$.
 \end{proof}
 
-\chapter{Analytic semigroups}
+\begin{proposition} \label{exponentialDifferentiableSemigroup}
+Let $X$ be a Banach space and $A\in\Bounded(X)$ a bounded operator. Then $e^{tA}$ is a differentiable semigroup and $\dod{e^{tA}}{t} = Ae^{tA}$.
+\end{proposition}
+By \ref{FrechetDifferentiableImpliesContinuous}, we have that $e^{tA}$ is a uniformly continuous semigroup.
+\begin{proof}
+We observe that $e^{tA}$ is a semigroup by (TODO ref $e^{A+B} = e^Ae^B$ is $A,B$ commute).
 
+We show that $e^{tA} = \sum_{n=0}^\infty \frac{t^nA^n}{n!}$ is differentiable using \ref{derivativeOfUniformLimit}. First we need to show that the convergence of
+\[ \sum_{n=1}^\infty \frac{nt^{n-1}A^n}{n!} = \sum_{n=1}^\infty \frac{t^{n-1}A^n}{(n-1)!} = \sum_{n=0}^\infty A\frac{t^{n}A^n}{n!} = Ae^{tA} \]
+is uniform on $\interval{0,1}$. This follows from the Weierstrass $M$-test \ref{WeierstrassMTest}, by observing $\sup_{t\in \interval{0,1}}\norm{A\frac{t^{n}A^n}{n!}} \leq \norm{A}\frac{\norm{A}^n}{n!}$ and $\sum_{n=0} \norm{A}\frac{\norm{A}^n}{n!} = \norm{A}e^{\norm{A}}$.
+
+By \ref{derivativeOfUniformLimit}, $e^{tA}$ is differentiable on $\interval{0,1}$, with $\dod{e^{tA}}{t} = Ae^{tA}$. This result extends to the whole of $\R^+$ by shifting using the semigroup property.
+\end{proof}
+\begin{proof}[Alternate proof by holomorphic functional calculus]
+Let $\Gamma$ be a counterclockwise path such that $\spec(A)$ lies in the interior of $\Gamma$. We calculate
+\begin{align*}
+\od{}{t}e^{tA} &= \od{}{t}\frac{1}{2\pi i}\oint_\Gamma e^{tz}R_{A}(z)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma \od{}{t}e^{tz}R_{A}(z)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}zR_{A}(z)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}\big(AR_A(z) + \id_X\big)\diff{z} \\
+&= \frac{1}{2\pi i}\oint_\Gamma e^{tz}AR_A(z)\diff{z} \\
+&= Ae^{tA},
+\end{align*}
+where we have used \ref{pathIntegralContinuousOperator} and \ref{derivativeOfConstructions} to move the derivative inside the integral. Then we have used the indentity \ref{BanachAlgebraResolventMultiplication}, \ref{weakAnalyticityConsequences} to see that the second term is zero and \ref{derivativeOfConstructions} again to move the $A$ outside.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a Banach space and $A\in \Bounded(X)$ a bounded operator. Then there exists a unique function $T: \R^+\to \Bounded(X)$ such that
+\[ \begin{cases}
+\dod{T(t)}{t} = AT(t) \\
+T(0) = \id_X.
+\end{cases} \]
+\end{proposition}
+Note that $T$ is unique even among all such functions, not just the semigroups.
+\begin{proof}
+By \ref{exponentialDifferentiableSemigroup} the semigroup $t\mapsto e^{tA}$ satisfies the criteria.
+
+Now suppose, towards a contradiction, that there was another function $T: \R^+ \to \Bounded(X)$ that fits the criteria. Then, for fixed $t\in \R^+$, define
+\[ Q: \interval{0,t}\to \Bounded(X): s\mapsto e^{sA}T(t-s). \]
+Now, using \ref{FrechetChainRule} and \ref{LeibnizRuleDerivativeAlgebra},
+\[ \dod{Q}{s} = Ae^{sA}T(t-s) - e^{sA}AT(t-s) = 0. \]
+It follows from the vector mean value theorem \ref{meanValueTheoremVectorFunctions} that $Q$ is constant, so $T(t) = Q(0) = Q(t) = e^{tA}$.
+\end{proof}
+
+
+\begin{corollary}
+Let $X$ be a Banach space and $T: \R^+\to \Bounded(X)$ a function.
+Then the following are equivalent:
+\begin{enumerate}
+\item $T$ is a uniformly continuous semigroup;
+\item $T$ is differentiable and
+\[ \begin{cases}
+\dod{T(t)}{t} = AT(t) \\
+T(0) = \id_X,
+\end{cases} \]
+for some $A\in \Bounded(X)$;
+\item there exists an $A\in \Bounded(X)$ such that $T(t) = e^{tA}$ for all $t\in \R^+$.
+\end{enumerate}
+\end{corollary}
+In cases (2) and (3) the operator $A$ is the same.
+
+
+
+\subsection{Matrix semigroups}
+\subsubsection{Explicit 2D solutions}
+\begin{proposition}
+Let $A = \begin{pmatrix}
+a & b \\ c & d
+\end{pmatrix}$ be a $2\times 2$-matrix. For $t\in \R$, we have
+\[ e^{tA} = \begin{cases}
+e^{t\tau/2}\Big(\frac{\sinh(t\gamma)}{\gamma}A + \big(\cosh(t\gamma) - \frac{2\tau}{\gamma}\sinh(t\gamma)\big)\mathbb{1}_2\Big) & (\gamma \neq 0) \\
+e^{t\tau/2}\big(tA + (1-\frac{t\tau}{2})\mathbb{1}_2\big) & (\gamma = 0),
+\end{cases} \]
+where $\delta = \det(A)$, $\tau = \Tr(A)$ and $\gamma = \frac{\tau^2 - 4\delta}{4}$.
+\end{proposition}
+
+\begin{example}
+\begin{itemize}
+\item If $A = \begin{pmatrix}
+0 & 1 \\ -1 & 0
+\end{pmatrix}$, then $e^{tA} = \begin{pmatrix}
+\cos(t) & \sin(t) \\ -\sin(t) & \cos(t)
+\end{pmatrix}$.
+\item If $A = \begin{pmatrix}
+0 & 1 \\ 1 & 0
+\end{pmatrix} = \sigma_X$, then $e^{tA} = \begin{pmatrix}
+\cosh(t) & \sinh(t) \\ \sinh(t) & \cosh(t)
+\end{pmatrix}$.
+\item If $A = \begin{pmatrix}
+1 & 1 \\ -1 & -1
+\end{pmatrix}$, then $e^{tA} = \begin{pmatrix}
+1+t & t \\ -t & 1-t
+\end{pmatrix}$.
+\end{itemize}
+\end{example}
+
+
+\section{Analytic semigroups}
 TODO Sufficient condition: $\im(T(t)) \subseteq \dom(A)$ and $t\norm{AT(t)} \leq N$. See Berens \& Butzer
-
 
 \subsection{Sectorial operators}
 \begin{definition}
@@ -1334,7 +1566,7 @@ is contained in the resolvent set $\res(A)$ and
 \end{definition}
 Note that a sectorial operator is closed by \ref{spectrumNonClosedOperator}.
 
-\section{Analytic semigroups}
+\subsection{Analytic semigroups}
 \begin{definition}
 Let $X$ be a Banach space. A function $T: \Sigma_\delta \to \Bounded(X)$ is called an \udef{analytic semigroup} of angle $\delta$ if
 \begin{itemize}

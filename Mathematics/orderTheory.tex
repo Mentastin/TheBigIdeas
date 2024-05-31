@@ -4717,7 +4717,7 @@ Let $L$ be a Boolean lattice and $F\subseteq L$ an upwards closed subset. Then t
 TODO \ref{atomsJoinIrriducible} and \ref{BooleanUltrafilterDisjunction}. TODO: is upwards closure enough?
 \end{proof}
 
-TODO: compare with \ref{complementInIsotoneGrill}!
+TODO: compare with \ref{complementInIsotoneGrill} and \ref{complementUltrafilterIsIdeal}!
 
 
 \begin{proposition}\label{filterGrillIsPrime}
@@ -4780,11 +4780,20 @@ Let $L$ be a Boolean lattice and $F,I\subseteq L$. Then
 \end{enumerate}
 \end{proposition}
 
-\begin{lemma}
+\begin{lemma} \label{complementUltrafilterIsIdeal}
 Let $L$ be a Boolean lattice and $U\subseteq L$ an ultrafilter. Then
 \[ U^c = \setbuilder{\overline{x}}{x\in U} \]
 and this is an ideal.
 \end{lemma}
+\begin{proof}
+By \ref{complementInIsotoneGrill} and \ref{ultrafilterCriteria}, we have
+\begin{align*}
+x \in U^c &\iff x \notin U \\
+&\iff \overline{x} \in U^\mesh \\
+&\iff \overline{x} \in U.
+\end{align*}
+That this is an ideal follows from \ref{filterIdealDuality}.
+\end{proof}
 
 \begin{lemma} \label{idealFromUltrafilter}
 Let $L$ be a Boolean lattice, $F\in \filters(L)$ and $I\in \ideals(L)$. Then
@@ -4795,21 +4804,41 @@ The direction $\Leftarrow$ is immediate by transitivity of the inclusion.
 
 Now assume $I \subseteq F^c$, then for all $a\in I$ we have $a\notin F$, which is equivalent to $\overline{a}\in F^\mesh$ by \ref{complementInIsotoneGrill}. Thus, setting $F_I \defeq \setbuilder{\overline{a}}{a\in I}$, which is a filter by \ref{filterIdealDuality}, we have $F \amesh F_I$. Thus $F\vee F_I$ is proper by \ref{joinProperFilter} and contained in an ultrafilter $U$ by \ref{ultrafilterLemma}.
 
-Now this $U$ satisfies the requirements. Clearly $U^c\subseteq F^c$ and $I \subseteq \setbuilder{\overline{b}}{b\in U} = U^c$ by \ref{idealFromUltrafilter}.
+Now this $U$ satisfies the requirements. Clearly $U^c\subseteq F^c$ and $I \subseteq \setbuilder{\overline{b}}{b\in U} = U^c$ by \ref{complementUltrafilterIsIdeal}.
+\end{proof}
+
+\begin{lemma} \label{compactnessEquivalentsLemma}
+Let $L$ be a Boolean lattice, $F\in \filters(L)$ and $C\in \powerset(L)$ Then
+\[ C\in \big(\ultrafilters(L) \cap \upset \{F\}\big)^\mesh \qquad\iff\qquad F \mesh \mathfrak{I}(C). \]
+\end{lemma}
+\begin{proof}
+We calculate
+\begin{align*}
+C\in \big(\ultrafilters(L) \cap \upset \{F\}\big)^\mesh &\iff C\in \big(\upset \ultrafilters(L) \cap \upset \{F\}\big)^\mesh \\
+&\iff C^c \notin \big(\upset \ultrafilters(L) \cap \upset \{F\}\big) \\
+&\iff \neg \Big(\exists U\in \ultrafilters(L): \; (U\subseteq C^c) \land (F \subseteq U)\Big) \\
+&\iff \neg \Big(\exists U\in \ultrafilters(L): \; (C\subseteq U^c) \land (U^c \subseteq F^c)\Big) \\
+&\iff \neg \Big(\exists U\in \ultrafilters(L): \; (\mathfrak{I}(C)\subseteq U^c) \land (U^c \subseteq F^c)\Big) \\
+&\iff \neg \big(\mathfrak{I}(C) \subseteq F^c\big) \\
+&\iff F \mesh \mathfrak{I}(C),
+\end{align*}
+where we have used \ref{upwardClosureGrill}, \ref{complementInIsotoneGrill}, the fact that $U^c$ is an ideal (\ref{complementUltrafilterIsIdeal}) and \ref{idealFromUltrafilter}.
 \end{proof}
 
 \begin{proposition} \label{ChoquetModificationFilterSet}
 Let $L$ be a Boolean lattice and $\mathcal{F}$ an upwards closed set of filters and $F\in \filters(L)$. Then the following are equivalent:
 \begin{enumerate}
 \item $U\in \mathcal{F}$ for all ultrafilters $U\supseteq F$;
+\item for all $C\in \mathcal{F}^\mesh$, there exist finitely many $c_0,\ldots, c_n \in C$ such that $c_0 \vee \ldots \vee c_n \in F$;
 \item $F\in \mathfrak{I}^\imf(\mathcal{F}^\mesh)^\mesh$;
-\item for all $C\in \mathcal{F}^\mesh$, there exist finitely many $c_0,\ldots, c_n \in C$ such that $c_0 \vee \ldots \vee c_n \in F$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-By \ref{complementInIsotoneGrill}, we have $F\in \mathfrak{I}^\imf(\mathcal{F}^\mesh)^\mesh = \big(\upset \mathfrak{I}^\imf(\mathcal{F}^\mesh)\big)^\mesh$ iff $F^c \notin \upset \mathfrak{I}^\imf(\mathcal{F}^\mesh)$ iff there exist no ideals $I$ that are subsets of $F^c$ in $\mathfrak{I}^\imf(\mathcal{F}^\mesh)$.
+We can restate (1) as $\big(\ultrafilters(L) \cap \upset\{F\}\big) \subseteq \mathcal{F}$. By \ref{upwardClosureGrill}, this is equivalent to $\mathcal{F}^\mesh \subseteq \big(\ultrafilters(L) \cap \upset\{F\}\big)^\mesh$. By \ref{compactnessEquivalentsLemma} it is equivalent to $F\mesh \mathfrak{I}(C)$ for all $C\in \mathcal{F}^\mesh$. This is a restatement of (2).
 
-By \ref{idealFromUltrafilter}, this is equivalent to requiring that there are no ideals in $\mathfrak{I}^\imf(\mathcal{F}^\mesh)$ that are subsets of $F^c$ and of the form $U^c$ for some ultrafilter $U$. In other words, all ultrafilters larger than $F$ are not elements of $\mathcal{F}^\mesh$. Again by \ref{complementInIsotoneGrill}, this is equivalent to requiring that all ultrafilters larger than $F$ are elements of $\mathcal{F}$.
+We can also restate this as
+\[ F \in \bigcap_{C\in \mathcal{F}^\mesh} \{\mathfrak{I}(C)\}^\mesh = \Big(\bigcup_{C\in \mathcal{F}^\mesh}\{\mathfrak{I}(C)\}\Big)^\mesh = \mathfrak{I}^\imf(\mathcal{F}^\mesh)^\mesh. \]
+This is (3).
 \end{proof}
 
 \subsection{Image filters and ideals}

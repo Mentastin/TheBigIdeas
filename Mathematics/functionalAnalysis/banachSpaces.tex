@@ -198,9 +198,10 @@ An anti-linear map $A:V\to W$ is an $\R$-linear map $A:V_\R\to W_\R$. Now $V_\R,
 
 
 \subsubsection{Equicontinuity}
-\begin{proposition}
+\begin{proposition} \label{equicontinuityBoundedOperators}
 Let $X,Y$ be normed space and $K\subseteq \contLin(X,Y)$. Then $K$ is equicontinuous \textup{if and only if} $\sup_{T\in K}\norm{T} < \infty$.
 \end{proposition}
+TODO: This follows more easily from \ref{metricEquicontinuity}. Alternatively, it can also follow from \ref{vonNeumannBoundedImpliesEquicontinuous}.
 \begin{proof}
 By \ref{equicontinuityGroupHomomorphisms} we have that the equicontinuity of $K$ is equivalent to
 \begin{align*}
@@ -1761,7 +1762,7 @@ Let $U,V,W$ be convergence vector spaces, $f,g: U\to V$, $h: U\to \F$, $a\in U$,
 \item $\partial_u(hf)|_a$ exists and $\partial_u(hf)|_a = (\partial_uh|_a)\cdot f(a) + h(a)\cdot(\partial_u f|_a)$;
 \item $\partial_u(T\circ f)|_a = T\big(\partial_uf|_a\big)$;
 \item $\partial_u(\lambda f)_a$ exists and $\partial_u(\lambda f)_a = \lambda \partial_uf|_a$;
-\item define $h: x\mapsto f(a+x)$. Then $\partial_u h|_0$ exists and $\partial_uh|_0 = \partial_u f|_a$.
+\item define $h: x\mapsto f(a+\lambda x)$. Then $\partial_u h|_0$ exists and $\partial_uh|_0 = \lambda \partial_u f|_a$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -1794,8 +1795,10 @@ Let $U,V,W$ be convergence vector spaces, $f,g: U\to V$, $h: U\to \F$, $a\in U$,
 (5) We calculate
 \begin{align*}
 \partial_uh|_0 &= \lim_{t\to 0} \frac{h(tu) - h(0)}{t} \\
-&= \lim_{t\to 0} \frac{f(a+ tu) - f(a)}{t} \\
-&= \partial_uf|_a.
+&= \lim_{t\to 0} \frac{f(a+ \lambda tu) - f(a)}{t} \\
+&= \lim_{t\to 0} \lambda\frac{f(a+ \lambda tu) - f(a)}{\lambda t} \\
+&= \lambda\lim_{t\to 0} \frac{f(a+ tu) - f(a)}{t} \\
+&= \lambda\partial_uf|_a.
 \end{align*}
 \end{proof}
 \begin{corollary} \label{derivativeOfConstructions}
@@ -1816,8 +1819,8 @@ Take arbitrary $u\in V$. Then
 \[ \diff_{aT}(u) = \lim_{t\to 0} \frac{T(a+tu) - T(a)}{t} = \lim_{t\to 0} \frac{tT(u)}{t} = T(u). \]
 \end{proof}
 
-\begin{proposition} \label{derivativeBilinearForm}
-Let $B: V_1 \oplus V_2 \to W$ be a bilinear form. Then, for $(x,y),(a,b)\in V_1\oplus V_2$
+\begin{proposition} \label{derivativeBilinearFunction}
+Let $B: V_1 \oplus V_2 \to W$ be a bilinear function. Then, for $(x,y),(a,b)\in V_1\oplus V_2$
 \[ \partial_{(x,y)}B|_{(a,b)} = B(x,b) + B(a,y). \]
 \end{proposition}
 \begin{proof}
@@ -1828,6 +1831,23 @@ We calculate
 &=B(x,b) + B(a,y) + \lim_{t\to 0} tB(x,y) \\
 &= B(x,b) + B(a,y).
 \end{align*}
+\end{proof}
+
+\begin{proposition}[Leibniz rule] \label{LeibnizDerivativeRule}
+Let $U,V_1,V_2$ be convergence vector spaces, $f: U\to V_1$, $g: U\to V_2$ functions and $u,a\in U$. Let $B: V_1\oplus V_2 \to W$ is a continuous bilinear function. Suppose $\partial_uf|_a$ and $\partial_ug|_a$ exist. Then $\partial_u B\circ (f,g)|_a$ exists and is given by
+\[ \partial_u B\circ (f,g)|_a = B\big(\partial_uf|_a, g(a)\big) + B\big(f(a), \partial_ug|_a\big). \]
+\end{proposition}
+Note $(f,g)$ is a function $U\to V_1\oplus V_2$. The proof makes essential use of the bilinearity, rather than linearity, of $B$.
+\begin{proof}
+We calculate
+\begin{align*}
+\partial_u B\circ (f,g)|_a &= \lim_{t\to 0} \frac{B\big(f(a+tu), g(a+tu)\big) - B\big(f(a), g(a)\big)}{t} \\
+&= \lim_{t\to 0} \frac{B\big(f(a+tu), g(a+tu)\big) - B\big(f(a), g(a)\big) - B\big(f(a+tu), g(a)\big) + B\big(f(a+tu), g(a)\big)}{t} \\
+&= \lim_{t\to 0} B\Big(f(a+tu), \frac{g(a+tu)-g(a)}{t}\Big) + B\Big(\frac{f(a+tu) - f(a)}{t}, g(a)\Big) \\
+&= B\Big(\lim_{t\to 0}f(a+tu), \lim_{t\to 0}\frac{g(a+tu)-g(a)}{t}\Big) + B\Big(\lim_{t\to 0}\frac{f(a+tu) - f(a)}{t}, g(a)\Big) \\
+&= B\Big(f(a), \partial_ug|_a\Big) + B\Big(\partial_uf|_a, g(a)\Big),
+\end{align*}
+where we have used that the convergence on $V_1\oplus V_2$ is the product convergence, see \ref{finiteDirectSumIsProduct}. We have also used the fact that $t\mapsto f(a+tu)$ is continuous at $0$, which is given by \ref{partialDerivativeImpliesContinuityAlongLine}.
 \end{proof}
 
 
@@ -2072,6 +2092,56 @@ where the $h \in \interval[o]{0,1}$ depends on $x$ and is given by \ref{meanValu
 Since $h(x)$ is bounded, we have that $hx \to 0$ as $x\to 0$. Thus $\norm{\diff{_{a+hx}f} - \diff{_af}}$ also converges to $0$ and $\frac{\norm{f(a+x) - f(a) - \diff{_af}(x)}}{\norm{x}}$ converges to $0$. We conclude that the derivative is a Fréchet derivative by \ref{FrechetDerivativeAsymptotics}.
 \end{proof}
 
+\subsection{Derivative of determinant}
+\begin{proposition} \label{DerivativeDeterminantAtIdentity}
+Let $\F$ be a field and $A\in \F^{n\times n}$. Then $\diff{_{\mathbb{1}_n}\det} = \Tr$, where the derivative is a Fréchet derivative.
+\end{proposition}
+In other words, the Fréchet derivative of the determinant function $\det: \F^{n\times n}\to \F$ at $\mathbb{1}_{n}$ is the trace function $\Tr:\F^{n\times n}\to \F$.
+\begin{proof}
+We use \ref{FrechetDerivativeAsymptotics} to show that it is the Fréchet derivative. To that end, we expand using \ref{expansionDeterminantAroundIdentity}:
+\begin{align*}
+\det(\mathbb{1}_n + X) &= \det(\mathbb{1}_n + \frac{\norm{X}}{\norm{X}}X) \\
+&= 1 + \norm{X}\Tr\Big(\frac{X}{\norm{X}}\Big) + {\norm{X}}^2 P({\norm{X}}) \\
+&= \det(\mathbb{1}_n) + \Tr(X) + {\norm{X}}^2 P({\norm{X}}),
+\end{align*}
+so we just need to show that ${\norm{X}}^2 P({\norm{X}})$ is $o(X)$ as $X\to 0$. For $X$ such that $\norm{X} \leq 1$, we use the bound in \ref{expansionDeterminantAroundIdentity} (and the fact that $\norm{X/\norm{X}} = 1$) to calculate
+\begin{align*}
+0\leq \frac{{\norm{X}}^2 P({\norm{X}})}{\norm{X}} &= {\norm{X}} P({\norm{X}}) \\
+&\leq {\norm{X}} P(1) \\
+&\leq \norm{X}\big(1 + n + n!2^n\big).
+\end{align*}
+The last term converges to $0$ as $X\to 0$, so ${\norm{X}}^2 P({\norm{X}})$ is $o(X)$ as $X\to 0$ by the squeeze theorem \ref{squeezeTheorem}.
+\end{proof}
+
+\begin{proposition}[Jacobi's formula] \label{JacobisFormula}
+Let $U\subseteq \R$ be an open set and $A: U\to \F^{n\times n}$ a differentiable function. Then
+\[ \od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) = \Tr\Big(\adj\big(A(t_0)\big)A'(t_0)\Big). \]
+If $A(t_0)$ is invertible, then
+\[ \od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) = \det\big(A(t_0)\big)\Tr\Big(A^{-1}(t_0)A'(t_0)\Big). \]
+\end{proposition}
+\begin{proof}
+We first prove the second assertion, assuming $A(t_0)$ is invertible. Using \ref{DerivativeDeterminantAtIdentity} and the chain rule \ref{FrechetChainRule}, we calculate
+\begin{align*}
+\dod{}{t}\Big|_{t=t_0}\det\big(A(t)\big) &= \dod{}{t}\Big|_{t=t_0}\det\big(A(t_0)A(t_0)^{-1}A(t)\big) \\
+&= \det\big(A(t_0)\big)\dod{}{t}\Big|_{t=t_0}\det\big(A(t_0)^{-1}A(t)\big) \\
+&= \det\big(A(t_0)\big)\big(\diff{_{\mathbb{1}_n}\det}\big)\Big(A(t_0)^{-1}\dod{}{t}\Big|_{t=t_0}A'(t)\Big) \\
+&= \det\big(A(t_0)\big)\Tr\Big(A(t_0)^{-1}A'(t_0)\Big).
+\end{align*}
+For the first assertion, first assume $A(t_0)$ is invertible. Then, by \ref{inverseAdjunctDeterminant},
+\begin{align*}
+\od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) &= \det\big(A(t_0)\big)\Tr\big(A^{-1}(t_0)A'(t_0)\big) \\
+&= \Tr\Big(\det\big(A(t_0)\big)A^{-1}(t_0)A'(t_0)\Big) \\
+&= \Tr\Big(\adj\big(A(t_0)\big)A'(t_0)\Big).
+\end{align*}
+Now suppose $A(t_0)$ is not invertible. Since the invertible elements are dense in the space of all matrices, by \ref{finiteDimensionsInvertiblesDense}, we can find a sequence $\seq{B_n}$ of invertible matrices that converges to $A(t_0)$ by \ref{existenceConvergentSequenceDenseSubset}. TODO: finish argument!
+\end{proof}
+\begin{corollary}
+Let $B\in \F^{n\times n}$. Then $\det(e^{B}) = e^{\Tr(B)}$.
+\end{corollary}
+\begin{proof}
+Setting $A(t) = e^{t B}$ in the Jacobi formula gives $\od{}{t}\det(e^{tB}) = \det(e^{tB})\Tr(e^{-tB}Be^{tB}) = \det(e^{tB})\Tr(B)$. Solving this differential equation yields $\det(e^{tB}) = e^{t\Tr(B)}$.
+\end{proof}
+
 \section{Differentiation in a convergence algebra}
 
 \begin{proposition}[Leibniz rule] \label{LeibnizRuleDerivativeAlgebra}
@@ -2184,55 +2254,6 @@ We have
 \end{align*}
 \end{proof}
 
-\subsubsection{Derivative of determinant}
-\begin{proposition} \label{DerivativeDeterminantAtIdentity}
-Let $\F$ be a field and $A\in \F^{n\times n}$. Then $\diff{_{\mathbb{1}_n}\det} = \Tr$, where the derivative is a Fréchet derivative.
-\end{proposition}
-In other words, the Fréchet derivative of the determinant function $\det: \F^{n\times n}\to \F$ at $\mathbb{1}_{n}$ is the trace function $\Tr:\F^{n\times n}\to \F$.
-\begin{proof}
-We use \ref{FrechetDerivativeAsymptotics} to show that it is the Fréchet derivative. To that end, we expand using \ref{expansionDeterminantAroundIdentity}:
-\begin{align*}
-\det(\mathbb{1}_n + X) &= \det(\mathbb{1}_n + \frac{\norm{X}}{\norm{X}}X) \\
-&= 1 + \norm{X}\Tr\Big(\frac{X}{\norm{X}}\Big) + {\norm{X}}^2 P({\norm{X}}) \\
-&= \det(\mathbb{1}_n) + \Tr(X) + {\norm{X}}^2 P({\norm{X}}),
-\end{align*}
-so we just need to show that ${\norm{X}}^2 P({\norm{X}})$ is $o(X)$ as $X\to 0$. For $X$ such that $\norm{X} \leq 1$, we use the bound in \ref{expansionDeterminantAroundIdentity} (and the fact that $\norm{X/\norm{X}} = 1$) to calculate
-\begin{align*}
-0\leq \frac{{\norm{X}}^2 P({\norm{X}})}{\norm{X}} &= {\norm{X}} P({\norm{X}}) \\
-&\leq {\norm{X}} P(1) \\
-&\leq \norm{X}\big(1 + n + n!2^n\big).
-\end{align*}
-The last term converges to $0$ as $X\to 0$, so ${\norm{X}}^2 P({\norm{X}})$ is $o(X)$ as $X\to 0$ by the squeeze theorem \ref{squeezeTheorem}.
-\end{proof}
-
-\begin{proposition}[Jacobi's formula] \label{JacobisFormula}
-Let $U\subseteq \R$ be an open set and $A: U\to \F^{n\times n}$ a differentiable function. Then
-\[ \od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) = \Tr\Big(\adj\big(A(t_0)\big)A'(t_0)\Big). \]
-If $A(t_0)$ is invertible, then
-\[ \od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) = \det\big(A(t_0)\big)\Tr\Big(A^{-1}(t_0)A'(t_0)\Big). \]
-\end{proposition}
-\begin{proof}
-We first prove the second assertion, assuming $A(t_0)$ is invertible. Using \ref{DerivativeDeterminantAtIdentity} and the chain rule \ref{FrechetChainRule}, we calculate
-\begin{align*}
-\dod{}{t}\Big|_{t=t_0}\det\big(A(t)\big) &= \dod{}{t}\Big|_{t=t_0}\det\big(A(t_0)A(t_0)^{-1}A(t)\big) \\
-&= \det\big(A(t_0)\big)\dod{}{t}\Big|_{t=t_0}\det\big(A(t_0)^{-1}A(t)\big) \\
-&= \det\big(A(t_0)\big)\big(\diff{_{\mathbb{1}_n}\det}\big)\Big(A(t_0)^{-1}\dod{}{t}\Big|_{t=t_0}A'(t)\Big) \\
-&= \det\big(A(t_0)\big)\Tr\Big(A(t_0)^{-1}A'(t_0)\Big).
-\end{align*}
-For the first assertion, first assume $A(t_0)$ is invertible. Then, by \ref{inverseAdjunctDeterminant},
-\begin{align*}
-\od{}{t}\Big|_{t=t_0}\det\big(A(t)\big) &= \det\big(A(t_0)\big)\Tr\big(A^{-1}(t_0)A'(t_0)\big) \\
-&= \Tr\Big(\det\big(A(t_0)\big)A^{-1}(t_0)A'(t_0)\Big) \\
-&= \Tr\Big(\adj\big(A(t_0)\big)A'(t_0)\Big).
-\end{align*}
-Now suppose $A(t_0)$ is not invertible. Since the invertible elements are dense in the space of all matrices, by \ref{finiteDimensionsInvertiblesDense}, we can find a sequence $\seq{B_n}$ of invertible matrices that converges to $A(t_0)$ by \ref{existenceConvergentSequenceDenseSubset}. TODO: finish argument!
-\end{proof}
-\begin{corollary}
-Let $B\in \F^{n\times n}$. Then $\det(e^{B}) = e^{\Tr(B)}$.
-\end{corollary}
-\begin{proof}
-Setting $A(t) = e^(t B)$ in the Jacobi formula gives $\od{}{t}\det(e^{tB}) = \det(e^{tB})Tr(e^{-tB}Be^{tB}) = \det(e^{tB})Tr(B)$. Solving this differential equation yields $\det(e^{tB}) = e^{t\Tr(B)}$.
-\end{proof}
 
 \section{Analytic functions}
 TODO: multiindex notation
@@ -2752,7 +2773,7 @@ Finally $\norm{R_x(\lambda)} \leq \sum_{n=0}^\infty\frac{\norm{x}^n}{|\lambda|^{
 \end{proof}
 
 \begin{lemma} \label{BanachAlgebraResolventMultiplication}
-Let $A$ be a unital Banach algebra, $a\in A$ and $\lambda\in\\res(a)$. Then
+Let $A$ be a unital Banach algebra, $a\in A$ and $\lambda\in\res(a)$. Then
 \[ aR_a(\lambda) = \lambda R_a(\lambda) - \vec{1}. \]
 \end{lemma}
 \begin{proof}
