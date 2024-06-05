@@ -240,7 +240,7 @@ Let $\sSet{I, \{\sSet{V_i, \xi_i}\}_{i\in I}, \{p_{j,i}\}_{i\preceq j}}$ be an p
 \end{corollary}
 
 \subsection{Quotient spaces}
-\begin{proposition}
+\begin{proposition} \label{quotientConvergenceVectorSpaceConvergence}
 Let $\sSet{V, \xi}$ be a convergence vector space, $W$ a vector space and $q: \sSet{V, \xi} \to W$ a surjective linear function. Then the quotient convergence on $W$ w.r.t. $q$ is a vector space convergence.
 \end{proposition}
 \begin{proof}
@@ -483,14 +483,14 @@ For the continuity of $g^{-1}$, note that $\proj_k\circ g^{-1}$ is a functional,
 Let $\sSet{V,\xi}$ and $\sSet{W,\zeta}$ be convergence vector spaces over a complete field and $f: V\to W$ a linear map. If $V$ is finite-dimensional and Hausdorff, then $f$ is continuous.
 \end{corollary}
 \begin{proof}
-Let $\{x_0,. \ldots, x_{n-1}\}$ be a basis of $V$. The function $f$ can be decomposed as
+Let $\{x_0, \ldots, x_{n-1}\}$ be a basis of $V$. The function $f$ can be decomposed as
 \[ \begin{tikzcd}
 \sum_{k=0}^{n-1}\lambda_kx_k \ar[r, mapsto] & (\lambda_0, \ldots, \lambda_{k-1}) \ar[r, mapsto] & \sum_{k=0}^{n-1}\lambda_kf(x_k).
 \end{tikzcd} \]
 The first part is continuous by \ref{finiteDimensionalHausdorffEuclidean} and the second part by \ref{continuityLinearCombination}.
 \end{proof}
 \begin{corollary} \label{finiteDimensionalHausdorffLinearBijectionIsHomeomorphism}
-Every bijective linear map between finite-dimensional Hausdorff convergence vector spaces is a homeomorphism.
+Every bijective linear map between finite-dimensional Hausdorff convergence vector spaces over a complete field is a homeomorphism.
 \end{corollary}
 
 
@@ -500,14 +500,33 @@ Every bijective linear map between finite-dimensional Hausdorff convergence vect
 discusses some almost counterexamples to \ref{finiteDimensionalHausdorffEuclidean}
 \end{example}
 
+\begin{proposition} \label{closedKernelLinearFunctionToFiniteDimSpaceContinuous}
+Let $\sSet{V,\xi}$ be a convergence vector space and $\sSet{W,\zeta}$ a finite dimensional convergence vector space, both over a complete field $\F$. Let $L: V\to W$ be a linear function such that $\ker(L)$ is closed. Then $L$ is continuous.
+\end{proposition}
+If $W$ is Hausdorff, then the converse also holds by \ref{kernelClosed}: if $L$ is continuous, then $\ker(L)$ is closed.
+\begin{proof}
+By the factor theorem \ref{factorTheorem}, we have an injective linear function $L': V/\ker(f)\to W$ such that
+\[ \begin{tikzcd}
+V \arrow[r, "{[\cdot]_{\ker(L)}}"] \arrow[dr, swap, "L"] & V/\ker(L) \arrow[d, dashed, "{L'}"] \\
+& W
+\end{tikzcd} \qquad\text{commutes.} \]
 
-\begin{lemma} \label{finiteDimSubspaceClosed}
-Let $\sSet{V,\xi}$ be a Hausdorff CVS over a complete field. Then any finite dimensional subspace $U$ of $V$ is closed.
-\end{lemma}
+Restricting $L'$ to its image, we have an isomorphism between $V/\ker(L)$ and a subspace of $W$, which means that $V/\ker(L)$ is finite dimensional. We also have that $V/\ker(L)$ is Hausdorff by \ref{quotientConvergenceGroupProperties}. Thus $L': V/\ker(L) \to W$ is continuous by \ref{finiteDimensionalLinearMapContinuous}. Since $[\cdot]_{\ker(L)}$ is continuous by definition of the quotient convergence, we have that $L = L'\circ [\cdot]_{\ker(L)}$ is continuous as a composition of continuous functions.
+\end{proof}
+
+\begin{proposition} \label{finiteDimSubspaceClosed}
+Let $\sSet{V,\xi}$ be a Hausdorff CVS over a complete field. Then any finite-dimensional subspace $U$ of $V$ is closed.
+\end{proposition}
 \begin{proof}
 Let $W$ be a finite dimensional subspace of $V$. Then $U$ equipped with the subspace convergence is a convergence vector space by \ref{initialVectorSpaceConvergence}. It is complete by \ref{finiteDimensionalHausdorffEuclidean} and \ref{productCompleteSpacesComplete}.
 
 Since $V$ is complete, $U$ is closed by \ref{closedComplete}.
+\end{proof}
+\begin{corollary}
+Let $\sSet{V,\xi}$ be a Hausdorff CVS over a complete field, $U\subseteq V$ a finite-dimensional subspace and $W \subseteq V$ a closed subspace. Then $U+W$ is a closed subspace of $V$.
+\end{corollary}
+\begin{proof}
+Consider the quotient map $[\cdot]_W: V\to V/W$. Then $V/W$ is Hausdorff by \ref{quotientConvergenceGroupProperties}, so $[\cdot]_W^{\imf}(U)$ is closed, because it is a finite-dimensional subspace. This implies that $U+W = \big([\cdot]_W^{\preimf}[\cdot]_W^{\imf}\big)(U)$ is closed, by \ref{preimageOpenClosed}.
 \end{proof}
 
 \begin{lemma} \label{compactHCVSZeroDim}
@@ -1390,6 +1409,32 @@ The kernel of a seminorm is a vector space, but, unlike linear functionals, it i
 For example take any norm on a space that is not $1$ dimensional.
 \end{example}
 
+\begin{proposition} \label{seminormOpenMap}
+Let $V$ be a convergence vector space and $f:V\to \R^+$ a non-zero seminorm. Then $f$ is an open map.
+\end{proposition}
+Note that $f: V\to \R^+$ is open as a function with codomain $\R^+$. If we take $\R$ to be the codomain, then it is not open (indeed $f^\imf(V) = \interval[co]{0,\infty}$).
+
+We have a similar result for linear functions, see \ref{linearFunctionalOpen}.
+\begin{proof}
+It is enough to show $f$ is open when $V$ is equipped with the algebraic convergence.
+
+Let $A$ be an algebraically open set. We use \ref{openClosedCriteria} to show $f^\imf(A)$ is also open. Take some $y\in f^\imf(A)$. Then there exists an $x\in A$ such that $f(x) = y$.
+
+First suppose $f(x) \neq 0$. Because $A$ is open, $x\in \inh_\mathfrak{a}(A)$ and there exists $\Gamma\in \neighbourhood_\F(0)$ such that $x+\Gamma\cdot x \subseteq A$ by \ref{constructionsInAlgebraicConvergence}. There exists $\epsilon > 0$ such that $\ball_\F(0,\epsilon) \subseteq f(x)\cdot \Gamma$ and $\epsilon \leq f(x)$. Now we calculate
+\begin{align*}
+\interval[o]{f(x)-\epsilon, f(x)+\epsilon} &= \interval[o]{1 - \frac{\epsilon}{f(x)}, 1 + \frac{\epsilon}{f(x)}} \cdot f(x) \\
+&= f^\imf\Big(\ball_\F\big(1, \epsilon / f(x)\big)\cdot x\Big) \\
+&= f^\imf\Big(x + \ball_\F\big(0, \epsilon / f(x)\big)\cdot x\Big) \\
+&\subseteq f^\imf\Big(x + \Gamma\cdot x\Big) \subseteq f^\imf(A).
+\end{align*}
+
+Now suppose $f(x) = 0$. Because $f$ is non-zero, there exists a $v\in V$ such that $f(v) \neq 0$.  By the triangle inequality and the reverse triangle inequality \ref{reverseTriangleInequality}, we have, for all $t\geq 0$
+\[ tf(v) = |f(tv)| = \big|f(tv) - f(x)\big| \leq f(x+tv) \leq f(x) + f(tv) = tf(v), \]
+so $tf(v) = f(x+tv)$
+Because $A$ is algebraically open, $x\in \inh_\mathfrak{a}(A)$ and there exists $\Gamma\in \neighbourhood_\F(0)$ such that $x+\Gamma\cdot v \subseteq A$ by \ref{constructionsInAlgebraicConvergence}. Now there exists $\epsilon > 0$ such that $\interval[co]{0,\epsilon} \subseteq \Gamma$, so
+\[ \interval[co]{0,\epsilon f(v)} = \interval[co]{0,\epsilon}\cdot f(v) = f^\imf\big(x + \interval[co]{0,\epsilon}\cdot v\big) \subseteq f^\imf(A). \]
+\end{proof}
+
 
 \subsection{Gauges}
 \begin{definition}
@@ -1645,12 +1690,15 @@ Conversely, suppose $A \not\subseteq f^{\preimf}(\ball(0,|f(x)|))$, i.e.\ there 
 \begin{proposition} \label{linearFunctionalOpen}
 Let $V$ be a convergence vector space and $f:V\to \F$ a non-zero linear functional. Then $f$ is an open map.
 \end{proposition}
+We have a similar result for seminorms, see \ref{seminormOpenMap}
 \begin{proof}
 It is enough to show $f$ is open when $V$ is equipped with the algebraic convergence.
 
-Let $A$ be an algebraically open map. We use \ref{openClosedCriteria} to show $f^\imf[A]$ is also open. Because $f$ is non-zero, there exists a $v\in V$ such that $f(v) \neq 0$. Take some $y\in f^\imf[A]$. Then there exists an $x\in A$ such that $f(x) = y$. Because $A$ is open, $x\in \inh_\mathfrak{x}(A)$ and there exists $x+ \Gamma_v\in \neighbourhood_\F(0)$ such that $x+\Gamma_v\cdot v \subseteq A$ by \ref{constructionsInAlgebraicConvergence}.
+Let $A$ be an algebraically open set. We use \ref{openClosedCriteria} to show $f^\imf(A)$ is also open. Take some $y\in f^\imf(A)$. Then there exists an $x\in A$ such that $f(x) = y$.
 
-Now $f^\imf[x+ \Gamma_v\in \neighbourhood_\F(0)] = y+\Gamma_v \cdot f(v) \subseteq f^\imf[A]$ and $y+\Gamma_v \cdot f(v)$ is a vicinity of $y$, so we are done.
+Because $f$ is non-zero, there exists a $v\in V$ such that $f(v) \neq 0$. Because $A$ is open, $x\in \inh_\mathfrak{a}(A)$ and there exists $\Gamma\in \neighbourhood_\F(0)$ such that $x+\Gamma\cdot v \subseteq A$ by \ref{constructionsInAlgebraicConvergence}.
+
+Now $f^\imf\big(x+ \Gamma\big) = y+\Gamma \cdot f(v) \subseteq f^\imf(A)$ and $y+\Gamma \cdot f(v)$ is a vicinity of $y$, since $f(v) \neq 0$, so we are done.
 \end{proof}
 
 \begin{lemma} \label{complexRangeExtensionRealFunctional}
@@ -1727,12 +1775,7 @@ $(1) \Leftrightarrow (2)$ By \ref{continuityToNormedSpace}.
 
 $(1) \Rightarrow (3)$ Because $\ker(f) = f^{\preimf}(\{0\})$ and $\{0\}$ is closed in $\F$, $\ker(f)$ is closed by \ref{preimageOpenClosed}.
 
-$(3) \Rightarrow (1)$ If $f = \underline{0}$, then continuity is immediate. Now assume $f \neq \underline{0}$, which means that $f$ is surjective. By the factor theorem \ref{factorTheorem}, we can find an injective linear function $f': V/\ker(f)\to \F$ such that
-\[ \begin{tikzcd}
-V \arrow[r, "{[\cdot]_{\ker(f)}}"] \arrow[dr, swap, "f"] & V/\ker(f) \arrow[d, dashed, "{f'}"] \\
-& \F
-\end{tikzcd} \qquad\text{commutes.} \]
-Thus $f'$ is bijective linear. We give $V/\ker(f)$ the quotient convergence. As $\ker(f)$ was assumed closed, $V/\ker(f)$ is Hausdorff (by \ref{quotientConvergenceGroupProperties}) and thus $f'$ is a homeomorphism by \ref{finiteDimensionalHausdorffLinearBijectionIsHomeomorphism}. We conclude that $f= f'\circ [\cdot]_{\ker(f)}$ is continuous as a composition of continuous functions.
+$(3) \Rightarrow (1)$ This follows from \ref{closedKernelLinearFunctionToFiniteDimSpaceContinuous}.
 
 $(3) \Leftrightarrow (4)$ By \ref{kernelHyperplane} $\ker(f)$ is a hyperplane and by \ref{hyperplaneClosedDense} this hyperplane is either closed or dense, but not both.
 \end{proof}
@@ -3929,7 +3972,7 @@ Let $F\in\powerfilters\big(\ker(T)\big)$ be a convergent filter that converges t
 \begin{proof}[Alternate proof.]
 Let $T: X\to Y$. Then $\ker(T)\times\{0\} = \graph(T)\cap X\times\{0\}$. As $\graph(T)$ is closed and $X\times\{0\}$ is closed by \ref{productOpenClosed}, we have that $\ker(T)$ is closed by \ref{productOpenClosed}.
 \end{proof}
-We have already proven this for bounded operators, see \ref{kerClosed}.
+We have already proven this for bounded operators, see \ref{kernelClosed}.
 
 \section{Convergences on spaces of continuous operators}
 \subsection{Strong operator topology}

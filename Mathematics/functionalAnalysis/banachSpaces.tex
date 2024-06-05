@@ -448,38 +448,6 @@ Now assume $T^{\preimf}[\ball(\vec{0},1)]$ has non-empty interior, then we can p
 is a neighbourhood of $0$. Now $T$ is bounded on $T^{\preimf}[\ball(\vec{0},1)- T(x)]$, so it is continuous by \ref{boundedOnVicinityImpliesContinuous}.
 \end{proof}
 
-\begin{lemma} \label{kerClosed}
-Let $T$ be a bounded linear operator. Then $\ker(T)$ is closed.
-\end{lemma}
-\begin{proof}
-Suppose $T$ bounded and thus continuous. Then $\ker L = L^{-1}[\{0\}]$ and thus closed, by proposition \ref{continuity}.
-\end{proof}
-\begin{proof}
-Let $v\in \overline{\ker(T)}$. Then find a sequence $(v_n)$ in $\ker(T)$ that converges to $v$. Then by continuity $(Tv_n)$ converges to $Tv$, but for all $n\in\N: Tx_n = 0$, so the limit is $Tv=0$. Thus $v\in\ker(T)$, making it closed.
-\end{proof}
-
-\begin{proposition}\label{continuousMapCriterion}
-Let $L:V\to W$ be a linear map between normed spaces.
-\begin{enumerate}
-\item If $V$ is finite-dimensional, then $L$ is continuous.
-\item If $W$ is finite-dimensional, then $L$ is continuous \textup{if and only if} $\ker L$ is closed.
-\end{enumerate}
-\end{proposition}
-TODO: true for general TVS
-\begin{proof}
-\begin{enumerate}
-\item This follows from a consideration of the graph norm $\norm{v}_L = \norm{v}+\norm{Lv}$ and the fact that on a finite-dimensional space any two norms are equivalent: for all $v$ we can choose an $M$ such that
-\[ \norm{Lv}\leq \norm{v}_L \leq M\norm{v}. \]
-\item Assume $W$ finite-dimensional. Consider the map $\bar{L}:V/\ker L\to W: v+\ker{L}\mapsto L(v)$, defined in proposition \ref{splittingMap}. Then $V/\ker L$ is isomorphic to a subspace of $W$ and thus is finite-dimensional. By the first point, $\bar{L}$ must be continuous. Let $\pi: V\to V/\ker L$ denote the quotient map, which is continuous (TODO is this where closure of $\ker L$ is used?). Then $L = \bar{L}\circ \pi$ is a composition of continuous maps and thus continuous.
-
-Conversely, we have the lemma \ref{kerClosed}.
-\end{enumerate}
-\end{proof}
-
-\begin{example}
-Let $\seq{e_n}$ be a basis of unit vectors of an infinite dimensional real vector space. Then consider the map $e_n\mapsto n$ and extend by linearity. This is an unbounded linear operator with finite dimensional codomain.
-\end{example}
-
 
 \subsection{The algebra of bounded operators}
 \begin{lemma} \label{existenceOperatorNorm}
@@ -1292,12 +1260,32 @@ Since $A\oplus^i B$ is closed, it is a Banach space and we can apply the closed 
 
 
 \subsection{Quotients of normed spaces}
-\begin{proposition}
-Let $V$ be a normed space and $U\subseteq V$ a subspace. Then
-\[ \norm{x+U}_{V/U} \defeq \inf\setbuilder{\norm{x+u}}{u\in U} \]
-is a seminorm on $V/U$. It is a norm \textup{if and only if} $U$ is closed in $V$.
+\begin{proposition} \label{quotientNormProperties}
+Let $\sSet{V, \norm{\cdot}}$ be a seminormed space and $U\subseteq V$ a subspace. Then
+\begin{align*}
+\norm{[x]_U}_{V/U} \defeq& \inf\setbuilder{\norm{x+u}}{u\in U} \\
+=& \inf\setbuilder{\norm{y}}{y\in [x]_U}
+\end{align*}
+is
+\begin{enumerate}
+\item a well-defined seminorm on $V/U$;
+\item continuous;
+\item $\ker\big(\norm{[\cdot]_U}_{V/U}\big) = \overline{U}$;
+\item $\ker\big(\norm{\cdot}_{V/U}\big) = \setbuilder{[v]_U}{v \in \overline{U}}$;
+\item a norm \textup{if and only if} $U$ is closed in $V$.
+\end{enumerate}
 \end{proposition}
+Note that we are allowing $\norm{\cdot}$ to be a seminorm on $V$, rather than a norm.
 \begin{proof}
+The equality in the definition is immediate, since $y \in [x]_U$ is equivalent to $y-x \in U$ and thus equivalent to the existence of $u\in U$ such that $y = x+u$. 
+
+(1) First we check that $\norm{\cdot}_{V/U}$ is well-defined. Take $x,y\in V$ such that $[x]_U = [y]_U$. Then $x-y \in U$. For all $u\in U$ we have
+\begin{align*}
+\norm{x+u} &= \norm{y + (x-y)+u} \in \setbuilder{\norm{y+u}}{u\in U} \\
+\norm{y+u} &= \norm{x + (y-x)+u} \in \setbuilder{\norm{x+u}}{u\in U}, 
+\end{align*}
+which implies that $\norm{[x]_U}_{V/U} = \norm{[y]_U}_{V/U}$.
+
 For absolute homogeneity, take $\lambda\in\F\setminus\{0\}$. Then $\lambda x+U = \lambda(x+U)$, so
 \[ \norm{\lambda x}_{V/U} = \inf\setbuilder{\norm{\lambda x+u}}{u\in U} = \inf\setbuilder{|\lambda|\norm{(x+u)}}{u\in U} = |\lambda| \norm{x}_{V/U}. \]
 For subadditivity, we have
@@ -1308,29 +1296,82 @@ For subadditivity, we have
 &= \norm{x}_{V/U} + \norm{y}_{V/U}.
 \end{align*}
 
-Now $\norm{x}_{V/U} = 0$ iff there exists a sequence $\seq{u_n}$ in $U$ such that $u_n\to x$ in $V$. Also $[x]_U = 0$ is equivalent to $x\in U$. Thus point-separation (i.e. $\norm{x}_{V/U} = 0$ implies $[x]_U = 0$) is equivalent to the statement ``if there exists a sequence $\seq{u_n}$ in $U$ such that $u_n\to x$ in $V$, then $x\in U$'', which is equivalent to the statement that $U$ is closed.
+(2) The function $N: V\to \R^+: x\mapsto \norm{[x]_U}_{V/U}$ is a seminorm. It is bounded by $1$ on $\cball_V(0,1)$, since
+\[ \norm{[x]_U}_{V/U} = \inf\setbuilder{\norm{x+u}}{u\in U} \leq \norm{x+0} = \norm{x}. \]
+It is continuous by \ref{sublinearContinuity}. And thus $\norm{\cdot}_{V/U}$ is continuous by \ref{characteristicPropertyInitialFinalConvergence}.
+
+(3) For all $v\in U$, we have
+\[ 0 \leq \norm{[v]_U}_{V/U} \defeq \inf\setbuilder{\norm{v+u}}{u\in U} \leq \norm{v + (-v)} = 0, \]
+so $v\in \ker\big(\norm{[\cdot]_U}_{V/U}\big)$. This implies $U \subseteq \ker\big(\norm{[\cdot]_U}_{V/U}\big)$. Since the kernel is closed, by (2), we have $\overline{U} \subseteq \ker\big(\norm{\cdot}_{V/U}\big)$.
+
+Conversely, suppose $v\in \ker\big(\norm{[\cdot]_U}_{V/U}\big)$. Then, by \ref{sequencesToExtrema}, there exists a sequence $\seq{u_n}$ in $U$ such that $\norm{v+ u_n} \to 0$. Thus $\seq{-u_n}$ converges to $v$ in $V$ and $v\in \overline{U}$.
+
+(4) We have $[v]_U \in \ker\big(\norm{\cdot}_{V/U}\big) \iff \norm{[v]_U}_{V/U} = 0 \iff v\in \ker\big(\norm{[\cdot]_U}_{V/U}\big)$.
+
+(5) We have that
+\begin{align*}
+\text{$\norm{\cdot}_{V/U}$ is a norm} &\iff \ker\big(\norm{\cdot}_{V/U}\big) = \{[0]_U\} \\
+&\iff \forall v\in \overline{U}: \; [v]_U = [0]_U \\
+&\iff \forall v\in \overline{U}: \; v\in U \\
+&\iff U = \overline{U}.
+\end{align*}
 \end{proof}
 
-\begin{proposition}
-Let $V$ be a normed space and $U\subseteq V$ a subspace. Then
-\begin{enumerate}
-\item the quotient map $[\cdot]_U$ is bounded and $\norm{[\cdot]_U}\leq 1$;
-\item the topology generated by $\norm{\cdot}_{V/U}$ is the quotient topology on $V/U$, i.e.\ the final topology w.r.t.\ the quotient map $[\cdot]_U$;
-\item $[\cdot]_U$ is an open map.
-\end{enumerate}
+\begin{proposition} \label{quotientNormFromKernelSeminorm}
+Let $\sSet{V,\norm{\cdot}}$ be a seminormed space and $N \defeq \ker\big(\norm{\cdot}\big)$. Then $\norm{[v]_N}_{V/N} = \norm{v}$ for all $v\in V$.
 \end{proposition}
 \begin{proof}
-(1) We have
-\[ \norm{[x]_U}_{V/U} = \inf\setbuilder{\norm{x+u}}{u\in U} \leq \inf\setbuilder{\norm{x+u}}{u\in \{0\}} = \norm{x+0} = \norm{x}. \]
+For all $u\in N$ we have
+\[ \norm{v} = \big|\norm{v} - \norm{-u}\big| \leq \norm{v + u} \leq \norm{v}+\norm{u} = \norm{v}, \]
+by the reverse triangle inequality \ref{reverseTriangleInequality}, so $\norm{v} = \norm{v+u}$. Thus
+\[ \norm{[v]_N}_{V/N} = \inf \setbuilder{\norm{v+u}}{u\in N} = \inf\{\norm{v}\} = \norm{v}. \]
+\end{proof}
 
-(2), (3) TODO Conway p.71
+\begin{lemma} \label{approximationToQuotientNormLemma}
+Let $\sSet{V,\norm{\cdot}}$ be a seminormed space, $U\subseteq V$ a subspace, $x\in V$ and $\epsilon > 0$. Then there exists $y\in [x]_U$ such that $\norm{y} \leq \norm{[x]_U}_{V/U} + \epsilon$.
+\end{lemma}
+\begin{proof}
+We have $\norm{[x]_U}_{V/U} = \inf\setbuilder{\norm{y}}{y\in [x]_U}$. If there was no such $y$, then $\norm{[x]_U}_{V/U} + \epsilon$ would have been a lower bound, which is impossible, since $\norm{[x]_U}_{V/U}$ is not greater than $\norm{[x]_U}_{V/U} + \epsilon$.
+\end{proof}
+
+\begin{proposition} \label{quotientSeminormConvergenceIsQuotientConvergence}
+Let $\sSet{V, \norm{\cdot}}$ be a seminormed space and $U\subseteq V$ a subspace. Then the pseudometric convergence on $V/U$ w.r.t.\ the seminorm $\norm{\cdot}_{V/U}$ is equal to the quotient convergence.
+\end{proposition}
+\begin{proof}
+Since the quotient convergence makes $\norm{\cdot}_{V/U}$ continuous, by \ref{quotientNormProperties}, and the quotient convergence is a vector space convergence, by \ref{quotientConvergenceVectorSpaceConvergence}, the quotient convergence is stronger than the initial vector space convergence w.r.t.\ the seminorm $\norm{\cdot}_{V/U}$. By \ref{seminormPseudometricLemma} this is equal to the pseudometric convergence.
+
+For the opposite inclusion, it is enough to compare the convergences at $0$. Suppose $F \in \powerfilters(V/U)$ such that $F$ converges to $[0]_U\in V/U$ in the seminorm convergence. We need to prove $F\to [0]_U$ in the quotient convergence.
+
+For all $A\in F$ and $\epsilon > 0$, define
+\[ A_\epsilon \defeq \bigcup_{[x]_U\in A}\setbuilder{y\in [x]_U}{\norm{y} \leq \norm{x}_{U/V} + \epsilon}. \]
+Then consider $G \defeq \upset\setbuilder{A_\epsilon}{A\in F, \epsilon > 0}$. It is a filter since $A_{\epsilon_1}\cap B_{\epsilon_2} \supseteq (A\cap B)_{\min\{\epsilon_1, \epsilon_2\}}$. We claim $G\to 0$ in $V$ and $[\cdot]_{U}^{\imf\imf}(G) \subseteq F$, which is enough to prove that $F\to [0]_U$ in $V/U$.
+
+For the first claim, take $\delta >0$. Then $A \defeq \ball_{V/U}([0]_U, \delta / 2) \in F$ and, for all $y\in A_{\delta / 2}$, there exists $[x]_U\in A$ such that $y\in [x]_U$ and
+\[ \norm{y} \leq \norm{[x]_U}_{V/U} + \delta / 2 < \delta / 2 + \delta / 2 = \delta, \]
+so $A_{\delta / 2} \subseteq \ball_V(0, \delta)$. Since this holds for all $\delta > 0$, we have that $G \to 0$ in $V$.
+
+For the second claim, take arbitrary $A_\epsilon \in G$. It is enough to prove that $A\subseteq [\cdot]_{U}^{\imf}(A_\epsilon)$. Indeed, take arbitrary $[x]_U \in A$. By \ref{approximationToQuotientNormLemma}, there exists $y\in [x]_U$ such that $\norm{y} \leq \norm{[x]_U}_{V/U} + \epsilon$. Since $y\in A_\epsilon$ and $[y]_U = [x]_U$, we have $[x]_U \in [\cdot]_{U}^{\imf}(A_\epsilon)$.
 \end{proof}
 
 \begin{proposition} \label{quotientBanachSpace}
-Let $V$ be a Banach space and $U\subseteq V$ a closed subspace. Then $V/U$ is a Banach space.
+Let $X$ be a Banach space and $U\subseteq X$ a closed subspace. Then $X/U$ is a Banach space.
 \end{proposition}
+TODO: does this follow from a more general principle???
 \begin{proof}
-TODO Conway p.71
+The space $X/U$ is normed by \ref{quotientNormProperties} and \ref{quotientSeminormConvergenceIsQuotientConvergence}. We just need to show that it is complete.
+
+Let $\seq{[x_n]_U}$ be a Cauchy sequence in $X/U$. There exists a subsequence $\seq{x_{n_k}}_k$ such that $\norm{[x_{n_k}]_U - [x_{n_{k-1}}]_U}_{X/U} \leq 2^{-k}$ for all $k\in \N\setminus\{0\}$.
+
+For all $k\in \N\setminus\{0\}$, we can find $y_{k} \in [x_{n_k} - x_{n_{k-1}}]_U$ such that
+\[ \norm{y_k} \leq \norm{[x_{n_k}]_U - [x_{n_{k-1}}]_U}_{X/U} + 2^{-k} \leq 2^{-k}+2^{-k} = 2^{-k+1}. \]
+Define the sequence $\seq{z_k}$ recursively by $z_0 = x_{n_0}$ and $z_{k+1} = z_{k}+ y_{k+1}$. We have that $z_k \in [x_{n_k}]_U$ for all $k\in \N$. For all $l\leq m \in \N$, we have
+\begin{align*}
+\norm{z_m - z_l} &= \norm{\sum_{k=l}^{m-1} z_{k+1} - z_{k}} \\
+&= \norm{\sum_{k=l}^{m-1} y_{k+1}} \\
+&\leq \sum_{k=l}^{m-1}\norm{y_{k+1}} \\
+&\leq \sum_{k=l}^{m-1}2^{-k} \leq \sum_{k=l}^{\infty}2^{-k} = 2^{-l}\Big(\sum_{k=0}^{\infty}2^{-k}\Big) = 2^{1-l}.
+\end{align*}
+This implies that $\seq{z_k}$ is a Cauchy sequence in $X$. Since $X$ is a Banach space, it has a limit $z$. By continuity of $[\cdot]_U$, we have that $\seq{[x_{n_k}]_U} = \seq{[z_k]_U} \to [z]_U$.
 \end{proof}
 
 \section{Unbounded operators}
