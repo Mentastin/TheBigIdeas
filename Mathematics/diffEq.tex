@@ -675,26 +675,48 @@ TODO
 Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space, $1\leq p \leq \infty$ and $q: \Omega \to \C$ be a measurable function such that $\Re(q)$ is essentially bounded. Define the function $T: \R\to \Bounded(L^p(\Omega, \mu)): t\mapsto M_{e^{tq}}$, where $M_{e^{tq}}$ is a multiplication operator. Then $T$ is a strongly continuous group with generator $M_q$.
 \end{proposition}
 \begin{proof}
-Take $\epsilon > 0$. Since, for all $t\in\R$, we have $|e^{tq}| = |e^{t\Re(q)}| \leq e^{t|\Re(q)|}$, we also have $|e^{tq}| \leq e^\epsilon e^{|t|\norm{\Re(q)}_\infty}$ almost everywhere by \ref{compositionMultiplicationOperators}. This implies that $e^{tq}$ is essentially bounded and $\norm{e^{tq}}_\infty \leq e^\epsilon e^{|t|\norm{\Re(q)}_\infty}$. By taking $\epsilon \to 0$, we have $\norm{e^{tq}}_\infty \leq e^{|t|\norm{\Re(q)}_\infty}$.
+Since, for all $t\in\R$, we have $|e^{tq}| = |e^{t\Re(q)}| \leq e^{t|\Re(q)|}$, we also have $|e^{tq}| \leq e^{|t|\norm{\Re(q)}_\infty}$ almost everywhere by \ref{essentialSupremumEssentialBound}. This implies that $e^{tq}$ is essentially bounded and $\norm{e^{tq}}_\infty \leq e^{|t|\norm{\Re(q)}_\infty}$.
 
 Now we have that $T(t) = M_{e^{tq}}$ is bounded for all $t\in \R$ by \ref{boundedMultiplicationOperator} and
 \[ T(s+t) = M_{e^{(s+t)q}} = M_{e^{sq}e^{tq}} = M_{e^{sq}}\circ M_{tq} = T(s)\circ T(t) \]
 by \ref{compositionMultiplicationOperators}. Also $T(0) = M_{e^{0}} = M_{\constant{1}} = \id_{L^p(\Omega, \mu)}$. Thus $T$ is a group of linear operators.
 
-To show that $T$ is strongly continuous, it is enough to show that, for all $f\in L^p(\Omega, \mu)$, $T(t)f \to T(0)f$ as $t\searrow 0$ by \ref{stronglyContinuousConditionGroupOfOperators}. By \ref{pseudometricSpaceFrechetUrysohn} and \ref{FrechetUrysohnSequentialContinuity}, it is enough to show that $T(t_n)f \to T(0)f$ for every sequence $\seq{t_n}$ that converges to $0$. WLOG we may assume $t_n \leq 1$ for all $n\in \N$. Then
-\[ |(e^{t_nq} - 1)\cdot f|^p \leq |e^{t_n|q|} - 1|^p\cdot |f|^p \leq |e^{|q|} - 1|^p\cdot |f|^p \leq |e^{\norm{\Re(q)}_\infty+ \epsilon} - 1|^p\cdot |f|^p. \]
-almost everywhere.
+To show that $T$ is strongly continuous, it is enough to show that, for all $f\in L^p(\Omega, \mu)$, $T(t)f \to T(0)f$ as $t\searrow 0$ by \ref{stronglyContinuousConditionGroupOfOperators}. By \ref{pseudometricSpaceFrechetUrysohn} and \ref{FrechetUrysohnSequentialContinuity}, it is enough to show that $T(t_n)f \to T(0)f$ for every sequence $\seq{t_n}$ that converges to $0$. WLOG we may assume $t_n \leq 1$ for all $n\in \N$. 
+
+We calculate
+\begin{align*}
+\lim_{n\to \infty} \norm{T(t_n)f - T(0)f}_p^p &= \lim_{n\to \infty}\norm{M_{e^{t_nq}}(f) - f}_p^p \\
+&= \lim_{n\to \infty} \norm{(e^{t_nq} - 1)\cdot f}_p^p \\
+&= \lim_{n\to \infty} \int_\Omega |(e^{t_nq} - 1)\cdot f|^p \diff{\mu} \\
+&= \int_\Omega \lim_{n\to \infty} |(e^{t_nq} - 1)\cdot f|^p \diff{\mu} \\
+&= \int_\Omega \constant{0} \diff{\mu} = 0,
+\end{align*}
+where we have brought the limit inside the integral thanks to the dominated convergence theorem, \ref{dominatedConvergence}, which we can apply because
+\[ |(e^{t_nq} - 1)\cdot f|^p \leq (e^{t_n|\Re(q)|} + 1)^p\cdot |f|^p \leq (e^{|\Re(q)|} + 1)^p\cdot |f|^p \leq (e^{\norm{\Re(q)}_\infty} + 1)^p\cdot |f|^p \]
+almost everywhere, by \ref{essentialSupremumEssentialBound}. Since $f\in L^p(\Omega,\mu)$, we have that $(e^{\norm{\Re(q)}_\infty} + 1)^p\cdot |f|^p$ is integrable and this can be used as the dominating function.
+
+Finally we calculate the generator of $T$. Take an arbitrary  sequence $\seq{t_n}$ in $\R^+$ that converges to $0$. WLOG we may assume $t_n \leq 1$ for all $n\in\N$. We have that
+\[ \frac{T(t_n)f - f}{t_n} = \frac{e^{t_nq}\cdot f - f}{t_n}, \]
+converges pointwise to $q\cdot f$. Let $A$ be the generator of $T$. If $f\in \dom(A)$, then $\frac{e^{t_nq}\cdot f - f}{t_n}$ converges in the $L^p$ sense and since convergence a.e.\ is weaker (TODO ref), $q\cdot f = Af \in L^p(\Omega,\mu)$. This implies $f\in \dom(M_q)$ and $Af = M_qf$, so $A\subseteq M_q$.
+
+Now suppose $f\in \dom(M_q)$.
+By \ref{expZMinusOneInequality} and \ref{essentialSupremumEssentialBound} we have
+\[ \Big|\frac{e^{t_nq} - 1}{t_n}f\Big| \leq |q| e^{t_n |\Re(q)|}|f| \leq |q\cdot f|e^{\norm{\Re(q)}_\infty} \]
+almost everywhere. Since $f\in \dom(M_q)$, we have $q\cdot f\in L^p(\Omega,\mu)$.
 
 
+
+
+and, by \ref{essentialSupremumEssentialBound},
 \begin{align*}
-\norm{T(t_n)f - T(0)f}_p = \norm{M_{e^{t_nq}}(f) - f}_p = \norm{(e^{t_nq} - 1)\cdot f}_p.
+\lim_{n\to \infty} \frac{T(t_n)f - f}{t_n} &= \frac{e^{t_nq}f - f}{t_n}
 \end{align*}
-Now
-\begin{align*}
-\lim_{n\to \infty} \norm{T(t_n)f - T(0)f}_p^p &= \lim_{n\to \infty} \norm{(e^{t_nq} - 1)\cdot f}_p^p \\
-&= \lim_{n\to \infty} \int_\Omega |(e^{t_nq} - 1)\cdot f|^p \diff{\mu} \\
-&= \lim_{n\to \infty} \int_\Omega |(e^{t_nq} - 1)\cdot f|^p \diff{\mu} \\
-\end{align*}
+
+
+
+\ref{expInequality}
+
+\ref{dominatedConvergenceLpVersion}
 \end{proof}
 
 
@@ -1031,14 +1053,16 @@ By \ref{quasiContractiveHilleYosida} $A+B$ then generates a semigroup $S(t)$ sat
 
 TODO rescaling
 \end{proof}
-\begin{corollary}[Variation of parameters] \label{operatorVariationOfParameteres}
+
+
+\begin{proposition}[Variation of parameters] \label{operatorVariationOfParameteres}
 Let $A$ be the generator of a strongly continuous operator semigroup $T$ on $X$ and $B\in\Bounded(X)$. Let $S$ be the semigroup generated by $A+B$. Then
 \begin{align*}
 S(t)x &= T(t)x + \int_0^tT(t-s)BS(s)x\diff{s} \\
 &= T(t)x + \int_0^tS(s)BT(t-s)x\diff{s}
 \end{align*}
 for all $t\in\R^+$ and $x\in X$.
-\end{corollary}
+\end{proposition}
 \begin{proof}
 We calculate
 \begin{align*}
@@ -1051,6 +1075,51 @@ for all $x\in \dom(A)$. By the density of $\dom(A)$ and the boundedness of the o
 
 The other equation follows by considering $S(s)T(t-s)$ in stead of $T(t-s)S(s)$
 \end{proof}
+\begin{corollary}
+Let $A,B$ be bounded operators on a Banach space $X$. Then
+\[ \norm{e^{A} - e^{B}} \leq \norm{A-B}\int_0^1\norm{e^{(1-s)A}}\,\norm{e^{sB}}\diff{s} \leq \norm{A-B}e^{\max\{\norm{A}, \norm{B}\}}. \]
+\end{corollary}
+\begin{proof}
+We can write $B = A + (B-A)$, so we can consider $B$ as the perturbation of $A$ with the bounded operator $B-A$. We can then calculate
+\begin{align*}
+\norm{e^A - e^B} &= \norm{\int_0^1e^{(1-s)A}(B-A)e^{sB} \diff{s}} \\
+&\leq \int_0^1\norm{e^{(1-s)A}}\norm{A-B}\norm{e^{sB}}\diff{s} \\
+&= \norm{A-B} \int_0^1\norm{e^{(1-s)A}}\norm{e^{sB}}\diff{s} \\
+&= \norm{A-B} \int_0^1\norm{e^{(1-s)A}}\norm{e^{sB}}\diff{s} \\
+&\leq \norm{A-B} \int_0^1e^{(1-s)\norm{A}}e^{s\norm{B}}\diff{s} \\
+&\leq \norm{A-B} \int_0^1e^{(1-s)\max\{\norm{A}, \norm{B}\}}e^{s\max\{\norm{A}, \norm{B}\}}\diff{s} \\
+&= \norm{A-B} e^{\max\{\norm{A}, \norm{B}\}},
+\end{align*}
+where we have used (TODO ref norm triangle inequality and ref $\norm{e^A} \leq e^{\norm{A}}$).
+\end{proof}
+\begin{corollary} \label{expZMinusOneInequality}
+For all $z\in \C$, we have
+\begin{enumerate}
+\item $|e^z - 1| \leq |z|e^{|z|}$;
+\item $|e^z - 1| \leq |z| \dfrac{e^{|\Re(z)|} - 1}{|\Re(z)|}$ if $\Re(z) \neq 0$.
+\item $|e^z - 1| \leq |z|e^{|\Re(z)|}$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) We have
+\[ |e^z - 1| = |e^z - e^{0}| \leq |z-0|e^{\max\{|z|,0\}} = |z|e^{|z|}. \]
+
+(2) We have
+\begin{align*}
+|e^z - 1| &= |e^z - e^0| \\
+&\leq |z - 0|\int_0^1|e^{(1-s)z}|\,|e^{s0}|\diff{s} \\
+&= |z| \int_0^1 |e^{(1-s)z}| \diff{s} \\
+&\leq |z| \int_0^1 e^{(1-s)|\Re(z)|} \diff{s} \\
+&= |z| \frac{e^{|\Re(z)|} - 1}{|\Re(z)|}.
+\end{align*}
+
+(3) By the calculation in (2), we have
+\[ |e^z - 1| \leq |z| \int_0^1 e^{(1-s)|\Re(z)|} \diff{s} \leq |z| \int_0^1 e^{|\Re(z)|} \diff{s} = |z|e^{|\Re(z)|}. \]
+\end{proof}
+
+TODO: link with Duhamel formula (see Product Integration with Application to Differential Equations)
+
+TODO: link with One Bound To Rule Them All
 
 \subsubsection{Volterra operators and Dyson-Phillips series}
 \begin{definition}

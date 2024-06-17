@@ -3262,6 +3262,15 @@ TODO picture.
 We clearly have equality iff $a^{p-1} = b$.
 \end{proof}
 
+\subsection{Miscelaneous inequalities}
+
+\begin{lemma} \label{expInequality}
+For all $x\in \R$, we have $e^x \leq 1 + xe^x$.
+\end{lemma}
+\begin{proof}
+Set $f(x) = 1+xe^x - e^x$. Then $f'(x) = xe^x$, so there is one critical point at $x=0$. If $x \leq 0$, then $f'(x) \leq 0$ and so $f$ is decreasing. If $x \geq 0$, then $f'(x) \geq 0$ and $f$ is increasing. Thus $x=0$ is a minimum. Since $f(0) = 1 - 1 = 0$, we have that $f(x) \geq 0$ for all $x\in \R$.
+\end{proof}
+
 \section{Non-standard analysis}
 \url{http://www.lightandmatter.com/calc/}
 
@@ -3884,6 +3893,8 @@ So the domain of convergence of a Laurent series is an annulus around $z_0$.
 
 \chapter{Function spaces}
 
+TODO: \url{https://www.johndcook.com/blog/modes_of_convergence/}
+
 \section{The $\mathcal{L}^p(X,\mu)$ spaces}
 \subsection{The $p$ seminorms}
 \begin{definition}
@@ -3897,51 +3908,49 @@ We will prove that the functional $\norm{\cdot}_{p}$ is a seminorm for all $p \g
 
 \subsubsection{The essential supremum}
 \begin{definition}
-Let $(X, \mathcal{A}, \mu)$ be a measure space. We define
+Let $(X, \mathcal{A}, \mu)$ be a measure space.
 \begin{itemize}
-\item the set $\mathcal{L}^\infty(X,\mu) \defeq \setbuilder{f\in \meas(X,\C)}{\exists C \geq 0: \; |f| \leq C \; \text{a.e.}}$;
-\item the real functional
+\item We call $C \geq 0$ an \udef{essential bound} of some $f\in \meas(X,\C)$ if $|f| \leq C$ almost everywhere.
+\item We define the set $\mathcal{L}^\infty(X,\mu) \defeq \setbuilder{f\in \meas(X,\C)}{\exists C \geq 0: \; |f| \leq C \; \text{a.e.}}$ of measurable functions that have an essential bound.
+\item We define the real functional
 \[ \norm{\cdot}_{\infty}: \mathcal{L}^\infty(X,\mu)\to \R: f\mapsto \inf\setbuilder{C \geq 0}{|f| \leq C \; \text{a.e.}}. \]
 \end{itemize}
 We call $\norm{f}_\infty$ the \udef{essential supremum} of $f$. We call $f$ \udef{essentially bounded} if $f\in \mathcal{L}^\infty(X,\mu)$.
 \end{definition}
 
-\begin{lemma} \label{approximationEssentialSupremum}
-Let $(X, \mathcal{A}, \mu)$ be a measure space, $f\in \meas(X, \C)$ such that $\norm{f}_\infty < \infty$ and $\epsilon > 0$. Then $|f| \leq \norm{f}_\infty + \epsilon$ almost everywhere.
+\begin{lemma} \label{essentialSupremumEssentialBound}
+Let $(X, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(X, \C)$. Then $|f| \leq \norm{f}_\infty$ almost everywhere.
 \end{lemma}
 \begin{proof}
-Since $\norm{f}_\infty + \epsilon$ is not a lower bound of $\setbuilder{C \geq 0}{|f| \leq C \; \text{a.e.}}$, there exists $0\leq C \leq \norm{f}_\infty + \epsilon$ such that $|f| \leq C$ a.e.
+We will first show that $|f| \leq \norm{f}_\infty + \epsilon$ almost everywhere, for arbitrary $\epsilon > 0$.
 
+Take $\epsilon > 0$. Since $\norm{f}_\infty + \epsilon$ is not a lower bound of $\setbuilder{C \geq 0}{|f| \leq C \; \text{a.e.}}$, there exists $0\leq C \leq \norm{f}_\infty + \epsilon$ such that $|f| \leq C$ a.e.
 We have
 \[ 0 \leq \mu\{|f| >  \norm{f}_\infty + \epsilon \} \leq \mu\{|f| >  C \} = 0, \]
 so $|f| \leq \norm{f}_\infty + \epsilon$ a.e. 
-\end{proof}
 
-\begin{lemma} \label{kernelEssentialSupremum}
-Let $(X, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(X, \C)$. Then $\norm{f}_\infty = 0$ \textup{if and only if} $f = 0$ almost everywhere.
-\end{lemma}
-\begin{proof}
-If $f=0$ a.e., then $|f|\leq 0$ a.e. This implies $\norm{f}_\infty = 0$.
-
-Now suppose $\norm{f}_\infty = 0$. Then, by \ref{approximationEssentialSupremum}, $|f| \leq \frac{1}{n}$ a.e.\ for all $n\in \N$. Define $E_n \defeq |f|^{\preimf}\big(\interval[o]{\frac{1}{n}, \infty}\big)$. We have that $\seq{E_n}$ is an increasing sequence of sets and $\mu(E_n) = 0$ for all $n\in \N$.
-
-Now we have, by \ref{premeasureChainContinuous},
+Now we can calculate
 \begin{align*}
-\mu\setbuilder{x\in X}{f \neq 0} &= \mu\setbuilder{x\in X}{|f| \neq 0} \\
-&= \mu\Big(\bigcup_{n\in \N} E_n\Big) = \sum_{n\in\N}\mu(E_n) = 0,
+\mu \{ |f| > \norm{f}_\infty \} &= \mu\Big( \bigcup_{n\in \N}\{ |f| > \norm{f}_\infty + n^{-1} \} \Big) \\
+&= \sup_{n\to \infty}\mu\{ |f| > \norm{f}_\infty + n^{-1} \} \\
+&= \sup_{n\to \infty}0 = 0,
 \end{align*}
-so $f = 0$ a.e.
+using the fact that $\mu$ is $\sigma$-chain-continuous \ref{premeasureChainContinuous}.
+\end{proof}
+\begin{corollary} \label{kernelEssentialSupremum}
+Let $(X, \mathcal{A}, \mu)$ be a measure space and $f\in \meas(X, \C)$. Then $\norm{f}_\infty = 0$ \textup{if and only if} $f = 0$ almost everywhere.
+\end{corollary}
+\begin{proof}
+We have $f = 0$ a.e.\ if and only if $|f| \leq 0$ a.e. This immediately implies $\norm{f}_\infty = 0$.
+
+Conversely, if $\norm{f}_\infty = 0$, then $|f| \leq \norm{f}_\infty = 0$ a.e.\ by the lemma.
 \end{proof}
 
 \begin{lemma} \label{LinftyNormSubmultiplicative}
 Let $(X, \mathcal{A}, \mu)$ be a measure space and $f,g\in \meas(X, \C)$. Then $\norm{f\cdot g}_\infty \leq \norm{f}_\infty\norm{g}_\infty$.
 \end{lemma}
 \begin{proof}
-Take arbitrary $\epsilon  > 0$. Then, by \ref{approximationEssentialSupremum},
-\[ |f\cdot g| \leq \big(\norm{f}_\infty + \epsilon\big)\big(\norm{g}_\infty + \epsilon\big) = \norm{f}_\infty\norm{g}_\infty + \big(\norm{f}_\infty + \norm{g}_\infty + \epsilon\big)\epsilon \]
-almost everywhere, which implies that
-\[ \norm{f\cdot g}_\infty \leq \norm{f}_\infty\norm{g}_\infty + \big(\norm{f}_\infty + \norm{g}_\infty + \epsilon\big)\epsilon. \]
-By taking $\epsilon \to 0$, we get the result.
+By \ref{essentialSupremumEssentialBound}, we have $|f\cdot g| \leq \norm{f}_\infty\norm{g}_\infty$ except on the union of two null sets, which is again a null set. This implies that $\norm{f}_\infty\norm{g}_\infty$ is an essential bound and $\norm{f\cdot g}_\infty \leq \norm{f}_\infty\norm{g}_\infty$.
 \end{proof}
 
 \subsubsection{The $p$ seminorms are seminorms}
@@ -3989,10 +3998,10 @@ Note that if $p,q\in\R^+$ are Hölder conjugate, then $1\leq p,q \leq \infty$.
 \begin{proof}
 First suppose $p,q\in \{1,\infty\}$. WLOG we may set $p = 1$ and $q = \infty$.
 
-Take arbitrary $\epsilon > 0$. By \ref{approximationEssentialSupremum}, we have $|g| \leq \norm{g}_\infty + \epsilon$ a.e., so $|fg| \leq \big(\norm{g}_\infty + \epsilon\big)|f|$ a.e.\ and, by \ref{integralsAlmostEverywhereComparableFunctions} and \ref{propertiesIntegralPositiveFunctions}, we have
-\[ \int_X |fg| \diff{\mu} \leq \int_X \big(\norm{g}_\infty + \epsilon\big)|f| \diff{\mu} = \big(\norm{g}_\infty + \epsilon\big)\int_X |f|\diff{\mu} = \big(\norm{g}_\infty + \epsilon\big)\norm{f}_1 \]
-Since this holds for all $\epsilon > 0$, we have $\norm{fg}_1 \leq \norm{f}_1\norm{g}_\infty$.
+By \ref{essentialSupremumEssentialBound}, we have $|g| \leq \norm{g}_\infty$ a.e., so $|fg| \leq \norm{g}_\infty|f|$ a.e.\ and, by \ref{integralsAlmostEverywhereComparableFunctions} and \ref{propertiesIntegralPositiveFunctions}, we have
+\[ \norm{fg}_1 = \int_X |fg| \diff{\mu} \leq \int_X \norm{g}_\infty|f| \diff{\mu} = \norm{g}_\infty\int_X |f|\diff{\mu} = \norm{g}_\infty\norm{f}_1. \]
 
+Now suppose $p,q \in \R$.
 If either $\norm{f}_p = 0$ or $\norm{g}_q = 0$, then either $|f|^p$ or $|g|^q$ is $0$ a.e. by \ref{functionPropertiesFromIntegral}. Then $fg = 0$ a.e., so $\norm{fg}_1 = 0$.
 
 Now, assuming $\norm{f}_p \neq 0$ and $\norm{g}_q \neq 0$, we can write $f' = \norm{f}_p^{-1}f$ and $g' = \norm{g}_q^{-1}g$.
@@ -4026,7 +4035,7 @@ TODO invert inequality if $p<1$! TODO also inverse Hölder inequality.
 
 See also Minkowski's integral inequality \ref{MinkowskisIntegralInequality}.
 \begin{proof}
-First consider the case $p = \infty$. Take arbitrary $\epsilon > 0$. Then $|f|\leq \norm{f}_\infty + \epsilon/2$ a.e.\ and $|g| \leq \norm{g}_\infty+ \epsilon / 2$ a.e., by \ref{approximationEssentialSupremum}, so $|f+g| \leq |f|+|g| \leq \norm{f}_\infty + \norm{g}_\infty + \epsilon$ a.e. This implies $\norm{f+g}_\infty \leq \norm{f}_\infty + \norm{g}_\infty + \epsilon$. Since this inequality holds for arbitrary $\epsilon > 0$, we have $\norm{f+g}_\infty \leq \norm{f}_\infty + \norm{g}_\infty$.
+First consider the case $p = \infty$. Take arbitrary $\epsilon > 0$. By \ref{essentialSupremumEssentialBound}, $|f+g| \leq |f|+|g| \leq \norm{f}_\infty + \norm{g}_\infty$, except on the union of $2$ null sets, which is again a null set.
 
 Now suppose $p \neq \infty$. First we show that $\norm{f+g}_p$ is finite. We show this using the convexity of $\R^+\to \R^+: x\mapsto |x|^p$:
 \begin{align*}
@@ -4167,11 +4176,19 @@ For all $0< p<q \leq \infty$ and $a,b\in\R$, we have $\mathcal{L}^p([a,b],\lambd
 
 \subsection{The $L^p(X,\mu)$ spaces}
 \begin{lemma} \label{LpEquivalenceClassesAreAE}
-Let $\sSet{X,\mathcal{A},\mu}$ be a measure space and $1 \leq p \leq \infty$. Then $\norm{f}_p = 0$ \textup{if and only if} $f = 0$ a.e.
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $1 \leq p \leq \infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then $\norm{f}_p = 0$ \textup{if and only if} $f = 0$ a.e.
 \end{lemma}
 Thus $f \in \ker\big(\norm{\cdot}_p\big)$ iff $f = 0$ almost everywhere.
 \begin{proof}
 For $p \neq \infty$, this follows straight from \ref{functionPropertiesFromIntegral}. For $p = \infty$ this is given by \ref{kernelEssentialSupremum}.
+\end{proof}
+\begin{corollary} \label{AEEqualImpliesSamePNorm}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $1 \leq p \leq \infty$ and $f,g\in \mathcal{L}^p(X,\mu)$. Then $f = g$ a.e.\ implies $\norm{f}_p = \norm{g}_p$.
+\end{corollary}
+\begin{proof}
+By the lemma we have $\norm{f-g}_p = 0$ and so
+\[ 0 \leq \big|\norm{f}_p - \norm{g}_p\big| \leq \norm{f-g}_p = 0 \]
+by the reverse triangle inequality \ref{reverseTriangleInequality}. Thus $\big|\norm{f}_p - \norm{g}_p\big| = 0$ and so $\norm{f}_p = \norm{g}_p$.
 \end{proof}
 
 \begin{definition}
@@ -4185,6 +4202,7 @@ Let $\sSet{X,\xi}$ be a topological space, $\mu$ a strictly positive Borel measu
 \begin{proof}
 Suppose there exist continuous functions $f,g\in \mathcal{L}^p(X,\mu)$ such that $f = g$ a.e., then $f-g = 0$ a.e.\ and $f-g$ is continuous. By \ref{continuousZeroAEImpliesConstant}, $f-g = \constant{0}$, so $f=g$.
 \end{proof}
+
 
 \subsubsection{Completeness and density}
 
@@ -4529,7 +4547,7 @@ We have
 by Tonelli's theorem \ref{tonellisTheorem} (as $\varphi'$ is positive) and \ref{weakSecondTheoremCalculus}.
 \end{proof}
 \begin{corollary} \label{LpNormFromDistribution}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(X,\mu)$. Then
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a $\sigma$-finite measure space, $0<p<\infty$ and $f\in \mathcal{L}^p(\Omega,\mu)$. Then
 \[ \norm{f}_p = \left(p\int_0^\infty \alpha^{p-1}D_f(\alpha)\diff{\alpha}\right)^{1/p}. \]
 \end{corollary}
 \begin{proof}
@@ -4537,9 +4555,19 @@ Take $\varphi: \alpha\mapsto \alpha^p$. Then $\varphi'(\alpha) = p\alpha^{p-1}$ 
 \[ \norm{f}_p^p = \int_\Omega |f|^p \diff{\mu} = \int_\Omega \varphi\circ|f| \diff{\mu} = \int_0^\infty \varphi'(\alpha)D_f(\alpha)\diff{\alpha} = p\int_0^\infty \alpha^{p-1}D_f(\alpha)\diff{\alpha}. \]
 \end{proof}
 
+\begin{lemma} \label{distributionPastEssentialSupremumIsZero}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f\in \mathcal{L}^\infty(\Omega, \mu)$. Then $D_{|f|}\big(\norm{f}_\infty\big) = 0$.
+\end{lemma}
+Since $D_{|f|}$ is monotonically decreasing, \ref{distributionContinuity}, we have $D_{|f|}(\alpha) = 0$ for all $\alpha \geq \norm{f}_\infty$.
+\begin{proof}
+We have
+\[ D_{|f|}(\norm{f}_\infty) = \mu\{|f| > \norm{f}_\infty\} = 0  \]
+by \ref{essentialSupremumEssentialBound}.
+\end{proof}
+
 \subsection{Distribution inequalities}
 \begin{proposition}[Markov's inequality]
-Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to\C$ a measurable function and $\alpha>0$. Then
+Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $f:\Omega\to \R^+$ a measurable function and $\alpha>0$. Then
 \[ D_f(\alpha) + \mu\{f = \alpha\} = \mu\{f\geq \alpha\} \leq \frac{1}{\alpha}\int_{\{f\geq \alpha\}}f\diff{\mu} \leq \frac{1}{\alpha}\int_\Omega f\diff{\mu}. \]
 \end{proposition}
 Also called Chebyshev's inequality or Chebyshev's first inequality. The next inequality would then be Chebyshev's second inequality. 
@@ -4639,6 +4667,67 @@ where we have used the fact that $D_f^{\preimf}\big(\interval{0,t}\big)$ is upwa
 \end{proof}
 
 
+\subsection{Weak $L^p(X,\mu)$ spaces}
+\begin{definition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then we define the extended real functional
+\[ \norm{\cdot}_{p,\infty}: \meas(X, \C)\to \overline{\R}^+: f\mapsto \sup\setbuilder{\alpha D_f(\alpha)^{1/p}}{\alpha > 0}. \]
+The \udef{weak $L^p(X,\mu)$ space}, denoted $L^{p,\infty}(X,\mu)$, is the subset of functions $f$ in $\meas(X, \C)$ for which $\norm{f}_{p,\infty}$ is finite.
+\end{definition}
+
+\begin{lemma}
+Let $0<p<\infty$, let $\sSet{X,\mathcal{A}, \mu}$ be a measure space and $f\in \meas(X, \C)$. Then
+\[ \norm{f}_{p,\infty} = \inf\setbuilder{C\in \R^+}{\forall \alpha>0: \; D_f(\alpha) \leq \frac{C^p}{\alpha^p}}. \]
+\end{lemma}
+
+
+\begin{proposition}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
+\begin{enumerate}
+\item the functional $\norm{\cdot}_{p,\infty}$ is constant on the equivalence classes of a.e.\ equality;
+\item $\norm{\cdot}_{p,\infty}: \Big(\meas(X, \C)/\overset{a.e.}{=}\Big) \to \overline{\R}^+$ is a quasi-norm;
+\item $\norm{\cdot}_{p,\infty} \leq \norm{\cdot}_{p}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) If $f = g$ a.e.\ then $D_f = D_g$ by \ref{distributionOfFunctionLemma}.
+
+(2) TODO
+
+(3) By \ref{ChebyshevInequalityCorollary}, we have $\alpha D_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha D_f(\alpha)^{1/p} \leq \norm{f}_p$.
+\end{proof}
+\begin{corollary}
+Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\mu)$ is a subspace of $L^{p}(X,\mu)$.
+\end{corollary}
+\begin{proof}
+TODO \ref{realPartExtendedRealFunctional}
+\end{proof}
+
+\begin{example}
+The inclusion $L^{p,\infty}(X,\mu) \subseteq L^{p}(X,\mu)$ is strict in general.
+
+Take $h: \R\to \R: x\mapsto |x|^{-1/p}$. Then
+\[ \norm{h}_p^p = \int_\R |x|^{-1} \diff{x} = 2\int_0^\infty x^{-1}\diff{x} = \infty. \]
+We also have
+\[ D_h(\alpha) = \mu\big\{|x|^{-1/p} > \alpha\big\} = \mu\big\{|x| < \alpha^{-p}\big\} = 2\alpha^{-p}, \]
+so
+\[ \norm{h}_{p,\infty} = \sup_{\alpha > 0}\alpha\cdot (2\alpha^{-p})^{1/p} = \sup_{\alpha > 0}2^{1/p}\alpha\cdot \alpha^{-1} = 2^{1/p} < \infty. \]
+\end{example}
+
+\section{Modes of convergence}
+\subsection{Convergence almost everywhere}
+\begin{lemma} \label{AEconvergenceToPointwiseConvergence}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $\sSet{Y,\zeta}$ a convergence space and $\seq{f_n}$ a sequence in $(X\to Y)$ such that $f_n \to f$ almost everywhere. Then there exists a sequence $\seq{g_n}$ in $(X\to Y)$ such that $f_n = g_n$ a.e.\ for all $n\in \N$ and $g_n \to f$ pointwise.
+\end{lemma}
+\begin{proof}
+Let $N$ be the null set of $x\in X$ such that $f_n(x) \not\to f(x)$. Define
+\[ g_n(a) \defeq \begin{cases}
+f_n(a) & (a\notin N) \\
+f(a) & (a \in N)
+\end{cases}. \]
+The sequence $\seq{g_n}$ converges to $f$ pointwise.
+\end{proof}
+
+
 \subsection{Convergence in measure}
 \begin{definition}
 Let $(\Omega, \mathcal{A}, \mu)$ be a measure space, $F\in \powerfilters\big(\meas(\Omega, \C)\big)$ and $f\in \meas(\Omega, \C)$. Then $F$ is said to \udef{converge in measure} to $f$ if
@@ -4708,51 +4797,79 @@ We are now ready to verify the conditions in \ref{TVSconstruction}. Take arbitra
 Take arbitrary $\lambda\in \C$. \ref{distributionOfFunctionLemma}
 \end{proof}
 
+\subsection{Almost uniform convergence}
+TODO
 
-\subsection{Weak $L^p(X,\mu)$ spaces}
-\begin{definition}
-Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then we define the extended real functional
-\[ \norm{\cdot}_{p,\infty}: \meas(X, \C)\to \overline{\R}^+: f\mapsto \sup\setbuilder{\alpha D_f(\alpha)^{1/p}}{\alpha > 0}. \]
-The \udef{weak $L^p(X,\mu)$ space}, denoted $L^{p,\infty}(X,\mu)$, is the subset of functions $f$ in $\meas(X, \C)$ for which $\norm{f}_{p,\infty}$ is finite.
-\end{definition}
+\subsection{Relations between the modes of convergence}
+The solid arrows point from the stronger convergence to the weaker convergence. For the dashed arrows: a convergent filter in the mode at the base is contained in a convergent filter in the mode at the tip.
 
-\begin{lemma}
-Let $0<p<\infty$, let $\sSet{X,\mathcal{A}, \mu}$ be a measure space and $f\in \meas(X, \C)$. Then
-\[ \norm{f}_{p,\infty} = \inf\setbuilder{C\in \R^+}{\forall \alpha>0: \; D_f(\alpha) \leq \frac{C^p}{\alpha^p}}. \]
-\end{lemma}
+? Do we allow $p=\infty$??
+
+For general measure spaces:
+\[ \begin{tikzcd}
+\text{Almost everywhere} & \ar[l] \ar[d, shift left] \text{Almost uniform} \\
+\mathcal{L}^p \ar[ur, dashed] \ar[r] \ar[u, dashed] & \text{In measure} \ar[u, shift left, dashed] \ar[ul, dashed]
+\end{tikzcd} \]
+For finite measure spaces:
+\[ \begin{tikzcd}
+\text{Almost everywhere} \ar[r, shift left] \ar[dr, shift left] & \ar[l, shift left] \ar[d, shift left] \text{Almost uniform} \\
+\mathcal{L}^p \ar[ur, shift left, dashed] \ar[r] \ar[u, dashed] & \text{In measure} \ar[u, shift left, dashed] \ar[ul, dashed]
+\end{tikzcd} \]
+If dominated, then all convergences imply $\mathcal{L}^p$, for $1\leq p < \infty$, so not for $p = \infty$.
+
+\begin{example}
+Define, for $n\geq 1$,
+\[ A_n \defeq \interval{\frac{n-2^{\floor{\log_2(n)}}}{2^{\floor{\log_2(n)}}}, \frac{n-2^{\floor{\log_2(n)}}+1}{2^{\floor{\log_2(n)}}}}. \]
+The sequence $\seq{\charFunc{A_n}: \interval{0,1} \to \{0,1\}}$
+is called the \udef{typewriter sequence}. It marches over and over the unit interval, ever decreasing in width.
 
 
+It converges to $\constant{0}$ in the $\mathcal{L}^p$ sense for all $1\leq p < \infty$ (and thus in measure), but not in the $L^\infty$ sense, nor a.e.
+\end{example}
+
+\subsubsection{General measure spaces}
 \begin{proposition}
-Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then
-\begin{enumerate}
-\item the functional $\norm{\cdot}_{p,\infty}$ is constant on the equivalence classes of a.e.\ equality;
-\item $\norm{\cdot}_{p,\infty}: \Big(\meas(X, \C)/\overset{a.e.}{=}\Big) \to \overline{\R}^+$ is a quasi-norm;
-\item $\norm{\cdot}_{p,\infty} \leq \norm{\cdot}_{p}$.
-\end{enumerate}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $1 \leq p \leq \infty$, $f\in \mathcal{L}^p(X,\mu)$ and $\seq{f_n}$ a sequence of functions in $\mathcal{L}^p(X,\mu)$. If $f_n\to f$ in $\mathcal{L}^p$, then $f_n \to f$ in measure.
 \end{proposition}
 \begin{proof}
-(1) If $f = g$ a.e.\ then $D_f = D_g$ by \ref{distributionOfFunctionLemma}.
+Take arbitrary $\epsilon > 0$.
+First assume $p = \infty$. Since $\norm{f_n - f}_\infty \to 0$, there exists $k\in\N$ such that $\norm{f_n - f}_\infty \leq \epsilon$ for all $n\geq k$. By \ref{distributionPastEssentialSupremumIsZero}, $D_{|f_n - f|}(\epsilon) = 0$ for all $n\geq k$. Thus $D_{|f_n - f|}(\epsilon) \to 0$.
 
-(2) TODO
+Now suppose $p \neq \infty$.
+By Chebyshev's inequality \ref{ChebyshevInequalityCorollary},
+\[ D_{|f_n - f|}(\epsilon) \leq \epsilon^{-p}\int_X |f_n - f|^p\diff{\mu} = \epsilon^{-p}\norm{f_n - f}_p^p \to 0, \]
+since $x\mapsto x^p$ is a continuous function.
 
-(3) By \ref{ChebyshevInequalityCorollary}, we have $\alpha D_f(\alpha)^{1/p} \leq \norm{f}_p$ and thus $\norm{f}_{p,\infty} = \sup_{\alpha > 0}\alpha D_f(\alpha)^{1/p} \leq \norm{f}_p$.
+If $\epsilon \leq \norm{f}_\infty$
 \end{proof}
-\begin{corollary}
-Let $0<p<\infty$ and let $\sSet{X,\mathcal{A}, \mu}$ be a measure space. Then $L^{p,\infty}(X,\mu)$ is a subspace of $L^{p}(X,\mu)$.
-\end{corollary}
+
+\subsubsection{Finite measure spaces}
+
+\subsubsection{Dominated sequences}
+\begin{proposition} \label{dominatedConvergenceLpVersion}
+Let $\sSet{X,\mathcal{A},\mu}$ be a measure space, $1 \leq p < \infty$ and $\seq{f_n}$ a sequence of functions in $\mathcal{L}^p(X,\mu)$ such that $f_n \to f$ a.e. and there exists $g\in \mathcal{L}^p(X,\mu)$ such that, for all $n\in \N$, $|f_n| \leq |g|$ a.e. Then
+\begin{enumerate}
+\item $f\in \mathcal{L}^p(X,\mu)$;
+\item $f_n \to f$ in the $\mathcal{L}^p$ sense.
+\end{enumerate}
+\end{proposition}
+Note that we need $p \neq \infty$.
 \begin{proof}
-TODO \ref{realPartExtendedRealFunctional}
+By \ref{AEconvergenceToPointwiseConvergence}, we can consider $\seq{g_n}$ such that $f_n = g_n$ a.e.\ and $g_n \to f$ pointwise. We have $|g_n| \leq |g|$ a.e.\ for all $n\in \N$.
+
+Since all $|g_n| \leq |g|$, we have $|f| \leq |g|$ a.e.\ by \ref{limsupBoundAE}. This implies that $f\in \mathcal{L}^p(X,\mu)$. Also $|g_n - f| \leq |g_n| + |f| \leq 2|g|$ and thus $|g_n - f|^p \leq 2^p|g|^p$. We have that $2^p|g|^p$ is integrable since $g\in L^p(X,\mu)$, so we can apply the dominated convergence theorem \ref{dominatedConvergence} to calculate
+\begin{align*}
+\lim_{n\to \infty}\norm{f_n - f}_p^p &= \lim_{n\to \infty}\norm{g_n - f}_p^p \\
+&= \lim_{n\to \infty}\int_X |g_n - f| \diff{\mu} \\
+&= \int_X \lim_{n\to \infty}|g_n - f| \diff{\mu} \\ 
+&= \int_X \constant{0} \diff{\mu} = 0,
+\end{align*}
+where the first equality follows from \ref{AEEqualImpliesSamePNorm}.
+Since the function $x\mapsto x^{1/p}$ is continuous, this implies $f_n \to f$ in the $\mathcal{L}^p$ sense.
 \end{proof}
 
 \begin{example}
-The inclusion $L^{p,\infty}(X,\mu) \subseteq L^{p}(X,\mu)$ is strict in general.
-
-Take $h: \R\to \R: x\mapsto |x|^{-1/p}$. Then
-\[ \norm{h}_p^p = \int_\R |x|^{-1} \diff{x} = 2\int_0^\infty x^{-1}\diff{x} = \infty. \]
-We also have
-\[ D_h(\alpha) = \mu\big\{|x|^{-1/p} > \alpha\big\} = \mu\big\{|x| < \alpha^{-p}\big\} = 2\alpha^{-p}, \]
-so
-\[ \norm{h}_{p,\infty} = \sup_{\alpha > 0}\alpha\cdot (2\alpha^{-p})^{1/p} = \sup_{\alpha > 0}2^{1/p}\alpha\cdot \alpha^{-1} = 2^{1/p} < \infty. \]
+The sequence $\seq{\charFunc{\interval[o]{0,(n+1)^{-1}}}: \interval{0,1} \to \{0,1\}}_{n\in \N}$. Converges pointwise to $\constant{0}$ and is dominated by $\constant{1}$, but does not converge to $\constant{0}$ in the $\mathcal{L}^\infty$ sense.
 \end{example}
 
 \section{Interpolation}
