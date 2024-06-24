@@ -4143,24 +4143,59 @@ Let $\mathcal{H}$ be a Hilbert space and $K: \Z\times \Z\to \Bounded(\mathcal{H}
 
 \subsection{Discrete Fourier transform}
 \begin{definition}
-Then $N$-dimensional \udef{discrete Fourier transform} (DFT) is the linear transformation $\C^N \to \C^N$ defined by the matrix $DFT_N$ with components
-\[ [DFT_N]_{j,k} = \frac{1}{\sqrt{N}}\omega_N^{(j-1)(k-1)}, \]
-where $\omega_N$ is the $N^\text{th}$ root of unity.
+Then $N$-dimensional \udef{discrete Fourier transform} (DFT) is the linear transformation $\C^N \to \C^N$ defined by the matrix $\DFT_N$ with components
+\[ [\DFT_N]_{j,k} = \frac{1}{\sqrt{N}}\omega_N^{-jk}, \]
+where $\omega_N$ is the $N^\text{th}$ root of unity, $e^{\frac{2\pi i}{N}}$.
 \end{definition}
+The indices $j,k$ start at zero!
 
-\begin{lemma} \mbox{}
+By \ref{DFTlemma}, we have $[\DFT_N^{-1}]_{j,k} = \frac{1}{\sqrt{N}}\omega_N^{jk}$. For any vector $\vec{x}\in \C^N$, we write
+\[ [\vec{x}]_k = \big[\DFT_N^{-1}\DFT_N\vec{x}\big]_k = \sum_{l=0}^{N-1}\frac{\omega_N^{kl}}{\sqrt{N}}[\DFT_N\vec{x}]_l = \sum_{l=0}^{N-1}[\DFT_N\vec{x}]_l\frac{e^{2\pi i\frac{l}{N}k}}{\sqrt{N}} \]
+So we have written $\vec{x}$ as a combination of `waves' with different frequencies. The $l^\text{th}$ component of $\DFT_N\vec{x}$ is the amplitude of the wave with frequency $\frac{l}{N}$.
+
+The discrete Fourier transform is sometimes defined as
+\[ [\DFT_N]_{j,k} = \omega_N^{-jk} \quad\text{or}\quad [\DFT_N]_{j,k} = \frac{1}{N}\omega_N^{-jk}. \]
+In these cases it is not unitary.
+
+The discrete Fourier transform is sometimes defined as
+\[ [\DFT_N]_{j,k} = \frac{1}{\sqrt{N}}\omega_N^{jk}, \]
+which swaps the roles of $\DFT_N$ and $\DFT_N^{-1}$. This can be interpreted as inverting the frequency axis (i.e.\ the $l^\text{th}$ component of $\DFT_N\vec{x}$ is now the amplitude of the wave with frequency $-\frac{l}{N}$.)
+
+\begin{lemma} \mbox{} \label{DFTlemma}
 \begin{enumerate}
-\item The $DFT_N$ matrix is the Vandermonde matrix of the roots of unity, up to the normalisation factor $1/\sqrt{N}$.
-\item The $DFT_N$ matrix is unitary.
+\item The $\DFT_N$ matrix is the Vandermonde matrix of the roots of unity, up to the normalisation factor $1/\sqrt{N}$.
+\item The $\DFT_N$ matrix is unitary.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
 (1) Just an observation.
 
 (2) We calculate
-\[ [DFT_N\cdot DFT_N]_{j,l} = \frac{1}{N}\sum_{k=1}^N\omega_N^{jk}\overline{\omega_N}^{kl} = \frac{1}{N}\sum_{k=1}^N\omega_N^{k(j-l)} = \delta_{j,l}. \]
+\[ [\DFT_N\cdot \DFT_N]_{j,l} = \frac{1}{N}\sum_{k=0}^{N-1}\omega_N^{-jk}\overline{\omega_N}^{-kl} = \frac{1}{N}\sum_{k=0}^{N-1}\omega_N^{k(l-j)} = \delta_{j,l}. \]
+TODO ref sum of roots of unity is zero.
 \end{proof}
 
+\begin{proposition}[Danielson-Lanczos lemma]
+Let $M,N\in \N$ and $\seq{x_k}\in \C^{MN}$. Then
+\[ [\DFT_{MN}\seq{x_k}]_{l} = \sum_{k_0 = 0}^{M-1}\frac{\omega_{MN}^{-lk_0}}{\sqrt{M}}\big[\DFT_N\seq{x_{k_1\cdot M+k_0}}_{k_1}\big]_{l}. \]
+\end{proposition}
+Often the name ``Danielson-Lanczos lemma'' is used to mean the special case of $M=2$. In this case the proposition simplifies to
+\[ [\DFT_{2N}\seq{x_k}]_{l} = \frac{1}{\sqrt{2}}\big[\DFT_N\seq{x_{2k_1}}_{k_1}\big]_{l} + \frac{\omega_{2N}^{-l}}{\sqrt{2}}\big[\DFT_N\seq{x_{2k_1+1}}_{k_1}\big]_{l}, \]
+which is a sum of the DFT of the even components with the DFT of the odd components times a factor, often called a \udef{twiddle factor}. This procedure is also known as ``decimation in time''.
+\begin{proof}
+Using \ref{sumAsDecimation}, we can calculate
+\begin{align*}
+[\DFT_{MN}\seq{x_k}]_{l} &= \sum_{k=0}^{MN - 1}\frac{\omega_{MN}^{-kl}}{\sqrt{MN}}x_k \\
+&= \sum_{k_0=0}^{M - 1}\sum_{k_1=0}^{N-1}\frac{\omega_{MN}^{-(k_1M + k_0)l}}{\sqrt{MN}}x_{k_1\cdot M+k_0} \\
+&= \sum_{k_0=0}^{M - 1}\sum_{k_1=0}^{N-1}\frac{\omega_{MN}^{-k_0l}}{\sqrt{M}}\frac{\omega_{MN}^{-k_1M l}}{\sqrt{N}}x_{k_1\cdot M+k_0} \\
+&= \sum_{k_0=0}^{M - 1}\frac{\omega_{MN}^{-k_0l}}{\sqrt{M}}\sum_{k_1=0}^{N-1}\frac{\omega_{N}^{-k_1l}}{\sqrt{N}}x_{k_1\cdot M+k_0} \\
+&= \sum_{k_0=0}^{M - 1}\frac{\omega_{MN}^{-lk_0}}{\sqrt{M}} \big[\DFT_N\seq{x_{k_1\cdot M+k_0}}_{k_1}\big]_{l}.
+\end{align*}
+\end{proof}
+By swapping the order of summation, we also have
+\[ [\DFT_{MN}\seq{x_k}]_{l} = \sum_{k_1=0}^{N-1}\sum_{k_0=0}^{M - 1}\frac{\omega_{MN}^{-(k_1M + k_0)l}}{\sqrt{MN}}x_{k_1\cdot M+k_0} = \sum_{k_1=0}^{N-1}\frac{\omega_{N}^{-k_1l}}{\sqrt{MN}}\sum_{k_0=0}^{M - 1}\omega_{M}^{\frac{-k_0l}{N}}x_{k_1\cdot M+k_0}. \]
+This is known as ``decimation in frequency''. In the case $M=2$, we get
+\[ [\DFT_{2N}\seq{x_k}]_{l} = \sum_{k_1=0}^{N-1}\frac{\omega_{N}^{-k_1l}}{\sqrt{2N}}\Big(x_{2k_1} + e^{\frac{-l\pi i}{N}}x_{2k_1+1}\Big). \]
 
 \chapter{$C^*$-algebras}
 \section{$*$-algebras}
