@@ -3525,21 +3525,27 @@ Adding these gives
 where we have used using \ref{birkhoffIdentity}.
 \end{proof}
 
-\begin{proposition}
-Let $V$ be a Riesz space and $v,v',w,w'\in V$, then
-\[ |(v\vee v')- (w\vee w')| \leq |v-w| \vee |v'- w'|. \]
+\begin{proposition} \label{differenceOfSupremaLessThanSupremumOfDifferences}
+Let $V$ be a Riesz space, $n\in\N$ and $\{x_k\}_{k=0}^n,\{y_k\}_{k=0}^n\subseteq V$, then
+\begin{enumerate}
+\item $|x_0\vee x_1 - y_0\vee y_1| \leq |x_0 - y_0|\vee |x_1 - y_1|$;
+\item $\Big|\bigvee_{k=0}^n x_k - \bigvee_{k=0}^n y_k| \leq \bigvee_{k=0}^n|x_k - y_k|$.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-We calculate
+(1) We calculate
 \begin{align*}
-|(v\vee v')- (w\vee w')| &= (v\vee v')\vee(w\vee w') - (v\vee w)\wedge (v'\vee w') \\
-&\leq (v\vee w)\vee(v\vee w') - (v\wedge w)\vee (v'\wedge w') \\
-&= \big((v\vee w) - (v\wedge w)\vee (v'\wedge w')\big)\vee\big((v'\vee w') - (v\wedge w)\vee (v'\wedge w')\big) \\
-&\leq \big((v\vee w) - (v\wedge w)\big)\vee\big((v'\vee w') - (v'\wedge w')\big) \\
-&= |v-w|\vee |v'-w'|,
+|(x_0\vee x_1)- (y_0\vee y_1)| &= (x_0\vee x_1)\vee(y_0\vee y_1) - (x_0\vee y_0)\wedge (x_1\vee y_1) \\
+&\leq (x_0\vee y_0)\vee(x_0\vee y_1) - (x_0\wedge y_0)\vee (x_1\wedge y_1) \\
+&= \Big((x_0\vee y_0) - (x_0\wedge y_0)\vee (x_1\wedge y_1)\Big)\vee\Big((x_1\vee y_1) - (x_0\wedge y_0)\vee (x_1\wedge y_1)\Big) \\
+&\leq \big((x_0\vee y_0) - (x_0\wedge y_0)\big)\vee\big((x_1\vee y_1) - (x_1\wedge y_1)\big) \\
+&= |x_0-y_0|\vee |x_1-y_1|,
 \end{align*}
-where we have used \ref{absoluteValueDifference}, \ref{firstMiniMaxCorollary} and \ref{lemmaRieszSpaces}.
+where we have used \ref{absoluteValueDifference}, \ref{firstMiniMaxCorollary} and \ref{lemmaRieszSpaces} (the last one to pull $-(x_0\wedge y_0)\vee (x_1\wedge y_1)$ inside $(x_0\vee y_0)\vee(x_0\vee y_1)$).
+
+(2) Follows by $n-1$ applications of (1).
 \end{proof}
+
 
 \subsection{Disjointness}
 \begin{definition}
@@ -4443,43 +4449,51 @@ Let $V$ be a Riesz space and $v\in V$. We call the seminorm uniformity generated
 \end{definition}
 By definition this is a pseudometric uniformity. We label the corresponding objects with a $v$. I.e.\ we have $\entourage_v(\epsilon), \ball_v(x,\epsilon), \cball_v(x,\epsilon), \entourages_v, \uniformity_v, \neighbourhoods_v(x)$ etc.
 
-\begin{lemma}
-Let $V$ be a Riesz space, $\epsilon > 0$, $v\in V$ and $x\in V$. Then
+\begin{lemma} \label{ballsInRieszUniformities}
+Let $V$ be a Riesz space, $\epsilon > 0$, $v\in V$ and $x, x'\in V$. Then
 \begin{enumerate}
+\item $p_{S_v}(x-x') < \epsilon \;\implies\; |x-x'| \leq \epsilon|v| \;\implies\; p_{S_v}(x-x') \leq \epsilon$
 \item $\ball_v(x,\epsilon) \subseteq \setbuilder{y\in V}{ |x-y| \leq \epsilon |v|} \subseteq \cball_v(x,\epsilon)$;
 \item $\entourage_v(\epsilon/2) \subseteq \setbuilder{(y,z)\in V}{ |y-z| \leq \epsilon |v|} \subseteq \entourage_v(\epsilon)$.
 \end{enumerate}
 If $V$ is Archimedean, then
-\begin{enumerate} \setcounter{enumi}{2}
+\begin{enumerate} \setcounter{enumi}{3}
+\item $|x-x'| \leq \epsilon|v| \;\iff\; p_{S_v}(x-x') \leq \epsilon$;
 \item $\cball_v(x,\epsilon) = \setbuilder{y\in V}{ |x-y| \leq \epsilon |v|}$;
 \item $\entourage_v(\epsilon) = \setbuilder{(y,z)\in V^2}{|y-z| \leq \epsilon |v|}$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-(1) Since $S_v$ is absolutely convex by \ref{principalSolidSetsAbsolutelyConvex}, it is in particular semibalanced. Take arbitrary $y\in V$. We calculate, using \ref{gaugeLemma},
-\begin{align*}
-y \in \ball_v(x, \epsilon) &\iff p_{S_v}(x-y) < \epsilon \\
-&\implies \epsilon^{-1}(y-z) \in S_v \\
-&\implies p_{S_v}(y-z) \leq \epsilon \\
-&\iff y \in \cball_v(x, \epsilon).
-\end{align*}
-The inclusions follow, since
-\[ \epsilon^{-1}(y-z) \in S_v \quad\iff\quad \epsilon^{-1}|y-z| \leq |v| \quad\iff\quad |y-z| \leq \epsilon |v|, \]
+(1) Since $S_v$ is absolutely convex by \ref{principalSolidSetsAbsolutelyConvex}, it is in particular semibalanced.  We calculate, using \ref{gaugeLemma},
+\[ p_{S_v}(x-x') < \epsilon \;\implies\; \epsilon^{-1}(x-x') \in S_v \;\implies\; p_{S_v}(x-x') \leq \epsilon \]
+This is equivalent to the statement, since
+\[ \epsilon^{-1}(x-x') \in S_v \quad\iff\quad \epsilon^{-1}|x-x'| \leq |v| \quad\iff\quad |x-x'| \leq \epsilon |v|, \]
 by \ref{principalSolidSets}.
 
-(2) We have that $(y,z) \in \entourage_v(\epsilon/2)$ implies $z\in \ball_v(y,\epsilon /2) \subseteq \cball_v(y,\epsilon)$.
-
-(3) Take arbitrary $y\in V$. Since $S_v$ is convex and algebraically closed, by \ref{principalSolidSetsAbsolutelyConvex} and \ref{principalSolidSetsClosedInArchimedeanRieszSpaces}, we can calculate, using \ref{gaugeScaling} and \ref{gaugeInherenceAdherence},
+(2) Take arbitrary $y\in V$. We calculate, using (1),
 \begin{align*}
-y \in \cball_v(x, \epsilon) &\iff p_{S_v}(x-y) \leq \epsilon \\
-&\iff \epsilon^{-1}p_{S_v}(x-y) \leq 1 \\
-&\iff p_{S_v}\big(\epsilon^{-1}(x-y)\big) \leq 1 \\
-&\iff \epsilon^{-1}(x-y) \in S_v \\
-&\iff \epsilon^{-1}|x-y| \leq |v| \\
-&\iff |x-y| \leq \epsilon|v|.
+y \in \ball_v(x, \epsilon) &\iff p_{S_v}(x-y) < \epsilon \\
+&\implies |x-y| \leq \epsilon |v| \\
+&\implies p_{S_v}(x-y) \leq \epsilon \\
+&\iff y \in \cball_v(x, \epsilon).
 \end{align*}
 
-(4) Take arbitrary $y,z \in V$. We calculate
+(3) We have that $(y,z) \in \entourage_v(\epsilon/2)$ implies $z\in \ball_v(y,\epsilon /2) \subseteq \cball_v(y,\epsilon)$.
+
+(4) Since $S_v$ is convex and algebraically closed, by \ref{principalSolidSetsAbsolutelyConvex} and \ref{principalSolidSetsClosedInArchimedeanRieszSpaces}, we can calculate, using \ref{gaugeScaling} and \ref{gaugeInherenceAdherence},
+\begin{align*}
+|x-x'| \leq \epsilon|v| &\iff \epsilon^{-1}|x-x'| \leq |v| \\
+&\iff \epsilon^{-1}(x-x') \in S_v \\
+&\iff \epsilon^{-1}(x-x') \in \adh_{\mathfrak{a}}(S_v) \\
+&\iff p_{S_v}\big(\epsilon^{-1}(x-x')\big) \leq 1 \\
+&\iff \epsilon^{-1}p_{S_v}(x-x') \leq 1 \\
+&\iff p_{S_v}(x-x') \leq \epsilon.
+\end{align*}
+
+(5) Immediate from (4) and
+\[ y \in \cball_v(x, \epsilon) \iff p_{S_v}(x-y) \leq \epsilon \iff |x-y| \leq \epsilon|v|. \] 
+
+(6) Take arbitrary $y,z \in V$. We calculate
 \begin{align*}
 (y,z) \in \entourage_v(\epsilon) &\iff z\in \cball_v(y,\epsilon) \\
 &\iff |y-z| \leq \epsilon |v|.
@@ -4512,7 +4526,7 @@ Take $A \in \mathcal{E}_v$. By \ref{vEntouragesBase}, there exists $\epsilon > 0
 so $(x,y)\in D_{v,\epsilon}$. This implies $D_{u,\epsilon} \subseteq D_{v,\epsilon} \subseteq A$ and so $A\in \upset\setbuilder{D_{u,\epsilon}}{\epsilon >0} = \mathcal{E}_u$.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{OrderConvergenceWeakerThenUniformConvergenceArchimedeanRieszSpace}
 Let $V$ be an Archimedean Riesz space and $v\in V$. Let $\mathcal{U}_\mathfrak{o}$ be the uniform structure on the convergence group $\sSet{V,\mathfrak{o}}$. Then $\mathcal{U}_v \subseteq \mathcal{U}_\mathfrak{o}$.
 \end{proposition}
 The convergence $\mathfrak{o}$ is the order convergence.
@@ -4600,11 +4614,29 @@ The argument for $\wedge$ is similar.
 
 \subsubsection{The Riesz uniformity}
 \begin{definition}
-Let $V$ be a Riesz space. The \udef{Riesz uniformity} on $V$ is the uniformity $\bigvee_{v\in V^+} \mathcal{U}_v$, where the join is taken in the poset of uniformities on $V$.
+Let $V$ be a Riesz space. The \udef{Riesz uniformity} on $V$ is the uniformity $\bigvee_{v\in V} \mathcal{U}_v$, where the join is taken in the poset of uniformities on $V$.
 \end{definition}
 
+\begin{lemma} \label{RieszEntouragesCompositionLemma}
+Let $V$ be a Riesz space and $u,v\in V$. Then $\entourages_{|u|+|v|} \subseteq \entourages_{u};\entourages_{v}$.
+\end{lemma}
+\begin{proof}
+Take arbitrary $A\in \entourages_{|u|+|v|}$. By \ref{vEntouragesBase}, there exists $\epsilon > 0$ such that $D_{|u|+|v|}(\epsilon) \subseteq A$. We claim $D_{u}(\epsilon);D_{v}(\epsilon) \subseteq D_{|u|+|v|}(\epsilon)$. Indeed, take arbitrary $(x,z) \in D_{u}(\epsilon);D_{v}(\epsilon)$. Then there exists $y\in V$ such that $(x,y)\in D_{u}(\epsilon)$ and $(y,z)\in D_{v}(\epsilon)$. Then
+\[ |x-z| \leq |x-y|+ |y-z| \leq \epsilon |u| + \epsilon |v| = \epsilon\big(|u|+|v|\big), \]
+so $(x,z) \in D_{|u|+|v|}(\epsilon)$. This implies $D_{u}(\epsilon);D_{v}(\epsilon) \subseteq D_{|u|+|v|}(\epsilon) \subseteq A$, so $\entourages_{u};\entourages_{v}$.
+\end{proof}
 
+\begin{proposition}
+Let $V$ be a Riesz space. Then the Riesz uniformity is given by
+\[ \bigvee_{v\in V} \mathcal{U}_v = \bigcup_{v\in V} \mathcal{U}_v = \upset \setbuilder{\entourages_v}{v\in V}. \]
+\end{proposition}
+\begin{proof}
+The first equality follows from \ref{latticeOfUniformities}, because $\bigcup_{v\in V} \mathcal{U}_v$ is closed under composition. Indeed, take $G,H\in \bigcup_{v\in V} \mathcal{U}_v$. Then there exist $u,v\in V$ such that $G \in\mathcal{U}_u = \upset \{\entourages_u\}$ and $H \in\mathcal{U}_v = \upset \{\entourages_v\}$. Then, by \ref{RieszEntouragesCompositionLemma}, we have
+\[ \entourages_{|u|+|v|} \subseteq \entourages_{u};\entourages_{v} \subseteq G;H, \]
+so $G;H\in \mathcal{U}_{|u|+|v|} \subseteq \bigcup_{v\in V} \mathcal{U}_v$.
 
+The second equality is immediate because each $\mathcal{U}_v$ is topological.
+\end{proof}
 
 
 \subsection{The Daniell integral}
@@ -4658,7 +4690,101 @@ Next, suppose $F$ converges isotonically to $v$ and $F\subseteq G$, then there e
 We have a similar argument for antitonic convergence. For monotonic convergence, we use \ref{latticeConvergences}.
 \end{proof}
 
+\section{Complexification of Riesz spaces}
+\subsection{The modulus}
+\begin{definition}
+Let $V$ be a Riesz space and $V+iV$ its complexification. For all $z\in V+iV$, we define the \udef{modulus}
+\[ |z| \defeq \sup_{\theta\in S^1} \Re(ze^{-i\theta}), \]
+if this supremum exists.
 
+If $|z|$ exists for all $z\in V+iV$, we call $V+iV$ a \udef{complex Riesz space}.
+\end{definition}
+The condition that ``$V$ be a Riesz space with complexification $V+iV$'' is weaker than the condition that ``$V$ be a complex Riesz space''.
+
+\begin{lemma}
+Let $V$ be a Riesz space with complexification $V+iV$ and $x+iy \in V + iV$. Then
+\begin{enumerate}
+\item $|x+i0|$ exists and $|x+i0| = |x|$;
+\item 
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{lemma} \label{modulusConstructionLemma}
+Let $V$ be a Riesz space with complexification $V+iV$ and $x+iy \in V+iV$. Consider the function
+\[ h: S^1 \to V: \theta\mapsto \Re\big((x+iy)e^{-i\theta}\big). \]
+Suppose $V$ is equipped with the Riesz uniformity $\uniformity_{|x|+|y|}$. Then
+\begin{enumerate}
+\item $h(\theta) = x\cos\theta + y\sin\theta$;
+\item $\big|h(\theta_1) - h(\theta_2)\big| \leq d(\theta_1, \theta_2)\big(|x|+ |y|\big)$ for all $\theta_1,\theta_2 \in S^1$;
+\item $h$ is Lipschitz continuous with Lipschitz constant $1$.
+\end{enumerate}
+\end{lemma}
+Note that Lipschitz makes sense because $\uniformity_{|x|+|y|}$ is a pseudometric uniformity. Comparing with \ref{ballsInRieszUniformities}, we see that (3) is a weaker statement than (2), but they are equivalent in Archimedean Riesz spaces.
+\begin{proof}
+(1) We calculate
+\begin{align*}
+(x+iy)e^{-i\theta} &= (\cos\theta - i\sin\theta)(x+iy) \\
+&= \cos\theta x + \sin\theta y + i\big(\cos\theta y - \sin\theta x\big).
+\end{align*}
+Taking the real part yields the proof.
+
+(2) Take arbitrary $\theta_1, \theta_2 \in S^1$ and calculate
+\begin{align*}
+\big|h(\theta_1) - h(\theta_2)\big| &= |x\cos\theta_1 +y\sin\theta_1 - x\cos\theta_2 - y\sin\theta_2| \\
+&\leq |\cos\theta_1 - \cos\theta_2|\,|x| + |\sin\theta_1 - \sin\theta_2|\,|y| \\
+&\leq d(\theta_1, \theta_2)\big(|x|+ |y|\big),
+\end{align*}
+by TODO ref distance in $S^1$.
+
+(3) By \ref{ballsInRieszUniformities}, (2) implies $p_{S_{|x|+|y|}}\big(h(\theta_1) - h(\theta_2)\big) \leq d(\theta_1, \theta_2)$.
+\end{proof}
+
+
+\begin{proposition}
+Let $V$ be an Archimedean and uniformly complete Riesz space. Then $V+iV$ is a complex Riesz space.
+\end{proposition}
+\begin{proof}
+Take arbitrary $z = x+iy \in V+iV$ and consider the function $h$ of \ref{modulusConstructionLemma}.
+Define the sequence $\seq{x_n}$ in $V+iV$ by
+\[ x_n \defeq \bigvee_{k=0}^{2^n} h\Big(\frac{2\pi k}{2^n}\Big). \]
+This is monotonically increasing. We show that it is a $(|x|+|y|)$-Cauchy sequence.
+
+We observe that, for $m\geq n$, we have
+\[ \setbuilder{\floor*{\frac{k}{2^{m-n}}}\in \N}{k\in [0:2^m]} = \setbuilder{k\in \N}{k\in [0:2^n]}. \]
+Indeed, for all $k\in [0:2^n]$, we have $2^{m-n}k \leq 2^{m-n}2^n = 2^m$, so
+\[ k = \floor*{\frac{2^{m-n}k}{2^{m-n}}} \in \setbuilder{\floor*{\frac{k}{2^{m-n}}}\in \N}{k\in [0:2^m]}. \]
+Conversely, take $k \in [0:2^m]$ and set $l \defeq \floor*{\frac{k}{2^{m-n}}}$. Then
+\[ 2^{m-n}l = 2^{m-n}\floor*{\frac{k}{2^{m-n}}} \leq k \leq 2^m, \]
+so $l \leq 2^m2^{n-m} = 2^n$.
+
+Now take $m,n\in \N$. WLOG we may set $n\leq m$. Then we calculate
+\begin{align*}
+|x_n - x_m| &= \Big|\bigvee_{k=0}^{2^n} h\Big(\frac{2\pi k}{2^n}\Big) - \bigvee_{k=0}^{2^m} h\Big(\frac{2\pi k}{2^m}\Big)\Big| \\
+&= \Big|\bigvee_{k=0}^{2^m} h\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}\Big) - \bigvee_{k=0}^{2^m} h\Big(\frac{2\pi k}{2^m}\Big)\Big| \\
+&\leq \bigvee_{k=0}^{2^m}\Big| h\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}\Big) - h\Big(\frac{2\pi k}{2^m}\Big)\Big| \\
+&\leq \bigvee_{k=0}^{2^m}d\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}, \frac{2\pi k}{2^m}\Big)\big(|x| + |y|\big) \\
+&\leq d\Big(0,\frac{2\pi}{2^n}\Big)\big(|x|+|y|\big),
+\end{align*}
+where we have used \ref{differenceOfSupremaLessThanSupremumOfDifferences}, \ref{extremaScalarProduct} (together with the assumption that $V$ is Archimedean) and
+\[ \frac{2\pi k}{2^m} - \frac{2\pi}{2^n} = \frac{2\pi}{2^n}\Big(\frac{k}{2^{m-n}} - 1\Big) \leq \frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}} \leq \frac{2\pi}{2^m}, \]
+so
+\[ d\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}, \frac{2\pi k}{2^m}\Big) \leq d\Big(\frac{2\pi k}{2^m} - \frac{2\pi}{2^n}, \frac{2\pi k}{2^m}\Big) = d\Big(0, \frac{2\pi}{2^n}\Big). \]
+Thus $p_{S_{|x|+|y|}}(x_n - x_m) \leq d\Big(0,\frac{2\pi}{2^n}\Big)$ by \ref{ballsInRieszUniformities}, which implies that $\seq{x_n}$ is $(|x|+|y|)$-Cauchy.
+Since $V$ is uniformly complete, it has a limit $x$. By \ref{OrderConvergenceWeakerThenUniformConvergenceArchimedeanRieszSpace}, and the fact that $V$ is Archimedean, $\seq{x_n}$ also converges to $x$ in the order convergence. Thus
+\[ x = \bigvee_{n\in \N}x_n = \bigvee \setbuilder{h\Big(\frac{2\pi k}{2^n}\Big)}{k,n\in\N, k\leq n^n} \]
+by \ref{netMonotoneConvergence}. It is now enough to show that $x$ is an upper bound of $\setbuilder{h(\theta)}{\theta\in S^1}$.
+
+Take arbitrary $\theta\in S^1$. Now $\setbuilder{\frac{2\pi k}{2^n}}{k,n\in\N, k\leq n^n}$ is dense in $S^1$, so there exists $F\in \powerfilters\setbuilder{\frac{2\pi k}{2^n}}{k,n\in\N, k\leq n^n}$ such that $F\to \theta$. Since $h$ is uniformly continuous, from \ref{modulusConstructionLemma},  we have $\upset h^{\imf\imf}(F) \to h(\theta)$, both both in the uniform convergence, and, from \ref{OrderConvergenceWeakerThenUniformConvergenceArchimedeanRieszSpace}, in the order convergence. Since the order convergence preserves weak order \ref{orderConvergenceCompatibleWeakOrder}, we have that $\upset h^{\imf\imf}(F) \leq_w \pfilter{x}$ implies $h(\theta) \leq x$. Since $\theta$ was chosen arbitrarily, we have that $x$ is an upper bound.
+\end{proof}
+
+\subsection{The ordering}
+\begin{definition}
+Let $V+iV$ be a complex Riesz space. Then we define the ordering on $V+iV$ by setting the positive cone to be $(V+iV)^+ \defeq V^++i\{0\}$.
+\end{definition}
+TODO: does this work? Compatibility with modulus? Why not for all complexified Riesz spaces?
 
 
 \chapter{Some results and applications}

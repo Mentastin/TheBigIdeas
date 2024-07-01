@@ -1958,8 +1958,8 @@ Let $(\Omega, \mathcal{A}, \mu)$ be a measure space and let $f,g:\Omega\to[0,+\i
 
 (2) This follows from $f\cdot\chi_{E_1}\leq f\cdot\chi_{E_2}$ and \ref{simpleIntegralOverSubset}.
 
-(3) That the sequence $(\int_\Omega f_n\diff{\mu})_n$ is increasing follows from point 1. For increasing sequences the limits are suprema, by monotone convergence \ref{sequenceMonotoneConvergence}. Also, for all $m\in\N$, we have $f_m\leq\sup_{n\in\N}f_n$, which implies, by point 1., that $\int_\Omega f_m\diff{\mu}\leq \int_\Omega \sup_{n\in\N}f_n\diff{\mu}$. So
-\[ \lim_{n\to\infty}\int_\Omega f_n\diff{\mu} = \sup_{n\in\N}\int_\Omega f_n\diff{\mu} \leq \int_\Omega \sup_{n\in\N}f_n\diff{\mu} = \int_\Omega \lim_{n\to\infty}f_n\diff{\mu}. \]
+(3) That the sequence $(\int_\Omega f_n\diff{\mu})_n$ is increasing follows from point 1. For increasing sequences the limits are suprema, by monotone convergence \ref{netMonotoneConvergence}. Also, for all $m\in\N$, we have $f_m\leq\sup_{n\in\N}f_n$, which implies, by point 1., that $\int_\Omega f_m\diff{\mu}\leq \int_\Omega \sup_{n\in\N}f_n\diff{\mu}$. So
+\[ \sup_{n\in\N}\int_\Omega f_n\diff{\mu} \leq \int_\Omega \sup_{n\in\N}f_n\diff{\mu} = \int_\Omega \lim_{n\to\infty}f_n\diff{\mu}. \]
 For the other inequality, it is enough to prove that $c\int_\Omega s\diff{\mu} \leq \lim_{n\to\infty}\int_\Omega f_n\diff{\mu}$ for all $0<c<1$ and $s\in\SF(\Omega,[0,+\infty[)$ such that $s\leq f$. Fix such a $c$ and $s = \sum_{i=1}^k\lambda_i\chi_{A_i}$. Consider the sets
 \[ E_n = \setbuilder{x\in\Omega}{cs(x)\leq f_n(x)} = \bigcup_{i=1}^k \left(f^{-1}_n[\,[c\lambda_i, +\infty]\,]\cap A_i\right). \]
 Then $(E_n)$ is an increasing sequence in $\mathcal{A}$ with $\Omega= \bigcup_{n\in\N}E_n$ and
@@ -1967,6 +1967,9 @@ Then $(E_n)$ is an increasing sequence in $\mathcal{A}$ with $\Omega= \bigcup_{n
 by \ref{integralContinuousInDomain}. Also 
 \[ \int_{E_n} cs\diff{\mu} \leq \int_{E_n} f_n\diff{\mu} \leq \int_{\Omega} f_n\diff{\mu} \]
 by the previous points and so the result follows from the fact that limits preserve inequalities, \ref{limitPreservesInequality}.
+
+Thus, by \ref{netMonotoneConvergence}, we have
+\[ \lim_{n\to\infty}\int_\Omega f_n\diff{\mu} = \sup_{n\in\N}\int_\Omega f_n\diff{\mu} = \int_\Omega \lim_{n\to\infty}f_n\diff{\mu}. \]
 
 (4) Take sequences $(s_n)$ and $(t_n)$ of positive measurable step functions
 that increase pointwise to $f$ and $g$, respectively. Then $cs_n+t_n$ converges pointwise to $cf+g$ by the linearity of the limit and
@@ -4640,9 +4643,28 @@ We have
 by \ref{functionPropertiesFromIntegral} and the dominated convergence theorem \ref{dominatedConvergence}. Since we are considering the limit $\alpha \to 0$, we can take $\beta$ arbitrarily small, and thus $\int_\Omega[f \leq \beta]f^p\diff{\mu}$ becomes arbitrarily small and we have $\lim_{\alpha \to 0}\alpha^p D_f(\alpha) = 0$.
 \end{proof}
 
-\subsection{Decreasing rearrangements}
+\subsection{Majorisation}
+\subsubsection{Integral comparison on the line}
 \begin{definition}
-Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \R$ a measurable function. The \udef{decreasing rearrangement} of $f$ is the function
+The \udef{integral ordering} $\leq_I$ on $\mathcal{L}^1(\R^+,\R)$ is defined by
+\[ f \leq_I g \quad \defequiv \quad \begin{cases} 
+\int_0^\infty f(s) \diff{s} = \int_0^\infty g(s) \diff{s} \\
+\forall x\in\R^+: \; \int_0^x f(s) \diff{s} \leq \int_0^x g(s) \diff{s}.
+\end{cases} \]
+The \udef{weak integral ordering} $\leq_{wI}$ on $\mathcal{L}^1(\R^+,\R)$ is defined by
+\[ f \leq_{wI} g \quad \defequiv \quad \forall x\in\R^+: \; \int_0^x f(s) \diff{s} \leq \int_0^x g(s) \diff{s}. \]
+\end{definition}
+
+\begin{proposition}
+The space $\mathcal{L}^1(\R^+,\R)$ equipped with the integral ordering is a Riesz space.
+\end{proposition}
+\begin{proof}
+TODO!
+\end{proof}
+
+\subsubsection{Decreasing rearrangements}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space and $f: \Omega\to \R^+$ a positive measurable function. The \udef{decreasing rearrangement} of $f$ is the function
 \[ \decRearrange{f}: \overline{\R^+}\to \overline{\R^+}: t \mapsto \inf\setbuilder{\alpha > 0}{D_f(\alpha)\leq t} = \inf D_f^{\preimf}\big(\interval{0,t}\big).  \]
 \end{definition}
 
@@ -4662,13 +4684,28 @@ Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space, $f: \Omega\to \overlin
 (1) We have $t\in D_f^\preimf\big(\interval{0,D_f(t)}\big)$, so
 \[ \decRearrange{f}\big(D_f(t)\big) = \inf D_f^\preimf\big(\interval{0,D_f(t)}\big)\leq \inf\{t\} = t. \]
 
-(2)
+(2) TODO
 
 (3) We calculate
 \[ s < \decRearrange{f}(s) \iff s< \inf D_f^{\preimf}\big(\interval{0,t}\big) \iff s\notin D_f^{\preimf}\big(\interval{0,t}\big) \iff D_f(s) \notin \interval{0,t} \iff t < D_f(s), \]
 where we have used the fact that $D_f^{\preimf}\big(\interval{0,t}\big)$ is upwards closed and topologically closed.
 \end{proof}
 
+\begin{proposition}
+$\norm{f}_p = \norm{\decRearrange{f}}_p$.
+\end{proposition}
+
+\begin{theorem}[Hardy-Littlewood inequality]
+\[ \int_{X}|fg|\diff{\mu} \leq \int_{0}^{\infty}\decRearrange{|f|}(t)\decRearrange{|g|}(t)\diff{t}. \]
+\end{theorem}
+
+\subsubsection{Majorisation}
+\begin{definition}
+Let $\sSet{\Omega, \mathcal{A}, \mu}$ be a measure space. We define the \udef{majorisation relation} $\prec$ on $\mathcal{L}^1(\Omega, \mu)$ by
+\[ f \prec g \quad\defequiv\quad \decRearrange{|f|} \leq_I \decRearrange{|g|} \]
+and the \udef{weak majorisation relation} $\prec_w$ on $\mathcal{L}^1(\Omega, \mu)$ by
+\[ f \prec_w g \quad\defequiv\quad \decRearrange{|f|} \leq_{wI} \decRearrange{|g|}. \]
+\end{definition}
 
 \subsection{Weak $L^p(X,\mu)$ spaces}
 \begin{definition}
