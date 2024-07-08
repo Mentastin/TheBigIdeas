@@ -559,7 +559,7 @@ Let $L \in \Lin(V,W)$. The \udef{image} or \udef{range} of $L$ is the set of vec
 \[ \im(L) = \setbuilder{L(v)}{v\in V}. \]
 \end{definition}
 
-\begin{lemma}
+\begin{lemma} \label{rangeSubspace}
 The range of $L\in \Lin(V,W)$ is a subspace of $W$.
 \end{lemma}
 \begin{proof}
@@ -918,7 +918,7 @@ Point (d) follows immediately from (c). The converse follows from $P(TP) = P(PT)
 Let $V$ be a vector space and $T$ an operator on $V$. Then $T$ is called \udef{irreducible} if $V$ is irreducible w.r.t. $T$.
 \end{definition}
 
-\subsection{antilinear maps}
+\subsection{Antilinear maps}
 \begin{definition}
 Let $\sSet{\C, V, +}$ and $\sSet{\C, W, +}$ be complex vector spaces. A function $A: V\to W$ is called \udef{antilinear} (or \udef{conjugate-linear}) if
 \begin{itemize}
@@ -2253,62 +2253,104 @@ The complexification of $V$ can also be obtained by equipping $V\oplus V$ with i
 \begin{definition}
 Let $V$ be a complex vector space. A \udef{real structure} on $V$ is an antilinear involution $\sigma: V\to V$.
 
-We define the \udef{real subspace} of $V$ w.r.t.\ $\sigma$ as
-\[ \Re_\sigma(V) = \setbuilder{v\in V}{\sigma(v) = v} \]
-and the \udef{imaginary subspace} of $V$ w.r.t.\ $\sigma$ as
-\[ \Im_\sigma(V) = \setbuilder{v\in V}{\sigma(v) = -v}. \]
+We define the functions
+\begin{align*}
+&\Re_\sigma: V\to \im(\Re_\sigma): v \mapsto \frac{v+\sigma(v)}{2} \\
+&\Im_\sigma: V\to \im(\Im_\sigma): v \mapsto \frac{v-\sigma(v)}{2}
+\end{align*}
+and call $\Re_\sigma(v)$ the \udef{real part} of $v$ w.r.t.\ $\sigma$ and $\Im_\sigma(v)$ the \udef{imaginary part} of $v$ w.r.t.\ $\sigma$.
 \end{definition}
 Involution means that $\sigma^2 = \id_V$.
 
-The real and imaginary subspaces are not subspaces of $V$, but they are subspaces of $V_\R$:
-\begin{lemma}
-Let $V$ be a complex vector space with real structure $\sigma$. The real subspace $\Re_\sigma(V)$ and imaginary subspace $\Im_\sigma(V)$ are both subspaces of $V_\R$.
-\end{lemma}
-We write $\Re_\sigma(V)_\R$ and $\Im_\sigma(V)_\R$ when we want to emphasise their role as real subspaces of $V_\R$.
+\begin{proposition} \label{realImaginaryPartsProjectors}
+Let $V$ be a complex vector space with real structure $\sigma$. Then
+\begin{enumerate}
+\item $\Re_\sigma + \Im_\sigma = \id_V$;
+\item $\Re_\sigma$ and $\Im_\sigma$ are projectors on $V_\R$.
+\end{enumerate}
+\end{proposition}
 \begin{proof}
-Take $u,v \in \Re_\sigma(V)$ and $a\in \R$. Then $\sigma(u+av) = \sigma(u)+ a\sigma(v) = u+av$.
+(1) Take arbitrary $v\in V$. Then
+\[ \id_V(v) = v = \frac{v+\sigma(v)}{2} + \frac{v-\sigma(v)}{2} = \Re_\sigma(v) + \Im_\sigma(v). \]
 
-Now take $u,v \in \Im_\sigma(V)$ and $a\in \R$. Then $\sigma(u+av) = \sigma(u)+ a\sigma(v) = -u-av = -(u+av)$.
+(2) Since $\sigma$ is real-linear, see \ref{complexLinearAntilinearRealLinear}, it is clear $\Re_\sigma$ and $i\Im_\sigma$ are real-linear by construction. We just need to check that they are idempotent. Take arbitrary $v\in V$. Then
+\begin{align*}
+\Re_\sigma^2(v) &= \frac{\Re_\sigma(v)+ \sigma\big(\Re_\sigma(v)\big)}{2} \\
+&= \frac{\frac{v+\sigma(v)}{2}+ \sigma\big(\frac{v+\sigma(v)}{2}\big)}{2} \\
+&= \frac{\frac{v+\sigma(v)}{2}+ \frac{\sigma(v)+v}{2}}{2} \\
+&= \frac{v+\sigma(v)}{2} = \Re_\sigma(v).
+\end{align*}
+The idempotency of $\Im_\sigma$ follows from \ref{projectorKernelImageLemma}.
 \end{proof}
 
+\begin{proposition} \label{descriptionRealImaginarySubspaces}
+Let $V$ be a complex vector space with real structure $\sigma$. Then
+\begin{align*}
+\Re^\imf_\sigma(V) &= \setbuilder{v\in V}{\sigma(v) = v} \\
+\Im^\imf_\sigma(V) &= \setbuilder{v\in V}{\sigma(v) = -v}
+\end{align*}
+and these sets are both subspaces of $V_\R$. In particular, $\Re^\imf_\sigma(V) \cap \Im^\imf_\sigma(V) = \{0\}$.
+\end{proposition}
+Note that they are subspaces of $V_\R$, not $V$. I.e.\ they are real subspaces, not complex ones.
+
+We have that $\Re_\sigma$ is the projector on $\Re_\sigma^\imf(V)$ along $\Im_\sigma^\imf(V)$.
+\begin{proof}
+The fact that $\Re^\imf_\sigma(V)$ and $\Im^\imf_\sigma(V)$ are subspaces of $V_\R$ follows from \ref{realImaginaryPartsProjectors} and \ref{rangeSubspace}.
+
+Using \ref{realImaginaryPartsProjectors} and \ref{projectorKernelImageLemma}, we have
+\begin{align*}
+v \in \Re^\imf_\sigma(V) &\iff v = \Re_\sigma(v) \\
+&\iff v = \frac{v+\sigma(v)}{2} \\
+&\iff 2v = v+\sigma(v) \\
+&\iff v = \sigma(v).
+\end{align*}
+Similarly,
+\begin{align*}
+v \in \Im^\imf_\sigma(V) &\iff v = \Im_\sigma(v) \\
+&\iff v = \frac{v-\sigma(v)}{2} \\
+&\iff 2v = v-\sigma(v) \\
+&\iff v = -\sigma(v).
+\end{align*}
+
+Finally, take $v\in \Re^\imf_\sigma(V) \cap \Im^\imf_\sigma(V)$. Then $v = \sigma(v) = -v$, so $v = 0$.
+\end{proof}
+
+\begin{definition}
+Let $V$ be a complex vector space with real structure $\sigma$.
+
+We define the \udef{real subspace} of $V$ w.r.t.\ $\sigma$ as
+\[ \Re_\sigma^\imf(V) = \setbuilder{v\in V}{\sigma(v) = v} \]
+and the \udef{imaginary subspace} of $V$ w.r.t.\ $\sigma$ as
+\[ \Im_\sigma^\imf(V) = \setbuilder{v\in V}{\sigma(v) = -v}. \]
+\end{definition}
 
 \begin{lemma} \label{realImaginarySubspacesIsomorphic}
 Let $V$ be a complex vector space with real structure $\sigma$. Then the function
-\[ M: \Re_\sigma(V) \to \Im_\sigma(V): x \mapsto ix \]
+\[ M: \Re_\sigma^\imf(V) \to \Im_\sigma^\imf(V): x \mapsto ix \]
 is a real-linear isomorphism, with inverse
-\[ M^{-1}: \Im_\sigma(V) \to \Re_\sigma(V): x \mapsto -ix. \]
+\[ M^{-1}: \Im_\sigma^\imf(V) \to \Re_\sigma^\imf(V): x \mapsto -ix. \]
 \end{lemma}
 \begin{proof}
-Both functions are clearly real-linear. We show that it is well-defined. Take $x\in \Re_\sigma(V)$. Then
+Both functions are clearly real-linear and clearly have each other as their inverses. We show that they are well-defined. Take $x\in \Re_\sigma^\imf(V)$. Then, using \ref{descriptionRealImaginarySubspaces},
 \[ ix = i\sigma(x) = \sigma(-ix) = -\sigma(ix), \]
-which means that $ix\in \Im_\sigma(V)$.
+which means that $ix\in \Im_\sigma^\imf(V)$.
 
-Now we show that the proposed inverse is well-defined. Take $y\in \Im_\sigma(V)$. Then
+Now we show that the proposed inverse is well-defined. Take $y\in \Im_\sigma^\imf(V)$. Then, using \ref{descriptionRealImaginarySubspaces},
 \[ -iy = i\sigma(y) = \sigma(-iy), \]
-so $-iy \in \Re_\sigma(V)$.
-
-Finally we calculate, for $x\in \Re_\sigma(V)$,
-\[ (M^{-1}\circ M)(x) = M^{-1}(ix) = -iix = x, \]
-and for $y\in \Im_\sigma(V)$,
-\[ (M\circ M^{-1})(y) = M(-iy) = -iiy = y, \]
-so $M$ is an isomorphism.
+so $-iy \in \Re_\sigma^\imf(V)$.
 \end{proof}
 
 \begin{proposition}
 Let $V$ be a complex vector space with real structure $\sigma$. Then the function
-\[ N: \Re_\sigma(V)_\R\oplus i \Re_\sigma(V)_\R \to V: x\oplus iy \mapsto x+iy \]
+\[ N: \Re_\sigma^\imf(V)_\R\oplus i \Re_\sigma^\imf(V)_\R \to V: x\oplus iy \mapsto x+iy \]
 is a complex-linear isomorphism with inverse
-\[ N^{-1}: V\to \Re_\sigma(V)_\R\oplus i \Re_\sigma(V)_\R: v \mapsto \frac{v+\sigma(v)}{2} \oplus i(-i)\frac{v-\sigma(v)}{2} \]
+\[ N^{-1}: V\to \Re_\sigma^\imf(V)_\R\oplus i \Re_\sigma^\imf(V)_\R: v \mapsto \Re_\sigma(v) \oplus i(-i)\Im_\sigma(v). \]
 \end{proposition}
 In other words, we can recover the original complex space by complexifying the real subspace.
 
 We write the $i(-i)$ the definition of $N^{-1}$, i.e.\ we do not simplify it to $1$, because the first $i$ is purely formal. The function $N$ turns this purely formal $i$ into an actual imaginary unit $i$.
 \begin{proof}
-We first show that $N^{-1}$ is well-defined. Take $v\in V$. Then
-\[ \sigma\Big(\frac{v+\sigma(v)}{2}\Big) = \frac{\sigma(v)+\sigma^2(v)}{2} = \frac{\sigma(v)+v}{2} = \frac{v+\sigma(v)}{2}, \]
-so $\frac{v+\sigma(v)}{2}\in \Re_\sigma(V)$. Also
-\[ \sigma\Big(\frac{v-\sigma(v)}{2}\Big) = \frac{\sigma(v)-\sigma^2(v)}{2} = \frac{\sigma(v)-v}{2} = - \frac{v-\sigma(v)}{2}, \]
-so $\frac{v-\sigma(v)}{2}\in \Im_\sigma(V)$ and $(-i)\frac{v-\sigma(v)}{2} \in \Re_\sigma(V)$ by \ref{realImaginarySubspacesIsomorphic}.
+We first observe that $N^{-1}$ is well-defined due to \ref{realImaginarySubspacesIsomorphic}.
 
 Next we check that $N$ is complex-linear. It is clear that it is real-linear, so we just need to check that it commutes with $i$, by \ref{complexLinearAntilinearRealLinear}. Indeed, take arbitrary $x\oplus iy\in \Re_\sigma(V)_\R\oplus i \Re_\sigma(V)_\R$. Then
 \[ N\big(i(x\oplus iy)\big) = N\big((-y)\oplus ix\big) = -y+ix = i(x+iy) = iN(x\oplus iy). \]
@@ -2409,10 +2451,11 @@ u \\ w
 \end{pmatrix} = \begin{pmatrix}
 u \\ -w
 \end{pmatrix} \]
-is a real structure on $(W\oplus W)_J$. We have
-\[ \Re_\sigma\big((W\oplus W)_J\big) = W\oplus\{0\} \quad\subseteq\quad W\oplus W \]
-and
-\[ \Im_\sigma\big((W\oplus W)_J\big) = \{0\}\oplus W \quad\subseteq\quad W\oplus W. \]
+is a real structure on $(W\oplus W)_J$. We have, for all $(u,w)\in W\oplus W$,
+\begin{align*}
+\Re_\sigma(u,w) &= (u,0) \\
+\Im_\sigma(u,w) &= (0,w).
+\end{align*}
 \end{lemma}
 We call this real structure the \udef{canonical real structure} on $(W\oplus W)_J$.
 \begin{proof}
@@ -2437,7 +2480,10 @@ Clearly $\sigma$ is a real-linear involution. To show that it is a real structur
 \mathbb{0} & -\id_W
 \end{pmatrix} = -J\circ \sigma.
 \end{align*}
-The identification of the real and imaginary subspaces is straightforward.
+Finally, we calculate the real and imaginary parts:
+\[ \Re_\sigma(u,w) = \frac{(u,w)+\sigma(u,w)}{2} = \frac{(u,w)+(u,-w)}{2} = (u,0) \]
+and
+\[ \Im_\sigma(u,w) = \frac{(u,w)-\sigma(u,w)}{2} = \frac{(u,w)-(u,-w)}{2} = (0,w). \]
 \end{proof}
 
 
@@ -3037,6 +3083,8 @@ Let $V$ be an Archimedean vector poset, $A\subseteq V^+$ and $S\subseteq \R^+$. 
 \end{enumerate}
 \end{lemma}
 In fact any of these points is equivalent to $V$ being Archimedean.
+
+If $S$ is a singleton, we do not need $V$ to be Archimedean, see \ref{scalarMultipleOrderHomomorphism}.
 \begin{proof}
 (1) Set $\lambda \defeq \bigvee S$ and $x \defeq \bigvee A$. First suppose $\lambda = 0$. Then $S = \{0\}$, so $S\cdot A = \{0\}$ and $0 = \bigvee(S\cdot A) = 0\cdot \bigvee A = \bigvee S \cdot \bigvee A$.
 
@@ -4252,7 +4300,7 @@ Let $V$ be a Riesz space. We say that
 \end{itemize}
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{DedekindCompleteProjectionPropertieArchimedean}
 Let $V$ be a Riesz space. Then the following implications hold:
 
 \[ \begin{tikzcd}[column sep=0]
@@ -4338,8 +4386,25 @@ First assume $p\in C_u$. Clearly $p\in B_p$. Also $p\perp_r(e-p)$, so $e-p \in \
 Now assume $p = P_v(u)$ for some $v\in V$. Since $P_v$ is the band projector of a projection band, we have $p = P_v(u) \in B_v$ and $u-p = (\id_V- P_v)(u) \in B_v^{\perp_r}$. Thus $p$ and $u-p$ are disjoint, meaning $0 = |p|\wedge |u-p| = u\wedge (u-p)$.
 \end{proof}
 
-\section{Order convergence in ordered vector spaces}
 
+\section{Convergences on ordered vector spaces}
+\begin{definition}
+Let $\sSet{V, \leq}$ be a partially ordered vector space and $\xi$ a convergence on $V$. We call $\xi$ \udef{compatible} with $\sSet{V,\leq}$ if $\xi$ is compatible with the weak order.
+\end{definition}
+
+\begin{proposition}
+Let $\sSet{V, \leq}$ be a partially ordered vector space and $\xi$ a group convergence on $V$. Then $\xi$ is compatible with $V$ \textup{if and only if} $V^+$ is $\xi$-closed.
+\end{proposition}
+TODO: generalise for partially ordered groups.
+\begin{proof}
+First suppose $\xi$ is compatible with $V$. Then \ref{principalUpDownSetsClosed} implies that $V^+$ is closed.
+
+Now assume $V^+$ is closed. Take arbitrary $F,G\in \powerfilters(V)$ such that $F\leq_w G$, $F\to x$ and $G\to y$. Then $0\leq_w G-F$.
+
+TODO!
+\end{proof}
+
+\subsection{Order convergence in ordered vector spaces}
 \begin{proposition} \label{continuityOrderConvergenceOrderedVectorSpaces}
 Let $\sSet{V, \leq}$ be a partially ordered vector space equipped with the order convergence. Then
 \begin{enumerate}
@@ -4385,7 +4450,7 @@ Suppose $B\in G$ such that $B\subseteq \interval{0,b}$. Then there exists $A$ su
 For the direction $\Rightarrow$, we use point (1). Take arbitrary $A+B\in F + G$. Then $A\subseteq \downset (A+B)$ and so $F \overset{\mathfrak{o}}{\longrightarrow} 0$. The argument for $G \overset{\mathfrak{o}}{\longrightarrow} 0$ is similar.
 \end{proof}
 
-\subsection{Order convergence in Riesz spaces}
+\subsubsection{Order convergence in Riesz spaces}
 
 \begin{lemma} \label{RieszSpaceOperationsOrderContinuous}
 Let $V$ be a Riesz space equipped with the order convergence. Then
@@ -4638,6 +4703,14 @@ so $G;H\in \mathcal{U}_{|u|+|v|} \subseteq \bigcup_{v\in V} \mathcal{U}_v$.
 The second equality is immediate because each $\mathcal{U}_v$ is topological.
 \end{proof}
 
+\begin{proposition} \label{DedekindSigmaCompleteRieszSpaceUniformlyComplete}
+Let $V$ be a Dedekind $\sigma$-complete Riesz space. Then $V$ is uniformly complete.
+\end{proposition}
+\begin{proof}
+Let $F\in \powerfilters(V)$ be uniformly Cauchy. Then it is $v$-Cauchy for some $v\in V$. Since $\uniformity_v$ is pseudometric, 
+
+TODO! p. 69 of \cite{zaanen_introOperatorTheoryRieszSpaces}
+\end{proof}
 
 \subsection{The Daniell integral}
 \begin{definition}
@@ -4690,67 +4763,121 @@ Next, suppose $F$ converges isotonically to $v$ and $F\subseteq G$, then there e
 We have a similar argument for antitonic convergence. For monotonic convergence, we use \ref{latticeConvergences}.
 \end{proof}
 
-\section{Complexification of Riesz spaces}
+\section{Complex Riesz spaces}
 \subsection{The modulus}
 \begin{definition}
-Let $V$ be a Riesz space and $V+iV$ its complexification. For all $z\in V+iV$, we define the \udef{modulus}
-\[ |z| \defeq \sup_{\theta\in S^1} \Re(ze^{-i\theta}), \]
+Let $V$ be a complex vector space with real structure $\sigma$ and ordering on $\Re^\imf_\sigma(V)$ that makes it a Riesz space. For all $z\in V$, we define the \udef{modulus}
+\[ |z| \defeq \sup_{\theta\in S^1} \Re(ze^{i\theta}), \]
 if this supremum exists.
 
-If $|z|$ exists for all $z\in V+iV$, we call $V+iV$ a \udef{complex Riesz space}.
+If $|z|$ exists for all $z\in V$, we call $V$ a \udef{complex Riesz space}.
 \end{definition}
-The condition that ``$V$ be a Riesz space with complexification $V+iV$'' is weaker than the condition that ``$V$ be a complex Riesz space''.
+If $W$ is a real Riesz space, then the complexification $W+iW$ is naturally a complex vector space with a real structure such that $\Re^\imf(V) = W+i\{0\}$ has an ordering that makes it a Riesz space. The space $W+iW$ is not necessarily a complex Riesz space.
 
-\begin{lemma}
-Let $V$ be a Riesz space with complexification $V+iV$ and $x+iy \in V + iV$. Then
-\begin{enumerate}
-\item $|x+i0|$ exists and $|x+i0| = |x|$;
-\item 
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
+We use the same notation for the modulus as for the absolute value. We show in \ref{modulusTriangleInequalities} that they coincide if they are both defined, so this does not lead to confusion.
 
 \begin{lemma} \label{modulusConstructionLemma}
-Let $V$ be a Riesz space with complexification $V+iV$ and $x+iy \in V+iV$. Consider the function
-\[ h: S^1 \to V: \theta\mapsto \Re\big((x+iy)e^{-i\theta}\big). \]
-Suppose $V$ is equipped with the Riesz uniformity $\uniformity_{|x|+|y|}$. Then
+Let $V$ be a complex vector space with real structure $\sigma$ and ordering on $\Re^\imf_\sigma(V)$ that makes it a Riesz space.
+Let $z\in V$ and consider the function
+\[ h: S^1 \to V: \theta\mapsto \Re(ze^{i\theta}). \]
+Suppose $\Re^\imf(V)$ is equipped with the Riesz uniformity $\uniformity_{|\Re(z)|+|i\Im(z)|}$. Then
 \begin{enumerate}
-\item $h(\theta) = x\cos\theta + y\sin\theta$;
-\item $\big|h(\theta_1) - h(\theta_2)\big| \leq d(\theta_1, \theta_2)\big(|x|+ |y|\big)$ for all $\theta_1,\theta_2 \in S^1$;
+\item $h(\theta) = \cos\theta\Re(z) + i\sin\theta\Im(z)$;
+\item $\Re(v), i\Im(v), -\Re(v), -i\Im(v) \in \setbuilder{\Re(ve^{i\theta})}{\theta\in S^1}$;
+\item $\big|h(\theta_1) - h(\theta_2)\big| \leq d(\theta_1, \theta_2)\big(|\Re(z)|+|i\Im(z)|\big)$ for all $\theta_1,\theta_2 \in S^1$;
 \item $h$ is Lipschitz continuous with Lipschitz constant $1$.
 \end{enumerate}
 \end{lemma}
-Note that Lipschitz makes sense because $\uniformity_{|x|+|y|}$ is a pseudometric uniformity. Comparing with \ref{ballsInRieszUniformities}, we see that (3) is a weaker statement than (2), but they are equivalent in Archimedean Riesz spaces.
+Note that Lipschitz makes sense because $\uniformity_{|\Re(z)|+|i\Im(z)|}$ is a pseudometric uniformity. Comparing with \ref{ballsInRieszUniformities}, we see that (4) is a weaker statement than (3), but they are equivalent in Archimedean Riesz spaces.
 \begin{proof}
-(1) We calculate
+(1) We calculate, using \ref{realImaginaryPartsProjectors},
 \begin{align*}
-(x+iy)e^{-i\theta} &= (\cos\theta - i\sin\theta)(x+iy) \\
-&= \cos\theta x + \sin\theta y + i\big(\cos\theta y - \sin\theta x\big).
+ze^{i\theta} &= (\cos\theta + i\sin\theta)\big(\Re(z) + \Im(z)\big) \\
+&= \cos\theta \Re(z) + i\sin\theta \Im(z) + \cos\theta \Im(z) + i\sin\theta \Re(z).
 \end{align*}
-Taking the real part yields the proof.
+From \ref{realImaginarySubspacesIsomorphic}, we have $\cos\theta \Re(z)\in \Re^\imf(V)$ and $i\sin\theta \Im(z)\in \Re^\imf(V)$, while $\cos\theta \Im(z) \in \Im^\imf(V)$ and $i\sin\theta \Re(z) \in \Im^\imf(V)$. Since $\Re = \id_V - \Im$, from \ref{realImaginaryPartsProjectors}, we have $\Re(ze^{i\theta}) = \cos\theta \Re(z) + i\sin\theta \Im(z)$.
 
-(2) Take arbitrary $\theta_1, \theta_2 \in S^1$ and calculate
+(2) This follows from (1) by plugging in $\theta = 0, \pi/2, \pi, 3\pi/2$.
+
+(3) Take arbitrary $\theta_1, \theta_2 \in S^1$ and calculate
 \begin{align*}
-\big|h(\theta_1) - h(\theta_2)\big| &= |x\cos\theta_1 +y\sin\theta_1 - x\cos\theta_2 - y\sin\theta_2| \\
-&\leq |\cos\theta_1 - \cos\theta_2|\,|x| + |\sin\theta_1 - \sin\theta_2|\,|y| \\
-&\leq d(\theta_1, \theta_2)\big(|x|+ |y|\big),
+\big|h(\theta_1) - h(\theta_2)\big| &= \big|\cos\theta_1\Re(z) + i\sin\theta_1\Im(z) - \cos\theta_2\Re(z) - i\sin\theta_2\Im(z)\big| \\
+&\leq |\cos\theta_1 - \cos\theta_2|\,|\Re(z)| + |\sin\theta_1 - \sin\theta_2|\,|i\Im(z)| \\
+&\leq d(\theta_1, \theta_2)\big(|\Re(z)|+ |i\Im(z)|\big),
 \end{align*}
 by TODO ref distance in $S^1$.
 
-(3) By \ref{ballsInRieszUniformities}, (2) implies $p_{S_{|x|+|y|}}\big(h(\theta_1) - h(\theta_2)\big) \leq d(\theta_1, \theta_2)$.
+(4) By \ref{ballsInRieszUniformities}, (3) implies $p_{S_{|\Re(z)|+ |i\Im(z)|}}\big(h(\theta_1) - h(\theta_2)\big) \leq d(\theta_1, \theta_2)$.
 \end{proof}
 
+\begin{lemma} \label{modulusTriangleInequalities}
+Let $V$ be a complex vector space with real structure $\sigma$ and ordering on $\Re^\imf_\sigma(V)$ that makes it a Riesz space. Let $v,w \in V$ and $x\in \Re^\imf(V)$. Then
+\begin{enumerate}
+\item the modulus $|x|$ exists and is equal to the absolute value;
+\item $|v|$ exists and $|v| = 0$ \textup{if and only if} $\Re(v) = 0 = \Im(v)$.
+\end{enumerate}
+Assuming the relevant moduli exist, we have
+\begin{enumerate} \setcounter{enumi}{2}
+\item $|\Re(v)| \vee |i\Im(v)| \leq |v| \leq |\Re(v)| + |i\Im(v)|$;
+\item $|v + w| \leq |v| + |w|$;
+\item $\big||v| - |w|\big| \leq |v - w|$.
+\end{enumerate}
+\end{lemma}
+Note that $|x|$ refers to the absolute value, while $|x+iy|$ refers to the modulus.
+\begin{proof}
+(1) We have, using \ref{modulusConstructionLemma},
+\[ \Re(xe^{-i\theta}) = \cos\theta\Re(x) + i\sin\theta\Im(x) = \cos\theta x \leq |\cos\theta x| = |\cos\theta|\,|x| \leq |x|,  \]
+where the vertical bars denote the absolute value. This implies that $|x|$ is an upper bound of $\setbuilder{\Re(xe^{-i\theta})}{\theta\in S^1}$. Suppose $w \in V$ is some other upper bound. Then $x,-x \leq w$, from \ref{modulusConstructionLemma}, so $|x| = x\vee(-x) \leq w$. Thus $|x|$ is indeed the least upper bound, which means that it is the modulus.
 
+(2) First assume $|v|$ exists and $|v| = 0$. We have $0\leq \big|\Re(v)\big| = \Re(v)\vee\big(-\Re(v)\big) \leq 0$, so $\Re(v) = 0$, from \ref{modulusConstructionLemma} and \ref{absoluteValue}. Similarly $i\Im(v) = 0$, which is equivalent to $\Im(v)$.
+
+Now assume $\Re(v) = 0 = \Im(v)$, so $v = \Re(v) + \Im(v) = 0$. Then $\Re(ve^{-i\theta}) = 0$ for all $\theta\in S^1$, which means that $0$ is the least upper bound.
+
+(3) From \ref{modulusConstructionLemma}, we have $|\Re(v)|\vee |i\Im(v)| = \Re(v)\vee\big(-\Re(v)\big) \vee \big(i\Im(v)\big) \vee\big(-i\Im(v)\big) \leq |v|$. We also have, using \ref{modulusConstructionLemma}, \ref{absoluteValue} and \ref{triangleInequalityRieszSpaces},
+\begin{align*}
+\Re(ve^{-i\theta}) &= \cos\theta\Re(v) + i\sin\theta\Im(v) \\
+&\leq \big|\cos\theta\Re(v) + i\sin\theta\Im(v)\big| \\
+&\leq |\cos\theta|\,|\Re(v)| + |\sin\theta|\,|i\Im(v)| \leq |\Re(v)| + |i\Im(v)|,
+\end{align*}
+so $|v| \leq |\Re(v)| + |i\Im(v)|$.
+
+(4) We calculate, using \ref{modulusConstructionLemma},
+\begin{align*}
+\big|v + w\big| &= \sup_{\theta\in S^1}\Big(\cos\theta\big(\Re(v+w)\big) + i\sin\theta\big(\Im(v+w)\big)\Big) \\
+&= \sup_{\theta\in S^1}\Big(\cos\theta\big(\Re(v)+\Re(w)\big) + i\sin\theta\big(\Im(v)+\Im(w)\big)\Big) \\
+&= \sup_{\theta\in S^1}\big(\cos\theta\Re(v) + i\sin\theta\Im(v)\big) + \big(\cos\theta\Re(w) + i\sin\theta\Im(w)\big) \\
+&\leq \sup_{\theta\in S^1}\big(\cos\theta\Re(v) + i\sin\theta\Im(v)\big) + \sup_{\varphi\in S^1}\big(\cos\varphi\Re(w) + i\sin\varphi\Im(w)\big) \\
+&= |v| + |w|.
+\end{align*}
+
+(5) TODO: reverse triangle equality for homogeneous functions on Riesz spaces??
+\end{proof}
+
+\begin{lemma} \label{scalarOutOfModulus}
+Let $V$ be a complex vector space with real structure $\sigma$ and ordering on $\Re^\imf_\sigma(V)$ that makes it a Riesz space. Let $v\in V$ be such that the modulus $|v|$ exists and $\lambda \in \C$. Then $|\lambda z|$ exists and $|\lambda z| = |\lambda|\,|z|$.
+\end{lemma}
+\begin{proof}
+We can write $\lambda = |\lambda|e^{i\varphi}$, so
+\begin{align*}
+|z| = \sup_{\theta\in S^1} \Re\big(\lambda ze^{i\theta}\big) &= \sup_{\theta\in S^1} \Re\big(|\lambda|e^{i\varphi} ze^{i\theta}\big) \\
+&= \sup_{\theta\in S^1} \Re\big(|\lambda|ze^{-i(\theta+\varphi)}\big) \\
+&= |\lambda|\sup_{\theta\in S^1} \Re\big(ze^{-i\theta}\big) = |\lambda|\, |z|,
+\end{align*}
+using \ref{scalarMultipleOrderHomomorphism}.
+\end{proof}
+
+\subsubsection{Disjoint elements of a complex Riesz space}
+TODO: mirrors discussion of disjoint elements of real Riesz space.
+
+\subsubsection{Sufficient conditions for complex Riesz space}
 \begin{proposition}
-Let $V$ be an Archimedean and uniformly complete Riesz space. Then $V+iV$ is a complex Riesz space.
+Let $V$ be a complex vector space with real structure $\sigma$ and ordering on $\Re^\imf_\sigma(V)$ that makes it a Riesz space. If $\Re^\imf_\sigma(V)$ is an Archimedean and uniformly complete Riesz space, then $V$ is a complex Riesz space.
 \end{proposition}
 \begin{proof}
-Take arbitrary $z = x+iy \in V+iV$ and consider the function $h$ of \ref{modulusConstructionLemma}.
-Define the sequence $\seq{x_n}$ in $V+iV$ by
+Take arbitrary $z\in V$ and consider the function $h$ of \ref{modulusConstructionLemma}.
+Define the sequence $\seq{x_n}$ in $\Re^\imf(V)$ by
 \[ x_n \defeq \bigvee_{k=0}^{2^n} h\Big(\frac{2\pi k}{2^n}\Big). \]
-This is monotonically increasing. We show that it is a $(|x|+|y|)$-Cauchy sequence.
+This is monotonically increasing. We show that it is a $\big(|\Re(v)| + |i\Im(v)|\big)$-Cauchy sequence.
 
 We observe that, for $m\geq n$, we have
 \[ \setbuilder{\floor*{\frac{k}{2^{m-n}}}\in \N}{k\in [0:2^m]} = \setbuilder{k\in \N}{k\in [0:2^n]}. \]
@@ -4765,26 +4892,28 @@ Now take $m,n\in \N$. WLOG we may set $n\leq m$. Then we calculate
 |x_n - x_m| &= \Big|\bigvee_{k=0}^{2^n} h\Big(\frac{2\pi k}{2^n}\Big) - \bigvee_{k=0}^{2^m} h\Big(\frac{2\pi k}{2^m}\Big)\Big| \\
 &= \Big|\bigvee_{k=0}^{2^m} h\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}\Big) - \bigvee_{k=0}^{2^m} h\Big(\frac{2\pi k}{2^m}\Big)\Big| \\
 &\leq \bigvee_{k=0}^{2^m}\Big| h\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}\Big) - h\Big(\frac{2\pi k}{2^m}\Big)\Big| \\
-&\leq \bigvee_{k=0}^{2^m}d\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}, \frac{2\pi k}{2^m}\Big)\big(|x| + |y|\big) \\
-&\leq d\Big(0,\frac{2\pi}{2^n}\Big)\big(|x|+|y|\big),
+&\leq \bigvee_{k=0}^{2^m}d\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}, \frac{2\pi k}{2^m}\Big)\big(|\Re(v)| + |i\Im(v)|\big) \\
+&\leq d\Big(0,\frac{2\pi}{2^n}\Big)\big(|\Re(v)| + |i\Im(v)|\big),
 \end{align*}
 where we have used \ref{differenceOfSupremaLessThanSupremumOfDifferences}, \ref{extremaScalarProduct} (together with the assumption that $V$ is Archimedean) and
 \[ \frac{2\pi k}{2^m} - \frac{2\pi}{2^n} = \frac{2\pi}{2^n}\Big(\frac{k}{2^{m-n}} - 1\Big) \leq \frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}} \leq \frac{2\pi}{2^m}, \]
 so
 \[ d\Big(\frac{2\pi}{2^n}\floor*{\frac{k}{2^{m-n}}}, \frac{2\pi k}{2^m}\Big) \leq d\Big(\frac{2\pi k}{2^m} - \frac{2\pi}{2^n}, \frac{2\pi k}{2^m}\Big) = d\Big(0, \frac{2\pi}{2^n}\Big). \]
-Thus $p_{S_{|x|+|y|}}(x_n - x_m) \leq d\Big(0,\frac{2\pi}{2^n}\Big)$ by \ref{ballsInRieszUniformities}, which implies that $\seq{x_n}$ is $(|x|+|y|)$-Cauchy.
+Thus $p_{S_{|x|+|y|}}(x_n - x_m) \leq d\Big(0,\frac{2\pi}{2^n}\Big)$ by \ref{ballsInRieszUniformities}, which implies that $\seq{x_n}$ is $\big(|\Re(v)| + |i\Im(v)|\big)$-Cauchy.
 Since $V$ is uniformly complete, it has a limit $x$. By \ref{OrderConvergenceWeakerThenUniformConvergenceArchimedeanRieszSpace}, and the fact that $V$ is Archimedean, $\seq{x_n}$ also converges to $x$ in the order convergence. Thus
 \[ x = \bigvee_{n\in \N}x_n = \bigvee \setbuilder{h\Big(\frac{2\pi k}{2^n}\Big)}{k,n\in\N, k\leq n^n} \]
 by \ref{netMonotoneConvergence}. It is now enough to show that $x$ is an upper bound of $\setbuilder{h(\theta)}{\theta\in S^1}$.
 
 Take arbitrary $\theta\in S^1$. Now $\setbuilder{\frac{2\pi k}{2^n}}{k,n\in\N, k\leq n^n}$ is dense in $S^1$, so there exists $F\in \powerfilters\setbuilder{\frac{2\pi k}{2^n}}{k,n\in\N, k\leq n^n}$ such that $F\to \theta$. Since $h$ is uniformly continuous, from \ref{modulusConstructionLemma},  we have $\upset h^{\imf\imf}(F) \to h(\theta)$, both both in the uniform convergence, and, from \ref{OrderConvergenceWeakerThenUniformConvergenceArchimedeanRieszSpace}, in the order convergence. Since the order convergence preserves weak order \ref{orderConvergenceCompatibleWeakOrder}, we have that $\upset h^{\imf\imf}(F) \leq_w \pfilter{x}$ implies $h(\theta) \leq x$. Since $\theta$ was chosen arbitrarily, we have that $x$ is an upper bound.
 \end{proof}
+\begin{corollary}
+Let $V$ be a complex vector space with real structure $\sigma$ and ordering on $\Re^\imf_\sigma(V)$ that makes it a Riesz space. If $\Re^\imf_\sigma(V)$ is a Dedekind $\sigma$-complete Riesz space, then $V$ is a complex Riesz space.
+\end{corollary}
+\begin{proof}
+This follows from \ref{DedekindSigmaCompleteRieszSpaceUniformlyComplete} and \ref{DedekindCompleteProjectionPropertieArchimedean}.
+\end{proof}
 
-\subsection{The ordering}
-\begin{definition}
-Let $V+iV$ be a complex Riesz space. Then we define the ordering on $V+iV$ by setting the positive cone to be $(V+iV)^+ \defeq V^++i\{0\}$.
-\end{definition}
-TODO: does this work? Compatibility with modulus? Why not for all complexified Riesz spaces?
+\subsection{Ideals and bands}
 
 
 \chapter{Some results and applications}

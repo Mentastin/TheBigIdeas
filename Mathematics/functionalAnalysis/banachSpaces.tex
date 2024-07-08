@@ -1551,9 +1551,70 @@ Note that the norm is bounded by the graph norm, so the graph norm topology is f
 Immediate by \ref{graphNormConvergenceLemma}.
 \end{proof}
 
+\section{Normed Riesz spaces and Banach lattices}
+\begin{definition}
+Let $V$ be a real vector space that is both a normed space and a Riesz space. Then the norm is called a \udef{Riesz norm} if, for all $v,w\in V$,
+\[ |v|\leq |w| \qquad\implies\qquad \norm{v} \leq \norm{w}. \]
+In this case $V$ is called a \udef{normed Riesz space}. If $V$ is, in addition, complete as a normed space, then it is called a \udef{Banach lattice}.
+\end{definition}
 
+\begin{proposition} \label{normedRieszSpaceArchimedean}
+Let $V$ be a normed Riesz space. Then $V$ is Archimedean.
+\end{proposition}
+\begin{proof}
+Take arbitrary $v\in V^+$. Clearly $0$ is a lower bound of $\{\epsilon v\}_{\epsilon > 0}$. Take any other lower bound $w$. Now $w\vee 0$ is also a lower bound and $0\leq w\vee 0$, so $|w\vee 0| = w\vee 0 \leq |\epsilon v|$. Since $V$ is a normed Riesz space, this implies $0\leq \norm{w\vee 0} \leq \epsilon \norm{v}$, for all $\epsilon >0$. This implies $\norm{w\vee 0} = 0$, so $w\vee 0 = 0$ and $w\leq 0$. Thus $0$ is the greatest lower bound, i.e.\ $\bigwedge_{\epsilon >0}\epsilon v = 0$.
+\end{proof}
 
+\begin{proposition}
+Let $V$ be a normed Riesz space. Then
+\begin{enumerate}
+\item the absolute value function $|\cdot|: V\to V$ is norm-continuous;
+\item the lattice operations $\wedge: V\times V\to V$ and $\vee: V\times V \to V$ are norm-continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Take arbitrary $v\in V$. We use \ref{continuityMetricSpaces}. Take arbitrary $\epsilon > 0$. Set $\delta = \epsilon$. Take arbitrary $w\in V$. Suppose $\norm{v-w}\leq \delta = \epsilon$. Since $\big||v| - |w|\big| \leq |v-w|$, from \ref{triangleInequalityRieszSpaces}, we have $\norm{|v|-|w|} \leq \norm{v-w} \leq \epsilon$.
 
+(2) From \ref{absoluteValueMeetJoin}, we have
+\begin{align*}
+v \vee w &= \frac{1}{2}\big(v+w + |v - w|\big) \\
+v \wedge w &= \frac{1}{2}\big(v+w - |v - w|\big),
+\end{align*}
+so the continuity of the lattice operations follows from the continuity of the absolute value function and the vector operations.
+\end{proof}
+\begin{corollary}
+Let $V$ be a normed Riesz space. Then the norm convergence is compatible with the weak order.
+\end{corollary}
+\begin{proof}
+This follows from \ref{HausdorffContinuousLatticeOperationsOrderCompatible}.
+\end{proof}
+
+\subsection{Comparing modes of convergence}
+\begin{proposition}
+Let $V$ be a normed Riesz space. Then $\bigvee_{v\in V}\uniformity_{v} \subseteq \uniformity_{\norm{\cdot}}$.
+\end{proposition}
+\begin{proof}
+It is enough to show that $\norm{\cdot}\circ \Delta$ is a continuous pseudometric when $V$ is equipped with the pseudometric uniformity $\uniformity_v$, for all $v\in V$.
+
+Fix arbitrary $v\in V$. We use \ref{continuousPseudometricOnMetricSpace}. Take arbitrary $\epsilon >0$. Set $\delta \defeq \epsilon / \norm{v}$. Take arbitrary $u,w\in V$. Suppose that $p_{S_v}(u-w) \leq \delta = \epsilon / \norm{v}$. Then \ref{ballsInRieszUniformities}, together with \ref{normedRieszSpaceArchimedean}, implies $|v-w| \leq \frac{\epsilon}{\norm{v}}|v|$. Since $V$ is a normed Riesz space, we have $\norm{v-w} \leq \frac{\epsilon}{\norm{v}}\norm{v} = \epsilon$.
+\end{proof}
+
+\begin{example}
+We have $\bigvee_{v\in V}\uniformity_{v} \subseteq \uniformity_{\norm{\cdot}}$ and $\bigvee_{v\in V}\uniformity_{v} \subseteq \uniformity_{\mathfrak{o}}$, but $\uniformity_{\norm{\cdot}}$ and $\uniformity_{\mathfrak{o}}$ are incomparable.
+
+Since pointwise convergence is often strictly weaker than norm convergence, we clearly have $\uniformity_{\mathfrak{o}} \nsubseteq \uniformity_{\norm{\cdot}}$.
+
+The typewriter sequence shows that $\uniformity_{\norm{\cdot}} \nsubseteq \uniformity_{\mathfrak{o}}$.
+\end{example}
+
+\begin{proposition}
+Let $V$ be a normed Riesz space, $\seq{x_i}_{i\in I}$ a net in $V$ and $x\in V$. If $\seq{x_i}$ is monotone (either increasing or decreasing) and converges to $x$ in norm, then it converges to $x$ in the order convergence.
+\end{proposition}
+\begin{proof}
+Suppose $\seq{x_i}$ is monotonically increasing. Using \ref{netMonotoneConvergence}, it is enough to show that $x = \bigvee_{i\in I}x_i$.
+
+We first show that $x$ is an upper bound of $\{x_i\}_{i\in I}$ 
+\end{proof}
 
 
 \chapter{Differentiation}
@@ -2918,7 +2979,8 @@ R_x(\lambda) - R_x(\mu) &= R_x(\lambda) - R_{(\lambda-\mu)\vec{1} + x}(\lambda) 
 
 \begin{corollary}
 Let $x,y\in A$ and $\lambda\in \res(x)\cap \res(y)$ be such that $\norm{R_x(\lambda)(y-x)}<1$. Then 
-\[ R_y(\lambda) = \sum_{n=0}^\infty \big(R_x(\lambda)(y-x)\big)^nR_x(\lambda) \quad\text{and}\quad \norm{R_y(\lambda)} \leq \frac{1}{\norm{R_x(\lambda)}^{-1} - \norm{y-x}}. \]
+\[ R_y(\lambda) = \sum_{n=0}^\infty \big(R_x(\lambda)(y-x)\big)^nR_x(\lambda) \quad\text{and}\quad \begin{aligned}[t]\norm{R_y(\lambda)} &\leq \frac{\norm{R_x(\lambda)}}{1 - \norm{R_x(\lambda)(y-x)}}\\
+&\leq \frac{1}{\norm{R_x(\lambda)}^{-1} - \norm{y-x}}.\end{aligned} \]
 \end{corollary}
 \begin{proof}
 We have
