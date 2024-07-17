@@ -136,21 +136,63 @@ Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. The following are equiva
 TODO (??)
 \end{proof}
 
-\subsubsection{Approaches}
+\subsubsection{Convergence selections}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space. An \udef{approach} on $X$ is a function $F: X\to \powerfilters(X)$ such that $F(x) \overset{\xi}{\longrightarrow} x$ for all $x\in X$.
+Let $\sSet{X,\xi}$ be a convergence space. A \udef{convergence selection} or \udef{$\xi$-selection} is a function $F: X\to \powerfilters(X)$ such that $F(x)$ is a proper filter and $F(x) \overset{\xi}{\longrightarrow} x$ for all $x\in X$.
+
+Let $A$ be a set and $f: A\to X$ a function. An \udef{$f$-convergence selection} is a function $F: A\to \powerfilters(X)$ such that $F(a)$ is a proper filter and $F(a) \overset{\xi}{\longrightarrow} f(a)$ for all $a\in A$.
 \end{definition}
+Note that a convergence selection is just an $\id$-convergence selection.
+
 
 \begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space. The function $X\to \powerfilters(X): x\mapsto \pfilter{x}$ is an approach.
+Let $\sSet{X,\xi}$ be a convergence space. The function $X\to \powerfilters(X): x\mapsto \pfilter{x}$ is a convergence selection.
 \end{lemma}
 
+\begin{lemma} \label{fSelectionLargerThanVicinities}
+Let $\sSet{Y,\zeta}$ be a convergence space, $X$ a set, $f: X\to Y$ a function and $F$ an $f$-convergence selection. Then $\vicinities_\xi\circ f \subseteq F$ pointwise.
+\end{lemma}
+In other words, $\vicinities_\xi\big(f(x)\big) \subseteq F(x)$ for all $x\in X$.
+\begin{proof}
+Take arbitrary $x\in X$. Since $F(x)$ converges to $f(x)$, we have $\vicinities_\xi\big(f(x)\big) \subseteq F(x)$.
+\end{proof}
 
+\begin{proposition} \label{convergenceAdherenceSelectionAdherence}
+Let $\sSet{Y,\zeta}$ be a convergence space, $X$ a set, $f: X\to Y$ a function and $F$ an $f$-convergence selection. Let $A\subseteq Y$ and $G\in \powerfilters(Y)$. Then
+\begin{enumerate}
+\item $f^\imf\big(\adh_F(A)\big) \subseteq \adh_\xi(A)$;
+\item $\adh_\xi^\imf(G) \subseteq \upset f^{\imf\imf}\big(\adh_F^\imf(G)\big)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) From \ref{fSelectionLargerThanVicinities}, we have $F^\mesh \subseteq (\vicinities_\xi\circ f)^\mesh$, so
+\begin{align*}
+x\in \adh_F(A) \iff& A\in F(x)^\mesh \\
+\implies& A\in \vicinities_\xi\big(f(x)\big)^\mesh \\
+\iff& f(x)\in \adh_\xi(A).
+\end{align*}
+This implies $f^\imf\big(\adh_F(A)\big) \subseteq \adh_\xi(A)$.
 
-\subsubsection{Convergence of nets}
-\begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space $\seq{x_i}_{i\in I}$ a net on $X$ and $x\in X$. The net $\seq{x_i}_{i\in I}$ \udef{converges} to $x$ in $\xi$, denoted $\seq{x_i}_{i\in I} \overset{\xi}{\longrightarrow} x$, if the associated filter converges to $x$.
-\end{definition}
+(2) Take arbitrary $B\in G$. We need to show that $\adh_\xi(B) \in \upset f^{\imf\imf}\big(\adh_F^\imf(G)\big)$. Indeed, $f^\imf\big(\adh_F(B)\big) \subseteq \adh_\xi(B)$, from (1).
+\end{proof}
+
+\begin{proposition} \label{adherenceSelectionContour}
+Let $\sSet{Y,\zeta}$ be a convergence space, $X$ a set, $f: X\to Y$ a function, $F$ an $f$-convergence selection and $G\in \powerfilters(X)$. Then
+\[ \adh_\xi^\imf\big(F(G)\big) \subseteq \upset f^{\imf\imf}(G). \]
+\end{proposition}
+\begin{proof}
+Since $\im(F) \subseteq \powerfilters(Y)\setminus\{\powerset(Y)\}$, we have $F(x) \subseteq F^\mesh(x)$ for all $x\in X$ from \ref{properFiltersSelfMesh}. Then \ref{inclusionPreservantionOfContours} implies $F(G) \subseteq F^\mesh(G)$. We calculate
+\begin{align*}
+F(G) \subseteq F^\mesh(G) \iff& F(G) \subseteq \big(F(G^\mesh)\big)^\mesh \\
+\iff& F(G) \amesh F(G^\mesh) \\
+\iff& \adh_F^\imf\big(F(G)\big) \amesh G^\mesh \\
+\iff& \adh_F^\imf\big(F(G)\big) \subseteq G^{\mesh\mesh} \\
+\iff& \adh_F^\imf\big(F(G)\big) \subseteq G \\
+\implies& \upset f^{\preimf\imf}\big(\adh_\xi^\imf\big(F(G)\big)\big) \subseteq G \\
+\iff& \adh_\xi^\imf\big(F(G)\big) \subseteq \upset f^{\imf\imf}(G),
+\end{align*}
+using \ref{adherenceContourDuality}, \ref{upwardClosureGrill} and \ref{convergenceAdherenceSelectionAdherence} (with \ref{upsetPreimageImageGaloisConnection}).
+\end{proof}
 
 
 \subsection{Depth requirements}
@@ -256,7 +298,7 @@ Let $X$ be a set, $\xi$ a preconvergence on $X$ and $A\subseteq X$. Then
 \end{lemma}
 
 \begin{lemma}
-Let $\sSet{X,\xi}$ be a convergence space. Then $\vicinities_\xi$ is an approach \textup{if and only if} $\xi$ is pretopological.
+Let $\sSet{X,\xi}$ be a convergence space. Then $\vicinities_\xi$ is a convergence selection \textup{if and only if} $\xi$ is pretopological.
 \end{lemma}
 
 \begin{lemma} \label{vicinityOfSetLemma}
@@ -420,6 +462,7 @@ Let $X$ be a set, $\zeta, \xi$ preconvergences on $X$ such that $\zeta \leq \xi$
 Let $\sSet{X,\xi}$ be a preconvergence space and $G\in\powerfilters(X)$ a filter. Then
 \[ \adh_\xi(G) = \displaystyle\bigcup_{\substack{F\in\powerfilters(X) \\ G\lhd F}}\lim_\xi F = \displaystyle\bigcup_{\substack{U\in\powerultrafilters(X) \\ G\subseteq U}}\lim_\xi U. \]
 \end{proposition}
+This proposition uses the ultrafilter lemma.
 \begin{proof}
 For the first equality, take $x\in \adh_\xi(G)$. Then there exists a filter $F$ such that $G\amesh F$ and $F\to x$.
 Now $F\vee G$ is a proper filter by \ref{joinProperFilter} and $G\subseteq F\vee G$, so $G\lhd F\vee G$. Also $F\vee G\to x$ by monotonicity of the limit. So $x\in \bigcup_{\substack{F\in\powerfilters(X) \\ G\lhd F}}\lim_\xi F$.
@@ -516,6 +559,7 @@ Thus principal adherence and inherence is a pretopological notion, while filter 
 Let $\sSet{X,\xi}$ be a preconvergence space and $A,B\subseteq X$ subsets. Then
 \[ \adh_\xi(A) \mesh B \qquad\iff\qquad \{A\} \amesh \vicinities_\xi(B). \]
 \end{corollary}
+TODO: redo using \ref{adherenceContourDuality}.
 \begin{proof}
 We have
 \begin{align*}
@@ -1286,7 +1330,7 @@ Let $\sSet{X,\xi}$ be a convergence space and $x\in X$. Then $\neighbourhoods_\x
 \begin{proof}
 By construction it is clearly upwards closed: if a set $A$ contains an open set $O$ that contains $x$, then any superset of $A$ also contains $O$.
 
-Now take $A,B\in \neighbourhoods_xi(x)$. Then there exist $O_A, O_B \in \topology_\xi$ such that $x\in O_A$ and $x\in O_B$. Now $x\in O_A\cap O_B$ and $O_A\cap O_B \in \topology_\xi$ by \ref{propertiesTopology}. Since $O_A\cap O_B\subseteq A\cap B$, we have $A\cap B\in \neighbourhoods_\xi(x)$.
+Now take $A,B\in \neighbourhoods_\xi(x)$. Then there exist $O_A, O_B \in \topology_\xi$ such that $x\in O_A$ and $x\in O_B$. Now $x\in O_A\cap O_B$ and $O_A\cap O_B \in \topology_\xi$ by \ref{propertiesTopology}. Since $O_A\cap O_B\subseteq A\cap B$, we have $A\cap B\in \neighbourhoods_\xi(x)$.
 \end{proof}
 
 \begin{proposition} \label{interiorClosureMembership}
@@ -2542,12 +2586,19 @@ Let $\sSet{X,\leq}$ be a complete lattice and $\xi$ a convergence on $X$. Then
 \end{proof}
 
 \begin{proposition} \label{principalUpDownSetsClosed}
-Let $\sSet{P,\leq}$ be a poset, $\xi$ a convergence compatible with the weak order and $x\in P$. Then $\upset\{x\}$ and $\downset\{x\}$ are closed.
+Let $\sSet{P,\leq}$ be a poset, $\xi$ a convergence compatible with the weak order and $x,y\in P$. Then
+\begin{enumerate}
+\item $\upset\{x\}$ is closed;
+\item $\downset\{x\}$ is closed;
+\item $\interval{x,y}$ is closed.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-Take arbitrary $y\in \adh_\xi\big(\upset\{x\}\big)$. Then, from \ref{principalAdherenceInherence}, there exists $F\in \powerfilters(P)$ such that $F\to y$ and $\upset\{x\} \in F$. This implies $\pfilter{x} \leq_w F$, so $x\leq y$ and $y\in \upset \{x\}$. Thus $\adh_\xi\big(\upset\{x\}\big) \subseteq \upset\{x\}$, which means that $\upset\{x\}$ is closed.
+(1) Take arbitrary $y\in \adh_\xi\big(\upset\{x\}\big)$. Then, from \ref{principalAdherenceInherence}, there exists $F\in \powerfilters(P)$ such that $F\to y$ and $\upset\{x\} \in F$. This implies $\pfilter{x} \leq_w F$, so $x\leq y$ and $y\in \upset \{x\}$. Thus $\adh_\xi\big(\upset\{x\}\big) \subseteq \upset\{x\}$, which means that $\upset\{x\}$ is closed.
 
-The argument for $\downset\{x\}$ is dual.
+(2) The argument for $\downset\{x\}$ is dual.
+
+(3) We have that $\interval{x,y} = \upset\{x\} \cap \downset\{y\}$ is closed from (1),(2) and \ref{propertiesTopology}.
 \end{proof}
 
 \begin{lemma} \label{principalUpDownsetWeaklyOrderedFilters}
@@ -2735,6 +2786,10 @@ Let $\sSet{X,\leq}$ be a poset. The \udef{order convergence} $\mathfrak{o}$ is t
 
 A discussion of different modes of order convergence can be found in \cite{abela_different_2022}.
 
+\begin{example}
+Order convergence not topological. See \url{https://arxiv.org/pdf/1705.09883}
+\end{example}
+
 \begin{lemma} \label{orderConvergenceCompatibleWeakOrder}
 Let $\sSet{X,\leq}$ be a poset. The order convergence on $X$ is compatible with the weak order.
 \end{lemma}
@@ -2870,6 +2925,16 @@ Finally the claim about the directedness of $M$ and $N$ follows from \ref{lattic
 \end{proof}
 
 \begin{proposition}
+Let $\sSet{P,\leq}$ be a poset. Then the order convergence on $P$ is regular.
+\end{proposition}
+See also \cite{VANDERWALT2011138}.
+\begin{proof}
+Take $F\in\powerfilters(P)$ and $x\in P$ such that $F\overset{\mathfrak{o}}{\longrightarrow} x$. Let $M,N$ be the sets from \ref{orderConvergenceIntervalBase}.
+
+For all $a\in M$ and $b\in N$, the interval $\interval{a,b}$ is closed, from \ref{principalUpDownSetsClosed}. Thus $\interval{a,b} \in \adh^\imf(F)$, and \ref{orderConvergenceIntervalBase} implies that $\adh^\imf(F)\overset{\mathfrak{o}}{\longrightarrow} x$.
+\end{proof}
+
+\begin{proposition}
 Let $P, Q$ be posets, $f: P\to Q$ an order-preserving function and $x\in P$. If $f$ is order-continuous at $x$, then 
 \begin{enumerate}
 \item $\bigvee f^\imf(M) = f(x)$ for all upwards directed $M \subseteq P$ such that $\bigvee M = x$;
@@ -2934,7 +2999,24 @@ Now, take $x\wedge a \in x\wedge M$ and $x\wedge b \in x\wedge N$. Since $\inter
 \end{proof}
 
 
-TODO: When does the following hold: Let $\sSet{P_i, \leq_i}$ be a poset for all $i\in I$, each equipped with the order convergence. Then the order convergence on $\prod_{i\in I}P_i$ is the same as the product convergence. ???
+\begin{proposition}
+Let $X$ be a set and $L$ a complete lattice. Then the order convergence on $(X\to L)$ is the pointwise convergence.
+\end{proposition}
+It is important that $L$ be complete. Dedekind-complete is not enough!
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{example}
+Consider the sequence of functions defined by
+\[ f_n(x) = \begin{cases}
+n & (0 < x \leq n^{-1}) \\
+0 & (\text{otherwise}).
+\end{cases} \]
+Then $\seq{f_n}$ converges to $\constant{0}$ pointwise as a sequence in both $(\R\to\R)$ and $(\R\to\overline{\R})$. It converges in order in $(\R\to\overline{\R})$, but \emph{not} in $(\R\to\R)$.
+
+By definition of the order convergence, we must have that $\seq{m(f_n)}$ does not converge to $m(\constant{0})$ in $\DM(\R\to \R)$. In particular, we do not have $\DM(\R\to \R) \cong (\R\to\overline{\R})$. Rather, we have $\DM(\R\to\R) \cong (\R\to\R)\cup\{\bot,\top\}$ from \ref{DMCompletionDedekindCompleteLattice}.
+\end{example}
 
 \subsection{Squeeze theorems}
 
@@ -3419,7 +3501,7 @@ TODO: can we improve (1)?
 \begin{proof}
 (1) By \ref{adherenceInherenceContinuity} we have $f_i^{\imf}\big(\adh_\mu(A)\big) \subseteq \adh_{\zeta_i}\big(f^{\imf}(A)\big)$, so $(f^{\preimf}_i\circ \adh_{\zeta_i}\circ f^{\imf}_i)(A)$ for all $i\in I$ by \ref{functionImagePreimageGaloisConnection}.
 
-(2) We calculate, using \ref{pretopologicalFinalConvergence}, \ref{grillIntersectionUnion} and \ref{meshConnectionSetsOfSets}, \ref{upsetPreimageImageGaloisConnection} (with the fact that $\vicinities_{\xi_i}(x)$ is upwards closed, by \ref{upwardClosureGrill})
+(2) We calculate, using \ref{pretopologicalFinalConvergence}, \ref{grillIntersectionUnion} and \ref{meshConnectionSetsOfSets}, \ref{upsetPreimageImageGaloisConnection} (with the fact that $\vicinities_{\xi_i}(x)$ is upwards closed, since it is a filter)
 \begin{align*}
 y\in \adh_\nu(A) &\iff A\in \vicinities_\nu(y)^\mesh \\
 &\iff A\in \Big(\bigcap_{\substack{i\in I \\ x\in g^\preimf_i\{y\}}}\upset g_i^{\imf\imf}\big(\vicinities_{\xi_i}(x)\big)\Big)^\mesh \\
@@ -5030,7 +5112,7 @@ Assume $x,y$ separated. WLOG we can assume $\pfilter{x} \not\to y$. So $\pfilter
 
 \subsubsection{Separation by convergent filters}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by convergent filters} if for all approaches $F:X\to \powerfilters(X)$, the contours satisfy $\neg(F(A)\amesh F(B))$.
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. We say $A$ and $B$ are \udef{separated by convergent filters} if for all convergence selections $F:X\to \powerfilters(X)$, the contours satisfy $\neg(F(A)\amesh F(B))$.
 
 We call two points $x,y\in X$ separated by convergent filters if $\{x\}$ and $\{y\}$ are separated by convergent filters.
 \end{definition}
@@ -5043,9 +5125,9 @@ Let $\sSet{X,\xi}$ be a convergence space. For $x,y\in X$ the following are equi
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-$(1) \Rightarrow (2)$ Assume $\lim^{-1}(x)\amesh \lim^{-1}(y)$, i.e.\ there exists some filter $F\in \lim^{-1}(x)\cap \lim^{-1}(y)$. Then the constant approach $x,y\mapsto F$ has $F(x) = F(y)$, meaning $F(x)\amesh F(y)$ and thus $x,y$ are not separated by convergent filters.
+$(1) \Rightarrow (2)$ Assume $\lim^{-1}(x)\amesh \lim^{-1}(y)$, i.e.\ there exists some filter $F\in \lim^{-1}(x)\cap \lim^{-1}(y)$. Then the constant convergence selection $x,y\mapsto F$ has $F(x) = F(y)$, meaning $F(x)\amesh F(y)$ and thus $x,y$ are not separated by convergent filters.
 
-$(2) \Rightarrow (1)$ Assume $\lim^{-1}(x)\perp \lim^{-1}(y)$. Pick an arbitrary approach $F$. If $F(x)\amesh F(y)$, then $F(x)\vee F(y)$ is proper by \ref{joinProperFilter} and in $\lim^{-1}(x)\cap \lim^{-1}(y)$ by monotonicity, which is a contradiction.
+$(2) \Rightarrow (1)$ Assume $\lim^{-1}(x)\perp \lim^{-1}(y)$. Pick an arbitrary convergence selection $F$. If $F(x)\amesh F(y)$, then $F(x)\vee F(y)$ is proper by \ref{joinProperFilter} and in $\lim^{-1}(x)\cap \lim^{-1}(y)$ by monotonicity, which is a contradiction.
 \end{proof}
 
 
@@ -5072,11 +5154,11 @@ Let $\sSet{X,\xi}$ be a convergence space.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-$(1)$ Assume $A,B\subseteq X$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $F(A)\amesh F(B)$ for some approach $F$. Then for all $a\in A$, $U\in F(a)$, so $U\in F(A)$. Similarly $V\in F(B)$. This means $U\mesh V$, which is a contradiction.
+$(1)$ Assume $A,B\subseteq X$ are separated by vicinities $U$ and $V$. Assume, towards a contradiction, that $F(A)\amesh F(B)$ for some convergence selection $F$. Then for all $a\in A$, $U\in F(a)$, so $U\in F(A)$. Similarly $V\in F(B)$. This means $U\mesh V$, which is a contradiction.
 
-$(2)$ If $\xi$ is pretopological, then $\vicinities_\xi$ is an approach. Thus $\neg(\vicinities_\xi(A)\amesh \vicinities_\xi(B))$, meaning there exist disjoint vicinities of $A,B$.
+$(2)$ If $\xi$ is pretopological, then $\vicinities_\xi$ is a convergence selection. Thus $\neg(\vicinities_\xi(A)\amesh \vicinities_\xi(B))$, meaning there exist disjoint vicinities of $A,B$.
 \end{proof}
-Thus in the pretopological case all approaches $F$ satisfy $\neg(F(A)\mesh F(B))$ iff the vicinity filter satisfies $\neg(\vicinities(A)\mesh \vicinities(B))$.
+Thus in the pretopological case all convergence selections $F$ satisfy $\neg(F(A)\mesh F(B))$ iff the vicinity filter satisfies $\neg(\vicinities(A)\mesh \vicinities(B))$.
 
 
 \begin{proposition} \label{separationByVicinitiesEquivalences}
@@ -5416,7 +5498,7 @@ Let $\xi$ be a convergence.
 \end{itemize}
 \end{proposition}
 \begin{proof}
-(1) Fix an arbitrary approach $F: X\to \powerfilters(X)$ and $V_x\in \vicinities(x)$ for all $x\in X$.
+(1) Fix an arbitrary convergence selection $F: X\to \powerfilters(X)$ and $V_x\in \vicinities(x)$ for all $x\in X$.
 
 By regularity we have $\vicinities(x)\subseteq \upset\adh[F(x)]$ for all $x\in X$.
 This means
@@ -5459,6 +5541,60 @@ Take $F\in \powerfilters(Y)$ such that $F\overset{\mu}{\longrightarrow} y$. Then
 
 Now $\upset\adh_{\zeta_i}^\imf\big(\upset f_i^{\imf\imf}(F)\big)$ converges by continuity of $f_i$ and regularity of $\zeta_i$, so $\upset f_i^{\imf\imf}\big(\adh_{\mu}^{\imf}(F)\big)$ converges by monotonicity and thus $\adh_{\mu}^{\imf}(F)$ converges by \ref{initialFinalConvergence}.
 \end{proof}
+
+\begin{proposition} \label{regularityContourConvergence}
+Let $\sSet{X,\xi}$ be a convergence space. Then the following are equivalent:
+\begin{enumerate}
+\item $\xi$ is regular;
+\item for every set $A$, every function $f: A\to X$ and every function $F: A\to \powerfilters(X)$ such that $F(a) \overset{\xi}{\longrightarrow} f(a)$ for all $a\in A$, we have
+\[ \lim F(G) \subseteq \lim \upset f^{\imf\imf}(G) \]
+for all $G\in \powerfilters(A)$;
+\item for every set $A$, every function $f: A\to X$ and every function $F: A\to \powerultrafilters(X)$ such that $F(a) \overset{\xi}{\longrightarrow} f(a)$ for all $a\in A$, we have
+\[ \lim F(G) \subseteq \lim \upset f^{\imf\imf}(G) \]
+for all $G\in \powerfilters(A)$.
+\end{enumerate}
+\end{proposition}
+The implication $(3) \Rightarrow (1)$ uses the ultrafilter lemma.
+\begin{proof}
+$(1) \Rightarrow (2)$ Assume $\xi$ is regular and pick arbitrary $A,f, F$ and $G$ as in the statement. 
+From \ref{adherenceSelectionContour}, we have $\adh_\xi^\imf\big(F(G)\big) \subseteq \upset f^{\imf\imf}(G)$ and so
+\[ \lim F(G) = \lim \adh_\xi^\imf\big(F(G)\big) \subseteq \lim \upset f^{\imf\imf}(G), \]
+using regularity.
+
+$(2) \Rightarrow (3)$ Clear.
+
+$(3) \Rightarrow (1)$ Assume (3). Let $H\in \powerfilters(X)$ be a an arbitrary filter. Set $A \defeq X \times H$. For all $(x, B)\in X\times H$ such that $x\in \adh_\xi(B)$, there exists an ultrafilter $U_{x,B}$ such that $B\in U_{x,B}$ and $U_{x,B} \overset{\xi}{\longrightarrow} x$, from \ref{differentUnionsForAdherence}.
+
+For $(x, B)\in X\times H$ such that $x\in \adh_\xi(B)$, we set $F(x,B) \defeq U_{x,B}$. For $(x, B)\in X\times H$ such that $x\notin \adh_\xi(B)$, we set $F(x,B) \defeq \pfilter{x}$. We set $f(x,B) \defeq x$. It is clear by construction that $F$ is an $f$-selection.
+
+Consider
+\[ G \defeq \upset \setbuilder[\Big]{\setbuilder[\big]{(x,C)}{x\in\adh_\xi(C), C\in H\cap \downset\{B\}}}{B\in H}. \]
+We first show that $G$ is a filter. Since it is upwards closed by construction, it is enough to show that it is downwards directed. Take arbitrary $B,B'\in H$. Then
+\begin{align*}
+\setbuilder[\big]{(x,C)}{x\in\adh_\xi(C), C\in H\cap \downset\{B\}} \cap &\setbuilder[\big]{(x,C)}{x\in\adh_\xi(C), C\in H\cap \downset\{B'\}} \\
+&\subseteq \setbuilder[\big]{(x,C)}{x\in\adh_\xi(C), C\in H\cap \downset\{B\cap B'\}},
+\end{align*}
+indeed, for any element $(x,C)$ of the left-hand side, it is enough to observe that $C \subseteq B\cap B'$. Since $B\cap B'\in H$, this implies that $G$ is downwards directed.
+
+Next we observe that
+\begin{align*}
+\upset f^{\imf\imf}(G) &= \upset \setbuilder[\big]{\setbuilder{x}{\exists C\in H\cap \downset \{B\}: x\in \adh_\xi(C)}}{B\in H} \\
+&= \upset \setbuilder[\big]{\setbuilder{x}{x\in \adh_\xi(B)}}{B\in H} \\
+&= \upset \adh_\xi^\imf(H).
+\end{align*}
+Finally, we calculate, using the fact that $C\subseteq B$ implies $B\in U_{x,C}$ from the upwards closude of $U_{x,C}$,
+\begin{align*}
+F(G) &= \bigcup_{B\in H}\bigcap_{\substack{C\in H\cap \downset\{B\} \\ x\in \adh_\xi(C)}} U_{x,C} \\
+&\supseteq \bigcup_{B\in H}\{B\} \\
+&= H.
+\end{align*}
+Thus, by assumption, we have $\lim H \subseteq \lim F(G) \subseteq \lim \adh_\xi^\imf(H)$. Since $H$ was chosen arbitrarily, we have that $\xi$ is regular.
+\end{proof}
+\begin{corollary}
+Let $\sSet{X,\xi}$ be a regular convergence space, $F$ a convergence selection and $G\in \powerfilters(X)$. Then $\lim F(G) \subseteq \lim G$.
+\end{corollary}
+
+
 
 \subsubsection{$\omega$-regular}
 \begin{definition}
@@ -5594,11 +5730,27 @@ We use \ref{topologicalNormal}. Take closed disjoint sets $C_1,C_2$. For all $x\
 Now $\{U_x\}_{x\in C_1}$ is an open cover of $C_1$, which is compact by \ref{compactClosedSets}. So there is a finite subcover $\{U_x\}_{x\in F}$ by \ref{topologyCompactnessOpenCover}. Now set $O_1 \defeq \bigcup_{x\in F} U_x$ and $O_2 \defeq \bigcap_{x\in F} V_x$. These sets are both open by \ref{propertiesTopology}. By construction $C_1\subseteq O_1$, $C_2\subseteq O_2$ and $O_1\perp O_2$.
 \end{proof}
 
+\section{Diagonality}
+\begin{definition}
+Let $\sSet{X,\xi}$ be a convergence space. We call $\xi$ a \udef{diagonal} convergence if
+\[ \lim_\xi F \subseteq \lim_\xi\big(f(F)\big) \]
+for all $\xi$-selections $f: X\to \powerfilters(X)$.
+\end{definition}
+TODO: this concept is somehow dual to regularity.
+
+\begin{proposition}
+A pretopological convergence is topological \textup{if and only if} it is diagonal.
+\end{proposition}
+\begin{proof}
+TODO!
+\end{proof}
+
+
 \section{Comparison with reals and metrisability}
 \subsection{Functional convergence properties}
 \subsubsection{Functional closure}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$. We call $A$ \udef{functionally closed} if there exists a continuous function $f: X\to \R$ and a closed set $C\subseteq \R$ such that $A = f^{-1}[C]$.
+Let $\sSet{X,\xi}$ be a convergence space and $A\subseteq X$. We call $A$ \udef{functionally closed} if there exists a continuous function $f: X\to \R$ and a closed set $C\subseteq \R$ such that $A = f^{\preimf}(C)$.
 \end{definition}
 
 \begin{proposition}
@@ -5618,7 +5770,7 @@ If there exists such a function $g$, then $A$ is clearly functionally closed. Fo
 
 \subsubsection{Functional separation}
 \begin{definition}
-Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. Then $A$ and $B$ are \udef{functionally separated} if there exists a continuous function $f: X\to [0,1]\subseteq \R$ with $f[A] = \{0\}$ and $f[B] = \{1\}$.
+Let $\sSet{X,\xi}$ be a convergence space and $A,B\subseteq X$. Then $A$ and $B$ are \udef{functionally separated} if there exists a continuous function $f: X\to [0,1]\subseteq \R$ with $f^\imf(A) = \{0\}$ and $f^\imf(B) = \{1\}$.
 \end{definition}
 
 \begin{proposition}
@@ -8248,6 +8400,13 @@ We call the series
 \begin{lemma}
 TODO: $\sum_{n\in\N}a_n$ converges iff $\sum_{n=0}^\infty a_n$ converges unconditionally.
 \end{lemma}
+
+\begin{lemma}
+Let $\seq{a_n}_{n\in \N}$ be a sequence in a normed abelian group. Then the series $\sum_{i=0}^\infty a_i$ is absolutely convergence \textup{if and only if} $\sum_{i=0}^\infty \norm{a_i} < \infty$.
+\end{lemma}
+\begin{proof}
+Every bounded monotone sequence in $\R$ converges. TODO ref.
+\end{proof}
 
 \begin{proposition} \label{absoluteConvergenceImpliesConvergence}
 Let $\sum_{i=0}^\infty a_i$ be a series in a complete abelian normed group. If $\sum_{i=0}^\infty a_i$ is absolutely convergent, it is unconditionally convergent.

@@ -1558,6 +1558,13 @@ Let $V$ be a real vector space that is both a normed space and a Riesz space. Th
 In this case $V$ is called a \udef{normed Riesz space}. If $V$ is, in addition, complete as a normed space, then it is called a \udef{Banach lattice}.
 \end{definition}
 
+\begin{lemma} \label{normAbsoluteValue}
+Let $V$ be a normed Riesz space and $v\in V$. Then $\norm[\big]{|v|} = \norm{v}$.
+\end{lemma}
+\begin{proof}
+We have $\big||v|\big| = |v|$, so $\norm[\big]{|v|} \leq \norm{v}$ and $\norm[\big]{|v|} \geq \norm{v}$.
+\end{proof}
+
 \begin{proposition} \label{normedRieszSpaceArchimedean}
 Let $V$ be a normed Riesz space. Then $V$ is Archimedean.
 \end{proposition}
@@ -1565,7 +1572,7 @@ Let $V$ be a normed Riesz space. Then $V$ is Archimedean.
 Take arbitrary $v\in V^+$. Clearly $0$ is a lower bound of $\{\epsilon v\}_{\epsilon > 0}$. Take any other lower bound $w$. Now $w\vee 0$ is also a lower bound and $0\leq w\vee 0$, so $|w\vee 0| = w\vee 0 \leq |\epsilon v|$. Since $V$ is a normed Riesz space, this implies $0\leq \norm{w\vee 0} \leq \epsilon \norm{v}$, for all $\epsilon >0$. This implies $\norm{w\vee 0} = 0$, so $w\vee 0 = 0$ and $w\leq 0$. Thus $0$ is the greatest lower bound, i.e.\ $\bigwedge_{\epsilon >0}\epsilon v = 0$.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{normContinuityLatticeOperations}
 Let $V$ be a normed Riesz space. Then
 \begin{enumerate}
 \item the absolute value function $|\cdot|: V\to V$ is norm-continuous;
@@ -1582,15 +1589,15 @@ v \wedge w &= \frac{1}{2}\big(v+w - |v - w|\big),
 \end{align*}
 so the continuity of the lattice operations follows from the continuity of the absolute value function and the vector operations.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{normConvergenceCompatibleWeakOrder}
 Let $V$ be a normed Riesz space. Then the norm convergence is compatible with the weak order.
 \end{corollary}
 \begin{proof}
-This follows from \ref{HausdorffContinuousLatticeOperationsOrderCompatible}.
+This follows from \ref{HausdorffContinuousLatticeOperationsOrderCompatible} and \ref{normedRieszSpaceArchimedean}.
 \end{proof}
 
 \subsection{Comparing modes of convergence}
-\begin{proposition}
+\begin{proposition} \label{RieszUniformityNormUniformityCompared}
 Let $V$ be a normed Riesz space. Then $\bigvee_{v\in V}\uniformity_{v} \subseteq \uniformity_{\norm{\cdot}}$.
 \end{proposition}
 \begin{proof}
@@ -1602,10 +1609,34 @@ Fix arbitrary $v\in V$. We use \ref{continuousPseudometricOnMetricSpace}. Take a
 \begin{example}
 We have $\bigvee_{v\in V}\uniformity_{v} \subseteq \uniformity_{\norm{\cdot}}$ and $\bigvee_{v\in V}\uniformity_{v} \subseteq \uniformity_{\mathfrak{o}}$, but $\uniformity_{\norm{\cdot}}$ and $\uniformity_{\mathfrak{o}}$ are incomparable.
 
-Since pointwise convergence is often strictly weaker than norm convergence, we clearly have $\uniformity_{\mathfrak{o}} \nsubseteq \uniformity_{\norm{\cdot}}$.
+TODO example for $\uniformity_{\mathfrak{o}} \nsubseteq \uniformity_{\norm{\cdot}}$.
 
 The typewriter sequence shows that $\uniformity_{\norm{\cdot}} \nsubseteq \uniformity_{\mathfrak{o}}$.
 \end{example}
+
+\begin{proposition}
+Let $V$ be a normed Riesz space, $F\in\powerfilters(V)$ and $v,x\in V$. If $F\to x$ in norm and $F$ is $v$-uniformly Cauchy, then $F\to x$ $v$-uniformly.
+\end{proposition}
+\begin{proof}
+The calculations in this proof are made easier by the fact that $V$ is Archimedean, \ref{normedRieszSpaceArchimedean}, using \ref{ballsInRieszUniformities}.
+
+We need to prove $\neighbourhoods_v(x) \subseteq F$. Take arbitrary $\epsilon > 0$. We need to show $\cball_v(x,\epsilon) \in F$. Since $F$ is $v$-uniformly Cauchy, we have $D_v(\epsilon) \in F\otimes F$, so there exists $A\in F$ such that $A\times A \subseteq D_v(\epsilon)$. We aim to show that $A \subseteq \cball_v(x,\epsilon)$.
+
+Take arbitrary $a\in A$. Then $A \subseteq \cball_v(a,\epsilon)$, so $\downset\{\epsilon|v|\} \in |F-a|$. Then \ref{normContinuityLatticeOperations} and \ref{seminormConvergenceVectorSpaceConvergence} imply $|F-a| \to |x-a|$ in norm. Thus $|x-a| \in \downset\{\epsilon|v|\}$, so $|x-a| \leq \epsilon |v|$, from \ref{normConvergenceCompatibleWeakOrder}, \ref{principalUpDownSetsClosed} and \ref{adherenceLimitFilter}. We conclude that $A \subseteq \cball_v(x,\epsilon)$.
+\end{proof}
+\begin{corollary}
+Every Banach lattice is uniformly complete.
+\end{corollary}
+\begin{proof}
+Any filter that is uniformly Cauchy is also norm-Cauchy, from \ref{RieszUniformityNormUniformityCompared}. Since a Banach lattice is norm-complete by definition, this filter is norm-convergent. It is uniformly convergent by the proposition.
+\end{proof}
+
+\begin{proposition}
+Let $V$ be a normed Riesz space, $F\in\powerfilters(V)$ and $x,y\in V$. If $F \to x$ in norm and $F\to y$ in the order convergence, then $x = y$.
+\end{proposition}
+\begin{proof}
+Since $F\to y$ in the order convergence, there exist $M,N \subseteq V$ as in \ref{orderConvergenceIntervalBase}. For all $a\in M$ and $b\in N$, we have $\interval{a,b} \in F$, so $\upset\{a\}\in F$ and $\downset \{b\} \in F$. This implies $x\in \interval{a,b}$ from \ref{normConvergenceCompatibleWeakOrder}, \ref{principalUpDownSetsClosed} and \ref{adherenceLimitFilter}, so $y =\bigvee M \leq x \leq \bigwedge N = y$. Thus $x = y$.
+\end{proof}
 
 \begin{proposition}
 Let $V$ be a normed Riesz space, $\seq{x_i}_{i\in I}$ a net in $V$ and $x\in V$. If $\seq{x_i}$ is monotone (either increasing or decreasing) and converges to $x$ in norm, then it converges to $x$ in the order convergence.
@@ -1613,9 +1644,21 @@ Let $V$ be a normed Riesz space, $\seq{x_i}_{i\in I}$ a net in $V$ and $x\in V$.
 \begin{proof}
 Suppose $\seq{x_i}$ is monotonically increasing. Using \ref{netMonotoneConvergence}, it is enough to show that $x = \bigvee_{i\in I}x_i$.
 
-We first show that $x$ is an upper bound of $\{x_i\}_{i\in I}$ 
+We first show that $x$ is an upper bound of $\{x_i\}_{i\in I}$. Take arbitrary $x_j\in \{x_i\}_{i\in I}$. Since $\seq{x_i}$ is monotonically increasing, we have $\setbuilder{x_i}{i\geq j} \subseteq \upset\{x_j\}$, so $\upset\{x_j\} \in \TailsFilter\seq{x_i}$. Since $\upset\{x_j\}$ is closed, from \ref{normConvergenceCompatibleWeakOrder} and \ref{principalUpDownSetsClosed}, we have $x \in \upset\{x_j\}$, from \ref{adherenceLimitFilter}. Thus $x_j \leq x$, which implies that $x$ is an upper bound.
+
+We now show that $x$ is the least upper bound. Suppose $y$ is some other upper bound. Then $x_i \leq y$ for all $i\in I$. This implies $\TailsFilter\seq{x_i} \leq_w \pfilter{y}$, so $x \leq y$, from \ref{normConvergenceCompatibleWeakOrder}.
+
+If $\seq{x_i}$ is monotonically decreasing, then the argument is dual.
 \end{proof}
 
+\begin{proposition}
+Let $V$ be a Banach lattice, $x\in V$ and $\seq{x_n}_{n\in\N}$ a sequence in $V$ such that $x_n\to x$ in norm. Then there exists a subsequence $\seq{x_{n_k}}_k$ that converges to $x$ uniformly.
+\end{proposition}
+\begin{proof}
+For all $k$, let $x_{n_k}$ be the least $x_n$ such that $\norm{x-x_n} \leq k^{-3}$. Now we have, using \ref{normAbsoluteValue},
+\[ \sum_{k\in \N} k\norm[\big]{|x-x_{n_k}|} = \sum_{k\in \N} k\norm{x-x_{n_k}} \leq \sum_{k\in \N} kk^{-3} = \sum_{k\in \N} k^{-2} = \frac{\pi^2}{6} < \infty, \]
+so the series converges in norm, from \ref{absoluteConvergenceImpliesConvergence}, and we can set $s\defeq \sum_{k\in \N} k|x-x_{n_k}|$. Take arbitrary $l\in \N$. For all $m\geq l$, we have $l|x-x_{n_l}| \leq \sum_{k=0}^m k|x-x_{n_k}|$, so \ref{normConvergenceCompatibleWeakOrder} implies $l|x-x_{n_l}| \leq s$. Thus $|x-x_{n_l}| \leq l^{-1}s$, which implies that $x_{n_l} \to x$ $s$-uniformly.
+\end{proof}
 
 \chapter{Differentiation}
 \url{file:///C:/Users/user/Downloads/978-1-4614-3894-6.pdf}

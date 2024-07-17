@@ -874,44 +874,6 @@ This gives the table
 
 TODO: intersection distributes over disjoint union.
 
-\begin{lemma} \label{unionIntersectionLabelSet}
-Let $\mathcal{I}$ be a family of index sets and let $A_i$ be a set for all $i\in \bigcup \mathcal{I}$. Then
-\begin{enumerate}
-\item $\bigcup_{i\in \bigcup \mathcal{I}} A_i = \bigcup_{I\in \mathcal{I}}\bigcup_{i\in I} A_i$;
-\item $\bigcap_{i\in \bigcap \mathcal{I}} A_i = \bigcap_{I\in \mathcal{I}}\bigcap_{i\in I} A_i$;
-\item $\bigcup_{i\in \bigcap \mathcal{I}} A_i \subseteq \bigcap_{I\in \mathcal{I}}\bigcup_{i\in I} A_i$;
-\item $\bigcap_{i\in \bigcup \mathcal{I}} A_i \supseteq \bigcup_{I\in \mathcal{I}}\bigcap_{i\in I} A_i$.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-(1) We calculate
-\begin{align*}
-x\in \bigcup_{i\in \bigcup \mathcal{I}} A_i &\iff \exists i\in \bigcup \mathcal{I}: x\in A_i \\
-&\iff \exists i: (i\in \bigcup \mathcal{I}) \land (x\in A_i) \\
-&\iff \exists i: (\exists I \in \mathcal{I}: i\in I) \land (x\in A_i) \\
-&\iff \exists i: \exists I: (I \in \mathcal{I}) \land (i\in I) \land (x\in A_i) \\
-&\iff \exists I\in \mathcal{I}: \exists i \in I: x\in A_i \\
-&\iff x\in \bigcup_{I\in \mathcal{I}}\bigcup_{i\in I} A_i
-\end{align*}
-
-(2) Replace $\exists$ by $\forall$ and $\land$ by $\Rightarrow$ in the proof of (1).
-
-(3) We calculate
-\begin{align*}
-x\in \bigcup_{i\in \bigcap \mathcal{I}} A_i &\iff \exists i\in \bigcap \mathcal{I}: x\in A_i \\
-&\iff \exists i: (i\in \bigcap \mathcal{I}) \land (x\in A_i) \\
-&\iff \exists i: (\forall I \in \mathcal{I}: i\in I) \land (x\in A_i) \\
-&\iff \exists i: (\forall I: (I \in \mathcal{I}) \Rightarrow (i\in I)) \land (x\in A_i) \\
-&\implies \exists i: \forall I: (I \in \mathcal{I}) \Rightarrow ((i\in I) \land (x\in A_i)) \\
-&\implies \forall I: \exists i: (I \in \mathcal{I}) \Rightarrow ((i\in I) \land (x\in A_i)) \\
-&\iff \forall I: (I \in \mathcal{I}) \Rightarrow (\exists i:(i\in I) \land (x\in A_i)) \\
-&\iff \forall I\in \mathcal{I}: \exists i \in I: x\in A_i \\
-&\iff x\in \bigcap_{I\in \mathcal{I}}\bigcup_{i\in I} A_i
-\end{align*}
-
-(4) TODO
-\end{proof}
-
 For more identities, see \url{https://en.wikipedia.org/wiki/List_of_set_identities_and_relations}.
 
 
@@ -1565,6 +1527,10 @@ Let $A,B$ be classes. Then
 \end{enumerate}
 \end{lemma}
 
+\begin{lemma} \label{relationConverseSimilarity}
+Let $A,B$ be sets. Then $(-)^\transp: \powerset(A\times B) \to \powerset(B\times A): R\mapsto R^\transp$ is an order similarity.
+\end{lemma}
+
 \subsection{Complementary relation}
 \begin{definition}
 Let $R$ be a binary relation on $(A, B)$. The \udef{complementary relation} $\overline{R}$ of $R$ is the relation on $(A, B)$ with graph
@@ -1924,217 +1890,6 @@ Let $R$ be a relation on $(A,B)$, $X\subseteq A$ and $Y\subseteq B$. Then
 \end{enumerate}
 \end{lemma}
 
-\subsection{Galois connections}
-\begin{proposition}
-Consider a monoid $M$ of relations under composition. Then for $R\in M$ the following maps form a Galois connection:
-\[ \rho_R: M\to M: S \mapsto S;R \qquad\text{and}\qquad \rho_R^+: M\to M: S \mapsto S\diagup R \]
-as do the following:
-\[ \lambda_R: M\to M: S \mapsto R;S \qquad\text{and}\qquad \lambda_R^+: M\to M: S \mapsto R\diagdown S. \]
-\end{proposition}
-\begin{proof}
-The is just a restatement of \ref{GaloisConnectionFromSchroderRule}.
-\end{proof}
-
-\begin{proposition}
-We can order relations by image, $\leq_i$ or by preimage $\leq_p$:
-\[ R \leq_i S \defequiv \im(R) \subseteq \im(S) \qquad R \leq_p S \defequiv \preim(R) \subseteq \preim(S). \]
-These orders are preorders, but not partial orders.
-\begin{enumerate}
-\item If we order relations by image, then $X\mapsto \id_X$ and $\im$ form a Galois connection;
-\item If we order relations by preimage, then $X\mapsto \id_X$ and $\preim$ form a Galois connection.
-\end{enumerate}
-\end{proposition}
-
-\begin{lemma}
-Let $R$ be a relation on $(A,B)$, $X\subseteq A$ and $Y\subseteq B$, then
-\begin{enumerate}
-\item $X_R = \im(\id_X; R)$ and $_RX = \preim(R;\id_X)$;
-\item $X^R = B\setminus \im(\overline{\id_X}; R)$ and $^RX = A\setminus \preim(R;\overline{\id}_X)$.
-\end{enumerate}
-\end{lemma}
-
-\begin{proposition}
-Let $R$ be a relation on $(A,B)$. Then
-\begin{enumerate}
-\item $\powerset(A)\to \powerset(B): X\to X^R$ and $\powerset(B)\to \powerset(A): X\to {^RX}$ form a Galois connection;
-\item $\powerset(A)\to \powerset(B): X\to X^{\overrightarrow{R}}$ and $\powerset(B)\to \powerset(A): X\to {^{\overleftarrow{R}}X}$ form a Galois connection.
-\end{enumerate}
-\end{proposition}
-
-\subsubsection{Closures}
-TODO use Galois theory
-\begin{definition}
-Let $R$ be a homogeneous relation on a class $A$.
-\begin{itemize}
-\item The \udef{reflexive closure} of $R$ is the relation $R^=$ on $A$ with graph
-\begin{align*}
-\graph(R^=) &= \bigcap\setbuilder{\graph(R')}{\text{$R'$ extends $R$ and is reflexive}} \\
-&= \setbuilder{(x,x)\in A\times A}{x\in A}\cup \graph(R); \\
-&= \graph(\id_A)\cup \graph(R).
-\end{align*}
-\item The \udef{reflexive reduction} of $R$ is the relation $R^{\neq}$ on $A$ with graph
-\[ \graph{R^{\neq}} = \graph(R)\setminus \setbuilder{(x,x)\in A\times A}{x \in A}. \]
-\item The \udef{transitive closure} of $R$ is the relation $R^{+}$ on $A$ with graph
-\[ \graph(R^+) = \bigcap\setbuilder{\graph(R')}{\text{$R'$ extends $R$ and is transitive}}. \]
-\item The \udef{symmetric closure} of $R$ is the relation $R^{\leftrightarrow}$ on $A$ with graph
-\begin{align*}
-\graph(R^\leftrightarrow) &= \bigcap\setbuilder{\graph(R')}{\text{$R'$ extends $R$ and is symmetric}} \\
-&=  \graph(R)\cup \graph(R^\transp).
-\end{align*}
-\end{itemize}
-\end{definition}
-
-TODO: $R^?$ for reflexive closure?
-
-\begin{lemma}
-Let $R$ be a homogeneous relation on a class $A$.
-\begin{enumerate}
-\item The reflexive closure $R^=$ is the smallest reflexive relation on $A$ that extends $R$.
-\item The reflexive reduction $R^{\neq}$ is the largest irreflexive relation on $A$ that is a restriction of $R$.
-\item The transitive closure $R^{+}$ is the smallest transitive relation on $A$ that extends $R$.
-\item The symmetric closure $R^{\leftrightarrow}$ is the smallest symmetric relation on $A$ that extends $R$.
-\end{enumerate}
-\end{lemma}
-
-\begin{lemma}
-The closures (and reduction) are monotone: if $R$ extends $S$, then $R^a$ extends $S^a$ for all $a,b\in\{=,+,\leftrightarrow,\neq\}$.
-\end{lemma}
-
-\begin{lemma}
-Let $R$ be a homogeneous relation over a class $A$. Then $\big(R^=\big)^\leftrightarrow = \big(R^\leftrightarrow\big)^=$.
-\end{lemma}
-\begin{proof}
-We have $\big(R^=\big)^\leftrightarrow = R^=\cup \big(R^=\big)^\transp = (R\cup \id)\cup \big(R \cup \id\big)^\transp = R\cup R^\transp \cup \id = \big(R^\leftrightarrow\big)^=$.
-\end{proof}
-
-\begin{lemma}
-Let $R$ be a homogeneous relation over a class $A$.
-\begin{enumerate}
-\item The reflexive transitive closure $R^*$ is the smallest preorder containing $R$.
-\item The reflexive transitive symmetric closure $\equiv_R$ is the smallest equivalence relation containing $R$.
-\end{enumerate}
-\end{lemma}
-TODO: equivalence relations are defined below.
-
-\begin{definition}
-The reflexive transitive closure $R^*$. The reflexive transitive symmetric closure $\equiv_R$.
-\end{definition}
-
-\subsubsection{Transitive closure}
-
-\begin{proposition} \label{transitiveClosureConnection}
-Let $R$ be a homogeneous relation over a class $A$ and $x,y\in A$. Then $x\mathrel{R^+}y$ \textup{if and only if} there exists a finite sequence $\seq{z_0, \ldots, z_n}$ such that $x=z_0$, $z_n=y$ and $\forall i<n: z_iRz_{i+1}$.
-\end{proposition}
-\begin{proof}
-The proof of the direction $\Leftarrow$ is by induction on $n$.
-
-For the direction $\Rightarrow$ TODO (+relate to $T_R$)
-\end{proof}
-
-\begin{lemma} \label{transpositionTransitiveClosure}
-Let $R$ be a homogeneous relation over a class $A$. Then $(R^+)^\transp = (R^\transp)^+$.
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{proposition}
-Let $R$ be a homogeneous relation over a class $A$. Then
-\begin{enumerate}
-\item $\big(R^=\big)^+ = \big(R^+\big)^=$;
-\item $\big(R^\leftrightarrow\big)^+ \supseteq \big(R^+\big)^\leftrightarrow$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-(1) Take arbitrary $x,y\in A$. First assume $x\mathrel{\big(R^+\big)^=}y$. Then either $x=y$ or $x\mathrel{R^+}y$. In the first case we clearly have $x\mathrel{R^=}y$ and thus $x\mathrel{\big(R^=\big)^+}y$. In the second, we have $R^+ \subseteq \big(R^=\big)^+$ by monotonicity of the closure, so $x\mathrel{\big(R^=\big)^+}y$.
-
-Now assume $x\mathrel{\big(R^=\big)^+}y$. Then consider a finite sequence as defined in \ref{transitiveClosureConnection}. Remove all repeated adjacent elements in the sequence. Then all adjacent elements are $R$-related and the initial and final elements are the same. These elements are related by $R^+$ if the sequence consists of at least two elements. If it consists of a single element, then $x=y$ and $x\mathrel{\big(R^+\big)^=}$.
-
-(2) We have
-\[ \big(R^\leftrightarrow\big)^+ = \big(R\cup R^\transp\big)^+ \supseteq R^+ \cup \big(R^\transp\big)^+ = R^+ \cup \big(R^+\big)^\transp = \big(R^+\big)^\leftrightarrow, \]
-using \ref{orderPreservingFunctionLatticeOperations} and \ref{transpositionTransitiveClosure}.
-\end{proof}
-TODO: this uses references from later theory.
-
-\begin{example}
-There exists a relational structure $\sSet{A,R}$ such that
-\[ \big(R^\leftrightarrow\big)^+ \neq \big(R^+\big)^\leftrightarrow. \]
-Consider the relation $R = {\to}$ on $\{a,b,c\}$ with relationships
-\[ \begin{tikzcd}
-a \ar[dr] & {} & \ar[dl] c \\
-{} & b & {}
-\end{tikzcd}. \]
-Then $a \mathrel{\big(R^\leftrightarrow\big)^+}b$ but not $a \mathrel{\big(R^+\big)^\leftrightarrow}b$.
-\end{example}
-
-
-
-\subsubsection{Convex hull}
-\begin{definition}
-Let $\sSet{A,R}$ be a relational structure and $X\subseteq A$ a subset. The \udef{$R$-convex hull} of $X$ is
-\begin{align*}
-\relconvex_R(X) &\defeq \setbuilder{a\in A}{\exists b,c\in X:\; bR^*a \land aR^*c} \\
-&= \setbuilder{a\in A}{\exists b,c\in X:\; bR^+a \land aR^+c} \cup S.
-\end{align*}
-The subset $X$ is called \udef{$R$-convex} if $X = \relconvex_R(X)$.
-\end{definition}
-
-\begin{lemma}
-Let $\sSet{A,R}$ be a relational structure and $X\subseteq A$ a subset. Then $\relconvex_R(X) = \relconvex_{R^+}(X) = \relconvex_{R^*}(X)$.
-\end{lemma}
-
-\begin{lemma} \label{transitiveClosureConnectionInSet}
-Let $\sSet{A,R}$ be a relational structure and $X\subseteq A$ an $R$-convex subset. Then for all $x,y\in X$ such that $x\mathrel{R^+}y$, there exists a finite sequence $\seq{z_0, \ldots, z_n}$ in $X$ such that $x = z_0$, $z_n = y$ and $\forall i<n: z_iRz_{i+1}$.
-\end{lemma}
-\begin{proof}
-TODO \ref{transitiveClosureConnection}
-\end{proof}
-
-\begin{lemma} \label{addedElementsRConvexHull}
-Let $\sSet{A,R}$ be a relational structure and $X\subseteq A$. Then for all $x\in \relconvex_R(X)\setminus X$, there exist $y,z\in \relconvex_R(X)$ such that $y\neq x\neq z$  and $yRxRz$.
-
-In particular none of the elements of $\relconvex_R(X)\setminus X$ are (strictly) maximal / minimal in $\relconvex_R(X)$.
-\end{lemma}
-\begin{proof}
-TODO
-\end{proof}
-
-\begin{proposition} \label{maximalityMinimalityRConvexSets}
-Let $\sSet{A,R}$ be a relational structure, $X\subseteq A$ an $R$-convex subset and $x\in X$. Then 
-\begin{enumerate}
-\item $x$ is $R$-maximal in $X$ \textup{if and only if} $x$ is $R^+$-maximal in $X$;
-\item $x$ is strictly $R$-maximal in $X$ \textup{if and only if} $x$ is strictly $R^+$-maximal in $X$;
-\item $x$ is $R$-minimal in $X$ \textup{if and only if} $x$ is  $R^+$-minimal in $X$;
-\item $x$ is strictly $R$-minimal in $X$ \textup{if and only if} $x$ is strictly $R^+$-minimal in $X$.
-\end{enumerate}
-\end{proposition}
-For (strict) minimality / maximality, the converse also holds as 
-\begin{proof}
-(1) First assume $x$ is $R$-maximal, so $xR \cap X \subseteq \{x\}$. Now take $y\in xR^+\cap X$. By \ref{transitiveClosureConnectionInSet}, there exists $\seq{z_0, \ldots, z_n}$ in $X$ such that $x = z_0$, $z_n = y$ and $\forall i<n: z_iRz_{i+1}$. WLOG we may assume that no adjacent elements are equal. If the sequence has length one, then set $y = x$. Otherwise set $y' = z_1$. We have $xRy'$, so $x=y'$. As $z_1$ must be different from $x$, we have that this is impossible. Thus $xR^+\cap X \subseteq \{x\}$.
-
-The other direction ss immediate from $R \subseteq R^+$.
-
-(2) Now assume $x$ is strictly $R$-maximal. The proof is similar, except a sequence of lenth one is now impossible, so $xR^+\cap X = \emptyset$.
-
-(3, 4) Dual to (1,2).
-\end{proof}
-
-\begin{example}
-Neither direction of \ref{maximalityMinimalityRConvexSets} holds in general for loosely minimal / maximal elements.
-\begin{itemize}
-\item Consider the relation $R$ on $\{x,y,z\}$ determined by
-\[ \begin{tikzcd}[column sep=0.8em]
-x \arrow[rr, bend left] & {} & y \arrow[dl, bend left] \\
-{} & z \arrow[ul, bend left] & {}
-\end{tikzcd}. \]
-All three elements are loosely $R^+$-maximal in the $R$-convex set $\{x,y,z\}$, but none are loosely $R$-maximal.
-\item Consider the relation $R$ on $\{x,y,z\}$ determined by
-\[ \begin{tikzcd}
-x \arrow[r, bend left] & \arrow[l, bend left] y \arrow[r] & z.
-\end{tikzcd} \]
-Then $x$ is loosely $R$-maximal in the $R$-convex set $\{x,y,z\}$, but it is not loosely $R^+$-maximal.
-\end{itemize}
-\end{example}
 
 \subsection{Direct product}
 TODO: extend: heterogeneous relations + direct product of two different relations.
@@ -2743,6 +2498,10 @@ R\cup \id_A &= \id_A \cup \bigcup\setbuilder{R'}{\text{$R'\subseteq R$ finite}} 
 (3) This is immediate from (2) and \ref{imageAlgebraicClosureAlgebraicLattice}.
 \end{proof}
 
+\begin{definition}
+Let $A$ be a set and $R$ a relation on $A$. Then we also write $R^?$ for $\Closure_{\ReflRel}(R)$.
+\end{definition}
+
 \subsubsection{Symmetric relations}
 \begin{definition}
 Let $A$ be a set. Then the set of symmetric relations on $A$, ordered by inclusion, is denoted $\SymmRel(A)$.
@@ -2775,12 +2534,16 @@ where we have used \ref{transposeSwapLemma} and \ref{imagePreimageGaloisConnecti
 (3) This is immediate from (2) and \ref{imageAlgebraicClosureAlgebraicLattice}.
 \end{proof}
 
+\begin{definition}
+Let $A$ be a set and $R$ a relation on $A$. Then we also write $R^\leftrightarrow$ for $\Closure_{\SymmRel}(R)$.
+\end{definition}
+
 \subsubsection{Transitive relations}
 \begin{definition}
 Let $A$ be a set. Then the set of transitive relations on $A$, ordered by inclusion, is denoted $\TransRel(A)$.
 \end{definition}
 
-\begin{proposition}
+\begin{proposition} \label{transitiveClosureProp}
 Let $A$ be a set. Then $\TransRel(A)$
 \begin{enumerate}
 \item is a complete $\wedge$-subsemilattice of $\powerset(A^2)$;
@@ -2811,6 +2574,29 @@ This concludes the proof that $\bigcup_{n\geq 1}R^n \subseteq \bigcup\setbuilder
 (3) This is immediate from (2) and \ref{imageAlgebraicClosureAlgebraicLattice}.
 \end{proof}
 
+\begin{definition}
+Let $A$ be a set and $R$ a relation on $A$. Then we also write $R^+$ for $\Closure_{\TransRel}(R)$.
+\end{definition}
+
+\begin{proposition} \label{transitiveClosureConnection}
+Let $R$ be a homogeneous relation over a class $A$ and $x,y\in A$. Then $x\mathrel{R^+}y$ \textup{if and only if} there exists a finite sequence $\seq{z_0, \ldots, z_n}$ such that $x=z_0$, $z_n=y$ and $\forall i<n: z_iRz_{i+1}$.
+\end{proposition}
+TODO: relate this to the tree $T_R$.
+\begin{proof}
+Immediate from the form of the transitive closure calculated in \ref{transitiveClosureProp}.
+\end{proof}
+
+
+\begin{lemma} \label{transpositionTransitiveClosure}
+Let $R$ be a homogeneous relation over a class $A$. Then $(R^+)^\transp = (R^\transp)^+$.
+\end{lemma}
+\begin{proof}
+We have
+\[ (R^+)^\transp = \Big(\bigcup_{n\geq 1}R^n\Big)^\transp = \bigcup_{n\geq 1}(R^n)^\transp = \bigcup_{n\geq 1}(R^\transp)^n = (R^\transp)^+, \]
+from \ref{transitiveClosureProp} and \ref{relationConverseSimilarity}.
+\end{proof}
+
+
 \subsubsection{Tolerance relations}
 \begin{definition}
 Let $A$ be a set. Then the set of tolerance relations on $A$, ordered by inclusion, is denoted $\TolRel(A)$.
@@ -2819,7 +2605,8 @@ Thus $\TolRel(A) = \ReflRel(A) \cap \SymmRel(A)$.
 
 
 \begin{lemma} \label{reflexiveSymmetricClosuresCommute}
-Let $A$ be a set. Then the closure operators into $\ReflRel$ and $\SymmRel$ commute, i.e.\ $\Closure_{\ReflRel}\circ \Closure_{\SymmRel} = \Closure_{\SymmRel}\circ \Closure_{\ReflRel}$.
+Let $A$ be a set. Then the closure operators into $\ReflRel$ and $\SymmRel$ commute, i.e.
+\[ \Closure_{\ReflRel}\circ \Closure_{\SymmRel} = \Closure_{\SymmRel}\circ \Closure_{\ReflRel}. \]
 \end{lemma}
 \begin{proof}
 Take $R\in \powerset(A^2)$. Then we calculate
@@ -2831,7 +2618,7 @@ Take $R\in \powerset(A^2)$. Then we calculate
 \end{align*}
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{toleranceClosureProp}
 Let $A$ be a set. Then $\TolRel(A)$
 \begin{enumerate}
 \item is a complete $\wedge$-subsemilattice of $\powerset(A^2)$;
@@ -2848,6 +2635,109 @@ Let $A$ be a set. Then $\TolRel(A)$
 (3) This is immediate from (2) and \ref{imageAlgebraicClosureAlgebraicLattice}.
 \end{proof}
 
+\begin{definition}
+Let $A$ be a set and $R$ a relation on $A$. Then we also write $R^{\overset{?}{\leftrightarrow}}$ for $\Closure_{\TolRel}(R)$.
+\end{definition}
+
+\subsubsection{Preorder relations}
+Preorder relations are reflexive and transitive relations.
+\begin{definition}
+Let $A$ be a set. Then the set of preorder relations on $A$, ordered by inclusion, is denoted $\PreOrdRel(A)$.
+\end{definition}
+
+\begin{lemma} \label{reflexiveTransitiveClosuresCommute}
+Let $A$ be a set. Then $\Closure_{\TransRel}$ and $\Closure_{\ReflRel}$ commute, i.e.\
+\[ \Closure_{\TransRel}\circ \Closure_{\ReflRel} = \Closure_{\ReflRel}\circ \Closure_{\TransRel}. \]
+\end{lemma}
+\begin{proof}
+Take $R\in \powerset(A^2)$. Then we calculate
+\begin{align*}
+\big(\Closure_{\TransRel}\circ \Closure_{\ReflRel}\big)(R) &= \bigcup_{n\geq 1}(R \cup \id_A)^n \\
+&= \Big(\bigcup_{n\geq 1}R^n\Big) \cup \id_A \\
+&= \big(\Closure_{\ReflRel}\circ \Closure_{\TransRel}\big)(R).
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a set. Then $\PreOrdRel(A)$
+\begin{enumerate}
+\item is a complete $\wedge$-subsemilattice of $\powerset(A^2)$;
+\item has an algebraic closure operator
+\[ \Closure_{\PreOrdRel} = \Closure_{\ReflRel}\circ \Closure_{\TransRel}: \powerset(A^2)\to \TolRel(A): R \mapsto \bigcup_{n\geq 1}R^n \cup \id_A; \]
+\item is an algebraic lattice.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{intersectionCompleteSemilatticesCompleteSemilattice}.
+
+(2) By \ref{reflexiveTransitiveClosuresCommute} and \ref{compositionOfAlgebraicClosuresAlgebraic}.
+
+(3) This is immediate from (2) and \ref{imageAlgebraicClosureAlgebraicLattice}.
+\end{proof}
+
+\begin{definition}
+Let $A$ be a set and $R$ a relation on $A$. Then we also write $R^{\overset{*}{\leftrightarrow}}$ for $\Closure_{\EquivRel}(R)$.
+\end{definition}
+
+\subsubsection{Quasi-equivalence relations}
+A relation is a quasi-equivalence relation if it is symmetric and transitive.
+\begin{definition}
+Let $A$ be a set. Then the set of quasi-equivalence relations on $A$, ordered by inclusion, is denoted $\QuasiEquivRel(A)$.
+\end{definition}
+
+\begin{lemma} \label{symmetricTransitiveClosuresCompatible}
+Let $A$ be a set. Then
+\[ \Closure_{\TransRel}\circ \Closure_{\SymmRel} = \Closure_{\SymmRel}\circ \Closure_{\TransRel}\circ \Closure_{\SymmRel}. \]
+\end{lemma}
+\begin{proof}
+Take $R\in \powerset(A^2)$. Then we calculate
+\begin{align*}
+\big(\Closure_{\SymmRel}\circ \Closure_{\TransRel}\circ \Closure_{\SymmRel}\big)(R) &= \Big(\bigcup_{n\geq 1}(R\cup R^\transp)^n\Big) \cup \Big(\bigcup_{n\geq 1}(R\cup R^\transp)^n\Big)^\transp \\
+&= \Big(\bigcup_{n\geq 1}(R\cup R^\transp)^n\Big) \cup \Big(\bigcup_{n\geq 1}(R\cup R^\transp)^n\Big) \\
+&= \bigcup_{n\geq 1}(R\cup R^\transp)^n \\
+&= \big(\Closure_{\TransRel}\circ \Closure_{\SymmRel}\big)(R).
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $R$ be a homogeneous relation over a class $A$. Then $\big(R^\leftrightarrow\big)^+ \supseteq \big(R^+\big)^\leftrightarrow$.
+\end{corollary}
+\begin{proof}[Alternate proof]
+We have
+\[ \big(R^\leftrightarrow\big)^+ = \big(R\cup R^\transp\big)^+ \supseteq R^+ \cup \big(R^\transp\big)^+ = R^+ \cup \big(R^+\big)^\transp = \big(R^+\big)^\leftrightarrow, \]
+using \ref{orderPreservingFunctionLatticeOperations} and \ref{transpositionTransitiveClosure}.
+\end{proof}
+
+\begin{example}
+There exists a relational structure $\sSet{A,R}$ such that
+\[ \big(R^\leftrightarrow\big)^+ \neq \big(R^+\big)^\leftrightarrow. \]
+Consider the relation $R = {\to}$ on $\{a,b,c\}$ with relationships
+\[ \begin{tikzcd}
+a \ar[dr] & {} & \ar[dl] c \\
+{} & b & {}
+\end{tikzcd}. \]
+Then $a \mathrel{\big(R^\leftrightarrow\big)^+}b$ but not $a \mathrel{\big(R^+\big)^\leftrightarrow}b$.
+\end{example}
+
+\begin{proposition}
+Let $A$ be a set. Then $\QuasiEquivRel(A)$
+\begin{enumerate}
+\item is a complete $\wedge$-subsemilattice of $\powerset(A^2)$;
+\item has an algebraic closure operator
+\[ \Closure_{\QuasiEquivRel} = \Closure_{\TransRel}\circ \Closure_{\SymmRel}: \powerset(A^2)\to \TolRel(A): R \mapsto \bigcup_{n\geq 1}(R \cup R^\transp)^n; \]
+\item is an algebraic lattice.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) By \ref{intersectionCompleteSemilatticesCompleteSemilattice}.
+
+(2) By \ref{symmetricTransitiveClosuresCompatible} and \ref{compositionOfAlgebraicClosuresAlgebraic}.
+
+(3) This is immediate from (2) and \ref{imageAlgebraicClosureAlgebraicLattice}.
+\end{proof}
+
+
+
+
 \subsubsection{Equivalence relations}
 \begin{definition}
 Let $A$ be a set. Then the set of equivalence relations on $A$, ordered by inclusion, is denoted $\EquivRel(A)$.
@@ -2858,15 +2748,15 @@ Let $A$ be a set. Then
 \[ \Closure_{\TransRel}\circ \Closure_{\TolRel} = \Closure_{\TolRel}\circ \Closure_{\TransRel}\circ \Closure_{\TolRel}. \]
 \end{lemma}
 \begin{proof}
-Take $R\in \powerset(A^2)$. Then we calculate
+We calculate
 \begin{align*}
-\big(\Closure_{\TolRel}\circ \Closure_{\TransRel}\circ \Closure_{\TolRel}\big)(R) &= \Big(\bigcup_{n\geq 1}(R\cup R^\transp \cup \id_A)^n\Big) \cup \Big(\bigcup_{n\geq 1}(R\cup R^\transp \cup \id_A)^n\Big)^\transp \cup \id_A \\
-&= \Big(\bigcup_{n\geq 1}(R\cup R^\transp \cup \id_A)^n\Big) \cup \Big(\bigcup_{n\geq 1}(R\cup R^\transp \cup \id_A)^n\Big) \cup \id_A \\
-&= \Big(\bigcup_{n\geq 1}(R\cup R^\transp \cup \id_A)^n\Big) \cup \id_A \\
-&= \bigcup_{n\geq 1}(R\cup R^\transp \cup \id_A)^n  \cup \id_A \\
-&= \bigcup_{n\geq 1}(R\cup R^\transp \cup \id_A)^n \\
-&= \big(\Closure_{\TransRel}\circ \Closure_{\TolRel}\big)(R).
+\Closure_{\TransRel}\circ \Closure_{\TolRel} &= \Closure_{\TransRel}\circ \Closure_{\SymmRel} \circ \Closure_{\ReflRel} \\
+&= \Closure_{\SymmRel}\circ \Closure_{\TransRel}\circ \Closure_{\SymmRel} \circ \Closure_{\ReflRel} \\
+&= \Closure_{\SymmRel}\circ \Closure_{\TransRel}\circ \Closure_{\SymmRel} \circ \Closure_{\ReflRel}^2 \\
+&= \Closure_{\SymmRel}\circ \Closure_{\ReflRel} \circ \Closure_{\TransRel}\circ \Closure_{\SymmRel} \circ \Closure_{\ReflRel} \\
+&= \Closure_{\TolRel} \circ \Closure_{\TransRel}\circ \Closure_{\TolRel},
 \end{align*}
+using \ref{toleranceClosureProp}, \ref{symmetricTransitiveClosuresCompatible} and \ref{reflexiveSymmetricClosuresCommute}.
 \end{proof}
 
 \begin{proposition}
@@ -2886,6 +2776,79 @@ Let $A$ be a set. Then $\EquivRel(A)$
 
 (3) This is immediate from (2) and \ref{imageAlgebraicClosureAlgebraicLattice}.
 \end{proof}
+
+\begin{definition}
+Let $A$ be a set and $R$ a relation on $A$. Then we also write $R^{\overset{*}{\leftrightarrow}}$ for $\Closure_{\EquivRel}(R)$.
+\end{definition}
+
+
+
+\subsubsection{Convex hull}
+\begin{definition}
+Let $\sSet{A,R}$ be a relational structure and $X\subseteq A$ a subset. The \udef{$R$-convex hull} of $X$ is
+\begin{align*}
+\relconvex_R(X) &\defeq \setbuilder{a\in A}{\exists b,c\in X:\; bR^*a \land aR^*c} \\
+&= \setbuilder{a\in A}{\exists b,c\in X:\; bR^+a \land aR^+c} \cup S.
+\end{align*}
+The subset $X$ is called \udef{$R$-convex} if $X = \relconvex_R(X)$.
+\end{definition}
+
+\begin{lemma}
+Let $\sSet{A,R}$ be a relational structure and $X\subseteq A$ a subset. Then $\relconvex_R(X) = \relconvex_{R^+}(X) = \relconvex_{R^*}(X)$.
+\end{lemma}
+
+\begin{lemma} \label{transitiveClosureConnectionInSet}
+Let $\sSet{A,R}$ be a relational structure and $X\subseteq A$ an $R$-convex subset. Then for all $x,y\in X$ such that $x\mathrel{R^+}y$, there exists a finite sequence $\seq{z_0, \ldots, z_n}$ in $X$ such that $x = z_0$, $z_n = y$ and $\forall i<n: z_iRz_{i+1}$.
+\end{lemma}
+\begin{proof}
+TODO \ref{transitiveClosureConnection}
+\end{proof}
+
+\begin{lemma} \label{addedElementsRConvexHull}
+Let $\sSet{A,R}$ be a relational structure and $X\subseteq A$. Then for all $x\in \relconvex_R(X)\setminus X$, there exist $y,z\in \relconvex_R(X)$ such that $y\neq x\neq z$  and $yRxRz$.
+
+In particular none of the elements of $\relconvex_R(X)\setminus X$ are (strictly) maximal / minimal in $\relconvex_R(X)$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+
+\begin{proposition} \label{maximalityMinimalityRConvexSets}
+Let $\sSet{A,R}$ be a relational structure, $X\subseteq A$ an $R$-convex subset and $x\in X$. Then 
+\begin{enumerate}
+\item $x$ is $R$-maximal in $X$ \textup{if and only if} $x$ is $R^+$-maximal in $X$;
+\item $x$ is strictly $R$-maximal in $X$ \textup{if and only if} $x$ is strictly $R^+$-maximal in $X$;
+\item $x$ is $R$-minimal in $X$ \textup{if and only if} $x$ is  $R^+$-minimal in $X$;
+\item $x$ is strictly $R$-minimal in $X$ \textup{if and only if} $x$ is strictly $R^+$-minimal in $X$.
+\end{enumerate}
+\end{proposition}
+For (strict) minimality / maximality, the converse also holds as 
+\begin{proof}
+(1) First assume $x$ is $R$-maximal, so $xR \cap X \subseteq \{x\}$. Now take $y\in xR^+\cap X$. By \ref{transitiveClosureConnectionInSet}, there exists $\seq{z_0, \ldots, z_n}$ in $X$ such that $x = z_0$, $z_n = y$ and $\forall i<n: z_iRz_{i+1}$. WLOG we may assume that no adjacent elements are equal. If the sequence has length one, then set $y = x$. Otherwise set $y' = z_1$. We have $xRy'$, so $x=y'$. As $z_1$ must be different from $x$, we have that this is impossible. Thus $xR^+\cap X \subseteq \{x\}$.
+
+The other direction ss immediate from $R \subseteq R^+$.
+
+(2) Now assume $x$ is strictly $R$-maximal. The proof is similar, except a sequence of lenth one is now impossible, so $xR^+\cap X = \emptyset$.
+
+(3, 4) Dual to (1,2).
+\end{proof}
+
+\begin{example}
+Neither direction of \ref{maximalityMinimalityRConvexSets} holds in general for loosely minimal / maximal elements.
+\begin{itemize}
+\item Consider the relation $R$ on $\{x,y,z\}$ determined by
+\[ \begin{tikzcd}[column sep=0.8em]
+x \arrow[rr, bend left] & {} & y \arrow[dl, bend left] \\
+{} & z \arrow[ul, bend left] & {}
+\end{tikzcd}. \]
+All three elements are loosely $R^+$-maximal in the $R$-convex set $\{x,y,z\}$, but none are loosely $R$-maximal.
+\item Consider the relation $R$ on $\{x,y,z\}$ determined by
+\[ \begin{tikzcd}
+x \arrow[r, bend left] & \arrow[l, bend left] y \arrow[r] & z.
+\end{tikzcd} \]
+Then $x$ is loosely $R$-maximal in the $R$-convex set $\{x,y,z\}$, but it is not loosely $R^+$-maximal.
+\end{itemize}
+\end{example}
 
 \subsection{Uniqueness and totality}
 \begin{definition}
