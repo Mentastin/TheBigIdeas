@@ -2546,20 +2546,25 @@ This function is clearly injective. Now take arbitrary $f\in \cont_0(X,Y)$. Then
 \section{Convergences on ordered sets}
 \subsection{Order convergence}
 \subsubsection{Convergence compatible with the order}
-
 \begin{definition}
-Let $\sSet{X,\leq}$ be a poset. A convergence $\xi$ in $X$ is called
-\begin{itemize}
-\item \udef{compatible with the weak order} if $F \leq_w G$, $x\in\lim_\xi F$ and $y\in \lim_\xi G$ imply $x\leq y$;
-\item \udef{compatible with the strong order} if $F \leq_s G$, $x\in\lim_\xi F$ and $y\in \lim_\xi G$ imply $x\leq y$.
-\end{itemize}
+Let $\sSet{P,\leq}$ be a poset. A convergence $\xi$ in $P$ is called \udef{compatible with the order} or \udef{order-compatible} if, for all $F,G\in\powerfilters(P)$ and $x,y\in P$ such that $F\overset{\xi}{\longrightarrow} x$ and $G \overset{\xi}{\longrightarrow} y$, we have
+\[ F \leq_w G \qquad\implies\qquad x \leq y. \]
 \end{definition}
 
-\begin{proposition} \label{compatibleWeakOrderHausdorff}
-Let $\sSet{X,\leq}$ be a poset and $\xi$ a convergence compatible with the weak order. Then $\xi$ is Hausdorff.
+\begin{proposition} \label{convergenceCompatibleWithOrderIFFGraphClosed}
+Let $\sSet{P,\leq}$ be a poset and $\xi$ a convergence on $P$. Then $\xi$ is compatible with the order \textup{if and only if} $\graph(\leq)$ is a closed subset of $P\times P$.
 \end{proposition}
 \begin{proof}
-Take $F\in\powerfilters(X)$ and $x,y\in \lim_\xi F$. Since $\leq_w$ is reflexive by \ref{reflexivityFilterRelations}, we have $F\leq_w F$, which implies $x\leq y$ and $y\leq x$ by compatibility with the weak order. Thus $x=y$ by antisymmetry.
+First assume $\xi$ is compatible with the order and take $(x,y) \in \adh_{\xi\otimes \xi}\big(\graph(\leq)\big)$, so \ref{productAdherenceFilterLemma} implies that there exist $F,G\in \powerfilters(P)$ such that $F\to x, G\to y$ and $\graph(\leq) \in F\otimes G$. Since \ref{properFiltersSelfMesh} gives $F\otimes G \subseteq (F\otimes G)^\mesh$, we have $F \leq_w G$ from \ref{relationsOnFiltersRestated}. This implies $x\leq y$, so $(x,y)\in \graph(\leq)$. Thus $\adh_{\xi\otimes \xi}\big(\graph(\leq)\big) \subseteq \graph(\leq)$, which means that $\graph(\leq)$ is closed.
+
+Now assume $\graph(\leq)$ is a closed subset of $P\times P$. Take arbitrary $F,G\in\powerfilters(P)$ and $x,y\in P$ such that $F\overset{\xi}{\longrightarrow} x$, $G \overset{\xi}{\longrightarrow} y$ and $F \leq_w G$. Then $F\otimes G \to (x,y)$ and $\graph(\leq) \in (F\otimes G)^\mesh$ from \ref{relationsOnFiltersRestated}, so $(x,y) \in \adh_{\xi\otimes \xi}\big(\graph(\leq)\big) = \graph(\leq)$ and thus $x \leq y$.
+\end{proof}
+
+\begin{proposition} \label{compatibleWeakOrderHausdorff}
+Let $\sSet{X,\leq}$ be a poset and $\xi$ a convergence compatible with the order. Then $\xi$ is Hausdorff.
+\end{proposition}
+\begin{proof}
+Take $F\in\powerfilters(X)$ and $x,y\in \lim_\xi F$. Since $\leq_w$ is reflexive by \ref{reflexivityFilterRelations}, we have $F\leq_w F$, which implies $x\leq y$ and $y\leq x$ by compatibility with the order. Thus $x=y$ by antisymmetry.
 \end{proof}
 
 \begin{lemma} \label{limsupLiminfInequality}
@@ -2575,7 +2580,7 @@ This implies $\bigvee_{A\in F}\bigwedge A \leq \bigwedge_{A\in F}\bigvee A$.
 \begin{lemma} \label{completePosetConvergenceCompatibleWithWeakOrder}
 Let $\sSet{X,\leq}$ be a complete lattice and $\xi$ a convergence on $X$. Then
 \begin{enumerate}
-\item if $\lim_\xi F\subseteq \{\liminf F\}\cap\{\limsup F\}$ for all $F\in\powerfilters(X)$, then $\xi$ is compatible with the weak order;
+\item if $\lim_\xi F\subseteq \{\liminf F\}\cap\{\limsup F\}$ for all $F\in\powerfilters(X)$, then $\xi$ is compatible with the order;
 \item if $\lim_\xi F\subseteq \interval{\liminf F, \limsup F}$ for all $F\in\powerfilters(X)$, then $\xi$ is compatible with the strong order.
 \end{enumerate}
 \end{lemma}
@@ -2585,44 +2590,37 @@ Let $\sSet{X,\leq}$ be a complete lattice and $\xi$ a convergence on $X$. Then
 (2) Take $F,G\in \powerfilters(X)$ such that $F\leq_s G$. Take $x\in \lim F$ and $y\in \lim G$. By assumption, $x \leq \limsup F$ and $y \geq \liminf G$. By \ref{filterInequalityCriterion} we have $\limsup F\leq \liminf G$, so $x\leq \limsup F\leq \liminf G \leq y$.
 \end{proof}
 
-\begin{proposition} \label{principalUpDownSetsClosed}
-Let $\sSet{P,\leq}$ be a poset, $\xi$ a convergence compatible with the weak order and $x,y\in P$. Then
+\begin{proposition}
+Let $\sSet{P,\leq}$ be a poset and $\xi$ a convergence on $P$ that is compatible with the order. Let $A\subseteq P$ be a compact subset. Then $\downset A$ and $\upset A$ are closed. 
+\end{proposition}
+\begin{proof}
+We can write
+\[ \downset A = \proj_1^\imf\big((P\times A) \cap \graph(\leq)\big) \]
+From \ref{compactClosedSets} and \ref{compatibleWeakOrderHausdorff}, we know that $A$ is closed, so \ref{productOpenClosed} and \ref{propertiesTopology} imply that $P\times A$ is closed. Using \ref{convergenceCompatibleWithOrderIFFGraphClosed} and \ref{propertiesTopology}, we have that $(P\times \{x\}) \cap \graph(\leq)$ is a closed subset of $P\times P$. It is also a closed subset of $P\times \{x\}$, from \ref{subspaceAdherence}.
+
+Since $A$ is compact, \ref{projectionClosedFunction} implies that $\proj_1^\imf\big((P\times A) \cap \graph(\leq)\big)$ is closed.
+
+The argument for $\upset A$ is dual.
+\end{proof}
+\begin{corollary} \label{principalUpDownSetsClosed}
+Let $\sSet{P,\leq}$ be a poset, $\xi$ a convergence compatible with the order and $x,y\in P$. Then
 \begin{enumerate}
 \item $\upset\{x\}$ is closed;
 \item $\downset\{x\}$ is closed;
 \item $\interval{x,y}$ is closed.
 \end{enumerate}
-\end{proposition}
+\end{corollary}
 \begin{proof}
-(1) Take arbitrary $y\in \adh_\xi\big(\upset\{x\}\big)$. Then, from \ref{principalAdherenceInherence}, there exists $F\in \powerfilters(P)$ such that $F\to y$ and $\upset\{x\} \in F$. This implies $\pfilter{x} \leq_w F$, so $x\leq y$ and $y\in \upset \{x\}$. Thus $\adh_\xi\big(\upset\{x\}\big) \subseteq \upset\{x\}$, which means that $\upset\{x\}$ is closed.
-
-(2) The argument for $\downset\{x\}$ is dual.
+(1,2) Immediate from the proposition.
 
 (3) We have that $\interval{x,y} = \upset\{x\} \cap \downset\{y\}$ is closed from (1),(2) and \ref{propertiesTopology}.
 \end{proof}
-
-\begin{lemma} \label{principalUpDownsetWeaklyOrderedFilters}
-Let $\sSet{P,\leq}$ be a poset $x\in P$ and $F,G\in \powerfilters(P)$. If $F\leq_w G$, then $\downset\{x\} \in G$ implies $\downset\{x\} \in F^\mesh$.
-\end{lemma}
-\begin{proof}
-Suppose $\downset\{x\} \in G$. Take arbitrary $A\in F$. Then there exists $a\in A$ and $b\in \downset \{x\}$ such that $a\leq b \leq x$. Thus $a \leq x$ and $a\in \downset\{x\}$, which implies $A \mesh \downset\{x\}$.
-\end{proof}
-
-\begin{proposition}
-Let $\sSet{P,\leq}$ be a poset and $\xi$ a convergence on $P$. Then the following are equivalent:
-\begin{enumerate}
-\item $\xi$ is compatible with the weak order;
-\item $\upset\{x\}$ is closed for all $x\in P$;
-\item $\downset\{x\}$ is closed for all $x\in P$.
-\end{enumerate}
-\end{proposition}
-TODO: is this true????
-\begin{proof}
-$(2) \Rightarrow (1)$ Let $F,G\in\powerfilters(P)$ be such that $F\to x$, $G\to y$ and $F\leq_w G$. We need to prove $x \leq y$. Suppose this is not true, so $x\nleq y$. Then $y\in \big(\upset\{x\}\big)^c$. Since $\big(\upset\{x\}\big)^c$ is open, we have $\big(\upset\{x\}\big)^c\in G$ from \ref{openClosedCriteria}. Then \ref{complementInIsotoneGrill} gives $\upset\{x\} \notin G^\mesh$ and \ref{principalUpDownsetWeaklyOrderedFilters} implies $\upset\{x\} \notin F$. TODO: does this give a contradiction?
+\begin{proof}[Alternate proof of (1)]
+Take arbitrary $y\in \adh_\xi\big(\upset\{x\}\big)$. Then, from \ref{principalAdherenceInherence}, there exists $F\in \powerfilters(P)$ such that $F\to y$ and $\upset\{x\} \in F$. This implies $\pfilter{x} \leq_w F$, so $x\leq y$ and $y\in \upset \{x\}$. Thus $\adh_\xi\big(\upset\{x\}\big) \subseteq \upset\{x\}$, which means that $\upset\{x\}$ is closed.
 \end{proof}
 
 \begin{lemma} \label{latticeOperationsWeaklyOrderedFilters}
-Let $\sSet{P,\leq}$ be a poset and $F,G\in\powerfilters(P)$ such that $F\leq_w G$. Then
+Let $L$ be a lattice and $F,G\in\powerfilters(L)$ such that $F\leq_w G$. Then
 \begin{enumerate}
 \item $\vee^{\imf\imf}(F\otimes G) \amesh G$;
 \item $\wedge^{\imf\imf}(F\otimes G) \amesh F$.
@@ -2635,22 +2633,22 @@ Let $\sSet{P,\leq}$ be a poset and $F,G\in\powerfilters(P)$ such that $F\leq_w G
 \end{proof}
 
 \begin{proposition} \label{HausdorffContinuousLatticeOperationsOrderCompatible}
-Let $\sSet{P,\leq}$ be a poset and $\xi$ a convergence such that
+Let $L$ be a lattice and $\xi$ a convergence such that
 \begin{itemize}
 \item $\xi$ is Hausdorff;
-\item either $\vee: P\times P \to P$ or $\wedge: P\times P \to P$ is continuous.
+\item either $\vee: L\times L \to L$ or $\wedge: L\times L \to L$ is continuous.
 \end{itemize}
-Then $\xi$ is compatible with the weak order.
+Then $\xi$ is compatible with the order.
 \end{proposition}
 \begin{proof}
-Suppose $\vee: P\times P \to P$ is continuous.
+Suppose $\vee: L\times L \to L$ is continuous.
 
-Take arbitrary $F,G\in\powerfilters(P)$ such that $F\leq_w G$, $F\to x$ and $G\to y$. Then \ref{latticeOperationsWeaklyOrderedFilters} gives $\vee^{\imf\imf}(F\otimes G) \amesh G$. Since $\vee^{\imf\imf}(F\otimes G) \to x\vee y$, \ref{HausdorffFilterPartition} yields $x\vee y = y$ and so $x\leq y$.
+Take arbitrary $F,G\in\powerfilters(L)$ such that $F\leq_w G$, $F\to x$ and $G\to y$. Then \ref{latticeOperationsWeaklyOrderedFilters} gives $\vee^{\imf\imf}(F\otimes G) \amesh G$. Since $\vee^{\imf\imf}(F\otimes G) \to x\vee y$, \ref{HausdorffFilterPartition} yields $x\vee y = y$ and so $x\leq y$.
 
-The argument if $\wedge: P\times P \to P$ is continuous, is dual.
+The argument if $\wedge: L\times L \to L$ is continuous, is dual.
 \end{proof}
 
-\subsubsection{Convergence potentially compatible with weak order}
+\subsubsection{Convergence potentially compatible with order}
 \begin{definition}
 Let $\sSet{X,\leq}$ be a poset. Consider
 \[ F \mapsto \begin{cases}
@@ -2661,13 +2659,13 @@ for all filters $F\in \powerfilters(X)$.
 \end{definition}
 
 \begin{proposition} \label{necessityWeakOrderConvergence}
-Let $\sSet{X,\leq}$ be a poset, $\xi$ a convergence on $X$ that is compatible with the weak order and $F\in \powerfilters(X)$. Then
+Let $\sSet{X,\leq}$ be a poset, $\xi$ a convergence on $X$ that is compatible with the order and $F\in \powerfilters(X)$. Then
 \[ \lim_\xi F \subseteq \Big(\bigcap_{A\in F}\upset A\Big)^\geq \cap \Big(\bigcap_{A\in F}\downset A\Big)^\leq. \]
 \end{proposition}
 \begin{proof}
-Let $\xi$ be an arbitrary convergence that is compatible with the weak order.
+Let $\xi$ be an arbitrary convergence that is compatible with the order.
 
-Take $y\in \lim_\xi(F)$. Take arbitrary $x\in \bigcap_{A\in F}\upset A$. Then $F \leq_w \pfilter{x}$ by \ref{weakRelationPrincipalFilter}, so $y\leq x$ by compatibility with the weak order. Since this holds for all such $x$, we have $y\in \Big(\bigcap_{A\in F}\upset A\Big)^\geq$. Similarly $y\in \Big(\bigcap_{A\in F}\downset A\Big)^\leq$.
+Take $y\in \lim_\xi(F)$. Take arbitrary $x\in \bigcap_{A\in F}\upset A$. Then $F \leq_w \pfilter{x}$ by \ref{weakRelationPrincipalFilter}, so $y\leq x$ by compatibility with the order. Since this holds for all such $x$, we have $y\in \Big(\bigcap_{A\in F}\upset A\Big)^\geq$. Similarly $y\in \Big(\bigcap_{A\in F}\downset A\Big)^\leq$.
 \end{proof}
 
 
@@ -2691,9 +2689,9 @@ To show that it is centered, take $x\in X$. Then
 \begin{proposition}
 Let $\sSet{X,\leq}$ be a poset and let $\xi$ be the convergence defined in \ref{potentialWeakOrderConvergence}. Then the following are equivalent:
 \begin{enumerate}
-\item $X$ has a weakest convergence compatible with weak order;
+\item $X$ has a weakest convergence compatible with order;
 \item $\xi$ is Hausdorff;
-\item $\xi$ is compatible with the weak order.
+\item $\xi$ is compatible with the order.
 \end{enumerate}
 \end{proposition}
 Is this true????
@@ -2703,12 +2701,12 @@ $(1) \Rightarrow (2)$ We prove this by contraposition. Assume the convergence in
 G\overset{\zeta_x}{\longrightarrow} a \quad&\defequiv\quad \big(G = \pfilter{a}\big) \lor \Big( (F\subseteq G)\land (a = x) \Big) \\
 G\overset{\zeta_y}{\longrightarrow} a \quad&\defequiv\quad \big(G = \pfilter{a}\big) \lor \Big( (F\subseteq G)\land (a = y) \Big).
 \end{align*}
-It is enough to show that both $\zeta_x$ and $\zeta_y$ are compatible with the weak order, since in this case $\zeta_x \vee \zeta_y$ is not Hausdorff and thus not compatible with the weak order by \ref{compatibleWeakOrderHausdorff}.
+It is enough to show that both $\zeta_x$ and $\zeta_y$ are compatible with the order, since in this case $\zeta_x \vee \zeta_y$ is not Hausdorff and thus not compatible with the order by \ref{compatibleWeakOrderHausdorff}.
 
 For $\zeta_x$, take $G, H\in \powerfilters(X)$ such that $G,H$ are convergent and $G\leq_w H$. If $G,H$ are both principal ultrafilters, then weak compatibility follows from \ref{weakRelationPrincipalFilter}. If neither is a principal ultrafilter, then both converge to $x$ and we weak compatibility.
 If $H = \pfilter{a}$ and $G\supseteq F$. Then $F\leq_w \pfilter{a}$ by \ref{upDownClosureWeakStrongRelation}, so $a \in \bigcap_{A\in F}\upset A$ by \ref{weakRelationPrincipalFilter} and $x\leq a$ by assumption. The case $G = \pfilter{a}$ is similar.
 
-The convergence $\zeta_y$ is compatible with weak order by a similar argument.
+The convergence $\zeta_y$ is compatible with order by a similar argument.
 
 $(2) \Rightarrow (3)$ TODO!
 
@@ -2726,7 +2724,7 @@ Now set $A_\epsilon = \setbuilder{(x, 0)}{-\epsilon \leq x\leq \epsilon} \setmin
 \item $\Big(\bigcap_{\epsilon > 0}\upset A_\epsilon\Big)^\geq = \setbuilder{(0,y)}{y < 0}\cup \R\times\{0\}$ and $\Big(\bigcap_{\epsilon > 0}\downset A_\epsilon\Big)^\leq = \setbuilder{(0,y)}{y > 0}\cup \R\times\{0\}$;
 \item $\Big(\bigcap_{\epsilon > 0}\upset A_\epsilon\Big)^\geq \cap\Big(\bigcap_{\epsilon > 0}\downset A_\epsilon\Big)^\leq = \R\times\{0\}$.
 \end{itemize}
-Thus $P$ has no weakest convergence compatible with weak ordering.
+Thus $P$ has no weakest convergence compatible with the ordering.
 \end{example}
 
  
@@ -2791,7 +2789,7 @@ Order convergence not topological. See \url{https://arxiv.org/pdf/1705.09883}
 \end{example}
 
 \begin{lemma} \label{orderConvergenceCompatibleWeakOrder}
-Let $\sSet{X,\leq}$ be a poset. The order convergence on $X$ is compatible with the weak order.
+Let $\sSet{X,\leq}$ be a poset. The order convergence on $X$ is compatible with the order.
 \end{lemma}
 \begin{proof}
 Suppose $F\overset{\mathfrak{o}}{\longrightarrow} x$, $G\overset{\mathfrak{o}}{\longrightarrow} y$ and $F\leq_w G$. Then $\upset m^{\imf\imf}(F) \overset{\mathfrak{o}}{\longrightarrow} m(x)$ and $\upset m^{\imf\imf}(G) \overset{\mathfrak{o}}{\longrightarrow} m(y)$ by definition and $\upset m^{\imf\imf}(F) \leq_w \upset m^{\imf\imf}(G)$ by \ref{relationPreservingfunctionToFilterInequality}. So $m(x)\leq m(y)$ by \ref{completePosetConvergenceCompatibleWithWeakOrder} and thus $x\leq y$. 
@@ -2924,7 +2922,7 @@ By \ref{limsupLiminfInequality}, we also have $\bigvee_{A\in F}\bigwedge_{\DM(P)
 Finally the claim about the directedness of $M$ and $N$ follows from \ref{latticeIntervalIntersection}.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{orderConvergenceRegular}
 Let $\sSet{P,\leq}$ be a poset. Then the order convergence on $P$ is regular.
 \end{proposition}
 See also \cite{VANDERWALT2011138}.
@@ -2933,6 +2931,30 @@ Take $F\in\powerfilters(P)$ and $x\in P$ such that $F\overset{\mathfrak{o}}{\lon
 
 For all $a\in M$ and $b\in N$, the interval $\interval{a,b}$ is closed, from \ref{principalUpDownSetsClosed}. Thus $\interval{a,b} \in \adh^\imf(F)$, and \ref{orderConvergenceIntervalBase} implies that $\adh^\imf(F)\overset{\mathfrak{o}}{\longrightarrow} x$.
 \end{proof}
+
+\begin{note}
+I had thought that the following may be true:
+\begin{lemma*}
+Let $P$ be a poset and $A\subseteq P$ a subset. Then $A$ is order-dense in $P$ \textup{if and only if} for all $x\in P$ there exist subsets $M,N \subseteq A$ such that $\bigvee M = x = \bigwedge N$.
+\end{lemma*}
+\begin{proof}
+First assume $A$ is order-dense in $P$ and take arbitrary $x\in P$. Then there exists $F \overset{\mathfrak{o}}{\longrightarrow} x$ such that $A\in F$. From \ref{orderConvergenceIntervalBase}, we know that there exist $M_0, N_0 \subseteq X$ such that $\bigvee M_0 = x = \bigwedge N_0$ and $\interval{a,b} \in F$ for all $a\in M_0, b\in N_0$.
+
+Since $A\in F$, we have $A\mesh \interval{a,b}$. 
+\end{proof}
+
+
+It turns out it is not. Consider $P = \R^+\times \{0,1\} \setminus \{(0,0)\}$ with lexicographic ordering: 
+\[ (x, \alpha) \leq (y, \beta) \quad\defequiv\quad (x < y) \lor \big((x = y) \land (\alpha \leq \beta)\big). \]
+We have
+\[ \bigwedge \setbuilder{(n^{-1},1)}{n\in \N} = (0,1), \]
+so
+\[ F \defeq \upset\setbuilder{\interval{(0,1), (n^{-1},1)}}{n\in \N} \overset{\mathfrak{o}}{\longrightarrow} (1,0). \]
+But also $F \amesh \big\{\R^+\times \{0\}\big\}$, so $F \vee \upset\big\{\R^+\times \{0\}\big\}$ is a proper filter and $(0,1) \in \adh_\mathfrak{o}\big(\{0\}\times\R\big)$
+
+
+BETTER COUNTEREXAMPLE: Consider complete lattice $\interval{0,1}$ with dense subset $\interval[oc]{0,1}$.
+\end{note}
 
 \begin{proposition}
 Let $P, Q$ be posets, $f: P\to Q$ an order-preserving function and $x\in P$. If $f$ is order-continuous at $x$, then 
@@ -3774,7 +3796,16 @@ Let $\sSet{X_i, \xi_i}$ be a (pre)convergence space for all $i\in I$ and $x\in \
 \[\vicinities_{\prod \xi_i}(x) = \upset \setbuilder{\bigtimes_{i\in I}A_i}{\forall i\in I: A_i \in \vicinities_{\xi_i}(p_i(x)) \;\land\; A_i = X_i, \,\text{except for finitely many $A_i$}}. \]
 In particular $\vicinities_{\xi\otimes \zeta}((x,y)) = \upset \vicinities_\xi(x)\otimes \vicinities_\zeta(y)$.
 \end{corollary}
-
+\begin{corollary} \label{productAdherenceFilterLemma}
+Let $\sSet{X_i, \xi_i}$ be a (pre)convergence space for all $i\in I$ and $A\subseteq \bigtimes_{i\in I} X_i$. Then
+\[ \seq{x_i}_{i\in I} \in \adh_{\prod_{i\in I}\xi_i}(A) \iff \exists \seq{F_i}_{i\in I}\in \powerfilters\Big(\bigcup_{i\in I}X_i\Big)^I: \Big(\forall i\in I: \big(F_i\in\powerfilters(X_i)\big) \land \big(F_i \overset{\xi_i}{\longrightarrow} x_i\big)\Big) \land \Big(A\in \bigotimes_{i\in I}F_i\Big). \]
+In particular, suppose $\sSet{X,\xi},\sSet{Y, \zeta}$ are convergence spaces and $A\subseteq X\times Y$. Then $(x,y) \in \adh_{\xi\otimes \zeta}(A)$ \textup{if and only if} there exist $F\to x$ and $G\to y$ such that $A\in F\otimes G$.
+\end{corollary}
+\begin{proof}
+From \ref{principalAdherenceInherence}, we have
+\[ \seq{x_i}_{i\in I} \in \adh_{\prod_{i\in I}\xi_i}(A) \iff \exists F \in\powerfilters\Big(\bigtimes_{i\in I}X_i\Big): \Big(F \overset{\prod_{i\in I}\xi_i}{\longrightarrow} \seq{x_i}\Big) \land (A\in F). \]
+Due to the proposition, we can replace $F$ by a product of convergent filters and this is equivalent to the statement.
+\end{proof}
 \begin{corollary} \label{productAdherence}
 Let $\sSet{X_i, \xi_i}$ be a (pre)convergence space and $A_i\subseteq X_i$ for all $i\in I$. Then
 \[ \adh_{\prod_{i\in I}\xi_i}\left(\bigtimes_{i\in I}A_i\right) = \bigtimes_{i\in I}\adh_{\xi_i}(A_i). \]
@@ -3846,14 +3877,10 @@ Now the right-hand side is only empty if there exists $i\in I$ such that $A_i\ca
 \end{proof}
 
 \begin{lemma} \label{projectionsOfProductFilter}
-Let $X,Y$ be sets, $F\in \powerfilters(X)$ and $G\in \powerfilters(Y)$. Then
-\begin{enumerate}
-\item $\proj_1^{\imf\imf}[F\otimes G] = F$;
-\item $\proj_2^{\imf\imf}[F\otimes G] = G$.
-\end{enumerate}
+Let $I$ be a set and $X_i$ a set for all $i\in I$. Suppose $A_i \subseteq X_i$ is a subset and $F_i \in powerfilters(X_i)$ for all $i\in I$. Then $\upset\proj_i^{\imf\imf}\big(\bigotimes_{i\in I}F_i\big) = F_i$ for all $i\in I$.
 \end{lemma}
 \begin{proof}
-The elements of $F$ form a basis of $p_1^{\imf\imf}[F\otimes G]$. Similarly the elements of $G$ form a basis of $p_2^{\imf\imf}[F\otimes G]$.
+Take $i\in I$. The equality is clear by considering basissets of $\upset \proj_i^{\imf\imf}\big(\bigotimes_{i\in I}F_i\big)$.
 \end{proof}
 \begin{lemma} \label{parallelFunctionProductFilter}
 Let $X,Y,V,W$ be sets, $F\in \powerfilters(X)$, $G\in \powerfilters(Y)$, $f: X\to U$ and $g: Y\to W$. Then $(f|g)^{\imf\imf}(F\otimes G) = f^{\imf\imf}(F)\otimes g^{\imf\imf}(G)$.
