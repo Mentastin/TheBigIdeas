@@ -4378,7 +4378,7 @@ $\mathcal{C}(X)$ for some compact $X$ (need Hausdorff?). TODO: norm well defined
 \end{example}
 
 \begin{proposition}
-The $B^*$-identity is equivalent to the $C^*$-identity
+The $B^*$-identity is equivalent to the \udef{$C^*$-identity}
 \[\forall x\in A: \quad \norm{x^*x} = \norm{x^*}\cdot\norm{x}.\]
 \end{proposition}
 \begin{proof}
@@ -5328,12 +5328,78 @@ Assume $0\leq a\leq b$. Then
 It is not true that $a^2\leq b^2$ or that $ab$ is positive in general!
 
 \subsubsection{Increasing approximate units}
+\begin{definition}
+Let $A$ be a $C^*$-algebra. An \udef{increasing approximate unit} on $A$ is an approximate unit that is a monotonically increasing net of positive elements.
+\end{definition}
+Note the positivity requirement!
+
+\begin{lemma} \label{increasingApproximateUnitLemma}
+Let $t\in \R^+$ and $n\in \N\setminus\{0\}$. Then
+\begin{enumerate}
+\item $0 \leq t - \frac{t^2}{t+n^{-1}} \leq \frac{1}{n}$;
+\item $t - \frac{t^2}{t+n^{-1}} = 1 - (1 + nt)^{-1}$. 
+\end{enumerate}
+\end{lemma}
+
 \begin{proposition} \label{approximateUnitInIdeal}
-Let $A$ be a $C^*$-algebra and $J \subseteq A$ a two-sided $*$-ideal. Then there exists a net $(e_\lambda)_{\lambda\in\Lambda}$ in $J$ that that is an increasing approximate unit of $\overline{J}$.
+Let $A$ be a unital $C^*$-algebra and $J\subseteq A$ a (not necessarily
+closed) left-ideal. Then there exists a net $\seq{e_\lambda}_{\lambda \in \Lambda}$ in $J$ such that
+\begin{itemize}
+\item $\seq{e_\lambda}$ is increasing;
+\item $e_\lambda \geq 0$ for all $\lambda \in \Lambda$;
+\item $\norm{e_\lambda} \leq 1$ for all $\lambda \in \Lambda$;
+\item $xe_\lambda \to x$ for all $x\in J$.
+\end{itemize}
 \end{proposition}
+Note that it is not an approximate unit of $J$ because we do not have $e_\lambda x \to x$.
 \begin{proof}
-See Dana Williams
+Let $\Lambda$ be the set of finite non-empty subsets of $J$, which is a directed set. For all $\lambda\in \Lambda$, we define $v_\lambda \defeq \sum_{x \in \lambda}x^*x$, which is an element of $J$ because $J$ is a left-ideal and $x\in J$ for all $x\in \lambda$. Set $n\defeq |\lambda|$. Since $v_\lambda$ is positive, we have that $n^{-1}\vec{1}+v_\lambda$ is invertible by spectral mapping \ref{spectralMappingCFC}. Thus we can define
+\[ e_\lambda \defeq (n^{-1}\vec{1}+v_\lambda)^{-1}v_\lambda \in J, \]
+which is an element of $J$, since $J$ is a left ideal. We have
+\[ \norm{e_\lambda} = \norm{(n^{-1}\vec{1}+v_\lambda)^{-1}v_\lambda} \leq 1, \]
+by spectral mapping \ref{spectralMappingCFC} and \ref{normNormalElement}.
+
+Now take arbitrary $x\in J$ and $\lambda \in \Lambda$ such that $x\in \lambda$. We compute
+\begin{align*}
+n^{-1} &\geq \norm*{v_\lambda - v_\lambda^2(n^{-1}\vec{1} + v_\lambda)^{-1}} \\
+&= \norm*{v_\lambda(\vec{1} - e_\lambda)} \\
+&\geq \norm{(\vec{1}-e_\lambda)}\norm*{v_\lambda(\vec{1} - e_\lambda)} \\
+&\geq \norm*{(\vec{1} - e_\lambda)v_\lambda(\vec{1} - e_\lambda)} \\
+&\geq \norm*{(\vec{1} - e_\lambda)x^*x(\vec{1} - e_\lambda)} \\
+&= \norm*{x - xe_\lambda}^2,
+\end{align*}
+using \ref{increasingApproximateUnitLemma}, \ref{spectralMappingCFC}, \ref{normNormalElement}, \ref{inequalityPositiveElementsLemma}, \ref{CstarOrderLemma} and the $B^*$-identity. This implies $xe_\lambda \to x$.
+
+Finally, we show that $\seq{e_\lambda}$ is increasing. From \ref{increasingApproximateUnitLemma}, we have $e_\lambda = \vec{1} - (1+nv_\lambda)^{-1}$. Suppose $\mu\in \Lambda$ and $\lambda \subseteq \mu$. Set $m \defeq |\mu|$. Then $n\leq m$ and $v_\lambda \leq v_\mu$, so $nv_\lambda \leq mv_\mu$. We have $(\vec{1}+mv_\mu)^{-1} \leq (\vec{1}+nv_\lambda)^{-1}$ from \ref{inequalityPositiveElementsLemma} and thus
+\[ e_\lambda = \vec{1} - (1+nv_\lambda)^{-1} \leq \vec{1} - (1+mv_\mu)^{-1} = e_\mu. \]
 \end{proof}
+\begin{corollary} \label{CstarAlgebraHasIncreasingApproximateUnit}
+Every $C^*$-algebra has an increasing approximate unit.
+\end{corollary}
+\begin{proof}
+Let $A$ be a $C^*$-algebra. If $A$ is unital, the constant net $\constant{\vec{1}}$ is an increasing approximate unit.
+
+If $A$ is non-unital, we have that $A\subseteq A^\dagger$ as an ideal. The proposition yields a net $\seq{e_\lambda}_{\lambda\in\Lambda}$. All we need to prove is that $e_\lambda a \to a$ for all $a\in A$. Since $a^*\in A$, we have $a^*e_\lambda \to a^*$. Taking the adjoint gives $e_\lambda a \to a$.
+\end{proof}
+\begin{corollary} \label{closedTwoSidedIdealCstarAlgebra}
+Let $A$ be a $C^*$-algebra and $J\subseteq A$ a closed two-sided ideal. Then
+\begin{enumerate}
+\item $J = J^*$;
+\item $J$ is a $C^*$-subalgebra.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+(1) Take arbitrary $x\in J$. Then $xe_\lambda \to x$, so $e_\lambda x^*\to x$. Since $J$ is a two-sided ideal, we have $e_\lambda x^*\in J$ for all $\lambda\in\Lambda$. Since $J$ is closed, we have $x^*\in J$.
+
+(2) We have that $J$ is a subalgebra by definition of ideal. From (1), we have that $J$ is a $*$-subalgebra. Finally, $J$ is complete because it is closed, using \ref{closedComplete}.
+\end{proof}
+\begin{corollary}\label{closedTwoSidedIdealHasIncreasingApproximateUnit}
+Every closed two-sided ideal in a $C^*$-algebra has an increasing approximate unit.
+\end{corollary}
+\begin{proof}
+Immediate from \ref{closedTwoSidedIdealCstarAlgebra} and \ref{CstarAlgebraHasIncreasingApproximateUnit}.
+\end{proof}
+
 
 \subsection{Absolute value}
 \begin{definition}
@@ -5478,6 +5544,7 @@ Let $A$ be a $C^*$-algebra, $f: A\to \C$ a bounded linear functional on $A$ and 
 \end{enumerate}
 In particular, if $A$ is unital, then $\norm{f} = f(\vec{1})$.
 \end{proposition}
+Every $C^*$-algebra has an increasing approximate unit, by \ref{CstarAlgebraHasIncreasingApproximateUnit}.
 \begin{proof}
 $(1) \Rightarrow (2)$  For all $\lambda \leq \mu$ we have $e_\lambda \leq e_\mu$, so $f(e_\lambda) \leq f(e_\mu) \leq \norm{f}$. Since $\seq{f(e_\lambda)}$ is a bounded monotone sequence, it converges (TODO ref) to a limit less than $\norm{f}$, i.e. $\lim_\lambda f(e_\lambda)$ exists and $\lim_\lambda f(e_\lambda)\leq \norm{f}$.
 
@@ -5531,7 +5598,7 @@ Let $A$ be a $C^*$-algebra, $f: A\to \C$ a bounded linear functional on $A$ and 
 \begin{proof}
 (1) Since $f$ determines a pre-inner product, as in \ref{positiveLinearFunctionalPreinnerProduct}, we have that $\inner{\cdot,\cdot}_f$ has conjugate symmetry. 
 
-Let $\seq{e_\lambda}_{\lambda\in \Lambda}$ be an increasing approximate unit. Since $f$ is bounded \ref{positiveLinearFunctionalBounded}, we have
+Let $\seq{e_\lambda}_{\lambda\in \Lambda}$ be an increasing approximate unit, which exists due to \ref{CstarAlgebraHasIncreasingApproximateUnit}. Since $f$ is bounded \ref{positiveLinearFunctionalBounded}, we have
 \[ f(a) = \lim_{\lambda}f(e_\lambda a) = \lim_{\lambda}\inner{e_\lambda, a}_f = \lim_{\lambda}\overline{\inner{a, e_\lambda}_f} = \lim_{\lambda}\overline{f(a^*e_\lambda)} = \overline{f(a^*)}. \]
 
 (2) The inequality $|f(a)|^2 \leq \lim_\lambda f(e_\lambda) f(a^*a)$ appears in the proof of \ref{positiveFunctionalNormValueAtUnit}. Using the result of this proposition, we have $|f(a)|^2 \leq \norm{f} f(a^*a)$.
@@ -5600,18 +5667,78 @@ Lattice
 \subsection{General comparison theory}
 
 \section{Constructions}
+\subsection{Quotient algebras}
+
+\begin{lemma} \label{CstarIdealInIdealIsIdeal}
+Let $A$ be a $C^*$-algebra, $J\subseteq A$ a closed two-sided ideal and $K\subseteq J$ a closed two-sided ideal. Then $K\subseteq A$ is a closed two-sided ideal.
+\end{lemma}
+\begin{proof}
+We have that $K$ is closed in $A$ from \ref{subspaceAdherence}, using the fact that $J$ is closed.
+
+We now just need to show that $K$ is an ideal in $A$. We have that $J$ contains an increasing approximate unit $\seq{e_\lambda}$, by \ref{closedTwoSidedIdealHasIncreasingApproximateUnit}. Take $k\in K$ and $a\in A$. Then $ka = \lim_\lambda ke_\lambda a$. Since $e_\lambda a \in J$, we have $ke_\lambda a \in K$ and $ka\in K$ because $K$ is closed. The argument for $ak$ is similar.
+\end{proof}
+
+\begin{lemma} \label{starCongruenceIffStarClosed}
+Let $A$ be a $*$-algebra and $\mathfrak{q}$ a ranslation invariant binary relation on $A$. Then $\mathfrak{q}$ is a $\{*\}$-congruence \textup{if and only if} $\widetilde{\mathfrak{q}}^* = \widetilde{\mathfrak{q}}$.
+\end{lemma}
+\begin{proof}
+First suppose $\mathfrak{q}$ is a $\{*\}$-congruence and take $x-y\in \widetilde{\mathfrak{q}}$. Then $(x-y)^* = x^* - y^* \in\widetilde{\mathfrak{q}}$. This implies $\widetilde{\mathfrak{q}}^* \subseteq \widetilde{\mathfrak{q}} = \widetilde{\mathfrak{q}}^{**} \subseteq \widetilde{\mathfrak{q}}^*$.
+
+Now suppose $\widetilde{\mathfrak{q}}^* = \widetilde{\mathfrak{q}}$ and $x \mathrel{\mathfrak{q}}y$. Then $x^*-y^* = (x-y)^* \in \widetilde{\mathfrak{q}}^* = \widetilde{\mathfrak{q}}$, so $x^* \mathrel{\mathfrak{q}}y^*$.
+\end{proof}
+
+\begin{lemma} \label{quotientNormApproximateUnitCstarAlgebra}
+Let $A$ be a $C^*$-algebra, $J\subseteq A$ a closed two-sided ideal, $a\in A$ and $\seq{e_\lambda}_{\lambda\in\Lambda}$ and increasing approximate unit in $J$. Then $\norm{a+J}_{A/J} = \lim_\lambda \norm{a-ae_\lambda}$.
+\end{lemma}
+There exists a due to \ref{closedTwoSidedIdealHasIncreasingApproximateUnit}.
+\begin{proof}
+We have
+\[ \norm{a+J}_{A/J} = \inf_{x\in J}\norm{a+x} \leq \liminf_\lambda\norm{a-ae_\lambda}, \]
+since $ae_\lambda \in J$ for all $\lambda\in\Lambda$.
+
+Now take arbitrary $x\in J$ and $\epsilon >0$. There exists $\lambda\in\Lambda$ such that $\norm{x-xe_\lambda} \leq \epsilon$ and we can calculate in $A^\dagger$:
+\begin{align*}
+\norm{a-ae_\lambda} &= \norm{(a+x)(\vec{1}-e_\lambda) - (x-xe_\lambda)} \\
+&\leq \norm{(a+x)(\vec{1}-e_\lambda)} + \norm{x-xe_\lambda} \\
+&\leq \norm{(a+x)(\vec{1}-e_\lambda)} + \epsilon \\
+&\leq \norm{a+x} + \epsilon,
+\end{align*}
+where we have used $\norm{\vec{1}-e_\lambda} \leq 1$, which follows from \ref{selfAdjointUnitSphereFromOrder} (using $e_\lambda \geq 0$ and $\norm{e_\lambda} \leq 1$). Thus $\limsup_\lambda \norm{a-ae_\lambda} \leq \norm{a+x} + \epsilon$ for all $x\in J$ and $\epsilon > 0$, which implies $\limsup_\lambda \norm{a-ae_\lambda} \leq \inf_{x\in J}\norm{a+x} = \norm{a+J}_{A/J}$. Now
+\[ \norm{a+J}_{A/J} \leq \liminf_\lambda\norm{a-ae_\lambda} \leq \limsup_\lambda\norm{a-ae_\lambda} \leq \liminf_\lambda\norm{a-ae_\lambda}, \]
+which implies that $\lim_\lambda\norm{a-ae_\lambda}$ exists and is equal to $\norm{a+J}_{A/J}$.
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a $C^*$-algebra and $J\subseteq A$ a closed two-sided ideal. Then the quotient $A/J$ is a $C^*$-subalgebra.
+\end{proposition}
+\begin{proof}
+From \ref{quotientBanachAlgebra}, we know that $A/J$ is a Banach algebra. Since $J$ is $*$-closed, by \ref{closedTwoSidedIdealCstarAlgebra}, we have that $A/J$ is a $*$-Banach quotient algebra using \ref{starCongruenceIffStarClosed}.
+
+Finally, we need to verify that the $C^*$-identity holds. Take arbitrary $x\in J$ and calculate (in the unitisation $A^\dagger$) using \ref{quotientNormApproximateUnitCstarAlgebra}:
+\begin{align*}
+\norm{a+J}_{A/J}^2 &= \lim_\lambda \norm{a-ae_\lambda}^2 \\
+&= \lim_\lambda \norm{a(\vec{1}-e_\lambda)}^2 \\
+&= \lim_\lambda \norm{(\vec{1}-e_\lambda)a^*a(\vec{1}-e_\lambda)} \\
+&= \lim_\lambda \norm{(\vec{1}-e_\lambda)(a^*a+ x)(\vec{1}-e_\lambda) - (\vec{1}-e_\lambda)x(\vec{1}-e_\lambda)} \\
+&\leq \lim_\lambda \norm{(\vec{1}-e_\lambda)(a^*a+ x)(\vec{1}-e_\lambda)} - \lim_\lambda \norm{(\vec{1}-e_\lambda)x(\vec{1}-e_\lambda)} \\
+&\leq \lim_\lambda \norm{(\vec{1}-e_\lambda)(a^*a+ x)(\vec{1}-e_\lambda)} \\
+&\leq \norm{a^*a+ x}.
+\end{align*}
+Since $x\in J$ was taken arbitrarily, we have $\norm{a+J}_{A/J}^2 \leq \inf_{x\in J}\norm{a^*a+ x} = \norm{a^*a+J}_{A/J}$ and we conclude using \ref{C*identityEquivalent}.
+\end{proof}
+
 \subsection{Moore-Penrose pseudoinverse}
 \begin{definition}
 Let $A$ be a $C^*$ algebra and $x\in A$. Let $x^\dagger$ be an element of $A$ such that
 \begin{itemize}
 \item $xx^\dagger x = x$;
 \item $x^\dagger xx^\dagger  = x^\dagger $;
-\item $xx^\dagger $ is Hermitian;
-\item $x^\dagger x$ is Hermitian.
+\item $xx^\dagger $ is self-adjoint;
+\item $x^\dagger x$ is self-adjoint.
 \end{itemize}
 Then $x^\dagger $ is called a \udef{Moore-Penrose pseudoinverse} of $x$.
 \end{definition}
-We will show that an element has at most one Moore-Penrose pseudoinverse, so we are justified in speaking of \emph{the} Moore-Penrose pseudoinverse of $x$, which we denote $x^\dagger $.
+We will show that an element has at most one Moore-Penrose pseudoinverse, so we are justified in speaking of \emph{the} Moore-Penrose pseudoinverse of $x$, which we denote $x^\dagger$.
 
 If $x$ has a generalised inverse $x^\dagger $, then $xx^\dagger $ and $x^\dagger x$ are automatically idempotent, so the requirement that they be Hermitian is equivalent to requiring they be orthogonal projectors.
 
@@ -6538,23 +6665,108 @@ We also have
 Let $A,B$ be $C^*$-algebras and $f:A\to B$ a linear function. We call $f$ \udef{completely bounded} if for all $n\in\N$ the pointwise extension of $f$ in $(A^{n\times n}\to B^{n\times n})$ is bounded.
 \end{definition}
 
-\chapter{Von Neumann Algebras}
-TODO: definitions of SOT and WOT!
+
+\chapter{Concrete $C^*$-algebras}
+\begin{definition}
+A \udef{concrete $C^*$-algebra} is a $C^*$-subalgebra of $\Bounded(\mathcal{H})$, for some Hilbert space $\mathcal{H}$.
+
+We say a concrete $C^*$-algebra $A$ is
+\begin{enumerate}
+\item \udef{non-degenerate} if $\overline{A\mathcal{H}} = \mathcal{H}$;
+\item \udef{cyclic} w.r.t. a unit vector $\xi\in\mathcal{H}$ if $\overline{A\xi} = \mathcal{H}$.
+\end{enumerate}
+\end{definition}
+A concrete $C^*$-algebra is a norm-closed $*$-subalgebra of $\Bounded(\mathcal{H})$.
+
+\begin{proposition} \label{boundedIncreasingNetConvergesPointwise}
+Let $\mathcal{H}$ be a Hilbert space and $\seq{T_i}_{i\in I}$ a norm-bounded increasing net of bounded self-adjoint operators. Then $\seq{T_i}$ converges pointwise to a bounded self-adjoint operator on $\mathcal{H}$.
+\end{proposition}
+TODO: connect to abstract theory??
+\begin{proof}
+From \ref{boundedSetNormedSpace}, we can find $M\in\R^+$ such that $\norm{T_i} \leq M$ for all $i\in I$.
+
+TODO: OpAlg-ExS-4
+\end{proof}
+
+\section{Von Neumann Algebras}
 \begin{definition}
 A concrete $C^*$-algebra $A\subseteq \Bounded(\mathcal{H})$ is a \udef{von Neumann algebra} if it is closed in the SOT.
 \end{definition}
 
-\section{von Neumann bicommutant theorem}
+\begin{proposition} \label{unitInSOTclosure}
+Let $\mathcal{H}$ be a Hilbert space and $A\subseteq \Bounded(\mathcal{H})$ a concrete $C^*$-algebra. Then
+\begin{enumerate}
+\item there exists $e\in \overline{A}^{\text{SOT}}$ such that $ea = a = ae$ for all $a\in A$;
+\item $e = \id_{\mathcal{H}}$ \textup{if and only if} $A$ is non-degenerate.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) Let $\seq{e_\lambda}$ be an increasing approximate unit in $A$, which exists by \ref{CstarAlgebraHasIncreasingApproximateUnit}. By \ref{boundedIncreasingNetConvergesPointwise}, $\seq{e_\lambda}$ has a SOT-limit $e$. For any $a\in A$, we have
+\[ ea = \big(\lim_{\lambda}e_\lambda\big)a = \lim_{\lambda}e_\lambda a = a = \lim_{\lambda}a e_\lambda = a\big(\lim_{\lambda}e_\lambda\big) = ae, \]
+where all limits are in the SOT. We have used that SOT-convergence is weaker than norm-convergence and that the multiplication is separately SOT-continuous, \ref{multiplicationSeparatelySOTWOTcontinuous}.
+
+(2) First assume $e = \id_{\mathcal{H}}$, i.e.\ $\id_{\mathcal{H}} \in \overline{A}^{\text{SOT}}$. Then there exists a net $\seq{e_\lambda}_{\lambda\in\Lambda}$ in $A$ that SOT-converges to $e$, so $e_\lambda\xi \to \xi$ for all $\xi\in \mathcal{H}$. Since $\seq{e_\lambda\xi}_{\lambda\in\Lambda}$ is a net in $A\mathcal{H}$, we have $\xi \in \overline{A\mathcal{H}}$. Thus $\overline{A\mathcal{H}} = \mathcal{H}$.
+
+For the other direction, we have $\overline{\{e\}\mathcal{H}} = \overline{A \mathcal{H}} = \mathcal{H}$, so for all $x\in \mathcal{H}$ there exists a sequence $\seq{x_n}$ in $\mathcal{H}$ such that $x = \lim_{n\to \infty}ex_n$ (using the fact that metric spaces are sequential). Now
+\[ ex = e\big(\lim_{n\to\infty}ex_n\big) = \lim_{n\to\infty}e^2x_n = \lim_{n\to\infty}ex_n = x. \]
+Thus $e = \id_{\mathcal{H}}$.
+\end{proof}
+\begin{corollary}
+Let $\mathcal{H}$ be a Hilbert space and $A\subseteq \Bounded(\mathcal{H})$ a von Neumann algebra. Then
+\begin{enumerate}
+\item $A$ is unital;
+\item $\id_{\mathcal{H}} \in A$ \textup{if and only if} $A$ is non-degenerate.
+\end{enumerate}
+\end{corollary}
+
+
+
+\subsection{Commutants}
 \begin{proposition} \label{commutantBanachAlgebra}
 Let $S\subset \Bounded(\mathcal{H})$ be a set for some Hilbert space $\mathcal{H}$. Then
 \begin{enumerate}
-\item $\comm{S}$ is a Banach algebra;
-\item $\comm{S}$ is a $C^*$-algebra if $S = S^*$;
-\item $\comm{S}\subseteq \Bounded(\mathcal{H})$ is WOT-closed.
+\item $S^{\comm}$ is a Banach algebra;
+\item $S^{\comm}$ is a $C^*$-algebra if $S = S^*$;
+\item $S^{\comm}\subseteq \Bounded(\mathcal{H})$ is WOT-closed.
 \end{enumerate}
 \end{proposition}
 
-\chapter{Representations and states}
+\begin{lemma} \label{vonNeumannBicommutantLemma}
+Let $A$ be a non-degenerate concrete $C^*$-algebra, $\xi \in \mathcal{H}$ and $T \in A^{\comm\comm}$. Then $T\xi \in \overline{A\{\xi\}}$.
+\end{lemma}
+\begin{proof}
+First we show that $\xi \in \overline{A\{\xi\}}$. 
+Consider the $e$ of \ref{unitInSOTclosure}. Then there exists a net $\seq{e_\lambda}_{\lambda\in\Lambda}$ in $A$ that SOT-converges to $e$, so $e_\lambda\xi \to \xi$. Since $\seq{e_\lambda\xi}$ is a net in $A\{\xi\}$, we have $\xi\in \overline{A\{\xi\}}$.
+
+Let $P$ be the orthogonal projection onto $\overline{A\{\xi\}}$. Take $a\in A$. Then $a$ maps $\overline{A\{\xi\}}$ into itself, so $aP = PaP$. If $a$ is self-adjoint, then $aP = PaP = Pa$. If $a$ is not self-adjoint, this still holds by \ref{realImaginaryParts}. In particular $P \in A^{\comm}$, so $T \in A^{\comm\comm}\subseteq \{P\}^{\comm}$.
+
+Finally we have, since $\xi\in \overline{A\{\xi\}}$,
+\[ T\xi = TP\xi = PT\xi, \]
+so $T\xi\in \overline{A\{\xi\}}$.
+\end{proof}
+
+\begin{proposition}[von Neumann's bicommutant theorem]
+Let $\mathcal{H}$ be a Hilbert space and $A\subseteq \Bounded(\mathcal{H})$ a $*$-subalgebra such that $\overline{A\mathcal{H}} = \mathcal{H}$. Then $A^{\comm\comm} = \overline{A}^\text{SOT} = \overline{A}^\text{WOT}$.
+\end{proposition}
+\begin{proof}
+We have $\overline{A}^\text{SOT} \subseteq \overline{A}^\text{WOT} \subseteq A^{\comm\comm}$, from \ref{principalInherenceAdherenceProperties}, the fact that $A\subseteq A^{\comm\comm}$ and \ref{commutantBanachAlgebra}.
+
+We finally need to show that $A$ is SOT-dense in $A^{\comm\comm}$. We do this using \ref{denseIffMeshesWithAllVicinities}. Take arbitrary $T\in A^{\comm\comm}$ and $U\in \vicinities_{\text{SOT}}(T)$. From \ref{pretopologicalInitialConvergence} and \ref{vicinitiesPretopologicalSubspaceConvergence}, there exist $\xi_1, \ldots, \xi_n\in \mathcal{H}$ and $\epsilon_1, \ldots, \epsilon_n \in \R^+\setminus\{0\}$ such that $\bigcap_{k=1}^n\evalMap_{\xi_k}^{\preimf}\big(\cball(T\xi_k, \epsilon_k)\big) \cap A^{\comm\comm} \subseteq U$. Setting $\epsilon \defeq \min\{\epsilon_1, \ldots, \epsilon_n\}$, we have
+\[ \setbuilder{a\in A^{\comm\comm}}{\forall k\in[1:n]:\; \norm{(T-a)\xi_k}\leq \epsilon} = \bigcap_{k=1}^n\evalMap_{\xi_k}^{\preimf}\big(\cball(T\xi_k, \epsilon)\big)\cap A^{\comm\comm} \subseteq U. \]
+From \ref{commutantsMatrixAlgebrasLemma}, we have $T\cdot\mathbb{1}_n \in A^{\comm\comm}\cdot^\imf\{\mathbb{1}_n\} =  (A\cdot^\imf \{\mathbb{1}_n\})^{\comm\comm}$ and so, from \ref{vonNeumannBicommutantLemma}, there exists $a\cdot\mathbb{1}_n \in A\cdot^\imf \{\mathbb{1}_n\}$ such that
+\[ \norm*{\big(T\cdot\mathbb{1}_n\big)\begin{pmatrix}
+\xi_1 \\ \hdots \\ \xi_n
+\end{pmatrix} - \big(a\cdot\mathbb{1}_n\big)\begin{pmatrix}
+\xi_1 \\ \hdots \\ \xi_n
+\end{pmatrix}} \leq \epsilon. \]
+This implies that $a\in U$, so $A\mesh U$.
+\end{proof}
+\begin{corollary}
+Let $A\subseteq \Bounded(\mathcal{H})$ be a concrete $C^*$-algebra with $\id_{\mathcal{H}} \in A$. Then $A$ is a von Neumann algebra \textup{if and only if} $A = A^{\comm\comm}$.
+\end{corollary}
+
+\subsection{Borel functional calculus}
+
 \section{Representations}
 \begin{definition}
 A \udef{representation} of a $C^*$-algebra $A$ on a Hilbert space $\mathcal{H}$ is a $*$-homomorphism $\pi: A \to \Bounded(\mathcal{H})$.
@@ -6564,8 +6776,8 @@ A \udef{subrepresentation} of $\pi$ is the restriction of $\pi$ to a closed inva
 We say a representation $\pi: A \to \Bounded(\mathcal{H})$ is
 \begin{enumerate}
 \item \udef{faithful} if it is injective;
-\item \udef{non-degenerate} if $\overline{\pi(A)\mathcal{H}} = \mathcal{H}$;
-\item \udef{cyclic} w.r.t. a unit vector $\xi\in\mathcal{H}$ if $\overline{\pi(A)\xi} = \mathcal{H}$.
+\item \udef{non-degenerate} if $\im(\pi)$ is non-degenerate;
+\item \udef{cyclic} w.r.t.\ a unit vector $\xi\in\mathcal{H}$ if $\im(\pi)$ is cyclic w.r.t.\ $\xi$.
 \end{enumerate}
 \end{definition}
 
@@ -6635,9 +6847,9 @@ Let $D$ be a set of bounded operators on the Hilbert space $\mathcal{H}$. Then $
 Let $D$ be a set of bounded operators on the Hilbert space $\mathcal{H}$. The following are equivalent:
 \begin{enumerate}
 \item $D$ is topologically irreducible;
-\item all non-zero elements of the commutant $D^\commute$ are invertible; 
-\item the commutant $D^\commute$ consists of multiples of the identity operator;
-\item the commutant $D^\commute$ contains no projectors other than the identity;
+\item all non-zero elements of the commutant $D^{\comm}$ are invertible; 
+\item the commutant $D^{\comm}$ consists of multiples of the identity operator;
+\item the commutant $D^{\comm}$ contains no projectors other than the identity;
 \item if $D \neq \{0\}$ is a subalgebra of $\Bounded(\mathcal{H})$, then every non-zero vector $x\in\mathcal{H}$ is cyclic for $D$ in $\mathcal{H}$.
 \end{enumerate}
 \end{proposition}
@@ -6661,23 +6873,23 @@ TODO: should distinction algebraic and topological irreducibility be removed?
 \end{proof}
 
 \begin{lemma} \label{idealRepresentationExtensionLemma}
-Let $A$ be a $C^*$-algebra and $J$ an ideal in $A$. Let $\rho: J\to \Bounded(\mathcal{H})$ be a nondegenerate representation of $J$. For all $b_1,\ldots, b_n\in J$, $h_1,\ldots, h_n\in\mathcal{H}$ and $a\in A$, we have
+Let $A$ be a $C^*$-algebra and $J$ an left-ideal in $A$. Let $\rho: J\to \Bounded(\mathcal{H})$ be a nondegenerate representation of $J$. For all $b_1,\ldots, b_n\in J$, $h_1,\ldots, h_n\in\mathcal{H}$ and $a\in A$, we have
 \[ \norm{\sum_{k=1}^n\rho(ab_k)h_k} \leq \norm{a}\, \norm{\sum_{k=1}^n\rho(b_k)h_k}. \]
 \end{lemma}
 \begin{proof}
 By \ref{approximateUnitInIdeal} we can find an approximate unit $\seq{e_\lambda} \subseteq J$. Then
 \begin{align*}
-\norm{\sum_{k=1}^n\rho(ab_k)h_k} &= \lim_\lambda\norm{\sum_{k=1}^n\rho(ae_\lambda b_k)h_k} \\
-&= \lim_\lambda\norm{\rho(ae_\lambda)\sum_{k=1}^n\rho(b_k)h_k} \\
-&\leq \limsup_\lambda\norm{\rho(ae_\lambda)}\norm{\sum_{k=1}^n\rho(b_k)h_k} \\
-&\leq \limsup_\lambda\norm{ae_\lambda}\norm{\sum_{k=1}^n\rho(b_k)h_k} \\
-&= \lim_\lambda\norm{a}\norm{\sum_{k=1}^n\rho(b_k)h_k},
+\norm*{\sum_{k=1}^n\rho(ab_k)h_k} &= \lim_\lambda\norm*{\sum_{k=1}^n\rho(ae_\lambda b_k)h_k} \\
+&= \lim_\lambda\norm*{\rho(ae_\lambda)\sum_{k=1}^n\rho(b_k)h_k} \\
+&\leq \limsup_\lambda\norm{\rho(ae_\lambda)}\norm*{\sum_{k=1}^n\rho(b_k)h_k} \\
+&\leq \limsup_\lambda\norm{ae_\lambda}\norm*{\sum_{k=1}^n\rho(b_k)h_k} \\
+&= \lim_\lambda\norm{a}\norm*{\sum_{k=1}^n\rho(b_k)h_k},
 \end{align*}
 where we have used \ref{starHomomorphismCstarProperties}.
 \end{proof}
 
 \begin{proposition}
-Let $A$ be a $C^*$-algebra and $J$ an ideal in $A$. Let $\rho: J\to \Bounded(\mathcal{H})$ be a nondegenerate representation of $J$. Then there is a unique representation $\overline{\rho}: A\to \Bounded(\mathcal{H})$ of $A$ that extends $\rho$. If $\rho$ and $\sigma$ are equivalent representations of $J$, then $\overline{\rho}$ and $\overline{\sigma}$ are equivalent representations of $A$.
+Let $A$ be a $C^*$-algebra and $J$ a left-ideal in $A$. Let $\rho: J\to \Bounded(\mathcal{H})$ be a nondegenerate representation of $J$. Then there is a unique representation $\overline{\rho}: A\to \Bounded(\mathcal{H})$ of $A$ that extends $\rho$. If $\rho$ and $\sigma$ are equivalent representations of $J$, then $\overline{\rho}$ and $\overline{\sigma}$ are equivalent representations of $A$.
 \end{proposition}
 \begin{proof}
 Set $\mathcal{H}_0 = \rho^\imf(J)\mathcal{H}$. For all $x = \sum_{k=1}^n\rho(b_k)h_k\in \mathcal{H}_0$, we define $\overline{\rho}$ by
@@ -6846,7 +7058,7 @@ Thus $\pi_\omega(ab) = \pi_\omega(a)\circ \pi_\omega(b)$. We also calculate
 \end{align*}
 This implies $\pi_\omega(a)^* = \pi_\omega(a^*)$.
 
-Let $\seq{e_\lambda}$ be an increasing approximate unit in $A$. Then $\seq{[e_\lambda]}$ is a Cauchy net in $A/N_\omega$ by \ref{GNSlemma}, which means it has a limit in $H_\omega.$ We call this limit $\xi_\omega$.
+Let $\seq{e_\lambda}$ be an increasing approximate unit in $A$, which exists by \ref{CstarAlgebraHasIncreasingApproximateUnit}. Then $\seq{[e_\lambda]}$ is a Cauchy net in $A/N_\omega$ by \ref{GNSlemma}, which means it has a limit in $H_\omega.$ We call this limit $\xi_\omega$.
 
 (1) Now, since the quotien map is continuous, \ref{GNSlemma}, we have
 \[ \pi_\omega(a)\xi_\omega = \lim_{\lambda}\pi_\omega(a)[e_\lambda] = \lim_{\lambda}[ae_\lambda] = \big[\lim_{\lambda}ae_\lambda\big] = [a]. \]
@@ -6878,7 +7090,7 @@ We call the cyclic representation $(\mathcal{H}_\omega,\pi_\omega,\xi_\omega)$ c
 \begin{lemma}
 Let $\omega$ be a state over a $C^*$-algebra $A$ and $(\mathcal{H}_\omega,\pi_\omega,\xi_\omega)$ the associated cyclic representation. There is a bijective correspondence 
 \[ \omega_T(a) = \inner{T\xi_\omega, \pi_\omega(a)\xi_\omega} \]
-between positive functionals $\omega_T$ over $A$ majorised by $\omega$ and positive operators $T$ in the commutant $\comm{\pi_\omega}$ with $\norm{T}\leq 1$.
+between positive functionals $\omega_T$ over $A$ majorised by $\omega$ and positive operators $T$ in the commutant $\pi_\omega^{\comm}$ with $\norm{T}\leq 1$.
 \end{lemma}
 
 \begin{proposition}

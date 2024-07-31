@@ -14,6 +14,21 @@ Envelope of a representation: module to algebra.
 Vector space with associative bilinear function.
 \end{definition}
 
+\subsection{The commutator}
+\begin{definition}
+Let $A$ be an algebra. Then the function
+\[ [\cdot, \cdot]: A\times A \to A: (x,y) \mapsto [x,y] \defeq xy - yx \]
+is called the \udef{commutator} on $A$.
+\end{definition}
+
+\begin{lemma} \label{commutatorBilinear}
+Let $A$ be an algebra. The commutator on $A$ is bilinear.
+\end{lemma}
+\begin{proof}
+Take $x,y,z\in A$ and $\lambda \in \F$. Then
+\[ [x+\lambda y, z] = (x+\lambda y)z - z(x+\lambda y) = xz - zx + \lambda(yz - zy) = [x,z] + \lambda[y,z]. \]
+We conclude using the fact that $[x,z] = -[z,x]$.
+\end{proof}
 
 \section{Semisimple algebra}
 \begin{proposition}
@@ -97,8 +112,91 @@ Transpose: $v\otimes w \to w\otimes v$.
 
 \section{Matrix algebras}
 \begin{definition}
-TODO
+Let $A$ be an algebra. TODO define multiplication on $A^{n\times n}$.
 \end{definition}
+
+\subsection{Commutants}
+
+\begin{lemma} \label{commutantsMatrixAlgebrasLemma}
+Let $A$ be a unital algebra, $B\subseteq A$ a subset and $n\in \N$. Then
+\begin{enumerate}
+\item $(B^{\comm})^{n\times n} = \big(B\cdot^\imf\{\mathbb{1}_n\}\big)^{\comm}$;
+\item if $0,\vec{1}\in B$, then $(B^{n\times n})^{\comm} = B^{\comm}\cdot^\imf\{\mathbb{1}_n\}$;
+\item if $0,\vec{1}\in B$, then $(B^{\comm\comm})^{n\times n} = (B^{n\times n})^{\comm\comm}$;
+\item $B^{\comm\comm}\cdot^\imf\{\mathbb{1}_n\} = \big(B\cdot^\imf\{\mathbb{1}_n\}\big)^{\comm\comm}$.
+\end{enumerate}
+\end{lemma}
+By $B^{n\times n}$, we mean
+\[ B^{n\times n} \defeq \setbuilder{\mathfrak{b} \in A^{n\times n}}{\forall i,j\in [0:n-1]: \; [\mathfrak{b}]_{i,j} \in B}. \]
+This is an example for the need of a subset type, not just a set type. The expression $B^{n\times n}$ means different things, depeding on whether $B$ is an algebra or a subset of an algebra, \ref{typeExample}.
+\begin{proof}
+(1) Take $\mathfrak{a} \in A^{n\times n}$ and $a\in A$. Then, for all $i,j\in [0:n-1]$,
+\begin{align*}
+\big[\mathfrak{a}\cdot a \cdot \mathbb{1}_n\big]_{i,j} &= [\mathfrak{a}]_{i,j}\cdot a \\
+\big[a \cdot \mathbb{1}_n \cdot \mathfrak{a}\big]_{i,j} &= a\cdot [\mathfrak{a}]_{i,j},
+\end{align*}
+so $a \cdot \mathbb{1}_n \comm \mathfrak{a}$ if and only if $a\comm [\mathfrak{a}]_{i,j}$. This implies (1).
+
+(2) It is clear that $B^{\comm}\cdot^\imf\{\mathbb{1}_n\} \subseteq (B^{n\times n})^{\comm}$. We prove the other inclusione by induction on $n$. The base case $n=1$ is immediate. Now suppose the inclusion holds for $n-1$.
+
+Take $\mathfrak{c} \in (B^{n\times n})^{\comm}$. We can write $\mathfrak{c} = \begin{pmatrix}
+\mathfrak{c}_{00} & c_{01} \\ c_{10} & c_{11}
+\end{pmatrix}$, where $\mathfrak{c}_{00} \in B^{(n-1)\times (n-1)}, c_{01}\in B^{(n-1)\times 1}, c_{10} \in B^{1\times (n-1)}$ and $c_{11}\in B$. Since $\begin{pmatrix}
+\mathbb{1}_{n-1} & \mathbb{0} \\ \mathbb{0} & 0
+\end{pmatrix} \in B^{n\times n}$, we have
+\[ \begin{pmatrix}
+\mathfrak{c}_{00} & \mathbb{0} \\ c_{10} & 0
+\end{pmatrix} = \mathfrak{c}\begin{pmatrix}
+\mathbb{1}_{n-1} & \mathbb{0} \\ \mathbb{0} & 0
+\end{pmatrix} = \begin{pmatrix}
+\mathbb{1}_{n-1} & \mathbb{0} \\ \mathbb{0} & 0
+\end{pmatrix}\mathfrak{c} = \begin{pmatrix}
+\mathfrak{c}_{00} & c_{01} \\ \mathbb{0} & 0
+\end{pmatrix}, \]
+which implies $c_{01} = 0 = c_{10}$.
+
+Take arbitrary $\mathfrak{d} \in B^{(n-1)\times (n-1)}$. Then we have
+\[ \begin{pmatrix}
+\mathfrak{c}_{00}\mathfrak{d} & \mathbb{0} \\ \mathbb{0} & 0
+\end{pmatrix} = \mathfrak{c}\begin{pmatrix}
+\mathfrak{d} & \mathbb{0} \\ \mathbb{0} & 0
+\end{pmatrix} = \begin{pmatrix}
+\mathfrak{d} & \mathbb{0} \\ \mathbb{0} & 0
+\end{pmatrix}\mathfrak{c} = \begin{pmatrix}
+\mathfrak{d}\mathfrak{c}_{00} & \mathbb{0} \\ \mathbb{0} & 0
+\end{pmatrix}, \]
+so $\mathfrak{d}\comm \mathfrak{c}_{00}$ and, since $\mathfrak{d}$ was chosen arbitrarily, $\mathfrak{c}_{00} \in (B^{(n-1)\times (n-1)})^{\comm}$. The induction hypothesis implies $\mathfrak{c}_{00} = b \mathbb{1}_{n-1}$ for some $b\in B^{\comm}$. A similar calculation yields $c\in B^{\comm}$.
+
+Finally, we need to show $b = c$. This follows from
+\[ \begin{pmatrix}
+\mathbb{0} & b \\ \mathbb{0} & \mathbb{0}
+\end{pmatrix} = \begin{pmatrix}
+b & \mathbb{0} & 0 \\
+\mathbb{0} & b \mathbb{1}_{n-2} & \mathbb{0} \\
+0 & \mathbb{0} & c
+\end{pmatrix}\begin{pmatrix}
+\mathbb{0} & \vec{1} \\ \mathbb{0} & \mathbb{0}
+\end{pmatrix} = \mathfrak{c}\begin{pmatrix}
+\mathbb{0} & \vec{1} \\ \mathbb{0} & \mathbb{0}
+\end{pmatrix} = \begin{pmatrix}
+\mathbb{0} & \vec{1} \\ \mathbb{0} & \mathbb{0}
+\end{pmatrix}\mathfrak{c} = \begin{pmatrix}
+\mathbb{0} & \vec{1} \\ \mathbb{0} & \mathbb{0}
+\end{pmatrix}\begin{pmatrix}
+b & \mathbb{0} & 0 \\
+\mathbb{0} & b \mathbb{1}_{n-2} & \mathbb{0} \\
+0 & \mathbb{0} & c
+\end{pmatrix} = \begin{pmatrix}
+\mathbb{0} & c \\ \mathbb{0} & \mathbb{0}
+\end{pmatrix}. \]
+
+(3) We combine (1) and (2) to have
+\[ (B^{\comm\comm})^{n\times n} = (B^{\comm}\cdot^\imf\{\mathbb{1}_n\})^{\comm} = (B^{n\times n})^{\comm\comm}. \]
+
+(4) We combine (1) and (2) to have
+\[ B^{\comm\comm}\cdot^\imf\{\mathbb{1}_n\} = \big((B^{\comm})^{n\times n}\big)^{\comm} = \big(B\cdot^\imf\{\mathbb{1}_n\}\big)^{\comm\comm}, \]
+where we have used the fact that $0, \vec{1} \in B^{\comm}$.
+\end{proof}
 
 \subsection{Natural isomorphism}
 Remove parentheses block matrix.
