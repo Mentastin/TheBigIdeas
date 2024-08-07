@@ -229,9 +229,13 @@ Let $E = f^{\preimf}\big(\{\max_{x\in K} f(x)\}\big)$ be the set of maximisers o
 
 By \ref{compactExtremeSetContainsExtremePoint}, $E$ contains an extreme point $p$. Thus $f(p) = f(a)$. This means that $f(p) \notin \overline{f^\imf\big(\overline{\convex}\big(\ext(K)\big)\big)}$ and thus $p \notin \ext(K)$. This is a contradiction.
 \end{proof}
-\begin{corollary}[Krein-Milman]
+\begin{corollary}[Krein-Milman] \label{KreinMilman}
 Let $\sSet{V,\xi}$ be a Hausdorff locally convex topological vector space and $K\subseteq V$ a non-empty compact convex subset. Then $\ext(K)\neq \emptyset$ and $K = \overline{\convex}\big(\ext(K)\big)$.
 \end{corollary}
+We allow $V$ to be either a real or complex vector space. For complex spaces, the argument goes through the realification $V_\R$. See \ref{convexityPropertyOfRealVectorSpaces}, \ref{localConvexityPropertyOfRealCVSs} and \ref{extremityPropertyOfRealVectorSpaces}.
+\begin{proof}
+From 
+\end{proof}
 \begin{proof}
 One inclusion is given by the proposition. For the other, note that $\ext(K) \subseteq K$, $K$ is convex and $K$ is closed by \ref{compactClosedSets}.
 \end{proof}
@@ -254,11 +258,61 @@ See \url{https://math.stackexchange.com/questions/749797/is-convex-hull-of-a-fin
 \end{proof}
 
 
-\subsection{Stone-Weierstrass}
+\subsection{Bishop's theorem and Stone-Weierstrass}
+TODO: move?
+TODO: move definition somewhere else.
+\begin{definition}
+Let $X,Y$ be sets. Then we define the $\constOn$ relation on $\big((X\to Y), X\big)$ by
+\[ f \constOn E \qquad\defequiv \qquad \text{$f^\imf(E)$ is a singleton}. \]
+\end{definition}
 
-\begin{proposition}
+\begin{lemma}
+Let $\sSet{X,\xi}$ be a compact Hausdorff space. The bands in $\cont(X)$ are exactly the sets of the form
+\[ \setbuilder{f\in \cont(X)}{\forall x\in C: f(x) = 0}, \]
+where $C$ is a closed subset of $X$.
+\end{lemma}
 
-\end{proposition}
+
+TODO: the following can probably be generalised using Riesz space theory. (See order dual and carrier of operators in \cite{zaanen_introOperatorTheoryRieszSpaces}). Typically the calculations are carried out by identifying $\dual{\cont(X)}$ as a space of measures, using Riesz-Markov-Kakutani representation, but we make use of the Riesz space structure instead. See \cite{rudinFA} and \cite{conwayFA}.
+\begin{theorem}[Bishop]
+Let $\sSet{X,\xi}$ be a compact Hausdorff space, $A \subseteq \cont(X, \R)$ a Riesz subspace and $f\in \cont(X)$. Suppose that for all $E\in A^{\constOn}$ there exists $g\in A$ such that $f|_E = g|_E$. Then $f\in \closure(A)$.
+\end{theorem}
+Here $\closure$ is the uniform closure, i.e.\ w.r.t.\ the max-norm.
+\begin{proof}
+Define $K \defeq \setbuilder{\mu\in A^\perp}{\norm{\mu}_{\dual{\cont(X, \R)}} \leq 1}$. Then
+\begin{align*}
+K &= A^\perp \cap \cball_{\dual{\cont(X, \R)}}(0,1) \\
+&= A^\pol \cap \cball_{\cont(X, \R)}(0,1)^\pol \\
+&= \big(A\cup \cball_{\cont(X, \R)}(0,1)\big)^\pol,
+\end{align*}
+using \ref{polarOfBall}, \ref{perpAsPolar} and \ref{polarOfUnion}. 
+
+First suppose $K = \{0\}$. Take arbitrary $\mu\in A^\perp$. Then $\frac{\mu}{\norm{\mu}} \in K$, so $\mu = 0$ and $A^\perp = \{0\}$. Thus
+\[ \overline{A} = \overline{A}^{\sigma} = A^{\perp\perp} = \{0\}^\perp = \cont(X, \R), \]
+using \ref{weakClosureConvexSubsets} and \ref{corollaryPerpAsPolar}.
+
+Now suppose $K\neq \{0\}$. Since $K$ is weak-$*$-compact and convex (from \ref{alaogluTheorem} and \ref{polarPropertiesLemma}), we can use the Krein-Milman theorem \ref{KreinMilman} to find a (non-zero) extreme point $\mu \in K$. Since $\mu = \big(1 - \norm{\mu}\big)\constant{0} + \norm{\mu}\frac{\mu}{\norm{\mu}}$ and $\mu$ is an extreme point, we have $\norm{\mu} = 1$. Let $E$ be open carrier of $\ker(\mu)^{\perp_r}$. We will now prove that $E\in A^{\constOn}$.
+
+Take arbitrary $g\in A$. We define the following functionals:
+\[ \sigma_1: \cont(X,\R) \to \R: h\mapsto \frac{1}{\norm{g}}\mu\big((\norm{g}-g)\cdot h\big) \quad\text{and}\quad \sigma_2: \cont(X,\R) \to \R: h\mapsto \frac{1}{\norm{g}}\mu(g\cdot h). \]
+For all $h\in A$, we have $(\norm{g}-g)\cdot h, g\cdot h\in A$, so $\mu\big((\norm{g}-g)\cdot h\big) = 0 = \mu(g\cdot h)$ and thus $\sigma_1, \sigma_2 \in A^\perp$. We aim to show that $\sigma_1, \sigma_2 \in \cball_{\dual{\cont(X, \R)}}(0,1)$, so $\sigma_1, \sigma_2 \in K$.
+
+
+
+\ref{normFunctionalAsSup}
+
+
+\ref{absoluteValueOrderBoundedOperatorLemma}
+
+$ = A^\perp \cap \cball_{\dual{\cont(X, \R)}}(0,1)$. From \ref{corollaryPerpAsPolar} and \ref{propertiesTopology} we have that $K$ is a $\sigma^*\big(\dual{\cont(X, \R)}, \cont(X, \R)\big)$-closed subset of the unit ball, and thus is weak-$*$-compact, from \ref{alaogluTheorem}, \ref{polarOfBall} and \ref{compactClosedSets}.
+
+
+\end{proof}
+
+\begin{theorem}[Stone-Weierstrass]
+Let $\sSet{X,\xi}$ be a compact Hausdorff space.
+\end{theorem}
+
 
 \section{Conic programming}
 \subsection{Cones and alignment}

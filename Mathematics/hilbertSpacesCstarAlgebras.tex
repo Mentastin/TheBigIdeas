@@ -1692,7 +1692,7 @@ because $\norm{x_n} \to \norm{x}$ and $\inner{x,x_n} \to \inner{x,x} = \norm{x}^
 
 
 \subsection{Strong and weak convergence of operators}
-\begin{lemma}
+\begin{lemma} \label{WOTforInnerProductSpace}
 Let $V_1,V_2$ be inner product spaces. Then the weak operator topology on $\Bounded(H_1,H_2)$ is the initial topology w.r.t.\ $\big\{\inner{y, (-)x}: T\mapsto \inner{y,Tx}\big\}_{x\in H_1, y\in H_2}$.
 \end{lemma}
 
@@ -4476,8 +4476,9 @@ Since $(x+it\cdot\vec{1})^* = x^* - it\cdot\vec{1}^* = x - it\cdot\vec{1}$ (usin
 \begin{proposition}
 Let $A$ be a unital $C^*$-algebra and $\varphi: A\to \C$ a linear functional satisfying $\norm{\varphi} = \varphi(\vec{1})$. If $a\in A$ is self-adjoint, then $\varphi(a) \in \R$.
 \end{proposition}
+TODO: version of this proposition for non-unital $A$, using approximate unit.
 \begin{proof}
-We may assume $\varphi \neq 0$ and $\varphi(\vec{1}) = 1$. Using \ref{normSelfAdjoint}, we calculate
+We may assume $\varphi \neq 0$ and $\varphi(\vec{1}) = 1 = \norm{\varphi}$, by rescaling. Using \ref{normSelfAdjoint}, we calculate
 \[ |\varphi(x)+it|^2 = |\varphi(x+it)|^2 \leq \norm{x+it}^2 \leq \norm{x}^2 + t^2. \]
 By \ref{boundedThenReal} this means $\varphi(x)\in\R$.
 \end{proof}
@@ -4488,16 +4489,21 @@ Let $x\in A$ be self-adjoint. Then $\sigma(x) \subseteq \R$.
 \begin{proof}
 By \ref{commutativeSameSpectrum}, and the fact that $x$ is self-adjoint (TODO ref) we may assume $A$ commutative. Let $\lambda \in \sigma(x)$. By \ref{spectrumFromSpectrum} there is a $\varphi\in\hat{A}$ such that $\lambda = \varphi(x)$. By \ref{charactersUnital}, $\norm{\varphi} = \varphi(\vec{1}) = 1$. Then by the proposition $\lambda = \varphi(x) \in \R$.
 \end{proof}
-\begin{corollary}
+\begin{corollary} \label{linearFunctionalStarPreserving}
 Let $\varphi:A\to \C$ be a \emph{linear} functional satisfying $\norm{\varphi} = \varphi(\vec{1})$. Then $\varphi$ is $*$-preserving, i.e.\ for all $x\in A$
 \[\varphi(x^*) = \overline{\varphi(x)}. \] 
 \end{corollary}
+TODO non-unital version with approximate unit.
 \begin{proof}
 By \ref{realImaginaryParts} we can write $x= x_1+ix_2$. Then $\varphi(x^*) = \varphi(x_1-ix_2) = \varphi(x_1) - i \varphi(x_2)$. By the proposition $\varphi(x_1), \varphi(x_2)\in \R$.
 \end{proof}
-\begin{corollary} \label{characters*Preserving}
-Every character on $A$ is $*$-preserving.
-\end{corollary}
+
+\begin{proposition} \label{charactersStarPreserving}
+Let $A$ be a $C^*$-algebra and $\varphi$ a character on $A$. Then $\varphi$ is $*$-preserving.
+\end{proposition}
+\begin{proof}
+We extend $\varphi$ to the character $\varphi^\dagger$ on $A^\dagger$ using \ref{halfUnitalExtensionLinearFunction}. Now $\varphi^\dagger$ is $*$-preserving by \ref{linearFunctionalStarPreserving} and \ref{charactersUnital}. By restricting to $A$, we have that $\varphi$ is $*$-preserving.
+\end{proof}
 
 \subsubsection{Projections}
 
@@ -4707,8 +4713,8 @@ This does not hold in general for Banach-$*$-algebras!
 TODO example
 
 
-\subsection{The Gelfand-Naimark theorem}
-\begin{theorem}[Unital Gelfand-Naimark] \label{GelfandNaimarkCommutative}
+\subsection{The Gelfand-Neumark theorem}
+\begin{theorem}[Unital Gelfand-Neumark] \label{GelfandNeumarkCommutative}
 Let $A$ be a unital commutative $C^*$-algebra. Then the Gelfand transform
 \[ \evalMap_{-}|_{\hat{A}}: A\to\cont(\hat{A}): x\mapsto \evalMap_{x} \]
 is an isometric $*$-isomorphism.
@@ -4719,7 +4725,7 @@ We already know the Gelfand transform is a homomorphism by \ref{GelfandTransform
 
 We first prove it is a $*$-homomorphism: $\forall x\in A: (\evalMap_{x})^* = \evalMap_{x^*}$. To that end, take some $\varphi\in\hat{A}$. Then
 \[ (\evalMap_{x})^*(\varphi) = \overline{\evalMap_{x}(\varphi)} = \overline{\varphi(x)} = \varphi(x^*) = \evalMap_{x^*}(\varphi), \]
-where the third equality is due to \ref{characters*Preserving}.
+where the third equality is due to \ref{charactersStarPreserving}.
 
 For isometry, notice that every element is normal due to commutativity. By \ref{normNormalElement} and \ref{GelfandTransformHomomorphism}, we have
 \[ \norm{x} = \spr(x) = \norm{\evalMap_{x}}. \]
@@ -4734,19 +4740,19 @@ Every commutative unital $C^*$-algebra is isomorphic to $\cont(X)$ for some comp
 This space $X$ is unique up to homeomorphism.
 \end{corollary}
 \begin{proof}
-The first part follows from the Gelfand-Naimark theorem and the fact that $\hat{A}$ is compact, \ref{characterSpaceLocallyCompact}.
+The first part follows from the Gelfand-Neumark theorem and the fact that $\hat{A}$ is compact, \ref{characterSpaceLocallyCompact}.
 
 
 For the second part, we know that $\widehat{C(X)}\cong X$ for all compact topological spaces by \ref{charactersFunctionAlgebraCompactSpace}. Suppose that $X,Y$ are suitable spaces, then $X \cong\cont(X) \cong \cont(Y)\cong Y$.
 \end{proof}
 
-\begin{theorem}[Non-unital Gelfand-Naimark] \label{nonUnitalGelfandNaimarkCommutative}
+\begin{theorem}[Non-unital Gelfand-Neumark] \label{nonUnitalGelfandNeumarkCommutative}
 Let $A$ be a commutative $C^*$-algebra. Then the Gelfand transform
 \[ \evalMap_{-}|_{\hat{A}}: A\to\cont_0(\hat{A}): x\mapsto \evalMap_{x} \]
 is an isometric $*$-isomorphism.
 \end{theorem}
 \begin{proof}
-By \ref{GelfandNaimarkCommutative}, the function $\evalMap_{-}|_{\hat{A^\dagger}}: A^\dagger\to\cont(\hat{A^\dagger}): x\mapsto \evalMap_{x}$ is an isometric $*$-isomorphism. Let $h: \hat{A}^\dagger \to \widehat{A^\dagger}$ be the homeomorphism from \ref{compactificationOfCharacterSpaceIsCharacterSpaceOfUnitisation}, so $h^\star$ is an algebra $*$-isomorphism. Let $\Phi: \cont_0(\hat{A}^\dagger) \to \cont(\hat{A}^\dagger)$ be the $*$-isomorphism from \ref{unitisationOnePointCompactificationIsomorphism}. Then
+By \ref{GelfandNeumarkCommutative}, the function $\evalMap_{-}|_{\hat{A^\dagger}}: A^\dagger\to\cont(\hat{A^\dagger}): x\mapsto \evalMap_{x}$ is an isometric $*$-isomorphism. Let $h: \hat{A}^\dagger \to \widehat{A^\dagger}$ be the homeomorphism from \ref{compactificationOfCharacterSpaceIsCharacterSpaceOfUnitisation}, so $h^\star$ is an algebra $*$-isomorphism. Let $\Phi: \cont_0(\hat{A}^\dagger) \to \cont(\hat{A}^\dagger)$ be the $*$-isomorphism from \ref{unitisationOnePointCompactificationIsomorphism}. Then
 \[ \Phi^{-1}\circ h^\star\circ \big(\evalMap|_{\widehat{A^\dagger}}\big): A^\dagger \to \cont(\widehat{A^\dagger}) \to \cont(\hat{A}^\dagger) \to \cont_0(\hat{A})^\dagger \]
 is a $*$-isomorphism by construction.
 
@@ -4770,7 +4776,7 @@ Thus the restriction $\evalMap_{-}|_{\hat{A}}$ is a $*$-isomorphism and it is is
 If $A$ (commutative) generated by one element $a$, then $A$ is isomorphic to the $C^*$-algebra of continuous functions on the spectrum of $a$ which vanish at $0$.
 \end{proposition}
 
-TODO non-unital Gelfand-Naimark!
+TODO non-unital Gelfand-Neumark!
 
 \subsection{Continuous functional calculus}
 
@@ -4812,7 +4818,7 @@ For uniqueness, note that $\cont(\spec(x)) = C^*(\id_{\spec(x)}, \constant{1}_{\
 
 For existence, let $B \defeq C^*(x,\vec{1})$, which is commutative because $x$ is normal. Then $\evalMap_x: \hat{B}\to \sigma(x): \varphi\mapsto \varphi(x)$ is a homeomorphism by \ref{generatedAlgebraSpectrumHomeomorphism} and so the pre-composition $\evalMap_x^\star: \mathcal{C}(\sigma(x))\to \mathcal{C}(\hat{B})$ is an isometric $*$-isomorphism. The we have the $*$-homomorphism
 \[ \Phi_x \defeq \iota_B\circ\big(\evalMap_{-}|_{\hat{B}}\big)^{-1}\circ \evalMap_x^\star: \begin{tikzcd} \mathcal{C}(\sigma(x)) \ar[r, "{\evalMap_x^\star}"] & \mathcal{C}(\hat{B}) \ar[r, "\big(\evalMap_{-}|_{\hat{B}}\big)^{-1}"] & B \ar[r , hook, "\iota_B"] & A \end{tikzcd} \]
-where the inverse Gelfand transform $\big(\evalMap_{-}|_{\hat{B}}\big)^{-1}$ exists and is an isometric isomorphism by the Gelfand-Naimark theorem \ref{GelfandNaimarkCommutative}, since $B$ is commutative.
+where the inverse Gelfand transform $\big(\evalMap_{-}|_{\hat{B}}\big)^{-1}$ exists and is an isometric isomorphism by the Gelfand-Neumark theorem \ref{GelfandNeumarkCommutative}, since $B$ is commutative.
 
 We verify
 \begin{align*}
@@ -5177,6 +5183,18 @@ We have $\spec(d^*d) \cup \{0\} = \spec(dd^*)\cup \{0\}$ by \ref{spectrumSwapped
 by \ref{positiveElementEqualsItsAbsValue}.
 \end{proof}
 
+\begin{lemma} \label{productPositiveCommutingElementsPositive}
+Let $A$ be a $C^*$-algebra and $a,b\in A^+$. If $a$ and $b$ commute, then $ab\in A^+$.
+\end{lemma}
+It is not true that $a^2\leq b^2$ or that $ab$ is positive in general!
+\begin{proof}
+Immediate from \ref{spectrumAlgebraicOperationsOnCommutingElements}.
+\end{proof}
+\begin{proof}[Alternate proof]
+We calculate have $ab = \sqrt{a}b\sqrt{a} = \big(\sqrt{b}\sqrt{a}\big)^*\sqrt{b}\sqrt{a} \geq 0$, using \ref{existenceSquareRoot}.
+\end{proof}
+
+
 \begin{proposition}
 Let $A$ be a concrete $C^*$-algebra of bounded operators on some Hilbert space $\mathcal{H}$ and $a\in A$. Then $a$ is positive as an element of the $C^*$ algebra \textup{if and only if} $a$ is positive as an operator on $\mathcal{H}$, i.e.\ for all $x\in \mathcal{H}: \inner{x,ax}\geq 0$.
 \end{proposition}
@@ -5316,16 +5334,6 @@ Let $A$ be a $C^*$-algebra and $a\in \SelfAdjoints(A)$. Since the $C^*$-subalgeb
 The set of all bounded self-adjoint operators on a Hilbert space is an anti-lattice.
 \end{proposition}
 
-\subsubsection{Operator monotonicity}
-Delicate!
-\begin{proposition}
-Assume $0\leq a\leq b$. Then
-\begin{enumerate}
-\item $\sqrt{a}\leq \sqrt{b}$;
-\item $0\leq ab$ if $a,b$ commute.
-\end{enumerate}
-\end{proposition}
-It is not true that $a^2\leq b^2$ or that $ab$ is positive in general!
 
 \subsubsection{Increasing approximate units}
 \begin{definition}
@@ -5518,7 +5526,7 @@ Let $\omega$ be a positive linear functional on a $C^*$-algebra $A$. Then the ma
 is a pre-inner product on $A$.
 \end{lemma}
 \begin{proof}
-It is clear that $\omega$ is $\inner{\cdot, \cdot}_\omega$ a sesquilinear form. By \ref{HermitianRealQuadratic}, it is now enough to prove positivity. Since $x^*x$ is self-adjoint for all $x\in A$, the positivity of $\inner{\cdot, \cdot}_\omega$ follows from the positivity of $omega$.
+It is clear that $\omega$ is $\inner{\cdot, \cdot}_\omega$ a sesquilinear form. By \ref{HermitianRealQuadratic}, it is now enough to prove positivity. Since $x^*x$ is self-adjoint for all $x\in A$, the positivity of $\inner{\cdot, \cdot}_\omega$ follows from the positivity of $\omega$.
 \end{proof}
 
 \begin{proposition} \label{positiveLinearFunctionalBounded}
@@ -5589,12 +5597,13 @@ Thus $f(a) \geq f(e_\lambda) - \norm{f} \to 0$.
 
 
 \begin{lemma}
-Let $A$ be a $C^*$-algebra, $f: A\to \C$ a bounded linear functional on $A$ and $a,x\in A$. Then
+Let $A$ be a $C^*$-algebra, $f: A\to \C$ a positive bounded linear functional on $A$ and $a,x\in A$. Then
 \begin{enumerate}
 \item $f(a) = \overline{f(a^*)}$;
 \item $|f(a)|^2 \leq \norm{f}f(a^*a) = \norm{f}\inner{a,a}_f$.
 \end{enumerate}
 \end{lemma}
+TODO: compare with \ref{linearFunctionalStarPreserving} (also non-unital version).
 \begin{proof}
 (1) Since $f$ determines a pre-inner product, as in \ref{positiveLinearFunctionalPreinnerProduct}, we have that $\inner{\cdot,\cdot}_f$ has conjugate symmetry. 
 
@@ -5606,7 +5615,7 @@ Let $\seq{e_\lambda}_{\lambda\in \Lambda}$ be an increasing approximate unit, wh
 
 \subsubsection{States}
 \begin{definition}
-A \udef{state} on a $C^*$-algebra $A$ is a positive linear functional of norm $1$. The set $\states(A)$ of all states on $A$ is called the \udef{state space} of $A$.
+A \udef{state} on a $C^*$-algebra $A$ is a positive linear functional of norm $1$. The set $\states(A)$ of all states on $A$ is called the \udef{state space} of $A$. The extreme points of $\states(A)$ are called \udef{pure states}.
 \end{definition}
 
 
@@ -5616,8 +5625,21 @@ Let $A$ be a concrete $C^*$-algebra of operators acting non-degenerately on $\ma
 then $\rho_\xi$ is a positive linear functional on $A$ of norm $\norm{\xi}^2$, so  $\rho_\xi$ is a state if $\norm{\xi} =1$. Such a state is called a \udef{vector state} of $A$.
 \end{example}
 
+\begin{proposition} \label{setOfStatesConvex}
+Let $A$ be a $C^*$ algebra. Then $\states(A)$ is convex.
+\end{proposition}
+\begin{proof}
+Take $\omega_1,\omega_2\in \states(A)$ and $r\in \interval{0,1}$. Take $a\in A^+$. Then $\omega_1(a), \omega_2(a)\in \R^+$, so $r\omega_1(a) + (1-r)\omega_2(a) \in \R^+$. This implies that $r\omega_1 + (1-r)\omega_2$ is a positive linear functional. We just need to check that the norm is $1$. Let $\seq{e_\lambda}$ be an increasing approximate unit. Then, from \ref{positiveFunctionalNormValueAtUnit}, we have
+\begin{align*}
+\norm{r\omega_1 + (1-r)\omega_2} &= \lim_\lambda \big(r\omega_1 + (1-r)\omega_2\big)(e_\lambda) \\
+&= r\lim_\lambda \omega_1(e_\lambda) + (1-r)\lim_\lambda \omega_2(e_\lambda) \\
+&= r\norm{\omega_1} + (1-r)\norm{\omega_2} = r + (1-r) = 1.
+\end{align*}
+Thus $r\omega_1 + (1-r)\omega_2 \in \states(A)$ and $\states(A)$ is convex.
+\end{proof}
+
 \begin{lemma}
-Let $B\subseteq A$ be unital $C^*$-algebras. State on $B$ extends to a state on $A$.
+Let $B\subseteq A$ be unital $C^*$-algebras. A state on $B$ extends to a state on $A$.
 \end{lemma}
 \begin{proof}
 Let $\omega\in\states(B)$ be a state on $B$. It can be extended to a bounded functional $\omega'$ of the same norm on $A$ by \ref{existenceBoundedFunctionalOfSameNorm}. Since $\vec{1} \in B\subseteq A$, we have, by \ref{positiveFunctionalNormValueAtUnit},
@@ -5626,13 +5648,13 @@ This implies that $\omega'$ is positive by \ref{positiveFunctionalNormValueAtUni
 \end{proof}
 
 \begin{lemma} \label{normalElementExtendsToState}
-Let $A$ be a $C^*$-algebra and $a\in \Normals(A)\setminus\{0\}$. Then there exists a state $\omega\in \states(A)$ such that $|f(a)| = \norm{a}$.
+Let $A$ be a $C^*$-algebra and $a\in \Normals(A)\setminus\{0\}$. Then there exists a state $\omega\in \states(A)$ such that $|\omega(a)| = \norm{a}$.
 \end{lemma}
 \begin{proof}
-TODO
+TODO see Murphy, theorem 5.1.11.
 \end{proof}
 
-\begin{proposition}
+\begin{proposition} \label{propertiesPositiveFunctionals}
 Let $\omega$ be a positive linear functional over a $C^*$-algebra $A$ and $a,b\in A$, then
 \begin{enumerate}
 \item $\omega(a^*) = \overline{\omega(a)}$;
@@ -5641,8 +5663,9 @@ Let $\omega$ be a positive linear functional over a $C^*$-algebra $A$ and $a,b\i
 \item $\norm{\omega} = \sup\setbuilder{\omega(a^*a)}{\norm{a} = 1}$
 \end{enumerate}
 \end{proposition}
+TODO: obtain from general theory of positive operators.
 \begin{proof}
-By \ref{realImaginaryParts} and \ref{positiveNegativeParts} we can write $a\in A$ as
+By \ref{CartesianDecomposition} we can write $a\in A$ as
 \[ a = x_{1,+} - x_{1,-} + i(x_{2,+} - x_{2,-}).\]
 Where $x_{1,+}, x_{1,-}, x_{2,+}, x_{2,-}$ are self-adjoint. Then
 \[ \rho(a^*) = \rho(x_{1,+} - x_{1,-} - i(x_{2,+} - x_{2,-})) = \rho(x_{1,+}) - \rho(x_{1,-}) - i(\rho(x_{2,+}) - \rho(x_{2,-})) = \overline{\rho(a)}. \]
@@ -5658,9 +5681,54 @@ Let $X$ be a compact Hausdorff space. Let $\omega$ be a positive linear function
 \end{corollary}
 TODO: move up for Riesz-Markov?
 
+\begin{lemma} \label{pureStateEquivalents}
+Let $A$ be a $C^*$-algebra and $\omega\in \states(A)$. Then the following are equivalent:
+\begin{enumerate}
+\item $\omega$ is pure;
+\item for all linear functionals $\rho \in \interval{\constant{0}, \omega}$, we have $\rho = t\omega$ for some $t\in \interval{0,1}$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+$(1) \Rightarrow (2)$ Suppose $\rho \in \interval{\constant{0}, \omega}$ is a linear functional. Then $\rho$ and $\omega-\rho$ are positive. Let $\seq{e_\lambda}$ be an increasing approximate unit, which exists by \ref{CstarAlgebraHasIncreasingApproximateUnit}. Then we calculate, using \ref{positiveFunctionalNormValueAtUnit},
+\begin{align*}
+\omega &= \rho + (\omega - \rho) \\
+&= \norm{\rho}\frac{\rho}{\norm{\rho}} + \norm{\omega - \rho}\frac{\omega - \rho}{\norm{\omega - \rho}} \\
+&= \norm{\rho}\frac{\rho}{\norm{\rho}} + \lim_{\lambda}(\omega - \rho)(e_\lambda)\frac{\omega - \rho}{\norm{\omega - \rho}} \\
+&= \norm{\rho}\frac{\rho}{\norm{\rho}} + \big(\lim_{\lambda}\omega(e_\lambda) - \lim_{\lambda}\rho(e_\lambda)\big)\frac{\omega - \rho}{\norm{\omega - \rho}} \\
+&= \norm{\rho}\frac{\rho}{\norm{\rho}} + \big(1 - \norm{\rho}\big)\frac{\omega - \rho}{\norm{\omega - \rho}}.
+\end{align*}
+Since $\omega$ is an extreme point, we have $\omega = \frac{\rho}{\norm{\rho}}$. Finally we need to observe that $\norm{\rho} \leq 1$. This follows from $\norm{\rho} = \lim_\lambda\rho(e_\lambda) \leq \lim_\lambda\omega(e_\lambda) = \norm{\omega} = 1$.
+
+$(2) \Rightarrow (1)$ Suppose $\omega = r\omega_1 + (1-r)\omega_2$, for some $\omega_1, \omega_2\in\states(A)$ and $r\in \interval[o]{0,1}$. Then $r\omega_1 \leq \omega$, since $(1-r)\omega_2 \geq 0$. By assumption $r\omega_1 = t\omega$, for some $t\in \interval{0,1}$. Taking the norm gives $t = r$, so $\omega_1 = \omega$ and thus $\omega_2 = \omega$. We conclude that $\omega$ is an extreme point.
+\end{proof}
+
 \begin{proposition}
-If $A$ is commutative, the pure states are exactly the characters.
+Let $A$ be a $C^*$-algebra. Then
+\begin{enumerate}
+\item every character on $A$ is a pure state;
+\item if $A$ is commutative, then every pure state is a character.
+\end{enumerate}
 \end{proposition}
+\begin{proof}
+(1) Let $\varphi$ be a character on $A$. Take $a\in A^+$. Then we can write $a = b^*b$, by \ref{existenceSquareRoot}. So, using \ref{charactersStarPreserving}, we have
+\[ \varphi(a) = \varphi(b^*b) = \varphi(b^*)\varphi(b) = \overline{\varphi(b)}\varphi(b) = |\varphi(b)|^2 \]
+and thus $\varphi(a) \geq 0$. We also have $\norm{\varphi} = 1$ from \ref{charactersUnital} and \ref{CstarAlgebraHasIncreasingApproximateUnit}. Thus $\varphi$ is a state.
+
+We now show that $\varphi$ is pure. Pick a linear functional $\rho \in \interval{0, \varphi}$. Take $a\in \ker(\varphi)$. Then, by \ref{propertiesPositiveFunctionals} and the calculation above,
+\[ |\rho(a)|^2 \leq \norm{\rho}\rho(a^*a) \leq \norm{\rho}\varphi(a^*a) = \norm{\rho}|\varphi(a)|^2 = 0. \]
+Thus $\ker(\varphi) \subseteq \ker(\rho)$. Using \ref{kernelInclusionDecomposition}, this implies that there exists $t\in \C$ such that $\rho = t\varphi$. If $\rho = 0$, we may take $t = 0$. If not, there exists $a\in A^+$ such that $\rho(a)\neq 0$. Then $0 < \rho(a) \leq \varphi(a)$, so $t = \frac{\rho(a)}{\varphi(a)} \in \interval{0,1}$.
+
+We conclude that $\varphi$ is pure using \ref{pureStateEquivalents}.
+
+(2) Now assume $A$ commutative. Let $\varphi$ be a pure state. Pick arbitrary $a\in A^+\setminus\{0\}$. For all $b\in A^+$, we have $ab\in A^+$ from \ref{productPositiveCommutingElementsPositive} and thus $\varphi(ab) \geq 0$. This means that the functional $x\mapsto \varphi(ax)$ is positive.
+
+Again, take arbitrary $b\in A^+$. Then $\varphi(ab) = |\varphi(ab)| = \big|\varphi\big(\sqrt{b}a\sqrt{b}\big)\big| \leq \varphi(b)\norm{a}$ from \ref{propertiesPositiveFunctionals}. This implies that $x \mapsto \varphi\big(\frac{a}{\norm{a}}x\big)$ is in $\interval{0,\varphi}$. Thus, from \ref{pureStateEquivalents}, there exists $t\in \interval{0,1}$ such that for all $x\in A$, we have $\varphi(ax) = t\varphi(x)$.
+
+Let $\seq{e_\lambda}$ be an increasing positive unit (which exists, \ref{CstarAlgebraHasIncreasingApproximateUnit}). Then
+\[ t = \lim_{\lambda}t\varphi(e_\lambda) = \lim_{\lambda}\varphi(ae_\lambda) = \varphi\big(\lim_{\lambda}ae_\lambda\big) = \varphi(a), \]
+using \ref{positiveFunctionalNormValueAtUnit}. Thus $\varphi(ax) = \varphi(a)\varphi(x)$ for all $x\in A$ and $a\in A^+$. Since the positive elements span $A$, see \ref{CartesianDecomposition}, we have that $\varphi$ is multiplicative.
+\end{proof}
+
 
 \subsection{Comparison of projectors}
 Lattice
@@ -5679,7 +5747,7 @@ We now just need to show that $K$ is an ideal in $A$. We have that $J$ contains 
 \end{proof}
 
 \begin{lemma} \label{starCongruenceIffStarClosed}
-Let $A$ be a $*$-algebra and $\mathfrak{q}$ a ranslation invariant binary relation on $A$. Then $\mathfrak{q}$ is a $\{*\}$-congruence \textup{if and only if} $\widetilde{\mathfrak{q}}^* = \widetilde{\mathfrak{q}}$.
+Let $A$ be a $*$-algebra and $\mathfrak{q}$ a translation invariant binary relation on $A$. Then $\mathfrak{q}$ is a $\{*\}$-congruence \textup{if and only if} $\widetilde{\mathfrak{q}}^* = \widetilde{\mathfrak{q}}$.
 \end{lemma}
 \begin{proof}
 First suppose $\mathfrak{q}$ is a $\{*\}$-congruence and take $x-y\in \widetilde{\mathfrak{q}}$. Then $(x-y)^* = x^* - y^* \in\widetilde{\mathfrak{q}}$. This implies $\widetilde{\mathfrak{q}}^* \subseteq \widetilde{\mathfrak{q}} = \widetilde{\mathfrak{q}}^{**} \subseteq \widetilde{\mathfrak{q}}^*$.
@@ -6688,6 +6756,57 @@ From \ref{boundedSetNormedSpace}, we can find $M\in\R^+$ such that $\norm{T_i} \
 TODO: OpAlg-ExS-4
 \end{proof}
 
+TODO: From here we implicitly make use of the fact that any matrix algebra of concrete $C^*$-algebras is isomorphic to a concrete $C^*$-algebra of operators on a direct sum of a Hilbert space. TODO: make explicit!
+
+\begin{proposition}
+Let $\mathcal{H}$ be a Hilbert space and $\varphi: \Bounded(\mathcal{H})\to \C$ a linear functional. Then the following are equivalent:
+\begin{enumerate}
+\item there exist vectors $\xi_1,\ldots, \xi_n, \eta_1,\ldots, \eta_n \in \mathcal{H}$ such that
+\[ \varphi(T) = \sum_{k=1}^n \inner{\eta_k, T\xi_k} \]
+for all $T\in \Bounded(\mathcal{H})$;
+\item $\varphi$ is WOT-continuous;
+\item $\varphi$ is SOT-continuous.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+$(1) \Rightarrow (2)$ Follows from \ref{WOTforInnerProductSpace} and the continuity of the addition.
+
+$(2) \Rightarrow (3)$ Immediate, since the SOT is stronger than the WOT.
+
+$(3) \Rightarrow (1)$ The SOT is the seminormed convergence w.r.t. the seminorms $\setbuilder{\norm{\cdot}\circ \evalMap_\xi}{\xi\in \mathcal{H}}$, see \ref{initialConvergenceWRTlinearOperatorsToNormedSpacesSeminormed}.
+
+From \ref{dualSeminormedConvergence}, there exists $\xi_1, \ldots, \xi_n$ and $C>0$ such that
+\[ |\varphi(T)| \leq C\max_{k\in [1:n]}\norm{T\xi_k} \leq C \norm{\seq{T\xi_k}_{k\in[1:n]}}_{\mathcal{H}^{\oplus n}} = C \norm*{\begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix}T}_{\mathcal{H}^{\oplus n}} \]
+for all $T\in \Bounded(\mathcal{H})$. This implies $\ker \varphi \supseteq \ker \begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix}$, so \ref{kernelInclusionDecomposition} gives a composition $\varphi = \varphi'\circ \begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix}$, where $\varphi': \im \begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix} \to \C$ is a linear functional. For all $\begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix}T \in \im \begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix}$, the inequality yields
+\[ \Big|\varphi'\Big(\begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix}T\Big)\Big| = |\varphi(T)| \leq C\norm*{\begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix}T}, \]
+so $\varphi'$ is bounded. By the Riesz representation theorem, \ref{rieszRepresentation}, we have $\varphi' = \inner{\seq{\eta_k}_{k\in[1:n]}, -}$ for some $\seq{\eta_k}_{k\in[1:n]} \in \mathcal{H}^{\oplus n}$. Putting every thing together yields, for arbitrary $T\in \Bounded(\mathcal{H})$,
+\[ \varphi(T) = \varphi'\circ \begin{pmatrix}
+\evalMap_{\xi_1} \\ \hdots \\ \evalMap_{\xi_n}
+\end{pmatrix} T = \inner{\big. \seq{\eta_k}_{k\in[1:n]}, \seq{T\xi_k}_{k\in[1:n]}} = \sum_{k=1}^n\inner{\eta_k, T\xi_k}. \]
+\end{proof}
+\begin{corollary}
+Let $\mathcal{H}$ be a Hilbert space and $S\subseteq \Bounded(\mathcal{H})$ a convex subset. Then $\overline{S}^\text{SOT} = \overline{S}^\text{WOT}$.
+\end{corollary}
+\begin{proof}
+This follows from \ref{weakClosureConvexSubsets}.
+\end{proof}
+
 \section{Von Neumann Algebras}
 \begin{definition}
 A concrete $C^*$-algebra $A\subseteq \Bounded(\mathcal{H})$ is a \udef{von Neumann algebra} if it is closed in the SOT.
@@ -6764,6 +6883,27 @@ This implies that $a\in U$, so $A\mesh U$.
 \begin{corollary}
 Let $A\subseteq \Bounded(\mathcal{H})$ be a concrete $C^*$-algebra with $\id_{\mathcal{H}} \in A$. Then $A$ is a von Neumann algebra \textup{if and only if} $A = A^{\comm\comm}$.
 \end{corollary}
+
+\subsection{Kaplansky's density theorem}
+\begin{proposition}
+Let $\mathcal{H}$ be a Hilbert space and $f: \R\to \R$ a continuous function. Then
+\begin{enumerate}
+\item if $\lim_{t\to\pm\infty}f(t) = 0$, then $f: \SelfAdjoints(\mathcal{H}) \to \SelfAdjoints(\mathcal{H})$ is SOT-SOT-continuous;
+\item if $\lim_{t\to\pm\infty}\frac{f(t)}{t} = 0$, then $f: \SelfAdjoints(\mathcal{H}) \to \SelfAdjoints(\mathcal{H})$ is SOT-SOT-continuous.
+\end{enumerate}
+\end{proposition}
+The function $f: \SelfAdjoints(\mathcal{H}) \to \SelfAdjoints(\mathcal{H})$ is defined by continuous functional calculus.
+\begin{proof}
+(1) Let $A_0$ be the set of continuous real functions $f$ such that $f: \SelfAdjoints(\mathcal{H}) \to \SelfAdjoints(\mathcal{H})$ is SOT-SOT-continuous.
+
+TODO Stone-Weierstrass: see Conway. \cite{conwayFA}
+
+\end{proof}
+
+\begin{theorem}[Kaplansky's density theorem]
+Let $A\subseteq \Bounded(\mathcal{H})$ be a concrete $C^*$-algebra.
+\end{theorem}
+
 
 \subsection{Borel functional calculus}
 
@@ -7021,7 +7161,7 @@ Thus $\norm{[e_\mu] - [e_\nu]}_\omega \leq \epsilon$, which implies $\seq{[e_\la
 (4) TODO
 \end{proof}
 
-\begin{theorem}[Gelfand-Naimark-Segal construction] \label{GNSconstruction}
+\begin{theorem}[Gelfand-Neumark-Segal construction] \label{GNSconstruction}
 Let $\omega\in\states(A)$ be a state on a $C^*$-algebra $A$. The map $\pi_\omega: A\to \Bounded(A/N_\omega)$ defined by
 \[ \pi_\omega(x) : A/N_\omega \to A/N_\omega: [y] \mapsto [xy] \]
 is a well-defined $*$-representation of $A$ on $A/N_\omega$. This can be extended to a representation of $A$ on $H_\omega$. There exists $\xi_\omega\in H_\omega$ such that
@@ -7067,7 +7207,7 @@ Let $\seq{e_\lambda}$ be an increasing approximate unit in $A$, which exists by 
 (3) Immediate from (1). 
 \end{proof}
 
-\begin{theorem}[Gelfand-Naimark theorem]
+\begin{theorem}[Gelfand-Neumark theorem]
 Every $C^*$-algebra has a faithful non-degenerate representation.
 \end{theorem}
 \begin{proof}
